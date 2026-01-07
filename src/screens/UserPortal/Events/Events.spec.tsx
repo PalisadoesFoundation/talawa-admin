@@ -10,6 +10,7 @@
 import React, { act } from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
+import { InMemoryCache } from '@apollo/client';
 import { I18nextProvider } from 'react-i18next';
 
 import dayjs from 'dayjs';
@@ -30,8 +31,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Events from './Events';
 import userEvent from '@testing-library/user-event';
-import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
-
+import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { vi, beforeEach, afterEach } from 'vitest';
 import { Frequency } from 'utils/recurrenceUtils';
@@ -514,6 +514,7 @@ const MOCKS = [
           location: 'New Test Location',
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
         },
       },
     },
@@ -604,6 +605,7 @@ const CREATE_EVENT_ERROR_MOCKS = [
           location: 'New Test Location',
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
         },
       },
     },
@@ -632,6 +634,7 @@ const CREATE_EVENT_NULL_MOCKS = [
           location: 'New Test Location',
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
         },
       },
     },
@@ -732,8 +735,9 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should render the Events screen properly', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -756,8 +760,9 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should open and close the create event modal', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -810,6 +815,7 @@ describe('Testing Events Screen [User Portal]', () => {
           location?: string;
           isPublic: boolean;
           isRegisterable: boolean;
+          isInviteOnly: boolean;
         };
       }) => {
         const { input } = variables;
@@ -819,8 +825,9 @@ describe('Testing Events Screen [User Portal]', () => {
           input.organizationId === 'org123' &&
           input.allDay === true &&
           input.location === 'New Test Location' &&
-          input.isPublic === true &&
+          input.isPublic === false &&
           input.isRegisterable === true &&
+          input.isInviteOnly === true &&
           typeof input.startAt === 'string' &&
           typeof input.endAt === 'string'
         );
@@ -829,6 +836,31 @@ describe('Testing Events Screen [User Portal]', () => {
         data: {
           createEvent: {
             id: 'newEvent1',
+            name: 'New Test Event',
+            description: 'New Test Description',
+            startAt: new Date().toISOString(),
+            endAt: new Date().toISOString(),
+            allDay: true,
+            location: 'New Test Location',
+            isPublic: true,
+            isRegisterable: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            isRecurringEventTemplate: false,
+            hasExceptions: false,
+            sequenceNumber: null,
+            totalCount: null,
+            progressLabel: null,
+            attachments: [],
+            creator: {
+              id: 'user1',
+              name: 'Test User',
+            },
+            organization: {
+              id: 'org123',
+              name: 'Test Org',
+            },
+            baseEvent: null,
           },
         },
       },
@@ -839,8 +871,9 @@ describe('Testing Events Screen [User Portal]', () => {
       true,
     );
 
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={testLink}>
+      <MockedProvider link={testLink} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -904,6 +937,7 @@ describe('Testing Events Screen [User Portal]', () => {
           location?: string;
           isPublic: boolean;
           isRegisterable: boolean;
+          isInviteOnly: boolean;
         };
       }) => {
         const { input } = variables;
@@ -913,8 +947,9 @@ describe('Testing Events Screen [User Portal]', () => {
           input.organizationId === 'org123' &&
           input.allDay === false &&
           input.location === 'New Test Location' &&
-          input.isPublic === true &&
+          input.isPublic === false &&
           input.isRegisterable === true &&
+          input.isInviteOnly === true &&
           typeof input.startAt === 'string' &&
           typeof input.endAt === 'string'
         );
@@ -923,6 +958,31 @@ describe('Testing Events Screen [User Portal]', () => {
         data: {
           createEvent: {
             id: 'newEvent2',
+            name: 'New Non All Day Event',
+            description: 'New Test Description Non All Day',
+            startAt: new Date().toISOString(),
+            endAt: new Date().toISOString(),
+            allDay: false,
+            location: 'New Test Location',
+            isPublic: true,
+            isRegisterable: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            isRecurringEventTemplate: false,
+            hasExceptions: false,
+            sequenceNumber: null,
+            totalCount: null,
+            progressLabel: null,
+            attachments: [],
+            creator: {
+              id: 'user1',
+              name: 'Test User',
+            },
+            organization: {
+              id: 'org123',
+              name: 'Test Org',
+            },
+            baseEvent: null,
           },
         },
       },
@@ -930,8 +990,9 @@ describe('Testing Events Screen [User Portal]', () => {
 
     const testLink = new StaticMockLink([...MOCKS, nonAllDayMock], true);
 
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={testLink}>
+      <MockedProvider link={testLink} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -1001,8 +1062,9 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle create event error', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={createEventErrorLink}>
+      <MockedProvider link={createEventErrorLink} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -1053,8 +1115,9 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should toggle all-day checkbox and enable/disable time inputs', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -1106,8 +1169,9 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should toggle public, registerable, recurring, and createChat checkboxes', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -1128,28 +1192,32 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('publicEventCheck')).toBeInTheDocument();
+      expect(screen.getByTestId('visibilityPublicRadio')).toBeInTheDocument();
     });
 
-    // Toggle all checkboxes
-    await userEvent.click(screen.getByTestId('publicEventCheck'));
+    // Test visibility radio buttons
+    await userEvent.click(screen.getByTestId('visibilityOrgRadio'));
+    await userEvent.click(screen.getByTestId('visibilityInviteRadio'));
+    await userEvent.click(screen.getByTestId('visibilityPublicRadio'));
+
+    // Toggle other checkboxes
     await userEvent.click(screen.getByTestId('registerableEventCheck'));
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
     await userEvent.click(screen.getByTestId('createChatCheck'));
 
     // Toggle back
-    await userEvent.click(screen.getByTestId('publicEventCheck'));
     await userEvent.click(screen.getByTestId('registerableEventCheck'));
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
     await userEvent.click(screen.getByTestId('createChatCheck'));
 
     // All toggles should work without errors
-    expect(screen.getByTestId('publicEventCheck')).toBeInTheDocument();
+    expect(screen.getByTestId('visibilityPublicRadio')).toBeInTheDocument();
   });
 
   it('Should handle date picker changes', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -1195,8 +1263,9 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle time picker changes when all-day is disabled', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -1250,8 +1319,9 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle null date values gracefully', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -1298,8 +1368,9 @@ describe('Testing Events Screen [User Portal]', () => {
       .spyOn(console, 'warn')
       .mockImplementation(() => {});
 
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={errorLink}>
+      <MockedProvider link={errorLink} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -1327,8 +1398,9 @@ describe('Testing Events Screen [User Portal]', () => {
       .spyOn(console, 'warn')
       .mockImplementation(() => {});
 
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={rateLimitLink}>
+      <MockedProvider link={rateLimitLink} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -1362,8 +1434,9 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle input changes for title, description, and location', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -1405,8 +1478,9 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should test userRole as administrator', async () => {
     localStorage.setItem('Talawa-admin_role', JSON.stringify('administrator'));
 
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -1433,8 +1507,9 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should test userRole as regular user', async () => {
     localStorage.setItem('Talawa-admin_role', JSON.stringify('user'));
 
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -1459,8 +1534,9 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should change view type', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -1493,8 +1569,9 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should not change viewType when handleChangeView is called with null', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -1528,8 +1605,9 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should call onMonthChange callback from EventCalendar', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -1558,8 +1636,9 @@ describe('Testing Events Screen [User Portal]', () => {
     const testLink = new StaticMockLink(CREATE_EVENT_NULL_MOCKS, true);
     mockToast.success.mockClear();
     mockToast.error.mockClear();
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={testLink}>
+      <MockedProvider link={testLink} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -1611,8 +1690,9 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should map missing creator to default (fallback) in eventData mapping', async () => {
     const testLink = new StaticMockLink(CREATOR_NULL_MOCKS, true);
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={testLink}>
+      <MockedProvider link={testLink} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
@@ -1660,6 +1740,7 @@ describe('Testing Events Screen [User Portal]', () => {
           location?: string;
           isPublic: boolean;
           isRegisterable: boolean;
+          isInviteOnly: boolean;
           recurrence?: {
             frequency: string;
             interval: number;
@@ -1676,8 +1757,9 @@ describe('Testing Events Screen [User Portal]', () => {
             input.organizationId === 'org123' &&
             input.allDay === true &&
             input.location === 'Recurring Test Location' &&
-            input.isPublic === true &&
+            input.isPublic === false &&
             input.isRegisterable === true &&
+            input.isInviteOnly === true &&
             typeof input.startAt === 'string' &&
             typeof input.endAt === 'string' &&
             input.recurrence &&
@@ -1690,6 +1772,31 @@ describe('Testing Events Screen [User Portal]', () => {
         data: {
           createEvent: {
             id: 'newRecurringEvent1',
+            name: 'Recurring Test Event',
+            description: 'Recurring Test Description',
+            startAt: new Date().toISOString(),
+            endAt: new Date().toISOString(),
+            allDay: true,
+            location: 'Recurring Test Location',
+            isPublic: true,
+            isRegisterable: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            isRecurringEventTemplate: true,
+            hasExceptions: false,
+            sequenceNumber: 1,
+            totalCount: 5,
+            progressLabel: '1 of 5',
+            attachments: [],
+            creator: {
+              id: 'user1',
+              name: 'Test User',
+            },
+            organization: {
+              id: 'org123',
+              name: 'Test Org',
+            },
+            baseEvent: null,
           },
         },
       },
@@ -1702,8 +1809,9 @@ describe('Testing Events Screen [User Portal]', () => {
 
     mockToast.success.mockClear();
 
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={testLink}>
+      <MockedProvider link={testLink} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <>
