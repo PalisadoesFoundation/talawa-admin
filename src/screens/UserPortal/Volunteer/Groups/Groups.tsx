@@ -4,38 +4,37 @@
  * This component renders a table of volunteer groups for a specific organization and event.
  * It provides functionalities such as searching, sorting, and viewing/editing group details.
  *
- * @component
- * @returns {JSX.Element} The rendered Groups component.
+ * @returns The rendered Groups component.
  *
- * @remarks
+ * remarks
  * - Uses `@apollo/client` to fetch volunteer group data from the GraphQL API.
  * - Implements debounced search functionality for better performance.
  * - Displays a loader while data is being fetched and an error message if the query fails.
  * - Integrates modals for viewing and editing group details.
  *
- * @requires
+ * requires
  * - `react`, `react-i18next` for translations.
  * - `@apollo/client` for GraphQL queries.
  * - `@mui/x-data-grid` for rendering the data grid.
  * - `react-bootstrap` for UI components.
  * - Custom components: `Loader`, `Avatar`, `GroupModal`, `VolunteerGroupViewModal`, `SearchBar`, `SortingButton`.
  *
- * @enum {ModalState}
+ * enum [ModalState]
  * - `EDIT`: Represents the edit modal state.
  * - `VIEW`: Represents the view modal state.
  *
- * @state
+ * state
  * - `group`: Stores the currently selected group for modal interactions.
  * - `searchTerm`: Stores the search input value.
  * - `sortBy`: Stores the sorting criteria for volunteer groups.
  * - `searchBy`: Determines whether to search by group name or leader name.
  * - `modalState`: Tracks the visibility of the edit and view modals.
  *
- * @query
+ * query
  * - `EVENT_VOLUNTEER_GROUP_LIST`: Fetches the list of volunteer groups based on filters and sorting.
  *
- * @param {string} orgId - The organization ID retrieved from the URL parameters.
- * @param {string} userId - The user ID retrieved from local storage.
+ * @param  orgId - The organization ID retrieved from the URL parameters.
+ * @param  userId - The user ID retrieved from local storage.
  *
  * @example
  * ```tsx

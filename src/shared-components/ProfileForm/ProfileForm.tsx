@@ -293,7 +293,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
   };
 
   return (
-    <LoadingState isLoading={loading}>
+    <LoadingState isLoading={loading} variant="spinner">
       {show && (
         <MemberAttendedEventsModal
           eventsAttended={userData?.user?.eventsAttended}

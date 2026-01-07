@@ -1661,10 +1661,9 @@ describe('UpcomingEvents', () => {
       await waitFor(() => {
         expect(screen.getAllByTestId('eventTitle').length).toBe(2);
       });
-      await waitFor(async () => {
-        const input = screen.getByTestId('searchByInput');
-        await userEvent.type(input, 'xyz');
-      });
+
+      const input = screen.getByTestId('searchByInput');
+      await userEvent.type(input, 'xyz');
       await waitFor(() => {
         expect(screen.getByTestId('events-empty-state')).toBeInTheDocument();
         expect(screen.getByText(/no upcoming events/i)).toBeInTheDocument();
@@ -1682,10 +1681,8 @@ describe('UpcomingEvents', () => {
       await userEvent.click(dropdownButton);
       const locationOption = screen.getByTestId('location');
       await userEvent.click(locationOption);
-      await waitFor(async () => {
-        const input = screen.getByTestId('searchByInput');
-        await userEvent.type(input, 'park');
-      });
+      const input = screen.getByTestId('searchByInput');
+      await userEvent.type(input, 'park');
       await waitFor(() => {
         const titles = screen.getAllByTestId('eventTitle');
         expect(titles.length).toBe(1);
@@ -1764,10 +1761,8 @@ describe('UpcomingEvents', () => {
       await userEvent.click(dropdownButton);
       const locationOption = screen.getByTestId('location');
       await userEvent.click(locationOption);
-      await waitFor(async () => {
-        const input = screen.getByTestId('searchByInput');
-        await userEvent.type(input, 'park');
-      });
+      const input = screen.getByTestId('searchByInput');
+      await userEvent.type(input, 'park');
       await waitFor(() => {
         const titles = screen.getAllByTestId('eventTitle');
         expect(titles.length).toBe(1);

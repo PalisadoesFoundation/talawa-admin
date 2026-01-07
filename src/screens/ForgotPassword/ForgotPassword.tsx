@@ -37,7 +37,7 @@
  * - Displays appropriate toast notifications for errors such as user not found,
  *   API unavailability, or email not registered.
  *
- * @returns {JSX.Element} The ForgotPassword component.
+ * @returns The ForgotPassword component.
  */
 import { useMutation } from '@apollo/client';
 import type { ChangeEvent } from 'react';

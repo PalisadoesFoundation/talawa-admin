@@ -264,13 +264,13 @@ function AgendaItemsContainer({
   return (
     <>
       <div
-        className={`mx-1 ${agendaItemConnection == 'Event' ? 'my-4' : 'my-0'}`}
+        className={`mx-1 ${agendaItemConnection == t('event') ? 'my-4' : 'my-0'}`}
       >
         <div
-          className={` shadow-sm ${agendaItemConnection === 'Event' ? 'rounded-top-4 mx-4' : 'rounded-top-2 mx-0'}`}
+          className={` shadow-sm ${agendaItemConnection === t('event') ? 'rounded-top-4 mx-4' : 'rounded-top-2 mx-0'}`}
         >
           <Row
-            className={`${styles.tableHeadAgendaItems} mx-0 border border-light-subtle py-3 ${agendaItemConnection === 'Event' ? 'rounded-top-4' : 'rounded-top-2'}`}
+            className={`${styles.tableHeadAgendaItems} mx-0 border border-light-subtle py-3 ${agendaItemConnection === t('event') ? 'rounded-top-4' : 'rounded-top-2'}`}
           >
             <Col
               xs={6}
@@ -321,7 +321,7 @@ function AgendaItemsContainer({
               <div
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className={`bg-light-subtle border border-light-subtle border-top-0 shadow-sm ${agendaItemConnection === 'Event' ? 'rounded-bottom-4 mx-4' : 'rounded-bottom-2 mb-2 mx-0'}`}
+                className={`bg-light-subtle border border-light-subtle border-top-0 shadow-sm ${agendaItemConnection === t('event') ? 'rounded-bottom-4 mx-4' : 'rounded-bottom-2 mb-2 mx-0'}`}
               >
                 {agendaItemData &&
                   agendaItemData.map((agendaItem, index) => (

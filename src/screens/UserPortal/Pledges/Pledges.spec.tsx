@@ -1690,12 +1690,7 @@ describe('Testing User Pledge Screen', () => {
         expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       });
 
-      const spinners = screen.queryAllByTestId('spinner');
-      const visibleSpinners = spinners.filter((spinner) => {
-        const parent = spinner.closest('[data-testid="loadingContainer"]');
-        return parent && !parent.classList.contains('hidden');
-      });
-      expect(visibleSpinners.length).toBe(0);
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       expect(screen.getByRole('grid')).toBeInTheDocument();
     });
   });

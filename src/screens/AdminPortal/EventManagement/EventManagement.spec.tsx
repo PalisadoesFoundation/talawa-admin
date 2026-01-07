@@ -20,7 +20,10 @@ dayjs.extend(utc);
 const { setItem, clearAllItems } = useLocalStorage();
 
 vi.mock('@mui/icons-material', async () => {
-  const actual = await vi.importActual('@mui/icons-material');
+  const actual = (await vi.importActual('@mui/icons-material')) as Record<
+    string,
+    unknown
+  >;
   return {
     ...actual,
     Edit: vi.fn(() => null),

@@ -657,6 +657,8 @@ describe('Testing VolunteerGroups Screen', () => {
       // Assert spinner is removed after loading
       expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       // Assert data is rendered
+      const groupNames = screen.getAllByTestId('groupName');
+      expect(groupNames.length).toBeGreaterThan(0);
     });
   });
 });

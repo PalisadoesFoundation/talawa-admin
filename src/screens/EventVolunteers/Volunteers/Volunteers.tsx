@@ -1,44 +1,46 @@
 /**
- * @file Volunteers.tsx
- * @description This component renders the Volunteers page for an event in the Talawa Admin application.
+ * Volunteers.tsx
+ * This component renders the Volunteers page for an event in the Talawa Admin application.
  * It provides functionalities to view, search, filter, sort, and manage volunteers for a specific event.
  * The page includes a data grid to display volunteer details and modals for adding, viewing, and deleting volunteers.
  *
- * @module Volunteers
+ * module Volunteers
  *
- * @requires react
- * @requires react-i18next
- * @requires react-bootstrap
- * @requires react-router-dom
- * @requires @mui/icons-material
- * @requires @apollo/client
- * @requires @mui/x-data-grid
- * @requires @mui/material
- * @requires shared-components/LoadingState/LoadingState
- * @requires components/Avatar/Avatar
- * @requires subComponents/SortingButton
- * @requires shared-components/SearchBar/SearchBar
- * @requires GraphQl/Queries/EventVolunteerQueries
- * @requires utils/interfaces
- * @requires ./createModal/VolunteerCreateModal
- * @requires ./deleteModal/VolunteerDeleteModal
- * @requires ./viewModal/VolunteerViewModal
- * @requires style/app.module.css
+ * requires
+ * - react
+ * - react-i18next
+ * - react-bootstrap
+ * - react-router-dom
+ * - \@mui/icons-material
+ * - \@apollo/client
+ * - \@mui/x-data-grid
+ * - \@mui/material
+ * - shared-components/LoadingState/LoadingState
+ * - components/Avatar/Avatar
+ * - subComponents/SortingButton
+ * - shared-components/SearchBar/SearchBar
+ * - GraphQl/Queries/EventVolunteerQueries
+ * - utils/interfaces
+ * - ./createModal/VolunteerCreateModal
+ * - ./deleteModal/VolunteerDeleteModal
+ * - ./viewModal/VolunteerViewModal
+ * - style/app.module.css
  *
- * @typedef {InterfaceEventVolunteerInfo} InterfaceEventVolunteerInfo - Interface for volunteer information.
+ * typedef InterfaceEventVolunteerInfo - Interface for volunteer information.
  *
- * @component
- * @returns {JSX.Element} The Volunteers page component.
+ * @returns The Volunteers page component.
  *
  * @example
+ * ```tsx
  * // Usage
  * import Volunteers from './Volunteers';
  *
  * function App() {
  *   return <Volunteers />;
  * }
+ * ```
  *
- * @remarks
+ * remarks
  * - The component uses Apollo Client's `useQuery` to fetch volunteer data.
  * - It supports search, sorting, and filtering functionalities.
  * - Modals are used for adding, viewing, and deleting volunteers.

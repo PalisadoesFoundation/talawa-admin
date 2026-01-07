@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/AdminPortal/ManageTag/ManageTag.tsx:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/ManageTag.tsx#L108)
+Defined in: [src/screens/AdminPortal/ManageTag/ManageTag.tsx:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/ManageTag.tsx#L107)
 
 ## Returns
 

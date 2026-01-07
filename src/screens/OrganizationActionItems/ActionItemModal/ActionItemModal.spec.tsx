@@ -1036,13 +1036,15 @@ describe('ItemModal - Additional Test Cases', () => {
         .getAllByRole('button')
         .filter((button) => button.textContent?.includes('volunteerGroup'));
       expect(allChips.length).toBeGreaterThanOrEqual(1);
-      const volunteerGroupChip = allChips[0];
+      const volunteerGroupChip = screen.getByRole('button', {
+        name: /volunteerGroup/i,
+      });
       await userEvent.click(volunteerGroupChip);
 
       // Wait for volunteerGroupSelect to appear (this confirms the switch happened)
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
-        {},
+        undefined,
         { timeout: 5000 },
       );
       const volunteerGroupInput =
@@ -1063,15 +1065,9 @@ describe('ItemModal - Additional Test Cases', () => {
       });
 
       // Find the volunteer chip by text content
-      const volunteerChips = screen
-        .getAllByRole('button')
-        .filter(
-          (button) =>
-            button.textContent?.includes('volunteer') &&
-            !button.textContent?.includes('volunteerGroup'),
-        );
-      expect(volunteerChips.length).toBeGreaterThanOrEqual(1);
-      const volunteerChip = volunteerChips[0];
+      const volunteerChip = screen.getByRole('button', {
+        name: /^volunteer$/i,
+      });
       await userEvent.click(volunteerChip);
 
       await waitFor(() => {
@@ -4140,12 +4136,10 @@ describe('Partially Covered Lines Test Coverage', () => {
       });
       await userEvent.click(volunteerGroupChip);
 
-      await waitFor(() => {
-        expect(screen.getByTestId('volunteerGroupSelect')).toBeInTheDocument();
-      });
-
-      const volunteerGroupSelect = await screen.getByTestId(
+      const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
+        undefined,
+        { timeout: 5000 },
       );
       expect(volunteerGroupSelect).toBeInTheDocument();
 

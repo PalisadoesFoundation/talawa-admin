@@ -18,18 +18,19 @@
  * - Custom components: `Loader` and `UpdateSession`.
  * - Utility functions: `convertToBase64` and `errorHandler`.
  *
- * @returns {JSX.Element} The rendered CommunityProfile component.
+ * @returns The rendered CommunityProfile component.
  *
- * @component
+ * component
  * @example
  * // Usage in a parent component
+ * ```tsx
  * import CommunityProfile from './CommunityProfile';
  *
  * function App() {
  *   return <CommunityProfile />;
  * }
- *
- * @remarks
+ *```
+ * remarks
  * - The component uses `useEffect` to populate the form with fetched data.
  * - Social media links are displayed with corresponding icons.
  * - Form submission and reset operations are handled asynchronously.

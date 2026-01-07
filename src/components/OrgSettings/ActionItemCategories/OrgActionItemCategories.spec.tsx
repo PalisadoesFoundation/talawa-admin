@@ -329,7 +329,7 @@ describe('Testing Organisation Action Item Categories', () => {
 
   describe('LoadingState Behavior', () => {
     it('should show LoadingState spinner while data is loading', async () => {
-      renderActionItemCategories(new StaticMockLink([]), 'orgId');
+      renderActionItemCategories(link1, 'orgId');
 
       expect(screen.getByTestId('spinner')).toBeInTheDocument();
     });
@@ -355,7 +355,7 @@ describe('Testing Organisation Action Item Categories', () => {
     });
 
     it('should show loading spinner when data is loading', async () => {
-      renderActionItemCategories(new StaticMockLink([]), 'orgId');
+      renderActionItemCategories(link1, 'orgId');
 
       expect(screen.getByTestId('spinner')).toBeInTheDocument();
     });

@@ -1,29 +1,30 @@
 /**
- * @file Requests.tsx
- * @description This component renders a table displaying volunteer membership requests for a specific event.
+ * Requests.tsx
+ * This component renders a table displaying volunteer membership requests for a specific event.
  * It allows administrators to search, sort, and manage these requests by accepting or rejecting them.
  *
- * @module Requests
+ * module Requests
  *
- * @requires react
- * @requires react-i18next
- * @requires react-bootstrap
- * @requires react-router-dom
- * @requires @apollo/client
- * @requires @mui/x-data-grid
- * @requires dayjs
- * @requires NotificationToast
- * @requires shared-components/LoadingState/LoadingState
- * @requires components/Avatar/Avatar
- * @requires components/AdminSearchFilterBar/AdminSearchFilterBar
- * @requires GraphQl/Queries/EventVolunteerQueries
- * @requires GraphQl/Mutations/EventVolunteerMutation
- * @requires utils/interfaces
+ * requires
+ * - react
+ * - react-i18next
+ * - react-bootstrap
+ * - react-router-dom
+ * - \@apollo/client
+ * - \@mui/x-data-grid
+ * - dayjs
+ * - NotificationToast
+ * - shared-components/LoadingState/LoadingState
+ * - components/Avatar/Avatar
+ * - components/AdminSearchFilterBar/AdminSearchFilterBar
+ * - GraphQl/Queries/EventVolunteerQueries
+ * - GraphQl/Mutations/EventVolunteerMutation
+ * - utils/interfaces
  *
- * @function Requests
- * @returns {JSX.Element} A React component that displays a searchable and sortable table of volunteer membership requests.
+ * function Requests
+ * @returns A React component that displays a searchable and sortable table of volunteer membership requests.
  *
- * @remarks
+ * remarks
  * - Displays a loader while fetching data and handles errors gracefully.
  * - Uses Apollo Client's `useQuery` to fetch data and `useMutation` to update membership status.
  * - Uses AdminSearchFilterBar for unified search and filter interface with debouncing.

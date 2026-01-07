@@ -247,7 +247,7 @@ describe('Actions Screen', () => {
     renderActions(link1);
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('assigneeName')).toBeDefined();
+      expect(screen.getAllByTestId('assigneeName').length).toBeGreaterThan(0);
     });
 
     fireEvent.click(screen.getByTestId('sort'));

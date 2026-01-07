@@ -908,13 +908,37 @@ describe('Groups Screen [User Portal]', () => {
     expect(groupNames).toHaveLength(2);
   });
 
-  it('should display volunteer groups after fetching', async () => {
-    renderGroups(linkSuccess);
+  it('should display LoadingState spinner while data is loading', async () => {
+    const DELAYED_MOCKS = [
+      {
+        request: {
+          query: EVENT_VOLUNTEER_GROUP_LIST,
+          variables: {
+            where: { orgId: 'orgId', userId: 'userId' },
+            orderBy: 'volunteers_DESC',
+          },
+        },
+        result: {
+          data: {
+            getEventVolunteerGroups: [group1, group2],
+          },
+        },
+        delay: 100, // Add delay to simulate loading
+      },
+    ];
 
+    const linkDelayed = new StaticMockLink(DELAYED_MOCKS);
+    renderGroups(linkDelayed);
+
+    // Assert spinner is visible during loading
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+
+    // Wait for data to load
     await waitFor(() => {
       expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
-    const groupNames = screen.getAllByTestId('groupName');
-    expect(groupNames.length).toBeGreaterThan(0);
+
+    // Assert groups are displayed
+    expect(screen.getByText('Group 1')).toBeInTheDocument();
   });
 });

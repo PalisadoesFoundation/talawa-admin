@@ -6,14 +6,14 @@
  * pinned posts in a carousel layout and regular posts in a paginated list with interactive
  * features for post management.
  *
- * @returns {JSX.Element} A JSX element representing the complete posts interface with:
+ * @returns A JSX element representing the complete posts interface with:
  * - Header with search and sorting controls
  * - Pinned posts carousel section
  * - Paginated posts list with infinite scroll
  * - Modal for viewing individual pinned posts
  * - Loading states and error handling
  *
- * @remarks
+ * remarks
  * - Uses Apollo Client for GraphQL queries (ORGANIZATION_POST_LIST_WITH_VOTES, ORGANIZATION_PINNED_POST_LIST)
  * - Implements search functionality that filters posts by caption text
  * - Supports sorting by creation date (oldest/newest) with local state management
@@ -25,7 +25,7 @@
  * - Supports both admin and user role-based interactions
  * - Implements proper data formatting for PostCard components
  *
- * @dependencies
+ * dependencies
  * - Apollo Client for GraphQL operations
  * - React Router for URL parameters
  * - React i18n for internationalization

@@ -5,10 +5,9 @@
  * hours volunteered. It includes features such as search, sorting, and filtering
  * by time frame. The leaderboard is displayed in a table format using the MUI DataGrid.
  *
- * @component
- * @returns {JSX.Element} The rendered leaderboard component.
+ * @returns The rendered leaderboard component.
  *
- * @remarks
+ * remarks
  * - Redirects to the home page if `orgId` is not present in the URL parameters.
  * - Displays a loader while fetching data and an error message if the query fails.
  * - Uses Apollo Client's `useQuery` to fetch volunteer rankings from the GraphQL API.
@@ -19,29 +18,29 @@
  * <Leaderboard />
  * ```
  *
- * @dependencies
+ * dependencies
  * - `@mui/x-data-grid` for table rendering.
  * - `@apollo/client` for GraphQL queries.
  * - `react-router-dom` for navigation and URL parameter handling.
  * - `@mui/material` for UI components like `Stack`.
  * - Custom components: `Loader`, `Avatar`, `SortingButton`, `SearchBar`.
  *
- * @enum {TimeFrame}
+ * enum [TimeFrame]
  * - `All`: All-time rankings.
  * - `Weekly`: Rankings for the past week.
  * - `Monthly`: Rankings for the past month.
  * - `Yearly`: Rankings for the past year.
  *
- * @query
+ * query
  * - `VOLUNTEER_RANKING`: Fetches volunteer rankings based on organization ID, sort order,
  *   time frame, and search term.
  *
- * @state
+ * state
  * - `searchTerm` (`string`): The current search term for filtering volunteers.
  * - `sortBy` (`'hours_ASC' | 'hours_DESC'`): The current sorting order.
  * - `timeFrame` (`TimeFrame`): The selected time frame for filtering rankings.
  *
- * @styles
+ * styles
  * - Custom styles are applied using `styles` imported from `app-fixed.module.css`.
  */
 import React, { useMemo, useState } from 'react';

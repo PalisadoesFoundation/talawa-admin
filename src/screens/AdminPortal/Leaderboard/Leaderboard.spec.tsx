@@ -1,7 +1,9 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -286,12 +288,14 @@ describe('Testing Leaderboard Screen', () => {
   it('OnClick of Member navigate to Member Screen', async () => {
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
 
-    await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchBy');
-      expect(searchInput).toBeInTheDocument();
-      const userName = screen.getAllByTestId('userName');
-      await userEvent.click(userName[0]);
+    const userName = screen.getAllByTestId('userName');
+    await userEvent.click(userName[0]);
+
+    await waitFor(() => {
       expect(screen.getByTestId('memberScreen')).toBeInTheDocument();
     });
   });
@@ -372,7 +376,7 @@ describe('Testing Leaderboard Screen', () => {
 
     // Should render component even during error state
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
     });
   });
 });

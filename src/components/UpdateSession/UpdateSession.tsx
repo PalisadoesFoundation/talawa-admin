@@ -1,24 +1,25 @@
 /**
- * @file UpdateSession.tsx
- * @description A React component that allows users to update the session timeout for a community.
- *              It fetches the current timeout value from the server, displays it, and provides
- *              a slider to update the timeout value. The updated value is submitted to the server
- *              via a GraphQL mutation.
+ * A React component that allows users to update the session timeout for a community.
+ * It fetches the current timeout value from the server, displays it, and provides
+ * a slider to update the timeout value. The updated value is submitted to the server
+ * via a GraphQL mutation.
  *
- * @module UpdateTimeout
+ * module - UpdateTimeout
  *
- * @interface TestInterfaceUpdateTimeoutProps
- * @description Props for the `UpdateTimeout` component.
- * @property {function} [onValueChange] - Optional callback function triggered when the slider value changes.
- * @component
- * @name UpdateTimeout
- * @description A React functional component that manages and updates the session timeout for a community.
+ * interface TestInterfaceUpdateTimeoutProps
+ * description Props for the `UpdateTimeout` component.
+ * property - onValueChange - Optional callback function triggered when the slider value changes.
+ * component -
+ * - name UpdateTimeout
+ * - description A React functional component that manages and updates the session timeout for a community.
  *
- * @param {TestInterfaceUpdateTimeoutProps} props - Component props.
- * @returns {JSX.Element} The rendered component.
+ * @param props - Component props.
+ * @returns The rendered component.
  *
  * @example
+ * ```tsx
  * <UpdateTimeout onValueChange={(value) => console.log(value)} />
+ * ```
  *
  * @remarks
  * - Fetches the current session timeout using a GraphQL query.
@@ -26,11 +27,11 @@
  * - Submits the updated timeout value to the server using a GraphQL mutation.
  * - Displays a success toast on successful update or handles errors gracefully.
  *
- * @dependencies
+ * dependencies -
  * - `react`, `react-bootstrap`, `@mui/material`, `@apollo/client`, `react-toastify`
  * - Custom modules: `GraphQl/Queries/Queries`, `GraphQl/Mutations/mutations`, `utils/errorHandler`, `shared-components/LoadingState/LoadingState`
  *
- * @todo
+ * todo -
  * - Add additional validation for slider input if needed.
  * - Improve error handling for edge cases.
  */

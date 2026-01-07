@@ -267,7 +267,6 @@ const fundCampaignPledge = (): JSX.Element => {
             <div className="d-flex justify-content-center">
               <fieldset
                 className={`btn-group ${styles.toggleGroup}`}
-                role="group"
                 aria-label={tCommon('togglePledgedRaised')}
               >
                 <input

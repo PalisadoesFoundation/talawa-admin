@@ -1299,44 +1299,51 @@ describe('FetchMore Success Coverage', () => {
     const infiniteScroll = screen.getByTestId('infinite-scroll');
     expect(infiniteScroll).toHaveAttribute('data-has-more', 'false');
   });
+});
 
-  describe('LoadingState Wrapper', () => {
-    beforeEach(() => {
-      nextId = 1;
-      vi.clearAllMocks();
-      routerMocks.useParams.mockReturnValue({ orgId: '123' });
-    });
+describe('LoadingState Wrapper', () => {
+  beforeEach(() => {
+    nextId = 1;
+    vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({ orgId: '123' });
+  });
 
-    afterEach(() => {
-      vi.clearAllMocks();
-    });
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
 
-    it('shows loader during initial data loading', async () => {
-      renderComponent([orgPostListMock, orgPinnedPostListMock]);
+  it('shows loader during initial data loading', async () => {
+    // Create mocks with deliberate delay
+    const delayedOrgPostMock = {
+      ...orgPostListMock,
+      delay: 100, // 100ms delay
+    };
+    const delayedPinnedPostMock = {
+      ...orgPinnedPostListMock,
+      delay: 100,
+    };
 
-      // Loader should be present initially
-      const loader = screen.queryByTestId('loader');
-      if (loader) {
-        expect(loader).toBeInTheDocument();
-      }
+    renderComponent([delayedOrgPostMock, delayedPinnedPostMock]);
 
-      // Wait for content to load
-      await waitFor(() => {
-        expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
-        expect(screen.getByTestId('page-header')).toBeInTheDocument();
-      });
-    });
+    // Loader should be present during loading
+    expect(screen.getByTestId('loader')).toBeInTheDocument();
 
-    it('renders content when not loading', async () => {
-      renderComponent([orgPostListMock, emptyPinnedPostsMock]);
-
-      await waitFor(() => {
-        expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
-      });
-
-      // Verify main content is visible
+    // Wait for content to load and loader to disappear
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
       expect(screen.getByTestId('page-header')).toBeInTheDocument();
-      expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
     });
+  });
+
+  it('renders content when not loading', async () => {
+    renderComponent([orgPostListMock, emptyPinnedPostsMock]);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    // Verify main content is visible
+    expect(screen.getByTestId('page-header')).toBeInTheDocument();
+    expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
   });
 });
