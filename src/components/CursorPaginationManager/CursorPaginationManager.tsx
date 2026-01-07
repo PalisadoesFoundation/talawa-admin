@@ -289,6 +289,7 @@ export function CursorPaginationManager<
           loadingMore: isLoadingMore,
           pageInfo,
           handleLoadMore,
+          handleRefetch,
           error,
         })}
       </>

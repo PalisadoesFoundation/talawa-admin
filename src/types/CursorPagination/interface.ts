@@ -65,5 +65,6 @@ export interface InterfaceCursorPaginationRenderProps<TNode> {
   loadingMore: boolean;
   pageInfo: InterfacePageInfo | null;
   handleLoadMore: () => void;
+  handleRefetch: () => void;
   error: Error | undefined;
 }

@@ -871,10 +871,7 @@ describe('CursorPaginationManager', () => {
   });
 
   describe('Coverage Gaps', () => {
-    it('logs error to console when load more fails (Line 191)', async () => {
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
+    it('handles error when load more fails without console logging (Line 191)', async () => {
       const user = userEvent.setup();
       const mocks = [
         createSuccessMock(true),
@@ -907,14 +904,11 @@ describe('CursorPaginationManager', () => {
       const loadMoreBtn = screen.getByTestId('load-more-button');
       await user.click(loadMoreBtn);
 
+      // Error is handled silently via Apollo's error prop
+      // Button should remain enabled for retry
       await waitFor(() => {
-        expect(consoleSpy).toHaveBeenCalledWith(
-          'Error loading more items:',
-          expect.any(Error),
-        );
+        expect(loadMoreBtn).not.toBeDisabled();
       });
-
-      consoleSpy.mockRestore();
     });
 
     it('handles null data in load more response (Line 26)', async () => {

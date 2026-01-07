@@ -121,10 +121,16 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
             queryVariables={{ id: tag._id, first: TAGS_QUERY_DATA_CHUNK_SIZE }}
             dataPath="getChildTags.childTags"
             itemsPerPage={TAGS_QUERY_DATA_CHUNK_SIZE}
-
             useExternalUI={true}
           >
-            {({ items, loading, pageInfo, handleLoadMore, error }) => {
+            {({
+              items,
+              loading,
+              pageInfo,
+              handleLoadMore,
+              handleRefetch,
+              error,
+            }) => {
               if (error) {
                 return (
                   <div
@@ -138,6 +144,13 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
                       <h6 className="fw-bold text-danger text-center">
                         {t('errorOccurredWhileLoadingSubTags')}
                       </h6>
+                      <button
+                        type="button"
+                        onClick={handleRefetch}
+                        className="btn btn-primary mt-2"
+                      >
+                        {t('retry')}
+                      </button>
                     </div>
                   </div>
                 );
