@@ -50,6 +50,7 @@ describe('OrganizationModal Component', () => {
     addressLine1: '',
     addressLine2: '',
     avatar: '',
+    avatarPreview: '',
     city: '',
     countryCode: '',
     description: '',
@@ -120,6 +121,7 @@ describe('OrganizationModal Component', () => {
       countryCode: 'us',
       postalCode: '12345',
       avatar: '',
+      avatarPreview: '',
     };
 
     render(
@@ -192,6 +194,7 @@ describe('OrganizationModal Component', () => {
       countryCode: 'us',
       postalCode: '12345',
       avatar: '',
+      avatarPreview: '',
     };
 
     render(
@@ -342,6 +345,7 @@ describe('OrganizationModal Component', () => {
       state: 'Test State',
       countryCode: 'us',
       postalCode: '12345',
+      avatarPreview: '',
     };
 
     setup();
@@ -522,6 +526,7 @@ describe('OrganizationModal Component', () => {
       countryCode: 'us',
       postalCode: '12345',
       avatar: '',
+      avatarPreview: '',
     };
 
     render(
