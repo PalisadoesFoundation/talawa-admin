@@ -291,7 +291,7 @@ describe('AddOnSpotAttendee Component', () => {
     await waitFor(() => {
       // Button should reappear (if modal is still open, which it is in this render context)
       expect(screen.getByRole('button', { name: /add/i })).toBeInTheDocument();
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(mockNotificationToast.success).toHaveBeenCalledWith(
         'Attendee added successfully!',
       );
       // Callbacks should be invoked
