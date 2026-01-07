@@ -1,23 +1,13 @@
 import { MockedProvider } from '@apollo/react-testing';
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  within,
-} from '@testing-library/react';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import type {
-  IItemModalProps,
-  IUpdateActionItemForInstanceVariables,
-  ICreateActionItemVariables,
-} from 'types/ActionItems/interface.ts';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import type { IItemModalProps } from 'types/ActionItems/interface.ts';
 import ItemModal from './ActionItemModal';
-import { vi, it, describe, expect, beforeEach, afterEach } from 'vitest';
+import { vi, it, describe, expect, afterEach } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
+
 import {
   LocalizationProvider,
   AdapterDayjs,
@@ -39,7 +29,6 @@ import {
 } from 'GraphQl/Mutations/ActionItemMutations';
 import userEvent from '@testing-library/user-event';
 import type { IActionItemInfo } from 'types/ActionItems/interface';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
@@ -58,17 +47,6 @@ vi.mock('react-i18next', () => ({
     },
   }),
 }));
-
-const matchesInputSubset = (
-  variables: { input: unknown },
-  expectedInput: Record<string, unknown>,
-) => {
-  const actualInput = variables.input as Record<string, unknown> | undefined;
-  if (!actualInput) return false;
-  return Object.entries(expectedInput).every(
-    ([key, value]) => actualInput[key] === value,
-  );
-};
 
 const createVolunteer = (
   eventId: string,
@@ -513,7 +491,7 @@ const mockQueries = [
 
 const renderWithProviders = (props: IItemModalProps) => {
   return render(
-    <MockedProvider mocks={mockQueries}>
+    <MockedProvider mocks={mockQueries} addTypename={false}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <ItemModal {...props} />
       </LocalizationProvider>
@@ -620,9 +598,6 @@ const mockActionItemWithGroup = {
   },
 };
 
-const getPickerInputByLabel = (label: string) =>
-  screen.getByLabelText(label, { selector: 'input' });
-
 describe('ItemModal - Additional Test Cases', () => {
   afterEach(() => {
     vi.restoreAllMocks();
@@ -640,8 +615,10 @@ describe('ItemModal - Additional Test Cases', () => {
         editMode: false,
         actionItem: null,
       };
+
       renderWithProviders(props);
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+      expect(screen.queryByText('createActionItem')).not.toBeInTheDocument();
     });
 
     it('should render modal when isOpen is true', () => {
@@ -654,8 +631,12 @@ describe('ItemModal - Additional Test Cases', () => {
         editMode: false,
         actionItem: null,
       };
+
       renderWithProviders(props);
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+
+      // Check for modal by looking for the close button which is unique
+      expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('submitBtn')).toBeInTheDocument();
     });
 
     it('should call hide function when close button is clicked', () => {
@@ -669,9 +650,12 @@ describe('ItemModal - Additional Test Cases', () => {
         editMode: false,
         actionItem: null,
       };
+
       renderWithProviders(props);
+
       const closeButton = screen.getByTestId('modalCloseBtn');
       fireEvent.click(closeButton);
+
       expect(mockHide).toHaveBeenCalledTimes(1);
     });
 
@@ -688,18 +672,14 @@ describe('ItemModal - Additional Test Cases', () => {
 
       renderWithProviders(props);
 
-      await screen.findByRole('dialog');
-
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
         {},
         { timeout: 5000 },
       );
-
       expect(volunteerGroupSelect).toBeInTheDocument();
 
       const volunteerGroupInput = screen.getByLabelText(/volunteerGroup/i);
-
       await waitFor(
         () => {
           expect(volunteerGroupInput).toHaveValue('Test Group 1');
@@ -722,7 +702,9 @@ describe('ItemModal - Additional Test Cases', () => {
         editMode: false,
         actionItem: null,
       };
+
       renderWithProviders(props);
+
       const submitButton = screen.getByTestId('submitBtn');
       expect(submitButton).toHaveTextContent(/create/i);
     });
@@ -737,13 +719,16 @@ describe('ItemModal - Additional Test Cases', () => {
         editMode: true,
         actionItem: mockActionItem,
       };
+
       renderWithProviders(props);
+
       const notesFields = screen.getAllByRole('textbox');
       const hasFieldWithValue = notesFields.some(
         (field) =>
           field.getAttribute('value') === 'Test notes' ||
           field.textContent?.includes('Test notes'),
       );
+
       expect(hasFieldWithValue).toBe(true);
     });
   });
@@ -762,7 +747,9 @@ describe('ItemModal - Additional Test Cases', () => {
       };
 
       renderWithProviders(props);
-      await screen.findByRole('dialog');
+
+      // Wait for the modal to be rendered by checking for the submit button
+      await screen.findByTestId('submitBtn');
 
       const volunteerInput = screen.getByLabelText('volunteer *');
       await userEvent.click(volunteerInput);
@@ -775,8 +762,14 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(screen.getByLabelText('volunteer *')).toHaveValue('Jane Smith');
       });
 
-      const seriesRadio = screen.getByLabelText('entireSeries');
-      await userEvent.click(seriesRadio);
+      // Find the "entireSeries" chip by its text content
+      const seriesChip = screen
+        .getByText('entireSeries')
+        .closest('.MuiChip-root');
+      expect(seriesChip).toBeInTheDocument();
+      if (seriesChip) {
+        await userEvent.click(seriesChip);
+      }
 
       await waitFor(() => {
         expect(screen.getByLabelText('volunteer *')).toHaveValue('');

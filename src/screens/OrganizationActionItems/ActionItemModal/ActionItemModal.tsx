@@ -1,16 +1,14 @@
 /**
- * @file This file contains the ItemModal component, which is used for creating and updating action items.
+ * This component is used for creating and updating action items.
  */
+
 import React, { useEffect, useMemo, useState } from 'react';
-import { Modal, Form, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import type { FormEvent, FC } from 'react';
 import styles from 'style/app-fixed.module.css';
-
-// FIXED: Corrected import path from '@mui/date-pickers' to '@mui/x-date-pickers'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
-
 import type {
   IActionItemCategoryInfo,
   IActionItemInfo,
@@ -19,12 +17,10 @@ import type {
   IUpdateActionForInstanceInput,
   IEventVolunteerGroup,
 } from 'types/ActionItems/interface';
-
 import type {
   IFormStateType,
   IItemModalProps,
 } from 'types/ActionItems/interface.ts';
-
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useMutation, useQuery } from '@apollo/client';
@@ -47,6 +43,7 @@ import {
   GET_EVENT_VOLUNTEER_GROUPS,
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'types/Volunteer/interface';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 
 const initializeFormState = (
   actionItem: IActionItemInfo | null,
@@ -81,7 +78,6 @@ const ItemModal: FC<IItemModalProps> = ({
 
   const [actionItemCategory, setActionItemCategory] =
     useState<IActionItemCategoryInfo | null>(null);
-
   const [selectedVolunteer, setSelectedVolunteer] =
     useState<InterfaceEventVolunteerInfo | null>(null);
   const [selectedVolunteerGroup, setSelectedVolunteerGroup] =
@@ -89,11 +85,9 @@ const ItemModal: FC<IItemModalProps> = ({
   const [assignmentType, setAssignmentType] = useState<
     'volunteer' | 'volunteerGroup'
   >('volunteer');
-
   const [formState, setFormState] = useState<IFormStateType>(
     initializeFormState(actionItem),
   );
-
   const [applyTo, setApplyTo] = useState<'series' | 'instance'>('instance');
 
   const {
@@ -172,6 +166,7 @@ const ItemModal: FC<IItemModalProps> = ({
   const [createActionItem] = useMutation(CREATE_ACTION_ITEM_MUTATION, {
     refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
   });
+
   const [updateActionItem] = useMutation(UPDATE_ACTION_ITEM_MUTATION, {
     refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
   });
@@ -192,7 +187,10 @@ const ItemModal: FC<IItemModalProps> = ({
     field: keyof IFormStateType,
     value: string | boolean | Date | undefined | null,
   ): void => {
-    setFormState((prevState) => ({ ...prevState, [field]: value }));
+    setFormState((prevState) => ({
+      ...prevState,
+      [field]: value,
+    }));
   };
 
   const createActionItemHandler = async (e: FormEvent): Promise<void> => {
@@ -230,7 +228,6 @@ const ItemModal: FC<IItemModalProps> = ({
       setActionItemCategory(null);
       setSelectedVolunteer(null);
       setSelectedVolunteerGroup(null);
-
       runRefetches();
       hide();
       NotificationToast.success({
@@ -331,7 +328,6 @@ const ItemModal: FC<IItemModalProps> = ({
 
   useEffect(() => {
     setFormState(initializeFormState(actionItem));
-
     if (actionItem?.category?.id) {
       const foundCategory: IActionItemCategoryInfo | undefined =
         actionItemCategories.find(
@@ -390,6 +386,7 @@ const ItemModal: FC<IItemModalProps> = ({
       setSelectedVolunteer(null);
       handleFormChange('volunteerId', '');
     }
+
     if (
       selectedVolunteerGroup &&
       applyTo === 'series' &&
@@ -407,270 +404,229 @@ const ItemModal: FC<IItemModalProps> = ({
   }, [isOpen, editMode, actionItem]);
 
   return (
-    <Modal className={styles.itemModal} show={isOpen} onHide={hide}>
-      <Modal.Header>
-        <p className={styles.titlemodal}>
-          {editMode ? t('updateActionItem') : t('createActionItem')}
-        </p>
-        <Button
-          variant="danger"
-          onClick={hide}
-          className={styles.closeButton}
-          data-testid="modalCloseBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-      </Modal.Header>
-      <Modal.Body>
-        <Form
-          onSubmitCapture={
-            editMode
-              ? actionItem?.isTemplate
-                ? applyTo === 'series'
-                  ? updateActionItemHandler
-                  : updateActionForInstanceHandler
-                : updateActionItemHandler
-              : createActionItemHandler
-          }
-          className="p-2"
-        >
-          {(isRecurring && !editMode) ||
-          (editMode &&
-            actionItem?.isTemplate &&
-            !actionItem.isInstanceException) ? (
-            <Form.Group className="mb-3">
-              <Form.Label>{t('applyTo')}</Form.Label>
-              <Form.Check
-                type="radio"
+    <BaseModal
+      show={isOpen}
+      onHide={hide}
+      title={editMode ? t('updateActionItem') : t('createActionItem')}
+      size="lg"
+    >
+      <Form
+        onSubmit={
+          editMode
+            ? actionItem?.isInstanceException
+              ? updateActionForInstanceHandler
+              : updateActionItemHandler
+            : createActionItemHandler
+        }
+      >
+        {(isRecurring && !editMode) ||
+        (editMode &&
+          actionItem?.isTemplate &&
+          !actionItem.isInstanceException) ? (
+          <FormControl fullWidth margin="normal">
+            <Typography variant="body1" gutterBottom>
+              {t('applyTo')}
+            </Typography>
+            <Box display="flex" gap={2}>
+              <Chip
                 label={t('entireSeries')}
-                name="applyTo"
-                id="applyToSeries"
-                checked={applyTo === 'series'}
-                onChange={() => setApplyTo('series')}
+                variant={applyTo === 'series' ? 'filled' : 'outlined'}
+                color={applyTo === 'series' ? 'primary' : 'default'}
+                onClick={() => setApplyTo('series')}
               />
-              <Form.Check
-                type="radio"
-                label={t('thisEventOnly')}
-                name="applyTo"
-                id="applyToInstance"
-                checked={applyTo === 'instance'}
-                onChange={() => setApplyTo('instance')}
+              <Chip
+                label={t('thisInstance')}
+                variant={applyTo === 'instance' ? 'filled' : 'outlined'}
+                color={applyTo === 'instance' ? 'primary' : 'default'}
+                onClick={() => setApplyTo('instance')}
               />
-            </Form.Group>
-          ) : null}
+            </Box>
+          </FormControl>
+        ) : null}
 
-          <Form.Group
-            className="d-flex gap-3 mb-3"
-            data-testid="categorySelect"
-          >
-            <Autocomplete
-              className={`${styles.noOutline} w-100`}
-              data-cy="categorySelect"
-              options={actionItemCategories}
-              value={actionItemCategory}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
-              filterSelectedOptions={true}
-              getOptionLabel={(item: IActionItemCategoryInfo): string =>
-                item.name
-              }
-              onChange={(_, newCategory): void => {
-                handleFormChange('categoryId', newCategory?.id ?? '');
-                setActionItemCategory(newCategory);
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label={t('actionItemCategory')}
-                  required
-                />
-              )}
-            />
-          </Form.Group>
+        <FormControl fullWidth margin="normal">
+          <Autocomplete
+            id="actionItemCategorySelect"
+            data-testid="formSelectActionItemCategory"
+            options={actionItemCategories}
+            value={actionItemCategory}
+            isOptionEqualToValue={(option, value): boolean =>
+              option.id === value.id
+            }
+            filterSelectedOptions={true}
+            getOptionLabel={(item: IActionItemCategoryInfo): string =>
+              item.name
+            }
+            onChange={(_, newCategory): void => {
+              handleFormChange('categoryId', newCategory?.id ?? '');
+              setActionItemCategory(newCategory);
+            }}
+            renderInput={(params) => (
+              <TextField {...params} label={t('category') + ' *'} />
+            )}
+          />
+        </FormControl>
 
-          {!isCompleted && (
-            <>
-              <Box className="mb-3">
-                <Typography variant="subtitle2" className="mb-2">
-                  {t('assignTo')}
-                </Typography>
-                <Box className="d-flex gap-2">
-                  <Chip
-                    label={t('volunteer')}
-                    variant={
-                      assignmentType === 'volunteer' ? 'filled' : 'outlined'
-                    }
-                    color={
-                      assignmentType === 'volunteer' ? 'primary' : 'default'
-                    }
-                    onClick={() => {
-                      if (!isVolunteerChipDisabled) {
-                        setAssignmentType('volunteer');
-                        handleFormChange('volunteerGroupId', '');
-                        setSelectedVolunteerGroup(null);
-                      }
-                    }}
-                    clickable={!isVolunteerChipDisabled}
-                    sx={{
-                      opacity: isVolunteerChipDisabled ? 0.6 : 1,
-                      cursor: isVolunteerChipDisabled
-                        ? 'not-allowed'
-                        : 'pointer',
-                    }}
-                  />
-                  <Chip
-                    label={t('volunteerGroup')}
-                    variant={
-                      assignmentType === 'volunteerGroup'
-                        ? 'filled'
-                        : 'outlined'
-                    }
-                    color={
-                      assignmentType === 'volunteerGroup'
-                        ? 'primary'
-                        : 'default'
-                    }
-                    onClick={() => {
-                      if (!isVolunteerGroupChipDisabled) {
-                        setAssignmentType('volunteerGroup');
-                        handleFormChange('volunteerId', '');
-                        setSelectedVolunteer(null);
-                      }
-                    }}
-                    clickable={!isVolunteerGroupChipDisabled}
-                    sx={{
-                      opacity: isVolunteerGroupChipDisabled ? 0.6 : 1,
-                      cursor: isVolunteerGroupChipDisabled
-                        ? 'not-allowed'
-                        : 'pointer',
-                    }}
-                  />
-                </Box>
-              </Box>
-
-              {assignmentType === 'volunteer' && (
-                <Form.Group
-                  className="mb-3 w-100"
-                  data-testid="volunteerSelect"
-                >
-                  <Autocomplete
-                    className={`${styles.noOutline} w-100`}
-                    data-cy="volunteerSelect"
-                    options={volunteers}
-                    value={selectedVolunteer}
-                    isOptionEqualToValue={(option, value) =>
-                      option.id === value?.id
-                    }
-                    filterSelectedOptions={true}
-                    getOptionLabel={(
-                      volunteer: InterfaceEventVolunteerInfo,
-                    ): string => {
-                      return volunteer.user?.name || t('unknownVolunteer');
-                    }}
-                    onChange={(_, newVolunteer): void => {
-                      const volunteerId = newVolunteer?.id;
-                      handleFormChange('volunteerId', volunteerId);
+        {!isCompleted && (
+          <>
+            <FormControl fullWidth margin="normal">
+              <Typography variant="body1" gutterBottom>
+                {t('assignTo')}
+              </Typography>
+              <Box display="flex" gap={2}>
+                <Chip
+                  label={t('volunteer')}
+                  variant={
+                    assignmentType === 'volunteer' ? 'filled' : 'outlined'
+                  }
+                  color={assignmentType === 'volunteer' ? 'primary' : 'default'}
+                  onClick={() => {
+                    if (!isVolunteerChipDisabled) {
+                      setAssignmentType('volunteer');
                       handleFormChange('volunteerGroupId', '');
-                      setSelectedVolunteer(newVolunteer);
                       setSelectedVolunteerGroup(null);
-                    }}
-                    renderInput={(params) => (
-                      <TextField {...params} label={t('volunteer')} required />
-                    )}
-                  />
-                </Form.Group>
-              )}
-
-              {assignmentType === 'volunteerGroup' && (
-                <Form.Group
-                  className="mb-3 w-100"
-                  data-testid="volunteerGroupSelect"
-                >
-                  <Autocomplete
-                    className={`${styles.noOutline} w-100`}
-                    data-cy="volunteerGroupSelect"
-                    options={volunteerGroups}
-                    value={selectedVolunteerGroup}
-                    isOptionEqualToValue={(option, value) =>
-                      option.id === value?.id
-                    }
-                    filterSelectedOptions={true}
-                    getOptionLabel={(group: IEventVolunteerGroup): string => {
-                      return group.name;
-                    }}
-                    onChange={(_, newGroup): void => {
-                      const groupId = newGroup?.id;
-                      handleFormChange('volunteerGroupId', groupId);
-                      handleFormChange('volunteerId', '');
-                      setSelectedVolunteerGroup(newGroup);
-                      setSelectedVolunteer(null);
-                    }}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label={t('volunteerGroup')}
-                        required
-                      />
-                    )}
-                  />
-                </Form.Group>
-              )}
-
-              <Form.Group className="d-flex gap-3 mx-auto mb-3">
-                <DatePicker
-                  format="DD/MM/YYYY"
-                  label={t('assignmentDate')}
-                  className={styles.noOutline}
-                  value={dayjs(assignedAt)}
-                  disabled={editMode}
-                  onChange={(date: Dayjs | null): void => {
-                    if (date && !editMode) {
-                      handleFormChange('assignedAt', date.toDate());
                     }
                   }}
+                  clickable={!isVolunteerChipDisabled}
+                  sx={{
+                    opacity: isVolunteerChipDisabled ? 0.6 : 1,
+                    cursor: isVolunteerChipDisabled ? 'not-allowed' : 'pointer',
+                  }}
                 />
-              </Form.Group>
-
-              <FormControl fullWidth className="mb-2">
-                <TextField
-                  label={t('preCompletionNotes')}
-                  variant="outlined"
-                  data-cy="preCompletionNotes"
-                  className={styles.noOutline}
-                  value={preCompletionNotes}
-                  onChange={(e) =>
-                    handleFormChange('preCompletionNotes', e.target.value)
+                <Chip
+                  label={t('volunteerGroup')}
+                  variant={
+                    assignmentType === 'volunteerGroup' ? 'filled' : 'outlined'
                   }
+                  color={
+                    assignmentType === 'volunteerGroup' ? 'primary' : 'default'
+                  }
+                  onClick={() => {
+                    if (!isVolunteerGroupChipDisabled) {
+                      setAssignmentType('volunteerGroup');
+                      handleFormChange('volunteerId', '');
+                      setSelectedVolunteer(null);
+                    }
+                  }}
+                  clickable={!isVolunteerGroupChipDisabled}
+                  sx={{
+                    opacity: isVolunteerGroupChipDisabled ? 0.6 : 1,
+                    cursor: isVolunteerGroupChipDisabled
+                      ? 'not-allowed'
+                      : 'pointer',
+                  }}
+                />
+              </Box>
+            </FormControl>
+
+            {assignmentType === 'volunteer' && (
+              <FormControl fullWidth margin="normal">
+                <Autocomplete
+                  id="volunteerSelect"
+                  data-testid="volunteerSelect"
+                  options={volunteers}
+                  value={selectedVolunteer}
+                  isOptionEqualToValue={(option, value): boolean =>
+                    option.id === value?.id
+                  }
+                  filterSelectedOptions={true}
+                  getOptionLabel={(
+                    volunteer: InterfaceEventVolunteerInfo,
+                  ): string => {
+                    return volunteer.user?.name || t('unknownVolunteer');
+                  }}
+                  onChange={(_, newVolunteer): void => {
+                    const volunteerId = newVolunteer?.id;
+                    handleFormChange('volunteerId', volunteerId);
+                    handleFormChange('volunteerGroupId', '');
+                    setSelectedVolunteer(newVolunteer);
+                    setSelectedVolunteerGroup(null);
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params} label={t('volunteer') + ' *'} />
+                  )}
                 />
               </FormControl>
-            </>
-          )}
+            )}
 
-          {isCompleted && (
-            <FormControl fullWidth className="mb-2">
-              <TextField
-                label={t('postCompletionNotes')}
-                className={styles.noOutline}
-                value={postCompletionNotes || ''}
-                multiline
-                maxRows={3}
-                onChange={(e) =>
-                  handleFormChange('postCompletionNotes', e.target.value)
-                }
-              />
-            </FormControl>
-          )}
+            {assignmentType === 'volunteerGroup' && (
+              <FormControl fullWidth margin="normal">
+                <Autocomplete
+                  id="volunteerGroupSelect"
+                  data-testid="volunteerGroupSelect"
+                  options={volunteerGroups}
+                  value={selectedVolunteerGroup}
+                  isOptionEqualToValue={(option, value): boolean =>
+                    option.id === value?.id
+                  }
+                  filterSelectedOptions={true}
+                  getOptionLabel={(group: IEventVolunteerGroup): string => {
+                    return group.name;
+                  }}
+                  onChange={(_, newGroup): void => {
+                    const groupId = newGroup?.id;
+                    handleFormChange('volunteerGroupId', groupId);
+                    handleFormChange('volunteerId', '');
+                    setSelectedVolunteerGroup(newGroup);
+                    setSelectedVolunteer(null);
+                  }}
+                  renderInput={(params) => (
+                    <TextField {...params} label={t('volunteerGroup') + ' *'} />
+                  )}
+                />
+              </FormControl>
+            )}
+          </>
+        )}
 
-          <Button
-            type="submit"
-            className={styles.addButton}
-            data-testid="submitBtn"
-            data-cy="submitBtn"
-          >
-            {editMode ? t('updateActionItem') : t('createActionItem')}
-          </Button>
-        </Form>
-      </Modal.Body>
-    </Modal>
+        <FormControl fullWidth margin="normal">
+          <DatePicker
+            label={t('dueDate')}
+            value={dayjs(assignedAt)}
+            onChange={(date: Dayjs | null): void => {
+              if (date && !editMode) {
+                handleFormChange('assignedAt', date.toDate());
+              }
+            }}
+          />
+        </FormControl>
+
+        <Form.Group className="mb-3">
+          <Form.Control
+            as="textarea"
+            rows={3}
+            placeholder={t('preCompletionNotes')}
+            value={preCompletionNotes}
+            onChange={(e): void =>
+              handleFormChange('preCompletionNotes', e.target.value)
+            }
+          />
+        </Form.Group>
+
+        {isCompleted && (
+          <Form.Group className="mb-3">
+            <Form.Control
+              as="textarea"
+              rows={3}
+              placeholder={t('postCompletionNotes')}
+              value={postCompletionNotes || ''}
+              onChange={(e): void =>
+                handleFormChange('postCompletionNotes', e.target.value)
+              }
+            />
+          </Form.Group>
+        )}
+
+        <Button
+          type="submit"
+          className={styles.greenregbtn}
+          value="createActionItem"
+          data-testid="submitBtn"
+        >
+          {editMode ? t('updateActionItem') : t('createActionItem')}
+        </Button>
+      </Form>
+    </BaseModal>
   );
 };
 
