@@ -10,10 +10,10 @@ import tsdoc from 'eslint-plugin-tsdoc';
 import vitestIsolation from './scripts/eslint-plugin-vitest-isolation/index.js';
 
 /**
-  * Central registry for restricted imports used by the base rule and overrides.
-  * Add new restrictions here, then allow them in specific folders via IDs.
-  * For more details refer `docs/docs/docs/developer-resources/reusable-components.md`
-*/
+ * Central registry for restricted imports used by the base rule and overrides.
+ * Add new restrictions here, then allow them in specific folders via IDs.
+ * For more details refer `docs/docs/docs/developer-resources/reusable-components.md`
+ */
 const restrictedImports = [
   {
     id: 'mui-data-grid',
@@ -49,7 +49,13 @@ const restrictedImports = [
   },
 ];
 
-const restrictedImportPaths = restrictedImports.map(({ id, ...rule }) => rule);
+const stripId = (entry) => {
+  const { id, ...rule } = entry;
+  void id;
+  return rule;
+};
+
+const restrictedImportPaths = restrictedImports.map(stripId);
 
 const restrictImportsExcept = (allowedIds = []) => ({
   'no-restricted-imports': [
@@ -57,7 +63,7 @@ const restrictImportsExcept = (allowedIds = []) => ({
     {
       paths: restrictedImports
         .filter(({ id }) => !allowedIds.includes(id))
-        .map(({ id, ...rule }) => rule),
+        .map(stripId),
     },
   ],
 });
