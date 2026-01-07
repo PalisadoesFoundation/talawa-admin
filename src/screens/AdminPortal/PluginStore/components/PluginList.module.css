@@ -31,8 +31,8 @@
 }
 
 .pluginName {
-  font-weight: 600;
-  font-size: 18;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-lg);
   margin-bottom: var(--space-1);
   white-space: nowrap;
   overflow: hidden;
@@ -40,7 +40,7 @@
 }
 
 .pluginDescription {
-  font-size: 14;
+  font-size: var(--font-size-sm);
   color: #555;
   margin-bottom: var(--space-1);
   white-space: nowrap;
@@ -49,7 +49,7 @@
 }
 
 .pluginAuthor {
-  font-size: 13;
+  font-size: var(--font-size-sm);
   color: #888;
 }
 

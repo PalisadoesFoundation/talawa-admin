@@ -36,15 +36,6 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
-  const dateTimePickerModule = await vi.importActual(
-    '@mui/x-date-pickers/DesktopDateTimePicker',
-  );
-  return {
-    DateTimePicker: dateTimePickerModule.DesktopDateTimePicker,
-  };
-});
-
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(MOCKS_EMPTY);
 const link3 = new StaticMockLink(MOCKS_ERROR);
@@ -77,6 +68,7 @@ const renderActionItemCategories = (
 
 describe('Testing Organisation Action Item Categories', () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
