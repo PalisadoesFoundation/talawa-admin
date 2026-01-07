@@ -1,50 +1,18 @@
 /**
  * AdvertisementRegister Component
  *
- * This component handles the creation and editing of advertisements for an organization.
- * It provides a modal-based form to input advertisement details such as name, media, type,
- * start date, and end date. The component supports both "register" and "edit" modes.
+ * Handles the creation and editing of advertisements.
  *
- * @component
- * @param {InterfaceAddOnRegisterProps} props - The properties for the component.
- * @param {string} [props.formStatus='register'] - Determines whether the form is in "register" or "edit" mode.
- * @param {string} [props.idEdit] - The ID of the advertisement being edited (used in "edit" mode).
- * @param {string} [props.nameEdit=''] - The name of the advertisement being edited.
- * @param {string} [props.typeEdit='BANNER'] - The type of the advertisement being edited.
- * @param {string} [props.advertisementMediaEdit=''] - The media file of the advertisement being edited.
- * @param {Date} [props.startDateEdit=new Date()] - The start date of the advertisement being edited.
- * @param {Date} [props.endDateEdit=new Date()] - The end date of the advertisement being edited.
- * @param {Function} props.setAfter - Callback to reset pagination or refetch data after mutation.
- *
- * @returns {JSX.Element} The AdvertisementRegister component.
+ * @param props - The properties for the component.
+ * @returns The AdvertisementRegister component.
  *
  * @remarks
- * - Uses `react-bootstrap` for modal and form components.
- * - Integrates with Apollo Client for GraphQL mutations and queries.
- * - Validates date ranges to ensure the end date is not earlier than the start date.
- * - Converts uploaded media files to Base64 format for preview and submission.
- *
- * @example
- * <AdvertisementRegister
- *   formStatus="register"
- *   setAfter={setAfterCallback}
- * />
- *
- * @example
- * <AdvertisementRegister
- *   formStatus="edit"
- *   idEdit="123"
- *   nameEdit="Sample Ad"
- *   typeEdit="POPUP"
- *   advertisementMediaEdit="base64string"
- *   startDateEdit={new Date()}
- *   endDateEdit={new Date()}
- *   setAfter={setAfterCallback}
- * />
+ * - Media upload is temporarily disabled to align with Apollo HttpLink standardization.
+ * - End date validation ensures the range is logical.
  */
 import React, { useState, useEffect } from 'react';
 import styles from 'style/app-fixed.module.css';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import {
   ADD_ADVERTISEMENT_MUTATION,
   UPDATE_ADVERTISEMENT_MUTATION,
@@ -56,16 +24,15 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 
-// Extend dayjs with UTC plugin
 dayjs.extend(utc);
 import { useParams } from 'react-router';
 import type {
   InterfaceAddOnRegisterProps,
   InterfaceFormStateTypes,
 } from 'types/Advertisement/interface';
-import { FaTrashCan } from 'react-icons/fa6';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { BaseModal } from 'shared-components/BaseModal';
 
 function AdvertisementRegister({
   formStatus = 'register',
@@ -88,9 +55,7 @@ function AdvertisementRegister({
   if (currentOrg === undefined) {
     return <PageNotFound />;
   }
-  /*
-   * Mutation to add advertisement and refetch the advertisement list
-   */
+
   const [createAdvertisement] = useMutation(ADD_ADVERTISEMENT_MUTATION, {
     refetchQueries: [
       {
@@ -116,12 +81,8 @@ function AdvertisementRegister({
     ],
   });
 
-  /*
-   * Mutation to update advertisement and refetch the advertisement list
-   */
   const [updateAdvertisement] = useMutation(UPDATE_ADVERTISEMENT_MUTATION);
 
-  // Set Initial Form State While Creating an Advertisemnt
   const [formState, setFormState] = useState<InterfaceFormStateTypes>({
     name: '',
     description: null,
@@ -143,48 +104,8 @@ function AdvertisementRegister({
     setShow(false);
   };
 
-  const handleShow = (): void => setShow(true); // Shows the modal
+  const handleShow = (): void => setShow(true);
 
-  // Handle file uploads
-  const handleFileUpload = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): Promise<void> => {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      const validFiles: File[] = [];
-      const maxFileSize = 5 * 1024 * 1024; // 5MB
-      const allowedTypes = ['image/jpeg', 'image/png', 'video/mp4'];
-
-      Array.from(files).forEach((file) => {
-        if (!allowedTypes.includes(file.type)) {
-          NotificationToast.error(
-            t('invalidFileType', { fileName: file.name }),
-          );
-        } else if (file.size > maxFileSize) {
-          NotificationToast.error(t('fileTooLarge', { fileName: file.name }));
-        } else {
-          validFiles.push(file);
-        }
-      });
-
-      if (validFiles.length > 0) {
-        setFormState((prev) => ({
-          ...prev,
-          attachments: [...prev.attachments, ...validFiles],
-        }));
-      }
-    }
-  };
-
-  // Handle file removal
-  const removeFile = (index: number): void => {
-    setFormState((prev) => ({
-      ...prev,
-      attachments: prev.attachments.filter((_, i) => i !== index),
-    }));
-  };
-
-  // Set form state if editing
   useEffect(() => {
     if (formStatus === 'edit') {
       setFormState((prevState) => ({
@@ -207,7 +128,6 @@ function AdvertisementRegister({
     currentOrg,
   ]);
 
-  // Validates the date range and performs the mutation to create an advertisement.
   const handleRegister = async (): Promise<void> => {
     try {
       const startDate = dayjs(formState.startAt).startOf('day');
@@ -229,15 +149,13 @@ function AdvertisementRegister({
         type: string;
         startAt: string;
         endAt: string;
-        attachments: File[] | undefined;
         description?: string | null;
       } = {
-        organizationId: currentOrg,
+        organizationId: currentOrg as string,
         name: formState.name as string,
         type: formState.type as string,
         startAt: dayjs.utc(formState.startAt).startOf('day').toISOString(),
         endAt: dayjs.utc(formState.endAt).startOf('day').toISOString(),
-        attachments: formState.attachments,
       };
 
       if (formState.description !== null) {
@@ -250,19 +168,10 @@ function AdvertisementRegister({
       const { data } = await createAdvertisement({
         variables,
       });
+
       if (data) {
         NotificationToast.success(t('advertisementCreated') as string);
         handleClose();
-        setFormState({
-          name: '',
-          type: 'banner',
-          description: null,
-          startAt: new Date(formState.startAt),
-          endAt: new Date(),
-          organizationId: currentOrg,
-          attachments: [],
-          existingAttachments: undefined,
-        });
         setAfterActive(null);
         setAfterCompleted(null);
       }
@@ -277,12 +186,10 @@ function AdvertisementRegister({
     }
   };
 
-  // Handles advertisement update.
   const handleUpdate = async (): Promise<void> => {
     try {
       const updatedFields: Partial<InterfaceFormStateTypes> = {};
 
-      // Only include the fields which are updated
       if (formState.name !== nameEdit) {
         updatedFields.name = formState.name;
       }
@@ -299,7 +206,6 @@ function AdvertisementRegister({
         updatedFields.endAt = formState.endAt;
       }
 
-      // if both are updated, check if end date is greater or not
       if (updatedFields.endAt && updatedFields.startAt) {
         const startDate = dayjs(updatedFields.startAt).startOf('day');
         const endDate = dayjs(updatedFields.endAt).startOf('day');
@@ -324,7 +230,6 @@ function AdvertisementRegister({
         ...(endAt && { endAt }),
       };
 
-      // query to update the advertisement.
       const { data } = await updateAdvertisement({
         variables: mutationVariables,
       });
@@ -345,7 +250,6 @@ function AdvertisementRegister({
   };
 
   return (
-    //If register show register button else show edit button
     <ErrorBoundaryWrapper
       fallbackErrorMessage={tErrors('defaultErrorMessage')}
       fallbackTitle={tErrors('title')}
@@ -369,160 +273,105 @@ function AdvertisementRegister({
           {tCommon('edit')}
         </div>
       )}
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          {formStatus === 'register' ? (
-            <Modal.Title> {t('addNew')}</Modal.Title>
-          ) : (
-            <Modal.Title>{t('editAdvertisement')}</Modal.Title>
-          )}
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3" controlId="registerForm.Rname">
-              <Form.Label>{t('Rname')}</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder={t('EXname')}
-                autoComplete="off"
-                required
-                value={formState.name}
-                onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    name: e.target.value,
-                  });
-                }}
-                className={styles.inputField}
-                data-cy="advertisementNameInput"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="registerForm.Rdesc">
-              <Form.Label>{t('Rdesc')}</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder={t('EXdesc')}
-                autoComplete="off"
-                value={formState.description || ''}
-                onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    description: e.target.value,
-                  });
-                }}
-                className={styles.inputField}
-                data-cy="advertisementDescriptionInput"
-              />
-            </Form.Group>
-            {formStatus === 'register' && (
-              <Form.Group className="mb-3">
-                <Form.Label htmlFor="advertisementMedia">
-                  {t('Rmedia')}
-                </Form.Label>
-                <Form.Control
-                  accept="image/*, video/*"
-                  data-testid="advertisementMedia"
-                  name="advertisementMedia"
-                  type="file"
-                  id="advertisementMedia"
-                  multiple={true}
-                  onChange={handleFileUpload}
-                  className={styles.inputField}
-                  data-cy="advertisementMediaInput"
-                />
-                {/* Preview section */}
-                {formState.attachments.map((file, index) => (
-                  <div key={index}>
-                    {file.type.startsWith('video/') ? (
-                      <video
-                        data-testid="mediaPreview"
-                        controls
-                        src={encodeURI(URL.createObjectURL(file))}
-                        className={styles.previewAdvertisementRegister}
-                      >
-                        <track
-                          kind="captions"
-                          srcLang="en"
-                          label={t('englishCaptions')}
-                        />
-                      </video>
-                    ) : (
-                      <img
-                        data-testid="mediaPreview"
-                        src={encodeURI(URL.createObjectURL(file))}
-                        alt={t('preview')}
-                        className={styles.previewAdvertisementRegister}
-                      />
-                    )}
-                    <Button
-                      variant="danger"
-                      data-testid="closePreview"
-                      className={styles.removeButton}
-                      onClick={() => removeFile(index)}
-                    >
-                      <FaTrashCan />
-                    </Button>
-                  </div>
-                ))}
-              </Form.Group>
-            )}
-            <Form.Group className="mb-3" controlId="registerForm.Rtype">
-              <Form.Label>{t('Rtype')}</Form.Label>
-              <Form.Select
-                aria-label={t('Rtype')}
-                value={formState.type}
-                onChange={(e): void => {
-                  setFormState({
-                    ...formState,
-                    type: e.target.value,
-                  });
-                }}
-                className={styles.inputField}
-                data-cy="advertisementTypeSelect"
-              >
-                <option value="banner">{t('bannerAd')} </option>
-                <option value="pop_up">{t('popupAd')}</option>
-                <option value="menu">{t('menuAd')}</option>
-              </Form.Select>
-            </Form.Group>
+      <BaseModal
+        show={show}
+        onHide={handleClose}
+        headerContent={
+          <div data-testid="advertisementModalHeader">
+            {formStatus === 'register' ? t('addNew') : t('editAdvertisement')}
+          </div>
+        }
+      >
+        <Form>
+          <Form.Group className="mb-3" controlId="registerForm.Rname">
+            <Form.Label>{t('Rname')}</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder={t('EXname')}
+              autoComplete="off"
+              required
+              value={formState.name}
+              onChange={(e): void => {
+                setFormState((prev) => ({
+                  ...prev,
+                  name: e.target.value,
+                }));
+              }}
+              className={styles.inputField}
+              data-cy="advertisementNameInput"
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="registerForm.Rdesc">
+            <Form.Label>{t('Rdesc')}</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder={t('EXdesc')}
+              autoComplete="off"
+              value={formState.description || ''}
+              onChange={(e): void => {
+                setFormState((prev) => ({
+                  ...prev,
+                  description: e.target.value,
+                }));
+              }}
+              className={styles.inputField}
+              data-cy="advertisementDescriptionInput"
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="registerForm.Rtype">
+            <Form.Label>{t('Rtype')}</Form.Label>
+            <Form.Select
+              aria-label={t('Rtype')}
+              value={formState.type}
+              onChange={(e): void => {
+                setFormState((prev) => ({
+                  ...prev,
+                  type: e.target.value,
+                }));
+              }}
+              className={styles.inputField}
+              data-cy="advertisementTypeSelect"
+            >
+              <option value="banner">{t('bannerAd')} </option>
+              <option value="pop_up">{t('popupAd')}</option>
+              <option value="menu">{t('menuAd')}</option>
+            </Form.Select>
+          </Form.Group>
 
-            <Form.Group className="mb-3" controlId="registerForm.RstartAt">
-              <Form.Label>{t('RstartDate')}</Form.Label>
-              <Form.Control
-                type="date"
-                required
-                value={dayjs.utc(formState.startAt).format('YYYY-MM-DD')}
-                onChange={(e): void => {
-                  // Create UTC date from date input to avoid timezone issues
-                  const newDate = dayjs.utc(e.target.value).toDate();
-                  setFormState({
-                    ...formState,
-                    startAt: newDate,
-                  });
-                }}
-                className={styles.inputField}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="registerForm.RDate">
-              <Form.Label>{t('RendDate')}</Form.Label>
-              <Form.Control
-                type="date"
-                required
-                value={dayjs.utc(formState.endAt).format('YYYY-MM-DD')}
-                onChange={(e): void => {
-                  // Create UTC date from date input to avoid timezone issues
-                  const newDate = dayjs.utc(e.target.value).toDate();
-                  setFormState({
-                    ...formState,
-                    endAt: newDate,
-                  });
-                }}
-                className={styles.inputField}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
+          <Form.Group className="mb-3" controlId="registerForm.RstartAt">
+            <Form.Label>{t('RstartDate')}</Form.Label>
+            <Form.Control
+              type="date"
+              required
+              value={dayjs.utc(formState.startAt).format('YYYY-MM-DD')}
+              onChange={(e): void => {
+                const newDate = dayjs.utc(e.target.value).toDate();
+                setFormState((prev) => ({
+                  ...prev,
+                  startAt: newDate,
+                }));
+              }}
+              className={styles.inputField}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="registerForm.RDate">
+            <Form.Label>{t('RendDate')}</Form.Label>
+            <Form.Control
+              type="date"
+              required
+              value={dayjs.utc(formState.endAt).format('YYYY-MM-DD')}
+              onChange={(e): void => {
+                const newDate = dayjs.utc(e.target.value).toDate();
+                setFormState((prev) => ({
+                  ...prev,
+                  endAt: newDate,
+                }));
+              }}
+              className={styles.inputField}
+            />
+          </Form.Group>
+        </Form>
+        <div className="d-flex justify-content-end gap-2 mt-4">
           <Button
             variant="secondary"
             onClick={handleClose}
@@ -550,8 +399,8 @@ function AdvertisementRegister({
               {tCommon('saveChanges')}
             </Button>
           )}
-        </Modal.Footer>
-      </Modal>
+        </div>
+      </BaseModal>
     </ErrorBoundaryWrapper>
   );
 }

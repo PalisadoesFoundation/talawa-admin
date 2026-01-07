@@ -17,7 +17,7 @@ import styles from 'style/app-fixed.module.css';
  * The skeleton items are styled using CSS classes provided by the `styles` object,
  * and each item is uniquely identified with a `data-testid` attribute for testing purposes.
  *
- * @returns {JSX.Element[]} An array of JSX elements representing the skeleton loaders.
+ * @returns An array of JSX elements representing the skeleton loaders.
  */
 export function AdvertisementSkeleton() {
   return [...Array(6)].map((_, index) => (

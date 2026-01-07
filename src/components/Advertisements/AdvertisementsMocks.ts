@@ -9,6 +9,8 @@
  * - Provides tailored mock scenarios: Active/Completed lists, Infinite Scrolling, and Error states.
  * - Includes mutation mocks for Creating, Updating, and Deleting advertisements.
  * - Uses `act` wrappers in utility functions to handle async React state updates.
+ * - File: AdvertisementsMocks.ts
+ * - Category: Mocks
  *
  * @example
  * ```tsx
@@ -21,9 +23,6 @@
  * </MockedProvider>
  * );
  * ```
- *
- * @file AdvertisementsMocks.ts
- * @category Mocks
  */
 import { act } from 'react';
 import type { NormalizedCacheObject, DocumentNode } from '@apollo/client';

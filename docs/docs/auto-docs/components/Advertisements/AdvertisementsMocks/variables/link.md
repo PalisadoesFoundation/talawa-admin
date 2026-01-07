@@ -6,4 +6,4 @@
 
 > `const` **link**: `ApolloLink`
 
-Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:191](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L191)
+Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:190](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L190)

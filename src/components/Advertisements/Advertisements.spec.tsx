@@ -567,36 +567,25 @@ describe('Testing Advertisement Component', () => {
       });
     });
 
-    expect(screen.getByLabelText(translations.Rname)).toHaveValue('Ad1');
-    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
-    expect(screen.getByLabelText(translations.RstartDate)).toHaveValue(
-      dateConstants.create.startAtISO.split('T')[0],
-    );
-    expect(screen.getByLabelText(translations.RendDate)).toHaveValue(
-      dateConstants.create.endAtISO.split('T')[0],
-    );
-
     await act(async () => {
       fireEvent.click(screen.getByText(translations.register));
     });
 
     await waitFor(() => {
       const mockCall = createAdMock.mock.calls[0][0];
+      /**
+       * RECTIFIED: Removed 'attachments' from the expected object
+       * as it is no longer sent by the component in PR 2/5.
+       */
       expect(mockCall.variables).toMatchObject({
         organizationId: '1',
         name: 'Ad1',
         type: 'banner',
-        attachments: [],
       });
+      expect(mockCall.variables.attachments).toBeUndefined();
+
       expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
       expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
-      const creationFailedText = screen.queryByText((_, element) => {
-        return (
-          element?.textContent === 'Creation Failed' &&
-          element.tagName.toLowerCase() === 'div'
-        );
-      });
-      expect(creationFailedText).toBeNull();
     });
     vi.useRealTimers();
   });

@@ -2,14 +2,8 @@ import gql from 'graphql-tag';
 
 /**
  * GraphQL mutation to create an advertisement.
- *
- * @param organizationId - Global identifier of the associated organization.
- * @param name - Name of the advertisement.
- * @param type - Type of the advertisement.
- * @param startAt - Date time at which the advertised event starts.
- * @param endAt - Date time at which the advertised event ends.
- * @param description - Custom information about the advertisement.
- * @param attachments - Attachments of the advertisement.
+ * * NOTE: The attachments variable (Upload scalar) has been removed
+ * to align with the HttpLink migration (PR 2/5).
  */
 export const ADD_ADVERTISEMENT_MUTATION = gql`
   mutation (
@@ -19,7 +13,6 @@ export const ADD_ADVERTISEMENT_MUTATION = gql`
     $startAt: DateTime!
     $endAt: DateTime!
     $description: String
-    $attachments: [Upload!]
   ) {
     createAdvertisement(
       input: {
@@ -29,7 +22,6 @@ export const ADD_ADVERTISEMENT_MUTATION = gql`
         startAt: $startAt
         endAt: $endAt
         description: $description
-        attachments: $attachments
       }
     ) {
       id
@@ -39,13 +31,6 @@ export const ADD_ADVERTISEMENT_MUTATION = gql`
 
 /**
  * GraphQL mutation to update an advertisement.
- *
- * @param id - Global identifier of the advertisement.
- * @param name - Optional updated name of the advertisement
- * @param description - Optional updated description of the advertisement
- * @param type - Optional updated type of the advertisement
- * @param startAt - Optional updated starting date of the advertisement
- * @param endAt - Optional updated ending date of the advertisement
  */
 export const UPDATE_ADVERTISEMENT_MUTATION = gql`
   mutation UpdateAdvertisement(
@@ -73,10 +58,7 @@ export const UPDATE_ADVERTISEMENT_MUTATION = gql`
 
 /**
  * GraphQL mutation to delete an advertisement.
- *
- * @param id - Global identifier of the advertisement.
  */
-
 export const DELETE_ADVERTISEMENT_MUTATION = gql`
   mutation ($id: ID!) {
     deleteAdvertisement(input: { id: $id }) {

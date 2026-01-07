@@ -4,32 +4,22 @@
  * infinite scrolling, tabbed views for active and archived advertisements,
  * and a search bar for filtering advertisements.
  *
- * @component
- * @returns {JSX.Element} The rendered Advertisements component.
+ * @returns The rendered Advertisements component.
  *
  * @remarks
  * - Utilizes Apollo Client's `useQuery` for fetching advertisement data.
  * - Supports infinite scrolling for loading more advertisements.
  * - Displays advertisements in two tabs: active and archived.
  * - Includes a search bar and advertisement registration functionality.
- *
- * @dependencies
- * - `react`, `react-bootstrap`, `react-router-dom`, `react-i18next`
- * - `@apollo/client` for GraphQL queries.
- * - `InfiniteScroll` for infinite scrolling functionality.
+ * - Dependencies: react, react-bootstrap, react-router-dom, react-i18next,
+ * \@apollo/client, react-infinite-scroll-component.
+ * - The component fetches advertisements using the ORGANIZATION_ADVERTISEMENT_LIST
+ * GraphQL query and organizes them into active and archived categories.
  *
  * @example
  * ```tsx
  * <Advertisements />
  * ```
- *
- * @remarks
- * The component fetches advertisements using the `ORGANIZATION_ADVERTISEMENT_LIST`
- * GraphQL query and organizes them into active and archived categories based on
- * their `endDate`.
- *
- * @see {@link AdvertisementEntry} for rendering individual advertisements.
- * @see {@link AdvertisementRegister} for registering new advertisements.
  */
 
 import React, { useEffect, useState } from 'react';

@@ -6,7 +6,7 @@
 
 > **updateDates**: `object`
 
-Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:175](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L175)
+Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:174](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L174)
 
 ## Type Declaration
 

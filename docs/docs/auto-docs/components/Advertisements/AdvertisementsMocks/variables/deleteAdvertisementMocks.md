@@ -6,4 +6,4 @@
 
 > `const` **deleteAdvertisementMocks**: (`IAdvertisementListMock` \| `IBaseMutationMock`\<\{ `id`: `string`; \}\>)[]
 
-Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:356](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L356)
+Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:355](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L355)
