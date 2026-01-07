@@ -38,7 +38,8 @@ function AdvertisementEntry({
     React.SetStateAction<string | null | undefined>
   >;
 }): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
+  // Removed keyPrefix to ensure the translation script can resolve full paths
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -78,7 +79,7 @@ function AdvertisementEntry({
       await deleteAd({
         variables: { id: advertisement.id },
       });
-      NotificationToast.success(t('advertisementDeleted') as string);
+      NotificationToast.success(t('advertisement.advertisementDeleted') as string);
       setButtonLoading(false);
       setAfterCompleted?.(null);
       setAfterActive?.(null);
@@ -180,7 +181,7 @@ function AdvertisementEntry({
                           <img
                             className={`d-block w-100 ${styles.cardImage}`}
                             src={attachment.url}
-                            alt={t('advertisementImageAlt', {
+                            alt={t('advertisement.advertisementImageAlt', {
                               index: index + 1,
                               name: advertisement.name ?? 'ad',
                             })}
@@ -196,7 +197,7 @@ function AdvertisementEntry({
                     <img
                       className={`d-block w-100 ${styles.cardImage}`}
                       src={advertisement.attachments?.[0]?.url}
-                      alt={t('advertisementMedia')}
+                      alt={t('advertisement.advertisementMedia')}
                       data-testid="media"
                       crossOrigin="anonymous"
                     />
@@ -207,7 +208,7 @@ function AdvertisementEntry({
                   className={`${styles.noMediaPlaceholder} ${styles.imageWrapper}`}
                   data-testid="media"
                 >
-                  {t('noMediaAvailable')}
+                  {t('advertisement.noMediaAvailable')}
                 </div>
               )}
             </div>
@@ -225,16 +226,16 @@ function AdvertisementEntry({
                     : localStyles.noDescription
                 }
               >
-                {advertisement.description || t('noDescription')}
+                {advertisement.description || t('advertisement.noDescription')}
               </Card.Text>
               <Card.Text data-testid="Ad_start_date">
-                {t('ads.starts')} :{' '}
+                {t('advertisement.ads.starts')} :{' '}
                 {advertisement.startAt
                   ? new Date(advertisement.startAt).toDateString()
                   : tCommon('na')}
               </Card.Text>
               <Card.Text data-testid="Ad_end_date">
-                {t('ads.ends')} :{' '}
+                {t('advertisement.ads.ends')} :{' '}
                 {advertisement.endAt
                   ? new Date(advertisement.endAt).toDateString()
                   : tCommon('na')}
@@ -244,9 +245,9 @@ function AdvertisementEntry({
                 className="mb-2 text-muted author"
                 data-testid="Ad_type"
               >
-                {t('ads.type')} :{' '}
+                {t('advertisement.ads.type')} :{' '}
                 {advertisement.type === 'pop_up'
-                  ? t('ads.types.pop_up')
+                  ? t('advertisement.ads.types.pop_up')
                   : advertisement.type || tCommon('na')}
               </Card.Subtitle>
               <div className={styles.buttons}>
@@ -259,7 +260,7 @@ function AdvertisementEntry({
                   <LoadingState isLoading={buttonLoading} variant="spinner">
                     <i className="fa fa-eye" />
                   </LoadingState>
-                  {t('view')}
+                  {t('advertisement.view')}
                 </Button>
               </div>
 
@@ -269,7 +270,7 @@ function AdvertisementEntry({
                 headerContent={
                   <div className="d-flex align-items-center justify-content-between w-100">
                     <h5 data-testid="delete_title" className="mb-0">
-                      {t('deleteAdvertisement')}
+                      {t('advertisement.deleteAdvertisement')}
                     </h5>
                     <Button
                       type="button"
@@ -282,7 +283,7 @@ function AdvertisementEntry({
                 }
               >
                 <div data-testid="delete_body" className="mb-4">
-                  {t('deleteAdvertisementMsg')}
+                  {t('advertisement.deleteAdvertisementMsg')}
                 </div>
                 <div className="d-flex justify-content-end gap-2">
                   <Button
