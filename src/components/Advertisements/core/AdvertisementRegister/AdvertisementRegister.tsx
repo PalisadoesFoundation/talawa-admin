@@ -5,7 +5,7 @@
  * It provides a modal-based form to input advertisement details such as name, media, type,
  * start date, and end date. The component supports both "register" and "edit" modes.
  *
- * @param props The properties for the component. See InterfaceAddOnRegisterProps for details.
+ * @param props - The properties for the component. See InterfaceAddOnRegisterProps for details.
  *
  * @returns The AdvertisementRegister component.
  *
