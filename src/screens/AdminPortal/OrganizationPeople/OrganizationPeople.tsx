@@ -402,16 +402,6 @@ function OrganizationPeople(): JSX.Element {
         );
       },
     },
-          <Link
-            to={`/member/${currentUrl}/${params.row.id}`}
-            state={{ id: params.row.id }}
-            className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.memberNameFontSize}`}
-          >
-            {params.row.name}
-          </Link>
-        );
-      },
-    },
     {
       field: 'email',
       headerName: tCommon('email'),
