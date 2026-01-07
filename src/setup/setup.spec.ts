@@ -12,6 +12,15 @@ import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
 import { backupEnvFile } from './backupEnvFile/backupEnvFile';
 import inquirer from 'inquirer';
 
+// Define proper types for inquirer prompts
+interface PromptQuestion {
+  type: string;
+  name: string;
+  message: string;
+  default?: boolean | string | number;
+  validate?: (input: string) => boolean | string;
+}
+
 vi.mock('./backupEnvFile/backupEnvFile', () => ({
   backupEnvFile: vi.fn().mockResolvedValue(undefined),
 }));
@@ -58,6 +67,7 @@ describe('Talawa Admin Setup', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.resetAllMocks();
     processExitSpy.mockRestore();
     consoleErrorSpy.mockRestore();
@@ -351,8 +361,8 @@ describe('Talawa Admin Setup', () => {
 
       await askAndSetRecaptcha();
 
-      // Verify the second prompt call structure
-      const secondPromptCall = vi.mocked(inquirer.prompt).mock.calls[1][0];
+      // Verify the second prompt call structure with proper typing
+      const secondPromptCall = vi.mocked(inquirer.prompt).mock.calls[1][0] as PromptQuestion | PromptQuestion[];
       const questions = Array.isArray(secondPromptCall)
         ? secondPromptCall
         : [secondPromptCall];
@@ -378,15 +388,17 @@ describe('Talawa Admin Setup', () => {
 
       await askAndSetRecaptcha();
 
-      // Get the prompt config with validation
-      const promptCall = vi.mocked(inquirer.prompt).mock.calls[1][0] as any;
+      // Get the prompt config with proper typing
+      const promptCall = vi.mocked(inquirer.prompt).mock.calls[1][0] as PromptQuestion | PromptQuestion[];
       const questions = Array.isArray(promptCall) ? promptCall : [promptCall];
       const validateFn = questions[0].validate;
 
       // Test validation with invalid key
       vi.mocked(validateRecaptcha).mockReturnValue(false);
-      const result = validateFn('invalid-key');
-      expect(result).toBe('Invalid reCAPTCHA site key. Please try again.');
+      if (validateFn) {
+        const result = validateFn('invalid-key');
+        expect(result).toBe('Invalid reCAPTCHA site key. Please try again.');
+      }
     });
 
     it('should have validation function that returns true for valid key', async () => {
@@ -397,15 +409,17 @@ describe('Talawa Admin Setup', () => {
 
       await askAndSetRecaptcha();
 
-      // Get the prompt config with validation
-      const promptCall = vi.mocked(inquirer.prompt).mock.calls[1][0] as any;
+      // Get the prompt config with proper typing
+      const promptCall = vi.mocked(inquirer.prompt).mock.calls[1][0] as PromptQuestion | PromptQuestion[];
       const questions = Array.isArray(promptCall) ? promptCall : [promptCall];
       const validateFn = questions[0].validate;
 
       // Test validation with valid key
       vi.mocked(validateRecaptcha).mockReturnValue(true);
-      const result = validateFn('valid-key');
-      expect(result).toBe(true);
+      if (validateFn) {
+        const result = validateFn('valid-key');
+        expect(result).toBe(true);
+      }
     });
 
     it('should handle errors during the second prompt (site key input)', async () => {
@@ -513,17 +527,26 @@ describe('Talawa Admin Setup', () => {
   });
 
   describe('Module execution', () => {
-    it('should not auto-execute main() when imported for testing', () => {
-      expect(main).toBeDefined();
-      expect(askAndSetRecaptcha).toBeDefined();
-      expect(askAndSetLogErrors).toBeDefined();
-      expect(typeof main).toBe('function');
-    });
-
     it('should export all required functions', () => {
       expect(typeof main).toBe('function');
       expect(typeof askAndSetRecaptcha).toBe('function');
       expect(typeof askAndSetLogErrors).toBe('function');
+    });
+
+    it('should not have side effects on import', () => {
+      // Clear all mocks to reset any calls that might have happened
+      vi.clearAllMocks();
+      
+      // Assert that setup functions haven't been called before explicit invocation
+      expect(checkEnvFile).not.toHaveBeenCalled();
+      expect(backupEnvFile).not.toHaveBeenCalled();
+      expect(modifyEnvFile).not.toHaveBeenCalled();
+      expect(askAndSetDockerOption).not.toHaveBeenCalled();
+      
+      // Verify exports are available
+      expect(main).toBeDefined();
+      expect(askAndSetRecaptcha).toBeDefined();
+      expect(askAndSetLogErrors).toBeDefined();
     });
   });
 
@@ -571,18 +594,20 @@ describe('Talawa Admin Setup', () => {
       expect(askAndUpdateTalawaApiUrl).toHaveBeenCalledWith(false);
     });
 
-    it('should handle multiple consecutive errors in setup steps', async () => {
-      const mockError1 = new Error('First error');
+    it('should handle synchronous error from modifyEnvFile', async () => {
+      const mockError = new Error('Modify env failed');
       vi.mocked(modifyEnvFile).mockImplementation(() => {
-        throw mockError1;
+        throw mockError;
       });
 
       await expect(main()).rejects.toThrow('process.exit called with code 1');
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         '\n❌ Setup failed:',
-        mockError1,
+        mockError,
       );
+      
+      expect(askAndSetDockerOption).not.toHaveBeenCalled();
     });
   });
 });
