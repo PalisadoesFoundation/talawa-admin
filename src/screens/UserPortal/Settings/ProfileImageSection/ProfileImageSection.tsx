@@ -28,6 +28,7 @@ import { Form, Col } from 'react-bootstrap';
 import { sanitizeAvatars } from 'utils/sanitizeAvatar';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import styles from 'style/app-fixed.module.css';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceProfileImageSectionProps {
   /**
@@ -63,10 +64,28 @@ const ProfileImageSection: React.FC<InterfaceProfileImageSectionProps> = ({
   fileInputRef,
   handleFileUpload,
 }) => {
+  const { t } = useTranslation('translation');
   const normalizedAvatarUrl =
     userDetails?.avatarURL && userDetails.avatarURL.includes('127.0.0.1')
       ? userDetails.avatarURL.replace('127.0.0.1', 'localhost')
       : userDetails?.avatarURL;
+  const uploadProfilePictureLabel = t('settings.uploadProfilePicture', {
+    name: userDetails?.name || t('settings.profileSettings'),
+    defaultValue: t('settings.editProfile'),
+  });
+
+  const triggerFileInput = (): void => {
+    fileInputRef.current?.click();
+  };
+
+  const handleUploadIconKeyDown = (
+    event: React.KeyboardEvent<HTMLElement>,
+  ): void => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      triggerFileInput();
+    }
+  };
   return (
     <Col lg={12} className="mb-2">
       <div className="text-center mb-3">
@@ -78,27 +97,27 @@ const ProfileImageSection: React.FC<InterfaceProfileImageSectionProps> = ({
                 : undefined
             }
             fallbackName={userDetails?.name}
-            size="medium"
+            size="custom"
             shape="circle"
-            customSize={60}
+            customSize={80}
             border={false}
             className="rounded-circle"
-            style={{ width: 80, height: 80, objectFit: 'cover' }}
             dataTestId="profile-avatar"
             objectFit="cover"
             enableEnlarge={true}
             crossOrigin="anonymous"
           />
-          <i
-            className="fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle"
-            onClick={() => fileInputRef.current?.click()}
+          <button
+            type="button"
+            className="position-absolute bottom-0 right-0 p-2 bg-white rounded-circle border-0 cursor-pointer d-flex align-items-center justify-content-center"
+            onClick={triggerFileInput}
+            onKeyDown={handleUploadIconKeyDown}
             data-testid="uploadImageBtn"
-            style={{ cursor: 'pointer', fontSize: '1.2rem' }}
-            title={userDetails?.name}
-            role="button"
-            aria-label={userDetails?.name}
-            tabIndex={0}
-          />
+            title={uploadProfilePictureLabel}
+            aria-label={uploadProfilePictureLabel}
+          >
+            <i className="fas fa-edit fs-5" aria-hidden="true" />
+          </button>
         </div>
       </div>
       <Form.Control

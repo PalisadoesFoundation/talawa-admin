@@ -1417,6 +1417,8 @@
     "noeventsAttended": "未参加任何活动",
     "eventAttended": "参加的活动",
     "profileSettings": "配置文件设置",
+    "editProfile": "编辑个人资料",
+    "uploadProfilePicture": "为 {{name}} 上传个人资料照片",
     "gender": "性别",
     "phoneNumber": "电话号码",
     "homePhoneNumber": "家庭电话号码",
