@@ -704,7 +704,9 @@
     "agendaItemUpdated": "Punto del orden del día actualizado exitosamente",
     "agendaItemDeleted": "Punto del orden del día eliminado exitosamente",
     "deleteAgendaItem": "Eliminar punto del orden del día",
-    "deleteAgendaItemMsg": "¿Desea eliminar este punto del orden del día?"
+    "deleteAgendaItemMsg": "¿Desea eliminar este punto del orden del día?",
+    "event": "Evento",
+    "search": "Buscar"
   },
   "eventListCard": {
     "location": "Lugar del evento",
@@ -1669,6 +1671,9 @@
     "newGroup": "Nuevo Grupo",
     "groupName": "Nombre del grupo",
     "groupDescription": "Descripción del Grupo",
+    "confirmRemoveMember": "Confirmar eliminar miembro",
+    "failedToAddUser": "Error al agregar usuario",
+    "userAddedSuccessfully": "Usuario agregado exitosamente",
     "next": "Siguiente"
   },
   "userChatRoom": {

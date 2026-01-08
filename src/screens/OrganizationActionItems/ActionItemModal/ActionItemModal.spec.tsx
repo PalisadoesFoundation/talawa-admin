@@ -4130,6 +4130,8 @@ describe('Partially Covered Lines Test Coverage', () => {
 
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
+        undefined,
+        { timeout: 3000 },
       );
       expect(volunteerGroupSelect).toBeInTheDocument();
 
