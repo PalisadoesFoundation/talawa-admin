@@ -4,13 +4,12 @@
  * Displays organization information in the sidebar including avatar, name, and location.
  * Handles loading and error states appropriately.
  *
- * @component
- * @param {ISidebarOrgSectionProps} props - The props for the component
- * @param {string} props.orgId - Organization ID to fetch and display
- * @param {boolean} props.hideDrawer - Whether the drawer is hidden/collapsed
- * @param {boolean} [props.isProfilePage] - Whether current page is the profile page
+ * @param  props - The props for the component
+ * @param  orgId - Organization ID to fetch and display
+ * @param  hideDrawer - Whether the drawer is hidden/collapsed
+ * @param  isProfilePage - Whether current page is the profile page
  *
- * @returns {React.ReactElement | null} The rendered SidebarOrgSection component or null if drawer is hidden
+ * @returns  The rendered SidebarOrgSection component or null if drawer is hidden
  *
  * @example
  * ```tsx
@@ -27,7 +26,7 @@ import { useQuery } from '@apollo/client';
 import { WarningAmberOutlined } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import styles from '../../style/app-fixed.module.css';
 import type { ISidebarOrgSectionProps } from '../../types/SidebarOrgSection/interface';

@@ -17,7 +17,7 @@ vi.mock('react-i18next', () => ({
 }));
 
 // Mock Avatar component
-vi.mock('components/Avatar/Avatar', () => ({
+vi.mock('shared-components/Avatar/Avatar', () => ({
   default: ({
     name,
     alt,

@@ -32,7 +32,7 @@
  * - Includes `aria-label` attributes for better screen reader support.
  * - Uses `data-testid` attributes for testing purposes.
  */
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import React from 'react';
 import { ButtonGroup, Dropdown } from 'react-bootstrap';
 import { useNavigate } from 'react-router';

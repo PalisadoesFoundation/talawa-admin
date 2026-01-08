@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/shared-components/OrganizationCard/OrganizationCard.tsx:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/OrganizationCard/OrganizationCard.tsx#L64)
+Defined in: [src/shared-components/OrganizationCard/OrganizationCard.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/OrganizationCard/OrganizationCard.tsx#L63)
 
 ## Parameters
 

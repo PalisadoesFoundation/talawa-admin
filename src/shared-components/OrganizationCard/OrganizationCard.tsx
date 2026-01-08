@@ -5,18 +5,17 @@
  * It includes the organization's name, description, address, avatar, and the number of members.
  * A button is provided to navigate to the organization's dashboard for management.
  *
- * @component
- * @param {InterfaceOrganizationCardPropsPG} props - The props for the component.
- * @param {string} props.data.id - The unique identifier for the organization.
- * @param {string} props.data.avatarURL - The URL of the organization's avatar image.
- * @param {string} props.data.addressLine1 - The primary address of the organization.
- * @param {string} props.data.name - The name of the organization.
- * @param {string} props.data.description - A brief description of the organization.
- * @param {object} props.data.members - The members of the organization.
- * @param {Array} props.data.members.edges - The list of members in the organization.
- * @param {number|undefined} [props.data.membersCount] - The number of members. Optional. The component uses `membersCount ?? members?.edges.length ?? 0` as the fallback.
+ * @param  props - The props for the component.
+ * @param  id - The unique identifier for the organization.
+ * @param  avatarURL - The URL of the organization's avatar image.
+ * @param  addressLine1 - The primary address of the organization.
+ * @param  name - The name of the organization.
+ * @param  description - A brief description of the organization.
+ * @param  members - The members of the organization.
+ * @param  edges - The list of members in the organization.
+ * @param  membersCount - The number of members. Optional. The component uses `membersCount ?? members?.edges.length ?? 0` as the fallback.
  *
- * @returns {JSX.Element} A JSX element representing the organization card.
+ * @returns  A JSX element representing the organization card.
  *
  * @remarks
  * - The component uses `react-bootstrap` for the button and `@mui/material` for the tooltip.
@@ -43,7 +42,7 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import { Tooltip } from '@mui/material';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
 import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
 import { ApolloError, useMutation } from '@apollo/client';

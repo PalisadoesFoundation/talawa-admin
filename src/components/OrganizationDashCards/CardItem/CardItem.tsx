@@ -1,42 +1,23 @@
 /**
- * Represents a card item component that displays information about an event, post, or membership request.
+ * Represents a card item component that displays information about an event,
+ * post, or membership request.
  *
- * @component
- * @param props - The properties for the `CardItem` component.
+ * @param props - Props for the CardItem component.
  *
- * @property {'Event' | 'Post' | 'MembershipRequest'} type - The type of the card item. Determines the layout and displayed information.
- * @property {string} title - The title of the card item. Displayed as the main heading, truncated to 25 characters if too long.
- * @property {string} [time] - The timestamp for posts, formatted as "MMM D, YYYY". Used when `type` is 'Post'.
- * @property {string} [startdate] - The start date of an event, formatted as "MMM D, YYYY". Used when `type` is 'Event'.
- * @property {string} [enddate] - The end date of an event, formatted as "MMM D, YYYY". Used when `type` is 'Event'.
- * @property {{ id: string | number; name: string }} [creator] - The creator of the card item. Displays the author's name if provided.
- * @property {string} [location] - The location of the event. Displays an icon and the location name if provided.
+ * The component renders different layouts depending on the card type:
+ * - Event: shows start and end dates
+ * - Post: shows the post timestamp
+ * - MembershipRequest: shows requester details
  *
- * @returns {JSX.Element} A styled card item component displaying the provided information.
- *
- * @example
- * ```tsx
- * <CardItem
- *   type="Event"
- *   title="Community Meetup"
- *   startdate=dayjs().subtract(1, 'year').month(9).date(1).format('YYYY-MM-DD')
- *   enddate=dayjs().subtract(1, 'year').month(9).date(2).format('YYYY-MM-DD')
- *   creator={{ id: 1, name: "John Doe" }}
- *   location="Central Park"
- * />
- * ```
- *
- * @remarks
- * - The component uses `dayjs` for date formatting.
- * - Icons for location and date are imported as React components.
- * - Styling is applied using CSS modules from `app-fixed.module.css`.
+ * Dates are formatted using dayjs.
  */
+
 import React, { useState, useEffect } from 'react';
 import MarkerIcon from 'assets/svgs/cardItemLocation.svg?react';
 import DateIcon from 'assets/svgs/cardItemDate.svg?react';
 import dayjs from 'dayjs';
 import styles from 'style/app-fixed.module.css';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import DefaultImg from 'assets/images/defaultImg.png';
 
 export interface InterfaceCardItem {

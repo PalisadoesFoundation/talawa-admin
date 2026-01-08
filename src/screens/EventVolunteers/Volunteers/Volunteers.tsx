@@ -65,7 +65,7 @@ import {
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
 import { Chip, debounce } from '@mui/material';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import styles from '../../../style/app-fixed.module.css';
 import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';

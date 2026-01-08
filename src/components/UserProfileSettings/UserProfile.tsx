@@ -7,36 +7,30 @@
  * styling and Material-UI icons for visual elements. The component also
  * supports tooltips for displaying additional information.
  *
- * @param props - Partial properties of the `InterfaceUser` type.
- * @param props.firstName - The first name of the user.
- * @param props.lastName - The last name of the user.
- * @param props.createdAt - The date when the user joined.
- * @param props.email - The email address of the user.
- * @param props.image - The URL of the user's profile picture.
+ * @param props - Partial properties of the InterfaceUser type.
+ *
+ * Props include:
+ * - firstName: First name of the user
+ * - lastName: Last name of the user
+ * - createdAt: Date when the user joined
+ * - email: Email address of the user
+ * - image: URL of the user's profile picture
  *
  * @returns A JSX element displaying the user's profile details.
  *
  * @example
  * ```tsx
- * <UserProfile
+ * \<UserProfile
  *   firstName="John"
  *   lastName="Doe"
- *   createdAt=dayjs().subtract(1, 'year').format('YYYY-MM-DD')
- *   email="john.doe@example.com"
+ *   createdAt={dayjs().subtract(1, 'year').format('YYYY-MM-DD')}
+ *   email="john.doe\@example.com"
  *   image="https://example.com/profile.jpg"
- * />
+ * /\>
  * ```
- *
- * @dependencies
- * - `react-bootstrap` for Card and Button components.
- * - `@mui/icons-material` for CalendarMonthOutlinedIcon.
- * - `react-i18next` for translations.
- * - `react-tooltip` for tooltips.
- * - `Avatar` component for displaying a placeholder profile picture.
- *
- * @module UserProfile
  */
-import Avatar from 'components/Avatar/Avatar';
+
+import Avatar from 'shared-components/Avatar/Avatar';
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';

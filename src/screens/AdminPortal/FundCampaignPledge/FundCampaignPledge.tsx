@@ -13,7 +13,7 @@ import styles from 'style/app-fixed.module.css';
 import PledgeDeleteModal from './deleteModal/PledgeDeleteModal';
 import PledgeModal from './modal/PledgeModal';
 import { Popover } from '@mui/material';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/BreadcrumbsComponent';
 import { DataGrid } from 'shared-components/DataGridWrapper';
 import EmptyState from 'shared-components/EmptyState/EmptyState';

@@ -92,7 +92,7 @@ import { errorHandler } from 'utils/errorHandler';
 import { Card, Row, Col, Form } from 'react-bootstrap';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import useLocalStorage from 'utils/useLocalstorage';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import EventsAttendedByMember from 'components/MemberActivity/EventsAttendedByMember';
 import MemberAttendedEventsModal from 'components/MemberActivity/Modal/EventsAttendedMemberModal';
 import {
