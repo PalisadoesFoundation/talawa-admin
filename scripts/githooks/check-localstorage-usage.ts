@@ -66,7 +66,6 @@ const checkLocalStorageUsage = (file: string): void => {
     containsSkipComment(file)
   ) {
     console.log(`Skipping file: ${file}`);
-    console.log(`File ${file} does not exist.`);
     return;
   }
 
