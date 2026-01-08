@@ -1024,7 +1024,11 @@
     "createdAt": "Created At",
     "options": "Options",
     "addRegistrant": "Add Registrant",
-    "noRegistrantsFound": "No Registrants Found."
+    "noRegistrantsFound": "No Registrants Found.",
+    "removingAttendee": "Removing the attendee...",
+    "attendeeRemovedSuccessfully": "Attendee removed successfully",
+    "errorRemovingAttendee": "Error removing attendee",
+    "cannotUnregisterCheckedIn": "Cannot unregister a user who has already checked in"
   },
   "onSpotAttendee": {
     "title": "On-spot Attendee",

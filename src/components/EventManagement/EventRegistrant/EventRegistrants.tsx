@@ -134,24 +134,22 @@ function EventRegistrants(): JSX.Element {
     (userId: string): void => {
       // Check if user is already checked in
       if (checkedInUsers.includes(userId)) {
-        NotificationToast.error(
-          'Cannot unregister a user who has already checked in',
-        );
+        NotificationToast.error(t('cannotUnregisterCheckedIn'));
         return;
       }
 
-      NotificationToast.warning('Removing the attendee...');
+      NotificationToast.warning(t('removingAttendee'));
       const removeVariables = isRecurring
         ? { userId, recurringEventInstanceId: eventId }
         : { userId, eventId: eventId };
 
       removeRegistrantMutation({ variables: removeVariables })
         .then(() => {
-          NotificationToast.success('Attendee removed successfully');
+          NotificationToast.success(t('attendeeRemovedSuccessfully'));
           refreshData(); // Refresh the data after removal
         })
         .catch((err) => {
-          NotificationToast.error('Error removing attendee');
+          NotificationToast.error(t('errorRemovingAttendee'));
           NotificationToast.error(err.message);
         });
     },

@@ -9,6 +9,7 @@ import {
 } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
+import { I18nextProvider } from 'react-i18next';
 import React from 'react';
 import cookies from 'js-cookie';
 import i18next from 'i18next';
@@ -17,6 +18,8 @@ import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
 import useLocalStorage from 'utils/useLocalstorage';
 import { urlToFile } from 'utils/urlToFile';
+import i18nForTest from 'utils/i18nForTest';
+import i18nForTest from 'utils/i18nForTest';
 
 // Mock dependencies
 const mockNotificationToast = vi.hoisted(() => ({
@@ -95,7 +98,9 @@ describe('ChangeLanguageDropDown', () => {
   it('renders with default language (English)', () => {
     render(
       <MockedProvider mocks={mocks}>
-        <ChangeLanguageDropDown />
+        <I18nextProvider i18n={i18nForTest}>
+          <ChangeLanguageDropDown />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -113,7 +118,9 @@ describe('ChangeLanguageDropDown', () => {
 
     render(
       <MockedProvider mocks={mocks}>
-        <ChangeLanguageDropDown />
+        <I18nextProvider i18n={i18nForTest}>
+          <ChangeLanguageDropDown />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -124,16 +131,16 @@ describe('ChangeLanguageDropDown', () => {
     fireEvent.click(spanishOption);
 
     await waitFor(() => {
-      expect(mockNotificationToast.error).toHaveBeenCalledWith(
-        'User not found',
-      );
+      expect(mockNotificationToast.error).toHaveBeenCalledWith('User not found');
     });
   });
 
   it('successfully changes language', async () => {
     render(
       <MockedProvider mocks={mocks}>
-        <ChangeLanguageDropDown />
+        <I18nextProvider i18n={i18nForTest}>
+          <ChangeLanguageDropDown />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -152,7 +159,9 @@ describe('ChangeLanguageDropDown', () => {
   it('renders all available languages in the dropdown', async () => {
     render(
       <MockedProvider mocks={mocks}>
-        <ChangeLanguageDropDown />
+        <I18nextProvider i18n={i18nForTest}>
+          <ChangeLanguageDropDown />
+        </I18nextProvider>
       </MockedProvider>,
     );
 

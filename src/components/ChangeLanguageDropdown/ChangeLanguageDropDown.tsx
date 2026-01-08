@@ -37,10 +37,12 @@ import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceDropDownProps } from 'types/DropDown/interface';
 import { urlToFile } from 'utils/urlToFile';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { useTranslation } from 'react-i18next';
 
 const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
   const currentLanguageCode = cookies.get('i18next') || 'en';
   const { getItem } = useLocalStorage();
+  const { t } = useTranslation('translation');
 
   const userId = getItem('id');
   const userImage = getItem('UserImage');
@@ -55,7 +57,7 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
     }
 
     if (!userId) {
-      NotificationToast.error('User not found');
+      NotificationToast.error(t('userNotFound'));
       return;
     }
 

@@ -1391,7 +1391,11 @@
     "createdAt": "创建时间",
     "options": "选项",
     "addRegistrant": "添加注册者",
-    "noRegistrantsFound": "未找到注册者"
+    "noRegistrantsFound": "未找到注册者",
+    "removingAttendee": "正在删除与会者...",
+    "attendeeRemovedSuccessfully": "与会者已成功删除",
+    "errorRemovingAttendee": "删除与会者时出错",
+    "cannotUnregisterCheckedIn": "无法取消已签到的用户的注册"
   },
   "onSpotAttendee": {
     "title": "现场参与者",

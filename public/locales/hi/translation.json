@@ -1391,7 +1391,11 @@
     "createdAt": "निर्माण तिथि",
     "options": "विकल्प",
     "addRegistrant": "पंजीकृत व्यक्ति जोड़ें",
-    "noRegistrantsFound": "कोई पंजीकृत व्यक्ति नहीं मिला"
+    "noRegistrantsFound": "कोई पंजीकृत व्यक्ति नहीं मिला",
+    "removingAttendee": "उपस्थित होने वाले को हटाया जा रहा है...",
+    "attendeeRemovedSuccessfully": "उपस्थित होने वाला सफलतापूर्वक हटा दिया गया",
+    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
+    "cannotUnregisterCheckedIn": "किसी उपयोगकर्ता का पंजीकरण रद्द नहीं किया जा सकता जो पहले से ही चेक-इन कर चुका है"
   },
   "onSpotAttendee": {
     "title": "ऑन-स्पॉट प्रतिभागी",
