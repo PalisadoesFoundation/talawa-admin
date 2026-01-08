@@ -49,19 +49,23 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
 import { Delete } from '@mui/icons-material';
+import { useMutation } from '@apollo/client';
 import dayjs from 'dayjs';
 import styles from 'style/app-fixed.module.css';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
+import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { Button } from 'react-bootstrap';
 import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import CursorPaginationManager from 'components/CursorPaginationManager/CursorPaginationManager';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
-import BaseModal from 'shared-components/BaseModal/BaseModal'; // Correct import path
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { errorHandler } from 'utils/errorHandler';
 
 /**
  * Maps numeric filter state to string option identifiers.
@@ -109,6 +113,9 @@ function OrganizationPeople(): JSX.Element {
 
   const [refetchTrigger, setRefetchTrigger] = useState(0);
 
+  // Mutation to remove a member from the organization
+  const [removeMember] = useMutation(REMOVE_MEMBER_MUTATION_PG);
+
   // Handle tab changes and search updates
   useEffect(() => {
     setRefetchTrigger((prev) => prev + 1);
@@ -129,18 +136,20 @@ function OrganizationPeople(): JSX.Element {
     if (!selectedMemId) return;
 
     try {
-      // TODO: Re-implement the delete mutation here.
-      // Previously, this logic was inside <OrgPeopleListCard>.
-      // Example:
-      // await removeMember({ variables: { id: selectedMemId } });
+      const { data } = await removeMember({
+        variables: { memberId: selectedMemId, organizationId: currentUrl },
+      });
 
-      console.log('Deleting member:', selectedMemId);
-
-      // Refresh list after deletion
-      setRefetchTrigger((prev) => prev + 1);
-      handleCloseModal();
-    } catch (error) {
-      console.error('Error removing member:', error);
+      if (data) {
+        NotificationToast.success(
+          tCommon('removedSuccessfully', { item: tCommon('removeMember') }),
+        );
+        // Refresh list after deletion
+        setRefetchTrigger((prev) => prev + 1);
+        handleCloseModal();
+      }
+    } catch (error: unknown) {
+      errorHandler(t, error);
     }
   };
 
@@ -152,14 +161,21 @@ function OrganizationPeople(): JSX.Element {
   const getQueryAndVariables = () => {
     const baseVariables = {
       orgId: currentUrl,
-      firstName_contains: searchTerm,
     };
+
+    // Build where filter for search
+    const searchFilter = searchTerm
+      ? { firstName: { contains: searchTerm } }
+      : undefined;
 
     if (state === 0) {
       // Members
       return {
         query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-        variables: baseVariables,
+        variables: {
+          ...baseVariables,
+          where: searchFilter,
+        },
         dataPath: 'organization.members',
       };
     } else if (state === 1) {
@@ -168,7 +184,9 @@ function OrganizationPeople(): JSX.Element {
         query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
         variables: {
           ...baseVariables,
-          where: { role: { equal: 'administrator' } },
+          where: searchFilter
+            ? { ...searchFilter, role: { equal: 'administrator' } }
+            : { role: { equal: 'administrator' } },
         },
         dataPath: 'organization.members',
       };
@@ -176,7 +194,9 @@ function OrganizationPeople(): JSX.Element {
       // Users
       return {
         query: USER_LIST_FOR_TABLE,
-        variables: baseVariables,
+        variables: {
+          where: searchFilter,
+        },
         dataPath: 'allUsers',
       };
     }
@@ -225,63 +245,55 @@ function OrganizationPeople(): JSX.Element {
       />
 
       {/* Organization People Table */}
-      <div
+      <section
         className={styles.tableContainer}
-        role="region"
         aria-label={t('organizationPeopleTable')}
       >
         <table
           className={styles.table}
-          role="table"
           aria-label={t('organizationPeopleTable')}
         >
-          <thead role="rowgroup">
-            <tr className={styles.tableHeaderRow} role="row">
+          <thead>
+            <tr className={styles.tableHeaderRow}>
               <th
                 className={`${styles.tableHeader} ${styles.tableCell}`}
-                role="columnheader"
                 scope="col"
               >
                 {tCommon('sl_no')}
               </th>
               <th
                 className={`${styles.tableHeader} ${styles.tableCell}`}
-                role="columnheader"
                 scope="col"
               >
                 {tCommon('profile')}
               </th>
               <th
                 className={`${styles.tableHeader} ${styles.tableCell}`}
-                role="columnheader"
                 scope="col"
               >
                 {tCommon('name')}
               </th>
               <th
                 className={`${styles.tableHeader} ${styles.tableCell}`}
-                role="columnheader"
                 scope="col"
               >
                 {tCommon('email')}
               </th>
               <th
                 className={`${styles.tableHeader} ${styles.tableCell}`}
-                role="columnheader"
                 scope="col"
               >
                 {tCommon('joinedOn')}
               </th>
               <th
                 className={`${styles.tableHeader} ${styles.tableCell}`}
-                role="columnheader"
                 scope="col"
               >
                 {tCommon('action')}
               </th>
             </tr>
           </thead>
-          <tbody role="rowgroup">
+          <tbody>
             <CursorPaginationManager
               query={query}
               queryVariables={variables}
@@ -300,9 +312,6 @@ function OrganizationPeople(): JSX.Element {
                           src={item.avatarURL}
                           alt={tCommon('avatar')}
                           className={styles.avatarImage}
-                          style={
-                            { '--avatar-size': '40px' } as React.CSSProperties
-                          }
                           crossOrigin="anonymous"
                         />
                       ) : (
@@ -357,7 +366,7 @@ function OrganizationPeople(): JSX.Element {
             />
           </tbody>
         </table>
-      </div>
+      </section>
 
       <BaseModal
         show={showRemoveModal}

@@ -81,7 +81,7 @@ export default function People(): React.JSX.Element {
 
   const { orgId: organizationId } = useParams();
 
-  const modes = ['All Members', 'Admins'];
+  const modes = [t('allMembers'), tCommon('admin')];
 
   const handleSearch = (newFilter: string): void => {
     setSearchTerm(newFilter);
@@ -146,18 +146,28 @@ export default function People(): React.JSX.Element {
               query={ORGANIZATIONS_MEMBER_CONNECTION_LIST}
               queryVariables={{
                 orgId: organizationId,
-                firstName_contains: searchTerm,
-                where:
-                  mode === 1 ? { role: { equal: 'administrator' } } : undefined,
+                where: (() => {
+                  const searchFilter = searchTerm
+                    ? { firstName: { contains: searchTerm } }
+                    : undefined;
+                  const roleFilter =
+                    mode === 1
+                      ? { role: { equal: 'administrator' } }
+                      : undefined;
+
+                  if (searchFilter && roleFilter) {
+                    return { ...searchFilter, ...roleFilter };
+                  }
+                  return searchFilter || roleFilter || undefined;
+                })(),
               }}
               dataPath="organization.members"
               itemsPerPage={10}
               renderItem={(node: IMemberNode, index: number) => {
                 const isAdmin = node.role === 'administrator';
                 const userType = isAdmin ? 'Admin' : 'Member';
-                const name = `${node.name}`;
                 const cardProps: IOrganizationCardProps = {
-                  name,
+                  name: node.name,
                   image: node.avatarURL ?? '',
                   id: node.id ?? '',
                   email: node.emailAddress ?? t('emailNotAvailable'),

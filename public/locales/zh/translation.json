@@ -396,7 +396,10 @@
     "profile": "配置文件",
     "joined": "加入",
     "createUser": "创建用户",
-    "notFound": "未找到成员"
+    "notFound": "未找到成员",
+    "organizationPeopleTable": "组织人员表",
+    "removeMemberTitle": "删除成员",
+    "removeMemberConfirmation": "您确定要删除此成员吗？"
   },
   "organizationCard": {
     "join": "加入",

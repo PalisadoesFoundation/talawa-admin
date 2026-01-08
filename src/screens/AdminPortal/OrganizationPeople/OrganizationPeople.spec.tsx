@@ -5,6 +5,7 @@ import {
   waitFor,
   fireEvent,
   within,
+  act,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
@@ -19,6 +20,7 @@ import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
+import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 
 vi.mock('./addMember/AddMember', () => ({
@@ -34,8 +36,10 @@ type MemberConnectionVariables = {
   orgId: string;
   first?: number | null;
   after?: string | null;
-  firstName_contains?: string;
-  where?: { role?: { equal: string } };
+  where?: {
+    role?: { equal: string };
+    firstName?: { contains: string };
+  };
 };
 
 type MemberEdge = {
@@ -124,10 +128,11 @@ const createMemberConnectionMock = (
 };
 
 type UserListVariables = {
-  orgId: string;
   first?: number | null;
   after?: string | null;
-  firstName_contains?: string;
+  where?: {
+    firstName?: { contains: string };
+  };
 };
 
 type UserEdge = {
@@ -228,7 +233,6 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        firstName_contains: '',
       }),
     ];
 
@@ -267,7 +271,6 @@ describe('OrganizationPeople', () => {
       orgId: 'orgid',
       first: 10,
       after: null,
-      firstName_contains: '',
     });
 
     const searchMock = createMemberConnectionMock(
@@ -275,7 +278,7 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        firstName_contains: 'Jane',
+        where: { firstName: { contains: 'Jane' } },
       },
       {
         edges: [
@@ -327,13 +330,22 @@ describe('OrganizationPeople', () => {
 
     // Search for "Jane"
     const searchInput = screen.getByTestId('searchbtn');
+    await userEvent.clear(searchInput);
     await userEvent.type(searchInput, 'Jane');
 
-    // Wait for search results (AdminSearchFilterBar has debounce)
-    await waitFor(() => {
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-      expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+    // Wait for debounce (300ms default) plus some buffer
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 400));
     });
+
+    // Wait for search results
+    await waitFor(
+      () => {
+        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+        expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('handles tab switching between members, admins, and users', async () => {
@@ -341,7 +353,6 @@ describe('OrganizationPeople', () => {
       orgId: 'orgid',
       first: 10,
       after: null,
-      firstName_contains: '',
     });
 
     const adminMock = createMemberConnectionMock(
@@ -349,7 +360,6 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        firstName_contains: '',
         where: { role: { equal: 'administrator' } },
       },
       {
@@ -376,10 +386,8 @@ describe('OrganizationPeople', () => {
     );
 
     const usersMock = createUserListMock({
-      orgId: 'orgid',
       first: 10,
       after: null,
-      firstName_contains: '',
     });
 
     const mocks = [membersMock, adminMock, usersMock];
@@ -436,7 +444,6 @@ describe('OrganizationPeople', () => {
       orgId: 'orgid',
       first: 10,
       after: null,
-      firstName_contains: '',
     });
 
     const loadMoreMock = createMemberConnectionMock(
@@ -444,7 +451,6 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: 'cursor2',
-        firstName_contains: '',
       },
       {
         edges: [
@@ -510,7 +516,6 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        firstName_contains: '',
       },
       {
         edges: [],
@@ -558,7 +563,6 @@ describe('OrganizationPeople', () => {
           orgId: 'orgid',
           first: 10,
           after: null,
-          firstName_contains: '',
         },
       },
       error: new Error('GraphQL error occurred'),
@@ -596,7 +600,6 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        firstName_contains: '',
       }),
     ];
 
@@ -645,19 +648,35 @@ describe('OrganizationPeople', () => {
       orgId: 'orgid',
       first: 10,
       after: null,
-      firstName_contains: '',
     });
+
+    const deleteMock = {
+      request: {
+        query: REMOVE_MEMBER_MUTATION_PG,
+        variables: {
+          memberId: 'member1',
+          organizationId: 'orgid',
+        },
+      },
+      result: {
+        data: {
+          removeMember: {
+            _id: 'member1',
+          },
+        },
+      },
+    };
 
     const refetchMock = createMemberConnectionMock({
       orgId: 'orgid',
       first: 10,
       after: null,
-      firstName_contains: '',
     });
 
-    const link = new StaticMockLink([initialMock, refetchMock], true);
-
-    const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const link = new StaticMockLink(
+      [initialMock, deleteMock, refetchMock],
+      true,
+    );
 
     render(
       <MockedProvider link={link}>
@@ -694,16 +713,10 @@ describe('OrganizationPeople', () => {
     fireEvent.click(confirmButton);
 
     await waitFor(() => {
-      expect(consoleLogSpy).toHaveBeenCalledWith('Deleting member:', 'member1');
-    });
-
-    await waitFor(() => {
       expect(
         screen.queryByTestId('remove-member-modal'),
       ).not.toBeInTheDocument();
     });
-
-    consoleLogSpy.mockRestore();
   });
 
   test('renders avatar image when avatarURL is present', async () => {
@@ -712,7 +725,6 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        firstName_contains: '',
       }),
     ];
 
@@ -751,14 +763,11 @@ describe('OrganizationPeople', () => {
       orgId: 'orgid',
       first: 10,
       after: null,
-      firstName_contains: '',
     });
 
     const usersMock = createUserListMock({
-      orgId: 'orgid',
       first: 10,
       after: null,
-      firstName_contains: '',
     });
 
     const mocks = [membersMock, usersMock];

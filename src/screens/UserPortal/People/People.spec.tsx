@@ -34,7 +34,6 @@ const defaultQueryMock = {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     variables: {
       orgId: DEFAULT_ORG_ID,
-      firstName_contains: '',
       first: 10,
       after: null,
     },
@@ -61,7 +60,6 @@ const loadMoreMock = {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     variables: {
       orgId: DEFAULT_ORG_ID,
-      firstName_contains: '',
       first: 10,
       after: 'cur2',
     },
@@ -88,7 +86,7 @@ const adminSearchMock = {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     variables: {
       orgId: DEFAULT_ORG_ID,
-      firstName_contains: 'Admin',
+      where: { firstName: { contains: 'Admin' } },
       first: 10,
       after: null,
     },
@@ -120,7 +118,6 @@ const adminFilterMock = {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     variables: {
       orgId: DEFAULT_ORG_ID,
-      firstName_contains: '',
       first: 10,
       after: null,
       where: { role: { equal: 'administrator' } },
@@ -275,7 +272,6 @@ describe('People Component Tests', () => {
         query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
         variables: {
           orgId: DEFAULT_ORG_ID,
-          firstName_contains: '',
           first: 10,
           after: null,
         },
@@ -310,7 +306,6 @@ describe('People Component Tests', () => {
         query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
         variables: {
           orgId: DEFAULT_ORG_ID,
-          firstName_contains: '',
           first: 10,
           after: null,
         },
