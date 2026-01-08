@@ -34,99 +34,79 @@ reviews:
   path_instructions:
     - path: '**/*'
       instructions: |
-        Conduct a comprehensive review and reevaluate all resolved and dismissed items. Include the following validation criteria:
+        Conduct a comprehensive review and reevaluate all resolved and dismissed items.
 
-        ## 1. Test Coverage & Quality Validation
+        # VALIDATION FRAMEWORK
 
-        ### 1.1 Test File Quality
-        For any modified test files, validate:
-        - ✅ **Framework Compliance**: Follow Vitest and React Testing Library best practices
+        ## 1. Test Coverage & Quality
+
+        ### 1.1 Test File Requirements
+        For each modified source file with logic or UI:
+        - ✅ Test file exists: `*.spec.tsx`, `*.spec.ts`, `*.test.tsx`, or `*.test.ts`
+        - ✅ Test file colocated with component (same directory)
+        - ✅ Test file updated to reflect source changes
+        - ✅ Target 100% code coverage for new/modified code
+        - ✅ **List specific line numbers** lacking test coverage
+
+        ### 1.2 Test Quality Standards
+        - ✅ **Framework Compliance** (Vitest + React Testing Library):
           - Use `vi.mock()` for mocking (not `jest.mock()`)
-          - Use `describe()`, `it()`, `test()` for test structure
-          - Leverage `@testing-library/react` queries (getByRole, getByText, etc.)
-          - Use `@testing-library/user-event` for simulating interactions
+          - Use `describe()`, `it()`, `test()` for structure
+          - Use `@testing-library/react` queries (getByRole, getByText, etc.)
+          - Use `@testing-library/user-event` for interactions
 
-        - ✅ **Coverage Completeness**: Cover all code paths including:
-          - Success scenarios with valid data
+        - ✅ **Coverage Completeness** - All scenarios tested:
+          - Success paths with valid data
           - Error scenarios (network failures, GraphQL errors, validation errors)
           - Edge cases (empty data, null/undefined, boundary values)
           - Loading and pending states
-          - User interactions (clicks, form submissions, navigation)
-          - State changes and side effects
+          - User interactions and state changes
 
         - ✅ **Mock Quality**:
-          - GraphQL queries/mutations use `MockedProvider` or `StaticMockLink`
-          - External dependencies properly mocked
-          - Mock data is realistic and comprehensive
-          - Cleanup performed after tests (reset mocks, clear timers)
+          - GraphQL: `MockedProvider` or `StaticMockLink`
+          - Realistic, comprehensive mock data
+          - Proper cleanup (reset mocks, clear timers)
 
         - ✅ **Test Structure**:
-          - Tests are isolated and don't depend on execution order
-          - No disabled tests (`it.skip`, `describe.skip`, `test.skip`) unless:
-            - Documented with a comment explaining why
-            - Linked to an issue for re-enabling
-          - Proper use of `waitFor`, `act`, and async utilities
+          - Isolated tests (no execution order dependency)
+          - No disabled tests (`*.skip`) without documented reason + linked issue
+          - Proper async utilities (`waitFor`, `act`)
+          - Shard-compatible (12-shard strategy, no shared state, <30s timeout)
 
-        ### 1.2 Test File Existence
-        For each modified source file with logic or UI:
-        - ✅ Corresponding test file exists with naming: `*.spec.tsx`, `*.spec.ts`, `*.test.tsx`, `*.test.ts`
-        - ✅ Test file is colocated with component (same directory)
-        - ✅ Test file is updated to reflect source changes
-        - ✅ Target 100% test code coverage for new/modified code
-        - ✅ **List specific line numbers** in source files lacking test coverage
+        ## 2. Code Quality & Implementation
 
-        ### 1.3 Shard Compatibility
-        - ✅ Tests don't break the 12-shard parallel execution strategy
-        - ✅ No shared state between tests that could cause race conditions
-        - ✅ Tests complete within reasonable time (testTimeout: 30000ms)
-
-        ## 2. Code Quality & Repository Standards
-
-        ### 2.1 TypeScript Compliance
-        - ✅ **No `any` type** without explicit JSDoc justification
-        - ✅ Proper interface/type definitions for:
-          - Component props with `interface` declarations
+        ### 2.1 TypeScript Standards
+        - ✅ **No `any` type** without JSDoc justification
+        - ✅ Proper typing for:
+          - Component props (interface declarations)
           - Function parameters and return types
-          - GraphQL query/mutation variables and responses
-          - State and context types
-        - ✅ No TypeScript errors or `@ts-ignore` comments without explanation
+          - GraphQL variables and responses
+          - State and context
+        - ✅ No `@ts-ignore` without explanation
+        - ✅ Zero TypeScript compilation errors
 
-        ### 2.2 GraphQL Implementation
-        - ✅ Queries/mutations follow patterns in `src/GraphQl/Queries/` and `src/GraphQl/Mutations/`
-        - ✅ Proper typing using `gql` template tag from `graphql-tag`
-        - ✅ No duplicate queries (check for pagination inconsistencies like `first`/`last` usage)
-        - ✅ Error handling implemented for all GraphQL operations:
-          ```typescript
-          const [mutation, { loading, error }] = useMutation(MUTATION);
-          // Must handle error state in UI
-          ```
-        - ✅ Proper use of Apollo Client hooks (`useQuery`, `useMutation`, `useSubscription`)
+        ### 2.2 React & GraphQL Implementation
+        - ✅ **React Best Practices**:
+          - Functional components with proper hooks (useState, useEffect, useMemo, useCallback)
+          - Material-UI v7 patterns (import from `@mui/material`, emotion styling)
+          - Avoid prop drilling (use Context/Redux)
+          - Proper `useEffect` cleanup for subscriptions/timers
 
-        ### 2.3 React & Material-UI Best Practices
-        - ✅ Functional components with proper hooks usage (useState, useEffect, useMemo, useCallback)
-        - ✅ Material-UI v7 component patterns followed consistently:
-          - Import from `@mui/material`
-          - Use emotion for styling (`@emotion/react`)
-          - Follow MUI theming patterns
-        - ✅ No prop drilling; use React Context or Redux when needed
-        - ✅ Proper cleanup in `useEffect`:
-          ```typescript
-          useEffect(() => {
-            // Effect logic
-            return () => {
-              // Cleanup subscriptions, timers, etc.
-            };
-          }, [deps]);
-          ```
+        - ✅ **GraphQL Patterns**:
+          - Follow patterns in `src/GraphQl/Queries/` and `src/GraphQl/Mutations/`
+          - Proper `gql` template tag usage
+          - No duplicate queries (check pagination patterns)
+          - Error handling for all operations (handle `error` state in UI)
+          - Correct Apollo Client hooks (`useQuery`, `useMutation`, `useSubscription`)
 
-        ### 2.4 Internationalization (i18n)
-        - ✅ **Zero hardcoded user-facing strings** in UI components
-        - ✅ All text uses `useTranslation()` hook with translation keys:
+        ### 2.3 Internationalization (i18n)
+        - ✅ **Zero hardcoded user-facing strings** in UI
+        - ✅ Use `useTranslation()` hook with translation keys:
           ```typescript
           const { t } = useTranslation('translation', { keyPrefix: 'componentName' });
           <Button>{t('buttonLabel')}</Button>
           ```
-        - ✅ New translation keys added to **all locale files**:
+        - ✅ New keys added to **all** locale files:
           - `public/locales/en/translation.json`
           - `public/locales/es/translation.json`
           - `public/locales/fr/translation.json`
@@ -134,259 +114,249 @@ reviews:
           - `public/locales/zh/translation.json`
         - ✅ Keys follow nested structure matching component hierarchy
 
-        ### 2.5 Accessibility (a11y)
-        - ✅ Proper ARIA attributes where needed:
+        ### 2.4 Accessibility (a11y)
+        - ✅ Proper ARIA attributes:
           - `aria-label` for icon-only buttons
-          - `aria-describedby` for form hints and errors
-          - `aria-live` for dynamic content announcements
+          - `aria-describedby` for form hints/errors
+          - `aria-live` for dynamic content
         - ✅ Semantic HTML and proper `role` attributes
         - ✅ Keyboard navigation support (focusable elements, tab order)
-        - ✅ Screen reader compatibility (meaningful text alternatives)
+        - ✅ Screen reader compatibility (text alternatives)
 
-        ### 2.6 Package Manager
-        - ✅ Use **pnpm** commands (not npm or yarn) in documentation
-        - ✅ No direct `package-lock.json` or `yarn.lock` changes (use `pnpm-lock.yaml`)
+        ### 2.5 Package Manager
+        - ✅ Use **pnpm** commands (not npm or yarn)
+        - ✅ No `package-lock.json` or `yarn.lock` changes (use `pnpm-lock.yaml`)
 
-        ### 2.7 Reusable Component Architecture (CRITICAL)
+        ## 3. Reusable Component Architecture (CRITICAL)
 
         **Reference**: https://docs-admin.talawa.io/docs/developer-resources/reusable-components
 
-        #### Component Placement & Organization
-        - ✅ **Admin-only components** must be in:
-          - `src/components/AdminPortal/**` (components)
-          - `src/types/AdminPortal/**` (types)
+        ### 3.1 Directory Structure & Placement
 
-        - ✅ **User-only components** must be in:
-          - `src/components/UserPortal/**` (components)
-          - `src/types/UserPortal/**` (types)
+        **Strict Portal Separation**:
+        - ✅ **Admin-only**: `src/components/AdminPortal/**` + `src/types/AdminPortal/**`
+        - ✅ **User-only**: `src/components/UserPortal/**` + `src/types/UserPortal/**`
+        - ✅ **Shared** (both portals): `src/shared-components/**` + `src/types/shared-components/**`
 
-        - ✅ **Shared components** used by both portals must be in:
-          - `src/shared-components/**` (components)
-          - `src/types/shared-components/**` (types)
+        **Rules**:
+        - ❌ Never place Admin components in UserPortal or vice versa
+        - ❌ Never duplicate components across portals
+        - ✅ Promote to `shared-components/` if used by both portals
+        - ✅ Portal-specific hooks stay under that portal (e.g., `AdminPortal/hooks/`)
 
-        - ✅ **Do not** place Admin components in UserPortal or vice versa
-        - ✅ **Do not** duplicate components across portals—promote to `shared-components/` if used by both
-        - ✅ Portal-specific hooks belong under that portal (e.g., `AdminPortal/hooks/`)
-
-        #### Naming Conventions
-        - ✅ **Component folders and files**: PascalCase (e.g., `UserTableRow/`, `UserTableRow.tsx`)
-        - ✅ **Component name must match** folder and file name exactly
+        ### 3.2 Naming Conventions
+        - ✅ **Component folders/files**: PascalCase (e.g., `UserTableRow/`, `UserTableRow.tsx`)
+        - ✅ **Component name matches** folder and file name exactly
         - ✅ **Test files**: `Component.spec.tsx` or `Component.test.tsx`
         - ✅ **Mock files**: `ComponentMock.ts` or `ComponentMocks.ts`
         - ✅ **Interface files**: `interface.ts` in corresponding types directory
         - ✅ Exception: `types/shared-components` folder uses kebab-case
 
-        #### Interface & Type Definitions
-        - ✅ **NO inline prop interfaces** in component files
-        - ✅ All component props **must** be defined in:
-          ```
-          src/types/<Portal or shared-components>/<ComponentName>/interface.ts
-          ```
+        ### 3.3 Interface & Type Definitions
+        - ❌ **NO inline prop interfaces** in component files
+        - ✅ All props **must** be defined in: `src/types/<Portal or shared-components>/<ComponentName>/interface.ts`
         - ✅ Interface naming: `Interface<ComponentName>Props`
-        - ✅ Single source of truth for types—import from interface.ts
+        - ✅ Single source of truth—import from `interface.ts`
 
-        #### Import Patterns
+        **Correct Import Patterns**:
         ```typescript
-        // ✅ CORRECT: Shared component
+        // ✅ Shared component
         import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
         import type { InterfaceProfileAvatarDisplayProps } from 'types/shared-components/ProfileAvatarDisplay/interface';
 
-        // ✅ CORRECT: Admin component
+        // ✅ Admin component
         import { UserTableRow } from 'components/AdminPortal/UserTableRow/UserTableRow';
         import type { InterfaceUserTableRowProps } from 'types/AdminPortal/UserTableRow/interface';
 
-        // ❌ WRONG: Inline interface
+        // ❌ Inline interface (WRONG)
         interface UserTableRowProps { ... }
         ```
 
-        #### Restricted Library Imports
+        ### 3.4 Restricted Library Imports
 
-        **ESLint enforces these restrictions** via `no-restricted-imports`:
+        **ESLint enforces** via `no-restricted-imports`:
 
-        - ❌ **DataGrid**: Do not import `@mui/x-data-grid` or `@mui/x-data-grid-pro` directly
+        - ❌ **DataGrid**: No `@mui/x-data-grid` or `@mui/x-data-grid-pro`
           - ✅ Use: `DataGridWrapper` from `shared-components/DataGridWrapper/`
 
-        - ❌ **Spinner**: Do not import `Spinner` from `react-bootstrap`
+        - ❌ **Spinner**: No `Spinner` from `react-bootstrap`
           - ✅ Use: `LoadingState` from `shared-components/LoadingState/`
 
-        - ❌ **Modal**: Do not import `Modal` from `react-bootstrap`
+        - ❌ **Modal**: No `Modal` from `react-bootstrap`
           - ✅ Use: `BaseModal` from `shared-components/BaseModal/`
 
-        - ❌ **Date Pickers**: Do not import from `@mui/x-date-pickers` directly
+        - ❌ **Date Pickers**: No direct imports from `@mui/x-date-pickers`
           - ✅ Use: `DateRangePicker`, `DatePicker`, or `TimePicker` wrappers
 
-        **Exceptions**: Direct imports are ONLY allowed in the wrapper component implementations themselves.
+        **Exception**: Direct imports ONLY allowed in wrapper implementations.
 
-        #### TSDoc Requirements
-        - ✅ All exported components must have JSDoc headers:
+        ### 3.5 TSDoc Requirements
+        - ✅ All exported components must have JSDoc:
           ```typescript
           /**
-          * Brief description of component purpose and usage.
-          * @param props - Component props from Interface<ComponentName>Props
-          * @returns JSX.Element
-          */
+           * Brief description of component purpose and usage.
+           * @param props - Component props from Interface<ComponentName>Props
+           * @returns JSX.Element
+           */
           export const ComponentName = (props: InterfaceComponentNameProps): JSX.Element => { ... }
           ```
         - ✅ Interfaces must have JSDoc:
           ```typescript
           /**
-          * Props for ComponentName component.
-          */
+           * Props for ComponentName component.
+           */
           export interface InterfaceComponentNameProps { ... }
           ```
 
-        #### Validation Checklist for New/Modified Components
-        1. ❓ Is the component in the correct portal directory (Admin/User/shared)?
-        2. ❓ Does the folder/file/component name follow PascalCase?
-        3. ❓ Is there a colocated `.spec.tsx` test file?
-        4. ❓ Are props defined in `src/types/.../interface.ts` (not inline)?
-        5. ❓ Does the component use wrapper components instead of restricted imports?
-        6. ❓ Are TSDoc comments present on component and interface?
-        7. ❓ Does the import path follow the correct pattern?
-        8. ❓ If shared, is it actually used by both portals? If not, move to specific portal.
+        ### 3.6 Validation Checklist
+        For new/modified components, verify:
+        1. ❓ Component in correct portal directory (Admin/User/shared)?
+        2. ❓ Folder/file/component name follows PascalCase?
+        3. ❓ Colocated `.spec.tsx` test file exists?
+        4. ❓ Props defined in `src/types/.../interface.ts` (not inline)?
+        5. ❓ Uses wrapper components (not restricted imports)?
+        6. ❓ TSDoc comments on component and interface?
+        7. ❓ Import path follows correct pattern?
+        8. ❓ If shared, actually used by both portals? (else move to specific portal)
 
-        ## 3. Documentation & Code Comments
+        ## 4. Documentation & Comments
 
-        - ✅ **JSDoc comments** (with TSDoc format) on:
-          - All exported functions, classes, and interfaces
+        - ✅ **TSDoc/JSDoc comments** on:
+          - All exported functions, classes, interfaces
           - All components (purpose, params, returns)
           - Complex logic requiring explanation
-          - GraphQL queries/mutations (parameters, return values)
-        - ✅ Auto-generated documentation updated (enforced by Check-AutoDocs job)
+          - GraphQL queries/mutations
+        - ✅ Auto-generated docs updated (Check-AutoDocs job)
         - ✅ README.md or feature docs updated for new features
-        - ✅ Table of Contents updated (enforced by pre-commit hook)
+        - ✅ Table of Contents updated (pre-commit hook)
 
-        ## 4. Code Issues to Identify
+        ## 5. Code Issues to Report
 
-        Report these issues with **specific line numbers**:
-        - ❌ Lines of code missing test coverage
+        **Provide specific line numbers for**:
+        - ❌ Lines missing test coverage
         - ❌ Unnecessary files:
           - Build artifacts (`dist/`, `build/`, `coverage/`)
-          - Dependencies (`node_modules/`, `pnpm-lock.yaml` unnecessary changes)
+          - Dependencies (unnecessary `node_modules/`, `pnpm-lock.yaml` changes)
           - Environment files (`.env`, `.env.local`)
           - IDE configs (`.vscode/`, `.idea/`)
-        - ❌ Unused imports or dead code (checked by knip)
-        - ❌ Debug code left in production:
+        - ❌ Unused imports/dead code (checked by knip)
+        - ❌ Debug code in production:
           - `console.log()`, `console.debug()`, `console.info()` in non-script files
           - Commented-out code blocks
-          - TODO/FIXME comments without linked issues
+          - TODO/FIXME without linked issues
         - ❌ Skipped tests without documentation
-        - ❌ **Inline prop interfaces** (should use interface.ts)
-        - ❌ **Restricted library imports** (should use wrappers)
-        - ❌ **Components in wrong portal directory**
-        - ❌ **Missing TSDoc on exported components**
+        - ❌ **Architecture violations**:
+          - Inline prop interfaces
+          - Restricted library imports
+          - Components in wrong portal directory
+          - Missing TSDoc on exported components
 
-        ## 5. PR Requirements Validation
+        ## 6. PR & Issue Compliance
 
-        ### 5.1 Issue Requirements
+        ### 6.1 Issue Requirements
         - ✅ All acceptance criteria from linked issue addressed
-        - ✅ No out-of-scope changes included
-        - ✅ If bugs found in files being tested, they **must be fixed in this PR**
-        - ✅ Bugs in unrelated files should be deferred to separate issues
+        - ✅ No out-of-scope changes
+        - ✅ Bugs in **files being tested** must be fixed in this PR
+        - ✅ Bugs in **unrelated files** deferred to separate issues
 
-        ### 5.2 Review Feedback Compliance
-        - ✅ All previous review comments addressed or acknowledged
+        ### 6.2 Review Feedback
+        - ✅ All previous comments addressed or acknowledged
         - ✅ Requested changes implemented correctly
         - ✅ No unresolved conversations without explanation
 
-        ### 5.3 PR Metadata
-        - ✅ Clear, descriptive title following convention (e.g., "feat:", "fix:", "refactor:")
-        - ✅ Linked to issue(s) using GitHub keywords (Fixes #1234, Resolves #5678)
-        - ✅ Target branch is correct (typically `develop`)
-        - ✅ No sensitive information exposed (checked by Check-Sensitive-Files job)
+        ### 6.3 PR Metadata
+        - ✅ Descriptive title with convention (e.g., "feat:", "fix:", "refactor:")
+        - ✅ Linked to issue(s) using keywords (Fixes #1234, Resolves #5678)
+        - ✅ Target branch correct (typically `develop`)
+        - ✅ No sensitive information exposed (Check-Sensitive-Files job)
 
-        ## 6. CI/CD Pipeline Compatibility
+        ## 7. CI/CD & Security
 
-        - ✅ Changes won't break CI jobs:
-          - Code Quality Checks (linting, formatting, type-checking)
-          - Vitest test execution (12 shards)
+        ### 7.1 CI Pipeline Compatibility
+        - ✅ Won't break CI jobs:
+          - Code Quality (linting, formatting, type-checking)
+          - Vitest execution (12 shards)
           - Code coverage reporting
           - Documentation generation
-          - Sensitive files check
-          - MinIO compliance check
-          - Knip unused code detection
+          - Sensitive files check, MinIO compliance, Knip
 
-        - ✅ Pre-commit hook requirements met:
-          - `pnpm run format:fix` - Prettier formatting
-          - `pnpm run lint-staged` - ESLint with zero warnings (including no-restricted-imports)
-          - `pnpm run typecheck` - TypeScript compilation
-          - `pnpm run update:toc` - Table of Contents
-          - `pnpm run check:pom` - Page Object Model checks
-          - `npx knip` - Unused file detection
+        - ✅ Pre-commit requirements met:
+          - `pnpm run format:fix` (Prettier)
+          - `pnpm run lint-staged` (ESLint, zero warnings, no-restricted-imports)
+          - `pnpm run typecheck` (TypeScript)
+          - `pnpm run update:toc` (Table of Contents)
+          - `pnpm run check:pom` (Page Object Model)
+          - `npx knip` (unused files)
 
-        - ✅ No performance regressions in test execution time
+        - ✅ No performance regressions in test execution
 
-        ## 7. Security & Best Practices
-
+        ### 7.2 Security
         - ✅ No security vulnerabilities introduced
-        - ✅ No exposed credentials:
-          - API keys, tokens, passwords
-          - Database connection strings
-          - Third-party service credentials
+        - ✅ No exposed credentials (API keys, tokens, passwords, connection strings)
         - ✅ Proper input validation and sanitization
-        - ✅ No XSS vulnerabilities in user-generated content rendering
-        - ✅ Secure handling of sensitive data (PII, authentication tokens)
+        - ✅ No XSS vulnerabilities in user-generated content
+        - ✅ Secure handling of sensitive data (PII, auth tokens)
 
-        ## 8. Implementation Correctness
+        ## 8. Review Decision Framework
 
-        For files under test or modification:
-        - ✅ Implementation logic is correct and bug-free
-        - ✅ GraphQL queries target correct schema fields
-        - ✅ Data transformations and business logic are accurate
-        - ✅ Error handling covers all failure scenarios
-        - ✅ State management (Redux/Context) is properly implemented
-        - ✅ No race conditions or memory leaks
-        - ✅ Component architecture follows reusable component policy
-
-        ## 9. Review Decision & Approval
-
-        ### When to Require Changes (DO NOT approve):
+        ### 8.1 When to Require Changes (DO NOT approve)
         - Critical bugs in implementation
         - Missing test coverage for new/modified code
-        - Security vulnerabilities
-        - TypeScript errors
-        - Missing i18n translations
-        - Accessibility violations
-        - **Reusable component policy violations**:
-          - Components in wrong portal directory
-          - Inline prop interfaces instead of interface.ts
-          - Direct imports of restricted libraries
-          - Missing TSDoc on components
-          - Incorrect naming conventions
+        - Security vulnerabilities or TypeScript errors
+        - Missing i18n translations or accessibility violations
+        - **Reusable component policy violations** (see §3)
         - Unaddressed review feedback
         - Out-of-scope changes without justification
 
-        ### Approval Criteria (append `[approve]` tag ONLY when ALL are met):
-        1. ✅ Complete test coverage (target 100%) with quality tests
-        2. ✅ Zero code quality issues
-        3. ✅ No security concerns
-        4. ✅ All bugs fixed (in files being tested)
-        5. ✅ Full compliance with previous feedback
-        6. ✅ No unnecessary files
-        7. ✅ All CI checks will pass
-        8. ✅ Complete i18n support
-        9. ✅ Accessibility requirements met
-        10. ✅ **Reusable component policy fully followed**
-        11. ✅ **Zero changes needed** - even minor improvements should block approval
+        ### 8.2 Approval Criteria
 
-        **Important**: Be strict with approvals. If you suggest any improvement, do not approve.
+        **Append `` tag ONLY when ALL criteria met**:
+        1. ✅ Complete test coverage (target 100%) with quality tests (§1)
+        2. ✅ Zero code quality issues (§2)
+        3. ✅ **Full reusable component policy compliance** (§3)
+        4. ✅ Complete documentation and TSDoc (§4)
+        5. ✅ No code issues identified (§5)
+        6. ✅ Full PR & issue compliance (§6)
+        7. ✅ All CI checks pass, no security concerns (§7)
+        8. ✅ **Zero changes needed** — even minor improvements block approval
 
-        ## 10. Focus & Prioritization
+        **Be strict**: If you suggest any improvement, do not approve.
 
-        - **Prioritize substantive issues** over stylistic preferences
-        - **Focus on CI-breaking issues** and production bugs first
-        - **Component architecture violations** are high priority (affects maintainability)
-        - **Highlight pattern deviations** that could cause maintenance issues
-        - **Be specific**: Provide exact line numbers, not just file names
+        ## 9. Review Priorities & Scope
+
+        ### 9.1 Focus Areas (in priority order)
+        1. **CI-breaking issues** and production bugs
+        2. **Component architecture violations** (affects long-term maintainability)
+        3. **Security vulnerabilities** and data handling issues
+        4. **Test coverage gaps** and quality issues
+        5. **Code quality** and pattern deviations
+
+        ### 9.2 Scope Boundaries
+        - **In-scope bugs**: Files being tested MUST be fixed in same PR
+        - **Out-of-scope bugs**: Unrelated files deferred to separate issues
+        - **Component refactoring**:
+          - New components must follow policy
+          - Significantly modified components should be refactored to policy
+          - Bulk refactoring of existing components → separate PRs
+        - Document scope decisions clearly
+
+        ### 9.3 Feedback Quality
+        - **Be specific**: Exact line numbers, not just file names
         - **Be constructive**: Suggest concrete solutions with correct paths/patterns
+        - **Prioritize substance** over style
+        - **Highlight pattern deviations** that cause maintenance issues
 
-        ## 11. Scope Boundaries
+  pre_merge_checks:
+    instructions: |
+      Before approving for merge, verify:
 
-        - Test-focused PRs should maintain clear scope boundaries
-        - Bugs in the **specific files being tested MUST be fixed** in the same PR
-        - Bugs in **unrelated files** should be deferred to separate issues
-        - **Component refactoring for policy compliance** should be scoped appropriately:
-          - If adding a new component, it must follow the policy
-          - If significantly modifying an existing component, consider refactoring to policy
-          - Bulk refactoring of existing components should be separate PRs
-        - Document scope decisions clearly in review comments
+      ✅ All validation criteria from path_instructions are met
+      ✅ All CI/CD checks pass
+      ✅ No pending review comments
+      ✅ Reusable component architecture fully compliant
+      ✅ 100% test coverage target achieved
+      ✅ Zero TypeScript errors
+      ✅ All i18n translations present
+      ✅ Documentation updated
+
+      Only approve if absolutely ready for production with zero improvements needed.
