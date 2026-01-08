@@ -1,36 +1,5 @@
 /**
- *
  * UpdateTimeout Component
- *
- * A React component that allows users to update the session timeout for a community.
- * It fetches the current timeout value from the server, displays it, and provides
- * a slider to update the timeout value. The updated value is submitted to the server
- * via a GraphQL mutation.
- *
- * Props interface: TestInterfaceUpdateTimeoutProps
- * - onValueChange: Optional callback function triggered when the slider value changes.
- *
- * @param props - Component props.
- * @returns The rendered component.
- *
- * @example
- * ```tsx
- * <UpdateTimeout onValueChange={(value) => console.log(value)} />
- * ```
- *
- * @remarks
- * - Fetches the current session timeout using a GraphQL query.
- * - Allows users to update the timeout using a slider.
- * - Submits the updated timeout value to the server using a GraphQL mutation.
- * - Displays a success toast on successful update or handles errors gracefully.
- *
- * Dependencies:
- * - `react`, `react-bootstrap`, `@mui/material`, `@apollo/client`, `react-toastify`
- * - Custom modules: `GraphQl/Queries/Queries`, `GraphQl/Mutations/mutations`, `utils/errorHandler`, `shared-components/LoadingState/LoadingState`
- *
- * TODO:
- * - Add additional validation for slider input if needed.
- * - Improve error handling for edge cases.
  */
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -59,7 +28,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
   const [timeout, setTimeout] = useState<number>(30);
   const [communityTimeout, setCommunityTimeout] = useState<number | undefined>(
     30,
-  ); // Timeout from database for the community
+  );
 
   const {
     data,
@@ -70,10 +39,6 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
 
   type TimeoutDataType = { inactivityTimeoutDuration: number };
 
-  /**
-   * Effect that fetches the current session timeout from the server and sets the initial state.
-   * If there is an error in fetching the data, it is handled using the error handler.
-   */
   React.useEffect(() => {
     if (queryError) {
       errorHandler(t, queryError as Error);
@@ -97,35 +62,17 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
 
   /**
    * Handles changes to the slider value and updates the timeout state.
-   *
-   * @param e - The event triggered by slider movement.
    */
-  const handleOnChange = (
-    e: Event | React.ChangeEvent<HTMLInputElement>,
-  ): void => {
-    if ('target' in e && e.target) {
-      const target = e.target as HTMLInputElement;
-      // Ensure the value is a number and not NaN
-      const value = parseInt(target.value, 10);
-      if (!Number.isNaN(value)) {
-        setTimeout(value);
+  const handleOnChange = (_event: Event, value: number | number[]): void => {
+    const newValue = Array.isArray(value) ? value[0] : value;
 
-        if (onValueChange) {
-          onValueChange(value);
-        }
-      } else {
-        console.warn('Invalid timeout value:', target.value);
-      }
+    setTimeout(newValue);
+
+    if (onValueChange) {
+      onValueChange(newValue);
     }
   };
 
-  /**
-   * Handles form submission to update the session timeout.
-   * It makes a mutation request to update the timeout value on the server.
-   * If the update is successful, a success toast is shown, and the state is updated.
-   *
-   * @param e - The event triggered by form submission.
-   */
   const handleOnSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {

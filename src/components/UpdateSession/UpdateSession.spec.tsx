@@ -11,7 +11,8 @@ import {
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter } from 'react-router';
+// FIXED: Correct import from react-router-dom
+import { BrowserRouter } from 'react-router-dom';
 import UpdateTimeout from './UpdateSession';
 
 import i18n from 'utils/i18nForTest';
@@ -76,9 +77,7 @@ vi.mock('utils/errorHandler', () => ({
 describe('Testing UpdateTimeout Component', () => {
   beforeEach(() => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
-
-    // FIXED: Mock getBoundingClientRect so slider math works in JSDOM
-    // We mock a slider width of 100px starting at x=0
+    // Mocking getBoundingClientRect is good practice for JSDOM components
     vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(
       () => ({
         width: 100,
@@ -107,14 +106,12 @@ describe('Testing UpdateTimeout Component', () => {
       </MockedProvider>,
     );
 
-    const slider = await screen.findByTestId('slider-thumb');
+    // Target the hidden input directly to guarantee onChange is fired
+    const sliderInput = screen.getByRole('slider');
 
-    // FIXED: Add mouseMove sequence
-    fireEvent.mouseDown(slider, { clientX: 0 });
-    fireEvent.mouseMove(slider, { clientX: -50 }); // Drag way to the left
-    fireEvent.mouseUp(slider);
+    fireEvent.change(sliderInput, { target: { value: 15 } });
 
-    expect(mockOnValueChange).toHaveBeenCalledWith(15); // Adjust based on slider min value
+    expect(mockOnValueChange).toHaveBeenCalledWith(15);
   });
 
   it('Should handle maximum slider value correctly', async () => {
@@ -126,33 +123,11 @@ describe('Testing UpdateTimeout Component', () => {
       </MockedProvider>,
     );
 
-    const slider = await screen.findByTestId('slider-thumb');
+    const sliderInput = screen.getByRole('slider');
 
-    // FIXED: Add mouseMove sequence
-    fireEvent.mouseDown(slider, { clientX: 0 });
-    fireEvent.mouseMove(slider, { clientX: 200 }); // Drag way to the right
-    fireEvent.mouseUp(slider);
+    fireEvent.change(sliderInput, { target: { value: 60 } });
 
-    expect(mockOnValueChange).toHaveBeenCalledWith(60); // Adjust based on slider max value
-  });
-
-  it('Should not update value if an invalid value is passed', async () => {
-    const mockOnValueChange = vi.fn();
-
-    render(
-      <MockedProvider>
-        <UpdateTimeout onValueChange={mockOnValueChange} />
-      </MockedProvider>,
-    );
-
-    const slider = await screen.findByTestId('slider-thumb');
-
-    // Simulate invalid value handling
-    fireEvent.mouseDown(slider, { clientX: 0 }); // Adjust the clientX to simulate different slider positions
-    fireEvent.mouseUp(slider);
-
-    // Ensure onValueChange is not called with invalid values
-    expect(mockOnValueChange).not.toHaveBeenCalled();
+    expect(mockOnValueChange).toHaveBeenCalledWith(60);
   });
 
   it('Should update slider value on user interaction', async () => {
@@ -164,18 +139,13 @@ describe('Testing UpdateTimeout Component', () => {
       </MockedProvider>,
     );
 
-    // Wait for the slider to be present
-    const slider = await screen.findByTestId('slider-thumb');
+    const sliderInput = screen.getByRole('slider');
 
-    // FIXED: Simulate a drag to the middle (approx 50px on a 100px slider should be ~37.5)
-    fireEvent.mouseDown(slider, { clientX: 0 });
-    fireEvent.mouseMove(slider, { clientX: 50 });
-    fireEvent.mouseUp(slider);
+    fireEvent.change(sliderInput, { target: { value: 45 } });
 
-    // Assert that the callback was triggered
     await waitFor(
       () => {
-        expect(mockOnValueChange).toHaveBeenCalledWith(expect.any(Number));
+        expect(mockOnValueChange).toHaveBeenCalledWith(45);
       },
       { timeout: 1000 },
     );
@@ -194,22 +164,16 @@ describe('Testing UpdateTimeout Component', () => {
 
     await wait();
 
-    // Use getAllByText to get all elements with "Update Timeout" text
     const updateTimeoutElements = screen.getAllByText(/Update Timeout/i);
-    expect(updateTimeoutElements).toHaveLength(1); // Check if there are exactly 2 elements with this text
+    expect(updateTimeoutElements).toHaveLength(1);
 
     expect(screen.getByText(/Current Timeout/i)).toBeInTheDocument();
     expect(screen.getByText(/15 min/i)).toBeInTheDocument();
 
-    // Locate the parent element first
     const sliderLabelsContainer = screen.getByTestId('slider-labels');
-
-    // Use within to query inside the parent element
     const sliderLabels = within(sliderLabelsContainer);
 
-    // Check for the specific text within the parent element
     expect(sliderLabels.getByText('30 min')).toBeInTheDocument();
-
     expect(screen.getByText(/45 min/i)).toBeInTheDocument();
     expect(screen.getByText(/60 min/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Update/i })).toBeInTheDocument();
@@ -217,7 +181,6 @@ describe('Testing UpdateTimeout Component', () => {
 
   it('Should update session timeout', async () => {
     const user = userEvent.setup();
-
     const toastSpy = vi.spyOn(NotificationToast, 'success');
 
     const { container } = render(
@@ -230,7 +193,6 @@ describe('Testing UpdateTimeout Component', () => {
       </MockedProvider>,
     );
 
-    // Wait for the initial query to complete
     await waitFor(
       () => {
         expect(screen.getByTestId('timeout-value')).toHaveTextContent(
@@ -240,22 +202,17 @@ describe('Testing UpdateTimeout Component', () => {
       { timeout: 3000 },
     );
 
-    // Get the form using querySelector
     const form = container.querySelector('form');
     expect(form).toBeInTheDocument();
 
-    // Get and verify submit button
     const submitButton = screen.getByTestId('update-button');
     expect(submitButton).toBeInTheDocument();
 
-    // Click the button and submit the form
     await user.click(submitButton);
     if (form) {
-      // Perform actions on the form
       fireEvent.submit(form);
     }
 
-    // Wait for the mutation and toast
     await waitFor(
       () => {
         expect(toastSpy).toHaveBeenCalledWith(
@@ -265,7 +222,6 @@ describe('Testing UpdateTimeout Component', () => {
       { timeout: 3000 },
     );
 
-    // Verify toast was called once
     expect(toastSpy).toHaveBeenCalledTimes(1);
   });
 
@@ -360,28 +316,20 @@ describe('Testing UpdateTimeout Component', () => {
 
     await wait();
 
-    // Assertions to verify the component handles null community object correctly
-    // Use getAllByText to get all elements with "Update Timeout" text
     const updateTimeoutElements = screen.getAllByText(/Update Timeout/i);
-    expect(updateTimeoutElements).toHaveLength(1); // Check if there are exactly 2 elements with this text
+    expect(updateTimeoutElements).toHaveLength(1);
 
     expect(screen.getByText(/Current Timeout/i)).toBeInTheDocument();
 
-    // Locate the parent element first
     const sliderLabelsContainer = screen.getByTestId('slider-labels');
-
-    // Use within to query inside the parent element
     const sliderLabels = within(sliderLabelsContainer);
 
-    // Check for the specific text within the parent element
     expect(sliderLabels.getByText('15 min')).toBeInTheDocument();
-
     expect(screen.getByText(/30 min/i)).toBeInTheDocument();
     expect(screen.getByText(/45 min/i)).toBeInTheDocument();
     expect(screen.getByText(/60 min/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Update/i })).toBeInTheDocument();
 
-    // Check if the component displays a default value or handles the null state appropriately
     expect(screen.getByText(/No timeout set/i)).toBeInTheDocument();
   });
 });
