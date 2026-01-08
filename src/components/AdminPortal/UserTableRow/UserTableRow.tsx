@@ -1,64 +1,7 @@
 /**
  * UserTableRow Component
  *
- * A reusable table row component for displaying user information in a consistent format
- * across different screens. Supports both 2-column and 4-column layouts with optional
- * joined date display and customizable actions.
- *
- * @example
- * // Basic usage with 2-column layout (User + Actions)
- * <UserTableRow
- *   user={{
- *     id: "1",
- *     name: "John Doe",
- *     emailAddress: "john@example.com",
- *     createdAt: "2023-01-01T00:00:00Z"
- *   }}
- *   rowNumber={1}
- *   showJoinedDate={false}
- *   actions={[
- *     {
- *       label: "Edit",
- *       onClick: () => handleEdit("1"),
- *       variant: "primary",
- *       testId: "editUser1"
- *     }
- *   ]}
- * />
- *
- * @example
- * // 4-column layout with joined date (# + User + Joined + Actions)
- * <UserTableRow
- *   user={{
- *     id: "2",
- *     name: "Jane Smith",
- *     emailAddress: "jane@example.com",
- *     createdAt: "2023-02-01T00:00:00Z"
- *   }}
- *   rowNumber={2}
- *   showJoinedDate={true}
- *   actions={[
- *     {
- *       label: "Block",
- *       onClick: () => handleBlock("2"),
- *       variant: "danger",
- *       icon: <BlockIcon />,
- *       testId: "blockUser2"
- *     }
- *   ]}
- *   testIdPrefix="block-user"
- * />
- *
- * @example
- * // With clickable row and link path
- * <UserTableRow
- *   user={userData}
- *   rowNumber={3}
- *   linkPath="/users/3"
- *   onRowClick={() => navigate("/users/3")}
- *   showJoinedDate={true}
- *   actions={[]}
- * />
+ * A reusable table row component for displaying user information.
  */
 import React, { memo, useCallback, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';

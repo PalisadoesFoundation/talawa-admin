@@ -5,40 +5,37 @@
  * 1. Adding an existing user from the user list.
  * 2. Creating a new user and adding them to the organization.
  *
- * @Features
- * - Fetches and displays a paginated list of users with search functionality.
- * - Allows adding existing users to the organization.
- * - Provides a modal for creating new users with validation for required fields.
- * - Supports cursor-based pagination for user listing.
+ * Features:
+ * - Fetches and displays a paginated list of users with search functionality
+ * - Allows adding existing users to the organization
+ * - Provides a modal for creating new users with validation for required fields
+ * - Supports cursor-based pagination for user listing
  *
- * @Hooks
- * - `useLazyQuery`: Fetches users with pagination.
- * - `useMutation`: Handles adding members and creating new users.
- * - `useQuery`: Fetches organization details.
- * - `useTranslation`: Provides translations for UI text.
+ * Hooks:
+ * - useLazyQuery: Fetches users with pagination
+ * - useMutation: Handles adding members and creating new users
+ * - useQuery: Fetches organization details
+ * - useTranslation: Provides translations for UI text
  *
- * @StateManagement
- * - `addUserModalisOpen`: Controls the visibility of the "Add Existing User" modal.
- * - `createNewUserModalisOpen`: Controls the visibility of the "Create New User" modal.
- * - `page`: Tracks the current page for pagination.
- * - `paginationMeta`: Stores pagination metadata (e.g., hasNextPage, hasPreviousPage).
- * - `createUserVariables`: Stores input values for creating a new user.
+ * State Management:
+ * - addUserModalisOpen: Controls the visibility of the "Add Existing User" modal
+ * - createNewUserModalisOpen: Controls the visibility of the "Create New User" modal
+ * - page: Tracks the current page for pagination
+ * - paginationMeta: Stores pagination metadata (e.g., hasNextPage, hasPreviousPage)
+ * - createUserVariables: Stores input values for creating a new user
  *
- * @Props
- * - None
+ * Dependencies:
+ * - Apollo Client for GraphQL queries and mutations
+ * - React Bootstrap for modals and forms
+ * - Material-UI for table and icons
+ * - React Router for navigation
+ * - React Toastify for notifications
  *
- * @Dependencies
- * - Apollo Client for GraphQL queries and mutations.
- * - React Bootstrap for modals and forms.
- * - Material-UI for table and icons.
- * - React Router for navigation.
- * - React Toastify for notifications.
+ * Usage:
+ * - This component is used in the "Organization People" section of the application
+ * - It allows administrators to manage members of an organization
  *
- * @Usage
- * - This component is used in the "Organization People" section of the application.
- * - It allows administrators to manage members of an organization.
- *
- * @returns {JSX.Element} The rendered AddMember component.
+ * @returns The rendered AddMember component
  */
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { Check, Close } from '@mui/icons-material';
