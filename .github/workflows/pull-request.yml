@@ -89,7 +89,12 @@ jobs:
         if: steps.changed-files.outputs.only_changed != 'true'
         env:
           CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: pnpm exec eslint ${CHANGED_FILES}
+        run: |
+          if [ -n "$CHANGED_FILES" ]; then
+            echo "$CHANGED_FILES" | xargs -n 50 pnpm exec eslint
+          else
+            echo "No files to lint"
+          fi
 
       - name: Validate design tokens in modified files
         if: steps.changed-files.outputs.any_changed == 'true'
