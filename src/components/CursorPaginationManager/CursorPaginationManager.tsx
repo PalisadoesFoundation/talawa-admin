@@ -173,15 +173,15 @@ export function CursorPaginationManager<
     variables:
       paginationDirection === 'forward'
         ? ({
-          ...queryVariables,
-          first: itemsPerPage,
-          after: null,
-        } as PaginationVariables<TVariables>)
+            ...queryVariables,
+            first: itemsPerPage,
+            after: null,
+          } as PaginationVariables<TVariables>)
         : ({
-          ...queryVariables,
-          last: itemsPerPage,
-          before: null,
-        } as PaginationVariables<TVariables>),
+            ...queryVariables,
+            last: itemsPerPage,
+            before: null,
+          } as PaginationVariables<TVariables>),
     notifyOnNetworkStatusChange: true,
   });
 
@@ -227,15 +227,15 @@ export function CursorPaginationManager<
         variables:
           paginationDirection === 'forward'
             ? ({
-              ...queryVariables,
-              first: itemsPerPage,
-              after: pageInfo.endCursor,
-            } as PaginationVariables<TVariables>)
+                ...queryVariables,
+                first: itemsPerPage,
+                after: pageInfo.endCursor,
+              } as PaginationVariables<TVariables>)
             : ({
-              ...queryVariables,
-              last: itemsPerPage,
-              before: pageInfo.startCursor,
-            } as PaginationVariables<TVariables>),
+                ...queryVariables,
+                last: itemsPerPage,
+                before: pageInfo.startCursor,
+              } as PaginationVariables<TVariables>),
       });
 
       // Check if this request is stale or component unmounted
@@ -304,15 +304,15 @@ export function CursorPaginationManager<
       await refetch(
         paginationDirection === 'forward'
           ? ({
-            ...queryVariables,
-            first: itemsPerPage,
-            after: null,
-          } as PaginationVariables<TVariables>)
+              ...queryVariables,
+              first: itemsPerPage,
+              after: null,
+            } as PaginationVariables<TVariables>)
           : ({
-            ...queryVariables,
-            last: itemsPerPage,
-            before: null,
-          } as PaginationVariables<TVariables>),
+              ...queryVariables,
+              last: itemsPerPage,
+              before: null,
+            } as PaginationVariables<TVariables>),
       );
     } catch (err) {
       console.error('Error refetching data:', err);
