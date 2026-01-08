@@ -410,9 +410,7 @@ describe('Donate Component', () => {
     await userEvent.click(screen.getByTestId('donateBtn'));
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(
-        i18nForTest.t('success'),
-      );
+      expect(NotificationToast.success).toHaveBeenCalledWith('Donation Successful');
     });
   });
 
