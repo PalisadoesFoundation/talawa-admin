@@ -315,7 +315,11 @@ const ItemModal: FC<IItemModalProps> = ({
           </Form.Group>
         ) : null}
 
-        <Form.Group className="d-flex gap-3 mb-3" data-testid="categorySelect">
+        <Form.Group
+          className="d-flex gap-3 mb-3"
+          data-testid="categorySelect"
+          data-cy="categorySelect"
+        >
           <Autocomplete
             className={`${styles.noOutline} w-100`}
             options={actionItemCategories}
@@ -374,7 +378,11 @@ const ItemModal: FC<IItemModalProps> = ({
             </Box>
 
             {assignmentType === 'volunteer' && (
-              <Form.Group className="mb-3 w-100" data-testid="volunteerSelect">
+              <Form.Group
+                className="mb-3 w-100"
+                data-testid="volunteerSelect"
+                data-cy="volunteerSelect"
+              >
                 <Autocomplete
                   options={volunteers}
                   value={selectedVolunteer}
@@ -460,6 +468,7 @@ const ItemModal: FC<IItemModalProps> = ({
           type="submit"
           className={styles.addButton}
           data-testid="submitBtn"
+          data-cy="submitBtn"
         >
           {editMode ? t('updateActionItem') : t('createActionItem')}
         </Button>
