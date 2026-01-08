@@ -1,5 +1,8 @@
 import React from 'react';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import { render } from '@testing-library/react';
 import UserProfile from './UserProfile';
 import { MockedProvider } from '@apollo/react-testing';
@@ -45,7 +48,8 @@ describe('UserProfile Component', () => {
     const avatarImage = profileAvatar.querySelector('img');
     expect(avatarImage).toBeInTheDocument();
     expect(avatarImage).toHaveAttribute('src', 'profile-image-url');
-    expect(getByText('Joined 13 April 2023')).toBeInTheDocument();
+    const expectedDate = dayjs.utc().subtract(1, 'year').format('D MMMM YYYY');
+    expect(getByText(`Joined ${expectedDate}`)).toBeInTheDocument();
     expect(getByTestId('copyProfileLink')).toBeInTheDocument();
   });
   it('renders fallback avatar when image is null', () => {
@@ -53,7 +57,7 @@ describe('UserProfile Component', () => {
       firstName: 'Alice',
       lastName: 'Smith',
       email: 'alice@example.com',
-      createdAt: new Date('2022-12-12'),
+      createdAt: dayjs.utc().subtract(1, 'day').toDate(),
       image: null,
     };
     const castedUser = userDetails as unknown as Parameters<
@@ -70,7 +74,7 @@ describe('UserProfile Component', () => {
       firstName: 'Nora',
       lastName: 'Literal',
       email: 'nora@example.com',
-      createdAt: new Date('2024-02-20'),
+      createdAt: dayjs.utc().subtract(2, 'days').toDate(),
       image: 'null',
     };
     const { getByTestId } = renderWithProviders(
@@ -106,7 +110,8 @@ describe('UserProfile Component', () => {
     const { getByText, getByTestId } = renderWithProviders(
       <UserProfile {...userDetails} />,
     );
-    expect(getByText('Joined 15 January 2022')).toBeInTheDocument();
+    const expectedDate = dayjs.utc().subtract(1, 'year').format('D MMMM YYYY');
+    expect(getByText(`Joined ${expectedDate}`)).toBeInTheDocument();
     expect(getByTestId('profile-avatar')).toBeInTheDocument();
   });
   it('renders "Unavailable" when createdAt is invalid', () => {
@@ -140,7 +145,8 @@ describe('UserProfile Component', () => {
     const { getByText, getByTestId } = renderWithProviders(
       <UserProfile {...castedUser} />,
     );
-    expect(getByText('Joined 10 February 2023')).toBeInTheDocument();
+    const expectedDate = dayjs.utc().subtract(1, 'year').format('D MMMM YYYY');
+    expect(getByText(`Joined ${expectedDate}`)).toBeInTheDocument();
     expect(getByTestId('profile-avatar')).toBeInTheDocument();
   });
 });
