@@ -1,5 +1,10 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 
+# Configuration Metadata
+# Version: 2.0
+# Last Updated: 2026-01-08
+# Purpose: Comprehensive review validation with reusable component architecture enforcement
+
 language: 'en-US'
 
 early_access: false
@@ -23,7 +28,6 @@ reviews:
     enabled: true
     drafts: false
     base_branches:
-      - develop
       - develop
       - main
   path_filters:
