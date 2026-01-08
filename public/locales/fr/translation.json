@@ -1627,6 +1627,7 @@
     "advertisementMedia": "Média publicitaire",
     "noMediaAvailable": "Aucun média disponible",
     "mediaUnavailable": "Médias indisponibles",
+    "mediaUploadsUnavailable": "Les téléchargements de médias sont actuellement indisponibles.",
     "advertisementImageAlt": "Image publicitaire #{{index}} pour {{name}}",
     "invalidFileType": "Type de fichier invalide : {{fileName}}",
     "fileTooLarge": "Fichier trop volumineux : {{fileName}}",

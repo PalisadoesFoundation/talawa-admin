@@ -1597,6 +1597,7 @@
     "Rdesc": "Enter description of Advertisement (optional)",
     "Rtype": "Select type of Advertisement",
     "Rmedia": "Provide media content to be displayed",
+    "mediaUploadsUnavailable": "Media uploads are currently unavailable.",
     "RstartDate": "Select Start Date",
     "RendDate": "Select End Date",
     "RClose": "Close the window",
