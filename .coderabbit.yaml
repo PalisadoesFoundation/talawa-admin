@@ -351,16 +351,20 @@ reviews:
         - **Highlight pattern deviations** that cause maintenance issues
 
   pre_merge_checks:
-    instructions: |
-      Before approving for merge, verify:
+    # Enforce test file updates for modified source files
+    custom_checks:
+      - name: 'Test Coverage Validation'
+        mode: 'error' # Blocks PR until resolved
+        instructions: |
+          Before approving for merge, verify:
 
-      ✅ All validation criteria from path_instructions are met
-      ✅ All CI/CD checks pass
-      ✅ No pending review comments
-      ✅ Reusable component architecture fully compliant
-      ✅ 100% test coverage target achieved
-      ✅ Zero TypeScript errors
-      ✅ All i18n translations present
-      ✅ Documentation updated
+          ✅ All validation criteria from path_instructions are met
+          ✅ All CI/CD checks pass
+          ✅ No pending review comments
+          ✅ Reusable component architecture fully compliant
+          ✅ 100% test coverage target achieved
+          ✅ Zero TypeScript errors
+          ✅ All i18n translations present
+          ✅ Documentation updated
 
-      Only approve if absolutely ready for production with zero improvements needed.
+          Only approve if absolutely ready for production with zero improvements needed.
