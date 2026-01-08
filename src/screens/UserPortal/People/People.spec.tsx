@@ -145,6 +145,35 @@ const adminFilterMock = {
   },
 };
 
+const memberFilterMock = {
+  request: {
+    query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+    variables: {
+      orgId: DEFAULT_ORG_ID,
+      first: 10,
+      after: null,
+      where: { role: { equal: 'member' } },
+    },
+  },
+  result: {
+    data: {
+      organization: {
+        members: {
+          edges: [
+            { cursor: 'cur1', node: memberNode('1', 'Test User', 'member') },
+          ],
+          pageInfo: {
+            endCursor: 'cur1',
+            hasNextPage: false,
+            hasPreviousPage: false,
+            startCursor: 'cur1',
+          },
+        },
+      },
+    },
+  },
+};
+
 const sharedMocks = vi.hoisted(() => ({
   useParams: vi.fn(() => ({ orgId: DEFAULT_ORG_ID })),
 }));
@@ -190,6 +219,7 @@ describe('People Component Tests', () => {
 
   it('renders members and handles loading state', async () => {
     renderComponent([defaultQueryMock]);
+    expect(screen.getByTestId('cursor-pagination-loading')).toBeInTheDocument();
     await waitFor(() => {
       expect(screen.getByTestId('people-name-1')).toHaveTextContent(
         'Test User',
@@ -223,9 +253,15 @@ describe('People Component Tests', () => {
         'Page 2 User',
       );
     });
+    await waitFor(() => {
+      expect(
+        screen.queryByRole('button', { name: /load more/i }),
+      ).not.toBeInTheDocument();
+    });
   });
 
-  it('performs search using the search button', async () => {
+  it('performs search via debounced input', async () => {
+    vi.useFakeTimers();
     const user = userEvent.setup();
     renderComponent([defaultQueryMock, adminSearchMock]);
     await waitFor(() => {
@@ -236,15 +272,15 @@ describe('People Component Tests', () => {
     await user.type(input, 'Admin');
 
     await act(async () => {
-      await new Promise((r) => setTimeout(r, SEARCH_DEBOUNCE_MS + 50));
+      vi.advanceTimersByTime(SEARCH_DEBOUNCE_MS + 50);
     });
-
     await waitFor(() => {
       expect(screen.getByTestId('people-name-2')).toHaveTextContent(
         'Admin User',
       );
       expect(screen.queryByTestId('people-name-1')).not.toBeInTheDocument();
     });
+    vi.useRealTimers();
   });
 
   it('filters by Admins mode with server-side filtering', async () => {
@@ -298,6 +334,26 @@ describe('People Component Tests', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Nothing to show here')).toBeInTheDocument();
+    });
+  });
+
+  it('filters by Members mode with server-side filtering', async () => {
+    renderComponent([defaultQueryMock, memberFilterMock]);
+    await waitFor(() => {
+      expect(screen.getByTestId('people-name-1')).toBeInTheDocument();
+    });
+
+    const filterDropdown = screen.getByTestId('modeChangeBtn');
+    await userEvent.click(filterDropdown);
+
+    const memberOption = screen.getByTestId('2'); // Assuming '2' is Members mode
+    await userEvent.click(memberOption);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('people-name-1')).toHaveTextContent(
+        'Test User',
+      );
+      expect(screen.queryByTestId('people-name-2')).not.toBeInTheDocument();
     });
   });
 

@@ -397,7 +397,9 @@
     "joined": "Rejoint",
     "createUser": "Créer un utilisateur",
     "notFound": "Aucun membre trouvé",
-    "organizationPeopleTable": "Table des Personnes de l'Organisation"
+    "organizationPeopleTable": "Table des Personnes de l'Organisation",
+    "removeMemberTitle": "Supprimer un membre",
+    "removeMemberConfirmation": "Êtes-vous sûr de vouloir supprimer ce membre ?"
   },
   "organizationCard": {
     "join": "Rejoindre",
@@ -1206,7 +1208,8 @@
     "email": "E-mail",
     "role": "Rôle",
     "loading": "Chargement...",
-    "emailNotAvailable": "E-mail non disponible"
+    "emailNotAvailable": "E-mail non disponible",
+    "allMembers": "Tous les membres"
   },
   "userLogin": {
     "login": "Se connecter",

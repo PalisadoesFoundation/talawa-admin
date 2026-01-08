@@ -397,7 +397,9 @@
     "cancel": "रद्द करें",
     "createUser": "उपयोगकर्ता बनाएं",
     "notFound": "कोई सदस्य नहीं मिले",
-    "organizationPeopleTable": "संगठन लोग तालिका"
+    "organizationPeopleTable": "संगठन लोग तालिका",
+    "removeMemberTitle": "सदस्य हटाएँ",
+    "removeMemberConfirmation": "क्या आप वाकई इस सदस्य को हटाना चाहते हैं?"
   },
   "organizationCard": {
     "join": "जॉइन करें",
@@ -1206,7 +1208,8 @@
     "email": "ईमेल",
     "role": "भूमिका",
     "loading": "लोड हो रहा है...",
-    "emailNotAvailable": "ईमेल उपलब्ध नहीं है"
+    "emailNotAvailable": "ईमेल उपलब्ध नहीं है",
+    "allMembers": "सभी सदस्य"
   },
   "userLogin": {
     "login": "लॉग इन करें",

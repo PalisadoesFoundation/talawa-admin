@@ -397,7 +397,9 @@
     "joined": "Unido",
     "notFound": "No se encontraron miembros",
     "organizationPeopleTable": "Tabla de Personas de la Organización",
-    "createUser": "Crear usuario"
+    "createUser": "Crear usuario",
+    "removeMemberTitle": "Eliminar miembro",
+    "removeMemberConfirmation": "¿Está seguro de que desea eliminar a este miembro?"
   },
   "organizationCard": {
     "join": "Unirse",
@@ -1220,7 +1222,8 @@
     "email": "Correo Electrónico",
     "role": "Rol",
     "loading": "Cargando...",
-    "emailNotAvailable": "Correo electrónico no disponible"
+    "emailNotAvailable": "Correo electrónico no disponible",
+    "allMembers": "Todos los miembros"
   },
   "userRegister": {
     "register": "Registro",

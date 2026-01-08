@@ -720,42 +720,16 @@ describe('OrganizationPeople', () => {
   });
 
   test('renders avatar image when avatarURL is present', async () => {
-    const mocks = [
-      createMemberConnectionMock({
-        orgId: 'orgid',
-        first: 10,
-        after: null,
-      }),
-    ];
-
-    const link = new StaticMockLink(mocks, true);
-
-    const { container } = render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    // Check for avatar image
-    const imgElement = container.querySelector(
-      'img[src="https://example.com/avatar1.jpg"]',
+    // Check for avatar image - use screen queries if alt text is available
+    const avatarImages = screen.getAllByRole('img');
+    const johnDoeAvatar = avatarImages.find(
+      (img) => img.getAttribute('src') === 'https://example.com/avatar1.jpg',
     );
-    expect(imgElement).toBeInTheDocument();
+    expect(johnDoeAvatar).toBeInTheDocument();
   });
 
   test('disables remove button for users tab', async () => {
