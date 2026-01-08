@@ -14,6 +14,9 @@ vi.mock('react-i18next', () => ({
 const NotificationToastMocks = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
+  dismiss: vi.fn(),
 }));
 
 // Mock NotificationToast
