@@ -147,7 +147,7 @@ describe('OrgUpdate Component', () => {
 
     // Wait for loading to complete
     await waitFor(() => {
-      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
 
     await waitFor(() => {
@@ -404,14 +404,12 @@ describe('OrgUpdate Component', () => {
         </MockedProvider>,
       );
 
-      expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
       expect(screen.getByTestId('spinner')).toBeInTheDocument();
 
       await waitFor(() => {
         expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
       });
 
-      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
       expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
 
@@ -890,6 +888,101 @@ describe('OrgUpdate Component', () => {
         );
       });
       expect(errorContainer).toBeInTheDocument();
+    });
+  });
+
+  describe('LoadingState Behavior', () => {
+    it('should show LoadingState spinner while organization data is loading', async () => {
+      const loadingMocks = [
+        {
+          request: {
+            query: GET_ORGANIZATION_BASIC_DATA,
+            variables: { id: '1' },
+          },
+          result: {
+            data: {
+              organization: {
+                __typename: 'Organization',
+                id: '1',
+                name: 'Test Org',
+                description: 'Test Description',
+                addressLine1: '123 Test St',
+                addressLine2: 'Suite 100',
+                city: 'Test City',
+                state: 'Test State',
+                postalCode: '12345',
+                countryCode: 'US',
+                avatarURL: null,
+                createdAt: dayjs.utc().toISOString(),
+                updatedAt: dayjs.utc().toISOString(),
+                isUserRegistrationRequired: false,
+              },
+            },
+            delay: 100,
+          },
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={loadingMocks}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      const spinners = screen.getAllByTestId('spinner');
+      expect(spinners.length).toBeGreaterThan(0);
+    });
+
+    it('should hide spinner and render form after LoadingState completes', async () => {
+      const successMocks = [
+        {
+          request: {
+            query: GET_ORGANIZATION_BASIC_DATA,
+            variables: { id: '1' },
+          },
+          result: {
+            data: {
+              organization: {
+                __typename: 'Organization',
+                id: '1',
+                name: 'Test Org',
+                description: 'Test Description',
+                addressLine1: '123 Test St',
+                addressLine2: 'Suite 100',
+                city: 'Test City',
+                state: 'Test State',
+                postalCode: '12345',
+                countryCode: 'US',
+                avatarURL: null,
+                createdAt: dayjs.utc().toISOString(),
+                updatedAt: dayjs.utc().toISOString(),
+                isUserRegistrationRequired: false,
+              },
+            },
+          },
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={successMocks}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId('save-org-changes-btn')).toBeInTheDocument();
+      });
+
+      const spinners = screen.queryAllByTestId('spinner');
+      const visibleSpinners = spinners.filter((spinner) => {
+        const parent = spinner.closest('[data-testid="loadingContainer"]');
+        return parent && !parent.classList.contains('hidden');
+      });
+      expect(visibleSpinners.length).toBe(0);
     });
   });
 });

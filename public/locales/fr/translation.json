@@ -704,7 +704,9 @@
     "agendaItemUpdated": "Point de l'ordre du jour mis à jour avec succès",
     "agendaItemDeleted": "Point de l'ordre du jour supprimé avec succès",
     "deleteAgendaItem": "Supprimer le point de l'ordre du jour",
-    "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?"
+    "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?",
+    "event": "Événement",
+    "search": "Rechercher"
   },
   "eventListCard": {
     "deleteEvent": "Supprimer l'événement",
@@ -1670,7 +1672,10 @@
     "demoteToRegular": "Rétrograder au rang régulier",
     "promoteToAdmin": "Promouvoir administrateur",
     "user": "Utilisateur",
-    "chatAction": "Action de chat"
+    "chatAction": "Action de chat",
+    "confirmRemoveMember": "Confirmer la suppression du membre",
+    "failedToAddUser": "Échec de l'ajout de l'utilisateur",
+    "userAddedSuccessfully": "Utilisateur ajouté avec succès"
   },
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",
