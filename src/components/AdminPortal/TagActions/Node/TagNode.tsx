@@ -160,7 +160,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
             <input
               type="checkbox"
               checked={checkedTags.has(tag._id)}
-              className={`ms-1 me-2 ${componentStyle.cursorpointer}`}
+              className={`ms-1 me-2 ${componentStyle.cursorPointer}`}
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
               aria-label={tag.name}
