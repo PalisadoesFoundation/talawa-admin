@@ -59,13 +59,29 @@ describe('UserProfile Component', () => {
       firstName: 'Alice',
       lastName: 'Smith',
       email: 'alice@example.com',
-      createdAt: dayjs.utc().subtract(1, 'year').toDate(),
+      createdAt: new Date('2022-12-12'),
+      image: null,
+    };
+    const castedUser = userDetails as unknown as Parameters<
+      typeof UserProfile
+    >[0];
+    const { getByTestId } = renderWithProviders(
+      <UserProfile {...castedUser} />,
+    );
+    // ProfileAvatarDisplay fallback renders a div with data-testid="profile-avatar"
+    expect(getByTestId('profile-avatar')).toBeInTheDocument();
+  });
+  it('renders fallback avatar when image is the string "null"', () => {
+    const userDetails = {
+      firstName: 'Nora',
+      lastName: 'Literal',
+      email: 'nora@example.com',
+      createdAt: new Date('2024-02-20'),
       image: 'null',
     };
     const { getByTestId } = renderWithProviders(
       <UserProfile {...userDetails} />,
     );
-    // ProfileAvatarDisplay fallback renders a div with data-testid="profile-avatar"
     expect(getByTestId('profile-avatar')).toBeInTheDocument();
   });
   it('renders full firstName and email when they are short', () => {
