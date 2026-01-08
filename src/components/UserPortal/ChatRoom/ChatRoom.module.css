@@ -154,6 +154,7 @@
   flex-direction: column;
 }
 
+
 .loadMoreBar {
   text-align: center;
   padding: var(--space-3);
@@ -325,4 +326,30 @@ a {
 
 .deleteMenuItem {
   color: red;
+}
+
+.flexColumn {
+  display: flex;
+  flex-grow: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.hiddenFileInput {
+  display: none;
+}
+
+.loadingMore {
+  text-align: center;
+  padding: 10px;
+  color: var(--bs-secondary);
+  font-size: 14px;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+.deleteAction {
+  color: var(--bs-danger);
 }

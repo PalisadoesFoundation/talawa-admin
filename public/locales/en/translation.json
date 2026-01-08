@@ -1695,6 +1695,8 @@
       "resetButtonAriaLabel": "Try again"
     }
   },
+=======
+>>>>>>> a8c742c35f (fix: resolve PR check failures)
   "orgActionItemCategories": {
     "enableButton": "Enable",
     "disableButton": "Disable",

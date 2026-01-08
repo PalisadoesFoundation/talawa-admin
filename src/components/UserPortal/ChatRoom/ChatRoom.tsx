@@ -612,10 +612,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
               </div>
             </div>
           </div>
-          <div
-            className={`d-flex flex-grow-1 flex-column`}
-            style={{ minHeight: 0 }}
-          >
+          <div className={styles.flexColumn}>
             <CursorPaginationManager<
               typeof chatData,
               INewChat['messages']['edges'][0]['node']
@@ -671,13 +668,15 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                         onClick={() => loadMore()}
                         disabled={loading}
                       >
-                        {loading ? 'Loading…' : 'Load older messages'}
+                        {loading
+                          ? t('chat.loading')
+                          : t('chat.loadOlderMessages')}
                       </Button>
                     </div>
                   )}
                   {loading && (
                     <div className={styles.loadingMore}>
-                      Loading more messages...
+                      {t('chat.loadingMore')}
                     </div>
                   )}
                   {!!messages.length && (
@@ -751,7 +750,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                               <div className={styles.messageAttributes}>
                                 <Dropdown
                                   data-testid="moreOptions"
-                                  style={{ cursor: 'pointer' }}
+                                  className={styles.cursorPointer}
                                 >
                                   <Dropdown.Toggle
                                     className={styles.customToggle}
@@ -780,7 +779,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                             }}
                                             data-testid="replyToMessage"
                                           >
-                                            Edit
+                                            {t('chat.edit')}
                                           </Dropdown.Item>
                                         )}
                                         <Dropdown.Item
@@ -788,9 +787,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                             deleteMessage(message.id)
                                           }
                                           data-testid="deleteMessage"
-                                          style={{ color: 'red' }}
+                                          className={styles.deleteAction}
                                         >
-                                          Delete
+                                          {t('chat.delete')}
                                         </Dropdown.Item>
                                       </>
                                     )}
@@ -820,7 +819,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
               type="file"
               accept="image/*"
               ref={fileInputRef}
-              style={{ display: 'none' }} // Hide the input
+              className={styles.hiddenFileInput}
               onChange={handleImageChange}
               data-testid="hidden-file-input"
             />

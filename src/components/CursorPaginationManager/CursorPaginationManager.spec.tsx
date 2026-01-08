@@ -3,6 +3,7 @@ import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import CursorPaginationManager from './CursorPaginationManager';
 import type { InterfaceConnection } from 'types/CursorPagination/interface';
+import styles from './CursorPaginationManager.module.css';
 
 // Mock data types
 interface InterfaceMockNode {
@@ -394,10 +395,7 @@ describe('CursorPaginationManager Component', () => {
             scrollContainerRef={scrollRef}
           >
             {({ items, loadMore }) => (
-              <div
-                ref={scrollRef}
-                style={{ height: '200px', overflow: 'auto' }}
-              >
+              <div ref={scrollRef} className={styles.testScrollContainer}>
                 <button type="button" onClick={() => loadMore()}>
                   Load Older
                 </button>
@@ -491,7 +489,7 @@ describe('CursorPaginationManager Component', () => {
       const onLoadMore = vi.fn().mockRejectedValue(error);
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
 
       render(
         <CursorPaginationManager
