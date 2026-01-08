@@ -331,8 +331,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               aria-label={t('allTags')}
             >
               {tagActionsModalIsOpen && (
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                <CursorPaginationManager<any, InterfaceTagData>
+                <CursorPaginationManager<unknown, InterfaceTagData>
                   query={ORGANIZATION_USER_TAGS_LIST}
                   queryVariables={{
                     id: orgId,

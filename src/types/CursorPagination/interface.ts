@@ -5,6 +5,8 @@
  * to handle cursor-based pagination in both forward and backward directions.
  */
 
+import type { DocumentNode } from '@apollo/client';
+
 /**
  * Page information from a cursor-based pagination query.
  *
@@ -177,7 +179,7 @@ export interface InterfaceCursorPaginationProps<TData, TNode> {
    */
   getConnection?: (
     data: TData,
-  ) => InterfaceConnection<TNode> | null | undefined;
+  ) => InterfaceConnection<TNode> | null | undefined; // i18n-ignore-line
 
   /**
    * Current query variables.
@@ -234,7 +236,7 @@ export interface InterfaceCursorPaginationProps<TData, TNode> {
    * GraphQL query to fetch data.
    * If provided, the component will manage data fetching.
    */
-  query?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
+  query?: DocumentNode;
 
   /**
    * Path to extract the connection from the query result.

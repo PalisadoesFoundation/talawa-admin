@@ -10,20 +10,13 @@
  * - Displays group chat details when applicable.
  *
  * @param props - The props for the ChatRoom component.
- * @returns The rendered ChatRoom comp                            {message.parentMessage && (
-                              <a href={`#${message.parentMessage.id}`}>
-                                <div className={styles.replyToMessage}>
-                                  <p className={styles.replyToMessageSender}>
-                                    {message.parentMessage.creator.name}
-                                  </p>
-                                  <span>{message.parentMessage.body}</span>
-                                </div>
-                              </a>
-                            )} @example
+ * @returns The rendered ChatRoom component.
+ *
+ * @example
  * ```tsx
  * <ChatRoom
  *   selectedContact="12345"
- *   chatListRefetch={refetchChatList}
+ *   chatListRefetch=\{refetchChatList\}
  * />
  * ```
  */
@@ -31,7 +24,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
-import Avatar from 'components/Avatar/Avatar';
 import type { ChangeEvent } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
@@ -285,7 +277,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     useState(false);
 
   const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const backfillAttemptsRef = useRef<number>(0);
   const shouldAutoScrollRef = useRef<boolean>(false);
 
   const [attachment, setAttachment] = useState<string | null>(null);

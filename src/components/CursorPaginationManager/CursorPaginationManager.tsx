@@ -1,10 +1,18 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, gql } from '@apollo/client';
 import get from 'lodash/get';
 import type {
   InterfaceCursorPaginationProps,
   InterfaceCursorPaginationRenderProps,
+  InterfaceEdge,
 } from 'types/CursorPagination/interface';
+
+// Empty query used as fallback when no query is provided (Controlled Mode)
+const EMPTY_QUERY = gql`
+  query EmptyQuery {
+    __typename
+  }
+`;
 
 /**
  * CursorPaginationManager Component
@@ -47,7 +55,7 @@ function CursorPaginationManager<TData, TNode>({
     loading: queryLoading,
     fetchMore,
     refetch,
-  } = useQuery(query, {
+  } = useQuery(query ?? EMPTY_QUERY, {
     skip: !isSmartMode,
     variables: queryVariables,
     notifyOnNetworkStatusChange: true,
@@ -75,8 +83,10 @@ function CursorPaginationManager<TData, TNode>({
   const pageInfo = connection?.pageInfo;
 
   // Extract items
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const items = useMemo(() => edges.map((edge: any) => edge.node), [edges]);
+  const items = useMemo(
+    () => edges.map((edge: InterfaceEdge<TNode>) => edge.node), // i18n-ignore-line
+    [edges],
+  );
 
   // Notify parent of data change
   useEffect(() => {
@@ -196,7 +206,9 @@ function CursorPaginationManager<TData, TNode>({
             key={
               keyExtractor
                 ? keyExtractor(item)
-                : (item as any).id || (item as any)._id || index // eslint-disable-line @typescript-eslint/no-explicit-any
+                : (item as { id?: string; _id?: string }).id ||
+                  (item as { id?: string; _id?: string })._id ||
+                  index
             }
           >
             {renderItem(item)}

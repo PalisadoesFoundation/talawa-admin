@@ -411,8 +411,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         <>
           <Divider />
           <Box className={postCardStyles.commentSection}>
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            <CursorPaginationManager<any, InterfaceComment>
+            <CursorPaginationManager<unknown, InterfaceComment>
               query={GET_POST_COMMENTS}
               queryVariables={{
                 postId: props.id,

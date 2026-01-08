@@ -1546,7 +1546,6 @@
     "enterName": "Entrez le nom",
     "enterDescription": "Entrez la description",
     "enterLocation": "Entrez l'emplacement",
-
     "registerable": "Est enregistrable",
     "monthlyCalendarView": "Calendrier mensuel",
     "yearlyCalendarView": "Calendrier annuel",
@@ -1693,7 +1692,7 @@
       "title": "Quelque chose s'est mal passé",
       "message": "Une erreur inattendue s'est produite dans la salle de discussion",
       "resetButton": "Réessayer",
-      "resetButtonAriaLabel": "Réessayer"
+      "returnButton": "Réessayer"
     }
   },
   "orgActionItemCategories": {

@@ -1546,7 +1546,6 @@
     "enterName": "नाम दर्ज करें",
     "enterDescription": "विवरण दर्ज करें",
     "enterLocation": "स्थान दर्ज करें",
-
     "registerable": "पंजीकरण योग्य है",
     "monthlyCalendarView": "मासिक कैलेंडर",
     "yearlyCalendarView": "वार्षिक कैलेंडर",
@@ -1693,7 +1692,7 @@
       "title": "कुछ गलत हो गया",
       "message": "चैट रूम में एक अप्रत्याशित त्रुटि हुई",
       "resetButton": "फिर से प्रयास करें",
-      "resetButtonAriaLabel": "फिर से प्रयास करें"
+      "returnButton": "फिर से प्रयास करें"
     }
   },
   "orgActionItemCategories": {

@@ -1546,7 +1546,6 @@
     "enterName": "输入名称",
     "enterDescription": "输入描述",
     "enterLocation": "输入位置",
-
     "registerable": "可注册",
     "monthlyCalendarView": "月历",
     "yearlyCalendarView": "年历",
@@ -1693,7 +1692,7 @@
       "title": "出现问题",
       "message": "聊天室中发生了意外错误",
       "resetButton": "重试",
-      "resetButtonAriaLabel": "重试"
+      "returnButton": "重试"
     }
   },
   "orgActionItemCategories": {

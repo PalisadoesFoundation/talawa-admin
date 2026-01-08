@@ -1692,7 +1692,7 @@
       "title": "Algo salió mal",
       "message": "Ocurrió un error inesperado en la sala de chat",
       "resetButton": "Intentar de nuevo",
-      "resetButtonAriaLabel": "Intentar de nuevo"
+      "returnButton": "Intentar de nuevo"
     }
   },
   "orgActionItemCategories": {
