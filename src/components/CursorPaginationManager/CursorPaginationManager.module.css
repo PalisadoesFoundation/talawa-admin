@@ -1,0 +1,15 @@
+/* CursorPaginationManager component styles */
+
+.loadingIndicator {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  color: var(--bs-secondary);
+}
+
+.errorMessage {
+  padding: 1rem;
+  color: var(--bs-danger);
+  text-align: center;
+}

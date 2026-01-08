@@ -1,0 +1,230 @@
+/**
+ * TypeScript interfaces for cursor-based pagination.
+ *
+ * This module defines the interfaces used by the CursorPaginationManager component
+ * to handle cursor-based pagination in both forward and backward directions.
+ */
+
+/**
+ * Page information from a cursor-based pagination query.
+ *
+ * This follows the Relay Cursor Connections Specification.
+ */
+export interface InterfacePageInfo {
+  /**
+   * Indicates if there are more items available after the current page.
+   * Used for forward pagination.
+   */
+  hasNextPage: boolean;
+
+  /**
+   * Indicates if there are more items available before the current page.
+   * Used for backward pagination.
+   */
+  hasPreviousPage: boolean;
+
+  /**
+   * Cursor pointing to the start of the current page.
+   * Used as the `before` parameter for backward pagination.
+   */
+  startCursor: string | null;
+
+  /**
+   * Cursor pointing to the end of the current page.
+   * Used as the `after` parameter for forward pagination.
+   */
+  endCursor: string | null;
+}
+
+/**
+ * Generic edge type for cursor-based pagination.
+ *
+ * @typeParam T - The type of the node contained in this edge.
+ */
+export interface InterfaceEdge<T> {
+  /**
+   * Cursor for this specific edge.
+   */
+  cursor: string;
+
+  /**
+   * The actual data node.
+   */
+  node: T;
+}
+
+/**
+ * Generic connection type for cursor-based pagination.
+ *
+ * @typeParam T - The type of the items in the edges.
+ */
+export interface InterfaceConnection<T> {
+  /**
+   * Array of edges containing the data and cursors.
+   */
+  edges: InterfaceEdge<T>[];
+
+  /**
+   * Information about the current page.
+   */
+  pageInfo: InterfacePageInfo;
+}
+
+/**
+ * Render props passed to the children function of CursorPaginationManager.
+ *
+ * @typeParam T - The type of the items being paginated.
+ */
+export interface InterfaceCursorPaginationRenderProps<T> {
+  /**
+   * Array of items to render.
+   */
+  items: T[];
+
+  /**
+   * Indicates if more items are currently being loaded.
+   */
+  loading: boolean;
+
+  /**
+   * Indicates if there are more items available to load.
+   * - For forward pagination: equals `hasNextPage`
+   * - For backward pagination: equals `hasPreviousPage`
+   */
+  hasMore: boolean;
+
+  /**
+   * Function to trigger loading more items.
+   * Typically called when user scrolls or clicks a "load more" button.
+   */
+  loadMore: () => Promise<void>;
+
+  /**
+   * Error that occurred during loading, if any.
+   */
+  error?: Error;
+}
+
+/**
+ * Props for the CursorPaginationManager component.
+ *
+ * @typeParam TData - The type of data returned by the query.
+ * @typeParam TNode - The type of individual items being paginated.
+ *
+ * @example
+ * Forward pagination (loading next page):
+ * ```tsx
+ * <CursorPaginationManager
+ *   paginationDirection="forward"
+ *   data={queryData?.posts}
+ *   queryVariables={{ first: 10, after: null }}
+ *   onLoadMore={(variables) => refetch(variables)}
+ *   getConnection={(data) => data}
+ * >
+ *   {({ items, loading, hasMore, loadMore }) => (
+ *     <div>
+ *       {items.map(item => <PostCard key={item.id} post={item} />)}
+ *       {hasMore && <button onClick={loadMore}>Load More</button>}
+ *     </div>
+ *   )}
+ * </CursorPaginationManager>
+ * ```
+ *
+ * @example
+ * Backward pagination (loading previous page, e.g., for chat messages):
+ * ```tsx
+ * <CursorPaginationManager
+ *   paginationDirection="backward"
+ *   data={queryData?.chat?.messages}
+ *   queryVariables={{ last: 10, before: null }}
+ *   onLoadMore={(variables) => refetch(variables)}
+ *   getConnection={(data) => data}
+ *   scrollContainerRef={messagesContainerRef}
+ * >
+ *   {({ items, loading, hasMore, loadMore }) => (
+ *     <div ref={messagesContainerRef}>
+ *       {hasMore && <button onClick={loadMore}>Load Older</button>}
+ *       {items.map(msg => <Message key={msg.id} message={msg} />)}
+ *     </div>
+ *   )}
+ * </CursorPaginationManager>
+ * ```
+ */
+export interface InterfaceCursorPaginationProps<TData, TNode> {
+  /**
+   * Direction of pagination.
+   *
+   * - `'forward'`: Load next page using `first` and `after` parameters.
+   *   New items are appended to the end of the list.
+   * - `'backward'`: Load previous page using `last` and `before` parameters.
+   *   New items are prepended to the beginning of the list.
+   *
+   * @default 'forward'
+   */
+  paginationDirection?: 'forward' | 'backward';
+
+  /**
+   * The data returned from the GraphQL query containing the connection.
+   */
+  data?: TData | null;
+
+  /**
+   * Function to extract the connection from the query data.
+   *
+   * @param data - The query data.
+   * @returns The connection object containing edges and pageInfo.
+   *
+   * @example
+   * For a query like `{ chat: { messages: { edges, pageInfo } } }`:
+   * ```tsx
+   * getConnection={(data) => data?.chat?.messages}
+   * ```
+   */
+  getConnection: (data: TData) => InterfaceConnection<TNode> | null | undefined;
+
+  /**
+   * Current query variables.
+   * Used to determine pagination state.
+   */
+  queryVariables: {
+    first?: number | null;
+    after?: string | null;
+    last?: number | null;
+    before?: string | null;
+    [key: string]: unknown;
+  };
+
+  /**
+   * Number of items to fetch per page.
+   */
+  itemsPerPage: number;
+
+  /**
+   * Callback function to load more items.
+   *
+   * @param variables - The new query variables to fetch the next/previous page.
+   * @returns A promise that resolves when the data is loaded.
+   */
+  onLoadMore: (variables: Record<string, unknown>) => Promise<unknown>;
+
+  /**
+   * Render function that receives pagination state and renders the UI.
+   *
+   * @param props - The render props containing items, loading state, and loadMore function.
+   */
+  children: (
+    props: InterfaceCursorPaginationRenderProps<TNode>,
+  ) => React.ReactNode;
+
+  /**
+   * Optional ref to the scroll container.
+   * Required for backward pagination to maintain scroll position.
+   */
+  scrollContainerRef?: React.RefObject<HTMLElement>;
+
+  /**
+   * Optional callback fired when items change.
+   * Useful for side effects like scroll position management.
+   */
+  onItemsChange?: (items: TNode[]) => void;
+}
