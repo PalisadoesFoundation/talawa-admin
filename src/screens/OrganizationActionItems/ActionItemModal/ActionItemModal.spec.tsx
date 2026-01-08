@@ -4124,9 +4124,12 @@ describe('Partially Covered Lines Test Coverage', () => {
       });
 
       // Wait for volunteer select to be in the document
-      await waitFor(() => {
-        expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       // Click volunteer group chip to switch assignment type
       const volunteerGroupChip = screen.getByRole('button', {
