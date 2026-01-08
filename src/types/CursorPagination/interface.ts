@@ -8,17 +8,17 @@ import type { DefaultConnectionPageInfo } from '../pagination';
 export type PaginationVariables<T extends Record<string, unknown>> = T &
   (
     | {
-        first: number;
-        after: string | null;
-        last?: never;
-        before?: never;
-      }
+      first: number;
+      after: string | null;
+      last?: never;
+      before?: never;
+    }
     | {
-        last: number;
-        before: string | null;
-        first?: never;
-        after?: never;
-      }
+      last: number;
+      before: string | null;
+      first?: never;
+      after?: never;
+    }
   );
 
 /**
@@ -90,7 +90,7 @@ export interface InterfaceCursorPaginationManagerProps<
 
   /**
    * Number of items to fetch per page
-   * @default 10
+   * @defaultValue 10
    */
   itemsPerPage?: number;
 
