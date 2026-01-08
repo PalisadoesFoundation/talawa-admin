@@ -47,6 +47,19 @@ const restrictedImports = [
     message:
       'Direct imports from @mui/x-date-pickers are not allowed. Please use the wrappers (DateRangePicker, DatePicker, TimePicker) from src/shared-components/ instead.',
   },
+  {
+    id: 'rb-table',
+    name: 'react-bootstrap',
+    importNames: ['Table'],
+    message:
+      'Do not import Table directly. Use the shared DataTable component instead.',
+  },
+  {
+    id: 'rb-table-path',
+    name: 'react-bootstrap/Table',
+    message:
+      'Do not import react-bootstrap/Table directly. Use the shared DataTable component instead.',
+  },
 ];
 
 const stripId = (entry) => {
@@ -304,6 +317,20 @@ export default [
       'src/index.tsx',
     ],
     rules: restrictImportsExcept(['mui-date-pickers']),
+  },
+  /**
+   * Exemption: DataTable wrapper component
+   *
+   * DataTable files need direct react-bootstrap Table access for wrapper implementation.
+   * These files are the only ones allowed to import Table directly from react-bootstrap.
+   * Allowed IDs: rb-table, rb-table-path.
+   */
+  {
+    files: [
+      'src/shared-components/DataTable/**/*.{ts,tsx}',
+      'src/types/shared-components/DataTable/**/*.{ts,tsx}',
+    ],
+    rules: restrictImportsExcept(['rb-table', 'rb-table-path']),
   },
   {
     files: ['*.graphql'],
