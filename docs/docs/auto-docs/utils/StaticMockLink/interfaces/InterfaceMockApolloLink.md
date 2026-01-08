@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
 # Interface: InterfaceMockApolloLink
 
-Defined in: [src/utils/StaticMockLink.ts:188](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L188)
+Defined in: [src/utils/StaticMockLink.ts:188](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/utils/StaticMockLink.ts#L188)
 
 ## Extends
 
@@ -16,4 +16,4 @@ Defined in: [src/utils/StaticMockLink.ts:188](https://github.com/PalisadoesFound
 
 > `optional` **operation**: `Operation`
 
-Defined in: [src/utils/StaticMockLink.ts:189](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L189)
+Defined in: [src/utils/StaticMockLink.ts:189](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/utils/StaticMockLink.ts#L189)

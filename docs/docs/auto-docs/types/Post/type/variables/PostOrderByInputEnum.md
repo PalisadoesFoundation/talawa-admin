@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **PostOrderByInputEnum**: `object`
 
-Defined in: [src/types/Post/type.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L32)
+Defined in: [src/types/Post/type.ts:32](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Post/type.ts#L32)
 
 ## Type Declaration
 

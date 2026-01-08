@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceAddPeopleToTagProps
 
-Defined in: [src/types/Tag/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L27)
+Defined in: [src/types/Tag/interface.ts:27](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Tag/interface.ts#L27)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Tag/interface.ts:27](https://github.com/PalisadoesFoundat
 
 > **addPeopleToTagModalIsOpen**: `boolean`
 
-Defined in: [src/types/Tag/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L28)
+Defined in: [src/types/Tag/interface.ts:28](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Tag/interface.ts#L28)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Tag/interface.ts:28](https://github.com/PalisadoesFoundat
 
 > **hideAddPeopleToTagModal**: () => `void`
 
-Defined in: [src/types/Tag/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L29)
+Defined in: [src/types/Tag/interface.ts:29](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Tag/interface.ts#L29)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Tag/interface.ts:29](https://github.com/PalisadoesFoundat
 
 > **refetchAssignedMembersData**: () => `void`
 
-Defined in: [src/types/Tag/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L30)
+Defined in: [src/types/Tag/interface.ts:30](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Tag/interface.ts#L30)
 
 #### Returns
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Tag/interface.ts:30](https://github.com/PalisadoesFoundat
 
 > **t**: `TFunction`\<`"translation"`, `"manageTag"`\>
 
-Defined in: [src/types/Tag/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L31)
+Defined in: [src/types/Tag/interface.ts:31](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Tag/interface.ts#L31)
 
 ***
 
@@ -52,4 +52,4 @@ Defined in: [src/types/Tag/interface.ts:31](https://github.com/PalisadoesFoundat
 
 > **tCommon**: `TFunction`\<`"common"`, `undefined`\>
 
-Defined in: [src/types/Tag/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L32)
+Defined in: [src/types/Tag/interface.ts:32](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Tag/interface.ts#L32)

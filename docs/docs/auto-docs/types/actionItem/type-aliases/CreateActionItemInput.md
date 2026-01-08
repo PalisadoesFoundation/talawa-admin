@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **CreateActionItemInput** = `object`
 
-Defined in: [src/types/actionItem.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L32)
+Defined in: [src/types/actionItem.ts:32](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/actionItem.ts#L32)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/actionItem.ts:32](https://github.com/PalisadoesFoundation
 
 > **assigneeId**: `string`
 
-Defined in: [src/types/actionItem.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L33)
+Defined in: [src/types/actionItem.ts:33](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/actionItem.ts#L33)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/actionItem.ts:33](https://github.com/PalisadoesFoundation
 
 > `optional` **dueDate**: `Date`
 
-Defined in: [src/types/actionItem.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L34)
+Defined in: [src/types/actionItem.ts:34](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/actionItem.ts#L34)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/actionItem.ts:34](https://github.com/PalisadoesFoundation
 
 > `optional` **eventId**: `string`
 
-Defined in: [src/types/actionItem.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L35)
+Defined in: [src/types/actionItem.ts:35](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/actionItem.ts#L35)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/types/actionItem.ts:35](https://github.com/PalisadoesFoundation
 
 > `optional` **preCompletionNotes**: `string`
 
-Defined in: [src/types/actionItem.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L36)
+Defined in: [src/types/actionItem.ts:36](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/actionItem.ts#L36)

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **useLocalStorage**(`prefix`): `InterfaceStorageHelper`
 
-Defined in: [src/utils/useLocalstorage.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L82)
+Defined in: [src/utils/useLocalstorage.ts:82](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/utils/useLocalstorage.ts#L82)
 
 Custom hook for simplified localStorage operations.
 

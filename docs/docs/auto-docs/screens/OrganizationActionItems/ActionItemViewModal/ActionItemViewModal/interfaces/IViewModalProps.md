@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: IViewModalProps
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L21)
+Defined in: [src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx:21](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L21)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemV
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L23)
+Defined in: [src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx:23](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L23)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemV
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L22)
+Defined in: [src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx:22](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L22)
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemV
 
 > **item**: [`IActionItemInfo`](../../../../../types/ActionItems/interface/interfaces/IActionItemInfo.md)
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L24)
+Defined in: [src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx:24](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L24)

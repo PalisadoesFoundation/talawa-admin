@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **clearAllItems**(`prefix`): `void`
 
-Defined in: [src/utils/useLocalstorage.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L62)
+Defined in: [src/utils/useLocalstorage.ts:62](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/utils/useLocalstorage.ts#L62)
 
 Clears all items from localStorage with the given prefix.
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **nonEmptyProps**: `object`
 
-Defined in: [src/components/EventStats/EventStatsMocks.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/EventStatsMocks.ts#L71)
+Defined in: [src/components/EventStats/EventStatsMocks.ts:71](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/components/EventStats/EventStatsMocks.ts#L71)
 
 ## Type Declaration
 

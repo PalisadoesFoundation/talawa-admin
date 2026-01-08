@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **REMOVE\_EVENT\_ATTENDEE**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/EventAttendeeMutations.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventAttendeeMutations.ts#L39)
+Defined in: [src/GraphQl/Mutations/EventAttendeeMutations.ts:39](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/GraphQl/Mutations/EventAttendeeMutations.ts#L39)
 
 GraphQL mutation to remove an attendee from an event.
 

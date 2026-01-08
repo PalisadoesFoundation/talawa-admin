@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceAddOnRegisterProps
 
-Defined in: [src/types/Advertisement/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L3)
+Defined in: [src/types/Advertisement/interface.ts:3](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/interface.ts#L3)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Advertisement/interface.ts:3](https://github.com/Palisado
 
 > `optional` **createdBy**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L10)
+Defined in: [src/types/Advertisement/interface.ts:10](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/interface.ts#L10)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Advertisement/interface.ts:10](https://github.com/Palisad
 
 > `optional` **descriptionEdit**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L8)
+Defined in: [src/types/Advertisement/interface.ts:8](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/interface.ts#L8)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Advertisement/interface.ts:8](https://github.com/Palisado
 
 > `optional` **endAtEdit**: `Date`
 
-Defined in: [src/types/Advertisement/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L11)
+Defined in: [src/types/Advertisement/interface.ts:11](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/interface.ts#L11)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Advertisement/interface.ts:11](https://github.com/Palisad
 
 > `optional` **formStatus**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L4)
+Defined in: [src/types/Advertisement/interface.ts:4](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/interface.ts#L4)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Advertisement/interface.ts:4](https://github.com/Palisado
 
 > `optional` **id**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L9)
+Defined in: [src/types/Advertisement/interface.ts:9](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/interface.ts#L9)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Advertisement/interface.ts:9](https://github.com/Palisado
 
 > `optional` **idEdit**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L5)
+Defined in: [src/types/Advertisement/interface.ts:5](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/interface.ts#L5)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Advertisement/interface.ts:5](https://github.com/Palisado
 
 > `optional` **nameEdit**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L6)
+Defined in: [src/types/Advertisement/interface.ts:6](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/interface.ts#L6)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/types/Advertisement/interface.ts:6](https://github.com/Palisado
 
 > **setAfterActive**: `Dispatch`\<`SetStateAction`\<`string`\>\>
 
-Defined in: [src/types/Advertisement/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L13)
+Defined in: [src/types/Advertisement/interface.ts:13](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/interface.ts#L13)
 
 ***
 
@@ -76,7 +76,7 @@ Defined in: [src/types/Advertisement/interface.ts:13](https://github.com/Palisad
 
 > **setAfterCompleted**: `Dispatch`\<`SetStateAction`\<`string`\>\>
 
-Defined in: [src/types/Advertisement/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L16)
+Defined in: [src/types/Advertisement/interface.ts:16](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/interface.ts#L16)
 
 ***
 
@@ -84,7 +84,7 @@ Defined in: [src/types/Advertisement/interface.ts:16](https://github.com/Palisad
 
 > `optional` **startAtEdit**: `Date`
 
-Defined in: [src/types/Advertisement/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L12)
+Defined in: [src/types/Advertisement/interface.ts:12](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/interface.ts#L12)
 
 ***
 
@@ -92,4 +92,4 @@ Defined in: [src/types/Advertisement/interface.ts:12](https://github.com/Palisad
 
 > `optional` **typeEdit**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/interface.ts#L7)
+Defined in: [src/types/Advertisement/interface.ts:7](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/interface.ts#L7)

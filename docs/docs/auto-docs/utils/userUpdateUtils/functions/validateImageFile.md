@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **validateImageFile**(`file`, `tCommon`): `boolean`
 
-Defined in: [src/utils/userUpdateUtils.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/userUpdateUtils.ts#L60)
+Defined in: [src/utils/userUpdateUtils.ts:60](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/utils/userUpdateUtils.ts#L60)
 
 Validates an image file for type and size constraints.
 Shows error notifications for invalid files using the provided translation function.

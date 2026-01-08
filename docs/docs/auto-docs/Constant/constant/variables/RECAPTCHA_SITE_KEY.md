@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **RECAPTCHA\_SITE\_KEY**: `string` = `process.env.REACT_APP_RECAPTCHA_SITE_KEY`
 
-Defined in: [src/Constant/constant.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/constant.ts#L3)
+Defined in: [src/Constant/constant.ts:3](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/Constant/constant.ts#L3)

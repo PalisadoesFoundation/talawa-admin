@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **logSuccess**(`message`): `void`
 
-Defined in: [src/install/utils/logger.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/logger.ts#L6)
+Defined in: [src/install/utils/logger.ts:6](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/install/utils/logger.ts#L6)
 
 Logger utility for installation script
 Provides colored output and progress indicators

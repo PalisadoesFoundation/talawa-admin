@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **getMemberLabel**(`member`): `string`
 
-Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L104)
+Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:104](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L104)
 
 Builds a display label for a member.
 Empty name parts are safely ignored.

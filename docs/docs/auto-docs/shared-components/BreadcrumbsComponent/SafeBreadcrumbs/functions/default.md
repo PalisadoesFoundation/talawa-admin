@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/shared-components/BreadcrumbsComponent/SafeBreadcrumbs.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/BreadcrumbsComponent/SafeBreadcrumbs.tsx#L19)
+Defined in: [src/shared-components/BreadcrumbsComponent/SafeBreadcrumbs.tsx:19](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/shared-components/BreadcrumbsComponent/SafeBreadcrumbs.tsx#L19)
 
 SafeBreadcrumbs is a defensive wrapper around [BreadcrumbsComponent](../../functions/BreadcrumbsComponent.md).
 

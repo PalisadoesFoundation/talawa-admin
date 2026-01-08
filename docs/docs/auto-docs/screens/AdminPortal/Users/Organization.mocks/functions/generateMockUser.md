@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **generateMockUser**(`id`, `firstName`, `lastName`, `email`, `createdAt`, `isSuperAdmin`): `InterfaceMockUser`
 
-Defined in: [src/screens/AdminPortal/Users/Organization.mocks.ts:236](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Users/Organization.mocks.ts#L236)
+Defined in: [src/screens/AdminPortal/Users/Organization.mocks.ts:236](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/screens/AdminPortal/Users/Organization.mocks.ts#L236)
 
 ## Parameters
 

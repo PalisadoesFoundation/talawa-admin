@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **getRecurrenceRuleText**(`recurrence`, `startDate`, `endDate?`): `string`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L104)
+Defined in: [src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts:104](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/utils/recurrenceUtils/recurrenceUtilityFunctions.ts#L104)
 
 Generates a human-readable description of the recurrence rule
 

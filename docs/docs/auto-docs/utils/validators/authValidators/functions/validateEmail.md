@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **validateEmail**(`email`): [`InterfaceValidationResult`](../../../../types/Auth/ValidationInterfaces/interfaces/InterfaceValidationResult.md)
 
-Defined in: [src/utils/validators/authValidators.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/validators/authValidators.ts#L19)
+Defined in: [src/utils/validators/authValidators.ts:19](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/utils/validators/authValidators.ts#L19)
 
 Validates email format.
 Note: Uses basic regex validation. Does not enforce RFC 5322 compliance.

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<`InterfaceSortingButtonProps`\>
 
-Defined in: [src/subComponents/SortingButton.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/subComponents/SortingButton.tsx#L46)
+Defined in: [src/subComponents/SortingButton.tsx:46](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/subComponents/SortingButton.tsx#L46)
 
 SortingButton component renders a Dropdown with sorting options.
 It allows users to select a sorting option and triggers a callback on selection.

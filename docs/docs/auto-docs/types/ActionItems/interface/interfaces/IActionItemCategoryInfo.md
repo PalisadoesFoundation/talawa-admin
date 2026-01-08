@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: IActionItemCategoryInfo
 
-Defined in: [src/types/ActionItems/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L3)
+Defined in: [src/types/ActionItems/interface.ts:3](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/ActionItems/interface.ts#L3)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/ActionItems/interface.ts:3](https://github.com/Palisadoes
 
 > **createdAt**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L8)
+Defined in: [src/types/ActionItems/interface.ts:8](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/ActionItems/interface.ts#L8)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/ActionItems/interface.ts:8](https://github.com/Palisadoes
 
 > `optional` **creatorId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L10)
+Defined in: [src/types/ActionItems/interface.ts:10](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/ActionItems/interface.ts#L10)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/ActionItems/interface.ts:10](https://github.com/Palisadoe
 
 > **description**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L6)
+Defined in: [src/types/ActionItems/interface.ts:6](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/ActionItems/interface.ts#L6)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/ActionItems/interface.ts:6](https://github.com/Palisadoes
 
 > **id**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L4)
+Defined in: [src/types/ActionItems/interface.ts:4](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/ActionItems/interface.ts#L4)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/ActionItems/interface.ts:4](https://github.com/Palisadoes
 
 > **isDisabled**: `boolean`
 
-Defined in: [src/types/ActionItems/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L7)
+Defined in: [src/types/ActionItems/interface.ts:7](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/ActionItems/interface.ts#L7)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/ActionItems/interface.ts:7](https://github.com/Palisadoes
 
 > **name**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L5)
+Defined in: [src/types/ActionItems/interface.ts:5](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/ActionItems/interface.ts#L5)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/ActionItems/interface.ts:5](https://github.com/Palisadoes
 
 > **organizationId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L11)
+Defined in: [src/types/ActionItems/interface.ts:11](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/ActionItems/interface.ts#L11)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/ActionItems/interface.ts:11](https://github.com/Palisadoe
 
 > `optional` **updatedAt**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L9)
+Defined in: [src/types/ActionItems/interface.ts:9](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/ActionItems/interface.ts#L9)

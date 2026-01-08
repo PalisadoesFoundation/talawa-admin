@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **default**: `FC`\<`InterfaceGeneralSettingsProps`\>
 
-Defined in: [src/components/OrgSettings/General/GeneralSettings.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/General/GeneralSettings.tsx#L23)
+Defined in: [src/components/OrgSettings/General/GeneralSettings.tsx:23](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/components/OrgSettings/General/GeneralSettings.tsx#L23)
 
 A component for displaying general settings for an organization.
 

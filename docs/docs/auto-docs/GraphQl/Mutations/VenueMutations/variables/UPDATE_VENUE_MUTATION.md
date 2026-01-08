@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_VENUE\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/VenueMutations.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/VenueMutations.ts#L44)
+Defined in: [src/GraphQl/Mutations/VenueMutations.ts:44](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/GraphQl/Mutations/VenueMutations.ts#L44)
 
 GraphQL mutation to update a venue.
 

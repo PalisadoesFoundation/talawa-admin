@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **OrganizationCustomField** = `object`
 
-Defined in: [src/types/Organization/type.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L47)
+Defined in: [src/types/Organization/type.ts:47](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Organization/type.ts#L47)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Organization/type.ts:47](https://github.com/PalisadoesFou
 
 > **\_id**: `string`
 
-Defined in: [src/types/Organization/type.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L48)
+Defined in: [src/types/Organization/type.ts:48](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Organization/type.ts#L48)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Organization/type.ts:48](https://github.com/PalisadoesFou
 
 > **name**: `string`
 
-Defined in: [src/types/Organization/type.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L49)
+Defined in: [src/types/Organization/type.ts:49](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Organization/type.ts#L49)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Organization/type.ts:49](https://github.com/PalisadoesFou
 
 > **organizationId**: `string`
 
-Defined in: [src/types/Organization/type.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L50)
+Defined in: [src/types/Organization/type.ts:50](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Organization/type.ts#L50)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/types/Organization/type.ts:50](https://github.com/PalisadoesFou
 
 > **type**: `string`
 
-Defined in: [src/types/Organization/type.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L51)
+Defined in: [src/types/Organization/type.ts:51](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Organization/type.ts#L51)

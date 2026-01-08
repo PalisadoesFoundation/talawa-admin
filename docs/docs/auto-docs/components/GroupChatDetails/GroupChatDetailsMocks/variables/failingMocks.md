@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **failingMocks**: (\{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `input`: \{ `avatar?`: `undefined`; `chatId`: `string`; `id?`: `undefined`; `memberId`: `string`; `name?`: `undefined`; `role`: `string`; \}; \}; \}; \} \| \{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `input`: \{ `avatar?`: `undefined`; `chatId`: `string`; `id?`: `undefined`; `memberId`: `string`; `name?`: `undefined`; `role?`: `undefined`; \}; \}; \}; \} \| \{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `input`: \{ `avatar?`: `undefined`; `chatId?`: `undefined`; `id`: `string`; `memberId?`: `undefined`; `name?`: `undefined`; `role?`: `undefined`; \}; \}; \}; \} \| \{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `input`: \{ `avatar?`: `undefined`; `chatId?`: `undefined`; `id`: `string`; `memberId?`: `undefined`; `name`: `string`; `role?`: `undefined`; \}; \}; \}; \} \| \{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `input`: \{ `avatar`: \{ `uri`: `string`; \}; `chatId?`: `undefined`; `id`: `string`; `memberId?`: `undefined`; `name`: `string`; `role?`: `undefined`; \}; \}; \}; \})[]
 
-Defined in: [src/components/GroupChatDetails/GroupChatDetailsMocks.tsx:405](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/GroupChatDetails/GroupChatDetailsMocks.tsx#L405)
+Defined in: [src/components/GroupChatDetails/GroupChatDetailsMocks.tsx:405](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/components/GroupChatDetails/GroupChatDetailsMocks.tsx#L405)

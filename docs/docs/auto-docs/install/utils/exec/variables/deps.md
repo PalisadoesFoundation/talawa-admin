@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **deps**: `object`
 
-Defined in: [src/install/utils/exec.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L21)
+Defined in: [src/install/utils/exec.ts:21](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/install/utils/exec.ts#L21)
 
 ## Type Declaration
 

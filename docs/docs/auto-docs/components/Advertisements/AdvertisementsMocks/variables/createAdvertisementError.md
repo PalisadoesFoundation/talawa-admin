@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **createAdvertisementError**: `IBaseMutationMock`\<\{ `endAt`: `string`; `organizationId`: `string`; `startAt`: `string`; `type`: `string`; \}\>[]
 
-Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:516](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L516)
+Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:516](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/components/Advertisements/AdvertisementsMocks.ts#L516)

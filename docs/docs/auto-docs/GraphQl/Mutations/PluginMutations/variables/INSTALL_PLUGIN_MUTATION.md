@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **INSTALL\_PLUGIN\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/PluginMutations.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PluginMutations.ts#L29)
+Defined in: [src/GraphQl/Mutations/PluginMutations.ts:29](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/GraphQl/Mutations/PluginMutations.ts#L29)
 
 GraphQL mutation to install a plugin.
 

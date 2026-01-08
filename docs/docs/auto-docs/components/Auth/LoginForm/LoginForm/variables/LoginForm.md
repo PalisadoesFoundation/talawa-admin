@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **LoginForm**: `React.FC`\<[`InterfaceLoginFormProps`](../../../../../types/Auth/LoginForm/interface/interfaces/InterfaceLoginFormProps.md)\>
 
-Defined in: [src/components/Auth/LoginForm/LoginForm.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/LoginForm/LoginForm.tsx#L30)
+Defined in: [src/components/Auth/LoginForm/LoginForm.tsx:30](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/components/Auth/LoginForm/LoginForm.tsx#L30)
 
 Reusable login form component that composes EmailField and PasswordField.
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **TableRow**(`__namedParameters`): `Element`
 
-Defined in: [src/components/CheckIn/Modal/Row/TableRow.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/Modal/Row/TableRow.tsx#L47)
+Defined in: [src/components/CheckIn/Modal/Row/TableRow.tsx:47](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/components/CheckIn/Modal/Row/TableRow.tsx#L47)
 
 ## Parameters
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **NO\_FUNDS**: `object`[]
 
-Defined in: [src/screens/AdminPortal/OrganizationFunds/OrganizationFundsMocks.ts:164](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFunds/OrganizationFundsMocks.ts#L164)
+Defined in: [src/screens/AdminPortal/OrganizationFunds/OrganizationFundsMocks.ts:164](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/screens/AdminPortal/OrganizationFunds/OrganizationFundsMocks.ts#L164)
 
 ## Type Declaration
 

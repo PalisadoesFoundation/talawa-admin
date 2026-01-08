@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **CreateAdvertisementInput** = `object`
 
-Defined in: [src/types/Advertisement/type.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L46)
+Defined in: [src/types/Advertisement/type.ts:46](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/type.ts#L46)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Advertisement/type.ts:46](https://github.com/PalisadoesFo
 
 > **attachments**: `File`[]
 
-Defined in: [src/types/Advertisement/type.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L53)
+Defined in: [src/types/Advertisement/type.ts:53](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/type.ts#L53)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Advertisement/type.ts:53](https://github.com/PalisadoesFo
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/Advertisement/type.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L48)
+Defined in: [src/types/Advertisement/type.ts:48](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/type.ts#L48)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Advertisement/type.ts:48](https://github.com/PalisadoesFo
 
 > **endAt**: `Date`
 
-Defined in: [src/types/Advertisement/type.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L52)
+Defined in: [src/types/Advertisement/type.ts:52](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/type.ts#L52)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Advertisement/type.ts:52](https://github.com/PalisadoesFo
 
 > **name**: `string`
 
-Defined in: [src/types/Advertisement/type.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L47)
+Defined in: [src/types/Advertisement/type.ts:47](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/type.ts#L47)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Advertisement/type.ts:47](https://github.com/PalisadoesFo
 
 > **organizationId**: `string`
 
-Defined in: [src/types/Advertisement/type.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L50)
+Defined in: [src/types/Advertisement/type.ts:50](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/type.ts#L50)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Advertisement/type.ts:50](https://github.com/PalisadoesFo
 
 > **startAt**: `Date`
 
-Defined in: [src/types/Advertisement/type.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L51)
+Defined in: [src/types/Advertisement/type.ts:51](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/type.ts#L51)
 
 ***
 
@@ -62,4 +62,4 @@ Defined in: [src/types/Advertisement/type.ts:51](https://github.com/PalisadoesFo
 
 > **type**: [`AdvertisementType`](../enumerations/AdvertisementType.md)
 
-Defined in: [src/types/Advertisement/type.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L49)
+Defined in: [src/types/Advertisement/type.ts:49](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Advertisement/type.ts#L49)

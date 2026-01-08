@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **FUND\_CAMPAIGN**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/fundQueries.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/fundQueries.ts#L51)
+Defined in: [src/GraphQl/Queries/fundQueries.ts:51](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/GraphQl/Queries/fundQueries.ts#L51)
 
 Query to fetch a specific fund by its ID, along with its associated campaigns.
 

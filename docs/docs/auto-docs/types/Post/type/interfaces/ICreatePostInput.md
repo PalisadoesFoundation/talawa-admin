@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: ICreatePostInput
 
-Defined in: [src/types/Post/type.ts:170](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L170)
+Defined in: [src/types/Post/type.ts:170](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Post/type.ts#L170)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/type.ts:170](https://github.com/PalisadoesFoundation
 
 > `optional` **attachments**: `File`[]
 
-Defined in: [src/types/Post/type.ts:175](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L175)
+Defined in: [src/types/Post/type.ts:175](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Post/type.ts#L175)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/type.ts:175](https://github.com/PalisadoesFoundation
 
 > `optional` **body**: `string`
 
-Defined in: [src/types/Post/type.ts:172](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L172)
+Defined in: [src/types/Post/type.ts:172](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Post/type.ts#L172)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/type.ts:172](https://github.com/PalisadoesFoundation
 
 > **caption**: `string`
 
-Defined in: [src/types/Post/type.ts:171](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L171)
+Defined in: [src/types/Post/type.ts:171](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Post/type.ts#L171)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Post/type.ts:171](https://github.com/PalisadoesFoundation
 
 > **isPinned**: `boolean`
 
-Defined in: [src/types/Post/type.ts:174](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L174)
+Defined in: [src/types/Post/type.ts:174](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Post/type.ts#L174)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [src/types/Post/type.ts:174](https://github.com/PalisadoesFoundation
 
 > **organizationId**: `string`
 
-Defined in: [src/types/Post/type.ts:173](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L173)
+Defined in: [src/types/Post/type.ts:173](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Post/type.ts#L173)

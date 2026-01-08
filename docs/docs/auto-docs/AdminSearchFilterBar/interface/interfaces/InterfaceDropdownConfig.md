@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
 # Interface: InterfaceDropdownConfig
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L35)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:35](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/AdminSearchFilterBar/interface.ts#L35)
 
 Configuration for a single dropdown (sort or filter) in the AdminSearchFilterBar.
 Each dropdown represents either a sorting control or a filter control,
@@ -16,7 +16,7 @@ and is rendered using the SortingButton component.
 
 > **dataTestIdPrefix**: `string`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L95)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:95](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/AdminSearchFilterBar/interface.ts#L95)
 
 The prefix used for generating data-testid attributes for testing.
 This is passed directly to the SortingButton component's `dataTestIdPrefix` prop.
@@ -33,7 +33,7 @@ This is passed directly to the SortingButton component's `dataTestIdPrefix` prop
 
 > `optional` **dropdownTestId**: `string`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L109)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:109](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/AdminSearchFilterBar/interface.ts#L109)
 
 Optional data-testid for the dropdown element itself.
 **Job:** Enables testing frameworks to identify the entire dropdown component.
@@ -50,7 +50,7 @@ Optional data-testid for the dropdown element itself.
 
 > **id**: `string`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L41)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:41](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/AdminSearchFilterBar/interface.ts#L41)
 
 A unique identifier for this dropdown configuration.
 Used as the React key for stable rendering and should be unique across all dropdowns.
@@ -67,7 +67,7 @@ Used as the React key for stable rendering and should be unique across all dropd
 
 > **label**: `string`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L48)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:48](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/AdminSearchFilterBar/interface.ts#L48)
 
 The label/title displayed on the dropdown button.
 This is typically a user-facing label like "Sort", "Filter", or "Time Frame".
@@ -84,7 +84,7 @@ This is typically a user-facing label like "Sort", "Filter", or "Time Frame".
 
 > **onOptionChange**: (`value`) => `void`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L88)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:88](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/AdminSearchFilterBar/interface.ts#L88)
 
 Callback function triggered when the user selects a different option.
 **Trigger:** User clicks on a dropdown item in the menu.
@@ -114,7 +114,7 @@ onOptionChange={(value) => setSortOrder(value as SortedByType)}
 
 > **options**: [`InterfaceSortingOption`](InterfaceSortingOption.md)[]
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L68)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:68](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/AdminSearchFilterBar/interface.ts#L68)
 
 The list of available options for this dropdown.
 Each option contains a label (display text) and a value (underlying data).
@@ -134,7 +134,7 @@ Each option contains a label (display text) and a value (underlying data).
 
 > **selectedOption**: `string` \| `number`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L75)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:75](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/AdminSearchFilterBar/interface.ts#L75)
 
 The currently selected option value.
 This should match the `value` field of one of the options in the `options` array.
@@ -151,7 +151,7 @@ This should match the `value` field of one of the options in the `options` array
 
 > `optional` **title**: `string`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L102)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:102](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/AdminSearchFilterBar/interface.ts#L102)
 
 Optional title attribute for the dropdown element.
 **Job:** Provides tooltip text when hovering over the dropdown.
@@ -168,7 +168,7 @@ Optional title attribute for the dropdown element.
 
 > **type**: `"filter"` \| `"sort"`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L55)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:55](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/AdminSearchFilterBar/interface.ts#L55)
 
 The type of dropdown control.
 - `'sort'`: Displays a sort icon and is used for ordering data

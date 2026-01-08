@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **months**: `string`[]
 
-Defined in: [src/types/Event/utils.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/utils.ts#L29)
+Defined in: [src/types/Event/utils.ts:29](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Event/utils.ts#L29)

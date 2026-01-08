@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceOrgPeopleListCardProps
 
-Defined in: [src/types/Organization/interface.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L1)
+Defined in: [src/types/Organization/interface.ts:1](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Organization/interface.ts#L1)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Organization/interface.ts:1](https://github.com/Palisadoe
 
 > **id**: `string`
 
-Defined in: [src/types/Organization/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L2)
+Defined in: [src/types/Organization/interface.ts:2](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Organization/interface.ts#L2)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Organization/interface.ts:2](https://github.com/Palisadoe
 
 > **toggleRemoveModal**: () => `void`
 
-Defined in: [src/types/Organization/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L3)
+Defined in: [src/types/Organization/interface.ts:3](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Organization/interface.ts#L3)
 
 #### Returns
 

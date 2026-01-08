@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **setupLocalStorageMock**(): `Storage`
 
-Defined in: [src/test-utils/localStorageMock.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/localStorageMock.ts#L54)
+Defined in: [src/test-utils/localStorageMock.ts:54](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/test-utils/localStorageMock.ts#L54)
 
 Setup localStorage mock for tests
 Configures window.localStorage with a mock implementation for test isolation

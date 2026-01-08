@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **ReportingTableGridProps** = `object`
 
-Defined in: [src/types/ReportingTable/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L57)
+Defined in: [src/types/ReportingTable/interface.ts:57](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/ReportingTable/interface.ts#L57)
 
 Props for the ReportingTableGrid component
 
@@ -20,7 +20,7 @@ Props for the ReportingTableGrid component
 
 > `optional` **columns**: [`ReportingTableColumn`](ReportingTableColumn.md)[]
 
-Defined in: [src/types/ReportingTable/interface.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L59)
+Defined in: [src/types/ReportingTable/interface.ts:59](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/ReportingTable/interface.ts#L59)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/ReportingTable/interface.ts:59](https://github.com/Palisa
 
 > `optional` **compactColumns**: `boolean`
 
-Defined in: [src/types/ReportingTable/interface.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L61)
+Defined in: [src/types/ReportingTable/interface.ts:61](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/ReportingTable/interface.ts#L61)
 
 When true, applies tighter column widths for tables with many columns (7+)
 
@@ -38,4 +38,4 @@ When true, applies tighter column widths for tables with many columns (7+)
 
 > `optional` **rows**: readonly [`ReportingRow`](ReportingRow.md)[]
 
-Defined in: [src/types/ReportingTable/interface.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L58)
+Defined in: [src/types/ReportingTable/interface.ts:58](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/ReportingTable/interface.ts#L58)

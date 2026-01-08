@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **getPledgeColumns**(`props`): `GridColDef`[]
 
-Defined in: [src/screens/AdminPortal/FundCampaignPledge/PledgeColumns.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/PledgeColumns.tsx#L42)
+Defined in: [src/screens/AdminPortal/FundCampaignPledge/PledgeColumns.tsx:42](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/screens/AdminPortal/FundCampaignPledge/PledgeColumns.tsx#L42)
 
 Returns the column definitions for the pledges DataGrid.
 

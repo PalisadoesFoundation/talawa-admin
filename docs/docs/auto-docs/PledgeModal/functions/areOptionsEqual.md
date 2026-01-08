@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **areOptionsEqual**(`option`, `value`): `boolean`
 
-Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L88)
+Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:88](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L88)
 
 Compares two user options by ID.
 Used by MUI Autocomplete to determine equality.

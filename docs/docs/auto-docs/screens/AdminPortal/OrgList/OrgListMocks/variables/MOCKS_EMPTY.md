@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **MOCKS\_EMPTY**: (\{ `request`: \{ `notifyOnNetworkStatusChange?`: `undefined`; `query`: `DocumentNode`; `variables`: \{ `filter`: `string`; `first?`: `undefined`; `input?`: `undefined`; `orderBy?`: `undefined`; `skip?`: `undefined`; `userId?`: `undefined`; \}; \}; `result`: \{ `data`: \{ `organizations`: `any`[]; `user?`: `undefined`; \}; \}; \} \| \{ `request`: \{ `notifyOnNetworkStatusChange`: `boolean`; `query`: `DocumentNode`; `variables`: \{ `filter`: `string`; `first`: `number`; `input?`: `undefined`; `orderBy`: `string`; `skip`: `number`; `userId?`: `undefined`; \}; \}; `result`: \{ `data`: \{ `organizations`: `any`[]; `user?`: `undefined`; \}; \}; \} \| \{ `request`: \{ `notifyOnNetworkStatusChange?`: `undefined`; `query`: `DocumentNode`; `variables`: \{ `filter?`: `undefined`; `first?`: `undefined`; `input?`: `undefined`; `orderBy?`: `undefined`; `skip?`: `undefined`; `userId`: `string`; \}; \}; `result`: \{ `data`: \{ `organizations?`: `undefined`; `user`: [`InterfaceUserType`](../../../../../utils/interfaces/interfaces/InterfaceUserType.md); \}; \}; \} \| \{ `request`: \{ `notifyOnNetworkStatusChange?`: `undefined`; `query`: `DocumentNode`; `variables`: \{ `filter?`: `undefined`; `first?`: `undefined`; `input`: \{ `first`: `number`; `skip`: `number`; \}; `orderBy?`: `undefined`; `skip?`: `undefined`; `userId`: `string`; \}; \}; `result`: \{ `data`: \{ `organizations?`: `undefined`; `user`: \{ `__typename`: `string`; `notifications`: `any`[]; \}; \}; \}; \})[]
 
-Defined in: [src/screens/AdminPortal/OrgList/OrgListMocks.ts:218](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/OrgListMocks.ts#L218)
+Defined in: [src/screens/AdminPortal/OrgList/OrgListMocks.ts:218](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/screens/AdminPortal/OrgList/OrgListMocks.ts#L218)

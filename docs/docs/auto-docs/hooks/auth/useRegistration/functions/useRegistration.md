@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **useRegistration**(`__namedParameters`): `object`
 
-Defined in: [src/hooks/auth/useRegistration.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L16)
+Defined in: [src/hooks/auth/useRegistration.ts:16](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/hooks/auth/useRegistration.ts#L16)
 
 Custom hook for user registration
 

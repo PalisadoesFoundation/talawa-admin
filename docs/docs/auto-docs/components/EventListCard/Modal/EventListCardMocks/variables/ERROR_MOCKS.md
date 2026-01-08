@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **ERROR\_MOCKS**: `object`[]
 
-Defined in: [src/components/EventListCard/Modal/EventListCardMocks.ts:295](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/EventListCardMocks.ts#L295)
+Defined in: [src/components/EventListCard/Modal/EventListCardMocks.ts:295](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/components/EventListCard/Modal/EventListCardMocks.ts#L295)
 
 ## Type Declaration
 

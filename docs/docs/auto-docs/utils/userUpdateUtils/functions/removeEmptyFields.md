@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **removeEmptyFields**\<`T`\>(`obj`): `Partial`\<`T`\>
 
-Defined in: [src/utils/userUpdateUtils.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/userUpdateUtils.ts#L23)
+Defined in: [src/utils/userUpdateUtils.ts:23](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/utils/userUpdateUtils.ts#L23)
 
 Removes empty fields from an object, filtering out null, undefined, and empty/whitespace-only strings.
 File objects are preserved regardless of their content.

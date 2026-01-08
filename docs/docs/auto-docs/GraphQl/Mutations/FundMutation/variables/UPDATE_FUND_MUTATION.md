@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_FUND\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/FundMutation.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/FundMutation.ts#L37)
+Defined in: [src/GraphQl/Mutations/FundMutation.ts:37](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/GraphQl/Mutations/FundMutation.ts#L37)
 
 GraphQL mutation to update a fund.
 

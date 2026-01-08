@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceTagMembersData
 
-Defined in: [src/types/Tag/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L10)
+Defined in: [src/types/Tag/interface.ts:10](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Tag/interface.ts#L10)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Tag/interface.ts:10](https://github.com/PalisadoesFoundat
 
 > **edges**: `object`[]
 
-Defined in: [src/types/Tag/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L11)
+Defined in: [src/types/Tag/interface.ts:11](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Tag/interface.ts#L11)
 
 #### node
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Tag/interface.ts:11](https://github.com/PalisadoesFoundat
 
 > **pageInfo**: `object`
 
-Defined in: [src/types/Tag/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L18)
+Defined in: [src/types/Tag/interface.ts:18](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Tag/interface.ts#L18)
 
 #### endCursor
 
@@ -60,4 +60,4 @@ Defined in: [src/types/Tag/interface.ts:18](https://github.com/PalisadoesFoundat
 
 > **totalCount**: `number`
 
-Defined in: [src/types/Tag/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L24)
+Defined in: [src/types/Tag/interface.ts:24](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/Tag/interface.ts#L24)
