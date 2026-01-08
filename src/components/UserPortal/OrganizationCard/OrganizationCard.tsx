@@ -21,7 +21,7 @@
  *
  * @remarks
  * - Uses GraphQL mutations to send and cancel membership requests.
- * - Displays success or error feedback using `react-toastify`.
+ * - Displays success or error feedback using `NotificationToast`.
  * - Layout is provided by the reusable `UserPortalCard`.
  *
  * @example

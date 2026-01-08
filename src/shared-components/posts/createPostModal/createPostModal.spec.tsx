@@ -11,7 +11,7 @@ import CreatePostModal from './createPostModal';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from '../../../utils/i18nForTest';
 import { errorHandler } from 'utils/errorHandler';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import styles from './createPostModal.module.css';
 import dayjs from 'dayjs';
 
@@ -25,12 +25,13 @@ const originalAcceptDescriptor = Object.getOwnPropertyDescriptor(
   'accept',
 );
 
-// Mock react-toastify
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+const NotificationToastMocks = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+}));
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: NotificationToastMocks,
 }));
 
 // Mock useLocalStorage
@@ -418,7 +419,7 @@ describe('CreatePostModal Integration Tests', () => {
 
       const mockClick = vi
         .spyOn(fileInput, 'click')
-        .mockImplementation(() => {});
+        .mockImplementation(() => { });
 
       await user.click(photoButton);
 
@@ -438,7 +439,7 @@ describe('CreatePostModal Integration Tests', () => {
       await user.click(postButton);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(NotificationToast.success).toHaveBeenCalledWith(
           'Congratulations! You have Posted Something.',
         );
         expect(defaultProps.refetch).toHaveBeenCalled();
@@ -549,7 +550,7 @@ describe('CreatePostModal Integration Tests', () => {
       await userEvent.upload(fileInput, aviFile);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Unsupported file type!');
+        expect(NotificationToast.error).toHaveBeenCalledWith('Unsupported file type!');
       });
     });
 
@@ -565,7 +566,7 @@ describe('CreatePostModal Integration Tests', () => {
       await user.click(postButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Organization ID is missing!');
+        expect(NotificationToast.error).toHaveBeenCalledWith('Organization ID is missing!');
       });
     });
 
@@ -625,7 +626,6 @@ describe('CreatePostModal Integration Tests', () => {
     });
 
     it('handles case when createPost mutation succeeds but returns no data', async () => {
-      const { toast } = await import('react-toastify');
 
       const noDataMock = {
         request: {
@@ -656,7 +656,7 @@ describe('CreatePostModal Integration Tests', () => {
 
       // Should not show success toast or call refetch when data.createPost is null
       await waitFor(() => {
-        expect(toast.success).not.toHaveBeenCalled();
+        expect(NotificationToast.success).not.toHaveBeenCalled();
         expect(defaultProps.refetch).not.toHaveBeenCalled();
         expect(defaultProps.onHide).not.toHaveBeenCalled();
       });
@@ -724,7 +724,6 @@ describe('CreatePostModal Integration Tests', () => {
     });
 
     it('handles edit mode when updatePost returns null', async () => {
-      const { toast } = await import('react-toastify');
 
       const updatePostNullMock = {
         request: {
@@ -765,12 +764,11 @@ describe('CreatePostModal Integration Tests', () => {
       await user.click(saveButton);
 
       await waitFor(() => {
-        expect(toast.success).not.toHaveBeenCalled();
+        expect(NotificationToast.success).not.toHaveBeenCalled();
         expect(defaultProps.refetch).not.toHaveBeenCalled();
       });
     });
     it('handles edit mode when updatePost returns success', async () => {
-      const { toast } = await import('react-toastify');
 
       const updatePostNullMock = {
         request: {
@@ -820,7 +818,7 @@ describe('CreatePostModal Integration Tests', () => {
       await user.click(saveButton);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalled();
       });
     });
   });

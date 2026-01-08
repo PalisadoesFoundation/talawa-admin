@@ -39,7 +39,9 @@ import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import styles from './UserPortalNavigationBar.module.css';
 
 // Mock dependencies
-vi.mock('react-toastify', () => ({ toast: { error: vi.fn() } }));
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: { error: vi.fn() },
+}));
 vi.mock('js-cookie', () => ({ default: { get: vi.fn(), set: vi.fn() } }));
 vi.mock('i18next', () => ({ default: { changeLanguage: vi.fn() } }));
 vi.mock('utils/useLocalstorage', () => ({ default: vi.fn() }));
@@ -1027,9 +1029,9 @@ describe('UserPortalNavigationBar', () => {
         clearAllItems,
       });
 
-      // Import toast to spy on it
-      const { toast } = await import('react-toastify');
-      const toastErrorSpy = vi.spyOn(toast, 'error');
+      const { NotificationToast } = await import(
+        'components/NotificationToast/NotificationToast'
+      );
 
       render(
         <MockedProvider mocks={[logoutErrorMock]}>
@@ -1046,8 +1048,10 @@ describe('UserPortalNavigationBar', () => {
       fireEvent.click(logoutBtn);
 
       await waitFor(() => {
-        // Toast error should be called with logout failed message
-        expect(toastErrorSpy).toHaveBeenCalledWith('logoutFailed');
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'logoutFailed',
+
+        );
       });
 
       // Storage should still be cleared even on error

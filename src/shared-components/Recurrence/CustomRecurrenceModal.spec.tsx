@@ -7,15 +7,15 @@ import {
   act,
   waitFor,
 } from '@testing-library/react';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
-// Mock toast at module level
-vi.mock('react-toastify', () => ({
-  toast: {
+// Mock NotificationToast at module level
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     error: vi.fn(),
     success: vi.fn(),
   },
@@ -526,7 +526,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
 
     // Clear previous calls to isolate this test
     setCustomRecurrenceModalIsOpen.mockClear();
-    (toast.error as ReturnType<typeof vi.fn>).mockClear();
+    (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
 
     // Try to submit with invalid value
     await act(async () => {
@@ -535,17 +535,17 @@ describe('CustomRecurrenceModal – full coverage', () => {
 
     // Wait for toast.error to be called
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
 
     // Verify that toast.error was called
     // The t function returns the key, so it will be 'invalidDetailsMessage' or the fallback
-    expect(toast.error).toHaveBeenCalled();
-    const errorCall = (toast.error as ReturnType<typeof vi.fn>).mock
+    expect(NotificationToast.error).toHaveBeenCalled();
+    const errorCall = (NotificationToast.error as ReturnType<typeof vi.fn>).mock
       .calls[0][0];
     expect(
       errorCall === 'invalidDetailsMessage' ||
-        errorCall.includes('valid interval'),
+      errorCall.includes('valid interval'),
     ).toBe(true);
 
     // Verify that modal is NOT closed when validation fails
@@ -575,7 +575,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
 
     // Clear previous calls to isolate this test
     setCustomRecurrenceModalIsOpen.mockClear();
-    (toast.error as ReturnType<typeof vi.fn>).mockClear();
+    (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
 
     // Try to submit with invalid value
     await act(async () => {
@@ -583,17 +583,17 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
 
     // Verify that toast.error was called
     // The t function returns the key, so it will be 'invalidDetailsMessage' or the fallback
-    expect(toast.error).toHaveBeenCalled();
-    const errorCall = (toast.error as ReturnType<typeof vi.fn>).mock
+    expect(NotificationToast.error).toHaveBeenCalled();
+    const errorCall = (NotificationToast.error as ReturnType<typeof vi.fn>).mock
       .calls[0][0];
     expect(
       errorCall === 'invalidDetailsMessage' ||
-        errorCall.includes('valid interval'),
+      errorCall.includes('valid interval'),
     ).toBe(true);
 
     // Verify that modal is NOT closed when validation fails
@@ -627,7 +627,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
 
     // Clear previous calls to isolate this test
     setCustomRecurrenceModalIsOpen.mockClear();
-    (toast.error as ReturnType<typeof vi.fn>).mockClear();
+    (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
 
     // Try to submit with invalid value
     await act(async () => {
@@ -635,17 +635,17 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
 
     // Verify that toast.error was called
     // The t function returns the key, so it will be 'invalidDetailsMessage' or the fallback
-    expect(toast.error).toHaveBeenCalled();
-    const errorCall = (toast.error as ReturnType<typeof vi.fn>).mock
+    expect(NotificationToast.error).toHaveBeenCalled();
+    const errorCall = (NotificationToast.error as ReturnType<typeof vi.fn>).mock
       .calls[0][0];
     expect(
       errorCall === 'invalidDetailsMessage' ||
-        errorCall.includes('valid occurrence count'),
+      errorCall.includes('valid occurrence count'),
     ).toBe(true);
 
     // Verify that modal is NOT closed when validation fails
@@ -680,7 +680,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
 
     // Clear previous calls to isolate this test
     setCustomRecurrenceModalIsOpen.mockClear();
-    (toast.error as ReturnType<typeof vi.fn>).mockClear();
+    (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
 
     // Try to submit with invalid value
     await act(async () => {
@@ -688,16 +688,16 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
     // Verify that toast.error was called
     // The t function returns the key, so it will be 'invalidDetailsMessage' or the fallback
-    expect(toast.error).toHaveBeenCalled();
-    const errorCall = (toast.error as ReturnType<typeof vi.fn>).mock
+    expect(NotificationToast.error).toHaveBeenCalled();
+    const errorCall = (NotificationToast.error as ReturnType<typeof vi.fn>).mock
       .calls[0][0];
     expect(
       errorCall === 'invalidDetailsMessage' ||
-        errorCall.includes('valid occurrence count'),
+      errorCall.includes('valid occurrence count'),
     ).toBe(true);
 
     // Verify that modal is NOT closed when validation fails
@@ -735,7 +735,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
 
     // Clear previous calls to isolate this test
     setCustomRecurrenceModalIsOpen.mockClear();
-    (toast.error as ReturnType<typeof vi.fn>).mockClear();
+    (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
 
     // Try to submit with invalid value
     await act(async () => {
@@ -743,12 +743,12 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
 
     // Verify that toast.error was called with the fallback message (line 321)
-    expect(toast.error).toHaveBeenCalled();
-    const errorCall = (toast.error as ReturnType<typeof vi.fn>).mock
+    expect(NotificationToast.error).toHaveBeenCalled();
+    const errorCall = (NotificationToast.error as ReturnType<typeof vi.fn>).mock
       .calls[0][0];
     expect(errorCall).toBe(
       'Please enter a valid interval (must be at least 1)',
@@ -794,7 +794,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
 
     // Clear previous calls to isolate this test
     setCustomRecurrenceModalIsOpen.mockClear();
-    (toast.error as ReturnType<typeof vi.fn>).mockClear();
+    (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
 
     // Try to submit with invalid value
     await act(async () => {
@@ -802,11 +802,11 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
 
-    expect(toast.error).toHaveBeenCalled();
-    const errorCall = (toast.error as ReturnType<typeof vi.fn>).mock
+    expect(NotificationToast.error).toHaveBeenCalled();
+    const errorCall = (NotificationToast.error as ReturnType<typeof vi.fn>).mock
       .calls[0][0];
     expect(errorCall).toBe(
       'Please enter a valid occurrence count (must be at least 1)',
@@ -824,7 +824,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
     vi.clearAllMocks();
     setCustomRecurrenceModalIsOpen.mockClear();
-    (toast.error as ReturnType<typeof vi.fn>).mockClear();
+    (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
 
     // Try to submit with no days selected
     await act(async () => {
@@ -832,14 +832,14 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
-    expect(toast.error).toHaveBeenCalled();
-    const errorCall = (toast.error as ReturnType<typeof vi.fn>).mock
+    expect(NotificationToast.error).toHaveBeenCalled();
+    const errorCall = (NotificationToast.error as ReturnType<typeof vi.fn>).mock
       .calls[0][0];
     expect(
       errorCall === 'selectAtLeastOneDay' ||
-        errorCall.includes('select at least one day'),
+      errorCall.includes('select at least one day'),
     ).toBe(true);
 
     expect(setCustomRecurrenceModalIsOpen).not.toHaveBeenCalled();
@@ -855,22 +855,22 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
     vi.clearAllMocks();
     setCustomRecurrenceModalIsOpen.mockClear();
-    (toast.error as ReturnType<typeof vi.fn>).mockClear();
+    (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
 
     await act(async () => {
       fireEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
     });
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
 
-    expect(toast.error).toHaveBeenCalled();
-    const errorCall = (toast.error as ReturnType<typeof vi.fn>).mock
+    expect(NotificationToast.error).toHaveBeenCalled();
+    const errorCall = (NotificationToast.error as ReturnType<typeof vi.fn>).mock
       .calls[0][0];
     expect(
       errorCall === 'selectAtLeastOneDay' ||
-        errorCall.includes('select at least one day'),
+      errorCall.includes('select at least one day'),
     ).toBe(true);
 
     expect(setCustomRecurrenceModalIsOpen).not.toHaveBeenCalled();
@@ -887,12 +887,12 @@ describe('CustomRecurrenceModal – full coverage', () => {
       });
     vi.clearAllMocks();
     setCustomRecurrenceModalIsOpen.mockClear();
-    (toast.error as ReturnType<typeof vi.fn>).mockClear();
+    (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
 
     await act(async () => {
       fireEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
     });
-    expect(toast.error).not.toHaveBeenCalled();
+    expect(NotificationToast.error).not.toHaveBeenCalled();
     expect(setRecurrenceRuleState).toHaveBeenCalled();
     expect(setCustomRecurrenceModalIsOpen).toHaveBeenCalledWith(false);
   });
@@ -916,16 +916,16 @@ describe('CustomRecurrenceModal – full coverage', () => {
     });
     vi.clearAllMocks();
     setCustomRecurrenceModalIsOpen.mockClear();
-    (toast.error as ReturnType<typeof vi.fn>).mockClear();
+    (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
     await act(async () => {
       fireEvent.click(screen.getByTestId('customRecurrenceSubmitBtn'));
     });
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
-    expect(toast.error).toHaveBeenCalled();
-    const errorCall = (toast.error as ReturnType<typeof vi.fn>).mock
+    expect(NotificationToast.error).toHaveBeenCalled();
+    const errorCall = (NotificationToast.error as ReturnType<typeof vi.fn>).mock
       .calls[0][0];
     expect(errorCall).toBe(
       'Please select at least one day for weekly recurrence',

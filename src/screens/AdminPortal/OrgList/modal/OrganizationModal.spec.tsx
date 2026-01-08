@@ -17,14 +17,14 @@ import i18nForTest from '../../../../utils/i18nForTest'; // Update path based on
 
 import { validateFile } from 'utils/fileValidation';
 
-// Mock toast
-const toastMocks = vi.hoisted(() => ({
+// Mock NotificationToast
+const NotificationToastMocks = vi.hoisted(() => ({
   error: vi.fn(),
   success: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: NotificationToastMocks,
 }));
 
 vi.mock('utils/fileValidation', () => ({
@@ -174,7 +174,7 @@ describe('OrganizationModal Component', () => {
   });
 
   test('handles image upload error correctly', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
     mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
 
     setup();
@@ -328,7 +328,7 @@ describe('OrganizationModal Component', () => {
       // Check if the input has either the required attribute or aria-required
       expect(
         input.hasAttribute('required') ||
-          input.getAttribute('aria-required') === 'true',
+        input.getAttribute('aria-required') === 'true',
       ).toBeTruthy();
     });
   });
@@ -441,7 +441,7 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [invalidFile] } });
 
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith(
+      expect(NotificationToastMocks.error).toHaveBeenCalledWith(
         'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
       );
     });
@@ -588,7 +588,7 @@ describe('OrganizationModal Component', () => {
     await userEvent.upload(fileInput, largeFile);
 
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith(
+      expect(NotificationToastMocks.error).toHaveBeenCalledWith(
         'File is too large. Maximum size is 5MB.',
       );
       expect(mockUploadFileToMinio).not.toHaveBeenCalled();
@@ -604,7 +604,7 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(toastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
+      expect(NotificationToastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
     });
     expect(mockSetFormState).toHaveBeenCalledWith(
       expect.objectContaining({ avatar: 'mocked-object-name' }),
@@ -620,7 +620,7 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');
+      expect(NotificationToastMocks.error).toHaveBeenCalledWith('imageUploadError');
     });
     expect(mockSetFormState).not.toHaveBeenCalled();
   });

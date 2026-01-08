@@ -17,10 +17,10 @@ import Donate from './Donate';
 import userEvent from '@testing-library/user-event';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
 
-const { mockErrorHandler, mockUseParams, mockToast } = vi.hoisted(() => ({
+const { mockErrorHandler, mockUseParams, NotificationToast } = vi.hoisted(() => ({
   mockErrorHandler: vi.fn(),
   mockUseParams: vi.fn(),
-  mockToast: {
+  NotificationToast: {
     error: vi.fn(),
     success: vi.fn(),
   },
@@ -35,8 +35,8 @@ vi.mock('react-router', async () => ({
   useParams: mockUseParams,
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: mockToast,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast,
 }));
 
 vi.mock('utils/useLocalstorage', () => ({
@@ -312,8 +312,8 @@ describe('Donate Component', () => {
   beforeEach(() => {
     mockUseParams.mockReturnValue({ orgId: '' });
     mockErrorHandler.mockClear();
-    mockToast.error.mockClear();
-    mockToast.success.mockClear();
+    NotificationToast.error.mockClear();
+    NotificationToast.success.mockClear();
   });
 
   afterEach(() => {
@@ -356,8 +356,8 @@ describe('Donate Component', () => {
 
     await userEvent.click(screen.getByTestId('donateBtn'));
 
-    expect(mockToast.error).toHaveBeenCalledWith(
-      'Please enter a numerical value for the donation amount.',
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      i18nForTest.t('donate.invalidAmount'),
     );
   });
 
@@ -367,8 +367,8 @@ describe('Donate Component', () => {
     await userEvent.type(screen.getByTestId('donationAmount'), 'abc');
     await userEvent.click(screen.getByTestId('donateBtn'));
 
-    expect(mockToast.error).toHaveBeenCalledWith(
-      'Please enter a numerical value for the donation amount.',
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      i18nForTest.t('donate.invalidAmount'),
     );
   });
 
@@ -378,8 +378,8 @@ describe('Donate Component', () => {
     await userEvent.type(screen.getByTestId('donationAmount'), '0.5');
     await userEvent.click(screen.getByTestId('donateBtn'));
 
-    expect(mockToast.error).toHaveBeenCalledWith(
-      'Donation amount must be between 1 and 10000000.',
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      i18nForTest.t('donate.donationOutOfRange', { min: 1, max: 10000000 }),
     );
   });
 
@@ -389,8 +389,8 @@ describe('Donate Component', () => {
     await userEvent.type(screen.getByTestId('donationAmount'), '10000001');
     await userEvent.click(screen.getByTestId('donateBtn'));
 
-    expect(mockToast.error).toHaveBeenCalledWith(
-      'Donation amount must be between 1 and 10000000.',
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      i18nForTest.t('donate.donationOutOfRange', { min: 1, max: 10000000 }),
     );
   });
 
@@ -408,7 +408,7 @@ describe('Donate Component', () => {
     await userEvent.click(screen.getByTestId('donateBtn'));
 
     await waitFor(() => {
-      expect(mockToast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalled();
     });
   });
 
@@ -600,8 +600,8 @@ describe('Donate Component', () => {
     await userEvent.type(screen.getByTestId('donationAmount'), '0');
     await userEvent.click(screen.getByTestId('donateBtn'));
 
-    expect(mockToast.error).toHaveBeenCalledWith(
-      'Donation amount must be between 1 and 10000000.',
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      i18nForTest.t('donate.donationOutOfRange', { min: 1, max: 10000000 }),
     );
   });
 
@@ -611,8 +611,8 @@ describe('Donate Component', () => {
     await userEvent.type(screen.getByTestId('donationAmount'), '-10');
     await userEvent.click(screen.getByTestId('donateBtn'));
 
-    expect(mockToast.error).toHaveBeenCalledWith(
-      'Donation amount must be between 1 and 10000000.',
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      i18nForTest.t('donate.donationOutOfRange', { min: 1, max: 10000000 }),
     );
   });
 
@@ -666,7 +666,7 @@ describe('Donate Component', () => {
 
     // Should not trigger range error
     await waitFor(() => {
-      expect(mockToast.error).not.toHaveBeenCalledWith(
+      expect(NotificationToast.error).not.toHaveBeenCalledWith(
         expect.stringContaining('must be between'),
       );
     });
@@ -684,7 +684,7 @@ describe('Donate Component', () => {
 
     // Should not trigger range error
     await waitFor(() => {
-      expect(mockToast.error).not.toHaveBeenCalledWith(
+      expect(NotificationToast.error).not.toHaveBeenCalledWith(
         expect.stringContaining('must be between'),
       );
     });
