@@ -705,7 +705,9 @@
     "agendaItemUpdated": "एजेंडा आइटम सफलतापूर्वक अपडेट किया गया",
     "agendaItemDeleted": "एजेंडा आइटम सफलतापूर्वक हटा दिया गया",
     "deleteAgendaItem": "एजेंडा आइटम हटाएं",
-    "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?"
+    "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?",
+    "event": "कार्यक्रम",
+    "search": "खोज"
   },
   "eventListCard": {
     "deleteEvent": "ईवेंट हटाएँ",
@@ -1682,6 +1684,9 @@
     "newGroup": "नया समूह",
     "groupName": "समूह का नाम",
     "groupDescription": "समूह विवरण",
+    "confirmRemoveMember": "सदस्य हटाने की पुष्टि करें",
+    "failedToAddUser": "उपयोगकर्ता जोड़ने में विफल",
+    "userAddedSuccessfully": "उपयोगकर्ता सफलतापूर्वक जोड़ा गया",
     "next": "अगला"
   },
   "userChatRoom": {

@@ -705,7 +705,9 @@
     "agendaItemUpdated": "Agenda Item updated successfully",
     "agendaItemDeleted": "Agenda Item deleted successfully",
     "deleteAgendaItem": "Delete Agenda Item",
-    "deleteAgendaItemMsg": "Do you want to remove this agenda item?"
+    "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
+    "event": "Event",
+    "search": "Search"
   },
   "eventListCard": {
     "deleteEvent": "Delete Event",
@@ -1681,6 +1683,9 @@
     "newGroup": "New Group",
     "groupName": "Group name",
     "groupDescription": "Group Description",
+    "confirmRemoveMember": "Confirm Remove Member",
+    "failedToAddUser": "Failed to Add User",
+    "userAddedSuccessfully": "User Added Successfully",
     "next": "Next"
   },
   "userChatRoom": {
