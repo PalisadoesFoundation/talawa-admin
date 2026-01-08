@@ -4,23 +4,24 @@
  *
  * @component
  * @param props - The properties for the TableLoader component.
-
+ * @param props.noOfRows - The number of rows to render in the table body.
+ * @param props.headerTitles - (Optional) An array of strings representing the titles for the table headers.
+ *                              If provided, the number of columns will be determined by the length of this array.
+ * @param props.noOfCols - (Optional) The number of columns to render in the table.
+ *                         This is required if `headerTitles` is not provided.
+ * @param props.data-testid - (Optional) A custom `data-testid` attribute for testing purposes.
  *
- * @throws Error Throws an error if neither `headerTitles` nor `noOfCols` is provided.
+ * @throws {Error} Throws an error if neither `headerTitles` nor `noOfCols` is provided.
  *
  * @returns A JSX element representing the table skeleton loader.
  *
  * @example
- * ```tsx
  * // Example usage with header titles
  * <TableLoader noOfRows={5} headerTitles={['Name', 'Age', 'Location']} />
- * ```
  *
  * @example
- * ```tsx
  * // Example usage with number of columns
  * <TableLoader noOfRows={3} noOfCols={4} />
- * ```
  *
  * @remarks
  * - The component uses a shimmer effect for the loading placeholders.
