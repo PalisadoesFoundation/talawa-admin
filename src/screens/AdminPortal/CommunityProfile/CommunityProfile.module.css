@@ -21,34 +21,6 @@
   color: var(--color-black);
 }
 
-.profileDropdown .dropdown-toggle .btn .btn-normal {
-  display: none !important;
-  background-color: transparent !important;
-}
-
-.inputField {
-  margin-top: var(--space-4);
-  margin-bottom: var(--space-4);
-  background-color: var(--color-white);
-  border: var(--border-1) solid var(--color-gray-200);
-  box-shadow: 0 var(--border-shadow-1) var(--border-shadow-2)
-    rgba(var(--color-black), 0.1);
-}
-
-.inputField::placeholder {
-  color: var(--color-gray-500) !important;
-  opacity: 1;
-}
-
-.inputField:focus {
-  border: var(--border-0) solid var(--color-gray-200) !important;
-  background-color: var(--color-gray-50) !important;
-  box-shadow: 0 var(--border-shadow-1) var(--border-shadow-1)
-    rgba(var(--color-black), 0.25);
-  outline: none;
-  transition: box-shadow 0.2s ease;
-}
-
 .inputField {
   margin-top: var(--space-4);
   margin-bottom: var(--space-4);
@@ -59,8 +31,8 @@
 .inputField:focus {
   border: var(--border-0) solid var(--color-gray-200) !important;
   background-color: var(--color-white) !important;
-  box-shadow: 0 var(--border-shadow-1) var(--border-shadow-1)
-    rgba(var(--color-black), 0.25);
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-md)
+    rgba(0, 0, 0, 0.25);
   outline: none;
   transition: box-shadow 0.2s ease;
 }
@@ -90,24 +62,6 @@
 }
 
 .outlineBtn {
-  background-color: var(--color-white);
-  color: var(--color-blue-200);
-  border-color: var(--color-blue-200);
-}
-
-.outlineBtn:is(:hover, :active) {
-  background-color: var(--color-blue-500) !important;
-  color: var(--color-white) !important;
-  border-color: var(--color-blue-500);
-}
-
-.outlineBtn:disabled {
-  background-color: var(--color-white);
-  color: var(--color-gray-300);
-  border-color: var(--color-gray-300);
-}
-
-.outlineBtn {
   display: flex;
   justify-content: space-around;
   width: 8rem;
@@ -115,7 +69,8 @@
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
   cursor: pointer;
-  box-shadow: 0 var(--border-2) var(--border-2) var(--color-gray-100);
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-xs)
+    var(--color-gray-100);
   background-color: var(--color-white);
   color: var(--color-blue-200);
   border: var(--border-1) solid var(--color-blue-200);
@@ -126,9 +81,10 @@
   color: var(--color-white) !important;
   border-color: var(--color-blue-500);
   box-shadow:
-    0 var(--border-1) var(--border-3) 0 var(--color-blue-200),
-    0 var(--border-shadow-1) var(--border-shadow-2) var(--border-3)
-      rgba(var(--color-gray-800), 0.15);
+    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
+      var(--color-blue-200),
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
+      rgba(60, 64, 67, 0.15);
 }
 
 .outlineBtn:disabled {

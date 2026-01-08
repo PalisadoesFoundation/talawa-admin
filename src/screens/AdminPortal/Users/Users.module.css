@@ -23,9 +23,7 @@
 }
 
 .btnsContainer {
-  display: flex;
   margin: var(--space-9) 0;
-  align-items: center;
 }
 
 .btnsContainer,
@@ -55,9 +53,9 @@
     margin: var(--space-7) 0;
   }
 
-  .btnsContainer > div {
-    width: 100% !important;
-    max-width: 100% !important;
+  .btnsContainer > :first-child {
+    width: 100%;
+    max-width: 100%;
     box-sizing: border-box;
   }
 }
