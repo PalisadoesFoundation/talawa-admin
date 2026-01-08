@@ -7,12 +7,12 @@
  * styling and Material-UI icons for visual elements. The component also
  * supports tooltips for displaying additional information.
  *
- * @param props - Partial properties of the `InterfaceUser` type.
- * @param props.firstName - The first name of the user.
- * @param props.lastName - The last name of the user.
- * @param props.createdAt - The date when the user joined.
- * @param props.email - The email address of the user.
- * @param props.image - The URL of the user's profile picture.
+ * @param props - The user profile properties.
+ * @param firstName - The first name of the user.
+ * @param lastName - The last name of the user.
+ * @param createdAt - The date when the user joined.
+ * @param email - The email address of the user.
+ * @param image - The URL of the user's profile picture.
  *
  * @returns A JSX element displaying the user's profile details.
  *
@@ -27,14 +27,7 @@
  * />
  * ```
  *
- * @dependencies
- * - `react-bootstrap` for Card and Button components.
- * - `@mui/icons-material` for CalendarMonthOutlinedIcon.
- * - `react-i18next` for translations.
- * - `react-tooltip` for tooltips.
- * - `Avatar` component for displaying a placeholder profile picture.
  *
- * @module UserProfile
  */
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import React from 'react';
