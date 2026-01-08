@@ -340,7 +340,7 @@ const Users = (): JSX.Element => {
 
   /**
    * Helper function to determine empty state message
-   * @returns {string} - The appropriate empty state message
+   * @returns The appropriate empty state message
    */
   const getEmptyStateMessage = () => {
     if (searchByName.length > 0) {

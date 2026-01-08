@@ -7,11 +7,11 @@
  * @module Requests
  *
  * @requires react
- * @requires @apollo/client
+ * @requires \@apollo/client
  * @requires react-bootstrap
  * @requires react-i18next
  * @requires react-router-dom
- * @requires @mui/material
+ * @requires \@mui/material
  * @requires GraphQl/Queries/Queries
  * @requires shared-components/TableLoader/TableLoader
  * @requires components/RequestsTableItem/RequestsTableItem
@@ -21,12 +21,13 @@
  * @requires style/app-fixed.module.css
  *
  *
- * @typedef {Object} InterfaceRequestsListItem
- * @property {string} _id - The unique identifier for the request.
- * @property {Object} user - The user details associated with the request.
- * @property {string} user.firstName - The first name of the user.
- * @property {string} user.lastName - The last name of the user.
- * @property {string} user.email - The email address of the user.
+ *
+ * @typedef InterfaceRequestsListItem
+ * @property _id - The unique identifier for the request.
+ * @property user - The user details associated with the request.
+ * @property user.firstName - The first name of the user.
+ * @property user.lastName - The last name of the user.
+ * @property user.email - The email address of the user.
  *
  * @component
  * @name Requests
@@ -34,7 +35,7 @@
  *              infinite scrolling, and role-based access control. Redirects unauthorized users
  *              to the organization list page.
  *
- * @returns {JSX.Element} The rendered Requests component.
+ * @returns The rendered Requests component.
  *
  * @example
  * <Requests />

@@ -1,0 +1,37 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
+    "tagDefinitions": [
+        {
+            "tagName": "@component",
+            "syntaxKind": "modifier"
+        },
+        {
+            "tagName": "@file",
+            "syntaxKind": "modifier"
+        },
+        {
+            "tagName": "@description",
+            "syntaxKind": "block"
+        },
+        {
+            "tagName": "@module",
+            "syntaxKind": "modifier"
+        },
+        {
+            "tagName": "@requires",
+            "syntaxKind": "block"
+        },
+        {
+            "tagName": "@typedef",
+            "syntaxKind": "block"
+        },
+        {
+            "tagName": "@property",
+            "syntaxKind": "block"
+        },
+        {
+            "tagName": "@name",
+            "syntaxKind": "modifier"
+        }
+    ]
+}
