@@ -167,8 +167,21 @@ export interface DataTableProps<T> {
   loadingMore?: boolean;
 
   // Loading optimizations
+  /**
+   * Number of skeleton rows to render during loading/overlay states.
+   * Default: 5
+   */
   skeletonRows?: number;
+  /**
+   * When true and data is already present, show a translucent overlay on top of the table
+   * while a refetch is in flight. Overlay displays skeleton grid matching table columns.
+   */
   loadingOverlay?: boolean;
+  /**
+   * When true, append skeleton rows at the end of the table body to indicate a partial
+   * loading state (e.g., while fetchMore is running in incremental pagination).
+   */
+  loadingMore?: boolean;
 
   // Sorting
   serverSort?: boolean;
@@ -456,33 +469,56 @@ Use for large datasets. Relies on GraphQL-style `pageInfo` and `onLoadMore`.
 
 ## Loading state optimizations
 
-Initial skeleton, refetch overlay, and “loading more” rows.
+Optimized loading states prevent layout shift and improve perceived performance. Skeleton rows match the table's column structure.
+
+### Initial load skeleton
+
+When `loading=true` and no data yet, displays a skeleton grid.
 
 ```tsx
 <DataTable<User>
   data={[]}
   columns={[nameCol, emailCol]}
   loading
-  skeletonRows={5}
+  skeletonRows={5}  // default: 5
 />
 ```
 
+### Refetch overlay
+
+When `loading=true` AND data already present, shows a translucent overlay with skeleton grid on top of existing rows.
+This avoids content jump during refresh.
+
 ```tsx
-// overlay during refetch when rows already present
 <DataTable<User>
   data={users}
   columns={[nameCol, emailCol]}
   loading
-  loadingOverlay
+  loadingOverlay  // true to show overlay
 />
 ```
 
+### Partial loading (fetchMore)
+
+When `loadingMore=true`, appends skeleton rows at the bottom of the table to indicate incremental data fetching.
+
 ```tsx
-// append skeleton rows while fetching more pages
-<DataTable<User> data={users} columns={[nameCol, emailCol]} loadingMore />
+<DataTable<User>
+  data={users}
+  columns={[nameCol, emailCol]}
+  loadingMore  // append skeleton rows
+  skeletonRows={5}
+/>
 ```
 
-Essential CSS extracts
+### Accessibility & styling
+
+Skeleton cells render with:
+- `aria-hidden="true"` (visual placeholder, not announced)
+- `role="status"` + `aria-live="polite"` (grid announces loading to screen readers)
+- Shimmer animation (linear gradient) for visual feedback
+
+Essential CSS extracts:
 
 ```css
 /* src/shared-components/DataTable/DataTable.module.css */
@@ -494,22 +530,39 @@ Essential CSS extracts
     background-position: 200% 50%;
   }
 }
-.skeletonCell {
+.dataSkeletonCell {
   height: 16px;
   border-radius: 6px;
   background: linear-gradient(90deg, #eee 0%, #f5f5f5 50%, #eee 100%);
   background-size: 200% 100%;
   animation: shimmer 1.2s ease-in-out infinite;
 }
-.loadingOverlay {
+.dataLoadingOverlay {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
-  background: rgba(255, 255, 255, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(1px);
   pointer-events: none;
+  z-index: 10;
+  border-radius: 6px;
 }
+```
+
+### TableLoader component
+
+For reusable skeleton grids (e.g., in dialogs or custom loading states):
+
+```tsx
+import { TableLoader } from 'src/shared-components/DataTable/TableLoader';
+
+// Grid variant (no overlay)
+<TableLoader columns={columns} rows={5} ariaLabel="Loading users" />
+
+// Overlay variant (translucent with grid)
+<TableLoader columns={columns} rows={3} asOverlay />
 ```
 
 ## Sorting
