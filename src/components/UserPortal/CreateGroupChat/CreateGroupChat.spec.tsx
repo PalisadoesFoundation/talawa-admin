@@ -501,11 +501,8 @@ describe('CreateGroupChat', () => {
     });
 
     // Close the modal (cancel)
-    const modal = screen.getByTestId('createGroupChatModal');
-    const closeButton = modal.querySelector('.btn-close');
-    if (closeButton) {
-      fireEvent.click(closeButton);
-    }
+    const closeButton = screen.getByTestId('modalCloseBtn');
+    fireEvent.click(closeButton);
 
     await waitFor(() => {
       expect(toggleCreateGroupChatModal).toHaveBeenCalled();

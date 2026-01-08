@@ -1,31 +1,32 @@
 /**
  * Component for managing and displaying agenda item categories for an organization.
  *
- * @component
- * @param {InterfaceAgendaCategoryProps} props - The props for the component.
- * @param {string} props.orgId - The ID of the organization.
+ *
+ * @param props - The props for the component.
+ * @param orgId - The ID of the organization.
  *
  * @remarks
  * This component fetches, displays, and allows the creation of agenda item categories
  * for a specific organization. It includes a search bar for filtering categories by name
  * and a modal for creating new categories.
  *
- * @requires {@link useQuery} - For fetching agenda item categories.
- * @requires {@link useMutation} - For creating new agenda item categories.
- * @requires {@link useTranslation} - For internationalization.
- * @requires {@link AgendaCategoryContainer} - For displaying the list of agenda categories.
- * @requires {@link AgendaCategoryCreateModal} - For creating new agenda categories.
+ * requires -
+ *  - useQuery - For fetching agenda item categories.
+ *  - useMutation - For creating new agenda item categories.
+ *  - useTranslation - For internationalization.
+ *  - AgendaCategoryContainer - For displaying the list of agenda categories.
+ *  - AgendaCategoryCreateModal - For creating new agenda categories.
  *
  * @example
  * ```tsx
  * <OrganizationAgendaCategory orgId="12345" />
  * ```
  *
- * @returns {JSX.Element} The rendered component.
+ * @returns The rendered component.
  *
- * @throws {Error} If there is an error while fetching agenda item categories.
+ * @throws Error If there is an error while fetching agenda item categories.
  *
- * @todo Add additional error handling and improve UI for error states.
+ * todo - Add additional error handling and improve UI for error states.
  */
 import React, { useState } from 'react';
 import type { ChangeEvent, FC } from 'react';
@@ -42,7 +43,7 @@ import type { InterfaceAgendaItemCategoryList } from 'utils/interfaces';
 import AgendaCategoryContainer from 'components/AgendaCategory/AgendaCategoryContainer';
 import AgendaCategoryCreateModal from './Create/AgendaCategoryCreateModal';
 import styles from 'style/app-fixed.module.css';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
@@ -137,8 +138,6 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
     setAgendaCategoryCreateModalIsOpen(!agendaCategoryCreateModalIsOpen);
   };
 
-  if (agendaCategoryLoading) return <Loader size="xl" />;
-
   if (agendaCategoryError) {
     return (
       <div className={`${styles.container} bg-transparent rounded-4 my-3`}>
@@ -159,48 +158,51 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
   }
 
   return (
-    <div className={`mx-4`}>
-      <div className={` bg-transparent rounded-4 my-3`}>
-        <div className={`mx-4`}>
-          <div className={`${styles.btnsContainer} my-0`}>
-            <SearchBar
-              placeholder={tCommon('searchByName')}
-              onSearch={setSearchTerm}
-              inputTestId="searchByName"
-              buttonTestId="searchBtn"
-            />
+    <LoadingState isLoading={agendaCategoryLoading} variant="spinner">
+      <div className={`mx-4`}>
+        <div className={` bg-transparent rounded-4 my-3`}>
+          <div className={`mx-4`}>
+            <div className={`${styles.btnsContainer} my-0`}>
+              <SearchBar
+                placeholder={tCommon('searchByName')}
+                onSearch={setSearchTerm}
+                inputTestId="searchByName"
+                buttonTestId="searchBtn"
+              />
 
-            <Button
-              variant="success"
-              onClick={showCreateModal}
-              data-testid="createAgendaCategoryBtn"
-              className={styles.addButton}
-            >
-              <i className={'fa fa-plus me-2'} />
-              {t('createAgendaCategory')}
-            </Button>
+              <Button
+                type="button"
+                variant="success"
+                onClick={showCreateModal}
+                data-testid="createAgendaCategoryBtn"
+                className={styles.addButton}
+              >
+                <i className={'fa fa-plus me-2'} />
+                {t('createAgendaCategory')}
+              </Button>
+            </div>
           </div>
+
+          <hr />
+
+          <AgendaCategoryContainer
+            agendaCategoryConnection={'Organization'}
+            agendaCategoryData={
+              agendaCategoryData?.agendaItemCategoriesByOrganization
+            }
+            agendaCategoryRefetch={refetchAgendaCategory}
+          />
         </div>
-
-        <hr />
-
-        <AgendaCategoryContainer
-          agendaCategoryConnection={`Organization`}
-          agendaCategoryData={
-            agendaCategoryData?.agendaItemCategoriesByOrganization
-          }
-          agendaCategoryRefetch={refetchAgendaCategory}
+        <AgendaCategoryCreateModal
+          agendaCategoryCreateModalIsOpen={agendaCategoryCreateModalIsOpen}
+          hideCreateModal={hideCreateModal}
+          formState={formState}
+          setFormState={setFormState}
+          createAgendaCategoryHandler={createAgendaCategoryHandler}
+          t={t}
         />
       </div>
-      <AgendaCategoryCreateModal
-        agendaCategoryCreateModalIsOpen={agendaCategoryCreateModalIsOpen}
-        hideCreateModal={hideCreateModal}
-        formState={formState}
-        setFormState={setFormState}
-        createAgendaCategoryHandler={createAgendaCategoryHandler}
-        t={t}
-      />
-    </div>
+    </LoadingState>
   );
 };
 

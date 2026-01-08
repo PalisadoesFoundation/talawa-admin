@@ -9,7 +9,7 @@ import type { ApolloError } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { Col, Form, Row } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
@@ -212,10 +212,6 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     }
   };
 
-  if (loading) {
-    return <Loader styles={styles.message} size="lg" />;
-  }
-
   if (error) {
     return (
       <div className={styles.message}>
@@ -230,7 +226,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   }
 
   return (
-    <>
+    <LoadingState isLoading={loading} variant="spinner">
       <div id="orgupdate">
         <form className={styles.ss}>
           <Form.Label className={styles.orgUpdateFormLables}>
@@ -354,7 +350,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           </div>
         </form>
       </div>
-    </>
+    </LoadingState>
   );
 }
 export default OrgUpdate;

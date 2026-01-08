@@ -232,5 +232,6 @@
   "organizationEvent": "Miembros de la organización",
   "organizationEventDescription": "Visible para todos los miembros de la organización",
   "inviteOnlyEvent": "Solo por invitación",
-  "inviteOnlyEventDescription": "Visible solo para miembros invitados y administradores de eventos"
+  "inviteOnlyEventDescription": "Visible solo para miembros invitados y administradores de eventos",
+  "to": "A"
 }

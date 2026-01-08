@@ -8,8 +8,10 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import i18n from 'utils/i18nForTest';
 import { toast } from 'react-toastify';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import type { MockedResponse } from '@apollo/react-testing';
@@ -833,5 +835,38 @@ describe('Testing Agenda Items Components', () => {
     } finally {
       useMutationSpy.mockRestore();
     }
+  });
+
+  it('should handle loading state when fetching agenda items', async () => {
+    const loadingMocks = [
+      createCategorySuccessMock(),
+      {
+        request: {
+          query: AgendaItemByEvent,
+          variables: { relatedEventId: formData.relatedEventId },
+        },
+        result: { data: { agendaItemByEvent: [] } },
+        delay: 100,
+      },
+    ];
+
+    renderEventAgendaItems({
+      mocks: loadingMocks,
+      withLocalization: true,
+      eventId: formData.relatedEventId,
+    });
+
+    // Assert spinner is visible during loading
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+
+    // Wait for loading to complete and button to appear
+    await waitFor(() => {
+      expect(screen.getByTestId('createAgendaItemBtn')).toBeInTheDocument();
+    });
+
+    // Assert spinner is no longer visible after loading
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
   });
 });
