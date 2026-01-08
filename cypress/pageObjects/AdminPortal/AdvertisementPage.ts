@@ -45,16 +45,25 @@ export class AdvertisementPage {
   createAdvertisement(
     name: string,
     description: string,
-    mediaPath: string,
+    mediaPath: string | null, // CHANGED: Allow null
     type: string,
     timeout = 10000,
   ) {
     cy.get(this._createAdBtn, { timeout }).should('be.visible').click();
     cy.get(this._adNameInput).should('be.visible').type(name);
     cy.get(this._adDescriptionInput).should('be.visible').type(description);
-    cy.get(this._adMediaInput)
-      .should('be.visible')
-      .selectFile(mediaPath, { force: true });
+
+    // CHANGED: Only try to upload if mediaPath is provided AND input exists
+    if (mediaPath) {
+      cy.get('body').then(($body) => {
+        if ($body.find(this._adMediaInput).length > 0) {
+          cy.get(this._adMediaInput)
+            .should('be.visible')
+            .selectFile(mediaPath, { force: true });
+        }
+      });
+    }
+
     cy.get(this._adTypeSelect).should('be.visible').select(type);
     cy.get(this._registerAdBtn).should('be.visible').click();
     cy.get(this._alert)

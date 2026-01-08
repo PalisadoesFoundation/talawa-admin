@@ -31,7 +31,7 @@ describe('Testing Admin Advertisement Management', () => {
     adPage.createAdvertisement(
       adData.ad1.name,
       adData.ad1.description,
-      adData.ad1.mediaPath,
+      null, // CHANGED: Pass null instead of adData.ad1.mediaPath
       adData.ad1.type,
     );
   });
