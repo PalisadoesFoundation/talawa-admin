@@ -114,11 +114,13 @@ const map: Record<
   | 'communityProfile'
   | 'pluginStore'
   | 'notification'
+  | 'adminProfile'
 > = {
   orglist: 'orgList',
   requests: 'requests',
   users: 'users',
   member: 'memberDetail',
+  admin: 'adminProfile',
   communityProfile: 'communityProfile',
   pluginstore: 'pluginStore',
   notification: 'notification',

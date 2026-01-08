@@ -73,6 +73,13 @@
     "communityLogo": "社区标志",
     "organizations": "组织"
   },
+  "adminProfile": {
+    "title": "管理员资料",
+    "settings": "设置",
+    "profile": "资料",
+    "personalInfo": "个人信息",
+    "accountSettings": "账户设置"
+  },
   "signOut": {
     "retryPrompt": "撤銷工作階段失敗。要重試嗎？",
     "signingOut": "正在登出...",
@@ -697,7 +704,9 @@
     "agendaItemUpdated": "议程项目已成功更新",
     "agendaItemDeleted": "议程项目已成功删除",
     "deleteAgendaItem": "删除议程项目",
-    "deleteAgendaItemMsg": "您要删除此议程项目吗？"
+    "deleteAgendaItemMsg": "您要删除此议程项目吗？",
+    "event": "活动",
+    "search": "搜索"
   },
   "eventListCard": {
     "deleteEvent": "删除事件",
@@ -1349,6 +1358,7 @@
     "processingPost": "正在处理您的帖子。请稍候。"
   },
   "eventAttendance": {
+    "event_attendance_table": "活动出席表",
     "historical_statistics": "历史统计",
     "Search member": "搜索成员",
     "Member Name": "成员姓名",
@@ -1662,6 +1672,9 @@
     "newGroup": "新群组",
     "groupName": "组名",
     "groupDescription": "群组描述",
+    "confirmRemoveMember": "确认删除成员",
+    "failedToAddUser": "添加用户失败",
+    "userAddedSuccessfully": "用户添加成功",
     "next": "下一步"
   },
   "userChatRoom": {

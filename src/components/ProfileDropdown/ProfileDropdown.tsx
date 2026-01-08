@@ -3,8 +3,7 @@
  * It displays the user's profile picture, name, and role, and provides options
  * to view the profile or log out of the application.
  *
- * @component
- * @returns {JSX.Element} The ProfileDropdown component.
+ * @returns The ProfileDropdown component.
  *
  * @remarks
  * - Uses `useSession` to manage session-related actions like ending the session.
@@ -18,7 +17,7 @@
  * <ProfileDropdown />
  * ```
  *
- * @dependencies
+ * Dependencies:
  * - `Avatar`: Displays a fallback avatar if no user image is available.
  * - `useSession`: Provides session management utilities.
  * - `useLocalStorage`: Fetches user data from local storage.
@@ -29,14 +28,14 @@
  * - The `handleLogout` function calls the logout mutation, clears local storage, and navigates to the home page.
  * - The `displayedName` truncates the user's name if it exceeds the maximum length.
  *
- * @accessibility
+ * Accessibility:
  * - Includes `aria-label` attributes for better screen reader support.
  * - Uses `data-testid` attributes for testing purposes.
  */
 import Avatar from 'components/Avatar/Avatar';
 import React from 'react';
 import { ButtonGroup, Dropdown } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
 import dropdownStyles from './ProfileDropdown.module.css';
@@ -63,7 +62,6 @@ const ProfileDropdown = ({
   const name: string = getItem<string>('name') || '';
   const userImage: string = getItem<string>('UserImage') || '';
   const navigate = useNavigate();
-  const { orgId } = useParams();
 
   const handleLogout = async (): Promise<void> => {
     try {
@@ -83,7 +81,6 @@ const ProfileDropdown = ({
   const profileDestination = resolveProfileNavigation({
     portal,
     role: userRole,
-    orgId,
   });
 
   return (
