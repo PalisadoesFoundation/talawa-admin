@@ -159,7 +159,7 @@ export interface InterfaceCursorPaginationProps<TData, TNode> {
    * - `'backward'`: Load previous page using `last` and `before` parameters.
    *   New items are prepended to the beginning of the list.
    *
-   * @default 'forward'
+   * @defaultValue 'forward'
    */
   paginationDirection?: 'forward' | 'backward';
 
@@ -170,23 +170,21 @@ export interface InterfaceCursorPaginationProps<TData, TNode> {
 
   /**
    * Function to extract the connection from the query data.
+   * Required for Controlled Mode.
    *
    * @param data - The query data.
    * @returns The connection object containing edges and pageInfo.
-   *
-   * @example
-   * For a query like `{ chat: { messages: { edges, pageInfo } } }`:
-   * ```tsx
-   * getConnection={(data) => data?.chat?.messages}
-   * ```
    */
-  getConnection: (data: TData) => InterfaceConnection<TNode> | null | undefined;
+  getConnection?: (
+    data: TData,
+  ) => InterfaceConnection<TNode> | null | undefined;
 
   /**
    * Current query variables.
    * Used to determine pagination state.
+   * Required for Controlled Mode.
    */
-  queryVariables: {
+  queryVariables?: {
     first?: number | null;
     after?: string | null;
     last?: number | null;
@@ -201,18 +199,20 @@ export interface InterfaceCursorPaginationProps<TData, TNode> {
 
   /**
    * Callback function to load more items.
+   * Required for Controlled Mode.
    *
    * @param variables - The new query variables to fetch the next/previous page.
    * @returns A promise that resolves when the data is loaded.
    */
-  onLoadMore: (variables: Record<string, unknown>) => Promise<unknown>;
+  onLoadMore?: (variables: Record<string, unknown>) => Promise<unknown>;
 
   /**
    * Render function that receives pagination state and renders the UI.
+   * Required for Controlled Mode (unless renderItem is used in Smart Mode).
    *
    * @param props - The render props containing items, loading state, and loadMore function.
    */
-  children: (
+  children?: (
     props: InterfaceCursorPaginationRenderProps<TNode>,
   ) => React.ReactNode;
 
@@ -234,7 +234,7 @@ export interface InterfaceCursorPaginationProps<TData, TNode> {
    * GraphQL query to fetch data.
    * If provided, the component will manage data fetching.
    */
-  query?: any; // Using any to avoid DocumentNode import issues for now, or Import DocumentNode
+  query?: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
   /**
    * Path to extract the connection from the query result.

@@ -432,7 +432,7 @@ describe('CursorPaginationManager Component', () => {
   describe('Edge Cases', () => {
     it('handles null data gracefully', () => {
       render(
-        <CursorPaginationManager
+        <CursorPaginationManager<InterfaceMockData | null, InterfaceMockNode>
           paginationDirection="forward"
           data={null}
           getConnection={(data) => data?.items}
@@ -449,7 +449,10 @@ describe('CursorPaginationManager Component', () => {
 
     it('handles undefined data gracefully', () => {
       render(
-        <CursorPaginationManager
+        <CursorPaginationManager<
+          InterfaceMockData | undefined,
+          InterfaceMockNode
+        >
           paginationDirection="forward"
           data={undefined}
           getConnection={(data) => data?.items}
@@ -500,7 +503,7 @@ describe('CursorPaginationManager Component', () => {
       const onLoadMore = vi.fn().mockRejectedValue(error);
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
 
       render(
         <CursorPaginationManager

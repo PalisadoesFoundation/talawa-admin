@@ -1,51 +1,22 @@
-/**
- * CursorPaginationManager Component
- *
- * A reusable component that manages cursor-based pagination state and logic.
- * Supports both forward pagination (next page) and backward pagination (previous page).
- *
- * @remarks
- * This component uses a render props pattern to provide maximum flexibility.
- * It handles:
- * - Loading state management
- * - Cursor-based query variable construction
- * - Item deduplication
- * - Scroll position restoration (for backward pagination)
- *
- * @example
- * ```tsx
- * <CursorPaginationManager
- *   paginationDirection="backward"
- *   data={chatData?.chat?.messages}
- *   getConnection={(data) => data}
- *   queryVariables={{ last: 10, before: null }}
- *   itemsPerPage={10}
- *   onLoadMore={(vars) => refetch(vars)}
- *   scrollContainerRef={containerRef}
- * >
- *   {({ items, loading, hasMore, loadMore }) => (
- *     <div ref={containerRef}>
- *       {hasMore && <button onClick={loadMore}>Load More</button>}
- *       {items.map(item => <Item key={item.id} data={item} />)}
- *     </div>
- *   )}
- * </CursorPaginationManager>
- * ```
- */
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useQuery } from '@apollo/client';
+import get from 'lodash/get';
 import type {
   InterfaceCursorPaginationProps,
   InterfaceCursorPaginationRenderProps,
 } from 'types/CursorPagination/interface';
 
 /**
- * CursorPaginationManager component.
+ * CursorPaginationManager Component
  *
- * @typeParam TData - The type of data returned by the query.
- * @typeParam TNode - The type of individual items being paginated. Must have an `id` field.
+ * A reusable component that manages cursor-based pagination state and logic.
+ * Supports both forward pagination (next page) and backward pagination (previous page).
+ *
+ * It operates in two modes:
+ * 1. **Controlled Mode**: Parent provides `data` and handles loading via `onLoadMore`.
+ * 2. **Smart Mode**: Component fetches data using `query` and handles pagination internally.
  */
-function CursorPaginationManager<TData, TNode extends { id: string }>({
+function CursorPaginationManager<TData, TNode>({
   paginationDirection = 'forward',
   data,
   getConnection,
@@ -55,19 +26,66 @@ function CursorPaginationManager<TData, TNode extends { id: string }>({
   children,
   scrollContainerRef,
   onItemsChange,
+  // Smart Mode Props
+  query,
+  dataPath,
+  renderItem,
+  keyExtractor,
+  loadingComponent,
+  emptyStateComponent,
+  refetchTrigger = 0,
+  onDataChange,
 }: InterfaceCursorPaginationProps<TData, TNode>): JSX.Element {
-  const [loading, setLoading] = useState(false);
+  const [internalLoading, setInternalLoading] = useState(false);
   const [error, setError] = useState<Error | undefined>(undefined);
 
-  // Extract connection from data
-  const connection = data ? getConnection(data) : null;
+  // --- Smart Mode Logic ---
+  const isSmartMode = !!query;
+
+  const {
+    data: queryData,
+    loading: queryLoading,
+    fetchMore,
+    refetch,
+  } = useQuery(query, {
+    skip: !isSmartMode,
+    variables: queryVariables,
+    notifyOnNetworkStatusChange: true,
+  });
+
+  // Effect to handle manual refetch trigger
+  useEffect(() => {
+    if (isSmartMode && refetchTrigger > 0) {
+      refetch?.();
+    }
+  }, [refetchTrigger, isSmartMode, refetch]);
+
+  const effectiveData = isSmartMode ? queryData : data;
+  const isLoading = isSmartMode ? queryLoading : internalLoading;
+
+  // Extract connection
+  let connection = null;
+  if (isSmartMode && dataPath) {
+    connection = get(effectiveData, dataPath);
+  } else if (getConnection && effectiveData) {
+    connection = getConnection(effectiveData);
+  }
+
   const edges = connection?.edges ?? [];
   const pageInfo = connection?.pageInfo;
 
-  // Extract items from edges
-  const items = useMemo(() => edges.map((edge) => edge.node), [edges]);
+  // Extract items
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const items = useMemo(() => edges.map((edge: any) => edge.node), [edges]);
 
-  // Determine if there are more items based on direction
+  // Notify parent of data change
+  useEffect(() => {
+    if (onDataChange && items.length > 0) {
+      onDataChange(items);
+    }
+  }, [items, onDataChange]);
+
+  // Determine hasMore
   const hasMore = useMemo(() => {
     if (!pageInfo) return false;
     return paginationDirection === 'forward'
@@ -75,7 +93,7 @@ function CursorPaginationManager<TData, TNode extends { id: string }>({
       : pageInfo.hasPreviousPage;
   }, [pageInfo, paginationDirection]);
 
-  // Notify parent when items change
+  // Notify parent when items change (Controlled/Legacy)
   useEffect(() => {
     if (onItemsChange) {
       onItemsChange(items);
@@ -83,47 +101,45 @@ function CursorPaginationManager<TData, TNode extends { id: string }>({
   }, [items, onItemsChange]);
 
   /**
-   * Handles loading more items based on pagination direction.
+   * Handles loading more items.
    */
   const loadMore = useCallback(async (): Promise<void> => {
-    if (loading || !hasMore || !pageInfo) return;
+    if (isLoading || !hasMore || !pageInfo) return;
 
-    setLoading(true);
+    setInternalLoading(true);
     setError(undefined);
 
-    // Capture current scroll position for backward pagination
+    // Capture scroll position
     let currentScrollHeight = 0;
     if (paginationDirection === 'backward' && scrollContainerRef?.current) {
       currentScrollHeight = scrollContainerRef.current.scrollHeight;
     }
 
     try {
-      // Build new query variables based on direction
-      const newVariables: Record<string, unknown> = {
-        ...queryVariables,
-      };
+      const newVariables: Record<string, unknown> = { ...queryVariables };
 
       if (paginationDirection === 'forward') {
-        // Forward pagination: use first and after
         newVariables.first = itemsPerPage;
         newVariables.after = pageInfo.endCursor;
-        // Clear backward pagination params
         delete newVariables.last;
         delete newVariables.before;
       } else {
-        // Backward pagination: use last and before
         newVariables.last = itemsPerPage;
         newVariables.before = pageInfo.startCursor;
-        // Clear forward pagination params
         delete newVariables.first;
         delete newVariables.after;
       }
 
-      await onLoadMore(newVariables);
+      if (isSmartMode && fetchMore) {
+        await fetchMore({
+          variables: newVariables,
+        });
+      } else if (onLoadMore) {
+        await onLoadMore(newVariables);
+      }
 
-      // Restore scroll position for backward pagination
+      // Restore scroll position
       if (paginationDirection === 'backward' && scrollContainerRef?.current) {
-        // Wait for DOM update
         setTimeout(() => {
           if (scrollContainerRef.current) {
             const newScrollHeight = scrollContainerRef.current.scrollHeight;
@@ -136,10 +152,10 @@ function CursorPaginationManager<TData, TNode extends { id: string }>({
       console.error('Error loading more items:', err);
       setError(err instanceof Error ? err : new Error('Unknown error'));
     } finally {
-      setLoading(false);
+      setInternalLoading(false);
     }
   }, [
-    loading,
+    isLoading,
     hasMore,
     pageInfo,
     paginationDirection,
@@ -147,18 +163,51 @@ function CursorPaginationManager<TData, TNode extends { id: string }>({
     queryVariables,
     itemsPerPage,
     onLoadMore,
+    isSmartMode,
+    fetchMore,
   ]);
 
-  // Prepare render props
   const renderProps: InterfaceCursorPaginationRenderProps<TNode> = {
     items,
-    loading,
+    loading: isLoading,
     hasMore,
     loadMore,
     error,
   };
 
-  return <>{children(renderProps)}</>;
+  if (isSmartMode && queryLoading && loadingComponent) {
+    return <>{loadingComponent}</>;
+  }
+
+  if (
+    isSmartMode &&
+    !queryLoading &&
+    items.length === 0 &&
+    emptyStateComponent
+  ) {
+    return <>{emptyStateComponent}</>;
+  }
+
+  if (renderItem) {
+    return (
+      <>
+        {items.map((item: TNode, index: number) => (
+          <React.Fragment
+            key={
+              keyExtractor
+                ? keyExtractor(item)
+                : (item as any).id || (item as any)._id || index // eslint-disable-line @typescript-eslint/no-explicit-any
+            }
+          >
+            {renderItem(item)}
+          </React.Fragment>
+        ))}
+        {children && children(renderProps)}
+      </>
+    );
+  }
+
+  return <>{children ? children(renderProps) : null}</>;
 }
 
 export default CursorPaginationManager;
