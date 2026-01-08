@@ -227,4 +227,48 @@ export interface InterfaceCursorPaginationProps<TData, TNode> {
    * Useful for side effects like scroll position management.
    */
   onItemsChange?: (items: TNode[]) => void;
+
+  // --- Smart Mode Props (Optional) ---
+
+  /**
+   * GraphQL query to fetch data.
+   * If provided, the component will manage data fetching.
+   */
+  query?: any; // Using any to avoid DocumentNode import issues for now, or Import DocumentNode
+
+  /**
+   * Path to extract the connection from the query result.
+   * e.g., "chat.messages" or "organizations.0.userTags"
+   */
+  dataPath?: string;
+
+  /**
+   * Render function for individual items (alternative to children render props).
+   */
+  renderItem?: (item: TNode) => React.ReactNode;
+
+  /**
+   * Function to extract unique key from an item.
+   */
+  keyExtractor?: (item: TNode) => string;
+
+  /**
+   * Component to display while loading.
+   */
+  loadingComponent?: React.ReactNode;
+
+  /**
+   * Component to display when list is empty.
+   */
+  emptyStateComponent?: React.ReactNode;
+
+  /**
+   * Trigger to force refetch (for Smart Mode).
+   */
+  refetchTrigger?: number;
+
+  /**
+   * Callback when data is changed (Smart Mode).
+   */
+  onDataChange?: (items: TNode[]) => void;
 }

@@ -29,9 +29,9 @@
  */
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import ErrorBoundaryWrapper from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
-import ProfileAvatarDisplay from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
-import { Avatar } from '@mui/material';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
+import Avatar from 'components/Avatar/Avatar';
 import type { ChangeEvent } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
@@ -728,10 +728,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                     className={styles.contactImage}
                                   />
                                 ) : (
-                                  <Avatar
-                                    name={message.creator.name}
-                                    alt={message.creator.name}
-                                    avatarStyle={styles.contactImage}
+                                  <ProfileAvatarDisplay
+                                    fallbackName={message.creator.name}
+                                    className={styles.contactImage}
                                   />
                                 ))}
                               <div
@@ -857,10 +856,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 <div data-testid="replyMsg" className={styles.replyTo}>
                   <div className={styles.replyToMessageContainer}>
                     <div className={styles.userDetails}>
-                      <Avatar
-                        name={replyToDirectMessage.creator.name}
-                        alt={replyToDirectMessage.creator.name}
-                        avatarStyle={styles.userImage}
+                      <ProfileAvatarDisplay
+                        fallbackName={replyToDirectMessage.creator.name}
+                        className={styles.userImage}
                       />
                       <span>{replyToDirectMessage.creator.name}</span>
                     </div>

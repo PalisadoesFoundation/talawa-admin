@@ -500,7 +500,7 @@ describe('CursorPaginationManager Component', () => {
       const onLoadMore = vi.fn().mockRejectedValue(error);
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => {});
+        .mockImplementation(() => { });
 
       render(
         <CursorPaginationManager
