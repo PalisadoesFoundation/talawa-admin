@@ -6,4 +6,4 @@
 
 > `const` **ExtensionPointsOrganization**: `React.FC`
 
-Defined in: src/plugin/available/plugin\_map/pages/ExtensionPointsOrganization.tsx:41
+Defined in: src/plugin/available/plugin\_map/pages/ExtensionPointsOrganization.tsx:42
