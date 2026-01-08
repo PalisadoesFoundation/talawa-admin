@@ -38,7 +38,7 @@
  * ```
  */
 import React from 'react';
-import TruncatedText from 'components/OrgListCard/TruncatedText';
+import TruncatedText from 'shared-components/TruncatedText/TruncatedText';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
