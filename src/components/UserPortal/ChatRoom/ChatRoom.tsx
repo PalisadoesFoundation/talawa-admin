@@ -614,12 +614,24 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 input: { id: props.selectedContact },
                 first: 10,
                 after: null,
+                firstMessages: 10,
+                afterMessages: null,
                 lastMessages: 10,
                 beforeMessages: null,
               }}
               itemsPerPage={10}
               onLoadMore={async (variables) => {
-                await chatRefetch(variables);
+                // Map standard pagination params to custom CHAT_BY_ID names
+                const customVariables = {
+                  input: variables.input,
+                  first: variables.first,
+                  after: variables.after,
+                  firstMessages: variables.first,
+                  afterMessages: variables.after,
+                  lastMessages: variables.last,
+                  beforeMessages: variables.before,
+                };
+                await chatRefetch(customVariables);
               }}
               scrollContainerRef={
                 messagesContainerRef as React.RefObject<HTMLElement>

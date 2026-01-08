@@ -5,22 +5,22 @@ import CursorPaginationManager from './CursorPaginationManager';
 import type { InterfaceConnection } from 'types/CursorPagination/interface';
 
 // Mock data types
-interface MockNode {
+interface InterfaceMockNode {
   id: string;
   content: string;
 }
 
-interface MockData {
-  items: InterfaceConnection<MockNode>;
+interface InterfaceMockData {
+  items: InterfaceConnection<InterfaceMockNode>;
 }
 
 const createMockConnection = (
-  items: MockNode[],
+  items: InterfaceMockNode[],
   hasNextPage = true,
   hasPreviousPage = false,
   startCursor = 'start',
   endCursor = 'end',
-): InterfaceConnection<MockNode> => ({
+): InterfaceConnection<InterfaceMockNode> => ({
   edges: items.map((item, index) => ({
     cursor: `cursor-${index}`,
     node: item,
@@ -38,9 +38,13 @@ describe('CursorPaginationManager Component', () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('Forward Pagination', () => {
     it('renders items correctly in forward direction', () => {
-      const mockData: MockData = {
+      const mockData: InterfaceMockData = {
         items: createMockConnection([
           { id: '1', content: 'Item 1' },
           { id: '2', content: 'Item 2' },
@@ -73,7 +77,7 @@ describe('CursorPaginationManager Component', () => {
     });
 
     it('shows hasMore as true when hasNextPage is true', () => {
-      const mockData: MockData = {
+      const mockData: InterfaceMockData = {
         items: createMockConnection(
           [{ id: '1', content: 'Item 1' }],
           true, // hasNextPage
@@ -99,7 +103,7 @@ describe('CursorPaginationManager Component', () => {
     });
 
     it('shows hasMore as false when hasNextPage is false', () => {
-      const mockData: MockData = {
+      const mockData: InterfaceMockData = {
         items: createMockConnection(
           [{ id: '1', content: 'Item 1' }],
           false, // hasNextPage
@@ -125,7 +129,7 @@ describe('CursorPaginationManager Component', () => {
     });
 
     it('calls onLoadMore with correct variables for forward pagination', async () => {
-      const mockData: MockData = {
+      const mockData: InterfaceMockData = {
         items: createMockConnection(
           [{ id: '1', content: 'Item 1' }],
           true,
@@ -147,7 +151,9 @@ describe('CursorPaginationManager Component', () => {
           onLoadMore={onLoadMore}
         >
           {({ loadMore }) => (
-            <button onClick={() => loadMore()}>Load More</button>
+            <button type="button" onClick={() => loadMore()}>
+              Load More
+            </button>
           )}
         </CursorPaginationManager>,
       );
@@ -163,7 +169,7 @@ describe('CursorPaginationManager Component', () => {
     });
 
     it('shows loading state during forward pagination', async () => {
-      const mockData: MockData = {
+      const mockData: InterfaceMockData = {
         items: createMockConnection([{ id: '1', content: 'Item 1' }], true),
       };
 
@@ -183,7 +189,9 @@ describe('CursorPaginationManager Component', () => {
           {({ loadMore, loading }) => (
             <div>
               <div data-testid="loading">{loading ? 'Loading' : 'Ready'}</div>
-              <button onClick={() => loadMore()}>Load More</button>
+              <button type="button" onClick={() => loadMore()}>
+                Load More
+              </button>
             </div>
           )}
         </CursorPaginationManager>,
@@ -199,7 +207,7 @@ describe('CursorPaginationManager Component', () => {
     });
 
     it('does not load more when hasMore is false', async () => {
-      const mockData: MockData = {
+      const mockData: InterfaceMockData = {
         items: createMockConnection([{ id: '1', content: 'Item 1' }], false),
       };
 
@@ -215,7 +223,9 @@ describe('CursorPaginationManager Component', () => {
           onLoadMore={onLoadMore}
         >
           {({ loadMore }) => (
-            <button onClick={() => loadMore()}>Load More</button>
+            <button type="button" onClick={() => loadMore()}>
+              Load More
+            </button>
           )}
         </CursorPaginationManager>,
       );
@@ -230,7 +240,7 @@ describe('CursorPaginationManager Component', () => {
 
   describe('Backward Pagination', () => {
     it('renders items correctly in backward direction', () => {
-      const mockData: MockData = {
+      const mockData: InterfaceMockData = {
         items: createMockConnection(
           [
             { id: '1', content: 'Message 1' },
@@ -267,7 +277,7 @@ describe('CursorPaginationManager Component', () => {
     });
 
     it('shows hasMore as true when hasPreviousPage is true', () => {
-      const mockData: MockData = {
+      const mockData: InterfaceMockData = {
         items: createMockConnection(
           [{ id: '1', content: 'Message 1' }],
           false,
@@ -294,7 +304,7 @@ describe('CursorPaginationManager Component', () => {
     });
 
     it('shows hasMore as false when hasPreviousPage is false', () => {
-      const mockData: MockData = {
+      const mockData: InterfaceMockData = {
         items: createMockConnection(
           [{ id: '1', content: 'Message 1' }],
           false,
@@ -321,7 +331,7 @@ describe('CursorPaginationManager Component', () => {
     });
 
     it('calls onLoadMore with correct variables for backward pagination', async () => {
-      const mockData: MockData = {
+      const mockData: InterfaceMockData = {
         items: createMockConnection(
           [{ id: '1', content: 'Message 1' }],
           false,
@@ -343,7 +353,9 @@ describe('CursorPaginationManager Component', () => {
           onLoadMore={onLoadMore}
         >
           {({ loadMore }) => (
-            <button onClick={() => loadMore()}>Load Older</button>
+            <button type="button" onClick={() => loadMore()}>
+              Load Older
+            </button>
           )}
         </CursorPaginationManager>,
       );
@@ -361,7 +373,7 @@ describe('CursorPaginationManager Component', () => {
     it('handles scroll position restoration for backward pagination', async () => {
       const TestComponent = (): JSX.Element => {
         const scrollRef = useRef<HTMLDivElement>(null);
-        const mockData: MockData = {
+        const mockData: InterfaceMockData = {
           items: createMockConnection(
             [{ id: '1', content: 'Message 1' }],
             false,
@@ -386,7 +398,9 @@ describe('CursorPaginationManager Component', () => {
                 ref={scrollRef}
                 style={{ height: '200px', overflow: 'auto' }}
               >
-                <button onClick={() => loadMore()}>Load Older</button>
+                <button type="button" onClick={() => loadMore()}>
+                  Load Older
+                </button>
                 {items.map((item) => (
                   <div key={item.id}>{item.content}</div>
                 ))}
@@ -442,7 +456,7 @@ describe('CursorPaginationManager Component', () => {
     });
 
     it('handles empty edges array', () => {
-      const mockData: MockData = {
+      const mockData: InterfaceMockData = {
         items: createMockConnection([]),
       };
 
@@ -469,7 +483,7 @@ describe('CursorPaginationManager Component', () => {
     });
 
     it('handles errors during load more', async () => {
-      const mockData: MockData = {
+      const mockData: InterfaceMockData = {
         items: createMockConnection([{ id: '1', content: 'Item 1' }], true),
       };
 
@@ -477,7 +491,7 @@ describe('CursorPaginationManager Component', () => {
       const onLoadMore = vi.fn().mockRejectedValue(error);
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => {});
+        .mockImplementation(() => { });
 
       render(
         <CursorPaginationManager
@@ -490,7 +504,9 @@ describe('CursorPaginationManager Component', () => {
         >
           {({ loadMore, error: renderError }) => (
             <div>
-              <button onClick={() => loadMore()}>Load More</button>
+              <button type="button" onClick={() => loadMore()}>
+                Load More
+              </button>
               {renderError && (
                 <div data-testid="error">{renderError.message}</div>
               )}
@@ -510,7 +526,7 @@ describe('CursorPaginationManager Component', () => {
 
     it('calls onItemsChange when items change', () => {
       const onItemsChange = vi.fn();
-      const mockData: MockData = {
+      const mockData: InterfaceMockData = {
         items: createMockConnection([
           { id: '1', content: 'Item 1' },
           { id: '2', content: 'Item 2' },
@@ -544,7 +560,7 @@ describe('CursorPaginationManager Component', () => {
     });
 
     it('prevents multiple simultaneous load operations', async () => {
-      const mockData: MockData = {
+      const mockData: InterfaceMockData = {
         items: createMockConnection([{ id: '1', content: 'Item 1' }], true),
       };
 
@@ -562,7 +578,9 @@ describe('CursorPaginationManager Component', () => {
           onLoadMore={onLoadMore}
         >
           {({ loadMore }) => (
-            <button onClick={() => loadMore()}>Load More</button>
+            <button type="button" onClick={() => loadMore()}>
+              Load More
+            </button>
           )}
         </CursorPaginationManager>,
       );
