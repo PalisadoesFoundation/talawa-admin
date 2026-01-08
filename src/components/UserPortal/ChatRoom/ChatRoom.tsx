@@ -613,10 +613,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             </div>
           </div>
         <div className={styles.flexColumn}>
-          <CursorPaginationManager<
-            typeof chatData,
-            INewChat['messages']['edges'][0]['node']
-          >
+          <CursorPaginationManager<typeof chatData, INewChat['messages']['edges'][0]['node']>
             paginationDirection="backward"
             data={chatData}
             getConnection={(data) => data?.chat?.messages}
