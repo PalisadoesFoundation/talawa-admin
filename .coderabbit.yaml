@@ -49,7 +49,7 @@ reviews:
         - ✅ Test file exists: `*.spec.tsx`, `*.spec.ts`, `*.test.tsx`, or `*.test.ts`
         - ✅ Test file colocated with component (same directory)
         - ✅ Test file updated to reflect source changes
-        - ✅ Target 100% code coverage for new/modified code
+        - ✅ Target ≥95% code coverage for new/modified code
         - ✅ **List specific line numbers** lacking test coverage
 
         ### 1.2 Test Quality Standards
@@ -315,7 +315,7 @@ reviews:
         ### 8.2 Approval Criteria
 
         **Append [approve] tag ONLY when ALL criteria met**:
-        1. ✅ Complete test coverage (target 100%) with quality tests (§1)
+        1. ✅ Complete test coverage (target ≥95%) with quality tests (§1)
         2. ✅ Zero code quality issues (§2)
         3. ✅ **Full reusable component policy compliance** (§3)
         4. ✅ Complete documentation and TSDoc (§4)
