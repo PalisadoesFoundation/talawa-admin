@@ -708,7 +708,12 @@ This helps developers quickly identify and fix configuration errors during devel
 
 ## Linter Enforcement
 
-The project includes a linter (`scripts/lint-datagrid.sh`) that prevents direct usage of `@mui/x-data-grid` or `<DataGrid` in `src/screens/**` files.
+Direct usage of `@mui/x-data-grid` and `@mui/x-data-grid-pro` is enforced via ESLint
+(`no-restricted-imports`) in `eslint.config.js`.
+
+Only the `DataGridWrapper` and its associated type definitions are allowed to import
+these packages directly. All other usage must go through the standardized wrapper.
+
 
 **Linter runs:**
 - Pre-commit (via lint-staged)
