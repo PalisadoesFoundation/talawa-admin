@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, FormControl } from 'react-bootstrap';
-import { DatePicker } from '@mui/x-date-pickers';
+import DatePicker from '../DatePicker';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import {

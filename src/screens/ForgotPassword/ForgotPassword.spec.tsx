@@ -482,4 +482,67 @@ describe('Testing Forgot Password screen', () => {
     );
     await userEvent.click(screen.getByText('Change Password'));
   });
+
+  describe('LoadingState Behavior', () => {
+    it('should show LoadingState spinner while OTP generation is loading', async () => {
+      const loadingMocks = [
+        {
+          request: {
+            query: GENERATE_OTP_MUTATION,
+            variables: { email: 'test@example.com' },
+          },
+          result: { data: null },
+          delay: 100,
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={loadingMocks}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18n}>
+                <ForgotPassword />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      // Enter email to trigger OTP request
+      await userEvent.type(
+        screen.getByPlaceholderText(/Registered email/i),
+        'test@example.com',
+      );
+      await userEvent.click(screen.getByText('Get OTP'));
+
+      // Verify spinner is shown during loading
+      await waitFor(() => {
+        expect(screen.getByTestId('spinner')).toBeInTheDocument();
+      });
+    });
+
+    it('should hide spinner and render form after LoadingState completes', async () => {
+      const link = new StaticMockLink(MOCKS);
+      render(
+        <MockedProvider link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18n}>
+                <ForgotPassword />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(
+          screen.getByPlaceholderText(/Registered email/i),
+        ).toBeInTheDocument();
+        expect(screen.getByText('Get OTP')).toBeInTheDocument();
+      });
+
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
+  });
 });

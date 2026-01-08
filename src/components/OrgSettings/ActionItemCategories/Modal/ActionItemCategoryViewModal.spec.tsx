@@ -176,7 +176,7 @@ describe('Testing CategoryViewModal Component', () => {
     const mockHide = vi.fn();
     renderCategoryViewModal({ hide: mockHide });
 
-    const closeButton = screen.getByTestId('categoryViewModalCloseBtn');
+    const closeButton = screen.getByTestId('modalCloseBtn');
     await userEvent.click(closeButton);
 
     expect(mockHide).toHaveBeenCalledTimes(1);
@@ -231,7 +231,7 @@ describe('Testing CategoryViewModal Component', () => {
 
     // Check modal header
     expect(screen.getByText(translations.categoryDetails)).toBeInTheDocument();
-    expect(screen.getByTestId('categoryViewModalCloseBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
 
     // Check form structure - using getByRole for better accessibility testing
     const form = screen.getByRole('textbox', { name: /name/i }).closest('form');

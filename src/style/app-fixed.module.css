@@ -884,6 +884,28 @@
   --orgSelector-no-results-color: #6c757d;
 }
 
+/* Action Item Category Status Styles */
+.actionItemCategoryStatusIcon {
+  font-size: 0.8rem;
+  margin-right: 8px;
+}
+
+.statusIconActive {
+  color: var(--bs-success, #31bb6b);
+}
+
+.statusIconDisabled {
+  color: var(--bs-danger, #dc3545);
+}
+
+.statusTextActive {
+  color: var(--bs-success, #31bb6b);
+}
+
+.statusTextDisabled {
+  color: var(--bs-danger, #dc3545);
+}
+
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
 
 /* Add Button */
@@ -9208,10 +9230,14 @@ form {
 
 .checkboxdivEvents {
   display: flex;
+  flex-wrap: wrap;
+  --events-gap: 1rem;
+  gap: var(--events-gap, 1rem);
 }
 
 .checkboxdivEvents > div {
-  width: 50%;
+  flex: 0 0 calc(50% - (var(--events-gap, 1rem) / 2));
+  min-width: 200px;
 }
 
 .dispflexEvents {

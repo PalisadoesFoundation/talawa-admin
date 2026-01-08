@@ -16,7 +16,7 @@ import {
 } from 'types/Volunteer/interface';
 import { IoLocationOutline } from 'react-icons/io5';
 import { IoIosHand } from 'react-icons/io';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   USER_EVENTS_VOLUNTEER,
   USER_VOLUNTEER_MEMBERSHIP,
@@ -215,9 +215,7 @@ const UpcomingEvents = (): JSX.Element => {
         };
     }
   };
-  if (eventsLoading || membershipLoading) {
-    return <Loader size="xl" data-testid="loader" />;
-  }
+
   if (eventsError) {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
@@ -247,7 +245,10 @@ const UpcomingEvents = (): JSX.Element => {
     dataTestIdPrefix: 'searchBy',
   };
   return (
-    <>
+    <LoadingState
+      isLoading={eventsLoading || membershipLoading}
+      variant="spinner"
+    >
       <AdminSearchFilterBar
         searchPlaceholder={tCommon('searchBy', { item: t('titleOrLocation') })}
         searchValue={searchTerm}
@@ -410,7 +411,7 @@ const UpcomingEvents = (): JSX.Element => {
         onSelectSeries={() => {}}
         onSelectInstance={() => {}}
       />
-    </>
+    </LoadingState>
   );
 };
 export default UpcomingEvents;

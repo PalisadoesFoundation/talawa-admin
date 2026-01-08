@@ -8,7 +8,7 @@ import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_LIST } from 'GraphQl/Queries/ActionItemQueries';
 import type { IActionItemInfo } from 'types/ActionItems/interface';
 import styles from 'style/app-fixed.module.css';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   DataGrid,
   type GridCellParams,
@@ -115,10 +115,6 @@ function Actions(): JSX.Element {
     });
   }, [data, userId, searchTerm, searchBy, sortBy]);
 
-  if (loading) {
-    return <Loader size="xl" />;
-  }
-
   if (error) {
     return (
       <div className={styles.message} data-testid="errorMsg">
@@ -214,74 +210,76 @@ function Actions(): JSX.Element {
   ];
 
   return (
-    <div>
-      <AdminSearchFilterBar
-        searchPlaceholder={tCommon('searchBy', {
-          item: t('assigneeOrCategory'),
-        })}
-        searchValue={searchTerm}
-        onSearchChange={setSearchTerm}
-        searchInputTestId="searchByInput"
-        searchButtonTestId="searchBtn"
-        hasDropdowns
-        dropdowns={[
-          {
-            id: 'searchBy',
-            label: tCommon('searchBy', { item: '' }),
-            type: 'filter',
-            options: [
-              { label: t('assignee'), value: 'assignee' },
-              { label: t('category'), value: 'category' },
-            ],
-            selectedOption: searchBy,
-            onOptionChange: (v) => setSearchBy(v as 'assignee' | 'category'),
-            dataTestIdPrefix: 'searchBy',
-          },
-          {
-            id: 'sort',
-            label: tCommon('sort'),
-            type: 'sort',
-            options: [
-              { label: t('latestAssigned'), value: 'dueDate_DESC' },
-              { label: t('earliestAssigned'), value: 'dueDate_ASC' },
-            ],
-            selectedOption: sortBy,
-            onOptionChange: (v) =>
-              setSortBy(v as 'dueDate_ASC' | 'dueDate_DESC'),
-            dataTestIdPrefix: 'sort',
-          },
-        ]}
-      />
+    <LoadingState isLoading={loading} variant="spinner">
+      <div>
+        <AdminSearchFilterBar
+          searchPlaceholder={tCommon('searchBy', {
+            item: t('assigneeOrCategory'),
+          })}
+          searchValue={searchTerm}
+          onSearchChange={setSearchTerm}
+          searchInputTestId="searchByInput"
+          searchButtonTestId="searchBtn"
+          hasDropdowns
+          dropdowns={[
+            {
+              id: 'searchBy',
+              label: tCommon('searchBy', { item: '' }),
+              type: 'filter',
+              options: [
+                { label: t('assignee'), value: 'assignee' },
+                { label: t('category'), value: 'category' },
+              ],
+              selectedOption: searchBy,
+              onOptionChange: (v) => setSearchBy(v as 'assignee' | 'category'),
+              dataTestIdPrefix: 'searchBy',
+            },
+            {
+              id: 'sort',
+              label: tCommon('sort'),
+              type: 'sort',
+              options: [
+                { label: t('latestAssigned'), value: 'dueDate_DESC' },
+                { label: t('earliestAssigned'), value: 'dueDate_ASC' },
+              ],
+              selectedOption: sortBy,
+              onOptionChange: (v) =>
+                setSortBy(v as 'dueDate_ASC' | 'dueDate_DESC'),
+              dataTestIdPrefix: 'sort',
+            },
+          ]}
+        />
 
-      <DataGrid
-        autoHeight
-        hideFooter
-        rows={actionItems}
-        columns={columns}
-        getRowId={(r) => r.id}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack alignItems="center">{t('noActionItems')}</Stack>
-          ),
-        }}
-      />
+        <DataGrid
+          autoHeight
+          hideFooter
+          rows={actionItems}
+          columns={columns}
+          getRowId={(r) => r.id}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack alignItems="center">{t('noActionItems')}</Stack>
+            ),
+          }}
+        />
 
-      {actionItem && (
-        <>
-          <ItemViewModal
-            isOpen={modalState.view}
-            hide={() => closeModal(ModalState.VIEW)}
-            item={actionItem}
-          />
-          <ItemUpdateStatusModal
-            actionItem={actionItem}
-            isOpen={modalState.status}
-            hide={() => closeModal(ModalState.STATUS)}
-            actionItemsRefetch={refetch}
-          />
-        </>
-      )}
-    </div>
+        {actionItem && (
+          <>
+            <ItemViewModal
+              isOpen={modalState.view}
+              hide={() => closeModal(ModalState.VIEW)}
+              item={actionItem}
+            />
+            <ItemUpdateStatusModal
+              actionItem={actionItem}
+              isOpen={modalState.status}
+              hide={() => closeModal(ModalState.STATUS)}
+              actionItemsRefetch={refetch}
+            />
+          </>
+        )}
+      </div>
+    </LoadingState>
   );
 }
 

@@ -12,7 +12,7 @@ import { getPluginManager } from 'plugin/manager';
 import { discoverAndRegisterAllPlugins } from 'plugin/registry';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
@@ -34,7 +34,7 @@ const ForgotPassword = lazy(
   () => import('screens/ForgotPassword/ForgotPassword'),
 );
 const MemberDetail = lazy(
-  () => import('screens/AdminPortal/MemberDetail/MemberDetail'),
+  () => import('shared-components/ProfileForm/ProfileForm'),
 );
 const OrgContribution = lazy(
   () => import('screens/AdminPortal/OrgContribution/OrgContribution'),
@@ -94,7 +94,6 @@ const Organizations = lazy(
   () => import('screens/UserPortal/Organizations/Organizations'),
 );
 const People = lazy(() => import('screens/UserPortal/People/People'));
-const Settings = lazy(() => import('screens/UserPortal/Settings/Settings'));
 const Chat = lazy(() => import('screens/UserPortal/Chat/Chat'));
 const EventDashboardScreen = lazy(
   () => import('components/EventDashboardScreen/EventDashboardScreen'),
@@ -198,7 +197,13 @@ function App(): React.ReactElement {
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
     >
-      <Suspense fallback={<Loader />}>
+      <Suspense
+        fallback={
+          <LoadingState isLoading={true} variant="spinner">
+            <div />
+          </LoadingState>
+        }
+      >
         <NotificationToastContainer />
         <Routes>
           <Route path="/" element={<LoginPage />} />
@@ -208,7 +213,7 @@ function App(): React.ReactElement {
             <Route element={<SuperAdminScreen />}>
               <Route path="/admin/orglist" element={<OrgList />} />
               <Route path="/admin/notification" element={<Notification />} />
-              <Route path="/admin/member" element={<MemberDetail />} />
+              <Route path="/admin/profile" element={<MemberDetail />} />
               <Route path="/admin/users" element={<Users />} />
               <Route
                 path="/admin/communityProfile"
@@ -251,7 +256,7 @@ function App(): React.ReactElement {
                 path="/admin/orgtags/:orgId/subTags/:tagId"
                 element={<SubTags />}
               />
-              <Route path="/admin/member/:orgId" element={<MemberDetail />} />
+              <Route path="/admin/member/:orgId/:userId" element={<MemberDetail />} />
               <Route
                 path="/admin/orgevents/:orgId"
                 element={<OrganizationEvents />}
@@ -321,7 +326,7 @@ function App(): React.ReactElement {
           {/* User Portal Routes */}
           <Route element={<SecuredRouteForUser />}>
             <Route path="/user/organizations" element={<Organizations />} />
-            <Route path="/user/settings" element={<Settings />} />
+            <Route path="/user/settings" element={<MemberDetail />} />
             {/* User global plugin routes (no orgId required) */}
             <Route element={<UserGlobalScreen />}>
               {userGlobalPluginRoutes.map((route) => (

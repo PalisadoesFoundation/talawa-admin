@@ -44,16 +44,16 @@
 }
 
 .titleContainer h3 {
-  font-size: 1.25rem;
-  font-weight: 750;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-heavy);
   color: #5e5e5e;
   margin-top: var(--space-2);
 }
 
 .subContainer span {
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   margin-left: var(--space-3);
-  font-weight: lighter;
+  font-weight: var(--font-weight-lighter);
   color: #707070;
 }
 
@@ -84,7 +84,7 @@
 .progressBar {
   margin: var(--space-0) var(--space-4);
   width: 100%;
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   height: 1.25rem;
 }
 
@@ -98,8 +98,8 @@
 
 .titlemodal {
   color: #707070;
-  font-weight: 600;
-  font-size: 32px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-3xl);
   width: 65%;
   margin-bottom: var(--space-0);
 }
@@ -126,10 +126,10 @@
   border-radius: 5px;
   background-color: #31bb6b;
   width: 100%;
-  font-size: 16px;
+  font-size: var(--font-size-md);
   color: white;
   outline: none;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   cursor: pointer;
   transition:
     transform 0.2s,

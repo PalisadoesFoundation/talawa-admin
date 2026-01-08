@@ -73,6 +73,13 @@
     "communityLogo": "Logo Communautaire",
     "organizations": "Organisations"
   },
+  "adminProfile": {
+    "title": "Profil Administrateur",
+    "settings": "Paramètres",
+    "profile": "Profil",
+    "personalInfo": "Informations Personnelles",
+    "accountSettings": "Paramètres du Compte"
+  },
   "signOut": {
     "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
     "signingOut": "Déconnexion en cours...",
@@ -389,6 +396,7 @@
     "cancel": "Annuler",
     "actions": "Actions",
     "profile": "Profil",
+    "joined": "Rejoint",
     "createUser": "Créer un utilisateur",
     "notFound": "Aucun membre trouvé"
   },
@@ -479,7 +487,8 @@
     "errorOccurredWhileLoadingAssignedUser": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
     "tagActions": "Actions d'étiquette",
     "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
-    "sortPeople": "Trier les personnes"
+    "sortPeople": "Trier les personnes",
+    "noTagsFound": "Aucun tag trouvé"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
@@ -519,11 +528,10 @@
     "allDay": "Toute la journée",
     "recurringEvent": "Événement récurrent",
     "recurring": "Récurrent",
-    "searchMemberName": "Rechercher le nom du membre",
     "isPublic": "est public",
-    "publicEvent": "est public",
-    "isRegistrable": "Est enregistrable",
     "registerable": "Est enregistrable",
+    "searchMemberName": "Rechercher le nom du membre",
+    "isRegistrable": "Est enregistrable",
     "createEvent": "Créer un évènement",
     "enterFilter": "Entrer le filtre",
     "enterName": "Entrez le nom",
@@ -698,7 +706,9 @@
     "agendaItemUpdated": "Point de l'ordre du jour mis à jour avec succès",
     "agendaItemDeleted": "Point de l'ordre du jour supprimé avec succès",
     "deleteAgendaItem": "Supprimer le point de l'ordre du jour",
-    "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?"
+    "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?",
+    "event": "Événement",
+    "search": "Rechercher"
   },
   "eventListCard": {
     "deleteEvent": "Supprimer l'événement",
@@ -1296,11 +1306,15 @@
     "editPost": "Modifier le message",
     "pinPost": "Épingler le message",
     "unpinPost": "Désépingler le message",
-    "viewComments": "Voir les {{count}} commentaires",
+    "like": "J'aime",
+    "unlike": "Je n'aime plus",
+    "share": "Partager",
+    "viewComments": "Voir {{count}} commentaires",
     "hideComments": "Masquer les commentaires",
     "loadingComments": "Chargement des commentaires…",
     "loadMoreComments": "Charger plus de commentaires",
     "noMoreComments": "Plus de commentaires à charger",
+    "noComments": "Aucun commentaire",
     "postedOn": "Publié le {{date}}",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
     "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer.",
@@ -1346,6 +1360,7 @@
     "processingPost": "Traitement de votre publication. Veuillez patienter."
   },
   "eventAttendance": {
+    "event_attendance_table": "Table de présence aux événements",
     "historical_statistics": "Statistiques historiques",
     "Search member": "Rechercher un membre",
     "Member Name": "Nom du membre",
@@ -1533,7 +1548,7 @@
     "enterName": "Entrez le nom",
     "enterDescription": "Entrez la description",
     "enterLocation": "Entrez l'emplacement",
-    "publicEvent": "est public",
+
     "registerable": "Est enregistrable",
     "monthlyCalendarView": "Calendrier mensuel",
     "yearlyCalendarView": "Calendrier annuel",
@@ -1659,7 +1674,10 @@
     "demoteToRegular": "Rétrograder au rang régulier",
     "promoteToAdmin": "Promouvoir administrateur",
     "user": "Utilisateur",
-    "chatAction": "Action de chat"
+    "chatAction": "Action de chat",
+    "confirmRemoveMember": "Confirmer la suppression du membre",
+    "failedToAddUser": "Échec de l'ajout de l'utilisateur",
+    "userAddedSuccessfully": "Utilisateur ajouté avec succès"
   },
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",
@@ -1698,6 +1716,7 @@
     "categoryDeleted": "Catégorie d'élément d'action supprimée avec succès",
     "deleteCategory": "Supprimer la catégorie",
     "deleteCategoryMsg": "Êtes-vous sûr de vouloir supprimer cette catégorie d'élément d'action ?",
+    "noDescriptionProvided": "Aucune description fournie",
     "createButton": "Créer",
     "editButton": "Modifier"
   },

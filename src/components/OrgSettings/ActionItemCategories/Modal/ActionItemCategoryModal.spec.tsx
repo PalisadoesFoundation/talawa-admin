@@ -645,7 +645,7 @@ describe('Testing Action Item Category Modal', () => {
       };
       renderCategoryModal(link1, propsWithMockHide);
 
-      const closeBtn = screen.getByTestId('actionItemCategoryModalCloseBtn');
+      const closeBtn = screen.getByTestId('modalCloseBtn');
       await userEvent.click(closeBtn);
 
       expect(mockHide).toHaveBeenCalled();
