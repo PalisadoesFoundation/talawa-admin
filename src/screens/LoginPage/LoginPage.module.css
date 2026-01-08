@@ -1,0 +1,321 @@
+.active_tab {
+  -webkit-animation: fadeIn 0.3s ease-in-out;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.communityLogo {
+  object-fit: contain;
+}
+
+.email_button {
+  --bs-btn-active-bg: var(--color-blue-200);
+  --bs-btn-active-border-color: var(--color-blue-200);
+  --bs-btn-hover-bg: var(--color-blue-200);
+  --bs-btn-hover-border-color: var(--color-blue-200);
+  position: absolute;
+  z-index: 10;
+  bottom: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  background-color: var(--color-blue-200);
+  border-color: var(--color-blue-200);
+  justify-content: center;
+  align-items: center;
+  color: var(--color-gray-700);
+}
+
+.email_button:hover {
+  color: var(--color-gray-700) !important;
+  box-shadow:
+    0 var(--border-1) var(--border-3) 0 var(--color-blue-200),
+    0 var(--border-4) var(--border-8) var(--border-3) var(--color-gray-800);
+}
+
+.socialIcons {
+  display: flex;
+  gap: var(--space-5);
+  justify-content: center;
+}
+
+.login_background {
+  min-height: 100vh;
+}
+
+.login_btn {
+  font-weight: bold;
+  color: var(--color-gray-700);
+  --bs-btn-bg: var(--color-blue-200);
+  --bs-btn-border-color: var(--color-blue-200);
+  --bs-btn-hover-bg: var(--color-blue-200);
+  --bs-btn-hover-border-color: var(--color-blue-200);
+  --bs-btn-active-color: var(--color-blue-200);
+  --bs-btn-active-bg: var(--color-blue-200);
+  --bs-btn-active-border-color: var(--color-blue-200);
+  --bs-btn-disabled-bg: var(--color-blue-200);
+  --bs-btn-disabled-border-color: var(--color-blue-200);
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-5);
+  width: 100%;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.login_btn:hover {
+  color: var(--color-gray-700) !important;
+  box-shadow:
+    0 var(--border-1) var(--border-3) 0 var(--color-blue-200),
+    0 var(--border-4) var(--border-8) var(--border-3) var(--color-gray-800);
+}
+
+.langChangeBtnStyle {
+  --bs-btn-active-bg: var(--color-blue-200);
+  --bs-btn-active-border-color: var(--color-blue-200);
+  --bs-btn-active-color: var(--color-blue-500);
+  width: var(--space-14);
+  height: 2.2rem;
+  padding: 0;
+  color: var(--color-blue-500);
+  border-color: var(--color-blue-200);
+  background-color: transparent;
+}
+
+.langChangeBtnStyle:hover {
+  background-color: var(--color-blue-200) !important;
+  border-color: var(--color-blue-200) !important;
+}
+
+.talawa_logo {
+  height: clamp(var(--space-10), 8vw, var(--space-12));
+  width: auto;
+  aspect-ratio: 1;
+  display: block;
+  margin: var(--space-7) auto var(--space-5);
+
+  @media (prefers-reduced-motion: no-preference) {
+    -webkit-animation: zoomIn 0.3s ease-in-out;
+    animation: zoomIn 0.3s ease-in-out;
+  }
+}
+
+.password_checks {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.password_check_element {
+  padding: var(--space-3) 0;
+}
+
+.password_check_element_top {
+  margin-top: var(--space-1);
+}
+
+.password_check_element_bottom {
+  margin-bottom: var(--space-6);
+}
+
+.reg_btn {
+  font-weight: bold;
+  background-color: var(--color-gray-100);
+  border-color: var(--color-gray-100);
+  --bs-btn-hover-bg: var(--color-gray-100);
+  --bs-btn-hover-border-color: var(--color-gray-100);
+  --bs-btn-active-color: var(--color-gray-100);
+  --bs-btn-active-bg: var(--color-gray-100);
+  --bs-btn-active-border-color: var(--color-gray-100);
+  margin-top: var(--space-5);
+  color: var(--color-gray-700);
+  margin-bottom: var(--space-5);
+  width: 100%;
+  transition: background-color 0.2s ease;
+  cursor: pointer;
+}
+
+.reg_btn:hover {
+  color: var(--color-gray-700) !important;
+  box-shadow:
+    0 var(--border-1) var(--border-3) 0 var(--color-blue-200),
+    0 var(--border-4) var(--border-8) var(--border-3) var(--color-gray-800);
+}
+
+.row .left_portion {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.row .left_portion .inner .palisadoes_logo {
+  width: var(--logo-lg);
+  height: auto;
+}
+
+.row .right_portion {
+  min-height: 100vh;
+  position: relative;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--space-5) var(--space-9);
+  background: var(--color-white);
+}
+
+.row .right_portion::-webkit-scrollbar {
+  width: var(--space-3);
+}
+
+.row .right_portion::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.row .right_portion::-webkit-scrollbar-thumb {
+  background-color: var(--color-black);
+  border-radius: var(--radius-sm);
+}
+
+.row .right_portion .langChangeBtn {
+  margin: 0;
+  position: absolute;
+  top: var(--space-5);
+  left: var(--space-5);
+}
+
+.orText {
+  display: block;
+  position: absolute;
+  top: -0.2rem;
+  left: calc(50% - 2.6rem);
+  margin: 0 auto;
+  padding: var(--space-3) var(--space-8);
+  z-index: 100;
+  background: var(--color-white);
+  color: var(--color-gray-600);
+}
+
+.row .orText {
+  display: block;
+  position: absolute;
+  top: -0.5rem;
+  left: calc(50% - 2.6rem);
+  margin: 0 auto;
+  padding: 0.35rem var(--space-8);
+  z-index: 100;
+  background: var(--color-white);
+  color: var(--color-gray-600);
+}
+
+.selectOrgText {
+  width: 100%;
+}
+
+@media (max-width: 992px) {
+  .row .left_portion {
+    padding: var(--space-0) var(--space-8);
+  }
+
+  .row .left_portion .inner .palisadoes_logo {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column-reverse;
+  }
+
+  .row .right_portion,
+  .row .left_portion {
+    height: unset;
+  }
+
+  .row .right_portion {
+    min-height: 100vh;
+    overflow-y: unset;
+  }
+
+  .row .left_portion .inner {
+    display: flex;
+    justify-content: center;
+  }
+
+  .row .left_portion .inner .palisadoes_logo {
+    height: var(--logo-sm);
+    width: unset;
+    position: absolute;
+    margin: var(--space-3);
+    top: 0;
+    right: 0;
+    z-index: 100;
+  }
+
+  .row .left_portion .inner p {
+    margin-bottom: 0;
+    padding: var(--space-5);
+  }
+
+  .socialIcons {
+    margin-bottom: var(--space-5);
+  }
+}
+
+@media (max-width: 576px) {
+  .row .right_portion {
+    padding: var(--space-5) var(--space-5) var(--space-0) var(--space-5);
+  }
+
+  .row .right_portion .langChangeBtn {
+    position: absolute;
+    margin: var(--space-5);
+    left: 0;
+    top: 0;
+  }
+
+  .marginTopForReg {
+    margin-top: var(--space-11) !important;
+  }
+
+  .row .right_portion .talawa_logo {
+    height: var(--logo-md);
+    margin: var(--space-0) auto var(--space-8) auto;
+  }
+
+  .socialIcons {
+    margin-bottom: var(--space-5);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .talawa_logo {
+    animation: none;
+  }
+
+  .active_tab {
+    animation: none;
+  }
+}
+
+/* Animations */
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
