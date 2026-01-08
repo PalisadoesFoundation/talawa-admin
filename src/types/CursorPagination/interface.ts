@@ -5,20 +5,21 @@ import type { DefaultConnectionPageInfo } from '../pagination';
  * Helper type to combine pagination variables with custom query variables.
  * Supports both forward pagination (first/after) and backward pagination (last/before).
  */
-export type PaginationVariables<T extends Record<string, unknown>> = T & (
-  | {
-    first: number;
-    after: string | null;
-    last?: never;
-    before?: never;
-  }
-  | {
-    last: number;
-    before: string | null;
-    first?: never;
-    after?: never;
-  }
-);
+export type PaginationVariables<T extends Record<string, unknown>> = T &
+  (
+    | {
+        first: number;
+        after: string | null;
+        last?: never;
+        before?: never;
+      }
+    | {
+        last: number;
+        before: string | null;
+        first?: never;
+        after?: never;
+      }
+  );
 
 /**
  * Represents the GraphQL connection structure with edges and pageInfo.
