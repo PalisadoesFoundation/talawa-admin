@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { MockedResponse } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -278,6 +278,10 @@ describe('People Component Tests', () => {
     const input = screen.getByTestId('searchInput');
     await userEvent.type(input, 'Admin');
 
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 400));
+    });
+
     await waitFor(
       () => {
         expect(screen.getByTestId('people-name-2')).toHaveTextContent(
@@ -424,7 +428,7 @@ describe('People Component Tests', () => {
           'Admin User',
         );
       },
-      { timeout: 5000 },
+      { timeout: 2000 },
     );
   });
 });

@@ -16,6 +16,7 @@
   "avatar": "avatar",
   "user": "USER",
   "superAdmin": "SUPERADMIN",
+  "member": "Miembro",
   "members": "Members",
   "logout": "Logout",
   "login": "Login",

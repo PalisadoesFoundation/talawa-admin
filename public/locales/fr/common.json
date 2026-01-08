@@ -16,6 +16,7 @@
   "avatar": "avatar",
   "user": "UTILISATEUR",
   "superAdmin": "SUPERADMIN",
+  "member": "Membre",
   "members": "Membres",
   "logout": "Se déconnecter",
   "login": "Se connecter",

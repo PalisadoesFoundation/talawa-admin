@@ -135,6 +135,13 @@ function OrganizationPeople(): JSX.Element {
   const handleDeleteUser = async () => {
     if (!selectedMemId) return;
 
+    if (!currentUrl) {
+      NotificationToast.error(
+        'Organization ID is missing. Cannot remove member.',
+      );
+      return;
+    }
+
     try {
       const { data } = await removeMember({
         variables: { memberId: selectedMemId, organizationId: currentUrl },
@@ -149,7 +156,7 @@ function OrganizationPeople(): JSX.Element {
         handleCloseModal();
       }
     } catch (error: unknown) {
-      errorHandler(t, error);
+      errorHandler(undefined, error);
     }
   };
 
@@ -208,10 +215,10 @@ function OrganizationPeople(): JSX.Element {
   const modalFooter = (
     <>
       <Button variant="secondary" onClick={handleCloseModal}>
-        {tCommon('cancel') || 'Cancel'}
+        {tCommon('cancel')}
       </Button>
       <Button variant="danger" onClick={handleDeleteUser}>
-        {tCommon('remove') || 'Remove'}
+        {tCommon('remove')}
       </Button>
     </>
   );
@@ -244,61 +251,61 @@ function OrganizationPeople(): JSX.Element {
         additionalButtons={<AddMember />}
       />
 
-      {/* Organization People Table */}
-      <section className={styles.tableContainer}>
-        <table
-          className={styles.table}
-          aria-label={t('organizationPeopleTable')}
-        >
-          <thead>
-            <tr className={styles.tableHeaderRow}>
-              <th
-                className={`${styles.tableHeader} ${styles.tableCell}`}
-                scope="col"
+      {/* Pagination Manager - renders table rows wrapped in complete table structure */}
+      <CursorPaginationManager
+        query={query}
+        queryVariables={variables}
+        dataPath={dataPath}
+        itemsPerPage={10}
+        renderItem={(item: IUserNode, index: number) => {
+          const rowNumber = index + 1;
+          return (
+            <section className={styles.tableContainer}>
+              <table
+                className={styles.table}
+                aria-label={t('organizationPeopleTable')}
               >
-                {tCommon('sl_no')}
-              </th>
-              <th
-                className={`${styles.tableHeader} ${styles.tableCell}`}
-                scope="col"
-              >
-                {tCommon('profile')}
-              </th>
-              <th
-                className={`${styles.tableHeader} ${styles.tableCell}`}
-                scope="col"
-              >
-                {tCommon('name')}
-              </th>
-              <th
-                className={`${styles.tableHeader} ${styles.tableCell}`}
-                scope="col"
-              >
-                {tCommon('email')}
-              </th>
-              <th
-                className={`${styles.tableHeader} ${styles.tableCell}`}
-                scope="col"
-              >
-                {tCommon('joinedOn')}
-              </th>
-              <th
-                className={`${styles.tableHeader} ${styles.tableCell}`}
-                scope="col"
-              >
-                {tCommon('action')}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <CursorPaginationManager
-              query={query}
-              queryVariables={variables}
-              dataPath={dataPath}
-              itemsPerPage={10}
-              renderItem={(item: IUserNode, index: number) => {
-                const rowNumber = index + 1;
-                return (
+                <thead>
+                  <tr className={styles.tableHeaderRow}>
+                    <th
+                      className={`${styles.tableHeader} ${styles.tableCell}`}
+                      scope="col"
+                    >
+                      {tCommon('sl_no')}
+                    </th>
+                    <th
+                      className={`${styles.tableHeader} ${styles.tableCell}`}
+                      scope="col"
+                    >
+                      {tCommon('profile')}
+                    </th>
+                    <th
+                      className={`${styles.tableHeader} ${styles.tableCell}`}
+                      scope="col"
+                    >
+                      {tCommon('name')}
+                    </th>
+                    <th
+                      className={`${styles.tableHeader} ${styles.tableCell}`}
+                      scope="col"
+                    >
+                      {tCommon('email')}
+                    </th>
+                    <th
+                      className={`${styles.tableHeader} ${styles.tableCell}`}
+                      scope="col"
+                    >
+                      {tCommon('joinedOn')}
+                    </th>
+                    <th
+                      className={`${styles.tableHeader} ${styles.tableCell}`}
+                      scope="col"
+                    >
+                      {tCommon('action')}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
                   <tr key={item.id} className={styles.rowBackground}>
                     <td className={`${styles.tableCell} ${styles.centerAlign}`}>
                       {rowNumber}
@@ -330,7 +337,9 @@ function OrganizationPeople(): JSX.Element {
                       {item.emailAddress}
                     </td>
                     <td className={`${styles.tableCell} ${styles.centerAlign}`}>
-                      {dayjs(item.createdAt).format('DD/MM/YYYY')}
+                      {item.createdAt && dayjs(item.createdAt).isValid()
+                        ? dayjs(item.createdAt).format('DD/MM/YYYY')
+                        : '-'}
                     </td>
                     <td className={`${styles.tableCell} ${styles.centerAlign}`}>
                       <Button
@@ -345,11 +354,109 @@ function OrganizationPeople(): JSX.Element {
                       </Button>
                     </td>
                   </tr>
-                );
-              }}
-              keyExtractor={(item: IUserNode) => item.id}
-              refetchTrigger={refetchTrigger}
-              emptyStateComponent={
+                </tbody>
+              </table>
+            </section>
+          );
+        }}
+        keyExtractor={(item: IUserNode) => item.id}
+        refetchTrigger={refetchTrigger}
+        loadingComponent={
+          <section className={styles.tableContainer}>
+            <table
+              className={styles.table}
+              aria-label={t('organizationPeopleTable')}
+            >
+              <thead>
+                <tr className={styles.tableHeaderRow}>
+                  <th
+                    className={`${styles.tableHeader} ${styles.tableCell}`}
+                    scope="col"
+                  >
+                    {tCommon('sl_no')}
+                  </th>
+                  <th
+                    className={`${styles.tableHeader} ${styles.tableCell}`}
+                    scope="col"
+                  >
+                    {tCommon('profile')}
+                  </th>
+                  <th
+                    className={`${styles.tableHeader} ${styles.tableCell}`}
+                    scope="col"
+                  >
+                    {tCommon('name')}
+                  </th>
+                  <th
+                    className={`${styles.tableHeader} ${styles.tableCell}`}
+                    scope="col"
+                  >
+                    {tCommon('email')}
+                  </th>
+                  <th
+                    className={`${styles.tableHeader} ${styles.tableCell}`}
+                    scope="col"
+                  >
+                    {tCommon('joinedOn')}
+                  </th>
+                  <th
+                    className={`${styles.tableHeader} ${styles.tableCell}`}
+                    scope="col"
+                  >
+                    {tCommon('action')}
+                  </th>
+                </tr>
+              </thead>
+            </table>
+          </section>
+        }
+        emptyStateComponent={
+          <section className={styles.tableContainer}>
+            <table
+              className={styles.table}
+              aria-label={t('organizationPeopleTable')}
+            >
+              <thead>
+                <tr className={styles.tableHeaderRow}>
+                  <th
+                    className={`${styles.tableHeader} ${styles.tableCell}`}
+                    scope="col"
+                  >
+                    {tCommon('sl_no')}
+                  </th>
+                  <th
+                    className={`${styles.tableHeader} ${styles.tableCell}`}
+                    scope="col"
+                  >
+                    {tCommon('profile')}
+                  </th>
+                  <th
+                    className={`${styles.tableHeader} ${styles.tableCell}`}
+                    scope="col"
+                  >
+                    {tCommon('name')}
+                  </th>
+                  <th
+                    className={`${styles.tableHeader} ${styles.tableCell}`}
+                    scope="col"
+                  >
+                    {tCommon('email')}
+                  </th>
+                  <th
+                    className={`${styles.tableHeader} ${styles.tableCell}`}
+                    scope="col"
+                  >
+                    {tCommon('joinedOn')}
+                  </th>
+                  <th
+                    className={`${styles.tableHeader} ${styles.tableCell}`}
+                    scope="col"
+                  >
+                    {tCommon('action')}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
                 <tr>
                   <td colSpan={6} className={styles.emptyStateCell}>
                     <EmptyState
@@ -359,11 +466,11 @@ function OrganizationPeople(): JSX.Element {
                     />
                   </td>
                 </tr>
-              }
-            />
-          </tbody>
-        </table>
-      </section>
+              </tbody>
+            </table>
+          </section>
+        }
+      />
 
       <BaseModal
         show={showRemoveModal}

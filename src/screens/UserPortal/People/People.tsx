@@ -94,7 +94,10 @@ export default function People(): React.JSX.Element {
 
   return (
     <>
-      <div className={`${styles.mainContainer_people}`}>
+      <div
+        className={`${styles.mainContainer_people}`}
+        data-testid="people-main-container"
+      >
         {/* Refactored Header Structure */}
         <div className={styles.calendar__header}>
           <AdminSearchFilterBar
@@ -121,7 +124,10 @@ export default function People(): React.JSX.Element {
           />
         </div>
 
-        <div className={styles.people_content}>
+        <div
+          className={styles.people_content}
+          aria-label={t('organizationPeopleTable')}
+        >
           <div className={styles.people_card_header}>
             {/* Nested span groups sNo and avatar in a flex container for horizontal alignment */}
             <span
@@ -165,7 +171,7 @@ export default function People(): React.JSX.Element {
               itemsPerPage={10}
               renderItem={(node: IMemberNode, index: number) => {
                 const isAdmin = node.role === 'administrator';
-                const userType = isAdmin ? 'Admin' : 'Member';
+                const userType = isAdmin ? tCommon('admin') : tCommon('member');
                 const cardProps: IOrganizationCardProps = {
                   name: node.name,
                   image: node.avatarURL ?? '',
