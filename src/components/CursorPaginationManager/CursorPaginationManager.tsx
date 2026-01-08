@@ -142,6 +142,8 @@ export function CursorPaginationManager<
     emptyStateComponent,
     onDataChange,
     refetchTrigger,
+    paginationDirection = 'forward',
+    scrollContainerRef,
   } = props;
 
   const { t } = useTranslation('common');
@@ -168,11 +170,18 @@ export function CursorPaginationManager<
     TData,
     TVariables
   >(query, {
-    variables: {
-      ...queryVariables,
-      first: itemsPerPage,
-      after: null,
-    } as PaginationVariables<TVariables>,
+    variables:
+      paginationDirection === 'forward'
+        ? ({
+          ...queryVariables,
+          first: itemsPerPage,
+          after: null,
+        } as PaginationVariables<TVariables>)
+        : ({
+          ...queryVariables,
+          last: itemsPerPage,
+          before: null,
+        } as PaginationVariables<TVariables>),
     notifyOnNetworkStatusChange: true,
   });
 
@@ -195,20 +204,38 @@ export function CursorPaginationManager<
 
   // Load more handler
   const handleLoadMore = useCallback(async () => {
-    if (!pageInfo?.hasNextPage || isLoadingMore || loading) {
+    const hasMore =
+      paginationDirection === 'forward'
+        ? pageInfo?.hasNextPage
+        : pageInfo?.hasPreviousPage;
+
+    if (!hasMore || isLoadingMore || loading) {
       return;
     }
 
     setIsLoadingMore(true);
     const currentGeneration = generationRef.current;
 
+    // Capture scroll position for backward pagination
+    let previousScrollHeight = 0;
+    if (paginationDirection === 'backward' && scrollContainerRef?.current) {
+      previousScrollHeight = scrollContainerRef.current.scrollHeight;
+    }
+
     try {
       const result = await fetchMore({
-        variables: {
-          ...queryVariables,
-          first: itemsPerPage,
-          after: pageInfo.endCursor,
-        } as PaginationVariables<TVariables>,
+        variables:
+          paginationDirection === 'forward'
+            ? ({
+              ...queryVariables,
+              first: itemsPerPage,
+              after: pageInfo.endCursor,
+            } as PaginationVariables<TVariables>)
+            : ({
+              ...queryVariables,
+              last: itemsPerPage,
+              before: pageInfo.startCursor,
+            } as PaginationVariables<TVariables>),
       });
 
       // Check if this request is stale or component unmounted
@@ -221,13 +248,27 @@ export function CursorPaginationManager<
       if (connectionData) {
         const newNodes = extractNodes(connectionData.edges);
         setItems((prevItems) => {
-          const updatedItems = [...prevItems, ...newNodes];
+          const updatedItems =
+            paginationDirection === 'forward'
+              ? [...prevItems, ...newNodes]
+              : [...newNodes, ...prevItems];
           if (onDataChange) {
             onDataChange(updatedItems);
           }
           return updatedItems;
         });
         setPageInfo(connectionData.pageInfo || null);
+
+        // Restore scroll position for backward pagination
+        if (paginationDirection === 'backward' && scrollContainerRef?.current) {
+          requestAnimationFrame(() => {
+            if (scrollContainerRef.current) {
+              const newScrollHeight = scrollContainerRef.current.scrollHeight;
+              scrollContainerRef.current.scrollTop +=
+                newScrollHeight - previousScrollHeight;
+            }
+          });
+        }
       }
       if (isMounted.current) {
         setIsLoadingMore(false);
@@ -247,6 +288,8 @@ export function CursorPaginationManager<
     itemsPerPage,
     dataPath,
     onDataChange,
+    paginationDirection,
+    scrollContainerRef,
   ]);
 
   // Refetch handler
@@ -258,15 +301,23 @@ export function CursorPaginationManager<
     setIsLoadingMore(false);
 
     try {
-      await refetch({
-        ...queryVariables,
-        first: itemsPerPage,
-        after: null,
-      } as PaginationVariables<TVariables>);
+      await refetch(
+        paginationDirection === 'forward'
+          ? ({
+            ...queryVariables,
+            first: itemsPerPage,
+            after: null,
+          } as PaginationVariables<TVariables>)
+          : ({
+            ...queryVariables,
+            last: itemsPerPage,
+            before: null,
+          } as PaginationVariables<TVariables>),
+      );
     } catch (err) {
       console.error('Error refetching data:', err);
     }
-  }, [refetch, queryVariables, itemsPerPage]);
+  }, [refetch, queryVariables, itemsPerPage, paginationDirection]);
 
   // Watch for refetchTrigger changes
   useEffect(() => {
@@ -331,15 +382,34 @@ export function CursorPaginationManager<
   }
 
   // Success state: render items and load more button
+  const hasMore =
+    paginationDirection === 'forward'
+      ? pageInfo?.hasNextPage
+      : pageInfo?.hasPreviousPage;
+
   return (
     <div data-testid="cursor-pagination-manager">
+      {paginationDirection === 'backward' && hasMore && (
+        <div className={styles.loadMoreSection}>
+          <button
+            type="button"
+            onClick={handleLoadMore}
+            disabled={isLoadingMore}
+            className={styles.loadMoreButton}
+            aria-label={t('loadMoreItems')}
+            data-testid="load-more-button"
+          >
+            {isLoadingMore ? t('loading') : t('loadMore')}
+          </button>
+        </div>
+      )}
       <div className={styles.itemsContainer}>
         {items.map((item, index) => {
           const key = keyExtractor ? keyExtractor(item, index) : index;
           return <div key={key}>{renderItem(item, index)}</div>;
         })}
       </div>
-      {pageInfo?.hasNextPage && (
+      {paginationDirection === 'forward' && hasMore && (
         <div className={styles.loadMoreSection}>
           <button
             type="button"

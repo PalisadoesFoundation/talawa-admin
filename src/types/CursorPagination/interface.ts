@@ -2,12 +2,23 @@ import type { DocumentNode } from 'graphql';
 import type { DefaultConnectionPageInfo } from '../pagination';
 
 /**
- * Helper type to combine pagination variables with custom query variables
+ * Helper type to combine pagination variables with custom query variables.
+ * Supports both forward pagination (first/after) and backward pagination (last/before).
  */
-export type PaginationVariables<T extends Record<string, unknown>> = T & {
-  first: number;
-  after: string | null;
-};
+export type PaginationVariables<T extends Record<string, unknown>> = T & (
+  | {
+    first: number;
+    after: string | null;
+    last?: never;
+    before?: never;
+  }
+  | {
+    last: number;
+    before: string | null;
+    first?: never;
+    after?: never;
+  }
+);
 
 /**
  * Represents the GraphQL connection structure with edges and pageInfo.
@@ -44,9 +55,30 @@ export interface InterfaceCursorPaginationManagerProps<
   query: DocumentNode;
 
   /**
-   * Query variables (excluding pagination variables like 'first' and 'after')
+   * Direction of pagination.
+   *
+   * - `'forward'`: Load next page using `first` and `after` parameters (default).
+   *   New items are appended to the end of the list.
+   * - `'backward'`: Load previous page using `last` and `before` parameters.
+   *   New items are prepended to the beginning. Used for chat messages.
+   *
+   * @defaultValue 'forward'
+   *
+   * @example
+   * ```tsx
+   * // Forward pagination (default):
+   * <CursorPaginationManager paginationDirection="forward" ... />
+   *
+   * // Backward pagination for chat messages:
+   * <CursorPaginationManager paginationDirection="backward" ... />
+   * ```
    */
-  queryVariables?: Omit<TVariables, 'first' | 'after'>;
+  paginationDirection?: 'forward' | 'backward';
+
+  /**
+   * Query variables (excluding pagination variables like 'first', 'after', 'last', 'before')
+   */
+  queryVariables?: Omit<TVariables, 'first' | 'after' | 'last' | 'before'>;
 
   /**
    * Dot-separated path to extract connection data from the query response
@@ -124,4 +156,29 @@ export interface InterfaceCursorPaginationManagerProps<
    * Can be a number (counter) or any value that changes
    */
   refetchTrigger?: number;
+
+  /**
+   * Optional ref to the scroll container element.
+   * Required for backward pagination to maintain scroll position when prepending items.
+   *
+   * @remarks
+   * When loading older messages in backward pagination, new items are prepended,
+   * which would normally cause the scroll position to jump. By providing a
+   * scrollContainerRef, the component automatically adjusts the scroll position
+   * to maintain the user's view.
+   *
+   * @example
+   * ```tsx
+   * const messagesRef = useRef<HTMLDivElement>(null);
+   *
+   * <div ref={messagesRef}>
+   *   <CursorPaginationManager
+   *     paginationDirection="backward"
+   *     scrollContainerRef={messagesRef}
+   *     ...
+   *   />
+   * </div>
+   * ```
+   */
+  scrollContainerRef?: React.RefObject<HTMLElement>;
 }
