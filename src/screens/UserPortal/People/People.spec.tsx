@@ -285,7 +285,7 @@ describe('People Component Tests', () => {
         );
         expect(screen.queryByTestId('people-name-1')).not.toBeInTheDocument();
       },
-      { timeout: 5000 },
+      { timeout: 2000 },
     );
   });
 
@@ -347,6 +347,20 @@ describe('People Component Tests', () => {
         '2@example.com',
       );
     });
+  });
+
+  it('renders Avatar placeholder when avatarURL is null', async () => {
+    renderComponent([defaultQueryMock]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('people-name-1')).toBeInTheDocument();
+    });
+
+    const avatarImages = screen.queryAllByAltText('avatar');
+    expect(avatarImages).toHaveLength(0);
+
+    expect(screen.getByText('Test User')).toBeInTheDocument();
+    expect(screen.getByText('Admin User')).toBeInTheDocument();
   });
 
   it('combines search and admin filter simultaneously', async () => {

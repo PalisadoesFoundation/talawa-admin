@@ -24,7 +24,7 @@
  * <OrganizationPeople />
  * ```
  *
- * @returns \{JSX.Element\} A JSX element rendering the organization people table.
+ * @returns A JSX element rendering the organization people table.
 
  * @remarks
  * Component state includes:
@@ -245,10 +245,7 @@ function OrganizationPeople(): JSX.Element {
       />
 
       {/* Organization People Table */}
-      <section
-        className={styles.tableContainer}
-        aria-label={t('organizationPeopleTable')}
-      >
+      <section className={styles.tableContainer}>
         <table
           className={styles.table}
           aria-label={t('organizationPeopleTable')}

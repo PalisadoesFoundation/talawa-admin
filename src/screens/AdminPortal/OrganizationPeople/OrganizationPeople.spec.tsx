@@ -750,8 +750,8 @@ describe('OrganizationPeople', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    // Check avatar exists with user's name in alt text
-    const avatar = screen.getByAltText(/John Doe/);
+    // Check avatar exists with proper alt text
+    const avatar = screen.getByAltText('avatar');
     expect(avatar).toBeInTheDocument();
     expect(avatar).toHaveAttribute('src', 'https://example.com/avatar1.jpg');
   });
