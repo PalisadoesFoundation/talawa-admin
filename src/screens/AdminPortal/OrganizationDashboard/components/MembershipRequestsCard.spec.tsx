@@ -52,6 +52,8 @@ describe('MembershipRequestsCard Component', () => {
   afterEach(() => {
     NotificationToastMocks.success.mockReset();
     NotificationToastMocks.error.mockReset();
+    NotificationToastMocks.warning.mockReset();
+    NotificationToastMocks.info.mockReset();
     NotificationToastMocks.dismiss.mockReset();
     vi.clearAllMocks();
     vi.restoreAllMocks();
