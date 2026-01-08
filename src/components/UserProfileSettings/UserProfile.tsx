@@ -44,6 +44,7 @@ import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import type { InterfaceUser } from 'types/User/interface';
+import './UserProfile.css';
 
 const joinedDate = (param: string | Date): string => {
   const date = typeof param === 'string' ? new Date(param) : param;
@@ -92,7 +93,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
             </div>
             <div className={styles.profileDetails}>
               <span
-                className={styles.profileName}
+                className="profileName"
                 data-tooltip-id="name"
                 data-tooltip-content={fullName || undefined}
               >

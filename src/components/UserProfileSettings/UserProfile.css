@@ -1,0 +1,5 @@
+/* Global class for prominent profile name display */
+.profileName {
+  font-weight: 700;
+  font-size: 28px;
+}
