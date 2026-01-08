@@ -58,7 +58,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import {
@@ -165,7 +165,9 @@ const loginPage = (): JSX.Element => {
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
     if (isLoggedIn == 'TRUE') {
-      navigate(getItem('userId') !== null ? '/user/organizations' : '/orglist');
+      navigate(
+        getItem('userId') !== null ? '/user/organizations' : '/admin/orglist',
+      );
       extendSession();
     }
   }, []);
@@ -395,7 +397,7 @@ const loginPage = (): JSX.Element => {
           return;
         }
         startSession();
-        navigate(role === 'admin' ? '/orglist' : '/user/organizations');
+        navigate(role === 'admin' ? '/admin/orglist' : '/user/organizations');
       } else {
         NotificationToast.warning(tErrors('notFound') as string);
       }

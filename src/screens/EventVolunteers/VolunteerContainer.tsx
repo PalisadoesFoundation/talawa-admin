@@ -31,7 +31,7 @@
  */
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router-dom';
 import styles from 'style/app-fixed.module.css';
 import { HiUserGroup, HiUser } from 'react-icons/hi2';
 import Volunteers from './Volunteers/Volunteers';

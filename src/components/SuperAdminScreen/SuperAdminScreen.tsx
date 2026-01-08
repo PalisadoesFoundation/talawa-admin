@@ -24,14 +24,17 @@
 import LeftDrawer from 'components/LeftDrawer/LeftDrawer';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation } from 'react-router';
+import { Outlet, useLocation } from 'react-router-dom';
 import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const superAdminScreen = (): React.ReactElement => {
   const location = useLocation();
   const { getItem, setItem } = useLocalStorage();
-  const titleKey = map[location.pathname.split('/')[1]];
+  // Split by '/' and filter out empty strings, then get the second segment (after 'admin')
+  const pathSegments = location.pathname.split('/').filter(Boolean);
+  const routeSegment = pathSegments[1]; // Get segment after 'admin'
+  const titleKey = map[routeSegment] || 'orgList'; // Default to orgList if not found
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
   const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
     const stored = getItem('sidebar');

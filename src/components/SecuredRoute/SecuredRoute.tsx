@@ -32,7 +32,7 @@
  */
 
 import React, { useEffect, useRef } from 'react';
-import { Navigate, Outlet } from 'react-router';
+import { Navigate, Outlet } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';

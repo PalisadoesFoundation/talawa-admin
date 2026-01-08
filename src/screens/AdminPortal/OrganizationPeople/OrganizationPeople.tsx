@@ -50,7 +50,7 @@
  */
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useParams, Link } from 'react-router';
+import { useLocation, useParams, Link } from 'react-router-dom';
 import { useLazyQuery } from '@apollo/client';
 import {
   GridCellParams,

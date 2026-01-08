@@ -33,7 +33,7 @@ import { ListGroup } from 'react-bootstrap';
 import AboutImg from 'assets/images/defaultImg.png';
 import styles from './OrganizationSidebar.module.css';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { Link, useParams } from 'react-router';
+import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,

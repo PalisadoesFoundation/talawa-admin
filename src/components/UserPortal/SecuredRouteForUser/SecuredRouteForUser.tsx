@@ -29,7 +29,7 @@
  * @requires `useLocalStorage` custom hook for local storage interaction.
  */
 import React, { useEffect, useRef } from 'react';
-import { Navigate, Outlet } from 'react-router';
+import { Navigate, Outlet } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import useLocalStorage from 'utils/useLocalstorage';

@@ -25,7 +25,7 @@
  * Sets up and cleans up the window resize event listener.
  */
 import React, { useEffect, useState } from 'react';
-import { Outlet } from 'react-router';
+import { Outlet } from 'react-router-dom';
 import styles from 'style/app-fixed.module.css';
 import { Button } from 'react-bootstrap';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';

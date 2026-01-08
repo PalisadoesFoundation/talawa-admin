@@ -39,7 +39,7 @@ import Modal from 'react-bootstrap/Modal';
 import { useMutation } from '@apollo/client';
 import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router-dom';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceOrgPeopleListCardProps } from 'types/Organization/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';

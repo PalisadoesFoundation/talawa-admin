@@ -54,7 +54,7 @@ import {
   EVENT_CHECKINS,
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 import type { InterfaceUserAttendee } from 'types/User/interface';

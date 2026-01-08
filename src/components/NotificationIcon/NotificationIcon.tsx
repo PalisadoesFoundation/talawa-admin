@@ -10,7 +10,7 @@ import { useQuery } from '@apollo/client';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 import { Dropdown } from 'react-bootstrap';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { useNavigate, useLocation } from 'react-router';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './NotificationIcon.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 

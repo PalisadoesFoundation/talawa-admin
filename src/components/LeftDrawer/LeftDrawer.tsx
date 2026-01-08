@@ -14,7 +14,7 @@
 
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaBell, FaUsers } from 'react-icons/fa';
+import { FaBell, FaUsers, FaUserCircle } from 'react-icons/fa';
 import OrganizationsIcon from 'assets/svgs/organizations.svg?react';
 import SettingsIcon from 'assets/svgs/settings.svg?react';
 import PluginLogo from 'assets/svgs/plugins.svg?react';
@@ -96,6 +96,16 @@ const LeftDrawer = ({
           icon={<FaBell />}
           label={t('notification')}
           testId="notificationBtn"
+          hideDrawer={hideDrawer}
+          onClick={handleLinkClick}
+          iconType="react-icon"
+        />
+
+        <SidebarNavItem
+          to="/user/organizations"
+          icon={<FaUserCircle />}
+          label={t('switchToUserPortal')}
+          testId="switchToUserPortalBtn"
           hideDrawer={hideDrawer}
           onClick={handleLinkClick}
           iconType="react-icon"

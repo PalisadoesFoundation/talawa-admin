@@ -19,7 +19,7 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router-dom';
 
 import { Groups, WarningAmberRounded } from '@mui/icons-material';
 

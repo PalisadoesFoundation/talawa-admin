@@ -30,7 +30,7 @@ import {
 import dayjs from 'dayjs';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';

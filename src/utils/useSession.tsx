@@ -4,7 +4,7 @@ import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { t } from 'i18next';
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from './useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';

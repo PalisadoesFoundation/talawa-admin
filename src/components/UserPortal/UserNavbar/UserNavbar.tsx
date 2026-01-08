@@ -57,7 +57,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 
 function userNavbar(): JSX.Element {

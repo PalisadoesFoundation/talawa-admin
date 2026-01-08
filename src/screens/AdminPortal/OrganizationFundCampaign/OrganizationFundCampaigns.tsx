@@ -4,7 +4,7 @@ import { Typography, Box, CircularProgress } from '@mui/material';
 import { type GridCellParams } from 'shared-components/DataGridWrapper';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { Navigate, useNavigate, useParams } from 'react-router';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
 import TableLoader from 'components/TableLoader/TableLoader';

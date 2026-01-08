@@ -37,7 +37,7 @@
  */
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Outlet, useLocation, useParams } from 'react-router';
+import { Outlet, useLocation, useParams } from 'react-router-dom';
 import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';

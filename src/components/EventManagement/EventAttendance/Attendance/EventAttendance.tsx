@@ -46,7 +46,7 @@ import { Button, Table } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useLazyQuery } from '@apollo/client';
 import { EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
-import { useParams, Link } from 'react-router';
+import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { AttendanceStatisticsModal } from '../Statistics/EventStatistics';
 import AttendedEventList from '../AttendanceList/AttendedEventList';

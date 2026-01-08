@@ -37,7 +37,7 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { Card, Row, Col } from 'react-bootstrap';
 import { MdChevronRight, MdLocationOn } from 'react-icons/md';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
 

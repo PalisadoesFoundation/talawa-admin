@@ -34,7 +34,7 @@ import React from 'react';
 import { TableBody, TableCell, TableRow, Table } from '@mui/material';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
-import { Link, useParams } from 'react-router';
+import { Link, useParams } from 'react-router-dom';
 import { formatDate } from 'utils/dateFormatter';
 import DateIcon from 'assets/svgs/cardItemDate.svg?react';
 import type { InterfaceEvent } from 'types/Event/interface';

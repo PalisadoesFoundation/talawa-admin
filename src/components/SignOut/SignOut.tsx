@@ -41,7 +41,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import useSession from 'utils/useSession';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 
 interface ISignOutProps {

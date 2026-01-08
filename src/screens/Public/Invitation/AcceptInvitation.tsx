@@ -3,7 +3,7 @@
  * Verifies a token, shows invite details, and allows the user to accept the invitation.
  */
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import {
   VERIFY_EVENT_INVITATION,

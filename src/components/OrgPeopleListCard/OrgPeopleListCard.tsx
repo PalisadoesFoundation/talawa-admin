@@ -36,7 +36,7 @@ import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
-import { useParams, Navigate } from 'react-router';
+import { useParams, Navigate } from 'react-router-dom';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import { Close } from '@mui/icons-material';

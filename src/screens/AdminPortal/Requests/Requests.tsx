@@ -76,7 +76,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import {
   dataGridStyle,

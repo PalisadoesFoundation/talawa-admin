@@ -20,7 +20,7 @@
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router-dom';
 
 import { Circle, WarningAmberRounded, Group } from '@mui/icons-material';
 import dayjs from 'dayjs';

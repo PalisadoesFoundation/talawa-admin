@@ -39,7 +39,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { debounce } from '@mui/material';
 import { Button } from 'react-bootstrap';
-import { Navigate, useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router-dom';
 import { FaXmark } from 'react-icons/fa6';
 import { WarningAmberRounded } from '@mui/icons-material';
 

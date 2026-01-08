@@ -27,7 +27,7 @@
 
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaBell } from 'react-icons/fa';
+import { FaBell, FaUserShield } from 'react-icons/fa';
 import styles from '../../../style/app-fixed.module.css';
 import { usePluginDrawerItems } from 'plugin';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
@@ -36,6 +36,7 @@ import IconComponent from 'components/IconComponent/IconComponent';
 import SidebarBase from 'shared-components/SidebarBase/SidebarBase';
 import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
 import SidebarPluginSection from 'shared-components/SidebarPluginSection/SidebarPluginSection';
+import useLocalStorage from 'utils/useLocalstorage';
 
 export interface InterfaceUserSidebarProps {
   hideDrawer: boolean;
@@ -48,6 +49,14 @@ const UserSidebar = ({
 }: InterfaceUserSidebarProps): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'userSidebarOrg' });
   const { t: tCommon } = useTranslation('common');
+  const { t: tLeftDrawer } = useTranslation('translation', {
+    keyPrefix: 'leftDrawer',
+  });
+  const { getItem } = useLocalStorage();
+
+  // Check if user is an administrator
+  const userRole = getItem('role');
+  const isAdministrator = userRole === 'administrator';
 
   // Memoize the parameters to prevent infinite re-renders
   const userPermissions = useMemo(() => [], []);
@@ -103,6 +112,19 @@ const UserSidebar = ({
           iconType="svg"
         />
 
+        {/* Show Switch to Admin Portal only if user is administrator */}
+        {isAdministrator && (
+          <SidebarNavItem
+            to="/admin/orglist"
+            icon={<FaUserShield />}
+            label={tLeftDrawer('switchToAdminPortal')}
+            testId="switchToAdminPortalBtn"
+            hideDrawer={hideDrawer}
+            onClick={handleLinkClick}
+            iconType="react-icon"
+          />
+        )}
+
         {/* Plugin Global Features Section */}
         <SidebarPluginSection
           pluginItems={pluginDrawerItems}
@@ -111,7 +133,15 @@ const UserSidebar = ({
         />
       </div>
     ),
-    [pluginDrawerItems, t, tCommon, hideDrawer, handleLinkClick],
+    [
+      pluginDrawerItems,
+      t,
+      tCommon,
+      tLeftDrawer,
+      hideDrawer,
+      handleLinkClick,
+      isAdministrator,
+    ],
   );
 
   return (

@@ -53,7 +53,7 @@ import { useQuery } from '@apollo/client';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 
