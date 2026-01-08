@@ -660,8 +660,8 @@ describe('OrganizationPeople', () => {
       },
       result: {
         data: {
-          removeMember: {
-            _id: 'member1',
+          deleteOrganizationMembership: {
+            id: 'member1',
           },
         },
       },
