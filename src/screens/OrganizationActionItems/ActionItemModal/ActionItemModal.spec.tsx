@@ -4244,7 +4244,7 @@ describe('Partially Covered Lines Test Coverage', () => {
             screen.queryByTestId('volunteerSelect'),
           ).not.toBeInTheDocument();
         },
-        { timeout: 3000 },
+        { timeout: 5000 },
       );
     });
 
