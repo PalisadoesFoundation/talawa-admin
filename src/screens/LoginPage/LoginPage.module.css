@@ -151,7 +151,7 @@
 }
 
 .row .left_portion .inner .palisadoes_logo {
-  width: var(--logo-5xl);
+  width: var(--logo-lg);
   height: auto;
 }
 
@@ -176,7 +176,7 @@
 
 .row .right_portion::-webkit-scrollbar-thumb {
   background-color: var(--color-black);
-  border-radius: var(--border-4);
+  border-radius: var(--radius-sm);
 }
 
 .row .right_portion .langChangeBtn {
@@ -214,7 +214,7 @@
   width: 100%;
 }
 
-@media (max-width: var(--breakpoint-lg)) {
+@media (max-width: 992px) {
   .row .left_portion {
     padding: var(--space-0) var(--space-8);
   }
@@ -224,7 +224,7 @@
   }
 }
 
-@media (max-width: var(--breakpoint-md)) {
+@media (max-width: 768px) {
   .row {
     flex-direction: column-reverse;
   }
@@ -264,7 +264,7 @@
   }
 }
 
-@media (max-width: var(--breakpoint-sm)) {
+@media (max-width: 576px) {
   .row .right_portion {
     padding: var(--space-5) var(--space-5) var(--space-0) var(--space-5);
   }
@@ -297,5 +297,25 @@
 
   .active_tab {
     animation: none;
+  }
+}
+
+/* Animations */
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

@@ -50,28 +50,28 @@
   right: -55%;
 }
 
-@media (max-width: var(--breakpoint-lg)) {
+@media (max-width: 992px) {
   .pageNotFound h1.head {
     font-size: var(--font-size-7xl);
     letter-spacing: var(--letter-spacing-extra-wide);
   }
 }
 
-@media (max-width: var(--breakpoint-md)) {
+@media (max-width: 768px) {
   .pageNotFound h1.head {
     font-size: var(--font-size-6xl);
     letter-spacing: var(--letter-spacing-extra-wide);
   }
 }
 
-@media (max-width: var(--breakpoint-650)) {
+@media (max-width: 650px) {
   .pageNotFound h1.head {
     font-size: var(--font-size-6xl);
     letter-spacing: 0;
   }
 }
 
-@media (max-width: var(--breakpoint-xs)) {
+@media (max-width: 480px) {
   .pageNotFound .brand h3 {
     font-size: var(--font-size-xl);
   }
@@ -96,29 +96,5 @@
 
   .pageNotFound p {
     font-size: var(--font-size-lg);
-  }
-}
-
-@media (max-width: var(--breakpoint-xs)) {
-  .pageNotFound .brand h3 {
-    font-size: var(--font-size-md);
-  }
-
-  .pageNotFound h1.head {
-    font-size: var(--font-size-5xl);
-    letter-spacing: 0;
-  }
-
-  .pageNotFound h1.head span:before,
-  .pageNotFound h1.head span:after {
-    width: 25%;
-  }
-
-  .pageNotFound h1.head span:before {
-    left: -30%;
-  }
-
-  .pageNotFound h1.head span:after {
-    right: -30%;
   }
 }
