@@ -999,4 +999,74 @@ describe('GroupChatDetails', () => {
     toastError.mockRestore();
     consoleError.mockRestore();
   });
+
+  describe('LoadingState Behavior', () => {
+    it('should show LoadingState spinner while chat details are loading', async () => {
+      useLocalStorage().setItem('userId', 'user1');
+
+      const delayedMocks = mocks.map((mock) => ({
+        ...mock,
+        delay: 300,
+      }));
+
+      render(
+        <I18nextProvider i18n={i18n}>
+          <MockedProvider mocks={delayedMocks} cache={testCache}>
+            <GroupChatDetails
+              toggleGroupChatDetailsModal={vi.fn()}
+              groupChatDetailsModalisOpen={true}
+              chat={withSafeChat(filledMockChat)}
+              chatRefetch={vi.fn()}
+            />
+          </MockedProvider>
+        </I18nextProvider>,
+      );
+
+      // Click "Add Members" to open the modal that triggers ORGANIZATION_MEMBERS query
+      const addMembersBtn = screen.getByTestId('addMembers');
+      await act(async () => {
+        fireEvent.click(addMembersBtn);
+      });
+
+      // Wait for spinner to appear during the ORGANIZATION_MEMBERS query loading
+      await waitFor(
+        () => {
+          const spinner = document.querySelector('[data-testid="spinner"]');
+          expect(spinner).toBeInTheDocument();
+        },
+        { timeout: 2000 },
+      );
+    });
+
+    it('should hide spinner and render chat details after LoadingState completes', async () => {
+      useLocalStorage().setItem('userId', 'user1');
+
+      render(
+        <I18nextProvider i18n={i18n}>
+          <MockedProvider mocks={mocks} cache={testCache}>
+            <GroupChatDetails
+              toggleGroupChatDetailsModal={vi.fn()}
+              groupChatDetailsModalisOpen={true}
+              chat={withSafeChat(filledMockChat)}
+              chatRefetch={vi.fn()}
+            />
+          </MockedProvider>
+        </I18nextProvider>,
+      );
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('editImageBtn')).toBeInTheDocument();
+        },
+        { timeout: 3000 },
+      );
+
+      const spinners = screen.queryAllByTestId('spinner');
+      const visibleSpinners = spinners.filter((spinner) => {
+        const parent = spinner.closest('[data-testid="loadingContainer"]');
+        return parent && !parent.classList.contains('hidden');
+      });
+      expect(visibleSpinners.length).toBe(0);
+    });
+  });
 });

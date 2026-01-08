@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Define forbidden patterns
 patterns=(-e '@mui/x-data-grid' -e '<DataGrid\b')

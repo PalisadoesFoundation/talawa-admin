@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<`TestInterfaceUpdateTimeoutProps`\>
 
-Defined in: [src/components/UpdateSession/UpdateSession.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UpdateSession/UpdateSession.tsx#L54)
+Defined in: [src/components/UpdateSession/UpdateSession.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UpdateSession/UpdateSession.tsx#L52)

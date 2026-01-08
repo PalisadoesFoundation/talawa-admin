@@ -73,6 +73,13 @@
     "communityLogo": "Community Logo",
     "organizations": "Organizations"
   },
+  "adminProfile": {
+    "title": "Admin Profile",
+    "settings": "Settings",
+    "profile": "Profile",
+    "personalInfo": "Personal Information",
+    "accountSettings": "Account Settings"
+  },
   "signOut": {
     "retryPrompt": "Failed to revoke session. Retry?",
     "signingOut": "Signing out...",
@@ -478,7 +485,8 @@
     "errorOccurredWhileLoadingAssignedUser": "Error occurred while loading assigned users",
     "tagActions": "Tag Actions",
     "loadAssignedUsersError": "Error occurred while loading assigned users",
-    "sortPeople": "Sort People"
+    "sortPeople": "Sort People",
+    "noTagsFound": "No tags found"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
@@ -517,7 +525,6 @@
     "recurringEvent": "Recurring Event",
     "recurring": "Recurring",
     "isPublic": "Is Public",
-    "publicEvent": "Is Public",
     "isRegistrable": "Is Registrable",
     "registerable": "Is Registerable",
     "createChat": "Create Chat",
@@ -697,7 +704,9 @@
     "agendaItemUpdated": "Agenda Item updated successfully",
     "agendaItemDeleted": "Agenda Item deleted successfully",
     "deleteAgendaItem": "Delete Agenda Item",
-    "deleteAgendaItemMsg": "Do you want to remove this agenda item?"
+    "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
+    "event": "Event",
+    "search": "Search"
   },
   "eventListCard": {
     "deleteEvent": "Delete Event",
@@ -982,6 +991,7 @@
     "backToEvents": "Back to Events"
   },
   "eventAttendance": {
+    "event_attendance_table": "Event Attendance Table",
     "historical_statistics": "Historical Statistics",
     "Search member": "Search member",
     "Member Name": "Member Name",
@@ -1348,11 +1358,15 @@
     "editPost": "Edit Post",
     "pinPost": "Pin Post",
     "unpinPost": "Unpin Post",
+    "like": "Like post",
+    "unlike": "Unlike post",
+    "share": "Share post",
     "viewComments": "View {{count}} comments",
     "hideComments": "Hide comments",
     "loadingComments": "Loading comments…",
     "loadMoreComments": "Load more comments",
     "noMoreComments": "No more comments",
+    "noComments": "No comments",
     "moreOptions": "more options",
     "postedOn": "Posted on {{date}}",
     "emptyCommentError": "Please enter a comment before submitting.",
@@ -1529,7 +1543,6 @@
     "eventName": "Name",
     "enterName": "Enter Name",
     "enterDescription": "Enter Description",
-    "publicEvent": "Is Public",
     "registerable": "Is Registerable",
     "createChat": "Create Chat",
     "monthlyCalendarView": "Monthly Calendar",
@@ -1658,6 +1671,9 @@
     "newGroup": "New Group",
     "groupName": "Group name",
     "groupDescription": "Group Description",
+    "confirmRemoveMember": "Confirm Remove Member",
+    "failedToAddUser": "Failed to Add User",
+    "userAddedSuccessfully": "User Added Successfully",
     "next": "Next"
   },
   "userChatRoom": {

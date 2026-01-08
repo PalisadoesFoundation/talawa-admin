@@ -1,7 +1,9 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -233,8 +235,10 @@ describe('Testing Leaderboard Screen', () => {
     expect(timeFrameMonthly).toBeInTheDocument();
     fireEvent.click(timeFrameMonthly);
 
-    const userName = await screen.findAllByTestId('userName');
-    expect(userName).toHaveLength(2);
+    await waitFor(() => {
+      const userName = screen.getAllByTestId('userName');
+      expect(userName).toHaveLength(2);
+    });
   });
 
   it('Check Timeframe filter Functionality (Yearly)', async () => {
@@ -284,9 +288,9 @@ describe('Testing Leaderboard Screen', () => {
   it('OnClick of Member navigate to Member Screen', async () => {
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
-
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
 
     const userName = screen.getAllByTestId('userName');
     await userEvent.click(userName[0]);
@@ -300,24 +304,24 @@ describe('Testing Leaderboard Screen', () => {
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
-
     const userName = screen.getAllByTestId('userName');
     userName[0].focus();
     fireEvent.keyDown(userName[0], { key: 'Enter' });
-
-    await waitFor(() => {
-      expect(screen.getByTestId('memberScreen')).toBeInTheDocument();
-    });
+    expect(screen.getByTestId('memberScreen')).toBeInTheDocument();
   });
 
   it('OnKeyDown Space key on Member navigate to Member Screen', async () => {
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
 
     const userName = screen.getAllByTestId('userName');
     userName[0].focus();
@@ -369,12 +373,26 @@ describe('Testing Leaderboard Screen', () => {
     );
   });
 
-  it('Error while fetching volunteer data', async () => {
+  it('should display error message when data fetch fails', async () => {
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link2);
 
+    // Should render component even during error state
     await waitFor(() => {
       expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
+    });
+  });
+
+  it('should show spinner while loading data', async () => {
+    routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
+    renderLeaderboard(link1);
+
+    // Verify spinner is initially visible during loading
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+
+    // Then verify content appears after loading completes
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
     });
   });
 });
