@@ -1,14 +1,19 @@
 /**
- * Renders a modal for creating a new agenda category.
+ * AgendaCategoryCreateModal Component
  *
- * @remarks
- * This modal provides a form to enter the agenda category name and description.
- * It manages form state externally via props and triggers a submit handler
- * when the form is submitted.
+ * This component renders a modal for creating a new agenda category.
+ * It provides a form with fields for the category name and description,
+ * and allows users to submit the new category.
  *
- * @param props - Props for {@link InterfaceAgendaCategoryCreateModalProps}.
+ * @param props - The props for the component.
+ * @param agendaCategoryCreateModalIsOpen - Determines if the modal is open or closed.
+ * @param hideCreateModal - Function to hide/close the modal.
+ * @param formState - Current state of the form containing name, description, and createdBy.
+ * @param setFormState - Function to update the form state.
+ * @param createAgendaCategoryHandler - Async function to handle the agenda category creation.
+ * @param t - Translation function for internationalized strings.
  *
- * @returns A JSX element rendering the agenda category creation modal.
+ * @returns A React functional component that renders the create modal.
  */
 import React from 'react';
 import { Form, Button } from 'react-bootstrap';

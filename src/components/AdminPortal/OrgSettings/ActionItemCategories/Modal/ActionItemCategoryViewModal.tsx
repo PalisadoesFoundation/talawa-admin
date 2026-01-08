@@ -93,23 +93,23 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
                   sx={{
                     fontSize: '0.8rem',
                     color: category.isDisabled
-                      ? 'var(----errorIcon-color)'
-                      : 'var(----bs-success)',
+                      ? 'var(--errorIcon-color)'
+                      : 'var(--bs-success)',
                   }}
                   className="me-6"
                 />
               ),
               style: {
                 color: category.isDisabled
-                  ? 'var(----errorIcon-color)'
-                  : 'var(----bs-success)',
+                  ? 'var(--errorIcon-color)'
+                  : 'var(--bs-success)',
               },
             }}
             inputProps={{
               style: {
                 WebkitTextFillColor: category.isDisabled
-                  ? 'var(----errorIcon-color)'
-                  : 'var(----bs-success)',
+                  ? 'var(--errorIcon-color)'
+                  : 'var(--bs-success)',
               },
             }}
             disabled

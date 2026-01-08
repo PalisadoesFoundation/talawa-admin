@@ -23,7 +23,7 @@
  * - The `hideTagActionsModal` function is triggered when the close button is clicked.
  *
  * File: This file is located at:
- * `/src/screens/ManageTag/ManageTagMockComponents/MockTagActions.tsx`
+ * `/src/screens/AdminPortal/ManageTag/ManageTagMockComponents/MockTagActions.tsx`
  */
 import React from 'react';
 import type { InterfaceTagActionsProps } from 'components/AdminPortal/TagActions/TagActions';

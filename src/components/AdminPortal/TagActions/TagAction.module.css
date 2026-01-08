@@ -6,11 +6,11 @@
   margin: 0;
 }
 
-.cursor_pointer {
+.cursorPointer {
   cursor: pointer;
 }
 
-.subtags_scrollable_div {
+.subtagsScrollableDiv {
   max-height: 300px;
   overflow: auto;
 }

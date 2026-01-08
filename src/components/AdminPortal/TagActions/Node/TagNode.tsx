@@ -137,7 +137,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
           <>
             <span
               onClick={handleTagClick}
-              className={`me-3 ${componentStyle.cursor_pointer}`}
+              className={`me-3 ${componentStyle.cursorPointer}`}
               data-testid={`expandSubTags${tag._id}`}
               aria-label={expanded ? t('collapse') : t('expand')}
             >
@@ -146,7 +146,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
             <input
               type="checkbox"
               checked={checkedTags.has(tag._id)}
-              className={`me-2 ${componentStyle.cursor_pointer}`}
+              className={`me-2 ${componentStyle.cursorPointer}`}
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
               id={`checkbox-${tag._id}`}
@@ -160,7 +160,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
             <input
               type="checkbox"
               checked={checkedTags.has(tag._id)}
-              className={`ms-1 me-2 ${componentStyle.cursor_pointer}`}
+              className={`ms-1 me-2 ${componentStyle.cursorpointer}`}
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
               aria-label={tag.name}
@@ -182,9 +182,11 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
       {expanded && subTagsList?.length && (
         <div className="me-4">
           <div
+            // i18n-ignore-next-line
             id={`subTagsScrollableDiv${tag._id}`}
+            // i18n-ignore-next-line
             data-testid={`subTagsScrollableDiv${tag._id}`}
-            className={componentStyle.subtags_scrollable_div}
+            className={componentStyle.subtagsScrollableDiv}
           >
             <InfiniteScroll
               dataLength={subTagsList?.length ?? 0}
@@ -194,6 +196,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
                 false
               }
               loader={<InfiniteScrollLoader />}
+              // i18n-ignore-next-line
               scrollableTarget={`subTagsScrollableDiv${tag._id}`}
             >
               {subTagsList.map((tag: InterfaceTagData) => (
