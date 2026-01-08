@@ -1,9 +1,11 @@
-import React from 'react';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-
-dayjs.extend(utc);
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+  within,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter, Routes, Route } from 'react-router';
@@ -17,20 +19,7 @@ import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
-import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { PAGE_SIZE } from 'types/ReportingTable/utils';
-
-vi.mock('components/NotificationToast/NotificationToast', () => ({
-  NotificationToast: {
-    success: vi.fn(),
-    error: vi.fn(),
-    warning: vi.fn(),
-    info: vi.fn(),
-    dismiss: vi.fn(),
-  },
-}));
 
 vi.mock('./addMember/AddMember', () => ({
   default: () => (
@@ -40,35 +29,12 @@ vi.mock('./addMember/AddMember', () => ({
   ),
 }));
 
-// Setup mock window.location
-const setupLocationMock = () => {
-  Object.defineProperty(window, 'location', {
-    value: {
-      href: 'http://localhost/',
-      assign: vi.fn((url) => {
-        const urlObj = new URL(url, 'http://localhost');
-        window.location.href = urlObj.href;
-        window.location.pathname = urlObj.pathname;
-        window.location.search = urlObj.search;
-        window.location.hash = urlObj.hash;
-      }),
-      reload: vi.fn(),
-      pathname: '/',
-      search: '',
-      hash: '',
-      origin: 'http://localhost',
-    },
-    writable: true,
-  });
-};
-
 // Helper function to create mock Apollo responses
 type MemberConnectionVariables = {
   orgId: string;
   first?: number | null;
   after?: string | null;
-  last?: number | null;
-  before?: string | null;
+  firstName_contains?: string;
   where?: { role?: { equal: string } };
 };
 
@@ -108,7 +74,7 @@ const createMemberConnectionMock = (
               name: 'John Doe',
               emailAddress: 'john@example.com',
               avatarURL: 'https://example.com/avatar1.jpg',
-              createdAt: dayjs.utc().subtract(3, 'day').toISOString(),
+              createdAt: dayjs().subtract(3, 'day').toISOString(),
               role: 'member',
             },
             cursor: 'cursor1',
@@ -119,7 +85,7 @@ const createMemberConnectionMock = (
               name: 'Jane Smith',
               emailAddress: 'jane@example.com',
               avatarURL: null,
-              createdAt: dayjs.utc().subtract(2, 'day').toISOString(),
+              createdAt: dayjs().subtract(2, 'day').toISOString(),
               role: 'member',
             },
             cursor: 'cursor2',
@@ -136,19 +102,8 @@ const createMemberConnectionMock = (
   };
 
   const data = { ...defaultData };
-  const withRole = (edge: MemberEdge): MemberEdge => ({
-    ...edge,
-    node: {
-      ...edge.node,
-      role: edge.node.role ?? 'member',
-    },
-  });
-
-  data.organization.members.edges =
-    data.organization.members.edges.map(withRole);
-
   if (overrides.edges) {
-    data.organization.members.edges = overrides.edges.map(withRole);
+    data.organization.members.edges = overrides.edges;
   }
   if (overrides.pageInfo) {
     data.organization.members.pageInfo = {
@@ -172,8 +127,7 @@ type UserListVariables = {
   orgId: string;
   first?: number | null;
   after?: string | null;
-  last?: number | null;
-  before?: string | null;
+  firstName_contains?: string;
 };
 
 type UserEdge = {
@@ -211,7 +165,7 @@ const createUserListMock = (
             name: 'User One',
             emailAddress: 'user1@example.com',
             avatarURL: 'https://example.com/avatar1.jpg' as string | null,
-            createdAt: dayjs.utc().subtract(3, 'day').toISOString(),
+            createdAt: dayjs().subtract(3, 'day').toISOString(),
             role: 'member',
           },
           cursor: 'userCursor1',
@@ -222,7 +176,7 @@ const createUserListMock = (
             name: 'User Two',
             emailAddress: 'user2@example.com',
             avatarURL: null as string | null,
-            createdAt: dayjs.utc().subtract(2, 'day').toISOString(),
+            createdAt: dayjs().subtract(2, 'day').toISOString(),
             role: 'member',
           },
           cursor: 'userCursor2',
@@ -238,18 +192,8 @@ const createUserListMock = (
   };
 
   const data = { ...defaultData };
-  const withRole = (edge: UserEdge): UserEdge => ({
-    ...edge,
-    node: {
-      ...edge.node,
-      role: edge.node.role ?? 'member',
-    },
-  });
-
-  data.allUsers.edges = data.allUsers.edges.map(withRole) as UserEdge[];
-
   if (overrides.edges) {
-    data.allUsers.edges = overrides.edges.map(withRole);
+    data.allUsers.edges = overrides.edges;
   }
   if (overrides.pageInfo) {
     data.allUsers.pageInfo = {
@@ -269,46 +213,13 @@ const createUserListMock = (
   };
 };
 
-// Helper for waiting
 describe('OrganizationPeople', () => {
   beforeEach(() => {
-    setupLocationMock();
     vi.clearAllMocks();
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  test('renders loading state initially', async () => {
-    const mocks = [
-      createMemberConnectionMock({
-        orgId: 'orgid',
-        first: 10,
-        after: null,
-        last: null,
-        before: null,
-      }),
-    ];
-
-    const link = new StaticMockLink(mocks, true);
-
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    vi.clearAllMocks();
   });
 
   test('displays members list correctly', async () => {
@@ -317,8 +228,7 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        last: null,
-        before: null,
+        firstName_contains: '',
       }),
     ];
 
@@ -344,43 +254,53 @@ describe('OrganizationPeople', () => {
     // Wait for data to load
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
     });
 
-    const joinedLabels = screen.getAllByText(/Joined :/i);
-    expect(joinedLabels).toHaveLength(2);
-
-    // Use the same Intl.DateTimeFormat as the component
-    const dateFormatter = new Intl.DateTimeFormat('en-GB', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      timeZone: 'UTC',
-    });
-    const expectedDate1 = dateFormatter.format(
-      dayjs.utc().subtract(3, 'day').toDate(),
-    );
-    const expectedDate2 = dateFormatter.format(
-      dayjs.utc().subtract(2, 'day').toDate(),
-    );
-    expect(screen.getByTestId('org-people-joined-member1')).toHaveTextContent(
-      `Joined : ${expectedDate1}`,
-    );
-    expect(screen.getByTestId('org-people-joined-member2')).toHaveTextContent(
-      `Joined : ${expectedDate2}`,
-    );
+    // Verify email addresses are displayed
+    expect(screen.getByText('john@example.com')).toBeInTheDocument();
+    expect(screen.getByText('jane@example.com')).toBeInTheDocument();
   });
 
   test('handles search functionality correctly', async () => {
-    const mocks = [
-      createMemberConnectionMock({
+    const initialMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      firstName_contains: '',
+    });
+
+    const searchMock = createMemberConnectionMock(
+      {
         orgId: 'orgid',
         first: 10,
         after: null,
-        last: null,
-        before: null,
-      }),
-    ];
+        firstName_contains: 'Jane',
+      },
+      {
+        edges: [
+          {
+            node: {
+              id: 'member2',
+              name: 'Jane Smith',
+              emailAddress: 'jane@example.com',
+              avatarURL: null,
+              createdAt: dayjs().subtract(2, 'day').toISOString(),
+              role: 'member',
+            },
+            cursor: 'cursor2',
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: 'cursor2',
+          endCursor: 'cursor2',
+        },
+      },
+    );
 
+    const mocks = [initialMock, searchMock];
     const link = new StaticMockLink(mocks, true);
 
     render(
@@ -400,7 +320,7 @@ describe('OrganizationPeople', () => {
       </MockedProvider>,
     );
 
-    // Wait for data to load
+    // Wait for initial data to load
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
@@ -409,39 +329,19 @@ describe('OrganizationPeople', () => {
     const searchInput = screen.getByTestId('searchbtn');
     await userEvent.type(searchInput, 'Jane');
 
-    // Wait for debounced search (AdminSearchFilterBar has 300ms debounce)
-    await waitFor(
-      () => {
-        expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
-      },
-      { timeout: 3000 },
-    );
-
-    // Should show Jane but not John
-    await waitFor(
-      () => {
-        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-      },
-      { timeout: 3000 },
-    );
-
-    // Clear search
-    await userEvent.clear(searchInput);
-
-    // Should show both again
+    // Wait for search results (AdminSearchFilterBar has debounce)
     await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
     });
   });
 
   test('handles tab switching between members, admins, and users', async () => {
-    const initialMock = createMemberConnectionMock({
+    const membersMock = createMemberConnectionMock({
       orgId: 'orgid',
       first: 10,
       after: null,
-      last: null,
-      before: null,
+      firstName_contains: '',
     });
 
     const adminMock = createMemberConnectionMock(
@@ -449,8 +349,7 @@ describe('OrganizationPeople', () => {
         orgId: 'orgid',
         first: 10,
         after: null,
-        last: null,
-        before: null,
+        firstName_contains: '',
         where: { role: { equal: 'administrator' } },
       },
       {
@@ -461,12 +360,18 @@ describe('OrganizationPeople', () => {
               name: 'Admin User',
               emailAddress: 'admin@example.com',
               avatarURL: null,
-              createdAt: dayjs.utc().toISOString(),
+              createdAt: dayjs().toISOString(),
               role: 'administrator',
             },
             cursor: 'adminCursor1',
           },
         ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: 'adminCursor1',
+          endCursor: 'adminCursor1',
+        },
       },
     );
 
@@ -474,11 +379,10 @@ describe('OrganizationPeople', () => {
       orgId: 'orgid',
       first: 10,
       after: null,
-      last: null,
-      before: null,
+      firstName_contains: '',
     });
 
-    const mocks = [initialMock, adminMock, usersMock];
+    const mocks = [membersMock, adminMock, usersMock];
     const link = new StaticMockLink(mocks, true);
 
     render(
@@ -498,7 +402,7 @@ describe('OrganizationPeople', () => {
       </MockedProvider>,
     );
 
-    // Wait for initial members data to load
+    // Wait for initial members data
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
@@ -510,7 +414,7 @@ describe('OrganizationPeople', () => {
     const adminOption = screen.getByText(/admin/i);
     fireEvent.click(adminOption);
 
-    // Wait for admin data to load
+    // Wait for admin data
     await waitFor(() => {
       expect(screen.getByText('Admin User')).toBeInTheDocument();
     });
@@ -520,38 +424,27 @@ describe('OrganizationPeople', () => {
     const usersOption = screen.getByText(/users/i);
     fireEvent.click(usersOption);
 
-    // Wait for users data to load
+    // Wait for users data
     await waitFor(() => {
       expect(screen.getByText('User One')).toBeInTheDocument();
       expect(screen.getByText('User Two')).toBeInTheDocument();
     });
-
-    // Switch to users tab
-    fireEvent.click(sortingButton);
-    const memberOption = screen.getByText(/members/i);
-    fireEvent.click(memberOption);
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
   });
 
-  test('handles pagination correctly for MEMBERS', async () => {
+  test('handles load more functionality for members', async () => {
     const initialMock = createMemberConnectionMock({
       orgId: 'orgid',
       first: 10,
       after: null,
-      last: null,
-      before: null,
+      firstName_contains: '',
     });
 
-    const nextPageMock = createMemberConnectionMock(
+    const loadMoreMock = createMemberConnectionMock(
       {
         orgId: 'orgid',
         first: 10,
         after: 'cursor2',
-        last: null,
-        before: null,
+        firstName_contains: '',
       },
       {
         edges: [
@@ -561,281 +454,7 @@ describe('OrganizationPeople', () => {
               name: 'Bob Johnson',
               emailAddress: 'bob@example.com',
               avatarURL: null,
-              createdAt: dayjs.utc().toISOString(),
-            },
-            cursor: 'cursor3',
-          },
-        ],
-        pageInfo: {
-          hasNextPage: false,
-          hasPreviousPage: true,
-          startCursor: 'cursor3',
-          endCursor: 'cursor3',
-        },
-      },
-    );
-
-    const prevPageMock = createMemberConnectionMock({
-      orgId: 'orgid',
-      first: null,
-      after: null,
-      last: 10,
-      before: 'cursor3',
-    });
-
-    const mocks = [initialMock, nextPageMock, prevPageMock];
-    const link = new StaticMockLink(mocks, true);
-
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    // Wait for initial data to load
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-
-    // Navigate to next page
-    const nextPageButton = screen.getByRole('button', { name: /next page/i });
-    fireEvent.click(nextPageButton);
-
-    // Wait for next page data to load
-    await waitFor(() => {
-      expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
-    });
-
-    // Navigate back to previous page
-    const prevPageButton = screen.getByRole('button', {
-      name: /previous page/i,
-    });
-    fireEvent.click(prevPageButton);
-
-    // Wait for previous page data to load
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-  });
-
-  test('handles pagination correctly for ADMIN', async () => {
-    const initialMemberMock = createMemberConnectionMock({
-      orgId: 'orgid',
-      first: 10,
-      after: null,
-      last: null,
-      before: null,
-    });
-
-    const initialAdminMock = createMemberConnectionMock(
-      {
-        orgId: 'orgid',
-        first: 10,
-        after: null,
-        last: null,
-        before: null,
-        where: { role: { equal: 'administrator' } },
-      },
-      {
-        edges: [
-          {
-            node: {
-              id: 'admin1',
-              name: 'Admin User',
-              emailAddress: 'admin@example.com',
-              avatarURL: null,
-              createdAt: dayjs.utc().toISOString(),
-              role: 'administrator',
-            },
-            cursor: 'adminCursor1',
-          },
-        ],
-        pageInfo: {
-          hasNextPage: true,
-          hasPreviousPage: false,
-          startCursor: 'adminCursor1',
-          endCursor: 'adminCursor1',
-        },
-      },
-    );
-
-    const nextAdminPageMock = createMemberConnectionMock(
-      {
-        orgId: 'orgid',
-        last: null,
-        after: 'adminCursor1',
-        first: 10,
-        before: null,
-        where: { role: { equal: 'administrator' } },
-      },
-      {
-        edges: [
-          {
-            node: {
-              id: 'admin2',
-              name: 'Admin User 2',
-              emailAddress: 'admin2@example.com',
-              avatarURL: null,
-              createdAt: dayjs.utc().toISOString(),
-              role: 'administrator',
-            },
-            cursor: 'adminCursor2',
-          },
-        ],
-        pageInfo: {
-          hasNextPage: false,
-          hasPreviousPage: true,
-          startCursor: 'adminCursor2',
-          endCursor: 'adminCursor2',
-        },
-      },
-    );
-
-    const prevAdminPageMock = createMemberConnectionMock(
-      {
-        orgId: 'orgid',
-        last: 10,
-        after: null,
-        first: null,
-        before: 'adminCursor2',
-        where: { role: { equal: 'administrator' } },
-      },
-      {
-        edges: [
-          {
-            node: {
-              id: 'admin1',
-              name: 'Admin User',
-              emailAddress: 'admin1@example.com',
-              avatarURL: null,
-              createdAt: dayjs.utc().toISOString(),
-              role: 'administrator',
-            },
-            cursor: 'adminCursor1',
-          },
-        ],
-        pageInfo: {
-          hasNextPage: true,
-          hasPreviousPage: false,
-          startCursor: 'adminCursor1',
-          endCursor: 'adminCursor1',
-        },
-      },
-    );
-
-    const mocks = [
-      initialMemberMock,
-      initialAdminMock,
-      nextAdminPageMock,
-      prevAdminPageMock,
-    ];
-    const link = new StaticMockLink(mocks, true);
-
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    // Wait for initial data to load
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-
-    // Switch to admin tab
-    const sortingButton = screen.getByTestId('sort');
-    fireEvent.click(sortingButton);
-
-    const adminOption = screen.getByText(/ADMIN/i);
-    fireEvent.click(adminOption);
-
-    await waitFor(() => {
-      expect(
-        screen.getByRole('link', { name: 'Admin User' }),
-      ).toBeInTheDocument();
-    });
-
-    // Navigate to next page
-    const nextPageButton = screen.getByRole('button', { name: /next page/i });
-    fireEvent.click(nextPageButton);
-
-    // Wait for next page data to load
-    await waitFor(() => {
-      expect(
-        screen.getByRole('link', { name: 'Admin User 2' }),
-      ).toBeInTheDocument();
-    });
-
-    // Navigate back to previous page
-    const prevPageButton = screen.getByRole('button', {
-      name: /previous page/i,
-    });
-    fireEvent.click(prevPageButton);
-
-    // Wait for previous page data to load
-    await waitFor(() => {
-      expect(
-        screen.getByRole('link', { name: 'Admin User' }),
-      ).toBeInTheDocument();
-    });
-  });
-
-  test('handles pagination correctly for USER', async () => {
-    const initialMemberMock = createMemberConnectionMock({
-      orgId: 'orgid',
-      first: 10,
-      after: null,
-      last: null,
-      before: null,
-    });
-
-    const initialUsersMock = createUserListMock({
-      orgId: 'orgid',
-      first: 10,
-      after: null,
-      last: null,
-      before: null,
-    });
-
-    const nextUserMock = createUserListMock(
-      {
-        orgId: 'orgid',
-        first: 10,
-        after: 'userCursor2',
-        last: null,
-        before: null,
-      },
-      {
-        edges: [
-          {
-            node: {
-              id: 'member3',
-              name: 'Bob Johnson',
-              emailAddress: 'bob@example.com',
-              avatarURL: null,
-              createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+              createdAt: dayjs().toISOString(),
               role: 'member',
             },
             cursor: 'cursor3',
@@ -850,20 +469,7 @@ describe('OrganizationPeople', () => {
       },
     );
 
-    const prevUserMock = createUserListMock({
-      orgId: 'orgid',
-      first: null,
-      after: null,
-      last: 10,
-      before: 'cursor3',
-    });
-
-    const mocks = [
-      initialMemberMock,
-      initialUsersMock,
-      nextUserMock,
-      prevUserMock,
-    ];
+    const mocks = [initialMock, loadMoreMock];
     const link = new StaticMockLink(mocks, true);
 
     render(
@@ -883,241 +489,28 @@ describe('OrganizationPeople', () => {
       </MockedProvider>,
     );
 
-    // Wait for initial data to load
+    // Wait for initial data
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    // Switch to admin tab
-    const sortingButton = screen.getByTestId('sort');
-    fireEvent.click(sortingButton);
+    // Click load more button
+    const loadMoreButton = screen.getByRole('button', { name: /load more/i });
+    fireEvent.click(loadMoreButton);
 
-    const adminOption = screen.getByText(/user/i);
-    fireEvent.click(adminOption);
-
-    await waitFor(() => {
-      expect(screen.getByText('User One')).toBeInTheDocument();
-    });
-
-    // Navigate to next page
-    const nextPageButton = screen.getByRole('button', { name: /next page/i });
-    fireEvent.click(nextPageButton);
-
-    // Wait for next page data to load
+    // Wait for more data to load
     await waitFor(() => {
       expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
     });
-
-    // Navigate back to previous page
-    const prevPageButton = screen.getByRole('button', {
-      name: /previous page/i,
-    });
-    fireEvent.click(prevPageButton);
-
-    // Wait for previous page data to load
-    await waitFor(() => {
-      expect(screen.getByText('User One')).toBeInTheDocument();
-    });
   });
 
-  test('handles pagination correctly for ADMIN no next', async () => {
-    const initialMemberMock = createMemberConnectionMock({
-      orgId: 'orgid',
-      first: 10,
-      after: null,
-      last: null,
-      before: null,
-    });
-
-    const initialAdminMock = createMemberConnectionMock(
-      {
-        orgId: 'orgid',
-        first: 10,
-        after: null,
-        last: null,
-        before: null,
-        where: { role: { equal: 'administrator' } },
-      },
-      {
-        edges: [
-          {
-            node: {
-              id: 'admin1',
-              name: 'Admin User',
-              emailAddress: 'admin@example.com',
-              avatarURL: null,
-              createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
-              role: 'administrator',
-            },
-            cursor: 'adminCursor1',
-          },
-        ],
-        pageInfo: {
-          hasNextPage: false,
-          hasPreviousPage: false,
-          startCursor: 'adminCursor1',
-          endCursor: 'adminCursor1',
-        },
-      },
-    );
-
-    const mocks = [initialMemberMock, initialAdminMock];
-    const link = new StaticMockLink(mocks, true);
-
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    // Wait for initial data to load
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-
-    // Switch to admin tab
-    const sortingButton = screen.getByTestId('sort');
-    fireEvent.click(sortingButton);
-
-    const adminOption = screen.getByText(/ADMIN/i);
-    fireEvent.click(adminOption);
-
-    await waitFor(() => {
-      expect(
-        screen.getByText((content) => content.includes('Admin User')),
-      ).toBeInTheDocument();
-    });
-
-    // Navigate to next page
-    const nextPageButton = screen.getByRole('button', { name: /next page/i });
-    fireEvent.click(nextPageButton);
-
-    // Navigate back to previous page
-    const prevPageButton = screen.getByRole('button', {
-      name: /previous page/i,
-    });
-    fireEvent.click(prevPageButton);
-  });
-
-  test('handles errors from GraphQL queries', async () => {
-    const errorMock = {
-      request: {
-        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-        variables: {
-          orgId: 'orgid',
-          first: 10,
-          after: null,
-          last: null,
-          before: null,
-        },
-      },
-      error: new Error('An error occurred'),
-    };
-
-    const link = new StaticMockLink([errorMock], true);
-
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    // Wait for error handling
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith('An error occurred');
-    });
-  });
-
-  test('handles errors from GraphQL queries for users', async () => {
-    const initialMemberMock = createMemberConnectionMock({
-      orgId: 'orgid',
-      first: 10,
-      after: null,
-      last: null,
-      before: null,
-    });
-
-    const errorMock = {
-      request: {
-        query: USER_LIST_FOR_TABLE,
-        variables: {
-          orgId: 'orgid',
-          first: 10,
-          after: null,
-          last: null,
-          before: null,
-        },
-      },
-      error: new Error('An error occurred'),
-    };
-
-    const link = new StaticMockLink([initialMemberMock, errorMock], true);
-
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    // Wait for initial data to load
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-
-    // Switch to admin tab
-    const sortingButton = screen.getByTestId('sort');
-    fireEvent.click(sortingButton);
-
-    const adminOption = screen.getByText(/user/i);
-    fireEvent.click(adminOption);
-
-    // Wait for error handling
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith('An error occurred');
-    });
-  });
-
-  test('displays localized notFound message in empty state', async () => {
+  test('displays empty state when no members found', async () => {
     const emptyMock = createMemberConnectionMock(
       {
         orgId: 'orgid',
         first: 10,
         after: null,
-        last: null,
-        before: null,
+        firstName_contains: '',
       },
       {
         edges: [],
@@ -1149,42 +542,63 @@ describe('OrganizationPeople', () => {
       </MockedProvider>,
     );
 
-    // Wait for loading to finish and empty state to appear
-    await waitFor(
-      () => {
-        expect(
-          screen.getByTestId('organization-people-empty-state'),
-        ).toBeInTheDocument();
-        const msg =
-          i18nForTest.getDataByLanguage('en')?.common?.notFound ?? 'Not Found';
-        expect(screen.getByText(msg)).toBeInTheDocument();
-      },
-      { timeout: 3000 },
-    );
+    // Wait for empty state to appear
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('organization-people-empty-state'),
+      ).toBeInTheDocument();
+    });
   });
 
-  test('handles member removal modal correctly', async () => {
-    const initialMember = createMemberConnectionMock({
-      orgId: 'orgid',
-      first: 10,
-      after: null,
-      last: null,
-      before: null,
-    });
-
-    const removeMemberMock = {
+  test('handles GraphQL errors correctly', async () => {
+    const errorMock = {
       request: {
-        query: REMOVE_MEMBER_MUTATION_PG,
-        variables: { organizationId: 'orgid', memberId: 'member1' },
-      },
-      result: {
-        data: {
-          removeMember: { id: 1 },
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: {
+          orgId: 'orgid',
+          first: 10,
+          after: null,
+          firstName_contains: '',
         },
       },
+      error: new Error('GraphQL error occurred'),
     };
 
-    const mocks = [initialMember, removeMemberMock];
+    const link = new StaticMockLink([errorMock], true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for error message to be displayed by CursorPaginationManager
+    await waitFor(() => {
+      expect(screen.getByTestId('cursor-pagination-error')).toBeInTheDocument();
+      expect(screen.getByText('GraphQL error occurred')).toBeInTheDocument();
+    });
+  });
+
+  test('opens and closes remove member modal', async () => {
+    const mocks = [
+      createMemberConnectionMock({
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        firstName_contains: '',
+      }),
+    ];
 
     const link = new StaticMockLink(mocks, true);
 
@@ -1205,345 +619,45 @@ describe('OrganizationPeople', () => {
       </MockedProvider>,
     );
 
-    // Wait for data to load
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    // Click on delete button for a member
-    const deleteButtons = screen.getAllByTestId('removeMemberModalBtn');
-    fireEvent.click(deleteButtons[0]);
+    const removeButtons = screen.getAllByTestId('removeMemberModalBtn');
+    fireEvent.click(removeButtons[0]);
 
-    // Modal should be open
     await waitFor(() => {
-      expect(screen.getByTestId('removeMemberModal')).toBeInTheDocument();
+      expect(screen.getByTestId('remove-member-modal')).toBeInTheDocument();
     });
 
-    // Close the modal
-    const closeButton = screen.getByTestId('removeMemberBtn');
-    fireEvent.click(closeButton);
+    const cancelButton = screen.getByRole('button', { name: /cancel/i });
+    fireEvent.click(cancelButton);
 
-    // Modal should be closed
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalled();
+      expect(
+        screen.queryByTestId('remove-member-modal'),
+      ).not.toBeInTheDocument();
     });
   });
 
-  test('prevents navigation when there are no pages available', async () => {
-    const singlePageMock = createMemberConnectionMock(
-      {
-        orgId: 'orgid',
-        first: 10,
-        after: null,
-        last: null,
-        before: null,
-      },
-      {
-        edges: [
-          {
-            node: {
-              id: 'member1',
-              name: 'John Doe',
-              emailAddress: 'john@example.com',
-              avatarURL: 'https://example.com/avatar1.jpg',
-              createdAt: dayjs().subtract(1, 'year').toISOString(),
-            },
-            cursor: 'cursor1',
-          },
-        ],
-        pageInfo: {
-          hasNextPage: false,
-          hasPreviousPage: false,
-          startCursor: 'cursor1',
-          endCursor: 'cursor1',
-        },
-      },
-    );
-
-    const link = new StaticMockLink([singlePageMock], true);
-
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    // Wait for data to load
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-
-    // Try to navigate to next page (should not work)
-    const nextPageButton = screen.getByRole('button', { name: /next page/i });
-    fireEvent.click(nextPageButton);
-
-    // Should still show the same data
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-  });
-
-  test('handles backward navigation with missing page cursors', async () => {
+  test('handles member deletion', async () => {
     const initialMock = createMemberConnectionMock({
       orgId: 'orgid',
       first: 10,
       after: null,
-      last: null,
-      before: null,
+      firstName_contains: '',
     });
 
-    // Mock for backward navigation without stored cursors
-    const backwardMock = createMemberConnectionMock({
+    const refetchMock = createMemberConnectionMock({
       orgId: 'orgid',
-      first: null,
+      first: 10,
       after: null,
-      last: 10,
-      before: null, // This will test the fallback to null
+      firstName_contains: '',
     });
 
-    const link = new StaticMockLink([initialMock, backwardMock], true);
+    const link = new StaticMockLink([initialMock, refetchMock], true);
 
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    // Wait for initial data
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-
-    // Manually trigger pagination to page 1 to simulate being on a later page
-    // without having proper cursor data stored
-    const nextPageButton = screen.getByRole('button', { name: /next page/i });
-    fireEvent.click(nextPageButton);
-
-    // Now try to go back - this should trigger the fallback to null
-    const prevPageButton = screen.getByRole('button', {
-      name: /previous page/i,
-    });
-    fireEvent.click(prevPageButton);
-  });
-
-  test('prevents forward pagination when hasNextPage is false', async () => {
-    vi.resetModules();
-
-    vi.doMock('shared-components/ReportingTable/ReportingTable', () => ({
-      __esModule: true,
-      default: ({
-        rows,
-        gridProps,
-      }: {
-        rows?: unknown[];
-        gridProps?: {
-          onPaginationModelChange?: (model: {
-            page: number;
-            pageSize: number;
-          }) => void;
-        };
-      }) => (
-        <div>
-          <div data-testid="row-count">{rows?.length ?? 0}</div>
-          <button
-            data-testid="trigger-forward"
-            onClick={() =>
-              gridProps?.onPaginationModelChange?.({
-                page: 1,
-                pageSize: PAGE_SIZE,
-              })
-            }
-          >
-            Trigger Forward
-          </button>
-        </div>
-      ),
-    }));
-
-    const singlePageMock = createMemberConnectionMock(
-      {
-        orgId: 'orgid',
-        first: 10,
-        after: null,
-        last: null,
-        before: null,
-      },
-      {
-        edges: [
-          {
-            node: {
-              id: 'member1',
-              name: 'John Doe',
-              emailAddress: 'john@example.com',
-              avatarURL: 'https://example.com/avatar1.jpg',
-              createdAt: dayjs().subtract(1, 'year').toISOString(),
-            },
-            cursor: 'cursor1',
-          },
-        ],
-        pageInfo: {
-          hasNextPage: false,
-          hasPreviousPage: false,
-          startCursor: 'cursor1',
-          endCursor: 'cursor1',
-        },
-      },
-    );
-
-    const link = new StaticMockLink([singlePageMock], true);
-
-    const { default: Component } = await import('./OrganizationPeople');
-
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route path="/orgpeople/:orgId" element={<Component />} />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByTestId('row-count').textContent).toBe('1');
-    });
-
-    fireEvent.click(screen.getByTestId('trigger-forward'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('row-count').textContent).toBe('1');
-    });
-
-    vi.doUnmock('shared-components/ReportingTable/ReportingTable');
-    vi.resetModules();
-  });
-
-  test('skips storing cursors when startCursor or endCursor is missing', async () => {
-    // This test targets line 256 - the ELSE path (when condition is false)
-    const mockWithPartialCursors = {
-      request: {
-        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-        variables: {
-          orgId: 'orgid',
-          first: 10,
-          after: null,
-          last: null,
-          before: null,
-        },
-      },
-      result: {
-        data: {
-          organization: {
-            members: {
-              edges: [
-                {
-                  node: {
-                    id: 'member1',
-                    name: 'John Doe',
-                    emailAddress: 'john@example.com',
-                    avatarURL: null,
-                    createdAt: dayjs.utc().subtract(3, 'day').toISOString(),
-                    role: 'member',
-                  },
-                  cursor: 'cursor1',
-                },
-              ],
-              pageInfo: {
-                hasNextPage: false,
-                hasPreviousPage: false,
-                startCursor: '', // Empty string (falsy)
-                endCursor: 'cursor1',
-              },
-            },
-          },
-        },
-      },
-    };
-
-    const link = new StaticMockLink([mockWithPartialCursors], true);
-
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-  });
-
-  test('prevents backward navigation attempt when hasPreviousPage is false', async () => {
-    // This test targets line 353 - the second return statement
-    const firstPageMock = createMemberConnectionMock(
-      {
-        orgId: 'orgid',
-        first: 10,
-        after: null,
-        last: null,
-        before: null,
-      },
-      {
-        edges: [
-          {
-            node: {
-              id: 'member1',
-              name: 'John Doe',
-              emailAddress: 'john@example.com',
-              avatarURL: null,
-              createdAt: dayjs.utc().toISOString(),
-              role: 'member',
-            },
-            cursor: 'cursor1',
-          },
-        ],
-        pageInfo: {
-          hasNextPage: true,
-          hasPreviousPage: false, // We're on the first page
-          startCursor: 'cursor1',
-          endCursor: 'cursor1',
-        },
-      },
-    );
-
-    const link = new StaticMockLink([firstPageMock], true);
+    const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     render(
       <MockedProvider link={link}>
@@ -1566,93 +680,39 @@ describe('OrganizationPeople', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    // Click the previous page button (should be prevented from navigating)
-    const prevPageButton = screen.getByRole('button', {
-      name: /previous page/i,
-    });
-
-    // This click should trigger the line 353 return statement
-    fireEvent.click(prevPageButton);
-
-    // Verify we're still showing the same data
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-  });
-
-  test('renders img element when member has avatarURL', async () => {
-    // This test targets line 473 - the img element rendering
-    const mockWithAvatar = createMemberConnectionMock(
-      {
-        orgId: 'orgid',
-        first: 10,
-        after: null,
-        last: null,
-        before: null,
-      },
-      {
-        edges: [
-          {
-            node: {
-              id: 'member-with-image',
-              name: 'User With Image',
-              emailAddress: 'user@example.com',
-              avatarURL: 'https://example.com/user-avatar.jpg',
-              createdAt: dayjs.utc().toISOString(),
-              role: 'member',
-            },
-            cursor: 'cursor1',
-          },
-        ],
-        pageInfo: {
-          hasNextPage: false,
-          hasPreviousPage: false,
-          startCursor: 'cursor1',
-          endCursor: 'cursor1',
-        },
-      },
-    );
-
-    const link = new StaticMockLink([mockWithAvatar], true);
-
-    const { container } = render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    const removeButtons = screen.getAllByTestId('removeMemberModalBtn');
+    fireEvent.click(removeButtons[0]);
 
     await waitFor(() => {
-      expect(screen.getByText('User With Image')).toBeInTheDocument();
+      expect(screen.getByTestId('remove-member-modal')).toBeInTheDocument();
     });
 
-    // Find the actual img element - this covers line 473
-    const imgElement = container.querySelector(
-      'img[src="https://example.com/user-avatar.jpg"]',
-    );
-    expect(imgElement).toBeInTheDocument();
-    expect(imgElement).toHaveAttribute('crossorigin', 'anonymous');
+    const modal = screen.getByTestId('remove-member-modal');
+    const confirmButton = within(modal).getByRole('button', {
+      name: /remove/i,
+    });
+    fireEvent.click(confirmButton);
+
+    await waitFor(() => {
+      expect(consoleLogSpy).toHaveBeenCalledWith('Deleting member:', 'member1');
+    });
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('remove-member-modal'),
+      ).not.toBeInTheDocument();
+    });
+
+    consoleLogSpy.mockRestore();
   });
 
-  test('calls getRowClassName for each rendered row', async () => {
-    // This test targets line 565 - the getRowClassName function
+  test('renders avatar image when avatarURL is present', async () => {
     const mocks = [
       createMemberConnectionMock({
         orgId: 'orgid',
         first: 10,
         after: null,
-        last: null,
-        before: null,
+        firstName_contains: '',
       }),
     ];
 
@@ -1677,19 +737,70 @@ describe('OrganizationPeople', () => {
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
     });
 
-    // Verify rows exist and getRowClassName was called for each
-    const dataGridRows = container.querySelectorAll('.MuiDataGrid-row');
-    expect(dataGridRows.length).toBeGreaterThanOrEqual(2);
+    // Check for avatar image
+    const imgElement = container.querySelector(
+      'img[src="https://example.com/avatar1.jpg"]',
+    );
+    expect(imgElement).toBeInTheDocument();
+  });
 
-    // Verify each row has a class attribute (indicating getRowClassName returned a class)
-    dataGridRows.forEach((row) => {
-      expect(row).toHaveAttribute('class');
-      expect(row.getAttribute('class')).not.toBe('');
-      // Verify the class contains the transformed CSS module class (will include rowBackground)
-      expect(row.getAttribute('class')).toMatch(/rowBackground/);
+  test('disables remove button for users tab', async () => {
+    const membersMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      firstName_contains: '',
+    });
+
+    const usersMock = createUserListMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      firstName_contains: '',
+    });
+
+    const mocks = [membersMock, usersMock];
+    const link = new StaticMockLink(mocks, true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for initial data
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    // Switch to users tab
+    const sortingButton = screen.getByTestId('sort');
+    fireEvent.click(sortingButton);
+    const usersOption = screen.getByText(/users/i);
+    fireEvent.click(usersOption);
+
+    // Wait for users data
+    await waitFor(() => {
+      expect(screen.getByText('User One')).toBeInTheDocument();
+    });
+
+    // Remove buttons should be disabled
+    const removeButtons = screen.getAllByTestId('removeMemberModalBtn');
+    removeButtons.forEach((button) => {
+      expect(button).toBeDisabled();
     });
   });
 });

@@ -221,7 +221,6 @@
   "tags": "Etiquetas",
   "loadMoreItems": "Cargar más elementos",
   "loadMore": "Cargar Más",
-  "retry": "Reintentar",
   "publicEvent": "Público (Visible para la comunidad)",
   "publicEventDescription": "Visible para todos en la comunidad",
   "eventVisibility": "Visibilidad del evento",
@@ -229,5 +228,7 @@
   "organizationEventDescription": "Visible para todos los miembros de la organización",
   "inviteOnlyEvent": "Solo por invitación",
   "inviteOnlyEventDescription": "Visible solo para miembros invitados y administradores de eventos",
-  "to": "A"
+  "to": "A",
+  "removeMember": "Eliminar Miembro",
+  "retry": "Reintentar"
 }

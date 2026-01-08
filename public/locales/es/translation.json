@@ -396,6 +396,7 @@
     "profile": "Perfil",
     "joined": "Unido",
     "notFound": "No se encontraron miembros",
+    "organizationPeopleTable": "Tabla de Personas de la Organización",
     "createUser": "Crear usuario"
   },
   "organizationCard": {

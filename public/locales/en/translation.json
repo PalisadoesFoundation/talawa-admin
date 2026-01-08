@@ -410,7 +410,8 @@
     "actions": "Actions",
     "profile": "Profile",
     "joined": "Joined",
-    "notFound": "No Members Found"
+    "notFound": "No Members Found",
+    "organizationPeopleTable": "Organization People Table"
   },
   "organizationTags": {
     "title": "Organization Tags",

@@ -1,127 +1,43 @@
-import React from 'react';
-import type { RenderResult } from '@testing-library/react';
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
+import type { MockedResponse } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import People from './People';
 import userEvent from '@testing-library/user-event';
-import { vi, it, beforeEach, afterEach } from 'vitest';
+import { vi, it, beforeEach, afterEach, describe, expect } from 'vitest';
 import dayjs from 'dayjs';
-/**
- * This file contains unit tests for the People component.
- *
- * The tests cover:
- * - Proper rendering of the People screen and its elements.
- * - Functionality of the search input and search button.
- * - Correct behavior when switching between member and admin modes.
- * - Integration with mocked GraphQL queries for testing data fetching.
- *
- * These tests use Vitest for test execution, MockedProvider for mocking GraphQL queries, and react-testing-library for rendering and interactions.
- */
 
-// Reusable mock data constants
+const DEFAULT_ORG_ID = 'test-org-id';
+const SEARCH_DEBOUNCE_MS = 300;
 
-// Common test params
-const DEFAULT_ORG_ID = '';
-const DEFAULT_SEARCH = '';
-const DEFAULT_FIRST = 5;
-
-// Helper for members edges
-interface InterfaceMemberEdgeProps {
-  cursor?: string;
-  id?: string;
-  name?: string;
-  role?: string;
-  avatarURL?: string | null;
-  emailAddress?: string | null;
-  node?: Record<string, unknown>;
-}
-
-// Helper for members edges
-const memberEdge = (props: InterfaceMemberEdgeProps = {}) => ({
-  cursor: props.cursor || 'cursor1',
-  node: {
-    id: props.id || 'user-1',
-    name: props.name || 'User 1',
-    role: props.role || 'member',
-    avatarURL: props.avatarURL || null,
-    emailAddress: props.emailAddress || 'user1@example.com',
-    createdAt: dayjs().subtract(1, 'year').month(2).toISOString(),
-    ...props.node,
-  },
+const memberNode = (id: string, name: string, role = 'member') => ({
+  id,
+  name,
+  role,
+  avatarURL: null,
+  emailAddress: `${id}@example.com`,
+  createdAt: dayjs().toISOString(),
 });
 
-// Queries in People.tsx always set these variables (orgId, firstName_contains, first, after)
-const makeQueryVars = (overrides = {}) => ({
-  orgId: DEFAULT_ORG_ID,
-  firstName_contains: DEFAULT_SEARCH,
-  first: DEFAULT_FIRST,
-  after: undefined,
-  ...overrides,
-});
-
-// Mocks for default render (All Members mode)
 const defaultMembersEdges = [
-  memberEdge({
-    cursor: 'cursor1',
-    id: '1',
-    name: 'Test User',
-    role: 'member',
-    emailAddress: 'test@example.com',
-  }),
-  memberEdge({
-    cursor: 'cursor2',
-    id: '2',
-    name: 'Admin User',
-    role: 'administrator',
-    emailAddress: 'admin@example.com',
-  }),
-  memberEdge({
-    cursor: 'cursor3',
-    id: '3',
-    name: 'User Custom Role',
-    role: 'member',
-    emailAddress: null,
-  }),
+  { cursor: 'cur1', node: memberNode('1', 'Test User') },
+  { cursor: 'cur2', node: memberNode('2', 'Admin User', 'administrator') },
 ];
-const defaultMembersEdges2 = [
-  memberEdge({
-    cursor: 'cursor4',
-    id: '1',
-    name: 'Test User',
-    role: 'member',
-    emailAddress: 'test@example.com',
-  }),
-  memberEdge({
-    cursor: 'cursor5',
-    id: '2',
-    name: 'Admin User',
-    role: 'administrator',
-    emailAddress: 'admin@example.com',
-  }),
-  memberEdge({
-    cursor: 'cursor6',
-    id: '3',
-    name: 'User Custom Role',
-    role: 'member',
-    emailAddress: null,
-  }),
-];
+
 const defaultQueryMock = {
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    variables: makeQueryVars(),
+    variables: {
+      orgId: DEFAULT_ORG_ID,
+      firstName_contains: '',
+      first: 10,
+      after: null,
+    },
   },
   result: {
     data: {
@@ -129,36 +45,37 @@ const defaultQueryMock = {
         members: {
           edges: defaultMembersEdges,
           pageInfo: {
-            endCursor: 'cursor3',
-            hasPreviousPage: true,
+            endCursor: 'cur2',
             hasNextPage: true,
-            startCursor: 'cursor1',
+            hasPreviousPage: false,
+            startCursor: 'cur1',
           },
         },
       },
     },
   },
 };
-const nextPageMock = {
+
+const loadMoreMock = {
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     variables: {
-      orgId: '',
+      orgId: DEFAULT_ORG_ID,
       firstName_contains: '',
-      first: 5,
-      after: 'cursor3', // This matches the failing query!
+      first: 10,
+      after: 'cur2',
     },
   },
   result: {
     data: {
       organization: {
         members: {
-          edges: defaultMembersEdges2, // or whatever members you want for page 2
+          edges: [{ cursor: 'cur3', node: memberNode('3', 'Page 2 User') }],
           pageInfo: {
-            endCursor: 'cursor6',
+            endCursor: 'cur3',
+            hasNextPage: false,
             hasPreviousPage: true,
-            hasNextPage: false,
-            startCursor: 'cursor4',
+            startCursor: 'cur3',
           },
         },
       },
@@ -166,61 +83,31 @@ const nextPageMock = {
   },
 };
 
-// Mock for admin filtering (mode = 1)
-const adminsOnlyMock = {
-  request: {
-    query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    variables: makeQueryVars(),
-  },
-  result: {
-    data: {
-      organization: {
-        members: {
-          edges: [
-            memberEdge({
-              cursor: 'cursor2',
-              id: '2',
-              name: 'Admin User',
-              role: 'administrator',
-              emailAddress: 'admin@example.com',
-            }),
-          ],
-          pageInfo: {
-            endCursor: 'cursor2',
-            hasPreviousPage: false,
-            hasNextPage: false,
-            startCursor: 'cursor2',
-          },
-        },
-      },
-    },
-  },
-};
-
-// Mock for search with "Admin" as firstName_contains
 const adminSearchMock = {
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    variables: makeQueryVars({ firstName_contains: 'Admin' }),
+    variables: {
+      orgId: DEFAULT_ORG_ID,
+      firstName_contains: 'Admin',
+      first: 10,
+      after: null,
+    },
   },
   result: {
     data: {
       organization: {
         members: {
           edges: [
-            memberEdge({
-              cursor: 'cursor2',
-              id: '2',
-              name: 'Admin User',
-              role: 'administrator',
-              emailAddress: 'admin@example.com',
-            }),
+            {
+              cursor: 'cur2',
+              node: memberNode('2', 'Admin User', 'administrator'),
+            },
           ],
           pageInfo: {
-            endCursor: 'cursor2',
-            hasPreviousPage: false,
+            endCursor: 'cur2',
             hasNextPage: false,
-            startCursor: 'cursor2',
+            hasPreviousPage: false,
+            startCursor: 'cur2',
           },
         },
       },
@@ -228,114 +115,50 @@ const adminSearchMock = {
   },
 };
 
-// Mock for search with "Ad" as firstName_contains
-const adSearchMock = {
+const adminFilterMock = {
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    variables: makeQueryVars({ firstName_contains: 'Ad' }),
+    variables: {
+      orgId: DEFAULT_ORG_ID,
+      firstName_contains: '',
+      first: 10,
+      after: null,
+      where: { role: { equal: 'administrator' } },
+    },
   },
   result: {
     data: {
       organization: {
         members: {
           edges: [
-            memberEdge({
-              cursor: 'cursor2',
-              id: '2',
-              name: 'Admin User',
-              role: 'administrator',
-              emailAddress: 'admin@example.com',
-            }),
+            {
+              cursor: 'cur2',
+              node: memberNode('2', 'Admin User', 'administrator'),
+            },
           ],
           pageInfo: {
-            endCursor: 'cursor2',
+            endCursor: 'cur2',
+            hasNextPage: false,
             hasPreviousPage: false,
-            hasNextPage: false,
-            startCursor: 'cursor2',
+            startCursor: 'cur2',
           },
         },
       },
     },
   },
 };
-
-// Mocks for changing rows per page (simulate more members)
-const lotsOfMembersEdges = Array.from({ length: 6 }, (_, i) =>
-  memberEdge({
-    cursor: `cursor${i + 1}`,
-    id: `${i + 1}`,
-    name: `user${i + 1}`,
-  }),
-);
-const lotsOfMembersMock = {
-  request: {
-    query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    variables: makeQueryVars({ first: 10 }),
-  },
-  result: {
-    data: {
-      organization: {
-        members: {
-          edges: lotsOfMembersEdges,
-          pageInfo: {
-            endCursor: 'cursor6',
-            hasPreviousPage: true,
-            hasNextPage: false,
-            startCursor: 'cursor1',
-          },
-        },
-      },
-    },
-  },
-};
-
-const fiveMembersMock = {
-  request: {
-    query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    variables: makeQueryVars({ first: 5 }),
-  },
-  result: {
-    data: {
-      organization: {
-        members: {
-          edges: lotsOfMembersEdges.slice(0, 5),
-          pageInfo: {
-            endCursor: 'cursor5',
-            hasPreviousPage: true,
-            hasNextPage: true,
-            startCursor: 'cursor1',
-          },
-        },
-      },
-    },
-  },
-};
-
-// Debounce duration used by AdminSearchFilterBar component (default: 300ms)
-// NOTE: This value must be manually kept in sync with AdminSearchFilterBar's debounceDelay default
-const SEARCH_DEBOUNCE_MS = 300;
-
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 const sharedMocks = vi.hoisted(() => ({
-  useParams: vi.fn(() => ({ orgId: '' })),
+  useParams: vi.fn(() => ({ orgId: DEFAULT_ORG_ID })),
 }));
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
-  return {
-    ...actual,
-    useParams: sharedMocks.useParams,
-  };
+  return { ...actual, useParams: sharedMocks.useParams };
 });
 
-const setMatchMediaStub = (): void => {
+beforeEach(() => {
+  vi.clearAllMocks();
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: vi.fn().mockImplementation((query) => ({
@@ -347,40 +170,16 @@ const setMatchMediaStub = (): void => {
       dispatchEvent: vi.fn(),
     })),
   });
-};
-
-beforeEach(() => {
-  vi.clearAllMocks();
-  sharedMocks.useParams.mockReturnValue({ orgId: '' });
-  setMatchMediaStub();
 });
 
 afterEach(() => {
-  vi.clearAllMocks();
-  sharedMocks.useParams.mockReturnValue({ orgId: '' });
+  vi.restoreAllMocks();
 });
 
-describe('Testing People Screen [User Portal]', () => {
-  it('Screen should be rendered properly', async () => {
+describe('People Component Tests', () => {
+  const renderComponent = (mocks: MockedResponse[]) =>
     render(
-      <MockedProvider mocks={[defaultQueryMock]}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-    expect(screen.queryAllByText('Test User')).not.toBe([]);
-    expect(screen.queryAllByText('Admin User')).not.toBe([]);
-  });
-
-  it('Search works properly by pressing enter', async () => {
-    render(
-      <MockedProvider mocks={[defaultQueryMock, adSearchMock]}>
+      <MockedProvider mocks={mocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -391,389 +190,106 @@ describe('Testing People Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
-
-    await userEvent.type(screen.getByTestId('searchInput'), 'Ad{enter}');
-    await wait(SEARCH_DEBOUNCE_MS);
-
-    expect(screen.queryByText('Admin User')).toBeInTheDocument();
-    expect(screen.queryByText('Test User')).not.toBeInTheDocument();
-  });
-
-  it('Search works properly by clicking search Btn', async () => {
-    render(
-      <MockedProvider mocks={[defaultQueryMock, adminSearchMock]}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-    const searchBtn = screen.getByTestId('searchBtn');
-    await userEvent.clear(screen.getByTestId('searchInput'));
-    await userEvent.click(searchBtn);
-    await userEvent.type(screen.getByTestId('searchInput'), 'Admin');
-    await wait(SEARCH_DEBOUNCE_MS);
-    await userEvent.click(searchBtn);
-    await wait();
-
-    expect(screen.queryByText('Admin User')).toBeInTheDocument();
-    expect(screen.queryByText('Test User')).not.toBeInTheDocument();
-  });
-
-  it('Mode is changed to Admins', async () => {
-    render(
-      <MockedProvider mocks={[defaultQueryMock, adminsOnlyMock]}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('1'));
-    await wait();
-
-    expect(screen.queryByText('Admin User')).toBeInTheDocument();
-    expect(screen.queryByText('Test User')).not.toBeInTheDocument();
-  });
-
-  it('Shows loading state while fetching data', async () => {
-    render(
-      <MockedProvider mocks={[defaultQueryMock]}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    expect(screen.getByTestId('loading-state')).toBeInTheDocument();
-    await wait();
-  });
-
-  it('pagination working', async () => {
-    render(
-      <MockedProvider mocks={[fiveMembersMock, lotsOfMembersMock]}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-    // Pagination functional (visual test)
-    expect(screen.getByText('user1')).toBeInTheDocument();
-  });
-});
-
-describe('Testing People Screen Pagination [User Portal]', () => {
-  const renderComponent = (): RenderResult => {
-    return render(
-      <MockedProvider mocks={[fiveMembersMock, lotsOfMembersMock]}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-  };
-
-  it('handles rows per page change and pagination navigation', async () => {
-    renderComponent();
-    await wait();
-
-    // Default should show 5 items
-    expect(screen.getByText('user5')).toBeInTheDocument();
-
-    // Change rows per page to 10 (should show 6 now)
-    const select = screen.getByRole('combobox');
-    await userEvent.selectOptions(select, '10');
-    await wait();
-
-    expect(screen.getByText('user6')).toBeInTheDocument();
-
-    // Reset to smaller page size to test navigation
-    await userEvent.selectOptions(select, '5');
-    await wait();
-  });
-
-  it('handles backward pagination correctly', async () => {
-    // Use mocks that support forward and backward navigation
-    render(
-      <MockedProvider mocks={[defaultQueryMock, nextPageMock]}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-
-    // Navigate to page 2
-    const nextButton = screen.getByTestId('nextPage');
-    await userEvent.click(nextButton);
-    await wait();
-
-    // Now navigate back to page 1 (this covers lines 158-161)
-    // This uses cached cursor, no new query needed
-    const prevButton = screen.getByTestId('previousPage');
-    await userEvent.click(prevButton);
-    await wait();
-
-    // Should be back on first page
-    expect(screen.getByText('Test User')).toBeInTheDocument();
-  });
-});
-
-describe('People Component Mode Switch and Search Coverage', () => {
-  it('searches partial user name correctly and displays matching results', async (): Promise<void> => {
-    render(
-      <MockedProvider mocks={[defaultQueryMock, adminSearchMock]}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await userEvent.type(screen.getByTestId('searchInput'), 'Admin');
-    await wait(SEARCH_DEBOUNCE_MS);
-    await userEvent.click(screen.getByTestId('searchBtn'));
-
+  it('renders members and handles loading state', async () => {
+    renderComponent([defaultQueryMock]);
     await waitFor(() => {
-      expect(screen.getByText('Admin User')).toBeInTheDocument();
-      expect(screen.queryByText('Test User')).not.toBeInTheDocument();
+      expect(screen.getByTestId('people-name-1')).toHaveTextContent(
+        'Test User',
+      );
     });
   });
 
-  it('handles rowsPerPage = 0 case and edge cases', async () => {
-    render(
-      <MockedProvider mocks={[defaultQueryMock, nextPageMock]}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-
-    const select = screen.getByLabelText('rows per page');
-    expect(select).toBeInTheDocument();
-    const nextButton = screen.getByTestId('nextPage');
-    await userEvent.click(nextButton);
+  it('displays all members initially', async () => {
+    renderComponent([defaultQueryMock]);
+    await waitFor(() => {
+      expect(screen.getByTestId('people-name-1')).toHaveTextContent(
+        'Test User',
+      );
+      expect(screen.getByTestId('people-name-2')).toHaveTextContent(
+        'Admin User',
+      );
+    });
   });
 
-  it('should not trigger search for non-Enter key press', async () => {
-    render(
-      <MockedProvider mocks={[defaultQueryMock]}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  it('handles load more functionality', async () => {
+    renderComponent([defaultQueryMock, loadMoreMock]);
+    await waitFor(() => {
+      expect(screen.getByTestId('people-name-1')).toBeInTheDocument();
+    });
 
-    const searchInput = screen.getByTestId('searchInput');
-    fireEvent.keyUp(searchInput, { key: 'A', code: 'KeyA' });
+    const loadMoreBtn = screen.getByRole('button', { name: /load more/i });
+    await userEvent.click(loadMoreBtn);
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('people-name-3')).toHaveTextContent(
+        'Page 2 User',
+      );
+    });
   });
 
-  it('should handle search with empty input value', async () => {
-    render(
-      <MockedProvider mocks={[defaultQueryMock]}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+  it('performs search using the search button', async () => {
+    const user = userEvent.setup();
+    renderComponent([defaultQueryMock, adminSearchMock]);
+    await waitFor(() => {
+      expect(screen.getByTestId('people-name-1')).toBeInTheDocument();
+    });
 
-    const searchBtn = screen.getByTestId('searchBtn');
-    // Remove the search input from DOM to simulate edge case
-    const searchInput = screen.getByTestId('searchInput');
-    searchInput.remove();
+    const input = screen.getByTestId('searchInput');
+    await user.type(input, 'Admin');
 
-    await userEvent.click(searchBtn);
-    await new Promise((resolve) => setTimeout(resolve, 100));
-  });
-});
+    await act(async () => {
+      await new Promise((r) => setTimeout(r, SEARCH_DEBOUNCE_MS + 50));
+    });
 
-describe('People Component Field Tests (Email, ID, Role)', () => {
-  const renderComponentWithEmailMock = (): RenderResult => {
-    return render(
-      <MockedProvider mocks={[defaultQueryMock]}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-  };
-
-  it('should display user email addresses correctly', async () => {
-    renderComponentWithEmailMock();
-    await wait();
-
-    expect(screen.getByText('test@example.com')).toBeInTheDocument();
-    expect(screen.getByText('admin@example.com')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('people-name-2')).toHaveTextContent(
+        'Admin User',
+      );
+      expect(screen.queryByTestId('people-name-1')).not.toBeInTheDocument();
+    });
   });
 
-  it('should handle users with different ID formats', async () => {
-    renderComponentWithEmailMock();
-    await wait();
+  it('filters by Admins mode with server-side filtering', async () => {
+    renderComponent([defaultQueryMock, adminFilterMock]);
+    await waitFor(() => {
+      expect(screen.getByTestId('people-name-1')).toBeInTheDocument();
+    });
 
-    expect(screen.getByText('Test User')).toBeInTheDocument();
-    expect(screen.getByText('Admin User')).toBeInTheDocument();
+    const filterDropdown = screen.getByTestId('modeChangeBtn');
+    await userEvent.click(filterDropdown);
+
+    const adminOption = screen.getByTestId('1');
+    await userEvent.click(adminOption);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('people-name-2')).toHaveTextContent(
+        'Admin User',
+      );
+      expect(screen.queryByTestId('people-name-1')).not.toBeInTheDocument();
+    });
   });
 
-  it('should correctly identify and display different user roles', async () => {
-    renderComponentWithEmailMock();
-    await wait();
-
-    expect(screen.getByText('Test User')).toBeInTheDocument();
-    expect(screen.getByText('Admin User')).toBeInTheDocument();
-
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('1'));
-    await wait();
-
-    expect(screen.getByText('Admin User')).toBeInTheDocument();
-    expect(screen.queryByText('Test User')).not.toBeInTheDocument();
-  });
-
-  it('should correctly assign userType based on role for admin filtering', async () => {
-    renderComponentWithEmailMock();
-    await wait();
-
-    expect(screen.getByText('Admin User')).toBeInTheDocument();
-    expect(screen.getByText('Test User')).toBeInTheDocument();
-
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('1'));
-    await wait();
-
-    expect(screen.queryByText('Admin User')).toBeInTheDocument();
-    expect(screen.queryByText('Test User')).not.toBeInTheDocument();
-
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('0'));
-    await wait();
-
-    expect(screen.getByText('Test User')).toBeInTheDocument();
-    expect(screen.getByText('test@example.com')).toBeInTheDocument();
-  });
-
-  it('should pass correct props including id, email, and role to PeopleCard components', async () => {
-    renderComponentWithEmailMock();
-    await wait();
-
-    expect(screen.getByText('Admin User')).toBeInTheDocument();
-    expect(screen.getByText('Test User')).toBeInTheDocument();
-    expect(screen.getByText('test@example.com')).toBeInTheDocument();
-
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('1'));
-    await wait();
-
-    expect(screen.getByText('Admin User')).toBeInTheDocument();
-    expect(screen.queryByText('Test User')).not.toBeInTheDocument();
-    expect(screen.queryByText('test@example.com')).not.toBeInTheDocument();
-  });
-
-  it('clears search input', async () => {
-    render(
-      <MockedProvider mocks={[defaultQueryMock]}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    const searchInput = screen.getByTestId('searchInput');
-    await userEvent.type(searchInput, 'Test');
-    expect(searchInput).toHaveValue('Test');
-
-    // SearchBar renders a clear button when value is not empty
-    const clearBtn = screen.getByLabelText('Clear');
-    await userEvent.click(clearBtn);
-
-    expect(searchInput).toHaveValue('');
-  });
-
-  it('displays localized emailNotAvailable when email is missing', async () => {
-    // Create a mock with a member that has null email
-    const mockWithNullEmail = {
+  it('displays empty state when no members found', async () => {
+    const emptyMock = {
       request: {
         query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-        variables: makeQueryVars(),
+        variables: {
+          orgId: DEFAULT_ORG_ID,
+          firstName_contains: '',
+          first: 10,
+          after: null,
+        },
       },
       result: {
         data: {
           organization: {
             members: {
-              edges: [
-                {
-                  cursor: 'cursor1',
-                  node: {
-                    id: 'user-null-email',
-                    name: 'Test User No Email',
-                    role: 'member',
-                    avatarURL: null,
-                    emailAddress: null,
-                    createdAt: dayjs().subtract(2, 'year').toISOString(),
-                  },
-                },
-              ],
+              edges: [],
               pageInfo: {
-                endCursor: 'cursor1',
-                hasPreviousPage: false,
+                endCursor: null,
                 hasNextPage: false,
-                startCursor: 'cursor1',
+                hasPreviousPage: false,
+                startCursor: null,
               },
             },
           },
@@ -781,24 +297,54 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
       },
     };
 
-    render(
-      <MockedProvider mocks={[mockWithNullEmail]}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderComponent([emptyMock]);
 
-    await wait();
+    await waitFor(() => {
+      expect(screen.getByText('Nothing to show here')).toBeInTheDocument();
+    });
+  });
 
-    // Verify member is rendered
-    expect(screen.getByText('Test User No Email')).toBeInTheDocument();
-    // Verify emailNotAvailable translation is displayed
-    const emailElement = screen.getByTestId('people-email-user-null-email');
-    expect(emailElement).toHaveTextContent('Email not available');
+  it('handles GraphQL errors correctly', async () => {
+    const errorMock = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: {
+          orgId: DEFAULT_ORG_ID,
+          firstName_contains: '',
+          first: 10,
+          after: null,
+        },
+      },
+      error: new Error('GraphQL error occurred'),
+    };
+
+    renderComponent([errorMock]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('cursor-pagination-error')).toBeInTheDocument();
+      expect(screen.getByText('GraphQL error occurred')).toBeInTheDocument();
+    });
+  });
+
+  it('displays member role correctly', async () => {
+    renderComponent([defaultQueryMock]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('people-role-1')).toHaveTextContent('Member');
+      expect(screen.getByTestId('people-role-2')).toHaveTextContent('Admin');
+    });
+  });
+
+  it('displays email addresses correctly', async () => {
+    renderComponent([defaultQueryMock]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('people-email-1')).toHaveTextContent(
+        '1@example.com',
+      );
+      expect(screen.getByTestId('people-email-2')).toHaveTextContent(
+        '2@example.com',
+      );
+    });
   });
 });

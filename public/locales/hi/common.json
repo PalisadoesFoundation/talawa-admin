@@ -221,7 +221,6 @@
   "tags": "टैग",
   "loadMoreItems": "और चीज़ें लोड करें",
   "loadMore": "और लोड करें",
-  "retry": "पुनः प्रयास करें",
   "publicEvent": "सार्वजनिक (समुदाय के लिए दृश्य)",
   "publicEventDescription": "समुदाय में सभी के लिए दृश्य",
   "eventVisibility": "ईवेंट दृश्यता",
@@ -229,5 +228,7 @@
   "organizationEventDescription": "संगठन के सभी सदस्यों के लिए दृश्य",
   "inviteOnlyEvent": "केवल आमंत्रण",
   "inviteOnlyEventDescription": "केवल आमंत्रित सदस्यों और ईवेंट व्यवस्थापकों के लिए दृश्य",
-  "to": "को"
+  "to": "को",
+  "removeMember": "सदस्य हटाएं",
+  "retry": "पुनः प्रयास करें"
 }
