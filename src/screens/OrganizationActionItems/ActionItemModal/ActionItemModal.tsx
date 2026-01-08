@@ -445,6 +445,8 @@ const ItemModal: FC<IItemModalProps> = ({
                 onChange={(e) =>
                   handleFormChange('preCompletionNotes', e.target.value)
                 }
+                data-cy="preCompletionNotes"
+                data-testid="preCompletionNotes"
               />
             </FormControl>
           </>
