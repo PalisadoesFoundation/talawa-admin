@@ -353,18 +353,23 @@ reviews:
   pre_merge_checks:
     # Enforce test file updates for modified source files
     custom_checks:
-      - name: 'Test Coverage Validation'
-        mode: 'error' # Blocks PR until resolved
+      - name: 'Test Coverage Gate'
+        mode: 'error'
         instructions: |
-          Before approving for merge, verify:
+          BLOCKING: Test coverage must be ≥95% for modified files.
+          Run: pnpm run test:coverage
+          Verify: coverage/coverage-summary.json shows no files below threshold.
 
-          ✅ All validation criteria from path_instructions are met
-          ✅ All CI/CD checks pass
-          ✅ No pending review comments
-          ✅ Reusable component architecture fully compliant
-          ✅ 100% test coverage target achieved
-          ✅ Zero TypeScript errors
-          ✅ All i18n translations present
-          ✅ Documentation updated
+      - name: 'TypeScript Compilation'
+        mode: 'error'
+        instructions: |
+          BLOCKING: Zero TypeScript errors.
+          Run: pnpm run typecheck
+          Must pass without errors or warnings.
 
-          Only approve if absolutely ready for production with zero improvements needed.
+      - name: 'Component Architecture Compliance'
+        mode: 'error'
+        instructions: |
+          BLOCKING: All components follow reusable component policy.
+          Verify: No inline interfaces, correct portal placement, wrapper usage.
+          See: https://docs-admin.talawa.io/docs/developer-resources/reusable-components/
