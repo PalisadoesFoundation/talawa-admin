@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceCursorPaginationManagerProps\<TNode, TVariables\>
 
@@ -18,7 +18,7 @@ The type of individual items extracted from edges
 
 ### TVariables
 
-`TVariables` *extends* `Record`\<`string`, `unknown`\> = `Record`\<`string`, `unknown`\>
+`TVariables` _extends_ `Record`\<`string`, `unknown`\> = `Record`\<`string`, `unknown`\>
 
 The GraphQL query variables type (defaults to `Record<string, unknown>`)
 
@@ -42,7 +42,7 @@ Dot-separated path to extract connection data from the query response
 "organization.members" for data.organization.members
 ```
 
-***
+---
 
 ### emptyStateComponent?
 
@@ -52,7 +52,7 @@ Defined in: [interface.ts:148](https://github.com/PalisadoesFoundation/talawa-ad
 
 Custom component to show when no items are available
 
-***
+---
 
 ### itemsPerPage?
 
@@ -65,10 +65,10 @@ Number of items to fetch per page
 #### Default Value
 
 ```ts
-10
+10;
 ```
 
-***
+---
 
 ### keyExtractor()?
 
@@ -109,7 +109,7 @@ falls back to using the array index as the key.
 keyExtractor={(user) => user.id}
 ```
 
-***
+---
 
 ### loadingComponent?
 
@@ -119,7 +119,7 @@ Defined in: [interface.ts:143](https://github.com/PalisadoesFoundation/talawa-ad
 
 Custom loading component to show during initial data fetch
 
-***
+---
 
 ### onDataChange()?
 
@@ -139,7 +139,7 @@ Callback invoked when the data changes (initial load or after loading more)
 
 `void`
 
-***
+---
 
 ### paginationDirection?
 
@@ -157,7 +157,7 @@ Direction of pagination.
 #### Default Value
 
 ```ts
-'forward'
+'forward';
 ```
 
 #### Example
@@ -170,7 +170,7 @@ Direction of pagination.
 <CursorPaginationManager paginationDirection="backward" ... />
 ```
 
-***
+---
 
 ### query
 
@@ -180,7 +180,7 @@ Defined in: [interface.ts:56](https://github.com/PalisadoesFoundation/talawa-adm
 
 GraphQL query document for fetching data
 
-***
+---
 
 ### queryVariables?
 
@@ -190,7 +190,7 @@ Defined in: [interface.ts:82](https://github.com/PalisadoesFoundation/talawa-adm
 
 Query variables (excluding pagination variables like 'first', 'after', 'last', 'before')
 
-***
+---
 
 ### refetchTrigger?
 
@@ -201,7 +201,7 @@ Defined in: [interface.ts:159](https://github.com/PalisadoesFoundation/talawa-ad
 Trigger value that causes a refetch when changed
 Can be a number (counter) or any value that changes
 
-***
+---
 
 ### renderItem()
 
@@ -247,7 +247,7 @@ for append-only pagination but may cause issues if items are reordered.
 />
 ```
 
-***
+---
 
 ### scrollContainerRef?
 

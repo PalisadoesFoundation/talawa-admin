@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: PaginationVariables\<T\>
 
@@ -15,4 +15,4 @@ Supports both forward pagination (first/after) and backward pagination (last/bef
 
 ### T
 
-`T` *extends* `Record`\<`string`, `unknown`\>
+`T` _extends_ `Record`\<`string`, `unknown`\>

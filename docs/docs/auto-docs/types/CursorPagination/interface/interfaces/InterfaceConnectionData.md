@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceConnectionData\<TNode\>
 
@@ -39,7 +39,7 @@ Defined in: [interface.ts:36](https://github.com/PalisadoesFoundation/talawa-adm
 
 > **node**: `TNode`
 
-***
+---
 
 ### pageInfo?
 
