@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceCursorPaginationRenderProps\<T\>
 
-Defined in: [src/types/CursorPagination/interface.ts:80](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L80)
+Defined in: [src/types/CursorPagination/interface.ts:80](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L80)
 
 Render props passed to the children function of CursorPaginationManager.
 
@@ -22,7 +22,7 @@ The type of the items being paginated.
 
 > `optional` **error**: `Error`
 
-Defined in: [src/types/CursorPagination/interface.ts:107](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L107)
+Defined in: [src/types/CursorPagination/interface.ts:107](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L107)
 
 Error that occurred during loading, if any.
 
@@ -32,7 +32,7 @@ Error that occurred during loading, if any.
 
 > **hasMore**: `boolean`
 
-Defined in: [src/types/CursorPagination/interface.ts:96](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L96)
+Defined in: [src/types/CursorPagination/interface.ts:96](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L96)
 
 Indicates if there are more items available to load.
 - For forward pagination: equals `hasNextPage`
@@ -44,7 +44,7 @@ Indicates if there are more items available to load.
 
 > **items**: `T`[]
 
-Defined in: [src/types/CursorPagination/interface.ts:84](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L84)
+Defined in: [src/types/CursorPagination/interface.ts:84](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L84)
 
 Array of items to render.
 
@@ -54,7 +54,7 @@ Array of items to render.
 
 > **loading**: `boolean`
 
-Defined in: [src/types/CursorPagination/interface.ts:89](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L89)
+Defined in: [src/types/CursorPagination/interface.ts:89](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L89)
 
 Indicates if more items are currently being loaded.
 
@@ -64,7 +64,7 @@ Indicates if more items are currently being loaded.
 
 > **loadMore**: () => `Promise`\<`void`\>
 
-Defined in: [src/types/CursorPagination/interface.ts:102](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L102)
+Defined in: [src/types/CursorPagination/interface.ts:102](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L102)
 
 Function to trigger loading more items.
 Typically called when user scrolls or clicks a "load more" button.

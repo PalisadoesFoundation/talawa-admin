@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceEdge\<T\>
 
-Defined in: [src/types/CursorPagination/interface.ts:46](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L46)
+Defined in: [src/types/CursorPagination/interface.ts:46](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L46)
 
 Generic edge type for cursor-based pagination.
 
@@ -22,7 +22,7 @@ The type of the node contained in this edge.
 
 > **cursor**: `string`
 
-Defined in: [src/types/CursorPagination/interface.ts:50](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L50)
+Defined in: [src/types/CursorPagination/interface.ts:50](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L50)
 
 Cursor for this specific edge.
 
@@ -32,6 +32,6 @@ Cursor for this specific edge.
 
 > **node**: `T`
 
-Defined in: [src/types/CursorPagination/interface.ts:55](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L55)
+Defined in: [src/types/CursorPagination/interface.ts:55](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L55)
 
 The actual data node.

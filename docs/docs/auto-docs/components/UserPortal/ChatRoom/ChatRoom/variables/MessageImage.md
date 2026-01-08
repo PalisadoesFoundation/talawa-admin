@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **MessageImage**: `NamedExoticComponent`\<`IMessageImageProps`\>
 
-Defined in: [src/components/UserPortal/ChatRoom/ChatRoom.tsx:240](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/components/UserPortal/ChatRoom/ChatRoom.tsx#L240)
+Defined in: [src/components/UserPortal/ChatRoom/ChatRoom.tsx:240](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/components/UserPortal/ChatRoom/ChatRoom.tsx#L240)

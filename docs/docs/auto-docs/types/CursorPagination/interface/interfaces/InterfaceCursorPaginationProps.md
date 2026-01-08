@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceCursorPaginationProps\<TData, TNode\>
 
-Defined in: [src/types/CursorPagination/interface.ts:155](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L155)
+Defined in: [src/types/CursorPagination/interface.ts:155](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L155)
 
 Props for the CursorPaginationManager component.
 
@@ -67,7 +67,7 @@ The type of individual items being paginated.
 
 > `optional` **children**: (`props`) => `ReactNode`
 
-Defined in: [src/types/CursorPagination/interface.ts:217](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L217)
+Defined in: [src/types/CursorPagination/interface.ts:217](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L217)
 
 Render function that receives pagination state and renders the UI.
 Required for Controlled Mode (unless renderItem is used in Smart Mode).
@@ -90,7 +90,7 @@ The render props containing items, loading state, and loadMore function.
 
 > `optional` **data**: `TData`
 
-Defined in: [src/types/CursorPagination/interface.ts:171](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L171)
+Defined in: [src/types/CursorPagination/interface.ts:171](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L171)
 
 The data returned from the GraphQL query containing the connection.
 
@@ -100,7 +100,7 @@ The data returned from the GraphQL query containing the connection.
 
 > `optional` **dataPath**: `string`
 
-Defined in: [src/types/CursorPagination/interface.ts:245](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L245)
+Defined in: [src/types/CursorPagination/interface.ts:245](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L245)
 
 Path to extract the connection from the query result.
 e.g., "chat.messages" or "organizations.0.userTags"
@@ -111,7 +111,7 @@ e.g., "chat.messages" or "organizations.0.userTags"
 
 > `optional` **emptyStateComponent**: `ReactNode`
 
-Defined in: [src/types/CursorPagination/interface.ts:265](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L265)
+Defined in: [src/types/CursorPagination/interface.ts:265](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L265)
 
 Component to display when list is empty.
 
@@ -121,7 +121,7 @@ Component to display when list is empty.
 
 > `optional` **getConnection**: (`data`) => [`InterfaceConnection`](InterfaceConnection.md)\<`TNode`\>
 
-Defined in: [src/types/CursorPagination/interface.ts:180](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L180)
+Defined in: [src/types/CursorPagination/interface.ts:180](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L180)
 
 Function to extract the connection from the query data.
 Required for Controlled Mode.
@@ -146,7 +146,7 @@ The connection object containing edges and pageInfo.
 
 > **itemsPerPage**: `number`
 
-Defined in: [src/types/CursorPagination/interface.ts:200](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L200)
+Defined in: [src/types/CursorPagination/interface.ts:200](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L200)
 
 Number of items to fetch per page.
 
@@ -156,7 +156,7 @@ Number of items to fetch per page.
 
 > `optional` **keyExtractor**: (`item`) => `string`
 
-Defined in: [src/types/CursorPagination/interface.ts:255](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L255)
+Defined in: [src/types/CursorPagination/interface.ts:255](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L255)
 
 Function to extract unique key from an item.
 
@@ -176,7 +176,7 @@ Function to extract unique key from an item.
 
 > `optional` **loadingComponent**: `ReactNode`
 
-Defined in: [src/types/CursorPagination/interface.ts:260](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L260)
+Defined in: [src/types/CursorPagination/interface.ts:260](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L260)
 
 Component to display while loading.
 
@@ -186,7 +186,7 @@ Component to display while loading.
 
 > `optional` **onDataChange**: (`items`) => `void`
 
-Defined in: [src/types/CursorPagination/interface.ts:275](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L275)
+Defined in: [src/types/CursorPagination/interface.ts:275](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L275)
 
 Callback when data is changed (Smart Mode).
 
@@ -206,7 +206,7 @@ Callback when data is changed (Smart Mode).
 
 > `optional` **onItemsChange**: (`items`) => `void`
 
-Defined in: [src/types/CursorPagination/interface.ts:231](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L231)
+Defined in: [src/types/CursorPagination/interface.ts:231](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L231)
 
 Optional callback fired when items change.
 Useful for side effects like scroll position management.
@@ -227,7 +227,7 @@ Useful for side effects like scroll position management.
 
 > `optional` **onLoadMore**: (`variables`) => `Promise`\<`unknown`\>
 
-Defined in: [src/types/CursorPagination/interface.ts:209](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L209)
+Defined in: [src/types/CursorPagination/interface.ts:209](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L209)
 
 Callback function to load more items.
 Required for Controlled Mode.
@@ -252,7 +252,7 @@ A promise that resolves when the data is loaded.
 
 > `optional` **paginationDirection**: `"forward"` \| `"backward"`
 
-Defined in: [src/types/CursorPagination/interface.ts:166](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L166)
+Defined in: [src/types/CursorPagination/interface.ts:166](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L166)
 
 Direction of pagination.
 
@@ -273,7 +273,7 @@ Direction of pagination.
 
 > `optional` **query**: `DocumentNode`
 
-Defined in: [src/types/CursorPagination/interface.ts:239](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L239)
+Defined in: [src/types/CursorPagination/interface.ts:239](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L239)
 
 GraphQL query to fetch data.
 If provided, the component will manage data fetching.
@@ -284,7 +284,7 @@ If provided, the component will manage data fetching.
 
 > `optional` **queryVariables**: `object`
 
-Defined in: [src/types/CursorPagination/interface.ts:189](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L189)
+Defined in: [src/types/CursorPagination/interface.ts:189](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L189)
 
 Current query variables.
 Used to determine pagination state.
@@ -316,7 +316,7 @@ Required for Controlled Mode.
 
 > `optional` **refetchTrigger**: `number`
 
-Defined in: [src/types/CursorPagination/interface.ts:270](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L270)
+Defined in: [src/types/CursorPagination/interface.ts:270](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L270)
 
 Trigger to force refetch (for Smart Mode).
 
@@ -326,7 +326,7 @@ Trigger to force refetch (for Smart Mode).
 
 > `optional` **renderItem**: (`item`) => `ReactNode`
 
-Defined in: [src/types/CursorPagination/interface.ts:250](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L250)
+Defined in: [src/types/CursorPagination/interface.ts:250](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L250)
 
 Render function for individual items (alternative to children render props).
 
@@ -346,7 +346,7 @@ Render function for individual items (alternative to children render props).
 
 > `optional` **scrollContainerRef**: `RefObject`\<`HTMLElement`\>
 
-Defined in: [src/types/CursorPagination/interface.ts:225](https://github.com/ad1tyayadav/talawa-admin/blob/610e1eba4f5f98b7fa4c709055eb2481e5114540/src/types/CursorPagination/interface.ts#L225)
+Defined in: [src/types/CursorPagination/interface.ts:225](https://github.com/ad1tyayadav/talawa-admin/blob/113d6bb4150eecf2f42bfd13d7ecd3aa2d021635/src/types/CursorPagination/interface.ts#L225)
 
 Optional ref to the scroll container.
 Required for backward pagination to maintain scroll position.
