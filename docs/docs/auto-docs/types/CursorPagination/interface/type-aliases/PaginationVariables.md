@@ -6,7 +6,7 @@
 
 > **PaginationVariables**\<`T`\> = `T` & `object`
 
-Defined in: [src/types/CursorPagination/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L11)
+Defined in: [src/types/CursorPagination/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L12)
 
 Helper type to combine pagination variables with custom query variables
 

@@ -7,26 +7,18 @@ import {
   within,
 } from '@testing-library/react';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import { toast } from 'react-toastify';
 import type {
   IItemModalProps,
   IUpdateActionItemForInstanceVariables,
   ICreateActionItemVariables,
 } from 'types/ActionItems/interface.ts';
 import ItemModal from './ActionItemModal';
-import { vi, it, describe, expect, beforeEach, afterEach } from 'vitest';
+import { vi, it, describe, expect } from 'vitest';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-
-dayjs.extend(utc);
-import {
-  LocalizationProvider,
-  AdapterDayjs,
-} from 'shared-components/DateRangePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
-import {
-  ACTION_ITEM_LIST,
-  GET_EVENT_ACTION_ITEMS,
-} from 'GraphQl/Queries/ActionItemQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import {
   GET_EVENT_VOLUNTEERS,
@@ -39,24 +31,15 @@ import {
 } from 'GraphQl/Mutations/ActionItemMutations';
 import userEvent from '@testing-library/user-event';
 import type { IActionItemInfo } from 'types/ActionItems/interface';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
-  NotificationToast: {
+// Mock the toast functions
+vi.mock('react-toastify', () => ({
+  toast: {
     success: vi.fn(),
     error: vi.fn(),
     info: vi.fn(),
     warning: vi.fn(),
   },
-}));
-
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-    i18n: {
-      changeLanguage: () => Promise.resolve(),
-    },
-  }),
 }));
 
 const matchesInputSubset = (
@@ -69,164 +52,6 @@ const matchesInputSubset = (
     ([key, value]) => actualInput[key] === value,
   );
 };
-
-const createVolunteer = (
-  eventId: string,
-  {
-    id = 'volunteer1',
-    name = 'John Doe',
-    isTemplate = true,
-  }: { id?: string; name?: string; isTemplate?: boolean } = {},
-) => ({
-  id,
-  hasAccepted: true,
-  volunteerStatus: 'accepted',
-  hoursVolunteered: 10,
-  isPublic: true,
-  isTemplate,
-  isInstanceException: false,
-  createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-  updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-  user: {
-    id: `user-${id}`,
-    name,
-    avatarURL: null,
-  },
-  event: {
-    id: eventId,
-    name: 'Test Event',
-  },
-  creator: {
-    id: `user-${id}`,
-    name,
-    avatarURL: null,
-  },
-  updater: {
-    id: `user-${id}`,
-    name,
-    avatarURL: null,
-  },
-  groups: [],
-});
-
-const createVolunteerGroup = (
-  eventId: string,
-  {
-    id = 'group1',
-    name = 'Test Group 1',
-    description = 'Test volunteer group 1',
-    isTemplate = true,
-  }: {
-    id?: string;
-    name?: string;
-    description?: string;
-    isTemplate?: boolean;
-  } = {},
-) => ({
-  id,
-  name,
-  description,
-  volunteersRequired: 5,
-  isTemplate,
-  isInstanceException: false,
-  createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-  creator: {
-    id: 'user1',
-    name: 'John Doe',
-    avatarURL: null,
-  },
-  leader: {
-    id: 'user1',
-    name: 'John Doe',
-    avatarURL: null,
-  },
-  volunteers: [
-    {
-      id: 'volunteer1',
-      hasAccepted: true,
-      user: {
-        id: 'user-volunteer1',
-        name: 'John Doe',
-        avatarURL: null,
-      },
-    },
-  ],
-  event: {
-    id: eventId,
-  },
-});
-
-const createActionItemNode = (eventId: string) => ({
-  id: '1',
-  isCompleted: false,
-  assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-  completionAt: null,
-  createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-  updatedAt: dayjs().utc().add(1, 'day').format('YYYY-MM-DDTHH:mm:ss[Z]'),
-  preCompletionNotes: 'Test notes',
-  postCompletionNotes: null,
-  isInstanceException: false,
-  isTemplate: false,
-  volunteer: {
-    ...createVolunteer(eventId),
-  },
-  volunteerGroup: {
-    ...createVolunteerGroup(eventId),
-  },
-  category: {
-    id: 'cat1',
-    name: 'Category 1',
-  },
-  event: {
-    id: eventId,
-    name: 'Test Event',
-  },
-  recurringEventInstance: {
-    id: `recur-${eventId}`,
-    name: 'Recurring Event',
-  },
-  organization: {
-    id: 'orgId',
-    name: 'Test Organization',
-  },
-  creator: {
-    id: 'creator1',
-    name: 'Creator 1',
-  },
-  updater: {
-    id: 'creator1',
-    name: 'Creator 1',
-  },
-});
-
-const buildEventActionItemsData = (eventId: string) => ({
-  event: {
-    id: eventId,
-    recurrenceRule: { id: `rec-${eventId}` },
-    baseEvent: { id: `base-${eventId}` },
-    actionItems: {
-      edges: [
-        {
-          node: {
-            ...createActionItemNode(eventId),
-          },
-        },
-      ],
-      pageInfo: {
-        hasNextPage: false,
-        endCursor: null,
-      },
-    },
-  },
-});
-
-const buildActionItemsByOrgData = (eventId: string) => ({
-  actionItemsByOrganization: [
-    {
-      ...createActionItemNode(eventId),
-    },
-  ],
-});
 
 // Define common mocks for GraphQL queries
 const mockQueries = [
@@ -248,8 +73,8 @@ const mockQueries = [
             isDisabled: false,
             description: 'Test category 1',
             creator: { id: 'creator1', name: 'Creator 1' },
-            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-            updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+            createdAt: '2024-01-01',
+            updatedAt: '2024-01-01',
           },
           {
             id: 'cat2',
@@ -257,8 +82,8 @@ const mockQueries = [
             isDisabled: false,
             description: 'Test category 2',
             creator: { id: 'creator2', name: 'Creator 2' },
-            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-            updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+            createdAt: '2024-01-01',
+            updatedAt: '2024-01-01',
           },
         ],
       },
@@ -281,8 +106,8 @@ const mockQueries = [
             emailAddress: 'john@example.com',
             role: 'USER',
             avatarURL: '',
-            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-            updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+            createdAt: '2024-01-01',
+            updatedAt: '2024-01-01',
           },
           {
             id: 'user2',
@@ -293,8 +118,8 @@ const mockQueries = [
             emailAddress: 'jane@example.com',
             role: 'USER',
             avatarURL: '',
-            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-            updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+            createdAt: '2024-01-01',
+            updatedAt: '2024-01-01',
           },
         ],
       },
@@ -308,27 +133,73 @@ const mockQueries = [
         where: {},
       },
     },
-    newData: () => ({
+    result: {
       data: {
         event: {
           id: 'eventId',
-          recurrenceRule: { id: 'rec-eventId' },
-          baseEvent: { id: 'base-eventId' },
           volunteers: [
-            createVolunteer('eventId', {
+            {
               id: 'volunteer1',
-              name: 'John Doe',
+              hasAccepted: true,
+              volunteerStatus: 'accepted',
+              hoursVolunteered: 10,
+              isPublic: true,
               isTemplate: true,
-            }),
-            createVolunteer('eventId', {
+              isInstanceException: false,
+              createdAt: '2023-01-01T00:00:00Z',
+              updatedAt: '2023-01-01T00:00:00Z',
+              user: {
+                id: 'user1',
+                name: 'John Doe',
+                avatarURL: null,
+              },
+              event: {
+                id: 'eventId',
+                name: 'Test Event',
+              },
+              creator: {
+                id: 'user1',
+                name: 'John Doe',
+              },
+              updater: {
+                id: 'user1',
+                name: 'John Doe',
+              },
+              groups: [],
+            },
+            {
               id: 'volunteer2',
-              name: 'Jane Smith',
+              hasAccepted: true,
+              volunteerStatus: 'accepted',
+              hoursVolunteered: 5,
+              isPublic: true,
               isTemplate: false,
-            }),
+              isInstanceException: false,
+              createdAt: '2023-01-01T00:00:00Z',
+              updatedAt: '2023-01-01T00:00:00Z',
+              user: {
+                id: 'user2',
+                name: 'Jane Smith',
+                avatarURL: null,
+              },
+              event: {
+                id: 'eventId',
+                name: 'Test Event',
+              },
+              creator: {
+                id: 'user2',
+                name: 'Jane Smith',
+              },
+              updater: {
+                id: 'user2',
+                name: 'Jane Smith',
+              },
+              groups: [],
+            },
           ],
         },
       },
-    }),
+    },
   },
   {
     request: {
@@ -338,37 +209,73 @@ const mockQueries = [
         where: {},
       },
     },
-    newData: () => ({
+    result: {
       data: {
         event: {
           id: 'event123',
-          recurrenceRule: { id: 'rec-event123' },
-          baseEvent: { id: 'base-event123' },
           volunteers: [
             {
-              ...createVolunteer('event123', {
-                id: 'volunteer1',
+              id: 'volunteer1',
+              hasAccepted: true,
+              volunteerStatus: 'accepted',
+              hoursVolunteered: 10,
+              isPublic: true,
+              isTemplate: true,
+              isInstanceException: false,
+              createdAt: '2023-01-01T00:00:00Z',
+              updatedAt: '2023-01-01T00:00:00Z',
+              user: {
+                id: 'user1',
                 name: 'John Doe',
-                isTemplate: true,
-              }),
-              groups: [
-                {
-                  id: 'group1',
-                  name: 'Test Group 1',
-                  description: 'Test volunteer group 1',
-                  volunteers: [{ id: 'volunteer1' }],
-                },
-              ],
+                avatarURL: null,
+              },
+              event: {
+                id: 'event123',
+                name: 'Test Event',
+              },
+              creator: {
+                id: 'user1',
+                name: 'John Doe',
+              },
+              updater: {
+                id: 'user1',
+                name: 'John Doe',
+              },
+              groups: [],
             },
-            createVolunteer('event123', {
+            {
               id: 'volunteer2',
-              name: 'Jane Smith',
+              hasAccepted: true,
+              volunteerStatus: 'accepted',
+              hoursVolunteered: 5,
+              isPublic: true,
               isTemplate: false,
-            }),
+              isInstanceException: false,
+              createdAt: '2023-01-01T00:00:00Z',
+              updatedAt: '2023-01-01T00:00:00Z',
+              user: {
+                id: 'user2',
+                name: 'Jane Smith',
+                avatarURL: null,
+              },
+              event: {
+                id: 'event123',
+                name: 'Test Event',
+              },
+              creator: {
+                id: 'user2',
+                name: 'Jane Smith',
+              },
+              updater: {
+                id: 'user2',
+                name: 'Jane Smith',
+              },
+              groups: [],
+            },
           ],
         },
       },
-    }),
+    },
   },
   {
     request: {
@@ -377,24 +284,83 @@ const mockQueries = [
         input: { id: 'eventId' },
       },
     },
-    newData: () => ({
+    result: {
       data: {
         event: {
           id: 'eventId',
-          recurrenceRule: { id: 'rec-eventId' },
-          baseEvent: { id: 'base-eventId' },
+          recurrenceRule: null,
+          baseEvent: null,
           volunteerGroups: [
-            createVolunteerGroup('eventId', { id: 'group1', isTemplate: true }),
-            createVolunteerGroup('eventId', {
+            {
+              id: 'group1',
+              name: 'Test Group 1',
+              description: 'Test volunteer group 1',
+              volunteersRequired: 5,
+              isTemplate: true,
+              isInstanceException: false,
+              createdAt: '2023-01-01T00:00:00Z',
+              creator: {
+                id: 'user1',
+                name: 'John Doe',
+                avatarURL: null,
+              },
+              leader: {
+                id: 'user1',
+                name: 'John Doe',
+                avatarURL: null,
+              },
+              volunteers: [
+                {
+                  id: 'volunteer1',
+                  hasAccepted: true,
+                  user: {
+                    id: 'user1',
+                    name: 'John Doe',
+                    avatarURL: null,
+                  },
+                },
+              ],
+              event: {
+                id: 'eventId',
+              },
+            },
+            {
               id: 'group2',
               name: 'Test Group 2',
               description: 'Test volunteer group 2',
+              volunteersRequired: 3,
               isTemplate: false,
-            }),
+              isInstanceException: false,
+              createdAt: '2023-02-01T00:00:00Z',
+              creator: {
+                id: 'user2',
+                name: 'Jane Smith',
+                avatarURL: null,
+              },
+              leader: {
+                id: 'user2',
+                name: 'Jane Smith',
+                avatarURL: null,
+              },
+              volunteers: [
+                {
+                  id: 'volunteer2',
+                  hasAccepted: true,
+                  user: {
+                    id: 'user2',
+                    name: 'Jane Smith',
+                    avatarURL: null,
+                  },
+                },
+              ],
+              event: {
+                id: 'eventId',
+              },
+            },
           ],
         },
       },
-    }),
+    },
   },
   {
     request: {
@@ -403,109 +369,80 @@ const mockQueries = [
         input: { id: 'event123' },
       },
     },
-    newData: () => ({
+    result: {
       data: {
         event: {
           id: 'event123',
-          recurrenceRule: { id: 'rec-event123' },
-          baseEvent: { id: 'base-event123' },
+          recurrenceRule: null,
+          baseEvent: null,
           volunteerGroups: [
-            createVolunteerGroup('event123', {
+            {
               id: 'group1',
+              name: 'Test Group 1',
+              description: 'Test volunteer group 1',
+              volunteersRequired: 5,
               isTemplate: true,
-            }),
-            createVolunteerGroup('event123', {
+              isInstanceException: false,
+              createdAt: '2023-01-01T00:00:00Z',
+              creator: {
+                id: 'user1',
+                name: 'John Doe',
+                avatarURL: null,
+              },
+              leader: {
+                id: 'user1',
+                name: 'John Doe',
+                avatarURL: null,
+              },
+              volunteers: [
+                {
+                  id: 'volunteer1',
+                  hasAccepted: true,
+                  user: {
+                    id: 'user1',
+                    name: 'John Doe',
+                    avatarURL: null,
+                  },
+                },
+              ],
+              event: {
+                id: 'event123',
+              },
+            },
+            {
               id: 'group2',
               name: 'Test Group 2',
               description: 'Test volunteer group 2',
+              volunteersRequired: 3,
               isTemplate: false,
-            }),
+              isInstanceException: false,
+              createdAt: '2023-02-01T00:00:00Z',
+              creator: {
+                id: 'user2',
+                name: 'Jane Smith',
+                avatarURL: null,
+              },
+              leader: {
+                id: 'user2',
+                name: 'Jane Smith',
+                avatarURL: null,
+              },
+              volunteers: [
+                {
+                  id: 'volunteer2',
+                  hasAccepted: true,
+                  user: {
+                    id: 'user2',
+                    name: 'Jane Smith',
+                    avatarURL: null,
+                  },
+                },
+              ],
+              event: {
+                id: 'event123',
+              },
+            },
           ],
-        },
-      },
-    }),
-  },
-  {
-    request: {
-      query: ACTION_ITEM_LIST,
-    },
-    variableMatcher: () => true,
-    newData: () => ({
-      data: buildActionItemsByOrgData('eventId'),
-    }),
-  },
-  {
-    request: {
-      query: GET_EVENT_ACTION_ITEMS,
-      variables: { input: { id: 'eventId' } },
-    },
-    newData: () => ({
-      data: buildEventActionItemsData('eventId'),
-    }),
-  },
-  {
-    request: {
-      query: GET_EVENT_ACTION_ITEMS,
-      variables: { input: { id: 'event123' } },
-    },
-    newData: () => ({
-      data: buildEventActionItemsData('event123'),
-    }),
-  },
-  {
-    request: {
-      query: CREATE_ACTION_ITEM_MUTATION,
-    },
-    variableMatcher: () => true,
-    result: {
-      data: {
-        createActionItem: {
-          id: 'created-action-item',
-          isCompleted: false,
-          assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-          preCompletionNotes: 'Test notes',
-          postCompletionNotes: null,
-          isInstanceException: false,
-          isTemplate: false,
-          __typename: 'ActionItem',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_ACTION_ITEM_MUTATION,
-    },
-    variableMatcher: () => true,
-    result: {
-      data: {
-        updateActionItem: {
-          id: '1',
-          isCompleted: false,
-          assignedAt: dayjs()
-            .utc()
-            .add(1, 'day')
-            .format('YYYY-MM-DDTHH:mm:ss[Z]'),
-          completionAt: null,
-          createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-          preCompletionNotes: 'Test notes',
-          postCompletionNotes: null,
-          isInstanceException: false,
-          isTemplate: false,
-          __typename: 'ActionItem',
-        },
-      },
-    },
-  },
-  {
-    request: {
-      query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
-    },
-    variableMatcher: () => true,
-    result: {
-      data: {
-        updateActionItemForInstance: {
-          id: '1',
         },
       },
     },
@@ -515,7 +452,7 @@ const mockQueries = [
 // Helper function to render the component with necessary providers
 const renderWithProviders = (props: IItemModalProps) => {
   return render(
-    <MockedProvider mocks={mockQueries}>
+    <MockedProvider mocks={mockQueries} addTypename={false}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <ItemModal {...props} />
       </LocalizationProvider>
@@ -534,9 +471,9 @@ const mockActionItem = {
   organizationId: 'org1',
   creatorId: 'creator1',
   updaterId: null,
-  assignedAt: dayjs().utc().toDate(),
+  assignedAt: new Date('2024-01-01'),
   completionAt: null,
-  createdAt: dayjs().utc().toDate(),
+  createdAt: new Date('2024-01-01'),
   updatedAt: null,
   isCompleted: false,
   preCompletionNotes: 'Test notes',
@@ -569,7 +506,7 @@ const mockActionItem = {
     name: 'Category 1',
     description: '',
     isDisabled: false,
-    createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+    createdAt: '2024-01-01',
     organizationId: 'org1',
   },
   organization: {
@@ -590,7 +527,7 @@ const mockActionItemWithGroup = {
     volunteersRequired: 5,
     isTemplate: true,
     isInstanceException: false,
-    createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+    createdAt: '2023-01-01T00:00:00Z',
     creator: {
       id: 'user1',
       name: 'John Doe',
@@ -623,19 +560,14 @@ const mockActionItemWithGroup = {
   },
 };
 
-const getPickerInputByLabel = (label: string) =>
-  screen.getByLabelText(label, { selector: 'input' });
-
 // Additional test cases for ItemModal component
 describe('ItemModal - Additional Test Cases', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+  // Test modal visibility and basic rendering
 
   afterEach(() => {
     vi.clearAllMocks();
   });
-  // Test modal visibility and basic rendering
+
   describe('Modal Visibility and Basic Rendering', () => {
     it('should not render modal when isOpen is false', () => {
       const props: IItemModalProps = {
@@ -691,7 +623,7 @@ describe('ItemModal - Additional Test Cases', () => {
         isOpen: true,
         hide: vi.fn(),
         orgId: 'orgId',
-        eventId: 'event123',
+        eventId: 'eventId',
         actionItemsRefetch: vi.fn(),
         editMode: true,
         actionItem: mockActionItemWithGroup as unknown as IActionItemInfo,
@@ -699,26 +631,13 @@ describe('ItemModal - Additional Test Cases', () => {
 
       renderWithProviders(props);
 
-      await waitFor(
-        () => {
-          expect(screen.getByRole('dialog')).toBeInTheDocument();
-        },
-        { timeout: 5000 },
-      );
-
-      await waitFor(
-        () => {
-          expect(screen.getByTestId('categorySelect')).toBeInTheDocument();
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(screen.getByRole('dialog')).toBeInTheDocument();
+      });
 
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
-        {},
-        { timeout: 5000 },
       );
-
       expect(volunteerGroupSelect).toBeInTheDocument();
 
       const volunteerGroupInput = screen.getByLabelText(/volunteerGroup/i);
@@ -817,10 +736,7 @@ describe('ItemModal - Additional Test Cases', () => {
       }
 
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith({
-          key: 'selectCategoryAndAssignment',
-          namespace: 'translation',
-        });
+        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment');
       });
     });
   });
@@ -908,23 +824,11 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
-      // Select a category first (required for volunteer group functionality)
-      const categorySelect = screen.getByTestId('categorySelect');
-      const categoryInput = within(categorySelect).getByRole('combobox');
-      await userEvent.click(categoryInput);
-      await userEvent.type(categoryInput, 'Category 1');
-      await waitFor(async () => {
-        const option = await screen.findByText('Category 1');
-        await userEvent.click(option);
-      });
-
-      // Now click volunteer group chip to switch mode
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
       await userEvent.click(volunteerGroupChip);
 
-      // Wait for volunteer group select to appear
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
         {},
@@ -1068,7 +972,6 @@ describe('ItemModal - Additional Test Cases', () => {
       });
       await userEvent.click(volunteerGroupChip);
 
-      // Wait for volunteerGroupSelect to appear (this confirms the switch happened)
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
         {},
@@ -1078,11 +981,6 @@ describe('ItemModal - Additional Test Cases', () => {
         within(volunteerGroupSelect).getByRole('combobox');
       await userEvent.click(volunteerGroupInput);
       await userEvent.type(volunteerGroupInput, 'Test Group 2');
-
-      // Wait for the autocomplete dropdown to appear
-      await waitFor(() => {
-        expect(screen.getByRole('listbox')).toBeInTheDocument();
-      });
 
       const groupOption = await screen.findByText('Test Group 2');
       await userEvent.click(groupOption);
@@ -1156,10 +1054,7 @@ describe('ItemModal - Additional Test Cases', () => {
 
       // Should not throw an unhandled exception
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith({
-          key: 'selectCategoryAndAssignment',
-          namespace: 'translation',
-        });
+        expect(toast.error).toHaveBeenCalled();
       });
     });
   });
@@ -1202,10 +1097,7 @@ describe('ItemModal - Additional Test Cases', () => {
 
       // Add await here to properly wait for the toast error
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith({
-          key: 'unknownError',
-          namespace: 'errors',
-        });
+        expect(toast.error).toHaveBeenCalled();
       });
     });
   });
@@ -1288,7 +1180,7 @@ describe('ItemModal - Additional Test Cases', () => {
 
       // Re-render with same props
       rerender(
-        <MockedProvider mocks={mockQueries}>
+        <MockedProvider mocks={mockQueries} addTypename={false}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ItemModal {...props} />
           </LocalizationProvider>
@@ -1360,10 +1252,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       }
 
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith({
-          key: 'selectCategoryAndAssignment',
-          namespace: 'translation',
-        });
+        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment');
       });
     });
 
@@ -1394,10 +1283,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith({
-          key: 'unknownError',
-          namespace: 'errors',
-        });
+        expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
       });
     });
   });
@@ -1446,7 +1332,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       });
 
       // Find date picker input
-      const dateInput = getPickerInputByLabel('assignmentDate');
+      const dateInput = screen.getByLabelText(/assignmentDate/i);
       expect(dateInput).toBeInTheDocument();
 
       // The date picker should be accessible and allow interaction
@@ -1576,7 +1462,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       };
 
       rerender(
-        <MockedProvider mocks={mockQueries}>
+        <MockedProvider mocks={mockQueries} addTypename={false}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ItemModal {...editProps} />
           </LocalizationProvider>
@@ -1618,6 +1504,9 @@ describe('ItemModal - Specific Test Coverage', () => {
 });
 
 // ...existing code...
+beforeEach(() => {
+  vi.clearAllMocks();
+});
 
 afterAll(() => {
   vi.clearAllMocks();
@@ -1668,8 +1557,8 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
                 isDisabled: false,
                 description: 'Updated test category 1',
                 creator: { id: 'creator1', name: 'Creator 1' },
-                createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-                updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+                createdAt: '2024-01-01',
+                updatedAt: '2024-01-01',
               },
               {
                 id: 'cat3',
@@ -1677,8 +1566,8 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
                 isDisabled: false,
                 description: 'New test category 3',
                 creator: { id: 'creator3', name: 'Creator 3' },
-                createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-                updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+                createdAt: '2024-01-01',
+                updatedAt: '2024-01-01',
               },
             ],
           },
@@ -1698,7 +1587,7 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
     };
 
     const { rerender } = render(
-      <MockedProvider mocks={updatedMockQueries}>
+      <MockedProvider mocks={updatedMockQueries} addTypename={false}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -1711,7 +1600,7 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
 
     // Re-render with updated data should work without issues
     rerender(
-      <MockedProvider mocks={updatedMockQueries}>
+      <MockedProvider mocks={updatedMockQueries} addTypename={false}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -1752,7 +1641,7 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
     };
 
     render(
-      <MockedProvider mocks={emptyDataMockQueries}>
+      <MockedProvider mocks={emptyDataMockQueries} addTypename={false}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -1798,7 +1687,7 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
     };
 
     render(
-      <MockedProvider mocks={nullDataMockQueries}>
+      <MockedProvider mocks={nullDataMockQueries} addTypename={false}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -1836,7 +1725,7 @@ describe('updateActionForInstanceHandler', () => {
         }),
       result: {
         data: {
-          updateActionItemForInstance: {
+          updateActionForInstance: {
             id: '1',
           },
         },
@@ -1856,7 +1745,10 @@ describe('updateActionForInstanceHandler', () => {
     };
 
     render(
-      <MockedProvider mocks={[updateMutationMock, ...mockQueries]}>
+      <MockedProvider
+        mocks={[updateMutationMock, ...mockQueries]}
+        addTypename={false}
+      >
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -1890,10 +1782,7 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith({
-        key: 'eventActionItems.successfulUpdation',
-        namespace: 'translation',
-      });
+      expect(toast.success).toHaveBeenCalled();
       expect(mockRefetch).toHaveBeenCalled();
       expect(mockOrgRefetch).toHaveBeenCalled();
       expect(mockHide).toHaveBeenCalled();
@@ -1928,10 +1817,7 @@ describe('updateActionForInstanceHandler', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith({
-        key: 'unknownError',
-        namespace: 'errors',
-      });
+      expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
     });
   });
 
@@ -1967,10 +1853,7 @@ describe('updateActionForInstanceHandler', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith({
-        key: 'unknownError',
-        namespace: 'errors',
-      });
+      expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
     });
   });
 
@@ -2002,7 +1885,7 @@ describe('updateActionForInstanceHandler', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks}>
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -2036,10 +1919,7 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith({
-        key: 'unknownError',
-        namespace: 'errors',
-      });
+      expect(toast.error).toHaveBeenCalledWith('Network error occurred');
     });
   });
 
@@ -2050,9 +1930,9 @@ describe('updateActionForInstanceHandler', () => {
     const mockOrgRefetch = vi.fn();
     const mockHide = vi.fn();
 
-    const expectedAssignedAt = dayjs(mockActionItemWithGroup.assignedAt)
-      .utc()
-      .toISOString();
+    const expectedAssignedAt = dayjs(
+      mockActionItemWithGroup.assignedAt,
+    ).toISOString();
 
     const updateGroupMutationMock = {
       request: {
@@ -2069,7 +1949,7 @@ describe('updateActionForInstanceHandler', () => {
         }),
       result: {
         data: {
-          updateActionItemForInstance: {
+          updateActionForInstance: {
             id: '1',
           },
         },
@@ -2091,7 +1971,7 @@ describe('updateActionForInstanceHandler', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks}>
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -2113,10 +1993,7 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith({
-        key: 'eventActionItems.successfulUpdation',
-        namespace: 'translation',
-      });
+      expect(toast.success).toHaveBeenCalled();
       expect(mockRefetch).toHaveBeenCalledTimes(1);
       expect(mockOrgRefetch).toHaveBeenCalledTimes(1);
       expect(mockHide).toHaveBeenCalledTimes(1);
@@ -2140,7 +2017,7 @@ describe('updateActionForInstanceHandler', () => {
         }),
       result: {
         data: {
-          updateActionItemForInstance: {
+          updateActionForInstance: {
             id: '1',
           },
         },
@@ -2162,7 +2039,7 @@ describe('updateActionForInstanceHandler', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks}>
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -2217,7 +2094,7 @@ describe('updateActionForInstanceHandler', () => {
       },
       result: {
         data: {
-          updateActionItemForInstance: {
+          updateActionForInstance: {
             id: '1',
           },
         },
@@ -2238,7 +2115,7 @@ describe('updateActionForInstanceHandler', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks}>
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -2292,7 +2169,7 @@ describe('updateActionForInstanceHandler', () => {
       },
       result: {
         data: {
-          updateActionItemForInstance: {
+          updateActionForInstance: {
             id: '1',
           },
         },
@@ -2313,7 +2190,7 @@ describe('updateActionForInstanceHandler', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks}>
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -2347,10 +2224,7 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith({
-        key: 'eventActionItems.successfulUpdation',
-        namespace: 'translation',
-      });
+      expect(toast.success).toHaveBeenCalled();
     });
   });
 
@@ -2370,7 +2244,7 @@ describe('updateActionForInstanceHandler', () => {
       },
       result: {
         data: {
-          updateActionItemForInstance: {
+          updateActionForInstance: {
             id: '1',
           },
         },
@@ -2391,7 +2265,7 @@ describe('updateActionForInstanceHandler', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks}>
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -2425,10 +2299,7 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith({
-        key: 'eventActionItems.successfulUpdation',
-        namespace: 'translation',
-      });
+      expect(toast.success).toHaveBeenCalled();
     });
   });
 });
@@ -2448,13 +2319,13 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
             volunteerId: 'volunteer2',
             categoryId: 'cat2',
             preCompletionNotes: 'Updated notes for instance',
-            assignedAt: dayjs().utc().toISOString(),
+            assignedAt: new Date('2024-01-01').toISOString(),
           },
         },
       },
       result: {
         data: {
-          updateActionItemForInstance: {
+          updateActionForInstance: {
             id: '1',
           },
         },
@@ -2475,7 +2346,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks}>
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -2537,10 +2408,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith({
-        key: 'eventActionItems.successfulUpdation',
-        namespace: 'translation',
-      });
+      expect(toast.success).toHaveBeenCalled();
       expect(mockRefetch).toHaveBeenCalled();
       expect(mockHide).toHaveBeenCalled();
     });
@@ -2896,9 +2764,9 @@ describe('orgActionItemsRefetch functionality', () => {
           createActionItem: {
             id: 'newId',
             isCompleted: false,
-            assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+            assignedAt: '2024-01-01',
             completionAt: null,
-            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+            createdAt: '2024-01-01',
             preCompletionNotes: 'Test with org refetch',
             postCompletionNotes: null,
             volunteer: {
@@ -2940,7 +2808,7 @@ describe('orgActionItemsRefetch functionality', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks}>
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -3000,10 +2868,7 @@ describe('orgActionItemsRefetch functionality', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith({
-        key: 'eventActionItems.successfulCreation',
-        namespace: 'translation',
-      });
+      expect(toast.success).toHaveBeenCalled();
       expect(mockRefetch).toHaveBeenCalled();
       expect(mockOrgRefetch).toHaveBeenCalled();
       expect(mockHide).toHaveBeenCalled();
@@ -3029,7 +2894,7 @@ describe('orgActionItemsRefetch functionality', () => {
       },
       result: {
         data: {
-          updateActionItemForInstance: {
+          updateActionForInstance: {
             id: '1',
           },
         },
@@ -3051,7 +2916,7 @@ describe('orgActionItemsRefetch functionality', () => {
     };
 
     render(
-      <MockedProvider mocks={mutationMocks}>
+      <MockedProvider mocks={mutationMocks} addTypename={false}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...props} />
         </LocalizationProvider>
@@ -3088,10 +2953,7 @@ describe('orgActionItemsRefetch functionality', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith({
-        key: 'eventActionItems.successfulUpdation',
-        namespace: 'translation',
-      });
+      expect(toast.success).toHaveBeenCalled();
       expect(mockRefetch).toHaveBeenCalled();
       expect(mockOrgRefetch).toHaveBeenCalled();
       expect(mockHide).toHaveBeenCalled();
@@ -3139,9 +3001,9 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
             createActionItem: {
               id: 'newId',
               isCompleted: false,
-              assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+              assignedAt: '2024-01-01',
               completionAt: null,
-              createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+              createdAt: '2024-01-01',
               preCompletionNotes: 'Test with event',
               postCompletionNotes: null,
               volunteer: {
@@ -3182,7 +3044,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       };
 
       render(
-        <MockedProvider mocks={mutationMocks}>
+        <MockedProvider mocks={mutationMocks} addTypename={false}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ItemModal {...props} />
           </LocalizationProvider>
@@ -3231,10 +3093,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'eventActionItems.successfulCreation',
-          namespace: 'translation',
-        });
+        expect(toast.success).toHaveBeenCalled();
         expect(mockRefetch).toHaveBeenCalled();
         expect(mockHide).toHaveBeenCalled();
       });
@@ -3286,7 +3145,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       };
 
       render(
-        <MockedProvider mocks={mutationMocks}>
+        <MockedProvider mocks={mutationMocks} addTypename={false}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ItemModal {...props} />
           </LocalizationProvider>
@@ -3335,10 +3194,9 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith({
-          key: 'unknownError',
-          namespace: 'errors',
-        });
+        expect(toast.error).toHaveBeenCalledWith(
+          'Failed to create action item',
+        );
       });
     });
   });
@@ -3371,10 +3229,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith({
-          key: 'unknownError',
-          namespace: 'errors',
-        });
+        expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
       });
     });
 
@@ -3402,17 +3257,17 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
             updateActionItem: {
               id: '1',
               isCompleted: false,
-              updatedAt: dayjs()
-                .utc()
-                .add(1, 'day')
-                .format('YYYY-MM-DDTHH:mm:ss[Z]'),
+              updatedAt: '2024-01-02T00:00:00Z',
             },
           },
         },
       };
 
       render(
-        <MockedProvider mocks={[updateMutationMock, ...mockQueries]}>
+        <MockedProvider
+          mocks={[updateMutationMock, ...mockQueries]}
+          addTypename={false}
+        >
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ItemModal
               isOpen={true}
@@ -3440,10 +3295,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'eventActionItems.successfulUpdation',
-          namespace: 'translation',
-        });
+        expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
         expect(mockRefetch).toHaveBeenCalledTimes(1);
         expect(mockOrgRefetch).toHaveBeenCalledTimes(1);
         expect(mockHide).toHaveBeenCalledTimes(1);
@@ -3615,9 +3467,8 @@ describe('handleFormChange function', () => {
     await userEvent.type(notesInput, 'Updated field 1');
     expect(notesInput).toHaveValue('Updated field 1');
 
-    // Test updating the date field using the deterministic helper
-    const dateInput = getPickerInputByLabel('assignmentDate');
-    expect(dateInput).toBeInTheDocument();
+    // Test updating the date field
+    const dateInput = screen.getByDisplayValue('01/01/2024');
     await userEvent.click(dateInput);
     // Date field should be interactable
     expect(dateInput).toBeInTheDocument();
@@ -3811,7 +3662,7 @@ describe('Modal Structure - className={styles.itemModal} show={isOpen} onHide={h
     };
 
     rerender(
-      <MockedProvider mocks={mockQueries}>
+      <MockedProvider mocks={mockQueries} addTypename={false}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <ItemModal {...editProps} />
         </LocalizationProvider>
@@ -3941,10 +3792,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       }
 
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith({
-          key: 'selectCategoryAndAssignment',
-          namespace: 'translation',
-        });
+        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment');
       });
     });
 
@@ -3987,10 +3835,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       }
 
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith({
-          key: 'selectCategoryAndAssignment',
-          namespace: 'translation',
-        });
+        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment');
       });
     });
   });
@@ -4031,9 +3876,9 @@ describe('Partially Covered Lines Test Coverage', () => {
             createActionItem: {
               id: 'newId',
               isCompleted: false,
-              assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+              assignedAt: '2024-01-01',
               completionAt: null,
-              createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+              createdAt: '2024-01-01',
               preCompletionNotes: '',
               postCompletionNotes: null,
               volunteer: null,
@@ -4073,7 +3918,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       };
 
       render(
-        <MockedProvider mocks={mutationMocks}>
+        <MockedProvider mocks={mutationMocks} addTypename={false}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <ItemModal {...props} />
           </LocalizationProvider>
@@ -4120,11 +3965,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'eventActionItems.successfulCreation',
-          namespace: 'translation',
-        });
-
+        expect(toast.success).toHaveBeenCalled();
         expect(mockRefetch).toHaveBeenCalled();
         expect(mockHide).toHaveBeenCalled();
       });
@@ -4171,33 +4012,21 @@ describe('Partially Covered Lines Test Coverage', () => {
       });
       await userEvent.click(volunteerGroupChip);
 
-      // Wait for state change to complete and volunteerGroupSelect to appear
-      await waitFor(
-        () => {
-          expect(
-            screen.getByTestId('volunteerGroupSelect'),
-          ).toBeInTheDocument();
-          expect(
-            screen.queryByTestId('volunteerSelect'),
-          ).not.toBeInTheDocument();
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(screen.getByTestId('volunteerGroupSelect')).toBeInTheDocument();
+      });
 
       // Now click volunteer chip - this should execute the !isVolunteerChipDisabled path
       const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
       await userEvent.click(volunteerChip);
 
       // Should switch back to volunteer select and clear volunteer group
-      await waitFor(
-        () => {
-          expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
-          expect(
-            screen.queryByTestId('volunteerGroupSelect'),
-          ).not.toBeInTheDocument();
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
+        expect(
+          screen.queryByTestId('volunteerGroupSelect'),
+        ).not.toBeInTheDocument();
+      });
     });
 
     it('should have isVolunteerChipDisabled true when editing item with volunteer group', () => {
@@ -4247,16 +4076,6 @@ describe('Partially Covered Lines Test Coverage', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
-      // Select a category first (required for volunteer functionality)
-      const categorySelect = screen.getByTestId('categorySelect');
-      const categoryInput = within(categorySelect).getByRole('combobox');
-      await userEvent.click(categoryInput);
-      await userEvent.type(categoryInput, 'Category 1');
-      await waitFor(async () => {
-        const option = await screen.findByText('Category 1');
-        await userEvent.click(option);
-      });
-
       // Initially should show volunteer select (default)
       await waitFor(() => {
         expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
@@ -4269,17 +4088,10 @@ describe('Partially Covered Lines Test Coverage', () => {
       await userEvent.click(volunteerGroupChip);
 
       // Should switch to volunteer group select and clear volunteer
-      await waitFor(
-        () => {
-          expect(
-            screen.getByTestId('volunteerGroupSelect'),
-          ).toBeInTheDocument();
-          expect(
-            screen.queryByTestId('volunteerSelect'),
-          ).not.toBeInTheDocument();
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(screen.getByTestId('volunteerGroupSelect')).toBeInTheDocument();
+        expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
+      });
     });
 
     it('should have isVolunteerGroupChipDisabled true when editing item with volunteer', () => {

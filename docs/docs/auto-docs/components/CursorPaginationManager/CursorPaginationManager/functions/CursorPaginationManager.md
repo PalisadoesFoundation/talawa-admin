@@ -37,7 +37,7 @@ The GraphQL query variables type
 
 ### props
 
-[`InterfaceCursorPaginationManagerProps`](../../../../types/CursorPagination/interface/interfaces/InterfaceCursorPaginationManagerProps.md)\<`TNode`, `TVariables`\>
+[`InterfaceCursorPaginationManagerProps`](../../../../types/CursorPagination/interface/type-aliases/InterfaceCursorPaginationManagerProps.md)\<`TNode`, `TVariables`\>
 
 ## Returns
 

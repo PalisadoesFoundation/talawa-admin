@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCursorPaginationRenderProps\<TNode\>
 
-Defined in: [src/types/CursorPagination/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L57)
+Defined in: [src/types/CursorPagination/interface.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L98)
 
 Props passed to children render function when useExternalUI is true
 
@@ -18,9 +18,9 @@ Props passed to children render function when useExternalUI is true
 
 ### error
 
-> **error**: `Error`
+> **error**: `ApolloError`
 
-Defined in: [src/types/CursorPagination/interface.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L63)
+Defined in: [src/types/CursorPagination/interface.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L105)
 
 ***
 
@@ -28,7 +28,19 @@ Defined in: [src/types/CursorPagination/interface.ts:63](https://github.com/Pali
 
 > **handleLoadMore**: () => `void`
 
-Defined in: [src/types/CursorPagination/interface.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L62)
+Defined in: [src/types/CursorPagination/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L103)
+
+#### Returns
+
+`void`
+
+***
+
+### handleRefetch()
+
+> **handleRefetch**: () => `void`
+
+Defined in: [src/types/CursorPagination/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L104)
 
 #### Returns
 
@@ -40,7 +52,7 @@ Defined in: [src/types/CursorPagination/interface.ts:62](https://github.com/Pali
 
 > **items**: `TNode`[]
 
-Defined in: [src/types/CursorPagination/interface.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L58)
+Defined in: [src/types/CursorPagination/interface.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L99)
 
 ***
 
@@ -48,7 +60,7 @@ Defined in: [src/types/CursorPagination/interface.ts:58](https://github.com/Pali
 
 > **loading**: `boolean`
 
-Defined in: [src/types/CursorPagination/interface.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L59)
+Defined in: [src/types/CursorPagination/interface.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L100)
 
 ***
 
@@ -56,7 +68,7 @@ Defined in: [src/types/CursorPagination/interface.ts:59](https://github.com/Pali
 
 > **loadingMore**: `boolean`
 
-Defined in: [src/types/CursorPagination/interface.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L60)
+Defined in: [src/types/CursorPagination/interface.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L101)
 
 ***
 
@@ -64,4 +76,4 @@ Defined in: [src/types/CursorPagination/interface.ts:60](https://github.com/Pali
 
 > **pageInfo**: [`DefaultConnectionPageInfo`](../../../pagination/type-aliases/DefaultConnectionPageInfo.md)
 
-Defined in: [src/types/CursorPagination/interface.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L61)
+Defined in: [src/types/CursorPagination/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L102)
