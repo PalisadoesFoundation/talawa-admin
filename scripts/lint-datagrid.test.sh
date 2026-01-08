@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Test suite for lint-datagrid.sh
 # This tests detection, exit codes, and edge cases
