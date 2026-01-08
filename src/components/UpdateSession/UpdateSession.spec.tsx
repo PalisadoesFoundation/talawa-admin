@@ -76,6 +76,22 @@ vi.mock('utils/errorHandler', () => ({
 describe('Testing UpdateTimeout Component', () => {
   beforeEach(() => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    // FIXED: Mock getBoundingClientRect so slider math works in JSDOM
+    // We mock a slider width of 100px starting at x=0
+    vi.spyOn(HTMLElement.prototype, 'getBoundingClientRect').mockImplementation(
+      () => ({
+        width: 100,
+        height: 10,
+        top: 0,
+        left: 0,
+        bottom: 10,
+        right: 100,
+        x: 0,
+        y: 0,
+        toJSON: () => {},
+      }),
+    );
   });
 
   afterEach(() => {
@@ -93,8 +109,9 @@ describe('Testing UpdateTimeout Component', () => {
 
     const slider = await screen.findByTestId('slider-thumb');
 
-    // Simulate dragging to minimum value
-    fireEvent.mouseDown(slider, { clientX: -999 }); // Adjust the clientX to simulate different slider positions
+    // FIXED: Add mouseMove sequence
+    fireEvent.mouseDown(slider, { clientX: 0 });
+    fireEvent.mouseMove(slider, { clientX: -50 }); // Drag way to the left
     fireEvent.mouseUp(slider);
 
     expect(mockOnValueChange).toHaveBeenCalledWith(15); // Adjust based on slider min value
@@ -111,8 +128,9 @@ describe('Testing UpdateTimeout Component', () => {
 
     const slider = await screen.findByTestId('slider-thumb');
 
-    // Simulate dragging to maximum value
-    fireEvent.mouseDown(slider, { clientX: 999 }); // Adjust the clientX to simulate different slider positions
+    // FIXED: Add mouseMove sequence
+    fireEvent.mouseDown(slider, { clientX: 0 });
+    fireEvent.mouseMove(slider, { clientX: 200 }); // Drag way to the right
     fireEvent.mouseUp(slider);
 
     expect(mockOnValueChange).toHaveBeenCalledWith(60); // Adjust based on slider max value
@@ -149,7 +167,9 @@ describe('Testing UpdateTimeout Component', () => {
     // Wait for the slider to be present
     const slider = await screen.findByTestId('slider-thumb');
 
-    fireEvent.mouseDown(slider, { clientX: 45 }); // Adjust the clientX to simulate different slider positions
+    // FIXED: Simulate a drag to the middle (approx 50px on a 100px slider should be ~37.5)
+    fireEvent.mouseDown(slider, { clientX: 0 });
+    fireEvent.mouseMove(slider, { clientX: 50 });
     fireEvent.mouseUp(slider);
 
     // Assert that the callback was triggered
