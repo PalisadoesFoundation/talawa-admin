@@ -4,9 +4,17 @@
   --border-1-5: 1.5px;
   --border-2: 2px;
   --border-3: 3px;
+  --border-4: 4px;
+  --border-8: 8px;
 
+  --radius-none: 0;
+  --radius-xs: 0.125rem;
   --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.8rem;
   --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 50%;
 
   --border-shadow-1: 4px;
   --border-shadow-2: 8px;
