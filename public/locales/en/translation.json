@@ -1692,11 +1692,9 @@
       "title": "Something went wrong",
       "message": "An unexpected error occurred in the chat room",
       "resetButton": "Try Again",
-      "resetButtonAriaLabel": "Try again"
+      "returnButton": "Return to Chat List"
     }
   },
-=======
->>>>>>> a8c742c35f (fix: resolve PR check failures)
   "orgActionItemCategories": {
     "enableButton": "Enable",
     "disableButton": "Disable",
