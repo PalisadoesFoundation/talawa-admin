@@ -676,7 +676,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 )}
                 {loading && (
                   <div className={styles.loadingMore}>
-                    {t('chat.loadingMore')}
+                    {t('userChatRoom.loadingMoreMessages')}
                   </div>
                 )}
                 {!!messages.length && (
@@ -779,7 +779,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                             }}
                                             data-testid="replyToMessage"
                                           >
-                                            {t('chat.edit')}
+                                            {t('userChatRoom.edit')}
                                           </Dropdown.Item>
                                         )}
                                       <Dropdown.Item
@@ -789,7 +789,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                         data-testid="deleteMessage"
                                         className={styles.deleteAction}
                                       >
-                                        {t('chat.delete')}
+                                        {t('userChatRoom.delete')}
                                       </Dropdown.Item>
                                     </>
                                   )}
