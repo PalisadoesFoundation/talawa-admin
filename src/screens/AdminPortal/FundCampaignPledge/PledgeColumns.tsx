@@ -36,6 +36,7 @@ interface InterfacePledgeColumnsProps {
 
 /**
  * Returns the column definitions for the pledges DataGrid.
+ *
  * @param props - The props containing translation functions and event handlers.
  * @returns An array of GridColDef for the pledges table.
  */

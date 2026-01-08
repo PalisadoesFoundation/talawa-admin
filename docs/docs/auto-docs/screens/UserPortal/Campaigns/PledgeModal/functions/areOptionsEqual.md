@@ -6,7 +6,7 @@
 
 > **areOptionsEqual**(`option`, `value`): `boolean`
 
-Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L88)
+Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L69)
 
 Compares two user options by ID.
 Used by MUI Autocomplete to determine equality.
@@ -15,13 +15,13 @@ Used by MUI Autocomplete to determine equality.
 
 ### option
 
-[`InterfaceUserInfoPG`](../../utils/interfaces/interfaces/InterfaceUserInfoPG.md)
+[`InterfaceUserInfoPG`](../../../../../utils/interfaces/interfaces/InterfaceUserInfoPG.md)
 
 Option from the Autocomplete list
 
 ### value
 
-[`InterfaceUserInfoPG`](../../utils/interfaces/interfaces/InterfaceUserInfoPG.md)
+[`InterfaceUserInfoPG`](../../../../../utils/interfaces/interfaces/InterfaceUserInfoPG.md)
 
 Currently selected value
 

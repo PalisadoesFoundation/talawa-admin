@@ -1,27 +1,6 @@
 /**
- * @file LeaveOrganization.tsx
- * @description This component allows a user to leave an organization they are a member of.
+ * This component allows a user to leave an organization they are a member of.
  * It includes email verification for confirmation and handles the removal process via GraphQL mutations.
- *
- * @module LeaveOrganization
- */
-
-/**
- * @constant userEmail
- * @description Retrieves the user's email from localStorage. Returns an empty string if unavailable or an error occurs.
- */
-
-/**
- * @constant userId
- * @description Retrieves the user's ID from localStorage. Returns an empty string if unavailable or an error occurs.
- */
-
-/**
- * @function LeaveOrganization
- * @description React functional component that renders the UI for leaving an organization.
- * It includes a modal for confirmation, email verification, and handles the GraphQL mutation to remove the user.
- *
- * @returns {JSX.Element} The rendered LeaveOrganization component.
  *
  * @remarks
  * - Uses Apollo Client's `useQuery` to fetch organization details.
@@ -29,11 +8,11 @@
  * - Displays a modal for user confirmation and email verification.
  * - Handles errors and loading states gracefully.
  *
- * @dependencies
+ * Dependencies:
  * - `useQuery` and `useMutation` from Apollo Client for GraphQL operations.
  * - `useParams` and `useNavigate` from React Router for route handling.
  * - `react-toastify` for toast notifications.
- * - `react-bootstrap` for UI components like Modal, Button, Spinner, and Alert.
+ * - `react-bootstrap` for UI components like Button, Form, and Alert.
  *
  * @example
  * ```tsx

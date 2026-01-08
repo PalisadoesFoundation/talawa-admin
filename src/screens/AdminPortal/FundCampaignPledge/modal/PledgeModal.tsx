@@ -1,8 +1,5 @@
 /**
- * @file PledgeModal.tsx
- * @description A React component for creating or editing a pledge within a modal dialog.
- *
- * @module PledgeModal
+ * A React component for creating or editing a pledge within a modal dialog.
  *
  * @remarks
  * This component provides a form for managing pledges, allowing users to:
@@ -14,18 +11,8 @@
  * - `create`: For creating a new pledge.
  * - `edit`: For editing an existing pledge.
  *
- * @param {boolean} isOpen - Indicates whether the modal is open.
- * @param {() => void} hide - Function to close the modal.
- * @param {string} campaignId - The ID of the campaign associated with the pledge.
- * @param {string} orgId - The ID of the organization associated with the pledge.
- * @param {InterfacePledgeInfo | null} pledge - The pledge object to edit, or `null` for a new pledge.
- * @param {() => void} refetchPledge - Function to refetch the list of pledges after creation or update.
- * @param {Date} endDate - The campaign's end date to validate pledge dates.
- * @param {'create' | 'edit'} mode - The mode of the modal, either 'create' or 'edit'.
- *
- * @returns {JSX.Element} The rendered modal component.
- *
  * @example
+ * ```tsx
  * <PledgeModal
  *   isOpen={true}
  *   hide={() => {}}
@@ -36,15 +23,17 @@
  *   endDate={new Date()}
  *   mode="create"
  * />
+ * ```
  *
- * @dependencies
+ * @remarks
+ * Dependencies:
  * - React
  * - Apollo Client for GraphQL queries and mutations.
  * - Material-UI and Bootstrap for UI components.
  * - Day.js for date manipulation.
  * - NotificationToast for notifications.
  *
- * @css
+ * Styles:
  * - Uses global styles from `app-fixed.module.css`.
  * - Reusable class `.addButton` for consistent button styling.
  */
