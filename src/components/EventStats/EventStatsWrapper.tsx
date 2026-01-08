@@ -32,7 +32,7 @@
 import React, { useState } from 'react';
 import { EventStats } from './Statistics/EventStats';
 import { Button } from 'react-bootstrap';
-import IconComponent from 'components/IconComponent/IconComponent';
+import IconComponent from 'shared-components/IconComponent/IconComponent';
 import styles from 'style/app-fixed.module.css';
 
 export const EventStatsWrapper = ({ _id }: { _id: string }): JSX.Element => {

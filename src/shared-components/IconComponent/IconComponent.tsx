@@ -55,13 +55,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import { MdOutlineVolunteerActivism } from 'react-icons/md';
 
 import type { JSX } from 'react';
-
-export interface IIconComponent {
-  name: string;
-  fill?: string;
-  height?: string;
-  width?: string;
-}
+import type { IIconComponent } from 'types/shared-components/IconComponent';
 
 const iconComponent = (props: IIconComponent): JSX.Element => {
   switch (props.name) {

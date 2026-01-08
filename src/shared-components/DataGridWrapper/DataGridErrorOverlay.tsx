@@ -9,7 +9,7 @@
  */
 import React from 'react';
 import { Stack, Typography } from '@mui/material';
-import IconComponent from 'components/IconComponent/IconComponent';
+import IconComponent from 'shared-components/IconComponent/IconComponent';
 
 interface InterfaceDataGridErrorOverlayProps {
   /**

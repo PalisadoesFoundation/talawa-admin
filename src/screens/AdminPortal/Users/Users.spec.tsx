@@ -55,7 +55,7 @@ vi.mock('@mui/icons-material', async () => {
   };
 });
 
-vi.mock('components/IconComponent/IconComponent', () => ({
+vi.mock('shared-components/IconComponent/IconComponent', () => ({
   default: ({ name }: { name: string }) => (
     <div data-testid={`mock-icon-${name}`} />
   ),

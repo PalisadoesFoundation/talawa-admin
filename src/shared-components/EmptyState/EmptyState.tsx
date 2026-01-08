@@ -53,7 +53,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Stack, Button, Typography } from '@mui/material';
-import IconComponent from 'components/IconComponent/IconComponent';
+import IconComponent from 'shared-components/IconComponent/IconComponent';
 import type { InterfaceEmptyStateProps } from 'types/shared-components/EmptyState/interface';
 
 const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
