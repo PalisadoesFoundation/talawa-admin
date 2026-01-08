@@ -287,3 +287,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# pnpm-store
+.pnpm-store
