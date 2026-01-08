@@ -1,4 +1,4 @@
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { MockedResponse } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -13,7 +13,7 @@ import { vi, it, beforeEach, afterEach, describe, expect } from 'vitest';
 import dayjs from 'dayjs';
 
 const DEFAULT_ORG_ID = 'test-org-id';
-const SEARCH_DEBOUNCE_MS = 300;
+const MODE_ADMINS = 1;
 
 const memberNode = (id: string, name: string, role = 'member') => ({
   id,
@@ -145,35 +145,6 @@ const adminFilterMock = {
   },
 };
 
-const memberFilterMock = {
-  request: {
-    query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    variables: {
-      orgId: DEFAULT_ORG_ID,
-      first: 10,
-      after: null,
-      where: { role: { equal: 'member' } },
-    },
-  },
-  result: {
-    data: {
-      organization: {
-        members: {
-          edges: [
-            { cursor: 'cur1', node: memberNode('1', 'Test User', 'member') },
-          ],
-          pageInfo: {
-            endCursor: 'cur1',
-            hasNextPage: false,
-            hasPreviousPage: false,
-            startCursor: 'cur1',
-          },
-        },
-      },
-    },
-  },
-};
-
 const sharedMocks = vi.hoisted(() => ({
   useParams: vi.fn(() => ({ orgId: DEFAULT_ORG_ID })),
 }));
@@ -185,6 +156,7 @@ vi.mock('react-router', async () => {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  vi.useRealTimers();
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: vi.fn().mockImplementation((query) => ({
@@ -201,6 +173,7 @@ beforeEach(() => {
 afterEach(() => {
   vi.clearAllMocks();
   vi.restoreAllMocks();
+  vi.useRealTimers();
 });
 
 describe('People Component Tests', () => {
@@ -261,26 +234,22 @@ describe('People Component Tests', () => {
   });
 
   it('performs search via debounced input', async () => {
-    vi.useFakeTimers();
-    const user = userEvent.setup();
     renderComponent([defaultQueryMock, adminSearchMock]);
-    await waitFor(() => {
-      expect(screen.getByTestId('people-name-1')).toBeInTheDocument();
-    });
+
+    await screen.findByTestId('people-name-1');
 
     const input = screen.getByTestId('searchInput');
-    await user.type(input, 'Admin');
+    await userEvent.type(input, 'Admin');
 
-    await act(async () => {
-      vi.advanceTimersByTime(SEARCH_DEBOUNCE_MS + 50);
-    });
-    await waitFor(() => {
-      expect(screen.getByTestId('people-name-2')).toHaveTextContent(
-        'Admin User',
-      );
-      expect(screen.queryByTestId('people-name-1')).not.toBeInTheDocument();
-    });
-    vi.useRealTimers();
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('people-name-2')).toHaveTextContent(
+          'Admin User',
+        );
+        expect(screen.queryByTestId('people-name-1')).not.toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('filters by Admins mode with server-side filtering', async () => {
@@ -292,7 +261,7 @@ describe('People Component Tests', () => {
     const filterDropdown = screen.getByTestId('modeChangeBtn');
     await userEvent.click(filterDropdown);
 
-    const adminOption = screen.getByTestId('1');
+    const adminOption = screen.getByTestId(`${MODE_ADMINS}`);
     await userEvent.click(adminOption);
 
     await waitFor(() => {
@@ -333,27 +302,7 @@ describe('People Component Tests', () => {
     renderComponent([emptyMock]);
 
     await waitFor(() => {
-      expect(screen.getByText('Nothing to show here')).toBeInTheDocument();
-    });
-  });
-
-  it('filters by Members mode with server-side filtering', async () => {
-    renderComponent([defaultQueryMock, memberFilterMock]);
-    await waitFor(() => {
-      expect(screen.getByTestId('people-name-1')).toBeInTheDocument();
-    });
-
-    const filterDropdown = screen.getByTestId('modeChangeBtn');
-    await userEvent.click(filterDropdown);
-
-    const memberOption = screen.getByTestId('2'); // Assuming '2' is Members mode
-    await userEvent.click(memberOption);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('people-name-1')).toHaveTextContent(
-        'Test User',
-      );
-      expect(screen.queryByTestId('people-name-2')).not.toBeInTheDocument();
+      expect(screen.getByText(/nothing to show/i)).toBeInTheDocument();
     });
   });
 

@@ -720,6 +720,32 @@ describe('OrganizationPeople', () => {
   });
 
   test('renders avatar image when avatarURL is present', async () => {
+    const mocks = [
+      createMemberConnectionMock({
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+      }),
+    ];
+
+    const link = new StaticMockLink(mocks, true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
