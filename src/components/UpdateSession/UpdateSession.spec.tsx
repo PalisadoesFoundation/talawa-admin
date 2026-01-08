@@ -684,7 +684,11 @@ describe('Testing UpdateTimeout Component', () => {
     });
 
     // Verify that the timeout value is displayed after loading completes
-    expect(screen.getByTestId('timeout-value')).toHaveTextContent('30 minutes');
+    await waitFor(() => {
+      expect(screen.getByTestId('timeout-value')).toHaveTextContent(
+        '30 minutes',
+      );
+    });
   });
   it('should display loading spinner during query and hide it after data loads', async () => {
     // Use a mock that delays the response to keep loading state visible longer

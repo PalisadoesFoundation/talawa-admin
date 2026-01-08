@@ -161,6 +161,7 @@ Some shared components are wrappers around third-party UI libraries. To enforce 
 - `react-bootstrap` `Spinner` -> use `LoadingState`
 - `react-bootstrap` `Modal` -> use `BaseModal`
 - `@mui/x-date-pickers` -> use `DateRangePicker`, `DatePicker`, or `TimePicker`
+- `react-toastify` -> use `NotificationToast`
 
 These restrictions are enforced by `no-restricted-imports` in `eslint.config.js`.
 
@@ -207,6 +208,9 @@ Allowed IDs by folder:
   - `src/shared-components/DatePicker/**`
   - `src/shared-components/TimePicker/**`
   - `src/index.tsx`
+- NotificationToast: `react-toastify`
+  - `src/components/NotificationToast/**`
+  - `src/types/NotificationToast/**`
 
 ### Adding a new restricted import or wrapper
 
