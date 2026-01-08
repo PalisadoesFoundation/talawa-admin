@@ -6,4 +6,4 @@
 
 > `const` **ExtensionPointsDashboard**: `React.FC`
 
-Defined in: src/plugin/available/plugin\_map/pages/ExtensionPointsDashboard.tsx:39
+Defined in: src/plugin/available/plugin\_map/pages/ExtensionPointsDashboard.tsx:40

@@ -6,4 +6,4 @@
 
 > `const` **ExtensionPointsUser**: `React.FC`
 
-Defined in: src/plugin/available/plugin\_map/pages/ExtensionPointsUser.tsx:40
+Defined in: src/plugin/available/plugin\_map/pages/ExtensionPointsUser.tsx:41

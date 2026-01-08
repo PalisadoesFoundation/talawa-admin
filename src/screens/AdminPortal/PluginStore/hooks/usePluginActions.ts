@@ -4,11 +4,7 @@
 import { useState, useCallback } from 'react';
 import { getPluginManager } from 'plugin/manager';
 import type { IPluginMeta } from 'plugin';
-import {
-  useUpdatePlugin,
-  useDeletePlugin,
-  useInstallPlugin,
-} from 'plugin/graphql-service';
+import { useUpdatePlugin, useDeletePlugin } from 'plugin/graphql-service';
 import { adminPluginFileService } from 'plugin/services/AdminPluginFileService';
 
 import type { IPlugin } from 'plugin/graphql-service';
@@ -29,17 +25,28 @@ export function usePluginActions({
 
   const [updatePlugin] = useUpdatePlugin();
   const [deletePlugin] = useDeletePlugin();
-  const [installPlugin] = useInstallPlugin();
 
   const handleInstallPlugin = useCallback(
     async (plugin: IPluginMeta) => {
       setLoading(true);
       try {
-        // First, call the API to mark the plugin as installed
-        await installPlugin({
+        // Find the existing plugin in the database
+        const existingPlugin = pluginData?.getPlugins?.find(
+          (p: IPlugin) => p.pluginId === plugin.id,
+        );
+
+        if (!existingPlugin) {
+          throw new Error(
+            'Plugin not found in database. Please upload it first.',
+          );
+        }
+
+        // Mark the plugin as installed using updatePlugin mutation
+        await updatePlugin({
           variables: {
             input: {
-              pluginId: plugin.id,
+              id: existingPlugin.id,
+              isInstalled: true,
             },
           },
         });
@@ -61,7 +68,7 @@ export function usePluginActions({
         setLoading(false);
       }
     },
-    [installPlugin, refetch],
+    [pluginData, updatePlugin, refetch],
   );
 
   const togglePluginStatus = useCallback(
