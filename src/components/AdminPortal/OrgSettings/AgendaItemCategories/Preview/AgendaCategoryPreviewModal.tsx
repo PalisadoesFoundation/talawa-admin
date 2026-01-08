@@ -5,21 +5,21 @@
  * It displays the name, description, and creator of the agenda category, and
  * provides options to edit or delete the category.
  *
- * @component
- * @param {InterfaceAgendaCategoryPreviewModalProps} props - The props for the component.
- * @param {boolean} props.agendaCategoryPreviewModalIsOpen - Determines if the modal is visible.
- * @param {() => void} props.hidePreviewModal - Function to close the modal.
- * @param {() => void} props.showUpdateModal - Function to open the update modal.
- * @param {() => void} props.toggleDeleteModal - Function to toggle the delete modal.
- * @param {InterfaceFormStateType} props.formState - The state containing agenda category details.
- * @param {string} props.formState.name - The name of the agenda category.
- * @param {string} props.formState.description - The description of the agenda category.
- * @param {string} props.formState.createdBy - The creator of the agenda category.
- * @param {(key: string) => string} props.t - Translation function for localization.
+ * @param props - The props for the component.
+ * @param agendaCategoryPreviewModalIsOpen - Determines if the modal is visible.
+ * @param hidePreviewModal - Function to close the modal.
+ * @param showUpdateModal - Function to open the update modal.
+ * @param toggleDeleteModal - Function to toggle the delete modal.
+ * @param formState - The state containing agenda category details.
+ * @param name - The name of the agenda category.
+ * @param description - The description of the agenda category.
+ * @param createdBy - The creator of the agenda category.
+ * @param t - Translation function for localization.
  *
- * @returns {JSX.Element} The rendered AgendaCategoryPreviewModal component.
+ * @returns The rendered AgendaCategoryPreviewModal component.
  *
  * @example
+ * ```tsx
  * <AgendaCategoryPreviewModal
  *   agendaCategoryPreviewModalIsOpen={true}
  *   hidePreviewModal={handleHide}
@@ -28,6 +28,7 @@
  *   formState={{ name: 'Meeting', description: 'Monthly meeting', createdBy: 'Admin' }}
  *   t={(key) => key}
  * />
+ * ```
  */
 import React from 'react';
 import { Form, Button } from 'react-bootstrap';

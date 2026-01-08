@@ -5,15 +5,15 @@
  * It uses GraphQL mutation to handle the removal process and provides feedback to the user
  * through toast notifications. The modal includes options to confirm or cancel the removal.
  *
- * @module OrgPeopleListCard
- * @file OrgPeopleListCard.tsx
- * @see {@link REMOVE_MEMBER_MUTATION_PG} for the GraphQL mutation used to remove a member.
+ * Module: OrgPeopleListCard
+ * File: OrgPeopleListCard.tsx
+ * See REMOVE_MEMBER_MUTATION_PG for the GraphQL mutation used to remove a member.
  *
- * @param {InterfaceOrgPeopleListCardProps} props - The props for the component.
- * @param {string} props.id - The ID of the member to be removed.
- * @param {() => void} props.toggleRemoveModal - Function to toggle the visibility of the modal.
+ * @param props - The props for the component.
+ * @param id - The ID of the member to be removed.
+ * @param toggleRemoveModal - Function to toggle the visibility of the modal.
  *
- * @returns {JSX.Element} A React component that renders the modal for member removal.
+ * @returns  A React component that renders the modal for member removal.
  *
  * @remarks
  * - If the `id` prop is not provided, the user is redirected to the organization list.

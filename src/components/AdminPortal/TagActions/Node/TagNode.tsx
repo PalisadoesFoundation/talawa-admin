@@ -5,13 +5,11 @@
  * It supports infinite scrolling for loading subtags and allows users to select tags
  * using checkboxes. The component is recursive, enabling nested subtags to be displayed.
  *
- * @component
- * @param {InterfaceTagNodeProps} props - The props for the TagNode component.
- * @param {InterfaceTagData} props.tag - The tag data to be displayed.
- * @param {Set<string>} props.checkedTags - A set of tag IDs that are currently selected.
- * @param {(tag: InterfaceTagData, isSelected: boolean) => void} props.toggleTagSelection -
- *        Callback function to toggle the selection state of a tag.
- * @param {TFunction<'translation', 'manageTag'>} props.t - Translation function for i18n.
+ * @param props - The props for the TagNode component.
+ * @param tag - The tag data to be displayed.
+ * @param checkedTags - A set of tag IDs that are currently selected.
+ * @param toggleTagSelection - Callback function to toggle the selection state of a tag.
+ * @param t - Translation function for i18n.
  *
  * @remarks
  * - The component uses the `@apollo/client` `useQuery` hook to fetch subtags.
@@ -28,8 +26,9 @@
  * />
  * ```
  *
- * @returns {React.FC} A React functional component that renders a tag node with optional subtags.
+ * @returns A React functional component that renders a tag node with optional subtags.
  */
+// translation-check-keyPrefix: manageTag
 import { useQuery } from '@apollo/client';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import React, { useState } from 'react';
@@ -44,7 +43,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import { WarningAmberRounded } from '@mui/icons-material';
 import type { TFunction } from 'i18next';
-
+import componentStyle from '../TagAction.module.css';
 interface InterfaceTagNodeProps {
   tag: InterfaceTagData;
   checkedTags: Set<string>;
@@ -109,7 +108,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={`${styles.errorIcon} fs-6`} />
           <h6 className="fw-bold text-danger text-center">
             {t('errorOccurredWhileLoadingSubTags')}
           </h6>
@@ -138,18 +137,16 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
           <>
             <span
               onClick={handleTagClick}
-              className="me-3"
-              style={{ cursor: 'pointer' }}
+              className={`me-3 ${componentStyle.cursor_pointer}`}
               data-testid={`expandSubTags${tag._id}`}
               aria-label={expanded ? t('collapse') : t('expand')}
             >
               {expanded ? '▼' : '▶'}
             </span>
             <input
-              style={{ cursor: 'pointer' }}
               type="checkbox"
               checked={checkedTags.has(tag._id)}
-              className="me-2"
+              className={`me-2 ${componentStyle.cursor_pointer}`}
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
               id={`checkbox-${tag._id}`}
@@ -161,10 +158,9 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
           <>
             <span className="me-3">●</span>
             <input
-              style={{ cursor: 'pointer' }}
               type="checkbox"
               checked={checkedTags.has(tag._id)}
-              className="ms-1 me-2"
+              className={`ms-1 me-2 ${componentStyle.cursor_pointer}`}
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
               aria-label={tag.name}
@@ -184,11 +180,11 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
         </div>
       )}
       {expanded && subTagsList?.length && (
-        <div style={{ marginLeft: '20px' }}>
+        <div className="me-4">
           <div
             id={`subTagsScrollableDiv${tag._id}`}
             data-testid={`subTagsScrollableDiv${tag._id}`}
-            style={{ maxHeight: 300, overflow: 'auto' }}
+            className={componentStyle.subtags_scrollable_div}
           >
             <InfiniteScroll
               dataLength={subTagsList?.length ?? 0}

@@ -487,7 +487,8 @@
     "sortPeople": "Ordenar personas",
     "noTagsFound": "No se encontraron etiquetas",
     "tagActions": "Acciones de etiqueta",
-    "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados"
+    "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados",
+    "removeMember": "Eliminar miembro"
   },
   "userListCard": {
     "joined": "Unido",

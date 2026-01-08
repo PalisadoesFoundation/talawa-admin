@@ -69,7 +69,7 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
               label={t('actionItemCategoryDescription')}
               variant="outlined"
               className={styles.noOutline}
-              value={category.description || 'No description provided'}
+              value={category.description || t('noDescriptionProvided')}
               disabled
               multiline
               rows={4}
@@ -92,20 +92,24 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
                 <Circle
                   sx={{
                     fontSize: '0.8rem',
-                    color: category.isDisabled ? '#ff5252' : '#4caf50',
-                    marginRight: '8px',
+                    color: category.isDisabled
+                      ? 'var(----errorIcon-color)'
+                      : 'var(----bs-success)',
                   }}
+                  className="me-6"
                 />
               ),
               style: {
-                color: category.isDisabled ? '#ff5252' : '#4caf50',
+                color: category.isDisabled
+                  ? 'var(----errorIcon-color)'
+                  : 'var(----bs-success)',
               },
             }}
             inputProps={{
               style: {
                 WebkitTextFillColor: category.isDisabled
-                  ? '#ff5252'
-                  : '#4caf50',
+                  ? 'var(----errorIcon-color)'
+                  : 'var(----bs-success)',
               },
             }}
             disabled

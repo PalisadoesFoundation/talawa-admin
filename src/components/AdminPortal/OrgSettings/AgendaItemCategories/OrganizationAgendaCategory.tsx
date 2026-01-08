@@ -26,7 +26,7 @@
  *
  * @throws Error If there is an error while fetching agenda item categories.
  *
- * todo - Add additional error handling and improve UI for error states.
+ * TODO: - Add additional error handling and improve UI for error states.
  */
 import React, { useState } from 'react';
 import type { ChangeEvent, FC } from 'react';

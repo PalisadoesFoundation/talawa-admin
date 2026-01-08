@@ -5,29 +5,9 @@
  * It provides a form with fields for the category name and description,
  * and allows users to submit updates. The modal can be toggled open or closed.
  *
- * @component
- * @param {InterfaceAgendaCategoryUpdateModalProps} props - The props for the component.
- * @param {boolean} props.agendaCategoryUpdateModalIsOpen - Determines if the modal is open.
- * @param {() => void} props.hideUpdateModal - Function to close the modal.
- * @param {InterfaceFormStateType} props.formState - The current state of the form fields.
- * @param {(state: React.SetStateAction<InterfaceFormStateType>) => void} props.setFormState - Function to update the form state.
- * @param {(e: ChangeEvent<HTMLFormElement>) => Promise<void>} props.updateAgendaCategoryHandler - Handler for form submission.
- * @param {(key: string) => string} props.t - Translation function for localization.
+ * @param props - Props for {@link InterfaceAgendaCategoryUpdateModalProps}
  *
- * @interface InterfaceFormStateType
- * @property {string} name - The name of the agenda category.
- * @property {string} description - The description of the agenda category.
- * @property {string} createdBy - The creator of the agenda category.
- *
- * @interface InterfaceAgendaCategoryUpdateModalProps
- * @property {boolean} agendaCategoryUpdateModalIsOpen - Modal visibility state.
- * @property {() => void} hideUpdateModal - Function to hide the modal.
- * @property {InterfaceFormStateType} formState - Form state object.
- * @property {(state: React.SetStateAction<InterfaceFormStateType>) => void} setFormState - State updater for the form.
- * @property {(e: ChangeEvent<HTMLFormElement>) => Promise<void>} updateAgendaCategoryHandler - Form submission handler.
- * @property {(key: string) => string} t - Translation function.
- *
- * @returns {JSX.Element} The rendered modal component.
+ * @returns The rendered modal component.
  */
 import React from 'react';
 import { Form, Button } from 'react-bootstrap';

@@ -487,7 +487,8 @@
     "tagActions": "Actions d'étiquette",
     "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
     "sortPeople": "Trier les personnes",
-    "noTagsFound": "Aucun tag trouvé"
+    "noTagsFound": "Aucun tag trouvé",
+    "removeMember": "Retirer le membre"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",

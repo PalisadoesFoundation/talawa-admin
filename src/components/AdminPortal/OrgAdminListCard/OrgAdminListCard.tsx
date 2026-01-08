@@ -4,8 +4,8 @@
  * options and handles the admin removal process using a GraphQL mutation.
  *
  * @param props - The properties passed to the component.
- * @param props.id - The unique identifier of the admin to be removed.
- * @param props.toggleRemoveModal - A function to toggle the visibility of the modal.
+ * @param id - The unique identifier of the admin to be removed.
+ * @param propstoggleRemoveModal - A function to toggle the visibility of the modal.
  *
  * @returns A JSX element representing the modal for removing an admin.
  *
@@ -23,10 +23,10 @@
  * />
  * ```
  *
- * @dependencies
+ * Dependencies:
  * - React
  * - react-bootstrap (Button, Modal)
- * - @apollo/client (useMutation)
+ * - `@apollo/client` (useMutation)
  * - react-toastify (toast)
  * - react-i18next (useTranslation)
  * - react-router-dom (Navigate, useParams)

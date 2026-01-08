@@ -4,15 +4,14 @@
  * This component renders a modal for confirming the deletion of an agenda category.
  * It provides options to either confirm or cancel the deletion action.
  *
- * @component
- * @param {InterfaceAgendaCategoryDeleteModalProps} props - The props for the component.
- * @param {boolean} props.agendaCategoryDeleteModalIsOpen - Determines if the modal is open or closed.
- * @param {() => void} props.toggleDeleteModal - Function to toggle the visibility of the modal.
- * @param {() => Promise<void>} props.deleteAgendaCategoryHandler - Async function to handle the deletion of the agenda category.
- * @param {(key: string) => string} props.t - Translation function for component-specific strings.
- * @param {(key: string) => string} props.tCommon - Translation function for common strings.
+ * @param props - The props for the component.
+ * @param agendaCategoryDeleteModalIsOpen - Determines if the modal is open or closed.
+ * @param toggleDeleteModal - Function to toggle the visibility of the modal.
+ * @param deleteAgendaCategoryHandler - Async function to handle the deletion of the agenda category.
+ * @param t - Translation function for component-specific strings.
+ * @param tCommon - Translation function for common strings.
  *
- * @returns {React.FC} A React functional component that renders the delete confirmation modal.
+ * @returns A React functional component that renders the delete confirmation modal.
  *
  * @remarks
  * - The modal uses `react-bootstrap` for styling and functionality.
@@ -30,6 +29,7 @@
  * />
  * ```
  */
+// translation-check-keyPrefix: organizationAgendaCategory
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';

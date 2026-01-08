@@ -6,34 +6,34 @@
  * and assign them to the tag. The component uses Apollo Client for GraphQL queries
  * and mutations, and Material-UI's DataGrid for displaying member data.
  *
- * @props
+ * Props:
  * - `addPeopleToTagModalIsOpen` (boolean): Controls the visibility of the modal.
  * - `hideAddPeopleToTagModal` (function): Callback to close the modal.
  * - `refetchAssignedMembersData` (function): Callback to refetch the assigned members data.
  * - `t` (function): Translation function for component-specific strings.
  * - `tCommon` (function): Translation function for common strings.
  *
- * @state
+ * State:
  * - `assignToMembers` (InterfaceMemberData[]): List of members selected for assignment.
  * - `memberToAssignToSearchFirstName` (string): Search filter for first name.
  * - `memberToAssignToSearchLastName` (string): Search filter for last name.
  *
- * @queries
+ * Queries:
  * - `USER_TAGS_MEMBERS_TO_ASSIGN_TO`: Fetches members available for assignment to the tag.
  *
- * @mutations
+ * Mutations:
  * - `ADD_PEOPLE_TO_TAG`: Assigns selected members to the tag.
  *
- * @features
+ * Features:
  * - Infinite scrolling for loading more members.
  * - Search functionality for filtering members by name.
  * - Displays selected members with the ability to remove them.
  * - Handles errors and loading states with appropriate UI feedback.
  *
- * @dependencies
+ * Dependencies:
  * - React, Apollo Client, Material-UI, React-Bootstrap, React-Toastify, React-Infinite-Scroll.
  *
- * @usage
+ * Usage:
  * This component is used in the context of managing tags and their associated members.
  * It is designed to be displayed as a modal and requires integration with GraphQL APIs.
  */
@@ -324,7 +324,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
         title={t('addPeople')}
         headerClassName={`bg-primary ${styles.modalHeader}`}
         footer={modalFooter}
-        dataTestId="modalOrganizationHeader"
+        dataTestId="addPeopleToTagModal"
       >
         <Form onSubmit={addPeopleToCurrentTag} id="addPeopleToTagForm">
           <div
@@ -341,7 +341,8 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                   className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.memberBadge}`}
                 >
                   {member.firstName} {member.lastName}
-                  <i
+                  <button
+                    type="button"
                     className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary`}
                     onClick={() => removeMember(member._id)}
                     data-testid="clearSelectedMember"
