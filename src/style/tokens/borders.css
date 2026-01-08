@@ -1,6 +1,19 @@
 :root {
+  --border-0: 0.1px;
   --border-1: 1px;
   --border-1-5: 1.5px;
   --border-2: 2px;
   --border-3: 3px;
+
+  --radius-none: 0;
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.8rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 50%;
+
+  --border-shadow-1: 4px;
+  --border-shadow-2: 8px;
 }

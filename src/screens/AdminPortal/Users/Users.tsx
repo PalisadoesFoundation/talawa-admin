@@ -74,7 +74,7 @@ import TableLoader from 'components/TableLoader/TableLoader';
 import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './Users.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ApolloError } from '@apollo/client';
 import { PersonOff, WarningAmberRounded } from '@mui/icons-material';
@@ -340,7 +340,7 @@ const Users = (): JSX.Element => {
 
   /**
    * Helper function to determine empty state message
-   * @returns {string} - The appropriate empty state message
+   * @returns The appropriate empty state message
    */
   const getEmptyStateMessage = () => {
     if (searchByName.length > 0) {
