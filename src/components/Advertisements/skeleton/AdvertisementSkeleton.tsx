@@ -19,7 +19,11 @@ import styles from 'style/app-fixed.module.css';
  *
  * @returns An array of JSX elements representing the skeleton loaders.
  */
+import { useTranslation } from 'react-i18next';
+
 export function AdvertisementSkeleton(): JSX.Element[] {
+  const { t } = useTranslation();
+
   return [...Array(6)].map((_, index) => (
     <div
       key={index}
@@ -30,8 +34,10 @@ export function AdvertisementSkeleton(): JSX.Element[] {
         <div className={styles.innerContainer}>
           <div className={`${styles.orgImgContainer} shimmer`} />
           <div className={styles.content}>
-            <h5 className="shimmer" title="Name">
-              <span className="visually-hidden">Advertisement Loading</span>
+            <h5 className="shimmer" title={t('advertisement.name')}>
+              <span className="visually-hidden">
+                {t('advertisement.loading')}
+              </span>
             </h5>
           </div>
         </div>

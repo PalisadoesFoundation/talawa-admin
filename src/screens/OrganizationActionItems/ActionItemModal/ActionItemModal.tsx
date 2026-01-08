@@ -1,14 +1,10 @@
-/**
- * This component is used for creating and updating action items.
- */
-
 import React, { useEffect, useMemo, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import type { FormEvent, FC } from 'react';
 import styles from 'style/app-fixed.module.css';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-import type { Dayjs } from 'dayjs';
+
 import type {
   IActionItemCategoryInfo,
   IActionItemInfo,
@@ -17,10 +13,12 @@ import type {
   IUpdateActionForInstanceInput,
   IEventVolunteerGroup,
 } from 'types/ActionItems/interface';
+
 import type {
   IFormStateType,
   IItemModalProps,
 } from 'types/ActionItems/interface.ts';
+
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useMutation, useQuery } from '@apollo/client';
@@ -43,7 +41,7 @@ import {
   GET_EVENT_VOLUNTEER_GROUPS,
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'types/Volunteer/interface';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { BaseModal } from 'shared-components/BaseModal';
 
 const initializeFormState = (
   actionItem: IActionItemInfo | null,
@@ -102,62 +100,41 @@ const ItemModal: FC<IItemModalProps> = ({
 
   const { data: actionItemCategoriesData } = useQuery(
     ACTION_ITEM_CATEGORY_LIST,
-    {
-      variables: {
-        input: {
-          organizationId: orgId,
-        },
-      },
-    },
+    { variables: { input: { organizationId: orgId } } },
   );
 
   const { data: volunteersData } = useQuery(GET_EVENT_VOLUNTEERS, {
-    variables: {
-      input: { id: eventId },
-      where: {},
-    },
+    variables: { input: { id: eventId }, where: {} },
     skip: !eventId,
   });
 
   const { data: volunteerGroupsData } = useQuery(GET_EVENT_VOLUNTEER_GROUPS, {
-    variables: {
-      input: { id: eventId },
-    },
+    variables: { input: { id: eventId } },
     skip: !eventId,
   });
 
   const volunteers = useMemo(() => {
-    const allVolunteers = volunteersData?.event?.volunteers || [];
-    if (applyTo === 'series') {
-      return allVolunteers.filter(
-        (volunteer: InterfaceEventVolunteerInfo) =>
-          volunteer.isTemplate === true,
-      );
-    } else {
-      return allVolunteers;
-    }
+    const all = volunteersData?.event?.volunteers || [];
+    return applyTo === 'series'
+      ? all.filter((v: InterfaceEventVolunteerInfo) => v.isTemplate)
+      : all;
   }, [volunteersData, applyTo]);
 
   const volunteerGroups = useMemo(() => {
-    const allVolunteerGroups =
-      volunteerGroupsData?.event?.volunteerGroups || [];
-    if (applyTo === 'series') {
-      return allVolunteerGroups.filter(
-        (group: IEventVolunteerGroup) => group.isTemplate === true,
-      );
-    } else {
-      return allVolunteerGroups;
-    }
+    const all = volunteerGroupsData?.event?.volunteerGroups || [];
+    return applyTo === 'series'
+      ? all.filter((g: IEventVolunteerGroup) => g.isTemplate)
+      : all;
   }, [volunteerGroupsData, applyTo]);
 
-  const isVolunteerChipDisabled = useMemo(() => {
-    return editMode && actionItem?.volunteerGroup?.id;
-  }, [editMode, actionItem]);
-
-  const isVolunteerGroupChipDisabled = useMemo(() => {
-    return editMode && actionItem?.volunteer?.id;
-  }, [editMode, actionItem]);
-
+  const isVolunteerChipDisabled = useMemo(
+    () => editMode && actionItem?.volunteerGroup?.id,
+    [editMode, actionItem],
+  );
+  const isVolunteerGroupChipDisabled = useMemo(
+    () => editMode && actionItem?.volunteer?.id,
+    [editMode, actionItem],
+  );
   const actionItemCategories = useMemo(
     () => actionItemCategoriesData?.actionCategoriesByOrganization || [],
     [actionItemCategoriesData],
@@ -166,31 +143,19 @@ const ItemModal: FC<IItemModalProps> = ({
   const [createActionItem] = useMutation(CREATE_ACTION_ITEM_MUTATION, {
     refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
   });
-
   const [updateActionItem] = useMutation(UPDATE_ACTION_ITEM_MUTATION, {
     refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
   });
-
   const [updateActionForInstance] = useMutation(
     UPDATE_ACTION_ITEM_FOR_INSTANCE,
-    {
-      refetchQueries: ['GetEventActionItems'],
-    },
+    { refetchQueries: ['GetEventActionItems'] },
   );
-
-  const runRefetches = (): void => {
-    actionItemsRefetch();
-    orgActionItemsRefetch?.();
-  };
 
   const handleFormChange = (
     field: keyof IFormStateType,
     value: string | boolean | Date | undefined | null,
   ): void => {
-    setFormState((prevState) => ({
-      ...prevState,
-      [field]: value,
-    }));
+    setFormState((prev) => ({ ...prev, [field]: value }));
   };
 
   const createActionItemHandler = async (e: FormEvent): Promise<void> => {
@@ -203,11 +168,10 @@ const ItemModal: FC<IItemModalProps> = ({
         });
         return;
       }
-
       const input: ICreateActionItemInput = {
         volunteerId: volunteerId || undefined,
         volunteerGroupId: volunteerGroupId || undefined,
-        categoryId: categoryId,
+        categoryId,
         organizationId: orgId,
         preCompletionNotes: preCompletionNotes || undefined,
         assignedAt: dayjs(assignedAt).toISOString(),
@@ -219,26 +183,16 @@ const ItemModal: FC<IItemModalProps> = ({
               : { recurringEventInstanceId: eventId }
             : { eventId })),
       };
-
-      await createActionItem({
-        variables: { input },
-      });
-
-      setFormState(initializeFormState(null));
-      setActionItemCategory(null);
-      setSelectedVolunteer(null);
-      setSelectedVolunteerGroup(null);
-      runRefetches();
+      await createActionItem({ variables: { input } });
+      actionItemsRefetch();
+      orgActionItemsRefetch?.();
       hide();
       NotificationToast.success({
         key: 'eventActionItems.successfulCreation',
         namespace: 'translation',
       });
     } catch {
-      NotificationToast.error({
-        key: 'unknownError',
-        namespace: 'errors',
-      });
+      NotificationToast.error({ key: 'unknownError', namespace: 'errors' });
     }
   };
 
@@ -246,39 +200,28 @@ const ItemModal: FC<IItemModalProps> = ({
     e.preventDefault();
     try {
       if (!actionItem?.id) {
-        NotificationToast.error({
-          key: 'unknownError',
-          namespace: 'errors',
-        });
+        NotificationToast.error({ key: 'unknownError', namespace: 'errors' });
         return;
       }
-
       const input: IUpdateActionItemInput = {
         id: actionItem.id,
-        isCompleted: isCompleted,
-        categoryId: categoryId,
+        isCompleted,
+        categoryId,
         volunteerId: volunteerId || undefined,
         volunteerGroupId: volunteerGroupId || undefined,
-        preCompletionNotes: preCompletionNotes,
+        preCompletionNotes,
         postCompletionNotes: postCompletionNotes || undefined,
       };
-
-      await updateActionItem({
-        variables: { input },
-      });
-
-      setFormState(initializeFormState(null));
-      runRefetches();
+      await updateActionItem({ variables: { input } });
+      actionItemsRefetch();
+      orgActionItemsRefetch?.();
       hide();
       NotificationToast.success({
         key: 'eventActionItems.successfulUpdation',
         namespace: 'translation',
       });
     } catch {
-      NotificationToast.error({
-        key: 'unknownError',
-        namespace: 'errors',
-      });
+      NotificationToast.error({ key: 'unknownError', namespace: 'errors' });
     }
   };
 
@@ -288,18 +231,13 @@ const ItemModal: FC<IItemModalProps> = ({
     e.preventDefault();
     try {
       if (!actionItem?.id) {
-        NotificationToast.error({
-          key: 'unknownError',
-          namespace: 'errors',
-        });
+        NotificationToast.error({ key: 'unknownError', namespace: 'errors' });
         return;
       }
-
       const input: IUpdateActionForInstanceInput = {
         actionId: actionItem.id,
-        eventId: eventId,
+        eventId,
       };
-
       if (volunteerId) input.volunteerId = volunteerId;
       if (volunteerGroupId) input.volunteerGroupId = volunteerGroupId;
       if (categoryId) input.categoryId = categoryId;
@@ -307,173 +245,93 @@ const ItemModal: FC<IItemModalProps> = ({
       if (preCompletionNotes !== undefined)
         input.preCompletionNotes = preCompletionNotes;
 
-      await updateActionForInstance({
-        variables: { input },
-      });
-
-      setFormState(initializeFormState(null));
-      runRefetches();
+      await updateActionForInstance({ variables: { input } });
+      actionItemsRefetch();
+      orgActionItemsRefetch?.();
       hide();
       NotificationToast.success({
         key: 'eventActionItems.successfulUpdation',
         namespace: 'translation',
       });
     } catch {
-      NotificationToast.error({
-        key: 'unknownError',
-        namespace: 'errors',
-      });
+      NotificationToast.error({ key: 'unknownError', namespace: 'errors' });
     }
   };
 
   useEffect(() => {
     setFormState(initializeFormState(actionItem));
-    if (actionItem?.category?.id) {
-      const foundCategory: IActionItemCategoryInfo | undefined =
-        actionItemCategories.find(
-          (category: IActionItemCategoryInfo) =>
-            category.id === actionItem.category?.id,
-        );
-      setActionItemCategory(foundCategory || null);
-    } else {
-      setActionItemCategory(null);
-    }
-  }, [actionItem, actionItemCategories]);
-
-  useEffect(() => {
-    if (actionItem?.isInstanceException) {
-      setApplyTo('instance');
-    } else if (actionItem) {
-      setApplyTo('series');
-    }
   }, [actionItem]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    if (actionItem?.volunteer?.id) {
-      const allVolunteers = volunteersData?.event?.volunteers || [];
-      const foundVolunteer: InterfaceEventVolunteerInfo | undefined =
-        allVolunteers.find(
-          (volunteer: InterfaceEventVolunteerInfo) =>
-            volunteer.id === actionItem.volunteer?.id,
-        );
-      setSelectedVolunteer(foundVolunteer || null);
-      setAssignmentType('volunteer');
-    } else if (actionItem?.volunteerGroup?.id) {
-      const allVolunteerGroups =
-        volunteerGroupsData?.event?.volunteerGroups || [];
-      const foundGroup: IEventVolunteerGroup | undefined =
-        allVolunteerGroups.find(
-          (group: IEventVolunteerGroup) =>
-            group.id === actionItem.volunteerGroup?.id,
-        );
-      setSelectedVolunteerGroup(foundGroup || null);
-      setAssignmentType('volunteerGroup');
-    } else if (!actionItem) {
-      setSelectedVolunteer(null);
-      setSelectedVolunteerGroup(null);
-      setAssignmentType('volunteer');
-    }
-  }, [actionItem, volunteersData, volunteerGroupsData, isOpen]);
-
-  useEffect(() => {
-    if (
-      selectedVolunteer &&
-      applyTo === 'series' &&
-      !selectedVolunteer.isTemplate
-    ) {
-      setSelectedVolunteer(null);
-      handleFormChange('volunteerId', '');
-    }
-
-    if (
-      selectedVolunteerGroup &&
-      applyTo === 'series' &&
-      !selectedVolunteerGroup.isTemplate
-    ) {
-      setSelectedVolunteerGroup(null);
-      handleFormChange('volunteerGroupId', '');
-    }
-  }, [applyTo, selectedVolunteer, selectedVolunteerGroup]);
-
-  useEffect(() => {
-    if (isOpen && !editMode && !actionItem) {
-      setApplyTo('instance');
-    }
-  }, [isOpen, editMode, actionItem]);
 
   return (
     <BaseModal
       show={isOpen}
       onHide={hide}
-      title={editMode ? t('updateActionItem') : t('createActionItem')}
-      size="lg"
+      headerContent={
+        <p className={styles.titlemodal}>
+          {editMode ? t('updateActionItem') : t('createActionItem')}
+        </p>
+      }
     >
       <Form
-        onSubmit={
+        onSubmitCapture={
           editMode
-            ? actionItem?.isInstanceException
-              ? updateActionForInstanceHandler
+            ? actionItem?.isTemplate
+              ? applyTo === 'series'
+                ? updateActionItemHandler
+                : updateActionForInstanceHandler
               : updateActionItemHandler
             : createActionItemHandler
         }
+        className="p-2"
       >
         {(isRecurring && !editMode) ||
         (editMode &&
           actionItem?.isTemplate &&
           !actionItem.isInstanceException) ? (
-          <FormControl fullWidth margin="normal">
-            <Typography variant="body1" gutterBottom>
-              {t('applyTo')}
-            </Typography>
-            <Box display="flex" gap={2}>
-              <Chip
-                label={t('entireSeries')}
-                variant={applyTo === 'series' ? 'filled' : 'outlined'}
-                color={applyTo === 'series' ? 'primary' : 'default'}
-                onClick={() => setApplyTo('series')}
-              />
-              <Chip
-                label={t('thisInstance')}
-                variant={applyTo === 'instance' ? 'filled' : 'outlined'}
-                color={applyTo === 'instance' ? 'primary' : 'default'}
-                onClick={() => setApplyTo('instance')}
-              />
-            </Box>
-          </FormControl>
+          <Form.Group className="mb-3">
+            <Form.Label>{t('applyTo')}</Form.Label>
+            <Form.Check
+              type="radio"
+              label={t('entireSeries')}
+              name="applyTo"
+              id="applyToSeries"
+              checked={applyTo === 'series'}
+              onChange={() => setApplyTo('series')}
+            />
+            <Form.Check
+              type="radio"
+              label={t('thisEventOnly')}
+              name="applyTo"
+              id="applyToInstance"
+              checked={applyTo === 'instance'}
+              onChange={() => setApplyTo('instance')}
+            />
+          </Form.Group>
         ) : null}
 
-        <FormControl fullWidth margin="normal">
+        <Form.Group className="d-flex gap-3 mb-3" data-testid="categorySelect">
           <Autocomplete
-            id="actionItemCategorySelect"
-            data-testid="formSelectActionItemCategory"
+            className={`${styles.noOutline} w-100`}
             options={actionItemCategories}
             value={actionItemCategory}
-            isOptionEqualToValue={(option, value): boolean =>
-              option.id === value.id
-            }
-            filterSelectedOptions={true}
-            getOptionLabel={(item: IActionItemCategoryInfo): string =>
-              item.name
-            }
-            onChange={(_, newCategory): void => {
-              handleFormChange('categoryId', newCategory?.id ?? '');
-              setActionItemCategory(newCategory);
+            getOptionLabel={(item: IActionItemCategoryInfo) => item.name}
+            onChange={(_, val) => {
+              handleFormChange('categoryId', val?.id ?? '');
+              setActionItemCategory(val);
             }}
             renderInput={(params) => (
-              <TextField {...params} label={t('category') + ' *'} />
+              <TextField {...params} label={t('actionItemCategory')} required />
             )}
           />
-        </FormControl>
+        </Form.Group>
 
         {!isCompleted && (
           <>
-            <FormControl fullWidth margin="normal">
-              <Typography variant="body1" gutterBottom>
+            <Box className="mb-3">
+              <Typography variant="subtitle2" className="mb-2">
                 {t('assignTo')}
               </Typography>
-              <Box display="flex" gap={2}>
+              <Box className="d-flex gap-2">
                 <Chip
                   label={t('volunteer')}
                   variant={
@@ -488,10 +346,6 @@ const ItemModal: FC<IItemModalProps> = ({
                     }
                   }}
                   clickable={!isVolunteerChipDisabled}
-                  sx={{
-                    opacity: isVolunteerChipDisabled ? 0.6 : 1,
-                    cursor: isVolunteerChipDisabled ? 'not-allowed' : 'pointer',
-                  }}
                 />
                 <Chip
                   label={t('volunteerGroup')}
@@ -509,118 +363,96 @@ const ItemModal: FC<IItemModalProps> = ({
                     }
                   }}
                   clickable={!isVolunteerGroupChipDisabled}
-                  sx={{
-                    opacity: isVolunteerGroupChipDisabled ? 0.6 : 1,
-                    cursor: isVolunteerGroupChipDisabled
-                      ? 'not-allowed'
-                      : 'pointer',
-                  }}
                 />
               </Box>
-            </FormControl>
+            </Box>
 
             {assignmentType === 'volunteer' && (
-              <FormControl fullWidth margin="normal">
+              <Form.Group className="mb-3 w-100" data-testid="volunteerSelect">
                 <Autocomplete
-                  id="volunteerSelect"
-                  data-testid="volunteerSelect"
                   options={volunteers}
                   value={selectedVolunteer}
-                  isOptionEqualToValue={(option, value): boolean =>
-                    option.id === value?.id
+                  getOptionLabel={(v: InterfaceEventVolunteerInfo) =>
+                    v.user?.name || t('unknownVolunteer')
                   }
-                  filterSelectedOptions={true}
-                  getOptionLabel={(
-                    volunteer: InterfaceEventVolunteerInfo,
-                  ): string => {
-                    return volunteer.user?.name || t('unknownVolunteer');
-                  }}
-                  onChange={(_, newVolunteer): void => {
-                    const volunteerId = newVolunteer?.id;
-                    handleFormChange('volunteerId', volunteerId);
+                  onChange={(_, val) => {
+                    handleFormChange('volunteerId', val?.id);
                     handleFormChange('volunteerGroupId', '');
-                    setSelectedVolunteer(newVolunteer);
-                    setSelectedVolunteerGroup(null);
+                    setSelectedVolunteer(val);
                   }}
                   renderInput={(params) => (
-                    <TextField {...params} label={t('volunteer') + ' *'} />
+                    <TextField {...params} label={t('volunteer')} required />
                   )}
                 />
-              </FormControl>
+              </Form.Group>
             )}
 
             {assignmentType === 'volunteerGroup' && (
-              <FormControl fullWidth margin="normal">
+              <Form.Group
+                className="mb-3 w-100"
+                data-testid="volunteerGroupSelect"
+              >
                 <Autocomplete
-                  id="volunteerGroupSelect"
-                  data-testid="volunteerGroupSelect"
                   options={volunteerGroups}
                   value={selectedVolunteerGroup}
-                  isOptionEqualToValue={(option, value): boolean =>
-                    option.id === value?.id
-                  }
-                  filterSelectedOptions={true}
-                  getOptionLabel={(group: IEventVolunteerGroup): string => {
-                    return group.name;
-                  }}
-                  onChange={(_, newGroup): void => {
-                    const groupId = newGroup?.id;
-                    handleFormChange('volunteerGroupId', groupId);
+                  getOptionLabel={(g: IEventVolunteerGroup) => g.name}
+                  onChange={(_, val) => {
+                    handleFormChange('volunteerGroupId', val?.id);
                     handleFormChange('volunteerId', '');
-                    setSelectedVolunteerGroup(newGroup);
-                    setSelectedVolunteer(null);
+                    setSelectedVolunteerGroup(val);
                   }}
                   renderInput={(params) => (
-                    <TextField {...params} label={t('volunteerGroup') + ' *'} />
+                    <TextField
+                      {...params}
+                      label={t('volunteerGroup')}
+                      required
+                    />
                   )}
                 />
-              </FormControl>
+              </Form.Group>
             )}
+
+            <Form.Group className="d-flex gap-3 mx-auto mb-3">
+              <DatePicker
+                label={t('assignmentDate')}
+                value={dayjs(assignedAt)}
+                disabled={editMode}
+                onChange={(date) =>
+                  !editMode && handleFormChange('assignedAt', date?.toDate())
+                }
+              />
+            </Form.Group>
+
+            <FormControl fullWidth className="mb-2">
+              <TextField
+                label={t('preCompletionNotes')}
+                variant="outlined"
+                value={preCompletionNotes}
+                onChange={(e) =>
+                  handleFormChange('preCompletionNotes', e.target.value)
+                }
+              />
+            </FormControl>
           </>
         )}
 
-        <FormControl fullWidth margin="normal">
-          <DatePicker
-            label={t('dueDate')}
-            value={dayjs(assignedAt)}
-            onChange={(date: Dayjs | null): void => {
-              if (date && !editMode) {
-                handleFormChange('assignedAt', date.toDate());
-              }
-            }}
-          />
-        </FormControl>
-
-        <Form.Group className="mb-3">
-          <Form.Control
-            as="textarea"
-            rows={3}
-            placeholder={t('preCompletionNotes')}
-            value={preCompletionNotes}
-            onChange={(e): void =>
-              handleFormChange('preCompletionNotes', e.target.value)
-            }
-          />
-        </Form.Group>
-
         {isCompleted && (
-          <Form.Group className="mb-3">
-            <Form.Control
-              as="textarea"
-              rows={3}
-              placeholder={t('postCompletionNotes')}
+          <FormControl fullWidth className="mb-2">
+            <TextField
+              label={t('postCompletionNotes')}
               value={postCompletionNotes || ''}
-              onChange={(e): void =>
+              multiline
+              maxRows={3}
+              onChange={(e) =>
                 handleFormChange('postCompletionNotes', e.target.value)
               }
             />
-          </Form.Group>
+          </FormControl>
         )}
 
         <Button
           type="submit"
-          className={styles.greenregbtn}
-          value="createActionItem"
+          className={styles.addButton}
           data-testid="submitBtn"
         >
           {editMode ? t('updateActionItem') : t('createActionItem')}

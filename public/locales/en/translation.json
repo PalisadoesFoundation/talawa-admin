@@ -1618,6 +1618,8 @@
     "edit": "edit",
     "saveChanges": "saveChanges",
     "endOfResults": "endOfResults",
+    "name": "Name",
+    "loading": "Advertisement Loading",
     "failedToFetchAdvertisements": "Failed to fetch advertisements",
     "advertisementMedia": "Advertisement media",
     "noMediaAvailable": "No media available",

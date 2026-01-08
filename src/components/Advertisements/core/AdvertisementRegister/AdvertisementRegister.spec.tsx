@@ -1,6 +1,7 @@
 /**
  * Testing Advertisement Register Component
  * * Rectified to resolve Apollo Error #104 and TimeoutNaNWarning.
+ * * Updated to remove deprecated Apollo Cache options.
  */
 import React from 'react';
 import {
@@ -28,12 +29,9 @@ import * as router from 'react-router';
 import { dateConstants } from './AdvertisementRegisterMocks';
 
 // Create a local clean client for tests to avoid global cache pollution.
-// addTypename is explicitly disabled to fix Apollo Error #104 (Missing field error).
 const testClient = new ApolloClient({
   link: new HttpLink({ uri: '/graphql' }),
-  cache: new InMemoryCache({
-    addTypename: false,
-  }),
+  cache: new InMemoryCache(), // Deprecated option 'addTypename: false' removed
 });
 
 vi.mock('react-router', async () => {
@@ -119,7 +117,7 @@ describe('Testing Advertisement Register Component', () => {
   test('Throws error at creation when the end date is less than the start date', async () => {
     const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     render(
-      <MockedProvider cache={new InMemoryCache({ addTypename: false })}>
+      <MockedProvider cache={new InMemoryCache()}>
         <Provider store={store}>
           <router.BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>

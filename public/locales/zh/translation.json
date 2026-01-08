@@ -1610,6 +1610,8 @@
     "advertisementDeleted": "广告已成功删除。",
     "endDateGreater": "结束日期应大于开始日期",
     "advertisementCreated": "广告已成功创建。",
+    "name": "名称",
+    "loading": "广告加载中",
     "pHeading": "广告标题",
     "delete": "删除",
     "close": "关闭",

@@ -1604,6 +1604,8 @@
     "advertisementDeleted": "Anuncio eliminado con éxito.",
     "endDateGreater": "La fecha de inicio debe ser menor que la fecha de finalización",
     "advertisementCreated": "Anuncio creado con éxito.",
+    "name": "Nombre",
+    "loading": "Cargando anuncio",
     "saveChanges": "Guardar Cambios",
     "endOfResults": "Fin de los resultados",
     "Rname": "Nombre",

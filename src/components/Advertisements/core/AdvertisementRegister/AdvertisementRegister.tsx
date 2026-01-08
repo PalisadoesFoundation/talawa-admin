@@ -1,7 +1,5 @@
 /**
  * AdvertisementRegister Component
- *
- * Handles the creation and editing of advertisements.
  */
 import React, { useState, useEffect } from 'react';
 import styles from 'style/app-fixed.module.css';
@@ -274,7 +272,7 @@ function AdvertisementRegister({
               data-cy="advertisementMediaInput"
             />
             <Form.Text className="text-muted">
-              {t('mediaUnavailable')}
+              {t('mediaUploadsUnavailable')}
             </Form.Text>
           </Form.Group>
           <Form.Group className="mb-3" controlId="registerForm.RstartAt">
@@ -289,6 +287,7 @@ function AdvertisementRegister({
                 }))
               }
               data-cy="advertisementStartDateInput"
+              data-testid="advertisementStartDateInput"
             />
           </Form.Group>
           <Form.Group className="mb-3" controlId="registerForm.RDate">
@@ -303,6 +302,7 @@ function AdvertisementRegister({
                 }))
               }
               data-cy="advertisementEndDateInput"
+              data-testid="advertisementEndDateInput"
             />
           </Form.Group>
         </Form>

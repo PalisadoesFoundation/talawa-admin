@@ -23,7 +23,7 @@ vi.mock('@apollo/client', async () => {
   };
 });
 
-// FIXED: Added react-router mock to provide orgId and prevent 404/PageNotFound crash
+// FIXED: Mocking react-router prevents the 404 crash in the dropdown's Register component
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
@@ -185,13 +185,12 @@ describe('AdvertisementEntry Component Coverage', () => {
       });
     });
 
-    // FIXED: Using fireEvent.click for keyboard navigation tests on semantic buttons
-    // Firing a click on a button effectively tests the logic assigned to Enter/Space keys
     it('handles keyboard navigation for delete (Enter key)', () => {
       renderComponent();
       fireEvent.click(screen.getByTestId('moreiconbtn'));
       const deleteBtn = screen.getByTestId('deletebtn');
 
+      // Native buttons activate on click for Enter/Space
       fireEvent.click(deleteBtn);
       expect(screen.getByTestId('delete_title')).toBeInTheDocument();
     });

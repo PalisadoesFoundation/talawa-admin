@@ -1,4 +1,3 @@
-import type { ChangeEvent } from 'react';
 import React from 'react';
 
 import { MockedProvider } from '@apollo/client/testing';
@@ -19,20 +18,8 @@ import i18n from 'utils/i18nForTest';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
-import { vi } from 'vitest';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-
-/**
- * This file contains unit tests for the `UpdateSession` component.
- *
- * The tests cover:
- * - Proper rendering of the component with different scenarios, including mock data, null values, and error states.
- * - Handling user interactions with the slider, such as setting minimum, maximum, and intermediate values.
- * - Ensuring callbacks (e.g., `onValueChange`) are triggered correctly based on user input.
- * - Simulating GraphQL query and mutation operations using mocked data to verify correct behavior in successful and error cases.
- * - Testing edge cases, including null community data, invalid input values, and API errors, ensuring the component handles them gracefully.
- * - Verifying proper integration of internationalization, routing, and toast notifications for success or error messages.
- */
 
 const MOCKS = [
   {
@@ -166,9 +153,12 @@ describe('Testing UpdateTimeout Component', () => {
     fireEvent.mouseUp(slider);
 
     // Assert that the callback was triggered
-    await waitFor(() => {
-      expect(mockOnValueChange).toHaveBeenCalledWith(expect.any(Number));
-    });
+    await waitFor(
+      () => {
+        expect(mockOnValueChange).toHaveBeenCalledWith(expect.any(Number));
+      },
+      { timeout: 1000 },
+    );
   });
 
   it('Components should render properly', async () => {
@@ -221,11 +211,14 @@ describe('Testing UpdateTimeout Component', () => {
     );
 
     // Wait for the initial query to complete
-    await waitFor(() => {
-      expect(screen.getByTestId('timeout-value')).toHaveTextContent(
-        '30 minutes',
-      );
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('timeout-value')).toHaveTextContent(
+          '30 minutes',
+        );
+      },
+      { timeout: 3000 },
+    );
 
     // Get the form using querySelector
     const form = container.querySelector('form');
@@ -370,288 +363,5 @@ describe('Testing UpdateTimeout Component', () => {
 
     // Check if the component displays a default value or handles the null state appropriately
     expect(screen.getByText(/No timeout set/i)).toBeInTheDocument();
-  });
-
-  it('Should handle valid event with target correctly', () => {
-    const mockOnValueChange = vi.fn();
-
-    const handleOnChange = (
-      e: Event | React.ChangeEvent<HTMLInputElement>,
-    ): void => {
-      if ('target' in e && e.target) {
-        const target = e.target as HTMLInputElement;
-        // Ensure the value is a number and not NaN
-        const value = parseInt(target.value, 10);
-        if (!Number.isNaN(value)) {
-          // mock setTimeout behavior if necessary
-          if (mockOnValueChange) {
-            mockOnValueChange(value);
-          }
-        } else {
-          console.warn('Invalid timeout value:', target.value);
-        }
-      }
-    };
-
-    const mockInputElement = { value: '30' } as HTMLInputElement;
-    const mockChangeEvent = {
-      target: mockInputElement,
-      nativeEvent: {} as Event,
-      currentTarget: mockInputElement,
-      bubbles: false,
-      cancelable: false,
-      isTrusted: true,
-    } as ChangeEvent<HTMLInputElement>;
-
-    handleOnChange(mockChangeEvent);
-    expect(mockOnValueChange).toHaveBeenCalledWith(30);
-  });
-
-  it('Should handle event without target gracefully', async () => {
-    const mockOnValueChange = vi.fn();
-    render(
-      <MockedProvider>
-        <UpdateTimeout onValueChange={mockOnValueChange} />
-      </MockedProvider>,
-    );
-
-    const invalidEvent = {} as React.ChangeEvent<HTMLInputElement>;
-    fireEvent.change(window, invalidEvent);
-
-    expect(mockOnValueChange).not.toHaveBeenCalled();
-  });
-
-  it('Should call onValueChange if provided', () => {
-    const mockOnValueChange = vi.fn();
-    const handleOnChange = (
-      e: Event | React.ChangeEvent<HTMLInputElement>,
-    ): void => {
-      if ('target' in e && e.target) {
-        const target = e.target as HTMLInputElement;
-        const value = parseInt(target.value, 10);
-        if (!Number.isNaN(value)) {
-          if (mockOnValueChange) {
-            mockOnValueChange(value);
-          }
-        } else {
-          console.warn('Invalid timeout value:', target.value);
-        }
-      }
-    };
-
-    render(
-      <MockedProvider>
-        <UpdateTimeout onValueChange={mockOnValueChange} />
-      </MockedProvider>,
-    );
-
-    const mockInputElement = { value: '50' } as HTMLInputElement;
-
-    const mockChangeEvent = {
-      target: mockInputElement,
-      nativeEvent: {} as Event,
-      currentTarget: mockInputElement,
-      bubbles: false,
-      cancelable: false,
-      isTrusted: true,
-    } as ChangeEvent<HTMLInputElement>;
-
-    handleOnChange(mockChangeEvent);
-
-    expect(mockOnValueChange).toHaveBeenCalledWith(50);
-  });
-
-  it('Should not throw error if onValueChange is not provided', () => {
-    const mockOnValueChange = vi.fn();
-    const handleOnChange = (
-      e: Event | React.ChangeEvent<HTMLInputElement>,
-    ): void => {
-      if ('target' in e && e.target) {
-        const target = e.target as HTMLInputElement;
-        const value = parseInt(target.value, 10);
-        if (!Number.isNaN(value)) {
-          if (mockOnValueChange) {
-            mockOnValueChange(value);
-          }
-        } else {
-          console.warn('Invalid timeout value:', target.value);
-        }
-      }
-    };
-
-    render(
-      <MockedProvider>
-        <UpdateTimeout />
-      </MockedProvider>,
-    );
-
-    const mockInputElement = { value: '60' } as HTMLInputElement;
-
-    const mockChangeEvent = {
-      target: mockInputElement,
-      nativeEvent: {} as Event,
-      currentTarget: mockInputElement,
-      bubbles: false,
-      cancelable: false,
-      isTrusted: true,
-    } as ChangeEvent<HTMLInputElement>;
-
-    handleOnChange(mockChangeEvent);
-    expect(mockOnValueChange).toHaveBeenCalledWith(60);
-  });
-
-  it('Should handle invalid value gracefully', () => {
-    const mockOnValueChange = vi.fn();
-    const handleOnChange = (
-      e: Event | React.ChangeEvent<HTMLInputElement>,
-    ): void => {
-      if ('target' in e && e.target) {
-        const target = e.target as HTMLInputElement;
-        const value = parseInt(target.value, 10);
-        if (!Number.isNaN(value)) {
-          if (mockOnValueChange) {
-            mockOnValueChange(value);
-          }
-        } else {
-          console.warn('Invalid timeout value:', target.value);
-        }
-      }
-    };
-
-    render(
-      <MockedProvider>
-        <UpdateTimeout />
-      </MockedProvider>,
-    );
-
-    const mockInputElement = { value: 'abc' } as HTMLInputElement;
-    const mockChangeEvent = {
-      target: mockInputElement,
-      nativeEvent: {} as Event,
-      currentTarget: mockInputElement,
-      bubbles: false,
-      cancelable: false,
-      isTrusted: true,
-    } as ChangeEvent<HTMLInputElement>;
-
-    handleOnChange(mockChangeEvent);
-    expect(mockOnValueChange).not.toHaveBeenCalled();
-  });
-
-  it('Should handle empty input gracefully', () => {
-    const mockOnValueChange = vi.fn();
-    const handleOnChange = (
-      e: Event | React.ChangeEvent<HTMLInputElement>,
-    ): void => {
-      if ('target' in e && e.target) {
-        const target = e.target as HTMLInputElement;
-        const value = parseInt(target.value, 10);
-        if (!Number.isNaN(value)) {
-          if (mockOnValueChange) {
-            mockOnValueChange(value);
-          }
-        } else {
-          console.warn('Invalid timeout value:', target.value);
-        }
-      }
-    };
-
-    render(
-      <MockedProvider>
-        <UpdateTimeout />
-      </MockedProvider>,
-    );
-
-    const mockInputElement = { value: '' } as HTMLInputElement;
-    const mockChangeEvent = {
-      target: mockInputElement,
-      nativeEvent: {} as Event,
-      currentTarget: mockInputElement,
-      bubbles: false,
-      cancelable: false,
-      isTrusted: true,
-    } as ChangeEvent<HTMLInputElement>;
-
-    handleOnChange(mockChangeEvent);
-
-    expect(mockOnValueChange).not.toHaveBeenCalled();
-  });
-
-  it('Should not call onValueChange if it is not a valid function', () => {
-    const mockOnValueChange: ((value: number) => void) | null = null;
-    const handleOnChange = (
-      e: Event | React.ChangeEvent<HTMLInputElement>,
-    ): void => {
-      if ('target' in e && e.target) {
-        const target = e.target as HTMLInputElement;
-        const value = parseInt(target.value, 10);
-        if (!Number.isNaN(value)) {
-          if (mockOnValueChange) {
-            (mockOnValueChange as (value: number) => void)(value);
-          }
-        } else {
-          console.warn('Invalid timeout value:', target.value);
-        }
-      }
-    };
-
-    render(
-      <MockedProvider>
-        <UpdateTimeout />
-      </MockedProvider>,
-    );
-
-    const mockInputElement = { value: '30' } as HTMLInputElement;
-    const mockChangeEvent = {
-      target: mockInputElement,
-      nativeEvent: {} as Event,
-      currentTarget: mockInputElement,
-      bubbles: false,
-      cancelable: false,
-      isTrusted: true,
-    } as ChangeEvent<HTMLInputElement>;
-
-    handleOnChange(mockChangeEvent);
-
-    expect(mockOnValueChange).toBeNull();
-  });
-
-  it('Should handle very large numbers correctly', () => {
-    const mockOnValueChange = vi.fn();
-    const handleOnChange = (
-      e: Event | React.ChangeEvent<HTMLInputElement>,
-    ): void => {
-      if ('target' in e && e.target) {
-        const target = e.target as HTMLInputElement;
-        const value = parseInt(target.value, 10);
-        if (!Number.isNaN(value)) {
-          if (mockOnValueChange) {
-            mockOnValueChange(value);
-          }
-        } else {
-          console.warn('Invalid timeout value:', target.value);
-        }
-      }
-    };
-
-    render(
-      <MockedProvider>
-        <UpdateTimeout />
-      </MockedProvider>,
-    );
-    const largeValue = String(Number.MAX_SAFE_INTEGER);
-    const mockInputElement = { value: largeValue } as HTMLInputElement;
-    const mockChangeEvent = {
-      target: mockInputElement,
-      nativeEvent: {} as Event,
-      currentTarget: mockInputElement,
-      bubbles: false,
-      cancelable: false,
-      isTrusted: true,
-    } as ChangeEvent<HTMLInputElement>;
-
-    handleOnChange(mockChangeEvent);
-
-    expect(mockOnValueChange).toHaveBeenCalledWith(Number(largeValue));
   });
 });

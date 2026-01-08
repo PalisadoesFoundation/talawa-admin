@@ -1610,6 +1610,8 @@
     "advertisementDeleted": "Publicité supprimée avec succès.",
     "endDateGreater": "La date de fin doit être postérieure à la date de début",
     "advertisementCreated": "Publicité créée avec succès.",
+    "name": "Nom",
+    "loading": "Chargement de la publicité",
     "pHeading": "Titre principal",
     "delete": "Supprimer",
     "close": "Fermer",
