@@ -5,7 +5,7 @@
  *
  * @template T - The type of the callback function.
  * @param callback - The function to debounce. It will be executed after the delay
- * if no new calls are made during that time.
+ *   if no new calls are made during that time.
  * @param delay - The debounce delay in milliseconds.
  *
  * @returns An object containing:

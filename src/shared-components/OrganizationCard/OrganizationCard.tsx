@@ -1,38 +1,38 @@
 /**
- * OrganizationCard Component
+ * Renders a card displaying an organization's details including name, description, address, avatar,
+ * membership information, and action buttons.
  *
- * This component represents a card displaying information about an organization.
- * It includes the organization's name, description, address, avatar, and the number of members.
- * A button is provided to navigate to the organization's dashboard for management.
+ * @param data - The organization data.
  *
- * @component
- * @param {InterfaceOrganizationCardPropsPG} props - The props for the component.
- * @param {string} props.data.id - The unique identifier for the organization.
- * @param {string} props.data.avatarURL - The URL of the organization's avatar image.
- * @param {string} props.data.addressLine1 - The primary address of the organization.
- * @param {string} props.data.name - The name of the organization.
- * @param {string} props.data.description - A brief description of the organization.
- * @param {object} props.data.members - The members of the organization.
- * @param {Array} props.data.members.edges - The list of members in the organization.
- * @param {number|undefined} [props.data.membersCount] - The number of members. Optional. The component uses `membersCount ?? members?.edges.length ?? 0` as the fallback.
- *
- * @returns {JSX.Element} A JSX element representing the organization card.
+ * @returns A JSX element representing the organization card.
  *
  * @remarks
- * - The component uses `react-bootstrap` for the button and `@mui/material` for the tooltip.
- * - The `useNavigate` hook from `react-router-dom` is used for navigation.
- * - The `useTranslation` hook from `react-i18next` is used for localization.
+ * - The `data` object contains:
+ *   - `id`, `name`, `description`, `avatarURL`, `addressLine1`
+ *   - `members` (edges array) and optional `membersCount`
+ *   - `adminsCount`, `membershipRequestStatus`, `userRegistrationRequired`, `membershipRequests`, `isJoined`, `role`
+ * - Membership state can be `'member'`, `'pending'`, or `'notMember'`.
+ * - Uses `react-bootstrap` for buttons, `@mui/material` for tooltips, and `react-router-dom` for navigation.
+ * - Uses `useTranslation` from `react-i18next` for localization.
+ * - Uses GraphQL mutations to handle membership requests and joining organizations.
  *
  * @example
  * ```tsx
  * <OrganizationCard
  *   data={{
  *     id: '1',
- *     avatarURL: 'https://example.com/avatar.png',
- *     addressLine1: '123 Main St',
  *     name: 'Example Org',
  *     description: 'An example organization',
  *     members: { edges: [{ node: { id: '1' } }, { node: { id: '2' } }] },
+ *     membersCount: 2,
+ *     addressLine1: '123 Main St',
+ *     avatarURL: 'https://example.com/avatar.png',
+ *     adminsCount: 1,
+ *     membershipRequestStatus: 'pending',
+ *     userRegistrationRequired: true,
+ *     membershipRequests: [],
+ *     isJoined: false,
+ *     role: 'admin',
  *   }}
  * />
  * ```
