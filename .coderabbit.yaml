@@ -314,7 +314,7 @@ reviews:
 
         ### 8.2 Approval Criteria
 
-        **Append `` tag ONLY when ALL criteria met**:
+        **Append [approve] tag ONLY when ALL criteria met**:
         1. ✅ Complete test coverage (target 100%) with quality tests (§1)
         2. ✅ Zero code quality issues (§2)
         3. ✅ **Full reusable component policy compliance** (§3)
