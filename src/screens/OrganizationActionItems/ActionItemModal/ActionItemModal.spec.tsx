@@ -4113,37 +4113,57 @@ describe('Partially Covered Lines Test Coverage', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
-      // Wait for volunteer select and its data to be fully loaded
-      const volunteerSelect = await screen.findByTestId('volunteerSelect');
-      const volunteerInput = within(volunteerSelect).getByRole('combobox');
-
-      // Ensure volunteer data has loaded by waiting for the input to be enabled/ready
-      await waitFor(() => {
-        expect(volunteerInput).not.toBeDisabled();
+      // Select a category first (required for volunteer functionality)
+      const categorySelect = screen.getByTestId('categorySelect');
+      const categoryInput = within(categorySelect).getByRole('combobox');
+      await userEvent.click(categoryInput);
+      await userEvent.type(categoryInput, 'Category 1');
+      await waitFor(async () => {
+        const option = await screen.findByText('Category 1');
+        await userEvent.click(option);
       });
 
-      // First switch to volunteer group to set some state
+      // Wait for volunteer select to be in the document
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
+
+      // Click volunteer group chip to switch assignment type
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
       await userEvent.click(volunteerGroupChip);
 
-      const volunteerGroupSelect = await screen.findByTestId(
-        'volunteerGroupSelect',
+      // Wait for state change to complete and volunteerGroupSelect to appear
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('volunteerGroupSelect'),
+          ).toBeInTheDocument();
+          expect(
+            screen.queryByTestId('volunteerSelect'),
+          ).not.toBeInTheDocument();
+        },
+        { timeout: 5000 },
       );
-      expect(volunteerGroupSelect).toBeInTheDocument();
 
       // Now click volunteer chip - this should execute the !isVolunteerChipDisabled path
       const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
       await userEvent.click(volunteerChip);
 
       // Should switch back to volunteer select and clear volunteer group
-      await waitFor(() => {
-        expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
-        expect(
-          screen.queryByTestId('volunteerGroupSelect'),
-        ).not.toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
+          expect(
+            screen.queryByTestId('volunteerGroupSelect'),
+          ).not.toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
     });
 
     it('should have isVolunteerChipDisabled true when editing item with volunteer group', () => {
@@ -4215,10 +4235,16 @@ describe('Partially Covered Lines Test Coverage', () => {
       await userEvent.click(volunteerGroupChip);
 
       // Should switch to volunteer group select and clear volunteer
-      const volunteerGroupSelect = await screen.findByTestId(
-        'volunteerGroupSelect',
-        {},
-        { timeout: 3000 },
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('volunteerGroupSelect'),
+          ).toBeInTheDocument();
+          expect(
+            screen.queryByTestId('volunteerSelect'),
+          ).not.toBeInTheDocument();
+        },
+        { timeout: 5000 },
       );
       expect(volunteerGroupSelect).toBeInTheDocument();
       await waitFor(() => {

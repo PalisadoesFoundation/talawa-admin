@@ -1246,10 +1246,9 @@ describe('ChatRoom Component', () => {
       expect(screen.getByTestId('groupChatDetailsModal')).toBeInTheDocument(),
     );
 
-    const closeBtn = within(screen.getByTestId('groupChatDetails')).getByRole(
-      'button',
-      { name: /close/i },
-    );
+    const closeBtn = within(
+      screen.getByTestId('groupChatDetailsModal'),
+    ).getByRole('button', { name: /close/i });
     fireEvent.click(closeBtn);
 
     await waitFor(() =>

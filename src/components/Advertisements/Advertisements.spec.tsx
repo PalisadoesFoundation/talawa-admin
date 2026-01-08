@@ -537,6 +537,10 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
+    await waitFor(() =>
+      expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument(),
+    );
+
     expect(
       screen.getByText(translations.createAdvertisement),
     ).toBeInTheDocument();
@@ -617,6 +621,10 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
+    await waitFor(() =>
+      expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument(),
+    );
+
     expect(
       screen.getByText(translations.createAdvertisement),
     ).toBeInTheDocument();
@@ -673,6 +681,10 @@ describe('Testing Advertisement Component', () => {
           </BrowserRouter>
         </Provider>
       </ApolloProvider>,
+    );
+
+    await waitFor(() =>
+      expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument(),
     );
 
     expect(
@@ -737,6 +749,10 @@ describe('Testing Advertisement Component', () => {
           </BrowserRouter>
         </Provider>
       </ApolloProvider>,
+    );
+
+    await waitFor(() =>
+      expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument(),
     );
 
     expect(

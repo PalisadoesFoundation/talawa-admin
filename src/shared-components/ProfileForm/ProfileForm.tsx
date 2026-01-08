@@ -90,7 +90,7 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { languages } from 'utils/languages';
 import { errorHandler } from 'utils/errorHandler';
 import { Card, Row, Col, Form } from 'react-bootstrap';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import EventsAttendedByMember from 'components/MemberActivity/EventsAttendedByMember';
@@ -110,6 +110,7 @@ import { sanitizeAvatars } from 'utils/sanitizeAvatar';
 import type { IEvent } from 'types/Event/interface';
 import ProfileFormWrapper from './ProfileFormWrapper';
 import DatePicker from 'shared-components/DatePicker';
+import { removeEmptyFields, validateImageFile } from 'utils/userUpdateUtils';
 
 const MemberDetail: React.FC = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
@@ -183,27 +184,14 @@ const MemberDetail: React.FC = (): JSX.Element => {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const file = e.target?.files?.[0];
 
-    if (file) {
-      const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-      const maxSize = 5 * 1024 * 1024; // 5MB
-
-      if (!validTypes.includes(file.type)) {
-        NotificationToast.error(
-          tCommon('invalidFileType', { types: 'JPEG, PNG, or GIF' }) as string,
-        );
-        return;
-      }
-
-      if (file.size > maxSize) {
-        NotificationToast.error(tCommon('fileTooLarge', { size: 5 }) as string);
-        return;
-      }
-
-      // Update all states properly
-      setFormState((prevState) => ({ ...prevState, avatar: file }));
-      setSelectedAvatar(file); // to show the image to the user before updating the avatar
-      setisUpdated(true);
+    const isValid = validateImageFile(file, tCommon);
+    if (!isValid || !file) {
+      return;
     }
+    // Update all states properly
+    setFormState((prevState) => ({ ...prevState, avatar: file }));
+    setSelectedAvatar(file); // to show the image to the user before updating the avatar
+    setisUpdated(true);
   };
 
   // to handle the change in the form fields
@@ -226,20 +214,6 @@ const MemberDetail: React.FC = (): JSX.Element => {
 
   // Function to handle the update of the user details
   const handleUserUpdate = async (): Promise<void> => {
-    // Remove empty fields from the form state
-    function removeEmptyFields<T extends Record<string, string | File | null>>(
-      obj: T,
-    ): Partial<T> {
-      return Object.fromEntries(
-        Object.entries(obj).filter(
-          ([, value]) =>
-            value !== null &&
-            value !== undefined &&
-            (typeof value !== 'string' || value.trim() !== ''),
-        ),
-      ) as Partial<T>;
-    }
-
     // If no new avatar is selected but there's an avatar URL, convert it to File
     let avatarFile: File | null = null;
     if (!selectedAvatar && formState.avatarURL) {
@@ -318,12 +292,8 @@ const MemberDetail: React.FC = (): JSX.Element => {
     }
   };
 
-  if (loading) {
-    return <Loader />;
-  }
-
   return (
-    <>
+    <LoadingState isLoading={loading} variant="spinner">
       {show && (
         <MemberAttendedEventsModal
           eventsAttended={userData?.user?.eventsAttended}
@@ -839,7 +809,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
           )}
         </Row>
       </ProfileFormWrapper>
-    </>
+    </LoadingState>
   );
 };
 
