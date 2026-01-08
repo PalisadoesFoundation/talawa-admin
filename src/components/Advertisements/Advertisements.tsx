@@ -182,7 +182,9 @@ export default function Advertisements(): JSX.Element {
       <Row data-testid="advertisements" className={styles.rowAdvertisements}>
         <Col md={8} className={styles.containerAdvertisements}>
           {loading && (
-            <LoadingState isLoading={true} variant="spinner">{null}</LoadingState>
+            <LoadingState isLoading={true} variant="spinner">
+              {null}
+            </LoadingState>
           )}
           <Col className={styles.colAdvertisements}>
             <PageHeader
