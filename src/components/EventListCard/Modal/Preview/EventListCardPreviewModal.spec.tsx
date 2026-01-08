@@ -17,7 +17,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
 import dayjs, { type Dayjs } from 'dayjs';
-import CustomRecurrenceModal from 'screens/OrganizationEvents/CustomRecurrenceModal';
+import utc from 'dayjs/plugin/utc';
+import CustomRecurrenceModal from 'screens/AdminPortal/OrganizationEvents/CustomRecurrenceModal';
+
+dayjs.extend(utc);
 
 import PreviewModal from './EventListCardPreviewModal';
 import { UserRole } from 'types/Event/interface';
@@ -26,7 +29,7 @@ import {
   InterfaceRecurrenceRule,
 } from 'utils/recurrenceUtils/recurrenceTypes';
 
-vi.mock('screens/OrganizationEvents/CustomRecurrenceModal', () => ({
+vi.mock('screens/AdminPortal/OrganizationEvents/CustomRecurrenceModal', () => ({
   default: vi.fn(),
 }));
 
@@ -55,8 +58,14 @@ const mockEventListCardProps = {
   name: 'Test Event',
   description: 'Test event description',
   location: 'Test Location',
-  startAt: '2024-01-15T10:00:00Z',
-  endAt: '2024-01-15T12:00:00Z',
+  startAt: dayjs
+    .utc()
+    .add(10, 'days')
+    .hour(10)
+    .minute(0)
+    .second(0)
+    .toISOString(),
+  endAt: dayjs.utc().add(10, 'days').hour(12).minute(0).second(0).toISOString(),
   startTime: '10:00:00',
   endTime: '12:00:00',
   allDay: false,
@@ -90,8 +99,8 @@ const mockDefaultProps = {
   tCommon: mockTCommon,
   isRegistered: false,
   userId: 'user123',
-  eventStartDate: new Date('2024-01-15'),
-  eventEndDate: new Date('2024-01-15'),
+  eventStartDate: dayjs.utc().add(10, 'days').toDate(),
+  eventEndDate: dayjs.utc().add(10, 'days').toDate(),
   setEventStartDate: vi.fn(),
   setEventEndDate: vi.fn(),
   alldaychecked: false,
@@ -564,9 +573,21 @@ describe('EventListCardPreviewModal', () => {
     await userEvent.click(dropdownToggle);
 
     expect(screen.getByText('Daily')).toBeInTheDocument();
-    expect(screen.getByText('Weekly on Monday')).toBeInTheDocument();
-    expect(screen.getByText('Monthly on day 15')).toBeInTheDocument();
-    expect(screen.getByText('Annually on January 15')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        `Weekly on ${dayjs.utc(mockEventListCardProps.startAt).format('dddd')}`,
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        `Monthly on day ${dayjs.utc(mockEventListCardProps.startAt).date()}`,
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        `Annually on ${dayjs.utc(mockEventListCardProps.startAt).format('MMMM D')}`,
+      ),
+    ).toBeInTheDocument();
     expect(
       screen.getByText('Every weekday (Monday to Friday)'),
     ).toBeInTheDocument();
@@ -815,7 +836,7 @@ describe('EventListCardPreviewModal', () => {
       if (date) {
         mockSetEventStartDate(date.toDate());
         // Simulate the logic: if end date is before new start date, update end date
-        const currentEndDate = new Date('2024-01-10');
+        const currentEndDate = dayjs().subtract(5, 'days').toDate();
         if (currentEndDate < date.toDate()) {
           mockSetEventEndDate(date.toDate());
         }
@@ -823,7 +844,8 @@ describe('EventListCardPreviewModal', () => {
     };
 
     // Trigger the handler with a new date
-    handleStartDateChange(dayjs('2024-01-20'));
+    const targetDate = dayjs().add(5, 'days');
+    handleStartDateChange(targetDate);
 
     // Check that the functions were called and verify the date values
     expect(mockSetEventStartDate).toHaveBeenCalled();
@@ -832,14 +854,14 @@ describe('EventListCardPreviewModal', () => {
     const startDateCall = mockSetEventStartDate.mock.calls[0][0];
     const endDateCall = mockSetEventEndDate.mock.calls[0][0];
 
-    // Verify the date is January 20, 2024 (accounting for timezone)
-    expect(startDateCall.getFullYear()).toBe(2024);
-    expect(startDateCall.getMonth()).toBe(0); // January is 0
-    expect(startDateCall.getDate()).toBe(20);
+    // Verify the date is the target date
+    expect(startDateCall.getFullYear()).toBe(targetDate.year());
+    expect(startDateCall.getMonth()).toBe(targetDate.month());
+    expect(startDateCall.getDate()).toBe(targetDate.date());
 
-    expect(endDateCall.getFullYear()).toBe(2024);
-    expect(endDateCall.getMonth()).toBe(0);
-    expect(endDateCall.getDate()).toBe(20);
+    expect(endDateCall.getFullYear()).toBe(targetDate.year());
+    expect(endDateCall.getMonth()).toBe(targetDate.month());
+    expect(endDateCall.getDate()).toBe(targetDate.date());
   });
 
   test('end date picker onChange updates end date correctly', () => {
@@ -853,16 +875,17 @@ describe('EventListCardPreviewModal', () => {
     };
 
     // Trigger the handler with a new date
-    handleEndDateChange(dayjs('2024-01-25'));
+    const targetDate = dayjs().add(10, 'days');
+    handleEndDateChange(targetDate);
 
     expect(mockSetEventEndDate).toHaveBeenCalled();
 
     const endDateCall = mockSetEventEndDate.mock.calls[0][0];
 
-    // Verify the date is January 25, 2024 (accounting for timezone)
-    expect(endDateCall.getFullYear()).toBe(2024);
-    expect(endDateCall.getMonth()).toBe(0); // January is 0
-    expect(endDateCall.getDate()).toBe(25);
+    // Verify the date is the target date
+    expect(endDateCall.getFullYear()).toBe(targetDate.year());
+    expect(endDateCall.getMonth()).toBe(targetDate.month());
+    expect(endDateCall.getDate()).toBe(targetDate.date());
   });
 
   test('start time picker onChange updates form state correctly', () => {
@@ -1071,13 +1094,13 @@ describe('EventListCardPreviewModal', () => {
       renderWithRecurrenceModal({ setEventEndDate: mockSetEventEndDate });
 
       const customModalProps = (CustomRecurrenceModal as Mock).mock.calls[0][0];
-      const newDate = new Date('2024-05-10');
+      const newDate = dayjs().add(4, 'months').toDate();
       const updateFn = () => newDate;
       customModalProps.setEndDate(updateFn);
 
       expect(mockSetEventEndDate).toHaveBeenCalledWith(expect.any(Function));
 
-      const prevState = new Date('2024-01-01');
+      const prevState = dayjs().toDate();
       const passedFn = mockSetEventEndDate.mock.calls[0][0];
       const newState = passedFn(prevState);
       expect(newState).toEqual(newDate);
@@ -1088,7 +1111,7 @@ describe('EventListCardPreviewModal', () => {
       renderWithRecurrenceModal({ setEventEndDate: mockSetEventEndDate });
 
       const customModalProps = (CustomRecurrenceModal as Mock).mock.calls[0][0];
-      const newDate = new Date('2024-05-10');
+      const newDate = dayjs().add(4, 'months').toDate();
       customModalProps.setEndDate(newDate);
 
       expect(mockSetEventEndDate).toHaveBeenCalledWith(newDate);
@@ -1123,8 +1146,8 @@ describe('EventListCardPreviewModal', () => {
       const mockSetEventStartDate = vi.fn();
       const mockSetEventEndDate = vi.fn();
       renderComponent({
-        eventStartDate: new Date('2024-01-15'),
-        eventEndDate: new Date('2024-01-15'),
+        eventStartDate: dayjs().add(1, 'day').toDate(),
+        eventEndDate: dayjs().add(1, 'day').toDate(),
         setEventStartDate: mockSetEventStartDate,
         setEventEndDate: mockSetEventEndDate,
       });
@@ -1189,7 +1212,7 @@ describe('EventListCardPreviewModal', () => {
           const newStartDate = date.toDate();
           mockSetEventStartDate(newStartDate);
           // Auto-adjust end date if it's before the new start date
-          const currentEndDate = new Date('2024-01-15');
+          const currentEndDate = dayjs().toDate();
           if (currentEndDate < newStartDate) {
             mockSetEventEndDate(newStartDate);
           }
@@ -1231,7 +1254,7 @@ describe('EventListCardPreviewModal', () => {
           const newStartDate = date.toDate();
           mockSetEventStartDate(newStartDate);
           // Auto-adjust end date if it's before the new start date
-          const currentEndDate = new Date('2024-01-20'); // Later than the new start date
+          const currentEndDate = dayjs().add(10, 'days').toDate(); // Later than the new start date
           if (currentEndDate < newStartDate) {
             mockSetEventEndDate(newStartDate);
           }
@@ -1239,7 +1262,7 @@ describe('EventListCardPreviewModal', () => {
       };
 
       // Trigger the handler with a date that's before the current end date
-      handleStartDateChange(dayjs('2024-01-15'));
+      handleStartDateChange(dayjs().add(5, 'days'));
 
       // Verify that start date is updated but end date is not
       expect(mockSetEventStartDate).toHaveBeenCalled();
@@ -1256,7 +1279,7 @@ describe('EventListCardPreviewModal', () => {
           const newStartDate = date.toDate();
           mockSetEventStartDate(newStartDate);
           // Auto-adjust end date if it's before the new start date
-          const currentEndDate = new Date('2024-01-10'); // Earlier than the new start date
+          const currentEndDate = dayjs().subtract(5, 'days').toDate(); // Earlier than the new start date
           if (currentEndDate < newStartDate) {
             mockSetEventEndDate(newStartDate);
           }
@@ -1264,7 +1287,7 @@ describe('EventListCardPreviewModal', () => {
       };
 
       // Trigger the handler with a date that's after the current end date
-      handleStartDateChange(dayjs('2024-01-15'));
+      handleStartDateChange(dayjs().add(5, 'days'));
 
       // Verify that both start date and end date are updated
       expect(mockSetEventStartDate).toHaveBeenCalled();

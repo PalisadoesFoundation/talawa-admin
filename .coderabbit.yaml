@@ -34,7 +34,7 @@ reviews:
   path_instructions:
     - path: '**/*'
       instructions: |
-        Full review and reevaluate all resolved items and include the following points:
+        Full review and reevaluate all resolved and dismissed items and include the following points:
 
         1. **Test Coverage & Quality Validation:**
             1. Validate whether any updated test files:

@@ -1,4 +1,5 @@
 import React from 'react';
+import type { QueryResult, NetworkStatus } from '@apollo/client';
 
 /**
  * Header can be:
@@ -48,9 +49,264 @@ export interface IColumnDef<T, TValue = unknown> {
 }
 
 /**
+ * PageInfo for DataTable component with server-side pagination
+ */
+
+export interface IPageInfo {
+  /**
+   * Indicates if there is a next page available
+   */
+  hasNextPage: boolean;
+  /**
+   *  Indicates if there is a previous page available
+   */
+  hasPreviousPage: boolean;
+  /**
+   * Cursor for the start of the current page
+   */
+  startCursor?: string;
+  /**
+   * Cursor for the end of the current page
+   */
+  endCursor?: string;
+}
+
+/**
+ * Type alias for PageInfo (for compatibility with GraphQL conventions)
+ */
+export type PageInfo = IPageInfo;
+
+/**
+ * GraphQL connection helpers used by DataTable hooks
+ */
+export type Edge<TNode> = { node: TNode | null } | null;
+export type Connection<TNode> =
+  | {
+      edges?: Array<Edge<TNode>> | null;
+      pageInfo?: PageInfo | null;
+    }
+  | null
+  | undefined;
+
+/**
+ * Selector function type that resolves to a GraphQL-like connection structure.
+ */
+type ConnectionResolver<TNode, TData> = (data: TData) =>
+  | {
+      edges?:
+        | Array<{ node: TNode | null | undefined } | null | undefined>
+        | null
+        | undefined;
+      pageInfo?: IPageInfo | null | undefined;
+    }
+  | null
+  | undefined;
+
+/**
+ * Path type helper for useTableData options.
+ * Can be either a selector function or a path array.
+ */
+type DataPath<TNode, TData> =
+  | ConnectionResolver<TNode, TData>
+  | (string | number)[];
+
+/**
+ * Options for the useTableData hook
+ *
+ * @template TNode - The GraphQL node type extracted from the connection
+ * @template TRow - The transformed row type after optional transformation
+ * @template TData - The complete query result data type
+ */
+export interface IUseTableDataOptions<TNode, TRow, TData = unknown> {
+  /**
+   * Path to the GraphQL connection within the query result.
+   *
+   * Can be specified as either:
+   * 1. **String/number array path**: For deep property traversal with support for both object keys and array indices.
+   *    - String segments: Navigate object properties (e.g., 'users', 'organization')
+   *    - Numeric segments: Navigate array elements by index (e.g., 0, 5, 100)
+   *
+   * 2. **Selector function**: For custom traversal logic with optional chaining and computed paths.
+   *
+   * @example String/number array path with mixed navigation:
+   * ```tsx
+   * // Traverse into nested structure with array indexing
+   * path: ['data', 'organizations', 0, 'members', 'edges']
+   *
+   * // Equivalent to: data.organizations[0].members.edges
+   * // Where organizations[0] accesses the first organization in an array
+   * ```
+   *
+   * @example Array-based path with pure array indexing:
+   * ```tsx
+   * // Navigate through arrays of items
+   * path: ['results', 2, 'connection']
+   *
+   * // Equivalent to: results[2].connection
+   * // Where results[2] gets the 3rd item in the results array
+   * ```
+   *
+   * @example Selector function for dynamic/conditional traversal:
+   * ```tsx
+   * // Use a function for optional chaining or conditional logic
+   * path: (data) => data.activeOrganization?.teams?.[selectedTeamIndex]?.members
+   *
+   * // Safe navigation that returns undefined if any property is missing
+   * // Useful when you need to select based on component state
+   * ```
+   *
+   * @example GraphQL Connection with array of items:
+   * ```tsx
+   * // For GraphQL queries that return arrays with embedded connections
+   * interface QueryData {
+   *   items: Array<{
+   *     id: string;
+   *     connection: {
+   *       edges: Array<{ node: UserNode }>;
+   *       pageInfo: PageInfo;
+   *     };
+   *   }>;
+   * }
+   *
+   * // Access the 5th item's connection
+   * path: ['items', 5, 'connection']
+   * ```
+   *
+   * @remarks
+   * **Numeric Segment Semantics:**
+   * - Numeric segments are coerced to property access, working with both:
+   *   - Array indices: `array[0]`, `array[1]`, etc.
+   *   - String-keyed object properties: `obj['0']`, `obj['1']`, etc. (rarely used)
+   * - Out-of-bounds array access returns undefined (safe pattern)
+   * - Mixed string/number traversal is fully supported: `['org', 0, 'members', 2, 'name']`
+   *
+   * **When to Use Numeric Segments:**
+   * - Traversing arrays of items where each item contains a GraphQL connection
+   * - Accessing specific paginated result sets in a multi-result query
+   * - Array-based navigation in complex nested structures
+   * - GraphQL connections embedded within array elements
+   *
+   * **Expected Final Result:**
+   * The path (whether string[] or function) must resolve to a GraphQL connection type or undefined:
+   * - Must have an edges property that is an array
+   * - May have optional pageInfo property with pagination information
+   * - Will be safely validated at runtime
+   */
+  path: DataPath<TNode, TData>;
+
+  /**
+   * Optional transformation function to convert GraphQL nodes to display rows.
+   *
+   * **Type Signature:** `(node: TNode) => TRow | null | undefined`
+   *
+   * Called for each non-null node. Return null/undefined to drop a row, or a TRow to keep it.
+   * Defaults to identity when omitted (TNode -> TRow), matching the hook implementation.
+   *
+   * @example Basic field transformation
+   * ```tsx
+   * // Add computed field
+   * transformNode: (node) => ({
+   *   ...node,
+   *   displayName: node.name.toUpperCase(),
+   *   isActive: Boolean(node.activeAt)
+   * })
+   * ```
+   *
+   * @example Selective filtering
+   * ```tsx
+   * // Filter out inactive nodes
+   * transformNode: (node) => {
+   *   if (!node.isActive) return null;
+   *   return { ...node };
+   * }
+   * ```
+   *
+   * @example Data shape transformation
+   * ```tsx
+   * // Reshape from node structure to row structure
+   * transformNode: (node) => ({
+   *   id: node.id,
+   *   text: node.content,
+   *   author: `${node.user.firstName} ${node.user.lastName}`,
+   *   timestamp: new Date(node.createdAt).toLocaleDateString()
+   * })
+   * ```
+   *
+   * @example Complex computation
+   * ```tsx
+   * // Calculate derived properties
+   * transformNode: (node) => {
+   *   const createdDate = new Date(node.createdAt);
+   *   const ageInDays = Math.floor((Date.now() - createdDate.getTime()) / (1000 * 60 * 60 * 24));
+   *   return {
+   *     ...node,
+   *     isRecent: ageInDays < 30,
+   *     ageInDays,
+   *     status: ageInDays < 7 ? 'new' : 'old'
+   *   };
+   * }
+   * ```
+   *
+   * @type {(node: TNode) => TRow | null | undefined}
+   */
+  transformNode?: (node: TNode) => TRow | null | undefined;
+
+  /**
+   * React dependency array for memoization. Passed to useMemo() in useTableData.
+   * Only include values that should trigger path re-evaluation.
+   *
+   * @remarks
+   * The `data` parameter is already tracked automatically.
+   * Use this for additional dependencies like query variables or state.
+   */
+  deps?: React.DependencyList;
+}
+
+/**
+ * Result of the useTableData hook
+ */
+export interface IUseTableDataResult<TRow, TData = unknown> {
+  rows: TRow[];
+  loading: boolean;
+  loadingMore: boolean;
+  error: Error | null;
+  pageInfo: PageInfo | null;
+  refetch: QueryResult<TData>['refetch'];
+  fetchMore: QueryResult<TData>['fetchMore'];
+  networkStatus: NetworkStatus;
+}
+/**
+ * Props for pagination controls (minimal API used by current component)
+ *
+ * TYPE SAFETY AUDIT:
+ * - page, pageSize, totalItems are strictly typed as number (not string | number | any)
+ * - TypeScript prevents string/unknown types at compile-time
+ * - All callers (DataTable.tsx verified as only caller) provide numeric values
+ * - No string-to-number coercion needed; Number.isFinite() checks are defensive only
+ *
+ * CALL SITE VERIFICATION:
+ * - DataTable.tsx: pageSize = 10 (default numeric), totalItems = (totalItems ?? data.length)
+ * - All props destructured from typed IDataTableProps&lt;T&gt; interface
+ * - No URL parameters or form inputs directly coerced to number here
+ *
+ * Future consideration: If external callers provide string pageSize/totalItems,
+ * restore explicit coercion: Number.isFinite(Number(totalItems)) && Number.isFinite(Number(pageSize))
+ */
+export interface IPaginationControlsProps {
+  /** Current page number (1-indexed) */
+  page: number;
+  /** Number of items per page */
+  pageSize: number;
+  /** Total number of items across all pages */
+  totalItems: number;
+  /** Callback when page changes */
+  onPageChange: (page: number) => void;
+}
+/**
  * Props for a generic DataTable component
  */
-export interface IDataTableProps<T, TValue = unknown> {
+
+export interface IBaseDataTableProps<T, TValue = unknown> {
   data: T[];
   columns: Array<IColumnDef<T, TValue>>;
   loading?: boolean;
@@ -70,6 +326,62 @@ export interface IDataTableProps<T, TValue = unknown> {
   /** Number of skeleton rows to show when loading (default: 6) */
   skeletonRows?: number;
 }
+
+type ClientPaginationProps = {
+  paginationMode: 'client';
+  pageSize?: number; // default: 10
+  currentPage?: number; // controlled page (1-indexed)
+  onPageChange?: (page: number) => void;
+  totalItems?: number; // default: data.length (client mode)
+  pageInfo?: never;
+  onLoadMore?: never;
+  loadingMore?: never;
+};
+// Server pagination requires both pageInfo and onLoadMore together (or neither).
+type ServerPaginationProps =
+  | {
+      paginationMode: 'server';
+      pageSize?: never;
+      currentPage?: never;
+      onPageChange?: (page: number) => void;
+      totalItems?: number;
+      pageInfo: IPageInfo; // GraphQL-style page info
+      onLoadMore: () => void; // called to fetch next page
+      loadingMore?: boolean; // true while fetching more
+    }
+  | {
+      paginationMode: 'server';
+      pageSize?: never;
+      currentPage?: never;
+      onPageChange?: (page: number) => void;
+      totalItems?: number;
+      pageInfo?: undefined;
+      onLoadMore?: undefined;
+      loadingMore?: undefined;
+    };
+
+type NoPaginationProps = {
+  paginationMode?: undefined;
+  pageSize?: never;
+  currentPage?: never;
+  onPageChange?: never;
+  totalItems?: never;
+  pageInfo?: never;
+  onLoadMore?: never;
+  loadingMore?: never;
+};
+
+type PaginationProps =
+  | ClientPaginationProps
+  | ServerPaginationProps
+  | NoPaginationProps;
+
+// i18n-ignore-next-line
+export type IDataTableProps<T, TValue = unknown> = IBaseDataTableProps<
+  T,
+  TValue
+> &
+  PaginationProps;
 
 /** Sorting state */
 export interface ISortState {

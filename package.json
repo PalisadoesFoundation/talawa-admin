@@ -25,7 +25,7 @@
     "@pdfme/common": "^5.2.11",
     "@pdfme/generator": "^5.2.3",
     "@pdfme/schemas": "^5.1.6",
-    "@reduxjs/toolkit": "^2.3.0",
+    "@reduxjs/toolkit": "^2.11.2",
     "@remix-run/router": "^1.23.0",
     "@wry/equality": "^0.5.7",
     "apollo-upload-client": "^18.0.1",
@@ -60,7 +60,6 @@
     "react-toastify": "^11.0.3",
     "react-tooltip": "^5.28.0",
     "redux": "^5.0.1",
-    "sanitize-html": "^2.17.0",
     "ts-invariant": "^0.10.3",
     "vite-plugin-environment": "^1.1.3",
     "vite-tsconfig-paths": "^5.1.3",
@@ -76,7 +75,7 @@
     "test:shard": "node scripts/run-shard.js",
     "test:shard:coverage": "node scripts/run-shard.js --coverage",
     "eject": "react-scripts eject",
-    "lint:check": "eslint \"**/*.{ts,tsx,graphql}\" --max-warnings=0 && python .github/workflows/scripts/eslint_disable_check.py",
+    "lint:check": "eslint \"**/*.{ts,tsx,graphql}\" --max-warnings=0",
     "lint:fix": "eslint --fix \"**/*.{ts,tsx,graphql}\"",
     "format:fix": "prettier --write \"**/*.{ts,tsx,json,json5,scss,css,graphql,yaml,yml}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,json,json5,scss,css,graphql,yaml,yml}\"",
@@ -86,6 +85,7 @@
     "update:toc": "node scripts/githooks/update-toc.js",
     "lint-staged": "lint-staged --concurrent false",
     "setup": "tsx src/setup/setup.ts",
+    "install-deps": "tsx src/install/index.ts",
     "check-localstorage": "tsx scripts/githooks/check-localstorage-usage.ts",
     "postgenerate-docs": "find docs/docs/auto-docs -name 'README.md' -delete && node scripts/docs/fix-repo-url.js",
     "generate-docs": "typedoc && pnpm run postgenerate-docs && node scripts/docs/fix-readme-links.js",
@@ -96,7 +96,8 @@
     "cy:run": "cross-env CYPRESS_COVERAGE=true pnpm run start-server cypress:run",
     "check-mock-cleanup": "bash scripts/githooks/check-mock-cleanup.sh",
     "check:pom": "node scripts/githooks/check_pom.js",
-    "check-i18n": "node scripts/check-i18n.js"
+    "check-i18n": "node scripts/check-i18n.js",
+    "lint:datagrid": "./scripts/lint-datagrid.sh"
   },
   "eslintConfig": {
     "extends": [
@@ -122,6 +123,7 @@
     "@cypress/code-coverage": "^3.14.5",
     "@eslint/js": "^9.22.0",
     "@graphql-eslint/eslint-plugin": "^4.3.0",
+    "@storybook/react": "^10.1.11",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
@@ -134,10 +136,9 @@
     "@types/react": "^19.1.1",
     "@types/react-dom": "^19.1.1",
     "@types/react-google-recaptcha": "^2.1.9",
-    "@types/sanitize-html": "^2.16.0",
-    "@typescript-eslint/eslint-plugin": "^8.46.2",
-    "@typescript-eslint/parser": "^8.46.2",
-    "@vitejs/plugin-react": "^5.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
+    "@typescript-eslint/parser": "^8.51.0",
+    "@vitejs/plugin-react": "^5.1.2",
     "@vitest/coverage-istanbul": "^3.2.4",
     "@vitest/eslint-plugin": "^1.4.2",
     "@vitest/ui": "^3.2.4",
@@ -148,13 +149,13 @@
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-prettier": "^5.2.3",
     "eslint-plugin-react": "^7.37.4",
-    "eslint-plugin-tsdoc": "^0.4.0",
+    "eslint-plugin-tsdoc": "^0.5.0",
     "glob": "^13.0.0",
     "graphql": "^16.10.0",
     "husky": "^9.1.6",
     "jsdom": "^27.4.0",
     "knip": "^5.66.0",
-    "lint-staged": "^16.2.3",
+    "lint-staged": "^16.2.7",
     "nyc": "^17.1.0",
     "prettier": "^3.6.2",
     "sass": "^1.93.3",
@@ -227,12 +228,6 @@
     "gulp-header": "^2.0.9",
     "rimraf": "^6.1.2",
     "glob": "^13.0.0"
-  },
-  "lint-staged": {
-    "**/*.{ts, tsx, json, scss, css}": [
-      "prettier --write"
-    ],
-    "**/*.{ts, tsx, json}": "eslint --fix"
   },
   "packageManager": "pnpm@10.4.1"
 }

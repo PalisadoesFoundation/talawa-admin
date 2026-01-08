@@ -69,9 +69,7 @@ describe('AgendaCategoryUpdateModal', () => {
 
     expect(screen.getByText('updateAgendaCategory')).toBeInTheDocument();
     expect(screen.getByTestId('editAgendaCategoryBtn')).toBeInTheDocument();
-    expect(
-      screen.getByTestId('updateAgendaCategoryModalCloseBtn'),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
   });
 
   it('calls hideUpdateModal when close button is clicked', async () => {
@@ -96,9 +94,7 @@ describe('AgendaCategoryUpdateModal', () => {
       </MockedProvider>,
     );
 
-    await userEvent.click(
-      screen.getByTestId('updateAgendaCategoryModalCloseBtn'),
-    );
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     expect(mockHideUpdateModal).toHaveBeenCalledTimes(1);
   });
 

@@ -4,7 +4,7 @@ import UserOrganizations from './UserOrganizations';
 import { MemoryRouter } from 'react-router';
 import React from 'react';
 import {
-  InterfacePageHeaderProps,
+  InterfacePeopleTabNavbarProps,
   InterfacePeopleTabUserOrganizationProps,
 } from 'types/PeopleTab/interface';
 import {
@@ -96,8 +96,8 @@ vi.mock(
   }),
 );
 
-vi.mock('shared-components/Navbar/Navbar', () => ({
-  default: (props: InterfacePageHeaderProps) => (
+vi.mock('shared-components/PeopleTabNavbar/PeopleTabNavbar', () => ({
+  default: (props: InterfacePeopleTabNavbarProps) => (
     <div>
       {props.search && (
         <input

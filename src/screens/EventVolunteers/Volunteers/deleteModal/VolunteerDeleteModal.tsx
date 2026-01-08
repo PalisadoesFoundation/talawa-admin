@@ -27,7 +27,7 @@
  * - Uses `react-bootstrap` for modal and button components.
  * - Integrates `react-i18next` for translations.
  * - Utilizes Apollo Client's `useMutation` hook to perform the delete operation.
- * - Displays success or error messages using `react-toastify`.
+ * - Displays success or error messages using `NotificationToast`.
  *
  * @dependencies
  * - `DELETE_VOLUNTEER` GraphQL mutation for deleting a volunteer.
@@ -39,7 +39,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   DELETE_VOLUNTEER,
   DELETE_VOLUNTEER_FOR_INSTANCE,
@@ -92,9 +92,9 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
 
       refetchVolunteers();
       hide();
-      toast.success(t('volunteerRemoved'));
+      NotificationToast.success(t('volunteerRemoved'));
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     }
   };
   return (

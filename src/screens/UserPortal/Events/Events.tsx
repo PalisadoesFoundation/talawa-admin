@@ -2,21 +2,18 @@
  * The `events` component is responsible for managing and displaying events for a user portal.
  * It includes functionality for creating, viewing, and managing events within an organization.
  *
- * @component
- * @returns {JSX.Element} The rendered events component.
- *
  * @remarks
  * - Utilizes Apollo Client for GraphQL queries and mutations.
  * - Integrates with `react-bootstrap` for UI components and modals.
  * - Uses `dayjs` for date and time manipulation.
  * - Includes localization support via `react-i18next`.
  *
- * @dependencies
+ * Dependencies:
  * - `EventCalendar`: Displays events in a calendar view.
  * - `EventHeader`: Provides controls for calendar view and event creation.
  * - `DatePicker` and `TimePicker`: Used for selecting event dates and times.
  *
- * @state
+ * State:
  * - `events`: List of events fetched from the server.
  * - `eventTitle`, `eventDescription`, `eventLocation`: Input fields for event details.
  * - `startAt`, `endAt`: Start and end dates for the event.
@@ -26,18 +23,20 @@
  * - `createEventModal`: Controls visibility of the event creation modal.
  * - `createChatCheck`: Determines if a chat should be created for the event.
  *
- * @methods
+ * Methods:
  * - `createEvent`: Handles the creation of a new event by submitting a GraphQL mutation.
  * - `toggleCreateEventModal`: Toggles the visibility of the event creation modal.
  * - `handleEventTitleChange`, `handleEventLocationChange`, `handleEventDescriptionChange`:
  *   Update respective state variables when input fields change.
  * - `handleChangeView`: Updates the calendar view type.
  *
- * @hooks
+ * Hooks:
  * - `useQuery`: Fetches events and organization details.
  * - `useMutation`: Executes the event creation mutation.
  * - `useLocalStorage`: Retrieves user details from local storage.
  * - `useEffect`: Updates the event list when query data changes.
+ *
+ * @returns The rendered events component.
  *
  * @example
  * ```tsx
@@ -58,8 +57,7 @@ import { Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { toast } from 'react-toastify';
-import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
+import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { IEventEdge, ICreateEventInput } from 'types/Event/interface';
@@ -71,6 +69,7 @@ import type {
   IEventFormSubmitPayload,
   IEventFormValues,
 } from 'types/EventForm/interface';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 export default function events(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });
@@ -137,7 +136,8 @@ export default function events(): JSX.Element {
       startTime: '08:00:00',
       endTime: '10:00:00',
       allDay: true,
-      isPublic: true,
+      isPublic: false,
+      isInviteOnly: true,
       isRegisterable: true,
       recurrenceRule: null,
       createChat: false,
@@ -163,6 +163,7 @@ export default function events(): JSX.Element {
         allDay: payload.allDay,
         isPublic: payload.isPublic,
         isRegisterable: payload.isRegisterable,
+        isInviteOnly: payload.isInviteOnly,
         ...(payload.description && { description: payload.description }),
         ...(payload.location && { location: payload.location }),
         ...(recurrenceInput && { recurrence: recurrenceInput }),
@@ -172,7 +173,7 @@ export default function events(): JSX.Element {
         variables: { input },
       });
       if (createEventData) {
-        toast.success(t('eventCreated') as string);
+        NotificationToast.success(t('eventCreated') as string);
         refetch();
         setFormResetKey((prev) => prev + 1);
         setCreateEventmodalisOpen(false);

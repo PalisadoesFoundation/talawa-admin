@@ -6,7 +6,7 @@
 
 > **createMembershipRecord**(`__namedParameters`): `object`
 
-Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockHelpers.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockHelpers.ts#L63)
+Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockHelpers.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockHelpers.ts#L44)
 
 ## Parameters
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 
 ### createdAt
 
-> **createdAt**: `string` = `'2024-10-30T10:00:00.000Z'`
+> **createdAt**: `string`
 
 ### createdBy
 
@@ -88,7 +88,7 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 
 ### updatedAt
 
-> **updatedAt**: `string` = `'2024-10-30T10:00:00.000Z'`
+> **updatedAt**: `string`
 
 ### updatedBy
 

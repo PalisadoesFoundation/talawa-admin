@@ -12,11 +12,11 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import i18n from 'utils/i18nForTest';
-import { toast } from 'react-toastify';
 import { vi } from 'vitest';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
@@ -26,11 +26,15 @@ import {
   MOCKS_ERROR_MUTATION,
 } from './OrganizationAgendaCategoryErrorMocks';
 import { MOCKS } from './OrganizationAgendaCategoryMocks';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     error: vi.fn(),
+    success: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
   },
 }));
 
@@ -104,7 +108,7 @@ describe('Testing Agenda Categories Component', () => {
       </MockedProvider>,
     );
 
-    expect(getByTestId('spinner-wrapper')).toBeInTheDocument();
+    expect(getByTestId('spinner')).toBeInTheDocument();
   });
 
   it('render error component on unsuccessful agenda category list query', async () => {
@@ -153,17 +157,13 @@ describe('Testing Agenda Categories Component', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('createAgendaCategoryModalCloseBtn'),
+        screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(
-      screen.getByTestId('createAgendaCategoryModalCloseBtn'),
-    );
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('createAgendaCategoryModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
   it('creates new agenda cagtegory', async () => {
@@ -190,7 +190,7 @@ describe('Testing Agenda Categories Component', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('createAgendaCategoryModalCloseBtn'),
+        screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
 
@@ -208,7 +208,7 @@ describe('Testing Agenda Categories Component', () => {
     );
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(NotificationToast.success).toHaveBeenCalledWith(
         translations.agendaCategoryCreated,
       );
     });
@@ -238,7 +238,7 @@ describe('Testing Agenda Categories Component', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('createAgendaCategoryModalCloseBtn'),
+        screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
 
@@ -256,7 +256,9 @@ describe('Testing Agenda Categories Component', () => {
     );
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Mock Graphql Error',
+      );
     });
   });
   test('allow user to type in the search field', async () => {
@@ -273,7 +275,15 @@ describe('Testing Agenda Categories Component', () => {
         </Provider>
       </MockedProvider>,
     );
-    const searchInput = await screen.findByTestId('searchByName');
+
+    // Wait for data to load (LoadingState completes)
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAgendaCategory),
+      ).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
 
     await userEvent.type(searchInput, 'Category 1');
@@ -295,7 +305,15 @@ describe('Testing Agenda Categories Component', () => {
         </Provider>
       </MockedProvider>,
     );
-    const searchInput = await screen.findByTestId('searchByName');
+
+    // Wait for data to load (LoadingState completes)
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAgendaCategory),
+      ).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
 
     await userEvent.type(searchInput, 'Category');
@@ -321,11 +339,19 @@ describe('Testing Agenda Categories Component', () => {
         </Provider>
       </MockedProvider>,
     );
-    const searchInput = await screen.findByTestId('searchByName');
+
+    // Wait for data to load (LoadingState completes)
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAgendaCategory),
+      ).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
     await userEvent.type(searchInput, 'Category');
 
-    const searchButton = await screen.findByTestId('searchBtn');
+    const searchButton = screen.getByTestId('searchBtn');
     await userEvent.click(searchButton);
     await waitFor(() => {
       expect(screen.getAllByText('Category').length).toBe(2);
@@ -345,11 +371,39 @@ describe('Testing Agenda Categories Component', () => {
         </Provider>
       </MockedProvider>,
     );
-    const searchInput = await screen.findByTestId('searchByName');
+
+    // Wait for data to load (LoadingState completes)
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAgendaCategory),
+      ).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
     await userEvent.type(searchInput, 'A{backspace}');
     await waitFor(() => {
       expect(screen.getAllByText('Category').length).toBe(2);
+    });
+  });
+
+  it('should display categories after loading completes', async () => {
+    render(
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <MockedProvider link={new StaticMockLink(MOCKS)}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18n}>
+                <OrganizationAgendaCategory orgId="123" />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>
+      </LocalizationProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByName')).toBeInTheDocument();
     });
   });
 });

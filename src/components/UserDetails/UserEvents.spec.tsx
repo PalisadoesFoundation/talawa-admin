@@ -2,15 +2,15 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import UserEvents from './UserEvents';
 import {
-  InterfacePageHeaderProps,
+  InterfacePeopleTabNavbarProps,
   InterfacePeopletabUserEventsProps,
 } from 'types/PeopleTab/interface';
 
 /* ---------------- MOCKS ---------------- */
 
 // Mock PageHeader
-vi.mock('shared-components/Navbar/Navbar', () => ({
-  default: (props: InterfacePageHeaderProps) => (
+vi.mock('shared-components/PeopleTabNavbar/PeopleTabNavbar', () => ({
+  default: (props: InterfacePeopleTabNavbarProps) => (
     <div>
       {props.search && (
         <input

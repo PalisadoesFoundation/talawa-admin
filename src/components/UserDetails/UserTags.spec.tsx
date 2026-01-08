@@ -1,15 +1,15 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import UserTags from './UserTags';
-import { InterfacePageHeaderProps } from 'types/PeopleTab/interface';
+import { InterfacePeopleTabNavbarProps } from 'types/PeopleTab/interface';
 
 /**
  * Mock PageHeader because:
  * - We only want to test UserTags logic
  * - PageHeader is already tested elsewhere
  */
-vi.mock('shared-components/Navbar/Navbar', () => ({
-  default: (props: InterfacePageHeaderProps) => (
+vi.mock('shared-components/PeopleTabNavbar/PeopleTabNavbar', () => ({
+  default: (props: InterfacePeopleTabNavbarProps) => (
     <div>
       {/* Mock search input */}
       {props.search && (

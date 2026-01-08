@@ -13,7 +13,7 @@
  * @requires @apollo/client
  * @requires @mui/icons-material
  * @requires @mui/material
- * @requires react-toastify
+ * @requires NotificationToast
  * @requires i18next
  * @requires utils/errorHandler
  * @requires utils/useLocalstorage
@@ -59,17 +59,14 @@ import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import {
   REACT_APP_USE_RECAPTCHA,
   RECAPTCHA_SITE_KEY,
   BACKEND_URL,
 } from 'Constant/constant';
-import {
-  RECAPTCHA_MUTATION,
-  SIGNUP_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_LIST_NO_MEMBERS,
   SIGNIN_QUERY,
@@ -183,7 +180,6 @@ const loginPage = (): JSX.Element => {
   }, [data]);
   const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
-  const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
   const { data: orgData } = useQuery(ORGANIZATION_LIST_NO_MEMBERS);
   const { startSession, extendSession } = useSession();
   useEffect(() => {
@@ -224,25 +220,6 @@ const loginPage = (): JSX.Element => {
     loadResource();
   }, []);
 
-  const verifyRecaptcha = async (
-    recaptchaToken: string | null,
-  ): Promise<boolean | void> => {
-    try {
-      if (REACT_APP_USE_RECAPTCHA !== 'yes') {
-        return true;
-      }
-      const { data } = await recaptcha({
-        variables: {
-          recaptchaToken,
-        },
-      });
-
-      return data.recaptcha;
-    } catch {
-      toast.error(t('captchaError') as string);
-    }
-  };
-
   const handleCaptcha = (token: string | null): void => {
     setRecaptchaToken(token);
   };
@@ -251,13 +228,6 @@ const loginPage = (): JSX.Element => {
     e.preventDefault();
 
     const { signName, signEmail, signPassword, cPassword } = signformState;
-
-    const isVerified = await verifyRecaptcha(recaptchaToken);
-
-    if (!isVerified) {
-      toast.error(t('Please_check_the_captcha') as string);
-      return;
-    }
 
     const isValidName = (value: string): boolean => {
       // Allow letters, spaces, and hyphens, but not consecutive spaces or hyphens
@@ -290,11 +260,12 @@ const loginPage = (): JSX.Element => {
               name: signName,
               email: signEmail,
               password: signPassword,
+              ...(recaptchaToken && { recaptchaToken }),
             },
           });
 
           if (signUpData) {
-            toast.success(
+            NotificationToast.success(
               t(
                 role === 'admin' ? 'successfullyRegistered' : 'afterRegister',
               ) as string,
@@ -334,33 +305,30 @@ const loginPage = (): JSX.Element => {
           SignupRecaptchaRef.current?.reset();
         }
       } else {
-        toast.warn(t('passwordMismatches') as string);
+        NotificationToast.warning(t('passwordMismatches') as string);
       }
     } else {
       if (!isValidName(signName)) {
-        toast.warn(t('nameInvalid') as string);
+        NotificationToast.warning(t('nameInvalid') as string);
       }
       if (!validatePassword(signPassword)) {
-        toast.warn(t('passwordInvalid') as string);
+        NotificationToast.warning(t('passwordInvalid') as string);
       }
       if (signEmail.length < 8) {
-        toast.warn(t('emailInvalid') as string);
+        NotificationToast.warning(t('emailInvalid') as string);
       }
     }
   };
 
   const loginLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    const isVerified = await verifyRecaptcha(recaptchaToken);
-
-    if (!isVerified) {
-      toast.error(t('Please_check_the_captcha') as string);
-      return;
-    }
-
     try {
       const { data: signInData, error: signInError } = await signin({
-        variables: { email: formState.email, password: formState.password },
+        variables: {
+          email: formState.email,
+          password: formState.password,
+          ...(recaptchaToken && { recaptchaToken }),
+        },
         fetchPolicy: 'network-only', // Always make network request to receive Set-Cookie headers
       });
 
@@ -379,7 +347,7 @@ const loginPage = (): JSX.Element => {
           const diffMs = retryAfterDate.getTime() - now.getTime();
           const diffMinutes = Math.max(1, Math.ceil(diffMs / 60000));
 
-          toast.error(
+          NotificationToast.error(
             tErrors('accountLockedWithTimer', { minutes: diffMinutes }),
           );
         } else {
@@ -399,7 +367,7 @@ const loginPage = (): JSX.Element => {
         // Note: authenticationToken and refreshToken are now set via HTTP-Only cookies by the server (XSS protection)
         const isAdmin: boolean = user.role === 'administrator';
         if (role === 'admin' && !isAdmin) {
-          toast.warn(tErrors('notAuthorised') as string);
+          NotificationToast.warning(tErrors('notAuthorised') as string);
           return;
         }
         const loggedInUserId = user.id;
@@ -429,7 +397,7 @@ const loginPage = (): JSX.Element => {
         startSession();
         navigate(role === 'admin' ? '/orglist' : '/user/organizations');
       } else {
-        toast.warn(tErrors('notFound') as string);
+        NotificationToast.warning(tErrors('notFound') as string);
       }
     } catch (error) {
       errorHandler(t, error);
@@ -585,7 +553,7 @@ const loginPage = (): JSX.Element => {
                       {tCommon('forgotPassword')}
                     </Link>
                   </div>
-                  {REACT_APP_USE_RECAPTCHA === 'yes' ? (
+                  {REACT_APP_USE_RECAPTCHA === 'YES' ? (
                     <div className="googleRecaptcha">
                       <ReCAPTCHA
                         ref={loginRecaptchaRef}
@@ -594,6 +562,7 @@ const loginPage = (): JSX.Element => {
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
                         onChange={handleCaptcha}
+                        data-cy="loginRecaptcha"
                       />
                     </div>
                   ) : (
@@ -938,7 +907,7 @@ const loginPage = (): JSX.Element => {
                       />
                     </div>
                   </div>
-                  {REACT_APP_USE_RECAPTCHA === 'yes' ? (
+                  {REACT_APP_USE_RECAPTCHA === 'YES' ? (
                     <div className="mt-3">
                       <ReCAPTCHA
                         ref={SignupRecaptchaRef}
@@ -946,6 +915,7 @@ const loginPage = (): JSX.Element => {
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
                         onChange={handleCaptcha}
+                        data-cy="registrationRecaptcha"
                       />
                     </div>
                   ) : (

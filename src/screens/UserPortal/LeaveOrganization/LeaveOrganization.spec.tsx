@@ -1,4 +1,5 @@
 import React from 'react';
+import dayjs from 'dayjs';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
@@ -74,6 +75,7 @@ const mocks = [
         ],
       },
     },
+    delay: 50, // Add delay to show loading spinner
   },
   {
     request: {
@@ -114,7 +116,7 @@ const mocks = [
               { _id: 'user003' },
             ],
             admins: [{ _id: 'admin001' }, { _id: 'admin002' }],
-            createdAt: '2024-01-15T12:34:56.789Z',
+            createdAt: dayjs().month(0).date(15).toISOString(),
             address: {
               city: 'San Francisco',
               countryCode: 'US',
@@ -181,6 +183,7 @@ describe('LeaveOrganization Component', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -192,8 +195,9 @@ describe('LeaveOrganization Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    const spinner = await screen.findByRole('status');
-    expect(spinner).toBeInTheDocument();
+    // LoadingState renders with data-testid="loading-state"
+    const loadingState = await screen.findByTestId('loading-state');
+    expect(loadingState).toBeInTheDocument();
     await waitFor(() => {
       expect(screen.getByText('Test Organization')).toBeInTheDocument();
       expect(
@@ -342,11 +346,14 @@ describe('LeaveOrganization Component', () => {
     fireEvent.change(screen.getByPlaceholderText(/Enter your email/i), {
       target: { value: '' },
     });
-    fireEvent.click(screen.getByText('Confirm'));
+    const confirmButton = screen.getByRole('button', {
+      name: /confirm/i,
+    });
+    fireEvent.click(confirmButton);
     await waitFor(() => {
-      expect(
-        screen.getByText('Verification failed: Email does not match.'),
-      ).toBeInTheDocument();
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'Verification failed: Email does not match.',
+      );
     });
   });
 
@@ -374,11 +381,14 @@ describe('LeaveOrganization Component', () => {
     fireEvent.change(screen.getByPlaceholderText(/Enter your email/i), {
       target: { value: 'different@example.com' },
     });
-    fireEvent.click(screen.getByText('Confirm'));
+    const confirmButton = screen.getByRole('button', {
+      name: /confirm/i,
+    });
+    fireEvent.click(confirmButton);
     await waitFor(() => {
-      expect(
-        screen.getByText('Verification failed: Email does not match.'),
-      ).toBeInTheDocument();
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'Verification failed: Email does not match.',
+      );
     });
   });
 
@@ -499,7 +509,7 @@ describe('LeaveOrganization Component', () => {
 
     // Use aria-label to find the confirm button
     const confirmButton = screen.getByRole('button', {
-      name: 'confirm-leave-button',
+      name: /confirm/i,
     });
     fireEvent.click(confirmButton);
 
@@ -556,7 +566,7 @@ describe('LeaveOrganization Component', () => {
 
     // Use aria-label to find the confirm button
     const confirmButton = screen.getByRole('button', {
-      name: 'confirm-leave-button',
+      name: /confirm/i,
     });
     fireEvent.click(confirmButton);
 
@@ -620,7 +630,7 @@ describe('LeaveOrganization Component', () => {
 
     // Use aria-label to find the confirm button
     const confirmButton = screen.getByRole('button', {
-      name: 'confirm-leave-button',
+      name: /confirm/i,
     });
     fireEvent.click(confirmButton);
 

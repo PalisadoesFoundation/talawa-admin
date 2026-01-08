@@ -1,6 +1,9 @@
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider, type MockedResponse } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import dayjs from 'dayjs';
 import {
@@ -15,7 +18,6 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
@@ -86,8 +88,8 @@ const pledgeProps: InterfacePledgeModal[] = [
       id: '1',
       amount: 100,
       currency: 'USD',
-      createdAt: '2024-01-01T00:00:00.000Z',
-      updatedAt: '2024-01-10T00:00:00.000Z',
+      createdAt: dayjs().toISOString(),
+      updatedAt: dayjs().date(10).startOf('day').toISOString(),
       pledger: {
         id: '1',
         firstName: 'John',
@@ -108,8 +110,8 @@ const pledgeProps: InterfacePledgeModal[] = [
       id: '1',
       amount: 100,
       currency: 'USD',
-      createdAt: '2024-01-01T00:00:00.000Z',
-      updatedAt: '2024-01-10T00:00:00.000Z',
+      createdAt: dayjs().toISOString(),
+      updatedAt: dayjs().date(10).startOf('day').toISOString(),
       pledger: {
         id: '1',
         firstName: 'John',
@@ -144,8 +146,8 @@ const USER_DETAILS_MOCK = {
         birthDate: null,
         city: null,
         countryCode: null,
-        createdAt: '2024-01-01T00:00:00.000Z',
-        updatedAt: '2024-01-01T00:00:00.000Z',
+        createdAt: dayjs().toISOString(),
+        updatedAt: dayjs().toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: false,
@@ -279,7 +281,7 @@ const renderPledgeModal = (
   props: InterfacePledgeModal,
 ): RenderResult => {
   return render(
-    <MockedProvider link={link} addTypename={false}>
+    <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>

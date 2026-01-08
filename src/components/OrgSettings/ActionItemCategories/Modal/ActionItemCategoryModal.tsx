@@ -1,5 +1,6 @@
 import React, { type FormEvent, type FC, useEffect, useState } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
+import { BaseModal } from 'shared-components/BaseModal';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import type { IActionItemCategoryInfo } from 'types/ActionItems/interface';
@@ -9,7 +10,7 @@ import {
   UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
   DELETE_ACTION_ITEM_CATEGORY_MUTATION,
 } from 'GraphQl/Mutations/ActionItemCategoryMutations';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { FormControl, TextField } from '@mui/material';
 
 export interface IActionItemCategoryModal {
@@ -83,9 +84,15 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
       refetchCategories();
       hide();
       setFormState({ name: '', description: '', isDisabled: false });
-      toast.success(t('successfulCreation'));
-    } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.success({
+        key: 'eventActionItems.successfulCreation',
+        namespace: 'translation',
+      });
+    } catch {
+      NotificationToast.error({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     }
   };
 
@@ -99,7 +106,10 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
       description === category?.description &&
       isDisabled === category?.isDisabled
     ) {
-      toast.error(t('sameNameConflict'));
+      NotificationToast.error({
+        key: 'sameNameConflict',
+        namespace: 'translation',
+      });
       return;
     }
 
@@ -134,9 +144,15 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
       setFormState({ name: '', description: '', isDisabled: false });
       refetchCategories();
       hide();
-      toast.success(t('successfulUpdation'));
-    } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.success({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
+    } catch {
+      NotificationToast.error({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     }
   };
 
@@ -157,109 +173,110 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
 
       refetchCategories();
       hide();
-      toast.success(t('categoryDeleted'));
-    } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.success({
+        key: 'categoryDeleted',
+        namespace: 'translation',
+      });
+    } catch {
+      NotificationToast.error({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     }
   };
 
   return (
-    <Modal className={styles.createModal} show={isOpen} onHide={hide}>
-      <Modal.Header>
-        <p className={`${styles.titlemodal}`}>{t('categoryDetails')}</p>
-        <Button
-          variant="danger"
-          onClick={hide}
-          className={styles.modalCloseBtn}
-          data-testid="actionItemCategoryModalCloseBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-      </Modal.Header>
-      <Modal.Body>
-        <Form
-          onSubmit={mode === 'create' ? handleCreate : handleEdit}
-          className="p-2"
-        >
-          {/* Category Name Input */}
-          <FormControl fullWidth className="mb-3">
-            <TextField
-              label={t('actionItemCategoryName')}
-              type="text"
-              variant="outlined"
-              autoComplete="off"
-              className={styles.noOutline}
-              value={name}
-              onChange={(e): void =>
-                setFormState({ ...formState, name: e.target.value })
-              }
-              required
-              data-testid="categoryNameInput"
-            />
-          </FormControl>
+    <BaseModal
+      show={isOpen}
+      onHide={hide}
+      className={styles.createModal}
+      dataTestId="actionItemCategoryModal"
+      headerContent={
+        <p className={styles.titlemodal}>{t('categoryDetails')}</p>
+      }
+    >
+      <Form
+        onSubmit={mode === 'create' ? handleCreate : handleEdit}
+        className="p-2"
+      >
+        {/* Category Name Input */}
+        <FormControl fullWidth className="mb-3">
+          <TextField
+            label={t('actionItemCategoryName')}
+            type="text"
+            variant="outlined"
+            autoComplete="off"
+            className={styles.noOutline}
+            value={name}
+            onChange={(e): void =>
+              setFormState({ ...formState, name: e.target.value })
+            }
+            required
+            data-testid="categoryNameInput"
+          />
+        </FormControl>
 
-          {/* Category Description Input */}
-          <FormControl fullWidth className="mb-3">
-            <TextField
-              label={t('actionItemCategoryDescription')}
-              type="text"
-              variant="outlined"
-              autoComplete="off"
-              multiline
-              rows={3}
-              className={styles.noOutline}
-              value={description}
-              onChange={(e): void =>
-                setFormState({ ...formState, description: e.target.value })
-              }
-              data-testid="categoryDescriptionInput"
-            />
-          </FormControl>
+        {/* Category Description Input */}
+        <FormControl fullWidth className="mb-3">
+          <TextField
+            label={t('actionItemCategoryDescription')}
+            type="text"
+            variant="outlined"
+            autoComplete="off"
+            multiline
+            rows={3}
+            className={styles.noOutline}
+            value={description}
+            onChange={(e): void =>
+              setFormState({ ...formState, description: e.target.value })
+            }
+            data-testid="categoryDescriptionInput"
+          />
+        </FormControl>
 
-          {/* Disabled Toggle */}
-          <Form.Group className="d-flex flex-column mb-4">
-            <label>{tCommon('disabled')} </label>
-            <Form.Switch
-              type="checkbox"
-              checked={isDisabled}
-              data-testid="isDisabledSwitch"
-              className="mt-2 ms-2"
-              onChange={() =>
-                setFormState({ ...formState, isDisabled: !isDisabled })
-              }
-            />
-          </Form.Group>
+        {/* Disabled Toggle */}
+        <Form.Group className="d-flex flex-column mb-4">
+          <label htmlFor="isDisabledSwitch">{tCommon('disabled')} </label>
+          <Form.Switch
+            id="isDisabledSwitch"
+            type="checkbox"
+            checked={isDisabled}
+            data-testid="isDisabledSwitch"
+            className="mt-2 ms-2"
+            onChange={() =>
+              setFormState({ ...formState, isDisabled: !isDisabled })
+            }
+          />
+        </Form.Group>
 
-          {/* Action Buttons */}
-          <div className="d-flex gap-2 justify-content-between">
-            {/* Delete Button - Only show in edit mode */}
-            {mode === 'edit' && (
-              <Button
-                variant="danger"
-                onClick={handleDelete}
-                data-testid="deleteCategoryButton"
-                className="btn btn-danger"
-              >
-                <i className="fa fa-trash me-2" />
-                {tCommon('delete')}
-              </Button>
-            )}
-
-            {/* Create/Update Button */}
+        {/* Action Buttons */}
+        <div className="d-flex gap-2 justify-content-between">
+          {/* Delete Button - Only show in edit mode */}
+          {mode === 'edit' && (
             <Button
-              type="submit"
-              className={styles.editButton}
-              value="actionItemCategory"
-              data-testid="formSubmitButton"
+              variant="danger"
+              onClick={handleDelete}
+              data-testid="deleteCategoryButton"
             >
-              {mode === 'create'
-                ? tCommon('create')
-                : t('updateActionItemCategory')}
+              <i className="fa fa-trash me-2" />
+              {tCommon('delete')}
             </Button>
-          </div>
-        </Form>
-      </Modal.Body>
-    </Modal>
+          )}
+
+          {/* Create/Update Button */}
+          <Button
+            type="submit"
+            className={styles.editButton}
+            value="actionItemCategory"
+            data-testid="formSubmitButton"
+          >
+            {mode === 'create'
+              ? tCommon('create')
+              : t('updateActionItemCategory')}
+          </Button>
+        </div>
+      </Form>
+    </BaseModal>
   );
 };
 

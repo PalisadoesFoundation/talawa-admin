@@ -11,7 +11,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { Button } from 'react-bootstrap';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from '../../../utils/useLocalstorage';
 
@@ -53,7 +53,9 @@ const AcceptInvitation = (): JSX.Element => {
       setError(null);
       const tok = token || (getItem(STORAGE_KEY) as string | null);
       if (!tok) {
-        setError('Invalid invitation token');
+        setError(
+          t('invalidToken', { defaultValue: 'Invalid invitation token' }),
+        );
         setLoading(false);
         return;
       }
@@ -69,11 +71,18 @@ const AcceptInvitation = (): JSX.Element => {
         if (data && data.verifyEventInvitation) {
           setInvite(data.verifyEventInvitation as InviteMetadata);
         } else {
-          setError('Invitation not found or invalid');
+          setError(
+            t('invitationNotFound', {
+              defaultValue: 'Invitation not found or invalid',
+            }),
+          );
         }
       } catch (err) {
         const e = err as Error | { message?: string };
-        setError(e?.message || 'Error verifying invitation');
+        setError(
+          e?.message ||
+            t('verifyError', { defaultValue: 'Error verifying invitation' }),
+        );
       } finally {
         setLoading(false);
       }
@@ -104,7 +113,9 @@ const AcceptInvitation = (): JSX.Element => {
       const input = { invitationToken: invite.invitationToken };
       const { data } = await accept({ variables: { input } });
       if (data && data.acceptEventInvitation) {
-        toast.success(t('accepted', { defaultValue: 'Invitation accepted' }));
+        NotificationToast.success(
+          t('accepted', { defaultValue: 'Invitation accepted' }),
+        );
         removeItem(STORAGE_KEY);
         if (invite.eventId) {
           navigate(
@@ -116,7 +127,7 @@ const AcceptInvitation = (): JSX.Element => {
       }
     } catch (err) {
       const e = err as Error | { message?: string };
-      toast.error(
+      NotificationToast.error(
         e?.message ||
           t('acceptError', { defaultValue: 'Could not accept invitation' }),
       );

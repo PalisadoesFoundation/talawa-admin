@@ -1,0 +1,30 @@
+.progressCircleContainer {
+  position: relative;
+  display: inline-flex;
+}
+
+.progressCircleBackground {
+  color: var(--progress-track-color);
+}
+
+.overflowVisible {
+  overflow: visible;
+}
+
+.progressCircleForeground {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.progressComplete {
+  color: var(--progress-complete-color);
+}
+
+.progressHalf {
+  color: var(--progress-half-color);
+}
+
+.progressLow {
+  color: var(--progress-low-color);
+}

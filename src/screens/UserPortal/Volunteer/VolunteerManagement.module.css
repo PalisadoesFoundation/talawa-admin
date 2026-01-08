@@ -1,7 +1,7 @@
 /* Upcoming Events Styles */
 .btnsContainer {
   display: flex;
-  margin: 1.5rem 0;
+  margin: var(--space-7) var(--space-0);
 }
 
 .btnsContainer .input {
@@ -11,17 +11,17 @@
 }
 
 .btnsContainer input {
-  outline: 1px solid var(--bs-gray-400);
+  outline: var(--border-1) solid var(--bs-gray-400);
   background-color: white;
 }
 
 .btnsContainer .input button {
-  width: 52px;
+  width: var(--space-10);
 }
 
 .accordionSummary {
   width: 100% !important;
-  padding-right: 0.75rem;
+  padding-right: var(--space-4);
   display: flex;
   justify-content: space-between !important;
   align-items: center;
@@ -29,7 +29,7 @@
 
 .accordionSummary button {
   height: 2.25rem;
-  padding-top: 0.35rem;
+  padding-top: var(--space-2);
 }
 
 .accordionSummary button:hover {
@@ -40,20 +40,20 @@
 .titleContainer {
   display: flex;
   flex-direction: column;
-  gap: 0.1rem;
+  gap: var(--space-1);
 }
 
 .titleContainer h3 {
-  font-size: 1.25rem;
-  font-weight: 750;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-heavy);
   color: #5e5e5e;
-  margin-top: 0.2rem;
+  margin-top: var(--space-2);
 }
 
 .subContainer span {
-  font-size: 0.9rem;
-  margin-left: 0.5rem;
-  font-weight: lighter;
+  font-size: var(--font-size-sm);
+  margin-left: var(--space-3);
+  font-weight: var(--font-weight-lighter);
   color: #707070;
 }
 
@@ -63,7 +63,7 @@
 
 .chip {
   height: 1.5rem !important;
-  margin: 0.15rem 0 0 1.25rem;
+  margin: var(--space-1) var(--space-0) var(--space-0) var(--space-6);
 }
 
 .active {
@@ -82,9 +82,9 @@
 }
 
 .progressBar {
-  margin: 0rem 0.75rem;
+  margin: var(--space-0) var(--space-4);
   width: 100%;
-  font-size: 0.9rem;
+  font-size: var(--font-size-sm);
   height: 1.25rem;
 }
 
@@ -98,16 +98,16 @@
 
 .titlemodal {
   color: #707070;
-  font-weight: 600;
-  font-size: 32px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-3xl);
   width: 65%;
-  margin-bottom: 0px;
+  margin-bottom: var(--space-0);
 }
 
 .modalCloseBtn {
-  width: 40px;
-  height: 40px;
-  padding: 1rem;
+  width: var(--space-9);
+  height: var(--space-9);
+  padding: var(--space-5);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -118,18 +118,18 @@
 }
 
 .greenregbtn {
-  margin: 1rem 0 0;
-  margin-top: 15px;
-  border: 1px solid #e8e5e5;
+  margin: var(--space-5) var(--space-0) var(--space-0);
+  margin-top: var(--space-5);
+  border: var(--border-1) solid #e8e5e5;
   box-shadow: 0 2px 2px #e8e5e5;
-  padding: 10px 10px;
+  padding: var(--space-4) var(--space-4);
   border-radius: 5px;
   background-color: #31bb6b;
   width: 100%;
-  font-size: 16px;
+  font-size: var(--font-size-md);
   color: white;
   outline: none;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   cursor: pointer;
   transition:
     transform 0.2s,

@@ -20,5 +20,8 @@
   "title": "Ha ocurrido un error",
   "defaultErrorMessage": "Ocurrió un error inesperado",
   "resetButton": "Intentar de nuevo",
-  "resetButtonAriaLabel": "Intentar de nuevo"
+  "resetButtonAriaLabel": "Intentar de nuevo",
+  "fileTooLarge": "Archivo demasiado grande: {{fileName}}",
+  "invalidFileType": "Tipo de archivo no válido: {{fileName}}",
+  "emptyFile": "Archivo vacío seleccionado"
 }

@@ -7,8 +7,10 @@
  */
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -34,10 +36,12 @@ import { vi } from 'vitest';
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: toastMocks,
 }));
 
 const wait = async (ms = 100): Promise<void> => {
@@ -158,7 +162,12 @@ describe('Testing Requests Screen', () => {
   it('Search Requests by volunteer name', async () => {
     renderRequests(link1);
 
-    const searchInput = await screen.findByTestId('searchBy');
+    // Wait for LoadingState to complete and table data to render
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
     // Search by name with debounced search
@@ -174,7 +183,12 @@ describe('Testing Requests Screen', () => {
   it('Search Requests by volunteer name using submit (Enter key)', async () => {
     renderRequests(link1);
 
-    const searchInput = await screen.findByTestId('searchBy');
+    // Wait for LoadingState to complete and table data to render
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
     // Search by name using Enter key to trigger onSearchSubmit

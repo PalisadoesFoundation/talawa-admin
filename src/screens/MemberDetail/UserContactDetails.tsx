@@ -25,7 +25,6 @@ import { GET_USER_BY_ID } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import { Card, Row, Col, Form } from 'react-bootstrap';
-import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
@@ -176,7 +175,6 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     setisUpdated(false);
     if (data?.user) setFormState({ ...data.user });
   };
-  if (loading || !data?.user) return <Loader />;
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Row className="g-4 mt-1">

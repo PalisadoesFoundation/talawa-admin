@@ -108,6 +108,35 @@ export const MOCKS = [
       variables: {
         id: '123',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: null,
+        where: { name: { starts_with: '' } },
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            userTags: {
+              edges: userTagEdgesFirst,
+              pageInfo: {
+                startCursor: '1',
+                endCursor: '10',
+                hasNextPage: true,
+                hasPreviousPage: false,
+              },
+              totalCount: 12,
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: '123',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
       },
     },
@@ -153,6 +182,35 @@ export const MOCKS = [
                 hasPreviousPage: true,
               },
               totalCount: 12,
+            },
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_USER_TAGS_LIST,
+      variables: {
+        id: '123',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: null,
+        where: { name: { starts_with: 'searchUserTag' } },
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            userTags: {
+              edges: userTagEdgesSearch,
+              pageInfo: {
+                startCursor: '1',
+                endCursor: '2',
+                hasNextPage: false,
+                hasPreviousPage: false,
+              },
+              totalCount: 2,
             },
           },
         ],
@@ -276,20 +334,6 @@ export const MOCKS = [
   },
 ];
 
-export const MOCKS_ERROR_ORGANIZATION_TAGS_QUERY = [
-  {
-    request: {
-      query: ORGANIZATION_USER_TAGS_LIST,
-      variables: {
-        id: '123',
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: { name: { starts_with: '' } },
-      },
-    },
-    error: new Error('Mock Graphql Error for organization root tags query'),
-  },
-];
-
 export const MOCKS_ERROR_SUBTAGS_QUERY = [
   {
     request: {
@@ -297,6 +341,7 @@ export const MOCKS_ERROR_SUBTAGS_QUERY = [
       variables: {
         id: '123',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: null,
         where: { name: { starts_with: '' } },
       },
     },
@@ -341,6 +386,7 @@ export const MOCKS_ERROR_ASSIGN_OR_REMOVAL_TAGS = [
       variables: {
         id: '123',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: null,
         where: { name: { starts_with: '' } },
       },
     },

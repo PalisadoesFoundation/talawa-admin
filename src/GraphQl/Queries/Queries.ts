@@ -944,7 +944,9 @@ export const USER_DETAILS = gql`
       mobilePhoneNumber
       homePhoneNumber
       workPhoneNumber
-
+      eventsAttended {
+        id
+      }
       organizationsWhereMember(first: 10) {
         edges {
           node {
@@ -1189,8 +1191,18 @@ export const GET_COMMUNITY_DATA_PG = gql`
 `;
 
 export const SIGNIN_QUERY = gql`
-  query SignIn($email: EmailAddress!, $password: String!) {
-    signIn(input: { emailAddress: $email, password: $password }) {
+  query SignIn(
+    $email: EmailAddress!
+    $password: String!
+    $recaptchaToken: String
+  ) {
+    signIn(
+      input: {
+        emailAddress: $email
+        password: $password
+        recaptchaToken: $recaptchaToken
+      }
+    ) {
       user {
         id
         name

@@ -3,13 +3,12 @@
  * It displays the user's profile picture, name, and role, and provides options
  * to view the profile or log out of the application.
  *
- * @component
- * @returns {JSX.Element} The ProfileDropdown component.
+ * @returns The ProfileDropdown component.
  *
  * @remarks
  * - Uses `useSession` to manage session-related actions like ending the session.
  * - Utilizes `useLocalStorage` to fetch user details such as name, role, and profile image.
- * - Employs `useMutation` from Apollo Client to handle the `REVOKE_REFRESH_TOKEN` mutation.
+ * - Employs `useMutation` from Apollo Client to handle the `LOGOUT_MUTATION` mutation.
  * - Integrates `react-bootstrap` for dropdown UI and `react-router-dom` for navigation.
  * - Supports internationalization using `react-i18next`.
  *
@@ -18,7 +17,7 @@
  * <ProfileDropdown />
  * ```
  *
- * @dependencies
+ * Dependencies:
  * - `Avatar`: Displays a fallback avatar if no user image is available.
  * - `useSession`: Provides session management utilities.
  * - `useLocalStorage`: Fetches user data from local storage.
@@ -26,20 +25,21 @@
  * - `useNavigate`, `useParams`: Handles navigation and route parameters.
  *
  * @internal
- * - The `logout` function clears local storage, revokes the refresh token, and navigates to the home page.
+ * - The `handleLogout` function calls the logout mutation, clears local storage, and navigates to the home page.
  * - The `displayedName` truncates the user's name if it exceeds the maximum length.
  *
- * @accessibility
+ * Accessibility:
  * - Includes `aria-label` attributes for better screen reader support.
  * - Uses `data-testid` attributes for testing purposes.
  */
 import Avatar from 'components/Avatar/Avatar';
 import React from 'react';
 import { ButtonGroup, Dropdown } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import dropdownStyles from './ProfileDropdown.module.css';
+import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import useSession from 'utils/useSession';
@@ -56,19 +56,18 @@ const ProfileDropdown = ({
 }: InterfaceProfileDropdownProps): JSX.Element => {
   const { endSession } = useSession();
   const { t: tCommon } = useTranslation('common');
-  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
+  const [logout] = useMutation(LOGOUT_MUTATION);
   const { getItem, clearAllItems } = useLocalStorage();
   const userRole = getItem<string>('role');
   const name: string = getItem<string>('name') || '';
   const userImage: string = getItem<string>('UserImage') || '';
   const navigate = useNavigate();
-  const { orgId } = useParams();
 
-  const logout = async (): Promise<void> => {
+  const handleLogout = async (): Promise<void> => {
     try {
-      await revokeRefreshToken();
+      await logout();
     } catch (error) {
-      console.error('Error revoking refresh token:', error);
+      console.error('Error during logout:', error);
     }
     clearAllItems();
     endSession();
@@ -82,7 +81,6 @@ const ProfileDropdown = ({
   const profileDestination = resolveProfileNavigation({
     portal,
     role: userRole,
-    orgId,
   });
 
   return (
@@ -132,8 +130,8 @@ const ProfileDropdown = ({
           {tCommon('viewProfile')}
         </Dropdown.Item>
         <Dropdown.Item
-          style={{ color: 'red' }}
-          onClick={logout}
+          className={dropdownStyles.logoutBtn}
+          onClick={handleLogout}
           data-testid="logoutBtn"
         >
           {tCommon('logout')}
