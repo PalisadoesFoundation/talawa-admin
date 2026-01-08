@@ -2,8 +2,7 @@
  * ProfileHeader Component
  *
  * This component renders a header section for the user profile settings page.
- * It displays a title and a profile dropdown menu, providing a clean and
- * responsive layout.
+ * It displays the title for settings
  *
  * @remarks
  * - The component uses Bootstrap classes for layout and styling.
@@ -32,7 +31,7 @@ const ProfileHeader: FC<IProfileHeaderProps> = ({
     className="d-flex justify-content-between align-items-center mb-4"
     data-testid="profile-header"
   >
-    <div style={{ flex: 1 }}>
+    <div className="flex-grow-1">
       <h1 data-testid="profile-header-title">{title}</h1>
     </div>
   </div>
