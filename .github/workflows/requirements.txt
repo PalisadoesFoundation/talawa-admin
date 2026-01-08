@@ -1,15 +1,26 @@
-#############################################################################
-# DO NOT DELETE
-#############################################################################
+##############################################################################
+# Python Dependencies for Shared Workflow Scripts
+##############################################################################
 #
-# Required for GitHub Action workflow python checks
+# Required for GitHub Actions workflow Python checks
+# Standardized across all Talawa repositories (api, admin, mobile, plugin)
 #
-#############################################################################
-#############################################################################
+# Based on cross-repository analysis (2026-01-03):
+# - All repos use: black, pydocstyle, flake8, flake8-docstrings, docstring_parser
+# - Configuration files: pyproject.toml, .flake8, .pydocstyle
+#
+##############################################################################
 
+# Code Formatting
 black
-pydocstyle 
+
+# Docstring Checking
+pydocstyle
+docstring_parser
+
+# Linting
 flake8
 flake8-docstrings
-docstring_parser
+
+# Testing
 pytest

@@ -19,7 +19,7 @@ import {
   useQuery,
 } from '@apollo/client';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   DataGrid,
   type GridCellParams,
@@ -148,8 +148,6 @@ const Pledges = (): JSX.Element => {
       setPledges([]);
     }
   }, [pledgeData, isNoPledgesFoundError]);
-
-  if (pledgeLoading) return <Loader size="xl" />;
 
   if (pledgeError && !isNoPledgesFoundError) {
     return (
@@ -329,63 +327,65 @@ const Pledges = (): JSX.Element => {
   };
 
   return (
-    <div>
-      <AdminSearchFilterBar
-        searchPlaceholder={tCommon('searchBy', {
-          item: `${t('pledgers')} or ${t('campaigns')}`,
-        })}
-        searchValue={searchTerm}
-        onSearchChange={setSearchTerm}
-        searchInputTestId="searchByInput"
-        searchButtonTestId="searchBtn"
-        hasDropdowns={true}
-        dropdowns={[searchByDropdown, sortDropdown]}
-      />
+    <LoadingState isLoading={pledgeLoading} variant="spinner">
+      <div>
+        <AdminSearchFilterBar
+          searchPlaceholder={tCommon('searchBy', {
+            item: `${t('pledgers')} or ${t('campaigns')}`,
+          })}
+          searchValue={searchTerm}
+          onSearchChange={setSearchTerm}
+          searchInputTestId="searchByInput"
+          searchButtonTestId="searchBtn"
+          hasDropdowns={true}
+          dropdowns={[searchByDropdown, sortDropdown]}
+        />
 
-      <DataGrid
-        disableColumnMenu
-        hideFooter
-        getRowId={(row) => row.id}
-        sx={dataGridStyle}
-        autoHeight
-        rowHeight={65}
-        rows={pledges.map((p) => ({
-          id: p.id,
-          campaign: p.campaign,
-          pledger: p.pledger,
-          users: p.users,
-          amount: p.amount,
-          currency: p.campaign?.currencyCode,
-          goalAmount: p.campaign?.goalAmount,
-          endDate: p.campaign?.endAt,
-        }))}
-        columns={columns}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noPledges')}
-            </Stack>
-          ),
-        }}
-      />
+        <DataGrid
+          disableColumnMenu
+          hideFooter
+          getRowId={(row) => row.id}
+          sx={dataGridStyle}
+          autoHeight
+          rowHeight={65}
+          rows={pledges.map((p) => ({
+            id: p.id,
+            campaign: p.campaign,
+            pledger: p.pledger,
+            users: p.users,
+            amount: p.amount,
+            currency: p.campaign?.currencyCode,
+            goalAmount: p.campaign?.goalAmount,
+            endDate: p.campaign?.endAt,
+          }))}
+          columns={columns}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack height="100%" alignItems="center" justifyContent="center">
+                {t('noPledges')}
+              </Stack>
+            ),
+          }}
+        />
 
-      <PledgeModal
-        isOpen={modalState[ModalState.UPDATE]}
-        hide={() => closeModal(ModalState.UPDATE)}
-        campaignId={pledge?.campaign?.id || ''}
-        userId={userId}
-        pledge={pledge}
-        refetchPledge={refetchPledge}
-        mode="edit"
-      />
+        <PledgeModal
+          isOpen={modalState[ModalState.UPDATE]}
+          hide={() => closeModal(ModalState.UPDATE)}
+          campaignId={pledge?.campaign?.id || ''}
+          userId={userId}
+          pledge={pledge}
+          refetchPledge={refetchPledge}
+          mode="edit"
+        />
 
-      <PledgeDeleteModal
-        isOpen={modalState[ModalState.DELETE]}
-        hide={() => closeModal(ModalState.DELETE)}
-        pledge={pledge}
-        refetchPledge={refetchPledge}
-      />
-    </div>
+        <PledgeDeleteModal
+          isOpen={modalState[ModalState.DELETE]}
+          hide={() => closeModal(ModalState.DELETE)}
+          pledge={pledge}
+          refetchPledge={refetchPledge}
+        />
+      </div>
+    </LoadingState>
   );
 };
 

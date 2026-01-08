@@ -6,15 +6,14 @@
  * members assigned to a specific tag. It also supports infinite scrolling for assigned
  * members and includes modals for various actions.
  *
- * @component
- * @returns {JSX.Element} The ManageTag component.
+ * @returns The ManageTag component.
  *
- * @remarks
+ * remarks
  * - Uses GraphQL queries and mutations to fetch and manipulate tag data.
  * - Includes modals for actions like editing, removing, assigning, and unassigning tags.
  * - Implements infinite scrolling for the list of assigned members.
  *
- * @dependencies
+ * dependencies
  * - `@apollo/client` for GraphQL queries and mutations.
  * - `react-router-dom` for navigation.
  * - `react-bootstrap` for UI components.
@@ -22,7 +21,7 @@
  * - `react-toastify` for notifications.
  * - Custom components like `AddPeopleToTag`, `TagActions`, `EditUserTagModal`, etc.
  *
- * @state
+ * state
  * - `unassignUserTagModalIsOpen` - Controls the visibility of the unassign user tag modal.
  * - `addPeopleToTagModalIsOpen` - Controls the visibility of the add people to tag modal.
  * - `tagActionsModalIsOpen` - Controls the visibility of the tag actions modal.
@@ -33,7 +32,7 @@
  * - `tagActionType` - Specifies the type of tag action (assign or remove).
  * - `newTagName` - Stores the new name for the tag being edited.
  *
- * @methods
+ * methods
  * - `toggleRemoveUserTagModal` - Toggles the visibility of the remove user tag modal.
  * - `showAddPeopleToTagModal` - Opens the add people to tag modal.
  * - `hideAddPeopleToTagModal` - Closes the add people to tag modal.
@@ -43,7 +42,7 @@
  * - `handleEditUserTag` - Handles the editing of a tag's name.
  * - `handleRemoveUserTag` - Handles the removal of a tag.
  *
- * @errorHandling
+ * errorHandling
  * - Displays error messages using `react-toastify` in case of GraphQL errors.
  *
  * @example
@@ -55,7 +54,7 @@ import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { useNavigate, useParams, Link } from 'react-router';
 import { Col } from 'react-bootstrap';
@@ -470,9 +469,10 @@ function ManageTag(): JSX.Element {
             />
           </div>
 
-          {userTagAssignedMembersLoading ? (
-            <Loader />
-          ) : (
+          <LoadingState
+            isLoading={userTagAssignedMembersLoading}
+            variant="spinner"
+          >
             <Row className="mb-4">
               <Col xs={9}>
                 <div className="bg-white light border rounded-top mb-0 py-2 d-flex align-items-center">
@@ -588,7 +588,7 @@ function ManageTag(): JSX.Element {
                 </div>
               </Col>
             </Row>
-          )}
+          </LoadingState>
         </div>
       </Row>
 

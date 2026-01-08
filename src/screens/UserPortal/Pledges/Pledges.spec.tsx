@@ -1,8 +1,10 @@
 import React from 'react';
 import { GraphQLError } from 'graphql';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -1654,6 +1656,42 @@ describe('Testing User Pledge Screen', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Pledger User')).toBeInTheDocument();
+    });
+  });
+
+  describe('LoadingState Behavior', () => {
+    it('should show LoadingState spinner while pledges are loading', async () => {
+      const loadingMocks = [
+        {
+          request: {
+            query: USER_PLEDGES,
+            variables: {
+              input: { userId: 'userId' },
+              where: {},
+              orderBy: 'endDate_DESC',
+            },
+          },
+          result: { data: { getPledgesByUserId: [] } },
+          delay: 100,
+        },
+      ];
+
+      renderMyPledges(new StaticMockLink(loadingMocks));
+      await waitFor(() => {
+        const spinners = screen.getAllByTestId('spinner');
+        expect(spinners.length).toBeGreaterThan(0);
+      });
+    });
+
+    it('should hide spinner and render pledges after LoadingState completes', async () => {
+      renderMyPledges(new StaticMockLink(MOCKS));
+
+      await waitFor(() => {
+        expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      });
+
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
     });
   });
 });
