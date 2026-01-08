@@ -30,7 +30,7 @@ import styles from '../../../style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { Edit } from '@mui/icons-material';
 import EventListCardModals from 'components/EventListCard/Modal/EventListCardModals';
 import type { InterfaceEvent } from 'types/Event/interface';
@@ -70,7 +70,11 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
   };
 
   if (eventInfoLoading) {
-    return <Loader data-testid="loader" />;
+    return (
+      <LoadingState isLoading={eventInfoLoading} variant="spinner">
+        <div />
+      </LoadingState>
+    );
   }
 
   if (!eventData || !eventData.event) {
