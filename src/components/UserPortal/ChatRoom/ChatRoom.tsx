@@ -29,6 +29,9 @@
  */
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
+import ErrorBoundaryWrapper from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import ProfileAvatarDisplay from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
+import { Avatar } from '@mui/material';
 import type { ChangeEvent } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
@@ -55,6 +58,33 @@ import type { GroupChat } from 'types/Chat/type';
 import CursorPaginationManager from 'components/CursorPaginationManager/CursorPaginationManager';
 // import { toast } from 'react-toastify';
 // import { validateFile } from 'utils/fileValidation';
+
+// import { validateFile } from 'utils/fileValidation';
+
+/**
+ * Type definition for chat messages used in pagination
+ */
+type ChatMessage = {
+  id: string;
+  body: string;
+  createdAt: string;
+  updatedAt: string;
+  creator: {
+    id: string;
+    name: string;
+    avatarMimeType?: string;
+    avatarURL?: string;
+  };
+  parentMessage?: {
+    id: string;
+    body: string;
+    createdAt: string;
+    creator: {
+      id: string;
+      name: string;
+    };
+  };
+};
 
 interface IChatRoomProps {
   selectedContact: string;
@@ -612,7 +642,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
               </div>
             </div>
             <div className={styles.flexColumn}>
-              <CursorPaginationManager
+              <CursorPaginationManager<typeof chatData, ChatMessage>
                 paginationDirection="backward"
                 data={chatData}
                 getConnection={(data) => data?.chat?.messages}

@@ -374,25 +374,36 @@ describe('CursorPaginationManager Component', () => {
     it('handles scroll position restoration for backward pagination', async () => {
       const TestComponent = (): JSX.Element => {
         const scrollRef = useRef<HTMLDivElement>(null);
-        const mockData: InterfaceMockData = {
-          items: createMockConnection(
-            [{ id: '1', content: 'Message 1' }],
-            false,
-            true,
-          ),
+        type TestItem = {
+          id: string;
+          content: string;
+        };
+
+        const mockData: { items: InterfaceConnection<TestItem> } = {
+          items: {
+            edges: [
+              { cursor: 'cursor1', node: { id: '1', content: 'Message 1' } },
+            ],
+            pageInfo: {
+              hasPreviousPage: true,
+              hasNextPage: false,
+              startCursor: 'cursor1',
+              endCursor: 'cursor1',
+            },
+          },
         };
 
         const onLoadMore = vi.fn().mockResolvedValue(undefined);
 
         return (
-          <CursorPaginationManager
+          <CursorPaginationManager<typeof mockData, TestItem>
             paginationDirection="backward"
             data={mockData}
             getConnection={(data) => data.items}
             queryVariables={{ last: 10, before: null }}
             itemsPerPage={10}
             onLoadMore={onLoadMore}
-            scrollContainerRef={scrollRef}
+            scrollContainerRef={scrollRef as React.RefObject<HTMLElement>}
           >
             {({ items, loadMore }) => (
               <div ref={scrollRef} className={styles.testScrollContainer}>

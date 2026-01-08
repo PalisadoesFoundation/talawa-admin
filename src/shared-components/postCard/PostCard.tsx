@@ -70,7 +70,7 @@ import { PluginInjector } from '../../plugin';
 import useLocalStorage from '../../utils/useLocalstorage';
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
-import { CursorPaginationManager } from '../../components/CursorPaginationManager/CursorPaginationManager';
+import CursorPaginationManager from '../../components/CursorPaginationManager/CursorPaginationManager';
 
 export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation');
