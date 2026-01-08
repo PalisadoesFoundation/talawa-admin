@@ -145,6 +145,44 @@ const adminFilterMock = {
   },
 };
 
+const emptyMock = {
+  request: {
+    query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+    variables: {
+      orgId: DEFAULT_ORG_ID,
+      first: 10,
+      after: null,
+    },
+  },
+  result: {
+    data: {
+      organization: {
+        members: {
+          edges: [],
+          pageInfo: {
+            endCursor: null,
+            hasNextPage: false,
+            hasPreviousPage: false,
+            startCursor: null,
+          },
+        },
+      },
+    },
+  },
+};
+
+const errorMock = {
+  request: {
+    query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+    variables: {
+      orgId: DEFAULT_ORG_ID,
+      first: 10,
+      after: null,
+    },
+  },
+  error: new Error('GraphQL error occurred'),
+};
+
 const sharedMocks = vi.hoisted(() => ({
   useParams: vi.fn(() => ({ orgId: DEFAULT_ORG_ID })),
 }));
@@ -156,7 +194,6 @@ vi.mock('react-router', async () => {
 
 beforeEach(() => {
   vi.clearAllMocks();
-  vi.useRealTimers();
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: vi.fn().mockImplementation((query) => ({
@@ -173,7 +210,6 @@ beforeEach(() => {
 afterEach(() => {
   vi.clearAllMocks();
   vi.restoreAllMocks();
-  vi.useRealTimers();
 });
 
 describe('People Component Tests', () => {
@@ -192,6 +228,7 @@ describe('People Component Tests', () => {
 
   it('renders members and handles loading state', async () => {
     renderComponent([defaultQueryMock]);
+    // CursorPaginationManager's stable public API test ID (see CursorPaginationManager.spec.tsx)
     expect(screen.getByTestId('cursor-pagination-loading')).toBeInTheDocument();
     await waitFor(() => {
       expect(screen.getByTestId('people-name-1')).toHaveTextContent(
@@ -273,32 +310,6 @@ describe('People Component Tests', () => {
   });
 
   it('displays empty state when no members found', async () => {
-    const emptyMock = {
-      request: {
-        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-        variables: {
-          orgId: DEFAULT_ORG_ID,
-          first: 10,
-          after: null,
-        },
-      },
-      result: {
-        data: {
-          organization: {
-            members: {
-              edges: [],
-              pageInfo: {
-                endCursor: null,
-                hasNextPage: false,
-                hasPreviousPage: false,
-                startCursor: null,
-              },
-            },
-          },
-        },
-      },
-    };
-
     renderComponent([emptyMock]);
 
     await waitFor(() => {
@@ -307,21 +318,10 @@ describe('People Component Tests', () => {
   });
 
   it('handles GraphQL errors correctly', async () => {
-    const errorMock = {
-      request: {
-        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-        variables: {
-          orgId: DEFAULT_ORG_ID,
-          first: 10,
-          after: null,
-        },
-      },
-      error: new Error('GraphQL error occurred'),
-    };
-
     renderComponent([errorMock]);
 
     await waitFor(() => {
+      // CursorPaginationManager's stable public API test ID (see CursorPaginationManager.spec.tsx)
       expect(screen.getByTestId('cursor-pagination-error')).toBeInTheDocument();
       expect(screen.getByText('GraphQL error occurred')).toBeInTheDocument();
     });
@@ -347,5 +347,70 @@ describe('People Component Tests', () => {
         '2@example.com',
       );
     });
+  });
+
+  it('combines search and admin filter simultaneously', async () => {
+    const searchAdminMock = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: {
+          orgId: DEFAULT_ORG_ID,
+          where: {
+            firstName: { contains: 'Admin' },
+            role: { equal: 'administrator' },
+          },
+          first: 10,
+          after: null,
+        },
+      },
+      result: {
+        data: {
+          organization: {
+            members: {
+              edges: [
+                {
+                  cursor: 'cur2',
+                  node: memberNode('2', 'Admin User', 'administrator'),
+                },
+              ],
+              pageInfo: {
+                endCursor: 'cur2',
+                hasNextPage: false,
+                hasPreviousPage: false,
+                startCursor: 'cur2',
+              },
+            },
+          },
+        },
+      },
+    };
+
+    renderComponent([defaultQueryMock, adminFilterMock, searchAdminMock]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('people-name-1')).toBeInTheDocument();
+    });
+
+    const filterDropdown = screen.getByTestId('modeChangeBtn');
+    await userEvent.click(filterDropdown);
+
+    const adminOption = screen.getByTestId(`${MODE_ADMINS}`);
+    await userEvent.click(adminOption);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('people-name-2')).toBeInTheDocument();
+    });
+
+    const input = screen.getByTestId('searchInput');
+    await userEvent.type(input, 'Admin');
+
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('people-name-2')).toHaveTextContent(
+          'Admin User',
+        );
+      },
+      { timeout: 5000 },
+    );
   });
 });

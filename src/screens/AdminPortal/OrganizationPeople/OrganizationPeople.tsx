@@ -310,7 +310,7 @@ function OrganizationPeople(): JSX.Element {
                       {item.avatarURL ? (
                         <img
                           src={item.avatarURL}
-                          alt={tCommon('avatar')}
+                          alt={tCommon('avatar', { user: item.name })}
                           className={styles.avatarImage}
                           crossOrigin="anonymous"
                         />

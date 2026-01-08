@@ -750,12 +750,10 @@ describe('OrganizationPeople', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    // Check for avatar image - use screen queries if alt text is available
-    const avatarImages = screen.getAllByRole('img');
-    const johnDoeAvatar = avatarImages.find(
-      (img) => img.getAttribute('src') === 'https://example.com/avatar1.jpg',
-    );
-    expect(johnDoeAvatar).toBeInTheDocument();
+    // Check avatar exists with user's name in alt text
+    const avatar = screen.getByAltText(/John Doe/);
+    expect(avatar).toBeInTheDocument();
+    expect(avatar).toHaveAttribute('src', 'https://example.com/avatar1.jpg');
   });
 
   test('disables remove button for users tab', async () => {
@@ -811,5 +809,183 @@ describe('OrganizationPeople', () => {
     removeButtons.forEach((button) => {
       expect(button).toBeDisabled();
     });
+  });
+
+  test('handles member deletion error', async () => {
+    const initialMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+    });
+
+    const deleteErrorMock = {
+      request: {
+        query: REMOVE_MEMBER_MUTATION_PG,
+        variables: {
+          memberId: 'member1',
+          organizationId: 'orgid',
+        },
+      },
+      error: new Error('Failed to remove member'),
+    };
+
+    const link = new StaticMockLink([initialMock, deleteErrorMock], true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const removeButtons = screen.getAllByTestId('removeMemberModalBtn');
+    fireEvent.click(removeButtons[0]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('remove-member-modal')).toBeInTheDocument();
+    });
+
+    const modal = screen.getByTestId('remove-member-modal');
+    const confirmButton = within(modal).getByRole('button', {
+      name: /remove/i,
+    });
+    fireEvent.click(confirmButton);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('remove-member-modal')).toBeInTheDocument();
+    });
+  });
+
+  test('searches and filters by admin role simultaneously', async () => {
+    const initialMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+    });
+
+    const searchAdminMock = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        where: {
+          firstName: { contains: 'Admin' },
+          role: { equal: 'administrator' },
+        },
+      },
+      {
+        edges: [
+          {
+            node: {
+              id: 'admin1',
+              name: 'Admin User',
+              emailAddress: 'admin@example.com',
+              avatarURL: null,
+              createdAt: dayjs().toISOString(),
+              role: 'administrator',
+            },
+            cursor: 'adminCursor1',
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: 'adminCursor1',
+          endCursor: 'adminCursor1',
+        },
+      },
+    );
+
+    const adminMock = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        where: { role: { equal: 'administrator' } },
+      },
+      {
+        edges: [
+          {
+            node: {
+              id: 'admin1',
+              name: 'Admin User',
+              emailAddress: 'admin@example.com',
+              avatarURL: null,
+              createdAt: dayjs().toISOString(),
+              role: 'administrator',
+            },
+            cursor: 'adminCursor1',
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: 'adminCursor1',
+          endCursor: 'adminCursor1',
+        },
+      },
+    );
+
+    const mocks = [initialMock, adminMock, searchAdminMock];
+    const link = new StaticMockLink(mocks, true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const sortingButton = screen.getByTestId('sort');
+    fireEvent.click(sortingButton);
+    const adminOption = screen.getByText(/admin/i);
+    fireEvent.click(adminOption);
+
+    await waitFor(() => {
+      expect(screen.getByText('Admin User')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchbtn');
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'Admin');
+
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 400));
+    });
+
+    await waitFor(
+      () => {
+        expect(screen.getByText('Admin User')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 });
