@@ -295,6 +295,8 @@ export default [
     files: [
       'src/shared-components/BaseModal/**/*.{ts,tsx}',
       'src/types/shared-components/BaseModal/**/*.{ts,tsx}',
+      'src/shared-components/NotificationToast/**/*.{ts,tsx}',
+      'src/types/shared-components/NotificationToast/**/*.{ts,tsx}',
     ],
     rules: restrictImportsExcept(['rb-modal']),
   },
