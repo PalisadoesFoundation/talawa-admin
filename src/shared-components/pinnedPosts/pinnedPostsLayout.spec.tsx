@@ -12,15 +12,20 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from '../../utils/i18nForTest';
 import PinnedPostsLayout from './pinnedPostsLayout';
 import type { InterfacePostEdge } from 'types/Post/interface';
-import { toast } from 'react-toastify';
 import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutations';
 import { DELETE_POST_MUTATION } from '../../GraphQl/Mutations/mutations';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+dayjs.extend(utc);
 
-// Mock react-toastify
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     error: vi.fn(),
+    success: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
   },
 }));
 
@@ -57,9 +62,10 @@ const createMockPinnedPost = (
   node: {
     id,
     caption,
-    createdAt: '2024-01-15T12:00:00Z',
+    // Use dynamic dates to avoid test staleness
+    createdAt: dayjs.utc().subtract(14, 'days').toISOString(),
     attachmentURL: 'https://example.com/image.jpg',
-    pinnedAt: '2024-01-15T12:00:00Z',
+    pinnedAt: dayjs.utc().subtract(14, 'days').toISOString(),
     pinned: true,
     attachments: [
       {
@@ -137,7 +143,7 @@ describe('PinnedPostsLayout Component', () => {
   describe('Rendering', () => {
     it('renders the pinned posts layout container', () => {
       render(
-        <MockedProvider addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -153,7 +159,7 @@ describe('PinnedPostsLayout Component', () => {
 
     it('renders all pinned post cards with their captions', () => {
       render(
-        <MockedProvider addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -177,7 +183,7 @@ describe('PinnedPostsLayout Component', () => {
 
     it('renders creator names for all posts', () => {
       render(
-        <MockedProvider addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -194,7 +200,7 @@ describe('PinnedPostsLayout Component', () => {
 
     it('renders view buttons for all posts', () => {
       render(
-        <MockedProvider addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -210,7 +216,7 @@ describe('PinnedPostsLayout Component', () => {
 
     it('renders empty state when no pinned posts', () => {
       render(
-        <MockedProvider addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={[]}
@@ -228,7 +234,7 @@ describe('PinnedPostsLayout Component', () => {
   describe('Interactions', () => {
     it('calls onStoryClick when view button is clicked', () => {
       render(
-        <MockedProvider addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -246,7 +252,7 @@ describe('PinnedPostsLayout Component', () => {
 
     it('shows more options menu when more options button is clicked', async () => {
       render(
-        <MockedProvider addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -274,7 +280,7 @@ describe('PinnedPostsLayout Component', () => {
 
     it('calls scrollBy when left navigation button is clicked', async () => {
       render(
-        <MockedProvider addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -322,7 +328,7 @@ describe('PinnedPostsLayout Component', () => {
 
     it('calls scrollBy when right navigation button is clicked', async () => {
       render(
-        <MockedProvider addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -400,7 +406,7 @@ describe('PinnedPostsLayout Component', () => {
       );
 
       const { unmount } = render(
-        <MockedProvider addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -464,7 +470,7 @@ describe('PinnedPostsLayout Component', () => {
 
     it('should handle insufficient scroll width in scrollLeft', async () => {
       render(
-        <MockedProvider addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -509,7 +515,7 @@ describe('PinnedPostsLayout Component', () => {
   describe('Null/Undefined scrollContainerRef Edge Cases', () => {
     it('should handle null scrollContainerRef in checkScrollability', () => {
       const { rerender } = render(
-        <MockedProvider addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={[]}
@@ -524,7 +530,7 @@ describe('PinnedPostsLayout Component', () => {
 
       // Rerender with posts - should not throw
       rerender(
-        <MockedProvider addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -549,7 +555,7 @@ describe('PinnedPostsLayout Component', () => {
       postsWithNullCreator[0].node.creator = null;
 
       render(
-        <MockedProvider addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={postsWithNullCreator}
@@ -577,7 +583,7 @@ describe('PinnedPostsLayout Component', () => {
       ];
 
       render(
-        <MockedProvider addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={postsWithEmptyCaption}
@@ -603,7 +609,7 @@ describe('PinnedPostsLayout Component', () => {
       });
 
       render(
-        <MockedProvider addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -635,7 +641,7 @@ describe('PinnedPostsLayout Component', () => {
       });
 
       render(
-        <MockedProvider addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -663,7 +669,7 @@ describe('PinnedPostsLayout Component', () => {
       });
 
       render(
-        <MockedProvider addTypename={false}>
+        <MockedProvider>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -687,7 +693,7 @@ describe('PinnedPostsLayout Component', () => {
       });
 
       render(
-        <MockedProvider mocks={[TOGGLE_PINNED_POST_MOCK]} addTypename={false}>
+        <MockedProvider mocks={[TOGGLE_PINNED_POST_MOCK]}>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}
@@ -710,7 +716,7 @@ describe('PinnedPostsLayout Component', () => {
       fireEvent.click(pinMenuItem);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(NotificationToast.success).toHaveBeenCalledWith(
           'Post unpinned successfully.',
         );
       });
@@ -725,7 +731,7 @@ describe('PinnedPostsLayout Component', () => {
       });
 
       render(
-        <MockedProvider mocks={[DELETE_POST_MOCK]} addTypename={false}>
+        <MockedProvider mocks={[DELETE_POST_MOCK]}>
           <I18nextProvider i18n={i18nForTest}>
             <PinnedPostsLayout
               pinnedPosts={mockPinnedPosts}

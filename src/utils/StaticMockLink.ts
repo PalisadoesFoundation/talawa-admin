@@ -162,7 +162,16 @@ export class StaticMockLink extends ApolloLink {
   private _normalizeMockedResponse(
     mockedResponse: MockedResponse,
   ): MockedResponse {
-    const newMockedResponse = cloneDeep(mockedResponse);
+    const newMockedResponse = cloneDeep(
+      mockedResponse,
+    ) as IMockedResponseWithMatcher;
+    // cloneDeep might strip functions, so we restore the variableMatcher if it existed
+    if ((mockedResponse as IMockedResponseWithMatcher).variableMatcher) {
+      newMockedResponse.variableMatcher = (
+        mockedResponse as IMockedResponseWithMatcher
+      ).variableMatcher;
+    }
+
     const queryWithoutConnection = removeConnectionDirectiveFromDocument(
       newMockedResponse.request.query,
     );

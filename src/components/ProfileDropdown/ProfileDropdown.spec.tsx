@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import ProfileDropdown, { MAX_NAME_LENGTH } from './ProfileDropdown';
 import { MockedProvider } from '@apollo/react-testing';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -30,8 +30,8 @@ vi.mock('react-router', async () => {
 
 const MOCKS = [
   {
-    request: { query: REVOKE_REFRESH_TOKEN },
-    result: { data: { revokeRefreshTokenForUser: true } },
+    request: { query: LOGOUT_MUTATION },
+    result: { data: { logout: { success: true } } },
   },
   {
     request: { query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG },
@@ -205,37 +205,10 @@ describe('ProfileDropdown Component', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
   });
 
-  test('navigates to /member/:orgId for non-user roles when orgId is not present', async () => {
-    window.history.pushState({}, 'Test page', '/orglist');
-    setItem('SuperAdmin', true); // Set as admin
-    setItem('id', '123');
-
-    render(
-      <MockedProvider mocks={MOCKS}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <Routes>
-              <Route path="/orglist" element={<ProfileDropdown />} />
-            </Routes>
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await act(async () => {
-      await userEvent.click(screen.getByTestId('togDrop'));
-    });
-
-    await act(async () => {
-      await userEvent.click(screen.getByTestId('profileBtn'));
-    });
-
-    expect(mockNavigate).toHaveBeenCalledWith('/member');
-  });
-
-  test('navigates to /member/:userID for non-user roles', async () => {
+  test('navigates to /admin/profile for admin roles', async () => {
     window.history.pushState({}, 'Test page', '/321');
-    setItem('SuperAdmin', true); // Set as admin
+
+    setItem('SuperAdmin', true); // Admin role
     setItem('id', '123');
 
     render(
@@ -258,7 +231,7 @@ describe('ProfileDropdown Component', () => {
       await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
-    expect(mockNavigate).toHaveBeenCalledWith('/member/321');
+    expect(mockNavigate).toHaveBeenCalledWith('/admin/profile');
   });
 
   test('uses user settings route for admin when portal is user', async () => {
@@ -284,11 +257,11 @@ describe('ProfileDropdown Component', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
   });
 
-  test('handles error when revokeRefreshToken fails during logout', async () => {
+  test('handles error when logout fails during logout', async () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const errorMocks = [
       {
-        request: { query: REVOKE_REFRESH_TOKEN },
+        request: { query: LOGOUT_MUTATION },
         error: new Error('Network error'),
       },
       {
@@ -315,10 +288,10 @@ describe('ProfileDropdown Component', () => {
     });
 
     expect(consoleSpy).toHaveBeenCalledWith(
-      'Error revoking refresh token:',
+      'Error during logout:',
       expect.any(Error),
     );
-    // Verify that navigation still happens even when revokeRefreshToken fails
+    // Verify that navigation still happens even when logout mutation fails
     expect(mockNavigate).toHaveBeenCalledWith('/');
     consoleSpy.mockRestore();
   });

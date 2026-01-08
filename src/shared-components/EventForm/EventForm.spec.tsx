@@ -16,77 +16,95 @@ import type { IEventFormValues } from 'types/EventForm/interface';
 import { Frequency, createDefaultRecurrenceRule } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 
-vi.mock('@mui/x-date-pickers', () => {
-  const mockDatePicker = ({
-    label,
-    value,
-    onChange,
-    minDate,
-    'data-testid': dataTestId,
-  }: {
-    label: string;
-    value: unknown;
-    onChange?: (date: dayjs.Dayjs) => void;
-    minDate?: dayjs.Dayjs;
-    'data-testid'?: string;
-  }) => (
-    <input
-      data-testid={dataTestId || label}
-      value={dayjs(value as dayjs.Dayjs).format('YYYY-MM-DD')}
-      onChange={(e) => {
-        const newDate = dayjs(e.target.value);
-        if (
-          onChange &&
-          (!minDate || newDate.isAfter(minDate) || newDate.isSame(minDate))
-        ) {
-          onChange(newDate);
-        }
-      }}
-    />
-  );
+// Mock the wrapper components instead of MUI directly to verify EventForm uses them
+vi.mock('shared-components/DatePicker', () => ({
+  __esModule: true,
+  default: vi.fn(
+    (props: {
+      label?: string;
+      value: dayjs.Dayjs | null;
+      onChange?: (date: dayjs.Dayjs | null) => void;
+      minDate?: dayjs.Dayjs | null;
+      'data-testid'?: string;
+    }) => {
+      const {
+        label,
+        value,
+        onChange,
+        minDate,
+        'data-testid': dataTestId,
+      } = props;
+      return (
+        <div data-testid="date-picker-wrapper">
+          <input
+            data-testid={dataTestId || label || 'date-picker-input'}
+            value={value ? value.format('YYYY-MM-DD') : ''}
+            onChange={(e) => {
+              if (onChange) {
+                const newDate = e.target.value ? dayjs(e.target.value) : null;
+                if (
+                  !minDate ||
+                  !newDate ||
+                  newDate.isAfter(minDate) ||
+                  newDate.isSame(minDate)
+                ) {
+                  onChange(newDate);
+                }
+              }
+            }}
+          />
+        </div>
+      );
+    },
+  ),
+}));
 
-  const mockTimePicker = ({
-    label,
-    value,
-    onChange,
-    minTime,
-    disabled,
-    'data-testid': dataTestId,
-  }: {
-    label: string;
-    value: unknown;
-    onChange?: (time: dayjs.Dayjs) => void;
-    minTime?: dayjs.Dayjs;
-    disabled?: boolean;
-    'data-testid'?: string;
-  }) => {
-    const today = dayjs().format('YYYY-MM-DD');
-    return (
-      <input
-        data-testid={dataTestId || label}
-        value={dayjs(value as dayjs.Dayjs).format('HH:mm:ss')}
-        disabled={disabled}
-        onChange={(e) => {
-          if (!disabled && onChange && e.target.value) {
-            const newTime = dayjs(`${today}T${e.target.value}`);
-            if (
-              !minTime ||
-              newTime.isAfter(minTime) ||
-              newTime.isSame(minTime)
-            ) {
-              onChange(newTime);
-            }
-          }
-        }}
-      />
-    );
-  };
-
-  return {
-    DatePicker: mockDatePicker,
-    TimePicker: mockTimePicker,
-  };
-});
+vi.mock('shared-components/TimePicker', () => ({
+  __esModule: true,
+  default: vi.fn(
+    (props: {
+      label?: string;
+      value: dayjs.Dayjs | null;
+      onChange?: (time: dayjs.Dayjs | null) => void;
+      minTime?: dayjs.Dayjs | null;
+      disabled?: boolean;
+      'data-testid'?: string;
+    }) => {
+      const {
+        label,
+        value,
+        onChange,
+        minTime,
+        disabled,
+        'data-testid': dataTestId,
+      } = props;
+      const today = dayjs().format('YYYY-MM-DD');
+      return (
+        <div data-testid="time-picker-wrapper">
+          <input
+            data-testid={dataTestId || label || 'time-picker-input'}
+            value={value ? value.format('HH:mm:ss') : ''}
+            disabled={disabled}
+            onChange={(e) => {
+              if (!disabled && onChange) {
+                const val = e.target.value;
+                const newTime = val ? dayjs(`${today}T${val}`) : null;
+                if (
+                  !minTime ||
+                  !newTime ||
+                  newTime.isAfter(minTime) ||
+                  newTime.isSame(minTime)
+                ) {
+                  onChange(newTime);
+                }
+              }
+            }}
+          />
+        </div>
+      );
+    },
+  ),
+}));
 
 vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
   __esModule: true,
@@ -114,8 +132,9 @@ vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
             type="button"
             data-testid="updateRecurrenceRule"
             onClick={() => {
+              // Use dynamic date to avoid test staleness
               const newRule = createDefaultRecurrenceRule(
-                new Date('2025-01-01'),
+                dayjs().add(30, 'days').toDate(),
                 Frequency.DAILY,
               );
               setRecurrenceRuleState(newRule);
@@ -139,7 +158,8 @@ vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
             type="button"
             data-testid="updateEndDate"
             onClick={() => {
-              setEndDate(new Date('2025-01-10'));
+              // Use dynamic date to avoid test staleness
+              setEndDate(dayjs().add(40, 'days').toDate());
             }}
           >
             Update End Date
@@ -193,6 +213,7 @@ const baseValues: IEventFormValues = {
   endTime: '10:00:00',
   allDay: true,
   isPublic: true,
+  isInviteOnly: false,
   isRegisterable: true,
   recurrenceRule: null,
   createChat: false,
@@ -433,8 +454,9 @@ describe('EventForm', () => {
   test('enables recurrence toggle and opens custom modal', async () => {
     const handleSubmit = vi.fn();
     // Start with a rule so dropdown is visible
+    // Use dynamic date to avoid test staleness
     const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01'),
+      dayjs().add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -504,14 +526,10 @@ describe('EventForm', () => {
   });
 
   test('formatRecurrenceForPayload formats recurrence rule', () => {
-    const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01T00:00:00Z'),
-      Frequency.WEEKLY,
-    );
-    const result = formatRecurrenceForPayload(
-      rule,
-      new Date('2025-01-01T00:00:00Z'),
-    );
+    // Use dynamic date to avoid test staleness
+    const futureDate = dayjs().add(30, 'days').toDate();
+    const rule = createDefaultRecurrenceRule(futureDate, Frequency.WEEKLY);
+    const result = formatRecurrenceForPayload(rule, futureDate);
     expect(result).toEqual(
       expect.objectContaining({
         frequency: Frequency.WEEKLY,
@@ -520,7 +538,11 @@ describe('EventForm', () => {
   });
 
   test('formatRecurrenceForPayload returns null for null rule', () => {
-    const result = formatRecurrenceForPayload(null, new Date('2025-01-01'));
+    // Use dynamic date to avoid test staleness
+    const result = formatRecurrenceForPayload(
+      null,
+      dayjs().add(30, 'days').toDate(),
+    );
     expect(result).toBeNull();
   });
 
@@ -531,7 +553,8 @@ describe('EventForm', () => {
       never: false,
     };
     expect(() => {
-      formatRecurrenceForPayload(invalidRule, new Date('2025-01-01'));
+      // Use dynamic date to avoid test staleness
+      formatRecurrenceForPayload(invalidRule, dayjs().add(30, 'days').toDate());
     }).toThrow();
   });
 
@@ -626,8 +649,9 @@ describe('EventForm', () => {
   test('selects recurrence preset option', async () => {
     const handleSubmit = vi.fn();
     // Start with a rule so dropdown is visible
+    // Use dynamic date to avoid test staleness
     const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01'),
+      dayjs().add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -669,8 +693,9 @@ describe('EventForm', () => {
 
   test('toggles recurrence off', async () => {
     const handleSubmit = vi.fn();
+    // Use dynamic date to avoid test staleness
     const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01'),
+      dayjs().add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -716,9 +741,11 @@ describe('EventForm', () => {
     );
 
     const startDateInput = screen.getByTestId('eventStartAt');
+    // Use dynamic date to avoid test staleness
+    const newStartDate = dayjs().add(35, 'days').format('YYYY-MM-DD');
     await act(async () => {
       fireEvent.change(startDateInput, {
-        target: { value: '2025-01-05' },
+        target: { value: newStartDate },
       });
     });
 
@@ -744,9 +771,11 @@ describe('EventForm', () => {
     );
 
     const endDateInput = screen.getByTestId('eventEndAt');
+    // Use dynamic date to avoid test staleness
+    const newEndDate = dayjs().add(40, 'days').format('YYYY-MM-DD');
     await act(async () => {
       fireEvent.change(endDateInput, {
-        target: { value: '2025-01-10' },
+        target: { value: newEndDate },
       });
     });
 
@@ -839,33 +868,182 @@ describe('EventForm', () => {
     );
   });
 
-  test('toggles public event', async () => {
-    const handleSubmit = vi.fn();
-    render(
-      <EventForm
-        initialValues={{ ...baseValues, isPublic: false }}
-        onSubmit={handleSubmit}
-        onCancel={vi.fn()}
-        submitLabel="Create"
-        t={t}
-        tCommon={tCommon}
-        showPublicToggle
-      />,
-    );
+  describe('Event Visibility', () => {
+    test('defaults to INVITE_ONLY when creating a new event', () => {
+      // Create empty initial values typical for a "Create" scenario
+      const newEventValues: IEventFormValues = {
+        ...baseValues,
+        name: '', // Empty name implies new
+        isPublic: false,
+        isInviteOnly: false,
+      };
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('publicEventCheck'));
+      render(
+        <EventForm
+          initialValues={newEventValues}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Create"
+          t={t}
+          tCommon={tCommon}
+          showPublicToggle
+        />,
+      );
+
+      // Verify Invite Only is checked by default
+      expect(screen.getByTestId('visibilityInviteRadio')).toBeChecked();
+      expect(screen.getByTestId('visibilityPublicRadio')).not.toBeChecked();
+      expect(screen.getByTestId('visibilityOrgRadio')).not.toBeChecked();
     });
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('createEventBtn'));
+    test('populates visibility correctly from existing initialValues (PUBLIC)', () => {
+      render(
+        <EventForm
+          initialValues={{ ...baseValues, isPublic: true, isInviteOnly: false }}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Update"
+          t={t}
+          tCommon={tCommon}
+          showPublicToggle
+        />,
+      );
+      expect(screen.getByTestId('visibilityPublicRadio')).toBeChecked();
     });
 
-    expect(handleSubmit).toHaveBeenCalledWith(
-      expect.objectContaining({
-        isPublic: true,
-      }),
-    );
+    test('populates visibility correctly from existing initialValues (INVITE_ONLY)', () => {
+      render(
+        <EventForm
+          initialValues={{ ...baseValues, isPublic: false, isInviteOnly: true }}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Update"
+          t={t}
+          tCommon={tCommon}
+          showPublicToggle
+        />,
+      );
+      expect(screen.getByTestId('visibilityInviteRadio')).toBeChecked();
+    });
+
+    test('populates visibility correctly from existing initialValues (ORGANIZATION)', () => {
+      render(
+        <EventForm
+          initialValues={{
+            ...baseValues,
+            isPublic: false,
+            isInviteOnly: false,
+          }}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Update"
+          t={t}
+          tCommon={tCommon}
+          showPublicToggle
+        />,
+      );
+      expect(screen.getByTestId('visibilityOrgRadio')).toBeChecked();
+    });
+
+    test('updates visibility when initialValues change dynamically', () => {
+      const { rerender } = render(
+        <EventForm
+          initialValues={{
+            ...baseValues,
+            isPublic: false, // Start as Invite Only
+            isInviteOnly: true,
+          }}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Update"
+          t={t}
+          tCommon={tCommon}
+          showPublicToggle
+        />,
+      );
+      expect(screen.getByTestId('visibilityInviteRadio')).toBeChecked();
+
+      // Rerender with Organization visibility
+      rerender(
+        <EventForm
+          initialValues={{
+            ...baseValues,
+            name: 'Existing Event',
+            isPublic: false,
+            isInviteOnly: false,
+          }}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Update"
+          t={t}
+          tCommon={tCommon}
+          showPublicToggle
+        />,
+      );
+      expect(screen.getByTestId('visibilityOrgRadio')).toBeChecked();
+    });
+
+    test('toggles event visibility options correctly', async () => {
+      const handleSubmit = vi.fn();
+      render(
+        <EventForm
+          initialValues={{
+            ...baseValues,
+            isPublic: false,
+            isInviteOnly: false, // Starts as ORGANIZATION
+          }}
+          onSubmit={handleSubmit}
+          onCancel={vi.fn()}
+          submitLabel="Create"
+          t={t}
+          tCommon={tCommon}
+          showPublicToggle
+        />,
+      );
+
+      // 1. Switch to PUBLIC
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('visibilityPublicRadio'));
+      });
+      // Submit and verify payload
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('createEventBtn'));
+      });
+      expect(handleSubmit).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          isPublic: true,
+          isInviteOnly: false,
+        }),
+      );
+
+      // 2. Switch to INVITE_ONLY
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('visibilityInviteRadio'));
+      });
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('createEventBtn'));
+      });
+      expect(handleSubmit).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          isPublic: false,
+          isInviteOnly: true,
+        }),
+      );
+
+      // 3. Switch to ORGANIZATION
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('visibilityOrgRadio'));
+      });
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('createEventBtn'));
+      });
+      expect(handleSubmit).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          isPublic: false,
+          isInviteOnly: false,
+        }),
+      );
+    });
   });
 
   test('toggles registerable event', async () => {
@@ -965,7 +1143,7 @@ describe('EventForm', () => {
   test('handles CustomRecurrenceModal callbacks - setRecurrenceRuleState with value', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01'),
+      dayjs().add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1011,7 +1189,7 @@ describe('EventForm', () => {
   test('handles CustomRecurrenceModal callbacks - setRecurrenceRuleState with function', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01'),
+      dayjs().add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1057,7 +1235,7 @@ describe('EventForm', () => {
   test('handles CustomRecurrenceModal callbacks - setEndDate with value', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01'),
+      dayjs().add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1101,7 +1279,7 @@ describe('EventForm', () => {
   test('handles CustomRecurrenceModal callbacks - setEndDate with function', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01'),
+      dayjs().add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1140,7 +1318,7 @@ describe('EventForm', () => {
 
   test('handles CustomRecurrenceModal callbacks - hideCustomRecurrenceModal', async () => {
     const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01'),
+      dayjs().add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1181,7 +1359,7 @@ describe('EventForm', () => {
 
   test('handles CustomRecurrenceModal callbacks - setCustomRecurrenceModalIsOpen', async () => {
     const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01'),
+      dayjs().add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1379,7 +1557,7 @@ describe('EventForm', () => {
     const invalidDate = new Date('invalid');
     // Need a rule for dropdown to show when showRecurrenceToggle is true
     const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01'),
+      dayjs().add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1404,7 +1582,7 @@ describe('EventForm', () => {
 
   test('currentRecurrenceLabel returns matching preset label', async () => {
     const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01'),
+      dayjs().add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1460,9 +1638,11 @@ describe('EventForm', () => {
     );
 
     const startDateInput = screen.getByTestId('eventStartAt');
+    // Use dynamic date to avoid test staleness - use a date after the baseValues.endDate
+    const newStartDate = dayjs().add(40, 'days').format('YYYY-MM-DD');
     await act(async () => {
       fireEvent.change(startDateInput, {
-        target: { value: '2025-01-10' }, // After end date
+        target: { value: newStartDate }, // After end date
       });
     });
 
@@ -1575,7 +1755,7 @@ describe('EventForm', () => {
   test('selects weekly recurrence preset', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01'),
+      dayjs().add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1617,7 +1797,7 @@ describe('EventForm', () => {
   test('selects monthly recurrence preset', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01'),
+      dayjs().add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1659,7 +1839,7 @@ describe('EventForm', () => {
   test('selects annually recurrence preset', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01'),
+      dayjs().add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1701,7 +1881,7 @@ describe('EventForm', () => {
   test('selects every weekday recurrence preset', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01'),
+      dayjs().add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1781,7 +1961,7 @@ describe('EventForm', () => {
   test('handles setEndDate callback with null value', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01'),
+      dayjs().add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(
@@ -1822,7 +2002,13 @@ describe('EventForm', () => {
       />,
     );
 
-    expect(screen.queryByTestId('publicEventCheck')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('visibilityPublicRadio'),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByTestId('visibilityOrgRadio')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('visibilityInviteRadio'),
+    ).not.toBeInTheDocument();
   });
 
   test('does not show registerable toggle when showRegisterable is false', () => {
@@ -1862,7 +2048,7 @@ describe('EventForm', () => {
   test('creates default recurrence rule when selecting custom without existing rule', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01'),
+      dayjs().add(30, 'days').toDate(),
       Frequency.DAILY,
     );
     render(
@@ -1895,7 +2081,7 @@ describe('EventForm', () => {
   test('handles recurrence toggle when recurrence is already enabled', async () => {
     const handleSubmit = vi.fn();
     const rule = createDefaultRecurrenceRule(
-      new Date('2025-01-01'),
+      dayjs().add(30, 'days').toDate(),
       Frequency.WEEKLY,
     );
     render(

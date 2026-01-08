@@ -1,0 +1,9 @@
+.errorIcon {
+  font-size: var(--font-size-3xl);
+}
+
+.horizontalRule {
+  border-color: var(--grey-border-box-color);
+  border-width: var(--border-width-medium, 0.125rem);
+  width: 85%;
+}

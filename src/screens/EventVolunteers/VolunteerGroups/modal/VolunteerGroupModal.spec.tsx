@@ -18,19 +18,22 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18n from 'utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from './VolunteerGroups.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceVolunteerGroupModal } from './VolunteerGroupModal';
 import GroupModal from './VolunteerGroupModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
 
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: toastMocks,
 }));
 
 let successLink: StaticMockLink;
@@ -76,7 +79,7 @@ beforeEach(() => {
         volunteersRequired: 2,
         isTemplate: true,
         isInstanceException: false,
-        createdAt: '2024-10-25T16:16:32.978Z',
+        createdAt: dayjs().toISOString(),
         creator: {
           id: 'creatorId1',
           name: 'Wilt Shepherd',
@@ -120,7 +123,7 @@ beforeEach(() => {
         volunteersRequired: null,
         isTemplate: true,
         isInstanceException: false,
-        createdAt: '2024-10-25T16:16:32.978Z',
+        createdAt: dayjs().toISOString(),
         creator: {
           id: 'creatorId1',
           name: 'Wilt Shepherd',
@@ -208,7 +211,9 @@ describe('Testing VolunteerGroupModal', () => {
     await userEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(t.volunteerGroupCreated);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.volunteerGroupCreated,
+      );
       expect(modalProps[0].refetchGroups).toHaveBeenCalled();
       expect(modalProps[0].hide).toHaveBeenCalled();
     });
@@ -258,7 +263,7 @@ describe('Testing VolunteerGroupModal', () => {
     await userEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -286,7 +291,9 @@ describe('Testing VolunteerGroupModal', () => {
     await userEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(t.volunteerGroupUpdated);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.volunteerGroupUpdated,
+      );
       expect(modalProps[1].refetchGroups).toHaveBeenCalled();
       expect(modalProps[1].hide).toHaveBeenCalled();
     });
@@ -316,7 +323,7 @@ describe('Testing VolunteerGroupModal', () => {
     await userEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -359,7 +366,7 @@ describe('Testing VolunteerGroupModal', () => {
     await userEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalled();
     });
   });
 
@@ -420,7 +427,9 @@ describe('Testing VolunteerGroupModal', () => {
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(t.volunteerGroupCreated);
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.volunteerGroupCreated,
+        );
         expect(recurringEventProps.refetchGroups).toHaveBeenCalled();
         expect(recurringEventProps.hide).toHaveBeenCalled();
       });
@@ -467,7 +476,9 @@ describe('Testing VolunteerGroupModal', () => {
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(t.volunteerGroupCreated);
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.volunteerGroupCreated,
+        );
         expect(recurringEventProps.refetchGroups).toHaveBeenCalled();
         expect(recurringEventProps.hide).toHaveBeenCalled();
       });
@@ -484,7 +495,7 @@ describe('Testing VolunteerGroupModal', () => {
           volunteersRequired: 2,
           isTemplate: true,
           isInstanceException: false,
-          createdAt: '2024-10-25T16:16:32.978Z',
+          createdAt: dayjs().toISOString(),
           creator: {
             id: 'creatorId1',
             name: 'Wilt Shepherd',
@@ -551,7 +562,7 @@ describe('Testing VolunteerGroupModal', () => {
       // - baseEvent?.id is used as eventId ('baseEventId')
       // - scope is set to 'ENTIRE_SERIES' by default
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalled();
         expect(successLink.operation?.variables?.data?.eventId).toBe(
           'baseEventId',
         );

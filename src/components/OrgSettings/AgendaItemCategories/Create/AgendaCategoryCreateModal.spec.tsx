@@ -70,7 +70,7 @@ describe('AgendaCategoryCreateModal', () => {
       screen.getByTestId('createAgendaCategoryFormSubmitBtn'),
     ).toBeInTheDocument();
     expect(
-      screen.getByTestId('createAgendaCategoryModalCloseBtn'),
+      screen.getByTestId('modalCloseBtn'), // BaseModal's close button ID
     ).toBeInTheDocument();
   });
   it('tests the condition for formState.name and formState.description', () => {

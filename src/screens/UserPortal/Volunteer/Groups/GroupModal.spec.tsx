@@ -1,14 +1,16 @@
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18n from 'utils/i18nForTest';
 import { MOCKS, UPDATE_ERROR_MOCKS } from './Groups.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -17,6 +19,7 @@ import type { InterfaceGroupModal } from './GroupModal';
 import GroupModal from './GroupModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
 
 const sharedMocks = vi.hoisted(() => ({
   NotificationToast: {
@@ -61,7 +64,7 @@ const itemProps: InterfaceGroupModal[] = [
       name: 'Group 1',
       description: 'desc',
       volunteersRequired: null,
-      createdAt: '2024-10-25T16:16:32.978Z',
+      createdAt: dayjs().toISOString(),
       creator: {
         id: 'creatorId1',
         name: 'Wilt Shepherd',
@@ -106,7 +109,7 @@ const itemProps: InterfaceGroupModal[] = [
       name: 'Group 1',
       description: null,
       volunteersRequired: null,
-      createdAt: '2024-10-25T16:16:32.978Z',
+      createdAt: dayjs().toISOString(),
       creator: {
         id: 'creatorId1',
         name: 'Wilt Shepherd',
@@ -156,9 +159,9 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link1, itemProps[0]);
     expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
 
-    const requestsBtn = screen.getByText(t.requests);
-    expect(requestsBtn).toBeInTheDocument();
-    await userEvent.click(requestsBtn);
+    const requestsRadio = screen.getByLabelText(t.requests);
+    expect(requestsRadio).toBeInTheDocument();
+    await userEvent.click(requestsRadio);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(2);
@@ -177,9 +180,9 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link1, itemProps[0]);
     expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
 
-    const requestsBtn = screen.getByText(t.requests);
-    expect(requestsBtn).toBeInTheDocument();
-    await userEvent.click(requestsBtn);
+    const requestsRadio = screen.getByLabelText(t.requests);
+    expect(requestsRadio).toBeInTheDocument();
+    await userEvent.click(requestsRadio);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(2);
@@ -198,13 +201,13 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link1, itemProps[0]);
     expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
 
-    const requestsBtn = screen.getByText(t.requests);
-    expect(requestsBtn).toBeInTheDocument();
-    await userEvent.click(requestsBtn);
+    const requestsRadio = screen.getByLabelText(t.requests);
+    expect(requestsRadio).toBeInTheDocument();
+    await userEvent.click(requestsRadio);
 
-    const detailsBtn = await screen.findByText(t.details);
-    expect(detailsBtn).toBeInTheDocument();
-    await userEvent.click(detailsBtn);
+    const detailsRadio = screen.getByLabelText(t.details);
+    expect(detailsRadio).toBeInTheDocument();
+    await userEvent.click(detailsRadio);
   });
 
   it('GroupModal -> Details -> Update', async () => {
@@ -271,14 +274,14 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link2, itemProps[0]);
     expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
 
-    const requestsBtn = screen.getByText(t.requests);
-    expect(requestsBtn).toBeInTheDocument();
-    await userEvent.click(requestsBtn);
+    const requestsRadio = screen.getByLabelText(t.requests);
+    expect(requestsRadio).toBeInTheDocument();
+    await userEvent.click(requestsRadio);
 
-    const userName = await screen.findAllByTestId('userName');
-    expect(userName).toHaveLength(2);
-    expect(userName[0]).toHaveTextContent('John Doe');
-    expect(userName[1]).toHaveTextContent('Teresa Bradley');
+    const userNameElements = await screen.findAllByTestId('userName');
+    expect(userNameElements).toHaveLength(2);
+    expect(userNameElements[0]).toHaveTextContent('John Doe');
+    expect(userNameElements[1]).toHaveTextContent('Teresa Bradley');
 
     const acceptBtn = screen.getAllByTestId('acceptBtn');
     expect(acceptBtn).toHaveLength(2);

@@ -1,4 +1,6 @@
 import React, { act } from 'react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
@@ -16,6 +18,8 @@ const link3 = new StaticMockLink(MOCKS_UPDATE, true);
 import userEvent from '@testing-library/user-event';
 import { vi, beforeEach, afterEach, describe, test, expect } from 'vitest';
 import type * as RouterTypes from 'react-router';
+
+dayjs.extend(utc);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -90,8 +94,8 @@ describe('Testing User Table Item', () => {
         birthDate: null,
         city: null,
         countryCode: null,
-        createdAt: '2023-09-29T15:39:36.355Z',
-        updatedAt: '2023-09-29T15:39:36.355Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: true,
@@ -113,7 +117,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 1',
                 avatarURL: 'image.png',
                 city: 'Kingston',
-                createdAt: '2023-06-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(3, 'month').toISOString(),
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -128,7 +132,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 2',
                 avatarURL: 'image.png',
                 city: 'Kingston',
-                createdAt: '2023-07-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(2, 'month').toISOString(),
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -174,8 +178,8 @@ describe('Testing User Table Item', () => {
         birthDate: null,
         city: null,
         countryCode: null,
-        createdAt: '2023-09-29T15:39:36.355Z',
-        updatedAt: '2023-09-29T15:39:36.355Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: true,
@@ -197,7 +201,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 1',
                 avatarURL: 'image.png',
                 city: 'Kingston',
-                createdAt: '2023-06-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(3, 'month').toISOString(),
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -212,7 +216,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 2',
                 avatarURL: 'image.png',
                 city: 'Kingston',
-                createdAt: '2023-07-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(2, 'month').toISOString(),
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -266,8 +270,16 @@ describe('Testing User Table Item', () => {
     elementsWithKingston.forEach((element) => {
       expect(element).toBeInTheDocument();
     });
-    expect(screen.getByText(/29-06-2023/i)).toBeInTheDocument();
-    expect(screen.getByText(/29-07-2023/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        new RegExp(dayjs.utc().subtract(3, 'month').format('DD-MM-YYYY')),
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        new RegExp(dayjs.utc().subtract(2, 'month').format('DD-MM-YYYY')),
+      ),
+    ).toBeInTheDocument();
     expect(screen.getByTestId('removeUserFromOrgBtnabc')).toBeInTheDocument();
     expect(screen.getByTestId('removeUserFromOrgBtndef')).toBeInTheDocument();
 
@@ -294,7 +306,7 @@ describe('Testing User Table Item', () => {
     fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorabc`));
-    expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon !');
+    expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon!');
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Joined Organization 1/i));
     expect(window.location.replace).toHaveBeenCalledWith('/orgdash/abc');
@@ -316,8 +328,8 @@ describe('Testing User Table Item', () => {
         birthDate: null,
         city: null,
         countryCode: null,
-        createdAt: '2023-09-29T15:39:36.355Z',
-        updatedAt: '2023-09-29T15:39:36.355Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: true,
@@ -339,7 +351,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 1',
                 avatarURL: 'image.png',
                 city: 'Kingston',
-                createdAt: '2023-06-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(3, 'month').toISOString(),
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -354,7 +366,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 2',
                 avatarURL: 'image.png',
                 city: 'Kingston',
-                createdAt: '2023-07-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(2, 'month').toISOString(),
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -428,8 +440,8 @@ describe('Testing User Table Item', () => {
         birthDate: null,
         city: null,
         countryCode: null,
-        createdAt: '2023-09-29T15:39:36.355Z',
-        updatedAt: '2023-09-29T15:39:36.355Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: true,
@@ -451,7 +463,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 1',
                 avatarURL: 'image.png',
                 city: 'Kingston',
-                createdAt: '2023-06-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(3, 'month').toISOString(),
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -466,7 +478,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 2',
                 avatarURL: 'image.png',
                 city: 'Kingston',
-                createdAt: '2023-07-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(2, 'month').toISOString(),
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -515,8 +527,8 @@ describe('Testing User Table Item', () => {
         birthDate: null,
         city: null,
         countryCode: null,
-        createdAt: '2023-09-29T15:39:36.355Z',
-        updatedAt: '2023-09-29T15:39:36.355Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: true,
@@ -538,7 +550,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 1',
                 avatarURL: 'image.png',
                 city: 'Kingston',
-                createdAt: '2023-06-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(3, 'month').toISOString(),
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -553,7 +565,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 2',
                 avatarURL: 'image.png',
                 city: 'Kingston',
-                createdAt: '2023-07-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(2, 'month').toISOString(),
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -607,8 +619,8 @@ describe('Testing User Table Item', () => {
         birthDate: null,
         city: null,
         countryCode: null,
-        createdAt: '2023-09-29T15:39:36.355Z',
-        updatedAt: '2023-09-29T15:39:36.355Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: true,
@@ -630,7 +642,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 1',
                 avatarURL: 'image.png',
                 city: 'Kingston',
-                createdAt: '2023-06-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(3, 'month').toISOString(),
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -647,7 +659,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -685,8 +697,8 @@ describe('Testing User Table Item', () => {
         birthDate: null,
         city: null,
         countryCode: null,
-        createdAt: '2023-09-29T15:39:36.355Z',
-        updatedAt: '2023-09-29T15:39:36.355Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: true,
@@ -708,13 +720,13 @@ describe('Testing User Table Item', () => {
             {
               node: {
                 id: 'ghi',
-                createdAt: '2023-08-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
                 organization: {
                   name: 'Blocked Organization 1',
                   avatarURL: 'image.png',
                   city: 'Toronto',
                   state: 'ON',
-                  createdAt: '2023-08-29T15:39:36.355Z',
+                  createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
                   creator: {
                     name: 'Jane Smith',
                   },
@@ -724,13 +736,13 @@ describe('Testing User Table Item', () => {
             {
               node: {
                 id: 'jkl',
-                createdAt: '2023-09-29T15:39:36.355Z',
+                createdAt: dayjs.utc().toISOString(),
                 organization: {
                   name: 'Blocked Organization 2',
                   avatarURL: 'image.png',
                   city: 'Toronto',
                   state: 'ON',
-                  createdAt: '2023-09-29T15:39:36.355Z',
+                  createdAt: dayjs.utc().toISOString(),
                   creator: {
                     name: 'Jane Smith',
                   },
@@ -745,7 +757,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -781,8 +793,14 @@ describe('Testing User Table Item', () => {
     elementsWithToronto.forEach((element) => {
       expect(element).toBeInTheDocument();
     });
-    expect(screen.getByText(/29-08-2023/i)).toBeInTheDocument();
-    expect(screen.getByText(/29-09-2023/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        new RegExp(dayjs.utc().subtract(1, 'month').format('DD-MM-YYYY')),
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(new RegExp(dayjs.utc().format('DD-MM-YYYY'))),
+    ).toBeInTheDocument();
     expect(screen.getByTestId('unblockUserFromOrgBtnghi')).toBeInTheDocument();
     expect(screen.getByTestId('unblockUserFromOrgBtnjkl')).toBeInTheDocument();
     const searchBtn = screen.getByTestId(`searchBtnBlockedOrgs`);
@@ -810,7 +828,7 @@ describe('Testing User Table Item', () => {
     fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorghi`));
-    expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon !');
+    expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon!');
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Blocked Organization 1/i));
     expect(window.location.replace).toHaveBeenCalledWith('/orgdash/ghi');
@@ -832,8 +850,8 @@ describe('Testing User Table Item', () => {
         birthDate: null,
         city: null,
         countryCode: null,
-        createdAt: '2023-09-29T15:39:36.355Z',
-        updatedAt: '2023-09-29T15:39:36.355Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: true,
@@ -855,13 +873,13 @@ describe('Testing User Table Item', () => {
             {
               node: {
                 id: 'ghi',
-                createdAt: '2023-08-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
                 organization: {
                   name: 'Blocked Organization 1',
                   avatarURL: 'image.png',
                   city: 'Toronto',
                   state: 'ON',
-                  createdAt: '2023-08-29T15:39:36.355Z',
+                  createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
                   creator: {
                     name: 'Jane Smith',
                   },
@@ -877,7 +895,7 @@ describe('Testing User Table Item', () => {
     };
     // Assuming MOCKS2 includes error for unblockUser mutation; adjust if needed
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -909,8 +927,8 @@ describe('Testing User Table Item', () => {
         birthDate: null,
         city: null,
         countryCode: null,
-        createdAt: '2023-09-29T15:39:36.355Z',
-        updatedAt: '2023-09-29T15:39:36.355Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: true,
@@ -932,7 +950,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 1',
                 avatarURL: 'image.png',
                 city: 'Kingston',
-                createdAt: '2023-06-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(3, 'month').toISOString(),
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -950,7 +968,7 @@ describe('Testing User Table Item', () => {
     };
     // Assuming link2 includes error for update role; adjust mocks accordingly
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -983,8 +1001,8 @@ describe('Testing User Table Item', () => {
         birthDate: null,
         city: null,
         countryCode: null,
-        createdAt: '2023-09-29T15:39:36.355Z',
-        updatedAt: '2023-09-29T15:39:36.355Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: true,
@@ -1007,7 +1025,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1040,8 +1058,8 @@ describe('Testing User Table Item', () => {
         birthDate: null,
         city: null,
         countryCode: null,
-        createdAt: '2023-09-29T15:39:36.355Z',
-        updatedAt: '2023-09-29T15:39:36.355Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: true,
@@ -1067,7 +1085,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1100,8 +1118,8 @@ describe('Testing User Table Item', () => {
         birthDate: null,
         city: null,
         countryCode: null,
-        createdAt: '2023-09-29T15:39:36.355Z',
-        updatedAt: '2023-09-29T15:39:36.355Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: true,
@@ -1123,13 +1141,13 @@ describe('Testing User Table Item', () => {
             {
               node: {
                 id: 'ghi',
-                createdAt: '2023-08-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
                 organization: {
                   name: 'Blocked Organization 1',
                   avatarURL: 'image.png',
                   city: 'Toronto',
                   state: 'ON',
-                  createdAt: '2023-08-29T15:39:36.355Z',
+                  createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
                   creator: {
                     name: 'Jane Smith',
                   },
@@ -1144,7 +1162,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1171,7 +1189,7 @@ describe('Testing User Table Item', () => {
                 id: 'abc',
                 name: 'Joined Organization 1',
                 city: 'Kingston',
-                createdAt: '2023-06-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(3, 'month').toISOString(),
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -1187,7 +1205,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1222,7 +1240,7 @@ describe('Testing User Table Item', () => {
                 id: 'abc',
                 name: 'Admin Org',
                 city: 'Kingston',
-                createdAt: '2023-06-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(3, 'month').toISOString(),
                 creator: { id: '123', name: 'John Doe' },
               },
             },
@@ -1234,7 +1252,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1267,8 +1285,8 @@ describe('Testing User Table Item', () => {
         birthDate: null,
         city: 'New York',
         countryCode: 'US',
-        createdAt: '2023-08-20T10:00:00.000Z',
-        updatedAt: '2023-08-29T15:39:36.355Z',
+        createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+        updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: true,
@@ -1290,7 +1308,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 1',
                 avatarURL: 'joined-org.png',
                 city: 'Kingston',
-                createdAt: '2023-06-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(3, 'month').toISOString(),
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -1310,7 +1328,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1347,13 +1365,13 @@ describe('Testing User Table Item', () => {
             {
               node: {
                 id: 'ghi',
-                createdAt: '2023-08-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
                 organization: {
                   name: 'Blocked Organization 1',
                   avatarURL: 'image.png',
                   city: 'Toronto',
                   state: 'ON',
-                  createdAt: '2023-08-29T15:39:36.355Z',
+                  createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
                   creator: { name: 'Jane Smith' },
                 },
               },
@@ -1367,7 +1385,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1455,7 +1473,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1541,7 +1559,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1570,8 +1588,8 @@ describe('Testing User Table Item', () => {
         birthDate: null,
         city: 'New York',
         countryCode: 'US',
-        createdAt: '2023-08-20T10:00:00.000Z',
-        updatedAt: '2023-08-29T15:39:36.355Z',
+        createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+        updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: true,
@@ -1593,13 +1611,13 @@ describe('Testing User Table Item', () => {
             {
               node: {
                 id: 'ghi',
-                createdAt: '2023-08-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
                 organization: {
                   name: 'Blocked Organization 1',
                   avatarURL: 'blocked-org.png',
                   city: 'Toronto',
                   state: 'Ontario',
-                  createdAt: '2023-08-29T15:39:36.355Z',
+                  createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
                   creator: {
                     name: 'Jane Smith',
                   },
@@ -1614,7 +1632,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1656,8 +1674,8 @@ describe('Testing User Table Item', () => {
         birthDate: null,
         city: null,
         countryCode: null,
-        createdAt: '2023-09-29T15:39:36.355Z',
-        updatedAt: '2023-09-29T15:39:36.355Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: true,
@@ -1679,7 +1697,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 1',
                 avatarURL: 'image.png',
                 city: 'Kingston',
-                createdAt: '2023-06-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(3, 'month').toISOString(),
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -1694,7 +1712,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 2',
                 avatarURL: 'image.png',
                 city: 'Kingston',
-                createdAt: '2023-07-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(2, 'month').toISOString(),
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -1711,7 +1729,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1756,8 +1774,8 @@ describe('Testing User Table Item', () => {
         birthDate: null,
         city: null,
         countryCode: null,
-        createdAt: '2023-09-29T15:39:36.355Z',
-        updatedAt: '2023-09-29T15:39:36.355Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: true,
@@ -1779,13 +1797,13 @@ describe('Testing User Table Item', () => {
             {
               node: {
                 id: 'ghi',
-                createdAt: '2023-08-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
                 organization: {
                   name: 'Blocked Organization 1',
                   avatarURL: 'image.png',
                   city: 'Toronto',
                   state: 'ON',
-                  createdAt: '2023-08-29T15:39:36.355Z',
+                  createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
                   creator: {
                     name: 'Jane Smith',
                   },
@@ -1800,7 +1818,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1849,8 +1867,8 @@ describe('Testing User Table Item', () => {
         birthDate: null,
         city: null,
         countryCode: null,
-        createdAt: '2023-09-29T15:39:36.355Z',
-        updatedAt: '2023-09-29T15:39:36.355Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: true,
@@ -1872,7 +1890,7 @@ describe('Testing User Table Item', () => {
                 name: 'Org Without Avatar',
                 avatarURL: undefined,
                 city: 'Kingston',
-                createdAt: '2023-06-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(3, 'month').toISOString(),
                 creator: {
                   id: '456',
                   name: 'Creator Without Avatar',
@@ -1889,7 +1907,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1922,8 +1940,8 @@ describe('Testing User Table Item', () => {
         birthDate: null,
         city: null,
         countryCode: null,
-        createdAt: '2023-09-29T15:39:36.355Z',
-        updatedAt: '2023-09-29T15:39:36.355Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         educationGrade: null,
         employmentStatus: null,
         isEmailAddressVerified: true,
@@ -1945,13 +1963,13 @@ describe('Testing User Table Item', () => {
             {
               node: {
                 id: 'ghi',
-                createdAt: '2023-08-29T15:39:36.355Z',
+                createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
                 organization: {
                   name: 'Blocked Org Without Avatar',
                   avatarURL: undefined,
                   city: 'Toronto',
                   state: 'ON',
-                  createdAt: '2023-08-29T15:39:36.355Z',
+                  createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
                   creator: {
                     name: 'Blocked Creator',
                   },
@@ -1966,7 +1984,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />

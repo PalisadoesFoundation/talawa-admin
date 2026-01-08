@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import ProfileCard from './ProfileCard';
 import { MockedProvider } from '@apollo/react-testing';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -27,11 +27,11 @@ vi.mock('react-router', async () => {
 const MOCKS = [
   {
     request: {
-      query: REVOKE_REFRESH_TOKEN,
+      query: LOGOUT_MUTATION,
     },
     result: {
       data: {
-        revokeRefreshTokenForUser: true,
+        logout: { success: true },
       },
     },
   },
@@ -95,7 +95,9 @@ describe('ProfileDropdown Component', () => {
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('User')).toBeInTheDocument();
     expect(screen.getByTestId('display-type')).toBeInTheDocument();
-    expect(screen.getByAltText('profile picture')).toBeInTheDocument();
+    expect(
+      screen.getByAltText('Profile picture of John Doe'),
+    ).toBeInTheDocument();
   });
 
   test('renders Admin', () => {
@@ -122,13 +124,17 @@ describe('ProfileDropdown Component', () => {
       </MockedProvider>,
     );
 
-    const image = screen.getByAltText('profile picture');
+    const image = screen.getByAltText('Profile picture of John Doe');
+
+    // Trigger image error which will cause ProfileAvatarDisplay to show fallback
     act(() => {
       image.dispatchEvent(new Event('error'));
     });
 
-    // Verify the broken image is hidden from view
-    expect(image).not.toBeVisible();
+    // After error, the ProfileAvatarDisplay swaps to Avatar fallback
+    // The fallback avatar should be visible with a different testid
+    const fallbackAvatar = screen.getByTestId('display-img-fallback');
+    expect(fallbackAvatar).toBeInTheDocument();
   });
 
   test('renders Avatar when userImage is null string', () => {
@@ -144,8 +150,9 @@ describe('ProfileDropdown Component', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByAltText('dummy picture')).toBeInTheDocument();
-    expect(screen.queryByAltText('profile picture')).not.toBeInTheDocument();
+    // Verify fallback avatar is displayed when userImage is 'null' string
+    const avatar = screen.getByTestId('display-img');
+    expect(avatar).toBeInTheDocument();
   });
 
   test('truncates long names', () => {
@@ -187,7 +194,8 @@ describe('ProfileDropdown Component', () => {
     const displayName = screen.getByTestId('display-name');
     expect(displayName.textContent).toBe(' ');
     // Verify other component elements still render correctly
-    expect(screen.getByAltText('profile picture')).toBeInTheDocument();
+    const avatar = screen.getByTestId('display-img');
+    expect(avatar).toBeInTheDocument();
     expect(screen.getByText('User')).toBeInTheDocument();
   });
 
@@ -207,7 +215,8 @@ describe('ProfileDropdown Component', () => {
     const displayName = screen.getByTestId('display-name');
     expect(displayName.textContent).toBe(' ');
     // Verify other component elements still render correctly
-    expect(screen.getByAltText('profile picture')).toBeInTheDocument();
+    const avatar = screen.getByTestId('display-img');
+    expect(avatar).toBeInTheDocument();
     expect(screen.getByText('User')).toBeInTheDocument();
   });
 
@@ -227,7 +236,8 @@ describe('ProfileDropdown Component', () => {
     const displayName = screen.getByTestId('display-name');
     expect(displayName.textContent).toBe('John ');
     // Verify other component elements still render correctly
-    expect(screen.getByAltText('profile picture')).toBeInTheDocument();
+    const avatar = screen.getByTestId('display-img');
+    expect(avatar).toBeInTheDocument();
     expect(screen.getByText('User')).toBeInTheDocument();
   });
 });
@@ -276,31 +286,7 @@ describe('Member screen routing testing', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
   });
 
-  test('navigates to /member/:orgId for non-user roles when orgId is not present', async () => {
-    window.history.pushState({}, 'Test page', '/orglist');
-    setItem('SuperAdmin', true); // Set as admin
-    setItem('id', '123');
-
-    render(
-      <MockedProvider mocks={MOCKS}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <Routes>
-              <Route path="/orglist" element={<ProfileCard />} />
-            </Routes>
-          </I18nextProvider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await act(async () => {
-      await userEvent.click(screen.getByTestId('profileBtn'));
-    });
-
-    expect(mockNavigate).toHaveBeenCalledWith('/member');
-  });
-
-  test('navigates to /member/:userID for non-user roles', async () => {
+  test('navigates to /admin/profile for admin roles', async () => {
     window.history.pushState({}, 'Test page', '/321');
     setItem('SuperAdmin', true); // Set as admin
     setItem('id', '123');
@@ -321,7 +307,7 @@ describe('Member screen routing testing', () => {
       await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
-    expect(mockNavigate).toHaveBeenCalledWith('/member/321');
+    expect(mockNavigate).toHaveBeenCalledWith('/admin/profile');
   });
 
   test('navigates to /user/settings when admin is in user portal', async () => {

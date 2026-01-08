@@ -46,7 +46,6 @@ import {
   DELETE_CHAT_MESSAGE,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import useLocalStorage from 'utils/useLocalstorage';
-import Avatar from 'components/Avatar/Avatar';
 import { MoreVert, Close } from '@mui/icons-material';
 import GroupChatDetails from 'components/GroupChatDetails/GroupChatDetails';
 import { GrAttachment } from 'react-icons/gr';
@@ -166,6 +165,10 @@ const MessageImageBase: React.FC<IMessageImageProps> = ({
     error: false,
   });
 
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userChatRoom',
+  });
+
   useEffect(() => {
     if (!media) {
       setImageState((prev) => ({ ...prev, error: true, loading: false }));
@@ -193,18 +196,20 @@ const MessageImageBase: React.FC<IMessageImageProps> = ({
   }, [media, organizationId, getFileFromMinio]);
 
   if (imageState.loading) {
-    return <div className={styles.messageAttachment}>Loading image...</div>;
+    return <div className={styles.messageAttachment}>{t('loadingImage')}</div>;
   }
 
   if (imageState.error || !imageState.url) {
-    return <div className={styles.messageAttachment}>Image not available</div>;
+    return (
+      <div className={styles.messageAttachment}>{t('imageNotAvailable')}</div>
+    );
   }
 
   return (
     <img
       className={styles.messageAttachment}
       src={imageState.url}
-      alt="attachment"
+      alt={t('attachment')}
       onError={() => setImageState((prev) => ({ ...prev, error: true }))}
     />
   );
@@ -215,6 +220,9 @@ export const MessageImage = React.memo(MessageImageBase);
 export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
+  });
+  const { t: tErrors } = useTranslation('translation', {
+    keyPrefix: 'userChatRoom.errorBoundary',
   });
   const isMountedRef = useRef<boolean>(true);
 
@@ -562,40 +570,45 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   };
 
   return (
-    <div
-      className={`d-flex flex-column ${styles.chatAreaContainer}`}
-      id="chat-area"
+    <ErrorBoundaryWrapper
+      fallbackTitle={tErrors('title')}
+      fallbackErrorMessage={tErrors('message')}
+      resetButtonText={tErrors('resetButton')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
     >
-      {!props.selectedContact ? (
-        <div
-          className={`d-flex flex-column justify-content-center align-items-center w-100 h-75 gap-2 ${styles.grey}`}
-        >
-          <PermContactCalendarIcon fontSize="medium" className={styles.grey} />
-          <h6 data-testid="noChatSelected">{t('selectContact')}</h6>
-        </div>
-      ) : (
-        <>
-          <div className={styles.header}>
-            <div className={styles.userInfo}>
-              {chatImage ? (
-                <img
-                  src={chatImage}
-                  alt={chatTitle}
+      <div
+        className={`d-flex flex-column ${styles.chatAreaContainer}`}
+        id="chat-area"
+      >
+        {!props.selectedContact ? (
+          <div
+            className={`d-flex flex-column justify-content-center align-items-center w-100 h-75 gap-2 ${styles.grey}`}
+          >
+            <PermContactCalendarIcon
+              fontSize="medium"
+              className={styles.grey}
+            />
+            <h6 data-testid="noChatSelected">{t('selectContact')}</h6>
+          </div>
+        ) : (
+          <>
+            <div className={styles.header}>
+              <div className={styles.userInfo}>
+                <ProfileAvatarDisplay
+                  imageUrl={chatImage}
+                  fallbackName={chatTitle}
                   className={styles.contactImage}
+                  enableEnlarge={true}
                 />
-              ) : (
-                <Avatar
-                  name={chatTitle}
-                  alt={chatTitle}
-                  avatarStyle={styles.contactImage}
-                />
-              )}
-              <div
-                onClick={() => (chat?.isGroup ? openGroupChatDetails() : null)}
-                className={styles.userDetails}
-              >
-                <p className={styles.title}>{chatTitle}</p>
-                <p className={styles.subtitle}>{chatSubtitle}</p>
+                <div
+                  onClick={() =>
+                    chat?.isGroup ? openGroupChatDetails() : null
+                  }
+                  className={styles.userDetails}
+                >
+                  <p className={styles.title}>{chatTitle}</p>
+                  <p className={styles.subtitle}>{chatSubtitle}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -822,77 +835,77 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                     />
                     <span>{replyToDirectMessage.creator.name}</span>
                   </div>
-                  <p>{replyToDirectMessage.body}</p>
+
+                  <Button
+                    data-testid="closeReply"
+                    onClick={() => setReplyToDirectMessage(null)}
+                    className={styles.closeBtn}
+                  >
+                    <Close />
+                  </Button>
                 </div>
+              )}
+              {attachment && (
+                <div className={styles.attachment}>
+                  <img src={attachment} alt={t('attachment')} />
 
-                <Button
-                  data-testid="closeReply"
-                  onClick={() => setReplyToDirectMessage(null)}
-                  className={styles.closeBtn}
+                  <Button
+                    data-testid="removeAttachment"
+                    onClick={() => {
+                      setAttachment(null);
+                      setAttachmentObjectName(null);
+                      if (fileInputRef.current) fileInputRef.current.value = '';
+                    }}
+                    className={styles.closeBtn}
+                  >
+                    <Close />
+                  </Button>
+                </div>
+              )}
+
+              <InputGroup>
+                <button
+                  type="button"
+                  onClick={handleAddAttachment}
+                  className={styles.addAttachmentBtn}
                 >
-                  <Close />
-                </Button>
-              </div>
-            )}
-            {attachment && (
-              <div className={styles.attachment}>
-                <img src={attachment} alt="attachment" />
-
-                <Button
-                  data-testid="removeAttachment"
-                  onClick={() => {
-                    setAttachment(null);
-                    setAttachmentObjectName(null);
-                    if (fileInputRef.current) fileInputRef.current.value = '';
+                  <GrAttachment />
+                </button>
+                <Form.Control
+                  placeholder={t('sendMessage')}
+                  aria-label={t('sendMessage')}
+                  value={newMessage}
+                  data-testid="messageInput"
+                  onChange={handleNewMessageChange}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      sendMessage();
+                    }
                   }}
-                  className={styles.closeBtn}
+                  className={styles.sendMessageInput}
+                />
+                <Button
+                  onClick={sendMessage}
+                  variant="primary"
+                  id="button-send"
+                  data-testid="sendMessage"
                 >
-                  <Close />
+                  <SendIcon fontSize="small" />
                 </Button>
-              </div>
-            )}
-
-            <InputGroup>
-              <button
-                onClick={handleAddAttachment}
-                className={styles.addAttachmentBtn}
-              >
-                <GrAttachment />
-              </button>
-              <Form.Control
-                placeholder={t('sendMessage')}
-                aria-label="Send Message"
-                value={newMessage}
-                data-testid="messageInput"
-                onChange={handleNewMessageChange}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                  }
-                }}
-                className={styles.sendMessageInput}
-              />
-              <Button
-                onClick={sendMessage}
-                variant="primary"
-                id="button-send"
-                data-testid="sendMessage"
-              >
-                <SendIcon fontSize="small" />
-              </Button>
-            </InputGroup>
-          </div>
-        </>
-      )}
-      {groupChatDetailsModalisOpen && chat && (
-        <GroupChatDetails
-          toggleGroupChatDetailsModal={toggleGroupChatDetailsModal}
-          groupChatDetailsModalisOpen={groupChatDetailsModalisOpen}
-          chat={chat}
-          chatRefetch={chatRefetch}
-        ></GroupChatDetails>
-      )}
-    </div>
+              </InputGroup>
+            </div>
+          </>
+        )}
+        {groupChatDetailsModalisOpen && chat && (
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={toggleGroupChatDetailsModal}
+            groupChatDetailsModalisOpen={groupChatDetailsModalisOpen}
+            chat={chat}
+            chatRefetch={chatRefetch}
+          ></GroupChatDetails>
+        )}
+      </div>
+    </ErrorBoundaryWrapper>
   );
 }

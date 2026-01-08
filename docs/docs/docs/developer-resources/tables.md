@@ -21,6 +21,8 @@ tags:
   ]
 ---
 
+## Introduction
+
 What you’ll learn
 
 - How to define strongly‑typed table columns with string and function accessors
@@ -302,7 +304,11 @@ Empty and Error
 />
 ```
 
-## Hook: useTableData
+## Hooks
+
+This section explains how we use hooks in the table related components.
+
+### Hook: useTableData
 
 The useTableData hook flattens GraphQL connections (edges → rows) and exposes pagination signals.
 
@@ -317,23 +323,29 @@ type Connection<T> =
   | null
   | undefined;
 
-export interface UseTableDataOptions<TNode, TRow> {
-  path: string[] | ((data: any) => Connection<TNode> | undefined);
+export interface UseTableDataOptions<TNode, TRow, TData> {
+  path: ((data: TData) => Connection<TNode> | undefined) | (string | number)[];
   transformNode?: (node: TNode) => TRow;
   deps?: ReadonlyArray<unknown>;
 }
 
-export function useTableData<TRow = unknown, TNode = unknown>(
-  result: QueryResult<any>,
-  options: UseTableDataOptions<TNode, TRow>,
+export function useTableData<TData = unknown, TRow = unknown, TNode = unknown>(
+  result: QueryResult<TData>,
+  options: UseTableDataOptions<TNode, TRow, TData>,
 ) {
   const { data, loading, error, refetch, fetchMore, networkStatus } = result;
   const { path, transformNode, deps = [] } = options;
 
-  const getConnection = (d: any): Connection<TNode> =>
+  const getConnection = (d: TData): Connection<TNode> =>
     typeof path === 'function'
       ? path(d)
-      : path.reduce((acc, k) => (acc ? acc[k] : undefined), d);
+      : path.reduce<unknown>(
+          (acc, k) =>
+            acc != null && typeof acc === 'object'
+              ? (acc as Record<string | number, unknown>)[k]
+              : undefined,
+          d as unknown,
+        );
 
   const connection = useMemo(() => getConnection(data), [data, ...deps]);
 
@@ -367,15 +379,21 @@ Example with GraphQL connection
 import { useQuery } from '@apollo/client';
 import { useTableData } from 'src/shared-components/DataTable/hooks/useTableData';
 import { DataTable } from 'src/shared-components/DataTable/DataTable';
+import type { PageInfo } from 'src/shared-components/DataTable/types';
 
 type User = { id: string; name: string; email: string };
+type UsersQuery = {
+  users?: {
+    edges?: Array<{ node: User | null } | null> | null;
+    pageInfo?: PageInfo | null;
+  } | null;
+};
 
-const { data, loading, error, fetchMore, networkStatus } =
-  useQuery(/* GET_USERS */);
-const { rows, pageInfo, loadingMore } = useTableData<User, User>(
-  { data, loading, error, fetchMore, networkStatus } as any,
-  { path: ['users'], transformNode: (n) => n },
-);
+const result = useQuery<UsersQuery>(/* GET_USERS */);
+const { rows, pageInfo, loadingMore } = useTableData<UsersQuery, User, User>(result, {
+  path: ['users'],
+  transformNode: (n) => n,
+});
 
 <DataTable<User>
   data={rows}
@@ -384,16 +402,20 @@ const { rows, pageInfo, loadingMore } = useTableData<User, User>(
   paginationMode="server"
   pageInfo={pageInfo}
   loadingMore={loadingMore}
-  onLoadMore={() => fetchMore({ variables: { after: pageInfo?.endCursor } })}
+  onLoadMore={() => result.fetchMore({ variables: { after: pageInfo?.endCursor } })}
 />;
 ```
 
 ## Pagination
 
-Client mode
+The DataTable supports both client-side and server-side pagination for consistent UX across screens.
+
+### Client-side Pagination
+
+Use for small datasets. Data is sliced in memory.
 
 ```tsx
-import { PaginationControls } from 'src/shared-components/DataTable/Pagination';
+import { DataTable } from 'src/shared-components/DataTable/DataTable';
 
 <DataTable<User>
   data={users}
@@ -404,7 +426,9 @@ import { PaginationControls } from 'src/shared-components/DataTable/Pagination';
 />;
 ```
 
-Server mode (cursor)
+### Server-side Pagination (GraphQL cursor)
+
+Use for large datasets. Relies on GraphQL-style `pageInfo` and `onLoadMore`.
 
 ```tsx
 <DataTable<User>
@@ -418,7 +442,13 @@ Server mode (cursor)
 />
 ```
 
-:::note Trade‑offs
+### Accessibility notes
+
+- Pagination controls use `aria-label` and `aria-live` for screen reader support.
+- Disabled states are set for prev/next buttons on first/last page.
+- The "Load more" button in server mode uses `aria-busy` and disables while loading.
+
+:::note Trade-offs
 
 - Client mode: simple and fast for small datasets; slices in memory.
 - Server mode: required for large lists; relies on pageInfo and onLoadMore.

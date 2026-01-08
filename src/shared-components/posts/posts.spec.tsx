@@ -17,20 +17,20 @@ import type { RenderResult } from '@testing-library/react';
 import { InterfacePostEdge } from 'types/Post/interface';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'components/test-utils/I18nextProviderMock';
+import dayjs from 'dayjs';
 
 // Hoisted mocks (must be before vi.mock calls)
-const { mockToast } = vi.hoisted(() => ({
-  mockToast: {
+const { mockNotificationToast } = vi.hoisted(() => ({
+  mockNotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn(),
   },
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: mockToast,
-  ToastContainer: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockNotificationToast,
 }));
 
 // Hoisted router mock
@@ -57,9 +57,18 @@ vi.mock('utils/useLocalstorage', () => ({
   }),
 }));
 
-// Mock Loader component
-vi.mock('components/Loader/Loader', () => ({
-  default: () => <div data-testid="loader">Loading...</div>,
+// Mock LoadingState component
+vi.mock('shared-components/LoadingState/LoadingState', () => ({
+  default: ({
+    isLoading,
+    children,
+  }: {
+    isLoading: boolean;
+    children: React.ReactNode;
+  }) => {
+    if (isLoading) return <div data-testid="loader">Loading...</div>;
+    return children;
+  },
 }));
 
 // Mock InfiniteScrollLoader
@@ -224,7 +233,8 @@ vi.mock('react-infinite-scroll-component', () => ({
 
 // Deterministic values for stable testing
 let nextId = 1;
-const FIXED_TIMESTAMP = '2024-01-15T12:00:00.000Z';
+// Use dynamic timestamp to avoid test staleness
+const FIXED_TIMESTAMP = dayjs().subtract(14, 'days').toISOString();
 
 // Helper function to enrich post node
 const enrichPostNode = (
@@ -275,7 +285,8 @@ const samplePosts = [
   {
     id: 'post-1',
     caption: 'First Post Title',
-    createdAt: '2024-01-01T12:00:00Z',
+    // Use dynamic past date to avoid test staleness
+    createdAt: dayjs().subtract(30, 'days').toISOString(),
     creator: {
       id: 'user-1',
       name: 'John Doe',
@@ -291,7 +302,8 @@ const samplePosts = [
   {
     id: 'post-2',
     caption: 'Second Post About Testing',
-    createdAt: '2024-01-02T12:00:00Z',
+    // Use dynamic past date to avoid test staleness
+    createdAt: dayjs().subtract(29, 'days').toISOString(),
     creator: {
       id: 'user-2',
       name: 'Jane Smith',
@@ -299,7 +311,8 @@ const samplePosts = [
       emailAddress: 'jane@example.com',
     },
     pinned: true,
-    pinnedAt: '2024-01-02T12:00:00Z',
+    // Use dynamic past date for pinnedAt
+    pinnedAt: dayjs().subtract(29, 'days').toISOString(),
     imageUrl: null,
     videoUrl: 'video.mp4',
     attachments: [],
@@ -307,7 +320,8 @@ const samplePosts = [
   {
     id: 'post-4-invalid-date',
     caption: 'Third Post Content',
-    createdAt: '2024-01-03T12:00:00Z',
+    // Use dynamic past date to avoid test staleness
+    createdAt: dayjs().subtract(28, 'days').toISOString(),
     creator: {
       id: 'user-1',
       name: 'John Doe',
@@ -479,7 +493,7 @@ const pinnedPostsErrorMock: MockedResponse = {
 const renderComponent = (mocks: MockedResponse[]): RenderResult =>
   render(
     <I18nextProvider i18n={i18nForTest}>
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={['/orgpost/123']}>
           <Routes>
             <Route path="/orgpost/:orgId" element={<PostsPage />} />
@@ -505,7 +519,9 @@ describe('PostsPage Component', () => {
       renderComponent([orgPostListErrorMock, emptyPinnedPostsMock]);
 
       await waitFor(() => {
-        expect(mockToast.error).toHaveBeenCalledWith('Error loading posts');
+        expect(mockNotificationToast.error).toHaveBeenCalledWith(
+          'Error loading posts',
+        );
       });
     });
 
@@ -513,7 +529,7 @@ describe('PostsPage Component', () => {
       renderComponent([orgPostListMock, pinnedPostsErrorMock]);
 
       await waitFor(() => {
-        expect(mockToast.error).toHaveBeenCalledWith(
+        expect(mockNotificationToast.error).toHaveBeenCalledWith(
           'Error loading pinned posts',
         );
       });
@@ -621,7 +637,9 @@ describe('PostsPage Component', () => {
 
     // Should show error toast for GraphQL error
     await waitFor(() => {
-      expect(mockToast.error).toHaveBeenCalledWith('Error loading posts');
+      expect(mockNotificationToast.error).toHaveBeenCalledWith(
+        'Error loading posts',
+      );
     });
 
     // For GraphQL errors, the filtering state should remain as is
@@ -1018,7 +1036,9 @@ describe('Edge Cases', () => {
     });
 
     await waitFor(() => {
-      expect(mockToast.error).toHaveBeenCalledWith('Error loading more posts');
+      expect(mockNotificationToast.error).toHaveBeenCalledWith(
+        'Error loading more posts',
+      );
     });
   });
 
@@ -1034,7 +1054,7 @@ describe('Edge Cases', () => {
         downVotesCount: undefined, // Test fallback
         upVotesCount: undefined, // Test fallback
         attachments: undefined,
-        createdAt: '2024-01-15T12:00:00.000Z',
+        createdAt: dayjs().subtract(14, 'days').toISOString(),
       },
       cursor: 'cursor-video-post-1',
     };
@@ -1103,7 +1123,7 @@ describe('Missing User ID', () => {
     expect(screen.queryAllByTestId('post-card')).toHaveLength(0);
 
     // Error toasts should not be called since queries are skipped, not failed
-    expect(mockToast.error).not.toHaveBeenCalled();
+    expect(mockNotificationToast.error).not.toHaveBeenCalled();
   });
 });
 
@@ -1215,8 +1235,8 @@ describe('FetchMore Success Coverage', () => {
                   node: {
                     id: 'new-post-1',
                     caption: 'New Post From FetchMore',
-                    createdAt: '2024-01-04T12:00:00Z',
-                    updatedAt: '2024-01-04T12:00:00Z',
+                    createdAt: dayjs().subtract(27, 'days').toISOString(),
+                    updatedAt: dayjs().subtract(27, 'days').toISOString(),
                     pinnedAt: null,
                     pinned: false,
                     attachments: [],
@@ -1278,5 +1298,52 @@ describe('FetchMore Success Coverage', () => {
     // Verify infinite scroll reflects the new hasNextPage status
     const infiniteScroll = screen.getByTestId('infinite-scroll');
     expect(infiniteScroll).toHaveAttribute('data-has-more', 'false');
+  });
+});
+
+describe('LoadingState Wrapper', () => {
+  beforeEach(() => {
+    nextId = 1;
+    vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({ orgId: '123' });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('shows loader during initial data loading', async () => {
+    // Create mocks with deliberate delay
+    const delayedOrgPostMock = {
+      ...orgPostListMock,
+      delay: 100, // 100ms delay
+    };
+    const delayedPinnedPostMock = {
+      ...orgPinnedPostListMock,
+      delay: 100,
+    };
+
+    renderComponent([delayedOrgPostMock, delayedPinnedPostMock]);
+
+    // Loader should be present during loading
+    expect(screen.getByTestId('loader')).toBeInTheDocument();
+
+    // Wait for content to load and loader to disappear
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+      expect(screen.getByTestId('page-header')).toBeInTheDocument();
+    });
+  });
+
+  it('renders content when not loading', async () => {
+    renderComponent([orgPostListMock, emptyPinnedPostsMock]);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    // Verify main content is visible
+    expect(screen.getByTestId('page-header')).toBeInTheDocument();
+    expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
   });
 });

@@ -14,22 +14,23 @@
  * - Provides form validation and disables buttons when inputs are empty.
  *
  * Dependencies:
- * - React,React-Bootstrap, React-Toastify, Apollo Client, and i18next for translations.
+ * - React,React-Bootstrap, NotificationToast, Apollo Client, and i18next for translations.
  * - Custom components: `Loader` and `UpdateSession`.
  * - Utility functions: `convertToBase64` and `errorHandler`.
  *
- * @returns {JSX.Element} The rendered CommunityProfile component.
+ * @returns The rendered CommunityProfile component.
  *
- * @component
+ * component
  * @example
  * // Usage in a parent component
+ * ```tsx
  * import CommunityProfile from './CommunityProfile';
  *
  * function App() {
  *   return <CommunityProfile />;
  * }
- *
- * @remarks
+ *```
+ * remarks
  * - The component uses `useEffect` to populate the form with fetched data.
  * - Social media links are displayed with corresponding icons.
  * - Form submission and reset operations are handled asynchronously.
@@ -38,9 +39,9 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
 import {
   UPDATE_COMMUNITY_PG,
@@ -167,7 +168,7 @@ const CommunityProfile = (): JSX.Element => {
           slackURL: profileVariable.slackURL || undefined,
         },
       });
-      toast.success(t('profileChangedMsg') as string);
+      NotificationToast.success(t('profileChangedMsg') as string);
     } catch (error: unknown) {
       errorHandler(t, error as Error);
     }
@@ -197,7 +198,7 @@ const CommunityProfile = (): JSX.Element => {
       await resetPreLoginImagery({
         variables: { resetPreLoginImageryId: preLoginData?.id },
       });
-      toast.success(t(`resetData`) as string);
+      NotificationToast.success(t(`resetData`) as string);
     } catch (error: unknown) {
       errorHandler(t, error as Error);
     }
@@ -220,12 +221,8 @@ const CommunityProfile = (): JSX.Element => {
     }
   };
 
-  if (loading) {
-    <Loader />;
-  }
-
   return (
-    <>
+    <LoadingState isLoading={loading} variant="spinner">
       <Card border="0" className={`${styles.card} "rounded-4 my-4 shadow-sm"`}>
         <div className={styles.cardHeader}>
           <div className={styles.cardTitle}>{t('editProfile')}</div>
@@ -437,7 +434,7 @@ const CommunityProfile = (): JSX.Element => {
       </Card>
 
       <UpdateSession />
-    </>
+    </LoadingState>
   );
 };
 

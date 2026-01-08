@@ -1,4 +1,8 @@
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 export const MOCKS_WITH_TIME = [
   {
@@ -13,8 +17,20 @@ export const MOCKS_WITH_TIME = [
           id: 'event123',
           name: 'Test Event',
           description: 'Test Description',
-          startAt: '2024-01-01T09:00:00Z',
-          endAt: '2024-01-02T17:00:00Z',
+          startAt: dayjs
+            .utc()
+            .add(10, 'days')
+            .hour(9)
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          endAt: dayjs
+            .utc()
+            .add(11, 'days')
+            .hour(17)
+            .minute(0)
+            .second(0)
+            .toISOString(),
           startTime: '09:00:00',
           endTime: '17:00:00',
           allDay: false,
@@ -46,8 +62,8 @@ export const MOCKS_WITHOUT_TIME = [
           id: 'event123',
           name: 'Test Event',
           description: 'Test Description',
-          startAt: '2024-01-01T00:00:00Z',
-          endAt: '2024-01-02T00:00:00Z',
+          startAt: dayjs.utc().add(10, 'days').startOf('day').toISOString(),
+          endAt: dayjs.utc().add(11, 'days').startOf('day').toISOString(),
           startTime: null,
           endTime: null,
           allDay: true,
@@ -105,8 +121,20 @@ export const MOCKS_NO_LOCATION = [
           id: 'event123',
           name: 'Test Event',
           description: '',
-          startAt: '2024-01-01T09:00:00Z',
-          endAt: '2024-01-02T17:00:00Z',
+          startAt: dayjs
+            .utc()
+            .add(10, 'days')
+            .hour(9)
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          endAt: dayjs
+            .utc()
+            .add(11, 'days')
+            .hour(17)
+            .minute(0)
+            .second(0)
+            .toISOString(),
           startTime: '09:00:00',
           endTime: '17:00:00',
           allDay: false,
@@ -138,8 +166,20 @@ export const MOCKS_INVALID_DATETIME = [
           id: 'event123',
           name: 'Test Event',
           description: 'Test Description',
-          startAt: '2024-01-01T09:00:00Z',
-          endAt: '2024-01-02T17:00:00Z',
+          startAt: dayjs
+            .utc()
+            .add(10, 'days')
+            .hour(9)
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          endAt: dayjs
+            .utc()
+            .add(11, 'days')
+            .hour(17)
+            .minute(0)
+            .second(0)
+            .toISOString(),
           startTime: '09:00:00', // Changed from null to valid time
           endTime: '17:00:00', // Changed from null to valid time
           allDay: false,

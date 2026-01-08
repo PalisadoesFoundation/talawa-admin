@@ -1,8 +1,10 @@
 import React from 'react';
 import { GraphQLError } from 'graphql';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -19,6 +21,7 @@ import Pledges from './Pledges';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, expect, describe, it } from 'vitest';
+import dayjs from 'dayjs';
 
 type MockStorage = Storage & { resetStore: () => void };
 
@@ -61,7 +64,6 @@ Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
 });
 
-// Mock for missing campaign data
 const MOCKS_WITH_MISSING_CAMPAIGN = [
   {
     request: {
@@ -79,7 +81,7 @@ const MOCKS_WITH_MISSING_CAMPAIGN = [
             id: 'pledgeId1',
             amount: 700,
             note: 'Hospital pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: null,
             pledger: {
               id: 'userId',
@@ -99,7 +101,6 @@ const MOCKS_WITH_MISSING_CAMPAIGN = [
   },
 ];
 
-// Mock for invalid date
 const MOCKS_WITH_INVALID_DATE = [
   {
     request: {
@@ -117,11 +118,11 @@ const MOCKS_WITH_INVALID_DATE = [
             id: 'pledgeId1',
             amount: 700,
             note: 'Hospital pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId1',
               name: 'Hospital Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
               endAt: 'invalid-date',
               currencyCode: 'USD',
               goalAmount: 10000,
@@ -145,7 +146,6 @@ const MOCKS_WITH_INVALID_DATE = [
   },
 ];
 
-// Existing mocks from previous input (reusing for completeness)
 const MOCKS_WITH_MORE_USERS = [
   {
     request: {
@@ -163,12 +163,12 @@ const MOCKS_WITH_MORE_USERS = [
             id: 'pledgeId1',
             amount: 700,
             note: 'Hospital pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId1',
               name: 'Hospital Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-08-30T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 10000,
               __typename: 'FundraisingCampaign',
@@ -189,12 +189,12 @@ const MOCKS_WITH_MORE_USERS = [
             id: 'pledgeId2',
             amount: 100,
             note: 'School pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId2',
               name: 'School Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-09-30T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(2, 'months').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 5000,
               __typename: 'FundraisingCampaign',
@@ -215,12 +215,16 @@ const MOCKS_WITH_MORE_USERS = [
             id: 'pledgeId3',
             amount: 300,
             note: 'Library pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId3',
               name: 'Library Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-08-15T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs()
+                .add(1, 'month')
+                .date(15)
+                .endOf('day')
+                .toISOString(),
               currencyCode: 'USD',
               goalAmount: 3000,
               __typename: 'FundraisingCampaign',
@@ -241,12 +245,16 @@ const MOCKS_WITH_MORE_USERS = [
             id: 'pledgeId4',
             amount: 200,
             note: 'Park pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId4',
               name: 'Park Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-08-10T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs()
+                .add(1, 'month')
+                .date(10)
+                .endOf('day')
+                .toISOString(),
               currencyCode: 'USD',
               goalAmount: 2000,
               __typename: 'FundraisingCampaign',
@@ -286,12 +294,12 @@ const MOCKS_WITH_SINGLE_PLEDGER = [
             id: 'pledgeId1',
             amount: 700,
             note: 'Hospital pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId1',
               name: 'Hospital Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-08-30T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 10000,
               __typename: 'FundraisingCampaign',
@@ -331,12 +339,12 @@ const MOCKS_WITH_DIFFERENT_CURRENCIES = [
             id: 'pledgeId1',
             amount: 700,
             note: 'Hospital pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId1',
               name: 'Hospital Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-08-30T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
               currencyCode: 'EUR',
               goalAmount: 10000,
               __typename: 'FundraisingCampaign',
@@ -376,12 +384,12 @@ const MOCKS_WITH_ZERO_GOAL = [
             id: 'pledgeId1',
             amount: 700,
             note: 'Hospital pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId1',
               name: 'Hospital Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-08-30T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 0,
               __typename: 'FundraisingCampaign',
@@ -441,7 +449,7 @@ const EMPTY_MOCKS = [
           lastName: 'Lance',
           email: 'testuser1@example.com',
           image: null,
-          createdAt: '2023-04-13T04:53:17.742Z',
+          createdAt: dayjs().subtract(1, 'year').toISOString(),
           birthDate: null,
           educationGrade: null,
           employmentStatus: null,
@@ -514,7 +522,6 @@ const SEARCH_MOCKS = [
         input: { userId: 'userId' },
         where: {
           firstName_contains: 'Harve',
-          name_contains: undefined,
         },
         orderBy: 'endDate_DESC',
       },
@@ -526,12 +533,12 @@ const SEARCH_MOCKS = [
             id: 'pledgeId1',
             amount: 700,
             note: 'Hospital pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId1',
               name: 'Hospital Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-08-30T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 10000,
               __typename: 'FundraisingCampaign',
@@ -558,7 +565,6 @@ const SEARCH_MOCKS = [
       variables: {
         input: { userId: 'userId' },
         where: {
-          firstName_contains: '',
           name_contains: 'School',
         },
         orderBy: 'endDate_DESC',
@@ -571,12 +577,12 @@ const SEARCH_MOCKS = [
             id: 'pledgeId2',
             amount: 100,
             note: 'School pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId2',
               name: 'School Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-09-30T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(2, 'months').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 5000,
               __typename: 'FundraisingCampaign',
@@ -615,12 +621,12 @@ const SEARCH_MOCKS = [
             id: 'pledgeId2',
             amount: 100,
             note: 'School pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId2',
               name: 'School Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-09-30T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(2, 'months').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 5000,
               __typename: 'FundraisingCampaign',
@@ -657,12 +663,12 @@ const SEARCH_MOCKS = [
             id: 'pledgeId2',
             amount: 100,
             note: 'School pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId2',
               name: 'School Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-09-30T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(2, 'months').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 5000,
               __typename: 'FundraisingCampaign',
@@ -683,12 +689,12 @@ const SEARCH_MOCKS = [
             id: 'pledgeId1',
             amount: 700,
             note: 'Hospital pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId1',
               name: 'Hospital Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-08-30T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 10000,
               __typename: 'FundraisingCampaign',
@@ -714,9 +720,7 @@ const SEARCH_MOCKS = [
       query: USER_PLEDGES,
       variables: {
         input: { userId: 'userId' },
-        where: {
-          name_contains: '',
-        },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -727,12 +731,12 @@ const SEARCH_MOCKS = [
             id: 'pledgeId2',
             amount: 100,
             note: 'School pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId2',
               name: 'School Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-09-30T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(2, 'months').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 5000,
               __typename: 'FundraisingCampaign',
@@ -753,12 +757,12 @@ const SEARCH_MOCKS = [
             id: 'pledgeId1',
             amount: 700,
             note: 'Hospital pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId1',
               name: 'Hospital Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-08-30T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 10000,
               __typename: 'FundraisingCampaign',
@@ -795,12 +799,12 @@ const SEARCH_MOCKS = [
             id: 'pledgeId2',
             amount: 100,
             note: 'School pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId2',
               name: 'School Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-09-30T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(2, 'months').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 5000,
               __typename: 'FundraisingCampaign',
@@ -821,12 +825,12 @@ const SEARCH_MOCKS = [
             id: 'pledgeId1',
             amount: 700,
             note: 'Hospital pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId1',
               name: 'Hospital Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-08-30T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 10000,
               __typename: 'FundraisingCampaign',
@@ -863,12 +867,12 @@ const SEARCH_MOCKS = [
             id: 'pledgeId1',
             amount: 700,
             note: 'Hospital pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId1',
               name: 'Hospital Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-08-30T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 10000,
               __typename: 'FundraisingCampaign',
@@ -889,12 +893,12 @@ const SEARCH_MOCKS = [
             id: 'pledgeId2',
             amount: 100,
             note: 'School pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId2',
               name: 'School Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-09-30T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(2, 'months').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 5000,
               __typename: 'FundraisingCampaign',
@@ -931,12 +935,12 @@ const SEARCH_MOCKS = [
             id: 'pledgeId1',
             amount: 700,
             note: 'Hospital pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId1',
               name: 'Hospital Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-08-30T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 10000,
               __typename: 'FundraisingCampaign',
@@ -957,12 +961,12 @@ const SEARCH_MOCKS = [
             id: 'pledgeId2',
             amount: 100,
             note: 'School pledge note',
-            updatedAt: '2024-07-28T10:00:00.000Z',
+            updatedAt: dayjs().toISOString(),
             campaign: {
               id: 'campaignId2',
               name: 'School Campaign',
-              startAt: '2024-07-01T00:00:00.000Z',
-              endAt: '2024-09-30T23:59:59.000Z',
+              startAt: dayjs().startOf('month').toISOString(),
+              endAt: dayjs().add(2, 'months').endOf('month').toISOString(),
               currencyCode: 'USD',
               goalAmount: 5000,
               __typename: 'FundraisingCampaign',
@@ -1042,7 +1046,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render the Campaign Pledge screen', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
@@ -1081,7 +1085,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render user image when avatarURL is provided', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByTestId('image-pledger-userId')).toHaveAttribute(
         'src',
         'image-url',
@@ -1092,7 +1096,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render avatar when no avatarURL is provided', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByTestId('avatar-pledger-userId5')).toHaveAttribute(
         'alt',
         'John Doe',
@@ -1103,30 +1107,28 @@ describe('Testing User Pledge Screen', () => {
   it('should handle missing campaign data', async () => {
     renderMyPledges(link8);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    // The component should render without crashing even with missing campaign data
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
   it('should handle invalid end date', async () => {
     renderMyPledges(link9);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    // The component should render without crashing even with invalid dates
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
   it('should sort pledges by lowest amount', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('sort'));
     await userEvent.click(screen.getByTestId('amount_ASC'));
     await waitFor(() => {
       expect(screen.getAllByTestId('amountCell')[0]).toHaveTextContent('$100');
@@ -1136,10 +1138,10 @@ describe('Testing User Pledge Screen', () => {
   it('should sort pledges by highest amount', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('sort'));
     await userEvent.click(screen.getByTestId('amount_DESC'));
     await waitFor(() => {
       expect(screen.getAllByTestId('amountCell')[0]).toHaveTextContent('$700');
@@ -1149,14 +1151,13 @@ describe('Testing User Pledge Screen', () => {
   it('should sort pledges by earliest end date', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('sort'));
     await userEvent.click(screen.getByTestId('endDate_ASC'));
 
-    // Just verify the component doesn't crash and data is still visible
     await waitFor(() => {
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     });
@@ -1165,14 +1166,13 @@ describe('Testing User Pledge Screen', () => {
   it('should sort pledges by latest end date', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('sort'));
     await userEvent.click(screen.getByTestId('endDate_DESC'));
 
-    // Just verify the component doesn't crash and data is still visible
     await waitFor(() => {
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     });
@@ -1181,12 +1181,12 @@ describe('Testing User Pledge Screen', () => {
   it('should search pledges by user name', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('searchByDrpdwn'));
+    await userEvent.click(screen.getByTestId('searchBy'));
     await userEvent.click(screen.getByTestId('pledgers'));
-    await userEvent.type(screen.getByTestId('searchPledges'), 'Harve');
+    await userEvent.type(screen.getByTestId('searchByInput'), 'Harve');
     await userEvent.click(screen.getByTestId('searchBtn'));
     await waitFor(() => {
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
@@ -1197,12 +1197,12 @@ describe('Testing User Pledge Screen', () => {
   it('should search pledges by campaign name', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('searchByDrpdwn'));
+    await userEvent.click(screen.getByTestId('searchBy'));
     await userEvent.click(screen.getByTestId('campaigns'));
-    await userEvent.type(screen.getByTestId('searchPledges'), 'School');
+    await userEvent.type(screen.getByTestId('searchByInput'), 'School');
     await userEvent.click(screen.getByTestId('searchBtn'));
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -1213,7 +1213,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render all pledges as separate rows', async () => {
     renderMyPledges(link10);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
       expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(screen.getByText('Jeramy Gracia')).toBeInTheDocument();
@@ -1224,7 +1224,7 @@ describe('Testing User Pledge Screen', () => {
   it('should display single pledger correctly', async () => {
     renderMyPledges(link4);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
       expect(screen.getByTestId('amountCell')).toHaveTextContent('$700');
@@ -1235,7 +1235,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render correct currency symbol', async () => {
     renderMyPledges(link5);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByTestId('amountCell')).toHaveTextContent('€700');
       expect(screen.getByTestId('paidCell')).toHaveTextContent('€0');
     });
@@ -1244,7 +1244,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render ProgressBar with zero goal amount', async () => {
     renderMyPledges(link6);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByTestId('progressBar')).toHaveTextContent('0%');
     });
   });
@@ -1252,7 +1252,7 @@ describe('Testing User Pledge Screen', () => {
   it('should open and close delete pledge modal', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
     const deletePledgeBtn = await screen.findAllByTestId('deletePledgeBtn');
@@ -1272,7 +1272,7 @@ describe('Testing User Pledge Screen', () => {
   it('should open and close update pledge modal', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
     const editPledgeBtn = await screen.findAllByTestId('editPledgeBtn');
@@ -1299,7 +1299,6 @@ describe('Testing User Pledge Screen', () => {
         screen.getByText(/Error occured while loading Pledges data/i),
       ).toBeInTheDocument();
     });
-    // Check that the error message is displayed (it's in the same element)
     const errorElement = screen.getByTestId('errorMsg');
     expect(errorElement).toHaveTextContent('Mock Graphql USER_PLEDGES Error');
   });
@@ -1307,7 +1306,6 @@ describe('Testing User Pledge Screen', () => {
   it('should show empty state when server returns no associated resources error', async () => {
     renderMyPledges(link11);
     await waitFor(() => {
-      expect(screen.getByTestId('pledges-empty-state')).toBeInTheDocument();
       expect(
         screen.getByText(translations.userCampaigns.noPledges),
       ).toBeInTheDocument();
@@ -1318,7 +1316,6 @@ describe('Testing User Pledge Screen', () => {
   it('should render empty state', async () => {
     renderMyPledges(link3);
     await waitFor(() => {
-      expect(screen.getByTestId('pledges-empty-state')).toBeInTheDocument();
       expect(
         screen.getByText(translations.userCampaigns.noPledges),
       ).toBeInTheDocument();
@@ -1328,10 +1325,10 @@ describe('Testing User Pledge Screen', () => {
   it('should handle empty search input', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    const searchInput = screen.getByTestId('searchPledges');
+    const searchInput = screen.getByTestId('searchByInput');
     const searchButton = screen.getByTestId('searchBtn');
     await userEvent.clear(searchInput);
     await userEvent.click(searchButton);
@@ -1345,7 +1342,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render DataGrid with correct styling', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       const dataGrid = document.querySelector('.MuiDataGrid-root');
       expect(dataGrid).toBeInTheDocument();
       expect(dataGrid).toHaveClass('MuiDataGrid-root');
@@ -1355,10 +1352,10 @@ describe('Testing User Pledge Screen', () => {
   it('should handle component unmounting', async () => {
     const { unmount } = renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
     unmount();
-    expect(screen.queryByTestId('searchPledges')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('searchByInput')).not.toBeInTheDocument();
   });
 
   it('should update pledges on pledgeData change', async () => {
@@ -1370,7 +1367,6 @@ describe('Testing User Pledge Screen', () => {
     unmount();
     renderMyPledges(link3);
     await waitFor(() => {
-      expect(screen.getByTestId('pledges-empty-state')).toBeInTheDocument();
       expect(
         screen.getByText(translations.userCampaigns.noPledges),
       ).toBeInTheDocument();
@@ -1382,10 +1378,10 @@ describe('Testing User Pledge Screen', () => {
   it('should handle search input changes', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    const searchInput = screen.getByTestId('searchPledges');
+    const searchInput = screen.getByTestId('searchByInput');
     await userEvent.type(searchInput, 'test search');
     expect(searchInput).toHaveValue('test search');
 
@@ -1396,18 +1392,15 @@ describe('Testing User Pledge Screen', () => {
   it('should handle dropdown interactions', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    // Test search by dropdown
-    const searchByDropdown = screen.getByTestId('searchByDrpdwn');
+    const searchByDropdown = screen.getByTestId('searchBy');
     await userEvent.click(searchByDropdown);
 
-    // Test filter dropdown
-    const filterDropdown = screen.getByTestId('filter');
+    const filterDropdown = screen.getByTestId('sort');
     await userEvent.click(filterDropdown);
 
-    // Verify dropdown options are visible
     expect(screen.getByTestId('amount_ASC')).toBeInTheDocument();
     expect(screen.getByTestId('amount_DESC')).toBeInTheDocument();
     expect(screen.getByTestId('endDate_ASC')).toBeInTheDocument();
@@ -1417,29 +1410,27 @@ describe('Testing User Pledge Screen', () => {
   it('should handle pledge with null campaign gracefully', async () => {
     renderMyPledges(link8);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     });
 
-    // The component should render without crashing even with null campaign
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
   it('should handle invalid date formatting', async () => {
     renderMyPledges(link9);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     });
 
-    // The component should render without crashing even with invalid dates
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
   it('should display progress bar correctly', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       const progressBars = screen.getAllByTestId('progressBar');
       expect(progressBars.length).toBeGreaterThan(0);
       expect(progressBars[0]).toBeInTheDocument();
@@ -1448,7 +1439,7 @@ describe('Testing User Pledge Screen', () => {
   it('should handle different currency codes', async () => {
     renderMyPledges(link5);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByTestId('amountCell')).toBeInTheDocument();
       expect(screen.getByTestId('paidCell')).toBeInTheDocument();
     });
@@ -1457,11 +1448,10 @@ describe('Testing User Pledge Screen', () => {
   it('should render pledges with pledger data', async () => {
     renderMyPledges(link10);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
     expect(screen.getByRole('grid')).toBeInTheDocument();
 
-    // Verify pledger is rendered
     await waitFor(() => {
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     });
@@ -1470,7 +1460,7 @@ describe('Testing User Pledge Screen', () => {
   it('should handle zero goal amount', async () => {
     renderMyPledges(link6);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
@@ -1478,10 +1468,9 @@ describe('Testing User Pledge Screen', () => {
   it('should display pledger avatar when available', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    // Check for avatar image element
     expect(screen.getByTestId('image-pledger-userId')).toHaveAttribute(
       'src',
       'image-url',
@@ -1491,11 +1480,10 @@ describe('Testing User Pledge Screen', () => {
   it('should handle campaign with missing data gracefully', async () => {
     renderMyPledges(link8);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
     expect(screen.getByRole('grid')).toBeInTheDocument();
 
-    // Verify the pledge row renders with missing campaign handled appropriately
     await waitFor(() => {
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     });
@@ -1519,12 +1507,12 @@ describe('Testing User Pledge Screen', () => {
                 id: 'nullPledgerPledgeId',
                 amount: 300,
                 note: 'Null pledger test',
-                updatedAt: '2024-07-28T10:00:00.000Z',
+                updatedAt: dayjs().toISOString(),
                 campaign: {
                   id: 'campaignId1',
                   name: 'Test Campaign',
-                  startAt: '2024-07-01T00:00:00.000Z',
-                  endAt: '2024-08-30T23:59:59.000Z',
+                  startAt: dayjs().startOf('month').toISOString(),
+                  endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 10000,
                   __typename: 'FundraisingCampaign',
@@ -1545,10 +1533,9 @@ describe('Testing User Pledge Screen', () => {
     renderMyPledges(mockWithNullPledger);
 
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    // The component should render without crashing even with null pledger
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
@@ -1570,12 +1557,12 @@ describe('Testing User Pledge Screen', () => {
                 id: 'avatarPledgerId',
                 amount: 400,
                 note: 'Avatar pledger test',
-                updatedAt: '2024-07-28T10:00:00.000Z',
+                updatedAt: dayjs().toISOString(),
                 campaign: {
                   id: 'campaignId1',
                   name: 'Test Campaign',
-                  startAt: '2024-07-01T00:00:00.000Z',
-                  endAt: '2024-08-30T23:59:59.000Z',
+                  startAt: dayjs().startOf('month').toISOString(),
+                  endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 10000,
                   __typename: 'FundraisingCampaign',
@@ -1604,7 +1591,6 @@ describe('Testing User Pledge Screen', () => {
       expect(screen.getByText('Avatar Pledger')).toBeInTheDocument();
     });
 
-    // Check that the pledger image is rendered with the avatarURL
     const pledgerImage = screen.getByTestId(
       'image-pledger-avatarPledgerUserId',
     );
@@ -1632,12 +1618,12 @@ describe('Testing User Pledge Screen', () => {
                 id: 'pledgerPledgeId',
                 amount: 250,
                 note: 'Pledger test',
-                updatedAt: '2024-07-28T10:00:00.000Z',
+                updatedAt: dayjs().toISOString(),
                 campaign: {
                   id: 'campaignId1',
                   name: 'Test Campaign',
-                  startAt: '2024-07-01T00:00:00.000Z',
-                  endAt: '2024-08-30T23:59:59.000Z',
+                  startAt: dayjs().startOf('month').toISOString(),
+                  endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 10000,
                   __typename: 'FundraisingCampaign',
@@ -1663,15 +1649,49 @@ describe('Testing User Pledge Screen', () => {
     renderMyPledges(mockWithPledger);
 
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    // The component should render without crashing
     expect(screen.getByRole('grid')).toBeInTheDocument();
 
-    // Check that pledger is rendered
     await waitFor(() => {
       expect(screen.getByText('Pledger User')).toBeInTheDocument();
+    });
+  });
+
+  describe('LoadingState Behavior', () => {
+    it('should show LoadingState spinner while pledges are loading', async () => {
+      const loadingMocks = [
+        {
+          request: {
+            query: USER_PLEDGES,
+            variables: {
+              input: { userId: 'userId' },
+              where: {},
+              orderBy: 'endDate_DESC',
+            },
+          },
+          result: { data: { getPledgesByUserId: [] } },
+          delay: 100,
+        },
+      ];
+
+      renderMyPledges(new StaticMockLink(loadingMocks));
+      await waitFor(() => {
+        const spinners = screen.getAllByTestId('spinner');
+        expect(spinners.length).toBeGreaterThan(0);
+      });
+    });
+
+    it('should hide spinner and render pledges after LoadingState completes', async () => {
+      renderMyPledges(new StaticMockLink(MOCKS));
+
+      await waitFor(() => {
+        expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      });
+
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
     });
   });
 });

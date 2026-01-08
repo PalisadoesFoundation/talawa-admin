@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import SyncIcon from '@mui/icons-material/Sync';
 import SaveIcon from '@mui/icons-material/Save';
 import type { ApolloError } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { Col, Form, Row } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
@@ -154,7 +154,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const onSaveChangesClicked = async (): Promise<void> => {
     try {
       if (!formState.orgName || !formState.orgDescrip) {
-        toast.error('Name and description are required');
+        NotificationToast.error(t('nameDescriptionRequired') as string);
         return;
       }
 
@@ -198,12 +198,12 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
 
       if (data) {
         refetch({ id: orgId });
-        toast.success(t('successfulUpdated') as string);
+        NotificationToast.success(t('successfulUpdated') as string);
         // Clear avatar from state and file input after successful upload
         setFormState((prev) => ({ ...prev, avatar: undefined }));
         if (fileInputRef.current) fileInputRef.current.value = '';
       } else {
-        toast.error('Failed to update organization');
+        NotificationToast.error(t('updateFailed') as string);
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -212,14 +212,10 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
     }
   };
 
-  if (loading) {
-    return <Loader styles={styles.message} size="lg" />;
-  }
-
   if (error) {
     return (
       <div className={styles.message}>
-        <WarningAmberRounded className={styles.icon} fontSize="large" />
+        <WarningAmberRounded fontSize="large" className={styles.icon} />
         <h6 className="fw-bold text-danger text-center">
           Error occured while loading Organization Data
           <br />
@@ -230,7 +226,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   }
 
   return (
-    <>
+    <LoadingState isLoading={loading} variant="spinner">
       <div id="orgupdate">
         <form className={styles.ss}>
           <Form.Label className={styles.orgUpdateFormLables}>
@@ -354,7 +350,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
           </div>
         </form>
       </div>
-    </>
+    </LoadingState>
   );
 }
 export default OrgUpdate;
