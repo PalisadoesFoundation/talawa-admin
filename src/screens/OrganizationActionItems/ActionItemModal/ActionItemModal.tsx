@@ -405,6 +405,7 @@ const ItemModal: FC<IItemModalProps> = ({
               <Form.Group
                 className="mb-3 w-100"
                 data-testid="volunteerGroupSelect"
+                data-cy="volunteerGroupSelect"
               >
                 <Autocomplete
                   options={volunteerGroups}
@@ -432,7 +433,7 @@ const ItemModal: FC<IItemModalProps> = ({
                 value={dayjs(assignedAt)}
                 disabled={editMode}
                 onChange={(date) =>
-                  !editMode && handleFormChange('assignedAt', date?.toDate())
+                  handleFormChange('assignedAt', date?.toDate())
                 }
               />
             </Form.Group>
@@ -462,6 +463,8 @@ const ItemModal: FC<IItemModalProps> = ({
               onChange={(e) =>
                 handleFormChange('postCompletionNotes', e.target.value)
               }
+              data-testid="postCompletionNotes"
+              data-cy="postCompletionNotes"
             />
           </FormControl>
         )}
