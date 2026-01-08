@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.9.2">
 <title data-rh="true">Reusable Components | Talawa-Admin Documentation</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://docs-admin.talawa.io/docs/developer-resources/reusable-components"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Reusable Components | Talawa-Admin Documentation"><meta data-rh="true" name="description" content="Shared components are UI and functional elements used across multiple sections of the application."><meta data-rh="true" property="og:description" content="Shared components are UI and functional elements used across multiple sections of the application."><link data-rh="true" rel="icon" href="/img/icons/favicon_palisadoes.ico"><link data-rh="true" rel="canonical" href="https://docs-admin.talawa.io/docs/developer-resources/reusable-components"><link data-rh="true" rel="alternate" href="https://docs-admin.talawa.io/docs/developer-resources/reusable-components" hreflang="en"><link data-rh="true" rel="alternate" href="https://docs-admin.talawa.io/docs/developer-resources/reusable-components" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Reusable Components","item":"https://docs-admin.talawa.io/docs/developer-resources/reusable-components"}]}</script><link rel="stylesheet" href="https://docs.talawa.io/css/styles-latest.css"><link rel="stylesheet" href="/assets/css/styles.18736644.css">
-<script src="/assets/js/runtime~main.26f06db5.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.e627083e.js" defer="defer"></script>
 <script src="/assets/js/main.6eb90b17.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -127,6 +127,7 @@
 <li class=""><code>react-bootstrap</code> <code>Spinner</code> -&gt; use <code>LoadingState</code></li>
 <li class=""><code>react-bootstrap</code> <code>Modal</code> -&gt; use <code>BaseModal</code></li>
 <li class=""><code>@mui/x-date-pickers</code> -&gt; use <code>DateRangePicker</code>, <code>DatePicker</code>, or <code>TimePicker</code></li>
+<li class=""><code>react-toastify</code> -&gt; use <code>NotificationToast</code></li>
 </ul>
 <p>These restrictions are enforced by <code>no-restricted-imports</code> in <code>eslint.config.js</code>.</p>
 <h3 class="anchor anchorTargetStickyNavbar_g03t" id="where-direct-imports-are-allowed">Where direct imports are allowed<a href="#where-direct-imports-are-allowed" class="hash-link" aria-label="Direct link to Where direct imports are allowed" title="Direct link to Where direct imports are allowed" translate="no">​</a></h3>
@@ -160,6 +161,12 @@
 <li class=""><code>src/shared-components/DatePicker/**</code></li>
 <li class=""><code>src/shared-components/TimePicker/**</code></li>
 <li class=""><code>src/index.tsx</code></li>
+</ul>
+</li>
+<li class="">NotificationToast: <code>react-toastify</code>
+<ul>
+<li class=""><code>src/components/NotificationToast/**</code></li>
+<li class=""><code>src/types/NotificationToast/**</code></li>
 </ul>
 </li>
 </ul>
