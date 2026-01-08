@@ -1048,10 +1048,7 @@ describe('UserPortalNavigationBar', () => {
       fireEvent.click(logoutBtn);
 
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith(
-          'logoutFailed',
-
-        );
+        expect(NotificationToast.error).toHaveBeenCalledWith('logoutFailed');
       });
 
       // Storage should still be cleared even on error

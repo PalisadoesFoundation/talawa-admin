@@ -140,7 +140,6 @@ describe('OrganizationCard [PR-2]', () => {
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
         i18nForTest.t('organizationCard.withdraw_error'),
-  
       );
     });
   });
@@ -155,7 +154,6 @@ describe('OrganizationCard [PR-2]', () => {
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
         i18nForTest.t('organizationCard.join_error'),
-  
       );
     });
   });

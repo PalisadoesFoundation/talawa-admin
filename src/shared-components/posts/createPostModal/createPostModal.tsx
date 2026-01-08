@@ -373,8 +373,9 @@ function CreatePostModal({
           <div className={styles.postActions}>
             <form onSubmit={createPostHandler}>
               <button
-                className={`${styles.postButton} ${isPostDisabled || isLoading ? styles.postButtonDisabled : ''
-                  }`}
+                className={`${styles.postButton} ${
+                  isPostDisabled || isLoading ? styles.postButtonDisabled : ''
+                }`}
                 type="submit"
                 disabled={isPostDisabled || isLoading}
                 data-testid="createPostBtn"

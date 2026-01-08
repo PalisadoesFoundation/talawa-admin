@@ -291,7 +291,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
       console.error('Invalid interval:', localInterval);
       NotificationToast.error(
         t('invalidDetailsMessage') ||
-        'Please enter a valid interval (must be at least 1)',
+          'Please enter a valid interval (must be at least 1)',
       );
       return;
     }
@@ -301,7 +301,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
     if (frequency === Frequency.WEEKLY && (!byDay || byDay.length === 0)) {
       NotificationToast.error(
         t('selectAtLeastOneDay') ||
-        'Please select at least one day for weekly recurrence',
+          'Please select at least one day for weekly recurrence',
       );
       return;
     }
@@ -331,7 +331,7 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
         console.error('Invalid count:', localCount);
         NotificationToast.error(
           t('invalidDetailsMessage') ||
-          'Please enter a valid occurrence count (must be at least 1)',
+            'Please enter a valid occurrence count (must be at least 1)',
         );
         return;
       }

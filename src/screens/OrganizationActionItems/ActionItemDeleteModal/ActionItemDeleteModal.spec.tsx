@@ -25,16 +25,16 @@ dayjs.extend(utc);
 import ItemDeleteModal, {
   type IItemDeleteModalProps,
 } from './ActionItemDeleteModal';
-import { vi, afterEach, beforeEach } from 'vitest'; 
+import { vi, afterEach, beforeEach } from 'vitest';
 
-const NotificationToastMocks = vi.hoisted(() => ({ 
-  success: vi.fn(), 
-  error: vi.fn(), 
- })); 
+const NotificationToastMocks = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+}));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({ 
-  NotificationToast: NotificationToastMocks, 
- }));
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: NotificationToastMocks,
+}));
 
 let successLink: StaticMockLink;
 let errorLink: StaticMockLink;
@@ -136,7 +136,9 @@ describe('Testing ItemDeleteModal', () => {
     await waitFor(() => {
       expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
       expect(testItemProps.hide).toHaveBeenCalled();
-      expect(NotificationToast.success).toHaveBeenCalledWith(t.successfulDeletion);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.successfulDeletion,
+      );
     });
   });
 
@@ -146,7 +148,9 @@ describe('Testing ItemDeleteModal', () => {
     fireEvent.click(screen.getByTestId('deleteyesbtn'));
 
     await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith('Mock Graphql Error');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Mock Graphql Error',
+      );
     });
   });
 
@@ -257,7 +261,9 @@ describe('Testing ItemDeleteModal', () => {
       await waitFor(() => {
         expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
         expect(testItemProps.hide).toHaveBeenCalled();
-        expect(NotificationToast.success).toHaveBeenCalledWith(t.successfulDeletion);
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.successfulDeletion,
+        );
       });
     });
 
@@ -287,7 +293,9 @@ describe('Testing ItemDeleteModal', () => {
       await waitFor(() => {
         expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
         expect(testItemProps.hide).toHaveBeenCalled();
-        expect(NotificationToast.success).toHaveBeenCalledWith(t.successfulDeletion);
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.successfulDeletion,
+        );
       });
     });
 
@@ -311,7 +319,9 @@ describe('Testing ItemDeleteModal', () => {
       await waitFor(() => {
         expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
         expect(testItemProps.hide).toHaveBeenCalled();
-        expect(NotificationToast.success).toHaveBeenCalledWith(t.successfulDeletion);
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.successfulDeletion,
+        );
       });
     });
 
@@ -335,7 +345,9 @@ describe('Testing ItemDeleteModal', () => {
       await waitFor(() => {
         expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
         expect(testItemProps.hide).toHaveBeenCalled();
-        expect(NotificationToast.success).toHaveBeenCalledWith(t.successfulDeletion);
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.successfulDeletion,
+        );
       });
     });
 
@@ -360,7 +372,9 @@ describe('Testing ItemDeleteModal', () => {
       fireEvent.click(screen.getByTestId('deleteyesbtn'));
 
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith('Mock Graphql Error');
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Mock Graphql Error',
+        );
       });
     });
   });

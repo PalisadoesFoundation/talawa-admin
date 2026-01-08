@@ -17,14 +17,16 @@ import Donate from './Donate';
 import userEvent from '@testing-library/user-event';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
 
-const { mockErrorHandler, mockUseParams, NotificationToast } = vi.hoisted(() => ({
-  mockErrorHandler: vi.fn(),
-  mockUseParams: vi.fn(),
-  NotificationToast: {
-    error: vi.fn(),
-    success: vi.fn(),
-  },
-}));
+const { mockErrorHandler, mockUseParams, NotificationToast } = vi.hoisted(
+  () => ({
+    mockErrorHandler: vi.fn(),
+    mockUseParams: vi.fn(),
+    NotificationToast: {
+      error: vi.fn(),
+      success: vi.fn(),
+    },
+  }),
+);
 
 vi.mock('utils/errorHandler', () => ({
   errorHandler: mockErrorHandler,

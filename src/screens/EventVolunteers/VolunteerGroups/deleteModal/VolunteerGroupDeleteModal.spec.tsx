@@ -20,8 +20,6 @@ import { vi } from 'vitest';
 import { DELETE_VOLUNTEER_GROUP_FOR_INSTANCE } from 'GraphQl/Mutations/EventVolunteerMutation';
 import dayjs from 'dayjs';
 
-
-
 const NotificationToastMocks = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
@@ -124,7 +122,9 @@ describe('Testing Group Delete Modal', () => {
     await waitFor(() => {
       expect(itemProps[0].refetchGroups).toHaveBeenCalled();
       expect(itemProps[0].hide).toHaveBeenCalled();
-      expect(NotificationToast.success).toHaveBeenCalledWith(t.volunteerGroupDeleted);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.volunteerGroupDeleted,
+      );
     });
   });
 
@@ -284,7 +284,9 @@ describe('Testing Group Delete Modal', () => {
     await waitFor(() => {
       expect(recurringGroupProps.refetchGroups).toHaveBeenCalled();
       expect(recurringGroupProps.hide).toHaveBeenCalled();
-      expect(NotificationToast.success).toHaveBeenCalledWith(t.volunteerGroupDeleted);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.volunteerGroupDeleted,
+      );
     });
   });
 

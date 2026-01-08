@@ -15,7 +15,7 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: { warning: vi.fn() },
 }));
 
-vi.mock('screens/PageNotFound/PageNotFound', () => ({   
+vi.mock('screens/PageNotFound/PageNotFound', () => ({
   default: () => <div data-testid="page-not-found">Page Not Found</div>,
 }));
 

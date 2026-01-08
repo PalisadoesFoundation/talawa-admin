@@ -174,7 +174,7 @@ describe('OrganizationModal Component', () => {
   });
 
   test('handles image upload error correctly', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
 
     setup();
@@ -328,7 +328,7 @@ describe('OrganizationModal Component', () => {
       // Check if the input has either the required attribute or aria-required
       expect(
         input.hasAttribute('required') ||
-        input.getAttribute('aria-required') === 'true',
+          input.getAttribute('aria-required') === 'true',
       ).toBeTruthy();
     });
   });
@@ -604,7 +604,9 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(NotificationToastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
+      expect(NotificationToastMocks.success).toHaveBeenCalledWith(
+        'imageUploadSuccess',
+      );
     });
     expect(mockSetFormState).toHaveBeenCalledWith(
       expect.objectContaining({ avatar: 'mocked-object-name' }),
@@ -620,7 +622,9 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(NotificationToastMocks.error).toHaveBeenCalledWith('imageUploadError');
+      expect(NotificationToastMocks.error).toHaveBeenCalledWith(
+        'imageUploadError',
+      );
     });
     expect(mockSetFormState).not.toHaveBeenCalled();
   });

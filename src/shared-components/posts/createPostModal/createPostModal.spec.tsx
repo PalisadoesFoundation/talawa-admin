@@ -419,7 +419,7 @@ describe('CreatePostModal Integration Tests', () => {
 
       const mockClick = vi
         .spyOn(fileInput, 'click')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
 
       await user.click(photoButton);
 
@@ -550,7 +550,9 @@ describe('CreatePostModal Integration Tests', () => {
       await userEvent.upload(fileInput, aviFile);
 
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith('Unsupported file type!');
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Unsupported file type!',
+        );
       });
     });
 
@@ -566,7 +568,9 @@ describe('CreatePostModal Integration Tests', () => {
       await user.click(postButton);
 
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith('Organization ID is missing!');
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Organization ID is missing!',
+        );
       });
     });
 
@@ -626,7 +630,6 @@ describe('CreatePostModal Integration Tests', () => {
     });
 
     it('handles case when createPost mutation succeeds but returns no data', async () => {
-
       const noDataMock = {
         request: {
           query: CREATE_POST_MUTATION,
@@ -724,7 +727,6 @@ describe('CreatePostModal Integration Tests', () => {
     });
 
     it('handles edit mode when updatePost returns null', async () => {
-
       const updatePostNullMock = {
         request: {
           query: UPDATE_POST_MUTATION,
@@ -769,7 +771,6 @@ describe('CreatePostModal Integration Tests', () => {
       });
     });
     it('handles edit mode when updatePost returns success', async () => {
-
       const updatePostNullMock = {
         request: {
           query: UPDATE_POST_MUTATION,
