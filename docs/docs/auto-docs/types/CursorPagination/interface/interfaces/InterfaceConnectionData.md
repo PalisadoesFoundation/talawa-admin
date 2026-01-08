@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ---
 
 # Interface: InterfaceConnectionData\<TNode\>
 
-Defined in: [interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L35)
+Defined in: [src/types/CursorPagination/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L35)
 
 Represents the GraphQL connection structure with edges and pageInfo.
 This follows the Relay cursor pagination specification.
@@ -29,7 +29,7 @@ The type of individual items in the connection
 
 > **edges**: `object`[]
 
-Defined in: [interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L36)
+Defined in: [src/types/CursorPagination/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L36)
 
 #### cursor
 
@@ -43,6 +43,6 @@ Defined in: [interface.ts:36](https://github.com/PalisadoesFoundation/talawa-adm
 
 ### pageInfo?
 
-> `optional` **pageInfo**: `DefaultConnectionPageInfo`
+> `optional` **pageInfo**: [`DefaultConnectionPageInfo`](../../../pagination/type-aliases/DefaultConnectionPageInfo.md)
 
-Defined in: [interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L40)
+Defined in: [src/types/CursorPagination/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L40)
