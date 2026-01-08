@@ -172,8 +172,18 @@ Direct imports are only allowed inside the wrapper component implementations. Th
 const restrictedImports = [
   { id: 'mui-data-grid', name: '@mui/x-data-grid', message: '...' },
   { id: 'mui-data-grid-pro', name: '@mui/x-data-grid-pro', message: '...' },
-  { id: 'rb-spinner', name: 'react-bootstrap', importNames: ['Spinner'], message: '...' },
-  { id: 'rb-modal', name: 'react-bootstrap', importNames: ['Modal'], message: '...' },
+  {
+    id: 'rb-spinner',
+    name: 'react-bootstrap',
+    importNames: ['Spinner'],
+    message: '...',
+  },
+  {
+    id: 'rb-modal',
+    name: 'react-bootstrap',
+    importNames: ['Modal'],
+    message: '...',
+  },
   { id: 'mui-date-pickers', name: '@mui/x-date-pickers', message: '...' },
 ];
 
@@ -478,17 +488,20 @@ interface EmptyStateAction {
   }}
 />
 ```
+
 ### ErrorBoundaryWrapper
 
 `ErrorBoundaryWrapper` is a error boundary component that catches JavaScript errors in child components, logs them, and displays a fallback UI instead of crashing the entire application.
 
 **Use cases:**
+
 - Wrapping critical components that might throw render errors
 - Protecting modals, forms, and complex UI sections
 - Providing graceful error recovery for users
 - Integrating with error tracking services (e.g., Sentry, LogRocket)
 
 **Key features:**
+
 - Catches render errors that try-catch cannot handle
 - Provides default and custom fallback UI options
 - Integrates with toast notification system
@@ -554,21 +567,22 @@ const CustomErrorFallback = ({ error, onReset }) => (
 
 #### Props
 
-| Prop                  | Type                                              | Required | Description                                                          |
-| --------------------- | ------------------------------------------------- | -------- | -------------------------------------------------------------------- |
-| `children`            | `ReactNode`                                       | Yes      | Child components to wrap with error boundary                         |
-| `fallback`            | `ReactNode`                                       | No       | Custom JSX fallback UI                                               |
-| `fallbackComponent`   | `React.ComponentType<InterfaceErrorFallbackProps>`| No       | Custom fallback component that receives `error` and `onReset` props  |
-| `errorMessage`        | `string`                                          | No       | Custom error message for toast notification                          |
-| `showToast`           | `boolean`                                         | No       | Whether to show toast notification (default: `true`)                 |
-| `onError`             | `function`                                        | No       | Callback invoked when error is caught                                |
-| `onReset`             | `function`                                        | No       | Callback invoked when user clicks reset button                       |
-| `fallbackTitle`       | `string`                                          | No       | Custom error message for default UI                                  |
-| `fallbackErrorMessage`| `string`                                          | No       | Custom error message for default UI                                  |
-| `resetButtonText`     | `string`                                          | No       | Custom error message for default UI                                  |
-| `resetButtonAriaLabel`| `string`                                          | No       | Custom error message for default UI                                  |
+| Prop                   | Type                                               | Required | Description                                                         |
+| ---------------------- | -------------------------------------------------- | -------- | ------------------------------------------------------------------- |
+| `children`             | `ReactNode`                                        | Yes      | Child components to wrap with error boundary                        |
+| `fallback`             | `ReactNode`                                        | No       | Custom JSX fallback UI                                              |
+| `fallbackComponent`    | `React.ComponentType<InterfaceErrorFallbackProps>` | No       | Custom fallback component that receives `error` and `onReset` props |
+| `errorMessage`         | `string`                                           | No       | Custom error message for toast notification                         |
+| `showToast`            | `boolean`                                          | No       | Whether to show toast notification (default: `true`)                |
+| `onError`              | `function`                                         | No       | Callback invoked when error is caught                               |
+| `onReset`              | `function`                                         | No       | Callback invoked when user clicks reset button                      |
+| `fallbackTitle`        | `string`                                           | No       | Custom error message for default UI                                 |
+| `fallbackErrorMessage` | `string`                                           | No       | Custom error message for default UI                                 |
+| `resetButtonText`      | `string`                                           | No       | Custom error message for default UI                                 |
+| `resetButtonAriaLabel` | `string`                                           | No       | Custom error message for default UI                                 |
 
 **Accessibility:**
+
 - Default fallback includes `role="alert"` and `aria-live="assertive"`
 - Reset button is keyboard accessible (Enter and Space keys)
 - Screen reader friendly error messages
@@ -585,6 +599,320 @@ const CustomErrorFallback = ({ error, onReset }) => (
 - Legacy `.notFound` CSS patterns are deprecated
 - All new empty-state implementations must use EmptyState
 - Existing screens should be migrated incrementally
+
+## FormFieldGroup
+
+`FormFieldGroup` is a small set of reusable form components built to standardize labels, validation messages, help text, and accessibility across the application.
+​
+It includes a base wrapper (`FormFieldGroup`) plus field-specific components (`text`, `textarea`, `select`, `checkbox`, `radio group`, and `date picker`).
+
+#### Component Location
+
+```text
+src/shared-components/FormFieldGroup/
+```
+
+**Use case:**
+
+- Building consistent Bootstrap form rows with shared label + error + help text behavior.
+- Building Material UI fields (`TextField`/`Autocomplete`/`DatePicker`) with a consistent `touched` + `error` API.
+- Ensuring form errors are properly connected to inputs via `aria-describedby`/`aria-invalid`.
+
+**Key Features:**
+
+- Shared wrapper that renders label, required indicator, error feedback, and help text in one place.
+- Automatic ARIA injection: when `touched` + `error` are present, children receive `aria-invalid` and `aria-describedby` pointing to the rendered error element.
+- Supports both React-Bootstrap and Material UI field implementations under the same “FormFieldGroup family”.
+- Fully tested coverage across wrapper behavior + each field type + integration scenarios.
+
+**Example usage:**
+
+```tsx
+//FormTextField is a part of FormFIeldGroup components
+<FormTextField
+  format="mui"
+  name="username"
+  label="Username"
+  value={username}
+  onChange={(e) => setUsername(e.target.value)}
+  touched={touched}
+  error={error}
+/>
+```
+
+#### When to use FormFieldGroup and its components
+
+_Use FormFieldGroup components for:_
+
+- Screen-level forms (user-facing pages, modals, wizards)
+- Any form requiring consistent label + error + help text layout
+- Ensuring proper ARIA error association across form fields
+
+_Do not use FormFieldGroup components for:_
+
+- Unit tests of individual field components (FormTextField, FormSelect, etc.)
+- Simple standalone inputs without validation/label requirements
+- Internal component composition/testing scenarios
+
+### Component API
+
+Import
+
+```tsx
+import {
+  FormFieldGroup,
+  FormTextField,
+  FormTextArea,
+  FormSelect,
+  FormCheckbox,
+  FormRadioGroup,
+  FormDateField,
+} from 'src/shared-components/FormFieldGroup';
+```
+
+These exports are provided from the package `index.ts`.
+
+#### Props
+
+**1. ICommonInputProps**
+
+| Prop      | Type                                               | Required | Description                |
+| --------- | -------------------------------------------------- | -------- | -------------------------- |
+| value     | `string`                                           | Yes      | Current value of the input |
+| onChange  | `(e: React.ChangeEvent<HTMLInputElement>) => void` | No       | Change handler for input   |
+| error     | `boolean`                                          | No       | Indicates error state      |
+| required  | `boolean`                                          | No       | Marks field as required    |
+| disabled  | `boolean`                                          | No       | Disables the input         |
+| onFocus   | `() => void`                                       | No       | Focus event handler        |
+| onBlur    | `() => void`                                       | No       | Blur event handler         |
+| className | `string`                                           | No       | Custom CSS class           |
+
+**2. IBootstrapTextFieldProps**
+
+| Prop          | Type                                                            | Required | Description                        |
+| ------------- | --------------------------------------------------------------- | -------- | ---------------------------------- |
+| type          | `'text' \| 'email' \| 'password' \| 'number' \| 'url' \| 'tel'` | No       | HTML input type                    |
+| placeholder   | `string`                                                        | No       | Placeholder text                   |
+| maxLength     | `number`                                                        | No       | Maximum character length           |
+| showCharCount | `boolean`                                                       | No       | Shows character counter            |
+| autoComplete  | `string`                                                        | No       | Browser autocomplete hint          |
+| controlClass  | `string`                                                        | No       | Bootstrap control class            |
+| data-\*       | `string \| number`                                              | No       | Custom data attributes for testing |
+
+**3. IMuiFieldProps**
+
+| Prop         | Type                | Required | Description                  |
+| ------------ | ------------------- | -------- | ---------------------------- |
+| variant      | `TextFieldVariants` | No       | MUI TextField variant        |
+| endAdornment | `React.ReactNode`   | No       | Icon or element at input end |
+
+**4. IFormFieldGroupProps**
+
+| Prop            | Type                | Required | Description                         |
+| --------------- | ------------------- | -------- | ----------------------------------- |
+| name            | `string`            | No       | Field name                          |
+| label           | `string`            | No       | Display label                       |
+| ariaLabel       | `string`            | No       | Accessibility label                 |
+| ariaDescribedBy | `string`            | No       | Accessibility description reference |
+| groupClass      | `string`            | No       | Wrapper CSS class                   |
+| labelClass      | `string`            | No       | Label CSS class                     |
+| error           | `string \| boolean` | No       | Error message or state              |
+| touched         | `boolean`           | No       | Indicates field interaction         |
+| helpText        | `string`            | No       | Helper text below field             |
+| required        | `boolean`           | No       | Marks field as required             |
+
+**5. IFormTextFieldProps**
+
+| Prop   | Type                   | Required | Description              |
+| ------ | ---------------------- | -------- | ------------------------ |
+| format | `'bootstrap' \| 'mui'` | Yes      | Rendering framework      |
+| error  | `string`               | No       | Validation error message |
+
+_Note: Includes all inherited Bootstrap + MUI + common props_
+
+**6. IFormTextAreaProps**
+
+| Prop      | Type                | Required | Description            |
+| --------- | ------------------- | -------- | ---------------------- |
+| name      | `string`            | No       | Name of the text Area  |
+| multiline | `true`              | Yes      | Forces multiline       |
+| rows      | `number`            | No       | Number of visible rows |
+| label     | `string`            | No       | Field label            |
+| error     | `string \| boolean` | No       | Error state/message    |
+| touched   | `boolean`           | No       | Interaction state      |
+| helpText  | `string`            | No       | Helper text            |
+| required  | `boolean`           | No       | Required indicator     |
+| variant   | `TextFieldVariants` | No       | MUI variant            |
+| ariaLabel | `string`            | No       | Accessibility label    |
+
+_Note: Includes all inherited MUI + common props_
+
+**7. IFormSelectProps**
+
+| Prop                  | Type                                       | Required | Description                         |
+| --------------------- | ------------------------------------------ | -------- | ----------------------------------- |
+| options               | `InterfaceUserInfo[]`                      | No       | Selectable options                  |
+| value                 | `InterfaceUserInfo \| InterfaceUserInfo[]` | No       | Selected value(s)                   |
+| multiple              | `boolean`                                  | No       | Enables multi-select                |
+| limitTags             | `number`                                   | No       | Tag display limit                   |
+| isOptionEqualToValue  | `(option, value) => boolean`               | No       | Option comparison                   |
+| filterSelectedOptions | `boolean`                                  | No       | Hides selected options              |
+| getOptionLabel        | `(option) => string`                       | No       | Label extractor                     |
+| onChange              | `(event, value) => void`                   | No       | Change handler                      |
+| renderInput           | `(params) => React.ReactNode`              | No       | Custom input renderer               |
+| label                 | `string`                                   | No       | Field label                         |
+| name                  | `string`                                   | No       | Name of the Select field            |
+| error                 | `string \| boolean`                        | No       | Error state/message                 |
+| required              | `boolean`                                  | No       | Required indicator                  |
+| touched               | `boolean`                                  | No       | Interaction state                   |
+| helpText              | `string`                                   | No       | Helper text                         |
+| ariaLabel             | `string`                                   | No       | Accessibility label                 |
+| ariaDescribedBy       | `string`                                   | No       | Accessibility description reference |
+
+_Note: Includes all inherited common props_
+
+**8. IFormCheckBoxProps**
+
+| Prop           | Type                             | Required | Description       |
+| -------------- | -------------------------------- | -------- | ----------------- |
+| type           | `'checkbox'`                     | No       | Input type        |
+| labelText      | `string`                         | No       | Checkbox label    |
+| labelProps     | `LabelHTMLAttributes`            | No       | Label attributes  |
+| containerClass | `string`                         | No       | Wrapper CSS class |
+| containerProps | `HTMLAttributes<HTMLDivElement>` | No       | Wrapper props     |
+| touched        | `boolean`                        | No       | Interaction state |
+| error          | `string`                         | No       | Error message     |
+
+_Note: Includes all inherited FormCheckProp (Bootstrap) + common props_
+
+**9. IFormRadioGroupProps**
+
+| Prop       | Type                                   | Required | Description       |
+| ---------- | -------------------------------------- | -------- | ----------------- |
+| type       | `'radio'`                              | No       | Input type        |
+| name       | `string`                               | No       | Radio group name  |
+| id         | `string`                               | No       | Group ID          |
+| label      | `string`                               | No       | Group label       |
+| options    | `{ label: string; value: string }[]`   | Yes      | Radio options     |
+| checked    | `boolean`                              | No       | Checked state     |
+| onChange   | `ChangeEventHandler<HTMLInputElement>` | No       | Change handler    |
+| error      | `string`                               | No       | Error message     |
+| touched    | `boolean`                              | No       | Interaction state |
+| groupClass | `string`                               | No       | Wrapper CSS class |
+| labelClass | `string`                               | No       | Label CSS class   |
+
+_Note: Includes all inherited FormCheckProp (Bootstrap) + common props_
+
+**10. IFormDateFieldProps**
+
+| Prop      | Type             | Required | Description            |
+| --------- | ---------------- | -------- | ---------------------- |
+| value     | `Dayjs \| null`  | Yes      | Selected date          |
+| onChange  | `(date) => void` | Yes      | Date change handler    |
+| format    | `string`         | No       | Display format         |
+| minDate   | `Dayjs`          | No       | Minimum date           |
+| maxDate   | `Dayjs`          | No       | Maximum date           |
+| disabled  | `boolean`        | No       | Disables picker        |
+| readOnly  | `boolean`        | No       | Read-only mode         |
+| className | `string`         | No       | Custom CSS class       |
+| slotProps | `object`         | No       | MUI slot customization |
+| label     | `string`         | No       | Field label            |
+| name      | `string`         | No       | Date field name        |
+| error     | `boolean`        | No       | Error state            |
+| required  | `boolean`        | No       | Required indicator     |
+| touched   | `boolean`        | No       | Interaction state      |
+| helpText  | `string`         | No       | Helper text            |
+
+### Usage Example
+
+**1.Basic wrapper usage (Bootstrap)**
+
+```tsx
+import { FormFieldGroup } from 'src/shared-components/FormFieldGroup';
+
+<FormFieldGroup
+  name="email"
+  label="Email"
+  touched={touched.email}
+  error={errors.email}
+  helpText="We’ll never share your email."
+  required
+>
+  {children}
+</FormFieldGroup>;
+```
+
+`FormFieldGroup` will attach an `id` and wire up error ARIA attributes automatically when an error is shown.
+
+_Note: Children can not be part of default Form component_
+
+**2. Text field (Bootstrap or MUI)**
+
+```tsx
+import { FormTextField } from 'src/shared-components/FormFieldGroup';
+
+// Bootstrap format
+<FormTextField
+  format="bootstrap"
+  name="username"
+  label="Username"
+  value={username}
+  onChange={(e) => setUsername(e.target.value)}
+  touched={touched}
+  error={error}
+  showCharCount
+  maxLength={30}
+/>;
+
+// MUI format
+<FormTextField
+  format="mui"
+  name="username"
+  label="Username"
+  value={username}
+  onChange={(e) => setUsername(e.target.value)}
+  touched={touched}
+  error={error}
+/>;
+```
+
+`FormTextField` supports optional `endAdornment` and optional character counting when `showCharCount` is enabled and `maxLength` is provided.
+
+**3. Select (MUI Autocomplete)**
+
+```tsx
+import { FormSelect } from 'src/shared-components/FormFieldGroup';
+import TextField from '@mui/material/TextField';
+
+<FormSelect
+  name="user"
+  label="Select user"
+  options={users}
+  value={selectedUser}
+  onChange={(_, next) => setSelectedUser(next)}
+  getOptionLabel={(u) => u.name}
+  touched={touched}
+  error={error}
+  renderInput={(params) => <TextField {...params} />}
+/>;
+```
+
+`FormSelect` is built on MUI `Autocomplete`, supports `multiple`, `limitTags`, and `filterSelectedOptions`, and maps `touched` + `error` into `helperText`.
+
+### Field components
+
+- `FormTextField`: Text input supporting `format="bootstrap"` (uses `FormFieldGroup`) or `format="mui"` (uses MUI TextField).
+- `FormTextArea`: MUI multiline input with `rows`, `endAdornment`, and `aria-invalid` when error is shown.
+- `FormSelect`: MUI `Autocomplete` wrapper supporting single/multiple selection and passing ARIA attributes through to the underlying input.
+- `FormCheckbox`: Bootstrap checkbox with error feedback and `aria-describedby` wired to the error element.
+- `FormRadioGroup`: Bootstrap radios rendered from an `options` array and wrapped in `FormFieldGroup`.
+- `FormDateField`: MUI X `DatePicker` wrapped in `LocalizationProvider` with `AdapterDayjs`.
+
+### Accessibility notes
+
+- `FormFieldGroup` links errors to inputs by generating a stable error element id (`${fieldId}-error`) and injecting `aria-describedby` + `aria-invalid` into children when `touched` + `error` are truthy.
+- `FormCheckbox` also sets `aria-describedby` to its own error feedback when invalid.
+- Tests include keyboard navigation and validation announcement behaviors to prevent regressions.
 
 ## Creating Shared Components
 

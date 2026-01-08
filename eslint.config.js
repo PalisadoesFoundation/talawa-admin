@@ -305,6 +305,53 @@ export default [
     ],
     rules: restrictImportsExcept(['mui-date-pickers']),
   },
+  /* Enforce usage of standardized FormFieldGroup components
+   * Issue #5303: FormFieldGroup Components (Foundation)
+   *
+   * These rules prevent usage of deprecated react-bootstrap Form.* patterns
+   * (Form.Group, Form.Control, Form.Label, Form.Check) to ensure all new code
+   * uses the standardized FormFieldGroup components located at
+   * src/shared-components/FormFieldGroup/
+   *
+   * Replacements:
+   * - Form.Group → FormFieldGroup
+   * - Form.Control → FormTextField, FormTextArea, or FormSelect
+   * - Form.Label → Built into FormFieldGroup (via label prop)
+   * - Form.Check → FormCheckbox or FormRadioGroup
+   *
+   * Note: Approximately 20+ screens currently use deprecated patterns and
+   * will require migration in future PRs. These rules prevent new violations.
+   */
+  {
+    files: ['**/*.{ts,tsx}'],
+    ignores: ['src/shared-components/FormFieldGroup/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector:
+            "JSXMemberExpression[object.name='Form'][property.name='Group']",
+          message: 'Use FormFieldGroup instead of Form.Group',
+        },
+        {
+          selector:
+            "JSXMemberExpression[object.name='Form'][property.name='Control']",
+          message:
+            'Use FormTextField, FormTextArea, or FormSelect instead of Form.Control',
+        },
+        {
+          selector:
+            "JSXMemberExpression[object.name='Form'][property.name='Label']",
+          message: 'Labels are built into FormFieldGroup components',
+        },
+        {
+          selector:
+            "JSXMemberExpression[object.name='Form'][property.name='Check']",
+          message: 'Use FormCheckbox or FormRadioGroup instead of Form.Check',
+        },
+      ],
+    },
+  },
   {
     files: ['*.graphql'],
     languageOptions: {
