@@ -12,7 +12,7 @@ Defined in: [src/components/DynamicDropDown/DynamicDropDown.tsx:55](https://gith
 
 ### T
 
-`T` *extends* `object`
+`T` *extends* `Record`\<`string`, `unknown`\>
 
 ## Parameters
 

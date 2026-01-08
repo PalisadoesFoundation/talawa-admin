@@ -1193,8 +1193,7 @@
     "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
     "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
     "tagsAssigned": "étiquettes assignées",
-    "noTagsAssigned": "Aucune étiquette assignée",
-    "passwordPlaceholder": "Laisser vide pour conserver le mot de passe actuel"
+    "noTagsAssigned": "Aucune étiquette assignée"
   },
   "people": {
     "title": "Personnes",
