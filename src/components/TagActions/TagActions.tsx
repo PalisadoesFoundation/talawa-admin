@@ -52,7 +52,7 @@ import type { TFunction } from 'i18next';
 import componentStyles from './TagAction.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
-import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
+import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
 
 interface InterfaceUserTagsAncestorData {
   _id: string;

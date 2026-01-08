@@ -62,8 +62,8 @@ import PostCard from 'shared-components/postCard/PostCard';
 import styles from 'style/app-fixed.module.css';
 import { Box, Typography } from '@mui/material';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
+import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
 import { formatDate } from 'utils/dateFormatter';
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
 
