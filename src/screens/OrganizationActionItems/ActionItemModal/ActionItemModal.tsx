@@ -61,9 +61,8 @@ const initializeFormState = (
 /**
  * Modal dialog for creating or editing an organization action item.
  *
- * @component
- * @param {IItemModalProps} props - Props for ItemModal
- * @returns {JSX.Element} The item modal
+ * @param props - Props for ItemModal
+ * @returns The item modal element
  */
 const ItemModal: FC<IItemModalProps> = ({
   isOpen,
