@@ -611,297 +611,297 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 </div>
               </div>
             </div>
-          </div>
-        <div className={styles.flexColumn}>
-          <CursorPaginationManager<typeof chatData, INewChat['messages']['edges'][0]['node']>
-            paginationDirection="backward"
-            data={chatData}
-            getConnection={(data) => data?.chat?.messages}
-            queryVariables={{
-              input: { id: props.selectedContact },
-              first: 10,
-              after: null,
-              firstMessages: 10,
-              afterMessages: null,
-              lastMessages: 10,
-              beforeMessages: null,
-            }}
-            itemsPerPage={10}
-            onLoadMore={async (variables) => {
-              // Map standard pagination params to custom CHAT_BY_ID names
-              const customVariables = {
-                input: variables.input,
-                first: variables.first,
-                after: variables.after,
-                firstMessages: variables.first,
-                afterMessages: variables.after,
-                lastMessages: variables.last,
-                beforeMessages: variables.before,
-              };
-              await chatRefetch(customVariables);
-            }}
-            scrollContainerRef={
-              messagesContainerRef as React.RefObject<HTMLElement>
-            }
-          >
-            {({ items: messages, loading, hasMore, loadMore }) => (
-              <div
-                className={styles.chatMessages}
-                ref={messagesContainerRef}
-                onScroll={() => {
-                  if (!messagesContainerRef.current) return;
-                  const el = messagesContainerRef.current;
-                  const { scrollTop } = el;
-                  if (scrollTop < 100 && hasMore && !loading) {
-                    loadMore();
-                  }
+            <div className={styles.flexColumn}>
+              // @ts-ignore
+              <CursorPaginationManager
+                paginationDirection="backward"
+                data={chatData}
+                getConnection={(data) => data?.chat?.messages}
+                queryVariables={{
+                  input: { id: props.selectedContact },
+                  first: 10,
+                  after: null,
+                  firstMessages: 10,
+                  afterMessages: null,
+                  lastMessages: 10,
+                  beforeMessages: null,
                 }}
+                itemsPerPage={10}
+                onLoadMore={async (variables) => {
+                  // Map standard pagination params to custom CHAT_BY_ID names
+                  const customVariables = {
+                    input: variables.input,
+                    first: variables.first,
+                    after: variables.after,
+                    firstMessages: variables.first,
+                    afterMessages: variables.after,
+                    lastMessages: variables.last,
+                    beforeMessages: variables.before,
+                  };
+                  await chatRefetch(customVariables);
+                }}
+                scrollContainerRef={
+                  messagesContainerRef as React.RefObject<HTMLElement>
+                }
               >
-                {hasMore && (
-                  <div className={styles.loadMoreBar}>
+                {({ items: messages, loading, hasMore, loadMore }) => (
+                  <div
+                    className={styles.chatMessages}
+                    ref={messagesContainerRef}
+                    onScroll={() => {
+                      if (!messagesContainerRef.current) return;
+                      const el = messagesContainerRef.current;
+                      const { scrollTop } = el;
+                      if (scrollTop < 100 && hasMore && !loading) {
+                        loadMore();
+                      }
+                    }}
+                  >
+                    {hasMore && (
+                      <div className={styles.loadMoreBar}>
+                        <Button
+                          variant="light"
+                          size="sm"
+                          onClick={() => loadMore()}
+                          disabled={loading}
+                        >
+                          {loading
+                            ? t('userChatRoom.loading')
+                            : t('userChatRoom.loadOlderMessages')}
+                        </Button>
+                      </div>
+                    )}
+                    {loading && (
+                      <div className={styles.loadingMore}>
+                        {t('userChatRoom.loadingMoreMessages')}
+                      </div>
+                    )}
+                    {!!messages.length && (
+                      <div id="messages">
+                        {messages.map((message) => {
+                          const isFile = message.body.startsWith('uploads/');
+
+                          return (
+                            <div
+                              className={
+                                message.creator.id === userId
+                                  ? styles.messageSentContainer
+                                  : styles.messageReceivedContainer
+                              }
+                              key={message.id}
+                            >
+                              {chat?.isGroup &&
+                                message.creator.id !== userId &&
+                                (message.creator?.avatarURL ? (
+                                  <img
+                                    src={message.creator.avatarURL}
+                                    alt={message.creator.avatarURL}
+                                    className={styles.contactImage}
+                                  />
+                                ) : (
+                                  <Avatar
+                                    name={message.creator.name}
+                                    alt={message.creator.name}
+                                    avatarStyle={styles.contactImage}
+                                  />
+                                ))}
+                              <div
+                                className={
+                                  message.creator.id === userId
+                                    ? styles.messageSent
+                                    : styles.messageReceived
+                                }
+                                data-testid="message"
+                                key={message.id}
+                                id={message.id}
+                              >
+                                <span className={styles.messageContent}>
+                                  {chat?.isGroup &&
+                                    message.creator.id !== userId && (
+                                      <p className={styles.senderInfo}>
+                                        {message.creator.name}
+                                      </p>
+                                    )}
+                                  {message.parentMessage && (
+                                    <a href={`#${message.parentMessage.id}`}>
+                                      <div className={styles.replyToMessage}>
+                                        <p
+                                          className={styles.replyToMessageSender}
+                                        >
+                                          {message.parentMessage.creator.name}
+                                        </p>
+                                        <span>{message.parentMessage.body}</span>
+                                      </div>
+                                    </a>
+                                  )}
+                                  {isFile ? (
+                                    <MessageImage
+                                      media={message.body}
+                                      organizationId={chat?.organization?.id}
+                                      getFileFromMinio={getFileFromMinio}
+                                    />
+                                  ) : (
+                                    message.body
+                                  )}
+                                </span>
+                                <div className={styles.messageAttributes}>
+                                  <Dropdown
+                                    data-testid="moreOptions"
+                                    className={styles.cursorPointer}
+                                  >
+                                    <Dropdown.Toggle
+                                      className={styles.customToggle}
+                                      data-testid={'dropdown'}
+                                    >
+                                      <MoreVert />
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                      <Dropdown.Item
+                                        onClick={() => {
+                                          setReplyToDirectMessage(message);
+                                        }}
+                                        data-testid="replyBtn"
+                                      >
+                                        {t('reply')}
+                                      </Dropdown.Item>
+                                      {message.creator.id === userId && (
+                                        <>
+                                          {!message.body.startsWith(
+                                            'uploads/',
+                                          ) && (
+                                              <Dropdown.Item
+                                                onClick={() => {
+                                                  setEditMessage(message);
+                                                  setNewMessage(message.body);
+                                                }}
+                                                data-testid="replyToMessage"
+                                              >
+                                                {t('userChatRoom.edit')}
+                                              </Dropdown.Item>
+                                            )}
+                                          <Dropdown.Item
+                                            onClick={() =>
+                                              deleteMessage(message.id)
+                                            }
+                                            data-testid="deleteMessage"
+                                            className={styles.deleteAction}
+                                          >
+                                            {t('userChatRoom.delete')}
+                                          </Dropdown.Item>
+                                        </>
+                                      )}
+                                    </Dropdown.Menu>
+                                  </Dropdown>
+                                  <span className={styles.messageTime}>
+                                    {new Date(
+                                      message?.createdAt,
+                                    ).toLocaleTimeString('it-IT', {
+                                      hour: '2-digit',
+                                      minute: '2-digit',
+                                    })}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </CursorPaginationManager>
+            </div>
+            <div id="messageInput">
+              <input
+                type="file"
+                accept="image/*"
+                ref={fileInputRef}
+                className={styles.hiddenFileInput}
+                onChange={handleImageChange}
+                data-testid="hidden-file-input"
+              />
+              {!!replyToDirectMessage?.id && (
+                <div data-testid="replyMsg" className={styles.replyTo}>
+                  <div className={styles.replyToMessageContainer}>
+                    <div className={styles.userDetails}>
+                      <Avatar
+                        name={replyToDirectMessage.creator.name}
+                        alt={replyToDirectMessage.creator.name}
+                        avatarStyle={styles.userImage}
+                      />
+                      <span>{replyToDirectMessage.creator.name}</span>
+                    </div>
+
                     <Button
-                      variant="light"
-                      size="sm"
-                      onClick={() => loadMore()}
-                      disabled={loading}
+                      data-testid="closeReply"
+                      onClick={() => setReplyToDirectMessage(null)}
+                      className={styles.closeBtn}
                     >
-                      {loading
-                        ? t('userChatRoom.loading')
-                        : t('userChatRoom.loadOlderMessages')}
+                      <Close />
                     </Button>
                   </div>
-                )}
-                {loading && (
-                  <div className={styles.loadingMore}>
-                    {t('userChatRoom.loadingMoreMessages')}
-                  </div>
-                )}
-                {!!messages.length && (
-                  <div id="messages">
-                    {messages.map((message) => {
-                      const isFile = message.body.startsWith('uploads/');
-
-                      return (
-                        <div
-                          className={
-                            message.creator.id === userId
-                              ? styles.messageSentContainer
-                              : styles.messageReceivedContainer
-                          }
-                          key={message.id}
-                        >
-                          {chat?.isGroup &&
-                            message.creator.id !== userId &&
-                            (message.creator?.avatarURL ? (
-                              <img
-                                src={message.creator.avatarURL}
-                                alt={message.creator.avatarURL}
-                                className={styles.contactImage}
-                              />
-                            ) : (
-                              <Avatar
-                                name={message.creator.name}
-                                alt={message.creator.name}
-                                avatarStyle={styles.contactImage}
-                              />
-                            ))}
-                          <div
-                            className={
-                              message.creator.id === userId
-                                ? styles.messageSent
-                                : styles.messageReceived
-                            }
-                            data-testid="message"
-                            key={message.id}
-                            id={message.id}
-                          >
-                            <span className={styles.messageContent}>
-                              {chat?.isGroup &&
-                                message.creator.id !== userId && (
-                                  <p className={styles.senderInfo}>
-                                    {message.creator.name}
-                                  </p>
-                                )}
-                              {message.parentMessage && (
-                                <a href={`#${message.parentMessage.id}`}>
-                                  <div className={styles.replyToMessage}>
-                                    <p
-                                      className={styles.replyToMessageSender}
-                                    >
-                                      {message.parentMessage.creator.name}
-                                    </p>
-                                    <span>{message.parentMessage.body}</span>
-                                  </div>
-                                </a>
-                              )}
-                              {isFile ? (
-                                <MessageImage
-                                  media={message.body}
-                                  organizationId={chat?.organization?.id}
-                                  getFileFromMinio={getFileFromMinio}
-                                />
-                              ) : (
-                                message.body
-                              )}
-                            </span>
-                            <div className={styles.messageAttributes}>
-                              <Dropdown
-                                data-testid="moreOptions"
-                                className={styles.cursorPointer}
-                              >
-                                <Dropdown.Toggle
-                                  className={styles.customToggle}
-                                  data-testid={'dropdown'}
-                                >
-                                  <MoreVert />
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                  <Dropdown.Item
-                                    onClick={() => {
-                                      setReplyToDirectMessage(message);
-                                    }}
-                                    data-testid="replyBtn"
-                                  >
-                                    {t('reply')}
-                                  </Dropdown.Item>
-                                  {message.creator.id === userId && (
-                                    <>
-                                      {!message.body.startsWith(
-                                        'uploads/',
-                                      ) && (
-                                          <Dropdown.Item
-                                            onClick={() => {
-                                              setEditMessage(message);
-                                              setNewMessage(message.body);
-                                            }}
-                                            data-testid="replyToMessage"
-                                          >
-                                            {t('userChatRoom.edit')}
-                                          </Dropdown.Item>
-                                        )}
-                                      <Dropdown.Item
-                                        onClick={() =>
-                                          deleteMessage(message.id)
-                                        }
-                                        data-testid="deleteMessage"
-                                        className={styles.deleteAction}
-                                      >
-                                        {t('userChatRoom.delete')}
-                                      </Dropdown.Item>
-                                    </>
-                                  )}
-                                </Dropdown.Menu>
-                              </Dropdown>
-                              <span className={styles.messageTime}>
-                                {new Date(
-                                  message?.createdAt,
-                                ).toLocaleTimeString('it-IT', {
-                                  hour: '2-digit',
-                                  minute: '2-digit',
-                                })}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-              </div>
-            )}
-          </CursorPaginationManager>
-        </div>
-        <div id="messageInput">
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            className={styles.hiddenFileInput}
-            onChange={handleImageChange}
-            data-testid="hidden-file-input"
-          />
-          {!!replyToDirectMessage?.id && (
-            <div data-testid="replyMsg" className={styles.replyTo}>
-              <div className={styles.replyToMessageContainer}>
-                <div className={styles.userDetails}>
-                  <Avatar
-                    name={replyToDirectMessage.creator.name}
-                    alt={replyToDirectMessage.creator.name}
-                    avatarStyle={styles.userImage}
-                  />
-                  <span>{replyToDirectMessage.creator.name}</span>
-                </div>
-
-                <Button
-                  data-testid="closeReply"
-                  onClick={() => setReplyToDirectMessage(null)}
-                  className={styles.closeBtn}
-                >
-                  <Close />
-                </Button>
-              </div>
               )}
-              {attachment && (
-                <div className={styles.attachment}>
-                  <img src={attachment} alt={t('attachment')} />
+                  {attachment && (
+                    <div className={styles.attachment}>
+                      <img src={attachment} alt={t('attachment')} />
 
-                  <Button
-                    data-testid="removeAttachment"
-                    onClick={() => {
-                      setAttachment(null);
-                      setAttachmentObjectName(null);
-                      if (fileInputRef.current) fileInputRef.current.value = '';
-                    }}
-                    className={styles.closeBtn}
-                  >
-                    <Close />
-                  </Button>
+                      <Button
+                        data-testid="removeAttachment"
+                        onClick={() => {
+                          setAttachment(null);
+                          setAttachmentObjectName(null);
+                          if (fileInputRef.current) fileInputRef.current.value = '';
+                        }}
+                        className={styles.closeBtn}
+                      >
+                        <Close />
+                      </Button>
+                    </div>
+                  )}
+
+                  <InputGroup>
+                    <button
+                      type="button"
+                      onClick={handleAddAttachment}
+                      className={styles.addAttachmentBtn}
+                    >
+                      <GrAttachment />
+                    </button>
+                    <Form.Control
+                      placeholder={t('sendMessage')}
+                      aria-label={t('sendMessage')}
+                      value={newMessage}
+                      data-testid="messageInput"
+                      onChange={handleNewMessageChange}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          sendMessage();
+                        }
+                      }}
+                      className={styles.sendMessageInput}
+                    />
+                    <Button
+                      onClick={sendMessage}
+                      variant="primary"
+                      id="button-send"
+                      data-testid="sendMessage"
+                    >
+                      <SendIcon fontSize="small" />
+                    </Button>
+                  </InputGroup>
                 </div>
-              )}
-
-              <InputGroup>
-                <button
-                  type="button"
-                  onClick={handleAddAttachment}
-                  className={styles.addAttachmentBtn}
-                >
-                  <GrAttachment />
-                </button>
-                <Form.Control
-                  placeholder={t('sendMessage')}
-                  aria-label={t('sendMessage')}
-                  value={newMessage}
-                  data-testid="messageInput"
-                  onChange={handleNewMessageChange}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' && !e.shiftKey) {
-                      e.preventDefault();
-                      sendMessage();
-                    }
-                  }}
-                  className={styles.sendMessageInput}
-                />
-                <Button
-                  onClick={sendMessage}
-                  variant="primary"
-                  id="button-send"
-                  data-testid="sendMessage"
-                >
-                  <SendIcon fontSize="small" />
-                </Button>
-              </InputGroup>
-            </div>
           </>
         )}
-        {groupChatDetailsModalisOpen && chat && (
-          <GroupChatDetails
-            toggleGroupChatDetailsModal={toggleGroupChatDetailsModal}
-            groupChatDetailsModalisOpen={groupChatDetailsModalisOpen}
-            chat={chat}
-            chatRefetch={chatRefetch}
-          ></GroupChatDetails>
-        )}
-      </div>
+            {groupChatDetailsModalisOpen && chat && (
+              <GroupChatDetails
+                toggleGroupChatDetailsModal={toggleGroupChatDetailsModal}
+                groupChatDetailsModalisOpen={groupChatDetailsModalisOpen}
+                chat={chat}
+                chatRefetch={chatRefetch}
+              ></GroupChatDetails>
+            )}
+          </div>
     </ErrorBoundaryWrapper>
   );
 }
