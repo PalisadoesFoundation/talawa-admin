@@ -43,10 +43,17 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
   },
 }));
 
-vi.mock('@mui/icons-material', () => ({
-  WarningAmberRounded: vi.fn(() => null),
-  PersonOff: vi.fn(() => null),
-}));
+vi.mock('@mui/icons-material', async () => {
+  const actual = (await vi.importActual('@mui/icons-material')) as Record<
+    string,
+    unknown
+  >;
+  return {
+    ...actual,
+    WarningAmberRounded: vi.fn(() => null),
+    PersonOff: vi.fn(() => null),
+  };
+});
 
 vi.mock('components/IconComponent/IconComponent', () => ({
   default: ({ name }: { name: string }) => (

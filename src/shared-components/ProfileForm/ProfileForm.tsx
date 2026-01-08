@@ -90,7 +90,7 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { languages } from 'utils/languages';
 import { errorHandler } from 'utils/errorHandler';
 import { Card, Row, Col, Form } from 'react-bootstrap';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import EventsAttendedByMember from 'components/MemberActivity/EventsAttendedByMember';
@@ -292,12 +292,8 @@ const MemberDetail: React.FC = (): JSX.Element => {
     }
   };
 
-  if (loading) {
-    return <Loader />;
-  }
-
   return (
-    <>
+    <LoadingState isLoading={loading} variant="spinner">
       {show && (
         <MemberAttendedEventsModal
           eventsAttended={userData?.user?.eventsAttended}
@@ -813,7 +809,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
           )}
         </Row>
       </ProfileFormWrapper>
-    </>
+    </LoadingState>
   );
 };
 

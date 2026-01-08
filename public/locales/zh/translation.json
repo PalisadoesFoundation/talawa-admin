@@ -704,7 +704,9 @@
     "agendaItemUpdated": "议程项目已成功更新",
     "agendaItemDeleted": "议程项目已成功删除",
     "deleteAgendaItem": "删除议程项目",
-    "deleteAgendaItemMsg": "您要删除此议程项目吗？"
+    "deleteAgendaItemMsg": "您要删除此议程项目吗？",
+    "event": "活动",
+    "search": "搜索"
   },
   "eventListCard": {
     "deleteEvent": "删除事件",
@@ -1670,6 +1672,9 @@
     "newGroup": "新群组",
     "groupName": "组名",
     "groupDescription": "群组描述",
+    "confirmRemoveMember": "确认删除成员",
+    "failedToAddUser": "添加用户失败",
+    "userAddedSuccessfully": "用户添加成功",
     "next": "下一步"
   },
   "userChatRoom": {
