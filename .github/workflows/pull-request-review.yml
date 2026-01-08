@@ -11,42 +11,64 @@ jobs:
     permissions:
       pull-requests: read
     steps:
-      - name: Sleep for 30 seconds to make sure the review status propagates
-        run: sleep 30s
-        shell: bash
-      - name: Check CodeRabbit approval using GitHub Script
+      - name: Check CodeRabbit approval with retry logic
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            // List all reviews for the PR
-            const { data: reviews } = await github.rest.pulls.listReviews({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number
-            });
+            const maxRetries = 3;
+            const retryDelay = 20000; // 20 seconds between retries
 
-            // Filter reviews that have a user login containing "coderabbit" (case-insensitive)
-            // and exclude COMMENTED states.
-            const codeRabbitReviews = reviews.filter(review => 
-              (review.user.login.toLowerCase().includes('coderabbit') || 
-              review.user.login.toLowerCase().includes('coderabbitai')) &&
-              review.state !== 'COMMENTED'
-            );
+            async function checkApproval(attempt) {
+              console.log(`Attempt ${attempt}/${maxRetries}: Checking CodeRabbit approval...`);
+              
+              // List all reviews for the PR
+              const { data: reviews } = await github.rest.pulls.listReviews({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number
+              });
 
-            // Fail if no CodeRabbit reviews are found
-            if (codeRabbitReviews.length === 0) {
-              core.setFailed('ERROR: CodeRabbit has not reviewed this PR.');
-              return;
+              // Filter reviews that have a user login containing "coderabbit" (case-insensitive)
+              // and exclude COMMENTED states.
+              const codeRabbitReviews = reviews.filter(review => 
+                (review.user.login.toLowerCase().includes('coderabbit') || 
+                review.user.login.toLowerCase().includes('coderabbitai')) &&
+                review.state !== 'COMMENTED'
+              );
+
+              // Log found reviews for debugging
+              console.log(`Found ${codeRabbitReviews.length} CodeRabbit reviews (excluding COMMENTED)`);
+              
+              if (codeRabbitReviews.length > 0) {
+                // Sort reviews by submitted_at date in descending order
+                codeRabbitReviews.sort((a, b) => new Date(b.submitted_at) - new Date(a.submitted_at));
+                const latestReview = codeRabbitReviews[0];
+                
+                console.log(`Latest review state: ${latestReview.state}, submitted at: ${latestReview.submitted_at}`);
+                
+                if (latestReview.state === 'APPROVED') {
+                  console.log('✅ Success: CodeRabbit has approved this PR.');
+                  return true;
+                }
+              }
+              
+              return false;
             }
 
-            // Sort reviews by submitted_at date in descending order
-            codeRabbitReviews.sort((a, b) => new Date(b.submitted_at) - new Date(a.submitted_at));
-            const latestReview = codeRabbitReviews[0];
-
-            // Fail if the latest review from CodeRabbit is not "APPROVED"
-            if (latestReview.state !== 'APPROVED') {
-              core.setFailed('ERROR: CodeRabbit approval is required before merging this PR.');
-            } else {
-              console.log('Success: CodeRabbit has approved this PR.');
+            // Retry loop
+            for (let attempt = 1; attempt <= maxRetries; attempt++) {
+              const approved = await checkApproval(attempt);
+              
+              if (approved) {
+                process.exit(0); // Success
+              }
+              
+              if (attempt < maxRetries) {
+                console.log(`⏳ Waiting ${retryDelay/1000} seconds before retry...`);
+                await new Promise(resolve => setTimeout(resolve, retryDelay));
+              }
             }
+
+            // All retries exhausted
+            core.setFailed('❌ ERROR: CodeRabbit approval not found after ' + maxRetries + ' attempts. Please ensure CodeRabbit has approved this PR.');
