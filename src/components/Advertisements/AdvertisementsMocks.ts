@@ -512,19 +512,8 @@ export const createAdvertisementWithEndDateBeforeStart = [
   ),
 ];
 
-export const createAdvertisementError = [
-  createMutationMock(
-    ADD_ADVERTISEMENT_MUTATION,
-    {
-      organizationId: '1',
-      type: 'banner',
-      startAt: createDates.startAtCalledWith,
-      endAt: createDates.endAtCalledWith,
-    },
-    undefined,
-    new Error('An unknown error occurred'),
-  ),
-];
+// NOTE: Removed unused export `createAdvertisementError` to fix unused export lint error.
+// If you need an error mock for tests, reintroduce and import it where required.
 
 export const updateAdMocks = [
   createAdvertisementListMock({
