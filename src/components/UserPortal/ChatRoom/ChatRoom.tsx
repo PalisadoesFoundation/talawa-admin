@@ -612,7 +612,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
               </div>
             </div>
             <div className={styles.flexColumn}>
-              // @ts-ignore
               <CursorPaginationManager
                 paginationDirection="backward"
                 data={chatData}
@@ -641,7 +640,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                   await chatRefetch(customVariables);
                 }}
                 scrollContainerRef={
-                  messagesContainerRef as React.RefObject<HTMLElement>
+                  (messagesContainerRef as unknown) as React.RefObject<HTMLElement>
                 }
               >
                 {({ items: messages, loading, hasMore, loadMore }) => (
@@ -840,68 +839,69 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                       <Close />
                     </Button>
                   </div>
-              )}
-                  {attachment && (
-                    <div className={styles.attachment}>
-                      <img src={attachment} alt={t('attachment')} />
-
-                      <Button
-                        data-testid="removeAttachment"
-                        onClick={() => {
-                          setAttachment(null);
-                          setAttachmentObjectName(null);
-                          if (fileInputRef.current) fileInputRef.current.value = '';
-                        }}
-                        className={styles.closeBtn}
-                      >
-                        <Close />
-                      </Button>
-                    </div>
-                  )}
-
-                  <InputGroup>
-                    <button
-                      type="button"
-                      onClick={handleAddAttachment}
-                      className={styles.addAttachmentBtn}
-                    >
-                      <GrAttachment />
-                    </button>
-                    <Form.Control
-                      placeholder={t('sendMessage')}
-                      aria-label={t('sendMessage')}
-                      value={newMessage}
-                      data-testid="messageInput"
-                      onChange={handleNewMessageChange}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
-                          e.preventDefault();
-                          sendMessage();
-                        }
-                      }}
-                      className={styles.sendMessageInput}
-                    />
-                    <Button
-                      onClick={sendMessage}
-                      variant="primary"
-                      id="button-send"
-                      data-testid="sendMessage"
-                    >
-                      <SendIcon fontSize="small" />
-                    </Button>
-                  </InputGroup>
                 </div>
+              )}
+              {attachment && (
+                <div className={styles.attachment}>
+                  <img src={attachment} alt={t('attachment')} />
+
+                  <Button
+                    data-testid="removeAttachment"
+                    onClick={() => {
+                      setAttachment(null);
+                      setAttachmentObjectName(null);
+                      if (fileInputRef.current) fileInputRef.current.value = '';
+                    }}
+                    className={styles.closeBtn}
+                  >
+                    <Close />
+                  </Button>
+                </div>
+              )}
+
+              <InputGroup>
+                <button
+                  type="button"
+                  onClick={handleAddAttachment}
+                  className={styles.addAttachmentBtn}
+                >
+                  <GrAttachment />
+                </button>
+                <Form.Control
+                  placeholder={t('sendMessage')}
+                  aria-label={t('sendMessage')}
+                  value={newMessage}
+                  data-testid="messageInput"
+                  onChange={handleNewMessageChange}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      sendMessage();
+                    }
+                  }}
+                  className={styles.sendMessageInput}
+                />
+                <Button
+                  onClick={sendMessage}
+                  variant="primary"
+                  id="button-send"
+                  data-testid="sendMessage"
+                >
+                  <SendIcon fontSize="small" />
+                </Button>
+              </InputGroup>
+            </div>
           </>
         )}
-            {groupChatDetailsModalisOpen && chat && (
-              <GroupChatDetails
-                toggleGroupChatDetailsModal={toggleGroupChatDetailsModal}
-                groupChatDetailsModalisOpen={groupChatDetailsModalisOpen}
-                chat={chat}
-                chatRefetch={chatRefetch}
-              ></GroupChatDetails>
-            )}
-          </div>
+        {groupChatDetailsModalisOpen && chat && (
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={toggleGroupChatDetailsModal}
+            groupChatDetailsModalisOpen={groupChatDetailsModalisOpen}
+            chat={chat}
+            chatRefetch={chatRefetch}
+          ></GroupChatDetails>
+        )}
+      </div>
     </ErrorBoundaryWrapper>
   );
 }
