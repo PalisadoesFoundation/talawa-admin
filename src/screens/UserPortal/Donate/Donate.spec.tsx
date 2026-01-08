@@ -411,7 +411,7 @@ describe('Donate Component', () => {
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
-        i18nForTest.t('donate.successfulDonation'),
+        i18nForTest.t('success'),
       );
     });
   });
