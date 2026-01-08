@@ -11,6 +11,17 @@
  * - `create`: For creating a new pledge.
  * - `edit`: For editing an existing pledge.
  *
+ * Dependencies:
+ * - React
+ * - Apollo Client for GraphQL queries and mutations.
+ * - Material-UI and Bootstrap for UI components.
+ * - Day.js for date manipulation.
+ * - NotificationToast for notifications.
+ *
+ * Styles:
+ * - Uses global styles from `app-fixed.module.css`.
+ * - Reusable class `.addButton` for consistent button styling.
+ *
  * @example
  * ```tsx
  * <PledgeModal
@@ -24,18 +35,6 @@
  *   mode="create"
  * />
  * ```
- *
- * @remarks
- * Dependencies:
- * - React
- * - Apollo Client for GraphQL queries and mutations.
- * - Material-UI and Bootstrap for UI components.
- * - Day.js for date manipulation.
- * - NotificationToast for notifications.
- *
- * Styles:
- * - Uses global styles from `app-fixed.module.css`.
- * - Reusable class `.addButton` for consistent button styling.
  */
 import type { ChangeEvent } from 'react';
 import { Button, Form } from 'react-bootstrap';

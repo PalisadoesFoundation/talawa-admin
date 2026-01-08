@@ -4,7 +4,7 @@
 
 # Interface: InterfacePledgeModal
 
-Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L66)
+Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L65)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:66
 
 > **campaignId**: `string`
 
-Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L69)
+Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L68)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:69
 
 > **endDate**: `Date`
 
-Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L73)
+Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L72)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:73
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L68)
+Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L67)
 
 #### Returns
 
@@ -40,7 +40,7 @@ Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:68
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L67)
+Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L66)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:67
 
 > **mode**: `"create"` \| `"edit"`
 
-Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L74)
+Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L73)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:74
 
 > **orgId**: `string`
 
-Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L70)
+Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L69)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:70
 
 > **pledge**: [`InterfacePledgeInfo`](../../../../../../utils/interfaces/interfaces/InterfacePledgeInfo.md)
 
-Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L71)
+Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L70)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:71
 
 > **refetchPledge**: () => `void`
 
-Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L72)
+Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L71)
 
 #### Returns
 
