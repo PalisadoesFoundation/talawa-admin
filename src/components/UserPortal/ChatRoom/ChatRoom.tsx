@@ -61,8 +61,8 @@ interface IChatRoomProps {
   chatListRefetch: (
     variables?:
       | Partial<{
-        id: string;
-      }>
+          id: string;
+        }>
       | undefined,
   ) => Promise<ApolloQueryResult<{ chatList: GroupChat[] }>>;
 }
@@ -382,7 +382,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       const lastMessage =
         chatData.chat.messages.edges[chatData.chat.messages.edges.length - 1];
       markReadIfSupported(props.selectedContact, lastMessage.node.id)
-        .catch(() => { })
+        .catch(() => {})
         .finally(() => {
           props.chatListRefetch();
           unreadChatListRefetch();
@@ -466,14 +466,14 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       if (
         messageSubscriptionData?.data.data.chatMessageCreate &&
         messageSubscriptionData?.data.data.chatMessageCreate.chat?.id ===
-        props.selectedContact
+          props.selectedContact
       ) {
         const newMessage = messageSubscriptionData.data.data.chatMessageCreate;
         if (newMessage?.creator?.id === userId) {
           shouldAutoScrollRef.current = true;
         }
         await markReadIfSupported(props.selectedContact, newMessage.id).catch(
-          () => { },
+          () => {},
         );
 
         // Soft-append the new message to local state to avoid pagination issues.
@@ -497,14 +497,14 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 },
                 parentMessage: newMessage.parentMessage
                   ? {
-                    id: newMessage.parentMessage.id,
-                    body: newMessage.parentMessage.body,
-                    createdAt: newMessage.parentMessage.createdAt,
-                    creator: {
-                      id: newMessage.parentMessage.creator.id,
-                      name: newMessage.parentMessage.creator.name,
-                    },
-                  }
+                      id: newMessage.parentMessage.id,
+                      body: newMessage.parentMessage.body,
+                      createdAt: newMessage.parentMessage.createdAt,
+                      creator: {
+                        id: newMessage.parentMessage.creator.id,
+                        name: newMessage.parentMessage.creator.name,
+                      },
+                    }
                   : undefined,
               },
             } as INewChat['messages']['edges'][0];
@@ -640,7 +640,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                   await chatRefetch(customVariables);
                 }}
                 scrollContainerRef={
-                  (messagesContainerRef as unknown) as React.RefObject<HTMLElement>
+                  messagesContainerRef as unknown as React.RefObject<HTMLElement>
                 }
               >
                 {({ items: messages, loading, hasMore, loadMore }) => (
@@ -725,11 +725,15 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                     <a href={`#${message.parentMessage.id}`}>
                                       <div className={styles.replyToMessage}>
                                         <p
-                                          className={styles.replyToMessageSender}
+                                          className={
+                                            styles.replyToMessageSender
+                                          }
                                         >
                                           {message.parentMessage.creator.name}
                                         </p>
-                                        <span>{message.parentMessage.body}</span>
+                                        <span>
+                                          {message.parentMessage.body}
+                                        </span>
                                       </div>
                                     </a>
                                   )}
@@ -768,16 +772,16 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                           {!message.body.startsWith(
                                             'uploads/',
                                           ) && (
-                                              <Dropdown.Item
-                                                onClick={() => {
-                                                  setEditMessage(message);
-                                                  setNewMessage(message.body);
-                                                }}
-                                                data-testid="replyToMessage"
-                                              >
-                                                {t('userChatRoom.edit')}
-                                              </Dropdown.Item>
-                                            )}
+                                            <Dropdown.Item
+                                              onClick={() => {
+                                                setEditMessage(message);
+                                                setNewMessage(message.body);
+                                              }}
+                                              data-testid="replyToMessage"
+                                            >
+                                              {t('userChatRoom.edit')}
+                                            </Dropdown.Item>
+                                          )}
                                           <Dropdown.Item
                                             onClick={() =>
                                               deleteMessage(message.id)
