@@ -322,7 +322,7 @@ describe('OrganizationModal Component', () => {
       // Check if the input has either the required attribute or aria-required
       expect(
         input.hasAttribute('required') ||
-        input.getAttribute('aria-required') === 'true',
+          input.getAttribute('aria-required') === 'true',
       ).toBeTruthy();
     });
   });
