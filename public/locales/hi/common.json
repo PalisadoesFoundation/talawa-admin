@@ -248,5 +248,9 @@
   "inviteOnlyEvent": "केवल आमंत्रण",
   "inviteOnlyEventDescription": "केवल आमंत्रित सदस्यों और ईवेंट व्यवस्थापकों के लिए दृश्य",
   "to": "को",
-  "sortingIcon": "क्रमबद्ध करने का आइकन"
+  "sortingIcon": "क्रमबद्ध करने का आइकन",
+  "createEvent": "कार्यक्रम बनाएँ",
+  "eventCreated": "कार्यक्रम सफलतापूर्वक बनाया गया",
+  "eventDetails": "कार्यक्रम विवरण",
+  "peopleTabTagName": "लोग"
 }

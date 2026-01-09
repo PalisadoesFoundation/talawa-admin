@@ -250,5 +250,6 @@
   "inviteOnlyEvent": "Solo por invitación",
   "inviteOnlyEventDescription": "Visible solo para miembros invitados y administradores de eventos",
   "to": "A",
-  "sortingIcon": "icono de ordenación"
+  "sortingIcon": "icono de ordenación",
+  "peopleTabTagName": "Personas"
 }

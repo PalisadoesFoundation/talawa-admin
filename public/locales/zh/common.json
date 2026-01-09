@@ -251,5 +251,6 @@
   "inviteOnlyEvent": "仅限受邀者",
   "inviteOnlyEventDescription": "仅受邀成员和活动管理员可见",
   "to": "至",
-  "sortingIcon": "排序图标"
+  "sortingIcon": "排序图标",
+  "peopleTabTagName": "人员"
 }

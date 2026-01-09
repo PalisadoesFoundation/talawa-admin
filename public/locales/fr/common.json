@@ -250,5 +250,6 @@
   "organizationEventDescription": "Visible par tous les membres de l'organisation",
   "inviteOnlyEvent": "Sur invitation uniquement",
   "inviteOnlyEventDescription": "Visible uniquement par les membres invités et les administrateurs de l'événement",
-  "sortingIcon": "icône de tri"
+  "sortingIcon": "icône de tri",
+  "peopleTabTagName": "Personnes"
 }
