@@ -97,7 +97,6 @@ describe('OrganizationModal Component', () => {
               createOrg={mockCreateOrg}
               t={(key) => key}
               tCommon={(key) => key}
-              userData={undefined}
             />
           </I18nextProvider>
         </BrowserRouter>
@@ -146,7 +145,6 @@ describe('OrganizationModal Component', () => {
               createOrg={mockCreateOrg}
               t={(key) => key}
               tCommon={(key) => key}
-              userData={undefined}
             />
           </I18nextProvider>
         </BrowserRouter>
@@ -227,7 +225,6 @@ describe('OrganizationModal Component', () => {
               createOrg={mockCreateOrg}
               t={(key) => key}
               tCommon={(key) => key}
-              userData={undefined}
             />
           </I18nextProvider>
         </BrowserRouter>
@@ -347,7 +344,6 @@ describe('OrganizationModal Component', () => {
                 createOrg={mockCreateOrg}
                 t={(key) => key}
                 tCommon={(key) => key}
-                userData={undefined}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -482,7 +478,6 @@ describe('OrganizationModal Component', () => {
               createOrg={mockCreateOrg}
               t={(key) => key}
               tCommon={(key) => key}
-              userData={undefined}
             />
           </I18nextProvider>
         </BrowserRouter>
@@ -505,7 +500,6 @@ describe('OrganizationModal Component', () => {
               createOrg={mockCreateOrg}
               t={(key) => key}
               tCommon={(key) => key}
-              userData={undefined}
             />
           </I18nextProvider>
         </BrowserRouter>
@@ -558,7 +552,6 @@ describe('OrganizationModal Component', () => {
               createOrg={mockCreateOrg}
               t={(key) => key}
               tCommon={(key) => key}
-              userData={undefined}
             />
           </I18nextProvider>
         </BrowserRouter>
