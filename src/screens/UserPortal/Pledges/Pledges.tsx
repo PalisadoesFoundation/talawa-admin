@@ -32,7 +32,7 @@ import { currencySymbols } from 'utils/currency';
 import PledgeDeleteModal from 'screens/AdminPortal/FundCampaignPledge/deleteModal/PledgeDeleteModal';
 import { Navigate, useParams } from 'react-router';
 import PledgeModal from '../Campaigns/PledgeModal';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 const dataGridStyle = {
   '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
@@ -329,9 +329,9 @@ const Pledges = (): JSX.Element => {
   return (
     <LoadingState isLoading={pledgeLoading} variant="spinner">
       <div>
-        <AdminSearchFilterBar
+        <SearchFilterBar
           searchPlaceholder={tCommon('searchBy', {
-            item: `${t('pledgers')} or ${t('campaigns')}`,
+            item: `${t('pledgers')} ${tCommon('or')} ${t('campaigns')}`,
           })}
           searchValue={searchTerm}
           onSearchChange={setSearchTerm}

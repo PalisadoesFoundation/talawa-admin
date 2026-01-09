@@ -19,7 +19,7 @@ import ItemViewModal from 'screens/OrganizationActionItems/ActionItemViewModal/A
 import Avatar from 'components/Avatar/Avatar';
 import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
 import useLocalStorage from 'utils/useLocalstorage';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 enum ModalState {
   VIEW = 'view',
@@ -212,7 +212,7 @@ function Actions(): JSX.Element {
   return (
     <LoadingState isLoading={loading} variant="spinner">
       <div>
-        <AdminSearchFilterBar
+        <SearchFilterBar
           searchPlaceholder={tCommon('searchBy', {
             item: t('assigneeOrCategory'),
           })}

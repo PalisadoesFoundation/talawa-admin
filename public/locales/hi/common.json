@@ -229,5 +229,7 @@
   "organizationEventDescription": "संगठन के सभी सदस्यों के लिए दृश्य",
   "inviteOnlyEvent": "केवल आमंत्रण",
   "inviteOnlyEventDescription": "केवल आमंत्रित सदस्यों और ईवेंट व्यवस्थापकों के लिए दृश्य",
-  "to": "को"
+  "to": "को",
+  "or": "या",
+  "eventNotFound": "ईवेंट आईडी {{id}} के साथ नहीं मिला"
 }
