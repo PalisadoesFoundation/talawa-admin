@@ -1,38 +1,15 @@
 /**
- * @EventRegistrants Component
+ * EventRegistrants Component
  *
  * This component is responsible for displaying a list of event registrants
  * and attendees in a tabular format. It fetches data from GraphQL queries
  * and combines registrants and attendees data to display relevant information.
  *
- * @Features
+ * @remarks
  * - Fetches event registrants and attendees using GraphQL lazy queries.
  * - Combines registrants and attendees data to display enriched information.
- * - Displays a table with serial number, registrant name, registration date,
- *   and creation time.
+ * - Displays a table with serial number, registrant name, registration date, and creation time.
  * - Provides a button to add new registrants and a wrapper for event check-in.
- *
- * @Props
- * - None
- *
- * @Hooks
- * - `useTranslation`: For internationalization of text content.
- * - `useParams`: To extract `orgId` and `eventId` from the route parameters.
- * - `useLazyQuery`: To fetch event registrants and attendees data.
- * - `useState`: To manage state for registrants, attendees, and combined data.
- * - `useEffect`: To fetch and combine data on component mount and updates.
- * - `useCallback`: To memoize the data refresh function.
- *
- * @GraphQLQueries
- * - `EVENT_REGISTRANTS`: Fetches the list of registrants for the event.
- * - `EVENT_ATTENDEES`: Fetches the list of attendees for the event.
- *
- * @Returns
- * - A JSX element containing a table of event registrants and attendees.
- *
- * @Usage
- * - This component is used in the event management section of the application
- *   to display and manage event registrants and attendees.
  */
 import React, { useEffect, useState, useCallback } from 'react';
 import {
@@ -42,10 +19,10 @@ import {
   TableHead,
   TableRow,
   TableBody,
+  Table,
 } from '@mui/material';
-import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import styles from 'style/app-fixed.module.css';
 import { useLazyQuery, useQuery, useMutation } from '@apollo/client';
 import {
@@ -138,23 +115,23 @@ function EventRegistrants(): JSX.Element {
     (userId: string): void => {
       // Check if user is already checked in
       if (checkedInUsers.includes(userId)) {
-        toast.error('Cannot unregister a user who has already checked in');
+        NotificationToast.error(t('cannot_unregister_user_already_checked_in'));
         return;
       }
 
-      toast.warn('Removing the attendee...');
+      NotificationToast.warning(t('removing_attendee'));
       const removeVariables = isRecurring
         ? { userId, recurringEventInstanceId: eventId }
         : { userId, eventId: eventId };
 
       removeRegistrantMutation({ variables: removeVariables })
         .then(() => {
-          toast.success('Attendee removed successfully');
+          NotificationToast.success(t('attendee_removed_successfully'));
           refreshData(); // Refresh the data after removal
         })
         .catch((err) => {
-          toast.error('Error removing attendee');
-          toast.error(err.message);
+          NotificationToast.error(t('error_removing_attendee'));
+          NotificationToast.error(err.message);
         });
     },
     [
@@ -214,11 +191,7 @@ function EventRegistrants(): JSX.Element {
           />
         )}
       </div>
-      <TableContainer
-        component={Paper}
-        className="mt-3"
-        sx={{ borderRadius: '16px' }}
-      >
+      <TableContainer component={Paper} className={`mt-3 ${styles.rounded16}`}>
         <Table aria-label={t('eventRegistrantsTable')} role="grid">
           <TableHead>
             <TableRow>

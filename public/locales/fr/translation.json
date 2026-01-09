@@ -1396,7 +1396,11 @@
     "createdAt": "Créé le",
     "options": "Options",
     "addRegistrant": "Ajouter un inscrit",
-    "noRegistrantsFound": "Aucun inscrit trouvé."
+    "noRegistrantsFound": "Aucun inscrit trouvé.",
+    "removing_attendee": "Suppression du participant...",
+    "attendee_removed_successfully": "Participant supprimé avec succès",
+    "error_removing_attendee": "Erreur lors de la suppression du participant",
+    "cannot_unregister_user_already_checked_in": "Impossible de désinscrire un utilisateur qui s'est déjà enregistré"
   },
   "onSpotAttendee": {
     "title": "Participant sur place",

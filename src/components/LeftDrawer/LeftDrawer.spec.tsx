@@ -34,7 +34,7 @@ vi.mock('components/SignOut/SignOut', () => ({
   default: ({ hideDrawer }: { hideDrawer?: boolean }) => (
     <div
       data-testid="sign-out-component"
-      style={{ display: hideDrawer ? 'none' : 'block' }}
+      className={hideDrawer ? styles.displayNone : styles.displayBlock}
     >
       Sign Out Mock
     </div>

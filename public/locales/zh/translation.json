@@ -1396,7 +1396,11 @@
     "createdAt": "创建时间",
     "options": "选项",
     "addRegistrant": "添加注册者",
-    "noRegistrantsFound": "未找到注册者"
+    "noRegistrantsFound": "未找到注册者",
+    "removing_attendee": "正在移除与会者...",
+    "attendee_removed_successfully": "与会者已成功移除",
+    "error_removing_attendee": "移除与会者时出错",
+    "cannot_unregister_user_already_checked_in": "无法注销已经签到的用户"
   },
   "onSpotAttendee": {
     "title": "现场参与者",

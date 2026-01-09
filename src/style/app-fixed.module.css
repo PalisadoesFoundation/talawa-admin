@@ -11276,3 +11276,19 @@ form {
 .colorDarkGrey {
   color: var(--secondaryText-color, #3b3b3b) !important;
 }
+
+.rounded16 {
+  border-radius: 16px !important;
+}
+
+.tooltipShadow {
+  box-shadow: 0 0 5px var(--table-row-hover-bg, #0000001a) !important;
+}
+
+.displayBlock {
+  display: block !important;
+}
+
+.borderRadius6 {
+  border-radius: 6px !important;
+}

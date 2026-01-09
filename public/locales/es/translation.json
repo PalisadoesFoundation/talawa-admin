@@ -1396,7 +1396,11 @@
     "createdAt": "Creado en",
     "options": "Opciones",
     "addRegistrant": "Agregar registrado",
-    "noRegistrantsFound": "No se encontraron registrados"
+    "noRegistrantsFound": "No se encontraron registrados",
+    "removing_attendee": "Eliminando al asistente...",
+    "attendee_removed_successfully": "Asistente eliminado con éxito",
+    "error_removing_attendee": "Error al eliminar al asistente",
+    "cannot_unregister_user_already_checked_in": "No se puede dar de baja a un usuario que ya ha hecho el check-in"
   },
   "onSpotAttendee": {
     "title": "Asistente en el lugar",

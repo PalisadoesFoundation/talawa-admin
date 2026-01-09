@@ -4,31 +4,12 @@
  * This component is responsible for displaying and managing the attendance of members for a specific event.
  * It provides functionalities such as filtering, sorting, and searching attendees, as well as viewing attendance statistics.
  *
- * @component
- * @returns {JSX.Element} The rendered EventAttendance component.
- *
  * @remarks
  * - Utilizes Apollo Client's `useLazyQuery` to fetch event attendees data.
  * - Supports filtering attendees by time periods (e.g., This Month, This Year, All).
  * - Allows sorting attendees by name in ascending or descending order.
  * - Includes a search functionality to filter attendees by name or email.
  * - Displays attendance statistics in a modal.
- *
- * @dependencies
- * - React and React hooks (`useState`, `useEffect`, `useMemo`).
- * - Apollo Client for GraphQL queries.
- * - React Router's `useParams` for accessing route parameters.
- * - Material-UI and React-Bootstrap for UI components.
- * - `react-i18next` for internationalization.
- *
- * @example
- * ```tsx
- * <EventAttendance />
- * ```
- *
- *
- *
- * @todo
  * - Improve accessibility for tooltips and dropdowns.
  * - Optimize performance for large attendee lists.
  */
@@ -41,8 +22,9 @@ import {
   TableHead,
   TableRow,
   Tooltip,
+  Table,
 } from '@mui/material';
-import { Button, Table } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useLazyQuery } from '@apollo/client';
 import { EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
@@ -214,11 +196,7 @@ function EventAttendance(): JSX.Element {
           />
         </div>
       </div>
-      <TableContainer
-        component={Paper}
-        className="mt-3"
-        sx={{ borderRadius: '16px' }}
-      >
+      <TableContainer component={Paper} className={`mt-3 ${styles.rounded16}`}>
         <Table aria-label={t('event_attendance_table')} role="grid">
           <TableHead>
             <TableRow className="" data-testid="table-header-row">
@@ -301,6 +279,7 @@ function EventAttendance(): JSX.Element {
                     <Tooltip
                       componentsProps={{
                         tooltip: {
+                          className: styles.tooltipShadow,
                           sx: {
                             backgroundColor: 'var(--bs-white)',
                             fontSize: '2em',
@@ -308,8 +287,6 @@ function EventAttendance(): JSX.Element {
                             overflowY: 'scroll',
                             scrollbarColor: 'white',
                             border: 'var(--primary-border-solid)',
-                            borderRadius: '6px',
-                            boxShadow: '0 0 5px rgba(0,0,0,0.1)',
                           },
                         },
                       }}
