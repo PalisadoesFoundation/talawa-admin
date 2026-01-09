@@ -480,7 +480,7 @@ describe('Organisation Tags Page', () => {
   });
 
   it('skips query and renders without errors when parentTagId is undefined', async () => {
-    const { container } = render(
+    render(
       <MockedProvider cache={cache} link={link}>
         <MemoryRouter initialEntries={['/orgtags/123/subTags/']}>
           <Provider store={store}>

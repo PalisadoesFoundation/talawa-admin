@@ -102,8 +102,8 @@ export interface InterfaceCursorPaginationRenderProps<TNode, TData = unknown> {
   loading: boolean;
   loadingMore: boolean;
   pageInfo: InterfacePageInfo | null;
-  handleLoadMore: () => void;
-  handleRefetch: () => void;
+  handleLoadMore: () => Promise<void>;
+  handleRefetch: () => Promise<void>;
   error: ApolloError | undefined;
   /** The full query data from Apollo Client */
   queryData: TData | undefined;

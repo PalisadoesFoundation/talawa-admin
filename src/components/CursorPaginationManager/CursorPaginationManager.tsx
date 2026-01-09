@@ -69,45 +69,45 @@ function extractNodes<TNode>(
  *
  * @example
  * ```tsx
- * import \{ CursorPaginationManager \} from 'components/CursorPaginationManager/CursorPaginationManager';
- * import \{ gql \} from '@apollo/client';
+ * import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
+ * import { gql } from '@apollo/client';
  *
  * const GET_USERS_QUERY = gql`
- *   query GetUsers($first: Int!, $after: String) \{
- *     users(first: $first, after: $after) \{
- *       edges \{
+ *   query GetUsers($first: Int!, $after: String) {
+ *     users(first: $first, after: $after) {
+ *       edges {
  *         cursor
- *         node \{
+ *         node {
  *           id
  *           name
  *           email
- *         \}
- *       \}
- *       pageInfo \{
+ *         }
+ *       }
+ *       pageInfo {
  *         hasNextPage
  *         hasPreviousPage
  *         startCursor
  *         endCursor
- *       \}
- *     \}
- *   \}
+ *       }
+ *     }
+ *   }
  * `;
  *
- * function UsersList() \{
+ * function UsersList() {
  *   return (
  *     <CursorPaginationManager
- *       query=\{GET_USERS_QUERY\}
+ *       query={GET_USERS_QUERY}
  *       dataPath="users"
- *       itemsPerPage=\{10\}
- *       renderItem=\{(user) => (
- *         <div key=\{user.id\}>
- *           <h3>\{user.name\}</h3>
- *           <p>\{user.email\}</p>
+ *       itemsPerPage={10}
+ *       renderItem={(user) => (
+ *         <div key={user.id}>
+ *           <h3>{user.name}</h3>
+ *           <p>{user.email}</p>
  *         </div>
- *       )\}
+ *       )}
  *     />
  *   );
- * \}
+ * }
  * ```
  *
  * @remarks
@@ -354,7 +354,7 @@ export function CursorPaginationManager<
       <div className={styles.itemsContainer}>
         {items.map((item, index) => {
           const key = keyExtractor ? keyExtractor(item, index) : index;
-          return <div key={key}>{renderItem?.(item, index)}</div>;
+          return <div key={key}>{renderItem(item, index)}</div>;
         })}
       </div>
       {pageInfo?.hasNextPage && (
