@@ -431,7 +431,6 @@ jobs:
         MinIO-Compliance-Check,
         Python-Compliance,
         Translation-Tag-Check,
-        DataGrid-Policy-Check,
       ]
     steps:
       - name: This job intentionally does nothing

@@ -525,7 +525,7 @@ const columns: GridColDef[] = [
 
 ## Common Patterns and Best Practices
 
-### 1. Type Safety
+### Type Safety
 
 Always provide the generic type parameter for full type safety:
 
@@ -547,7 +547,7 @@ Always provide the generic type parameter for full type safety:
 />
 ```
 
-### 2. Column Configuration
+### Column Configuration
 
 Define columns outside the component to prevent re-renders:
 
@@ -571,7 +571,7 @@ export const UsersScreen = () => {
 };
 ```
 
-### 3. Search Fields
+### Search Fields
 
 Only include searchable text fields in `searchConfig.fields`:
 
@@ -589,7 +589,7 @@ searchConfig={{
 }}
 ```
 
-### 4. Pagination
+### Pagination
 
 Enable pagination for large datasets:
 
@@ -611,7 +611,7 @@ Enable pagination for large datasets:
 />
 ```
 
-### 5. Loading and Error States
+### Loading and Error States
 
 Always handle loading and error states:
 
@@ -628,7 +628,7 @@ const { data, loading, error } = useQuery(GET_USERS);
 />
 ```
 
-### 6. i18n Support
+### i18n Support
 
 Use translation keys for user-facing text:
 
@@ -650,7 +650,7 @@ const { t } = useTranslation('users');
 />
 ```
 
-### 7. Accessibility
+### Accessibility
 
 Ensure action buttons have proper aria labels:
 
@@ -677,7 +677,7 @@ Ensure action buttons have proper aria labels:
 />
 ```
 
-### 8. Sort Format Validation
+### Sort Format Validation
 
 The DataGridWrapper validates sort formats and provides helpful console warnings for debugging:
 
