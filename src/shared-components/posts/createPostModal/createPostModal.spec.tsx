@@ -28,6 +28,9 @@ const originalAcceptDescriptor = Object.getOwnPropertyDescriptor(
 const NotificationToastMocks = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
+  dismiss: vi.fn(),
 }));
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({

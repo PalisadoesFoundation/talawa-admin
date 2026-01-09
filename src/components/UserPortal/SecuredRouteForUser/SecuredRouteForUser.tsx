@@ -28,7 +28,7 @@
  * @requires `react-router-dom` for navigation and route handling.
  * @requires `useLocalStorage` custom hook for local storage interaction.
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Navigate, Outlet } from 'react-router';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -47,15 +47,15 @@ const SecuredRouteForUser = (): JSX.Element => {
   const { getItem, setItem, removeItem } = useLocalStorage();
   const { t } = useTranslation('translation', { keyPrefix: 'securedRoute' });
   const lastActiveRef = useRef<number>(Date.now());
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Check if the user is logged in and the role of the user
   const isLoggedIn = getItem('IsLoggedIn');
   const adminFor = getItem('AdminFor');
 
-  const updateLastActive = () => {
+  const updateLastActive = useCallback(() => {
     lastActiveRef.current = Date.now();
-  };
+  }, []);
 
   useEffect(() => {
     // Only set up session timeout if user is logged in
@@ -101,7 +101,7 @@ const SecuredRouteForUser = (): JSX.Element => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [isLoggedIn, setItem, removeItem]);
+  }, [isLoggedIn, removeItem, setItem, t, updateLastActive]);
 
   // Conditional rendering based on authentication status and role
   return isLoggedIn === 'TRUE' ? (

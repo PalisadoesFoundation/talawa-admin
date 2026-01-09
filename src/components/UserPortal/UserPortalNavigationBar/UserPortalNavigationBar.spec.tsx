@@ -19,6 +19,7 @@ import UserProfileDropdown from './UserDropdown';
 import LanguageSelector from './LanguageSelector';
 import { languages } from 'utils/languages';
 import useLocalStorage from 'utils/useLocalstorage';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 import { SvgIconTypeMap } from '@mui/material';
 import {
@@ -1028,10 +1029,6 @@ describe('UserPortalNavigationBar', () => {
         getStorageKey: vi.fn((key: string) => `Talawa-admin_${key}`),
         clearAllItems,
       });
-
-      const { NotificationToast } = await import(
-        'components/NotificationToast/NotificationToast'
-      );
 
       render(
         <MockedProvider mocks={[logoutErrorMock]}>
