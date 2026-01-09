@@ -413,7 +413,8 @@
     "notFound": "No Members Found",
     "organizationPeopleTable": "Organization People Table",
     "removeMemberTitle": "Remove Member",
-    "removeMemberConfirmation": "Are you sure you want to remove this member?"
+    "removeMemberConfirmation": "Are you sure you want to remove this member?",
+    "organizationIdMissing": "Organization ID is missing!"
   },
   "organizationTags": {
     "title": "Organization Tags",
@@ -1263,7 +1264,8 @@
     "role": "Role",
     "loading": "Loading...",
     "emailNotAvailable": "Email not available",
-    "allMembers": "All Members"
+    "allMembers": "All Members",
+    "peopleTable": "People Table"
   },
   "userLogin": {
     "login": "Login",

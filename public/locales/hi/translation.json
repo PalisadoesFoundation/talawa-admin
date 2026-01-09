@@ -399,6 +399,7 @@
     "notFound": "कोई सदस्य नहीं मिले",
     "organizationPeopleTable": "संगठन सदस्य तालिका",
     "removeMemberTitle": "सदस्य हटाएँ",
+    "organizationIdMissing": "संगठन आईडी गायब है!",
     "removeMemberConfirmation": "क्या आप वाकई इस सदस्य को हटाना चाहते हैं?"
   },
   "organizationCard": {
@@ -1209,7 +1210,8 @@
     "role": "भूमिका",
     "loading": "लोड हो रहा है...",
     "emailNotAvailable": "ईमेल उपलब्ध नहीं है",
-    "allMembers": "सभी सदस्य"
+    "allMembers": "सभी सदस्य",
+    "peopleTable": "लोग तालिका"
   },
   "userLogin": {
     "login": "लॉग इन करें",

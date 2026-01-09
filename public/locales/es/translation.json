@@ -399,6 +399,7 @@
     "organizationPeopleTable": "Tabla de Personas de la Organización",
     "createUser": "Crear usuario",
     "removeMemberTitle": "Eliminar miembro",
+    "organizationIdMissing": "¡Falta el ID de la organización!",
     "removeMemberConfirmation": "¿Está seguro de que desea eliminar a este miembro?"
   },
   "organizationCard": {
@@ -1223,7 +1224,8 @@
     "role": "Rol",
     "loading": "Cargando...",
     "emailNotAvailable": "Correo electrónico no disponible",
-    "allMembers": "Todos los miembros"
+    "allMembers": "Todos los miembros",
+    "peopleTable": "Tabla de Personas"
   },
   "userRegister": {
     "register": "Registro",

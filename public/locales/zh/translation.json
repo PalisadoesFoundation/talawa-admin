@@ -399,6 +399,7 @@
     "notFound": "未找到成员",
     "organizationPeopleTable": "组织人员表",
     "removeMemberTitle": "删除成员",
+    "organizationIdMissing": "组织ID 缺失！",
     "removeMemberConfirmation": "您确定要删除此成员吗？"
   },
   "organizationCard": {
@@ -1223,7 +1224,8 @@
     "role": "角色",
     "loading": "加载中...",
     "emailNotAvailable": "邮箱不可用",
-    "allMembers": "所有成员"
+    "allMembers": "所有成员",
+    "peopleTable": "人员表"
   },
   "userRegister": {
     "enterFirstName": "输入您的名字",

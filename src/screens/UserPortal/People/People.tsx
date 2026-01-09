@@ -44,7 +44,7 @@
  * @param mode - The current filter mode (0 for "All Members", 1 for "Admins").
  * @param organizationId - The ID of the organization extracted from URL parameters.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import styles from 'style/app-fixed.module.css';
@@ -92,6 +92,19 @@ export default function People(): React.JSX.Element {
     setRefetchTrigger((prev) => prev + 1);
   }, [mode]);
 
+  const whereFilter = useMemo(() => {
+    const searchFilter = searchTerm
+      ? { firstName: { contains: searchTerm } }
+      : undefined;
+    const roleFilter =
+      mode === 1 ? { role: { equal: 'administrator' } } : undefined;
+
+    if (searchFilter && roleFilter) {
+      return { ...searchFilter, ...roleFilter };
+    }
+    return searchFilter || roleFilter || undefined;
+  }, [searchTerm, mode]);
+
   return (
     <>
       <div
@@ -124,10 +137,7 @@ export default function People(): React.JSX.Element {
           />
         </div>
 
-        <div
-          className={styles.people_content}
-          aria-label={t('organizationPeopleTable')}
-        >
+        <div className={styles.people_content} aria-label={t('peopleTable')}>
           <div className={styles.people_card_header}>
             {/* Nested span groups sNo and avatar in a flex container for horizontal alignment */}
             <span
@@ -152,20 +162,7 @@ export default function People(): React.JSX.Element {
               query={ORGANIZATIONS_MEMBER_CONNECTION_LIST}
               queryVariables={{
                 orgId: organizationId,
-                where: (() => {
-                  const searchFilter = searchTerm
-                    ? { firstName: { contains: searchTerm } }
-                    : undefined;
-                  const roleFilter =
-                    mode === 1
-                      ? { role: { equal: 'administrator' } }
-                      : undefined;
-
-                  if (searchFilter && roleFilter) {
-                    return { ...searchFilter, ...roleFilter };
-                  }
-                  return searchFilter || roleFilter || undefined;
-                })(),
+                where: whereFilter,
               }}
               dataPath="organization.members"
               itemsPerPage={10}

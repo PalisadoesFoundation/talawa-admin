@@ -399,6 +399,7 @@
     "notFound": "Aucun membre trouvé",
     "organizationPeopleTable": "Table des Personnes de l'Organisation",
     "removeMemberTitle": "Supprimer un membre",
+    "organizationIdMissing": "L'ID de l'organisation est manquant !",
     "removeMemberConfirmation": "Êtes-vous sûr de vouloir supprimer ce membre ?"
   },
   "organizationCard": {
@@ -1209,7 +1210,8 @@
     "role": "Rôle",
     "loading": "Chargement...",
     "emailNotAvailable": "E-mail non disponible",
-    "allMembers": "Tous les membres"
+    "allMembers": "Tous les membres",
+    "peopleTable": "Table des personnes"
   },
   "userLogin": {
     "login": "Se connecter",
