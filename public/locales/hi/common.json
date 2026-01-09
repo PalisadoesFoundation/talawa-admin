@@ -233,5 +233,6 @@
   "invalidFile": "अमान्य फ़ाइल",
   "customRecurrence": "कस्टम पुनरावृत्ति",
   "selectAtLeastOneDay": "कृपया कम से कम एक दिन चुनें",
-  "invalidDetailsMessage": "अमान्य विवरण। कृपया अपना इनपुट जांचें।"
+  "invalidDetailsMessage": "अमान्य विवरण। कृपया अपना इनपुट जांचें।",
+  "logoutFailed": "लॉगआउट विफल रहा। कृपया पुनः प्रयास करें।"
 }

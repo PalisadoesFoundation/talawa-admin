@@ -233,5 +233,6 @@
   "invalidFile": "Invalid file",
   "customRecurrence": "Custom Recurrence",
   "selectAtLeastOneDay": "Please select at least one day",
-  "invalidDetailsMessage": "Invalid details. Please check your input."
+  "invalidDetailsMessage": "Invalid details. Please check your input.",
+  "logoutFailed": "Logout failed. Please try again."
 }

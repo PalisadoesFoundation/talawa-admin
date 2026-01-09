@@ -233,5 +233,6 @@
   "invalidFile": "Fichier invalide",
   "customRecurrence": "Récurrence personnalisée",
   "selectAtLeastOneDay": "Veuillez sélectionner au moins un jour",
-  "invalidDetailsMessage": "Détails invalides. Veuillez vérifier votre saisie."
+  "invalidDetailsMessage": "Détails invalides. Veuillez vérifier votre saisie.",
+  "logoutFailed": "Échec de la déconnexion. Veuillez réessayer."
 }
