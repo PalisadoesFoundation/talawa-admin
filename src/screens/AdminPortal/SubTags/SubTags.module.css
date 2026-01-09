@@ -142,12 +142,11 @@ form label,
   font-size: var(--font-size-4xl);
   color: var(--color-red-500);
   margin-bottom: var(--space-5);
+}
 
-  /* Add error icon for non-color indication */
-  &::before {
-    content: '\26A0\FE0F';
-    margin-right: var(--space-3);
-  }
+.errorIcon::before {
+  content: '\26A0\FE0F';
+  margin-right: var(--space-3);
 }
 
 /* Row Background */
@@ -201,16 +200,15 @@ form label,
 .tagsBreadCrumbs {
   color: var(--color-gray-400);
   cursor: pointer;
+}
 
-  /* Prevent layout shift */
-  &::after {
-    display: block;
-    content: attr(data-text);
-    font-weight: var(--font-weight-semibold);
-    height: 0;
-    overflow: hidden;
-    visibility: hidden;
-  }
+.tagsBreadCrumbs::after {
+  display: block;
+  content: attr(data-text);
+  font-weight: var(--font-weight-semibold);
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
 }
 
 .tagsBreadCrumbs:hover,
@@ -240,16 +238,15 @@ form label,
   color: var(--color-blue-700);
   font-weight: var(--font-weight-medium);
   cursor: pointer;
+}
 
-  /* Prevent layout shift */
-  &::after {
-    display: block;
-    content: attr(data-text);
-    font-weight: var(--font-weight-semibold);
-    height: 0;
-    overflow: hidden;
-    visibility: hidden;
-  }
+.subTagsLink::after {
+  display: block;
+  content: attr(data-text);
+  font-weight: var(--font-weight-semibold);
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
 }
 
 .subTagsScrollableDiv {

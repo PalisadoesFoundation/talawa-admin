@@ -130,22 +130,6 @@
   height: var(--logo-xs);
 }
 
-/* -- Requests.tsx --  */
-
-@media (max-width: 1120px) {
-  .contract {
-    padding-left: calc(var(--space-18) + var(--space-8) + var(--space-7));
-  }
-
-  .listBox .itemCard {
-    width: 100%;
-  }
-
-  .collapseSidebarButton {
-    width: calc(var(--space-18) + var(--space-8));
-  }
-}
-
 .listBox {
   width: 100%;
   flex: 1;
