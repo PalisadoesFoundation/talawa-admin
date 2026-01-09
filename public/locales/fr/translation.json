@@ -438,7 +438,8 @@
     "Latest": "Le Plus Récent",
     "Oldest": "Le Plus Ancien",
     "viewSubTags": "Voir {{count}} sous-étiquettes",
-    "tags": "Étiquettes"
+    "tags": "Étiquettes",
+    "errorLoadingSubTags": "Erreur lors du chargement des sous-étiquettes."
   },
   "manageTag": {
     "title": "Détails de l'étiquette",
@@ -488,7 +489,8 @@
     "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
     "sortPeople": "Trier les personnes",
     "noTagsFound": "Aucun tag trouvé",
-    "removeMember": "Retirer le membre"
+    "removeMember": "Retirer le membre",
+    "retry": "Réessayer"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",

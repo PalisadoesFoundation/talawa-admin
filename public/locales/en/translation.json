@@ -438,7 +438,8 @@
     "Latest": "Latest",
     "Oldest": "Oldest",
     "viewSubTags": "View {{count}} sub tags",
-    "tags": "Tags"
+    "tags": "Tags",
+    "errorLoadingSubTags": "Error loading sub-tags."
   },
   "manageTag": {
     "title": "Tag Details",
@@ -488,7 +489,8 @@
     "loadAssignedUsersError": "Error occurred while loading assigned users",
     "sortPeople": "Sort People",
     "noTagsFound": "No tags found",
-    "removeMember": "Remove Member"
+    "removeMember": "Remove Member",
+    "retry": "Retry"
   },
   "userListCard": {
     "addAdmin": "Add Admin",

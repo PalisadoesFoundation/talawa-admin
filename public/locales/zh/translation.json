@@ -438,7 +438,8 @@
     "Latest": "最新",
     "Oldest": "最旧",
     "viewSubTags": "查看 {{count}} 个子标签",
-    "tags": "标签"
+    "tags": "标签",
+    "errorLoadingSubTags": "加载子标签时出错。"
   },
   "manageTag": {
     "title": "标签详情",
@@ -488,7 +489,8 @@
     "tagActions": "标签操作",
     "loadAssignedUsersError": "加载已分配用户时发生错误",
     "noTagsFound": "未找到标签",
-    "removeMember": "移除成员"
+    "removeMember": "移除成员",
+    "retry": "重试"
   },
   "userListCard": {
     "addAdmin": "添加管理员",

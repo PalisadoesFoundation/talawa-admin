@@ -35,6 +35,7 @@ import React, { useState } from 'react';
 import type { InterfaceTagData } from 'utils/interfaces';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import styles from '../../../style/app-fixed.module.css';
+import tagNodeStyles from './TagNode.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import type { TFunction } from 'i18next';
@@ -76,18 +77,16 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
           <>
             <span
               onClick={handleTagClick}
-              className="me-3"
-              style={{ cursor: 'pointer' }}
+              className={`me-3 ${tagNodeStyles.cursorPointer}`}
               data-testid={`expandSubTags${tag._id}`}
               aria-label={expanded ? t('collapse') : t('expand')}
             >
               {expanded ? '▼' : '▶'}
             </span>
             <input
-              style={{ cursor: 'pointer' }}
+              className={`me-2 ${tagNodeStyles.cursorPointer}`}
               type="checkbox"
               checked={checkedTags.has(tag._id)}
-              className="me-2"
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
               id={`checkbox-${tag._id}`}
@@ -99,10 +98,9 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
           <>
             <span className="me-3">●</span>
             <input
-              style={{ cursor: 'pointer' }}
+              className={`ms-1 me-2 ${tagNodeStyles.cursorPointer}`}
               type="checkbox"
               checked={checkedTags.has(tag._id)}
-              className="ms-1 me-2"
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
               aria-label={tag.name}
@@ -115,7 +113,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
       </div>
 
       {expanded && (
-        <div style={{ marginLeft: '20px' }}>
+        <div className={tagNodeStyles.subTagsIndent}>
           <CursorPaginationManager<unknown, InterfaceTagData>
             query={USER_TAG_SUB_TAGS}
             queryVariables={{ id: tag._id, first: TAGS_QUERY_DATA_CHUNK_SIZE }}
@@ -174,7 +172,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
                 <div
                   id={`subTagsScrollableDiv${tag._id}`}
                   data-testid={`subTagsScrollableDiv${tag._id}`}
-                  style={{ maxHeight: 300, overflow: 'auto' }}
+                  className={tagNodeStyles.subTagsScrollableDiv}
                 >
                   <InfiniteScroll
                     dataLength={items.length}

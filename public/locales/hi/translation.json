@@ -438,7 +438,8 @@
     "Latest": "नवीनतम",
     "Oldest": "सबसे पुराना",
     "viewSubTags": "{{count}} उप-टैग देखें",
-    "tags": "टैग"
+    "tags": "टैग",
+    "errorLoadingSubTags": "उप-टैग लोड करने में त्रुटि।"
   },
   "manageTag": {
     "title": "टैग विवरण",
@@ -488,7 +489,8 @@
     "tagActions": "टैग क्रियाएँ",
     "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
     "noTagsFound": "कोई टैग नहीं मिला",
-    "removeMember": "सदस्य हटाएं"
+    "removeMember": "सदस्य हटाएं",
+    "retry": "पुनः प्रयास करें"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
