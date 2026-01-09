@@ -148,7 +148,7 @@ export function CursorPaginationManager<
     renderAdditionalButtons,
   } = props;
 
-  // Merge queryVariables and queryOptions.variables
+  // Use queryOptions.variables with fallback to queryVariables (precedence order)
   const baseVariables = queryOptions?.variables || queryVariables || {};
 
   const { t } = useTranslation('common');

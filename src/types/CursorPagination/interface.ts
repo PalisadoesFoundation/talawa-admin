@@ -2,6 +2,9 @@ import type { ReactNode } from 'react';
 import type { DocumentNode } from 'graphql';
 import type { ApolloError } from '@apollo/client';
 
+/**
+ * Pagination information following Relay cursor pagination spec
+ */
 export interface InterfacePageInfo {
   endCursor: string | null;
   startCursor: string | null;
