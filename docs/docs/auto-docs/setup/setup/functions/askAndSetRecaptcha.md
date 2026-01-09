@@ -6,7 +6,7 @@
 
 > **askAndSetRecaptcha**(): `Promise`\<`void`\>
 
-Defined in: [src/setup/setup.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L53)
+Defined in: [src/setup/setup.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L54)
 
 Prompts user to configure reCAPTCHA settings and updates the .env file.
 
@@ -28,6 +28,10 @@ This function handles the interactive setup for reCAPTCHA configuration:
 ```typescript
 await askAndSetRecaptcha();
 ```
+
+## Throws
+
+ExitPromptError if user cancels the prompt
 
 ## Throws
 

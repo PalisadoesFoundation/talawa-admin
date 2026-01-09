@@ -48,6 +48,7 @@ const isExitPromptError = (error: unknown): boolean =>
  * ```
  *
  * @returns A promise that resolves when configuration is complete
+ * @throws ExitPromptError if user cancels the prompt
  * @throws Error if user input fails or environment update fails
  */
 export const askAndSetRecaptcha = async (): Promise<void> => {
