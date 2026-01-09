@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { DocumentNode } from 'graphql';
+import type { ApolloError } from '@apollo/client';
 
 export interface InterfacePageInfo {
   endCursor: string | null;
@@ -9,11 +10,39 @@ export interface InterfacePageInfo {
 }
 
 /**
- * Props for CursorPaginationManager component.
+ * Connection data structure following Relay cursor pagination spec
  */
-export interface InterfaceCursorPaginationProps<TNode> {
+export interface InterfaceConnectionData<TNode> {
+  edges: Array<{ cursor: string; node: TNode }>;
+  pageInfo: InterfacePageInfo;
+  totalCount?: number;
+}
+
+/**
+ * Variables for cursor pagination queries
+ */
+export interface PaginationVariables {
+  first?: number;
+  after?: string | null;
+  last?: number;
+  before?: string | null;
+}
+
+/**
+ * Base props shared by both default and external UI modes
+ */
+export interface InterfaceCursorPaginationManagerBaseProps<
+  TNode,
+  TVariables extends Record<string, unknown> = Record<string, unknown>,
+> {
   query: DocumentNode;
-  queryVariables?: Record<string, unknown>;
+  /** Query options including variables (preferred) */
+  queryOptions?: {
+    variables?: TVariables;
+    [key: string]: unknown;
+  };
+  /** Legacy: Query variables (use queryOptions.variables instead) */
+  queryVariables?: TVariables;
   /** Dot-separated path to the connection field in the GraphQL response (e.g. "post.comments") */
   dataPath: string;
   itemsPerPage?: number;
@@ -24,6 +53,8 @@ export interface InterfaceCursorPaginationProps<TNode> {
   onDataChange?: (data: TNode[]) => void;
   /** Changing this numeric prop triggers a refetch when it updates */
   refetchTrigger?: number;
+  /** Optional additional buttons to render */
+  renderAdditionalButtons?: (queryData: unknown) => ReactNode;
 }
 
 /**

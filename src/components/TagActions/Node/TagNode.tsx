@@ -116,7 +116,9 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
         <div className={tagNodeStyles.subTagsIndent}>
           <CursorPaginationManager<unknown, InterfaceTagData>
             query={USER_TAG_SUB_TAGS}
-            queryVariables={{ id: tag._id, first: TAGS_QUERY_DATA_CHUNK_SIZE }}
+            queryOptions={{
+              variables: { id: tag._id, first: TAGS_QUERY_DATA_CHUNK_SIZE },
+            }}
             dataPath="getChildTags.childTags"
             itemsPerPage={TAGS_QUERY_DATA_CHUNK_SIZE}
             useExternalUI={true}

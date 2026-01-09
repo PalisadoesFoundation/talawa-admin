@@ -307,7 +307,7 @@ function SubTags(): JSX.Element {
                           />
                         </button>
 
-                        {orgUserTagAncestors?.map((tag, index) => (
+                        {orgUserTagAncestors?.map((tag: { _id: string; name: string }, index: number) => (
                           <button
                             type="button"
                             key={index}

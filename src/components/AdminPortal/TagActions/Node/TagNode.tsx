@@ -39,7 +39,6 @@ import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScroll
 import componentStyle from '../TagAction.module.css';
 import { WarningAmberRounded } from '@mui/icons-material';
 import type {
-  InterfaceOrganizationSubTagsQuery,
   InterfaceQueryUserTagChildTags,
 } from 'utils/interfaces';
 import type { InterfaceTagNodeProps } from 'types/AdminPortal/TagNode/interface';
@@ -60,7 +59,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
     loading: subTagsLoading,
     error: subTagsError,
     fetchMore: fetchMoreSubTags,
-  }: InterfaceOrganizationSubTagsQuery = useQuery(USER_TAG_SUB_TAGS, {
+  } = useQuery(USER_TAG_SUB_TAGS, {
     variables: { id: tag._id, first: TAGS_QUERY_DATA_CHUNK_SIZE },
     skip: !expanded,
   });
@@ -111,7 +110,9 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   }
 
   const subTagsList =
-    subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ?? [];
+    subTagsData?.getChildTags.childTags.edges.map(
+      (edge: { node: InterfaceTagData; cursor: string }) => edge.node,
+    ) ?? [];
 
   const handleTagClick = (): void => {
     setExpanded(!expanded);

@@ -134,6 +134,7 @@ export function CursorPaginationManager<
   const {
     query,
     queryVariables,
+    queryOptions,
     dataPath,
     itemsPerPage = 10,
     renderItem,
@@ -144,7 +145,11 @@ export function CursorPaginationManager<
     refetchTrigger,
     useExternalUI,
     children,
+    renderAdditionalButtons,
   } = props;
+
+  // Merge queryVariables and queryOptions.variables
+  const baseVariables = queryOptions?.variables || queryVariables || {};
 
   const { t } = useTranslation('common');
 
@@ -166,13 +171,14 @@ export function CursorPaginationManager<
   // Apollo Client hook
   const { data, loading, error, fetchMore, refetch } = useQuery<
     TData,
-    TVariables
+    TVariables & PaginationVariables
   >(query, {
+    ...queryOptions,
     variables: {
-      ...queryVariables,
+      ...(baseVariables as TVariables),
       first: itemsPerPage,
       after: null,
-    } as PaginationVariables<TVariables>,
+    } as TVariables & PaginationVariables,
     notifyOnNetworkStatusChange: true,
   });
 
@@ -184,7 +190,7 @@ export function CursorPaginationManager<
 
     if (connectionData) {
       const newNodes = extractNodes(connectionData.edges);
-      setItems(newNodes);
+      setItems(newNodes as TNode[]);
       setPageInfo(connectionData.pageInfo || null);
 
       if (onDataChange) {
@@ -205,10 +211,10 @@ export function CursorPaginationManager<
     try {
       const result = await fetchMore({
         variables: {
-          ...queryVariables,
+          ...(baseVariables as TVariables),
           first: itemsPerPage,
           after: pageInfo.endCursor,
-        } as PaginationVariables<TVariables>,
+        } as TVariables & PaginationVariables,
       });
 
       // Check if this request is stale or component unmounted
@@ -243,7 +249,7 @@ export function CursorPaginationManager<
     isLoadingMore,
     loading,
     fetchMore,
-    queryVariables,
+    baseVariables,
     itemsPerPage,
     dataPath,
     onDataChange,
@@ -259,14 +265,14 @@ export function CursorPaginationManager<
 
     try {
       await refetch({
-        ...queryVariables,
+        ...(baseVariables as TVariables),
         first: itemsPerPage,
         after: null,
-      } as PaginationVariables<TVariables>);
+      } as TVariables & PaginationVariables);
     } catch {
       // Error state is handled via Apollo's error prop
     }
-  }, [refetch, queryVariables, itemsPerPage]);
+  }, [refetch, baseVariables, itemsPerPage]);
 
   // Watch for refetchTrigger changes
   useEffect(() => {

@@ -73,7 +73,7 @@ const renderComponent = (
   customMocks: MockedResponse[] = mocks as MockedResponse[],
 ) => {
   return render(
-    <MockedProvider mocks={customMocks} addTypename={false}>
+    <MockedProvider mocks={customMocks}>
       <I18nextProvider i18n={i18nForTest}>
         <InviteByEmailModal {...defaultProps} {...props} />
       </I18nextProvider>

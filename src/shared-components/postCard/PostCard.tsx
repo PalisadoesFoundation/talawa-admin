@@ -413,9 +413,11 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           <Box className={postCardStyles.commentSection}>
             <CursorPaginationManager
               query={GET_POST_COMMENTS}
-              queryVariables={{
-                postId: props.id,
-                userId: userId as string,
+              queryOptions={{
+                variables: {
+                  postId: props.id,
+                  userId: userId as string,
+                },
               }}
               dataPath="post.comments"
               itemsPerPage={10}

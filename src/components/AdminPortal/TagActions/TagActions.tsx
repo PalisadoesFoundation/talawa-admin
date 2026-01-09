@@ -333,9 +333,11 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               {tagActionsModalIsOpen && (
                 <CursorPaginationManager
                   query={ORGANIZATION_USER_TAGS_LIST}
-                  queryVariables={{
-                    id: orgId,
-                    where: { name: { starts_with: tagSearchName } },
+                  queryOptions={{
+                    variables: {
+                      id: orgId,
+                      where: { name: { starts_with: tagSearchName } },
+                    },
                   }}
                   dataPath="organizations.0.userTags"
                   itemsPerPage={TAGS_QUERY_DATA_CHUNK_SIZE}

@@ -313,7 +313,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createSuccessMock()];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -335,7 +335,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createSuccessMock()];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -358,7 +358,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createNestedMock()];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_NESTED_QUERY}
@@ -380,7 +380,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createSuccessMock()];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -404,7 +404,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createSuccessMock()];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -425,7 +425,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createSuccessMock()];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -445,7 +445,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createEmptyMock()];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -468,7 +468,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createEmptyMock()];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -490,7 +490,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createErrorMock()];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -517,7 +517,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [errorMock, successMock];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -550,7 +550,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createSuccessMock(true)];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -571,7 +571,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createSuccessMock(false)];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -595,7 +595,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createSuccessMock(true), createLoadMoreMock()];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -631,7 +631,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createSuccessMock(true), createLoadMoreMock()];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -671,7 +671,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createSuccessMock(true), delayedLoadMoreMock];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -706,7 +706,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createSuccessMock(true), createLoadMoreMock()];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -747,7 +747,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createSuccessMock(true), createLoadMoreMock()];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -794,7 +794,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createSuccessMock(true), createLoadMoreMock()];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -870,7 +870,7 @@ describe('CursorPaginationManager', () => {
       );
 
       const { rerender } = render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <Wrapper trigger={0} />
           </I18nextProvider>
@@ -884,7 +884,7 @@ describe('CursorPaginationManager', () => {
 
       // Change refetchTrigger - this should trigger a refetch
       rerender(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <Wrapper trigger={1} />
           </I18nextProvider>
@@ -906,7 +906,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [initialMock, loadMoreMock, refetchMock];
 
       const { rerender } = render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -933,7 +933,7 @@ describe('CursorPaginationManager', () => {
 
       // Trigger refetch
       rerender(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -957,7 +957,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createSuccessMock()];
 
       const { rerender } = render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -976,7 +976,7 @@ describe('CursorPaginationManager', () => {
 
       // Re-render with same trigger value
       rerender(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -1009,7 +1009,7 @@ describe('CursorPaginationManager', () => {
       ];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -1051,7 +1051,7 @@ describe('CursorPaginationManager', () => {
       ];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -1123,7 +1123,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [nestedWithNextPage, brokenPathMock];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_NESTED_QUERY}
@@ -1158,7 +1158,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createSuccessMock()];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -1199,7 +1199,7 @@ describe('CursorPaginationManager', () => {
       };
 
       render(
-        <MockedProvider mocks={[mockWithoutPageInfo]} addTypename={false}>
+        <MockedProvider mocks={[mockWithoutPageInfo]}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -1236,7 +1236,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [successMock, errorMock];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -1285,7 +1285,7 @@ describe('CursorPaginationManager', () => {
       };
 
       render(
-        <MockedProvider mocks={[malformedMock]} addTypename={false}>
+        <MockedProvider mocks={[malformedMock]}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -1334,7 +1334,7 @@ describe('CursorPaginationManager', () => {
       };
 
       render(
-        <MockedProvider mocks={[mockWithNullCursor]} addTypename={false}>
+        <MockedProvider mocks={[mockWithNullCursor]}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -1358,7 +1358,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createSuccessMock()];
 
       const { unmount } = render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -1388,7 +1388,7 @@ describe('CursorPaginationManager', () => {
       const mocks = [createNestedMock()];
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_NESTED_QUERY}
@@ -1475,10 +1475,7 @@ describe('CursorPaginationManager', () => {
       };
 
       const { rerender } = render(
-        <MockedProvider
-          mocks={[initialMock, slowFetchMoreMock, refetchMock]}
-          addTypename={false}
-        >
+        <MockedProvider mocks={[initialMock, slowFetchMoreMock, refetchMock]}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -1502,10 +1499,7 @@ describe('CursorPaginationManager', () => {
 
       // Immediately trigger refetch (increments generation counter)
       rerender(
-        <MockedProvider
-          mocks={[initialMock, slowFetchMoreMock, refetchMock]}
-          addTypename={false}
-        >
+        <MockedProvider mocks={[initialMock, slowFetchMoreMock, refetchMock]}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -1555,7 +1549,7 @@ describe('CursorPaginationManager', () => {
       ));
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -1629,7 +1623,7 @@ describe('CursorPaginationManager', () => {
       let capturedQueryData: unknown;
 
       render(
-        <MockedProvider mocks={[mockOrgMembers]} addTypename={false}>
+        <MockedProvider mocks={[mockOrgMembers]}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_NESTED_QUERY}
@@ -1665,7 +1659,7 @@ describe('CursorPaginationManager', () => {
       let capturedHandleRefetch: (() => void) | null = null;
 
       render(
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -1722,7 +1716,7 @@ describe('CursorPaginationManager', () => {
       };
 
       render(
-        <MockedProvider mocks={[errorMock]} addTypename={false}>
+        <MockedProvider mocks={[errorMock]}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -1780,7 +1774,7 @@ describe('CursorPaginationManager', () => {
       };
 
       render(
-        <MockedProvider mocks={[emptyMock]} addTypename={false}>
+        <MockedProvider mocks={[emptyMock]}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -1845,7 +1839,7 @@ describe('CursorPaginationManager', () => {
       };
 
       const { rerender } = render(
-        <MockedProvider mocks={[initialMock, refetchMock]} addTypename={false}>
+        <MockedProvider mocks={[initialMock, refetchMock]}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -1864,7 +1858,7 @@ describe('CursorPaginationManager', () => {
 
       // Changing from 0 to 1 should still trigger refetch
       rerender(
-        <MockedProvider mocks={[initialMock, refetchMock]} addTypename={false}>
+        <MockedProvider mocks={[initialMock, refetchMock]}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}
@@ -1909,7 +1903,7 @@ describe('CursorPaginationManager', () => {
       };
 
       render(
-        <MockedProvider mocks={[largeMock]} addTypename={false}>
+        <MockedProvider mocks={[largeMock]}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
               query={MOCK_QUERY}

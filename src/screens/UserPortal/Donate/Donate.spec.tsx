@@ -296,7 +296,7 @@ const multipleLink = new StaticMockLink(MULTIPLE_DONATIONS_MOCKS, true);
 
 const renderDonate = (mocks = MOCKS) => {
   return render(
-    <MockedProvider mocks={mocks} addTypename={false}>
+    <MockedProvider mocks={mocks}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
