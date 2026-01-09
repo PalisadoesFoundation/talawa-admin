@@ -195,7 +195,7 @@ const renderOrganizationVenue = (link: ApolloLink): RenderResult => {
 };
 
 describe('OrganizationVenue with missing orgId', () => {
-  test('Redirect to /orglist when orgId is falsy/undefined', async () => {
+  test('Redirect to /admin/orglist when orgId is falsy/undefined', async () => {
     render(
       <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/admin/orgvenues/']}>

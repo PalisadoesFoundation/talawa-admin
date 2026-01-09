@@ -54,13 +54,13 @@ import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useMutation } from '@apollo/client';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useNavigate } from 'react-router-dom';
 import useLocalStorage from 'utils/useLocalstorage';
 
-function userNavbar(): JSX.Element {
+function UserNavbar(): JSX.Element {
   // Hook for local storage operations
   const { getItem, clearAllItems } = useLocalStorage();
 
@@ -94,7 +94,7 @@ function userNavbar(): JSX.Element {
       await logout();
     } catch (error) {
       console.error('Error during logout:', error);
-      toast.error(tCommon('errorOccurred'));
+      NotificationToast.error(tCommon('errorOccurred'));
     } finally {
       clearAllItems();
       navigate('/');
@@ -191,4 +191,4 @@ function userNavbar(): JSX.Element {
   );
 }
 
-export default userNavbar;
+export default UserNavbar;

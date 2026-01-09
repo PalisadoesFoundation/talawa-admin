@@ -34,14 +34,14 @@ enum ModalState {
 /**
  * Renders the Fund Campaign Pledges screen with pledge management, search/sort, and progress tracking.
  */
-const fundCampaignPledge = (): JSX.Element => {
+const FundCampaignPledge = (): JSX.Element => {
   const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
   const { fundCampaignId, orgId } = useParams();
   if (!fundCampaignId || !orgId) {
-    return <Navigate to={'/'} replace />;
+    return <Navigate to={'/admin/'} replace />;
   }
 
   const [campaignInfo, setCampaignInfo] = useState<InterfaceCampaignInfoPG>({
@@ -245,11 +245,11 @@ const fundCampaignPledge = (): JSX.Element => {
       <div>
         <BreadcrumbsComponent
           items={[
-            { label: fundName, to: `/orgfunds/${orgId}` },
+            { label: fundName, to: `/admin/orgfunds/${orgId}` },
             fundId
               ? {
                   label: campaignInfo?.name,
-                  to: `/orgfundcampaign/${orgId}/${fundId}`,
+                  to: `/admin/orgfundcampaign/${orgId}/${fundId}`,
                 }
               : { label: campaignInfo?.name },
             { translationKey: 'pledges.pledges', isCurrent: true },
@@ -483,4 +483,4 @@ const fundCampaignPledge = (): JSX.Element => {
     </LoadingState>
   );
 };
-export default fundCampaignPledge;
+export default FundCampaignPledge;

@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useEffect, useMemo } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import { useQuery, useApolloClient } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
@@ -24,7 +24,7 @@ const OrganizationScreen = lazy(
 const PostsPage = lazy(() => import('shared-components/posts/posts'));
 
 const SuperAdminScreen = lazy(
-  () => import('components/SuperAdminScreen/SuperAdminScreen'),
+  () => import('components/AdminPortal/SuperAdminScreen/SuperAdminScreen'),
 );
 const BlockUser = lazy(() => import('screens/AdminPortal/BlockUser/BlockUser'));
 const EventManagement = lazy(
@@ -212,6 +212,10 @@ function App(): React.ReactElement {
           <Route element={<SecuredRoute />}>
             <Route element={<SuperAdminScreen />}>
               <Route path="/admin/orglist" element={<OrgList />} />
+              <Route
+                path="/orglist"
+                element={<Navigate replace to="/admin/orglist" />}
+              />
               <Route path="/admin/notification" element={<Notification />} />
               <Route path="/admin/profile" element={<MemberDetail />} />
               <Route path="/admin/users" element={<Users />} />
@@ -256,7 +260,10 @@ function App(): React.ReactElement {
                 path="/admin/orgtags/:orgId/subTags/:tagId"
                 element={<SubTags />}
               />
-              <Route path="/admin/member/:orgId/:userId" element={<MemberDetail />} />
+              <Route
+                path="/admin/member/:orgId/:userId"
+                element={<MemberDetail />}
+              />
               <Route
                 path="/admin/orgevents/:orgId"
                 element={<OrganizationEvents />}

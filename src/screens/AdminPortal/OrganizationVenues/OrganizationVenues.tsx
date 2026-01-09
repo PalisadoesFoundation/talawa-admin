@@ -61,7 +61,7 @@ import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/Venues/VenueCard';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
-function organizationVenues(): JSX.Element {
+function OrganizationVenues(): JSX.Element {
   // Translation hooks for i18n support
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationVenues',
@@ -86,7 +86,7 @@ function organizationVenues(): JSX.Element {
   // Getting the organization ID from the URL parameters
   const { orgId } = useParams();
   if (!orgId) {
-    return <Navigate to="/orglist" />;
+    return <Navigate to="/admin/orglist" />;
   }
 
   // GraphQL query for fetching venue data
@@ -298,4 +298,4 @@ function organizationVenues(): JSX.Element {
   );
 }
 
-export default organizationVenues;
+export default OrganizationVenues;

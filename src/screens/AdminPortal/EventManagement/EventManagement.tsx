@@ -91,7 +91,7 @@ const EventManagement = (): JSX.Element => {
   const { eventId, orgId } = useParams();
   if (!eventId || !orgId) {
     // Redirect if event ID or organization ID is missing
-    return <Navigate to={'/orglist'} />;
+    return <Navigate to={'/admin/orglist'} />;
   }
 
   // Determine user role based on local storage

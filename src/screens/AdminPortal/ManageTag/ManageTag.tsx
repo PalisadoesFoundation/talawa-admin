@@ -85,8 +85,8 @@ import {
   UPDATE_USER_TAG,
 } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAGS_ASSIGNED_MEMBERS } from 'GraphQl/Queries/userTagQueries';
-import AddPeopleToTag from 'components/AddPeopleToTag/AddPeopleToTag';
-import TagActions from 'components/TagActions/TagActions';
+import AddPeopleToTag from 'components/AdminPortal/AddPeopleToTag/AddPeopleToTag';
+import TagActions from 'components/AdminPortal/TagActions/TagActions';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import EditUserTagModal from './editModal/EditUserTagModal';
@@ -283,7 +283,7 @@ function ManageTag(): JSX.Element {
     try {
       await removeUserTag({ variables: { id: currentTagId } });
 
-      navigate(`/orgtags/${orgId}`);
+      navigate(`/admin/orgtags/${orgId}`);
       toggleRemoveUserTagModal();
       NotificationToast.success({
         key: 'tagRemovalSuccess',
@@ -321,10 +321,10 @@ function ManageTag(): JSX.Element {
   ];
 
   const redirectToSubTags = (tagId: string): void => {
-    navigate(`/orgtags/${orgId}/subTags/${tagId}`);
+    navigate(`/admin/orgtags/${orgId}/subTags/${tagId}`);
   };
   const redirectToManageTag = (tagId: string): void => {
-    navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
+    navigate(`/admin/orgtags/${orgId}/manageTag/${tagId}`);
   };
   const toggleUnassignUserTagModal = (): void => {
     if (unassignUserTagModalIsOpen) {
@@ -383,7 +383,7 @@ function ManageTag(): JSX.Element {
         return (
           <div>
             <Link
-              to={`/member/${orgId}`}
+              to={`/admin/member/${orgId}`}
               state={{ id: params.row?._id }}
               data-testid="viewProfileBtn"
             >
@@ -480,7 +480,7 @@ function ManageTag(): JSX.Element {
                     <IconComponent name="Tag" />
                   </div>
                   <div
-                    onClick={() => navigate(`/orgtags/${orgId}`)}
+                    onClick={() => navigate(`/admin/orgtags/${orgId}`)}
                     className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
                     data-testid="allTagsBtn"
                   >

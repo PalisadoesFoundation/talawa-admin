@@ -36,7 +36,7 @@ import IconComponent from 'components/IconComponent/IconComponent';
 import SidebarBase from 'shared-components/SidebarBase/SidebarBase';
 import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
 import SidebarPluginSection from 'shared-components/SidebarPluginSection/SidebarPluginSection';
-import useLocalStorage from 'utils/useLocalstorage';
+import { useLocalStorage } from 'utils/useLocalstorage';
 
 export interface InterfaceUserSidebarProps {
   hideDrawer: boolean;
@@ -149,7 +149,7 @@ const UserSidebar = ({
       hideDrawer={hideDrawer}
       setHideDrawer={setHideDrawer}
       portalType="user"
-      backgroundColor="#f0f7fb"
+      backgroundColor="var(--color-sidebar-bg)"
       persistToggleState={true}
       headerContent={headerContent}
       footerContent={

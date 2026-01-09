@@ -2147,6 +2147,7 @@ export interface InterfaceQueryUserListItemForAdmin {
         id: string;
         createdAt: string;
         organization: {
+          id?: string;
           name: string;
           avatarURL?: string;
           city: string;

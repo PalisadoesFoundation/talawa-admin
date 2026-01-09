@@ -10060,6 +10060,26 @@ form {
   cursor: pointer;
   color: var(--primaryText-color);
   transition: transform 0.3s ease;
+  height: 38px;
+}
+
+.hamburgerIconExpanded {
+  margin-left: 10px;
+}
+
+.hamburgerIconCollapsed {
+  margin-left: 0;
+}
+
+.sidebarBrandingContainer {
+  display: flex;
+  align-items: center;
+  margin-right: auto;
+  padding-left: 5px;
+}
+
+.sidebarBrandingContainerHidden {
+  display: none;
 }
 
 .collapsedDrawer {

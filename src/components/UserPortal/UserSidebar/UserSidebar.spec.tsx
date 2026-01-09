@@ -24,6 +24,7 @@ const mockTImplementation = (key: string) => {
     'my organizations': 'My Organizations',
     menu: 'Menu',
     Settings: 'Settings', // Capital S for common namespace
+    switchToAdminPortal: 'Switch to Admin Portal',
   };
   return translations[key] || key;
 };
@@ -86,7 +87,7 @@ const { mockUsePluginDrawerItems } = vi.hoisted(() => ({
 const { mockUseLocalStorage } = vi.hoisted(() => ({
   mockUseLocalStorage: vi.fn(() => ({
     setItem: vi.fn(),
-    getItem: vi.fn(() => 'regular'),
+    getItem: vi.fn((_key: string) => 'regular'),
   })),
 }));
 
@@ -95,6 +96,7 @@ vi.mock('plugin', () => ({
 }));
 
 vi.mock('utils/useLocalstorage', () => ({
+  useLocalStorage: mockUseLocalStorage,
   default: mockUseLocalStorage,
   setItem: vi.fn(),
 }));
@@ -696,6 +698,42 @@ describe('UserSidebar', () => {
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
       expect(mockSetItem).toHaveBeenCalledWith('sidebar', false);
+    });
+  });
+
+  describe('Admin Portal Switch', () => {
+    it('should show "Switch to Admin Portal" link when user is administrator', () => {
+      mockUseLocalStorage.mockReturnValue({
+        setItem: vi.fn(),
+        getItem: vi.fn((key: string) =>
+          key === 'role' ? 'administrator' : 'regular',
+        ),
+      });
+
+      renderComponent();
+
+      const adminSwitchBtn = screen.getByTestId('switchToAdminPortalBtn');
+      expect(adminSwitchBtn).toBeInTheDocument();
+      expect(screen.getByText('Switch to Admin Portal')).toBeInTheDocument();
+
+      const adminLink = adminSwitchBtn.closest('a');
+      expect(adminLink).toHaveAttribute('href', '/admin/orglist');
+    });
+
+    it('should not show "Switch to Admin Portal" link when user is not administrator', () => {
+      mockUseLocalStorage.mockReturnValue({
+        setItem: vi.fn(),
+        getItem: vi.fn((key: string) => (key === 'role' ? 'user' : 'regular')),
+      });
+
+      renderComponent();
+
+      expect(
+        screen.queryByTestId('switchToAdminPortalBtn'),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByText('Switch to Admin Portal'),
+      ).not.toBeInTheDocument();
     });
   });
 });

@@ -3,7 +3,7 @@ import { MockedProvider, MockedResponse } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import cookies from 'js-cookie';
@@ -15,7 +15,7 @@ import userEvent from '@testing-library/user-event';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 /**
  * Unit tests for UserNavbar component [User Portal]:
@@ -33,7 +33,9 @@ import { toast } from 'react-toastify';
  * Mocked GraphQL mutation (LOGOUT_MUTATION) and mock store are used to test the component in an isolated environment.
  */
 
-vi.mock('react-toastify', () => ({ toast: { error: vi.fn() } }));
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: { error: vi.fn() },
+}));
 
 vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(() => ({
@@ -370,7 +372,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
       expect.any(Error),
     );
     // Verify toast was shown
-    expect(toast.error).toHaveBeenCalledWith('errorOccurred');
+    expect(NotificationToast.error).toHaveBeenCalledWith('errorOccurred');
     // Verify cleanup still happens even on error
     expect(mockClearAllItems).toHaveBeenCalled();
     expect(window.location.pathname).toBe('/');

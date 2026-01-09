@@ -54,7 +54,7 @@ const PageNotFound = (): JSX.Element => {
         <p>{tErrors('notFoundMsg')}</p>
         {/* Provide a link to redirect users based on admin status */}
         {isAdmin ? (
-          <Link to="/orglist" className="btn btn-outline-success mt-3">
+          <Link to="/admin/orglist" className="btn btn-outline-success mt-3">
             <i className="fas fa-home"></i> {t('backToHome')}
           </Link>
         ) : (

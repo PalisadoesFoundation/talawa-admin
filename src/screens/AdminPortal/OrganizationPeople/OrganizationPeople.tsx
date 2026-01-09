@@ -47,7 +47,7 @@ import {
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
 import { Button } from 'react-bootstrap';
-import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
+import OrgPeopleListCard from 'components/AdminPortal/OrgPeopleListCard/OrgPeopleListCard';
 import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';

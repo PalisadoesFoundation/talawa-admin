@@ -3,7 +3,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
 import { store } from 'state/store';
@@ -34,8 +34,11 @@ import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
-const { mockLocalStorageStore } = vi.hoisted(() => ({
+const { mockLocalStorageStore, routerMocks } = vi.hoisted(() => ({
   mockLocalStorageStore: {} as Record<string, string>,
+  routerMocks: {
+    navigate: vi.fn(),
+  },
 }));
 
 // Mock useLocalStorage
@@ -101,7 +104,10 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
     info: vi.fn(),
   },
 }));
-
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
+  useNavigate: () => routerMocks.navigate,
+}));
 // Create mock links
 const link = new StaticMockLink(UPDATED_MOCKS, true);
 const link2 = new StaticMockLink(EMPTY_MOCKS, true);
@@ -259,6 +265,7 @@ beforeEach(() => {
   setItem('role', 'administrator');
   setItem('SuperAdmin', false);
   vi.clearAllMocks();
+  routerMocks.navigate.mockReset();
 });
 
 afterEach(() => {
@@ -377,7 +384,9 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
 
-    expect(window.location.assign).toHaveBeenCalledWith('/admin/orglist');
+    expect(routerMocks.navigate).toHaveBeenCalledWith('/admin/orglist', {
+      replace: true,
+    });
   });
 
   test('Component should be rendered properly when user is Admin', async () => {

@@ -239,6 +239,10 @@ const Pledges = (): JSX.Element => {
       sortable: false,
       renderCell: (params) => (
         <div data-testid="paidCell">
+          {/* 
+            Hardcoded 0 as a placeholder because the current USER_PLEDGES 
+            query does not return the donated amount.
+          */}
           {currencySymbols[params.row.currency]}0
         </div>
       ),
@@ -277,6 +281,7 @@ const Pledges = (): JSX.Element => {
             variant="success"
             size="sm"
             data-testid="editPledgeBtn"
+            aria-label={tCommon('edit')}
             onClick={() => handleOpenModal(params.row as InterfacePledgeInfo)}
           >
             <i className="fa fa-edit" />
@@ -285,6 +290,7 @@ const Pledges = (): JSX.Element => {
             size="sm"
             variant="danger"
             data-testid="deletePledgeBtn"
+            aria-label={tCommon('delete')}
             onClick={() => handleDeleteClick(params.row as InterfacePledgeInfo)}
           >
             <i className="fa fa-trash" />

@@ -66,7 +66,7 @@ vi.mock('shared-components/posts/posts', () => ({
   default: () => <div data-testid="mock-posts">Mock Posts</div>,
 }));
 
-vi.mock('components/SuperAdminScreen/SuperAdminScreen', () => ({
+vi.mock('components/AdminPortal/SuperAdminScreen/SuperAdminScreen', () => ({
   default: () => (
     <div data-testid="mock-super-admin-screen">Mock Super Admin Screen</div>
   ),

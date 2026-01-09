@@ -249,7 +249,7 @@ const Campaigns = (): JSX.Element => {
     },
     {
       field: 'action',
-      headerName: 'Add Pledge',
+      headerName: t('addPledge'),
       flex: 1.5,
       minWidth: 120,
       align: 'center',

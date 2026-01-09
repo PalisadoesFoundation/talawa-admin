@@ -30,9 +30,10 @@
  */
 import React, { useEffect, useRef } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import useLocalStorage from 'utils/useLocalstorage';
+import { useTranslation } from 'react-i18next';
 
 // Time constants for session timeout and inactivity interval
 const timeoutMinutes = 15;
@@ -44,6 +45,7 @@ const inactiveIntervalMilliseconds = inactiveIntervalMinutes * 60 * 1000;
 const SecuredRouteForUser = (): JSX.Element => {
   // Custom hook to interact with local storage
   const { getItem, setItem, removeItem } = useLocalStorage();
+  const { t } = useTranslation();
   const lastActiveRef = useRef<number>(Date.now());
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -71,7 +73,7 @@ const SecuredRouteForUser = (): JSX.Element => {
 
         // If inactive for longer than the timeout period, show a warning and log out
         if (timeSinceLastActive > timeoutMilliseconds) {
-          toast.warn('Kindly relogin as session has expired');
+          NotificationToast.warning(t('securedRoute.sessionExpired'));
 
           setItem('IsLoggedIn', 'FALSE');
           removeItem('email');

@@ -7,7 +7,7 @@ import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   ORGANIZATION_EVENT_CONNECTION_LIST,
 } from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -120,8 +120,8 @@ async function wait(ms = 100): Promise<void> {
 }
 let mockId = '';
 
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
   return {
     ...actual,
     useParams: () => ({ orgId: mockId }),

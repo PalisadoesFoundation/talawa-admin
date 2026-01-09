@@ -15,7 +15,7 @@ import {
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
@@ -92,8 +92,8 @@ describe('Testing User Campaigns Screen', () => {
   });
 
   beforeAll(() => {
-    vi.mock('react-router', async () => {
-      const actual = await vi.importActual('react-router');
+    vi.mock('react-router-dom', async () => {
+      const actual = await vi.importActual('react-router-dom');
       return {
         ...actual,
         useParams: vi.fn(() => ({ orgId: 'orgId' })),
@@ -128,7 +128,7 @@ describe('Testing User Campaigns Screen', () => {
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
-    vi.unmock('react-router');
+    vi.unmock('react-router-dom');
     render(
       <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/user/campaigns/']}>

@@ -76,7 +76,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import {
   dataGridStyle,
@@ -131,6 +131,7 @@ const Requests = (): JSX.Element => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState<string>('');
   const userRole = getItem('role') as string;
+  const navigate = useNavigate();
   const { orgId = '' } = useParams();
   const organizationId = orgId;
 
@@ -205,7 +206,7 @@ const Requests = (): JSX.Element => {
       rawSuperAdmin === 'True';
     const isAdmin = userRole?.toLowerCase() === 'administrator';
     if (!(isAdmin || isSuperAdmin)) {
-      window.location.assign('/orglist');
+      navigate('/admin/orglist', { replace: true });
     }
   }, [userRole]);
 

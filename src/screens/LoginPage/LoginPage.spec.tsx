@@ -8,7 +8,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -240,8 +240,8 @@ vi.mock('Constant/constant.ts', async () => ({
   BACKEND_URL: 'http://localhost:4000/graphql',
 }));
 
-vi.mock('react-router', async () => ({
-  ...(await vi.importActual('react-router')),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
   useNavigate: () => routerMocks.navigate,
 }));
 
@@ -1298,9 +1298,7 @@ describe('Testing invitation functionality', () => {
         expect(mockRemoveItem).toHaveBeenCalledWith('pendingInvitationToken');
 
         // Verify that window.location.href was set to the invitation URL
-        expect(window.location.href).toBe(
-          `/admin/event/invitation/${mockToken}`,
-        );
+        expect(window.location.href).toBe(`/event/invitation/${mockToken}`);
       }
     }
   });

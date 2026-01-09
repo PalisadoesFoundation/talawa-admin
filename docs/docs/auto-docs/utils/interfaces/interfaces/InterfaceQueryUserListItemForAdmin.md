@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:2095](https://github.com/PalisadoesFoundati
 
 > `optional` **appUserProfile**: `object`
 
-Defined in: [src/utils/interfaces.ts:2166](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2166)
+Defined in: [src/utils/interfaces.ts:2167](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2167)
 
 Optional app user profile with administrative metadata.
 Note: This field is present in several GraphQL responses and is optional.

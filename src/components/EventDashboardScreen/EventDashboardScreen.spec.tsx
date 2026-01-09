@@ -4,7 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { MemoryRouter } from 'react-router';
+import { MemoryRouter } from 'react-router-dom';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import EventDashboardScreen from './EventDashboardScreen';
@@ -31,13 +31,13 @@ Object.defineProperty(window, 'matchMedia', {
 
 let mockID: string | undefined = '123';
 
-vi.mock('react-router', async () => {
-  const actual = await vi.importActual('react-router');
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
   return {
     ...actual,
     useParams: () => ({ orgId: mockID }),
     useLocation: () => ({
-      pathname: mockID ? `/orgdash/${mockID}` : '/admin/orgdash/undefined',
+      pathname: mockID ? `/admin/orgdash/${mockID}` : '/admin/orgdash',
     }),
   };
 });
@@ -158,7 +158,7 @@ describe('EventDashboardScreen Component', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByText(/title/i)).toBeInTheDocument();
+    expect(screen.getByText(/Dashboard/i)).toBeInTheDocument();
   });
 
   it('renders and toggles drawer states correctly', async () => {

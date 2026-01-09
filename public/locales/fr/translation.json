@@ -460,6 +460,7 @@
     "userName": "Nom d'utilisateur",
     "actions": "Actions",
     "noOneSelected": "Personne sélectionnée",
+    "addMember": "Ajouter un membre",
     "assignToTags": "Attribuer aux étiquettes",
     "removeFromTags": "Retirer des étiquettes",
     "assign": "Attribuer",
@@ -488,7 +489,8 @@
     "tagActions": "Actions d'étiquette",
     "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
     "sortPeople": "Trier les personnes",
-    "noTagsFound": "Aucun tag trouvé"
+    "noTagsFound": "Aucun tag trouvé",
+    "removeMember": "Retirer le membre"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
