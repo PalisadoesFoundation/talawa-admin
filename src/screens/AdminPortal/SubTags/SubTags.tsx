@@ -37,7 +37,7 @@
  * - This component is used in the context of managing organizational tags
  *   and their hierarchy within the Talawa Admin application.
  *
- * @returns {JSX.Element} The rendered SubTags component.
+ * @returns The rendered SubTags component.
  */
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
@@ -53,7 +53,7 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './SubTags.module.css';
 import { DataGrid } from 'shared-components/DataGridWrapper';
 import type {
   InterfaceOrganizationSubTagsQuery,
