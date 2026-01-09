@@ -71,7 +71,8 @@
     "user": "Utilisateur",
     "loading": "Chargement",
     "communityLogo": "Logo Communautaire",
-    "organizations": "Organisations"
+    "organizations": "Organisations",
+    "editProfile": "Modifier le profil"
   },
   "adminProfile": {
     "title": "Profil Administrateur",
@@ -1429,6 +1430,7 @@
     "state": "Ville/État",
     "country": "Pays",
     "resetChanges": "Réinitialiser les modifications",
+    "editProfile": "Modifier le profil",
     "profileDetails": "Détails du profil",
     "deleteUserMessage": "En cliquant sur le bouton Supprimer l'utilisateur, votre utilisateur sera définitivement supprimé ainsi que ses événements, balises et toutes les données associées.",
     "copyLink": "Copier le lien du profil",

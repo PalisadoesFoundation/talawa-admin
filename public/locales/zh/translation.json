@@ -71,7 +71,8 @@
     "user": "用户",
     "loading": "加载中",
     "communityLogo": "社区标志",
-    "organizations": "组织"
+    "organizations": "组织",
+    "editProfile": "编辑个人资料"
   },
   "adminProfile": {
     "title": "管理员资料",
@@ -1430,6 +1431,7 @@
     "state": "市，州",
     "country": "国家",
     "resetChanges": "重置更改",
+    "editProfile": "编辑个人资料",
     "profileDetails": "个人资料详情",
     "deleteUserMessage": "通过单击\"删除用户\"按钮，您的用户及其事件、标签和所有相关数据将被永久删除。",
     "copyLink": "复制个人资料链接",
