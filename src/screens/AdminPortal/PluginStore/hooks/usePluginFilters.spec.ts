@@ -100,7 +100,6 @@ describe('usePluginFilters', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   describe('Initialization', () => {

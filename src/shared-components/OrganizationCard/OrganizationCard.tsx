@@ -81,20 +81,16 @@ function OrganizationCard({
   } = data;
   {
     const navigate = useNavigate();
-
     const { t } = useTranslation('translation');
     const { t: tCommon } = useTranslation('common');
     const { getItem } = useLocalStorage();
     const userId = getItem('userId');
-
     type MembershipState = 'member' | 'pending' | 'notMember';
-
     const membershipState: MembershipState = isJoined
       ? 'member'
       : membershipRequestStatus === 'pending'
         ? 'pending'
         : 'notMember';
-
     // Mutations for handling organization memberships
     const [sendMembershipRequest] = useMutation(SEND_MEMBERSHIP_REQUEST, {
       refetchQueries: [{ query: ORGANIZATION_LIST }],
@@ -108,14 +104,12 @@ function OrganizationCard({
             },
           ]
         : [];
-
     const [joinPublicOrganization] = useMutation(JOIN_PUBLIC_ORGANIZATION, {
       refetchQueries: [{ query: ORGANIZATION_LIST }, ...joinedRefetch],
     });
     const [cancelMembershipRequest] = useMutation(CANCEL_MEMBERSHIP_REQUEST, {
       refetchQueries: [{ query: ORGANIZATION_LIST }],
     });
-
     /**
      * Handles joining the organization. Sends a membership request if registration is required,
      * otherwise joins the public organization directly. Displays success or error messages.
@@ -145,7 +139,6 @@ function OrganizationCard({
         }
       }
     }
-
     /**
      * Handles withdrawing a membership request. Finds the request for the current user and cancels it.
      */
@@ -155,27 +148,22 @@ function OrganizationCard({
         NotificationToast.error(t('users.UserIdNotFound'));
         return;
       }
-
       const membershipRequest = membershipRequests?.find(
         (request) => request.user.id === currentUserId,
       );
-
       try {
         if (!membershipRequest) {
           NotificationToast.error(t('users.MembershipRequestNotFound'));
           return;
         }
-
         await cancelMembershipRequest({
           variables: { membershipRequestId: membershipRequest.id },
         });
-
         NotificationToast.success(t('users.MembershipRequestWithdrawn'));
       } catch {
         NotificationToast.error(t('users.errorOccurred'));
       }
     }
-
     return (
       <>
         {/* Container for the organization card */}
@@ -208,8 +196,7 @@ function OrganizationCard({
                     {name}
                   </h4>
                 </Tooltip>
-                <output
-                  role="status"
+                <span
                   className={[
                     styles.statusChip,
                     membershipState === 'member'
@@ -239,12 +226,11 @@ function OrganizationCard({
                     : membershipState === 'pending'
                       ? t('users.pending')
                       : t('users.notMember')}
-                </output>
+                </span>
                 {/* Description of the organization */}
                 <div className={[styles.orgdesc, 'fw-semibold'].join(' ')}>
                   <TruncatedText text={description} />
                 </div>
-
                 {/* Display the organization address if available */}
                 {addressLine1 && (
                   <div className={styles.address}>
@@ -274,7 +260,6 @@ function OrganizationCard({
                 </h6>
               </div>
               {/* Button to manage the organization */}
-
               {role === 'admin' ? (
                 <Button
                   onClick={() => navigate(`/orgdash/${id}`)}
