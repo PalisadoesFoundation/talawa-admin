@@ -13,8 +13,12 @@
  * ```
  */
 import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
-import { Check, Clear } from '@mui/icons-material';
+import Check from '@mui/icons-material/Check';
+import Clear from '@mui/icons-material/Clear';
 import type { ChangeEvent } from 'react';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+
 import React, { useEffect, useRef, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
@@ -44,7 +48,6 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
 import styles from './LoginPage.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
-import { Autocomplete, TextField } from '@mui/material';
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
 
