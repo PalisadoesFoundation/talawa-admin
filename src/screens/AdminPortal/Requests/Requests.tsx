@@ -6,7 +6,7 @@
  *
  * Features:
  * - Infinite scroll pagination.
- * - Name search via AdminSearchFilterBar.
+ * - Name search via SearchFilterBar.
  * - Accept/reject actions with toast feedback.
  *
  * Data:
@@ -50,7 +50,7 @@ import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import styles from './Requests.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
-import AdminSearchFilterBar from 'shared-components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import {
   dataGridStyle,
   PAGE_SIZE,
@@ -76,7 +76,7 @@ interface InterfaceRequestsListItem {
  *
  * Responsibilities:
  * - Displays membership requests with infinite scroll support
- * - Supports search submission via AdminSearchFilterBar
+ * - Supports search submission via SearchFilterBar
  * - Shows user avatars and request details
  * - Handles accept and reject request actions
  * - Shows empty state via DataGrid overlay when no requests exist
@@ -491,7 +491,7 @@ const Requests = (): JSX.Element => {
 
   return (
     <div data-testid="testComp">
-      <AdminSearchFilterBar
+      <SearchFilterBar
         searchPlaceholder={t('requests.searchRequests')}
         searchValue={searchByName}
         onSearchChange={handleSearch}

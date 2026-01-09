@@ -4,20 +4,20 @@ import { useTranslation } from 'react-i18next';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
 import type {
-  InterfaceAdminSearchFilterBarProps,
-  InterfaceAdminSearchFilterBarAdvanced,
-} from 'types/AdminSearchFilterBar/interface';
+  InterfaceSearchFilterBarProps,
+  InterfaceSearchFilterBarAdvanced,
+} from 'types/shared-components/SearchFilterBar/interface';
 import styles from 'style/app-fixed.module.css';
 
 /**
- * AdminSearchFilterBar component provides a unified search and filter interface.
+ * SearchFilterBar component provides a unified search and filter interface.
  * Supports search functionality with optional sorting and filtering dropdowns.
  * Manages internal state for instant visual feedback while debouncing parent updates.
  * Includes internal i18n support for accessibility and customizable translations.
  * @param props - Component props based on discriminated union (simple or advanced variant)
- * @returns The rendered AdminSearchFilterBar component
+ * @returns The rendered SearchFilterBar component
  */
-const AdminSearchFilterBar: React.FC<InterfaceAdminSearchFilterBarProps> = ({
+const SearchFilterBar: React.FC<InterfaceSearchFilterBarProps> = ({
   searchPlaceholder,
   searchValue,
   onSearchChange,
@@ -31,10 +31,10 @@ const AdminSearchFilterBar: React.FC<InterfaceAdminSearchFilterBarProps> = ({
   ...rest
 }) => {
   const dropdowns = hasDropdowns
-    ? (rest as InterfaceAdminSearchFilterBarAdvanced).dropdowns
+    ? (rest as InterfaceSearchFilterBarAdvanced).dropdowns
     : undefined;
   const additionalButtons = hasDropdowns
-    ? (rest as InterfaceAdminSearchFilterBarAdvanced).additionalButtons
+    ? (rest as InterfaceSearchFilterBarAdvanced).additionalButtons
     : undefined;
 
   // Internal translations with defaults from common namespace
@@ -138,4 +138,4 @@ const AdminSearchFilterBar: React.FC<InterfaceAdminSearchFilterBarProps> = ({
   );
 };
 
-export default AdminSearchFilterBar;
+export default SearchFilterBar;

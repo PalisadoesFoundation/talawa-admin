@@ -19,7 +19,7 @@ import { USER_FUND_CAMPAIGNS } from 'GraphQl/Queries/fundQueries';
 import { useQuery } from '@apollo/client';
 import type { InterfaceUserCampaign } from 'utils/interfaces';
 import { currencySymbols } from 'utils/currency';
-import AdminSearchFilterBar from 'shared-components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import dayjs from 'dayjs';
 import {
@@ -308,7 +308,7 @@ const Campaigns = (): JSX.Element => {
 
   return (
     <>
-      <AdminSearchFilterBar
+      <SearchFilterBar
         searchPlaceholder={t('searchCampaigns')}
         searchValue={searchText}
         onSearchChange={setSearchText}

@@ -2,17 +2,17 @@
 
 ***
 
-# Interface: InterfaceAdminSearchFilterBarSimple
+# Interface: InterfaceSearchFilterBarSimple
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:221](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L221)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:220](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L220)
 
-Configuration for AdminSearchFilterBar with only search functionality (no dropdowns).
+Configuration for SearchFilterBar with only search functionality (no dropdowns).
 Use this variant when you only need search capabilities without any sorting or filtering dropdowns.
 
 ## Example
 
 ```tsx
-<AdminSearchFilterBar
+<SearchFilterBar
   hasDropdowns={false}
   searchPlaceholder="Search requests"
   searchValue={searchTerm}
@@ -22,7 +22,7 @@ Use this variant when you only need search capabilities without any sorting or f
 
 ## Extends
 
-- `InterfaceAdminSearchFilterBarBase`
+- `InterfaceSearchFilterBarBase`
 
 ## Properties
 
@@ -30,16 +30,11 @@ Use this variant when you only need search capabilities without any sorting or f
 
 > `optional` **containerClassName**: `string`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:183](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L183)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L182)
 
 Optional custom class name for the container div.
 **Job:** Allows overriding the default container styling for different screen layouts.
-
-#### Default
-
-```ts
-"btnsContainerSearchBar"
-```
+default "btnsContainerSearchBar"
 
 #### Example
 
@@ -49,7 +44,7 @@ Optional custom class name for the container div.
 
 #### Inherited from
 
-`InterfaceAdminSearchFilterBarBase.containerClassName`
+`InterfaceSearchFilterBarBase.containerClassName`
 
 ***
 
@@ -57,17 +52,12 @@ Optional custom class name for the container div.
 
 > `optional` **debounceDelay**: `number`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:192](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L192)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:191](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L191)
 
 Optional delay in milliseconds for debouncing search input changes.
 **Job:** Controls how long to wait after the user stops typing before calling onSearchChange.
 This prevents excessive API calls while the user is actively typing.
-
-#### Default
-
-```ts
-300
-```
+default 300
 
 #### Example
 
@@ -77,7 +67,7 @@ This prevents excessive API calls while the user is actively typing.
 
 #### Inherited from
 
-`InterfaceAdminSearchFilterBarBase.debounceDelay`
+`InterfaceSearchFilterBarBase.debounceDelay`
 
 ***
 
@@ -85,7 +75,7 @@ This prevents excessive API calls while the user is actively typing.
 
 > **hasDropdowns**: `false`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:228](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L228)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:227](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L227)
 
 Discriminator property indicating this variant has no dropdowns.
 
@@ -97,7 +87,7 @@ Discriminator property indicating this variant has no dropdowns.
 
 > **onSearchChange**: (`value`) => `void`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:143](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L143)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:142](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L142)
 
 Callback function triggered on every keystroke in the search input.
 **Trigger:** User types or deletes characters in the search field (onChange event).
@@ -124,7 +114,7 @@ onSearchChange={(value) => setSearchTerm(value)}
 
 #### Inherited from
 
-`InterfaceAdminSearchFilterBarBase.onSearchChange`
+`InterfaceSearchFilterBarBase.onSearchChange`
 
 ***
 
@@ -132,7 +122,7 @@ onSearchChange={(value) => setSearchTerm(value)}
 
 > `optional` **onSearchSubmit**: (`value`) => `void`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L159)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:158](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L158)
 
 Optional callback function triggered when the user explicitly submits the search.
 **Trigger:** User presses Enter key or clicks the search button.
@@ -162,7 +152,7 @@ onSearchSubmit={(value) => {
 
 #### Inherited from
 
-`InterfaceAdminSearchFilterBarBase.onSearchSubmit`
+`InterfaceSearchFilterBarBase.onSearchSubmit`
 
 ***
 
@@ -170,16 +160,11 @@ onSearchSubmit={(value) => {
 
 > `optional` **searchButtonTestId**: `string`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:175](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L175)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:174](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L174)
 
 Optional data-testid for the search button.
 **Job:** Enables testing frameworks to identify the search button element.
-
-#### Default
-
-```ts
-"searchButton"
-```
+default "searchButton"
 
 #### Example
 
@@ -189,7 +174,7 @@ Optional data-testid for the search button.
 
 #### Inherited from
 
-`InterfaceAdminSearchFilterBarBase.searchButtonTestId`
+`InterfaceSearchFilterBarBase.searchButtonTestId`
 
 ***
 
@@ -197,16 +182,11 @@ Optional data-testid for the search button.
 
 > `optional` **searchInputTestId**: `string`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:167](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L167)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:166](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L166)
 
 Optional data-testid for the search input field.
 **Job:** Enables testing frameworks to identify the search input element.
-
-#### Default
-
-```ts
-"searchInput"
-```
+default "searchInput"
 
 #### Example
 
@@ -216,7 +196,7 @@ Optional data-testid for the search input field.
 
 #### Inherited from
 
-`InterfaceAdminSearchFilterBarBase.searchInputTestId`
+`InterfaceSearchFilterBarBase.searchInputTestId`
 
 ***
 
@@ -224,7 +204,7 @@ Optional data-testid for the search input field.
 
 > **searchPlaceholder**: `string`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L122)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L121)
 
 Placeholder text displayed in the search input field.
 **Job:** Provides guidance to users about what they can search for.
@@ -237,7 +217,7 @@ Placeholder text displayed in the search input field.
 
 #### Inherited from
 
-`InterfaceAdminSearchFilterBarBase.searchPlaceholder`
+`InterfaceSearchFilterBarBase.searchPlaceholder`
 
 ***
 
@@ -245,7 +225,7 @@ Placeholder text displayed in the search input field.
 
 > **searchValue**: `string`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L130)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L129)
 
 The current search term value.
 **Job:** Controls the value of the search input field (controlled component pattern).
@@ -259,15 +239,15 @@ This should be managed in the parent component's state.
 
 #### Inherited from
 
-`InterfaceAdminSearchFilterBarBase.searchValue`
+`InterfaceSearchFilterBarBase.searchValue`
 
 ***
 
 ### translations?
 
-> `optional` **translations**: [`InterfaceAdminSearchFilterBarTranslations`](InterfaceAdminSearchFilterBarTranslations.md)
+> `optional` **translations**: [`InterfaceSearchFilterBarTranslations`](InterfaceSearchFilterBarTranslations.md)
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:205](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L205)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:204](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L204)
 
 Optional translation overrides for accessibility and UI customization.
 **Job:** Allows customizing internal component translations while providing sensible defaults.
@@ -283,4 +263,4 @@ translations: {
 
 #### Inherited from
 
-`InterfaceAdminSearchFilterBarBase.translations`
+`InterfaceSearchFilterBarBase.translations`

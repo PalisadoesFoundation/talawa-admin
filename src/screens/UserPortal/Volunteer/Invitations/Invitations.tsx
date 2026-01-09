@@ -52,7 +52,7 @@ import { FaRegClock } from 'react-icons/fa';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
-import AdminSearchFilterBar from 'shared-components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 enum ItemFilter {
@@ -186,7 +186,7 @@ const Invitations = (): JSX.Element => {
 
   return (
     <LoadingState isLoading={invitationLoading} variant="spinner">
-      <AdminSearchFilterBar
+      <SearchFilterBar
         searchPlaceholder={t('searchByEventName')}
         searchValue={searchTerm}
         onSearchChange={setSearchTerm}

@@ -55,7 +55,7 @@ import {
 } from 'types/ReportingTable/utils';
 import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
-import AdminSearchFilterBar from 'shared-components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 function OrganizationTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -346,7 +346,7 @@ function OrganizationTags(): JSX.Element {
             className={styles.btnsContainer}
             data-testid="organizationTags-header"
           >
-            <AdminSearchFilterBar
+            <SearchFilterBar
               hasDropdowns={true}
               searchPlaceholder={tCommon('searchByName')}
               searchValue={tagSearchName}

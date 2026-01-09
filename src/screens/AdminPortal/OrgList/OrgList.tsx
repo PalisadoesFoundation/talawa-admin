@@ -73,7 +73,7 @@ import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCar
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import style from './OrgList.module.css';
 import { Group, Search } from '@mui/icons-material';
-import AdminSearchFilterBar from 'shared-components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { BaseModal } from 'shared-components/BaseModal';
 
 const { getItem } = useLocalStorage();
@@ -257,7 +257,6 @@ function orgList(): JSX.Element {
         },
       });
 
-      //     toggleModal;
       if (data) {
         NotificationToast.success(t('congratulationOrgCreated'));
         refetchOrgs();
@@ -326,7 +325,7 @@ function orgList(): JSX.Element {
     <div className={styles.orgListContainer}>
       {/* Buttons Container */}
       <div className={styles.calendar__header}>
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={true}
           searchPlaceholder={t('searchOrganizations')}
           searchValue={typedValue}

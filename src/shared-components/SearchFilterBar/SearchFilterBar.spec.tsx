@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import AdminSearchFilterBar from './AdminSearchFilterBar';
+import SearchFilterBar from './SearchFilterBar';
 import type {
-  InterfaceAdminSearchFilterBarProps,
+  InterfaceSearchFilterBarProps,
   InterfaceSortingOption,
-} from 'types/AdminSearchFilterBar/interface';
+} from 'types/shared-components/SearchFilterBar/interface';
 
 vi.mock('shared-components/SearchBar/SearchBar', () => ({
   default: vi.fn(
@@ -77,7 +77,7 @@ vi.mock('lodash', async () => {
   };
 });
 
-describe('AdminSearchFilterBar', () => {
+describe('SearchFilterBar', () => {
   beforeEach(() => {
     vi.useFakeTimers();
   });
@@ -88,7 +88,7 @@ describe('AdminSearchFilterBar', () => {
   });
 
   describe('Simple Variant - Search Only', () => {
-    const simpleProps: InterfaceAdminSearchFilterBarProps = {
+    const simpleProps: InterfaceSearchFilterBarProps = {
       hasDropdowns: false,
       searchPlaceholder: 'Search requests',
       searchValue: '',
@@ -96,7 +96,7 @@ describe('AdminSearchFilterBar', () => {
     };
 
     it('should render search bar with placeholder', () => {
-      render(<AdminSearchFilterBar {...simpleProps} />);
+      render(<SearchFilterBar {...simpleProps} />);
 
       expect(
         screen.getByPlaceholderText('Search requests'),
@@ -104,7 +104,7 @@ describe('AdminSearchFilterBar', () => {
     });
 
     it('should render with default container className', () => {
-      const { container } = render(<AdminSearchFilterBar {...simpleProps} />);
+      const { container } = render(<SearchFilterBar {...simpleProps} />);
 
       const containerDiv = container.querySelector(
         'div[class*="btnsContainerSearchBar"]',
@@ -114,7 +114,7 @@ describe('AdminSearchFilterBar', () => {
 
     it('should render with custom container className', () => {
       const { container } = render(
-        <AdminSearchFilterBar
+        <SearchFilterBar
           {...simpleProps}
           containerClassName="customClassName"
         />,
@@ -125,7 +125,7 @@ describe('AdminSearchFilterBar', () => {
     });
 
     it('should update search input value when user types', () => {
-      render(<AdminSearchFilterBar {...simpleProps} />);
+      render(<SearchFilterBar {...simpleProps} />);
 
       const searchInput = screen.getByTestId('searchInput');
       fireEvent.change(searchInput, { target: { value: 'test query' } });
@@ -136,10 +136,7 @@ describe('AdminSearchFilterBar', () => {
     it('should call onSearchChange when user types', () => {
       const onSearchChange = vi.fn();
       render(
-        <AdminSearchFilterBar
-          {...simpleProps}
-          onSearchChange={onSearchChange}
-        />,
+        <SearchFilterBar {...simpleProps} onSearchChange={onSearchChange} />,
       );
 
       const searchInput = screen.getByTestId('searchInput');
@@ -151,7 +148,7 @@ describe('AdminSearchFilterBar', () => {
     it('should call onSearchSubmit when search button is clicked', () => {
       const onSearchSubmit = vi.fn();
       render(
-        <AdminSearchFilterBar
+        <SearchFilterBar
           {...simpleProps}
           searchValue="test query"
           onSearchSubmit={onSearchSubmit}
@@ -166,7 +163,7 @@ describe('AdminSearchFilterBar', () => {
 
     it('should use custom testIds when provided', () => {
       render(
-        <AdminSearchFilterBar
+        <SearchFilterBar
           {...simpleProps}
           searchInputTestId="customInput"
           searchButtonTestId="customButton"
@@ -178,7 +175,7 @@ describe('AdminSearchFilterBar', () => {
     });
 
     it('should not render dropdowns container for simple variant', () => {
-      const { container } = render(<AdminSearchFilterBar {...simpleProps} />);
+      const { container } = render(<SearchFilterBar {...simpleProps} />);
 
       const dropdownsContainer = container.querySelector(
         'div[class*="btnsBlockSearchBar"]',
@@ -188,7 +185,7 @@ describe('AdminSearchFilterBar', () => {
   });
 
   describe('Advanced Variant - Search with Dropdowns', () => {
-    const advancedProps: InterfaceAdminSearchFilterBarProps = {
+    const advancedProps: InterfaceSearchFilterBarProps = {
       hasDropdowns: true,
       searchPlaceholder: 'Search by volunteer',
       searchValue: '',
@@ -210,7 +207,7 @@ describe('AdminSearchFilterBar', () => {
     };
 
     it('should render search bar and dropdowns', () => {
-      render(<AdminSearchFilterBar {...advancedProps} />);
+      render(<SearchFilterBar {...advancedProps} />);
 
       expect(
         screen.getByPlaceholderText('Search by volunteer'),
@@ -219,7 +216,7 @@ describe('AdminSearchFilterBar', () => {
     });
 
     it('should render multiple dropdowns', () => {
-      const multiDropdownProps: InterfaceAdminSearchFilterBarProps = {
+      const multiDropdownProps: InterfaceSearchFilterBarProps = {
         ...advancedProps,
         dropdowns: [
           {
@@ -249,7 +246,7 @@ describe('AdminSearchFilterBar', () => {
         ],
       };
 
-      render(<AdminSearchFilterBar {...multiDropdownProps} />);
+      render(<SearchFilterBar {...multiDropdownProps} />);
 
       expect(screen.getByText('Sort')).toBeInTheDocument();
       expect(screen.getByText('Time Frame')).toBeInTheDocument();
@@ -257,7 +254,7 @@ describe('AdminSearchFilterBar', () => {
 
     it('should call dropdown onOptionChange when selection changes', () => {
       const onOptionChange = vi.fn();
-      const propsWithCallback: InterfaceAdminSearchFilterBarProps = {
+      const propsWithCallback: InterfaceSearchFilterBarProps = {
         ...advancedProps,
         dropdowns: [
           {
@@ -267,7 +264,7 @@ describe('AdminSearchFilterBar', () => {
         ],
       };
 
-      render(<AdminSearchFilterBar {...propsWithCallback} />);
+      render(<SearchFilterBar {...propsWithCallback} />);
 
       const dropdown = screen.getByTestId('sort-select');
       fireEvent.change(dropdown, { target: { value: 'ASCENDING' } });
@@ -276,14 +273,14 @@ describe('AdminSearchFilterBar', () => {
     });
 
     it('should render dropdowns with correct selected option', () => {
-      render(<AdminSearchFilterBar {...advancedProps} />);
+      render(<SearchFilterBar {...advancedProps} />);
 
       const dropdown = screen.getByTestId('sort-select');
       expect(dropdown).toHaveValue('DESCENDING');
     });
 
     it('should render dropdowns container when hasDropdowns is true', () => {
-      const { container } = render(<AdminSearchFilterBar {...advancedProps} />);
+      const { container } = render(<SearchFilterBar {...advancedProps} />);
 
       const dropdownsContainer = container.querySelector(
         'div[class*="btnsBlockSearchBar"]',
@@ -292,7 +289,7 @@ describe('AdminSearchFilterBar', () => {
     });
 
     it('should have correct aria-label when hasDropdowns is true', () => {
-      const { container } = render(<AdminSearchFilterBar {...advancedProps} />);
+      const { container } = render(<SearchFilterBar {...advancedProps} />);
 
       const dropdownsContainer = container.querySelector('div[role="toolbar"]');
       expect(dropdownsContainer).toHaveAttribute(
@@ -303,7 +300,7 @@ describe('AdminSearchFilterBar', () => {
   });
 
   describe('Advanced Variant - Additional Buttons', () => {
-    const propsWithButton: InterfaceAdminSearchFilterBarProps = {
+    const propsWithButton: InterfaceSearchFilterBarProps = {
       hasDropdowns: true,
       searchPlaceholder: 'Search plugins',
       searchValue: '',
@@ -330,14 +327,14 @@ describe('AdminSearchFilterBar', () => {
     };
 
     it('should render additional buttons alongside dropdowns', () => {
-      render(<AdminSearchFilterBar {...propsWithButton} />);
+      render(<SearchFilterBar {...propsWithButton} />);
 
       expect(screen.getByText('Filter plugins')).toBeInTheDocument();
       expect(screen.getByTestId('upload-button')).toBeInTheDocument();
     });
 
     it('should render additional buttons without dropdowns', () => {
-      const propsOnlyButton: InterfaceAdminSearchFilterBarProps = {
+      const propsOnlyButton: InterfaceSearchFilterBarProps = {
         hasDropdowns: true,
         searchPlaceholder: 'Search plugins',
         searchValue: '',
@@ -350,13 +347,13 @@ describe('AdminSearchFilterBar', () => {
         ),
       };
 
-      render(<AdminSearchFilterBar {...propsOnlyButton} />);
+      render(<SearchFilterBar {...propsOnlyButton} />);
 
       expect(screen.getByTestId('upload-button')).toBeInTheDocument();
     });
 
     it('should not render buttons container when no dropdowns or buttons', () => {
-      const propsNoExtras: InterfaceAdminSearchFilterBarProps = {
+      const propsNoExtras: InterfaceSearchFilterBarProps = {
         hasDropdowns: true,
         searchPlaceholder: 'Search',
         searchValue: '',
@@ -364,7 +361,7 @@ describe('AdminSearchFilterBar', () => {
         dropdowns: [],
       };
 
-      const { container } = render(<AdminSearchFilterBar {...propsNoExtras} />);
+      const { container } = render(<SearchFilterBar {...propsNoExtras} />);
 
       const dropdownsContainer = container.querySelector(
         'div[class*="btnsBlockSearchBar"]',
@@ -380,7 +377,7 @@ describe('AdminSearchFilterBar', () => {
 
       const onSearchChange = vi.fn();
       render(
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={false}
           searchPlaceholder="Search"
           searchValue=""
@@ -397,7 +394,7 @@ describe('AdminSearchFilterBar', () => {
 
       const onSearchChange = vi.fn();
       render(
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={false}
           searchPlaceholder="Search"
           searchValue=""
@@ -411,7 +408,7 @@ describe('AdminSearchFilterBar', () => {
 
     it('should update internal state immediately on typing', () => {
       render(
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={false}
           searchPlaceholder="Search"
           searchValue=""
@@ -427,7 +424,7 @@ describe('AdminSearchFilterBar', () => {
 
     it('should sync internal state with external searchValue prop changes', () => {
       const { rerender } = render(
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={false}
           searchPlaceholder="Search"
           searchValue=""
@@ -439,7 +436,7 @@ describe('AdminSearchFilterBar', () => {
       expect(searchInput).toHaveValue('');
 
       rerender(
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={false}
           searchPlaceholder="Search"
           searchValue="external update"
@@ -469,7 +466,7 @@ describe('AdminSearchFilterBar', () => {
       };
 
       render(
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={true}
           searchPlaceholder="Search"
           searchValue=""
@@ -485,7 +482,7 @@ describe('AdminSearchFilterBar', () => {
     });
 
     it('should render correct number of dropdowns', () => {
-      const threeDropdowns: InterfaceAdminSearchFilterBarProps = {
+      const threeDropdowns: InterfaceSearchFilterBarProps = {
         hasDropdowns: true,
         searchPlaceholder: 'Search',
         searchValue: '',
@@ -521,7 +518,7 @@ describe('AdminSearchFilterBar', () => {
         ],
       };
 
-      render(<AdminSearchFilterBar {...threeDropdowns} />);
+      render(<SearchFilterBar {...threeDropdowns} />);
 
       expect(
         screen.getByTestId('mock-sorting-button-sort'),
@@ -538,7 +535,7 @@ describe('AdminSearchFilterBar', () => {
   describe('Edge Cases', () => {
     it('should handle empty searchValue', () => {
       render(
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={false}
           searchPlaceholder="Search"
           searchValue=""
@@ -553,7 +550,7 @@ describe('AdminSearchFilterBar', () => {
     it('should handle long searchValue', () => {
       const longValue = 'a'.repeat(200);
       render(
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={false}
           searchPlaceholder="Search"
           searchValue={longValue}
@@ -568,7 +565,7 @@ describe('AdminSearchFilterBar', () => {
     it('should handle special characters in search', () => {
       const specialChars = '!@#$%^&*()_+-={}[]|:";\'<>?,./';
       render(
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={false}
           searchPlaceholder="Search"
           searchValue={specialChars}
@@ -582,7 +579,7 @@ describe('AdminSearchFilterBar', () => {
 
     it('should handle empty dropdowns array', () => {
       render(
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={true}
           searchPlaceholder="Search"
           searchValue=""
@@ -596,7 +593,7 @@ describe('AdminSearchFilterBar', () => {
 
     it('should handle undefined onSearchSubmit', () => {
       render(
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={false}
           searchPlaceholder="Search"
           searchValue="test"
@@ -618,7 +615,7 @@ describe('AdminSearchFilterBar', () => {
       };
 
       render(
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={true}
           searchPlaceholder="Search"
           searchValue=""
@@ -664,7 +661,7 @@ describe('AdminSearchFilterBar', () => {
       const onFilterChange = vi.fn();
 
       render(
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={true}
           searchPlaceholder="Search by volunteer"
           searchValue=""
@@ -717,7 +714,7 @@ describe('AdminSearchFilterBar', () => {
       const onUploadClick = vi.fn();
 
       render(
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={true}
           searchPlaceholder="Search plugins"
           searchValue=""
@@ -766,7 +763,7 @@ describe('AdminSearchFilterBar', () => {
       const onSearchSubmit = vi.fn();
 
       render(
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={false}
           searchPlaceholder="Search requests"
           searchValue=""

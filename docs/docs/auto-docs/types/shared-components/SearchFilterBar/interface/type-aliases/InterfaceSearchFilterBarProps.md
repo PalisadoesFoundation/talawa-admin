@@ -2,13 +2,13 @@
 
 ***
 
-# Type Alias: InterfaceAdminSearchFilterBarProps
+# Type Alias: InterfaceSearchFilterBarProps
 
-> **InterfaceAdminSearchFilterBarProps** = [`InterfaceAdminSearchFilterBarSimple`](../interfaces/InterfaceAdminSearchFilterBarSimple.md) \| [`InterfaceAdminSearchFilterBarAdvanced`](../interfaces/InterfaceAdminSearchFilterBarAdvanced.md)
+> **InterfaceSearchFilterBarProps** = [`InterfaceSearchFilterBarSimple`](../interfaces/InterfaceSearchFilterBarSimple.md) \| [`InterfaceSearchFilterBarAdvanced`](../interfaces/InterfaceSearchFilterBarAdvanced.md)
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:419](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L419)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:418](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L418)
 
-Main props interface for the AdminSearchFilterBar component.
+Main props interface for the SearchFilterBar component.
 
 This is a discriminated union type that ensures type safety:
 - When `hasDropdowns` is `false`, the `dropdowns` property cannot be provided
@@ -17,7 +17,7 @@ This is a discriminated union type that ensures type safety:
 ## Examples
 
 ```tsx
-const props: InterfaceAdminSearchFilterBarProps = {
+const props: InterfaceSearchFilterBarProps = {
   hasDropdowns: false,
   searchPlaceholder: "Search...",
   searchValue: searchTerm,
@@ -26,7 +26,7 @@ const props: InterfaceAdminSearchFilterBarProps = {
 ```
 
 ```tsx
-const props: InterfaceAdminSearchFilterBarProps = {
+const props: InterfaceSearchFilterBarProps = {
   hasDropdowns: true,
   searchPlaceholder: "Search...",
   searchValue: searchTerm,
@@ -36,7 +36,7 @@ const props: InterfaceAdminSearchFilterBarProps = {
 ```
 
 ```tsx
-const props: InterfaceAdminSearchFilterBarProps = {
+const props: InterfaceSearchFilterBarProps = {
   hasDropdowns: true,
   searchPlaceholder: "Search plugins...",
   searchValue: searchTerm,

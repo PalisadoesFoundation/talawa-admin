@@ -61,7 +61,7 @@ import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQuerie
 import VolunteerGroupViewModal from 'screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal';
 import useLocalStorage from 'utils/useLocalstorage';
 import GroupModal from './GroupModal';
-import AdminSearchFilterBar from 'shared-components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 enum ModalState {
   EDIT = 'edit',
@@ -311,7 +311,7 @@ function Groups(): JSX.Element {
   return (
     <LoadingState isLoading={groupsLoading} variant="spinner">
       <div>
-        <AdminSearchFilterBar
+        <SearchFilterBar
           searchPlaceholder={tCommon('searchBy', { item: t('groupOrLeader') })}
           searchValue={searchTerm}
           onSearchChange={setSearchTerm}

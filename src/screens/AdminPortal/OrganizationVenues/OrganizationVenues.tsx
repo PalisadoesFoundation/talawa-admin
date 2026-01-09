@@ -59,7 +59,7 @@ import VenueModal from 'components/Venues/Modal/VenueModal';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/Venues/VenueCard';
-import AdminSearchFilterBar from 'shared-components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 function organizationVenues(): JSX.Element {
   // Translation hooks for i18n support
@@ -213,7 +213,7 @@ function organizationVenues(): JSX.Element {
   return (
     <>
       <div className={`${styles.btnsContainer} gap-3 flex-wrap`}>
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={true}
           searchPlaceholder={`${t('searchBy')} ${tCommon(searchBy)}`}
           searchValue={searchTerm}
