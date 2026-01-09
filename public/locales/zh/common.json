@@ -229,5 +229,8 @@
   "organizationEventDescription": "组织的所有成员可见",
   "inviteOnlyEvent": "仅限受邀者",
   "inviteOnlyEventDescription": "仅受邀成员和活动管理员可见",
-  "to": "至"
+  "to": "至",
+  "invalidFile": "无效文件",
+  "customRecurrence": "自定义重复",
+  "selectAtLeastOneDay": "请至少选择一天"
 }

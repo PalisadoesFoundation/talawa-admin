@@ -14,8 +14,8 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Donate from './Donate';
-import userEvent from '@testing-library/user-event';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
+import userEvent from '@testing-library/user-event';
 
 const { mockErrorHandler, mockUseParams, NotificationToast } = vi.hoisted(
   () => ({
@@ -410,7 +410,9 @@ describe('Donate Component', () => {
     await userEvent.click(screen.getByTestId('donateBtn'));
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith('Donation Successful');
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        'Donation Successful',
+      );
     });
   });
 
