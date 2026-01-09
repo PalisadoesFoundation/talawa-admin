@@ -1,6 +1,6 @@
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import ProfileHeader from 'screens/UserPortal/Settings/ProfileHeader/ProfileHeader';
 import styles from 'style/app-fixed.module.css';
+import ProfileHeader from './ProfileHeader';
 
 /**
  * Props interface for the ProfileFormWrapper component.
