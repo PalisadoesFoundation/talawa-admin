@@ -108,7 +108,6 @@ const OrganizationScreen = (): JSX.Element => {
       return edge?.node?.id === eventId;
     });
     if (!matched?.node?.id) {
-      console.warn(`Event with id ${eventId} not found`);
       setEventName(null);
       return;
     }

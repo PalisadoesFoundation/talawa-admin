@@ -1942,7 +1942,9 @@
     "viewDetails": "查看 {{name}} 详情",
     "editVolunteerGroup": "编辑 {{name}} 志愿者小组",
     "deleteVolunteerGroup": "删除 {{name}} 志愿者小组",
-    "deleteVolunteerEntry": "删除 {{name}} 志愿者条目"
+    "deleteVolunteerEntry": "删除 {{name}} 志愿者条目",
+    "viewGroup": "查看 小组",
+    "editGroup": "编辑 小组"
   },
   "userVolunteer": {
     "title": "志愿服务",

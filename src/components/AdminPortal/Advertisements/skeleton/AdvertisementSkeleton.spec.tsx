@@ -27,7 +27,6 @@ describe('Testing Advertisement Component', () => {
       </Provider>,
     );
 
-    console.log(screen.debug());
     expect(screen.getByTestId('skeleton-1')).toBeInTheDocument();
     expect(screen.getByTestId('skeleton-2')).toBeInTheDocument();
     expect(screen.getByTestId('skeleton-3')).toBeInTheDocument();

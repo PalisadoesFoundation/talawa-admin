@@ -1942,7 +1942,9 @@
     "viewDetails": "Voir les détails de {{name}}",
     "editVolunteerGroup": "Modifier le groupe de bénévoles {{name}}",
     "deleteVolunteerGroup": "Supprimer le groupe de bénévoles {{name}}",
-    "deleteVolunteerEntry": "Supprimer l'entrée bénévole {{name}}"
+    "deleteVolunteerEntry": "Supprimer l'entrée bénévole {{name}}",
+    "viewGroup": "Voir le groupe de bénévoles",
+    "editGroup": "Modifier le groupe de bénévoles"
   },
   "userVolunteer": {
     "title": "Volontariat",
