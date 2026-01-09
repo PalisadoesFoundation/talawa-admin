@@ -462,6 +462,7 @@
     "userName": "用户名",
     "actions": "操作",
     "noOneSelected": "未选择任何人",
+    "addMember": "添加成员",
     "assignToTags": "分配到标签",
     "removeFromTags": "从标签中移除",
     "assign": "分配",
@@ -490,7 +491,8 @@
     "sortPeople": "排序人员",
     "tagActions": "标签操作",
     "loadAssignedUsersError": "加载已分配用户时发生错误",
-    "noTagsFound": "未找到标签"
+    "noTagsFound": "未找到标签",
+    "removeMember": "移除成员"
   },
   "userListCard": {
     "addAdmin": "添加管理员",
