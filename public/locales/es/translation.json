@@ -1418,7 +1418,6 @@
     "eventAttended": "Événements Assistés",
     "noeventsAttended": "No hay eventos asistidos",
     "profileSettings": "Configuración de perfil",
-    "editProfile": "Editar perfil",
     "uploadProfilePicture": "Subir foto de perfil de {{name}}",
     "firstName": "Nombre de pila",
     "lastName": "Apellido",

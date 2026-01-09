@@ -1,8 +1,6 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-
-dayjs.extend(utc);
 import { render } from '@testing-library/react';
 import UserProfile from './UserProfile';
 import { MockedProvider } from '@apollo/react-testing';
@@ -11,6 +9,8 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+
+dayjs.extend(utc);
 
 afterEach(() => {
   vi.clearAllMocks();

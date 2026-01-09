@@ -7,7 +7,6 @@
  * styling and Material-UI icons for visual elements. The component also
  * supports tooltips for displaying additional information.
  *
- * @param props - The user profile properties.
  * @param firstName - The first name of the user.
  * @param lastName - The last name of the user.
  * @param createdAt - The date when the user joined.
