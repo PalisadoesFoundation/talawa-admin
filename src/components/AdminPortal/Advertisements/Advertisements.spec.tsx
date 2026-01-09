@@ -346,7 +346,7 @@ describe('Testing Advertisement Component', () => {
 
     expect(screen.getByTestId('searchname')).toHaveAttribute(
       'placeholder',
-      'Search advertisements...',
+      translations.searchAdvertisement,
     );
   });
 
