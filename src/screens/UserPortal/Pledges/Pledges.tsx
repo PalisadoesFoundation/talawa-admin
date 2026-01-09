@@ -1,7 +1,7 @@
 /**
  * The `Pledges` component is responsible for rendering a user's pledges within a campaign.
  * It fetches pledges data using Apollo Client's `useQuery` hook and displays the data
- * in a DataGrid with various features such as search, sorting, and modal dialogs.
+ * in a DataGrid with search, sorting, pagination, and modal dialogs.
  */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, ProgressBar } from 'react-bootstrap';
@@ -192,7 +192,10 @@ const Pledges = (): JSX.Element => {
       headerName: tCommon('endDate'),
       flex: 1,
       sortable: false,
-      renderCell: (params) => dayjs(params.row.endDate).format('DD/MM/YYYY'),
+      renderCell: (params) =>
+        params.row.endDate
+          ? dayjs(params.row.endDate).format('DD/MM/YYYY')
+          : '-',
     },
     {
       field: 'amount',
@@ -268,7 +271,6 @@ const Pledges = (): JSX.Element => {
     },
   ];
 
-  // Prepare rows with searchable fields
   const rows = pledges.map((p) => {
     const pledger = p.pledger;
     const users = p.users || (pledger ? [pledger] : []);
@@ -285,7 +287,6 @@ const Pledges = (): JSX.Element => {
       currency: p.campaign?.currencyCode,
       goalAmount: p.campaign?.goalAmount,
       endDate: p.campaign?.endAt,
-      // Flattened fields for search
       pledgerName: pledgerNames,
       campaignName: p.campaign?.name || '',
     };
@@ -294,13 +295,13 @@ const Pledges = (): JSX.Element => {
   return (
     <LoadingState isLoading={pledgeLoading} variant="spinner">
       <div>
-        {!pledgeLoading && pledges.length === 0 && (
-          <div className="text-center py-4">{t('noPledges')}</div>
-        )}
         <DataGridWrapper
           rows={rows}
           columns={columns}
           loading={pledgeLoading}
+          emptyStateProps={{
+            message: t('noPledges'),
+          }}
           searchConfig={{
             enabled: true,
             fields: ['pledgerName', 'campaignName'],
@@ -315,13 +316,13 @@ const Pledges = (): JSX.Element => {
           }}
         />
 
-        {modalState[ModalState.UPDATE] && pledge && (
+        {modalState[ModalState.UPDATE] && pledge && pledge.campaign?.id && (
           <PledgeModal
             isOpen={modalState[ModalState.UPDATE]}
             hide={() => closeModal(ModalState.UPDATE)}
             pledge={pledge}
             refetchPledge={refetchPledge}
-            campaignId={pledge.campaign?.id ?? ''}
+            campaignId={pledge.campaign.id}
             userId={userId}
             mode="edit"
           />
