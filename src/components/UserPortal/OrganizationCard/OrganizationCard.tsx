@@ -5,17 +5,15 @@
  * Allows users to join an organization, withdraw a pending request,
  * or visit the organization based on their membership status.
  *
- * @component
- * @param props - Props for the OrganizationCard component.
- * @param props.id - Unique identifier of the organization.
- * @param props.name - Name of the organization.
- * @param props.description - Short description of the organization.
- * @param props.addressLine1 - Primary address line of the organization.
- * @param props.adminsCount - Total number of administrators.
- * @param props.membersCount - Total number of members.
- * @param props.membershipRequestStatus - Current membership request status.
- * @param props.membershipRequests - List of membership requests.
- * @param props.isJoined - Whether the current user is already a member.
+ * @param id - Unique identifier of the organization.
+ * @param name - Name of the organization.
+ * @param description - Short description of the organization.
+ * @param addressLine1 - Primary address line of the organization.
+ * @param adminsCount - Total number of administrators.
+ * @param membersCount - Total number of members.
+ * @param membershipRequestStatus - Current membership request status.
+ * @param membershipRequests - List of membership requests.
+ * @param isJoined - Whether the current user is already a member.
  *
  * @returns JSX.Element representing an organization card.
  *

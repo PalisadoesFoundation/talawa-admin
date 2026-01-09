@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+// eslint-disable-next-line no-restricted-imports -- Shared recurrence modal component, uses Modal for complex form interactions
 import { Button, Modal } from 'react-bootstrap';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import styles from '../../style/app-fixed.module.css';
@@ -28,19 +29,17 @@ import type { InterfaceCustomRecurrenceModalProps } from 'types/Recurrence/inter
  * A shared modal component for configuring custom recurrence rules for events.
  * This component is used by both Admin and User portals via the shared EventForm.
  *
- * @component
- * @param {InterfaceCustomRecurrenceModalProps} props - The props for the component
- * @param {InterfaceRecurrenceRule} props.recurrenceRuleState - Current recurrence rule state
- * @param {(state: React.SetStateAction<InterfaceRecurrenceRule>) => void} props.setRecurrenceRuleState - Function to update recurrence rule state
- * @param {Date | null} props.endDate - Event end date
- * @param {(state: React.SetStateAction<Date | null>) => void} props.setEndDate - Function to set event end date
- * @param {boolean} props.customRecurrenceModalIsOpen - Whether the modal is open
- * @param {() => void} props.hideCustomRecurrenceModal - Function to hide the modal
- * @param {(state: React.SetStateAction<boolean>) => void} props.setCustomRecurrenceModalIsOpen - Function to set modal open state
- * @param {(key: string) => string} props.t - Translation function
- * @param {Date} props.startDate - Event start date
+ * @param recurrenceRuleState - Current recurrence rule state
+ * @param setRecurrenceRuleState - Function to update recurrence rule state
+ * @param endDate - Event end date
+ * @param setEndDate - Function to set event end date
+ * @param customRecurrenceModalIsOpen - Whether the modal is open
+ * @param hideCustomRecurrenceModal - Function to hide the modal
+ * @param setCustomRecurrenceModalIsOpen - Function to set modal open state
+ * @param t - Translation function
+ * @param startDate - Event start date
  *
- * @returns {React.ReactElement} The rendered CustomRecurrenceModal component
+ * @returns The rendered CustomRecurrenceModal component
  *
  * @remarks
  * - Supports daily, weekly, monthly, and yearly recurrence frequencies

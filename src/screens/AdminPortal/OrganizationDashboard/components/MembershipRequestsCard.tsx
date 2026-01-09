@@ -5,11 +5,9 @@
  * volunteer rankings for an organization. It presents membership requests with user
  * details and provides a dedicated section for volunteer rankings (currently a placeholder).
  *
- * @component
- * @param props - The properties for the MembershipRequestsCard component.
- * @param props.membershipRequestData - Organization membership requests data
- * @param props.isLoading - Loading state indicator
- * @param props.onViewAllClick - Callback for "View All" button click
+ * @param membershipRequestData - Organization membership requests data
+ * @param isLoading - Loading state indicator
+ * @param onViewAllClick - Callback for "View All" button click
  *
  * @returns Styled card with membership requests list and volunteer rankings section
  *

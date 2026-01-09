@@ -30,6 +30,7 @@
  *
  */
 import React, { useState } from 'react';
+// eslint-disable-next-line no-restricted-imports -- Simple delete modal, refactoring to BaseModal would be a larger task
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';

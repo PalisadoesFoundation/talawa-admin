@@ -232,5 +232,6 @@
   "to": "To",
   "invalidFile": "Invalid file",
   "customRecurrence": "Custom Recurrence",
-  "selectAtLeastOneDay": "Please select at least one day"
+  "selectAtLeastOneDay": "Please select at least one day",
+  "invalidDetailsMessage": "Invalid details. Please check your input."
 }

@@ -4,14 +4,12 @@
  * This component renders a modal for deleting a volunteer group. It provides
  * confirmation options to either proceed with the deletion or cancel the action.
  *
- * @component
- * @param {InterfaceDeleteVolunteerGroupModal} props - The props for the component.
- * @param {boolean} props.isOpen - Determines whether the modal is visible.
- * @param {() => void} props.hide - Function to close the modal.
- * @param {InterfaceVolunteerGroupInfo | null} props.group - The volunteer group to be deleted.
- * @param {() => void} props.refetchGroups - Function to refetch the list of volunteer groups after deletion.
+ * @param isOpen - Determines whether the modal is visible.
+ * @param hide - Function to close the modal.
+ * @param group - The volunteer group to be deleted.
+ * @param refetchGroups - Function to refetch the list of volunteer groups after deletion.
  *
- * @returns {React.FC} A React functional component that renders the delete confirmation modal.
+ * @returns A React functional component that renders the delete confirmation modal.
  *
  * @remarks
  * - The modal uses `react-bootstrap` for styling and structure.
@@ -29,8 +27,9 @@
  * />
  * ```
  *
- * @see {@link DELETE_VOLUNTEER_GROUP} for the GraphQL mutation used.
+ * @see DELETE_VOLUNTEER_GROUP for the GraphQL mutation used.
  */
+// eslint-disable-next-line no-restricted-imports -- Delete modal component, refactoring to BaseModal would be a larger task
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import React, { useState } from 'react';

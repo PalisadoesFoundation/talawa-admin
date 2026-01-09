@@ -6,14 +6,12 @@
  * image or video, and optionally pin the post. The component handles file preview,
  * file hashing, GraphQL mutation submission, and UI state reset on success.
  *
- * @component
- * @param {ICreatePostModalProps} props - The props for the CreatePostModal component.
- * @param {boolean} props.show - Controls the visibility of the modal.
- * @param {() => void} props.onHide - Callback invoked to close the modal.
- * @param {() => Promise<unknown>} props.refetch - Function to refetch posts after a successful creation.
- * @param {string | undefined} props.orgId - The organization ID where the post will be created.
+ * @param show - Controls the visibility of the modal.
+ * @param onHide - Callback invoked to close the modal.
+ * @param refetch - Function to refetch posts after a successful creation.
+ * @param orgId - The organization ID where the post will be created.
  *
- * @returns {JSX.Element} A JSX element representing the create post modal.
+ * @returns A JSX element representing the create post modal.
  *
  * @remarks
  * - Uses `@apollo/client` for executing the `CREATE_POST_MUTATION`.

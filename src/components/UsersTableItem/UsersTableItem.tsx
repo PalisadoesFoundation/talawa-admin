@@ -12,6 +12,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
+// eslint-disable-next-line no-restricted-imports -- Legacy component uses Modal and Table directly, refactoring to BaseModal/DataTable would be a larger task
 import { Button, Form, Modal, Row, Table } from 'react-bootstrap';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { useTranslation } from 'react-i18next';

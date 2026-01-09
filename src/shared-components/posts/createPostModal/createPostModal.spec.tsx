@@ -432,7 +432,6 @@ describe('CreatePostModal Integration Tests', () => {
 
   describe('Form Submission', () => {
     it('creates post successfully with valid data', async () => {
-      const { toast } = await import('react-toastify');
       renderComponent();
 
       const titleInput = screen.getByPlaceholderText('Title of your post...');
@@ -560,7 +559,6 @@ describe('CreatePostModal Integration Tests', () => {
     });
 
     it('shows error when organization ID is missing', async () => {
-      const { toast } = await import('react-toastify');
       renderComponent({ orgId: undefined });
 
       const titleInput = screen.getByPlaceholderText('Title of your post...');

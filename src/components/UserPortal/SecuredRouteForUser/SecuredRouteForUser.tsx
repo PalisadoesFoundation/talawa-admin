@@ -5,12 +5,10 @@
  * role can access certain routes. It uses a custom hook to interact with
  * local storage for retrieving authentication and role information.
  *
- * @component
- *
- * @returns {JSX.Element} - A JSX element that conditionally renders:
+ * @returns A JSX element that conditionally renders:
  * - The child route components if the user is logged in and does not have an admin role.
  * - A `PageNotFound` component if the user has an admin role.
- * - A redirection to the home page (`"/"`) if the user is not logged in.
+ * - A redirection to the home page ("/") if the user is not logged in.
  *
  * @example
  * ```tsx
@@ -24,9 +22,8 @@
  * - The `adminFor` value is retrieved from local storage using the key `'AdminFor'`.
  * - If `isLoggedIn` is `'TRUE'` and `adminFor` is `undefined`, the child routes are rendered.
  * - If `isLoggedIn` is not `'TRUE'`, the user is redirected to the home page.
- *
- * @requires `react-router-dom` for navigation and route handling.
- * @requires `useLocalStorage` custom hook for local storage interaction.
+ * - Uses `react-router-dom` for navigation and route handling.
+ * - Uses `useLocalStorage` custom hook for local storage interaction.
  */
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Navigate, Outlet } from 'react-router';

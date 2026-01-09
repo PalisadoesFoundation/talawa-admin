@@ -5,18 +5,14 @@
  * It includes a form with fields for organization details such as name,
  * description, address, and an option to upload a display image.
  *
- * @component
- * @param {InterfaceOrganizationModalProps} props - The properties passed to the component.
- * @param {boolean} props.showModal - Determines whether the modal is visible.
- * @param {() => void} props.toggleModal - Function to toggle the visibility of the modal.
- * @param {InterfaceFormStateType} props.formState - The current state of the form fields.
- * @param {(state: React.SetStateAction<InterfaceFormStateType>) => void} props.setFormState -
- * Function to update the form state.
- * @param {(e: ChangeEvent<HTMLFormElement>) => Promise<void>} props.createOrg -
- * Function to handle form submission for creating an organization.
- * @param {(key: string) => string} props.t - Translation function for component-specific strings.
- * @param {(key: string) => string} props.tCommon - Translation function for common strings.
- * @param {InterfaceCurrentUserTypePG | undefined} props.userData - Current user data.
+ * @param showModal - Determines whether the modal is visible.
+ * @param toggleModal - Function to toggle the visibility of the modal.
+ * @param formState - The current state of the form fields.
+ * @param setFormState - Function to update the form state.
+ * @param createOrg - Function to handle form submission for creating an organization.
+ * @param t - Translation function for component-specific strings.
+ * @param tCommon - Translation function for common strings.
+ * @param userData - Current user data.
  *
  * @remarks
  * - The form includes validation for input fields such as name, description, and address.
@@ -38,6 +34,7 @@
  * ```
  */
 import React from 'react';
+// eslint-disable-next-line no-restricted-imports -- Organization creation modal, refactoring to BaseModal would be a larger task
 import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
 import { useMinioUpload } from 'utils/MinioUpload';
 import type { ChangeEvent } from 'react';

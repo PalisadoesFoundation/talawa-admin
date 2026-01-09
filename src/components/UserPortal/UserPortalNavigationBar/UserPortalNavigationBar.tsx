@@ -5,9 +5,8 @@
  * It consolidates functionality from UserNavbar and OrganizationNavbar,
  * supporting both user and organization modes with unified logic.
  *
- * @component
- * @param {InterfaceUserPortalNavbarProps} props - Component props
- * @returns {JSX.Element} The rendered UserPortalNavigationBar component
+ * @param props - Component props
+ * @returns The rendered UserPortalNavigationBar component
  */
 import { useState } from 'react';
 import { Container, Navbar, Nav, Offcanvas } from 'react-bootstrap';
