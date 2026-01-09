@@ -381,7 +381,6 @@ function SubTags(): JSX.Element {
                   }}
                   dataPath="getChildTags.childTags"
                   itemsPerPage={TAGS_QUERY_DATA_CHUNK_SIZE}
-                  renderItem={() => <></>}
                   useExternalUI={true}
                 >
                   {({ items, pageInfo, handleLoadMore }) => (

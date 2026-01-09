@@ -28,22 +28,22 @@
  *
  * @returns A React functional component that renders a tag node with optional subtags.
  */
+// translation-check-keyPrefix: manageTag
 import { useQuery } from '@apollo/client';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import React, { useState } from 'react';
-import type { InterfaceTagData } from 'utils/interfaces';
+import type {
+  InterfaceQueryUserTagChildTags,
+  InterfaceTagData,
+} from 'utils/interfaces';
+import type { InterfaceOrganizationSubTagsQuery } from 'utils/organizationTagsUtils';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import styles from 'style/app-fixed.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
-import type { TFunction } from 'i18next';
-<<<<<<< HEAD:src/components/AdminPortal/TagActions/Node/TagNode.tsx
-import componentStyle from '../TagAction.module.css';
-=======
-import CursorPaginationManager from 'components/CursorPaginationManager/CursorPaginationManager';
 import { WarningAmberRounded } from '@mui/icons-material';
 import type { TFunction } from 'i18next';
-
+import componentStyle from '../TagAction.module.css';
 interface InterfaceTagNodeProps {
   tag: InterfaceTagData;
   checkedTags: Set<string>;
@@ -108,7 +108,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={`${styles.errorIcon} fs-6`} />
           <h6 className="fw-bold text-danger text-center">
             {t('errorOccurredWhileLoadingSubTags')}
           </h6>
@@ -180,11 +180,13 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
         </div>
       )}
       {expanded && subTagsList?.length && (
-        <div style={{ marginLeft: '20px' }}>
+        <div className="me-4">
           <div
+            // i18n-ignore-next-line
             id={`subTagsScrollableDiv${tag._id}`}
+            // i18n-ignore-next-line
             data-testid={`subTagsScrollableDiv${tag._id}`}
-            style={{ maxHeight: 300, overflow: 'auto' }}
+            className={componentStyle.subtagsScrollableDiv}
           >
             <InfiniteScroll
               dataLength={subTagsList?.length ?? 0}
@@ -194,6 +196,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
                 false
               }
               loader={<InfiniteScrollLoader />}
+              // i18n-ignore-next-line
               scrollableTarget={`subTagsScrollableDiv${tag._id}`}
             >
               {subTagsList.map((tag: InterfaceTagData) => (
