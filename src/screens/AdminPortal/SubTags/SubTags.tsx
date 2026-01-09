@@ -307,32 +307,39 @@ function SubTags(): JSX.Element {
                           />
                         </button>
 
-                        {orgUserTagAncestors?.map((tag: { _id: string; name: string }, index: number) => (
-                          <button
-                            type="button"
-                            key={index}
-                            className={`ms-2  ${tag._id === parentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
-                            onClick={() => redirectToSubTags(tag._id as string)}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') {
-                                redirectToSubTags(tag._id as string);
-                              } else if (e.key === ' ') {
-                                e.preventDefault();
-                                redirectToSubTags(tag._id as string);
+                        {orgUserTagAncestors?.map(
+                          (
+                            tag: { _id: string; name: string },
+                            index: number,
+                          ) => (
+                            <button
+                              type="button"
+                              key={index}
+                              className={`ms-2  ${tag._id === parentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
+                              onClick={() =>
+                                redirectToSubTags(tag._id as string)
                               }
-                            }}
-                            data-testid="redirectToSubTags"
-                          >
-                            {tag.name}
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') {
+                                  redirectToSubTags(tag._id as string);
+                                } else if (e.key === ' ') {
+                                  e.preventDefault();
+                                  redirectToSubTags(tag._id as string);
+                                }
+                              }}
+                              data-testid="redirectToSubTags"
+                            >
+                              {tag.name}
 
-                            {orgUserTagAncestors.length - 1 !== index && (
-                              <i
-                                className={'mx-2 fa fa-caret-right'}
-                                aria-hidden="true"
-                              />
-                            )}
-                          </button>
-                        ))}
+                              {orgUserTagAncestors.length - 1 !== index && (
+                                <i
+                                  className={'mx-2 fa fa-caret-right'}
+                                  aria-hidden="true"
+                                />
+                              )}
+                            </button>
+                          ),
+                        )}
                       </div>
                       <div
                         id="subTagsScrollableDiv"

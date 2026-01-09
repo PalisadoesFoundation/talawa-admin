@@ -38,9 +38,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import componentStyle from '../TagAction.module.css';
 import { WarningAmberRounded } from '@mui/icons-material';
-import type {
-  InterfaceQueryUserTagChildTags,
-} from 'utils/interfaces';
+import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
 import type { InterfaceTagNodeProps } from 'types/AdminPortal/TagNode/interface';
 
 /**
@@ -100,7 +98,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={styles.errorIcon} />
           <h6 className="fw-bold text-danger text-center">
             {t('errorOccurredWhileLoadingSubTags')}
           </h6>
