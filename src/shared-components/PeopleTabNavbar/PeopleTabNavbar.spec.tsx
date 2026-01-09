@@ -160,4 +160,17 @@ describe('PeopleTabNavbar', () => {
     render(<PeopleTabNavbar showEventTypeFilter={false} />);
     expect(screen.queryByTestId('eventType-sorting')).not.toBeInTheDocument();
   });
+
+  it('handles event type sort change safely when onSortChange is a no-op', () => {
+    render(<PeopleTabNavbar showEventTypeFilter />);
+
+    // event type sorting button should exist
+    const eventTypeSorting = screen.getByTestId('eventType-sorting');
+    expect(eventTypeSorting).toBeInTheDocument();
+
+    // Clicking should NOT throw even though onSortChange is an empty function
+    expect(() => {
+      fireEvent.click(screen.getByText('Workshops'));
+    }).not.toThrow();
+  });
 });

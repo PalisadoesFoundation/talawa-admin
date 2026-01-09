@@ -221,6 +221,23 @@ describe('SortingButton', () => {
       const dropdown = screen.getByTestId('custom-dropdown');
       expect(dropdown).toBeInTheDocument();
     });
+
+    it('should render img icon when icon prop is provided', () => {
+      render(<SortingButton {...defaultProps} icon="/icons/custom-sort.svg" />);
+
+      // img should be rendered
+      const img = screen.getByAltText('sortingIcon');
+      expect(img).toBeInTheDocument();
+
+      // correct src
+      expect(img).toHaveAttribute('src', '/icons/custom-sort.svg');
+
+      // alt text from i18n key
+      expect(img).toHaveAttribute('alt', 'sortingIcon');
+
+      // default MUI icon should NOT be rendered
+      expect(screen.queryByTestId('sorting-icon')).not.toBeInTheDocument();
+    });
   });
 
   describe('Edge Cases', () => {
