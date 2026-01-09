@@ -8,12 +8,10 @@
 .rowBackground {
   background-color: var(--color-white);
   color: var(--color-black);
-  max-height: var(--logo-md);
-  overflow-y: auto;
 }
 
 .hoverShadowOnly:hover,
-.hoverShadowOnly:focus,
+.hoverShadowOnly:focus-visible,
 .hoverShadowOnly:active {
   box-shadow: var(--hover-shadow);
 }
@@ -56,16 +54,18 @@
 .requestsAcceptButton:focus-visible {
   background-color: var(--color-blue-200) !important;
   color: var(--color-gray-700);
-  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) var(--hover-shadow);
+  box-shadow:
+    0 0 0 var(--border-shadow-xs) currentColor,
+    var(--hover-shadow);
   outline: none;
 }
 
 .requestsRejectButton:focus-visible {
   background-color: var(--color-red-100) !important;
   color: var(--color-red-500);
-  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
-    var(--border-shadow-xs) var(--hover-shadow);
+  box-shadow:
+    0 0 0 var(--border-shadow-xs) currentColor,
+    var(--hover-shadow);
   outline: none;
 }
 
@@ -125,7 +125,7 @@
 
 .userAvatar {
   border-radius: 50%;
-  margin-right: var(--space-7);
+  margin-inline-end: var(--space-7);
   width: var(--logo-xs);
   height: var(--logo-xs);
 }

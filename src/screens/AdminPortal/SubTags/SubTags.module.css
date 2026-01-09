@@ -154,7 +154,7 @@ form label,
 .rowBackground {
   background-color: var(--color-white);
   color: var(--color-black);
-  max-height: var(--logo-md);
+  max-height: var(--space-14);
   overflow-y: auto;
 }
 
@@ -251,7 +251,7 @@ form label,
 
 .subTagsScrollableDiv {
   scrollbar-width: auto;
-  scrollbar-color: var(--color-gray-300);
+  scrollbar-color: var(--color-gray-400) var(--color-gray-100);
   max-height: calc(100vh - var(--space-20));
   overflow: auto;
 }
