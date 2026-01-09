@@ -307,7 +307,9 @@ describe('Testing User Table Item', () => {
     fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorabc`));
-    expect(NotificationToast.success).toHaveBeenCalledWith(
+    const successMock = vi.mocked(NotificationToast.success);
+    expect(successMock).toHaveBeenCalled();
+    expect(successMock.mock.calls[successMock.mock.calls.length - 1]?.[0]).toBe(
       'Profile Page Coming Soon!',
     );
     // Click on Organization Link
@@ -831,7 +833,9 @@ describe('Testing User Table Item', () => {
     fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorghi`));
-    expect(NotificationToast.success).toHaveBeenCalledWith(
+    const successMock = vi.mocked(NotificationToast.success);
+    expect(successMock).toHaveBeenCalled();
+    expect(successMock.mock.calls[successMock.mock.calls.length - 1]?.[0]).toBe(
       'Profile Page Coming Soon!',
     );
     // Click on Organization Link
