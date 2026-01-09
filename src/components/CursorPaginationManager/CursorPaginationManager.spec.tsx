@@ -4,7 +4,9 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import CursorPaginationManager from './CursorPaginationManager';
+import CursorPaginationManager, {
+  extractDataFromPath,
+} from './CursorPaginationManager';
 import { gql } from '@apollo/client';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -68,6 +70,128 @@ type Member = {
   name: string;
   role: string;
 };
+
+describe('extractDataFromPath utility', () => {
+  it('extracts single-level path', () => {
+    const data = {
+      users: {
+        edges: [
+          {
+            cursor: 'cursor1',
+            node: { id: '1', name: 'User 1' },
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: 'cursor1',
+          endCursor: 'cursor1',
+        },
+      },
+    };
+
+    const result = extractDataFromPath(data, 'users');
+    expect(result?.edges).toBeDefined();
+    expect(result?.edges).toHaveLength(1);
+    expect(result?.pageInfo).toBeDefined();
+  });
+
+  it('extracts nested path', () => {
+    const data = {
+      organization: {
+        members: {
+          edges: [
+            {
+              cursor: 'cursor1',
+              node: { id: '1', name: 'Member 1' },
+            },
+          ],
+          pageInfo: {
+            hasNextPage: false,
+            hasPreviousPage: false,
+            startCursor: 'cursor1',
+            endCursor: 'cursor1',
+          },
+        },
+      },
+    };
+
+    const result = extractDataFromPath(data, 'organization.members');
+    expect(result?.edges).toBeDefined();
+    expect(result?.edges).toHaveLength(1);
+    expect(result?.pageInfo).toBeDefined();
+  });
+
+  it('returns null for broken path', () => {
+    const data = { foo: 'bar' };
+    const result = extractDataFromPath(data, 'missing.path');
+    expect(result).toBeNull();
+  });
+
+  it('returns null for null data', () => {
+    const result = extractDataFromPath(null, 'users');
+    expect(result).toBeNull();
+  });
+
+  it('returns null for undefined data', () => {
+    const result = extractDataFromPath(undefined, 'users');
+    expect(result).toBeNull();
+  });
+
+  it('returns null when path leads to non-connection data', () => {
+    const data = {
+      users: {
+        name: 'John',
+      },
+    };
+    const result = extractDataFromPath(data, 'users');
+    expect(result).toBeNull();
+  });
+
+  it('handles deep nested paths', () => {
+    const data = {
+      level1: {
+        level2: {
+          level3: {
+            edges: [
+              {
+                cursor: 'cursor1',
+                node: { id: '1' },
+              },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              hasPreviousPage: false,
+              startCursor: 'cursor1',
+              endCursor: 'cursor1',
+            },
+          },
+        },
+      },
+    };
+
+    const result = extractDataFromPath(data, 'level1.level2.level3');
+    expect(result?.edges).toBeDefined();
+    expect(result?.edges).toHaveLength(1);
+  });
+
+  it('handles connection data without pageInfo', () => {
+    const data = {
+      users: {
+        edges: [
+          {
+            cursor: 'cursor1',
+            node: { id: '1', name: 'User 1' },
+          },
+        ],
+      },
+    };
+
+    const result = extractDataFromPath(data, 'users');
+    expect(result?.edges).toBeDefined();
+    expect(result?.pageInfo).toBeUndefined();
+  });
+});
 
 describe('CursorPaginationManager', () => {
   afterEach(() => {
@@ -1410,6 +1534,313 @@ describe('CursorPaginationManager', () => {
       // Should only have refetched data
       expect(screen.getByText('Refetched User 1')).toBeInTheDocument();
       expect(screen.queryByText('User 2')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('External UI Mode', () => {
+    it('renders external UI mode with children render prop', async () => {
+      const mocks = [createSuccessMock(true)];
+      const renderPropSpy = vi.fn(({ items, loading }) => (
+        <div>
+          {loading ? (
+            <div>External Loading</div>
+          ) : (
+            <div>
+              {items.map((item: User) => (
+                <div key={item.id}>{item.name}</div>
+              ))}
+            </div>
+          )}
+        </div>
+      ));
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              useExternalUI={true}
+            >
+              {renderPropSpy}
+            </CursorPaginationManager>
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(renderPropSpy).toHaveBeenCalledWith(
+          expect.objectContaining({
+            items: expect.any(Array),
+            loading: expect.any(Boolean),
+            loadingMore: expect.any(Boolean),
+            pageInfo: expect.any(Object),
+            handleLoadMore: expect.any(Function),
+            handleRefetch: expect.any(Function),
+            error: undefined,
+            queryData: expect.any(Object),
+          }),
+        );
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('User 1')).toBeInTheDocument();
+      });
+    });
+
+    it('external UI mode passes full queryData for custom rendering', async () => {
+      const mockOrgMembers = {
+        request: {
+          query: MOCK_NESTED_QUERY,
+          variables: { first: 10, after: null, orgId: 'org1' },
+        },
+        result: {
+          data: {
+            organization: {
+              members: {
+                edges: [
+                  {
+                    cursor: 'cursor1',
+                    node: { id: '1', name: 'Member 1', role: 'Admin' },
+                  },
+                  {
+                    cursor: 'cursor2',
+                    node: { id: '2', name: 'Member 2', role: 'User' },
+                  },
+                ],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: 'cursor1',
+                  endCursor: 'cursor2',
+                },
+              },
+            },
+          },
+        },
+      };
+
+      let capturedQueryData: any;
+
+      render(
+        <MockedProvider mocks={[mockOrgMembers]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_NESTED_QUERY}
+              queryVariables={{ orgId: 'org1' }}
+              dataPath="organization.members"
+              itemsPerPage={10}
+              useExternalUI={true}
+            >
+              {(props) => {
+                capturedQueryData = props.queryData;
+                return (
+                  <div>
+                    {props.items.map((item: Member) => (
+                      <div key={item.id}>{item.name}</div>
+                    ))}
+                  </div>
+                );
+              }}
+            </CursorPaginationManager>
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(capturedQueryData?.organization).toBeDefined();
+        expect(capturedQueryData?.organization.members).toBeDefined();
+      });
+    });
+
+    it('external UI mode provides handleLoadMore and handleRefetch', async () => {
+      const mocks = [createSuccessMock(true), createLoadMoreMock()];
+      let capturedHandleLoadMore: (() => void) | null = null;
+      let capturedHandleRefetch: (() => void) | null = null;
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              useExternalUI={true}
+            >
+              {(props) => {
+                capturedHandleLoadMore = props.handleLoadMore;
+                capturedHandleRefetch = props.handleRefetch;
+                return (
+                  <div>
+                    <button
+                      onClick={props.handleLoadMore}
+                      data-testid="external-load-more"
+                    >
+                      Load More
+                    </button>
+                    {props.items.map((item: User) => (
+                      <div key={item.id}>{item.name}</div>
+                    ))}
+                  </div>
+                );
+              }}
+            </CursorPaginationManager>
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('User 1')).toBeInTheDocument();
+      });
+
+      expect(capturedHandleLoadMore).toBeInstanceOf(Function);
+      expect(capturedHandleRefetch).toBeInstanceOf(Function);
+
+      const user = userEvent.setup();
+      const loadMoreBtn = screen.getByTestId('external-load-more');
+      await user.click(loadMoreBtn);
+
+      await waitFor(() => {
+        expect(screen.getByText('User 3')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Edge Cases', () => {
+    it('handles refetchTrigger with initial value of 0', async () => {
+      const initialMock = createSuccessMock();
+      const refetchMock = {
+        request: {
+          query: MOCK_QUERY,
+          variables: { first: 10, after: null },
+        },
+        result: {
+          data: {
+            users: {
+              edges: [
+                {
+                  cursor: 'cursor1',
+                  node: {
+                    id: '1',
+                    name: 'User 1 Refetched',
+                    email: 'user1@test.com',
+                  },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: false,
+                startCursor: 'cursor1',
+                endCursor: 'cursor1',
+              },
+            },
+          },
+        },
+      };
+
+      const { rerender } = render(
+        <MockedProvider mocks={[initialMock, refetchMock]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              renderItem={(user: User) => <div>{user.name}</div>}
+              refetchTrigger={0}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('User 1')).toBeInTheDocument();
+      });
+
+      // Changing from 0 to 1 should still trigger refetch
+      rerender(
+        <MockedProvider mocks={[initialMock, refetchMock]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              renderItem={(user: User) => <div>{user.name}</div>}
+              refetchTrigger={1}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('User 1 Refetched')).toBeInTheDocument();
+      });
+    });
+
+    it('handles large itemsPerPage values', async () => {
+      const largeMock = {
+        request: {
+          query: MOCK_QUERY,
+          variables: { first: 1000, after: null },
+        },
+        result: {
+          data: {
+            users: {
+              edges: [
+                {
+                  cursor: 'cursor1',
+                  node: { id: '1', name: 'User 1', email: 'user1@test.com' },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: false,
+                startCursor: 'cursor1',
+                endCursor: 'cursor1',
+              },
+            },
+          },
+        },
+      };
+
+      render(
+        <MockedProvider mocks={[largeMock]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={1000}
+              renderItem={(user: User) => <div>{user.name}</div>}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('User 1')).toBeInTheDocument();
+      });
+    });
+
+    it('handles renderItem being undefined in edge case', async () => {
+      const mocks = [createSuccessMock()];
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              renderItem={(user: User) => <div>{user.name}</div>}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('User 1')).toBeInTheDocument();
+        expect(screen.getByText('User 2')).toBeInTheDocument();
+      });
     });
   });
 });

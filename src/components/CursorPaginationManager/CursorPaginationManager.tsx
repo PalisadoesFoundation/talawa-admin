@@ -18,7 +18,7 @@ import EmptyState from 'shared-components/EmptyState/EmptyState';
  * @param path - Dot-separated path to connection (e.g., "organization.members")
  * @returns Connection data with edges and pageInfo, or null if not found
  */
-function extractDataFromPath<TNode>(
+export function extractDataFromPath<TNode>(
   data: unknown,
   path: string,
 ): InterfaceConnectionData<TNode> | null {
@@ -306,7 +306,9 @@ export function CursorPaginationManager<
         data-testid="cursor-pagination-error"
         className={styles.stateMessage}
       >
-        <p>{error.message}</p>
+        <p>
+          {t('errorLoadingData')}: {error.message}
+        </p>
         <button
           type="button"
           onClick={handleRefetch}
