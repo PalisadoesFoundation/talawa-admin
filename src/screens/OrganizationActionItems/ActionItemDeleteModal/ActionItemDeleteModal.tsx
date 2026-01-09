@@ -41,7 +41,7 @@ import {
 import type {
   IActionItemInfo,
   IDeleteActionItemInput,
-} from 'types/ActionItems/interface';
+} from 'types/AdminPortal/ActionItems/interface';
 
 export interface IItemDeleteModalProps {
   isOpen: boolean;

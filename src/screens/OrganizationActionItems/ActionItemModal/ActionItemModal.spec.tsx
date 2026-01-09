@@ -11,7 +11,7 @@ import type {
   IItemModalProps,
   IUpdateActionItemForInstanceVariables,
   ICreateActionItemVariables,
-} from 'types/ActionItems/interface.ts';
+} from 'types/AdminPortal/ActionItems/interface';
 import ItemModal from './ActionItemModal';
 import { vi, it, describe, expect, beforeEach, afterEach } from 'vitest';
 import dayjs from 'dayjs';
@@ -38,7 +38,7 @@ import {
   UPDATE_ACTION_ITEM_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import userEvent from '@testing-library/user-event';
-import type { IActionItemInfo } from 'types/ActionItems/interface';
+import type { IActionItemInfo } from 'types/AdminPortal/ActionItems/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({

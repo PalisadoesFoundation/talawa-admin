@@ -43,7 +43,7 @@ import type {
   IActionItemInfo,
   IUpdateActionItemInput,
   IMarkActionItemAsPendingInput,
-} from 'types/ActionItems/interface';
+} from 'types/AdminPortal/ActionItems/interface';
 
 export interface IItemUpdateStatusModalProps {
   isOpen: boolean;

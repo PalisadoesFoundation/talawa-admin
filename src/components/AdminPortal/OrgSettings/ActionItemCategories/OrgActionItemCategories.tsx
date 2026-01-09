@@ -33,7 +33,7 @@ import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
-import type { IActionItemCategoryInfo } from 'types/ActionItems/interface';
+import type { IActionItemCategoryInfo } from 'types/AdminPortal/ActionItems/interface';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import {

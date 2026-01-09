@@ -57,7 +57,7 @@ import { REMOVE_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
 import { useParams } from 'react-router';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
-import type { InterfaceUserAttendee } from 'types/User/interface';
+import type { InterfaceUserAttendee } from 'types/AdminPortal/User/interface';
 
 function EventRegistrants(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventRegistrant' });

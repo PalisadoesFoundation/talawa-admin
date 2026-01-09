@@ -12,7 +12,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from '../../../utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import ItemViewModal, { type IViewModalProps } from './ActionItemViewModal';
-import type { IActionItemInfo } from 'types/ActionItems/interface';
+import type { IActionItemInfo } from 'types/AdminPortal/ActionItems/interface';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';

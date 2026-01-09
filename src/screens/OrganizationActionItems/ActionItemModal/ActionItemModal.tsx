@@ -19,12 +19,12 @@ import type {
   IUpdateActionItemInput,
   IUpdateActionForInstanceInput,
   IEventVolunteerGroup,
-} from 'types/ActionItems/interface';
+} from 'types/AdminPortal/ActionItems/interface';
 
 import type {
   IFormStateType,
   IItemModalProps,
-} from 'types/ActionItems/interface.ts';
+} from 'types/AdminPortal/ActionItems/interface';
 
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';

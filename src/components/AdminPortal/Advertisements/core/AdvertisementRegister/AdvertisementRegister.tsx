@@ -65,7 +65,7 @@ import { useParams } from 'react-router';
 import type {
   InterfaceAddOnRegisterProps,
   InterfaceFormStateTypes,
-} from 'types/Advertisement/interface';
+} from 'types/AdminPortal/Advertisement/interface';
 import { FaTrashCan } from 'react-icons/fa6';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';

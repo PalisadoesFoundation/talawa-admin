@@ -1,5 +1,5 @@
 import type { Event } from '../Event/type';
-import type { User } from '../User/type';
+import type { User } from '../AdminPortal/User/type';
 
 export type CheckIn = {
   _id: string;
