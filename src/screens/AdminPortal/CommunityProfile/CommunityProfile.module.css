@@ -1,0 +1,119 @@
+.card {
+  width: fit-content;
+}
+
+.cardHeader {
+  padding: var(--space-6) var(--space-5) var(--space-5) var(--space-5);
+  border-bottom: var(--border-3) solid var(--color-gray-50);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardHeader .cardTitle {
+  font-size: var(--font-size-2xl);
+}
+
+.formLabel {
+  font-weight: var(--font-weight-regular);
+  padding-bottom: var(--space-0);
+  font-size: var(--font-size-md);
+  color: var(--color-black);
+}
+
+.inputField {
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-4);
+  background-color: var(--color-white);
+  border: var(--border-1) solid var(--color-gray-100);
+}
+
+.inputField:focus {
+  border: var(--border-0) solid var(--color-gray-200) !important;
+  background-color: var(--color-white) !important;
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-md)
+    rgba(0, 0, 0, 0.25);
+  outline: none;
+  transition: box-shadow 0.2s ease;
+}
+
+.inputField > button {
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-4);
+}
+
+.addButton {
+  margin-bottom: var(--space-4);
+  color: var(--color-gray-700);
+  background-color: var(--color-blue-200);
+  border-color: var(--color-blue-200);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.addButton:is(:hover, :active, :focus) {
+  background-color: var(--color-blue-500) !important;
+  border-color: var(--color-gray-700);
+}
+
+.addButton:disabled {
+  margin-bottom: var(--space-4);
+  background-color: var(--color-gray-50);
+  border-color: var(--color-blue-200);
+}
+
+.outlineBtn {
+  display: flex;
+  justify-content: space-around;
+  width: 8rem;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-xs)
+    var(--color-gray-100);
+  background-color: var(--color-white);
+  color: var(--color-blue-200);
+  border: var(--border-1) solid var(--color-blue-200);
+}
+
+.outlineBtn:is(:hover, :active) {
+  background-color: var(--color-blue-500) !important;
+  color: var(--color-white) !important;
+  border-color: var(--color-blue-500);
+  box-shadow:
+    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
+      var(--color-blue-200),
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
+      rgba(60, 64, 67, 0.15);
+}
+
+.outlineBtn:disabled {
+  background-color: var(--color-white);
+  color: var(--color-gray-400);
+  border-color: var(--color-gray-400);
+}
+
+.manageBtn,
+.withdrawBtn,
+.outlineBtn {
+  min-width: 8rem;
+  height: 2.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+@media (max-width: 520px) {
+  .btn {
+    flex-direction: column;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 1020px) {
+  .btn {
+    flex-direction: column;
+    justify-content: center;
+  }
+}

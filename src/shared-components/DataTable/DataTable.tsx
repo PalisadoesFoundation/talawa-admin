@@ -6,6 +6,7 @@ import type {
   HeaderRender,
 } from '../../types/shared-components/DataTable/interface';
 import { PaginationControls } from './Pagination';
+import { TableLoader } from './TableLoader';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 
@@ -36,7 +37,8 @@ function renderCellValue(value: unknown) {
  * @param props - Table configuration and data.
  * @returns A table with support for loading skeletons, empty state, and error display.
  */
-const DEFAULT_SKELETON_ROWS: number = 6;
+const DEFAULT_SKELETON_ROWS: number = 5;
+
 export function DataTable<T>(props: IDataTableProps<T>) {
   const { t: tCommon } = useTranslation('common');
   const {
@@ -44,11 +46,16 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     columns,
     loading,
     rowKey,
+    tableClassName,
+    renderRow,
     emptyMessage = tCommon('noResultsFound'),
     error,
     renderError,
     ariaLabel,
     skeletonRows = DEFAULT_SKELETON_ROWS,
+    // Loading optimizations
+    loadingOverlay = false,
+    loadingMore = false,
     // Pagination props
     paginationMode,
     pageSize = 10,
@@ -114,22 +121,29 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     : data;
   const total = totalItems ?? data.length;
 
-  const getKey = (row: T, idx: number): string | number => {
-    if (typeof rowKey === 'function') {
-      return rowKey(row);
-    } else if (rowKey) {
-      const value = row[rowKey];
-      if (typeof value === 'string' || typeof value === 'number') {
-        return value;
+  const tableClassNames = tableClassName
+    ? `${styles.dataTableBase} ${tableClassName}`
+    : styles.dataTableBase;
+
+  const getKey = React.useCallback(
+    (row: T, idx: number): string | number => {
+      if (typeof rowKey === 'function') {
+        return rowKey(row);
+      } else if (rowKey) {
+        const value = row[rowKey];
+        if (typeof value === 'string' || typeof value === 'number') {
+          return value;
+        }
+        if (value != null) {
+          return String(value);
+        }
+        return idx;
+      } else {
+        return idx;
       }
-      if (value != null) {
-        return String(value);
-      }
-      return idx;
-    } else {
-      return idx;
-    }
-  };
+    },
+    [rowKey],
+  );
 
   // 1) Error state (highest priority)
   if (error) {
@@ -152,15 +166,15 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     );
   }
 
-  // 2) Table with skeleton rows when loading
-  if (loading) {
+  // 2) Table with skeleton rows when loading (initial load, no data)
+  if (loading && (!paginatedData || paginatedData.length === 0)) {
     return (
       <div className={styles.dataTableWrapper} data-testid="datatable-loading">
         <Table
           striped
           hover
           responsive
-          className={styles.dataTableBase}
+          className={tableClassNames}
           aria-busy="true"
         >
           {ariaLabel && (
@@ -177,11 +191,15 @@ export function DataTable<T>(props: IDataTableProps<T>) {
           </thead>
           <tbody>
             {Array.from({ length: skeletonRows }).map((_, rowIdx) => (
-              <tr key={`skeleton-row-${rowIdx}`}>
+              <tr
+                key={`skeleton-row-${rowIdx}`}
+                data-testid={`skeleton-row-${rowIdx}`}
+              >
                 {columns.map((col) => (
                   <td key={col.id}>
                     <div
                       className={styles.dataSkeletonCell}
+                      data-testid="data-skeleton-cell"
                       aria-hidden="true"
                     />
                   </td>
@@ -195,7 +213,6 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   }
 
   // 3) Empty state
-  // Query-specific empty states will be handled in a future phase.
   if (!paginatedData || paginatedData.length === 0) {
     return (
       <div
@@ -209,10 +226,27 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     );
   }
 
-  // 4) Table content
+  // 4) Table content with optional loading overlay and partial loading
   return (
     <div className={styles.dataTableWrapper}>
-      <Table striped hover responsive className={styles.dataTableBase}>
+      {/* Loading overlay for refetch state */}
+      {loading && loadingOverlay && (
+        <TableLoader
+          columns={columns}
+          rows={Math.min(skeletonRows, 3)}
+          asOverlay
+          ariaLabel={tCommon('loading')}
+        />
+      )}
+
+      <Table
+        striped
+        hover
+        responsive
+        className={tableClassNames}
+        data-testid="datatable"
+        aria-busy={loading && loadingOverlay}
+      >
         {ariaLabel && (
           <caption className={styles.visuallyHidden}>{ariaLabel}</caption>
         )}
@@ -226,22 +260,61 @@ export function DataTable<T>(props: IDataTableProps<T>) {
           </tr>
         </thead>
         <tbody>
-          {paginatedData.map((row, idx) => (
-            <tr key={getKey(row, idx)}>
-              {columns.map((col) => {
-                const val = getCellValue(row, col.accessor);
-                return (
+          {renderRow
+            ? paginatedData.map((row, idx) => (
+                <React.Fragment key={getKey(row, idx)}>
+                  {renderRow(row, idx)}
+                </React.Fragment>
+              ))
+            : paginatedData.map((row, idx) => (
+                <tr
+                  key={getKey(row, idx)}
+                  data-testid={`datatable-row-${getKey(row, idx)}`}
+                >
+                  {columns.map((col) => {
+                    const val = getCellValue(row, col.accessor);
+                    return (
+                      <td key={col.id} data-testid={`datatable-cell-${col.id}`}>
+                        {col.render
+                          ? col.render(val, row)
+                          : renderCellValue(val)}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+
+          {/* Partial loading: append skeleton rows for fetchMore
+           *
+           * loadingMore behavior by pagination mode:
+           * - Client mode: Parent manages data array and sets loadingMore=true while fetching additional items
+           * - Server mode (Variant A with pageInfo/onLoadMore): Parent sets loadingMore=true after calling onLoadMore()
+           *   to indicate data is being fetched; resolves when parent appends new items to data array
+           * - Server mode (Variant B without pageInfo/onLoadMore): Parent manages all fetching externally
+           *   and sets loadingMore=true to show skeleton rows while loading
+           * - No pagination: Similar to server mode; parent manages loading state and appends items as they arrive
+           */}
+          {loadingMore &&
+            Array.from({ length: skeletonRows }).map((_, rowIdx) => (
+              <tr
+                key={`skeleton-append-${rowIdx}`}
+                data-testid={`skeleton-append-${rowIdx}`}
+              >
+                {columns.map((col) => (
                   <td key={col.id}>
-                    {col.render ? col.render(val, row) : renderCellValue(val)}
+                    <div
+                      className={styles.dataSkeletonCell}
+                      data-testid="data-skeleton-cell"
+                      aria-hidden="true"
+                    />
                   </td>
-                );
-              })}
-            </tr>
-          ))}
+                ))}
+              </tr>
+            ))}
         </tbody>
       </Table>
 
-      {showPaginationControls && (
+      {showPaginationControls && !loading && (
         <PaginationControls
           page={page}
           pageSize={pageSize}

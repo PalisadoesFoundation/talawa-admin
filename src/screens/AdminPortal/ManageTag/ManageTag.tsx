@@ -85,8 +85,8 @@ import {
   UPDATE_USER_TAG,
 } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAGS_ASSIGNED_MEMBERS } from 'GraphQl/Queries/userTagQueries';
-import AddPeopleToTag from 'components/AddPeopleToTag/AddPeopleToTag';
-import TagActions from 'components/TagActions/TagActions';
+import AddPeopleToTag from 'components/AdminPortal/AddPeopleToTag/AddPeopleToTag';
+import TagActions from 'components/AdminPortal/TagActions/TagActions';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import EditUserTagModal from './editModal/EditUserTagModal';

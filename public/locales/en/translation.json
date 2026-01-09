@@ -458,6 +458,7 @@
     "userName": "User Name",
     "actions": "Actions",
     "noOneSelected": "No One Selected",
+    "addMember": "Add Member",
     "assignToTags": "Assign to Tags",
     "removeFromTags": "Remove from Tags",
     "assign": "Assign",
@@ -486,7 +487,8 @@
     "tagActions": "Tag Actions",
     "loadAssignedUsersError": "Error occurred while loading assigned users",
     "sortPeople": "Sort People",
-    "noTagsFound": "No tags found"
+    "noTagsFound": "No tags found",
+    "removeMember": "Remove Member"
   },
   "userListCard": {
     "addAdmin": "Add Admin",

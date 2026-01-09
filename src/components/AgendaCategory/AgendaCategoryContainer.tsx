@@ -42,9 +42,9 @@ import {
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
 
-import AgendaCategoryDeleteModal from 'components/OrgSettings/AgendaItemCategories/Delete/AgendaCategoryDeleteModal';
-import AgendaCategoryPreviewModal from 'components/OrgSettings/AgendaItemCategories/Preview/AgendaCategoryPreviewModal';
-import AgendaCategoryUpdateModal from 'components/OrgSettings/AgendaItemCategories/Update/AgendaCategoryUpdateModal';
+import AgendaCategoryDeleteModal from 'components/AdminPortal/OrgSettings/AgendaItemCategories/Delete/AgendaCategoryDeleteModal';
+import AgendaCategoryPreviewModal from 'components/AdminPortal/OrgSettings/AgendaItemCategories/Preview/AgendaCategoryPreviewModal';
+import AgendaCategoryUpdateModal from 'components/AdminPortal/OrgSettings/AgendaItemCategories/Update/AgendaCategoryUpdateModal';
 
 function agendaCategoryContainer({
   agendaCategoryConnection,

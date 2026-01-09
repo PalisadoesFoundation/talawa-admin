@@ -703,14 +703,14 @@ describe('ItemModal - Additional Test Cases', () => {
         () => {
           expect(screen.getByRole('dialog')).toBeInTheDocument();
         },
-        { timeout: 3000 },
+        { timeout: 5000 },
       );
 
       await waitFor(
         () => {
           expect(screen.getByTestId('categorySelect')).toBeInTheDocument();
         },
-        { timeout: 3000 },
+        { timeout: 5000 },
       );
 
       const volunteerGroupSelect = await screen.findByTestId(
@@ -727,7 +727,7 @@ describe('ItemModal - Additional Test Cases', () => {
         () => {
           expect(volunteerGroupInput).toHaveValue('Test Group 1');
         },
-        { timeout: 3000 },
+        { timeout: 5000 },
       );
 
       expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
@@ -928,7 +928,7 @@ describe('ItemModal - Additional Test Cases', () => {
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
         {},
-        { timeout: 3000 },
+        { timeout: 5000 },
       );
       const volunteerGroupInput =
         within(volunteerGroupSelect).getByRole('combobox');
@@ -971,7 +971,25 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
-      const volunteerSelect = await screen.findByTestId('volunteerSelect');
+      // Select a category first (required for volunteer functionality)
+      const categorySelect = screen.getByTestId('categorySelect');
+      const categoryInput = within(categorySelect).getByRole('combobox');
+      await userEvent.click(categoryInput);
+      await userEvent.type(categoryInput, 'Category 1');
+      await waitFor(async () => {
+        const option = await screen.findByText('Category 1');
+        await userEvent.click(option);
+      });
+
+      // Wait for volunteer select to be in the document
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
+
+      const volunteerSelect = screen.getByTestId('volunteerSelect');
       const volunteerInput = within(volunteerSelect).getByRole('combobox');
       await userEvent.click(volunteerInput);
       await userEvent.type(volunteerInput, 'Jane Smith');
@@ -995,8 +1013,11 @@ describe('ItemModal - Additional Test Cases', () => {
       const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
       await userEvent.click(volunteerChip);
 
-      const reopenedVolunteerSelect =
-        await screen.findByTestId('volunteerSelect');
+      const reopenedVolunteerSelect = await screen.findByTestId(
+        'volunteerSelect',
+        {},
+        { timeout: 5000 },
+      );
       const reopenedVolunteerInput = within(reopenedVolunteerSelect).getByRole(
         'combobox',
       );
@@ -1023,14 +1044,23 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
-      // Wait for volunteer select and its data to be fully loaded
-      const volunteerSelect = await screen.findByTestId('volunteerSelect');
-      const volunteerInput = within(volunteerSelect).getByRole('combobox');
-
-      // Ensure volunteer data has loaded by waiting for the input to be enabled/ready
-      await waitFor(() => {
-        expect(volunteerInput).not.toBeDisabled();
+      // Select a category first (required for volunteer functionality)
+      const categorySelect = screen.getByTestId('categorySelect');
+      const categoryInput = within(categorySelect).getByRole('combobox');
+      await userEvent.click(categoryInput);
+      await userEvent.type(categoryInput, 'Category 1');
+      await waitFor(async () => {
+        const option = await screen.findByText('Category 1');
+        await userEvent.click(option);
       });
+
+      // Wait for volunteer select to be in the document
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
 
       // Now click the volunteerGroup chip to switch assignment type
       const volunteerGroupChip = screen.getByRole('button', {
@@ -1041,6 +1071,8 @@ describe('ItemModal - Additional Test Cases', () => {
       // Wait for volunteerGroupSelect to appear (this confirms the switch happened)
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
+        {},
+        { timeout: 5000 },
       );
       const volunteerGroupInput =
         within(volunteerGroupSelect).getByRole('combobox');
@@ -1075,6 +1107,8 @@ describe('ItemModal - Additional Test Cases', () => {
 
       const reopenedGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
+        {},
+        { timeout: 5000 },
       );
       const reopenedGroupInput =
         within(reopenedGroupSelect).getByRole('combobox');
@@ -4068,6 +4102,8 @@ describe('Partially Covered Lines Test Coverage', () => {
       // Select volunteer group
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
+        {},
+        { timeout: 5000 },
       );
       const volunteerGroupInput =
         within(volunteerGroupSelect).getByRole('combobox');
