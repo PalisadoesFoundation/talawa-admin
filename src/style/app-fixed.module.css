@@ -2854,6 +2854,7 @@ form label,
   align-items: center;
   color: grey;
 }
+
 .peopleTabEventHeader:hover {
   color: var(--groupsLabel-color);
 }
@@ -4346,36 +4347,34 @@ form label,
 .peopleTabIconWrapper {
   display: flex;
   align-items: center;
-  color: #dddddd;
-  border: 1px solid grey;
+  color: var(--secondaryText-color, #808080);
+  border: 1px solid var(--addButton-border, #ddd);
   border-radius: 9px;
   padding: 0 20px;
-  color: #808080;
-  border: 1px solid #ddd;
 }
 
 .peopleTabActiveButton {
-  color: #555555;
-  background: #eaebef;
+  color: var(--fonts-color, #555555);
+  background: var(--table-row-hover-bg, #eaebef);
   border-radius: 9px;
-  border: 1px solid #555555;
+  border: 1px solid var(--fonts-color, #555555);
 }
 
 .peopleTabActiveHeader {
-  color: #555555;
-  background: #eaebef;
+  color: var(--fonts-color, #555555);
+  background: var(--table-row-hover-bg, #eaebef);
 }
 
 .peopleTabIcon {
   font-size: 1.5rem;
   display: flex;
   align-items: center;
-  color: grey;
+  color: var(--secondaryText-color, grey);
   padding: 1rem 1.2rem;
 }
 
 .peopleTabComponent {
-  background: #fff;
+  background: var(--row-bg, #fff);
   padding-top: 1rem;
   border-radius: 20px;
   margin: 1rem;
@@ -4402,8 +4401,8 @@ form label,
 }
 
 .peopleTabUserTagColumnHeader {
-  background: #dddddd;
-  border: 1px solid #ddd;
+  background: var(--secondaryText-color, #dddddd);
+  border: 1px solid var(--addButton-border, #ddd);
 }
 
 .peopleTabUserTagTableCell {
@@ -4429,15 +4428,18 @@ form label,
 }
 
 .peopleTabUserTagTableHeader {
-  background-color: #f9fafb; /* bg-gray-50 */
-  border-top-width: 1px; /* border-y */
+  background-color: var(--table-header-bg, #f9fafb);
+  /* bg-gray-50 */
+  border-top-width: 1px;
+  /* border-y */
   border-bottom-width: 1px;
-  border-color: #e5e7eb; /* border-gray-200 */
+  border-color: var(--addButton-border, #e5e7eb);
+  /* border-gray-200 */
   border-style: solid;
 }
 
 .peopleTabUserTagTableRow:hover {
-  background-color: #f9fafb;
+  background-color: var(--table-row-hover-bg, #f9fafb);
 }
 
 .peopleTabUserTagTableHeaderCell {
@@ -4495,6 +4497,7 @@ form label,
   align-items: baseline;
   justify-content: space-between;
 }
+
 .peopleTabUserEventDate {
   display: flex;
   align-items: baseline;
@@ -4507,6 +4510,7 @@ form label,
   display: flex;
   flex-direction: column;
 }
+
 .peoplePageUserEventCardBody {
   display: grid;
   gap: 1rem;
@@ -6253,7 +6257,8 @@ form {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-right: 6px; /* space between icon & text */
+  margin-right: 6px;
+  /* space between icon & text */
 }
 
 .dropdownItemButton {
@@ -11066,6 +11071,7 @@ form {
 .orgSelectorNoResults {
   padding: 0.75rem 1rem;
   color: var(--orgSelector-no-results-color);
+
   .tagActionsDivider {
     border-color: var(--grey-border-box-color);
     border-style: solid;
@@ -11232,4 +11238,41 @@ form {
 .actionItemCategoriesDataGrid :global(.MuiDataGrid-root),
 .actionItemCategoriesDataGrid :global(.MuiDataGrid-main) {
   border-radius: 0.5rem;
+}
+/* Utility Classes added for CI Compliance */
+.flex1 {
+  flex: 1 !important;
+}
+
+.displayNone {
+  display: none !important;
+}
+
+.displayFlex {
+  display: flex !important;
+}
+
+.positionRelative {
+  position: relative !important;
+}
+
+.inlineBlock {
+  display: inline-block !important;
+}
+
+.cursorPointer {
+  cursor: pointer !important;
+}
+
+.cursorDefault {
+  cursor: default !important;
+}
+
+.blueTextNone {
+  color: var(--secondaryText-color, blue) !important;
+  text-decoration: none !important;
+}
+
+.colorDarkGrey {
+  color: var(--secondaryText-color, #3b3b3b) !important;
 }

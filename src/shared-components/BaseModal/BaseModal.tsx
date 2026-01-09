@@ -14,8 +14,8 @@
  * - Custom header support for complex layouts
  * - i18n support for all user-visible strings
  *
- * @component
  * @example
+ * ```tsx
  * // Simple delete confirmation modal
  * <BaseModal
  *   show={isOpen}
@@ -35,8 +35,10 @@
  * >
  *   <p>{t('deletePostMsg')}</p>
  * </BaseModal>
+ * ```
  *
  * @example
+ * ```tsx
  * // Form modal with custom styling
  * <BaseModal
  *   show={isEditOpen}
@@ -59,6 +61,7 @@
  *     <Form.Control {...} />
  *   </Form>
  * </BaseModal>
+ * ```
  */
 import { useId } from 'react';
 import { Modal, Button } from 'react-bootstrap';

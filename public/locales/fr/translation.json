@@ -1550,7 +1550,6 @@
     "enterName": "Entrez le nom",
     "enterDescription": "Entrez la description",
     "enterLocation": "Entrez l'emplacement",
-
     "registerable": "Est enregistrable",
     "monthlyCalendarView": "Calendrier mensuel",
     "yearlyCalendarView": "Calendrier annuel",
@@ -2108,7 +2107,11 @@
     "title": "Portail Utilisateur",
     "talawa": "Talawa",
     "talawaBranding": "Image de marque Talawa",
-    "view": "Voir"
+    "view": "Voir",
+    "close": "Fermer",
+    "deletePost": "Supprimer le message",
+    "deletePostMsg": "Êtes-vous sûr de vouloir supprimer ce message ?",
+    "editTag": "Modifier le tag"
   },
   "donation": {
     "amount_label": "Montant",

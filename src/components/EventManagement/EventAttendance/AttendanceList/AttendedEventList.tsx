@@ -5,32 +5,14 @@
  * It fetches event details using the `EVENT_DETAILS` GraphQL query and displays
  * the event title and start date. Each event is linked to its detailed page.
  *
- * @component
- * @param {Partial<InterfaceEvent>} props - Partial properties of the event interface.
- * @param {string} [props._id] - The unique identifier of the event to fetch details for.
- *
- * @returns {React.ReactElement} A React component that displays a list of attended events.
- *
  * @remarks
  * - Uses the `useQuery` hook from Apollo Client to fetch event details.
  * - Displays a loading message while fetching data and an error message if the query fails.
  * - Utilizes Material-UI components for table rendering.
  * - The `formatDate` utility is used to format the event's start date.
- *
- * @example
- * ```tsx
- * <AttendedEventList _id="event123" />
- * ```
- *
- * @dependencies
- * - `@mui/material` for table components.
- * - `@apollo/client` for GraphQL query handling.
- * - `react-router-dom` for navigation links.
- * - `utils/dateFormatter` for date formatting.
- * - `assets/svgs/cardItemDate.svg` for the date icon.
- *
  */
 import React from 'react';
+import styles from 'style/app-fixed.module.css';
 import { TableBody, TableCell, TableRow, Table } from '@mui/material';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
@@ -68,8 +50,7 @@ const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ id }) => {
               <TableCell>
                 <Link
                   to={`/event/${currentOrg}/${event.id}`}
-                  className="d-flex justify-items-center align-items-center"
-                  style={{ color: 'blue', textDecoration: 'none' }}
+                  className={`d-flex justify-items-center align-items-center ${styles.blueTextNone}`}
                 >
                   <DateIcon
                     title="Event Date"

@@ -1550,7 +1550,6 @@
     "enterName": "输入名称",
     "enterDescription": "输入描述",
     "enterLocation": "输入位置",
-
     "registerable": "可注册",
     "monthlyCalendarView": "月历",
     "yearlyCalendarView": "年历",
@@ -2108,7 +2107,11 @@
     "title": "用户门户",
     "talawa": "塔拉瓦",
     "talawaBranding": "Talawa 品牌形象",
-    "view": "查看"
+    "view": "查看",
+    "close": "关闭",
+    "deletePost": "删除帖子",
+    "deletePostMsg": "您确定要删除此帖子吗？",
+    "editTag": "编辑标签"
   },
   "donation": {
     "amount_label": "金额",

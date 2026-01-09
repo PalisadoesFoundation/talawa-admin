@@ -140,7 +140,7 @@ function Leaderboard(): JSX.Element {
   );
 
   if (!orgId) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/admin/orglist" replace />;
   }
 
   if (error) {

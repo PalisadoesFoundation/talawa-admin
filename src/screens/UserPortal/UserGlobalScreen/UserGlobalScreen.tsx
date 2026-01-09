@@ -2,27 +2,10 @@
  * UserGlobalScreen component serves as the main layout for user global routes.
  * It manages the sidebar visibility and displays content for routes that don't require an orgId.
  *
- * @component
- *
  * @remarks
  * - Uses UserSidebar instead of UserSidebarOrg since no orgId is required.
  * - Adjusts the sidebar visibility based on the screen width.
  * - Renders the Outlet for nested routes.
- *
- * @returns {JSX.Element} The rendered UserGlobalScreen component.
- *
- * @example
- * ```tsx
- * <Route path="/user/test/global" element={<UserGlobalScreen />} />
- * ```
- *
- * @property {boolean} hideDrawer - State to manage the visibility of the sidebar.
- *
- * @function handleResize
- * Toggles the sidebar visibility based on the screen width.
- *
- * @hook useEffect
- * Sets up and cleans up the window resize event listener.
  */
 import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
@@ -88,7 +71,7 @@ const UserGlobalScreen = (): JSX.Element => {
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
-          <div style={{ flex: 1 }}>
+          <div className={styles.flex1}>
             <h1>Global Features</h1>
           </div>
           <ProfileDropdown portal="user" />

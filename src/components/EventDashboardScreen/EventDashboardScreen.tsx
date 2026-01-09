@@ -74,7 +74,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
             <div
               className={`d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
             >
-              <div style={{ flex: 1 }}>
+              <div className={styles.flex1}>
                 <h1>{t('title')}</h1>
               </div>
               <Outlet />
@@ -157,7 +157,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
-          <div style={{ flex: 1 }}>
+          <div className={styles.flex1}>
             <h1>{t('title')}</h1>
           </div>
           <ProfileDropdown portal="admin" />

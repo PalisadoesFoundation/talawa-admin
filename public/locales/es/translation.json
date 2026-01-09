@@ -2107,7 +2107,11 @@
     "title": "Portal de Usuario",
     "talawa": "Talawa",
     "talawaBranding": "Marca Talawa",
-    "view": "Ver"
+    "view": "Ver",
+    "close": "Cerrar",
+    "deletePost": "Eliminar publicación",
+    "deletePostMsg": "¿Estás seguro de que deseas eliminar esta publicación?",
+    "editTag": "Editar etiqueta"
   },
   "donation": {
     "amount_label": "Cantidad",

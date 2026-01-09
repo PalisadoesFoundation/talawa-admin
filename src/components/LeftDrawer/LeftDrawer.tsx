@@ -129,7 +129,7 @@ const LeftDrawer = ({
       portalType="admin"
       footerContent={
         <>
-          <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
+          <div className={hideDrawer ? styles.displayNone : styles.displayFlex}>
             <ProfileCard />
           </div>
           <SignOut hideDrawer={hideDrawer} />

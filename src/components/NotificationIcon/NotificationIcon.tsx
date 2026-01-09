@@ -55,8 +55,8 @@ const NotificationIcon = () => {
         id="dropdown-basic"
         className={styles.iconButton}
       >
-        <div style={{ position: 'relative', display: 'inline-block' }}>
-          <NotificationsIcon style={{ color: '#3b3b3b' }} />
+        <div className={`${styles.positionRelative} ${styles.inlineBlock}`}>
+          <NotificationsIcon className={styles.colorDarkGrey} />
           {unreadCount > 0 && (
             <span
               className={styles.unreadBadge}
@@ -75,7 +75,11 @@ const NotificationIcon = () => {
           notifications.map((notification) => (
             <Dropdown.Item
               key={notification.id}
-              className={styles.notificationItem}
+              className={`${styles.notificationItem} ${
+                notification.navigation
+                  ? styles.cursorPointer
+                  : styles.cursorDefault
+              }`}
               onClick={() => {
                 if (notification.navigation) {
                   navigate(notification.navigation);
@@ -85,9 +89,6 @@ const NotificationIcon = () => {
                 const isUserPortal =
                   path.startsWith('/user/') || path.startsWith('/user');
                 navigate(isUserPortal ? '/user/notification' : '/notification');
-              }}
-              style={{
-                cursor: notification.navigation ? 'pointer' : 'default',
               }}
             >
               {!notification.isRead && (

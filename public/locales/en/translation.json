@@ -2107,7 +2107,11 @@
     "title": "User Portal",
     "talawa": "Talawa",
     "talawaBranding": "Talawa Branding",
-    "view": "View"
+    "view": "View",
+    "close": "Close",
+    "deletePost": "Delete Post",
+    "deletePostMsg": "Are you sure you want to delete this post?",
+    "editTag": "Edit Tag"
   },
   "donation": {
     "amount_label": "Amount",
