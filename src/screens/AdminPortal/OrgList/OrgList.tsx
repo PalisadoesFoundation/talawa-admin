@@ -3,15 +3,14 @@
  * and providing functionality for searching, sorting, and creating new organizations.
  * It also includes modals for creating organizations and managing features after creation.
  *
- * @component
- * @returns {JSX.Element} The rendered organization list component.
+ * @returns The rendered organization list component.
  *
  * @remarks
  * - Utilizes GraphQL queries and mutations for fetching and managing organization data.
  * - Includes search and sorting functionality for better user experience.
  * - Displays loading states and handles errors gracefully.
  *
- * @dependencies
+ * Dependencies:
  * - `useQuery` and `useMutation` from `@apollo/client` for GraphQL operations.
  * - `useTranslation` from `react-i18next` for localization.
  * - `useLocalStorage` for accessing local storage data.
@@ -19,7 +18,7 @@
  * - `NotificationToast` for notifications.
  * - `react-bootstrap` and `@mui/material` for modal and button components.
  *
- * @state
+ * State:
  * - `dialogModalisOpen` - Controls the visibility of the plugin notification modal.
  * - `dialogRedirectOrgId` - Stores the ID of the organization to redirect after creation.
  * - `isLoading` - Indicates whether the organization data is loading.
@@ -28,7 +27,7 @@
  * - `showModal` - Controls the visibility of the organization creation modal.
  * - `formState` - Manages the state of the organization creation form.
  *
- * @methods
+ * Methods:
  * - `openDialogModal(redirectOrgId: string): void` - Opens the plugin notification modal.
  * - `closeDialogModal(): void` - Closes the plugin notification modal.
  * - `toggleDialogModal(): void` - Toggles the plugin notification modal visibility.
@@ -36,11 +35,11 @@
  * - `handleSearch(value: string): void` - Filters organizations based on the search query.
  * - `handleSortChange(value: string): void` - Updates sorting state and refetches organizations.
  *
- * @errorHandling
+ * ErrorHandling:
  * - Handles errors from GraphQL queries and mutations using `errorHandler`.
  * - Clears local storage and redirects to the home page on critical errors.
  *
- * @modals
+ * Modals:
  * - `OrganizationModal` - For creating new organizations.
  * - `Modal` - For managing features after organization creation.
  */
@@ -68,14 +67,14 @@ import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Link } from 'react-router';
-import { Modal } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import style from './OrgList.module.css';
 import { Group, Search } from '@mui/icons-material';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import AdminSearchFilterBar from 'components/AdminPortal/AdminSearchFilterBar/AdminSearchFilterBar';
+import { BaseModal } from 'shared-components/BaseModal';
 
 const { getItem } = useLocalStorage();
 
@@ -282,7 +281,7 @@ function orgList(): JSX.Element {
   };
 
   /**
-   * Note: The explicit refetchOrgs({ filter: val }) call is intentional.
+   * Note: The explicit refetchOrgs(`{ filter: val }`) call is intentional.
    * While Apollo Client auto-refetches when filterName changes, the explicit
    * call ensures immediate network request execution and avoids timing issues
    * from React's batched state updates. This pattern is used consistently
@@ -469,45 +468,42 @@ function orgList(): JSX.Element {
         userData={userData}
       />
       {/* Plugin Notification Modal after Org is Created */}
-      <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
-        <Modal.Header
-          className={styles.modalHeader}
-          closeButton
-          data-testid="pluginNotificationHeader"
-        >
-          <Modal.Title className="text-white">
-            {t('manageFeatures')}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <section id={styles.grid_wrapper}>
-            <div>
-              <h4 className={styles.titlemodaldialog}>
-                {t('manageFeaturesInfo')}
-              </h4>
 
-              <div className={styles.pluginStoreBtnContainer}>
-                <Link
-                  className={pluginBtnClass}
-                  data-testid="goToStore"
-                  to={storeUrl}
-                >
-                  {t('goToStore')}
-                </Link>
-                <Button
-                  type="submit"
-                  className={styles.enableEverythingBtn}
-                  onClick={closeDialogModal}
-                  value="invite"
-                  data-testid="enableEverythingForm"
-                >
-                  {t('enableEverything')}
-                </Button>
-              </div>
+      <BaseModal
+        title={t('manageFeatures') as string}
+        show={dialogModalisOpen}
+        onHide={toggleDialogModal}
+        dataTestId="pluginNotificationModal"
+        headerClassName={styles.modalHeader}
+        showCloseButton={true}
+      >
+        <section id={styles.grid_wrapper}>
+          <div>
+            <h4 className={styles.titlemodaldialog}>
+              {t('manageFeaturesInfo')}
+            </h4>
+
+            <div className={styles.pluginStoreBtnContainer}>
+              <Link
+                className={pluginBtnClass}
+                data-testid="goToStore"
+                to={storeUrl}
+              >
+                {t('goToStore')}
+              </Link>
+              <Button
+                type="submit"
+                className={styles.enableEverythingBtn}
+                onClick={closeDialogModal}
+                value="invite"
+                data-testid="enableEverythingForm"
+              >
+                {t('enableEverything')}
+              </Button>
             </div>
-          </section>
-        </Modal.Body>
-      </Modal>
+          </div>
+        </section>
+      </BaseModal>
     </div>
   );
 }

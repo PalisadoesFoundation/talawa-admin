@@ -50,7 +50,7 @@ import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import styles from './Requests.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import AdminSearchFilterBar from 'components/AdminPortal/AdminSearchFilterBar/AdminSearchFilterBar';
 import {
   dataGridStyle,
   PAGE_SIZE,

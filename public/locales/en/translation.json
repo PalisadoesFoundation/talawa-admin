@@ -1632,7 +1632,9 @@
     "preview": "Preview",
     "bannerAd": "Banner Ad",
     "popupAd": "Popup Ad",
-    "menuAd": "Menu Ad"
+    "menuAd": "Menu Ad",
+    "searchAdvertisements": "Search advertisements",
+    "advertisementLoading": "Advertisement Loading"
   },
   "userChat": {
     "title": "Chats",

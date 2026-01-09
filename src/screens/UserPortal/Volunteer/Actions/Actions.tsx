@@ -19,7 +19,7 @@ import ItemViewModal from 'screens/OrganizationActionItems/ActionItemViewModal/A
 import Avatar from 'components/Avatar/Avatar';
 import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
 import useLocalStorage from 'utils/useLocalstorage';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import AdminSearchFilterBar from 'components/AdminPortal/AdminSearchFilterBar/AdminSearchFilterBar';
 
 enum ModalState {
   VIEW = 'view',

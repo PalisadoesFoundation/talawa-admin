@@ -326,4 +326,6 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   );
 }
 
+export { Table } from 'react-bootstrap';
+
 export default DataTable;

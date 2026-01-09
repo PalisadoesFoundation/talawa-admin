@@ -59,7 +59,7 @@ import leaderboardStyles from './Leaderboard.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import Avatar from 'components/Avatar/Avatar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import AdminSearchFilterBar from 'components/AdminPortal/AdminSearchFilterBar/AdminSearchFilterBar';
 
 import {
   DataGrid,

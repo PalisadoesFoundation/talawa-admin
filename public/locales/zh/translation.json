@@ -1633,7 +1633,9 @@
     "preview": "預覽",
     "bannerAd": "橫幅廣告",
     "popupAd": "彈出廣告",
-    "menuAd": "菜單廣告"
+    "menuAd": "菜單廣告",
+    "searchAdvertisements": "搜索廣告",
+    "advertisementLoading": "廣告加載中..."
   },
   "userChat": {
     "title": "聊天",

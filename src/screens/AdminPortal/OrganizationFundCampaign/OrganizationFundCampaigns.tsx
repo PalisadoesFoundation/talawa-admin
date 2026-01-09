@@ -17,7 +17,7 @@ import type {
   InterfaceCampaignInfo,
   InterfaceQueryOrganizationFundCampaigns,
 } from 'utils/interfaces';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import AdminSearchFilterBar from 'components/AdminPortal/AdminSearchFilterBar/AdminSearchFilterBar';
 import {
   ReportingRow,
   ReportingTableColumn,

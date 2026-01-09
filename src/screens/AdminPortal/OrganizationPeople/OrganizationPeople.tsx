@@ -50,7 +50,7 @@ import { Button } from 'react-bootstrap';
 import OrgPeopleListCard from 'components/AdminPortal/OrgPeopleListCard/OrgPeopleListCard';
 import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import AdminSearchFilterBar from 'components/AdminPortal/AdminSearchFilterBar/AdminSearchFilterBar';
 
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { errorHandler } from 'utils/errorHandler';

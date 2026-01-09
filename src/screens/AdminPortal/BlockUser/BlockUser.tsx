@@ -66,7 +66,7 @@ import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan, faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import AdminSearchFilterBar from 'components/AdminPortal/AdminSearchFilterBar/AdminSearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 

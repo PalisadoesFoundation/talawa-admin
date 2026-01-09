@@ -27,7 +27,7 @@ import {
   ROW_HEIGHT,
   dataGridStyle as baseDataGridStyle,
 } from 'types/ReportingTable/utils';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import AdminSearchFilterBar from 'components/AdminPortal/AdminSearchFilterBar/AdminSearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import componentStyles from './OrganizationFunds.module.css';
 

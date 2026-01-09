@@ -72,7 +72,7 @@ import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import VolunteerCreateModal from './createModal/VolunteerCreateModal';
 import VolunteerDeleteModal from './deleteModal/VolunteerDeleteModal';
 import VolunteerViewModal from './viewModal/VolunteerViewModal';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import AdminSearchFilterBar from 'components/AdminPortal/AdminSearchFilterBar/AdminSearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 enum VolunteerStatus {

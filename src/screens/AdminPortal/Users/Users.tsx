@@ -80,7 +80,7 @@ import type { ApolloError } from '@apollo/client';
 import { PersonOff, WarningAmberRounded } from '@mui/icons-material';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { DataTable } from 'shared-components/DataTable/DataTable';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import AdminSearchFilterBar from 'components/AdminPortal/AdminSearchFilterBar/AdminSearchFilterBar';
 
 type SortingOption = 'newest' | 'oldest';
 type FilteringOption = 'admin' | 'user' | 'cancel';

@@ -1633,7 +1633,9 @@
     "preview": "Aperçu",
     "bannerAd": "Bannière publicitaire",
     "popupAd": "Annonce popup",
-    "menuAd": "Annonce de menu"
+    "menuAd": "Annonce de menu",
+    "searchAdvertisements": "Rechercher des annonces",
+    "advertisementLoading": "Chargement de l'annonce..."
   },
   "userChat": {
     "title": "Discussions",

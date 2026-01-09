@@ -92,7 +92,7 @@ import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScroll
 import EditUserTagModal from './editModal/EditUserTagModal';
 import RemoveUserTagModal from './removeModal/RemoveUserTagModal';
 import UnassignUserTagModal from './unassignModal/UnassignUserTagModal';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import AdminSearchFilterBar from 'components/AdminPortal/AdminSearchFilterBar/AdminSearchFilterBar';
 
 export const getManageTagErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
