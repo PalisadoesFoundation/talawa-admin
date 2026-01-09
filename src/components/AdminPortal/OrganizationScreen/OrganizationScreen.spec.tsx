@@ -28,6 +28,8 @@ const toastMocks = vi.hoisted(() => {
     success: vi.fn(),
     error: vi.fn(),
     warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
   };
 });
 
@@ -162,6 +164,8 @@ describe('Testing OrganizationScreen', () => {
 
   afterAll(() => {
     clearAllItems('Talawa-admin');
+    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   beforeEach(() => {
@@ -252,9 +256,11 @@ describe('Testing OrganizationScreen', () => {
     // Wait for data to be processed
     await waitFor(() => {
       // Verify console.warn was called with the expected message
-      expect(warnSpy).toHaveBeenCalledWith(
-        'Event with id nonexistent-event not found',
-      );
+      expect(warnSpy).toHaveBeenCalledWith({
+        key: 'eventNotFound',
+        namespace: 'common',
+        values: { id: 'nonexistent-event' },
+      });
     });
 
     // Verify that no event name is displayed

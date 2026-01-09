@@ -52,7 +52,6 @@ const OrganizationScreen = (): JSX.Element => {
   const location = useLocation();
   const titleKey: string | undefined = map[location.pathname.split('/')[1]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
-  const { t: tCommon } = useTranslation('common');
 
   // Get the organization ID from the URL parameters
   const { orgId } = useParams();
@@ -110,11 +109,11 @@ const OrganizationScreen = (): JSX.Element => {
       return edge?.node?.id === eventId;
     });
     if (!matched?.node?.id) {
-      NotificationToast.warning(
-        tCommon('eventNotFound', {
-          id: eventId,
-        }) as string,
-      );
+      NotificationToast.warning({
+        key: 'eventNotFound',
+        namespace: 'common',
+        values: { id: eventId },
+      });
       setEventName(null);
       return;
     }
