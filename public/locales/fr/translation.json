@@ -1876,6 +1876,7 @@
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Sélecteur de vue des bénévoles",
+    "modalview": "Sélection de la vue modale",
     "volunteers": "Bénévoles",
     "volunteer": "Bénévole",
     "volunteerName": "Nom du Bénévole",

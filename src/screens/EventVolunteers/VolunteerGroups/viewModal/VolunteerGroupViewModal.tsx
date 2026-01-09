@@ -94,18 +94,16 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
               disabled
             />
           </FormControl>
-          {description && (
-            <FormControl fullWidth>
-              <TextField
-                required
-                label={tCommon('volunteersRequired')}
-                variant="outlined"
-                className={styles.noOutline}
-                value={volunteersRequired ?? '-'}
-                disabled
-              />
-            </FormControl>
-          )}
+          <FormControl fullWidth>
+            <TextField
+              required
+              label={tCommon('volunteersRequired')}
+              variant="outlined"
+              className={styles.noOutline}
+              value={volunteersRequired ?? '-'}
+              disabled
+            />
+          </FormControl>
         </Form.Group>
         {/* Input field to enter the group description */}
         {description && (
@@ -137,7 +135,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                     {leader.avatarURL ? (
                       <img
                         src={leader.avatarURL}
-                        alt={tCommon('volunteer')}
+                        alt={t('leader')}
                         data-testid="leader_image"
                         className={styles.TableImages}
                       />
@@ -149,7 +147,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                           avatarStyle={styles.TableImages}
                           dataTestId="leader_avatar"
                           name={leader.name}
-                          alt={leader.name}
+                          alt={t('leader')}
                         />
                       </div>
                     )}
@@ -172,7 +170,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                     {creator.avatarURL ? (
                       <img
                         src={creator.avatarURL}
-                        alt={tCommon('volunteer')}
+                        alt={t('creator')}
                         data-testid="creator_image"
                         className={styles.TableImages}
                       />
@@ -184,7 +182,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                           avatarStyle={styles.TableImages}
                           dataTestId="creator_avatar"
                           name={creator.name}
-                          alt={creator.name}
+                          alt={t('creator')}
                         />
                       </div>
                     )}

@@ -196,10 +196,10 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
       dataTestId="groupModal"
       headerClassName={styles.titlemodal}
     >
-      <div
+      <fieldset
         className={`btn-group ${styles.toggleGroup} mt-0 px-3 mb-4 w-100`}
-        role="group"
       >
+        <legend className="visually-hidden">{t('modalview')}</legend>
         <input
           type="radio"
           className={`btn-check ${styles.toggleBtn}`}
@@ -232,7 +232,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
           <PiUserListBold className="me-2" size={21} />
           {t('requests')}
         </label>
-      </div>
+      </fieldset>
 
       {modalType === 'details' ? (
         <Form

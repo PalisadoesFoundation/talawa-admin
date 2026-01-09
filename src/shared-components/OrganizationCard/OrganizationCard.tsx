@@ -5,15 +5,15 @@
  * It includes the organization's name, description, address, avatar, and the number of members.
  * A button is provided to navigate to the organization's dashboard for management.
  *
- * @param  props - The props for the component.
- * @param  id - The unique identifier for the organization.
- * @param  avatarURL - The URL of the organization's avatar image.
- * @param  addressLine1 - The primary address of the organization.
- * @param  name - The name of the organization.
- * @param  description - A brief description of the organization.
- * @param  members - The members of the organization.
- * @param  edges - The list of members in the organization.
- * @param  membersCount - The number of members. Optional. The component uses `membersCount ?? members?.edges.length ?? 0` as the fallback.
+ * @param data - The organization data object containing:
+ *   - id: The unique identifier for the organization
+ *   - name: The name of the organization
+ *   - description: A brief description of the organization
+ *   - avatarURL: The URL of the organization's avatar image
+ *   - addressLine1: The primary address of the organization
+ *   - members: The members of the organization with edges array
+ *   - membersCount: The number of members (optional, falls back to members?.edges.length)
+ *   - Other organization properties
  *
  * @returns  A JSX element representing the organization card.
  *

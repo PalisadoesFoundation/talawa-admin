@@ -19,7 +19,6 @@
  * - The volunteer's status is displayed with an icon indicating whether they have
  *   accepted or are pending.
  * - The number of hours volunteered by the volunteer is also displayed.
- *.
  *
  * @example
  * ```tsx

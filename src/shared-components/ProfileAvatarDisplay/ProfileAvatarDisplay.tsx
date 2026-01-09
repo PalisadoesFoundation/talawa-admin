@@ -8,18 +8,17 @@ import { useTranslation } from 'react-i18next';
 /**
  * ProfileAvatarDisplay component renders a profile avatar based on the provided properties.
  * It handles image loading errors and falls back to an initial-based avatar.
- * @param  props - The properties of the profile avatar display.
- * @param  imageUrl - The URL of the avatar image.
- * @param  fallbackName - The name of the user.
- * @param  size - The size of the avatar.
- * @param  shape - The shape of the avatar.
- * @param  customSize - The custom size of the avatar.
- * @param  border - Whether to show a border around the avatar.
- * @param  className - The CSS class name for the avatar.
- * @param  style - The inline styles for the avatar.
- * @param  dataTestId - The data test ID for the avatar.
- * @param  objectFit - The object fit for the avatar image.
- * @param  enableEnlarge - Whether to enable click-to-enlarge modal functionality.
+ * @param imageUrl - The URL of the avatar image.
+ * @param fallbackName - The name of the user.
+ * @param size - The size of the avatar.
+ * @param shape - The shape of the avatar.
+ * @param customSize - The custom size of the avatar.
+ * @param border - Whether to show a border around the avatar.
+ * @param className - The CSS class name for the avatar.
+ * @param style - The inline styles for the avatar.
+ * @param dataTestId - The data test ID for the avatar.
+ * @param objectFit - The object fit for the avatar image.
+ * @param enableEnlarge - Whether to enable click-to-enlarge modal functionality.
  * @returns  The ProfileAvatarDisplay component.
  * @example
  * ```tsx

@@ -1875,6 +1875,7 @@
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Volunteer view selector",
+    "modalview": "Modal view selection",
     "volunteers": "Volunteers",
     "volunteer": "Volunteer",
     "volunteerName": "Volunteer Name",

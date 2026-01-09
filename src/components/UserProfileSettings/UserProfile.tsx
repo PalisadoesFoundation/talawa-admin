@@ -7,14 +7,11 @@
  * styling and Material-UI icons for visual elements. The component also
  * supports tooltips for displaying additional information.
  *
- * @param props - Partial properties of the InterfaceUser type.
- *
- * Props include:
- * - firstName: First name of the user
- * - lastName: Last name of the user
- * - createdAt: Date when the user joined
- * - email: Email address of the user
- * - image: URL of the user's profile picture
+ * @param firstName - First name of the user
+ * @param lastName - Last name of the user
+ * @param createdAt - Date when the user joined
+ * @param email - Email address of the user
+ * @param image - URL of the user's profile picture
  *
  * @returns A JSX element displaying the user's profile details.
  *

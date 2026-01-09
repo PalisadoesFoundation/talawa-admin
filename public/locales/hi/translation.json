@@ -1876,6 +1876,7 @@
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "स्वयंसेवक दृश्य चयनकर्ता",
+    "modalview": "मोडल दृश्य चयन",
     "volunteers": "स्वयंसेवक",
     "volunteer": "स्वयंसेवक",
     "volunteerName": "स्वयंसेवक का नाम",

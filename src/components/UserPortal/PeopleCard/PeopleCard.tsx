@@ -61,14 +61,14 @@ const PeopleCard: React.FC<InterfacePeopleCardProps> = ({
   const imageSlot = image ? (
     <img
       src={image}
-      alt={tCommon('person')}
+      alt={tCommon('avatar')}
       className={styles.avatarImage}
       data-testid={`people-${id}-image`}
     />
   ) : (
     <Avatar
       name={name}
-      alt={tCommon('person')}
+      alt={tCommon('avatar')}
       avatarStyle={styles.avatarImage}
     />
   );

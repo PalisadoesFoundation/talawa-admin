@@ -369,7 +369,7 @@ function AddMember(): JSX.Element {
                         <Avatar
                           avatarStyle={styles.TableImage}
                           name={`${userDetails.name}`}
-                          data-testid="avatarImage"
+                          dataTestId="avatarImage"
                         />
                       )}
                     </TableCell>

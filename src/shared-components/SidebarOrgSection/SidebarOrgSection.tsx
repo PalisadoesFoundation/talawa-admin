@@ -4,7 +4,6 @@
  * Displays organization information in the sidebar including avatar, name, and location.
  * Handles loading and error states appropriately.
  *
- * @param  props - The props for the component
  * @param  orgId - Organization ID to fetch and display
  * @param  hideDrawer - Whether the drawer is hidden/collapsed
  * @param  isProfilePage - Whether current page is the profile page

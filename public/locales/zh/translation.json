@@ -1876,6 +1876,7 @@
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "志愿者视图选择器",
+    "modalview": "模态视图选择",
     "volunteers": "志愿者",
     "volunteer": "志愿者",
     "volunteerName": "志愿者姓名",
