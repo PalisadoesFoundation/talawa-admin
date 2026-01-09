@@ -245,7 +245,6 @@ describe('MOCKS Structure Validation', () => {
     expect(firstMock.request.variables).toEqual({
       id: '1',
       first: 10,
-      after: null,
     });
     expect(firstMock.result.data?.getChildTags?.childTags?.edges?.length).toBe(
       2,
@@ -273,7 +272,6 @@ describe('MOCKS Structure Validation', () => {
     expect(errorMock.request.variables).toEqual({
       id: '1',
       first: 10,
-      after: null,
     });
     expect(errorMock.error).toBeInstanceOf(Error);
     expect(errorMock.error?.message).toBe(
@@ -324,7 +322,7 @@ describe('Edge Cases and Coverage Improvements', () => {
       {
         request: {
           query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10, after: null },
+          variables: { id: '1', first: 10 },
         },
         result: {
           data: {
@@ -390,7 +388,7 @@ describe('Edge Cases and Coverage Improvements', () => {
       {
         request: {
           query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10, after: null },
+          variables: { id: '1', first: 10 },
         },
         result: {
           data: {
@@ -447,7 +445,7 @@ describe('Edge Cases and Coverage Improvements', () => {
       {
         request: {
           query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10, after: null },
+          variables: { id: '1', first: 10 },
         },
         result: {
           data: {
@@ -535,7 +533,7 @@ describe('Edge Cases and Coverage Improvements', () => {
       {
         request: {
           query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10, after: null },
+          variables: { id: '1', first: 10 },
         },
         result: {
           data: null, // This will make subTagsData null, so subTagsList will be []
@@ -574,7 +572,7 @@ describe('Edge Cases and Coverage Improvements', () => {
       {
         request: {
           query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10, after: null },
+          variables: { id: '1', first: 10 },
         },
         result: {
           data: {

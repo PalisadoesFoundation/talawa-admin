@@ -7,7 +7,6 @@ export const MOCKS1 = [
       variables: {
         id: '1',
         first: 10,
-        after: null,
       },
     },
     result: {
@@ -101,7 +100,6 @@ export const MOCKS_ERROR_SUBTAGS_QUERY1 = [
       variables: {
         id: '1',
         first: 10,
-        after: null,
       },
     },
     error: new Error('Mock GraphQL Error for fetching subtags'),

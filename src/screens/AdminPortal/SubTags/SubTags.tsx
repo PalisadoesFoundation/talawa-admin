@@ -62,6 +62,7 @@ import {
   dataGridStyle,
   TAGS_QUERY_DATA_CHUNK_SIZE,
 } from 'utils/organizationTagsUtils';
+import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
 import type {
   GridCellParams,
   GridColDef,
@@ -371,7 +372,10 @@ function SubTags(): JSX.Element {
                 data-testid="subTagsScrollableDiv"
                 className={styles.subTagsScrollableDiv}
               >
-                <CursorPaginationManager<unknown, InterfaceTagData>
+                <CursorPaginationManager<
+                  InterfaceQueryUserTagChildTags,
+                  InterfaceTagData
+                >
                   query={USER_TAG_SUB_TAGS}
                   queryVariables={{
                     id: parentTagId,

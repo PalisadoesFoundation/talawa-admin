@@ -478,4 +478,38 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByText(translations.noTagsFound)).toBeInTheDocument();
     });
   });
+
+  it('skips query and renders without errors when parentTagId is undefined', async () => {
+    const { container } = render(
+      <MockedProvider cache={cache} link={link}>
+        <MemoryRouter initialEntries={['/orgtags/123/subTags/']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <Routes>
+                <Route
+                  path="/orgtags/:orgId"
+                  element={<div data-testid="orgtagsScreen"></div>}
+                />
+                <Route
+                  path="/orgtags/:orgId/subTags/"
+                  element={<SubTags />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Component should render without errors
+    expect(container).toBeInTheDocument();
+
+    // Loading state should be handled properly when query is skipped
+    await waitFor(() => {
+      // The component should still render UI elements but with no data
+      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
+    });
+  });
 });
