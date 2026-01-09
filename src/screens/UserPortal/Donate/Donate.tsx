@@ -79,7 +79,7 @@ export default function Donate(): JSX.Element {
 
   const donateToOrg = async (): Promise<void> => {
     if (amount === '' || Number.isNaN(Number(amount))) {
-      NotificationToast.error(t('invalidAmount') as string);
+      NotificationToast.error(t('invalidAmount'));
       return;
     }
 
@@ -88,7 +88,7 @@ export default function Donate(): JSX.Element {
 
     if (Number(amount) < minDonation || Number(amount) > maxDonation) {
       NotificationToast.error(
-        t('donationOutOfRange', { min: minDonation, max: maxDonation }) as string,
+        t('donationOutOfRange', { min: minDonation, max: maxDonation }),
       );
       return;
     }
@@ -105,8 +105,10 @@ export default function Donate(): JSX.Element {
         },
       });
 
-      void refetch(); 
-      NotificationToast.success(t('success') as string);
+      void refetch().catch((error) => {
+        errorHandler(t, error);
+      });
+      NotificationToast.success(t('success'));
     } catch (error) {
       errorHandler(t, error);
     }
