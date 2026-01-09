@@ -90,7 +90,7 @@ interface IUserNode {
   name: string;
   role: string;
   avatarURL?: string;
-  emailAddress: string;
+  emailAddress?: string;
   createdAt: string;
 }
 
@@ -327,7 +327,7 @@ function OrganizationPeople(): JSX.Element {
                       </Link>
                     </td>
                     <td className={`${styles.tableCell} ${styles.centerAlign}`}>
-                      {memberItem.emailAddress}
+                      {memberItem.emailAddress || '-'}
                     </td>
                     <td className={`${styles.tableCell} ${styles.centerAlign}`}>
                       {memberItem.createdAt &&

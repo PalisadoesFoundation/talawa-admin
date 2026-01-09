@@ -906,7 +906,7 @@
     "cancel": "取消",
     "invalidDate": "Invalid Date",
     "messageTitleError": "帖子标题不能为空！",
-    "organizationIdMissing": "组织ID 缺失！",
+    "organizationIdMissing": "组织ID缺失！",
     "messageDescription": "帖子描述",
     "addVideo": "添加视频",
     "creatingMessage": "正在创建帖子...",

@@ -137,7 +137,10 @@ export default function People(): React.JSX.Element {
           />
         </div>
 
-        <div className={styles.people_content} aria-label={t('peopleTable')}>
+        <section
+          className={styles.people_content}
+          aria-label={t('peopleTable')}
+        >
           <div className={styles.people_card_header}>
             {/* Nested span groups sNo and avatar in a flex container for horizontal alignment */}
             <span
@@ -184,7 +187,7 @@ export default function People(): React.JSX.Element {
               emptyStateComponent={<span>{t('nothingToShow')}</span>}
             />
           </div>
-        </div>
+        </section>
       </div>
     </>
   );
