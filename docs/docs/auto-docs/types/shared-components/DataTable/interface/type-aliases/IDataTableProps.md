@@ -6,7 +6,7 @@
 
 > **IDataTableProps**\<`T`, `TValue`\> = [`IBaseDataTableProps`](../interfaces/IBaseDataTableProps.md)\<`T`, `TValue`\> & `PaginationProps`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:426](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L426)
+Defined in: [src/types/shared-components/DataTable/interface.ts:434](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L434)
 
 ## Type Parameters
 

@@ -297,7 +297,6 @@ const Pledges = (): JSX.Element => {
         {!pledgeLoading && pledges.length === 0 && (
           <div className="text-center py-4">{t('noPledges')}</div>
         )}
-
         <DataGridWrapper
           rows={rows}
           columns={columns}

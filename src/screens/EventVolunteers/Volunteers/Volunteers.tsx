@@ -72,7 +72,7 @@ import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import VolunteerCreateModal from './createModal/VolunteerCreateModal';
 import VolunteerDeleteModal from './deleteModal/VolunteerDeleteModal';
 import VolunteerViewModal from './viewModal/VolunteerViewModal';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 enum VolunteerStatus {
@@ -93,7 +93,7 @@ enum ModalState {
  *
  * Responsibilities:
  * - Displays volunteer listings with status chips
- * - Supports search and filter via AdminSearchFilterBar
+ * - Supports search and filter via SearchFilterBar
  * - Shows volunteer avatars and hours volunteered
  * - Handles add, view, and delete volunteer flows
  * - Integrates with DataGrid for table display
@@ -438,7 +438,7 @@ function Volunteers(): JSX.Element {
     <LoadingState isLoading={volunteersLoading} variant="spinner">
       <div>
         {/* Header with search, filter  and Create Button */}
-        <AdminSearchFilterBar
+        <SearchFilterBar
           searchPlaceholder={tCommon('searchBy', { item: tCommon('name') })}
           searchValue={searchTerm}
           onSearchChange={debouncedSearch}

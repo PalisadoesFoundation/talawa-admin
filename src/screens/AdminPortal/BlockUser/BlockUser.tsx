@@ -21,7 +21,7 @@
  * - `useCallback`: Optimizes event handlers for blocking/unblocking users and searching.
  *
  * Dependencies:
- * - `react-bootstrap`: Provides UI components like `Table` and `Button`.
+ * - `react-bootstrap`: Provides UI components like `Button`.
  * - `react-toastify`: Displays toast notifications for success and error messages.
  * - `react-i18next`: Handles internationalization and translations.
  * - `@apollo/client`: Manages GraphQL queries and mutations.
@@ -42,7 +42,6 @@
  */
 import { useQuery, useMutation } from '@apollo/client';
 import React, { useEffect, useState, useCallback } from 'react';
-import { Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
@@ -56,18 +55,25 @@ import {
 import TableLoader from 'components/TableLoader/TableLoader';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import styles from 'style/app-fixed.module.css';
+import styles from './BlockUser.module.css';
 import { useParams } from 'react-router';
 
 import type {
   InterfaceUserPg,
   InterfaceOrganizationPg,
 } from 'utils/interfaces';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan, faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
+import { DataTable } from 'shared-components/DataTable/DataTable';
+
+type BlockUserRow = {
+  user: InterfaceUserPg;
+  index: number;
+};
 
 const BlockUser = (): JSX.Element => {
   // Translation hooks for internationalization
@@ -228,6 +234,71 @@ const BlockUser = (): JSX.Element => {
     t('block_unblock'),
   ];
 
+  const displayedUsers = showBlockedMembers
+    ? filteredBlockedUsers
+    : filteredAllMembers;
+
+  const tableRows: BlockUserRow[] = displayedUsers.map((user, index) => ({
+    user,
+    index,
+  }));
+
+  const tableColumns: IColumnDef<BlockUserRow>[] = [
+    {
+      id: 'index',
+      header: headerTitles[0],
+      accessor: 'index',
+      render: (_value, row) => row.index + 1,
+    },
+    {
+      id: 'name',
+      header: headerTitles[1],
+      accessor: (row) => row.user.name,
+    },
+    {
+      id: 'email',
+      header: headerTitles[2],
+      accessor: (row) => row.user.emailAddress,
+    },
+    {
+      id: 'action',
+      header: headerTitles[3],
+      accessor: (row) => row.user.id,
+      render: (_, row) => {
+        const user = row.user;
+        return showBlockedMembers ? (
+          <Button
+            variant="success"
+            size="sm"
+            className={styles.unblockButton}
+            onClick={async (): Promise<void> => {
+              await handleUnBlockUser(user);
+            }}
+            data-testid={`blockUser${user.id}`}
+            aria-label={t('unblock') + ': ' + user.name}
+          >
+            <FontAwesomeIcon icon={faUserPlus} className={styles.unbanIcon} />
+            {t('unblock')}
+          </Button>
+        ) : (
+          <Button
+            variant="success"
+            size="sm"
+            className={styles.removeButton}
+            onClick={async (): Promise<void> => {
+              await handleBlockUser(user);
+            }}
+            data-testid={`blockUser${user.id}`}
+            aria-label={t('block') + ': ' + user.name}
+          >
+            <FontAwesomeIcon icon={faBan} className={styles.banIcon} />
+            {t('block')}
+          </Button>
+        );
+      },
+    },
+  ];
+
   if (loadingMembers || loadingBlockedUsers) {
     return (
       <TableLoader
@@ -242,7 +313,7 @@ const BlockUser = (): JSX.Element => {
     <>
       <div>
         <div className={styles.btnsContainer} data-testid="testcomp">
-          <AdminSearchFilterBar
+          <SearchFilterBar
             hasDropdowns={true}
             searchPlaceholder={t('searchByName')}
             searchValue={searchTerm}
@@ -271,74 +342,14 @@ const BlockUser = (): JSX.Element => {
         <div className={styles.listBox}>
           {(!showBlockedMembers && filteredAllMembers.length > 0) ||
           (showBlockedMembers && filteredBlockedUsers.length > 0) ? (
-            <Table
-              responsive
-              data-testid="userList"
-              className={styles.custom_table}
-            >
-              <thead>
-                <tr>
-                  {headerTitles.map((title: string, index: number) => (
-                    <th key={index} scope="col">
-                      {title}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {!showBlockedMembers
-                  ? filteredAllMembers.map((user, index: number) => (
-                      <tr key={user.id}>
-                        <th scope="row">{index + 1}</th>
-                        <td>{user.name}</td>
-                        <td>{user.emailAddress}</td>
-                        <td>
-                          <Button
-                            variant="success"
-                            size="sm"
-                            className={styles.removeButton}
-                            onClick={async (): Promise<void> => {
-                              await handleBlockUser(user);
-                            }}
-                            data-testid={`blockUser${user.id}`}
-                            aria-label={t('block') + ': ' + user.name}
-                          >
-                            <FontAwesomeIcon
-                              icon={faBan}
-                              className={styles.banIcon}
-                            />
-                            {t('block')}
-                          </Button>
-                        </td>
-                      </tr>
-                    ))
-                  : filteredBlockedUsers.map((user, index: number) => (
-                      <tr key={user.id}>
-                        <th scope="row">{index + 1}</th>
-                        <td>{user.name}</td>
-                        <td>{user.emailAddress}</td>
-                        <td>
-                          <Button
-                            variant="success"
-                            size="sm"
-                            className={styles.unblockButton}
-                            onClick={async (): Promise<void> => {
-                              await handleUnBlockUser(user);
-                            }}
-                            data-testid={`blockUser${user.id}`}
-                            aria-label={t('unblock') + ': ' + user.name}
-                          >
-                            <FontAwesomeIcon
-                              icon={faUserPlus}
-                              className={styles.unbanIcon}
-                            />
-                            {t('unblock')}
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-              </tbody>
-            </Table>
+            <div data-testid="userList">
+              <DataTable
+                data={tableRows}
+                columns={tableColumns}
+                rowKey={(row) => row.user.id}
+                tableClassName={styles.custom_table}
+              />
+            </div>
           ) : (
             <EmptyState
               icon="person_off"

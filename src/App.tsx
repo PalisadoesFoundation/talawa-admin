@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 const OrganizationScreen = lazy(
-  () => import('components/OrganizationScreen/OrganizationScreen'),
+  () => import('components/AdminPortal/OrganizationScreen/OrganizationScreen'),
 );
 const PostsPage = lazy(() => import('shared-components/posts/posts'));
 
@@ -83,7 +83,7 @@ const Leaderboard = lazy(
   () => import('screens/AdminPortal/Leaderboard/Leaderboard'),
 );
 const Advertisements = lazy(
-  () => import('components/Advertisements/Advertisements'),
+  () => import('components/AdminPortal/Advertisements/Advertisements'),
 );
 const Donate = lazy(() => import('screens/UserPortal/Donate/Donate'));
 const Transactions = lazy(

@@ -1,0 +1,74 @@
+.container {
+  min-height: 100vh;
+}
+
+.message {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.errorIcon {
+  font-size: var(--font-size-4xl);
+  color: var(--color-red-500);
+  margin-bottom: var(--space-5);
+
+  /* Add error icon for non-color indication */
+  &::before {
+    content: '\26A0\FE0F';
+    margin-right: var(--space-3);
+  }
+}
+
+.btnsContainer {
+  margin: var(--space-9) 0;
+}
+
+.btnsContainer,
+.calendar__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.btnsContainer > :first-child {
+  flex: 1 1 var(--space-21);
+  min-width: var(--space-18);
+  max-width: 100%;
+}
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer {
+    flex-direction: column;
+    margin: var(--space-7) 0;
+  }
+
+  .btnsContainer > :first-child {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 768px) {
+  .btnsContainer {
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.listBox {
+  width: 100%;
+  flex: 1;
+}

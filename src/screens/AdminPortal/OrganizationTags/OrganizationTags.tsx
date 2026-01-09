@@ -5,7 +5,6 @@
  * It provides functionalities such as searching, sorting, creating, and managing tags.
  * The component integrates with GraphQL queries and mutations to fetch and update data.
  *
- * @component
  *
  * @remarks
  * - Utilizes Apollo Client's `useQuery` and `useMutation` hooks for data fetching and mutations.
@@ -18,20 +17,8 @@
  * <OrganizationTags />
  * ```
  *
- * @returns {JSX.Element} The rendered OrganizationTags component.
+ * @returns  The rendered OrganizationTags component.
  *
- * @property {boolean} createTagModalIsOpen - State to control the visibility of the create tag modal.
- * @property {string} tagSearchName - State to store the search term for filtering tags.
- * @property {SortedByType} tagSortOrder - State to store the sorting order of tags.
- * @property {string} tagName - State to store the name of the tag being created.
- *
- * @function showCreateTagModal - Opens the create tag modal.
- * @function hideCreateTagModal - Closes the create tag modal.
- * @function createTag - Handles the creation of a new tag.
- * @function loadMoreUserTags - Fetches more tags for infinite scrolling.
- * @function redirectToManageTag - Navigates to the manage tag page for a specific tag.
- * @function redirectToSubTags - Navigates to the sub-tags page for a specific tag.
- * @function handleSortChange - Updates the sorting order of tags.
  */
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
@@ -68,7 +55,7 @@ import {
 } from 'types/ReportingTable/utils';
 import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 function OrganizationTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -359,7 +346,7 @@ function OrganizationTags(): JSX.Element {
             className={styles.btnsContainer}
             data-testid="organizationTags-header"
           >
-            <AdminSearchFilterBar
+            <SearchFilterBar
               hasDropdowns={true}
               searchPlaceholder={tCommon('searchByName')}
               searchValue={tagSearchName}
