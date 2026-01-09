@@ -398,9 +398,9 @@
     "createUser": "创建用户",
     "notFound": "未找到成员",
     "organizationPeopleTable": "组织人员表",
-    "removeMemberTitle": "删除成员",
+    "removeMemberTitle": "移除成员",
     "organizationIdMissing": "组织ID缺失！",
-    "removeMemberConfirmation": "您确定要删除此成员吗？"
+    "removeMemberConfirmation": "您确定要移除此成员吗？"
   },
   "organizationCard": {
     "join": "加入",

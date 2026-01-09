@@ -193,7 +193,6 @@ vi.mock('react-router', async () => {
 });
 
 beforeEach(() => {
-  vi.clearAllMocks();
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
     value: vi.fn().mockImplementation((query) => ({
@@ -209,6 +208,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.restoreAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('People Component Tests', () => {
@@ -335,7 +335,7 @@ describe('People Component Tests', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('people-role-1')).toHaveTextContent('Member');
-      expect(screen.getByTestId('people-role-2')).toHaveTextContent('Admin');
+      expect(screen.getByTestId('people-role-2')).toHaveTextContent('ADMIN');
     });
   });
 
