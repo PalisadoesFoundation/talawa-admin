@@ -275,7 +275,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
 
                 if (!validation.isValid) {
                   NotificationToast.error(
-                    validation.errorMessage || t('invalidFile'),
+                    validation.errorMessage || t('invalidFileType'),
                   );
                   return;
                 }
