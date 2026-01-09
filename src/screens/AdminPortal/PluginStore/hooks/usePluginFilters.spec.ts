@@ -99,6 +99,7 @@ describe('usePluginFilters', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
