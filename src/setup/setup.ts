@@ -12,7 +12,7 @@ import { backupEnvFile } from './backupEnvFile/backupEnvFile';
 /**
  * Environment variable value constants
  */
-const ENV_VALUES = {
+export const ENV_VALUES = {
   YES: 'YES',
   NO: 'NO',
 } as const;
@@ -20,7 +20,7 @@ const ENV_VALUES = {
 /**
  * Environment variable key names used by the setup script
  */
-const ENV_KEYS = {
+export const ENV_KEYS = {
   USE_RECAPTCHA: 'REACT_APP_USE_RECAPTCHA',
   RECAPTCHA_SITE_KEY: 'REACT_APP_RECAPTCHA_SITE_KEY',
   ALLOW_LOGS: 'ALLOW_LOGS',
