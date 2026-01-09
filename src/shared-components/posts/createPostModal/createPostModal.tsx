@@ -18,7 +18,7 @@
  * - Supports image and video uploads with MIME type validation.
  * - File integrity is ensured by generating a SHA-256 hash using the Web Crypto API.
  * - Displays media previews using `URL.createObjectURL`.
- * - Uses `react-i18next` for localization and `react-toastify` for user feedback.
+ * - Uses `react-i18next` for localization and `NotificationToast` for user feedback.
  * - Automatically resets form state and clears file inputs after successful submission.
  * - The modal can be dismissed by clicking the backdrop or pressing the `Escape` key.
  *

@@ -232,5 +232,6 @@
   "to": "को",
   "invalidFile": "अमान्य फ़ाइल",
   "customRecurrence": "कस्टम पुनरावृत्ति",
-  "selectAtLeastOneDay": "कृपया कम से कम एक दिन चुनें"
+  "selectAtLeastOneDay": "कृपया कम से कम एक दिन चुनें",
+  "invalidDetailsMessage": "अमान्य विवरण। कृपया अपना इनपुट जांचें।"
 }

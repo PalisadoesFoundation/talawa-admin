@@ -232,5 +232,6 @@
   "to": "À",
   "invalidFile": "Fichier invalide",
   "customRecurrence": "Récurrence personnalisée",
-  "selectAtLeastOneDay": "Veuillez sélectionner au moins un jour"
+  "selectAtLeastOneDay": "Veuillez sélectionner au moins un jour",
+  "invalidDetailsMessage": "Détails invalides. Veuillez vérifier votre saisie."
 }

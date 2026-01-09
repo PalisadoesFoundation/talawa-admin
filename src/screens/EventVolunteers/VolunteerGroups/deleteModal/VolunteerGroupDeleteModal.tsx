@@ -29,7 +29,6 @@
  *
  * @see DELETE_VOLUNTEER_GROUP for the GraphQL mutation used.
  */
-// eslint-disable-next-line no-restricted-imports -- Delete modal component, refactoring to BaseModal would be a larger task
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import React, { useState } from 'react';

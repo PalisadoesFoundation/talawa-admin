@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// eslint-disable-next-line no-restricted-imports -- Shared recurrence modal component, uses Modal for complex form interactions
 import { Button, Modal } from 'react-bootstrap';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import styles from '../../style/app-fixed.module.css';

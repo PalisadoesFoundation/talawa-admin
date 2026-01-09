@@ -17,7 +17,7 @@
  * @remarks
  * - The form includes validation for input fields such as name, description, and address.
  * - The `uploadFileToMinio` function is used to handle image uploads to MinIO storage.
- * - Displays success or error messages using `react-toastify` for image upload feedback.
+ * - Displays success or error messages using `NotificationToast` for image upload feedback.
  *
  * @example
  * ```tsx
@@ -34,7 +34,6 @@
  * ```
  */
 import React from 'react';
-// eslint-disable-next-line no-restricted-imports -- Organization creation modal, refactoring to BaseModal would be a larger task
 import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
 import { useMinioUpload } from 'utils/MinioUpload';
 import type { ChangeEvent } from 'react';
