@@ -73,7 +73,7 @@ import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCar
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import style from './OrgList.module.css';
 import { Group, Search } from '@mui/icons-material';
-import AdminSearchFilterBar from 'components/AdminPortal/AdminSearchFilterBar/AdminSearchFilterBar';
+import AdminSearchFilterBar from 'shared-components/AdminSearchFilterBar/AdminSearchFilterBar';
 import { BaseModal } from 'shared-components/BaseModal';
 
 const { getItem } = useLocalStorage();
