@@ -94,7 +94,7 @@ export class ActionItemPage {
   }
 
   editFirstActionItem(newNotes: string) {
-    cy.get('.Toastify__toast', { timeout: 1000 }).should('not.exist');
+    cy.get('.Toastify__toast', { timeout: 6000 }).should('not.exist');
 
     cy.get(this.editItemBtn).first().click();
     cy.get(this.notesInput).should('be.visible').type(newNotes);
