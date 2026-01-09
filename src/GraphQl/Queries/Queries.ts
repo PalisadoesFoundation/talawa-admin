@@ -449,6 +449,33 @@ export const GET_ORGANIZATION_POSTS_COUNT_PG = gql`
   }
 `;
 
+export const GET_USER_BY_ID = gql`
+  query GetUserById($input: QueryUserInput!) {
+    user(input: $input) {
+      id
+      name
+      emailAddress
+      addressLine1
+      addressLine2
+      birthDate
+      city
+      avatarURL
+      countryCode
+      description
+      educationGrade
+      employmentStatus
+      homePhoneNumber
+      maritalStatus
+      mobilePhoneNumber
+      natalSex
+      naturalLanguageCode
+      postalCode
+      state
+      workPhoneNumber
+    }
+  }
+`;
+
 export const GET_ORGANIZATION_MEMBERS_PG = gql`
   query GetOrganizationMembers($id: String!, $first: Int, $after: String) {
     organization(input: { id: $id }) {
@@ -925,6 +952,10 @@ export const USER_DETAILS = gql`
           node {
             id
             name
+            membersCount
+            adminsCount
+            description
+            avatarURL
           }
         }
       }
@@ -932,6 +963,10 @@ export const USER_DETAILS = gql`
       createdOrganizations {
         id
         name
+        membersCount
+        adminsCount
+        description
+        avatarURL
       }
     }
   }
