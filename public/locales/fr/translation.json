@@ -33,7 +33,6 @@
     "nameInvalid": "Le nom ne doit contenir que des lettres, des espaces et des traits d'union",
     "passwordInvalid": "Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule, une valeur numérique et un caractère spécial",
     "emailInvalid": "L'e-mail doit contenir au moins 8 caractères",
-    "doNotOwnAnAccount": "Vous ne possédez pas de compte ?",
     "captchaError": "Erreur CAPTCHA!",
     "Please_check_the_captcha": "S'il vous plaît, vérifiez le captcha.",
     "Something_went_wrong": "Quelque chose s'est mal passé. Veuillez réessayer plus tard.",

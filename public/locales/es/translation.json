@@ -44,7 +44,6 @@
     "forgotPassword": "Has olvidado tu contraseña ?",
     "enterEmail": "ingrese correo electrónico",
     "enterPassword": "introducir la contraseña",
-    "doNotOwnAnAccount": "¿No tienes una cuenta?",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Verifica también la conectividad de tu red.",
     "captchaError": "¡Error de captcha!",
     "Please_check_the_captcha": "Por favor, revisa el captcha.",

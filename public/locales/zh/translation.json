@@ -363,9 +363,6 @@
   "organizationPeople": {
     "title": "塔拉瓦会员",
     "filterByName": "按名称过滤",
-    "filterByLocation": "按地点过滤",
-    "filterByEvent": "按事件过滤",
-    "searchName": "输入名字",
     "searchevent": "输入事件",
     "searchFullName": "输入全名",
     "people": "人们",
