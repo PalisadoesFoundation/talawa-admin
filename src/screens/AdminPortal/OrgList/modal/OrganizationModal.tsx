@@ -12,7 +12,6 @@
  * @param createOrg - Function to handle form submission for creating an organization.
  * @param t - Translation function for component-specific strings.
  * @param tCommon - Translation function for common strings.
- * @param userData - Current user data.
  *
  * @remarks
  * - The form includes validation for input fields such as name, description, and address.
@@ -29,7 +28,6 @@
  *   createOrg={handleCreateOrg}
  *   t={translate}
  *   tCommon={translateCommon}
- *   userData={currentUser}
  * />
  * ```
  */
@@ -38,7 +36,6 @@ import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
 import { useMinioUpload } from 'utils/MinioUpload';
 import type { ChangeEvent } from 'react';
 import styles from 'style/app-fixed.module.css';
-import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
 import { countryOptions } from 'utils/formEnumFields';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { validateFile } from 'utils/fileValidation';
@@ -66,7 +63,6 @@ export interface InterfaceOrganizationModalProps {
   createOrg: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
   tCommon: (key: string) => string;
-  userData: InterfaceCurrentUserTypePG | undefined;
 }
 
 /**
@@ -285,8 +281,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                     await uploadFileToMinio(file, 'organization');
                   setFormState({ ...formState, avatar: avatarobjectName });
                   NotificationToast.success(t('imageUploadSuccess'));
-                } catch (error) {
-                  console.error('Error uploading image:', error);
+                } catch (error: unknown) {
                   NotificationToast.error(t('imageUploadError'));
                 }
               }
