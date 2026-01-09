@@ -438,8 +438,7 @@
     "Latest": "Le Plus Récent",
     "Oldest": "Le Plus Ancien",
     "viewSubTags": "Voir {{count}} sous-étiquettes",
-    "tags": "Étiquettes",
-    "errorLoadingSubTags": "Erreur lors du chargement des sous-étiquettes."
+    "tags": "Étiquettes"
   },
   "manageTag": {
     "title": "Détails de l'étiquette",

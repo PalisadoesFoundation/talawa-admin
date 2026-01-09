@@ -438,8 +438,7 @@
     "Latest": "Latest",
     "Oldest": "Oldest",
     "viewSubTags": "View {{count}} sub tags",
-    "tags": "Tags",
-    "errorLoadingSubTags": "Error loading sub-tags."
+    "tags": "Tags"
   },
   "manageTag": {
     "title": "Tag Details",

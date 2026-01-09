@@ -36,20 +36,13 @@ import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import styles from 'style/app-fixed.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
-import type { TFunction } from 'i18next';
 import componentStyle from '../TagAction.module.css';
 import { WarningAmberRounded } from '@mui/icons-material';
 import type {
   InterfaceOrganizationSubTagsQuery,
   InterfaceQueryUserTagChildTags,
 } from 'utils/interfaces';
-
-interface InterfaceTagNodeProps {
-  tag: InterfaceTagData;
-  checkedTags: Set<string>;
-  toggleTagSelection: (tag: InterfaceTagData, isSelected: boolean) => void;
-  t: TFunction<'translation', 'manageTag'>;
-}
+import type { InterfaceTagNodeProps } from 'types/AdminPortal/TagNode/interface';
 
 /**
  * Renders the Tags which can be expanded to list subtags.
@@ -137,9 +130,18 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
           <>
             <span
               onClick={handleTagClick}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleTagClick();
+                }
+              }}
+              role="button"
+              tabIndex={0}
               className={`me-3 ${componentStyle.cursorPointer}`}
               data-testid={`expandSubTags${tag._id}`}
               aria-label={expanded ? t('collapse') : t('expand')}
+              aria-expanded={expanded}
             >
               {expanded ? '▼' : '▶'}
             </span>

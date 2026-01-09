@@ -438,8 +438,7 @@
     "Latest": "最新",
     "Oldest": "最旧",
     "viewSubTags": "查看 {{count}} 个子标签",
-    "tags": "标签",
-    "errorLoadingSubTags": "加载子标签时出错。"
+    "tags": "标签"
   },
   "manageTag": {
     "title": "标签详情",

@@ -438,8 +438,7 @@
     "Latest": "नवीनतम",
     "Oldest": "सबसे पुराना",
     "viewSubTags": "{{count}} उप-टैग देखें",
-    "tags": "टैग",
-    "errorLoadingSubTags": "उप-टैग लोड करने में त्रुटि।"
+    "tags": "टैग"
   },
   "manageTag": {
     "title": "टैग विवरण",
