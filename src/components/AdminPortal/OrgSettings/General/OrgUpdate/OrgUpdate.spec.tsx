@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, it, expect, vi, beforeEach, suite } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
@@ -36,7 +36,7 @@ i18n.init({
           enterOrganizationDescription: 'Enter organization description',
           isUserRegistrationRequired: 'User registration required',
           isVisibleInSearch: 'Is visible in search',
-          'Is Public': 'Is Public',
+          isPublic: 'Is Public',
           nameDescriptionRequired: 'Name and description are required',
           updateFailed: 'Failed to update organization',
         },
@@ -145,7 +145,6 @@ describe('OrgUpdate Component', () => {
       </MockedProvider>,
     );
 
-    // Wait for loading to complete
     await waitFor(() => {
       expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
@@ -211,23 +210,7 @@ describe('OrgUpdate Component', () => {
         variables: { id: '1' },
       },
       result: {
-        data: {
-          organization: {
-            __typename: 'Organization',
-            id: '1',
-            name: 'Test Org',
-            description: 'Test Description',
-            addressLine1: '123 Test St',
-            addressLine2: 'Suite 100',
-            city: 'Test City',
-            state: 'Test State',
-            postalCode: '12345',
-            countryCode: 'US',
-            avatarURL: null,
-            createdAt: dayjs.utc().toISOString(),
-            updatedAt: dayjs.utc().toISOString(),
-          },
-        },
+        data: mockOrgData,
       },
     };
 
@@ -291,10 +274,6 @@ describe('OrgUpdate Component', () => {
     });
   });
 
-  vi.mock('utils/convertToBase64', () => ({
-    default: vi.fn().mockResolvedValue('base64String'),
-  }));
-
   it('handles file upload', async () => {
     const file = new File(['test'], 'test.png', { type: 'image/png' });
 
@@ -325,8 +304,60 @@ describe('OrgUpdate Component', () => {
     });
   });
 
+  it('updates address line1 when input changes', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('123 Test St')).toBeInTheDocument();
+    });
+
+    const addressInput = screen.getByPlaceholderText(
+      'Enter Organization location',
+    );
+    expect(addressInput).toBeInTheDocument();
+    expect(addressInput).toHaveValue('123 Test St');
+
+    fireEvent.change(addressInput, { target: { value: 'New Address Line' } });
+    expect(addressInput).toHaveValue('New Address Line');
+  });
+
+  it('displays error message when query fails', async () => {
+    const errorMock = {
+      request: {
+        query: GET_ORGANIZATION_BASIC_DATA,
+        variables: { id: '1' },
+      },
+      error: new Error('Failed to fetch organization data'),
+    };
+
+    render(
+      <MockedProvider mocks={[errorMock]}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      const errorContainer = screen.getByText((content, element) => {
+        return (
+          element?.tagName.toLowerCase() === 'h6' &&
+          content.includes('Error occured while loading Organization Data') &&
+          content.includes('Failed to fetch organization data')
+        );
+      });
+      expect(errorContainer).toBeInTheDocument();
+    });
+  });
+
   describe('OrgUpdate Loading and Error States', () => {
-    const mockOrgData = {
+    const extendedMockOrgData = {
       organization: {
         __typename: 'Organization',
         id: '1',
@@ -341,6 +372,7 @@ describe('OrgUpdate Component', () => {
         avatarURL: null,
         createdAt: dayjs.utc().toISOString(),
         updatedAt: dayjs.utc().toISOString(),
+        isUserRegistrationRequired: false,
         creator: {
           __typename: 'User',
           id: '1',
@@ -357,41 +389,13 @@ describe('OrgUpdate Component', () => {
     };
 
     it('shows loading state while fetching data', async () => {
-      const mockOrgData = {
-        organization: {
-          __typename: 'Organization',
-          id: '1',
-          name: 'Test Org',
-          description: 'Test Description',
-          addressLine1: '123 Test St',
-          addressLine2: 'Suite 100',
-          city: 'Test City',
-          state: 'Test State',
-          postalCode: '12345',
-          countryCode: 'US',
-          avatarURL: null,
-          createdAt: dayjs.utc().toISOString(),
-          updatedAt: dayjs.utc().toISOString(),
-          creator: {
-            id: '1',
-            name: 'Test Creator',
-            emailAddress: 'creator@test.com',
-          },
-          updater: {
-            id: '1',
-            name: 'Test Updater',
-            emailAddress: 'updater@test.com',
-          },
-        },
-      };
-
       const loadingMock = {
         request: {
           query: GET_ORGANIZATION_BASIC_DATA,
           variables: { id: '1' },
         },
         result: {
-          data: mockOrgData,
+          data: extendedMockOrgData,
         },
         delay: 100,
       };
@@ -448,24 +452,7 @@ describe('OrgUpdate Component', () => {
             variables: { id: '1' },
           },
           result: {
-            data: {
-              organization: {
-                __typename: 'Organization',
-                id: '1',
-                name: 'Test Org',
-                description: 'Test Description',
-                addressLine1: '123 Test St',
-                addressLine2: 'Suite 100',
-                city: 'Test City',
-                state: 'Test State',
-                postalCode: '12345',
-                countryCode: 'US',
-                avatarURL: null,
-                createdAt: dayjs.utc().toISOString(),
-                updatedAt: dayjs.utc().toISOString(),
-                isUserRegistrationRequired: false,
-              },
-            },
+            data: mockOrgData,
           },
         },
         {
@@ -534,9 +521,22 @@ describe('OrgUpdate Component', () => {
         );
       });
     });
+
     it('shows error toast when name or description is missing', async () => {
+      const localMocks = [
+        {
+          request: {
+            query: GET_ORGANIZATION_BASIC_DATA,
+            variables: { id: '1' },
+          },
+          result: {
+            data: mockOrgData,
+          },
+        },
+      ];
+
       render(
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={localMocks}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -630,145 +630,9 @@ describe('OrgUpdate Component', () => {
         );
       });
     });
-  });
 
-  describe('OrgUpdate Form Switch Controls', () => {
-    const mockOrgData = {
-      organization: {
-        __typename: 'Organization',
-        id: '1',
-        name: 'Test Org',
-        description: 'Test Description',
-        addressLine1: '123 Test St',
-        addressLine2: 'Suite 100',
-        city: 'Test City',
-        state: 'Test State',
-        postalCode: '12345',
-        countryCode: 'US',
-        avatarURL: null,
-        createdAt: dayjs.utc().toISOString(),
-        updatedAt: dayjs.utc().toISOString(),
-        isUserRegistrationRequired: false,
-      },
-    };
-
-    const mocks = [
-      {
-        request: {
-          query: GET_ORGANIZATION_BASIC_DATA,
-          variables: { id: '1' },
-        },
-        result: {
-          data: mockOrgData,
-        },
-      },
-    ];
-
-    beforeEach(() => {
-      vi.clearAllMocks();
-    });
-
-    it('toggles user registration switch correctly', async () => {
-      render(
-        <MockedProvider mocks={mocks}>
-          <I18nextProvider i18n={i18n}>
-            <OrgUpdate orgId="1" />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      await waitFor(() => {
-        expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
-      });
-
-      const userRegLabel = screen.getByText(i18n.t('orgUpdate.isPublic') + ':');
-      expect(userRegLabel).toBeInTheDocument();
-
-      const userRegSwitch = userRegLabel
-        .closest('.d-flex')
-        ?.querySelector('input[type="checkbox"]');
-      expect(userRegSwitch).toBeInTheDocument();
-      expect(userRegSwitch).toBeChecked();
-
-      if (userRegSwitch) {
-        fireEvent.click(userRegSwitch);
-        expect(userRegSwitch).not.toBeChecked();
-      }
-
-      if (userRegSwitch) {
-        fireEvent.click(userRegSwitch);
-      }
-      expect(userRegSwitch).toBeChecked();
-    });
-
-    it('toggles visibility switch correctly', async () => {
-      render(
-        <MockedProvider mocks={mocks}>
-          <I18nextProvider i18n={i18n}>
-            <OrgUpdate orgId="1" />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      await waitFor(() => {
-        expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
-      });
-
-      const visibilityLabel = screen.getByText(
-        i18n.t('orgUpdate.isVisibleInSearch') + ':',
-      );
-      expect(visibilityLabel).toBeInTheDocument();
-
-      const visibilitySwitch = visibilityLabel
-        .closest('.d-flex')
-        ?.querySelector('input[type="checkbox"]');
-      expect(visibilitySwitch).toBeInTheDocument();
-      expect(visibilitySwitch).not.toBeChecked();
-
-      if (visibilitySwitch) {
-        fireEvent.click(visibilitySwitch);
-        expect(visibilitySwitch).toBeChecked();
-
-        fireEvent.click(visibilitySwitch);
-        expect(visibilitySwitch).not.toBeChecked();
-      }
-    });
-  });
-
-  it('OrgUpdate Loading and Error States', () => {
-    const mockOrgData = {
-      organization: {
-        id: '1',
-        name: 'Test Org',
-        description: 'Test Description',
-        addressLine1: '123 Test St',
-        addressLine2: 'Suite 100',
-        city: 'Test City',
-        state: 'Test State',
-        postalCode: '12345',
-        countryCode: 'US',
-        avatarURL: null,
-        createdAt: dayjs.utc().toISOString(),
-        updatedAt: dayjs.utc().toISOString(),
-        creator: {
-          id: '1',
-          name: 'Test Creator',
-          emailAddress: 'creator@test.com',
-        },
-        updater: {
-          id: '1',
-          name: 'Test Updater',
-          emailAddress: 'updater@test.com',
-        },
-      },
-    };
-
-    beforeEach(() => {
-      vi.clearAllMocks();
-    });
-
-    suite('handles empty response from update mutation', async () => {
-      const mocks = [
+    it('handles empty response from update mutation', async () => {
+      const emptyResponseMocks = [
         {
           request: {
             query: GET_ORGANIZATION_BASIC_DATA,
@@ -803,7 +667,7 @@ describe('OrgUpdate Component', () => {
       ];
 
       render(
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={emptyResponseMocks}>
           <I18nextProvider i18n={i18n}>
             <OrgUpdate orgId="1" />
           </I18nextProvider>
@@ -835,59 +699,104 @@ describe('OrgUpdate Component', () => {
     });
   });
 
-  it('updates address line1 when input changes', async () => {
-    render(
-      <MockedProvider mocks={mocks}>
-        <I18nextProvider i18n={i18n}>
-          <OrgUpdate orgId="1" />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByDisplayValue('123 Test St')).toBeInTheDocument();
-    });
-
-    const addressInput = screen.getByPlaceholderText(
-      'Enter Organization location',
-    );
-    expect(addressInput).toBeInTheDocument();
-
-    expect(addressInput).toHaveValue('123 Test St');
-
-    fireEvent.change(addressInput, { target: { value: 'New Address Line' } });
-
-    expect(addressInput).toHaveValue('New Address Line');
-  });
-
-  it('displays error message when query fails', async () => {
-    const errorMock = {
-      request: {
-        query: GET_ORGANIZATION_BASIC_DATA,
-        variables: { id: '1' },
+  describe('OrgUpdate Form Switch Controls', () => {
+    const switchMockOrgData = {
+      organization: {
+        __typename: 'Organization',
+        id: '1',
+        name: 'Test Org',
+        description: 'Test Description',
+        addressLine1: '123 Test St',
+        addressLine2: 'Suite 100',
+        city: 'Test City',
+        state: 'Test State',
+        postalCode: '12345',
+        countryCode: 'US',
+        avatarURL: null,
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
+        isUserRegistrationRequired: false,
       },
-      error: new Error('Failed to fetch organization data'),
     };
 
-    render(
-      <MockedProvider mocks={[errorMock]}>
-        <I18nextProvider i18n={i18n}>
-          <OrgUpdate orgId="1" />
-        </I18nextProvider>
-      </MockedProvider>,
-    );
+    const switchMocks = [
+      {
+        request: {
+          query: GET_ORGANIZATION_BASIC_DATA,
+          variables: { id: '1' },
+        },
+        result: {
+          data: switchMockOrgData,
+        },
+      },
+    ];
 
-    await waitFor(() => {
-      // The error message is split across a <br /> tag within the h6 element
-      // Check for the error container and verify it contains both text parts
-      const errorContainer = screen.getByText((content, element) => {
-        return (
-          element?.tagName.toLowerCase() === 'h6' &&
-          content.includes('Error occured while loading Organization Data') &&
-          content.includes('Failed to fetch organization data')
-        );
+    beforeEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('toggles user registration switch correctly', async () => {
+      render(
+        <MockedProvider mocks={switchMocks}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
       });
-      expect(errorContainer).toBeInTheDocument();
+
+      const userRegLabel = screen.getByText(i18n.t('orgUpdate.isPublic') + ':');
+      expect(userRegLabel).toBeInTheDocument();
+
+      const userRegSwitch = userRegLabel
+        .closest('.d-flex')
+        ?.querySelector('input[type="checkbox"]');
+      expect(userRegSwitch).toBeInTheDocument();
+      expect(userRegSwitch).toBeChecked();
+
+      if (userRegSwitch) {
+        fireEvent.click(userRegSwitch);
+        expect(userRegSwitch).not.toBeChecked();
+
+        fireEvent.click(userRegSwitch);
+        expect(userRegSwitch).toBeChecked();
+      }
+    });
+
+    it('toggles visibility switch correctly', async () => {
+      render(
+        <MockedProvider mocks={switchMocks}>
+          <I18nextProvider i18n={i18n}>
+            <OrgUpdate orgId="1" />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByDisplayValue('Test Org')).toBeInTheDocument();
+      });
+
+      const visibilityLabel = screen.getByText(
+        i18n.t('orgUpdate.isVisibleInSearch') + ':',
+      );
+      expect(visibilityLabel).toBeInTheDocument();
+
+      const visibilitySwitch = visibilityLabel
+        .closest('.d-flex')
+        ?.querySelector('input[type="checkbox"]');
+      expect(visibilitySwitch).toBeInTheDocument();
+      expect(visibilitySwitch).not.toBeChecked();
+
+      if (visibilitySwitch) {
+        fireEvent.click(visibilitySwitch);
+        expect(visibilitySwitch).toBeChecked();
+
+        fireEvent.click(visibilitySwitch);
+        expect(visibilitySwitch).not.toBeChecked();
+      }
     });
   });
 
@@ -900,24 +809,7 @@ describe('OrgUpdate Component', () => {
             variables: { id: '1' },
           },
           result: {
-            data: {
-              organization: {
-                __typename: 'Organization',
-                id: '1',
-                name: 'Test Org',
-                description: 'Test Description',
-                addressLine1: '123 Test St',
-                addressLine2: 'Suite 100',
-                city: 'Test City',
-                state: 'Test State',
-                postalCode: '12345',
-                countryCode: 'US',
-                avatarURL: null,
-                createdAt: dayjs.utc().toISOString(),
-                updatedAt: dayjs.utc().toISOString(),
-                isUserRegistrationRequired: false,
-              },
-            },
+            data: mockOrgData,
             delay: 100,
           },
         },
@@ -943,24 +835,7 @@ describe('OrgUpdate Component', () => {
             variables: { id: '1' },
           },
           result: {
-            data: {
-              organization: {
-                __typename: 'Organization',
-                id: '1',
-                name: 'Test Org',
-                description: 'Test Description',
-                addressLine1: '123 Test St',
-                addressLine2: 'Suite 100',
-                city: 'Test City',
-                state: 'Test State',
-                postalCode: '12345',
-                countryCode: 'US',
-                avatarURL: null,
-                createdAt: dayjs.utc().toISOString(),
-                updatedAt: dayjs.utc().toISOString(),
-                isUserRegistrationRequired: false,
-              },
-            },
+            data: mockOrgData,
           },
         },
       ];

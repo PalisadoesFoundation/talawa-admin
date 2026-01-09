@@ -14,8 +14,6 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import { ToastContainer } from 'react-toastify';
-// FIXED: Import DateRangePicker helpers from shared-components
 import {
   LocalizationProvider,
   AdapterDayjs,
@@ -26,7 +24,6 @@ const queryMock = [
   {
     request: {
       query: EVENT_ATTENDEES,
-      // FIXED: 'id' changed to 'eventId' to match the actual query definition
       variables: { eventId: 'event123' },
     },
     result: {
@@ -40,7 +37,6 @@ const queryMock = [
   {
     request: {
       query: MEMBERS_LIST,
-      // Note: Keeping 'id' here. If this fails later, it might need to be 'organizationId'
       variables: { id: 'org123' },
     },
     result: {
@@ -72,13 +68,11 @@ type RenderComponentProps = React.ComponentProps<
 
 const renderComponent = (props: RenderComponentProps) => {
   return render(
-    // FIXED: Added addTypename={false} to prevent warnings about missing __typename in mocks
     <MockedProvider mocks={queryMock} addTypename={false}>
       <BrowserRouter>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
               <EventRegistrantsWrapper {...props} />
             </I18nextProvider>
           </Provider>
@@ -166,9 +160,6 @@ describe('EventRegistrantsWrapper Component', () => {
     });
 
     test('should render modal when eventId is provided', async () => {
-      // NOTE: We cannot change eventId to 'custom-event-123' here because the
-      // MockedProvider only has a mock for 'event123'. Doing so causes "No more mocked responses".
-      // We reuse defaultProps to ensure the query succeeds.
       renderComponent(defaultProps);
 
       fireEvent.click(screen.getByText('Register Member'));
@@ -441,7 +432,6 @@ describe('EventRegistrantsWrapper Component', () => {
 
       fireEvent.click(screen.getByText('Register Member'));
 
-      // It should still render, potentially empty, but not crash
       await waitFor(() => {
         expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
