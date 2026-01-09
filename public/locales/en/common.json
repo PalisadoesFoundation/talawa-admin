@@ -230,5 +230,6 @@
   "inviteOnlyEvent": "Invite Only",
   "inviteOnlyEventDescription": "Visible only to invited members and event admins",
   "to": "To",
-  "or": "or"
+  "or": "or",
+  "eventNotFound": "Event with id {{id}} not found"
 }

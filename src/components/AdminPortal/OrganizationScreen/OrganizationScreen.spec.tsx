@@ -23,6 +23,20 @@ let mockUseMatch: ReturnType<typeof vi.fn>;
 let mockNavigate: ReturnType<typeof vi.fn>;
 let mockUseLocation: ReturnType<typeof vi.fn>;
 
+const toastMocks = vi.hoisted(() => {
+  return {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+  };
+});
+
+vi.mock('components/NotificationToast/NotificationToast', async () => {
+  return {
+    NotificationToast: toastMocks,
+  };
+});
+
 // Mock the router hooks
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
@@ -229,7 +243,9 @@ describe('Testing OrganizationScreen', () => {
     });
 
     // Spy on console.warn to verify it's called
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const warnSpy = vi
+      .spyOn(toastMocks, 'warning')
+      .mockImplementation(() => {});
 
     renderComponent();
 
