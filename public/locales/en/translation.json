@@ -33,7 +33,7 @@
     "nameInvalid": "Name should contain only letters, spaces, and hyphens",
     "passwordInvalid": "Password should contain at least one lowercase letter, one uppercase letter, one numeric value and one special character",
     "emailInvalid": "Please enter a valid email address",
-    "editProfile": "",
+    "editProfile": "Edit Profile",
     "captchaError": "Captcha Error!",
     "Please_check_the_captcha": "Please, check the captcha.",
     "Something_went_wrong": "Something went wrong, Please try after sometime.",
