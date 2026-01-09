@@ -1,51 +1,24 @@
 /**
- * @file Requests.tsx
- * @description This file contains the implementation of the Requests component, which displays
- *              a list of membership requests for an organization. It includes features like
- *              infinite scrolling, search functionality, and role-based access control.
+ * Requests screen for membership requests in an organization.
  *
- * @module Requests
+ * Displays pending membership requests with infinite scroll, search, and role-based access
+ * control. Shows empty states for no orgs, no results, and no pending requests.
  *
- * @requires react
- * @requires @apollo/client
- * @requires react-bootstrap
- * @requires react-i18next
- * @requires react-router-dom
- * @requires @mui/material
- * @requires GraphQl/Queries/Queries
- * @requires components/TableLoader/TableLoader
- * @requires components/RequestsTableItem/RequestsTableItem
- * @requires subComponents/SearchBar
- * @requires utils/interfaces
- * @requires utils/useLocalstorage
- * @requires style/app-fixed.module.css
+ * Features:
+ * - Infinite scroll pagination.
+ * - Name search via AdminSearchFilterBar.
+ * - Accept/reject actions with toast feedback.
  *
- *
- * @typedef {Object} InterfaceRequestsListItem
- * @property {string} _id - The unique identifier for the request.
- * @property {Object} user - The user details associated with the request.
- * @property {string} user.firstName - The first name of the user.
- * @property {string} user.lastName - The last name of the user.
- * @property {string} user.email - The email address of the user.
- *
- * @component
- * @name Requests
- * @description Displays a list of membership requests for an organization. Includes search,
- *              infinite scrolling, and role-based access control. Redirects unauthorized users
- *              to the organization list page.
- *
- * @returns {JSX.Element} The rendered Requests component.
- *
- * @example
- * <Requests />
+ * Data:
+ * - Uses `MEMBERSHIP_REQUEST_PG` and `ORGANIZATION_LIST` queries.
+ * - Uses `ACCEPT_ORGANIZATION_REQUEST_MUTATION` and
+ *   `REJECT_ORGANIZATION_REQUEST_MUTATION`.
  *
  * @remarks
- * - Uses Apollo Client's `useQuery` for fetching data.
- * - Implements infinite scrolling using `react-infinite-scroll-component`.
- * - Displays a search bar for filtering requests by user name.
- * - Handles role-based access control for `ADMIN` and `SUPERADMIN` roles.
- * - Displays appropriate messages when no data is available.
+ * Only administrators and superadmins can access this screen; others are redirected to
+ * `/orglist`.
  *
+ * @returns The rendered Requests component.
  */
 import { useQuery, useMutation } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
@@ -74,7 +47,7 @@ import Avatar from 'components/Avatar/Avatar';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
-import styles from 'style/app-fixed.module.css';
+import styles from './Requests.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams, useNavigate } from 'react-router-dom';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';

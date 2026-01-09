@@ -69,11 +69,11 @@
     "serve": "cross-env ESLINT_NO_DEV_ERRORS=true vite --config config/vite.config.ts",
     "build": "tsc && vite build --config config/vite.config.ts",
     "preview": "vite preview --config config/vite.config.ts",
-    "test": "vitest run",
-    "test:watch": "vitest --ui",
-    "test:coverage": "vitest run --coverage",
-    "test:shard": "node scripts/run-shard.js",
-    "test:shard:coverage": "node scripts/run-shard.js --coverage",
+    "test": "cross-env TZ=UTC vitest run",
+    "test:watch": "cross-env TZ=UTC vitest --ui",
+    "test:coverage": "cross-env TZ=UTC vitest run --coverage",
+    "test:shard": "cross-env TZ=UTC node scripts/run-shard.js",
+    "test:shard:coverage": "cross-env TZ=UTC node scripts/run-shard.js --coverage",
     "eject": "react-scripts eject",
     "lint:check": "eslint \"**/*.{ts,tsx,graphql}\" --max-warnings=0",
     "lint:fix": "eslint --fix \"**/*.{ts,tsx,graphql}\"",
@@ -96,8 +96,7 @@
     "cy:run": "cross-env CYPRESS_COVERAGE=true pnpm run start-server cypress:run",
     "check-mock-cleanup": "bash scripts/githooks/check-mock-cleanup.sh",
     "check:pom": "node scripts/githooks/check_pom.js",
-    "check-i18n": "node scripts/check-i18n.js",
-    "lint:datagrid": "./scripts/lint-datagrid.sh"
+    "check-i18n": "node scripts/check-i18n.js"
   },
   "eslintConfig": {
     "extends": [
