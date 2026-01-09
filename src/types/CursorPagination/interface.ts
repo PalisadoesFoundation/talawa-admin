@@ -36,12 +36,19 @@ export interface InterfaceCursorPaginationManagerBaseProps<
   TVariables extends Record<string, unknown> = Record<string, unknown>,
 > {
   query: DocumentNode;
-  /** Query options including variables (preferred) */
+  /**
+   * Query options including variables (preferred)
+   * @remarks Takes precedence over queryVariables when both are provided
+   */
   queryOptions?: {
     variables?: TVariables;
     [key: string]: unknown;
   };
-  /** Legacy: Query variables (use queryOptions.variables instead) */
+  /**
+   * Query variables (legacy, use queryOptions.variables instead)
+   * @deprecated Use queryOptions.variables instead. This prop will be removed in a future version.
+   * @remarks When both queryOptions.variables and queryVariables are provided, queryOptions.variables takes precedence
+   */
   queryVariables?: TVariables;
   /** Dot-separated path to the connection field in the GraphQL response (e.g. "post.comments") */
   dataPath: string;

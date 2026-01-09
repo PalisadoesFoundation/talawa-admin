@@ -127,23 +127,16 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
       <div>
         {tag.childTags.totalCount ? (
           <>
-            <span
+            <button
+              type="button"
               onClick={handleTagClick}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  handleTagClick();
-                }
-              }}
-              role="button"
-              tabIndex={0}
               className={`me-3 ${componentStyle.cursorPointer}`}
               data-testid={`expandSubTags${tag._id}`}
               aria-label={expanded ? t('collapse') : t('expand')}
               aria-expanded={expanded}
             >
               {expanded ? '▼' : '▶'}
-            </span>
+            </button>
             <input
               type="checkbox"
               checked={checkedTags.has(tag._id)}

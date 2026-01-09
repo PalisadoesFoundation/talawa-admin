@@ -314,7 +314,7 @@ function SubTags(): JSX.Element {
                           ) => (
                             <button
                               type="button"
-                              key={index}
+                              key={tag._id}
                               className={`ms-2  ${tag._id === parentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
                               onClick={() =>
                                 redirectToSubTags(tag._id as string)

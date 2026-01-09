@@ -1,22 +1,19 @@
 /**
- * Component: TagNode
+ * TagNode Component
  *
- * This component renders a tag node that can be expanded to display its subtags.
- * It supports infinite scrolling for loading subtags and allows users to select tags
+ * Renders a tag node that can be expanded to display its subtags.
+ * Supports infinite scrolling for loading subtags and allows users to select tags
  * using checkboxes. The component is recursive, enabling nested subtags to be displayed.
  *
- * @component
- * @param {InterfaceTagNodeProps} props - The props for the TagNode component.
- * @param {InterfaceTagData} props.tag - The tag data to be displayed.
- * @param {Set<string>} props.checkedTags - A set of tag IDs that are currently selected.
- * @param {(tag: InterfaceTagData, isSelected: boolean) => void} props.toggleTagSelection -
- *        Callback function to toggle the selection state of a tag.
- * @param {TFunction<'translation', 'manageTag'>} props.t - Translation function for i18n.
+ * @param tag - The tag data to be displayed
+ * @param checkedTags - A set of tag IDs that are currently selected
+ * @param toggleTagSelection - Callback function to toggle the selection state of a tag
+ * @param t - Translation function for i18n
  *
  * @remarks
- * - The component uses the `@apollo/client` `useQuery` hook to fetch subtags.
- * - Infinite scrolling is implemented using the `react-infinite-scroll-component` library.
- * - Displays a loader while fetching subtags and handles errors gracefully.
+ * - Uses the `@apollo/client` `useQuery` hook to fetch subtags
+ * - Infinite scrolling implemented using `react-infinite-scroll-component` library
+ * - Displays a loader while fetching subtags and handles errors gracefully
  *
  * @example
  * ```tsx
@@ -28,7 +25,7 @@
  * />
  * ```
  *
- * @returns {React.FC} A React functional component that renders a tag node with optional subtags.
+ * @returns A React functional component that renders a tag node with optional subtags
  */
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import React, { useState } from 'react';
@@ -38,16 +35,9 @@ import styles from '../../../style/app-fixed.module.css';
 import tagNodeStyles from './TagNode.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
-import type { TFunction } from 'i18next';
 import CursorPaginationManager from 'components/CursorPaginationManager/CursorPaginationManager';
 import { WarningAmberRounded } from '@mui/icons-material';
-
-interface InterfaceTagNodeProps {
-  tag: InterfaceTagData;
-  checkedTags: Set<string>;
-  toggleTagSelection: (tag: InterfaceTagData, isSelected: boolean) => void;
-  t: TFunction<'translation', 'manageTag'>;
-}
+import type { InterfaceTagNodeProps } from 'types/AdminPortal/TagNode/interface';
 
 /**
  * Renders the Tags which can be expanded to list subtags.
@@ -75,14 +65,16 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
       <div>
         {tag.childTags.totalCount ? (
           <>
-            <span
+            <button
+              type="button"
               onClick={handleTagClick}
               className={`me-3 ${tagNodeStyles.cursorPointer}`}
               data-testid={`expandSubTags${tag._id}`}
               aria-label={expanded ? t('collapse') : t('expand')}
+              aria-expanded={expanded}
             >
               {expanded ? '▼' : '▶'}
-            </span>
+            </button>
             <input
               className={`me-2 ${tagNodeStyles.cursorPointer}`}
               type="checkbox"

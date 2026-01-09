@@ -1648,8 +1648,17 @@ describe('CursorPaginationManager', () => {
       );
 
       await waitFor(() => {
-        expect((capturedQueryData as any)?.organization).toBeDefined();
-        expect((capturedQueryData as any)?.organization.members).toBeDefined();
+        expect(
+          (capturedQueryData as unknown as { organization?: unknown })
+            ?.organization,
+        ).toBeDefined();
+        expect(
+          (
+            capturedQueryData as unknown as {
+              organization?: { members?: unknown };
+            }
+          )?.organization?.members,
+        ).toBeDefined();
       });
     });
 
