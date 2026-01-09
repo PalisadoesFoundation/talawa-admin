@@ -245,6 +245,7 @@ describe('MOCKS Structure Validation', () => {
     expect(firstMock.request.variables).toEqual({
       id: '1',
       first: 10,
+      after: null,
     });
     expect(firstMock.result.data?.getChildTags?.childTags?.edges?.length).toBe(
       2,
@@ -322,7 +323,7 @@ describe('Edge Cases and Coverage Improvements', () => {
       {
         request: {
           query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10 },
+          variables: { id: '1', first: 10, after: null },
         },
         result: {
           data: {
@@ -388,7 +389,7 @@ describe('Edge Cases and Coverage Improvements', () => {
       {
         request: {
           query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10 },
+          variables: { id: '1', first: 10, after: null },
         },
         result: {
           data: {
@@ -445,7 +446,7 @@ describe('Edge Cases and Coverage Improvements', () => {
       {
         request: {
           query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10 },
+          variables: { id: '1', first: 10, after: null },
         },
         result: {
           data: {
@@ -533,7 +534,7 @@ describe('Edge Cases and Coverage Improvements', () => {
       {
         request: {
           query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10 },
+          variables: { id: '1', first: 10, after: null },
         },
         result: {
           data: null, // This will make subTagsData null, so subTagsList will be []
@@ -572,7 +573,7 @@ describe('Edge Cases and Coverage Improvements', () => {
       {
         request: {
           query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10 },
+          variables: { id: '1', first: 10, after: null },
         },
         result: {
           data: {

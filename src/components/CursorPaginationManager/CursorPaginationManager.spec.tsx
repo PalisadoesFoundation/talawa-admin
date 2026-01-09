@@ -1925,7 +1925,5 @@ describe('CursorPaginationManager', () => {
         expect(screen.getByText('User 1')).toBeInTheDocument();
       });
     });
-
-
   });
 });

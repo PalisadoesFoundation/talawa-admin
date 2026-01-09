@@ -1,41 +1,19 @@
 import type { ReactNode } from 'react';
 import type { DocumentNode } from 'graphql';
-import type { ApolloError } from '@apollo/client';
-import type { DefaultConnectionPageInfo } from '../pagination';
 
-// Re-export DefaultConnectionPageInfo as InterfacePageInfo for consistency
-export type InterfacePageInfo = DefaultConnectionPageInfo;
-
-/**
- * Helper type to combine pagination variables with custom query variables
- */
-export type PaginationVariables<T extends Record<string, unknown>> = T & {
-  first: number;
-  after?: string | null;
-};
-
-/**
- * Represents the GraphQL connection structure with edges and pageInfo.
- * This follows the Relay cursor pagination specification.
- */
-export interface InterfaceConnectionData<TNode> {
-  edges: Array<{
-    cursor: string;
-    node: TNode;
-  }>;
-  pageInfo?: InterfacePageInfo;
+export interface InterfacePageInfo {
+  endCursor: string | null;
+  startCursor: string | null;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
 }
 
 /**
- * Base props shared by all CursorPaginationManager configurations
+ * Props for CursorPaginationManager component.
  */
-interface InterfaceCursorPaginationManagerBaseProps<
-  TNode,
-  TVariables extends Record<string, unknown> = Record<string, unknown>,
-> {
+export interface InterfaceCursorPaginationProps<TNode> {
   query: DocumentNode;
-  /** Query variables (pagination params 'first' and 'after' are added automatically) */
-  queryVariables?: Omit<TVariables, 'first' | 'after'>;
+  queryVariables?: Record<string, unknown>;
   /** Dot-separated path to the connection field in the GraphQL response (e.g. "post.comments") */
   dataPath: string;
   itemsPerPage?: number;
@@ -75,7 +53,9 @@ interface InterfaceCursorPaginationManagerExternalProps<
   renderItem?: (item: TNode, index: number) => ReactNode;
   useExternalUI: true;
   /** Render prop for external UI integration (e.g., InfiniteScroll) */
-  children: (props: InterfaceCursorPaginationRenderProps<TNode, TData>) => ReactNode;
+  children: (
+    props: InterfaceCursorPaginationRenderProps<TNode, TData>,
+  ) => ReactNode;
 }
 
 /**

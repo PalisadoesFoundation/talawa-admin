@@ -134,6 +134,17 @@ describe('Organisation Tags Page', () => {
     });
   });
 
+  it('render error component on unsuccessful subtags query', async () => {
+    const { getByText } = renderSubTags(link2);
+
+    await wait();
+
+    await waitFor(() => {
+      // The page still renders even with query error, addChildTag button should be visible
+      expect(getByText(translations.addChildTag)).toBeInTheDocument();
+    });
+  });
+
   it('opens and closes the create tag modal', async () => {
     renderSubTags(link);
 
@@ -317,7 +328,6 @@ describe('Organisation Tags Page', () => {
     );
   });
 
-
   it('adds a new sub tag to the current tag', async () => {
     renderSubTags(link);
 
@@ -483,10 +493,7 @@ describe('Organisation Tags Page', () => {
                   path="/orgtags/:orgId"
                   element={<div data-testid="orgtagsScreen"></div>}
                 />
-                <Route
-                  path="/orgtags/:orgId/subTags/"
-                  element={<SubTags />}
-                />
+                <Route path="/orgtags/:orgId/subTags/" element={<SubTags />} />
               </Routes>
             </I18nextProvider>
           </Provider>

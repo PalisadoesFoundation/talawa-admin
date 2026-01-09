@@ -60,7 +60,6 @@ import {
   dataGridStyle,
   TAGS_QUERY_DATA_CHUNK_SIZE,
 } from 'utils/organizationTagsUtils';
-import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
 import type {
   GridCellParams,
   GridColDef,
@@ -98,6 +97,20 @@ function SubTags(): JSX.Element {
     setTagName('');
   };
 
+  const {
+    data: subTagsData,
+    loading: subTagsLoading,
+    refetch: subTagsRefetch,
+  }: InterfaceOrganizationSubTagsQuery = useQuery(USER_TAG_SUB_TAGS, {
+    variables: {
+      id: parentTagId,
+      first: TAGS_QUERY_DATA_CHUNK_SIZE,
+      where: { name: { starts_with: tagSearchName } },
+      sortedBy: { id: tagSortOrder },
+    },
+    skip: !parentTagId, // Skip if no parent tag ID
+  });
+
   const [create, { loading: createUserTagLoading }] =
     useMutation(CREATE_USER_TAG);
 
@@ -125,6 +138,15 @@ function SubTags(): JSX.Element {
       }
     }
   };
+
+  const parentTagName = subTagsData?.getChildTags.name;
+
+  // get the ancestorTags array and push the current tag in it
+  // used for the tag breadcrumbs
+  const orgUserTagAncestors = [
+    ...(subTagsData?.getChildTags.ancestorTags ?? []),
+    { _id: parentTagId, name: parentTagName },
+  ];
 
   const redirectToManageTag = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
