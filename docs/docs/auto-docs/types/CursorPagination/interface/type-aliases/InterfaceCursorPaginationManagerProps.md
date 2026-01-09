@@ -2,11 +2,11 @@
 
 ***
 
-# Type Alias: InterfaceCursorPaginationManagerProps\<TNode, TVariables\>
+# Type Alias: InterfaceCursorPaginationManagerProps\<TNode, TVariables, TData\>
 
-> **InterfaceCursorPaginationManagerProps**\<`TNode`, `TVariables`\> = `InterfaceCursorPaginationManagerDefaultProps`\<`TNode`, `TVariables`\> \| `InterfaceCursorPaginationManagerExternalProps`\<`TNode`, `TVariables`\>
+> **InterfaceCursorPaginationManagerProps**\<`TNode`, `TVariables`, `TData`\> = `InterfaceCursorPaginationManagerDefaultProps`\<`TNode`, `TVariables`\> \| `InterfaceCursorPaginationManagerExternalProps`\<`TNode`, `TVariables`, `TData`\>
 
-Defined in: [src/types/CursorPagination/interface.ts:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L88)
+Defined in: [src/types/CursorPagination/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L69)
 
 Props for CursorPaginationManager component.
 
@@ -19,6 +19,10 @@ Props for CursorPaginationManager component.
 ### TVariables
 
 `TVariables` *extends* `Record`\<`string`, `unknown`\> = `Record`\<`string`, `unknown`\>
+
+### TData
+
+`TData` = `unknown`
 
 ## Remarks
 

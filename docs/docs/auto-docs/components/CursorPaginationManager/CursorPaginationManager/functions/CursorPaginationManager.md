@@ -37,7 +37,7 @@ The GraphQL query variables type
 
 ### props
 
-[`InterfaceCursorPaginationManagerProps`](../../../../types/CursorPagination/interface/type-aliases/InterfaceCursorPaginationManagerProps.md)\<`TNode`, `TVariables`\>
+[`InterfaceCursorPaginationManagerProps`](../../../../types/CursorPagination/interface/type-aliases/InterfaceCursorPaginationManagerProps.md)\<`TNode`, `TVariables`, `TData`\>
 
 ## Returns
 
@@ -46,45 +46,45 @@ The GraphQL query variables type
 ## Example
 
 ```tsx
-import \{ CursorPaginationManager \} from 'components/CursorPaginationManager/CursorPaginationManager';
-import \{ gql \} from '@apollo/client';
+import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
+import { gql } from '@apollo/client';
 
 const GET_USERS_QUERY = gql`
-  query GetUsers($first: Int!, $after: String) \{
-    users(first: $first, after: $after) \{
-      edges \{
+  query GetUsers($first: Int!, $after: String) {
+    users(first: $first, after: $after) {
+      edges {
         cursor
-        node \{
+        node {
           id
           name
           email
-        \}
-      \}
-      pageInfo \{
+        }
+      }
+      pageInfo {
         hasNextPage
         hasPreviousPage
         startCursor
         endCursor
-      \}
-    \}
-  \}
+      }
+    }
+  }
 `;
 
-function UsersList() \{
+function UsersList() {
   return (
     <CursorPaginationManager
-      query=\{GET_USERS_QUERY\}
+      query={GET_USERS_QUERY}
       dataPath="users"
-      itemsPerPage=\{10\}
-      renderItem=\{(user) => (
-        <div key=\{user.id\}>
-          <h3>\{user.name\}</h3>
-          <p>\{user.email\}</p>
+      itemsPerPage={10}
+      renderItem={(user) => (
+        <div key={user.id}>
+          <h3>{user.name}</h3>
+          <p>{user.email}</p>
         </div>
-      )\}
+      )}
     />
   );
-\}
+}
 ```
 
 ## Remarks

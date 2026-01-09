@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfacePageInfo
 
-Defined in: [src/types/CursorPagination/interface.ts:3](https://github.com/krishvsoni/talawa-admin/blob/442c1c84098d4833874ec872b1d3535c8ab0599b/src/types/CursorPagination/interface.ts#L3)
+Defined in: [src/types/CursorPagination/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L4)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/CursorPagination/interface.ts:3](https://github.com/krish
 
 > **endCursor**: `string`
 
-Defined in: [src/types/CursorPagination/interface.ts:4](https://github.com/krishvsoni/talawa-admin/blob/442c1c84098d4833874ec872b1d3535c8ab0599b/src/types/CursorPagination/interface.ts#L4)
+Defined in: [src/types/CursorPagination/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L5)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/CursorPagination/interface.ts:4](https://github.com/krish
 
 > **hasNextPage**: `boolean`
 
-Defined in: [src/types/CursorPagination/interface.ts:6](https://github.com/krishvsoni/talawa-admin/blob/442c1c84098d4833874ec872b1d3535c8ab0599b/src/types/CursorPagination/interface.ts#L6)
+Defined in: [src/types/CursorPagination/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L7)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/CursorPagination/interface.ts:6](https://github.com/krish
 
 > **hasPreviousPage**: `boolean`
 
-Defined in: [src/types/CursorPagination/interface.ts:7](https://github.com/krishvsoni/talawa-admin/blob/442c1c84098d4833874ec872b1d3535c8ab0599b/src/types/CursorPagination/interface.ts#L7)
+Defined in: [src/types/CursorPagination/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L8)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/types/CursorPagination/interface.ts:7](https://github.com/krish
 
 > **startCursor**: `string`
 
-Defined in: [src/types/CursorPagination/interface.ts:5](https://github.com/krishvsoni/talawa-admin/blob/442c1c84098d4833874ec872b1d3535c8ab0599b/src/types/CursorPagination/interface.ts#L5)
+Defined in: [src/types/CursorPagination/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L6)
