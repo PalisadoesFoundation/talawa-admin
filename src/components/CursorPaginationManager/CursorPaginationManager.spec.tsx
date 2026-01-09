@@ -1354,7 +1354,7 @@ describe('CursorPaginationManager', () => {
     it('component unmounts cleanly during fetch', async () => {
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => { });
+        .mockImplementation(vi.fn());
       const mocks = [createSuccessMock()];
 
       const { unmount } = render(
@@ -1621,7 +1621,12 @@ describe('CursorPaginationManager', () => {
         },
       };
 
-      let capturedQueryData: any;
+      /**
+       * Capturing the full query data object returned from the render prop
+       * to verify that nested data structures are correctly passed through.
+       * Type is unknown since it represents arbitrary GraphQL response data.
+       */
+      let capturedQueryData: unknown;
 
       render(
         <MockedProvider mocks={[mockOrgMembers]} addTypename={false}>
@@ -1649,8 +1654,8 @@ describe('CursorPaginationManager', () => {
       );
 
       await waitFor(() => {
-        expect(capturedQueryData?.organization).toBeDefined();
-        expect(capturedQueryData?.organization.members).toBeDefined();
+        expect((capturedQueryData as any)?.organization).toBeDefined();
+        expect((capturedQueryData as any)?.organization.members).toBeDefined();
       });
     });
 
@@ -1706,9 +1711,108 @@ describe('CursorPaginationManager', () => {
         expect(screen.getByText('User 3')).toBeInTheDocument();
       });
     });
+
+    it('external UI mode handles error state correctly', async () => {
+      const errorMock = {
+        request: {
+          query: MOCK_QUERY,
+          variables: { first: 10, after: null },
+        },
+        error: new GraphQLError('Query failed'),
+      };
+
+      render(
+        <MockedProvider mocks={[errorMock]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              useExternalUI={true}
+            >
+              {(props) => (
+                <div>
+                  {props.error ? (
+                    <div data-testid="external-error">
+                      Error: {props.error.message}
+                    </div>
+                  ) : (
+                    <div>No Error</div>
+                  )}
+                  <div data-testid="items-count">{props.items.length}</div>
+                </div>
+              )}
+            </CursorPaginationManager>
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId('external-error')).toBeInTheDocument();
+        expect(screen.getByTestId('external-error')).toHaveTextContent(
+          'Query failed',
+        );
+      });
+
+      // Items should be empty when error occurs
+      expect(screen.getByTestId('items-count')).toHaveTextContent('0');
+    });
+
+    it('external UI mode handles empty state correctly', async () => {
+      const emptyMock = {
+        request: {
+          query: MOCK_QUERY,
+          variables: { first: 10, after: null },
+        },
+        result: {
+          data: {
+            users: {
+              edges: [],
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: false,
+                startCursor: null,
+                endCursor: null,
+              },
+            },
+          },
+        },
+      };
+
+      render(
+        <MockedProvider mocks={[emptyMock]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              useExternalUI={true}
+            >
+              {(props) => (
+                <div>
+                  {props.items.length === 0 && !props.loading ? (
+                    <div data-testid="external-empty">No items found</div>
+                  ) : (
+                    <div>
+                      {(props.items as User[]).map((item) => (
+                        <div key={item.id}>{item.name}</div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+            </CursorPaginationManager>
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId('external-empty')).toBeInTheDocument();
+      });
+    });
   });
 
-  describe('Edge Cases', () => {
+  describe('RefetchTrigger Edge Cases', () => {
     it('handles refetchTrigger with initial value of 0', async () => {
       const initialMock = createSuccessMock();
       const refetchMock = {

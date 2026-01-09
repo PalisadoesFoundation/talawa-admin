@@ -140,7 +140,9 @@ describe('Organisation Tags Page', () => {
     await wait();
 
     await waitFor(() => {
-      // The page still renders even with query error, addChildTag button should be visible
+      // When using external UI mode, SubTags handles errors gracefully
+      // and continues to render the UI components. The addChildTag button
+      // should still be visible even when the query fails.
       expect(getByText(translations.addChildTag)).toBeInTheDocument();
     });
   });
