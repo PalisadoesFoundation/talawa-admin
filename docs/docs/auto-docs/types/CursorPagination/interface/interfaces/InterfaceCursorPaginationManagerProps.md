@@ -62,7 +62,7 @@ Defined in: [src/types/CursorPagination/interface.ts:62](https://github.com/Pali
 
 Number of items to fetch per page
 
-#### Default
+#### Default Value
 
 ```ts
 10
@@ -214,4 +214,21 @@ for append-only pagination but may cause issues if items are reordered.
 <CursorPaginationManager
   renderItem={(user) => <div>{user.name}</div>}
 />
+```
+
+***
+
+### tableMode?
+
+> `optional` **tableMode**: `boolean`
+
+Defined in: [src/types/CursorPagination/interface.ts:133](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L133)
+
+When true, renders items without wrapper divs for table contexts
+Use this when renderItem returns <tr> elements to be placed inside <tbody>
+
+#### Default Value
+
+```ts
+false
 ```

@@ -626,8 +626,8 @@ describe('OrganizationPeople', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    const removeButtons = screen.getAllByTestId('removeMemberModalBtn');
-    fireEvent.click(removeButtons[0]);
+    const removeButton = screen.getByTestId('removeMemberModalBtn-member1');
+    fireEvent.click(removeButton);
 
     await waitFor(() => {
       expect(screen.getByTestId('remove-member-modal')).toBeInTheDocument();
@@ -699,8 +699,8 @@ describe('OrganizationPeople', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    const removeButtons = screen.getAllByTestId('removeMemberModalBtn');
-    fireEvent.click(removeButtons[0]);
+    const removeButton = screen.getByTestId('removeMemberModalBtn-member1');
+    fireEvent.click(removeButton);
 
     await waitFor(() => {
       expect(screen.getByTestId('remove-member-modal')).toBeInTheDocument();
@@ -805,10 +805,10 @@ describe('OrganizationPeople', () => {
     });
 
     // Remove buttons should be disabled
-    const removeButtons = screen.getAllByTestId('removeMemberModalBtn');
-    removeButtons.forEach((button) => {
-      expect(button).toBeDisabled();
-    });
+    const removeButton1 = screen.getByTestId('removeMemberModalBtn-user1');
+    const removeButton2 = screen.getByTestId('removeMemberModalBtn-user2');
+    expect(removeButton1).toBeDisabled();
+    expect(removeButton2).toBeDisabled();
   });
 
   test('handles member deletion error', async () => {
@@ -852,8 +852,8 @@ describe('OrganizationPeople', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    const removeButtons = screen.getAllByTestId('removeMemberModalBtn');
-    fireEvent.click(removeButtons[0]);
+    const removeButton = screen.getByTestId('removeMemberModalBtn-member1');
+    fireEvent.click(removeButton);
 
     await waitFor(() => {
       expect(screen.getByTestId('remove-member-modal')).toBeInTheDocument();

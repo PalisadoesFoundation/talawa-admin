@@ -57,7 +57,7 @@ export interface InterfaceCursorPaginationManagerProps<
 
   /**
    * Number of items to fetch per page
-   * @default 10
+   * @defaultValue 10
    */
   itemsPerPage?: number;
 
@@ -124,4 +124,11 @@ export interface InterfaceCursorPaginationManagerProps<
    * Can be a number (counter) or any value that changes
    */
   refetchTrigger?: number;
+
+  /**
+   * When true, renders items without wrapper divs for table contexts
+   * Use this when renderItem returns <tr> elements to be placed inside <tbody>
+   * @defaultValue false
+   */
+  tableMode?: boolean;
 }

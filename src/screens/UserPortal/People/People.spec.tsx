@@ -1,9 +1,9 @@
 import { act, render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
-import type { MockedResponse } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing';
+import type { MockedResponse } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -427,7 +427,9 @@ describe('People Component Tests', () => {
 
     const input = screen.getByTestId('searchInput');
     await userEvent.type(input, 'Admin');
-
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 400));
+    });
     await waitFor(
       () => {
         expect(screen.getByTestId('people-name-2')).toHaveTextContent(

@@ -105,6 +105,17 @@ export default function People(): React.JSX.Element {
     return searchFilter || roleFilter || undefined;
   }, [searchTerm, mode]);
 
+  if (!organizationId) {
+    return (
+      <div
+        className={`${styles.mainContainer_people}`}
+        data-testid="people-main-container"
+      >
+        <span>{t('nothingToShow')}</span>
+      </div>
+    );
+  }
+
   return (
     <>
       <div
@@ -175,7 +186,7 @@ export default function People(): React.JSX.Element {
                 const cardProps: IOrganizationCardProps = {
                   name: node.name,
                   image: node.avatarURL ?? '',
-                  id: node.id ?? '',
+                  id: node.id,
                   email: node.emailAddress ?? t('emailNotAvailable'),
                   role: userType,
                   sno: (index + 1).toString(),

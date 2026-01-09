@@ -399,7 +399,7 @@
     "notFound": "未找到成员",
     "organizationPeopleTable": "组织人员表",
     "removeMemberTitle": "删除成员",
-    "organizationIdMissing": "组织ID 缺失！",
+    "organizationIdMissing": "组织ID缺失！",
     "removeMemberConfirmation": "您确定要删除此成员吗？"
   },
   "organizationCard": {

@@ -91,7 +91,7 @@ interface IUserNode {
   role: string;
   avatarURL?: string;
   emailAddress?: string;
-  createdAt: string;
+  createdAt?: string;
 }
 
 function OrganizationPeople(): JSX.Element {
@@ -145,7 +145,6 @@ function OrganizationPeople(): JSX.Element {
         NotificationToast.success(
           tCommon('removedSuccessfully', { item: tCommon('removeMember') }),
         );
-        // Refresh list after deletion
         setRefetchTrigger((prev) => prev + 1);
         handleCloseModal();
       }
@@ -158,19 +157,16 @@ function OrganizationPeople(): JSX.Element {
     setState(OPTION_TO_STATE[value] ?? 0);
   };
 
-  // Determine query and variables based on current tab
   const getQueryAndVariables = () => {
     const baseVariables = {
       orgId: currentUrl,
     };
 
-    // Build where filter for search
     const searchFilter = searchTerm
       ? { firstName: { contains: searchTerm } }
       : undefined;
 
     if (state === 0) {
-      // Members
       return {
         query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
         variables: {
@@ -180,7 +176,6 @@ function OrganizationPeople(): JSX.Element {
         dataPath: 'organization.members',
       };
     } else if (state === 1) {
-      // Admins
       return {
         query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
         variables: {
@@ -192,7 +187,6 @@ function OrganizationPeople(): JSX.Element {
         dataPath: 'organization.members',
       };
     } else {
-      // Users
       return {
         query: USER_LIST_FOR_TABLE,
         variables: {
@@ -205,7 +199,6 @@ function OrganizationPeople(): JSX.Element {
 
   const { query, variables, dataPath } = getQueryAndVariables();
 
-  // Define footer buttons for BaseModal
   const modalFooter = (
     <>
       <Button variant="secondary" onClick={handleCloseModal}>
@@ -296,6 +289,7 @@ function OrganizationPeople(): JSX.Element {
               queryVariables={variables}
               dataPath={dataPath}
               itemsPerPage={10}
+              tableMode={true}
               renderItem={(memberItem: IUserNode, memberIndex: number) => {
                 const rowNumber = memberIndex + 1;
                 return (
@@ -319,8 +313,7 @@ function OrganizationPeople(): JSX.Element {
                     </td>
                     <td className={`${styles.tableCell} ${styles.centerAlign}`}>
                       <Link
-                        to={`/member/${currentUrl}`}
-                        state={{ id: memberItem.id }}
+                        to={`/member/${currentUrl}/${memberItem.id}`}
                         className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.memberNameFontSize}`}
                       >
                         {memberItem.name}
@@ -342,7 +335,7 @@ function OrganizationPeople(): JSX.Element {
                         disabled={state === 2}
                         onClick={() => handleOpenRemoveModal(memberItem.id)}
                         aria-label={tCommon('removeMember')}
-                        data-testid="removeMemberModalBtn"
+                        data-testid={`removeMemberModalBtn-${memberItem.id}`}
                       >
                         <Delete />
                       </Button>
