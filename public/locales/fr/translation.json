@@ -226,6 +226,7 @@
     "OR": "OU",
     "imageUploadError": "Échec du téléchargement de l'image. Veuillez réessayer.",
     "imageUploadSuccess": "Image téléchargée avec succès.",
+    "invalidFileType": "Type de fichier invalide. Veuillez télécharger une image valide.",
     "congratulationOrgCreated": "Félicitations ! L'organisation est créée.",
     "goToStore": "Aller au magasin",
     "manageFeaturesInfo": "Gérez les fonctionnalités et les plugins disponibles pour cette organisation.",

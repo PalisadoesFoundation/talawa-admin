@@ -226,6 +226,7 @@
     "OR": "或",
     "imageUploadError": "图像上传失败。请再试一次。",
     "imageUploadSuccess": "图像上传成功。",
+    "invalidFileType": "无效的文件类型。请上传有效的图片。",
     "congratulationOrgCreated": "恭喜！组织已创建。",
     "goToStore": "前往商店",
     "manageFeaturesInfo": "管理此组织可用的功能和插件。",
