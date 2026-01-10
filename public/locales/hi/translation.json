@@ -70,8 +70,12 @@
     "admin": "व्यवस्थापक",
     "user": "उपयोगकर्ता",
     "loading": "लोड हो रहा है",
+    "userImage": "उपयोगकर्ता छवि",
+    "userEditProfilePicture": "प्रोफ़ाइल चित्र संपादित करें",
     "communityLogo": "समुदाय लोगो",
-    "organizations": "संगठन"
+    "organizations": "संगठन",
+    "accountLocked": "बहुत अधिक असफल लॉगिन प्रयासों के कारण आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया बाद में पुनः प्रयास करें।",
+    "accountLockedWithTimer": "आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया {{minutes}} मिनट में पुनः प्रयास करें।"
   },
   "adminProfile": {
     "title": "एडमिन प्रोफ़ाइल",
@@ -470,7 +474,6 @@
     "userName": "उपयोगकर्ता नाम",
     "actions": "क्रियाएँ",
     "noOneSelected": "कोई चयनित नहीं",
-    "addMember": "सदस्य जोड़ें",
     "assignToTags": "टैग्स को असाइन करें",
     "removeFromTags": "टैग्स से हटाएं",
     "assign": "असाइन करें",
@@ -499,8 +502,7 @@
     "sortPeople": "लोगों को सॉर्ट करें",
     "tagActions": "टैग क्रियाएँ",
     "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
-    "noTagsFound": "कोई टैग नहीं मिला",
-    "removeMember": "सदस्य हटाएं"
+    "noTagsFound": "कोई टैग नहीं मिला"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
@@ -799,9 +801,9 @@
     "viewCampaigns": "कैम्पेंस देखें",
     "assocCampaigns": "संबद्ध अभियान",
     "associatedCampaigns": "संबद्ध अभियान",
-    "searchFunds": "फंड खोजें",
     "errorLoadingFundsData": "फंड डेटा लोड करते समय त्रुटि हुई",
-    "editFund": "फंड संपादित करें"
+    "editFund": "फंड संपादित करें",
+    "searchFunds": "फंड खोजें"
   },
   "fundCampaign": {
     "title": "फंडरेजिंग कैंपेन",
@@ -830,6 +832,7 @@
     "earliestEndDate": "सबसे पहली समाप्ति तिथि",
     "lowestGoal": "सबसे कम उद्देश्य",
     "highestGoal": "सबसे ऊंचा उद्देश्य",
+    "errorLoading": "अभियान डेटा लोड करते समय त्रुटि हुई",
     "percentageRaised": "% एकत्रित",
     "campaignProgress": "अभियान प्रगति: {{percentage}}%"
   },
@@ -1207,7 +1210,20 @@
     "unassignUserTagMessage": "क्या आप इस उपयोगकर्ता से टैग हटाना चाहते हैं?",
     "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया",
     "tagsAssigned": "टैग सौंपे गए",
-    "noTagsAssigned": "कोई टैग सौंपा नहीं गया"
+    "noTagsAssigned": "कोई टैग सौंपा नहीं गया",
+    "to": "को",
+    "overview": "अवलोकन",
+    "tags": "टैग",
+    "invalidFileType": "अमान्य फ़ाइल प्रकार",
+    "fileTooLarge": "फ़ाइल बहुत बड़ी है",
+    "memberDetailNumberExample": "उदाहरण: 1234567890",
+    "memberDetailExampleLane": "उदाहरण: मुख्य मार्ग",
+    "memberDetailPostalExample": "उदाहरण: 110001",
+    "enterCity": "शहर दर्ज करें",
+    "enterState": "राज्य दर्ज करें",
+    "select": "चुनें",
+    "asYourCountry": "अपने देश के रूप में",
+    "actions": "कार्रवाई"
   },
   "people": {
     "title": "लोग",
@@ -1369,7 +1385,8 @@
     "event": "आयोजन",
     "article": "लेख",
     "postNowVisibleInFeed": "पोस्ट अब फीड में दिखाई दे रहा है",
-    "processingPost": "आपकी पोस्ट प्रसंस्करण कर रहे हैं। कृपया प्रतीक्षा करें।"
+    "processingPost": "आपकी पोस्ट प्रसंस्करण कर रहे हैं। कृपया प्रतीक्षा करें।",
+    "postImagePreview": "पोस्ट छवि पूर्वावलोकन"
   },
   "eventAttendance": {
     "event_attendance_table": "इवेंट उपस्थिति तालिका",
@@ -1541,7 +1558,9 @@
     "latestFirst": "नवीनतम पहले",
     "earliestFirst": "सबसे पहले",
     "noTransactionsFound": "कोई लेन-देन नहीं मिला",
-    "errorLoadingTransactions": "लेन-देन लोड करने में त्रुटि"
+    "errorLoadingTransactions": "लेन-देन लोड करने में त्रुटि",
+    "eventType": "कार्यक्रम प्रकार",
+    "tagCreationFailed": "टैग निर्माण विफल रहा"
   },
   "userEvents": {
     "title": "कार्यक्रम",
@@ -1869,17 +1888,17 @@
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
     "noCampaigns": "कोई अभियान नहीं मिला",
     "raised": "एकत्रित",
+    "campaignName": "अभियान का नाम",
+    "startDate": "आरंभ करने की तिथि",
+    "endDate": "अंतिम तिथि",
+    "fundingGoal": "निधि लक्ष्य",
+    "viewPledge": "प्रतिज्ञा देखें",
     "amountRaised": "एकत्रित राशि",
     "campaignIndex": "#",
-    "campaignName": "अभियान का नाम",
-    "startDate": "शुरुआत तिथि",
-    "endDate": "अंतिम तिथि",
     "fundGoal": "वित्त पोषण लक्ष्य",
     "percentRaised": "% एकत्रित",
     "createFirstCampaign": "इसे यहाँ देखने के लिए अपना पहला धन उगाहने का अभियान बनाएं।",
-    "campaignEnded": "अभियान समाप्त हो गया",
-    "fundingGoal": "फंडिंग उद्देश्य",
-    "viewPledge": "प्लेज देखें"
+    "campaignEnded": "अभियान समाप्त हो गया"
   },
   "userPledges": {
     "title": "मेरी प्रतिज्ञाएँ",

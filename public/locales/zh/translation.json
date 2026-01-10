@@ -70,8 +70,12 @@
     "admin": "管理员",
     "user": "用户",
     "loading": "加载中",
+    "userImage": "用户图片",
+    "userEditProfilePicture": "编辑用户头像",
     "communityLogo": "社区标志",
-    "organizations": "组织"
+    "organizations": "组织",
+    "accountLocked": "由于登录失败次数过多，您的账户已被暂时锁定。请稍后重试。",
+    "accountLockedWithTimer": "您的账户已被暂时锁定。请在 {{minutes}} 分钟后重试。"
   },
   "adminProfile": {
     "title": "管理员资料",
@@ -458,7 +462,6 @@
     "userName": "用户名",
     "actions": "操作",
     "noOneSelected": "未选择任何人",
-    "addMember": "添加成员",
     "assignToTags": "分配到标签",
     "removeFromTags": "从标签中移除",
     "assign": "分配",
@@ -487,8 +490,7 @@
     "sortPeople": "排序人员",
     "tagActions": "标签操作",
     "loadAssignedUsersError": "加载已分配用户时发生错误",
-    "noTagsFound": "未找到标签",
-    "removeMember": "移除成员"
+    "noTagsFound": "未找到标签"
   },
   "userListCard": {
     "addAdmin": "添加管理员",
@@ -818,6 +820,7 @@
     "earliestEndDate": "最早结束日期",
     "lowestGoal": "最低目标",
     "highestGoal": "最高目标",
+    "errorLoading": "加载活动数据时出错",
     "percentageRaised": "% 已筹集",
     "campaignProgress": "活动进度: {{percentage}}%"
   },
@@ -1207,7 +1210,20 @@
     "unassignUserTagMessage": "您想从此用户中删除标签吗？",
     "successfullyUnassigned": "标签已从用户中取消分配",
     "tagsAssigned": "已分配标签",
-    "noTagsAssigned": "未分配标签"
+    "noTagsAssigned": "未分配标签",
+    "to": "至",
+    "overview": "概览",
+    "tags": "标签",
+    "invalidFileType": "无效的文件类型",
+    "fileTooLarge": "文件过大",
+    "memberDetailNumberExample": "例如: 1234",
+    "memberDetailExampleLane": "例如: 街道名称",
+    "memberDetailPostalExample": "例如: 邮政编码",
+    "enterCity": "输入城市",
+    "enterState": "输入州/省",
+    "select": "请选择",
+    "asYourCountry": "作为您的国家",
+    "actions": "操作"
   },
   "userLogin": {
     "login": "登录",
@@ -1369,7 +1385,8 @@
     "event": "事件",
     "article": "文章",
     "postNowVisibleInFeed": "帖子现在在动态中可见",
-    "processingPost": "正在处理您的帖子。请稍候。"
+    "processingPost": "正在处理您的帖子。请稍候。",
+    "postImagePreview": "帖子图片预览"
   },
   "eventAttendance": {
     "event_attendance_table": "活动出席表",
@@ -1541,7 +1558,9 @@
     "latestFirst": "最新优先",
     "earliestFirst": "最早优先",
     "noTransactionsFound": "未找到交易记录",
-    "errorLoadingTransactions": "加载交易记录时出错"
+    "errorLoadingTransactions": "加载交易记录时出错",
+    "eventType": "事件类型",
+    "tagCreationFailed": "标签创建失败"
   },
   "userEvents": {
     "title": "活动",
