@@ -7,7 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { store } from '../../state/store';
 import i18nForTest from '../../utils/i18nForTest';
 import { StaticMockLink } from '../../utils/StaticMockLink';
-import { toast } from 'react-toastify';
+import { NotificationToast } from '../../components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
@@ -25,8 +25,8 @@ import { GET_POST_COMMENTS, CURRENT_USER } from '../../GraphQl/Queries/Queries';
 import useLocalStorage from '../../utils/useLocalstorage';
 import { errorHandler } from '../../utils/errorHandler';
 
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('../../components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     error: vi.fn(),
     success: vi.fn(),
   },
@@ -564,9 +564,9 @@ describe('PostCard', () => {
     await userEvent.click(deleteButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(NotificationToast.success).toHaveBeenCalledWith(
         expect.stringMatching(
-          /Post deleted successfully|postCard\.postDeletedSuccess/i,
+          /Post deleted successfully\.|postCard\.postDeletedSuccess/i,
         ),
       );
       expect(fetchPostsMock).toHaveBeenCalled();
@@ -676,9 +676,9 @@ describe('PostCard', () => {
         expect(mockLikePost).toHaveBeenCalled();
       });
 
-      // Wait for the error toast to be shown - component casts error to string
+      // Wait for the errorHandler to be called
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalled();
+        expect(errorHandler).toHaveBeenCalled();
       });
     } finally {
       // Always restore the original mock
@@ -1144,9 +1144,9 @@ describe('PostCard', () => {
     await userEvent.click(unpinButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(NotificationToast.success).toHaveBeenCalledWith(
         expect.stringMatching(
-          /postCard\.postUnpinnedSuccess|unpinned.*success/i,
+          /postCard\.postUnpinnedSuccess|Post unpinned successfully\./i,
         ),
       );
     });

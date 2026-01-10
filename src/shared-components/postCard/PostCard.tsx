@@ -123,8 +123,8 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       });
       setIsLikedByUser(!isLikedByUser);
       setLikeCount(isLikedByUser ? likeCount - 1 : likeCount + 1);
-    } catch (error) {
-      NotificationToast.error(error as string);
+    } catch (error: unknown) {
+      errorHandler(t, error);
     }
   };
 
