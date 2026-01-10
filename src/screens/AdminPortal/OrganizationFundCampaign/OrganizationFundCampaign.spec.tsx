@@ -189,9 +189,9 @@ describe('FundCampaigns Screen', () => {
     await waitFor(() =>
       expect(screen.getAllByText(translations.createCampaign)).toHaveLength(2),
     );
-    await userEvent.click(screen.getByTestId('campaignCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
-      expect(screen.queryByTestId('campaignCloseBtn')).toBeNull(),
+      expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
   });
 
@@ -214,9 +214,9 @@ describe('FundCampaigns Screen', () => {
         screen.getAllByText(translations.updateCampaign)[0],
       ).toBeInTheDocument(),
     );
-    await userEvent.click(screen.getByTestId('campaignCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
-      expect(screen.queryByTestId('campaignCloseBtn')).toBeNull(),
+      expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
   });
 
