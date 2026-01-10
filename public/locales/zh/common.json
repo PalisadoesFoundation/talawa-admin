@@ -229,5 +229,7 @@
   "organizationEventDescription": "组织的所有成员可见",
   "inviteOnlyEvent": "仅限受邀者",
   "inviteOnlyEventDescription": "仅受邀成员和活动管理员可见",
-  "to": "至"
+  "to": "至",
+  "or": "或",
+  "eventNotFound": "未找到 ID 为 {{id}} 的活动"
 }

@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import SortingButton from './SortingButton';
-import type { InterfaceSortingOption } from 'types/AdminSearchFilterBar/interface';
+import type { InterfaceSortingOption } from 'types/shared-components/SearchFilterBar/interface';
 
 describe('SortingButton', () => {
   const mockSortingOptions: InterfaceSortingOption[] = [

@@ -71,7 +71,7 @@ import { Stack } from '@mui/material';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 function SubTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -348,7 +348,7 @@ function SubTags(): JSX.Element {
     <>
       <Row>
         <div>
-          <AdminSearchFilterBar
+          <SearchFilterBar
             searchPlaceholder={tCommon('searchByName')}
             searchValue={tagSearchName}
             onSearchChange={(value) => setTagSearchName(value.trim())}
