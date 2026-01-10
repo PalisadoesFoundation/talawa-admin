@@ -48,7 +48,6 @@ import {
   GET_EVENT_VOLUNTEER_GROUPS,
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'types/Volunteer/interface';
-import { BaseModal } from 'shared-components/BaseModal';
 
 const initializeFormState = (
   actionItem: IActionItemInfo | null,
@@ -167,13 +166,11 @@ const ItemModal: FC<IItemModalProps> = ({
   }, [volunteerGroupsData, applyTo]);
 
   // Determine if assignment type chips should be disabled
-  const isVolunteerChipDisabled = useMemo(() => {
-    return editMode && Boolean(actionItem?.volunteerGroup?.id);
-  }, [editMode, actionItem]);
+  const isVolunteerChipDisabled =
+    editMode && Boolean(actionItem?.volunteerGroup?.id);
 
-  const isVolunteerGroupChipDisabled = useMemo(() => {
-    return editMode && Boolean(actionItem?.volunteer?.id);
-  }, [editMode, actionItem]);
+  const isVolunteerGroupChipDisabled =
+    editMode && Boolean(actionItem?.volunteer?.id);
 
   const actionItemCategories = useMemo(
     () => actionItemCategoriesData?.actionCategoriesByOrganization || [],
@@ -441,16 +438,7 @@ const ItemModal: FC<IItemModalProps> = ({
       title={editMode ? t('updateActionItem') : t('createActionItem')}
       dataTestId="actionItemModal"
     >
-      <Form
-        onSubmit={
-          editMode
-            ? actionItem?.isTemplate && applyTo === 'instance'
-              ? updateActionForInstanceHandler
-              : updateActionItemHandler
-            : createActionItemHandler
-        }
-        className="p-2"
-      >
+      <Form onSubmit={getSubmitHandler()} className="p-2">
         {isRecurring && !editMode && (
           <ApplyToSelector applyTo={applyTo} onChange={setApplyTo} />
         )}
@@ -504,7 +492,7 @@ const ItemModal: FC<IItemModalProps> = ({
                     }
                   }}
                   clickable={!isVolunteerChipDisabled}
-                  aria-disabled={isVolunteerChipDisabled || undefined}
+                  aria-disabled={isVolunteerChipDisabled}
                   sx={{
                     opacity: isVolunteerChipDisabled ? 0.6 : 1,
                     cursor: isVolunteerChipDisabled ? 'not-allowed' : 'pointer',
@@ -527,7 +515,7 @@ const ItemModal: FC<IItemModalProps> = ({
                     }
                   }}
                   clickable={!isVolunteerGroupChipDisabled}
-                  aria-disabled={isVolunteerGroupChipDisabled || undefined}
+                  aria-disabled={isVolunteerGroupChipDisabled}
                   sx={{
                     opacity: isVolunteerGroupChipDisabled ? 0.6 : 1,
                     cursor: isVolunteerGroupChipDisabled

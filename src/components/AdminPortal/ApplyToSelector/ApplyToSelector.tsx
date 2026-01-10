@@ -12,8 +12,7 @@ export type { ApplyToType };
  * A radio group selector for choosing action item scope.
  * Allows users to apply an action item to an entire series or a single instance.
  *
- * @param applyTo - Current selection value ('series' or 'instance')
- * @param onChange - Callback fired when selection changes
+ * @param props - Component props from InterfaceApplyToSelectorProps
  * @returns Radio group component for scope selection
  */
 const ApplyToSelector: React.FC<InterfaceApplyToSelectorProps> = ({
