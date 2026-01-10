@@ -6,14 +6,14 @@
  * and deleting venues. The component uses GraphQL queries and mutations
  * to fetch and manipulate venue data.
  *
- * @Features
+ * Features:
  * - Search venues by name or description.
  * - Sort venues by highest or lowest capacity.
  * - Create new venues or edit existing ones using a modal.
  * - Delete venues with confirmation.
  * - Displays a loader while fetching data and handles errors gracefully.
  *
- * @Hooks
+ * Hooks:
  * - `useTranslation`: For internationalization (i18n) support.
  * - `useState`: To manage component state such as modal visibility, search term, etc.
  * - `useEffect`: To update the venue list when data changes.
@@ -21,14 +21,14 @@
  * - `useMutation`: To handle venue deletion.
  * - `useParams`: To retrieve the organization ID from the URL.
  *
- * @Props
+ * Props:
  * - None (organization ID is derived from the URL parameters).
  *
- * @GraphQL
+ * GraphQL:
  * - Query: `VENUE_LIST` - Fetches the list of venues for the organization.
  * - Mutation: `DELETE_VENUE_MUTATION` - Deletes a specific venue by ID.
  *
- * @StateVariables
+ * StateVariables:
  * - `venueModal`: Controls the visibility of the venue modal.
  * - `venueModalMode`: Determines whether the modal is in 'edit' or 'create' mode.
  * - `searchTerm`: Stores the search term entered by the user.
@@ -37,10 +37,10 @@
  * - `editVenueData`: Stores the data of the venue being edited.
  * - `venues`: Stores the list of venues fetched from the server.
  *
- * @ErrorHandling
+ * ErrorHandling:
  * - Uses `errorHandler` utility to display errors in a user-friendly manner.
  *
- * @Dependencies
+ * Dependencies:
  * - React, React Router, Apollo Client, Bootstrap, and custom components.
  *
  * @returns JSX.Element - The rendered OrganizationVenues component.
@@ -59,7 +59,7 @@ import VenueModal from 'components/Venues/Modal/VenueModal';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/Venues/VenueCard';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 function organizationVenues(): JSX.Element {
   // Translation hooks for i18n support
@@ -213,7 +213,7 @@ function organizationVenues(): JSX.Element {
   return (
     <>
       <div className={`${styles.btnsContainer} gap-3 flex-wrap`}>
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={true}
           searchPlaceholder={`${t('searchBy')} ${tCommon(searchBy)}`}
           searchValue={searchTerm}
