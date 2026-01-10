@@ -11,14 +11,26 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
-import { toast } from 'react-toastify';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  AdapterDayjs,
+  LocalizationProvider,
+} from 'shared-components/DateRangePicker';
 import dayjs from 'dayjs';
 import { useLocalStorage } from 'utils/useLocalstorage';
 import { props } from './EventListCardProps';
 import { ERROR_MOCKS, MOCKS } from './Modal/EventListCardMocks';
 import { vi, beforeAll, afterAll, afterEach, expect, it } from 'vitest';
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
+  },
+}));
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 let setItem: ReturnType<typeof useLocalStorage>['setItem'];
 let clearAllItems: ReturnType<typeof useLocalStorage>['clearAllItems'];
@@ -209,14 +221,12 @@ describe('Testing Event List Card', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId('eventModalCloseBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
 
@@ -236,16 +246,13 @@ describe('Testing Event List Card', () => {
     await userEvent.click(screen.getByTestId('deleteEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(NotificationToast.success).toHaveBeenCalledWith(
         translations.eventDeleted,
-        expect.any(Object),
       );
     });
 
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
 
@@ -280,7 +287,7 @@ describe('Testing Event List Card', () => {
     await userEvent.click(screen.getByTestId('deleteEventBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -297,16 +304,13 @@ describe('Testing Event List Card', () => {
     await userEvent.click(screen.getByTestId('registerEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(NotificationToast.success).toHaveBeenCalledWith(
         `Successfully registered for ${props[2].name}`,
-        expect.any(Object),
       );
     });
 
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
 
@@ -317,7 +321,7 @@ describe('Testing Event List Card', () => {
     await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() =>
-      expect(screen.getByTestId('eventModalCloseBtn')).toBeInTheDocument(),
+      expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument(),
     );
 
     await waitFor(() => {

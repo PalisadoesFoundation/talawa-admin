@@ -12,15 +12,15 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import {
-  AdapterDayjs,
-  LocalizationProvider,
-} from 'shared-components/DateRangePicker';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
 import dayjs, { type Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import CustomRecurrenceModal from 'screens/AdminPortal/OrganizationEvents/CustomRecurrenceModal';
+import {
+  AdapterDayjs,
+  LocalizationProvider,
+} from 'shared-components/DateRangePicker';
 
 dayjs.extend(utc);
 
@@ -35,21 +35,12 @@ vi.mock('screens/AdminPortal/OrganizationEvents/CustomRecurrenceModal', () => ({
   default: vi.fn(),
 }));
 
-export const getPickerInputByLabel = (label: string): HTMLElement => {
-  const allInputs = screen.getAllByRole('textbox', { hidden: true });
-  for (const input of allInputs) {
-    const formControl = input.closest('.MuiFormControl-root');
-    if (formControl) {
-      const labelEl = formControl.querySelector('label');
-      if (labelEl) {
-        const labelText = labelEl.textContent?.toLowerCase() || '';
-        if (labelText.includes(label.toLowerCase())) {
-          return formControl as HTMLElement;
-        }
-      }
-    }
+const getPickerInputByTestId = (testId: string): HTMLElement => {
+  const input = screen.getByTestId(testId);
+  if (!input) {
+    throw new Error(`Could not find picker input with testId: ${testId}`);
   }
-  throw new Error(`Could not find date picker for label: ${label}`);
+  return input;
 };
 
 const mockT = (key: string): string => key;
@@ -171,7 +162,7 @@ describe('EventListCardPreviewModal', () => {
     const mockHideViewModal = vi.fn();
     renderComponent({ hideViewModal: mockHideViewModal });
 
-    const closeButton = screen.getByTestId('eventModalCloseBtn');
+    const closeButton = screen.getByTestId('modalCloseBtn');
     await userEvent.click(closeButton);
 
     expect(mockHideViewModal).toHaveBeenCalledOnce();
@@ -700,7 +691,7 @@ describe('EventListCardPreviewModal', () => {
       setEventEndDate: mockSetEventEndDate,
     });
 
-    const startDateInput = getPickerInputByLabel('startDate');
+    const startDateInput = getPickerInputByTestId('startDate');
     expect(startDateInput.parentElement).toBeTruthy();
     const startDatePicker = startDateInput.parentElement;
     const calendarButton = within(
@@ -728,7 +719,7 @@ describe('EventListCardPreviewModal', () => {
       setEventEndDate: mockSetEventEndDate,
     });
 
-    const endDateInput = getPickerInputByLabel('endDate');
+    const endDateInput = getPickerInputByTestId('endDate');
     expect(endDateInput.parentElement).toBeTruthy();
     const endDatePicker = endDateInput.parentElement;
     const calendarButton = within(endDatePicker as HTMLElement).getByLabelText(
@@ -753,7 +744,7 @@ describe('EventListCardPreviewModal', () => {
       setFormState: mockSetFormState,
     });
 
-    const startTimeInput = getPickerInputByLabel('startTime');
+    const startTimeInput = getPickerInputByTestId('startTime');
     expect(startTimeInput.parentElement).toBeTruthy();
     const startTimePicker = startTimeInput.parentElement;
     const clockButton = within(startTimePicker as HTMLElement).getByLabelText(
@@ -782,7 +773,7 @@ describe('EventListCardPreviewModal', () => {
       setFormState: mockSetFormState,
     });
 
-    const endTimeInput = getPickerInputByLabel('endTime');
+    const endTimeInput = getPickerInputByTestId('endTime');
     expect(endTimeInput.parentElement).toBeTruthy();
     const endTimePicker = endTimeInput.parentElement;
     const clockButton = within(endTimePicker as HTMLElement).getByLabelText(
@@ -830,7 +821,8 @@ describe('EventListCardPreviewModal', () => {
 
     // The CustomRecurrenceModal should be rendered in the DOM
     // (though it may not be visible unless customRecurrenceModalIsOpen is true)
-    expect(screen.getByRole('dialog', { hidden: true })).toBeInTheDocument();
+    const dialogs = screen.getAllByRole('dialog', { hidden: true });
+    expect(dialogs.length).toBeGreaterThan(0);
   });
 
   test('start date picker onChange updates dates correctly', () => {
@@ -1158,7 +1150,7 @@ describe('EventListCardPreviewModal', () => {
         setEventEndDate: mockSetEventEndDate,
       });
 
-      const dateInput = getPickerInputByLabel('startDate');
+      const dateInput = getPickerInputByTestId('startDate');
       expect(dateInput.parentElement).toBeDefined();
       const datePicker = dateInput?.parentElement;
       const calendarButton = within(datePicker as HTMLElement).getByLabelText(
