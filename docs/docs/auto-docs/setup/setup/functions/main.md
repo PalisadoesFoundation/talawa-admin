@@ -14,7 +14,7 @@ Main setup orchestrator for Talawa Admin initial configuration.
 
 `Promise`\<`void`\>
 
-A promise that resolves when setup completes successfully
+Promise<void> - A promise that resolves when setup completes successfully.
 
 ## Remarks
 
@@ -42,4 +42,4 @@ await main();
 
 ## Throws
 
-Error if any setup step fails
+Error - if any setup step fails.

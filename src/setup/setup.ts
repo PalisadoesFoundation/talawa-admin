@@ -137,8 +137,8 @@ const askAndSetLogErrors = async (): Promise<void> => {
  * await main();
  * ```
  *
- * @returns A promise that resolves when setup completes successfully
- * @throws Error if any setup step fails
+ * @returns Promise<void> - A promise that resolves when setup completes successfully.
+ * @throws Error - if any setup step fails.
  */
 export async function main(): Promise<void> {
   // Handle user cancellation (CTRL+C)
