@@ -2093,8 +2093,8 @@
     "rejected": "Rechazado",
     "disabled": "Deshabilitado",
     "accepted": "Aceptado",
-    "declined": "Rechazado",
-    "no_response": "Sin Respuesta"
+    "declined": "Declinado",
+    "no_response": "Sin respuesta"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comentario eliminado exitosamente",
