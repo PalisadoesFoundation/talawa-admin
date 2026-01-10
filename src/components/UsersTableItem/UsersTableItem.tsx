@@ -327,15 +327,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             {tCommon('user')}
                           </option>
                         </>
-                      ) : isAdmin ? (
-                        <>
-                          <option value={`ADMIN?${org.id}`}>
-                            {tCommon('admin')}
-                          </option>
-                          <option value={`USER?${org.id}`}>
-                            {tCommon('user')}
-                          </option>
-                        </>
                       ) : (
                         <>
                           <option value={`USER?${org.id}`}>
@@ -522,7 +513,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                       onClick={() => {
                         setremoveUserProps({
                           orgId: org.id,
-                          orgName: org.organization.creator.name,
+                          orgName: org.organization.name,
                           setShowOnCancel: 'Blocked',
                         });
                         setShowBlockedOrganizations(false);

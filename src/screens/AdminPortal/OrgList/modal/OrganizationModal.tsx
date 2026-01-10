@@ -244,7 +244,6 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             />
           </Col>
         </Row>
-        <Row className="mb-1"></Row>
         <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}</Form.Label>
         <Form.Control
           accept="image/*"
