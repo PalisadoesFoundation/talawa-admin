@@ -51,6 +51,15 @@ vi.mock('react-toastify', () => ({
     .mockImplementation(() => <div data-testid="toast-container" />),
 }));
 
+// Mock NotificationToast
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
+}));
 vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
   default: ({ data }: { data: InterfaceOrganizationCardProps }) => (
     <div data-testid="organization-card-mock">{data.name}</div>
@@ -70,6 +79,9 @@ beforeEach(() => {
   setItem('IsLoggedIn', 'TRUE');
   setItem('userId', '123'); // if this screen reads it
   removeItem('AdminFor'); // must be absent (== undefined)
+
+  // Clear NotificationToast mocks
+  vi.clearAllMocks();
 });
 
 const mockLinks = {
@@ -2323,3 +2335,6 @@ describe('Advanced Component Functionality Tests', () => {
     expect(screen.getByTestId('searchInput')).toBeInTheDocument();
   });
 });
+
+
+

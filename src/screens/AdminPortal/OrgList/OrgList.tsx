@@ -290,7 +290,8 @@ function orgList(): JSX.Element {
   };
 
   /**
-   * Note: The explicit refetchOrgs({ filter: val }) call is debounced to prevent
+   * Filters organizations by name and debounces the network refetch.
+   * The explicit refetchOrgs({ filter: val }) call is debounced to prevent
    * network flooding on every keystroke. The 250ms delay provides immediate UX feedback
    * (via setTypedValue) while batching network requests. This pattern prevents jittery
    * UI behavior under latency while maintaining Apollo Client's auto-refetch benefits.
