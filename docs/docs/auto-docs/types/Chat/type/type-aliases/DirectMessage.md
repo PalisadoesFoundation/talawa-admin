@@ -36,7 +36,7 @@ Defined in: [src/types/Chat/type.ts:6](https://github.com/PalisadoesFoundation/t
 
 ### deletedBy?
 
-> `optional` **deletedBy**: [`User`](../../../AdminPortal/User/type/type-aliases/User.md)[]
+> `optional` **deletedBy**: [`User`](../../../shared-components/User/type/type-aliases/User.md)[]
 
 Defined in: [src/types/Chat/type.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L14)
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Chat/type.ts:10](https://github.com/PalisadoesFoundation/
 
 ### receiver?
 
-> `optional` **receiver**: [`User`](../../../AdminPortal/User/type/type-aliases/User.md)
+> `optional` **receiver**: [`User`](../../../shared-components/User/type/type-aliases/User.md)
 
 Defined in: [src/types/Chat/type.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L8)
 
@@ -76,7 +76,7 @@ Defined in: [src/types/Chat/type.ts:9](https://github.com/PalisadoesFoundation/t
 
 ### sender
 
-> **sender**: [`User`](../../../AdminPortal/User/type/type-aliases/User.md)
+> **sender**: [`User`](../../../shared-components/User/type/type-aliases/User.md)
 
 Defined in: [src/types/Chat/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L7)
 

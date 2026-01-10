@@ -10,7 +10,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemUpdateModal/ActionIte
 
 ### actionItem
 
-> **actionItem**: [`IActionItemInfo`](../../../../../types/AdminPortal/ActionItems/interface/interfaces/IActionItemInfo.md)
+> **actionItem**: [`IActionItemInfo`](../../../../../types/shared-components/ActionItems/interface/interfaces/IActionItemInfo.md)
 
 Defined in: [src/screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx#L53)
 

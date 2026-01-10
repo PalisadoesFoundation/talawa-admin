@@ -1414,7 +1414,10 @@
     "noRegistrantsFound": "कोई पंजीकृत व्यक्ति नहीं मिला",
     "removingAttendee": "प्रतिभागी को हटाया जा रहा है...",
     "attendeeRemovedSuccessfully": "प्रतिभागी सफलतापूर्वक हटा दिया गया",
-    "errorRemovingAttendee": "प्रतिभागी को हटाने में त्रुटि हुई। कृपया पुनः प्रयास करें।"
+    "errorRemovingAttendee": "प्रतिभागी को हटाने में त्रुटि हुई। कृपया पुनः प्रयास करें।",
+    "checkedIn": "चेक इन किया गया",
+    "unregister": "पंजीकरण रद्द करें",
+    "cannotUnregisterCheckedInTooltip": "पहले से चेक इन किए गए उपयोगकर्ता का पंजीकरण रद्द नहीं किया जा सकता"
   },
   "onSpotAttendee": {
     "title": "ऑन-स्पॉट प्रतिभागी",
@@ -1844,7 +1847,7 @@
     "noRegistrationsFound": "कोई पंजीकरण नहीं मिला",
     "addOnspotRegistrationLink": "ऑन-स्पॉट पंजीकरण जोड़ें लिंक",
     "addRegistrantLabel": "पंजीकृत व्यक्ति जोड़ें",
-    "addRegistrantPlaceholder": "पूरा नाम या ईमेल दर्ज करें",
+    "addRegistrantPlaceholder": "पंजीकृत व्यक्ति का नाम या ईमेल दर्ज करें",
     "inviteByEmail": {
       "addRecipient": "प्राप्तकर्ता जोड़ें",
       "email": "ईमेल",

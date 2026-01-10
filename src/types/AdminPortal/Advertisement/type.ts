@@ -1,4 +1,4 @@
-import type { User } from '../User/type';
+import type { User } from '../../shared-components/User/type';
 import type { DefaultConnectionPageInfo } from 'types/pagination';
 
 // enum of the type of advertisements

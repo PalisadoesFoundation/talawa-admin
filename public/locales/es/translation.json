@@ -1414,7 +1414,10 @@
     "noRegistrantsFound": "No se encontraron registrados",
     "removingAttendee": "Eliminando asistente...",
     "attendeeRemovedSuccessfully": "Asistente eliminado con éxito",
-    "errorRemovingAttendee": "Error al eliminar asistente. Por favor, inténtelo de nuevo."
+    "errorRemovingAttendee": "Error al eliminar asistente. Por favor, inténtelo de nuevo.",
+    "checkedIn": "Registrado",
+    "unregister": "Dar de baja",
+    "cannotUnregisterCheckedInTooltip": "No se puede dar de baja a un usuario que ya se registró"
   },
   "onSpotAttendee": {
     "title": "Asistente en el lugar",
@@ -1843,7 +1846,7 @@
     "noRegistrationsFound": "No se encontraron registros",
     "addOnspotRegistrationLink": "Agregar enlace de registro en el lugar",
     "addRegistrantLabel": "Agregar registrado",
-    "addRegistrantPlaceholder": "Ingrese el nombre del registrado",
+    "addRegistrantPlaceholder": "Ingrese el correo electrónico del registrado",
     "inviteByEmail": {
       "addRecipient": "Agregar destinatario",
       "email": "Correo electrónico",

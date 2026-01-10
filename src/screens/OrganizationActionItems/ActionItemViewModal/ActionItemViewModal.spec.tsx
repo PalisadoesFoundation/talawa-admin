@@ -14,7 +14,7 @@ import { store } from 'state/store';
 import i18nForTest from '../../../utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import ItemViewModal, { type IViewModalProps } from './ActionItemViewModal';
-import type { IActionItemInfo } from 'types/AdminPortal/ActionItems/interface';
+import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
@@ -683,12 +683,7 @@ describe('Testing ItemViewModal', () => {
       expect(screen.getByLabelText(t.creator)).toBeInTheDocument();
       expect(screen.getByLabelText(t.status)).toBeInTheDocument();
       expect(screen.getByLabelText(t.event)).toBeInTheDocument();
-      expect(
-        screen.getByLabelText(t.assignmentDate, {
-          selector: 'input',
-          exact: true,
-        }),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('assignmentDatePicker')).toBeInTheDocument();
       expect(screen.getByLabelText(t.preCompletionNotes)).toBeInTheDocument();
     });
 

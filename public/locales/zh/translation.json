@@ -1414,7 +1414,10 @@
     "noRegistrantsFound": "未找到注册者",
     "removingAttendee": "正在移除参与者...",
     "attendeeRemovedSuccessfully": "参与者移除成功！",
-    "errorRemovingAttendee": "移除参与者时出错。请重试。"
+    "errorRemovingAttendee": "移除参与者时出错。请重试。",
+    "checkedIn": "已签到",
+    "unregister": "取消注册",
+    "cannotUnregisterCheckedInTooltip": "无法取消已签到用户的注册"
   },
   "onSpotAttendee": {
     "title": "现场参与者",

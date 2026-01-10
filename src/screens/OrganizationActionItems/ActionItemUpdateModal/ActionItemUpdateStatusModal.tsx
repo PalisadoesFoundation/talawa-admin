@@ -43,7 +43,7 @@ import type {
   IActionItemInfo,
   IUpdateActionItemInput,
   IMarkActionItemAsPendingInput,
-} from 'types/AdminPortal/ActionItems/interface';
+} from 'types/shared-components/ActionItems/interface';
 import { BaseModal } from 'shared-components/BaseModal';
 
 export interface IItemUpdateStatusModalProps {

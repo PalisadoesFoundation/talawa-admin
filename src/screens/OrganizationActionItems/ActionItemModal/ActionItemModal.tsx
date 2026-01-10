@@ -21,7 +21,7 @@ import type {
   IEventVolunteerGroup,
   IFormStateType,
   IItemModalProps,
-} from 'types/AdminPortal/ActionItems/interface';
+} from 'types/shared-components/ActionItems/interface';
 
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -422,25 +422,23 @@ const ItemModal: FC<IItemModalProps> = ({
     }
   }, [isOpen, editMode, actionItem]);
 
+  const getSubmitHandler = (): ((e: FormEvent) => Promise<void>) => {
+    if (!editMode) return createActionItemHandler;
+    if (actionItem?.isTemplate && applyTo === 'instance') {
+      return updateActionForInstanceHandler;
+    }
+    return updateActionItemHandler;
+  };
+
   return (
     <BaseModal
       show={isOpen}
       onHide={hide}
       title={editMode ? t('updateActionItem') : t('createActionItem')}
       showCloseButton={true}
+      dataTestId="itemModal"
     >
-      <Form
-        onSubmitCapture={
-          editMode
-            ? actionItem?.isTemplate
-              ? applyTo === 'series'
-                ? updateActionItemHandler
-                : updateActionForInstanceHandler
-              : updateActionItemHandler
-            : createActionItemHandler
-        }
-        className="p-2"
-      >
+      <Form onSubmitCapture={getSubmitHandler()} className="p-2">
         {isRecurring && !editMode ? (
           <Form.Group className="mb-3">
             <Form.Label>{t('applyTo')}</Form.Label>
@@ -630,6 +628,7 @@ const ItemModal: FC<IItemModalProps> = ({
 
             <Form.Group className="d-flex gap-3 mx-auto mb-3">
               <DatePicker
+                data-testid="assignmentDatePicker"
                 format="DD/MM/YYYY"
                 label={t('assignmentDate')}
                 className={styles.noOutline}

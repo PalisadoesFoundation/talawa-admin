@@ -8,7 +8,7 @@ import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
 import type { ICategoryViewModalProps } from './ActionItemCategoryViewModal';
 import CategoryViewModal from './ActionItemCategoryViewModal';
-import type { IActionItemCategoryInfo } from 'types/AdminPortal/ActionItems/interface';
+import type { IActionItemCategoryInfo } from 'types/shared-components/ActionItems/interface';
 import { vi, it, describe, beforeEach, expect } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';

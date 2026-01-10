@@ -45,7 +45,7 @@ import { REMOVE_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
 import { useParams } from 'react-router';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
-import type { InterfaceUserAttendee } from 'types/AdminPortal/User/interface';
+import type { InterfaceUserAttendee } from 'types/shared-components/User/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import DataTable from 'shared-components/DataTable/DataTable';
 import { IColumnDef } from 'types/shared-components/DataTable/interface';
@@ -234,16 +234,19 @@ function EventRegistrants(): JSX.Element {
       accessor: () => null,
       render: (_val, row) => (
         <button
+          type="button"
           className={`btn btn-sm ${
             row.isCheckedIn ? 'btn-secondary' : 'btn-outline-danger'
           }`}
           onClick={() => deleteRegistrant(row.user.id)}
           disabled={row.isCheckedIn}
           title={
-            row.isCheckedIn ? 'Cannot unregister checked-in user' : 'Unregister'
+            row.isCheckedIn
+              ? t('cannotUnregisterCheckedInTooltip')
+              : t('unregister')
           }
         >
-          {row.isCheckedIn ? 'Checked In' : 'Unregister'}
+          {row.isCheckedIn ? t('checkedIn') : t('unregister')}
         </button>
       ),
     },

@@ -340,6 +340,10 @@ describe('EventRegistrantsModal', () => {
   });
 
   test('successfully adds registrant for non-recurring event', async () => {
+    const user = await import('@testing-library/user-event').then(
+      (m) => m.default,
+    );
+
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -347,33 +351,40 @@ describe('EventRegistrantsModal', () => {
       makeAddRegistrantSuccessMock(),
     ]);
 
-    // Wait for modal to appear
     await screen.findByTestId('invite-modal');
 
-    // Find and interact with autocomplete input
-    const input = await screen.findByLabelText(/add an registrant/i);
-    fireEvent.change(input, { target: { value: 'John Doe' } });
-    fireEvent.keyDown(input, { key: 'ArrowDown' });
-    fireEvent.keyDown(input, { key: 'Enter' });
+    const input = await screen.findByTestId('autocomplete');
 
-    // Click add button
+    await user.click(input);
+    await user.type(input, 'John Doe');
+
+    await waitFor(() => {
+      const option = screen.getByText('John Doe');
+      expect(option).toBeInTheDocument();
+    });
+
+    const option = screen.getByText('John Doe');
+    await user.click(option);
+
     const addButton = screen.getByTestId('add-registrant-btn');
     fireEvent.click(addButton);
 
-    // Assert warning toast
     await waitFor(() => {
       expect(NotificationToast.warning).toHaveBeenCalledWith(
         'Adding the attendee...',
       );
     });
 
-    // Assert success toast
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalled();
     });
   });
 
   test('handles error when add registrant mutation fails', async () => {
+    const user = await import('@testing-library/user-event').then(
+      (m) => m.default,
+    );
+
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -383,10 +394,19 @@ describe('EventRegistrantsModal', () => {
 
     await screen.findByTestId('invite-modal');
 
-    const input = await screen.findByLabelText(/add an registrant/i);
-    fireEvent.change(input, { target: { value: 'John Doe' } });
-    fireEvent.keyDown(input, { key: 'ArrowDown' });
-    fireEvent.keyDown(input, { key: 'Enter' });
+    const input = await screen.findByTestId('autocomplete');
+
+    // Use userEvent to type
+    await user.click(input);
+    await user.type(input, 'John Doe');
+
+    // Wait for dropdown and select option
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const option = screen.getByText('John Doe');
+    await user.click(option);
 
     const addButton = screen.getByTestId('add-registrant-btn');
     fireEvent.click(addButton);
@@ -405,6 +425,10 @@ describe('EventRegistrantsModal', () => {
   });
 
   test('uses recurring variables when event is recurring (isRecurring branch)', async () => {
+    const user = await import('@testing-library/user-event').then(
+      (m) => m.default,
+    );
+
     renderWithProviders([
       makeEventDetailsRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -414,10 +438,19 @@ describe('EventRegistrantsModal', () => {
 
     await screen.findByTestId('invite-modal');
 
-    const input = await screen.findByLabelText(/add an registrant/i);
-    fireEvent.change(input, { target: { value: 'John Doe' } });
-    fireEvent.keyDown(input, { key: 'ArrowDown' });
-    fireEvent.keyDown(input, { key: 'Enter' });
+    const input = await screen.findByTestId('autocomplete');
+
+    // Use userEvent to type
+    await user.click(input);
+    await user.type(input, 'John Doe');
+
+    // Wait for dropdown and select option
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const option = screen.getByText('John Doe');
+    await user.click(option);
 
     const addButton = screen.getByTestId('add-registrant-btn');
     fireEvent.click(addButton);
@@ -535,7 +568,7 @@ describe('EventRegistrantsModal', () => {
       makeMembersUnknownNameMock(),
     ]);
 
-    const input = await screen.findByLabelText('Add an Registrant');
+    const input = await screen.findByTestId('autocomplete');
     expect(input).toBeInTheDocument();
 
     // Open autocomplete options

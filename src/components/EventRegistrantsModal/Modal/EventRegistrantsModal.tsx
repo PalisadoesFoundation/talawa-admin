@@ -51,7 +51,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
-import type { InterfaceUser } from 'types/AdminPortal/User/interface';
+import type { InterfaceUser } from 'types/shared-components/User/interface';
 import styles from '../EventRegistrants.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { BaseModal } from 'shared-components/BaseModal';
@@ -180,6 +180,14 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             <div className="d-flex ">
               <p className="me-2">{t('noRegistrationsFound')}</p>
               <span
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setOpen(true);
+                  }
+                }}
                 className={`underline ${styles.underlineText}`}
                 onClick={() => {
                   setOpen(true);

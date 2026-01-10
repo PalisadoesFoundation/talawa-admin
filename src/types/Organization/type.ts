@@ -1,5 +1,5 @@
 import type { Address, AddressInput } from '../address';
-import type { User } from '../AdminPortal/User/type';
+import type { User } from '../shared-components/User/type';
 import type { ActionItemCategory } from '../actionItem';
 import type { AgendaCategory } from '../Agenda/type';
 import type { MembershipRequest } from '../membership';

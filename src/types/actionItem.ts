@@ -1,4 +1,4 @@
-import type { User } from './AdminPortal/User/type';
+import type { User } from './shared-components/User/type';
 import type { Organization } from 'types/Organization/type';
 // types/actionItem.ts
 

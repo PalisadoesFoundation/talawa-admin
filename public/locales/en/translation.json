@@ -1033,7 +1033,10 @@
     "noRegistrantsFound": "No Registrants Found.",
     "removingAttendee": "Removing the attendee...",
     "attendeeRemovedSuccessfully": "Attendee removed successfully",
-    "errorRemovingAttendee": "Error removing attendee"
+    "errorRemovingAttendee": "Error removing attendee",
+    "checkedIn": "Checked In",
+    "unregister": "Unregister",
+    "cannotUnregisterCheckedInTooltip": "Cannot unregister checked-in user"
   },
   "onSpotAttendee": {
     "title": "On-spot Attendee",
@@ -1842,7 +1845,7 @@
     "addRegistrantButton": "Add Registrant",
     "noRegistrationsFound": "No Registrations found",
     "addOnspotRegistrationLink": "Add Onspot Registration",
-    "addRegistrantLabel": "Add an Registrant",
+    "addRegistrantLabel": "Add a Registrant",
     "addRegistrantPlaceholder": "Choose the user that you want to add",
     "inviteByEmail": {
       "addRecipient": "Add recipient",

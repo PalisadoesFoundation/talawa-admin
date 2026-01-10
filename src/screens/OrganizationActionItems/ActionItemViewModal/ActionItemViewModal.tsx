@@ -7,8 +7,8 @@ import React from 'react';
 import dayjs from 'dayjs';
 import type { FC } from 'react';
 import { Form } from 'react-bootstrap';
-import type { IActionItemInfo } from 'types/AdminPortal/ActionItems/interface';
-import type { InterfaceUser } from 'types/AdminPortal/User/interface';
+import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
+import type { InterfaceUser } from 'types/shared-components/User/interface';
 import type { InterfaceEvent } from 'types/Event/interface';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
@@ -176,7 +176,9 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
                 </>
               ),
               style: {
-                color: isCompleted ? 'green' : 'var(--pendingStatus-color)',
+                color: isCompleted
+                  ? 'var(--bs-success)'
+                  : 'var(--pendingStatus-color)',
               },
             }}
             inputProps={{
@@ -202,6 +204,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
         <Form.Group className={`d-flex gap-3 mb-3`}>
           {/* Date Calendar Component to display assigned date of Action Item */}
           <DatePicker
+            data-testid="assignmentDatePicker"
             format="DD/MM/YYYY"
             label={t('assignmentDate')}
             className={`${styles.noOutline} w-100`}

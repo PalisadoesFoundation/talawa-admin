@@ -1414,7 +1414,10 @@
     "noRegistrantsFound": "Aucun inscrit trouvé.",
     "removingAttendee": "Suppression du participant...",
     "attendeeRemovedSuccessfully": "Participant supprimé avec succès",
-    "errorRemovingAttendee": "Erreur lors de la suppression du participant. Veuillez réessayer."
+    "errorRemovingAttendee": "Erreur lors de la suppression du participant. Veuillez réessayer.",
+    "checkedIn": "Enregistré",
+    "unregister": "Désinscrire",
+    "cannotUnregisterCheckedInTooltip": "Impossible de désinscrire un utilisateur déjà enregistré"
   },
   "onSpotAttendee": {
     "title": "Participant sur place",
@@ -1844,7 +1847,7 @@
     "noRegistrationsFound": "Aucune inscription trouvée.",
     "addOnspotRegistrationLink": "Ajouter une inscription sur place",
     "addRegistrantLabel": "Ajouter un inscrit",
-    "addRegistrantPlaceholder": "Rechercher par nom complet",
+    "addRegistrantPlaceholder": "Entrez le nom complet ou l'email de l'utilisateur",
     "inviteByEmail": {
       "addRecipient": "Ajouter un destinataire",
       "email": "Email",

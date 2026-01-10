@@ -28,7 +28,7 @@ Defined in: [src/types/actionItem.ts:7](https://github.com/PalisadoesFoundation/
 
 ### assignee?
 
-> `optional` **assignee**: [`User`](../../AdminPortal/User/type/type-aliases/User.md)
+> `optional` **assignee**: [`User`](../../shared-components/User/type/type-aliases/User.md)
 
 Defined in: [src/types/actionItem.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L8)
 
@@ -36,7 +36,7 @@ Defined in: [src/types/actionItem.ts:8](https://github.com/PalisadoesFoundation/
 
 ### assigner?
 
-> `optional` **assigner**: [`User`](../../AdminPortal/User/type/type-aliases/User.md)
+> `optional` **assigner**: [`User`](../../shared-components/User/type/type-aliases/User.md)
 
 Defined in: [src/types/actionItem.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L9)
 
@@ -68,7 +68,7 @@ Defined in: [src/types/actionItem.ts:12](https://github.com/PalisadoesFoundation
 
 ### creator?
 
-> `optional` **creator**: [`User`](../../AdminPortal/User/type/type-aliases/User.md)
+> `optional` **creator**: [`User`](../../shared-components/User/type/type-aliases/User.md)
 
 Defined in: [src/types/actionItem.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L13)
 

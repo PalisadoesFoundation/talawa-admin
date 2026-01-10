@@ -28,7 +28,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:14](https://github.com/
 
 ### creator?
 
-> `optional` **creator**: [`User`](../../../User/type/type-aliases/User.md)
+> `optional` **creator**: [`User`](../../../../shared-components/User/type/type-aliases/User.md)
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L16)
 
