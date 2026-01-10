@@ -822,7 +822,9 @@
     "highestGoal": "最高目标",
     "errorLoading": "加载活动数据时出错",
     "percentageRaised": "% 已筹集",
-    "campaignProgress": "活动进度: {{percentage}}%"
+    "campaignProgress": "活动进度: {{percentage}}%",
+    "campaignNotFound": "未找到活动",
+    "dateRangeRequired": "请选择有效的日期范围"
   },
   "pledges": {
     "title": "基金活动承诺",

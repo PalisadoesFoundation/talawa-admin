@@ -822,7 +822,9 @@
     "searchCampaigns": "Rechercher des campagnes",
     "errorLoading": "Erreur lors du chargement des données de la campagne",
     "percentageRaised": "% Collecté",
-    "campaignProgress": "Progression de la campagne: {{percentage}}%"
+    "campaignProgress": "Progression de la campagne: {{percentage}}%",
+    "campaignNotFound": "Campagne introuvable",
+    "dateRangeRequired": "Veuillez sélectionner une plage de dates valide"
   },
   "pledges": {
     "title": "Engagements de campagne de financement",

@@ -822,7 +822,9 @@
     "highestGoal": "Meta más alta",
     "errorLoading": "Error al cargar los datos de la campaña",
     "percentageRaised": "% Recaudado",
-    "campaignProgress": "Progreso de la campaña: {{percentage}}%"
+    "campaignProgress": "Progreso de la campaña: {{percentage}}%",
+    "campaignNotFound": "Campaña no encontrada",
+    "dateRangeRequired": "Por favor seleccione un rango de fechas válido"
   },
   "pledges": {
     "title": "Compromisos de Campaña de Financiamiento",

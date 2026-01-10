@@ -822,7 +822,9 @@
     "highestGoal": "Highest Goal",
     "errorLoading": "Error occured while loading campaigns data",
     "percentageRaised": "% Raised",
-    "campaignProgress": "Campaign progress: {{percentage}}%"
+    "campaignProgress": "Campaign progress: {{percentage}}%",
+    "campaignNotFound": "Campaign not found",
+    "dateRangeRequired": "Please select a valid date range"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
