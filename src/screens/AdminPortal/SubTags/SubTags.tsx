@@ -40,7 +40,6 @@
  * @returns The rendered SubTags component.
  */
 import { useMutation, useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
 import IconComponent from 'components/IconComponent/IconComponent';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useNavigate, useParams, Link } from 'react-router';
@@ -101,10 +100,8 @@ function SubTags(): JSX.Element {
 
   const {
     data: subTagsData,
-    error: subTagsError,
     loading: subTagsLoading,
     refetch: subTagsRefetch,
-    fetchMore: fetchMoreSubTags,
   }: InterfaceOrganizationSubTagsQuery = useQuery(USER_TAG_SUB_TAGS, {
     variables: {
       id: parentTagId,
@@ -112,39 +109,8 @@ function SubTags(): JSX.Element {
       where: { name: { starts_with: tagSearchName } },
       sortedBy: { id: tagSortOrder },
     },
+    skip: !parentTagId, // Skip if no parent tag ID
   });
-
-  const loadMoreSubTags = (): void => {
-    fetchMoreSubTags({
-      variables: {
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after: subTagsData?.getChildTags.childTags.pageInfo.endCursor,
-      },
-      updateQuery: (
-        prevResult: { getChildTags: InterfaceQueryUserTagChildTags },
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
-        },
-      ) => {
-        if (!fetchMoreResult) return prevResult;
-
-        return {
-          getChildTags: {
-            ...fetchMoreResult.getChildTags,
-            childTags: {
-              ...fetchMoreResult.getChildTags.childTags,
-              edges: [
-                ...prevResult.getChildTags.childTags.edges,
-                ...fetchMoreResult.getChildTags.childTags.edges,
-              ],
-            },
-          },
-        };
-      },
-    });
-  };
 
   const [create, { loading: createUserTagLoading }] =
     useMutation(CREATE_USER_TAG);
@@ -173,22 +139,6 @@ function SubTags(): JSX.Element {
       }
     }
   };
-
-  if (subTagsError) {
-    return (
-      <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
-        <div className={styles.errorMessage}>
-          <WarningAmberRounded className={styles.errorIcon} />
-          <h6 className="fw-bold text-danger text-center">
-            {tCommon('errorOccured')}
-          </h6>
-        </div>
-      </div>
-    );
-  }
-
-  const subTagsList =
-    subTagsData?.getChildTags.childTags.edges.map((edge) => edge.node) ?? [];
 
   const parentTagName = subTagsData?.getChildTags.name;
 
@@ -421,52 +371,62 @@ function SubTags(): JSX.Element {
                 data-testid="subTagsScrollableDiv"
                 className={styles.subTagsScrollableDiv}
               >
-                <InfiniteScroll
-                  dataLength={subTagsList?.length ?? 0}
-                  next={loadMoreSubTags}
-                  hasMore={
-                    subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
-                    false
-                  }
-                  loader={
-                    <LoadingState
-                      isLoading={true}
-                      variant="inline"
-                      size="sm"
-                      data-testid="infiniteScrollLoader"
-                    >
-                      <></>
-                    </LoadingState>
-                  }
-                  scrollableTarget="subTagsScrollableDiv"
+                <CursorPaginationManager<InterfaceTagData>
+                  query={USER_TAG_SUB_TAGS}
+                  queryVariables={{
+                    id: parentTagId,
+                    first: TAGS_QUERY_DATA_CHUNK_SIZE,
+                    where: { name: { starts_with: tagSearchName } },
+                    sortedBy: { id: tagSortOrder },
+                  }}
+                  dataPath="getChildTags.childTags"
+                  itemsPerPage={TAGS_QUERY_DATA_CHUNK_SIZE}
+                  renderItem={() => <></>}
+                  useExternalUI={true}
                 >
-                  <DataGrid
-                    disableColumnMenu
-                    columnBufferPx={7}
-                    hideFooter={true}
-                    getRowId={(row) => row.id}
-                    slots={{
-                      noRowsOverlay: () => (
-                        <Stack
-                          height="100%"
-                          alignItems="center"
-                          justifyContent="center"
+                  {({ items, pageInfo, handleLoadMore }) => (
+                    <InfiniteScroll
+                      dataLength={items.length}
+                      next={handleLoadMore}
+                      hasMore={pageInfo?.hasNextPage ?? false}
+                      loader={
+                        <LoadingState
+                          isLoading={true}
+                          variant="inline"
+                          size="sm"
+                          data-testid="infiniteScrollLoader"
                         >
-                          {t('noTagsFound')}
-                        </Stack>
-                      ),
-                    }}
-                    sx={dataGridStyle}
-                    getRowClassName={() => `${styles.rowBackground}`}
-                    rowHeight={65}
-                    rows={subTagsList?.map((subTag, index) => ({
-                      id: index + 1,
-                      ...subTag,
-                    }))}
-                    columns={columns}
-                    isRowSelectable={() => false}
-                  />
-                </InfiniteScroll>
+                          <></>
+                        </LoadingState>
+                      }
+                      scrollableTarget="subTagsScrollableDiv"
+                    >
+                      <DataGrid
+                        disableColumnMenu
+                        columnBufferPx={7}
+                        hideFooter={true}
+                        getRowId={(row) => row._id}
+                        slots={{
+                          noRowsOverlay: () => (
+                            <Stack
+                              height="100%"
+                              alignItems="center"
+                              justifyContent="center"
+                            >
+                              {t('noTagsFound')}
+                            </Stack>
+                          ),
+                        }}
+                        sx={dataGridStyle}
+                        getRowClassName={() => `${styles.rowBackground}`}
+                        rowHeight={65}
+                        rows={items}
+                        columns={columns}
+                        isRowSelectable={() => false}
+                      />
+                    </InfiniteScroll>
+                  )}
+                </CursorPaginationManager>
               </div>
             </div>
           </LoadingState>

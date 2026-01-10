@@ -1,3 +1,13 @@
+.root {
+  display: block;
+}
+.items {
+  display: block;
+}
+.loadMore {
+  display: block;
+  margin: 12px auto;
+}
 .paginationContainer {
   display: flex;
   flex-direction: column;

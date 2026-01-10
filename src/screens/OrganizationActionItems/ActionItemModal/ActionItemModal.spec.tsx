@@ -4159,13 +4159,14 @@ describe('Partially Covered Lines Test Coverage', () => {
         await userEvent.click(option);
       });
 
-      // Wait for volunteer select to be in the document
-      await waitFor(
-        () => {
-          expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
-        },
-        { timeout: 5000 },
-      );
+      // Wait for volunteer select and its data to be fully loaded
+      const volunteerSelect = await screen.findByTestId('volunteerSelect');
+      const volunteerInput = within(volunteerSelect).getByRole('combobox');
+
+      // Ensure volunteer data has loaded by waiting for the input to be enabled/ready
+      await waitFor(() => {
+        expect(volunteerInput).not.toBeDisabled();
+      });
 
       // Click volunteer group chip to switch assignment type
       const volunteerGroupChip = screen.getByRole('button', {

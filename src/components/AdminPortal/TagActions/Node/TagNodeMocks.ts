@@ -7,17 +7,40 @@ export const MOCKS1 = [
       variables: {
         id: '1',
         first: 10,
+        after: null,
       },
     },
     result: {
       data: {
         getChildTags: {
           __typename: 'GetChildTagsPayload',
+          name: 'Parent Tag',
+          ancestorTags: [],
           childTags: {
             __typename: 'ChildTagsConnection',
             edges: [
-              { node: { _id: 'subTag1', name: 'subTag 1', __typename: 'Tag' } },
-              { node: { _id: 'subTag2', name: 'subTag 2', __typename: 'Tag' } },
+              {
+                node: {
+                  _id: 'subTag1',
+                  name: 'subTag 1',
+                  __typename: 'Tag',
+                  childTags: { totalCount: 0 },
+                  parentTag: { _id: '1' },
+                  usersAssignedTo: { totalCount: 0 },
+                  ancestorTags: [{ _id: '1', name: 'Parent Tag' }],
+                },
+              },
+              {
+                node: {
+                  _id: 'subTag2',
+                  name: 'subTag 2',
+                  __typename: 'Tag',
+                  childTags: { totalCount: 0 },
+                  parentTag: { _id: '1' },
+                  usersAssignedTo: { totalCount: 0 },
+                  ancestorTags: [{ _id: '1', name: 'Parent Tag' }],
+                },
+              },
             ],
             pageInfo: {
               __typename: 'PageInfo',
@@ -42,11 +65,21 @@ export const MOCKS1 = [
       data: {
         getChildTags: {
           __typename: 'GetChildTagsPayload',
+          name: 'Parent Tag',
+          ancestorTags: [],
           childTags: {
             __typename: 'ChildTagsConnection',
             edges: [
               {
-                node: { _id: 'subTag11', name: 'subTag 11', __typename: 'Tag' },
+                node: {
+                  _id: 'subTag11',
+                  name: 'subTag 11',
+                  __typename: 'Tag',
+                  childTags: { totalCount: 0 },
+                  parentTag: { _id: '1' },
+                  usersAssignedTo: { totalCount: 0 },
+                  ancestorTags: [{ _id: '1', name: 'Parent Tag' }],
+                },
               },
             ],
             pageInfo: {
@@ -68,6 +101,7 @@ export const MOCKS_ERROR_SUBTAGS_QUERY1 = [
       variables: {
         id: '1',
         first: 10,
+        after: null,
       },
     },
     error: new Error('Mock GraphQL Error for fetching subtags'),

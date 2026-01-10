@@ -21,7 +21,7 @@
  * @returns The rendered Requests component.
  */
 import { useQuery, useMutation } from '@apollo/client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -230,14 +230,15 @@ const Requests = (): JSX.Element => {
 
   /**
    * Loads more requests when scrolling to the bottom of the page.
+   * Note: This uses offset-based pagination (skip/first), not cursor-based.
+   * Cannot be refactored to use CursorPaginationManager without backend API changes.
    */
-
-  const loadMoreRequests = (): void => {
-    setIsLoadingMore(true);
-
+  const loadMoreRequests = useCallback((): void => {
     const currentLength = data?.organization?.membershipRequests?.length ?? 0;
 
-    fetchMore({
+    setIsLoadingMore(true);
+
+    void fetchMore({
       variables: {
         input: { id: organizationId },
         first: PAGE_SIZE,
@@ -254,10 +255,10 @@ const Requests = (): JSX.Element => {
 
         const newRequests = fetchMoreResult.organization.membershipRequests;
 
-        // If we got fewer results than requested, we've reached the end
         if (newRequests.length < PAGE_SIZE) {
           setHasMore(false);
         }
+
         return {
           organization: {
             ...prev.organization,
@@ -270,7 +271,12 @@ const Requests = (): JSX.Element => {
         };
       },
     });
-  };
+  }, [
+    data?.organization?.membershipRequests?.length,
+    fetchMore,
+    organizationId,
+    searchByName,
+  ]);
 
   // Header titles for the table
   const headerTitles: string[] = [

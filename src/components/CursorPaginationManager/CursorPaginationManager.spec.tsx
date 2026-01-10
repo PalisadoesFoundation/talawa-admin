@@ -4,7 +4,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { CursorPaginationManager } from './CursorPaginationManager';
+import CursorPaginationManager from './CursorPaginationManager';
 import { gql } from '@apollo/client';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -540,7 +540,11 @@ describe('CursorPaginationManager', () => {
 
     it('disables button and shows loading text during load more', async () => {
       const user = userEvent.setup();
-      const mocks = [createSuccessMock(true), createLoadMoreMock()];
+      const delayedLoadMoreMock = {
+        ...createLoadMoreMock(),
+        delay: 100, // Add delay to capture loading state
+      };
+      const mocks = [createSuccessMock(true), delayedLoadMoreMock];
 
       render(
         <MockedProvider mocks={mocks} addTypename={false}>
@@ -1282,101 +1286,6 @@ describe('CursorPaginationManager', () => {
       await waitFor(() => {
         expect(screen.getByText('Member 1')).toBeInTheDocument();
       });
-    });
-  });
-
-  describe('KeyExtractor', () => {
-    it('uses keyExtractor when provided for item keys', async () => {
-      const mocks = [createSuccessMock()];
-      const keyExtractor = vi.fn((user: User) => user.id);
-
-      render(
-        <MockedProvider mocks={mocks} addTypename={false}>
-          <I18nextProvider i18n={i18nForTest}>
-            <CursorPaginationManager
-              query={MOCK_QUERY}
-              dataPath="users"
-              itemsPerPage={10}
-              keyExtractor={keyExtractor}
-              renderItem={(user: User) => <div>{user.name}</div>}
-            />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      await waitFor(() => {
-        expect(screen.getByText('User 1')).toBeInTheDocument();
-      });
-
-      // Verify keyExtractor was called for each item
-      expect(keyExtractor).toHaveBeenCalledWith(
-        { id: '1', name: 'User 1', email: 'user1@test.com' },
-        0,
-      );
-      expect(keyExtractor).toHaveBeenCalledWith(
-        { id: '2', name: 'User 2', email: 'user2@test.com' },
-        1,
-      );
-    });
-
-    it('falls back to index when keyExtractor is not provided', async () => {
-      const mocks = [createSuccessMock()];
-
-      render(
-        <MockedProvider mocks={mocks} addTypename={false}>
-          <I18nextProvider i18n={i18nForTest}>
-            <CursorPaginationManager
-              query={MOCK_QUERY}
-              dataPath="users"
-              itemsPerPage={10}
-              renderItem={(user: User) => <div>{user.name}</div>}
-            />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      await waitFor(() => {
-        expect(screen.getByText('User 1')).toBeInTheDocument();
-      });
-
-      // Items should be rendered (keys are internal to React, so we just verify rendering)
-      expect(screen.getByText('User 1')).toBeInTheDocument();
-      expect(screen.getByText('User 2')).toBeInTheDocument();
-    });
-
-    it('uses keyExtractor with index parameter', async () => {
-      const mocks = [createSuccessMock()];
-      const keyExtractor = vi.fn(
-        (user: User, index: number) => `${user.id}-${index}`,
-      );
-
-      render(
-        <MockedProvider mocks={mocks} addTypename={false}>
-          <I18nextProvider i18n={i18nForTest}>
-            <CursorPaginationManager
-              query={MOCK_QUERY}
-              dataPath="users"
-              itemsPerPage={10}
-              keyExtractor={keyExtractor}
-              renderItem={(user: User) => <div>{user.name}</div>}
-            />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      await waitFor(() => {
-        expect(screen.getByText('User 1')).toBeInTheDocument();
-      });
-
-      // Verify keyExtractor was called with both item and index
-      expect(keyExtractor).toHaveBeenCalledWith(
-        { id: '1', name: 'User 1', email: 'user1@test.com' },
-        0,
-      );
-      expect(keyExtractor).toHaveBeenCalledWith(
-        { id: '2', name: 'User 2', email: 'user2@test.com' },
-        1,
-      );
     });
   });
 

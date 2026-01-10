@@ -251,6 +251,7 @@ export const MOCKS = [
       variables: {
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: null,
       },
     },
     result: {
@@ -373,6 +374,7 @@ export const MOCKS_ERROR_SUBTAGS_QUERY = [
       variables: {
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        after: null,
       },
     },
     error: new Error('Mock Graphql Error for subTags query'),

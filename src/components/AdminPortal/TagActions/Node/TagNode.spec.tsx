@@ -242,7 +242,11 @@ describe('MOCKS Structure Validation', () => {
     const firstMock = MOCKS1[0];
 
     expect(firstMock.request.query).toBeDefined();
-    expect(firstMock.request.variables).toEqual({ id: '1', first: 10 });
+    expect(firstMock.request.variables).toEqual({
+      id: '1',
+      first: 10,
+      after: null,
+    });
     expect(firstMock.result.data?.getChildTags?.childTags?.edges?.length).toBe(
       2,
     );
@@ -266,7 +270,11 @@ describe('MOCKS Structure Validation', () => {
     const errorMock = MOCKS_ERROR_SUBTAGS_QUERY1[0];
 
     expect(errorMock.request.query).toBeDefined();
-    expect(errorMock.request.variables).toEqual({ id: '1', first: 10 });
+    expect(errorMock.request.variables).toEqual({
+      id: '1',
+      first: 10,
+      after: null,
+    });
     expect(errorMock.error).toBeInstanceOf(Error);
     expect(errorMock.error?.message).toBe(
       'Mock GraphQL Error for fetching subtags',
@@ -316,7 +324,7 @@ describe('Edge Cases and Coverage Improvements', () => {
       {
         request: {
           query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10 },
+          variables: { id: '1', first: 10, after: null },
         },
         result: {
           data: {
@@ -382,7 +390,7 @@ describe('Edge Cases and Coverage Improvements', () => {
       {
         request: {
           query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10 },
+          variables: { id: '1', first: 10, after: null },
         },
         result: {
           data: {
@@ -439,7 +447,7 @@ describe('Edge Cases and Coverage Improvements', () => {
       {
         request: {
           query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10 },
+          variables: { id: '1', first: 10, after: null },
         },
         result: {
           data: {
@@ -527,7 +535,7 @@ describe('Edge Cases and Coverage Improvements', () => {
       {
         request: {
           query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10 },
+          variables: { id: '1', first: 10, after: null },
         },
         result: {
           data: null, // This will make subTagsData null, so subTagsList will be []
@@ -566,7 +574,7 @@ describe('Edge Cases and Coverage Improvements', () => {
       {
         request: {
           query: USER_TAG_SUB_TAGS,
-          variables: { id: '1', first: 10 },
+          variables: { id: '1', first: 10, after: null },
         },
         result: {
           data: {
