@@ -45,7 +45,7 @@ import { useTranslation } from 'react-i18next';
 import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { Advertisement } from 'types/Advertisement/type';
+import { Advertisement } from 'types/AdminPortal/Advertisement/type';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { BaseModal } from 'shared-components/BaseModal';

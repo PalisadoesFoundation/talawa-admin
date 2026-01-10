@@ -1423,7 +1423,13 @@
     "createdAt": "Créé le",
     "options": "Options",
     "addRegistrant": "Ajouter un inscrit",
-    "noRegistrantsFound": "Aucun inscrit trouvé."
+    "noRegistrantsFound": "Aucun inscrit trouvé.",
+    "removingAttendee": "Suppression du participant...",
+    "attendeeRemovedSuccessfully": "Participant supprimé avec succès",
+    "errorRemovingAttendee": "Erreur lors de la suppression du participant. Veuillez réessayer.",
+    "checkedIn": "Enregistré",
+    "unregister": "Désinscrire",
+    "cannotUnregisterCheckedInTooltip": "Impossible de désinscrire un utilisateur déjà enregistré"
   },
   "onSpotAttendee": {
     "title": "Participant sur place",
@@ -1847,6 +1853,13 @@
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
     "errorRemovingAttendee": "Erreur lors de la suppression du participant",
+    "eventRegistrantsTitle": "Inscrits à l'événement",
+    "inviteByEmailButton": "Inviter par email",
+    "addRegistrantButton": "Ajouter un inscrit",
+    "noRegistrationsFound": "Aucune inscription trouvée.",
+    "addOnspotRegistrationLink": "Ajouter une inscription sur place",
+    "addRegistrantLabel": "Ajouter un inscrit",
+    "addRegistrantPlaceholder": "Entrez le nom complet ou l'email de l'utilisateur",
     "inviteByEmail": {
       "addRecipient": "Ajouter un destinataire",
       "email": "Email",

@@ -1423,7 +1423,13 @@
     "createdAt": "创建时间",
     "options": "选项",
     "addRegistrant": "添加注册者",
-    "noRegistrantsFound": "未找到注册者"
+    "noRegistrantsFound": "未找到注册者",
+    "removingAttendee": "正在移除参与者...",
+    "attendeeRemovedSuccessfully": "参与者移除成功！",
+    "errorRemovingAttendee": "移除参与者时出错。请重试。",
+    "checkedIn": "已签到",
+    "unregister": "取消注册",
+    "cannotUnregisterCheckedInTooltip": "无法取消已签到用户的注册"
   },
   "onSpotAttendee": {
     "title": "现场参与者",
@@ -1847,6 +1853,13 @@
   "eventRegistrantsModal": {
     "errorAddingAttendee": "添加与会者时出错",
     "errorRemovingAttendee": "删除与会者时出错",
+    "eventRegistrantsTitle": "活动注册者",
+    "inviteByEmailButton": "通过电子邮件邀请",
+    "addRegistrantButton": "添加注册者",
+    "noRegistrationsFound": "未找到注册",
+    "addOnspotRegistrationLink": "添加现场注册链接",
+    "addRegistrantLabel": "添加注册者",
+    "addRegistrantPlaceholder": "输入注册者的全名",
     "inviteByEmail": {
       "addRecipient": "添加收件人",
       "email": "邮箱",
