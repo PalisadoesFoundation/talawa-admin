@@ -17,10 +17,6 @@ import type { Mock } from 'vitest';
 import dayjs, { type Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import CustomRecurrenceModal from 'screens/AdminPortal/OrganizationEvents/CustomRecurrenceModal';
-import {
-  AdapterDayjs,
-  LocalizationProvider,
-} from 'shared-components/DateRangePicker';
 
 dayjs.extend(utc);
 
