@@ -252,17 +252,19 @@ describe('Testing User Table Item', () => {
       keyCode: 27,
       charCode: 27,
     });
-    expect(screen.getByTestId('modal-joined-org-123').className).not.toContain(
-      'show',
+    await waitFor(() =>
+      expect(screen.getByTestId('modal-joined-org-123')).not.toHaveClass('show'),
     );
     fireEvent.click(showJoinedOrgsBtn);
     // Close using close button and reopen
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
-    expect(
-      screen
-        .queryAllByRole('dialog')
-        .every((el) => !el.className.includes('show')),
-    ).toBeTruthy();
+     await waitFor(() =>
+      expect(
+        screen
+          .queryAllByRole('dialog')
+          .every((el) => !el.className.includes('show')),
+      ).toBeTruthy(),
+    );
     fireEvent.click(showJoinedOrgsBtn);
     // Expect the following to exist in modal
     const inputBox = screen.getByTestId(`searchByNameJoinedOrgs`);
@@ -786,16 +788,18 @@ describe('Testing User Table Item', () => {
       keyCode: 27,
       charCode: 27,
     });
-    expect(screen.getByTestId('modal-blocked-org-123').className).not.toContain(
-      'show',
+    await waitFor(() =>
+      expect(screen.getByTestId('modal-blocked-org-123')).not.toHaveClass('show'),
     );
     fireEvent.click(showBlockedOrgsBtn);
     fireEvent.click(screen.getByTestId(`closeUnblockOrgsBtn${123}`));
-    expect(
-      screen
-        .queryAllByRole('dialog')
-        .every((el) => !el.className.includes('show')),
-    ).toBeTruthy();
+     await waitFor(() =>
+      expect(
+        screen
+          .queryAllByRole('dialog')
+          .every((el) => !el.className.includes('show')),
+      ).toBeTruthy(),
+    );
     fireEvent.click(showBlockedOrgsBtn);
     const inputBox = screen.getByTestId(`searchByNameBlockedOrgs`);
     expect(inputBox).toBeInTheDocument();
@@ -927,8 +931,7 @@ describe('Testing User Table Item', () => {
     fireEvent.click(screen.getByTestId(`unblockUserFromOrgBtn${'ghi'}`));
     const confirmUnblockBtn = screen.getByTestId(`confirmUnblockUser${123}`);
     fireEvent.click(confirmUnblockBtn);
-    await wait();
-    expect(NotificationToast.error).toHaveBeenCalled();
+    await waitFor(() => expect(NotificationToast.error).toHaveBeenCalled());
   });
   test('handles errors in updateUserRole mutation', async () => {
     const props: {
