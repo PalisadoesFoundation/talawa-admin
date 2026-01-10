@@ -6,6 +6,7 @@ import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import AddOnSpotAttendee from './AddOnSpotAttendee';
 import userEvent from '@testing-library/user-event';
 import type { RenderResult } from '@testing-library/react';
+// eslint-disable-next-line no-restricted-imports -- mocking toast for tests
 import { toast } from 'react-toastify';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';

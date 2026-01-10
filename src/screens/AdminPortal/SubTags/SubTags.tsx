@@ -40,7 +40,7 @@
  *
  * @returns The rendered SubTags component.
  */
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import IconComponent from 'components/IconComponent/IconComponent';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useNavigate, useParams, Link } from 'react-router';

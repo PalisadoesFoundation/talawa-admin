@@ -24,7 +24,7 @@ export interface InterfaceConnectionData<TNode> {
 /**
  * Variables for cursor pagination queries
  */
-export interface PaginationVariables {
+export interface InterfacePaginationVariables {
   first?: number;
   after?: string | null;
   last?: number;

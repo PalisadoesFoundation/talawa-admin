@@ -5,8 +5,10 @@ import { describe, it, expect, vi } from 'vitest';
 import TagNode from './TagNode';
 import type { InterfaceTagData } from 'utils/interfaces';
 import type { TFunction } from 'i18next';
-import { MOCKS, MOCKS_ERROR_SUBTAGS_QUERY } from '../TagActionsMocks';
-import { MOCKS_ERROR_SUBTAGS_QUERY1, MOCKS1 } from './TagNodeMocks';
+import {
+  MOCKS_ERROR_SUBTAGS_QUERY1 as MOCKS_ERROR_SUBTAGS_QUERY,
+  MOCKS1 as MOCKS,
+} from './TagNodeMocks';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 
 const mockTag: InterfaceTagData = {
@@ -239,7 +241,7 @@ describe('TagNode with Mocks', () => {
 
 describe('MOCKS Structure Validation', () => {
   it('validates the structure of MOCKS[0]', () => {
-    const firstMock = MOCKS1[0];
+    const firstMock = MOCKS[0];
 
     expect(firstMock.request.query).toBeDefined();
     expect(firstMock.request.variables).toEqual({
@@ -253,7 +255,7 @@ describe('MOCKS Structure Validation', () => {
   });
 
   it('validates the structure of MOCKS[1] (pagination)', () => {
-    const secondMock = MOCKS1[1];
+    const secondMock = MOCKS[1];
 
     expect(secondMock.request.query).toBeDefined();
     expect(secondMock.request.variables).toEqual({
@@ -267,12 +269,13 @@ describe('MOCKS Structure Validation', () => {
   });
 
   it('validates MOCKS_ERROR_SUBTAGS_QUERY structure', () => {
-    const errorMock = MOCKS_ERROR_SUBTAGS_QUERY1[0];
+    const errorMock = MOCKS_ERROR_SUBTAGS_QUERY[0];
 
     expect(errorMock.request.query).toBeDefined();
     expect(errorMock.request.variables).toEqual({
       id: '1',
       first: 10,
+      after: null,
     });
     expect(errorMock.error).toBeInstanceOf(Error);
     expect(errorMock.error?.message).toBe(

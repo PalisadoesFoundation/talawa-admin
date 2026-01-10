@@ -707,7 +707,7 @@ describe('EventListCardPreviewModal', () => {
       expect(screen.getByRole('grid')).toBeInTheDocument();
     });
 
-    const dateToSelect = screen.getByText('20');
+    const dateToSelect = screen.getByText('22');
     await userEvent.click(dateToSelect);
 
     await waitFor(() => {
@@ -1161,8 +1161,11 @@ describe('EventListCardPreviewModal', () => {
       fireEvent.click(calendarButton);
 
       await waitFor(() => {
-        const dateToSelect = screen.getByText('20');
-        fireEvent.click(dateToSelect);
+        const dateElements = screen.getAllByText('20');
+        // Click the button element (calendar day), not the input field
+        const dateToSelect = dateElements.find((el) => el.tagName === 'BUTTON');
+        expect(dateToSelect).toBeTruthy();
+        fireEvent.click(dateToSelect!);
         expect(mockSetEventStartDate).toHaveBeenCalled();
         expect(mockSetEventEndDate).toHaveBeenCalled();
       });

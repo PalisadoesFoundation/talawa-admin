@@ -488,6 +488,7 @@
     "loadAssignedUsersError": "Error occurred while loading assigned users",
     "sortPeople": "Sort People",
     "noTagsFound": "No tags found",
+    "retry": "Retry",
     "removeMember": "Remove Member",
     "retry": "Retry"
   },

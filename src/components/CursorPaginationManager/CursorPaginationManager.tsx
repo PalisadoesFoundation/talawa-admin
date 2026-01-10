@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client';
 import type {
   InterfaceCursorPaginationManagerProps,
   InterfaceConnectionData,
-  PaginationVariables,
+  InterfacePaginationVariables,
   InterfacePageInfo,
 } from 'types/CursorPagination/interface';
 import styles from './CursorPaginationManager.module.css';
@@ -145,7 +145,6 @@ export function CursorPaginationManager<
     refetchTrigger,
     useExternalUI,
     children,
-    renderAdditionalButtons,
   } = props;
 
   // Use queryOptions.variables with fallback to queryVariables (precedence order)
@@ -171,14 +170,14 @@ export function CursorPaginationManager<
   // Apollo Client hook
   const { data, loading, error, fetchMore, refetch } = useQuery<
     TData,
-    TVariables & PaginationVariables
+    TVariables & InterfacePaginationVariables
   >(query, {
     ...queryOptions,
     variables: {
       ...(baseVariables as TVariables),
       first: itemsPerPage,
       after: null,
-    } as TVariables & PaginationVariables,
+    } as TVariables & InterfacePaginationVariables,
     notifyOnNetworkStatusChange: true,
   });
 
@@ -214,7 +213,7 @@ export function CursorPaginationManager<
           ...(baseVariables as TVariables),
           first: itemsPerPage,
           after: pageInfo.endCursor,
-        } as TVariables & PaginationVariables,
+        } as TVariables & InterfacePaginationVariables,
       });
 
       // Check if this request is stale or component unmounted
@@ -268,7 +267,7 @@ export function CursorPaginationManager<
         ...(baseVariables as TVariables),
         first: itemsPerPage,
         after: null,
-      } as TVariables & PaginationVariables);
+      } as TVariables & InterfacePaginationVariables);
     } catch {
       // Error state is handled via Apollo's error prop
     }

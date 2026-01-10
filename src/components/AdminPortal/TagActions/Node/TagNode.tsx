@@ -28,18 +28,18 @@
  *
  * @returns A React functional component that renders a tag node with optional subtags.
  */
-import { useQuery } from '@apollo/client';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import React, { useState } from 'react';
 import type { InterfaceTagData } from 'utils/interfaces';
+import type { InterfaceTagNodeProps } from 'types/AdminPortal/TagNode/interface';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import styles from 'style/app-fixed.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import componentStyle from '../TagAction.module.css';
 import { WarningAmberRounded } from '@mui/icons-material';
-import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
-import type { InterfaceTagNodeProps } from 'types/AdminPortal/TagNode/interface';
+import CursorPaginationManager from 'components/CursorPaginationManager/CursorPaginationManager';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 
 /**
  * Renders the Tags which can be expanded to list subtags.
@@ -51,66 +51,6 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
   t,
 }) => {
   const [expanded, setExpanded] = useState(false);
-
-  const {
-    data: subTagsData,
-    loading: subTagsLoading,
-    error: subTagsError,
-    fetchMore: fetchMoreSubTags,
-  } = useQuery(USER_TAG_SUB_TAGS, {
-    variables: { id: tag._id, first: TAGS_QUERY_DATA_CHUNK_SIZE },
-    skip: !expanded,
-  });
-
-  const loadMoreSubTags = (): void => {
-    fetchMoreSubTags({
-      variables: {
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after: subTagsData?.getChildTags.childTags.pageInfo.endCursor,
-      },
-      updateQuery: (
-        prevResult: { getChildTags: InterfaceQueryUserTagChildTags },
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult?: { getChildTags: InterfaceQueryUserTagChildTags };
-        },
-      ) => {
-        if (!fetchMoreResult) return prevResult;
-
-        return {
-          getChildTags: {
-            ...fetchMoreResult.getChildTags,
-            childTags: {
-              ...fetchMoreResult.getChildTags.childTags,
-              edges: [
-                ...prevResult.getChildTags.childTags.edges,
-                ...fetchMoreResult.getChildTags.childTags.edges,
-              ],
-            },
-          },
-        };
-      },
-    });
-  };
-
-  if (subTagsError) {
-    return (
-      <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
-        <div className={styles.errorMessage}>
-          <WarningAmberRounded className={styles.errorIcon} />
-          <h6 className="fw-bold text-danger text-center">
-            {t('errorOccurredWhileLoadingSubTags')}
-          </h6>
-        </div>
-      </div>
-    );
-  }
-
-  const subTagsList =
-    subTagsData?.getChildTags.childTags.edges.map(
-      (edge: { node: InterfaceTagData; cursor: string }) => edge.node,
-    ) ?? [];
 
   const handleTagClick = (): void => {
     setExpanded(!expanded);
@@ -166,42 +106,92 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
         {tag.name}
       </div>
 
-      {expanded && subTagsLoading && (
-        <div className="ms-5">
-          <div className={styles.simpleLoader}>
-            <div className={styles.spinner} />
-          </div>
-        </div>
-      )}
-      {expanded && subTagsList?.length && (
+      {expanded && (
         <div className="ms-4">
-          <div
-            id={`subTagsScrollableDiv${tag._id}`}
-            data-testid={`subTagsScrollableDiv${tag._id}`}
-            className={componentStyle.subtagsScrollableDiv}
+          <CursorPaginationManager<unknown, InterfaceTagData>
+            query={USER_TAG_SUB_TAGS}
+            queryOptions={{
+              variables: { id: tag._id, first: TAGS_QUERY_DATA_CHUNK_SIZE },
+            }}
+            dataPath="getChildTags.childTags"
+            itemsPerPage={TAGS_QUERY_DATA_CHUNK_SIZE}
+            useExternalUI={true}
           >
-            <InfiniteScroll
-              dataLength={subTagsList?.length ?? 0}
-              next={loadMoreSubTags}
-              hasMore={
-                subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
-                false
+            {({
+              items,
+              loading,
+              pageInfo,
+              handleLoadMore,
+              handleRefetch,
+              error,
+            }) => {
+              if (error) {
+                return (
+                  <div
+                    className={`${styles.errorContainer} bg-white rounded-4 my-3`}
+                  >
+                    <div className={styles.errorMessage}>
+                      <WarningAmberRounded
+                        className={styles.errorIcon}
+                        fontSize="large"
+                      />
+                      <h6 className="fw-bold text-danger text-center">
+                        {t('errorOccurredWhileLoadingSubTags')}
+                      </h6>
+                      <button
+                        type="button"
+                        onClick={handleRefetch}
+                        className="btn btn-primary mt-2"
+                      >
+                        {t('retry')}
+                      </button>
+                    </div>
+                  </div>
+                );
               }
-              loader={<InfiniteScrollLoader />}
-              scrollableTarget={`subTagsScrollableDiv${tag._id}`}
-            >
-              {subTagsList.map((tag: InterfaceTagData) => (
-                <div key={tag._id} data-testid="orgUserSubTags">
-                  <TagNode
-                    tag={tag}
-                    checkedTags={checkedTags}
-                    toggleTagSelection={toggleTagSelection}
-                    t={t}
-                  />
+
+              if (loading && items.length === 0) {
+                return (
+                  <div className="ms-5">
+                    <LoadingState isLoading={true} variant="inline" size="sm">
+                      <div />
+                    </LoadingState>
+                  </div>
+                );
+              }
+
+              if (items.length === 0) {
+                return null;
+              }
+
+              return (
+                <div
+                  id={`subTagsScrollableDiv${tag._id}`}
+                  data-testid={`subTagsScrollableDiv${tag._id}`}
+                  className={componentStyle.subtagsScrollableDiv}
+                >
+                  <InfiniteScroll
+                    dataLength={items.length}
+                    next={handleLoadMore}
+                    hasMore={pageInfo?.hasNextPage ?? false}
+                    loader={<InfiniteScrollLoader />}
+                    scrollableTarget={`subTagsScrollableDiv${tag._id}`}
+                  >
+                    {items.map((subTag: InterfaceTagData) => (
+                      <div key={subTag._id} data-testid="orgUserSubTags">
+                        <TagNode
+                          tag={subTag}
+                          checkedTags={checkedTags}
+                          toggleTagSelection={toggleTagSelection}
+                          t={t}
+                        />
+                      </div>
+                    ))}
+                  </InfiniteScroll>
                 </div>
-              ))}
-            </InfiniteScroll>
-          </div>
+              );
+            }}
+          </CursorPaginationManager>
         </div>
       )}
     </div>
