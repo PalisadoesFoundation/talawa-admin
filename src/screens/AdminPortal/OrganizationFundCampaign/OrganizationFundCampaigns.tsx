@@ -17,7 +17,7 @@ import type {
   InterfaceCampaignInfo,
   InterfaceQueryOrganizationFundCampaigns,
 } from 'utils/interfaces';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import {
   ReportingRow,
   ReportingTableColumn,
@@ -396,7 +396,7 @@ const orgFundCampaign = (): JSX.Element => {
         ]}
       />
       <div className={styles.searchContainerRow}>
-        <AdminSearchFilterBar
+        <SearchFilterBar
           searchPlaceholder={t('searchCampaigns')}
           searchValue={searchText}
           onSearchChange={(value) => setSearchText(value.trim())}

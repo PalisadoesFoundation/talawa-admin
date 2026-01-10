@@ -30,6 +30,39 @@
  *   clears local storage and redirects to the home page on critical errors.
  * - Modals: `OrganizationModal` for creating new organizations, `Modal` for managing features
  *   after organization creation.
+ *
+ * Dependencies:
+ * - `useQuery` and `useMutation` from `@apollo/client` for GraphQL operations.
+ * - `useTranslation` from `react-i18next` for localization.
+ * - `useLocalStorage` for accessing local storage data.
+ * - `OrgListCard`, `SortingButton`, `SearchBar`, and `OrganizationModal` for UI components.
+ * - `NotificationToast` for notifications.
+ * - `react-bootstrap` and `@mui/material` for modal and button components.
+ *
+ * State:
+ * - `dialogModalisOpen` - Controls the visibility of the plugin notification modal.
+ * - `dialogRedirectOrgId` - Stores the ID of the organization to redirect after creation.
+ * - `isLoading` - Indicates whether the organization data is loading.
+ * - `sortingState` - Manages the sorting option and its label.
+ * - `searchByName` - Stores the search query for filtering organizations.
+ * - `showModal` - Controls the visibility of the organization creation modal.
+ * - `formState` - Manages the state of the organization creation form.
+ *
+ * Methods:
+ * - `openDialogModal(redirectOrgId: string): void` - Opens the plugin notification modal.
+ * - `closeDialogModal(): void` - Closes the plugin notification modal.
+ * - `toggleDialogModal(): void` - Toggles the plugin notification modal visibility.
+ * - `createOrg(e: ChangeEvent<HTMLFormElement>): Promise<void>` - Handles organization creation.
+ * - `handleSearch(value: string): void` - Filters organizations based on the search query.
+ * - `handleSortChange(value: string): void` - Updates sorting state and refetches organizations.
+ *
+ * ErrorHandling:
+ * - Handles errors from GraphQL queries and mutations using `errorHandler`.
+ * - Clears local storage and redirects to the home page on critical errors.
+ *
+ * Modals:
+ * - `OrganizationModal` - For creating new organizations.
+ * - `Modal` - For managing features after organization creation.
  */
 import React, { useEffect, useState, useMemo } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
@@ -62,7 +95,8 @@ import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCar
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import style from './OrgList.module.css';
 import { Group, Search } from '@mui/icons-material';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import { BaseModal } from 'shared-components/BaseModal';
 
 const { getItem } = useLocalStorage();
 
@@ -245,7 +279,6 @@ function orgList(): JSX.Element {
         },
       });
 
-      //     toggleModal;
       if (data) {
         NotificationToast.success(t('congratulationOrgCreated'));
         refetchOrgs();
@@ -270,6 +303,7 @@ function orgList(): JSX.Element {
 
   /**
    * Note: The explicit refetchOrgs call with filter parameter is intentional.
+   * Note: The explicit refetchOrgs(`{ filter: val }`) call is intentional.
    * While Apollo Client auto-refetches when filterName changes, the explicit
    * call ensures immediate network request execution and avoids timing issues
    * from React's batched state updates. This pattern is used consistently
@@ -314,7 +348,7 @@ function orgList(): JSX.Element {
     <div className={styles.orgListContainer}>
       {/* Buttons Container */}
       <div className={styles.calendar__header}>
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={true}
           searchPlaceholder={t('searchOrganizations')}
           searchValue={typedValue}
@@ -461,6 +495,14 @@ function orgList(): JSX.Element {
         dataTestId="pluginNotificationModal"
         title={t('manageFeatures')}
         headerClassName={styles.modalHeader}
+
+      <BaseModal
+        title={t('manageFeatures') as string}
+        show={dialogModalisOpen}
+        onHide={toggleDialogModal}
+        dataTestId="pluginNotificationModal"
+        headerClassName={styles.modalHeader}
+        showCloseButton={true}
       >
         <section id={styles.grid_wrapper}>
           <div>
