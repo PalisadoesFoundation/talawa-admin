@@ -97,6 +97,8 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
   const [createCampaign] = useMutation(CREATE_CAMPAIGN_MUTATION);
   const [updateCampaign] = useMutation(UPDATE_CAMPAIGN_MUTATION);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   /**
    * Handles form submission to create a new campaign.
    *
@@ -112,6 +114,7 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
       return;
     }
 
+    setIsSubmitting(true);
     try {
       await createCampaign({
         variables: {
@@ -137,6 +140,8 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
       hide();
     } catch (error: unknown) {
       errorHandler(t, error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -301,11 +306,11 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
               />
             </FormControl>
           </Form.Group>
-
           <Button
             type="submit"
             className={styles.addButton}
             data-testid="submitCampaignBtn"
+            disabled={isSubmitting}
           >
             {t(mode === 'edit' ? 'updateCampaign' : 'createCampaign')}
           </Button>
