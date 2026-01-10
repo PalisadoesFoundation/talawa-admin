@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceStatusBadgeProps`](../../../../types/shared-components/StatusBadge/interface/interfaces/InterfaceStatusBadgeProps.md)\>
 
-Defined in: [src/components/StatusBadge/StatusBadge.tsx:69](https://github.com/ad1tyayadav/talawa-admin/blob/81f612ecc17dcf00fddec09b69a8c4b8ba72eb3c/src/components/StatusBadge/StatusBadge.tsx#L69)
+Defined in: [src/components/StatusBadge/StatusBadge.tsx:69](https://github.com/ad1tyayadav/talawa-admin/blob/e39370f3081e50e02fb80174d5105bde60a02d0e/src/components/StatusBadge/StatusBadge.tsx#L69)
 
 StatusBadge component for displaying status information with consistent styling.
 
