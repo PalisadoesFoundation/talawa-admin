@@ -9,27 +9,6 @@
  * - Utilizes GraphQL queries and mutations for fetching and managing organization data.
  * - Includes search and sorting functionality for better user experience.
  * - Displays loading states and handles errors gracefully.
- * - Dependencies: `useQuery` and `useMutation` from `@apollo/client` for GraphQL operations,
- *   `useTranslation` from `react-i18next` for localization, `useLocalStorage` for accessing
- *   local storage data, `OrgListCard`, `SortingButton`, `SearchBar`, and `OrganizationModal`
- *   for UI components, `NotificationToast` for notifications, `react-bootstrap` and
- *   `@mui/material` for modal and button components.
- * - State: `dialogModalisOpen` controls the visibility of the plugin notification modal,
- *   `dialogRedirectOrgId` stores the ID of the organization to redirect after creation,
- *   `isLoading` indicates whether the organization data is loading, `sortingState` manages
- *   the sorting option and its label, `searchByName` stores the search query for filtering
- *   organizations, `showModal` controls the visibility of the organization creation modal,
- *   `formState` manages the state of the organization creation form.
- * - Methods: `openDialogModal(redirectOrgId: string): void` opens the plugin notification modal,
- *   `closeDialogModal(): void` closes the plugin notification modal, `toggleDialogModal(): void`
- *   toggles the plugin notification modal visibility, `createOrg(e: ChangeEvent<HTMLFormElement>): Promise<void>`
- *   handles organization creation, `handleSearch(value: string): void` filters organizations based
- *   on the search query, `handleSortChange(value: string): void` updates sorting state and refetches
- *   organizations.
- * - Error Handling: Handles errors from GraphQL queries and mutations using `errorHandler`,
- *   clears local storage and redirects to the home page on critical errors.
- * - Modals: `OrganizationModal` for creating new organizations, `Modal` for managing features
- *   after organization creation.
  *
  * Dependencies:
  * - `useQuery` and `useMutation` from `@apollo/client` for GraphQL operations.
@@ -301,8 +280,7 @@ function orgList(): JSX.Element {
   };
 
   /**
-   * Note: The explicit refetchOrgs call with filter parameter is intentional.
-   * Note: The explicit refetchOrgs(`{ filter: val }`) call is intentional.
+   * Note: The explicit refetchOrgs({ filter: val }) call is intentional.
    * While Apollo Client auto-refetches when filterName changes, the explicit
    * call ensures immediate network request execution and avoids timing issues
    * from React's batched state updates. This pattern is used consistently
