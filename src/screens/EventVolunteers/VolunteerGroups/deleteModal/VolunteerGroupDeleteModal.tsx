@@ -29,7 +29,8 @@
  *
  * @see DELETE_VOLUNTEER_GROUP for the GraphQL mutation used.
  */
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import styles from 'style/app-fixed.module.css';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -89,49 +90,14 @@ const VolunteerGroupDeleteModal: React.FC<
     }
   };
   return (
-    <>
-      <Modal className={styles.volunteerModal} onHide={hide} show={isOpen}>
-        <Modal.Header>
-          <p className={styles.titlemodal}> {t('deleteGroup')}</p>
-          <Button
-            variant="danger"
-            onClick={hide}
-            className={styles.modalCloseBtn}
-            data-testid="modalCloseBtn"
-          >
-            {' '}
-            <i className="fa fa-times"></i>
-          </Button>
-        </Modal.Header>
-        <Modal.Body>
-          <p> {t('deleteVolunteerGroupMsg')}</p>
-
-          {/* Radio buttons for recurring events - Template-First: All recurring event volunteer groups are templates */}
-          {group?.isTemplate && !group?.isInstanceException && (
-            <Form.Group className="mb-3">
-              <Form.Label>{t('applyTo')}</Form.Label>
-              <Form.Check
-                type="radio"
-                label={t('entireSeries')}
-                name="applyTo"
-                id="deleteApplyToSeries"
-                data-testid="deleteApplyToSeries"
-                checked={applyTo === 'series'}
-                onChange={() => setApplyTo('series')}
-              />
-              <Form.Check
-                type="radio"
-                label={t('thisEventOnly')}
-                name="applyTo"
-                id="deleteApplyToInstance"
-                data-testid="deleteApplyToInstance"
-                checked={applyTo === 'instance'}
-                onChange={() => setApplyTo('instance')}
-              />
-            </Form.Group>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
+    <BaseModal
+      show={isOpen}
+      onHide={hide}
+      dataTestId="volunteerGroupDeleteModal"
+      title={t('deleteGroup')}
+      headerClassName={styles.volunteerModal}
+      footer={
+        <>
           <Button
             variant="danger"
             onClick={deleteHandler}
@@ -142,9 +108,36 @@ const VolunteerGroupDeleteModal: React.FC<
           <Button variant="secondary" onClick={hide} data-testid="deletenobtn">
             {tCommon('no')}
           </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+        </>
+      }
+    >
+      <p> {t('deleteVolunteerGroupMsg')}</p>
+
+      {/* Radio buttons for recurring events - Template-First: All recurring event volunteer groups are templates */}
+      {group?.isTemplate && !group?.isInstanceException && (
+        <Form.Group className="mb-3">
+          <Form.Label>{t('applyTo')}</Form.Label>
+          <Form.Check
+            type="radio"
+            label={t('entireSeries')}
+            name="applyTo"
+            id="deleteApplyToSeries"
+            data-testid="deleteApplyToSeries"
+            checked={applyTo === 'series'}
+            onChange={() => setApplyTo('series')}
+          />
+          <Form.Check
+            type="radio"
+            label={t('thisEventOnly')}
+            name="applyTo"
+            id="deleteApplyToInstance"
+            data-testid="deleteApplyToInstance"
+            checked={applyTo === 'instance'}
+            onChange={() => setApplyTo('instance')}
+          />
+        </Form.Group>
+      )}
+    </BaseModal>
   );
 };
 export default VolunteerGroupDeleteModal;

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import styles from '../../style/app-fixed.module.css';
 import {
@@ -348,84 +349,70 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
 
   return (
     <>
-      <Modal
+      <BaseModal
         show={customRecurrenceModalIsOpen}
         onHide={hideCustomRecurrenceModal}
         centered
-        aria-labelledby="custom-recurrence-modal-title"
-        aria-modal="true"
+        dataTestId="customRecurrenceModal"
+        title={t('customRecurrence')}
+        showCloseButton={true}
+        bodyClassName="pb-2"
       >
-        <Modal.Header>
-          <p id="custom-recurrence-modal-title" className={styles.titlemodal}>
-            {t('customRecurrence')}
-          </p>
+        <RecurrenceFrequencySection
+          frequency={frequency}
+          localInterval={localInterval}
+          onIntervalChange={handleIntervalChange}
+          onFrequencyChange={handleFrequencyChange}
+          t={t}
+        />
+
+        <RecurrenceWeeklySection
+          frequency={frequency}
+          byDay={byDay}
+          onDayClick={handleDayClick}
+          onWeekdayKeyDown={handleWeekdayKeyDown}
+          t={t}
+        />
+
+        <RecurrenceMonthlySection
+          frequency={frequency}
+          recurrenceRuleState={recurrenceRuleState}
+          setRecurrenceRuleState={setRecurrenceRuleState}
+          startDate={startDate}
+          t={t}
+        />
+
+        <RecurrenceYearlySection
+          frequency={frequency}
+          startDate={startDate}
+          t={t}
+        />
+
+        <RecurrenceEndOptionsSection
+          frequency={frequency}
+          selectedRecurrenceEndOption={selectedRecurrenceEndOption}
+          recurrenceRuleState={recurrenceRuleState}
+          localCount={localCount}
+          onRecurrenceEndOptionChange={handleRecurrenceEndOptionChange}
+          onCountChange={handleCountChange}
+          setRecurrenceRuleState={setRecurrenceRuleState}
+          t={t}
+        />
+
+        <hr className="mt-4 mb-2 mx-2" />
+
+        <div className="mx w-100 position-relative">
           <Button
-            variant="danger"
-            onClick={hideCustomRecurrenceModal}
-            data-testid="customRecurrenceModalCloseBtn"
-            data-cy="customRecurrenceModalCloseBtn"
-            aria-label={t('close')}
+            className={styles.recurrenceRuleSubmitBtn}
+            data-testid="customRecurrenceSubmitBtn"
+            data-cy="customRecurrenceSubmitBtn"
+            onClick={handleCustomRecurrenceSubmit}
+            aria-label={t('done')}
           >
-            <i className="fa fa-times"></i>
+            {t('done')}
           </Button>
-        </Modal.Header>
-        <Modal.Body className="pb-2">
-          <RecurrenceFrequencySection
-            frequency={frequency}
-            localInterval={localInterval}
-            onIntervalChange={handleIntervalChange}
-            onFrequencyChange={handleFrequencyChange}
-            t={t}
-          />
-
-          <RecurrenceWeeklySection
-            frequency={frequency}
-            byDay={byDay}
-            onDayClick={handleDayClick}
-            onWeekdayKeyDown={handleWeekdayKeyDown}
-            t={t}
-          />
-
-          <RecurrenceMonthlySection
-            frequency={frequency}
-            recurrenceRuleState={recurrenceRuleState}
-            setRecurrenceRuleState={setRecurrenceRuleState}
-            startDate={startDate}
-            t={t}
-          />
-
-          <RecurrenceYearlySection
-            frequency={frequency}
-            startDate={startDate}
-            t={t}
-          />
-
-          <RecurrenceEndOptionsSection
-            frequency={frequency}
-            selectedRecurrenceEndOption={selectedRecurrenceEndOption}
-            recurrenceRuleState={recurrenceRuleState}
-            localCount={localCount}
-            onRecurrenceEndOptionChange={handleRecurrenceEndOptionChange}
-            onCountChange={handleCountChange}
-            setRecurrenceRuleState={setRecurrenceRuleState}
-            t={t}
-          />
-
-          <hr className="mt-4 mb-2 mx-2" />
-
-          <div className="mx w-100 position-relative">
-            <Button
-              className={styles.recurrenceRuleSubmitBtn}
-              data-testid="customRecurrenceSubmitBtn"
-              data-cy="customRecurrenceSubmitBtn"
-              onClick={handleCustomRecurrenceSubmit}
-              aria-label={t('done')}
-            >
-              {t('done')}
-            </Button>
-          </div>
-        </Modal.Body>
-      </Modal>
+        </div>
+      </BaseModal>
     </>
   );
 };
