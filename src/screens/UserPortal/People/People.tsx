@@ -53,10 +53,8 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import CursorPaginationManager from 'components/CursorPaginationManager/CursorPaginationManager';
-import type {
-  IMemberNode,
-  InterfacePeopleCardProps,
-} from 'types/UserPortal/People/interface';
+import type { IMemberNode } from 'types/UserPortal/People/interface';
+import type { InterfacePeopleCardProps } from 'types/UserPortal/PeopleCard/interface';
 
 export default function People(): React.JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'people' });

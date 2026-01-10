@@ -105,14 +105,6 @@ function OrganizationPeople(): JSX.Element {
 
   const [removeMember] = useMutation(REMOVE_MEMBER_MUTATION_PG);
 
-  if (!currentUrl && state !== 2) {
-    return (
-      <div role="alert" aria-live="assertive">
-        {t('organizationIdMissing')}
-      </div>
-    );
-  }
-
   useEffect(() => {
     setRefetchTrigger((prev) => prev + 1);
   }, [state, currentUrl]);
@@ -120,6 +112,14 @@ function OrganizationPeople(): JSX.Element {
     setShowRemoveModal(false);
     setSelectedMemId(null);
   };
+
+  if (!currentUrl && state !== 2) {
+    return (
+      <div role="alert" aria-live="assertive">
+        {t('organizationIdMissing')}
+      </div>
+    );
+  }
 
   const handleOpenRemoveModal = (id: string) => {
     setSelectedMemId(id);

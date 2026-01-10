@@ -24,7 +24,7 @@ import { useTranslation } from 'react-i18next';
 
 import UserPortalCard from 'components/UserPortal/UserPortalCard/UserPortalCard';
 import Avatar from 'components/Avatar/Avatar';
-import type { InterfacePeopleCardProps } from 'types/UserPortal/People/interface.ts';
+import type { InterfacePeopleCardProps } from 'types/UserPortal/PeopleCard/interface';
 
 import styles from './PeopleCard.module.css';
 

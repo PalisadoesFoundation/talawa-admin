@@ -1223,6 +1223,7 @@
     "nothingToShow": "Rien à montrer ici.",
     "sNo": "N°",
     "avatar": "Avatar",
+    "avatar_alt": "Avatar de {{name}}",
     "name": "Nom",
     "email": "E-mail",
     "role": "Rôle",

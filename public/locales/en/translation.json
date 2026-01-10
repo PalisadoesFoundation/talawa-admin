@@ -1283,7 +1283,8 @@
     "loading": "Loading...",
     "emailNotAvailable": "Email not available",
     "allMembers": "All Members",
-    "peopleTable": "People Table"
+    "peopleTable": "People Table",
+    "avatar_alt": "Avatar of {{name}}"
   },
   "userLogin": {
     "login": "Login",

@@ -254,7 +254,7 @@
   "retry": "Reintentar",
   "sortingIcon": "icono de ordenación",
   "peopleTabTagName": "Personas",
-  "or": "or",
+  "or": "o",
   "eventNotFound": "Evento con id {{id}} no encontrado",
   "required": "Obligatorio"
 }

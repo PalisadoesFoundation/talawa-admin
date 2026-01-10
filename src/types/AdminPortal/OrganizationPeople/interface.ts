@@ -2,11 +2,13 @@
  * GraphQL user/member node rendered in the AdminPortal OrganizationPeople table.
  */
 
+export type OrganizationMemberRole = 'ADMIN' | 'MEMBER';
+
 export interface IUserNode {
   id: string;
   name: string;
-  role: string;
-  avatarURL?: string;
-  emailAddress?: string;
-  createdAt?: string;
+  role: OrganizationMemberRole;
+  avatarURL?: string | null;
+  emailAddress?: string | null;
+  createdAt?: string | null;
 }
