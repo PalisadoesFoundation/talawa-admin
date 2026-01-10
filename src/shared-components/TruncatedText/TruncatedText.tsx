@@ -21,13 +21,7 @@
  */
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import useDebounce from '../useDebounce/useDebounce';
-
-interface InterfaceTruncatedTextProps {
-  /** The full text to display. It may be truncated if it exceeds the maximum width. */
-  text: string;
-  /** Optional: Override the maximum width for truncation. */
-  maxWidthOverride?: number;
-}
+import { InterfaceTruncatedTextProps } from 'types/shared-components/TruncatedText/interface';
 
 const TruncatedText: React.FC<InterfaceTruncatedTextProps> = ({
   text,
