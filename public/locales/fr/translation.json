@@ -1022,6 +1022,18 @@
     "notFoundMsg": "Oops! ",
     "backToHome": "De retour à la maison"
   },
+  "statusBadge": {
+    "completed": "Terminé",
+    "pending": "En attente",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "approved": "Approuvé",
+    "rejected": "Rejeté",
+    "disabled": "Désactivé",
+    "accepted": "Accepté",
+    "declined": "Refusé",
+    "no_response": "Aucune réponse"
+  },
   "orgContribution": {
     "title": "Contributions de Talawa",
     "filterByName": "Filtrer par nom",
