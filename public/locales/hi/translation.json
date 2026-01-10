@@ -449,11 +449,11 @@
     "pending": "लंबित",
     "active": "सक्रिय",
     "inactive": "निष्क्रिय",
-    "approved": "स्वीकृत",
+    "approved": "अनुमोदित",
     "rejected": "अस्वीकृत",
     "disabled": "अक्षम",
     "accepted": "स्वीकृत",
-    "declined": "अस्वीकृत",
+    "declined": "अस्वीकार किया गया",
     "no_response": "कोई प्रतिक्रिया नहीं"
   },
   "manageTag": {
