@@ -6,21 +6,21 @@
 }
 
 .modalHeader div,
-.modalHeader .modal-title {
+.modalHeader :global(.modal-title) {
   color: var(--color-gray-700) !important;
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-xl);
 }
 
-.modalHeader button.close,
-.modalHeader .btn-close {
+.modalHeader :global(button.close),
+.modalHeader :global(.btn-close) {
   color: var(--color-red-500) !important;
   opacity: 1;
 }
 
 .inputField label,
-form label,
-.form-label {
+.modalHeader form label,
+.modalHeader :global(.form-label) {
   color: var(--color-black) !important;
   font-weight: normal;
   padding-bottom: 0;

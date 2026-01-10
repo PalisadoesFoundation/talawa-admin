@@ -3,9 +3,11 @@
   padding-top: var(--space-2);
   margin: 0;
   height: 100%;
+  position: relative;
 }
 
 .sidebar:after {
+  content: '';
   background-color: var(--color-gray-100);
   position: absolute;
   width: var(--space-1);
@@ -13,6 +15,7 @@
   top: var(--space-4);
   right: 0;
   display: block;
+  pointer-events: none;
 }
 
 @media only screen and (max-width: 600px) {
@@ -36,7 +39,7 @@
   margin-bottom: var(--space-10);
   border-color: var(--color-gray-100);
   width: 80%;
-  border-radius: var(--space-3);
+  border-radius: var(--radius-md);
   padding-top: var(--space-2);
   padding-bottom: var(--space-2);
   padding-right: var(--space-4);
