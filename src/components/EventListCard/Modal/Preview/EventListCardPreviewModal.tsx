@@ -35,7 +35,9 @@
 import React from 'react';
 import { Button, Form, Modal, Dropdown } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
-import { DatePicker, TimePicker } from '@mui/x-date-pickers';
+// import { DatePicker, TimePicker } from '@mui/x-date-pickers';
+import DatePicker from 'shared-components/DatePicker/DatePicker';
+import TimePicker from 'shared-components/TimePicker/TimePicker';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import {
@@ -302,6 +304,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                   label={tCommon('startDate')}
                   className={styles.datebox}
                   value={dayjs(eventStartDate)}
+                  data-testid="startDate"
                   onChange={(date: Dayjs | null): void => {
                     if (date) {
                       const newStartDate = date.toDate();
@@ -318,6 +321,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
               <div>
                 <DatePicker
                   label={tCommon('endDate')}
+                  data-testid="endDate"
                   className={styles.datebox}
                   value={dayjs(eventEndDate)}
                   onChange={(date: Dayjs | null): void => {
@@ -335,6 +339,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 <div>
                   <TimePicker
                     label={tCommon('startTime')}
+                    data-testid="startTime"
                     className={styles.datebox}
                     timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
                     value={timeToDayJs(formState.startTime)}
@@ -356,6 +361,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 <div>
                   <TimePicker
                     label={tCommon('endTime')}
+                    data-testid="endTime"
                     className={styles.datebox}
                     timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
                     value={timeToDayJs(formState.endTime)}
