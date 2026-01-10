@@ -53,7 +53,8 @@ describe('ApplyToSelector', () => {
     const onChange = vi.fn();
     renderComponent('instance', onChange);
 
-    await userEvent.click(screen.getByLabelText(/entire series/i));
+    const user = userEvent.setup();
+    await user.click(screen.getByLabelText(/entire series/i));
 
     expect(onChange).toHaveBeenCalledWith('series');
   });
@@ -62,7 +63,8 @@ describe('ApplyToSelector', () => {
     const onChange = vi.fn();
     renderComponent('series', onChange);
 
-    await userEvent.click(screen.getByLabelText(/this event only/i));
+    const user = userEvent.setup();
+    await user.click(screen.getByLabelText(/this event only/i));
 
     expect(onChange).toHaveBeenCalledWith('instance');
   });

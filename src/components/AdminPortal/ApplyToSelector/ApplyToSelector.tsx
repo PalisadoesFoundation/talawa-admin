@@ -25,8 +25,8 @@ const ApplyToSelector: React.FC<InterfaceApplyToSelectorProps> = ({
   });
 
   return (
-    <Form.Group className="mb-3">
-      <Form.Label>{t('applyTo')}</Form.Label>
+    <Form.Group className="mb-3" as="fieldset">
+      <Form.Label as="legend">{t('applyTo')}</Form.Label>
       <Form.Check
         type="radio"
         label={t('entireSeries')}

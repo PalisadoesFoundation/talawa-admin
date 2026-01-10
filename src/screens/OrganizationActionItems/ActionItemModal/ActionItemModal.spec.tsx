@@ -721,7 +721,12 @@ describe('ItemModal - Additional Test Cases', () => {
 
       expect(volunteerGroupSelect).toBeInTheDocument();
 
-      const volunteerGroupInput = screen.getByLabelText(/volunteerGroup/i);
+      // Use getAllByLabelText since aria-label on Chip creates multiple matches
+      const volunteerGroupInputs = screen.getAllByLabelText(/volunteerGroup/i);
+      const volunteerGroupInput = volunteerGroupInputs.find(
+        (el) => el.tagName === 'INPUT',
+      );
+      expect(volunteerGroupInput).toBeDefined();
 
       await waitFor(
         () => {
@@ -1445,8 +1450,8 @@ describe('ItemModal - Specific Test Coverage', () => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
-      // Find date picker input
-      const dateInput = getPickerInputByLabel('assignmentDate');
+      // Find date picker input by testid - shared DatePicker applies testid directly to input
+      const dateInput = screen.getByTestId('assignmentDate');
       expect(dateInput).toBeInTheDocument();
 
       // The date picker should be accessible and allow interaction

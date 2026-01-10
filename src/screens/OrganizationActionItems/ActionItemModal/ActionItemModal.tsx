@@ -170,11 +170,11 @@ const ItemModal: FC<IItemModalProps> = ({
 
   // Determine if assignment type chips should be disabled
   const isVolunteerChipDisabled = useMemo(() => {
-    return editMode && actionItem?.volunteerGroup?.id;
+    return editMode && Boolean(actionItem?.volunteerGroup?.id);
   }, [editMode, actionItem]);
 
   const isVolunteerGroupChipDisabled = useMemo(() => {
-    return editMode && actionItem?.volunteer?.id;
+    return editMode && Boolean(actionItem?.volunteer?.id);
   }, [editMode, actionItem]);
 
   const actionItemCategories = useMemo(
@@ -436,12 +436,10 @@ const ItemModal: FC<IItemModalProps> = ({
       dataTestId="actionItemModal"
     >
       <Form
-        onSubmitCapture={
+        onSubmit={
           editMode
-            ? actionItem?.isTemplate
-              ? applyTo === 'series'
-                ? updateActionItemHandler
-                : updateActionForInstanceHandler
+            ? actionItem?.isTemplate && applyTo === 'instance'
+              ? updateActionForInstanceHandler
               : updateActionItemHandler
             : createActionItemHandler
         }
@@ -500,6 +498,7 @@ const ItemModal: FC<IItemModalProps> = ({
                     }
                   }}
                   clickable={!isVolunteerChipDisabled}
+                  aria-disabled={isVolunteerChipDisabled || undefined}
                   sx={{
                     opacity: isVolunteerChipDisabled ? 0.6 : 1,
                     cursor: isVolunteerChipDisabled ? 'not-allowed' : 'pointer',
@@ -522,6 +521,7 @@ const ItemModal: FC<IItemModalProps> = ({
                     }
                   }}
                   clickable={!isVolunteerGroupChipDisabled}
+                  aria-disabled={isVolunteerGroupChipDisabled || undefined}
                   sx={{
                     opacity: isVolunteerGroupChipDisabled ? 0.6 : 1,
                     cursor: isVolunteerGroupChipDisabled
