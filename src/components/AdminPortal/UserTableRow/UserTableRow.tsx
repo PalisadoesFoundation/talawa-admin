@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import Button, { type ButtonProps } from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import styles from './UserTableRow.module.css';
 import {
@@ -19,7 +19,9 @@ import {
 } from 'types/AdminPortal/UserTableRow/interface';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
-const mapVariantToColor = (v: InterfaceActionButton['variant']) => {
+const mapVariantToColor = (
+  v: InterfaceActionButton['variant'],
+): ButtonProps['color'] => {
   switch (v) {
     case 'danger':
       return 'error';
@@ -63,6 +65,17 @@ export const UserTableRow: React.FC<InterfaceUserTableRowProps> = memo(
       [onRowClick, user],
     );
 
+    const handleKeyDown = useCallback(
+      (e: React.KeyboardEvent) => {
+        if (!onRowClick) return;
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onRowClick(user);
+        }
+      },
+      [onRowClick, user],
+    );
+
     const renderActions = () => {
       if (!actions?.length) return null;
       return (
@@ -71,21 +84,15 @@ export const UserTableRow: React.FC<InterfaceUserTableRowProps> = memo(
             const color = mapVariantToColor(action.variant);
             const label = action.label;
             const aria = action.ariaLabel || label;
+            const key = action.testId || `${action.label}-${idx}`;
 
             return (
-              <Tooltip key={idx} title={label}>
+              <Tooltip key={key} title={label}>
                 <span>
                   <Button
                     size={compact ? 'small' : 'medium'}
                     variant="outlined"
-                    color={
-                      color as
-                        | 'primary'
-                        | 'secondary'
-                        | 'error'
-                        | 'success'
-                        | 'inherit'
-                    }
+                    color={color}
                     onClick={() => action.onClick(user)}
                     disabled={action.disabled}
                     aria-label={aria}
@@ -156,6 +163,8 @@ export const UserTableRow: React.FC<InterfaceUserTableRowProps> = memo(
       return (
         <Box
           onClick={onRowClick ? handleRowClick : undefined}
+          onKeyDown={onRowClick ? handleKeyDown : undefined}
+          tabIndex={onRowClick ? 0 : undefined}
           sx={{
             gap: compact ? 1 : 2,
           }}
@@ -172,6 +181,8 @@ export const UserTableRow: React.FC<InterfaceUserTableRowProps> = memo(
     return (
       <tr
         onClick={onRowClick ? handleRowClick : undefined}
+        onKeyDown={onRowClick ? handleKeyDown : undefined}
+        tabIndex={onRowClick ? 0 : undefined}
         className={onRowClick ? styles.tableRowPointer : undefined}
         data-testid={`${testIdPrefix}-tr-${user.id}`}
         aria-label={t('user')}

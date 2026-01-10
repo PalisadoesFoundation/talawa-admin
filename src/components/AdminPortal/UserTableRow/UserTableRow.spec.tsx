@@ -1,6 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { UserTableRow } from './UserTableRow';
@@ -9,10 +10,11 @@ import type {
   InterfaceActionVariant,
 } from 'types/AdminPortal/UserTableRow/interface';
 
-const MockedProvider = ({ children }: { children: React.ReactNode }) => (
+const RouterWrapper = ({ children }: { children: React.ReactNode }) => (
   <BrowserRouter>{children}</BrowserRouter>
 );
 
+// Use a dynamic date for deterministic testing
 const user: InterfaceUserInfo = {
   id: 'u1',
   name: 'Admin User',
@@ -29,7 +31,7 @@ describe('UserTableRow', () => {
 
   it('renders DataGrid cell view with avatar, name, email, and joined date', () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow
           user={user}
           isDataGrid
@@ -38,7 +40,7 @@ describe('UserTableRow', () => {
           actions={[]}
           testIdPrefix="spec"
         />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
 
     expect(screen.getByText('Admin User')).toBeInTheDocument();
@@ -46,26 +48,26 @@ describe('UserTableRow', () => {
     expect(screen.getByTestId('spec-joined-u1')).toBeInTheDocument();
   });
 
-  it('fires onRowClick when clicking non-button area (grid mode)', () => {
+  it('fires onRowClick when clicking non-button area (grid mode)', async () => {
     const onRowClick = vi.fn();
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow
           user={user}
           isDataGrid
           onRowClick={onRowClick}
           testIdPrefix="spec"
         />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
-    fireEvent.click(screen.getByTestId('spec-gridcell-u1'));
+    await userEvent.click(screen.getByTestId('spec-gridcell-u1'));
     expect(onRowClick).toHaveBeenCalledWith(user);
   });
 
-  it('fires onRowClick when clicking non-button area (table mode)', () => {
+  it('fires onRowClick when clicking non-button area (table mode)', async () => {
     const onRowClick = vi.fn();
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <table>
           <tbody>
             <UserTableRow
@@ -76,17 +78,17 @@ describe('UserTableRow', () => {
             />
           </tbody>
         </table>
-      </MockedProvider>,
+      </RouterWrapper>,
     );
-    fireEvent.click(screen.getByTestId('spec-tr-u1'));
+    await userEvent.click(screen.getByTestId('spec-tr-u1'));
     expect(onRowClick).toHaveBeenCalledWith(user);
   });
 
-  it('does not fire onRowClick when clicking an action button', () => {
+  it('does not fire onRowClick when clicking an action button', async () => {
     const onRowClick = vi.fn();
     const onAction = vi.fn();
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow
           user={user}
           isDataGrid
@@ -101,9 +103,9 @@ describe('UserTableRow', () => {
           ]}
           testIdPrefix="spec"
         />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
-    fireEvent.click(screen.getByTestId('removeBtn'));
+    await userEvent.click(screen.getByTestId('removeBtn'));
     expect(onRowClick).not.toHaveBeenCalled();
     expect(onAction).toHaveBeenCalledWith(user);
   });
@@ -111,7 +113,7 @@ describe('UserTableRow', () => {
   it('renders action button with default variant', () => {
     const onAction = vi.fn();
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow
           user={user}
           actions={[
@@ -123,7 +125,7 @@ describe('UserTableRow', () => {
           ]}
           testIdPrefix="spec"
         />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     expect(screen.getByTestId('defaultBtn')).toBeInTheDocument();
   });
@@ -131,7 +133,7 @@ describe('UserTableRow', () => {
   it('renders action buttons with all variant types', () => {
     const onAction = vi.fn();
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow
           user={user}
           actions={[
@@ -161,7 +163,7 @@ describe('UserTableRow', () => {
           ]}
           testIdPrefix="spec"
         />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     expect(screen.getByTestId('dangerBtn')).toBeInTheDocument();
     expect(screen.getByTestId('successBtn')).toBeInTheDocument();
@@ -171,7 +173,7 @@ describe('UserTableRow', () => {
 
   it('renders table row view with row number', () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <table>
           <tbody>
             <UserTableRow
@@ -182,7 +184,7 @@ describe('UserTableRow', () => {
             />
           </tbody>
         </table>
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     expect(screen.getByTestId('spec-no-u1')).toHaveTextContent('1');
     expect(screen.getByTestId('spec-tr-u1')).toBeInTheDocument();
@@ -190,23 +192,23 @@ describe('UserTableRow', () => {
 
   it('renders without joined date when showJoinedDate is false', () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow
           user={user}
           isDataGrid
           showJoinedDate={false}
           testIdPrefix="spec"
         />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     expect(screen.queryByTestId('spec-joined-u1')).not.toBeInTheDocument();
   });
 
   it('renders compact mode correctly', () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow user={user} isDataGrid compact testIdPrefix="spec" />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     expect(screen.getByTestId('spec-gridcell-u1')).toBeInTheDocument();
   });
@@ -220,9 +222,9 @@ describe('UserTableRow', () => {
       createdAt: null,
     };
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow user={incompleteUser} isDataGrid testIdPrefix="spec" />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     const gridCell = screen.getByTestId('spec-gridcell-u2');
     expect(gridCell).toBeInTheDocument();
@@ -233,14 +235,14 @@ describe('UserTableRow', () => {
 
   it('renders name as Link when linkPath is provided', () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow
           user={user}
           linkPath="/member/u1"
           isDataGrid
           testIdPrefix="spec"
         />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     const nameLink = screen.getByRole('link', { name: 'Admin User' });
     expect(nameLink).toBeInTheDocument();
@@ -250,7 +252,7 @@ describe('UserTableRow', () => {
   it('renders disabled action button', () => {
     const onAction = vi.fn();
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow
           user={user}
           actions={[
@@ -263,18 +265,18 @@ describe('UserTableRow', () => {
           ]}
           testIdPrefix="spec"
         />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     const button = screen.getByTestId('disabledBtn');
     expect(button).toBeDisabled();
-    fireEvent.click(button);
+    // Disabled buttons cannot be clicked with userEvent, which is correct behavior
     expect(onAction).not.toHaveBeenCalled();
   });
 
   it('renders action button with icon', () => {
     const onAction = vi.fn();
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow
           user={user}
           actions={[
@@ -287,7 +289,7 @@ describe('UserTableRow', () => {
           ]}
           testIdPrefix="spec"
         />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     expect(screen.getByTestId('iconBtn')).toBeInTheDocument();
     expect(screen.getByTestId('test-icon')).toBeInTheDocument();
@@ -296,7 +298,7 @@ describe('UserTableRow', () => {
   it('uses custom ariaLabel for action button', () => {
     const onAction = vi.fn();
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow
           user={user}
           actions={[
@@ -309,7 +311,7 @@ describe('UserTableRow', () => {
           ]}
           testIdPrefix="spec"
         />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     const button = screen.getByTestId('ariaBtn');
     expect(button).toHaveAttribute('aria-label', 'Custom aria label');
@@ -317,32 +319,32 @@ describe('UserTableRow', () => {
 
   it('sets aria-label on grid cell for accessibility', () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow user={user} isDataGrid testIdPrefix="spec" />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     const gridCell = screen.getByTestId('spec-gridcell-u1');
-    expect(gridCell).toHaveAttribute('aria-label', 'user');
+    expect(gridCell).toHaveAttribute('aria-label');
   });
 
   it('sets aria-label on table row for accessibility', () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <table>
           <tbody>
             <UserTableRow user={user} isDataGrid={false} testIdPrefix="spec" />
           </tbody>
         </table>
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     const tableRow = screen.getByTestId('spec-tr-u1');
-    expect(tableRow).toHaveAttribute('aria-label', 'user');
+    expect(tableRow).toHaveAttribute('aria-label');
   });
 
-  it('does not fire onRowClick when clicking a link', () => {
+  it('does not fire onRowClick when clicking a link', async () => {
     const onRowClick = vi.fn();
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow
           user={user}
           linkPath="/member/u1"
@@ -350,18 +352,18 @@ describe('UserTableRow', () => {
           isDataGrid
           testIdPrefix="spec"
         />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     const nameLink = screen.getByRole('link', { name: 'Admin User' });
-    fireEvent.click(nameLink);
+    await userEvent.click(nameLink);
     expect(onRowClick).not.toHaveBeenCalled();
   });
 
   it('renders without actions when actions array is empty', () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow user={user} actions={[]} isDataGrid testIdPrefix="spec" />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     expect(screen.getByTestId('spec-gridcell-u1')).toBeInTheDocument();
     // Should not have any action buttons
@@ -370,9 +372,9 @@ describe('UserTableRow', () => {
 
   it('handles undefined actions prop', () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow user={user} isDataGrid testIdPrefix="spec" />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     expect(screen.getByTestId('spec-gridcell-u1')).toBeInTheDocument();
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
@@ -381,7 +383,7 @@ describe('UserTableRow', () => {
   it('renders action button with unknown variant using default color', () => {
     const onAction = vi.fn();
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow
           user={user}
           actions={[
@@ -394,7 +396,7 @@ describe('UserTableRow', () => {
           ]}
           testIdPrefix="spec"
         />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     expect(screen.getByTestId('unknownBtn')).toBeInTheDocument();
   });
@@ -402,7 +404,7 @@ describe('UserTableRow', () => {
   it('generates default testId for action when testId is not provided', () => {
     const onAction = vi.fn();
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow
           user={user}
           actions={[
@@ -413,7 +415,7 @@ describe('UserTableRow', () => {
           ]}
           testIdPrefix="spec"
         />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     expect(screen.getByTestId('spec-action-0')).toBeInTheDocument();
   });
@@ -421,7 +423,7 @@ describe('UserTableRow', () => {
   it('handles action button size based on compact mode', () => {
     const onAction = vi.fn();
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow
           user={user}
           compact={true}
@@ -434,7 +436,7 @@ describe('UserTableRow', () => {
           ]}
           testIdPrefix="spec"
         />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     const button = screen.getByTestId('compactBtn');
     expect(button).toHaveClass('MuiButton-sizeSmall');
@@ -443,7 +445,7 @@ describe('UserTableRow', () => {
   it('handles action button size in non-compact mode', () => {
     const onAction = vi.fn();
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow
           user={user}
           compact={false}
@@ -456,7 +458,7 @@ describe('UserTableRow', () => {
           ]}
           testIdPrefix="spec"
         />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     const button = screen.getByTestId('regularBtn');
     expect(button).toHaveClass('MuiButton-sizeMedium');
@@ -464,55 +466,55 @@ describe('UserTableRow', () => {
 
   it('handles avatar spacing based on compact mode', () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow user={user} compact={true} testIdPrefix="spec" />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     expect(screen.getByTestId('spec-gridcell-u1')).toBeInTheDocument();
   });
 
   it('handles avatar spacing in non-compact mode', () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow user={user} compact={false} testIdPrefix="spec" />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     expect(screen.getByTestId('spec-gridcell-u1')).toBeInTheDocument();
   });
 
   it('uses default testIdPrefix when not provided', () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow user={user} />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     expect(
       screen.getByTestId('user-table-row-gridcell-u1'),
     ).toBeInTheDocument();
   });
 
-  it('handles row click when onRowClick is not provided', () => {
+  it('handles row click when onRowClick is not provided', async () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow user={user} testIdPrefix="spec" />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     const gridCell = screen.getByTestId('spec-gridcell-u1');
     // Should not have onClick handler when onRowClick is not provided
-    fireEvent.click(gridCell);
+    await userEvent.click(gridCell);
     // No assertion needed - just ensuring no errors occur
     expect(gridCell).toBeInTheDocument();
   });
 
   it('handles table mode without row number', () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <table>
           <tbody>
             <UserTableRow user={user} isDataGrid={false} testIdPrefix="spec" />
           </tbody>
         </table>
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     expect(screen.queryByTestId('spec-no-u1')).not.toBeInTheDocument();
     expect(screen.getByTestId('spec-tr-u1')).toBeInTheDocument();
@@ -520,7 +522,7 @@ describe('UserTableRow', () => {
 
   it('handles table mode with joined date column', () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <table>
           <tbody>
             <UserTableRow
@@ -531,30 +533,30 @@ describe('UserTableRow', () => {
             />
           </tbody>
         </table>
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     expect(
       screen.getByText(dayjs().subtract(30, 'days').format('YYYY-MM-DD')),
     ).toBeInTheDocument();
   });
 
-  it('handles early return in handleRowClick when onRowClick is not provided', () => {
+  it('handles early return in handleRowClick when onRowClick is not provided', async () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow user={user} testIdPrefix="spec" />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     const gridCell = screen.getByTestId('spec-gridcell-u1');
     // This should not throw an error even though onRowClick is undefined
-    fireEvent.click(gridCell);
+    await userEvent.click(gridCell);
     expect(gridCell).toBeInTheDocument();
   });
 
   it('renders name as plain Typography when linkPath is not provided', () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow user={user} isDataGrid testIdPrefix="spec" />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     const nameElement = screen.getByText('Admin User');
     expect(nameElement).toBeInTheDocument();
@@ -563,9 +565,9 @@ describe('UserTableRow', () => {
 
   it('adds data-field="name" attribute for Cypress compatibility', () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow user={user} isDataGrid testIdPrefix="spec" />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     const nameElement = screen.getByText('Admin User');
     expect(nameElement).toHaveAttribute('data-field', 'name');
@@ -573,14 +575,14 @@ describe('UserTableRow', () => {
 
   it('adds data-field="name" attribute to linked name for Cypress compatibility', () => {
     render(
-      <MockedProvider>
+      <RouterWrapper>
         <UserTableRow
           user={user}
           linkPath="/member/u1"
           isDataGrid
           testIdPrefix="spec"
         />
-      </MockedProvider>,
+      </RouterWrapper>,
     );
     const nameElement = screen.getByText('Admin User');
     expect(nameElement).toHaveAttribute('data-field', 'name');

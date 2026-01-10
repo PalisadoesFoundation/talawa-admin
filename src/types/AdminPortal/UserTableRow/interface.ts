@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 
 /**
  * User information interface for UserTableRow component
