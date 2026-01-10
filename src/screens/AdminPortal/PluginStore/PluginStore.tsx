@@ -11,7 +11,7 @@ import pluginStoreStyles from './PluginStore.module.css';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import PluginModal from './PluginModal';
 import UploadPluginModal from './UploadPluginModal';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { PluginList, UninstallConfirmationModal } from './components';
 import { usePluginActions, usePluginFilters } from './hooks';
 import { useGetAllPlugins } from 'plugin/graphql-service';
@@ -141,7 +141,7 @@ export default function PluginStore() {
       className={`${styles.pageContent} ${pluginStoreStyles.pageContent}`}
       data-testid="plugin-store-page"
     >
-      <AdminSearchFilterBar
+      <SearchFilterBar
         searchPlaceholder={t('searchPlaceholder')}
         searchValue={searchTerm}
         onSearchChange={debouncedSearch}

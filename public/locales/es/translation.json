@@ -1633,7 +1633,9 @@
     "preview": "Vista previa",
     "bannerAd": "Anuncio de banner",
     "popupAd": "Anuncio emergente",
-    "menuAd": "Anuncio de menú"
+    "menuAd": "Anuncio de menú",
+    "searchAdvertisements": "Buscar anuncios",
+    "advertisementLoading": "Cargando anuncios..."
   },
   "userChat": {
     "title": "Chats",
@@ -1940,7 +1942,9 @@
     "viewDetails": "Ver detalles de {{name}}",
     "editVolunteerGroup": "Editar grupo de voluntarios {{name}}",
     "deleteVolunteerGroup": "Eliminar grupo de voluntarios {{name}}",
-    "deleteVolunteerEntry": "Eliminar entrada de voluntario {{name}}"
+    "deleteVolunteerEntry": "Eliminar entrada de voluntario {{name}}",
+    "viewGroup": "Ver grupo",
+    "editGroup": "Editar grupo"
   },
   "userVolunteer": {
     "title": "Voluntariado",

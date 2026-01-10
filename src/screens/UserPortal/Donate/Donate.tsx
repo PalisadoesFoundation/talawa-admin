@@ -18,11 +18,12 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
 import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import {
   InterfaceDonation,
   InterfaceDonationCardProps,
 } from 'types/Donation/interface';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 /**
  * Component for handling donations to an organization.
@@ -109,6 +110,8 @@ export default function Donate(): JSX.Element {
         errorHandler(t, error);
       });
       NotificationToast.success(t('success'));
+      refetch();
+      NotificationToast.success(t('success') as string);
     } catch (error) {
       errorHandler(t, error);
     }
@@ -117,7 +120,7 @@ export default function Donate(): JSX.Element {
   return (
     <div className="d-flex flex-row mt-4">
       <div className={`${styles.mainContainer50} me-4`}>
-        <AdminSearchFilterBar
+        <SearchFilterBar
           searchPlaceholder={t('searchDonations')}
           searchValue={searchText}
           onSearchChange={setSearchText}

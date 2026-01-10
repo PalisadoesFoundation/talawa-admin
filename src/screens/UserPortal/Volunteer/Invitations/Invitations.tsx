@@ -52,8 +52,8 @@ import { FaRegClock } from 'react-icons/fa';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
-import { toast } from 'react-toastify';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 enum ItemFilter {
   Group = 'group',
@@ -92,14 +92,14 @@ const Invitations = (): JSX.Element => {
   ): Promise<void> => {
     try {
       await updateMembership({ variables: { id: id, status: status } });
-      toast.success(
+      NotificationToast.success(
         t(
           status === 'accepted' ? 'invitationAccepted' : 'invitationRejected',
         ) as string,
       );
       refetchInvitations();
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     }
   };
 
@@ -186,7 +186,7 @@ const Invitations = (): JSX.Element => {
 
   return (
     <LoadingState isLoading={invitationLoading} variant="spinner">
-      <AdminSearchFilterBar
+      <SearchFilterBar
         searchPlaceholder={t('searchByEventName')}
         searchValue={searchTerm}
         onSearchChange={setSearchTerm}

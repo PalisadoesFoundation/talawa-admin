@@ -39,6 +39,7 @@ vi.mock('react-router', async () => ({
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast,
+  NotificationToast: mockToast,
 }));
 
 vi.mock('utils/useLocalstorage', () => ({

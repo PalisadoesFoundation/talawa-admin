@@ -235,4 +235,6 @@
   "selectAtLeastOneDay": "Veuillez sélectionner au moins un jour",
   "invalidDetailsMessage": "Détails invalides. Veuillez vérifier votre saisie.",
   "logoutFailed": "Échec de la déconnexion. Veuillez réessayer."
+  "or": "ou",
+  "eventNotFound": "Événement avec l'id {{id}} non trouvé"
 }

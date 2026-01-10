@@ -54,7 +54,7 @@ import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 
 import { useParams } from 'react-router';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 
 interface IMemberNode {
@@ -205,7 +205,7 @@ export default function People(): React.JSX.Element {
       <div className={`${styles.mainContainer_people}`}>
         {/* Refactored Header Structure */}
         <div className={styles.calendar__header}>
-          <AdminSearchFilterBar
+          <SearchFilterBar
             searchPlaceholder={t('searchUsers')}
             searchValue={searchTerm}
             onSearchChange={handleSearch}
