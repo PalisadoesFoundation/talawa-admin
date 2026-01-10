@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCampaignModalProps
 
-Defined in: src/types/AdminPortal/CampaignModal/interface.ts:6
+Defined in: [src/types/AdminPortal/CampaignModal/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/CampaignModal/interface.ts#L6)
 
 Props for the CampaignModal component.
 
@@ -14,7 +14,7 @@ Props for the CampaignModal component.
 
 > **campaign**: [`InterfaceCampaignInfo`](../../../../../utils/interfaces/interfaces/InterfaceCampaignInfo.md)
 
-Defined in: src/types/AdminPortal/CampaignModal/interface.ts:20
+Defined in: [src/types/AdminPortal/CampaignModal/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/CampaignModal/interface.ts#L20)
 
 Campaign data for edit mode, null when creating a new campaign
 
@@ -24,7 +24,7 @@ Campaign data for edit mode, null when creating a new campaign
 
 > **fundId**: `string`
 
-Defined in: src/types/AdminPortal/CampaignModal/interface.ts:14
+Defined in: [src/types/AdminPortal/CampaignModal/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/CampaignModal/interface.ts#L14)
 
 ID of the fund this campaign belongs to
 
@@ -34,7 +34,7 @@ ID of the fund this campaign belongs to
 
 > **hide**: () => `void`
 
-Defined in: src/types/AdminPortal/CampaignModal/interface.ts:11
+Defined in: [src/types/AdminPortal/CampaignModal/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/CampaignModal/interface.ts#L11)
 
 Callback to close/hide the modal
 
@@ -48,7 +48,7 @@ Callback to close/hide the modal
 
 > **isOpen**: `boolean`
 
-Defined in: src/types/AdminPortal/CampaignModal/interface.ts:8
+Defined in: [src/types/AdminPortal/CampaignModal/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/CampaignModal/interface.ts#L8)
 
 Whether the modal is currently open
 
@@ -58,7 +58,7 @@ Whether the modal is currently open
 
 > **mode**: `"create"` \| `"edit"`
 
-Defined in: src/types/AdminPortal/CampaignModal/interface.ts:26
+Defined in: [src/types/AdminPortal/CampaignModal/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/CampaignModal/interface.ts#L26)
 
 Modal mode: 'create' for new campaign, 'edit' for existing campaign
 
@@ -68,7 +68,7 @@ Modal mode: 'create' for new campaign, 'edit' for existing campaign
 
 > **orgId**: `string`
 
-Defined in: src/types/AdminPortal/CampaignModal/interface.ts:17
+Defined in: [src/types/AdminPortal/CampaignModal/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/CampaignModal/interface.ts#L17)
 
 ID of the organization
 
@@ -78,7 +78,7 @@ ID of the organization
 
 > **refetchCampaign**: () => `void`
 
-Defined in: src/types/AdminPortal/CampaignModal/interface.ts:23
+Defined in: [src/types/AdminPortal/CampaignModal/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/CampaignModal/interface.ts#L23)
 
 Callback to refetch campaign data after create/update
 
