@@ -234,7 +234,7 @@
   "customRecurrence": "Recurrencia personalizada",
   "selectAtLeastOneDay": "Por favor seleccione al menos un día",
   "invalidDetailsMessage": "Detalles inválidos. Por favor verifique su entrada.",
-  "logoutFailed": "Error al cerrar sesión. Por favor, inténtelo de nuevo."
+  "logoutFailed": "Error al cerrar sesión. Por favor, inténtelo de nuevo.",
   "or": "o",
   "eventNotFound": "Evento con id {{id}} no encontrado"
 }
