@@ -4,7 +4,7 @@
 
 # Interface: IFormTextFieldProps
 
-Defined in: [src/types/FormFieldGroup/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L13)
+Defined in: [src/types/FormFieldGroup/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L10)
 
 ## Extends
 
@@ -12,47 +12,11 @@ Defined in: [src/types/FormFieldGroup/interface.ts:13](https://github.com/Palisa
 
 ## Properties
 
-### ariaDescribedBy?
-
-> `optional` **ariaDescribedBy**: `string`
-
-Defined in: [src/types/FormFieldGroup/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L10)
-
-#### Inherited from
-
-[`IFormFieldGroupProps`](IFormFieldGroupProps.md).[`ariaDescribedBy`](IFormFieldGroupProps.md#ariadescribedby)
-
-***
-
-### ariaLabel?
-
-> `optional` **ariaLabel**: `string`
-
-Defined in: [src/types/FormFieldGroup/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L9)
-
-#### Inherited from
-
-[`IFormFieldGroupProps`](IFormFieldGroupProps.md).[`ariaLabel`](IFormFieldGroupProps.md#arialabel)
-
-***
-
-### disabled?
-
-> `optional` **disabled**: `boolean`
-
-Defined in: [src/types/FormFieldGroup/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L5)
-
-#### Inherited from
-
-[`IFormFieldGroupProps`](IFormFieldGroupProps.md).[`disabled`](IFormFieldGroupProps.md#disabled)
-
-***
-
 ### error?
 
 > `optional` **error**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L7)
+Defined in: [src/types/FormFieldGroup/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L6)
 
 #### Inherited from
 
@@ -64,7 +28,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:7](https://github.com/Palisad
 
 > `optional` **helpText**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L6)
+Defined in: [src/types/FormFieldGroup/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L5)
 
 #### Inherited from
 
@@ -84,14 +48,6 @@ Defined in: [src/types/FormFieldGroup/interface.ts:3](https://github.com/Palisad
 
 ***
 
-### maxLength?
-
-> `optional` **maxLength**: `number`
-
-Defined in: [src/types/FormFieldGroup/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L18)
-
-***
-
 ### name
 
 > **name**: `string`
@@ -108,7 +64,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:2](https://github.com/Palisad
 
 > **onChange**: (`v`) => `void`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L17)
+Defined in: [src/types/FormFieldGroup/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L14)
 
 #### Parameters
 
@@ -126,7 +82,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:17](https://github.com/Palisa
 
 > `optional` **placeholder**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L15)
+Defined in: [src/types/FormFieldGroup/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L12)
 
 ***
 
@@ -142,19 +98,11 @@ Defined in: [src/types/FormFieldGroup/interface.ts:4](https://github.com/Palisad
 
 ***
 
-### showCharCount?
-
-> `optional` **showCharCount**: `boolean`
-
-Defined in: [src/types/FormFieldGroup/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L19)
-
-***
-
 ### touched?
 
 > `optional` **touched**: `boolean`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L8)
+Defined in: [src/types/FormFieldGroup/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L7)
 
 #### Inherited from
 
@@ -166,7 +114,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:8](https://github.com/Palisad
 
 > `optional` **type**: `"number"` \| `"text"` \| `"email"` \| `"password"` \| `"tel"` \| `"url"`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L14)
+Defined in: [src/types/FormFieldGroup/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L11)
 
 ***
 
@@ -174,4 +122,4 @@ Defined in: [src/types/FormFieldGroup/interface.ts:14](https://github.com/Palisa
 
 > **value**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L16)
+Defined in: [src/types/FormFieldGroup/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L13)
