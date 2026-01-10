@@ -34,23 +34,6 @@ vi.mock('screens/AdminPortal/OrganizationEvents/CustomRecurrenceModal', () => ({
   default: vi.fn(),
 }));
 
-// export const getPickerInputByTestId = (label: string): HTMLElement => {
-//   const allInputs = screen.getAllByRole('textbox', { hidden: true });
-//   for (const input of allInputs) {
-//     const formControl = input.closest('.MuiFormControl-root');
-//     if (formControl) {
-//       const labelEl = formControl.querySelector('label');
-//       if (labelEl) {
-//         const labelText = labelEl.textContent?.toLowerCase() || '';
-//         if (labelText.includes(label.toLowerCase())) {
-//           return formControl as HTMLElement;
-//         }
-//       }
-//     }
-//   }
-//   throw new Error(`Could not find date picker for label: ${label}`);
-// };
-
 export const getPickerInputByTestId = (testId: string): HTMLElement => {
   const input = screen.getByTestId(testId);
   if (!input) {
