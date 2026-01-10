@@ -12,7 +12,7 @@ Renders the Membership Requests screen.
 
 Responsibilities:
 - Displays membership requests with infinite scroll support
-- Supports search submission via AdminSearchFilterBar
+- Supports search submission via SearchFilterBar
 - Shows user avatars and request details
 - Handles accept and reject request actions
 - Shows empty state via DataGrid overlay when no requests exist

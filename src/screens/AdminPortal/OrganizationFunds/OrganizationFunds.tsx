@@ -27,7 +27,7 @@ import {
   ROW_HEIGHT,
   dataGridStyle as baseDataGridStyle,
 } from 'types/ReportingTable/utils';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import componentStyles from './OrganizationFunds.module.css';
 
@@ -361,7 +361,7 @@ const organizationFunds = (): JSX.Element => {
   return (
     <div>
       <div className={styles.searchContainerRowNoTopMargin}>
-        <AdminSearchFilterBar
+        <SearchFilterBar
           searchPlaceholder={t('funds.searchFunds')}
           searchValue={searchText}
           onSearchChange={(value) => setSearchText(value.trim())}
