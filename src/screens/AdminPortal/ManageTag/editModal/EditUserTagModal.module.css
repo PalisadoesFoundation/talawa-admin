@@ -21,7 +21,7 @@
 }
 
 /* Form Labels */
-.modalHeader:global(.modal-header) ~ :global(.modal-body) :global(.form-label) {
+:global(.modal-header) ~ :global(.modal-body) :global(.form-label) {
   color: var(--color-black);
   font-weight: normal;
   padding-bottom: 0;

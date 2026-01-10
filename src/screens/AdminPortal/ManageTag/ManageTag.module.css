@@ -105,12 +105,6 @@
   border: var(--border-1) solid var(--color-gray-400);
 }
 
-.tagsBreadCrumbs:hover {
-  color: var(--color-blue-700);
-  font-weight: var(--font-weight-semibold);
-  text-decoration: underline;
-}
-
 .tagsBreadCrumbs {
   color: var(--color-gray-400);
   cursor: pointer;
@@ -135,7 +129,7 @@
 
 .manageTagScrollableDiv:global(#manageTagScrollableDiv) {
   scrollbar-width: thin;
-  scrollbar-color: var(--color-gray-300);
+  scrollbar-color: var(--color-gray-300) var(--color-gray-100);
   max-height: calc(100vh - var(--space-20));
   overflow: auto;
   margin-top: var(--space-6);

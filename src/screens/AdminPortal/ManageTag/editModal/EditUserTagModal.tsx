@@ -68,6 +68,7 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
             onClick={(): void => hideEditUserTagModal()}
             data-testid="closeEditTagModalBtn"
             className={styles.removeButton}
+            aria-label={tCommon('cancel')}
           >
             {tCommon('cancel')}
           </Button>
@@ -77,6 +78,7 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
             value="invite"
             data-testid="editTagSubmitBtn"
             className={styles.addButton}
+            aria-label={tCommon('edit')}
           >
             {tCommon('edit')}
           </Button>
