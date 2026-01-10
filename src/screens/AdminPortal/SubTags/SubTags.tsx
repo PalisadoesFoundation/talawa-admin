@@ -384,6 +384,7 @@ function SubTags(): JSX.Element {
                   }}
                   className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
                   data-testid="allTagsBtn"
+                  data-text={t('tags')}
                 >
                   {t('tags')}
                   <i className={'mx-2 fa fa-caret-right'} aria-hidden="true" />
@@ -404,6 +405,7 @@ function SubTags(): JSX.Element {
                       }
                     }}
                     data-testid="redirectToSubTags"
+                    data-text={tag.name}
                   >
                     {tag.name}
 

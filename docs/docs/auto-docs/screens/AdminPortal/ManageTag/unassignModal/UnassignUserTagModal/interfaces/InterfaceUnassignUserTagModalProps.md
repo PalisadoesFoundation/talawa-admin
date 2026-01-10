@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUnassignUserTagModalProps
 
-Defined in: [src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModal.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModal.tsx#L39)
+Defined in: [src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModal.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModal.tsx#L29)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModa
 
 > **handleUnassignUserTag**: () => `Promise`\<`void`\>
 
-Defined in: [src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModal.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModal.tsx#L42)
+Defined in: [src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModal.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModal.tsx#L32)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModa
 
 > **toggleUnassignUserTagModal**: () => `void`
 
-Defined in: [src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModal.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModal.tsx#L41)
+Defined in: [src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModal.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModal.tsx#L31)
 
 #### Returns
 
@@ -36,4 +36,4 @@ Defined in: [src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModa
 
 > **unassignUserTagModalIsOpen**: `boolean`
 
-Defined in: [src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModal.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModal.tsx#L40)
+Defined in: [src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModal.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModal.tsx#L30)
