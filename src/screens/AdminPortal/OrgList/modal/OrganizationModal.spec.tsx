@@ -443,6 +443,7 @@ describe('OrganizationModal Component', () => {
     await waitFor(() => {
       expect(toastMocks.error).toHaveBeenCalledWith(
         'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
+        expect.any(Object),
       );
     });
     expect(mockUploadFileToMinio).not.toHaveBeenCalled();
@@ -590,6 +591,7 @@ describe('OrganizationModal Component', () => {
     await waitFor(() => {
       expect(toastMocks.error).toHaveBeenCalledWith(
         'File is too large. Maximum size is 5MB.',
+        expect.any(Object),
       );
       expect(mockUploadFileToMinio).not.toHaveBeenCalled();
       expect(mockSetFormState).not.toHaveBeenCalled();
@@ -604,7 +606,10 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(toastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
+      expect(toastMocks.success).toHaveBeenCalledWith(
+        'imageUploadSuccess',
+        expect.any(Object),
+      );
     });
     expect(mockSetFormState).toHaveBeenCalledWith(
       expect.objectContaining({ avatar: 'mocked-object-name' }),
@@ -620,7 +625,10 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');
+      expect(toastMocks.error).toHaveBeenCalledWith(
+        'imageUploadError',
+        expect.any(Object),
+      );
     });
     expect(mockSetFormState).not.toHaveBeenCalled();
   });
