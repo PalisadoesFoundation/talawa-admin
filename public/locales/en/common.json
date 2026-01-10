@@ -161,7 +161,7 @@
   "employmentStatus": "Employment Status",
   "fileTooLarge": "File is too large. Maximum size is 5MB.",
   "homePhoneNumber": "Home Phone Number",
-  "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF.",
+  "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF file.",
   "maritalStatus": "Marital Status",
   "mobilePhoneNumber": "Mobile Phone Number",
   "personalDetailsHeading": "Personal Information",

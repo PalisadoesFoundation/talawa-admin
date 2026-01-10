@@ -1257,7 +1257,7 @@
     "noTagsAssigned": "No Tags Assigned",
     "overview": "Overview",
     "tags": "Tags",
-    "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF.",
+    "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF file.",
     "fileTooLarge": "File is too large. Maximum size is 5MB.",
     "memberDetailNumberExample": "Ex. +1234567890",
     "memberDetailExampleLane": "Ex. Lane 2",
@@ -1503,7 +1503,7 @@
     "description": "Description",
     "enterDescription": "Enter Description",
     "atleast_8_char_long": "Password must be at least 8 characters long.",
-    "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF.",
+    "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF file.",
     "fileSizeTooLarge": "File is too large. Maximum size is 5MB.",
     "failedToProcessImage": "Failed to process profile picture. Please try uploading again.",
     "title": "Settings"
