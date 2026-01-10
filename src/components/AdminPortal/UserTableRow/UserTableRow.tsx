@@ -1,7 +1,19 @@
 /**
  * UserTableRow Component
  *
- * A reusable table row component for displaying user information.
+ * A reusable table row component for displaying user information in both DataGrid and table modes.
+ * Supports flexible action buttons, optional linking, and comprehensive accessibility features.
+ *
+ * @param user - User information to display (id, name, email, avatar, createdAt)
+ * @param rowNumber - Optional row number for table mode display
+ * @param linkPath - Optional path to make user name clickable as a link
+ * @param actions - Array of action buttons with configurable variants and handlers
+ * @param showJoinedDate - Whether to display the user's joined date (default: true)
+ * @param onRowClick - Callback when row is clicked (excludes button/link clicks)
+ * @param isDataGrid - Whether to render as DataGrid cell or table row (default: true)
+ * @param compact - Whether to use compact spacing and sizing (default: false)
+ * @param testIdPrefix - Prefix for test IDs (default: 'user-table-row')
+ * @returns JSX element representing the user table row
  */
 import React, { memo, useCallback, MouseEvent } from 'react';
 import { Link } from 'react-router-dom';
@@ -49,11 +61,11 @@ export const UserTableRow: React.FC<InterfaceUserTableRowProps> = memo(
     } = props;
 
     const { t } = useTranslation('common');
-    const email = user.emailAddress || 'No email';
-    const name = user.name || 'No name';
+    const email = user.emailAddress || '';
+    const name = user.name || '';
     const joined = user.createdAt
       ? dayjs(user.createdAt).format('YYYY-MM-DD')
-      : 'N/A';
+      : '';
 
     const handleRowClick = useCallback(
       (e: MouseEvent) => {

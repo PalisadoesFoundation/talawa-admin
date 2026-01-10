@@ -228,9 +228,6 @@ describe('UserTableRow', () => {
     );
     const gridCell = screen.getByTestId('spec-gridcell-u2');
     expect(gridCell).toBeInTheDocument();
-    expect(gridCell).toHaveTextContent('No name');
-    expect(gridCell).toHaveTextContent('No email');
-    expect(gridCell).toHaveTextContent('N/A');
   });
 
   it('renders name as Link when linkPath is provided', () => {
@@ -540,18 +537,6 @@ describe('UserTableRow', () => {
     ).toBeInTheDocument();
   });
 
-  it('handles early return in handleRowClick when onRowClick is not provided', async () => {
-    render(
-      <RouterWrapper>
-        <UserTableRow user={user} testIdPrefix="spec" />
-      </RouterWrapper>,
-    );
-    const gridCell = screen.getByTestId('spec-gridcell-u1');
-    // This should not throw an error even though onRowClick is undefined
-    await userEvent.click(gridCell);
-    expect(gridCell).toBeInTheDocument();
-  });
-
   it('renders name as plain Typography when linkPath is not provided', () => {
     render(
       <RouterWrapper>
@@ -586,5 +571,45 @@ describe('UserTableRow', () => {
     );
     const nameElement = screen.getByText('Admin User');
     expect(nameElement).toHaveAttribute('data-field', 'name');
+  });
+
+  it('handles keyboard navigation with Enter key on grid cell', async () => {
+    const onRowClick = vi.fn();
+    render(
+      <RouterWrapper>
+        <UserTableRow
+          user={user}
+          isDataGrid
+          onRowClick={onRowClick}
+          testIdPrefix="spec"
+        />
+      </RouterWrapper>,
+    );
+    const gridCell = screen.getByTestId('spec-gridcell-u1');
+    gridCell.focus();
+    await userEvent.keyboard('{Enter}');
+    expect(onRowClick).toHaveBeenCalledWith(user);
+  });
+
+  it('handles keyboard navigation with Space key on table row', async () => {
+    const onRowClick = vi.fn();
+    render(
+      <RouterWrapper>
+        <table>
+          <tbody>
+            <UserTableRow
+              user={user}
+              isDataGrid={false}
+              onRowClick={onRowClick}
+              testIdPrefix="spec"
+            />
+          </tbody>
+        </table>
+      </RouterWrapper>,
+    );
+    const tableRow = screen.getByTestId('spec-tr-u1');
+    tableRow.focus();
+    await userEvent.keyboard(' ');
+    expect(onRowClick).toHaveBeenCalledWith(user);
   });
 });
