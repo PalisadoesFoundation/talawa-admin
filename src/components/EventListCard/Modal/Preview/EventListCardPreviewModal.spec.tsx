@@ -690,28 +690,31 @@ describe('EventListCardPreviewModal', () => {
   test('updates start date and adjusts end date when start date changes', async () => {
     const mockSetEventStartDate = vi.fn();
     const mockSetEventEndDate = vi.fn();
+
     renderComponent({
       setEventStartDate: mockSetEventStartDate,
       setEventEndDate: mockSetEventEndDate,
     });
 
     const startDateInput = getPickerInputByLabel('startDate');
-    expect(startDateInput.parentElement).toBeTruthy();
-    const startDatePicker = startDateInput.parentElement;
-    const calendarButton = within(
-      startDatePicker as HTMLElement,
-    ).getByLabelText(/choose date/i);
+    const startDatePicker = startDateInput.parentElement!;
+
+    const calendarButton =
+      within(startDatePicker).getByLabelText(/choose date/i);
     await userEvent.click(calendarButton);
 
-    await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
-    });
+    // Wait for calendar
+    const dayCell = await screen.findByRole('gridcell', { name: '21' });
 
-    const dateToSelect = screen.getByText('20');
-    await userEvent.click(dateToSelect);
+    // Select day
+    await userEvent.click(dayCell);
+
+    // 🔑 COMMIT the date (MUI v6 requirement)
+    await userEvent.keyboard('{Enter}');
 
     await waitFor(() => {
       expect(mockSetEventStartDate).toHaveBeenCalled();
+      expect(mockSetEventEndDate).toHaveBeenCalled();
     });
   });
 
