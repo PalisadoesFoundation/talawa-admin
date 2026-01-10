@@ -254,5 +254,6 @@
   "sortingIcon": "sorting-icon",
   "to": "To",
   "or": "or",
-  "eventNotFound": "Event with id {{id}} not found"
+  "eventNotFound": "Event with id {{id}} not found",
+  "required": "Required"
 }

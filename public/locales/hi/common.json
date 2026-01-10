@@ -254,5 +254,6 @@
   "eventDetails": "कार्यक्रम विवरण",
   "peopleTabTagName": "लोग",
   "or": "या",
-  "eventNotFound": "ईवेंट आईडी {{id}} के साथ नहीं मिला"
+  "eventNotFound": "ईवेंट आईडी {{id}} के साथ नहीं मिला",
+  "required": "आवश्यक"
 }

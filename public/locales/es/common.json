@@ -253,5 +253,6 @@
   "sortingIcon": "icono de ordenación",
   "peopleTabTagName": "Personas",
   "or": "o",
-  "eventNotFound": "Evento con id {{id}} no encontrado"
+  "eventNotFound": "Evento con id {{id}} no encontrado",
+  "required": "Obligatorio"
 }
