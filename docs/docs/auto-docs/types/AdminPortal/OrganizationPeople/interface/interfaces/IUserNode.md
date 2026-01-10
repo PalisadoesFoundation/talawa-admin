@@ -4,7 +4,9 @@
 
 # Interface: IUserNode
 
-Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationPeople/interface.ts#L1)
+Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationPeople/interface.ts#L5)
+
+GraphQL user/member node rendered in the AdminPortal OrganizationPeople table.
 
 ## Properties
 
@@ -12,7 +14,7 @@ Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:1](https://gi
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationPeople/interface.ts#L5)
+Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationPeople/interface.ts#L9)
 
 ***
 
@@ -20,7 +22,7 @@ Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:5](https://gi
 
 > `optional` **createdAt**: `string`
 
-Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationPeople/interface.ts#L7)
+Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationPeople/interface.ts#L11)
 
 ***
 
@@ -28,7 +30,7 @@ Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:7](https://gi
 
 > `optional` **emailAddress**: `string`
 
-Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationPeople/interface.ts#L6)
+Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationPeople/interface.ts#L10)
 
 ***
 
@@ -36,7 +38,7 @@ Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:6](https://gi
 
 > **id**: `string`
 
-Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationPeople/interface.ts#L2)
+Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationPeople/interface.ts#L6)
 
 ***
 
@@ -44,7 +46,7 @@ Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:2](https://gi
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationPeople/interface.ts#L3)
+Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationPeople/interface.ts#L7)
 
 ***
 
@@ -52,4 +54,4 @@ Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:3](https://gi
 
 > **role**: `string`
 
-Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationPeople/interface.ts#L4)
+Defined in: [src/types/AdminPortal/OrganizationPeople/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrganizationPeople/interface.ts#L8)

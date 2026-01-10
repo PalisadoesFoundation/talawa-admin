@@ -95,17 +95,23 @@ function OrganizationPeople(): JSX.Element {
   const role = location?.state;
   const { orgId: currentUrl } = useParams();
 
-  // State
   const [state, setState] = useState(role?.role || 0);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Modal State
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [selectedMemId, setSelectedMemId] = useState<string | null>(null);
 
   const [refetchTrigger, setRefetchTrigger] = useState(0);
 
   const [removeMember] = useMutation(REMOVE_MEMBER_MUTATION_PG);
+
+  if (!currentUrl && state !== 2) {
+    return (
+      <div role="alert" aria-live="assertive">
+        {t('organizationIdMissing')}
+      </div>
+    );
+  }
 
   useEffect(() => {
     setRefetchTrigger((prev) => prev + 1);
@@ -147,6 +153,11 @@ function OrganizationPeople(): JSX.Element {
 
   const handleSortChange = (value: string): void => {
     setState(OPTION_TO_STATE[value] ?? 0);
+  };
+
+  const handleSearch = (value: string) => {
+    setSearchTerm(value);
+    setRefetchTrigger((prev) => prev + 1);
   };
 
   const getQueryAndVariables = () => {
@@ -208,7 +219,7 @@ function OrganizationPeople(): JSX.Element {
         hasDropdowns={true}
         searchPlaceholder={t('searchFullName')}
         searchValue={searchTerm}
-        onSearchChange={(value) => setSearchTerm(value)}
+        onSearchChange={handleSearch}
         searchInputTestId="searchbtn"
         searchButtonTestId="searchBtn"
         containerClassName={styles.calendar__header}

@@ -1,3 +1,6 @@
+/**
+ * GraphQL member node used by the UserPortal People screen.
+ */
 export interface IMemberNode {
   id: string;
   name: string;
@@ -7,7 +10,10 @@ export interface IMemberNode {
   emailAddress?: string;
 }
 
-export interface IOrganizationCardProps {
+/**
+ * Props for the PeopleCard component.
+ */
+export interface InterfacePeopleCardProps {
   id: string;
   name: string;
   image: string;

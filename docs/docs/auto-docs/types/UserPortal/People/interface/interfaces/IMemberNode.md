@@ -4,7 +4,9 @@
 
 # Interface: IMemberNode
 
-Defined in: [src/types/UserPortal/People/interface.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/People/interface.ts#L1)
+Defined in: [src/types/UserPortal/People/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/People/interface.ts#L4)
+
+GraphQL member node used by the UserPortal People screen.
 
 ## Properties
 
@@ -12,7 +14,7 @@ Defined in: [src/types/UserPortal/People/interface.ts:1](https://github.com/Pali
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/UserPortal/People/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/People/interface.ts#L5)
+Defined in: [src/types/UserPortal/People/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/People/interface.ts#L8)
 
 ***
 
@@ -20,7 +22,7 @@ Defined in: [src/types/UserPortal/People/interface.ts:5](https://github.com/Pali
 
 > **createdAt**: `string`
 
-Defined in: [src/types/UserPortal/People/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/People/interface.ts#L6)
+Defined in: [src/types/UserPortal/People/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/People/interface.ts#L9)
 
 ***
 
@@ -28,7 +30,7 @@ Defined in: [src/types/UserPortal/People/interface.ts:6](https://github.com/Pali
 
 > `optional` **emailAddress**: `string`
 
-Defined in: [src/types/UserPortal/People/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/People/interface.ts#L7)
+Defined in: [src/types/UserPortal/People/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/People/interface.ts#L10)
 
 ***
 
@@ -36,7 +38,7 @@ Defined in: [src/types/UserPortal/People/interface.ts:7](https://github.com/Pali
 
 > **id**: `string`
 
-Defined in: [src/types/UserPortal/People/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/People/interface.ts#L2)
+Defined in: [src/types/UserPortal/People/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/People/interface.ts#L5)
 
 ***
 
@@ -44,7 +46,7 @@ Defined in: [src/types/UserPortal/People/interface.ts:2](https://github.com/Pali
 
 > **name**: `string`
 
-Defined in: [src/types/UserPortal/People/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/People/interface.ts#L3)
+Defined in: [src/types/UserPortal/People/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/People/interface.ts#L6)
 
 ***
 
@@ -52,4 +54,4 @@ Defined in: [src/types/UserPortal/People/interface.ts:3](https://github.com/Pali
 
 > **role**: `string`
 
-Defined in: [src/types/UserPortal/People/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/People/interface.ts#L4)
+Defined in: [src/types/UserPortal/People/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/People/interface.ts#L7)

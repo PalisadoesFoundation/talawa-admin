@@ -55,7 +55,7 @@ import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import CursorPaginationManager from 'components/CursorPaginationManager/CursorPaginationManager';
 import type {
   IMemberNode,
-  IOrganizationCardProps,
+  InterfacePeopleCardProps,
 } from 'types/UserPortal/People/interface';
 
 export default function People(): React.JSX.Element {
@@ -76,7 +76,7 @@ export default function People(): React.JSX.Element {
 
   useEffect(() => {
     setRefetchTrigger((prev) => prev + 1);
-  }, [mode]);
+  }, [mode, organizationId]);
 
   const whereFilter = useMemo(() => {
     const searchFilter = searchTerm
@@ -169,7 +169,7 @@ export default function People(): React.JSX.Element {
               renderItem={(node: IMemberNode, index: number) => {
                 const isAdmin = node.role === 'administrator';
                 const userType = isAdmin ? tCommon('admin') : tCommon('member');
-                const cardProps: IOrganizationCardProps = {
+                const cardProps: InterfacePeopleCardProps = {
                   name: node.name,
                   image: node.avatarURL ?? '',
                   id: node.id,
