@@ -697,7 +697,10 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const startDateInput = getPickerInputByLabel('startDate');
-    const startDatePicker = startDateInput.parentElement!;
+    const startDatePicker = startDateInput.parentElement;
+    if (!startDatePicker) {
+      throw new Error('Start date picker container not found');
+    }
 
     const calendarButton =
       within(startDatePicker).getByLabelText(/choose date/i);
@@ -709,7 +712,7 @@ describe('EventListCardPreviewModal', () => {
     // Select day
     await userEvent.click(dayCell);
 
-    // 🔑 COMMIT the date (MUI v6 requirement)
+    // COMMIT the date (MUI v6 requirement)
     await userEvent.keyboard('{Enter}');
 
     await waitFor(() => {
