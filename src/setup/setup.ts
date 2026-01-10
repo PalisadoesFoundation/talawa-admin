@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 import inquirer from 'inquirer';
 import { checkEnvFile, modifyEnvFile } from './checkEnvFile/checkEnvFile';
 import { validateRecaptcha } from './validateRecaptcha/validateRecaptcha';
@@ -97,7 +98,10 @@ export async function main(): Promise<void> {
   }
 }
 
-// ES module compatible execution guard.
-if (import.meta.url === `file://${process.argv[1]}`) {
-  main();
+// ES module compatible execution guard with Windows compatibility and proper error handling
+if (fileURLToPath(import.meta.url) === process.argv[1]) {
+  Promise.resolve(main()).catch((err) => {
+    console.error('Uncaught error in main:', err);
+    process.exit(1);
+  });
 }
