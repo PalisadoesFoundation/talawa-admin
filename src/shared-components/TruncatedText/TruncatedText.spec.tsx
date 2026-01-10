@@ -3,6 +3,11 @@ import TruncatedText from './TruncatedText';
 import React from 'react';
 import { vi } from 'vitest';
 
+const originalOffsetWidth = Object.getOwnPropertyDescriptor(
+  HTMLElement.prototype,
+  'offsetWidth',
+);
+
 const mockLayout = (width: number, fontSize = '16px') => {
   Object.defineProperty(HTMLElement.prototype, 'offsetWidth', {
     configurable: true,
@@ -21,7 +26,16 @@ describe('TruncatedText Component', () => {
   });
 
   afterEach(() => {
-    vi.runOnlyPendingTimers();
+    if (originalOffsetWidth) {
+      Object.defineProperty(
+        HTMLElement.prototype,
+        'offsetWidth',
+        originalOffsetWidth,
+      );
+    }
+    act(() => {
+      vi.runOnlyPendingTimers();
+    });
     vi.useRealTimers();
     vi.clearAllMocks();
   });
@@ -78,10 +92,17 @@ describe('TruncatedText Component', () => {
 
     const { unmount } = render(<TruncatedText text="Cleanup test" />);
 
-    expect(addSpy).toHaveBeenCalledWith('resize', expect.any(Function));
+    const resizeCall = addSpy.mock.calls.find(([type]) => type === 'resize');
+    expect(resizeCall).toBeTruthy();
+    const resizeHandler = resizeCall?.[1];
+    expect(typeof resizeHandler).toBe('function');
 
     unmount();
 
-    expect(removeSpy).toHaveBeenCalledWith('resize', expect.any(Function));
+    expect(
+      removeSpy.mock.calls.some(
+        ([type, handler]) => type === 'resize' && handler === resizeHandler,
+      ),
+    ).toBe(true);
   });
 });
