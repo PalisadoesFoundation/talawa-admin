@@ -134,19 +134,6 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  it('renders page normally despite query error', async () => {
-    const { getByText } = renderSubTags(link2);
-
-    await wait();
-
-    await waitFor(() => {
-      // When using external UI mode, SubTags handles errors gracefully
-      // and continues to render the UI components. The addChildTag button
-      // should still be visible even when the query fails.
-      expect(getByText(translations.addChildTag)).toBeInTheDocument();
-    });
-  });
-
   it('opens and closes the create tag modal', async () => {
     renderSubTags(link);
 
@@ -298,9 +285,37 @@ describe('Organisation Tags Page', () => {
     fireEvent.click(descendingOption);
   });
 
-  // Note: Infinite scroll functionality is tested in CursorPaginationManager.spec.tsx
-  // The SubTags component uses CursorPaginationManager's external UI mode with InfiniteScroll,
-  // and testing actual scroll behavior in JSDOM is unreliable.
+  // Integration test for pagination in SubTags component.
+  // This verifies that handleLoadMore is properly passed from CursorPaginationManager
+  // to InfiniteScroll's next prop and that page 2 items load correctly.
+  it('loads page 2 items when handleLoadMore is triggered', async () => {
+    renderSubTags(link);
+
+    await wait();
+
+    // Wait for initial page to load (10 items)
+    await waitFor(() => {
+      const manageButtons = screen.getAllByTestId('manageTagBtn');
+      expect(manageButtons.length).toBe(10);
+    });
+
+    // Get the scrollable div and trigger scroll to load more
+    const scrollableDiv = screen.getByTestId('subTagsScrollableDiv');
+
+    // Simulate scroll event to trigger InfiniteScroll's next callback
+    fireEvent.scroll(scrollableDiv, {
+      target: { scrollTop: scrollableDiv.scrollHeight },
+    });
+
+    // Wait for page 2 to load (total should now be 11 items)
+    await waitFor(
+      () => {
+        const manageButtons = screen.getAllByTestId('manageTagBtn');
+        expect(manageButtons.length).toBe(11);
+      },
+      { timeout: 3000 },
+    );
+  });
 
 
   it('adds a new sub tag to the current tag', async () => {

@@ -31,7 +31,8 @@
  * - React, React Router, Apollo Client, Material-UI, React-Bootstrap, NotificationToast.
  *
  * Error Handling:
- * - Displays an error message if the sub-tags query fails.
+ * - Displays an error toast notification if the sub-tags query fails
+ *   (in external UI mode).
  *
  * Usage:
  * - This component is used in the context of managing organizational tags

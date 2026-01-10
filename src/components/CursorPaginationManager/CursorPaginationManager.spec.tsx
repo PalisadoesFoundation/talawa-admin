@@ -1354,7 +1354,7 @@ describe('CursorPaginationManager', () => {
     it('component unmounts cleanly during fetch', async () => {
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(vi.fn());
+        .mockImplementation(() => {});
       const mocks = [createSuccessMock()];
 
       const { unmount } = render(
