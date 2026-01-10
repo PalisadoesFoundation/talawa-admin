@@ -11,7 +11,8 @@ import type {
   IItemModalProps,
   IUpdateActionItemForInstanceVariables,
   ICreateActionItemVariables,
-} from 'types/ActionItems/interface.ts';
+  IActionItemInfo,
+} from 'types/shared-components/ActionItems/interface';
 import ItemModal from './ActionItemModal';
 import { vi, it, describe, expect, beforeEach, afterEach } from 'vitest';
 import dayjs from 'dayjs';
@@ -38,7 +39,6 @@ import {
   UPDATE_ACTION_ITEM_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import userEvent from '@testing-library/user-event';
-import type { IActionItemInfo } from 'types/ActionItems/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
@@ -623,9 +623,6 @@ const mockActionItemWithGroup = {
   },
 };
 
-const getPickerInputByLabel = (label: string) =>
-  screen.getByLabelText(label, { selector: 'input' });
-
 // Additional test cases for ItemModal component
 describe('ItemModal - Additional Test Cases', () => {
   beforeEach(() => {
@@ -652,7 +649,7 @@ describe('ItemModal - Additional Test Cases', () => {
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     });
 
-    it('should render modal when isOpen is true', () => {
+    it('should render modal when isOpen is true', async () => {
       const props: IItemModalProps = {
         isOpen: true,
         hide: vi.fn(),
@@ -698,7 +695,7 @@ describe('ItemModal - Additional Test Cases', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(
         () => {
           expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
@@ -741,7 +738,7 @@ describe('ItemModal - Additional Test Cases', () => {
 
   // Test form initialization
   describe('Form Initialization', () => {
-    it('should initialize form with default values for create mode', () => {
+    it('should initialize form with default values for create mode', async () => {
       const props: IItemModalProps = {
         isOpen: true,
         hide: vi.fn(),
@@ -831,7 +828,7 @@ describe('ItemModal - Additional Test Cases', () => {
   });
 
   describe('Date Picker Functionality', () => {
-    it('should render date picker correctly', () => {
+    it('should render date picker correctly', async () => {
       const props: IItemModalProps = {
         isOpen: true,
         hide: vi.fn(),
@@ -867,7 +864,7 @@ describe('ItemModal - Additional Test Cases', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -908,7 +905,7 @@ describe('ItemModal - Additional Test Cases', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -958,7 +955,7 @@ describe('ItemModal - Additional Test Cases', () => {
     });
   });
 
-  describe('Assignment type switching', () => {
+  describe('Assignment type switching', async () => {
     it('should clear volunteer selection when switching to volunteer group and back', async () => {
       const props: IItemModalProps = {
         isOpen: true,
@@ -971,7 +968,7 @@ describe('ItemModal - Additional Test Cases', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -1044,7 +1041,7 @@ describe('ItemModal - Additional Test Cases', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -1216,8 +1213,8 @@ describe('ItemModal - Additional Test Cases', () => {
   });
 
   // Test accessibility
-  describe('Accessibility', () => {
-    it('should have proper role for modal dialog', () => {
+  describe('Accessibility', async () => {
+    it('should have proper role for modal dialog', async () => {
       const props: IItemModalProps = {
         isOpen: true,
         hide: vi.fn(),
@@ -1278,7 +1275,7 @@ describe('ItemModal - Additional Test Cases', () => {
 
   // Test performance
   describe('Performance', () => {
-    it('should not re-render unnecessarily with same props', () => {
+    it('should not re-render unnecessarily with same props', async () => {
       const props: IItemModalProps = {
         isOpen: true,
         hide: vi.fn(),
@@ -1324,7 +1321,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -1347,7 +1344,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -1389,7 +1386,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -1420,7 +1417,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -1445,7 +1442,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -1457,6 +1454,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       // The date picker should be accessible and allow interaction
       await userEvent.click(dateInput);
       expect(dateInput).toBeInTheDocument();
+      expect(dateInput).not.toBeDisabled();
     });
 
     it('should clear field values when handleFormChange is called with empty values', async () => {
@@ -1471,7 +1469,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -1499,6 +1497,7 @@ describe('ItemModal - Specific Test Coverage', () => {
 
       renderWithProviders(props);
 
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         const modal = screen.getByTestId('actionItemModal');
         expect(modal).toBeInTheDocument();
@@ -1536,7 +1535,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -1561,7 +1560,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       };
 
       const { rerender } = renderWithProviders(createProps);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -1606,7 +1605,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -1642,7 +1641,7 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
     };
 
     renderWithProviders(props);
-
+    const modal = await screen.findByTestId('itemModal');
     // Wait for categories to load
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
@@ -1709,7 +1708,7 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
         </LocalizationProvider>
       </MockedProvider>,
     );
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -1763,7 +1762,7 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
         </LocalizationProvider>
       </MockedProvider>,
     );
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -1810,6 +1809,7 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
       </MockedProvider>,
     );
 
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -1867,7 +1867,7 @@ describe('updateActionForInstanceHandler', () => {
         </LocalizationProvider>
       </MockedProvider>,
     );
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -1923,7 +1923,7 @@ describe('updateActionForInstanceHandler', () => {
     };
 
     renderWithProviders(props);
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -1958,7 +1958,7 @@ describe('updateActionForInstanceHandler', () => {
     };
 
     renderWithProviders(props);
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -2013,7 +2013,7 @@ describe('updateActionForInstanceHandler', () => {
         </LocalizationProvider>
       </MockedProvider>,
     );
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -2103,6 +2103,8 @@ describe('updateActionForInstanceHandler', () => {
       </MockedProvider>,
     );
 
+    const modal = await screen.findByTestId('itemModal');
+
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -2174,6 +2176,7 @@ describe('updateActionForInstanceHandler', () => {
       </MockedProvider>,
     );
 
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -2250,6 +2253,7 @@ describe('updateActionForInstanceHandler', () => {
       </MockedProvider>,
     );
 
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -2325,6 +2329,7 @@ describe('updateActionForInstanceHandler', () => {
       </MockedProvider>,
     );
 
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -2402,7 +2407,7 @@ describe('updateActionForInstanceHandler', () => {
         </LocalizationProvider>
       </MockedProvider>,
     );
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -2487,6 +2492,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       </MockedProvider>,
     );
 
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -2565,6 +2571,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
 
     renderWithProviders(props);
 
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -2610,6 +2617,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
 
     renderWithProviders(props);
 
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -2648,6 +2656,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
 
     renderWithProviders(props);
 
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -2675,7 +2684,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
     };
 
     renderWithProviders(props);
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -2705,6 +2714,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
 
     renderWithProviders(props);
 
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -2733,7 +2743,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -2764,7 +2774,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -2794,7 +2804,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -2823,7 +2833,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -2860,7 +2870,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -2951,7 +2961,7 @@ describe('orgActionItemsRefetch functionality', () => {
         </LocalizationProvider>
       </MockedProvider>,
     );
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -3062,7 +3072,7 @@ describe('orgActionItemsRefetch functionality', () => {
         </LocalizationProvider>
       </MockedProvider>,
     );
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -3193,7 +3203,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
           </LocalizationProvider>
         </MockedProvider>,
       );
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -3297,7 +3307,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
           </LocalizationProvider>
         </MockedProvider>,
       );
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -3366,7 +3376,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -3432,7 +3442,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
           </LocalizationProvider>
         </MockedProvider>,
       );
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -3474,7 +3484,7 @@ describe('handleFormChange function', () => {
     };
 
     renderWithProviders(props);
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -3508,7 +3518,7 @@ describe('handleFormChange function', () => {
     };
 
     renderWithProviders(props);
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -3539,7 +3549,7 @@ describe('handleFormChange function', () => {
     };
 
     renderWithProviders(props);
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -3571,7 +3581,7 @@ describe('handleFormChange function', () => {
     };
 
     renderWithProviders(props);
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -3605,7 +3615,7 @@ describe('handleFormChange function', () => {
     };
 
     renderWithProviders(props);
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -3617,7 +3627,7 @@ describe('handleFormChange function', () => {
     expect(notesInput).toHaveValue('Updated field 1');
 
     // Test updating the date field using the deterministic helper
-    const dateInput = getPickerInputByLabel('assignmentDate');
+    const dateInput = await screen.findByTestId('assignmentDatePicker');
     expect(dateInput).toBeInTheDocument();
     await userEvent.click(dateInput);
     // Date field should be interactable
@@ -3636,7 +3646,7 @@ describe('handleFormChange function', () => {
     };
 
     renderWithProviders(props);
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -3678,6 +3688,7 @@ describe('Modal Structure - className={styles.itemModal} show={isOpen} onHide={h
 
     renderWithProviders(props);
 
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       const modal = screen.getByTestId('actionItemModal');
       expect(modal).toBeInTheDocument();
@@ -3702,6 +3713,7 @@ describe('Modal Structure - className={styles.itemModal} show={isOpen} onHide={h
 
     renderWithProviders(props);
 
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       const modal = screen.getByTestId('actionItemModal');
       expect(modal).toBeInTheDocument();
@@ -3739,7 +3751,7 @@ describe('Modal Structure - className={styles.itemModal} show={isOpen} onHide={h
     };
 
     renderWithProviders(props);
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -3763,7 +3775,7 @@ describe('Modal Structure - className={styles.itemModal} show={isOpen} onHide={h
     };
 
     renderWithProviders(props);
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -3791,7 +3803,7 @@ describe('Modal Structure - className={styles.itemModal} show={isOpen} onHide={h
     };
 
     const { rerender } = renderWithProviders(createProps);
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -3838,7 +3850,7 @@ describe('Modal Structure - className={styles.itemModal} show={isOpen} onHide={h
     };
 
     renderWithProviders(props);
-
+    const modal = await screen.findByTestId('itemModal');
     await waitFor(() => {
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -3883,7 +3895,7 @@ describe('Modal Structure - className={styles.itemModal} show={isOpen} onHide={h
       };
 
       const { unmount } = renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         if (testCase.isOpen) {
           expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
@@ -3915,7 +3927,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -3961,7 +3973,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -4080,7 +4092,7 @@ describe('Partially Covered Lines Test Coverage', () => {
           </LocalizationProvider>
         </MockedProvider>,
       );
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -4145,7 +4157,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -4203,7 +4215,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       );
     });
 
-    it('should have isVolunteerChipDisabled true when editing item with volunteer group', () => {
+    it('should have isVolunteerChipDisabled true when editing item with volunteer group', async () => {
       // This tests the useMemo for isVolunteerChipDisabled
       // When editMode is true and actionItem has volunteerGroup, chip should be disabled
       const actionItemWithVolunteerGroup = {
@@ -4226,7 +4238,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       // The component should render - this exercises the logic path
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
@@ -4245,7 +4257,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       await waitFor(() => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
@@ -4285,7 +4297,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       );
     });
 
-    it('should have isVolunteerGroupChipDisabled true when editing item with volunteer', () => {
+    it('should have isVolunteerGroupChipDisabled true when editing item with volunteer', async () => {
       // This tests the useMemo for isVolunteerGroupChipDisabled
       // When editMode is true and actionItem has volunteer, chip should be disabled
       const actionItemWithVolunteer = {
@@ -4312,7 +4324,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       };
 
       renderWithProviders(props);
-
+      const modal = await screen.findByTestId('itemModal');
       // The component should render - this exercises the logic path
       expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });

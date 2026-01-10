@@ -1,18 +1,20 @@
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from '../../../utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import ItemViewModal, { type IViewModalProps } from './ActionItemViewModal';
-import type { IActionItemInfo } from 'types/ActionItems/interface';
+import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
@@ -681,12 +683,7 @@ describe('Testing ItemViewModal', () => {
       expect(screen.getByLabelText(t.creator)).toBeInTheDocument();
       expect(screen.getByLabelText(t.status)).toBeInTheDocument();
       expect(screen.getByLabelText(t.event)).toBeInTheDocument();
-      expect(
-        screen.getByLabelText(t.assignmentDate, {
-          selector: 'input',
-          exact: true,
-        }),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('assignmentDatePicker')).toBeInTheDocument();
       expect(screen.getByLabelText(t.preCompletionNotes)).toBeInTheDocument();
     });
 

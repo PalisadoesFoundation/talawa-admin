@@ -22,12 +22,9 @@ import type {
   IUpdateActionItemInput,
   IUpdateActionForInstanceInput,
   IEventVolunteerGroup,
-} from 'types/ActionItems/interface';
-
-import type {
   IFormStateType,
   IItemModalProps,
-} from 'types/ActionItems/interface.ts';
+} from 'types/shared-components/ActionItems/interface';
 
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -51,6 +48,7 @@ import {
   GET_EVENT_VOLUNTEER_GROUPS,
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'types/Volunteer/interface';
+import { BaseModal } from 'shared-components/BaseModal';
 
 const initializeFormState = (
   actionItem: IActionItemInfo | null,
@@ -426,6 +424,14 @@ const ItemModal: FC<IItemModalProps> = ({
       setApplyTo('instance'); // Default to 'instance' for new action items
     }
   }, [isOpen, editMode, actionItem]);
+
+  const getSubmitHandler = (): ((e: FormEvent) => Promise<void>) => {
+    if (!editMode) return createActionItemHandler;
+    if (actionItem?.isTemplate && applyTo === 'instance') {
+      return updateActionForInstanceHandler;
+    }
+    return updateActionItemHandler;
+  };
 
   return (
     <BaseModal

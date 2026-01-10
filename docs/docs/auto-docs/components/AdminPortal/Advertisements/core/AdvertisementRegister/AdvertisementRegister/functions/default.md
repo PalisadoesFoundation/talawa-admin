@@ -12,7 +12,7 @@ Defined in: [src/components/AdminPortal/Advertisements/core/AdvertisementRegiste
 
 ### \_\_namedParameters
 
-[`InterfaceAddOnRegisterProps`](../../../../../../../types/Advertisement/interface/interfaces/InterfaceAddOnRegisterProps.md)
+[`InterfaceAddOnRegisterProps`](../../../../../../../types/AdminPortal/Advertisement/interface/interfaces/InterfaceAddOnRegisterProps.md)
 
 ## Returns
 
