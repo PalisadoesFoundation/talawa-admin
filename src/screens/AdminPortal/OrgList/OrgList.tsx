@@ -43,7 +43,7 @@
  * - `OrganizationModal` - For creating new organizations.
  * - `Modal` - For managing features after organization creation.
  */
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
@@ -95,6 +95,7 @@ function orgList(): JSX.Element {
   const { t: tCommon } = useTranslation('common');
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
+  const refetchDebounceRef = useRef<number | undefined>(undefined);
 
   function openDialogModal(redirectOrgId: string): void {
     setDialogRedirectOrgId(redirectOrgId);
@@ -280,17 +281,23 @@ function orgList(): JSX.Element {
   };
 
   /**
-   * Note: The explicit refetchOrgs({ filter: val }) call is intentional.
-   * While Apollo Client auto-refetches when filterName changes, the explicit
-   * call ensures immediate network request execution and avoids timing issues
-   * from React's batched state updates. This pattern is used consistently
-   * elsewhere (e.g., Organizations.tsx) to prevent UI state race conditions.
+   * Note: The explicit refetchOrgs({ filter: val }) call is debounced to prevent
+   * network flooding on every keystroke. The 250ms delay provides immediate UX feedback
+   * (via setTypedValue) while batching network requests. This pattern prevents jittery
+   * UI behavior under latency while maintaining Apollo Client's auto-refetch benefits.
    */
   const handleChangeFilter = (val: string) => {
     setTypedValue(val);
     setSearchByName(val);
     setFilterName(val);
-    refetchOrgs({ filter: val });
+
+    // Debounce the refetch to avoid flooding the network
+    if (refetchDebounceRef.current) {
+      window.clearTimeout(refetchDebounceRef.current);
+    }
+    refetchDebounceRef.current = window.setTimeout(() => {
+      refetchOrgs({ filter: val });
+    }, 250);
   };
 
   const handleSortChange = (value: string | number): void => {
@@ -368,9 +375,9 @@ function orgList(): JSX.Element {
       {/* Text Infos for list */}
 
       {!isLoading &&
-      (!sortedOrganizations || sortedOrganizations.length === 0) &&
-      searchByName.length === 0 &&
-      (!userData || adminFor.length === 0) ? (
+        (!sortedOrganizations || sortedOrganizations.length === 0) &&
+        searchByName.length === 0 &&
+        (!userData || adminFor.length === 0) ? (
         <EmptyState
           icon={<Group />}
           message={t('noOrgErrorTitle')}
@@ -414,9 +421,9 @@ function orgList(): JSX.Element {
           <div className={`${styles.listBoxOrgList}`}>
             {(rowsPerPage > 0
               ? sortedOrganizations.slice(
-                  page * rowsPerPage,
-                  page * rowsPerPage + rowsPerPage,
-                )
+                page * rowsPerPage,
+                page * rowsPerPage + rowsPerPage,
+              )
               : sortedOrganizations
             )?.map((item: InterfaceOrgInfoTypePG) => {
               return (
@@ -467,19 +474,11 @@ function orgList(): JSX.Element {
       />
       {/* Plugin Notification Modal after Org is Created */}
       <BaseModal
-        show={dialogModalisOpen}
-        onHide={toggleDialogModal}
-        dataTestId="pluginNotificationModal"
         title={t('manageFeatures')}
-        headerClassName={styles.modalHeader}
-
-      <BaseModal
-        title={t('manageFeatures') as string}
         show={dialogModalisOpen}
-        onHide={toggleDialogModal}
+        onHide={closeDialogModal}
         dataTestId="pluginNotificationModal"
         headerClassName={styles.modalHeader}
-        showCloseButton={true}
       >
         <section id={styles.grid_wrapper}>
           <div>

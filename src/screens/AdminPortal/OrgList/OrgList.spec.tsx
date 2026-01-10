@@ -1872,6 +1872,11 @@ describe('Advanced Component Functionality Tests', () => {
       ).not.toBeInTheDocument();
     });
 
+    // Verify success toast was triggered
+    expect(mockToast.success).toHaveBeenCalledWith(
+      expect.stringContaining('congratulationOrgCreated'),
+    );
+
     // Verify organization creation flow completed successfully:
     // - Membership creation mutation executed
     // - Success condition checked and toast displayed
