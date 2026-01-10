@@ -66,6 +66,7 @@ import EmptyState from 'shared-components/EmptyState/EmptyState';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
+import type { IUserNode } from 'types/AdminPortal/OrganizationPeople/interface';
 
 /**
  * Maps numeric filter state to string option identifiers.
@@ -84,15 +85,6 @@ const OPTION_TO_STATE: Record<string, number> = {
   admin: 1,
   users: 2,
 };
-
-interface IUserNode {
-  id: string;
-  name: string;
-  role: string;
-  avatarURL?: string;
-  emailAddress?: string;
-  createdAt?: string;
-}
 
 function OrganizationPeople(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -117,7 +109,7 @@ function OrganizationPeople(): JSX.Element {
 
   useEffect(() => {
     setRefetchTrigger((prev) => prev + 1);
-  }, [state, searchTerm, currentUrl]);
+  }, [state, currentUrl]);
   const handleCloseModal = () => {
     setShowRemoveModal(false);
     setSelectedMemId(null);
