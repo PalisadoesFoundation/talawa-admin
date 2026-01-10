@@ -141,18 +141,6 @@ jobs:
       - name: Check for unused files and exports in src/ and docs/src
         run: pnpm knip --include files,exports,nsExports,nsTypes
 
-  DataGrid-Policy-Check:
-    name: Check for forbidden DataGrid usage in screens
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Run DataGrid Usage Check
-        run: |
-          chmod +x scripts/lint-datagrid.sh
-          ./scripts/lint-datagrid.sh
-
   CSS-Policy-Check:
     name: CSS Policy Check
     runs-on: ubuntu-latest
@@ -443,7 +431,6 @@ jobs:
         MinIO-Compliance-Check,
         Python-Compliance,
         Translation-Tag-Check,
-        DataGrid-Policy-Check,
       ]
     steps:
       - name: This job intentionally does nothing

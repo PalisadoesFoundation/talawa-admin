@@ -231,5 +231,7 @@
   "inviteOnlyEventDescription": "Visible uniquement par les membres invités et les administrateurs de l'événement",
   "to": "À",
   "removeMember": "Supprimer le Membre",
-  "retry": "Réessayer"
+  "retry": "Réessayer",
+  "or": "ou",
+  "eventNotFound": "Événement avec l'id {{id}} non trouvé"
 }

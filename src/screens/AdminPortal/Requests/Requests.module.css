@@ -1,0 +1,141 @@
+.tableHeader {
+  background-color: var(--color-gray-100);
+  color: var(--color-black);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+}
+
+.rowBackground {
+  background-color: var(--color-white);
+  color: var(--color-black);
+}
+
+.hoverShadowOnly:hover,
+.hoverShadowOnly:focus-visible,
+.hoverShadowOnly:active {
+  box-shadow: var(--hover-shadow);
+}
+
+/* -- RequestsTableItem.tsx -- */
+
+.requestsTableItemIndex {
+  padding-inline-start: var(--space-9);
+  vertical-align: middle;
+}
+
+.requestsTableItemName {
+  padding-inline-start: var(--space-7);
+  vertical-align: middle;
+}
+
+.requestsTableItemEmail {
+  padding-inline-start: var(--space-7);
+  vertical-align: middle;
+}
+
+.requestsAcceptButton {
+  background-color: var(--color-blue-200);
+  color: var(--color-gray-700);
+  border-color: var(--color-blue-200);
+  width: var(--logo-md);
+  height: var(--logo-xs);
+  margin-inline-start: calc(var(--space-5) * -1);
+}
+
+.requestsRejectButton {
+  background-color: var(--color-red-100);
+  color: var(--color-red-500);
+  border-color: var(--color-red-100);
+  width: var(--logo-md);
+  height: var(--logo-xs);
+  margin-inline-start: calc(var(--space-5) * -1);
+}
+
+.requestsAcceptButton:focus-visible {
+  background-color: var(--color-blue-200) !important;
+  color: var(--color-gray-700);
+  box-shadow:
+    0 0 0 var(--border-shadow-xs) currentColor,
+    var(--hover-shadow);
+  outline: none;
+}
+
+.requestsRejectButton:focus-visible {
+  background-color: var(--color-red-100) !important;
+  color: var(--color-red-500);
+  box-shadow:
+    0 0 0 var(--border-shadow-xs) currentColor,
+    var(--hover-shadow);
+  outline: none;
+}
+
+.requestsAcceptButton:disabled,
+.requestsAcceptButton.disabled {
+  background-color: var(--color-gray-50) !important;
+  color: var(--color-gray-300) !important;
+  border-color: var(--color-gray-300) !important;
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.requestsRejectButton:disabled,
+.requestsRejectButton.disabled {
+  background-color: var(--color-gray-50) !important;
+  color: var(--color-gray-300) !important;
+  border-color: var(--color-gray-300) !important;
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+@media (max-width: 1020px) {
+  .requestsTableItemIndex {
+    padding-inline-start: var(--space-8);
+  }
+
+  .requestsTableItemName,
+  .requestsTableItemEmail {
+    padding-inline-start: var(--space-5);
+  }
+
+  .requestsAcceptButton,
+  .requestsRejectButton {
+    margin-inline-start: calc(var(--space-2) * -1);
+  }
+}
+
+@media (max-width: 520px) {
+  .requestsTableItemIndex,
+  .requestsTableItemName,
+  .requestsTableItemEmail {
+    padding-inline-start: var(--space-5);
+  }
+
+  .requestsAcceptButton,
+  .requestsRejectButton {
+    margin-inline-start: 0;
+    width: 100%;
+  }
+}
+
+.avatarStyle {
+  border-radius: 100%;
+}
+
+.userAvatar {
+  border-radius: 50%;
+  margin-inline-end: var(--space-7);
+  width: var(--logo-xs);
+  height: var(--logo-xs);
+}
+
+.listBox {
+  width: 100%;
+  flex: 1;
+}
+
+.listTable {
+  width: 100%;
+  overflow: visible;
+}

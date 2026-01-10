@@ -231,5 +231,7 @@
   "inviteOnlyEventDescription": "仅受邀成员和活动管理员可见",
   "to": "至",
   "removeMember": "删除成员",
-  "retry": "重试"
+  "retry": "重试",
+  "or": "或",
+  "eventNotFound": "未找到 ID 为 {{id}} 的活动"
 }

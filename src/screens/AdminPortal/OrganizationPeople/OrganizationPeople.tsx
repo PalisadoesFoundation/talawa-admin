@@ -60,7 +60,7 @@ import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { Button } from 'react-bootstrap';
 import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import CursorPaginationManager from 'components/CursorPaginationManager/CursorPaginationManager';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
@@ -212,7 +212,7 @@ function OrganizationPeople(): JSX.Element {
 
   return (
     <>
-      <AdminSearchFilterBar
+      <SearchFilterBar
         hasDropdowns={true}
         searchPlaceholder={t('searchFullName')}
         searchValue={searchTerm}

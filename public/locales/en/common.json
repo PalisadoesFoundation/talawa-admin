@@ -231,5 +231,7 @@
   "inviteOnlyEventDescription": "Visible only to invited members and event admins",
   "to": "To",
   "removeMember": "Remove Member",
-  "retry": "Retry"
+  "retry": "Retry",
+  "or": "or",
+  "eventNotFound": "Event with id {{id}} not found"
 }
