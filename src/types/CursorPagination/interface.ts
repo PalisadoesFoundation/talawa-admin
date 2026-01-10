@@ -69,12 +69,13 @@ interface InterfaceCursorPaginationManagerDefaultProps<
 interface InterfaceCursorPaginationManagerExternalProps<
   TNode,
   TVariables extends Record<string, unknown> = Record<string, unknown>,
+  TData = unknown,
 > extends InterfaceCursorPaginationManagerBaseProps<TNode, TVariables> {
   /** Function to render each item. Ignored in external UI mode. */
   renderItem?: (item: TNode, index: number) => ReactNode;
   useExternalUI: true;
   /** Render prop for external UI integration (e.g., InfiniteScroll) */
-  children: (props: InterfaceCursorPaginationRenderProps<TNode>) => ReactNode;
+  children: (props: InterfaceCursorPaginationRenderProps<TNode, TData>) => ReactNode;
 }
 
 /**
@@ -88,14 +89,15 @@ interface InterfaceCursorPaginationManagerExternalProps<
 export type InterfaceCursorPaginationManagerProps<
   TNode,
   TVariables extends Record<string, unknown> = Record<string, unknown>,
+  TData = unknown,
 > =
   | InterfaceCursorPaginationManagerDefaultProps<TNode, TVariables>
-  | InterfaceCursorPaginationManagerExternalProps<TNode, TVariables>;
+  | InterfaceCursorPaginationManagerExternalProps<TNode, TVariables, TData>;
 
 /**
  * Props passed to children render function when useExternalUI is true
  */
-export interface InterfaceCursorPaginationRenderProps<TNode> {
+export interface InterfaceCursorPaginationRenderProps<TNode, TData = unknown> {
   items: TNode[];
   loading: boolean;
   loadingMore: boolean;
@@ -103,4 +105,6 @@ export interface InterfaceCursorPaginationRenderProps<TNode> {
   handleLoadMore: () => void;
   handleRefetch: () => void;
   error: ApolloError | undefined;
+  /** The full query data from Apollo Client */
+  queryData: TData | undefined;
 }

@@ -503,9 +503,6 @@ describe('Organisation Tags Page', () => {
 
     await wait();
 
-    // Component should render without errors
-    expect(container).toBeInTheDocument();
-
     // Loading state should be handled properly when query is skipped
     await waitFor(() => {
       // The component should still render UI elements but with no data

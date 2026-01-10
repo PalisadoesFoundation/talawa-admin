@@ -129,7 +129,7 @@ export function CursorPaginationManager<
   TNode,
   TVariables extends Record<string, unknown> = Record<string, unknown>, //i18n-ignore-line
 >(
-  props: InterfaceCursorPaginationManagerProps<TNode, TVariables>,
+  props: InterfaceCursorPaginationManagerProps<TNode, TVariables, TData>,
 ): React.ReactElement {
   const {
     query,
@@ -291,6 +291,7 @@ export function CursorPaginationManager<
           handleLoadMore,
           handleRefetch,
           error,
+          queryData: data,
         })}
       </>
     );
