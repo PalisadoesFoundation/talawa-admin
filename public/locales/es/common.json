@@ -233,5 +233,6 @@
   "removeMember": "Eliminar Miembro",
   "retry": "Reintentar",
   "or": "o",
-  "eventNotFound": "Evento con id {{id}} no encontrado"
+  "eventNotFound": "Evento con id {{id}} no encontrado",
+  "required": "Obligatorio"
 }

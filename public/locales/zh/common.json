@@ -233,5 +233,6 @@
   "removeMember": "删除成员",
   "retry": "重试",
   "or": "或",
-  "eventNotFound": "未找到 ID 为 {{id}} 的活动"
+  "eventNotFound": "未找到 ID 为 {{id}} 的活动",
+  "required": "必填"
 }
