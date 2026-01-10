@@ -12,8 +12,10 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  AdapterDayjs,
+  LocalizationProvider,
+} from 'shared-components/DateRangePicker';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
 import dayjs, { type Dayjs } from 'dayjs';
@@ -696,9 +698,12 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('updates start date and adjusts end date when start date changes', async () => {
+    const baseDate = new Date(Date.UTC(2025, 0, 15, 12, 0, 0));
     const mockSetEventStartDate = vi.fn();
     const mockSetEventEndDate = vi.fn();
     renderComponent({
+      eventStartDate: baseDate,
+      eventEndDate: baseDate,
       setEventStartDate: mockSetEventStartDate,
       setEventEndDate: mockSetEventEndDate,
     });
@@ -711,15 +716,11 @@ describe('EventListCardPreviewModal', () => {
     ).getByLabelText(/choose date/i);
     await userEvent.click(calendarButton);
 
-    await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+    const calendarGrid = await screen.findByRole('grid');
+    const dateToSelect = within(calendarGrid).getByRole('gridcell', {
+      name: '20',
     });
-
-    const dayCell = await screen.findByRole('gridcell', { name: '21' });
-
-    await userEvent.click(dayCell);
-
-    await userEvent.keyboard('{Enter}');
+    await userEvent.click(dateToSelect);
 
     await waitFor(() => {
       expect(mockSetEventStartDate).toHaveBeenCalled();
@@ -727,8 +728,11 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('updates end date when end date changes', async () => {
+    const baseDate = new Date(Date.UTC(2025, 0, 15, 12, 0, 0));
     const mockSetEventEndDate = vi.fn();
     renderComponent({
+      eventStartDate: baseDate,
+      eventEndDate: baseDate,
       setEventEndDate: mockSetEventEndDate,
     });
 
@@ -740,11 +744,10 @@ describe('EventListCardPreviewModal', () => {
     );
     await userEvent.click(calendarButton);
 
-    await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+    const calendarGrid = await screen.findByRole('grid');
+    const dateToSelect = within(calendarGrid).getByRole('gridcell', {
+      name: '20',
     });
-
-    const dateToSelect = screen.getByText('22');
     await userEvent.click(dateToSelect);
 
     await waitFor(() => {
