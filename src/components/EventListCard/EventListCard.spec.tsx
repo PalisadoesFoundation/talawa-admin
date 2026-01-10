@@ -209,14 +209,12 @@ describe('Testing Event List Card', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId('eventModalCloseBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
 
@@ -243,9 +241,7 @@ describe('Testing Event List Card', () => {
     });
 
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
 
@@ -304,9 +300,7 @@ describe('Testing Event List Card', () => {
     });
 
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
 
@@ -317,7 +311,7 @@ describe('Testing Event List Card', () => {
     await userEvent.click(screen.getByTestId('card'));
 
     await waitFor(() =>
-      expect(screen.getByTestId('eventModalCloseBtn')).toBeInTheDocument(),
+      expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument(),
     );
 
     await waitFor(() => {
