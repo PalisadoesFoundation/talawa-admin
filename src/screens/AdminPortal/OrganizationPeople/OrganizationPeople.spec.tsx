@@ -409,7 +409,7 @@ describe('OrganizationPeople', () => {
     const searchInput = screen.getByTestId('searchbtn');
     await userEvent.type(searchInput, 'Jane');
 
-    // Wait for debounced search (AdminSearchFilterBar has 300ms debounce)
+    // Wait for debounced search (SearchFilterBar has 300ms debounce)
     await waitFor(
       () => {
         expect(screen.queryByText('John Doe')).not.toBeInTheDocument();

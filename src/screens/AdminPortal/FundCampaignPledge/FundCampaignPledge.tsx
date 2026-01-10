@@ -2,7 +2,7 @@ import { useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
@@ -337,7 +337,7 @@ const fundCampaignPledge = (): JSX.Element => {
           </div>
         </div>
         <div className={`${styles.btnsContainerPledge} align-items-center`}>
-          <AdminSearchFilterBar
+          <SearchFilterBar
             searchPlaceholder={t('pledges.searchPledger')}
             searchValue={searchTerm}
             onSearchChange={(value) => setSearchTerm(value.trim())}

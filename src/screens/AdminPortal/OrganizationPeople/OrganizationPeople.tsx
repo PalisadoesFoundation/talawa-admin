@@ -47,10 +47,10 @@ import {
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
 import { Button } from 'react-bootstrap';
-import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
+import OrgPeopleListCard from 'components/AdminPortal/OrgPeopleListCard/OrgPeopleListCard';
 import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { errorHandler } from 'utils/errorHandler';
@@ -544,7 +544,7 @@ function OrganizationPeople(): JSX.Element {
 
   return (
     <>
-      <AdminSearchFilterBar
+      <SearchFilterBar
         hasDropdowns={true}
         searchPlaceholder={t('searchFullName')}
         searchValue={searchTerm}

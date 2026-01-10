@@ -80,7 +80,7 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams } from 'react-router';
 import styles from 'style/app-fixed.module.css';
-import memberDetailStyles from './MemberDetail.module.css';
+import profileForm from './profileForm.module.css';
 import {
   UPDATE_CURRENT_USER_MUTATION,
   UPDATE_USER_MUTATION,
@@ -312,7 +312,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
             {/* Personal Details Card */}
             <Card className={`${styles.allRound}`}>
               <Card.Header
-                className={`py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius} ${memberDetailStyles.personalDetailsHeader}`}
+                className={`py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius} ${profileForm.personalDetailsHeader}`}
               >
                 <h3 className="m-0">{t('personalDetailsHeading')}</h3>
                 <Button
@@ -332,7 +332,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
                     <div className="position-relative d-inline-block">
                       {formState?.avatarURL ? (
                         <img
-                          className={`rounded-circle ${memberDetailStyles.profileImage}`}
+                          className={`rounded-circle ${profileForm.profileImage}`}
                           src={sanitizeAvatars(
                             selectedAvatar,
                             formState.avatarURL,
@@ -352,7 +352,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
                       )}
                       <button
                         type="button"
-                        className={`fas fa-edit position-absolute border-0 bottom-0 right-0 p-2 bg-white rounded-circle ${memberDetailStyles.editProfileIcon}`}
+                        className={`fas fa-edit position-absolute border-0 bottom-0 right-0 p-2 bg-white rounded-circle ${profileForm.editProfileIcon}`}
                         onClick={() => fileInputRef.current?.click()}
                         data-testid="uploadImageBtn"
                         title={`${tCommon('edit')} ${tCommon('profilePicture')}`}
@@ -369,7 +369,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
                     id="postphoto"
                     name="photo"
                     type="file"
-                    className={`${styles.cardControl} ${memberDetailStyles.hiddenFileInput}`}
+                    className={`${styles.cardControl} ${profileForm.hiddenFileInput}`}
                     data-testid="fileInput"
                     multiple={false}
                     ref={fileInputRef}
@@ -521,13 +521,13 @@ const MemberDetail: React.FC = (): JSX.Element => {
             <Col>
               <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
                 <Card.Header
-                  className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius} ${memberDetailStyles.member_details_style}`}
+                  className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius} ${profileForm.member_details_style}`}
                 >
                   <h3 className="m-0" data-testid="eventsAttended-title">
                     {t('eventsAttended')}
                   </h3>
                   <Button
-                    className={memberDetailStyles.contact_btn}
+                    className={profileForm.contact_btn}
                     size="sm"
                     variant="light"
                     data-testid="viewAllEvents"
@@ -562,7 +562,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
             </Col>
             <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
               <Card.Header
-                className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius} ${memberDetailStyles.member_details_style}`}
+                className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius} ${profileForm.member_details_style}`}
               >
                 <h3 className="m-0" data-testid="tagsAssigned-title">
                   {t('tagsAssigned')}
@@ -579,7 +579,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
           <Col md={6}>
             <Card className={`${styles.allRound}`}>
               <Card.Header
-                className={`py-3 px-4 ${styles.topRadius} ${memberDetailStyles.member_details_style}`}
+                className={`py-3 px-4 ${styles.topRadius} ${profileForm.member_details_style}`}
               >
                 <h3 className="m-0">{t('contactInfoHeading')}</h3>
               </Card.Header>
@@ -798,7 +798,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
                 </Button>
                 <Button
                   variant="outline"
-                  className={memberDetailStyles.member_details_style}
+                  className={profileForm.member_details_style}
                   onClick={handleUserUpdate}
                   data-testid="saveChangesBtn"
                 >

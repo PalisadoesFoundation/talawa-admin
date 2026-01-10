@@ -316,6 +316,14 @@ export interface IBaseDataTableProps<T, TValue = unknown> {
    * If a property name is provided, its value will be coerced to string or number.
    */
   rowKey?: keyof T | ((row: T) => string | number);
+  /**
+   * Optional className applied to the underlying table element.
+   */
+  tableClassName?: string;
+  /**
+   * Optional custom row renderer. When provided, rows are rendered using this function.
+   */
+  renderRow?: (row: T, index: number) => React.ReactNode;
   emptyMessage?: string;
   error?: Error | null;
   renderError?: (error: Error) => React.ReactNode;

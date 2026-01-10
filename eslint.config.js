@@ -60,6 +60,12 @@ const restrictedImports = [
     message:
       'Do not import react-bootstrap/Table directly. Use the shared DataTable component instead.',
   },
+  {
+    id: 'react-toastify',
+    name: 'react-toastify',
+    message:
+      'Direct imports from react-toastify are not allowed. Please use the NotificationToast component from src/components/NotificationToast/ instead.',
+  },
 ];
 
 const stripId = (entry) => {
@@ -297,6 +303,20 @@ export default [
       'src/types/shared-components/BaseModal/**/*.{ts,tsx}',
     ],
     rules: restrictImportsExcept(['rb-modal']),
+  },
+  /**
+   * Exemption: NotificationToast component files
+   *
+   * NotificationToast files need direct react-toastify access for wrapper implementation.
+   * These files are the only ones allowed to import from react-toastify.
+   * Allowed ID: react-toastify.
+   */
+  {
+    files: [
+      'src/components/NotificationToast/**/*.{ts,tsx}',
+      'src/types/NotificationToast/**/*.{ts,tsx}',
+    ],
+    rules: restrictImportsExcept(['react-toastify']),
   },
   /**
    * Exemption: Date picker wrapper components

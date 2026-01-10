@@ -62,7 +62,6 @@
  */
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
-import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
@@ -74,12 +73,14 @@ import TableLoader from 'components/TableLoader/TableLoader';
 import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
+import styles from './Users.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ApolloError } from '@apollo/client';
 import { PersonOff, WarningAmberRounded } from '@mui/icons-material';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import { DataTable } from 'shared-components/DataTable/DataTable';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 type SortingOption = 'newest' | 'oldest';
 type FilteringOption = 'admin' | 'user' | 'cancel';
@@ -338,9 +339,37 @@ const Users = (): JSX.Element => {
     t('blocked_organizations'),
   ];
 
+  const tableColumns: IColumnDef<InterfaceQueryUserListItem>[] = [
+    {
+      id: 'index',
+      header: headerTitles[0],
+      accessor: 'id',
+    },
+    {
+      id: 'name',
+      header: headerTitles[1],
+      accessor: 'name',
+    },
+    {
+      id: 'email',
+      header: headerTitles[2],
+      accessor: 'emailAddress',
+    },
+    {
+      id: 'joinedOrganizations',
+      header: headerTitles[3],
+      accessor: 'id',
+    },
+    {
+      id: 'blockedOrganizations',
+      header: headerTitles[4],
+      accessor: 'id',
+    },
+  ];
+
   /**
    * Helper function to determine empty state message
-   * @returns {string} - The appropriate empty state message
+   * @returns The appropriate empty state message
    */
   const getEmptyStateMessage = () => {
     if (searchByName.length > 0) {
@@ -353,7 +382,7 @@ const Users = (): JSX.Element => {
     <>
       {/* Buttons Container */}
       <div className={styles.btnsContainer} data-testid="testcomp">
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={true}
           searchPlaceholder={t('enterName')}
           searchValue={searchByName}
@@ -431,34 +460,20 @@ const Users = (): JSX.Element => {
                 </div>
               }
             >
-              <Table className="mb-0" responsive>
-                <thead>
-                  <tr>
-                    {headerTitles.map((title: string, index: number) => {
-                      return (
-                        <th key={index} scope="col">
-                          {title}
-                        </th>
-                      );
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {displayedUsers.map(
-                    (user: InterfaceQueryUserListItem, index: number) => {
-                      return (
-                        <UsersTableItem
-                          key={user.id}
-                          index={index}
-                          resetAndRefetch={resetAndRefetch}
-                          user={user}
-                          loggedInUserId={loggedInUserId}
-                        />
-                      );
-                    },
-                  )}
-                </tbody>
-              </Table>
+              <DataTable
+                data={displayedUsers}
+                columns={tableColumns}
+                rowKey="id"
+                tableClassName="mb-0"
+                renderRow={(user, index) => (
+                  <UsersTableItem
+                    index={index}
+                    resetAndRefetch={resetAndRefetch}
+                    user={user}
+                    loggedInUserId={loggedInUserId}
+                  />
+                )}
+              />
             </InfiniteScroll>
           )}
         </LoadingState>

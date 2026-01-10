@@ -46,6 +46,8 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     columns,
     loading,
     rowKey,
+    tableClassName,
+    renderRow,
     emptyMessage = tCommon('noResultsFound'),
     error,
     renderError,
@@ -119,6 +121,10 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     : data;
   const total = totalItems ?? data.length;
 
+  const tableClassNames = tableClassName
+    ? `${styles.dataTableBase} ${tableClassName}`
+    : styles.dataTableBase;
+
   const getKey = React.useCallback(
     (row: T, idx: number): string | number => {
       if (typeof rowKey === 'function') {
@@ -168,7 +174,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
           striped
           hover
           responsive
-          className={styles.dataTableBase}
+          className={tableClassNames}
           aria-busy="true"
         >
           {ariaLabel && (
@@ -237,7 +243,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
         striped
         hover
         responsive
-        className={styles.dataTableBase}
+        className={tableClassNames}
         data-testid="datatable"
         aria-busy={loading && loadingOverlay}
       >
@@ -254,21 +260,29 @@ export function DataTable<T>(props: IDataTableProps<T>) {
           </tr>
         </thead>
         <tbody>
-          {paginatedData.map((row, idx) => (
-            <tr
-              key={getKey(row, idx)}
-              data-testid={`datatable-row-${getKey(row, idx)}`}
-            >
-              {columns.map((col) => {
-                const val = getCellValue(row, col.accessor);
-                return (
-                  <td key={col.id} data-testid={`datatable-cell-${col.id}`}>
-                    {col.render ? col.render(val, row) : renderCellValue(val)}
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
+          {renderRow
+            ? paginatedData.map((row, idx) => (
+                <React.Fragment key={getKey(row, idx)}>
+                  {renderRow(row, idx)}
+                </React.Fragment>
+              ))
+            : paginatedData.map((row, idx) => (
+                <tr
+                  key={getKey(row, idx)}
+                  data-testid={`datatable-row-${getKey(row, idx)}`}
+                >
+                  {columns.map((col) => {
+                    const val = getCellValue(row, col.accessor);
+                    return (
+                      <td key={col.id} data-testid={`datatable-cell-${col.id}`}>
+                        {col.render
+                          ? col.render(val, row)
+                          : renderCellValue(val)}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
 
           {/* Partial loading: append skeleton rows for fetchMore
            *

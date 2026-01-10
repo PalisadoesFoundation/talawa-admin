@@ -85,14 +85,14 @@ import {
   UPDATE_USER_TAG,
 } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAGS_ASSIGNED_MEMBERS } from 'GraphQl/Queries/userTagQueries';
-import AddPeopleToTag from 'components/AddPeopleToTag/AddPeopleToTag';
-import TagActions from 'components/TagActions/TagActions';
+import AddPeopleToTag from 'components/AdminPortal/AddPeopleToTag/AddPeopleToTag';
+import TagActions from 'components/AdminPortal/TagActions/TagActions';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import EditUserTagModal from './editModal/EditUserTagModal';
 import RemoveUserTagModal from './removeModal/RemoveUserTagModal';
 import UnassignUserTagModal from './unassignModal/UnassignUserTagModal';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 export const getManageTagErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
@@ -421,7 +421,7 @@ function ManageTag(): JSX.Element {
       <Row className={styles.head}>
         <div className={styles.mainpageright}>
           <div className={styles.btnsContainer}>
-            <AdminSearchFilterBar
+            <SearchFilterBar
               hasDropdowns={true}
               searchPlaceholder={tCommon('searchByName')}
               searchValue={assignedMemberSearchInput}

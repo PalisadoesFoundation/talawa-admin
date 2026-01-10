@@ -33,7 +33,7 @@
  * - `useNavigate`: For navigation.
  * - `useParams`: For extracting event and organization IDs from the URL.
  *
- * @returns {JSX.Element} The rendered EventManagement component.
+ * @returns The rendered EventManagement component.
  */
 import React, { useState } from 'react';
 import Row from 'react-bootstrap/Row';
@@ -47,7 +47,7 @@ import { IoMdStats, IoIosHand } from 'react-icons/io';
 import EventAgendaItemsIcon from 'assets/svgs/agenda-items.svg?react';
 import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import styles from './EventManagement.module.css';
 
 import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
 import EventActionItems from 'components/EventManagement/EventActionItems/EventActionItems';

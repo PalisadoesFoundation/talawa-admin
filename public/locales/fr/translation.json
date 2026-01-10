@@ -458,6 +458,7 @@
     "userName": "Nom d'utilisateur",
     "actions": "Actions",
     "noOneSelected": "Personne sélectionnée",
+    "addMember": "Ajouter un membre",
     "assignToTags": "Attribuer aux étiquettes",
     "removeFromTags": "Retirer des étiquettes",
     "assign": "Attribuer",
@@ -486,7 +487,8 @@
     "tagActions": "Actions d'étiquette",
     "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
     "sortPeople": "Trier les personnes",
-    "noTagsFound": "Aucun tag trouvé"
+    "noTagsFound": "Aucun tag trouvé",
+    "removeMember": "Retirer le membre"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
@@ -1643,7 +1645,9 @@
     "preview": "Aperçu",
     "bannerAd": "Bannière publicitaire",
     "popupAd": "Annonce popup",
-    "menuAd": "Annonce de menu"
+    "menuAd": "Annonce de menu",
+    "searchAdvertisements": "Rechercher des annonces",
+    "advertisementLoading": "Chargement des annonces...."
   },
   "userChat": {
     "title": "Discussions",
@@ -1950,7 +1954,9 @@
     "viewDetails": "Voir les détails de {{name}}",
     "editVolunteerGroup": "Modifier le groupe de bénévoles {{name}}",
     "deleteVolunteerGroup": "Supprimer le groupe de bénévoles {{name}}",
-    "deleteVolunteerEntry": "Supprimer l'entrée bénévole {{name}}"
+    "deleteVolunteerEntry": "Supprimer l'entrée bénévole {{name}}",
+    "viewGroup": "Voir le groupe de bénévoles",
+    "editGroup": "Modifier le groupe de bénévoles"
   },
   "userVolunteer": {
     "title": "Volontariat",

@@ -229,5 +229,7 @@
   "organizationEventDescription": "Visible para todos los miembros de la organización",
   "inviteOnlyEvent": "Solo por invitación",
   "inviteOnlyEventDescription": "Visible solo para miembros invitados y administradores de eventos",
-  "to": "A"
+  "to": "A",
+  "or": "o",
+  "eventNotFound": "Evento con id {{id}} no encontrado"
 }

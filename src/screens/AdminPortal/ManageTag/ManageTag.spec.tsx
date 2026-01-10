@@ -109,11 +109,11 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
   },
 }));
 
-vi.mock('components/AddPeopleToTag/AddPeopleToTag', async () => {
+vi.mock('components/AdminPortal/AddPeopleToTag/AddPeopleToTag', async () => {
   return await import('./ManageTagMockComponents/MockAddPeopleToTag');
 });
 
-vi.mock('components/TagActions/TagActions', async () => {
+vi.mock('components/AdminPortal/TagActions/TagActions', async () => {
   return await import('./ManageTagMockComponents/MockTagActions');
 });
 
