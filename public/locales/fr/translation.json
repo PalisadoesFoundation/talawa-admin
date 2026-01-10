@@ -1411,7 +1411,10 @@
     "createdAt": "Créé le",
     "options": "Options",
     "addRegistrant": "Ajouter un inscrit",
-    "noRegistrantsFound": "Aucun inscrit trouvé."
+    "noRegistrantsFound": "Aucun inscrit trouvé.",
+    "removingAttendee": "Suppression du participant...",
+    "attendeeRemovedSuccessfully": "Participant supprimé avec succès",
+    "errorRemovingAttendee": "Erreur lors de la suppression du participant. Veuillez réessayer."
   },
   "onSpotAttendee": {
     "title": "Participant sur place",
@@ -1835,6 +1838,13 @@
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
     "errorRemovingAttendee": "Erreur lors de la suppression du participant",
+    "eventRegistrantsTitle": "Inscrits à l'événement",
+    "inviteByEmailButton": "Inviter par email",
+    "addRegistrantButton": "Ajouter un inscrit",
+    "noRegistrationsFound": "Aucune inscription trouvée.",
+    "addOnspotRegistrationLink": "Ajouter une inscription sur place",
+    "addRegistrantLabel": "Ajouter un inscrit",
+    "addRegistrantPlaceholder": "Rechercher par nom complet",
     "inviteByEmail": {
       "addRecipient": "Ajouter un destinataire",
       "email": "Email",

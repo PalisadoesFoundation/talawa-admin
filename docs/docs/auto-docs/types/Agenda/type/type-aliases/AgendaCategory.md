@@ -28,7 +28,7 @@ Defined in: [src/types/Agenda/type.ts:6](https://github.com/PalisadoesFoundation
 
 ### createdBy
 
-> **createdBy**: [`User`](../../../User/type/type-aliases/User.md)
+> **createdBy**: [`User`](../../../AdminPortal/User/type/type-aliases/User.md)
 
 Defined in: [src/types/Agenda/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L7)
 
@@ -68,6 +68,6 @@ Defined in: [src/types/Agenda/type.ts:11](https://github.com/PalisadoesFoundatio
 
 ### updatedBy?
 
-> `optional` **updatedBy**: [`User`](../../../User/type/type-aliases/User.md)
+> `optional` **updatedBy**: [`User`](../../../AdminPortal/User/type/type-aliases/User.md)
 
 Defined in: [src/types/Agenda/type.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L12)

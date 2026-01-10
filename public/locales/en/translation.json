@@ -1030,7 +1030,10 @@
     "createdAt": "Created At",
     "options": "Options",
     "addRegistrant": "Add Registrant",
-    "noRegistrantsFound": "No Registrants Found."
+    "noRegistrantsFound": "No Registrants Found.",
+    "removingAttendee": "Removing the attendee...",
+    "attendeeRemovedSuccessfully": "Attendee removed successfully",
+    "errorRemovingAttendee": "Error removing attendee"
   },
   "onSpotAttendee": {
     "title": "On-spot Attendee",
@@ -1834,6 +1837,13 @@
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",
     "errorRemovingAttendee": "Error removing attendee",
+    "eventRegistrantsTitle": "Event Registrants",
+    "inviteByEmailButton": "Invite by Email",
+    "addRegistrantButton": "Add Registrant",
+    "noRegistrationsFound": "No Registrations found",
+    "addOnspotRegistrationLink": "Add Onspot Registration",
+    "addRegistrantLabel": "Add an Registrant",
+    "addRegistrantPlaceholder": "Choose the user that you want to add",
     "inviteByEmail": {
       "addRecipient": "Add recipient",
       "email": "Email",

@@ -20,7 +20,7 @@ Defined in: [src/types/Chat/type.ts:19](https://github.com/PalisadoesFoundation/
 
 ### admins
 
-> **admins**: [`User`](../../../User/type/type-aliases/User.md)[]
+> **admins**: [`User`](../../../AdminPortal/User/type/type-aliases/User.md)[]
 
 Defined in: [src/types/Chat/type.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L24)
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Chat/type.ts:28](https://github.com/PalisadoesFoundation/
 
 ### creator?
 
-> `optional` **creator**: [`User`](../../../User/type/type-aliases/User.md)
+> `optional` **creator**: [`User`](../../../AdminPortal/User/type/type-aliases/User.md)
 
 Defined in: [src/types/Chat/type.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L29)
 
@@ -116,6 +116,6 @@ Defined in: [src/types/Chat/type.ts:31](https://github.com/PalisadoesFoundation/
 
 ### users
 
-> **users**: [`User`](../../../User/type/type-aliases/User.md)[]
+> **users**: [`User`](../../../AdminPortal/User/type/type-aliases/User.md)[]
 
 Defined in: [src/types/Chat/type.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L25)

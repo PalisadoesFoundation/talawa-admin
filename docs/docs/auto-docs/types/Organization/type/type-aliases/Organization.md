@@ -36,7 +36,7 @@ Defined in: [src/types/Organization/type.ts:27](https://github.com/PalisadoesFou
 
 ### admins?
 
-> `optional` **admins**: [`User`](../../../User/type/type-aliases/User.md)[]
+> `optional` **admins**: [`User`](../../../AdminPortal/User/type/type-aliases/User.md)[]
 
 Defined in: [src/types/Organization/type.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L28)
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Organization/type.ts:30](https://github.com/PalisadoesFou
 
 ### blockedUsers?
 
-> `optional` **blockedUsers**: [`User`](../../../User/type/type-aliases/User.md)[]
+> `optional` **blockedUsers**: [`User`](../../../AdminPortal/User/type/type-aliases/User.md)[]
 
 Defined in: [src/types/Organization/type.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L31)
 
@@ -76,7 +76,7 @@ Defined in: [src/types/Organization/type.ts:32](https://github.com/PalisadoesFou
 
 ### creator?
 
-> `optional` **creator**: [`User`](../../../User/type/type-aliases/User.md)
+> `optional` **creator**: [`User`](../../../AdminPortal/User/type/type-aliases/User.md)
 
 Defined in: [src/types/Organization/type.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L33)
 
@@ -108,7 +108,7 @@ Defined in: [src/types/Organization/type.ts:36](https://github.com/PalisadoesFou
 
 ### members?
 
-> `optional` **members**: [`User`](../../../User/type/type-aliases/User.md)[]
+> `optional` **members**: [`User`](../../../AdminPortal/User/type/type-aliases/User.md)[]
 
 Defined in: [src/types/Organization/type.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/type.ts#L37)
 

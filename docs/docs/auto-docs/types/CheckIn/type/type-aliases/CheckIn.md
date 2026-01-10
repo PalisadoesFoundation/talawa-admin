@@ -76,6 +76,6 @@ Defined in: [src/types/CheckIn/type.ts:12](https://github.com/PalisadoesFoundati
 
 ### user
 
-> **user**: [`User`](../../../User/type/type-aliases/User.md)
+> **user**: [`User`](../../../AdminPortal/User/type/type-aliases/User.md)
 
 Defined in: [src/types/CheckIn/type.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L13)

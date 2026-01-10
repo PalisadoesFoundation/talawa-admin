@@ -28,6 +28,6 @@ Defined in: [src/types/membership.ts:6](https://github.com/PalisadoesFoundation/
 
 ### user
 
-> **user**: [`User`](../../User/type/type-aliases/User.md)
+> **user**: [`User`](../../AdminPortal/User/type/type-aliases/User.md)
 
 Defined in: [src/types/membership.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/membership.ts#L7)

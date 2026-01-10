@@ -20,7 +20,7 @@ Defined in: [src/types/Comment/type.ts:6](https://github.com/PalisadoesFoundatio
 
 ### creator
 
-> **creator**: `Partial`\<[`User`](../../../User/type/type-aliases/User.md)\>
+> **creator**: `Partial`\<[`User`](../../../AdminPortal/User/type/type-aliases/User.md)\>
 
 Defined in: [src/types/Comment/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L7)
 
