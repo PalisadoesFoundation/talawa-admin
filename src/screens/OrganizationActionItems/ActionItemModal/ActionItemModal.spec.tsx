@@ -1448,13 +1448,10 @@ describe('ItemModal - Specific Test Coverage', () => {
         expect(modal).toBeInTheDocument();
       });
 
-      // Find date picker input
+      // Find date picker input and verify it's accessible
       const dateInput = await screen.findByTestId('assignmentDatePicker');
       expect(dateInput).toBeInTheDocument();
-
-      // The date picker should be accessible and allow interaction
-      await userEvent.click(dateInput);
-      expect(dateInput).toBeInTheDocument();
+      expect(dateInput).not.toBeDisabled();
     });
 
     it('should clear field values when handleFormChange is called with empty values', async () => {
@@ -3552,23 +3549,10 @@ describe('handleFormChange function', () => {
       expect(modal).toBeInTheDocument();
     });
 
-    // Find date picker inputs (MUI date pickers use textbox role)
-    const dateInputs = screen.getAllByRole('textbox');
-    const dateInput = dateInputs.find(
-      (input) =>
-        input.getAttribute('placeholder')?.includes('date') ||
-        input.getAttribute('type') === 'date' ||
-        input.closest('[data-testid*="date"]') ||
-        (input as HTMLInputElement).value?.match(/\d{2}\/\d{2}\/\d{4}/),
-    );
-
-    if (dateInput) {
-      // Try to interact with the date input
-      await userEvent.click(dateInput);
-
-      // The date picker should be accessible
-      expect(dateInput).toBeInTheDocument();
-    }
+    // Find and verify the date picker input exists
+    const dateInput = await screen.findByTestId('assignmentDatePicker');
+    expect(dateInput).toBeInTheDocument();
+    expect(dateInput).not.toBeDisabled();
   });
 
   it('should handle handleFormChange with null/undefined values', async () => {
