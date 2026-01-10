@@ -6,7 +6,7 @@
 
 > `const` **emptyMocks**: `object`[]
 
-Defined in: [src/screens/AdminPortal/SubTags/SubTagsMocks.ts:271](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/SubTags/SubTagsMocks.ts#L271)
+Defined in: [src/screens/AdminPortal/SubTags/SubTagsMocks.ts:276](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/SubTags/SubTagsMocks.ts#L276)
 
 ## Type Declaration
 

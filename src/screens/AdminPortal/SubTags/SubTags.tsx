@@ -52,7 +52,10 @@ import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
+import type {
+  InterfaceQueryUserTagChildTags,
+  InterfaceTagData,
+} from 'utils/interfaces';
 import styles from './SubTags.module.css';
 import { DataGrid } from 'shared-components/DataGridWrapper';
 import type { SortedByType } from 'utils/organizationTagsUtils';
@@ -312,10 +315,7 @@ function SubTags(): JSX.Element {
             additionalButtons={additionalActionButtons}
           />
 
-          <CursorPaginationManager<
-            InterfaceQueryUserTagChildTags,
-            InterfaceQueryUserTagChildTags
-          >
+          <CursorPaginationManager<unknown, InterfaceTagData>
             query={USER_TAG_SUB_TAGS}
             queryOptions={{
               variables: {
@@ -333,13 +333,8 @@ function SubTags(): JSX.Element {
             {({ items, loading, pageInfo, handleLoadMore, queryData }) => {
               // Extract ancestor tags from query data
               const orgUserTagAncestors =
-                (
-                  queryData as {
-                    getChildTags?: {
-                      ancestorTags?: Array<{ _id: string; name: string }>;
-                    };
-                  }
-                )?.getChildTags?.ancestorTags || [];
+                (queryData as { getChildTags?: InterfaceQueryUserTagChildTags })
+                  ?.getChildTags?.ancestorTags || [];
 
               return (
                 <>

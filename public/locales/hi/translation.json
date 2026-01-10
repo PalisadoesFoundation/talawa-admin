@@ -489,8 +489,8 @@
     "tagActions": "टैग क्रियाएँ",
     "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
     "noTagsFound": "कोई टैग नहीं मिला",
-    "removeMember": "सदस्य हटाएं",
-    "retry": "पुनः प्रयास करें"
+    "retry": "पुनः प्रयास करें",
+    "removeMember": "सदस्य हटाएं"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",

@@ -98,7 +98,12 @@ export const MOCKS = [
             },
             totalCount: 11,
           },
-          ancestorTags: [],
+          ancestorTags: [
+            {
+              _id: 'parentTag',
+              name: 'Parent Tag',
+            },
+          ],
         },
       },
     },

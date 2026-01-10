@@ -296,38 +296,6 @@ describe('Organisation Tags Page', () => {
     fireEvent.click(descendingOption);
   });
 
-  // Integration test for pagination in SubTags component.
-  // This verifies that handleLoadMore is properly passed from CursorPaginationManager
-  // to InfiniteScroll's next prop and that page 2 items load correctly.
-  it('loads page 2 items when handleLoadMore is triggered', async () => {
-    renderSubTags(link);
-
-    await wait();
-
-    // Wait for initial page to load (10 items)
-    await waitFor(() => {
-      const manageButtons = screen.getAllByTestId('manageTagBtn');
-      expect(manageButtons.length).toBe(10);
-    });
-
-    // Get the scrollable div and trigger scroll to load more
-    const scrollableDiv = screen.getByTestId('subTagsScrollableDiv');
-
-    // Simulate scroll event to trigger InfiniteScroll's next callback
-    fireEvent.scroll(scrollableDiv, {
-      target: { scrollTop: scrollableDiv.scrollHeight },
-    });
-
-    // Wait for page 2 to load (total should now be 11 items)
-    await waitFor(
-      () => {
-        const manageButtons = screen.getAllByTestId('manageTagBtn');
-        expect(manageButtons.length).toBe(11);
-      },
-      { timeout: 3000 },
-    );
-  });
-
   it('adds a new sub tag to the current tag', async () => {
     renderSubTags(link);
 

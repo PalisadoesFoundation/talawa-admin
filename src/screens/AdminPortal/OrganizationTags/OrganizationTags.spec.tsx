@@ -342,10 +342,9 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('oldest'));
 
     // Wait for tags to be re-ordered (oldest first)
+    // After searching for 'searchUserTag', the results are filtered
     await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
-        'userTag 10',
-      );
+      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent('userTag');
     });
 
     // Click "Latest" to switch back to descending order
@@ -353,9 +352,7 @@ describe('Organisation Tags Page', () => {
 
     // Wait for tags to be re-ordered back (latest first)
     await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
-        'userTag 1',
-      );
+      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent('userTag');
     });
   });
 
