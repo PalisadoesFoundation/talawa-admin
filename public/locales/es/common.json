@@ -236,5 +236,6 @@
   "selectTag": "Seleccionar etiqueta",
   "errorOccurredWhileLoadingSubTags": "Ocurrió un error al cargar las subetiquetas",
   "or": "o",
-  "eventNotFound": "Evento con id {{id}} no encontrado"
+  "eventNotFound": "Evento con id {{id}} no encontrado",
+  "required": "Obligatorio"
 }

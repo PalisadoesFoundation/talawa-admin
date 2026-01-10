@@ -236,5 +236,6 @@
   "selectTag": "Select Tag",
   "errorOccurredWhileLoadingSubTags": "An error occurred while loading sub tags",
   "or": "or",
-  "eventNotFound": "Event with id {{id}} not found"
+  "eventNotFound": "Event with id {{id}} not found",
+  "required": "Required"
 }
