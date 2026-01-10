@@ -174,28 +174,27 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
       }
       // START DATE
       if (
-        campaign?.startAt &&
         campaignDateRange.startDate &&
-        campaign.startAt.toISOString() !==
-          dayjs(campaignDateRange.startDate).toISOString()
+        (!campaign?.startAt ||
+          !dayjs(campaign.startAt).isSame(
+            dayjs(campaignDateRange.startDate),
+            'second',
+          ))
       ) {
-        updatedFields.startAt = dayjs(
-          campaignDateRange.startDate,
-        ).toISOString();
-      } else if (!campaign?.startAt && campaignDateRange.startDate) {
         updatedFields.startAt = dayjs(
           campaignDateRange.startDate,
         ).toISOString();
       }
 
+      // END DATE
       if (
-        campaign?.endAt &&
         campaignDateRange.endDate &&
-        campaign.endAt.toISOString() !==
-          dayjs(campaignDateRange.endDate).toISOString()
+        (!campaign?.endAt ||
+          !dayjs(campaign.endAt).isSame(
+            dayjs(campaignDateRange.endDate),
+            'second',
+          ))
       ) {
-        updatedFields.endAt = dayjs(campaignDateRange.endDate).toISOString();
-      } else if (!campaign?.endAt && campaignDateRange.endDate) {
         updatedFields.endAt = dayjs(campaignDateRange.endDate).toISOString();
       }
 
