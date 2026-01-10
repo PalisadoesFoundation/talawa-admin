@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceStatusBadgeProps`](../../../../types/shared-components/StatusBadge/interface/interfaces/InterfaceStatusBadgeProps.md)\>
 
-Defined in: [src/components/StatusBadge/StatusBadge.tsx:69](https://github.com/ad1tyayadav/talawa-admin/blob/bb05a5bd894a015a1064479d68535c7df64daa3e/src/components/StatusBadge/StatusBadge.tsx#L69)
+Defined in: [src/components/StatusBadge/StatusBadge.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/StatusBadge/StatusBadge.tsx#L69)
 
 StatusBadge component for displaying status information with consistent styling.
 
