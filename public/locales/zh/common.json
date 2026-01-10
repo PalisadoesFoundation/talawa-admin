@@ -231,6 +231,10 @@
   "inviteOnlyEventDescription": "仅受邀成员和活动管理员可见",
   "to": "至",
   "errorLoadingData": "加载数据出错",
+  "collapse": "折叠",
+  "expand": "展开",
+  "selectTag": "选择标签",
+  "errorOccurredWhileLoadingSubTags": "加载子标签时发生错误",
   "or": "或",
   "eventNotFound": "未找到ID为 {{id}} 的活动"
 }

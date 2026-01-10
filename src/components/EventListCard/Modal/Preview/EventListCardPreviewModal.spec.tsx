@@ -12,8 +12,6 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
 import dayjs, { type Dayjs } from 'dayjs';
@@ -127,9 +125,7 @@ const renderComponent = (props = {}) => {
       <Provider store={store}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <PreviewModal {...finalProps} />
-            </LocalizationProvider>
+            <PreviewModal {...finalProps} />
           </I18nextProvider>
         </BrowserRouter>
       </Provider>
@@ -707,8 +703,13 @@ describe('EventListCardPreviewModal', () => {
       expect(screen.getByRole('grid')).toBeInTheDocument();
     });
 
-    const dateToSelect = screen.getByText('22');
-    await userEvent.click(dateToSelect);
+    const dateElements = screen.getAllByText('22');
+    // Click the button element (calendar day), not the input field
+    const dateToSelect = dateElements.find((el) => el.tagName === 'BUTTON');
+    expect(dateToSelect).toBeDefined();
+    if (dateToSelect) {
+      await userEvent.click(dateToSelect);
+    }
 
     await waitFor(() => {
       expect(mockSetEventStartDate).toHaveBeenCalled();
@@ -1164,8 +1165,10 @@ describe('EventListCardPreviewModal', () => {
         const dateElements = screen.getAllByText('20');
         // Click the button element (calendar day), not the input field
         const dateToSelect = dateElements.find((el) => el.tagName === 'BUTTON');
-        expect(dateToSelect).toBeTruthy();
-        fireEvent.click(dateToSelect!);
+        expect(dateToSelect).toBeDefined();
+        if (dateToSelect) {
+          fireEvent.click(dateToSelect);
+        }
         expect(mockSetEventStartDate).toHaveBeenCalled();
         expect(mockSetEventEndDate).toHaveBeenCalled();
       });

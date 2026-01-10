@@ -231,6 +231,10 @@
   "inviteOnlyEventDescription": "Visible only to invited members and event admins",
   "to": "To",
   "errorLoadingData": "Error loading data: {{message}}",
+  "collapse": "Collapse",
+  "expand": "Expand",
+  "selectTag": "Select Tag",
+  "errorOccurredWhileLoadingSubTags": "An error occurred while loading sub tags",
   "or": "or",
   "eventNotFound": "Event with id {{id}} not found"
 }

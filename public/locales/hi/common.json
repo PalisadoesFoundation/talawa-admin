@@ -231,6 +231,10 @@
   "inviteOnlyEventDescription": "केवल आमंत्रित सदस्यों और ईवेंट व्यवस्थापकों के लिए दृश्य",
   "to": "को",
   "errorLoadingData": "डेटा लोड करने में त्रुटि: {{message}}",
+  "collapse": "संकुचित करें",
+  "expand": "विस्तार करें",
+  "selectTag": "टैग चुनें",
+  "errorOccurredWhileLoadingSubTags": "उप-टैग लोड करते समय एक त्रुटि हुई",
   "or": "या",
   "eventNotFound": "ईवेंट आईडी {{id}} के साथ नहीं मिला"
 }

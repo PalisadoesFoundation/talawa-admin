@@ -231,6 +231,10 @@
   "inviteOnlyEventDescription": "Visible solo para miembros invitados y administradores de eventos",
   "to": "A",
   "errorLoadingData": "Error al cargar datos: {{message}}",
+  "collapse": "Contraer",
+  "expand": "Expandir",
+  "selectTag": "Seleccionar etiqueta",
+  "errorOccurredWhileLoadingSubTags": "Ocurrió un error al cargar las subetiquetas",
   "or": "o",
   "eventNotFound": "Evento con id {{id}} no encontrado"
 }
