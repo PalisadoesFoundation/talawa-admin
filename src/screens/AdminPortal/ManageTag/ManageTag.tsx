@@ -483,6 +483,7 @@ function ManageTag(): JSX.Element {
                     onClick={() => navigate(`/orgtags/${orgId}`)}
                     className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
                     data-testid="allTagsBtn"
+                    data-text={t('tags')}
                   >
                     {t('tags')}
                     <i className={'mx-2 fa fa-caret-right'} />
@@ -493,6 +494,7 @@ function ManageTag(): JSX.Element {
                       className={`ms-2 my-1 ${tag._id === currentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
                       onClick={() => redirectToManageTag(tag._id as string)}
                       data-testid="redirectToManageTag"
+                      data-text={tag.name}
                     >
                       {tag.name}
                       {orgUserTagAncestors.length - 1 !== index && (

@@ -127,7 +127,7 @@
   text-decoration: underline;
 }
 
-.manageTagScrollableDiv:global(#manageTagScrollableDiv) {
+.manageTagScrollableDiv {
   scrollbar-width: thin;
   scrollbar-color: var(--color-gray-300) var(--color-gray-100);
   max-height: calc(100vh - var(--space-20));

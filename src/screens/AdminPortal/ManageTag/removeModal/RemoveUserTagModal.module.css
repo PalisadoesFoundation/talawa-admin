@@ -62,7 +62,7 @@
   outline-offset: 2px;
 }
 
-.addButton:global(.btn):disabled {
+.addButton:disabled {
   margin-bottom: var(--space-4);
   background-color: var(--color-gray-50);
   border-color: var(--color-blue-200);
