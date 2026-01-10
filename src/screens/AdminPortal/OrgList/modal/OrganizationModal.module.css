@@ -1,0 +1,59 @@
+.modalHeader:global(.modal-header) {
+  border: none;
+  background-color: var(--color-white);
+  padding: var(--space-5);
+  color: var(--color-black);
+}
+
+.modalHeader:global(.modal-header) :global(.modal-title) {
+  color: var(--color-gray-700);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xl);
+}
+
+.modalHeader:global(.modal-header) :global(button.close),
+.modalHeader:global(.modal-header) :global(.btn-close) {
+  color: var(--color-red-500);
+  opacity: 1;
+}
+
+.modalHeader:global(.modal-header) ~ :global(.modal-body) :global(.form-label) {
+  color: var(--color-black);
+  font-weight: normal;
+  padding-bottom: 0;
+  font-size: var(--font-size-md);
+  margin-top: var(--space-4);
+}
+
+.inputField:global(.form-control) {
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-4);
+  background-color: var(--color-white);
+  border: var(--border-1) solid var(--color-gray-100);
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg)
+    var(--shadow-spread-none) rgba(0, 0, 0, 0.1);
+}
+
+.inputField:global(.form-control)::placeholder {
+  color: var(--color-gray-500);
+  opacity: 1;
+}
+
+.inputField:global(.form-control):focus {
+  border: var(--border-0) solid var(--color-gray-300);
+  background-color: var(--color-gray-100);
+}
+
+.inputField:global(.form-control):focus-visible {
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-md)
+    var(--shadow-spread-none) rgba(0, 0, 0, 0.25);
+  outline: 2px solid var(--color-blue-500);
+  outline-offset: 2px;
+}
+
+.sampleOrgSection {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: var(--space-4);
+  width: 100%;
+}

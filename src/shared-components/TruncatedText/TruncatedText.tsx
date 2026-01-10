@@ -2,12 +2,9 @@
  * A React functional component that truncates a given text based on the available width
  * or an optional maximum width override. The truncated text is displayed within an `<h6>` element.
  *
- * @component
- * @param {InterfaceTruncatedTextProps} props - The props for the TruncatedText component.
- * @param {string} props.text - The full text to display. It may be truncated if it exceeds the maximum width.
- * @param {number} [props.maxWidthOverride] - Optional: Override the maximum width for truncation.
+ * @param props - Component props from InterfaceTruncatedTextProps
  *
- * @returns {JSX.Element} A truncated version of the provided text, displayed as an `<h6>` element.
+ * @returns JSX.Element
  *
  * @remarks
  * - The truncation logic calculates the maximum number of characters that can fit within the width
@@ -20,21 +17,10 @@
  * <TruncatedText text="This is a very long text that might be truncated." />
  * <TruncatedText text="Another example" maxWidthOverride={200} />
  * ```
- *
- * @dependencies
- * - React: Used for creating the component and managing state.
- * - useDebounce: A custom hook for debouncing the resize event handler.
- *
  */
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import useDebounce from './useDebounce';
-
-interface InterfaceTruncatedTextProps {
-  /** The full text to display. It may be truncated if it exceeds the maximum width. */
-  text: string;
-  /** Optional: Override the maximum width for truncation. */
-  maxWidthOverride?: number;
-}
+import useDebounce from '../useDebounce/useDebounce';
+import { InterfaceTruncatedTextProps } from 'types/shared-components/TruncatedText/interface';
 
 const TruncatedText: React.FC<InterfaceTruncatedTextProps> = ({
   text,
