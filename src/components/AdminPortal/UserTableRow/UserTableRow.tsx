@@ -61,11 +61,11 @@ export const UserTableRow: React.FC<InterfaceUserTableRowProps> = memo(
     } = props;
 
     const { t } = useTranslation('common');
-    const email = user.emailAddress || '';
-    const name = user.name || '';
+    const email = user.emailAddress || t('email', 'Email');
+    const name = user.name || t('name', 'Name');
     const joined = user.createdAt
       ? dayjs(user.createdAt).format('YYYY-MM-DD')
-      : '';
+      : t('notFound', 'Not Found');
 
     const handleRowClick = useCallback(
       (e: MouseEvent) => {

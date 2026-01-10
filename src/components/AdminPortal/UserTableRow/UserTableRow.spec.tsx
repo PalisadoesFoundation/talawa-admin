@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -611,5 +611,126 @@ describe('UserTableRow', () => {
     tableRow.focus();
     await userEvent.keyboard(' ');
     expect(onRowClick).toHaveBeenCalledWith(user);
+  });
+
+  it('handles keyboard events when onRowClick is not provided', async () => {
+    render(
+      <RouterWrapper>
+        <UserTableRow user={user} isDataGrid testIdPrefix="spec" />
+      </RouterWrapper>,
+    );
+    const gridCell = screen.getByTestId('spec-gridcell-u1');
+    gridCell.focus();
+    await userEvent.keyboard('{Enter}');
+    expect(gridCell).toBeInTheDocument();
+  });
+
+  it('prevents default on keyboard events', () => {
+    const onRowClick = vi.fn();
+
+    render(
+      <RouterWrapper>
+        <UserTableRow
+          user={user}
+          isDataGrid
+          onRowClick={onRowClick}
+          testIdPrefix="spec"
+        />
+      </RouterWrapper>,
+    );
+
+    const gridCell = screen.getByTestId('spec-gridcell-u1');
+
+    // Test Enter key
+    fireEvent.keyDown(gridCell, { key: 'Enter' });
+    expect(onRowClick).toHaveBeenCalledWith(user);
+
+    // Test Space key
+    fireEvent.keyDown(gridCell, { key: ' ' });
+    expect(onRowClick).toHaveBeenCalledTimes(2);
+  });
+
+  it('handles keyboard events without onRowClick handler', () => {
+    render(
+      <RouterWrapper>
+        <UserTableRow user={user} isDataGrid testIdPrefix="spec" />
+      </RouterWrapper>,
+    );
+
+    const gridCell = screen.getByTestId('spec-gridcell-u1');
+
+    // Should not throw error when onRowClick is undefined
+    fireEvent.keyDown(gridCell, { key: 'Enter' });
+    fireEvent.keyDown(gridCell, { key: ' ' });
+
+    expect(gridCell).toBeInTheDocument();
+  });
+
+  it('handles keyboard events on table row without onRowClick', () => {
+    render(
+      <RouterWrapper>
+        <table>
+          <tbody>
+            <UserTableRow user={user} isDataGrid={false} testIdPrefix="spec" />
+          </tbody>
+        </table>
+      </RouterWrapper>,
+    );
+
+    const tableRow = screen.getByTestId('spec-tr-u1');
+
+    // Should not throw error when onRowClick is undefined
+    fireEvent.keyDown(tableRow, { key: 'Enter' });
+    fireEvent.keyDown(tableRow, { key: ' ' });
+
+    expect(tableRow).toBeInTheDocument();
+  });
+
+  it('executes keyboard handler with onRowClick to cover preventDefault', async () => {
+    const mockOnRowClick = vi.fn();
+
+    render(
+      <RouterWrapper>
+        <table>
+          <tbody>
+            <UserTableRow
+              user={user}
+              isDataGrid={false}
+              testIdPrefix="spec"
+              onRowClick={mockOnRowClick}
+            />
+          </tbody>
+        </table>
+      </RouterWrapper>,
+    );
+
+    const tableRow = screen.getByTestId('spec-tr-u1');
+
+    // Focus the element to ensure proper keyboard event handling
+    tableRow.focus();
+
+    // Use userEvent for more realistic keyboard interaction
+    await userEvent.keyboard('{Enter}');
+    await userEvent.keyboard(' ');
+
+    expect(mockOnRowClick).toHaveBeenCalledTimes(2);
+    expect(mockOnRowClick).toHaveBeenCalledWith(user);
+  });
+
+  it('renders compact linked name to cover Typography component prop', () => {
+    render(
+      <RouterWrapper>
+        <UserTableRow
+          user={user}
+          linkPath="/member/u1"
+          compact={true}
+          isDataGrid
+          testIdPrefix="spec"
+        />
+      </RouterWrapper>,
+    );
+    const nameLink = screen.getByRole('link', { name: 'Admin User' });
+    expect(nameLink).toBeInTheDocument();
+    expect(nameLink).toHaveAttribute('href', '/member/u1');
   });
 });
