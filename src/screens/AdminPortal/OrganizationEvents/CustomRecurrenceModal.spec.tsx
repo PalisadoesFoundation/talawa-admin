@@ -101,9 +101,7 @@ describe('CustomRecurrenceModal', () => {
     renderComponent();
 
     expect(screen.getByText('customRecurrence')).toBeInTheDocument();
-    expect(
-      screen.getByTestId('customRecurrenceModalCloseBtn'),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
     expect(screen.getByTestId('customRecurrenceSubmitBtn')).toBeInTheDocument();
   });
 
@@ -123,7 +121,7 @@ describe('CustomRecurrenceModal', () => {
       hideCustomRecurrenceModal: hideModal,
     });
 
-    await userEvent.click(screen.getByTestId('customRecurrenceModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     expect(hideModal).toHaveBeenCalled();
   });
 

@@ -106,7 +106,7 @@ describe('OrganizationModal Component', () => {
 
   test('renders OrganizationModal correctly', () => {
     setup();
-    expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
+    expect(screen.getByTestId('modalOrganization')).toBeInTheDocument();
     expect(screen.getByTestId('modalOrganizationName')).toBeInTheDocument();
     expect(screen.getByTestId('submitOrganizationForm')).toBeInTheDocument();
   });
@@ -322,7 +322,7 @@ describe('OrganizationModal Component', () => {
       // Check if the input has either the required attribute or aria-required
       expect(
         input.hasAttribute('required') ||
-          input.getAttribute('aria-required') === 'true',
+        input.getAttribute('aria-required') === 'true',
       ).toBeTruthy();
     });
   });
@@ -481,7 +481,7 @@ describe('OrganizationModal Component', () => {
       </Provider>,
     );
 
-    expect(screen.getByTestId('modalOrganizationHeader')).toBeVisible();
+    expect(screen.getByTestId('modalOrganization')).toBeVisible();
   });
 
   test('should not show modal when showModal is false', () => {
@@ -504,7 +504,7 @@ describe('OrganizationModal Component', () => {
     );
 
     expect(
-      screen.queryByTestId('modalOrganizationHeader'),
+      screen.queryByTestId('modalOrganization'),
     ).not.toBeInTheDocument();
   });
 

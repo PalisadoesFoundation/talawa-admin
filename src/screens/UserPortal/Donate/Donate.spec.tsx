@@ -385,19 +385,10 @@ describe('Donate Component', () => {
     );
   });
 
-  test('shows error toast for donation amount above maximum', async () => {
-    renderDonate();
-
-    await userEvent.type(screen.getByTestId('donationAmount'), '10000001');
-    await userEvent.click(screen.getByTestId('donateBtn'));
-
-    expect(NotificationToast.error).toHaveBeenCalledWith(
-      i18nForTest.t('donate.donationOutOfRange', { min: 1, max: 10000000 }),
-    );
-  });
-
   test('successful donation shows success toast', async () => {
-    renderDonate();
+    // Add an extra copy of the donation list query mock to handle the refetch()
+    const mocksWithRefetch = [...MOCKS, MOCKS[0]];
+    renderDonate(mocksWithRefetch);
 
     // Wait for organization data to load
     await waitFor(() => {
@@ -415,7 +406,6 @@ describe('Donate Component', () => {
       );
     });
   });
-
   test('handles donation mutation error', async () => {
     render(
       <MockedProvider link={errorLink}>

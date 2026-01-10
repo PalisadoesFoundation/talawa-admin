@@ -1114,7 +1114,7 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Verify modal is not open initially
     expect(
-      screen.queryByTestId('modalOrganizationHeader'),
+      screen.queryByTestId('modalOrganizationName'),
     ).not.toBeInTheDocument();
 
     // Open the create organization modal
@@ -1124,7 +1124,7 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Verify modal is open
-    expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
+    expect(screen.getByTestId('modalOrganizationName')).toBeInTheDocument();
   });
 
   test('Testing organization creation flow and form handling', async () => {
@@ -1887,7 +1887,7 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Verify success toast was triggered
     expect(NotificationToast.success).toHaveBeenCalledWith(
-      expect.stringContaining('congratulationOrgCreated'),
+      'Congratulations! The Organization is created.',
     );
 
     // Verify organization creation flow completed successfully:
@@ -2283,7 +2283,7 @@ describe('Advanced Component Functionality Tests', () => {
     expect(mockToast.success).not.toHaveBeenCalled();
 
     // Verify that the modal should still be open since the success path wasn't taken
-    expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
+    expect(screen.getByTestId('modalOrganizationName')).toBeInTheDocument();
   });
 
   test('Testing missing token scenario', async () => {
@@ -2335,6 +2335,3 @@ describe('Advanced Component Functionality Tests', () => {
     expect(screen.getByTestId('searchInput')).toBeInTheDocument();
   });
 });
-
-
-

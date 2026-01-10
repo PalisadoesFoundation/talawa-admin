@@ -6,6 +6,7 @@ import {
   fireEvent,
   act,
   waitFor,
+  within,
 } from '@testing-library/react';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import dayjs from 'dayjs';
@@ -145,7 +146,9 @@ describe('CustomRecurrenceModal – full coverage', () => {
   it('closes modal via close button', () => {
     const { hideCustomRecurrenceModal } = renderModal();
 
-    fireEvent.click(screen.getByTestId('customRecurrenceModalCloseBtn'));
+    const modals = screen.getAllByTestId('customRecurrenceModal');
+    const modal = modals[modals.length - 1];
+    fireEvent.click(within(modal).getByTestId('modalCloseBtn'));
     expect(hideCustomRecurrenceModal).toHaveBeenCalled();
   });
 
@@ -1372,7 +1375,8 @@ describe('CustomRecurrenceModal – full coverage', () => {
 
   it('renders modal with onHide handler configured', () => {
     const { hideCustomRecurrenceModal } = renderModal();
-    const modal = screen.getByRole('dialog');
+    const modals = screen.getAllByRole('dialog');
+    const modal = modals[modals.length - 1];
     expect(modal).toBeInTheDocument();
     expect(hideCustomRecurrenceModal).toBeDefined();
     expect(modal).toBeVisible();

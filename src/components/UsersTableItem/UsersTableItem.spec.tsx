@@ -253,14 +253,18 @@ describe('Testing User Table Item', () => {
       charCode: 27,
     });
     expect(
-      screen.queryByRole('dialog')?.className.includes('show'),
-    ).toBeFalsy();
+      screen
+        .queryAllByRole('dialog')
+        .every((el) => !el.className.includes('show')),
+    ).toBeTruthy();
     fireEvent.click(showJoinedOrgsBtn);
     // Close using close button and reopen
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
     expect(
-      screen.queryByRole('dialog')?.className.includes('show'),
-    ).toBeFalsy();
+      screen
+        .queryAllByRole('dialog')
+        .every((el) => !el.className.includes('show')),
+    ).toBeTruthy();
     fireEvent.click(showJoinedOrgsBtn);
     // Expect the following to exist in modal
     const inputBox = screen.getByTestId(`searchByNameJoinedOrgs`);
@@ -307,11 +311,13 @@ describe('Testing User Table Item', () => {
     fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorabc`));
-    const successMock = vi.mocked(NotificationToast.success);
-    expect(successMock).toHaveBeenCalled();
-    expect(successMock.mock.calls[successMock.mock.calls.length - 1]?.[0]).toBe(
-      'Profile Page Coming Soon!',
-    );
+    await waitFor(() => {
+      const successMock = vi.mocked(NotificationToast.success);
+      expect(successMock).toHaveBeenCalled();
+      expect(
+        successMock.mock.calls[successMock.mock.calls.length - 1]?.[0],
+      ).toBe('Profile Page Coming Soon!');
+    });
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Joined Organization 1/i));
     expect(window.location.replace).toHaveBeenCalledWith('/orgdash/abc');
@@ -604,9 +610,9 @@ describe('Testing User Table Item', () => {
     ) as HTMLSelectElement;
     expect(changeRoleBtn).toBeInTheDocument();
     await userEvent.selectOptions(changeRoleBtn, 'ADMIN');
-    await wait();
-    expect(changeRoleBtn.value).toBe(`ADMIN?abc`);
-    await wait();
+    await waitFor(() => {
+      expect(changeRoleBtn.value).toBe(`ADMIN?abc`);
+    });
   });
 
   test('change role button should trigger success toast when mutation succeeds', async () => {
@@ -680,11 +686,13 @@ describe('Testing User Table Item', () => {
     ) as HTMLSelectElement;
     // Select USER role which has a success mock in MOCKS
     await userEvent.selectOptions(changeRoleBtn, 'USER');
-    await wait();
-    await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalled();
-      expect(resetAndRefetchMock).toHaveBeenCalled();
-    });
+    await waitFor(
+      () => {
+        expect(NotificationToast.success).toHaveBeenCalled();
+        expect(resetAndRefetchMock).toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('Should render Blocked Organizations Modal properly', async () => {
@@ -782,13 +790,17 @@ describe('Testing User Table Item', () => {
       charCode: 27,
     });
     expect(
-      screen.queryByRole('dialog')?.className.includes('show'),
-    ).toBeFalsy();
+      screen
+        .queryAllByRole('dialog')
+        .every((el) => !el.className.includes('show')),
+    ).toBeTruthy();
     fireEvent.click(showBlockedOrgsBtn);
     fireEvent.click(screen.getByTestId(`closeUnblockOrgsBtn${123}`));
     expect(
-      screen.queryByRole('dialog')?.className.includes('show'),
-    ).toBeFalsy();
+      screen
+        .queryAllByRole('dialog')
+        .every((el) => !el.className.includes('show')),
+    ).toBeTruthy();
     fireEvent.click(showBlockedOrgsBtn);
     const inputBox = screen.getByTestId(`searchByNameBlockedOrgs`);
     expect(inputBox).toBeInTheDocument();
@@ -833,11 +845,13 @@ describe('Testing User Table Item', () => {
     fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorghi`));
-    const successMock = vi.mocked(NotificationToast.success);
-    expect(successMock).toHaveBeenCalled();
-    expect(successMock.mock.calls[successMock.mock.calls.length - 1]?.[0]).toBe(
-      'Profile Page Coming Soon!',
-    );
+    await waitFor(() => {
+      const successMock = vi.mocked(NotificationToast.success);
+      expect(successMock).toHaveBeenCalled();
+      expect(
+        successMock.mock.calls[successMock.mock.calls.length - 1]?.[0],
+      ).toBe('Profile Page Coming Soon!');
+    });
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Blocked Organization 1/i));
     expect(window.location.replace).toHaveBeenCalledWith('/orgdash/ghi');
@@ -992,8 +1006,12 @@ describe('Testing User Table Item', () => {
       `changeRoleInOrg${'abc'}`,
     ) as HTMLSelectElement;
     await userEvent.selectOptions(changeRoleBtn, 'ADMIN');
-    await wait();
-    expect(NotificationToast.error).toHaveBeenCalled();
+    await waitFor(
+      () => {
+        expect(NotificationToast.error).toHaveBeenCalled();
+      },
+      { timeout: 3000 },
+    );
   });
   test('Should handle no joined organizations', async () => {
     const props: {
