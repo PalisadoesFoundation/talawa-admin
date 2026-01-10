@@ -2,10 +2,9 @@
  * A React functional component that truncates a given text based on the available width
  * or an optional maximum width override. The truncated text is displayed within an `<h6>` element.
  *
- * @param text - The full text to display. It may be truncated if it exceeds the maximum width.
- * @param maxWidthOverride - Optional: Override the maximum width for truncation.
+ * @param props - Component props from InterfaceTruncatedTextProps
  *
- * @returns A truncated version of the provided text, displayed as an `<h6>` element.
+ * @returns JSX.Element
  *
  * @remarks
  * - The truncation logic calculates the maximum number of characters that can fit within the width
