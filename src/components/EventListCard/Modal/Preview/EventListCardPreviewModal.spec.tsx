@@ -21,6 +21,7 @@ import {
   AdapterDayjs,
   LocalizationProvider,
 } from 'shared-components/DateRangePicker';
+
 dayjs.extend(utc);
 
 import PreviewModal from './EventListCardPreviewModal';
@@ -34,7 +35,7 @@ vi.mock('screens/AdminPortal/OrganizationEvents/CustomRecurrenceModal', () => ({
   default: vi.fn(),
 }));
 
-export const getPickerInputByTestId = (testId: string): HTMLElement => {
+const getPickerInputByTestId = (testId: string): HTMLElement => {
   const input = screen.getByTestId(testId);
   if (!input) {
     throw new Error(`Could not find picker input with testId: ${testId}`);
@@ -680,9 +681,12 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('updates start date and adjusts end date when start date changes', async () => {
+    const baseDate = new Date(Date.UTC(2025, 0, 15, 12, 0, 0));
     const mockSetEventStartDate = vi.fn();
     const mockSetEventEndDate = vi.fn();
     renderComponent({
+      eventStartDate: baseDate,
+      eventEndDate: baseDate,
       setEventStartDate: mockSetEventStartDate,
       setEventEndDate: mockSetEventEndDate,
     });
@@ -695,15 +699,11 @@ describe('EventListCardPreviewModal', () => {
     ).getByLabelText(/choose date/i);
     await userEvent.click(calendarButton);
 
-    await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+    const calendarGrid = await screen.findByRole('grid');
+    const dateToSelect = within(calendarGrid).getByRole('gridcell', {
+      name: '20',
     });
-
-    const dayCell = await screen.findByRole('gridcell', { name: '21' });
-
-    await userEvent.click(dayCell);
-
-    await userEvent.keyboard('{Enter}');
+    await userEvent.click(dateToSelect);
 
     await waitFor(() => {
       expect(mockSetEventStartDate).toHaveBeenCalled();
@@ -711,8 +711,11 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('updates end date when end date changes', async () => {
+    const baseDate = new Date(Date.UTC(2025, 0, 15, 12, 0, 0));
     const mockSetEventEndDate = vi.fn();
     renderComponent({
+      eventStartDate: baseDate,
+      eventEndDate: baseDate,
       setEventEndDate: mockSetEventEndDate,
     });
 
@@ -724,11 +727,10 @@ describe('EventListCardPreviewModal', () => {
     );
     await userEvent.click(calendarButton);
 
-    await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+    const calendarGrid = await screen.findByRole('grid');
+    const dateToSelect = within(calendarGrid).getByRole('gridcell', {
+      name: '20',
     });
-
-    const dateToSelect = screen.getByText('22');
     await userEvent.click(dateToSelect);
 
     await waitFor(() => {
