@@ -2091,6 +2091,18 @@
     "uninstallWarning": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer.",
     "errorInstalling": "Error al cargar los detalles del plugin"
   },
+  "statusBadge": {
+    "completed": "Completado",
+    "pending": "Pendiente",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "approved": "Aprobado",
+    "rejected": "Rechazado",
+    "disabled": "Deshabilitado",
+    "accepted": "Aceptado",
+    "declined": "Declinado",
+    "no_response": "Sin respuesta"
+  },
   "commentCard": {
     "commentDeletedSuccessfully": "Comentario eliminado exitosamente",
     "commentUpdatedSuccessfully": "Comentario actualizado exitosamente",

@@ -962,6 +962,18 @@
     "close": "关闭",
     "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
+  "statusBadge": {
+    "completed": "已完成",
+    "pending": "待处理",
+    "active": "活跃",
+    "inactive": "不活跃",
+    "approved": "已批准",
+    "rejected": "已拒绝",
+    "disabled": "已禁用",
+    "accepted": "已接受",
+    "declined": "已谢绝",
+    "no_response": "无响应"
+  },
   "blockUnblockUser": {
     "title": "阻止/取消阻止用户",
     "pageName": "阻止/解除阻止",

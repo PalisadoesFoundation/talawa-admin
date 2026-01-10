@@ -2091,6 +2091,18 @@
     "uninstallWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
     "errorInstalling": "Failed to load plugin details"
   },
+  "statusBadge": {
+    "completed": "Completed",
+    "pending": "Pending",
+    "active": "Active",
+    "inactive": "Inactive",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "disabled": "Disabled",
+    "accepted": "Accepted",
+    "declined": "Declined",
+    "no_response": "No Response"
+  },
   "commentCard": {
     "commentDeletedSuccessfully": "Comment deleted successfully",
     "commentUpdatedSuccessfully": "Comment updated successfully",

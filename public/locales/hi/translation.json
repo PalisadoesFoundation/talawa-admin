@@ -448,6 +448,18 @@
     "viewSubTags": "{{count}} उप-टैग देखें",
     "tags": "टैग"
   },
+  "statusBadge": {
+    "completed": "पूर्ण",
+    "pending": "लंबित",
+    "active": "सक्रिय",
+    "inactive": "निष्क्रिय",
+    "approved": "अनुमोदित",
+    "rejected": "अस्वीकृत",
+    "disabled": "अक्षम",
+    "accepted": "स्वीकृत",
+    "declined": "अस्वीकार किया गया",
+    "no_response": "कोई प्रतिक्रिया नहीं"
+  },
   "manageTag": {
     "title": "टैग विवरण",
     "addPeopleToTag": "टैग में लोगों को जोड़ें",
