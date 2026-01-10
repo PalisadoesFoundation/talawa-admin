@@ -100,7 +100,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
       <Form onSubmitCapture={createOrg}>
         <Form.Label htmlFor="orgname">{tCommon('name')}</Form.Label>
         <Form.Control
-          type="name"
+          type="description"
           id="orgname"
           className={`mb-3 ${styles.inputField}`}
           placeholder={t('enterName')}
@@ -110,7 +110,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           value={formState.name}
           onChange={(e): void => {
             const inputText = e.target.value;
-            if (inputText.length < 50) {
+            if (inputText.length <= 50) {
               setFormState({ ...formState, name: e.target.value });
             }
           }}
@@ -128,7 +128,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           value={formState.description}
           onChange={(e): void => {
             const descriptionText = e.target.value;
-            if (descriptionText.length < 200) {
+            if (descriptionText.length <= 200) {
               setFormState({ ...formState, description: e.target.value });
             }
           }}
@@ -143,7 +143,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               value={formState.countryCode}
               onChange={(e): void => {
                 const inputText = e.target.value;
-                if (inputText.length < 50) {
+                if (inputText.length <= 50) {
                   setFormState({ ...formState, countryCode: e.target.value });
                 }
               }}
@@ -171,7 +171,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               value={formState.state}
               onChange={(e): void => {
                 const inputText = e.target.value;
-                if (inputText.length < 50) {
+                if (inputText.length <= 50) {
                   setFormState({ ...formState, state: e.target.value });
                 }
               }}
@@ -189,7 +189,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               value={formState.city}
               onChange={(e): void => {
                 const inputText = e.target.value;
-                if (inputText.length < 50) {
+                if (inputText.length <= 50) {
                   setFormState({ ...formState, city: e.target.value });
                 }
               }}
@@ -204,7 +204,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               value={formState.postalCode}
               onChange={(e): void => {
                 const inputText = e.target.value;
-                if (inputText.length < 50) {
+                if (inputText.length <= 50) {
                   setFormState({ ...formState, postalCode: e.target.value });
                 }
               }}
@@ -222,7 +222,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               value={formState.addressLine1}
               onChange={(e): void => {
                 const inputText = e.target.value;
-                if (inputText.length < 50) {
+                if (inputText.length <= 50) {
                   setFormState({
                     ...formState,
                     addressLine1: e.target.value,
@@ -240,7 +240,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               value={formState.addressLine2}
               onChange={(e): void => {
                 const inputText = e.target.value;
-                if (inputText.length < 50) {
+                if (inputText.length <= 50) {
                   setFormState({
                     ...formState,
                     addressLine2: e.target.value,

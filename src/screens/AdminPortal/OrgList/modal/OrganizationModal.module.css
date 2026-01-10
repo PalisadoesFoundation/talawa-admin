@@ -53,6 +53,6 @@ form label,
 .sampleOrgSection {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
-  row-gap: 1em;
+  row-gap: var(--space-4);
   width: 100%;
 }

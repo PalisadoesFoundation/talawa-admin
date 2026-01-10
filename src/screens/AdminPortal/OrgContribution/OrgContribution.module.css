@@ -11,7 +11,7 @@
   width: var(--space-1);
   height: var(--space-26);
   top: var(--space-4);
-  left: 94%;
+  right: 0;
   display: block;
 }
 
@@ -27,11 +27,11 @@
   margin-top: var(--space-3);
 }
 
-.sidebarsticky > p {
+.searchLabel {
   margin-top: calc(var(--space-4) * -1);
 }
 
-.sidebarsticky > input {
+.searchInput {
   text-decoration: none;
   margin-bottom: var(--space-10);
   border-color: var(--color-gray-100);
