@@ -4,13 +4,12 @@
  * controlled by the `showDropdown` state, and it automatically toggles
  * based on the current route.
  *
- * @component
- * @param {InterfaceCollapsibleDropdown} props - The props for the component.
- * @param {object} props.target - The target object containing the dropdown's name and sub-targets.
- * @param {boolean} props.showDropdown - A boolean indicating whether the dropdown is currently visible.
- * @param {React.Dispatch<React.SetStateAction<boolean>>} props.setShowDropdown - A function to toggle the dropdown's visibility.
+ * @param props - The props for the component.
+ * @param props.target - The target object containing the dropdown's name and sub-targets.
+ * @param props.showDropdown - A boolean indicating whether the dropdown is currently visible.
+ * @param props.setShowDropdown - A function to toggle the dropdown's visibility.
  *
- * @returns {JSX.Element} The collapsible dropdown component.
+ * @returns The collapsible dropdown component.
  *
  * @remarks
  * - The dropdown automatically opens if the current route includes 'orgstore'.
@@ -19,15 +18,15 @@
  * @example
  * ```tsx
  * <CollapsibleDropdown
- *   target={{
+ *   target=\{\{
  *     name: 'example',
  *     subTargets: [
- *       { name: 'Sub 1', icon: 'fa-icon-1', url: '/sub1' },
- *       { name: 'Sub 2', icon: 'fa-icon-2', url: '/sub2' },
+ *       \{ name: 'Sub 1', icon: 'fa-icon-1', url: '/sub1' \},
+ *       \{ name: 'Sub 2', icon: 'fa-icon-2', url: '/sub2' \},
  *     ],
- *   }}
- *   showDropdown={true}
- *   setShowDropdown={setShowDropdown}
+ *   \}\}
+ *   showDropdown=\{true\}
+ *   setShowDropdown=\{setShowDropdown\}
  * />
  * ```
  *
