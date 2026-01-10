@@ -41,7 +41,7 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 import { Autocomplete, TextField } from '@mui/material';
 
 import { FaLink, FaTrash } from 'react-icons/fa';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import styles from '../../../style/app-fixed.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import convertToBase64 from 'utils/convertToBase64';
@@ -99,7 +99,7 @@ const AgendaItemsCreateModal: React.FC<
       });
       setNewUrl('');
     } else {
-      toast.error(t('invalidUrl'));
+      NotificationToast.error(t('invalidUrl'));
     }
   };
 
@@ -131,7 +131,7 @@ const AgendaItemsCreateModal: React.FC<
         totalSize += file.size;
       });
       if (totalSize > 10 * 1024 * 1024) {
-        toast.error(t('fileSizeExceedsLimit'));
+        NotificationToast.error(t('fileSizeExceedsLimit'));
         return;
       }
       const base64Files = await Promise.all(

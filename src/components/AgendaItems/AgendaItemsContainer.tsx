@@ -15,7 +15,7 @@
  *
  * @remarks
  * Uses `@hello-pangea/dnd` for drag-and-drop functionality.
- * Integrates with `react-toastify` for user notifications.
+ * Integrates with toast notification system
  * Includes modals for previewing, updating, and deleting agenda items.
  *
  * @example
@@ -32,7 +32,7 @@ import React, { useState } from 'react';
 import type { FormEvent, JSX } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useMutation } from '@apollo/client';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import type { DropResult } from '@hello-pangea/dnd';
@@ -161,10 +161,10 @@ function AgendaItemsContainer({
       });
       agendaItemRefetch();
       hideUpdateModal();
-      toast.success(t('agendaItemUpdated') as string);
+      NotificationToast.success(t('agendaItemUpdated') as string);
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(`${error.message}`);
+        NotificationToast.error(`${error.message}`);
       }
     }
   };
@@ -181,10 +181,10 @@ function AgendaItemsContainer({
       });
       agendaItemRefetch();
       toggleDeleteModal();
-      toast.success(t('agendaItemDeleted') as string);
+      NotificationToast.success(t('agendaItemDeleted') as string);
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(`${error.message}`);
+        NotificationToast.error(`${error.message}`);
       }
     }
   };
@@ -258,7 +258,7 @@ function AgendaItemsContainer({
       agendaItemRefetch();
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(`${error.message}`);
+        NotificationToast.error(`${error.message}`);
       }
     }
   };

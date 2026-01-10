@@ -23,7 +23,6 @@ import styles from 'style/app-fixed.module.css';
  */
 export function AdvertisementSkeleton() {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
-  const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
   return [...Array(6)].map((_, index) => (
