@@ -1,64 +1,23 @@
 /**
- * BaseModal Component
+ * BaseModal component.
  *
  * A reusable wrapper around react-bootstrap Modal that provides a consistent
  * structure and reduces boilerplate code across the Talawa Admin application.
  * Handles common patterns like header with title/close button, body content,
  * and optional footer with action buttons.
  *
+ * @remarks
  * Features:
- * - Standardized header with optional title and close button
- * - Customizable size variants (sm, lg, xl)
- * - Built-in accessibility (aria-modal, role="dialog", Escape key support)
- * - Flexible footer for action buttons
- * - Custom header support for complex layouts
- * - i18n support for all user-visible strings
+ * - Standardized header with optional title and close button.
+ * - Customizable size variants: sm, lg, xl.
+ * - Built-in accessibility including aria-modal, role dialog, and Escape key support.
+ * - Flexible footer for action buttons.
+ * - Custom header support for complex layouts.
+ * - i18n support for user-visible strings.
  *
- * @component
- * @example
- * // Simple delete confirmation modal
- * <BaseModal
- *   show={isOpen}
- *   onHide={handleClose}
- *   title={t('deletePost')}
- *   dataTestId="delete-post-modal"
- *   footer={
- *     <>
- *       <Button variant="secondary" onClick={handleClose}>
- *         {tCommon('cancel')}
- *       </Button>
- *       <Button variant="danger" onClick={handleDelete}>
- *         {tCommon('confirm')}
- *       </Button>
- *     </>
- *   }
- * >
- *   <p>{t('deletePostMsg')}</p>
- * </BaseModal>
- *
- * @example
- * // Form modal with custom styling
- * <BaseModal
- *   show={isEditOpen}
- *   onHide={handleClose}
- *   title={t('editTag')}
- *   size="lg"
- *   headerClassName={styles.customHeader}
- *   footer={
- *     <>
- *       <Button variant="secondary" onClick={handleClose}>
- *         {tCommon('cancel')}
- *       </Button>
- *       <Button type="submit" form="edit-form">
- *         {tCommon('save')}
- *       </Button>
- *     </>
- *   }
- * >
- *   <Form id="edit-form" onSubmit={handleSubmit}>
- *     <Form.Control {...} />
- *   </Form>
- * </BaseModal>
+ * Example usage:
+ * - Confirmation modal with title, footer actions, and content.
+ * - Form modal with custom header styling and submit button.
  */
 import { useId } from 'react';
 import { Modal, Button } from 'react-bootstrap';
@@ -79,13 +38,14 @@ export default function BaseModal({
   keyboard = true,
   className,
   headerClassName,
+  headerTestId,
   bodyClassName,
   footerClassName,
   showCloseButton = true,
   closeButtonVariant = 'danger',
   dataTestId,
 }: IBaseModalProps) {
-  const { t } = useTranslation('translation', { keyPrefix: 'common' });
+  const { t } = useTranslation('common');
   const titleId = useId();
   const bodyId = useId();
 
@@ -117,12 +77,12 @@ export default function BaseModal({
       data-testid={dataTestId}
     >
       {headerContent ? (
-        <Modal.Header className={headerClassName}>
+        <Modal.Header className={headerClassName} data-testid={headerTestId}>
           {headerContent}
           {closeButton}
         </Modal.Header>
       ) : (
-        <Modal.Header className={headerClassName}>
+        <Modal.Header className={headerClassName} data-testid={headerTestId}>
           <Modal.Title id={titleId}>{title}</Modal.Title>
           {closeButton}
         </Modal.Header>

@@ -63,7 +63,7 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceQueryUserTagsAssignedMembers } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './ManageTag.module.css';
 import {
   DataGrid,
   type GridCellParams,
