@@ -4,7 +4,9 @@
 
 # Interface: InterfacePageInfo
 
-Defined in: [src/types/CursorPagination/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L4)
+Defined in: [src/types/CursorPagination/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L8)
+
+Pagination information following Relay cursor pagination spec
 
 ## Properties
 
@@ -12,7 +14,7 @@ Defined in: [src/types/CursorPagination/interface.ts:4](https://github.com/Palis
 
 > **endCursor**: `string`
 
-Defined in: [src/types/CursorPagination/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L5)
+Defined in: [src/types/CursorPagination/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L9)
 
 ***
 
@@ -20,7 +22,7 @@ Defined in: [src/types/CursorPagination/interface.ts:5](https://github.com/Palis
 
 > **hasNextPage**: `boolean`
 
-Defined in: [src/types/CursorPagination/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L7)
+Defined in: [src/types/CursorPagination/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L11)
 
 ***
 
@@ -28,7 +30,7 @@ Defined in: [src/types/CursorPagination/interface.ts:7](https://github.com/Palis
 
 > **hasPreviousPage**: `boolean`
 
-Defined in: [src/types/CursorPagination/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L8)
+Defined in: [src/types/CursorPagination/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L12)
 
 ***
 
@@ -36,4 +38,4 @@ Defined in: [src/types/CursorPagination/interface.ts:8](https://github.com/Palis
 
 > **startCursor**: `string`
 
-Defined in: [src/types/CursorPagination/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L6)
+Defined in: [src/types/CursorPagination/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L10)

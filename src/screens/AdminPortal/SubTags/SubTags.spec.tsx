@@ -134,7 +134,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  it('render error component on unsuccessful subtags query', async () => {
+  it('renders UI with addChildTag button even when subtags query fails', async () => {
     const { getByText } = renderSubTags(link2);
 
     await wait();

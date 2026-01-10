@@ -6,7 +6,7 @@
 
 > **InterfaceCursorPaginationManagerProps**\<`TNode`, `TVariables`, `TData`\> = `InterfaceCursorPaginationManagerDefaultProps`\<`TNode`, `TVariables`\> \| `InterfaceCursorPaginationManagerExternalProps`\<`TNode`, `TVariables`, `TData`\>
 
-Defined in: [src/types/CursorPagination/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L69)
+Defined in: [src/types/CursorPagination/interface.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L114)
 
 Props for CursorPaginationManager component.
 

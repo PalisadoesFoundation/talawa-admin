@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_ERROR\_SUB\_TAGS**: `object`[]
 
-Defined in: [src/screens/AdminPortal/SubTags/SubTagsMocks.ts:250](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/SubTags/SubTagsMocks.ts#L250)
+Defined in: [src/screens/AdminPortal/SubTags/SubTagsMocks.ts:255](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/SubTags/SubTagsMocks.ts#L255)
 
 ## Type Declaration
 
@@ -42,9 +42,9 @@ Defined in: [src/screens/AdminPortal/SubTags/SubTagsMocks.ts:250](https://github
 
 > **sortedBy**: `object`
 
-#### request.variables.sortedBy.id
+#### request.variables.sortedBy.\_id
 
-> **id**: `string` = `'DESCENDING'`
+> **\_id**: `string` = `'DESCENDING'`
 
 #### request.variables.where
 

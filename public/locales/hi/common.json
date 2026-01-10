@@ -230,6 +230,7 @@
   "inviteOnlyEvent": "केवल आमंत्रण",
   "inviteOnlyEventDescription": "केवल आमंत्रित सदस्यों और ईवेंट व्यवस्थापकों के लिए दृश्य",
   "to": "को",
+  "errorLoadingData": "डेटा लोड करने में त्रुटि: {{message}}",
   "or": "या",
   "eventNotFound": "ईवेंट आईडी {{id}} के साथ नहीं मिला"
 }

@@ -435,6 +435,7 @@
     "tagCreationFailed": "标签创建失败",
     "errorLoadingTagsData": "加载组织标签数据时出错",
     "sortTags": "排序标签",
+    "sort": "排序",
     "Latest": "最新",
     "Oldest": "最旧",
     "viewSubTags": "查看 {{count}} 个子标签",

@@ -33,7 +33,7 @@ export const MOCKS = [
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: null,
         where: { name: { starts_with: '' } },
-        sortedBy: { id: 'DESCENDING' },
+        sortedBy: { _id: 'DESCENDING' },
       },
     },
     result: {
@@ -61,7 +61,12 @@ export const MOCKS = [
             },
             totalCount: 11,
           },
-          ancestorTags: [],
+          ancestorTags: [
+            {
+              _id: 'parentTag',
+              name: 'Parent Tag',
+            },
+          ],
         },
       },
     },
@@ -74,7 +79,7 @@ export const MOCKS = [
         after: '10',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
-        sortedBy: { id: 'DESCENDING' },
+        sortedBy: { _id: 'DESCENDING' },
       },
     },
     result: {
@@ -106,7 +111,7 @@ export const MOCKS = [
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: null,
         where: { name: { starts_with: '' } },
-        sortedBy: { id: 'DESCENDING' },
+        sortedBy: { _id: 'DESCENDING' },
       },
     },
     result: {
@@ -146,7 +151,7 @@ export const MOCKS = [
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: null,
         where: { name: { starts_with: 'searchSubTag' } },
-        sortedBy: { id: 'DESCENDING' },
+        sortedBy: { _id: 'DESCENDING' },
       },
     },
     result: {
@@ -191,7 +196,7 @@ export const MOCKS = [
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: null,
         where: { name: { starts_with: 'searchSubTag' } },
-        sortedBy: { id: 'ASCENDING' },
+        sortedBy: { _id: 'ASCENDING' },
       },
     },
     result: {
@@ -256,7 +261,7 @@ export const MOCKS_ERROR_SUB_TAGS = [
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: null,
         where: { name: { starts_with: '' } },
-        sortedBy: { id: 'DESCENDING' },
+        sortedBy: { _id: 'DESCENDING' },
       },
     },
     error: new Error('Mock Graphql Error'),
@@ -272,7 +277,7 @@ export const emptyMocks = [
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: null,
         where: { name: { starts_with: '' } },
-        sortedBy: { id: 'DESCENDING' },
+        sortedBy: { _id: 'DESCENDING' },
       },
     },
     result: {
@@ -302,7 +307,7 @@ export const MOCKS_CREATE_TAG_ERROR = [
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: null,
         where: { name: { starts_with: '' } },
-        sortedBy: { id: 'DESCENDING' },
+        sortedBy: { _id: 'DESCENDING' },
       },
     },
     result: {

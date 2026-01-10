@@ -230,5 +230,7 @@
   "inviteOnlyEvent": "仅限受邀者",
   "inviteOnlyEventDescription": "仅受邀成员和活动管理员可见",
   "to": "至",
-  "errorLoadingData": "加载数据出错"
+  "errorLoadingData": "加载数据出错",
+  "or": "或",
+  "eventNotFound": "未找到ID为 {{id}} 的活动"
 }

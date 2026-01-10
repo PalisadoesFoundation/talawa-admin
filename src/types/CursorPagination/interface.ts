@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import type { DocumentNode } from 'graphql';
-import type { ApolloError } from '@apollo/client';
+import type { ApolloError, QueryHookOptions } from '@apollo/client';
 
 /**
  * Pagination information following Relay cursor pagination spec
@@ -14,10 +14,14 @@ export interface InterfacePageInfo {
 
 /**
  * Connection data structure following Relay cursor pagination spec
+ * @remarks
+ * While the Relay spec requires both edges and pageInfo, this interface
+ * makes pageInfo optional to gracefully handle incomplete responses.
+ * When pageInfo is missing, items are still rendered but pagination is disabled.
  */
 export interface InterfaceConnectionData<TNode> {
   edges: Array<{ cursor: string; node: TNode }>;
-  pageInfo: InterfacePageInfo;
+  pageInfo?: InterfacePageInfo;
   totalCount?: number;
 }
 
@@ -43,9 +47,11 @@ export interface InterfaceCursorPaginationManagerBaseProps<
    * Query options including variables (preferred)
    * @remarks Takes precedence over queryVariables when both are provided
    */
-  queryOptions?: {
+  queryOptions?: Omit<
+    QueryHookOptions<unknown, TVariables & InterfacePaginationVariables>,
+    'query'
+  > & {
     variables?: TVariables;
-    [key: string]: unknown;
   };
   /**
    * Query variables (legacy, use queryOptions.variables instead)
@@ -63,8 +69,6 @@ export interface InterfaceCursorPaginationManagerBaseProps<
   onDataChange?: (data: TNode[]) => void;
   /** Changing this numeric prop triggers a refetch when it updates */
   refetchTrigger?: number;
-  /** Optional additional buttons to render */
-  renderAdditionalButtons?: (queryData: unknown) => ReactNode;
 }
 
 /**

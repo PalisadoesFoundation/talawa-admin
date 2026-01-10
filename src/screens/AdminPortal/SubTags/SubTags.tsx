@@ -69,6 +69,7 @@ import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import CursorPaginationManager from 'components/CursorPaginationManager/CursorPaginationManager';
 
 function SubTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -134,7 +135,7 @@ function SubTags(): JSX.Element {
   };
 
   // Render function for additional action buttons (defined here to use queryData)
-  const renderAdditionalButtons = (
+  const _renderAdditionalButtons = (
     queryData: { getChildTags: InterfaceQueryUserTagChildTags } | undefined,
   ): JSX.Element => (
     <>
@@ -259,6 +260,43 @@ function SubTags(): JSX.Element {
     },
   ];
 
+  // Dropdown configuration for sorting
+  const sortDropdownConfig = {
+    id: 'sort',
+    label: t('sort'),
+    type: 'sort' as const,
+    options: [
+      { label: t('Latest'), value: 'DESCENDING' },
+      { label: t('Oldest'), value: 'ASCENDING' },
+    ],
+    selectedOption: tagSortOrder,
+    onOptionChange: (value: string | number) =>
+      setTagSortOrder(value as SortedByType),
+    dataTestIdPrefix: 'sortTags',
+  };
+
+  // Additional action buttons configuration
+  const additionalActionButtons = [
+    <Button
+      key="manage-current-tag"
+      onClick={() => redirectToManageTag(parentTagId as string)}
+      data-testid="manageCurrentTagBtn"
+      className={`${styles.createButton} mb-3`}
+    >
+      {t('manageTag')}
+    </Button>,
+    <Button
+      key="add-sub-tag"
+      variant="success"
+      onClick={showAddSubTagModal}
+      data-testid="addSubTagBtn"
+      className={`${styles.createButton} mb-3`}
+    >
+      <i className={'fa fa-plus me-2'} />
+      {t('addChildTag')}
+    </Button>,
+  ];
+
   return (
     <>
       <Row>
@@ -274,6 +312,37 @@ function SubTags(): JSX.Element {
             additionalButtons={additionalActionButtons}
           />
 
+          <CursorPaginationManager<
+            InterfaceQueryUserTagChildTags,
+            InterfaceQueryUserTagChildTags
+          >
+            query={USER_TAG_SUB_TAGS}
+            queryOptions={{
+              variables: {
+                id: parentTagId,
+                where: { name: { starts_with: tagSearchName } },
+                sortedBy: { _id: tagSortOrder },
+              },
+              skip: !parentTagId,
+            }}
+            dataPath="getChildTags.childTags"
+            itemsPerPage={TAGS_QUERY_DATA_CHUNK_SIZE}
+            useExternalUI={true}
+            refetchTrigger={refetchTrigger}
+          >
+            {({ items, loading, pageInfo, handleLoadMore, queryData }) => {
+              // Extract ancestor tags from query data
+              const orgUserTagAncestors =
+                (
+                  queryData as {
+                    getChildTags?: {
+                      ancestorTags?: Array<{ _id: string; name: string }>;
+                    };
+                  }
+                )?.getChildTags?.ancestorTags || [];
+
+              return (
+                <>
                   <LoadingState
                     isLoading={loading}
                     variant="skeleton"

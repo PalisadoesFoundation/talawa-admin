@@ -286,6 +286,11 @@ export function CursorPaginationManager<
 
   // If using external UI (render prop pattern), provide data to children
   if (useExternalUI && children) {
+    if (typeof children !== 'function') {
+      throw new Error(
+        'CursorPaginationManager: children must be a function when useExternalUI is true',
+      );
+    }
     return (
       <>
         {children({
@@ -311,9 +316,7 @@ export function CursorPaginationManager<
         data-testid="cursor-pagination-error"
         className={styles.stateMessage}
       >
-        <p>
-          {t('errorLoadingData')}: {error.message}
-        </p>
+        <p>{t('errorLoadingData', { message: error.message })}</p>
         <button
           type="button"
           onClick={handleRefetch}

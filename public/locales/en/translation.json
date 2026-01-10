@@ -435,6 +435,7 @@
     "tagCreationFailed": "Tag creation failed",
     "errorLoadingTagsData": "Error occurred while loading Organization Tags Data",
     "sortTags": "Sort Tags",
+    "sort": "Sort",
     "Latest": "Latest",
     "Oldest": "Oldest",
     "viewSubTags": "View {{count}} sub tags",

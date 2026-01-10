@@ -435,6 +435,7 @@
     "tagCreationFailed": "टैग निर्माण विफल",
     "errorLoadingTagsData": "संगठन टैग डेटा लोड करते समय त्रुटि हुई",
     "sortTags": "टैग सॉर्ट करें",
+    "sort": "सॉर्ट करें",
     "Latest": "नवीनतम",
     "Oldest": "सबसे पुराना",
     "viewSubTags": "{{count}} उप-टैग देखें",

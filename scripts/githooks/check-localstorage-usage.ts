@@ -10,6 +10,9 @@ const scanEntireRepo: boolean = args.includes('--scan-entire-repo');
 
 const containsSkipComment = (file: string): boolean => {
   try {
+    if (!existsSync(file)) {
+      return false;
+    }
     const content = readFileSync(file, 'utf-8');
     return content.includes('// SKIP_LOCALSTORAGE_CHECK');
   } catch (error) {
@@ -27,17 +30,21 @@ const getModifiedFiles = (): string[] => {
 
     if (scanEntireRepo) {
       const result = execSync('git ls-files | grep ".tsx\\?$"', options);
-      return result.trim().split('\n');
+      return result.trim().split('\n').filter(Boolean);
     }
 
-    const result = execSync('git diff --cached --name-only', options);
-    return result.trim().split('\n');
+    const result = execSync(
+      'git diff --cached --name-only --diff-filter=d',
+      options,
+    );
+    return result.trim().split('\n').filter(Boolean);
   } catch (error) {
     console.error(
       'Error fetching modified files:',
       error instanceof Error ? error.message : error,
     );
     process.exit(1);
+    return []; // This will never be reached, but satisfies TypeScript
   }
 };
 
@@ -109,3 +116,5 @@ if (filesWithLocalStorage.length > 0) {
 
   process.exit(1);
 }
+
+process.exit(0);

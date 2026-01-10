@@ -230,6 +230,7 @@
   "inviteOnlyEvent": "Solo por invitación",
   "inviteOnlyEventDescription": "Visible solo para miembros invitados y administradores de eventos",
   "to": "A",
+  "errorLoadingData": "Error al cargar datos: {{message}}",
   "or": "o",
   "eventNotFound": "Evento con id {{id}} no encontrado"
 }

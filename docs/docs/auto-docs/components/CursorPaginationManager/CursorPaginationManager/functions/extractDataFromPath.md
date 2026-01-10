@@ -4,7 +4,7 @@
 
 # Function: extractDataFromPath()
 
-> **extractDataFromPath**\<`TNode`\>(`data`, `path`): `any`
+> **extractDataFromPath**\<`TNode`\>(`data`, `path`): [`InterfaceConnectionData`](../../../../types/CursorPagination/interface/interfaces/InterfaceConnectionData.md)\<`TNode`\>
 
 Defined in: [src/components/CursorPaginationManager/CursorPaginationManager.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CursorPaginationManager/CursorPaginationManager.tsx#L21)
 
@@ -32,6 +32,6 @@ Dot-separated path to connection (e.g., "organization.members")
 
 ## Returns
 
-`any`
+[`InterfaceConnectionData`](../../../../types/CursorPagination/interface/interfaces/InterfaceConnectionData.md)\<`TNode`\>
 
 Connection data with edges and pageInfo, or null if not found

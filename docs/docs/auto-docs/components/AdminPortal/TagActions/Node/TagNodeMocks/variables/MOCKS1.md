@@ -82,6 +82,18 @@ Defined in: [src/components/AdminPortal/TagActions/Node/TagNodeMocks.ts:3](https
 
 > **hasNextPage**: `boolean` = `false`
 
+#### result.data.getChildTags.childTags.pageInfo.hasPreviousPage
+
+> **hasPreviousPage**: `boolean` = `true`
+
+#### result.data.getChildTags.childTags.pageInfo.startCursor
+
+> **startCursor**: `string` = `'subTag11'`
+
+#### result.data.getChildTags.childTags.totalCount
+
+> **totalCount**: `number` = `3`
+
 #### result.data.getChildTags.name
 
 > **name**: `string` = `'Parent Tag'`

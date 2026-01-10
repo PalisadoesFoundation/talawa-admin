@@ -230,6 +230,7 @@
   "inviteOnlyEvent": "Invite Only",
   "inviteOnlyEventDescription": "Visible only to invited members and event admins",
   "to": "To",
+  "errorLoadingData": "Error loading data: {{message}}",
   "or": "or",
   "eventNotFound": "Event with id {{id}} not found"
 }
