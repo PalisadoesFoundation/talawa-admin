@@ -117,7 +117,7 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
         variables: {
           name: formState.campaignName,
           currencyCode: formState.campaignCurrency,
-          goalAmount: Number.parseInt(formState.campaignGoal.toString()),
+          goalAmount: formState.campaignGoal,
           startAt: dayjs(campaignDateRange.startDate).toISOString(),
           endAt: dayjs(campaignDateRange.endDate).toISOString(),
 
@@ -172,24 +172,31 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
       if (campaign?.goalAmount !== campaignGoal) {
         updatedFields.goalAmount = campaignGoal;
       }
+      // START DATE
       if (
-        campaign?.startAt?.toISOString() !==
-        campaignDateRange.startDate?.toISOString()
+        campaign?.startAt &&
+        campaignDateRange.startDate &&
+        campaign.startAt.toISOString() !==
+          dayjs(campaignDateRange.startDate).toISOString()
       ) {
-        if (campaignDateRange.startDate) {
-          updatedFields.startAt = dayjs(
-            campaignDateRange.startDate,
-          ).toISOString();
-        }
+        updatedFields.startAt = dayjs(
+          campaignDateRange.startDate,
+        ).toISOString();
+      } else if (!campaign?.startAt && campaignDateRange.startDate) {
+        updatedFields.startAt = dayjs(
+          campaignDateRange.startDate,
+        ).toISOString();
       }
 
       if (
-        campaign?.endAt?.toISOString() !==
-        campaignDateRange.endDate?.toISOString()
+        campaign?.endAt &&
+        campaignDateRange.endDate &&
+        campaign.endAt.toISOString() !==
+          dayjs(campaignDateRange.endDate).toISOString()
       ) {
-        if (campaignDateRange.endDate) {
-          updatedFields.endAt = dayjs(campaignDateRange.endDate).toISOString();
-        }
+        updatedFields.endAt = dayjs(campaignDateRange.endDate).toISOString();
+      } else if (!campaign?.endAt && campaignDateRange.endDate) {
+        updatedFields.endAt = dayjs(campaignDateRange.endDate).toISOString();
       }
 
       await updateCampaign({
@@ -283,12 +290,13 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
                 className={styles.noOutline}
                 value={campaignGoal}
                 onChange={(e) => {
+                  if (e.target.value === '') {
+                    setFormState({ ...formState, campaignGoal: 0 });
+                    return;
+                  }
                   const value = parseInt(e.target.value, 10);
-                  if (value > 0) {
-                    setFormState({
-                      ...formState,
-                      campaignGoal: value,
-                    });
+                  if (!isNaN(value) && value > 0) {
+                    setFormState({ ...formState, campaignGoal: value });
                   }
                 }}
               />
