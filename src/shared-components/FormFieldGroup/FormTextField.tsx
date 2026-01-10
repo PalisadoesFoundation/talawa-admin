@@ -3,6 +3,12 @@ import { Form } from 'react-bootstrap';
 import { FormFieldGroup } from './FormFieldGroup';
 import type { IFormTextFieldProps } from '../../types/FormFieldGroup/interface';
 
+/**
+ * Renders a text input field within a FormFieldGroup for consistent styling and validation.
+ *
+ * @param props - The properties for the FormTextField component.
+ * @returns A text field React element.
+ */
 export const FormTextField: React.FC<IFormTextFieldProps> = ({
   name,
   label,

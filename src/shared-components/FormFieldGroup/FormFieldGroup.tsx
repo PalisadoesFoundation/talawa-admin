@@ -3,6 +3,12 @@ import { Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import type { IFormFieldGroupProps } from '../../types/FormFieldGroup/interface';
 
+/**
+ * Renders a grouped form field with label, help text, error, and children elements.
+ *
+ * @param props - The properties for the FormFieldGroup component.
+ * @returns A form group React element.
+ */
 export const FormFieldGroup: React.FC<
   IFormFieldGroupProps & { children: React.ReactNode }
 > = ({ name, label, required, helpText, error, touched, children }) => {
