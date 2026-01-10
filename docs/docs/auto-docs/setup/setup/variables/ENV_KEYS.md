@@ -16,9 +16,17 @@ Environment variable key names used by the setup script
 
 > `readonly` **ALLOW\_LOGS**: `"ALLOW_LOGS"` = `'ALLOW_LOGS'`
 
+### BACKEND\_WEBSOCKET\_URL
+
+> `readonly` **BACKEND\_WEBSOCKET\_URL**: `"REACT_APP_BACKEND_WEBSOCKET_URL"` = `"REACT_APP_BACKEND_WEBSOCKET_URL"`
+
 ### RECAPTCHA\_SITE\_KEY
 
 > `readonly` **RECAPTCHA\_SITE\_KEY**: `"REACT_APP_RECAPTCHA_SITE_KEY"` = `'REACT_APP_RECAPTCHA_SITE_KEY'`
+
+### TALAWA\_URL
+
+> `readonly` **TALAWA\_URL**: `"REACT_APP_TALAWA_URL"` = `"REACT_APP_TALAWA_URL"`
 
 ### USE\_DOCKER
 

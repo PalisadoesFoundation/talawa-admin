@@ -25,6 +25,8 @@ export const ENV_KEYS = {
   RECAPTCHA_SITE_KEY: 'REACT_APP_RECAPTCHA_SITE_KEY',
   ALLOW_LOGS: 'ALLOW_LOGS',
   USE_DOCKER: 'USE_DOCKER',
+  TALAWA_URL: 'REACT_APP_TALAWA_URL',
+  BACKEND_WEBSOCKET_URL: 'REACT_APP_BACKEND_WEBSOCKET_URL',
 } as const;
 
 const isExitPromptError = (error: unknown): boolean =>
