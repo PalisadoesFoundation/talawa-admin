@@ -252,11 +252,9 @@ describe('Testing User Table Item', () => {
       keyCode: 27,
       charCode: 27,
     });
-    expect(
-      screen
-        .queryAllByRole('dialog')
-        .every((el) => !el.className.includes('show')),
-    ).toBeTruthy();
+    expect(screen.getByTestId('modal-joined-org-123').className).not.toContain(
+      'show',
+    );
     fireEvent.click(showJoinedOrgsBtn);
     // Close using close button and reopen
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
@@ -520,8 +518,7 @@ describe('Testing User Table Item', () => {
     fireEvent.click(screen.getByTestId(`removeUserFromOrgBtn${'abc'}`));
     const confirmRemoveBtn = screen.getByTestId(`confirmRemoveUser123`);
     fireEvent.click(confirmRemoveBtn);
-    await wait();
-    expect(NotificationToast.error).toHaveBeenCalled();
+    await waitFor(() => expect(NotificationToast.error).toHaveBeenCalled());
   });
   test('change role button should function properly', async () => {
     const props: {
@@ -789,11 +786,9 @@ describe('Testing User Table Item', () => {
       keyCode: 27,
       charCode: 27,
     });
-    expect(
-      screen
-        .queryAllByRole('dialog')
-        .every((el) => !el.className.includes('show')),
-    ).toBeTruthy();
+    expect(screen.getByTestId('modal-blocked-org-123').className).not.toContain(
+      'show',
+    );
     fireEvent.click(showBlockedOrgsBtn);
     fireEvent.click(screen.getByTestId(`closeUnblockOrgsBtn${123}`));
     expect(

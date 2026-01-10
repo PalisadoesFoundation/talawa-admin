@@ -24,6 +24,9 @@ const { mockErrorHandler, mockUseParams, NotificationToast } = vi.hoisted(
     NotificationToast: {
       error: vi.fn(),
       success: vi.fn(),
+      warning: vi.fn(),
+      info: vi.fn(),
+      dismiss: vi.fn(),
     },
   }),
 );
