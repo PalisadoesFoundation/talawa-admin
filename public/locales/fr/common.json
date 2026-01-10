@@ -251,5 +251,8 @@
   "inviteOnlyEvent": "Sur invitation uniquement",
   "inviteOnlyEventDescription": "Visible uniquement par les membres invités et les administrateurs de l'événement",
   "sortingIcon": "icône de tri",
-  "peopleTabTagName": "Personnes"
+  "peopleTabTagName": "Personnes",
+  "to": "À",
+  "or": "ou",
+  "eventNotFound": "Événement avec l'id {{id}} non trouvé"
 }

@@ -251,5 +251,7 @@
   "inviteOnlyEventDescription": "Visible solo para miembros invitados y administradores de eventos",
   "to": "A",
   "sortingIcon": "icono de ordenación",
-  "peopleTabTagName": "Personas"
+  "peopleTabTagName": "Personas",
+  "or": "o",
+  "eventNotFound": "Evento con id {{id}} no encontrado"
 }

@@ -252,5 +252,7 @@
   "createEvent": "कार्यक्रम बनाएँ",
   "eventCreated": "कार्यक्रम सफलतापूर्वक बनाया गया",
   "eventDetails": "कार्यक्रम विवरण",
-  "peopleTabTagName": "लोग"
+  "peopleTabTagName": "लोग",
+  "or": "या",
+  "eventNotFound": "ईवेंट आईडी {{id}} के साथ नहीं मिला"
 }

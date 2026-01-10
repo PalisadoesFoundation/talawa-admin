@@ -1652,7 +1652,9 @@
     "preview": "預覽",
     "bannerAd": "橫幅廣告",
     "popupAd": "彈出廣告",
-    "menuAd": "菜單廣告"
+    "menuAd": "菜單廣告",
+    "searchAdvertisements": "搜索广告",
+    "advertisementLoading": "广告加载中..."
   },
   "userChat": {
     "title": "聊天",
@@ -1959,7 +1961,9 @@
     "viewDetails": "查看 {{name}} 详情",
     "editVolunteerGroup": "编辑 {{name}} 志愿者小组",
     "deleteVolunteerGroup": "删除 {{name}} 志愿者小组",
-    "deleteVolunteerEntry": "删除 {{name}} 志愿者条目"
+    "deleteVolunteerEntry": "删除 {{name}} 志愿者条目",
+    "viewGroup": "查看小组",
+    "editGroup": "编辑小组"
   },
   "userVolunteer": {
     "title": "志愿服务",

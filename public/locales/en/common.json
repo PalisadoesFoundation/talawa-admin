@@ -251,5 +251,8 @@
   "organizationEventDescription": "Visible to all members of the organization",
   "inviteOnlyEvent": "Invite Only",
   "inviteOnlyEventDescription": "Visible only to invited members and event admins",
-  "sortingIcon": "sorting-icon"
+  "sortingIcon": "sorting-icon",
+  "to": "To",
+  "or": "or",
+  "eventNotFound": "Event with id {{id}} not found"
 }
