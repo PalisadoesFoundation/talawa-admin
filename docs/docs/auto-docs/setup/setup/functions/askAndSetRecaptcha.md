@@ -14,7 +14,7 @@ Prompts user to configure reCAPTCHA settings and updates the .env file.
 
 `Promise`\<`void`\>
 
-Promise<void> - Resolves when configuration is complete.
+`Promise<void>` - Resolves when configuration is complete.
 
 ## Remarks
 

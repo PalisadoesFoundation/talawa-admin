@@ -49,7 +49,7 @@ const isExitPromptError = (error: unknown): boolean =>
  * await askAndSetRecaptcha();
  * ```
  *
- * @returns Promise<void> - Resolves when configuration is complete.
+ * @returns `Promise<void>` - Resolves when configuration is complete.
  * @throws ExitPromptError - If user cancels the prompt.
  * @throws Error - If user input fails or environment update fails.
  */
@@ -139,7 +139,7 @@ const askAndSetLogErrors = async (): Promise<void> => {
  * await main();
  * ```
  *
- * @returns Promise<void> - A promise that resolves when setup completes successfully.
+ * @returns `Promise<void>` - A promise that resolves when setup completes successfully.
  * @throws Error - if any setup step fails.
  */
 export async function main(): Promise<void> {

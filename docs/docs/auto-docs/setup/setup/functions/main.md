@@ -14,7 +14,7 @@ Main setup orchestrator for Talawa Admin initial configuration.
 
 `Promise`\<`void`\>
 
-Promise<void> - A promise that resolves when setup completes successfully.
+`Promise<void>` - A promise that resolves when setup completes successfully.
 
 ## Remarks
 
