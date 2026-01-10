@@ -231,5 +231,6 @@
   "inviteOnlyEventDescription": "仅受邀成员和活动管理员可见",
   "to": "至",
   "or": "或",
-  "eventNotFound": "未找到 ID 为 {{id}} 的活动"
+  "eventNotFound": "未找到 ID 为 {{id}} 的活动",
+  "required": "必填"
 }

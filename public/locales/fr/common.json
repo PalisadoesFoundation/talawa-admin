@@ -231,5 +231,6 @@
   "inviteOnlyEventDescription": "Visible uniquement par les membres invités et les administrateurs de l'événement",
   "to": "À",
   "or": "ou",
-  "eventNotFound": "Événement avec l'id {{id}} non trouvé"
+  "eventNotFound": "Événement avec l'id {{id}} non trouvé",
+  "required": "Obligatoire"
 }
