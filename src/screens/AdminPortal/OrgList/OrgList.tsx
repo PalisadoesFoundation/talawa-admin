@@ -210,6 +210,15 @@ function orgList(): JSX.Element {
     setIsLoading(loadingAll);
   }, [loadingAll]);
 
+  useEffect(() => {
+    // Cleanup debounce timer on unmount
+    return () => {
+      if (refetchDebounceRef.current) {
+        window.clearTimeout(refetchDebounceRef.current);
+      }
+    };
+  }, []);
+
   const createOrg = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 

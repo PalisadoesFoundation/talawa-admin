@@ -35,6 +35,7 @@ import {
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
 } from 'GraphQl/Mutations/mutations';
 import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 vi.setConfig({ testTimeout: 30000 });
 
@@ -1873,7 +1874,7 @@ describe('Advanced Component Functionality Tests', () => {
     });
 
     // Verify success toast was triggered
-    expect(mockToast.success).toHaveBeenCalledWith(
+    expect(NotificationToast.success).toHaveBeenCalledWith(
       expect.stringContaining('congratulationOrgCreated'),
     );
 
