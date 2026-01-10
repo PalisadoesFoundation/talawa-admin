@@ -258,12 +258,8 @@ describe('Testing User Table Item', () => {
     fireEvent.click(showJoinedOrgsBtn);
     // Close using close button and reopen
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
-     await waitFor(() =>
-      expect(
-        screen
-          .queryAllByRole('dialog')
-          .every((el) => !el.className.includes('show')),
-      ).toBeTruthy(),
+    await waitFor(() =>
+      expect(screen.getByTestId('modal-joined-org-123')).not.toHaveClass('show'),
     );
     fireEvent.click(showJoinedOrgsBtn);
     // Expect the following to exist in modal
