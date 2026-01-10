@@ -47,9 +47,9 @@ const isExitPromptError = (error: unknown): boolean =>
  * await askAndSetRecaptcha();
  * ```
  *
- * @returns A promise that resolves when configuration is complete
- * @throws ExitPromptError if user cancels the prompt
- * @throws Error if user input fails or environment update fails
+ * @returns Promise<void> - Resolves when configuration is complete.
+ * @throws ExitPromptError - If user cancels the prompt.
+ * @throws Error - If user input fails or environment update fails.
  */
 export const askAndSetRecaptcha = async (): Promise<void> => {
   try {
@@ -166,7 +166,8 @@ export async function main(): Promise<void> {
     // Use async file read instead of sync
     const envFileContent = await fs.promises.readFile('.env', 'utf8');
     const envConfig = dotenv.parse(envFileContent);
-    const useDocker = envConfig[ENV_KEYS.USE_DOCKER] === ENV_VALUES.YES;
+    const useDocker =
+      (envConfig[ENV_KEYS.USE_DOCKER] ?? '').toUpperCase() === ENV_VALUES.YES;
 
     // Ask for port only when NOT using Docker
     if (!useDocker) {

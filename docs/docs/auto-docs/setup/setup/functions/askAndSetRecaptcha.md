@@ -14,7 +14,7 @@ Prompts user to configure reCAPTCHA settings and updates the .env file.
 
 `Promise`\<`void`\>
 
-A promise that resolves when configuration is complete
+Promise<void> - Resolves when configuration is complete.
 
 ## Remarks
 
@@ -31,8 +31,8 @@ await askAndSetRecaptcha();
 
 ## Throws
 
-ExitPromptError if user cancels the prompt
+ExitPromptError - If user cancels the prompt.
 
 ## Throws
 
-Error if user input fails or environment update fails
+Error - If user input fails or environment update fails.
