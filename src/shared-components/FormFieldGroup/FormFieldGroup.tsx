@@ -1,0 +1,32 @@
+import React from 'react';
+import { Form } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import type { IFormFieldGroupProps } from '../../types/FormFieldGroup/interface';
+
+export const FormFieldGroup: React.FC<
+  IFormFieldGroupProps & { children: React.ReactNode }
+> = ({ name, label, required, helpText, error, touched, children }) => {
+  const { t: tCommon } = useTranslation('common');
+  const showError = touched && !!error;
+
+  return (
+    <Form.Group controlId={name}>
+      <Form.Label>
+        {label}
+        {required && <span aria-label={tCommon('required')}>*</span>}
+      </Form.Label>
+
+      {children}
+
+      {helpText && !showError && (
+        <Form.Text className="text-muted">{helpText}</Form.Text>
+      )}
+
+      {showError && (
+        <Form.Control.Feedback type="invalid" className="d-block">
+          {error}
+        </Form.Control.Feedback>
+      )}
+    </Form.Group>
+  );
+};
