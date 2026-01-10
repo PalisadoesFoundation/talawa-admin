@@ -70,8 +70,12 @@
     "admin": "Administrateur",
     "user": "Utilisateur",
     "loading": "Chargement",
-    "communityLogo": "Logo Communautaire",
-    "organizations": "Organisations"
+    "userImage": "Image de l'utilisateur",
+    "userEditProfilePicture": "Modifier la photo de profil",
+    "communityLogo": "Logo de la Communauté",
+    "organizations": "Organisations",
+    "accountLocked": "Votre compte a été temporairement verrouillé en raison de trop nombreuses tentatives de connexion échouées. Veuillez réessayer plus tard.",
+    "accountLockedWithTimer": "Votre compte a été temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s)."
   },
   "adminProfile": {
     "title": "Profil Administrateur",
@@ -462,7 +466,6 @@
     "userName": "Nom d'utilisateur",
     "actions": "Actions",
     "noOneSelected": "Personne sélectionnée",
-    "addMember": "Ajouter un membre",
     "assignToTags": "Attribuer aux étiquettes",
     "removeFromTags": "Retirer des étiquettes",
     "assign": "Attribuer",
@@ -491,8 +494,7 @@
     "tagActions": "Actions d'étiquette",
     "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
     "sortPeople": "Trier les personnes",
-    "noTagsFound": "Aucun tag trouvé",
-    "removeMember": "Retirer le membre"
+    "noTagsFound": "Aucun tag trouvé"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
@@ -803,7 +805,6 @@
     "progress": "Progrès",
     "raised": "Collecté",
     "addCampaign": "Ajouter une campagne",
-    "editCampaign": "Modifier la campagne",
     "createdCampaign": "Campagne créée avec succès",
     "updatedCampaign": "Campagne mise à jour avec succès",
     "deletedCampaign": "Campagne supprimée avec succès",
@@ -815,13 +816,15 @@
     "currency": "Devise",
     "selectCurrency": "Sélectionner la devise",
     "searchFullName": "Rechercher par nom",
-    "searchCampaigns": "Rechercher des campagnes",
     "viewPledges": "Voir les promesses de dons",
     "noCampaignsFound": "Aucune campagne trouvée",
     "latestEndDate": "Dernière date de fin",
     "earliestEndDate": "Date de fin la plus ancienne",
     "lowestGoal": "Objectif le plus bas",
     "highestGoal": "Objectif le plus élevé",
+    "editCampaign": "Modifier la campagne",
+    "searchCampaigns": "Rechercher des campagnes",
+    "errorLoading": "Erreur lors du chargement des données de la campagne",
     "percentageRaised": "% Collecté",
     "campaignProgress": "Progression de la campagne: {{percentage}}%"
   },
@@ -1199,7 +1202,20 @@
     "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
     "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
     "tagsAssigned": "étiquettes assignées",
-    "noTagsAssigned": "Aucune étiquette assignée"
+    "noTagsAssigned": "Aucune étiquette assignée",
+    "to": "À",
+    "overview": "Aperçu",
+    "tags": "Étiquettes",
+    "invalidFileType": "Type de fichier invalide",
+    "fileTooLarge": "Fichier trop volumineux",
+    "memberDetailNumberExample": "Exemple de numéro",
+    "memberDetailExampleLane": "Exemple de rue",
+    "memberDetailPostalExample": "Exemple de code postal",
+    "enterCity": "Entrez la ville",
+    "enterState": "Entrez l'état",
+    "select": "Sélectionner",
+    "asYourCountry": "comme votre pays",
+    "actions": "Actions"
   },
   "people": {
     "title": "Personnes",
@@ -1363,7 +1379,8 @@
     "event": "Événement",
     "article": "Article",
     "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité",
-    "processingPost": "Traitement de votre publication. Veuillez patienter."
+    "processingPost": "Traitement de votre publication. Veuillez patienter.",
+    "postImagePreview": "Aperçu de l’image de la publication"
   },
   "eventAttendance": {
     "event_attendance_table": "Table de présence aux événements",
@@ -1535,7 +1552,9 @@
     "latestFirst": "Plus Récent en Premier",
     "earliestFirst": "Plus Ancien en Premier",
     "noTransactionsFound": "Aucune transaction trouvée",
-    "errorLoadingTransactions": "Erreur lors du chargement des transactions"
+    "errorLoadingTransactions": "Erreur lors du chargement des transactions",
+    "eventType": "Type d'événement",
+    "tagCreationFailed": "Échec de la création du tag"
   },
   "userEvents": {
     "title": "Événements",
@@ -1868,7 +1887,7 @@
     "startDate": "Date de début",
     "endDate": "Date de fin",
     "fundingGoal": "Objectif de financement",
-    "viewPledge": "Voir la promesse de don",
+    "viewPledge": "Voir l'engagement",
     "campaignIndex": "#",
     "fundGoal": "Objectif de Financement",
     "percentRaised": "% Collecté",

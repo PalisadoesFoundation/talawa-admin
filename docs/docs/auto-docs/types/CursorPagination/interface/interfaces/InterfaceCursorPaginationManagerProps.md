@@ -225,7 +225,7 @@ for append-only pagination but may cause issues if items are reordered.
 Defined in: [src/types/CursorPagination/interface.ts:133](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L133)
 
 When true, renders items without wrapper divs for table contexts
-Use this when renderItem returns <tr> elements to be placed inside <tbody>
+Use this when renderItem returns `<tr>` elements to be placed inside `<tbody>`
 
 #### Default Value
 
