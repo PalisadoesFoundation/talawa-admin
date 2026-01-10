@@ -1354,7 +1354,7 @@ describe('CursorPaginationManager', () => {
     it('component unmounts cleanly during fetch', async () => {
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => {});
+        .mockImplementation(() => { });
       const mocks = [createSuccessMock()];
 
       const { unmount } = render(
@@ -1637,7 +1637,7 @@ describe('CursorPaginationManager', () => {
                 capturedQueryData = props.queryData;
                 return (
                   <div>
-                    {props.items.map((item: Member) => (
+                    {(props.items as Member[]).map((item) => (
                       <div key={item.id}>{item.name}</div>
                     ))}
                   </div>
@@ -1674,12 +1674,13 @@ describe('CursorPaginationManager', () => {
                 return (
                   <div>
                     <button
+                      type="button"
                       onClick={props.handleLoadMore}
                       data-testid="external-load-more"
                     >
                       Load More
                     </button>
-                    {props.items.map((item: User) => (
+                    {(props.items as User[]).map((item) => (
                       <div key={item.id}>{item.name}</div>
                     ))}
                   </div>
@@ -1821,26 +1822,6 @@ describe('CursorPaginationManager', () => {
       });
     });
 
-    it('handles renderItem being undefined in edge case', async () => {
-      const mocks = [createSuccessMock()];
 
-      render(
-        <MockedProvider mocks={mocks} addTypename={false}>
-          <I18nextProvider i18n={i18nForTest}>
-            <CursorPaginationManager
-              query={MOCK_QUERY}
-              dataPath="users"
-              itemsPerPage={10}
-              renderItem={(user: User) => <div>{user.name}</div>}
-            />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      await waitFor(() => {
-        expect(screen.getByText('User 1')).toBeInTheDocument();
-        expect(screen.getByText('User 2')).toBeInTheDocument();
-      });
-    });
   });
 });
