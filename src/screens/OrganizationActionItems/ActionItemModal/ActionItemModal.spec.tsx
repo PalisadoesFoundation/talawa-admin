@@ -664,7 +664,7 @@ describe('ItemModal - Additional Test Cases', () => {
       };
 
       renderWithProviders(props);
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     it('should call hide function when close button is clicked', () => {
@@ -701,7 +701,7 @@ describe('ItemModal - Additional Test Cases', () => {
 
       await waitFor(
         () => {
-          expect(screen.getByRole('dialog')).toBeInTheDocument();
+          expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
         },
         { timeout: 5000 },
       );
@@ -750,7 +750,7 @@ describe('ItemModal - Additional Test Cases', () => {
       renderWithProviders(props);
 
       // Check the modal renders
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
 
       // Find submit button with correct label for create mode
       const submitButton = screen.getByTestId('submitBtn');
@@ -844,7 +844,7 @@ describe('ItemModal - Additional Test Cases', () => {
       expect(dateInputs.length).toBeGreaterThan(0);
 
       // The modal should be open
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
   });
 
@@ -864,7 +864,7 @@ describe('ItemModal - Additional Test Cases', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       const volunteerInput = screen.getByLabelText('volunteer *');
@@ -905,7 +905,7 @@ describe('ItemModal - Additional Test Cases', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Select a category first (required for volunteer group functionality)
@@ -968,7 +968,7 @@ describe('ItemModal - Additional Test Cases', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Select a category first (required for volunteer functionality)
@@ -1041,7 +1041,7 @@ describe('ItemModal - Additional Test Cases', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Select a category first (required for volunteer functionality)
@@ -1146,7 +1146,7 @@ describe('ItemModal - Additional Test Cases', () => {
       );
 
       // Verify the component renders
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
 
       // Get the form element and dispatch a submit event directly to bypass HTML5 validation
       const form = document.querySelector('form');
@@ -1224,7 +1224,7 @@ describe('ItemModal - Additional Test Cases', () => {
       };
 
       renderWithProviders(props);
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     it('should have form elements with proper labels', () => {
@@ -1296,7 +1296,7 @@ describe('ItemModal - Additional Test Cases', () => {
       );
 
       // Component should handle this gracefully
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
   });
 });
@@ -1321,7 +1321,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Component should render without crashing when categories are available
@@ -1344,7 +1344,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Wait for the form to load
@@ -1386,7 +1386,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Submit the form
@@ -1417,7 +1417,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Test string field update (preCompletionNotes)
@@ -1442,7 +1442,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Find date picker input
@@ -1468,7 +1468,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Test clearing a field
@@ -1495,7 +1495,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        const modal = screen.getByRole('dialog');
+        const modal = screen.getByTestId('actionItemModal');
         expect(modal).toBeInTheDocument();
         expect(modal).toBeVisible();
       });
@@ -1533,7 +1533,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Find and click the close button
@@ -1558,7 +1558,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       const { rerender } = renderWithProviders(createProps);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       const submitBtn = screen.getByTestId('submitBtn');
@@ -1603,7 +1603,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Check for modal header content
@@ -1640,12 +1640,12 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
 
     // Wait for categories to load
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Should have access to the categories in the component
     // The categories would be used in autocomplete or dropdown
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
   });
 
   it('should update actionItemCategories when actionItemCategoriesData changes', async () => {
@@ -1706,7 +1706,7 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Re-render with updated data should work without issues
@@ -1718,7 +1718,7 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
       </MockedProvider>,
     );
 
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
   });
 
   it('should handle empty actionCategoriesByOrganization data', async () => {
@@ -1760,11 +1760,11 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Component should handle empty categories gracefully
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
   });
 
   it('should handle null/undefined actionItemCategoriesData', async () => {
@@ -1806,11 +1806,11 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Should fallback to empty array and not crash
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
   });
 });
 
@@ -1864,7 +1864,7 @@ describe('updateActionForInstanceHandler', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Find and update the notes field
@@ -1920,7 +1920,7 @@ describe('updateActionForInstanceHandler', () => {
     renderWithProviders(props);
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Submit the form
@@ -1955,7 +1955,7 @@ describe('updateActionForInstanceHandler', () => {
     renderWithProviders(props);
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Select "This event only" to target updateActionForInstanceHandler
@@ -2010,7 +2010,7 @@ describe('updateActionForInstanceHandler', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Find and update the notes field
@@ -2099,7 +2099,7 @@ describe('updateActionForInstanceHandler', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     const instanceRadio = screen.getByLabelText('thisEventOnly');
@@ -2170,7 +2170,7 @@ describe('updateActionForInstanceHandler', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Find and update the notes field
@@ -2246,7 +2246,7 @@ describe('updateActionForInstanceHandler', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Find and update the notes field
@@ -2321,7 +2321,7 @@ describe('updateActionForInstanceHandler', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Find and update the notes field
@@ -2399,7 +2399,7 @@ describe('updateActionForInstanceHandler', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Find and update the notes field
@@ -2483,7 +2483,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Wait for form to be fully initialized
@@ -2561,7 +2561,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
     renderWithProviders(props);
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Initially, the entireSeries radio should be checked (default for template items)
@@ -2606,7 +2606,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
     renderWithProviders(props);
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Radio buttons should be visible when isRecurring && !editMode
@@ -2644,7 +2644,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
     renderWithProviders(props);
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Radio buttons should not be visible when !isRecurring
@@ -2672,7 +2672,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
     renderWithProviders(props);
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Radio buttons should not be visible when actionItem is not a template
@@ -2701,7 +2701,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
     renderWithProviders(props);
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Radio buttons should not be visible when actionItem is an instance exception
@@ -2730,7 +2730,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // postCompletionNotes field should be visible when isCompleted is true
@@ -2761,7 +2761,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // postCompletionNotes field should show empty value when postCompletionNotes is null
@@ -2791,7 +2791,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // postCompletionNotes field should not be visible when isCompleted is false
@@ -2820,7 +2820,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Find and update the postCompletionNotes field
@@ -2857,7 +2857,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Verify multiline content is displayed correctly
@@ -2948,7 +2948,7 @@ describe('orgActionItemsRefetch functionality', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Wait for data to load including volunteers
@@ -3059,7 +3059,7 @@ describe('orgActionItemsRefetch functionality', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Find and update the notes field
@@ -3190,7 +3190,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       );
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Wait for data to load
@@ -3294,7 +3294,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       );
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Wait for data to load
@@ -3363,7 +3363,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Submit the form
@@ -3429,7 +3429,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       );
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       const notesInput = await screen.findByLabelText('preCompletionNotes');
@@ -3471,7 +3471,7 @@ describe('handleFormChange function', () => {
     renderWithProviders(props);
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Test string field update (preCompletionNotes)
@@ -3505,7 +3505,7 @@ describe('handleFormChange function', () => {
     renderWithProviders(props);
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Check if there's a completion checkbox or toggle
@@ -3536,19 +3536,15 @@ describe('handleFormChange function', () => {
     renderWithProviders(props);
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
-    // Find date picker inputs (MUI date pickers use textbox role)
-    const dateInputs = screen.getAllByRole('textbox');
-    const dateInput = dateInputs.find(
-      (input) =>
-        input.getAttribute('placeholder')?.includes('date') ||
-        input.getAttribute('type') === 'date' ||
-        input.closest('[data-testid*="date"]') ||
-        (input as HTMLInputElement).value?.match(/\d{2}\/\d{2}\/\d{4}/),
-    );
+    // Find the date picker container using its data-testid
+    const datePickerContainer = screen.getByTestId('assignmentDate');
+    expect(datePickerContainer).toBeInTheDocument();
 
+    // Find the input within the date picker container
+    const dateInput = datePickerContainer.querySelector('input');
     if (dateInput) {
       // Try to interact with the date input
       await userEvent.click(dateInput);
@@ -3572,7 +3568,7 @@ describe('handleFormChange function', () => {
     renderWithProviders(props);
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Test clearing a field (setting it to empty/null)
@@ -3606,7 +3602,7 @@ describe('handleFormChange function', () => {
     renderWithProviders(props);
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Test updating the notes field (first available textbox)
@@ -3637,7 +3633,7 @@ describe('handleFormChange function', () => {
     renderWithProviders(props);
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Find the notes input that has the original value
@@ -3678,7 +3674,7 @@ describe('Modal Structure - className={styles.itemModal} show={isOpen} onHide={h
     renderWithProviders(props);
 
     await waitFor(() => {
-      const modal = screen.getByRole('dialog');
+      const modal = screen.getByTestId('actionItemModal');
       expect(modal).toBeInTheDocument();
 
       // Check if the modal has the expected CSS class
@@ -3702,7 +3698,7 @@ describe('Modal Structure - className={styles.itemModal} show={isOpen} onHide={h
     renderWithProviders(props);
 
     await waitFor(() => {
-      const modal = screen.getByRole('dialog');
+      const modal = screen.getByTestId('actionItemModal');
       expect(modal).toBeInTheDocument();
       expect(modal).toBeVisible();
     });
@@ -3740,7 +3736,7 @@ describe('Modal Structure - className={styles.itemModal} show={isOpen} onHide={h
     renderWithProviders(props);
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Find and click the close button
@@ -3764,7 +3760,7 @@ describe('Modal Structure - className={styles.itemModal} show={isOpen} onHide={h
     renderWithProviders(props);
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Check for modal header content
@@ -3792,7 +3788,7 @@ describe('Modal Structure - className={styles.itemModal} show={isOpen} onHide={h
     const { rerender } = renderWithProviders(createProps);
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // Should show create-related content in submit button
@@ -3839,12 +3835,12 @@ describe('Modal Structure - className={styles.itemModal} show={isOpen} onHide={h
     renderWithProviders(props);
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
 
     // In React Bootstrap, clicking the backdrop typically calls onHide
     // We can test this by finding the modal backdrop element
-    const modal = screen.getByRole('dialog');
+    const modal = screen.getByTestId('actionItemModal');
     expect(modal).toBeInTheDocument();
 
     // The modal should be present and the hide function should be available
@@ -3885,7 +3881,7 @@ describe('Modal Structure - className={styles.itemModal} show={isOpen} onHide={h
 
       await waitFor(() => {
         if (testCase.isOpen) {
-          expect(screen.getByRole('dialog')).toBeInTheDocument();
+          expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
           expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
           expect(screen.getByTestId('submitBtn')).toBeInTheDocument();
         }
@@ -3916,7 +3912,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Wait for form to load
@@ -3962,7 +3958,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Wait for form to load
@@ -4081,7 +4077,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Select category
@@ -4146,7 +4142,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Select a category first (required for volunteer functionality)
@@ -4227,7 +4223,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       renderWithProviders(props);
 
       // The component should render - this exercises the logic path
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
   });
 
@@ -4246,7 +4242,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       renderWithProviders(props);
 
       await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
+        expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
       // Select a category first (required for volunteer functionality)
@@ -4313,7 +4309,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       renderWithProviders(props);
 
       // The component should render - this exercises the logic path
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
     });
   });
 
