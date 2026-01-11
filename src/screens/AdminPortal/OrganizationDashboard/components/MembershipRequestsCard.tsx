@@ -5,11 +5,9 @@
  * volunteer rankings for an organization. It presents membership requests with user
  * details and provides a dedicated section for volunteer rankings (currently a placeholder).
  *
- * @component
- * @param props - The properties for the MembershipRequestsCard component.
- * @param props.membershipRequestData - Organization membership requests data
- * @param props.isLoading - Loading state indicator
- * @param props.onViewAllClick - Callback for "View All" button click
+ * @param membershipRequestData - Organization membership requests data.
+ * @param isLoading - Loading state indicator.
+ * @param onViewAllClick - Callback for "View All" button click.
  *
  * @returns Styled card with membership requests list and volunteer rankings section
  *
@@ -36,11 +34,10 @@
 import React from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
 import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/CardItemLoading';
-import styles from 'style/app-fixed.module.css';
-import orgStyle from '../OrganizationDashboard.module.css';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import styles from '../OrganizationDashboard.module.css';
 
 interface InterfaceMembershipRequestsProps {
   membershipRequestData: {
@@ -73,7 +70,7 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
   return (
     <Col xl={4}>
       <Row className="mb-4">
-        <Card border="0" className={`rounded-4 ${orgStyle.memReqCard}`}>
+        <Card border="0" className={`rounded-4 ${styles.memReqCard}`}>
           <div className={styles.cardHeader}>
             <div className={styles.cardTitle}>{t('membershipRequests')}</div>
             <Button
@@ -86,7 +83,7 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
             </Button>
           </div>
           <Card.Body
-            className={`${styles.emptyContainer} ${orgStyle.memReqCardBody}`}
+            className={`${styles.emptyContainer} ${styles.memReqCardBody}`}
           >
             {isLoading ? (
               [...Array(4)].map((_, index) => (
@@ -94,7 +91,7 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
               ))
             ) : pendingRequests.length === 0 ? (
               <div
-                className={`${styles.emptyContainer} ${orgStyle.memReqCardBody}`}
+                className={`${styles.emptyContainer} ${styles.memReqCardBody}`}
               >
                 <h6>{t('noMembershipRequests')}</h6>
               </div>
@@ -127,13 +124,13 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
               variant="light"
               data-testid="viewAllLeaderboard"
               onClick={() => {
-                toast.success(t('comingSoon'));
+                NotificationToast.success(t('comingSoon'));
               }}
             >
               {t('viewAll')}
             </Button>
           </div>
-          <Card.Body className={`${styles.containerBody} ${orgStyle.p0}`}>
+          <Card.Body className={`${styles.containerBody} ${styles.p0}`}>
             <div className={styles.emptyContainer}>
               <h6>{t('comingSoon')}</h6>
             </div>

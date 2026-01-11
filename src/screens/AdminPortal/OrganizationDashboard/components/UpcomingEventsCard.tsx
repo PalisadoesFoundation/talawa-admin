@@ -6,16 +6,9 @@
  * event management with loading states, empty states, and navigation functionality
  * to view all events in detail.
  *
- * @component
- * @param props - The properties for the UpcomingEventsCard component.
- * @param props.upcomingEvents - Array of upcoming event objects containing event details.
- * @param props.upcomingEvents[].node - Individual event node containing event information.
- * @param props.upcomingEvents[].node.id - Unique identifier for the event.
- * @param props.upcomingEvents[].node.name - The display name/title of the event.
- * @param props.upcomingEvents[].node.startAt - ISO timestamp indicating when the event starts.
- * @param props.upcomingEvents[].node.endAt - ISO timestamp indicating when the event ends.
- * @param props.eventLoading - Loading state indicator. When true, displays skeleton loaders instead of actual content.
- * @param props.onViewAllEventsClick - Callback function triggered when the "View All" button is clicked.
+ * @param upcomingEvents - Array of upcoming event objects. Each item includes a `node` with id, name, startAt, and endAt.
+ * @param eventLoading - Loading state indicator. When true, displays skeleton loaders instead of actual content.
+ * @param onViewAllEventsClick - Callback function triggered when the "View All" button is clicked.
  *
  * @returns A JSX element representing a styled card component displaying chronologically sorted upcoming events.
  *
@@ -47,7 +40,6 @@
  * - Date formatting follows the pattern 'MMM D, YYYY' for consistency across the application.
  * - Supports internationalization through react-i18next.
  *
- * @file This file defines the UpcomingEventsCard component used in the Talawa Admin organization dashboard.
  */
 
 import React from 'react';
@@ -57,7 +49,7 @@ import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
 import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/CardItemLoading';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type { IEvent } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from '../OrganizationDashboard.module.css';
 
 interface InterfaceUpcomingEventsCardProps {
   upcomingEvents: IEvent[];

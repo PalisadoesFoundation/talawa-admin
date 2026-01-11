@@ -10,16 +10,14 @@ import React from 'react';
 import type { IDrawerExtension } from 'plugin/types';
 import LeftDrawerOrg from './LeftDrawerOrg';
 import type { ILeftDrawerProps } from './LeftDrawerOrg';
-import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 
 // Type definitions for better type safety
 interface IMockedResponse {
   request: {
-    query: typeof GET_ORGANIZATION_DATA_PG;
+    query: typeof GET_ORGANIZATION_BASIC_DATA;
     variables: {
       id: string;
-      first: number;
-      after: null;
     };
   };
   result?: {
@@ -36,17 +34,8 @@ interface IMockedResponse {
         countryCode: string;
         avatarURL: string | null;
         createdAt: string;
-        updatedAt: string;
-        creator: {
-          id: string;
-          name: string;
-          emailAddress: string;
-        };
-        updater: {
-          id: string;
-          name: string;
-          emailAddress: string;
-        };
+        isUserRegistrationRequired: boolean;
+        __typename: string;
       };
     };
   };
@@ -217,17 +206,8 @@ const mockOrganizationData = {
     countryCode: 'US',
     avatarURL: 'https://example.com/avatar.jpg',
     createdAt: dayjs.utc().toISOString(),
-    updatedAt: dayjs.utc().toISOString(),
-    creator: {
-      id: 'creator-123',
-      name: 'Creator Name',
-      emailAddress: 'creator@example.com',
-    },
-    updater: {
-      id: 'updater-123',
-      name: 'Updater Name',
-      emailAddress: 'updater@example.com',
-    },
+    isUserRegistrationRequired: false,
+    __typename: 'Organization',
   },
 };
 
@@ -248,8 +228,8 @@ const mockOrganizationDataWithoutCity = {
 const successMocks: IMockedResponse[] = [
   {
     request: {
-      query: GET_ORGANIZATION_DATA_PG,
-      variables: { id: 'org-123', first: 10, after: null },
+      query: GET_ORGANIZATION_BASIC_DATA,
+      variables: { id: 'org-123' },
     },
     result: {
       data: mockOrganizationData,
@@ -260,8 +240,8 @@ const successMocks: IMockedResponse[] = [
 const loadingMocks: IMockedResponse[] = [
   {
     request: {
-      query: GET_ORGANIZATION_DATA_PG,
-      variables: { id: 'org-123', first: 10, after: null },
+      query: GET_ORGANIZATION_BASIC_DATA,
+      variables: { id: 'org-123' },
     },
     delay: 30000, // Never resolve to simulate loading
   },
@@ -270,8 +250,8 @@ const loadingMocks: IMockedResponse[] = [
 const errorMocks: IMockedResponse[] = [
   {
     request: {
-      query: GET_ORGANIZATION_DATA_PG,
-      variables: { id: 'org-123', first: 10, after: null },
+      query: GET_ORGANIZATION_BASIC_DATA,
+      variables: { id: 'org-123' },
     },
     error: new Error('Failed to fetch organization'),
   },
@@ -410,8 +390,8 @@ describe('LeftDrawerOrg', () => {
       const mocksWithoutAvatar: IMockedResponse[] = [
         {
           request: {
-            query: GET_ORGANIZATION_DATA_PG,
-            variables: { id: 'org-123', first: 10, after: null },
+            query: GET_ORGANIZATION_BASIC_DATA,
+            variables: { id: 'org-123' },
           },
           result: {
             data: mockOrganizationDataWithoutAvatar,
@@ -435,8 +415,8 @@ describe('LeftDrawerOrg', () => {
       const mocksWithoutCity: IMockedResponse[] = [
         {
           request: {
-            query: GET_ORGANIZATION_DATA_PG,
-            variables: { id: 'org-123', first: 10, after: null },
+            query: GET_ORGANIZATION_BASIC_DATA,
+            variables: { id: 'org-123' },
           },
           result: {
             data: mockOrganizationDataWithoutCity,
@@ -908,8 +888,6 @@ describe('LeftDrawerOrg', () => {
       // The query should be called with correct variables
       expect(successMocks[0].request.variables).toEqual({
         id: 'org-123',
-        first: 10,
-        after: null,
       });
     });
 
@@ -917,8 +895,8 @@ describe('LeftDrawerOrg', () => {
       const differentOrgMocks: IMockedResponse[] = [
         {
           request: {
-            query: GET_ORGANIZATION_DATA_PG,
-            variables: { id: 'different-org', first: 10, after: null },
+            query: GET_ORGANIZATION_BASIC_DATA,
+            variables: { id: 'different-org' },
           },
           result: {
             data: {

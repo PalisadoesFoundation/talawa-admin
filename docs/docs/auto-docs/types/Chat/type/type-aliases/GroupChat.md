@@ -92,7 +92,7 @@ Defined in: [src/types/Chat/type.ts:21](https://github.com/PalisadoesFoundation/
 
 ### organization?
 
-> `optional` **organization**: [`Organization`](../../../Organization/type/type-aliases/Organization.md)
+> `optional` **organization**: [`Organization`](../../../AdminPortal/Organization/type/type-aliases/Organization.md)
 
 Defined in: [src/types/Chat/type.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L30)
 
