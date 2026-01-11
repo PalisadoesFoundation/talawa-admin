@@ -83,15 +83,15 @@ export const ORGANIZATION_FILTER_LIST = gql`
   ${ORG_FIELDS}
 `;
 
-// Lightweight version without members
+// Lightweight version without members and other fields for registration page
 export const ORGANIZATION_LIST_NO_MEMBERS = gql`
-  query {
+  query OrganizationListBasic {
     organizations {
-      ...OrgFields
-      isMember
+      id
+      name
+      addressLine1
     }
   }
-  ${ORG_FIELDS}
 `;
 
 export const ORGANIZATION_MEMBER_ADMIN_COUNT = gql`
