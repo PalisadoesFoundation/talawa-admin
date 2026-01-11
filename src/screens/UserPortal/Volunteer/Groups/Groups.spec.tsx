@@ -951,8 +951,8 @@ describe('Groups Screen [User Portal]', () => {
       expect(screen.getByText('Group 1')).toBeInTheDocument();
     });
 
-    // Change searchBy to something other than 'group' or 'leader' to ensure
-    // both conditions are false and return vars; executes
+    // Switch between search options and clear search term to trigger
+    // useMemo recalculation with empty search conditions
     const searchByDropdown = screen.getByTestId('searchBy');
     await userEvent.click(searchByDropdown);
 
@@ -965,7 +965,7 @@ describe('Groups Screen [User Portal]', () => {
     const groupOption = await screen.findByTestId('group');
     await userEvent.click(groupOption);
 
-    // Ensure searchTerm is empty to make both conditions false
+    // Clear search term to ensure base vars object is returned
     const searchInput = screen.getByTestId('searchByInput');
     await userEvent.clear(searchInput);
 
