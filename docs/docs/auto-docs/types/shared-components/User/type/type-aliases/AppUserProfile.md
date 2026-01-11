@@ -20,7 +20,7 @@ Defined in: [src/types/shared-components/User/type.ts:44](https://github.com/Pal
 
 ### adminFor
 
-> **adminFor**: [`Organization`](../../../../Organization/type/type-aliases/Organization.md)[]
+> **adminFor**: [`Organization`](../../../../AdminPortal/Organization/type/type-aliases/Organization.md)[]
 
 Defined in: [src/types/shared-components/User/type.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L45)
 
@@ -44,7 +44,7 @@ Defined in: [src/types/shared-components/User/type.ts:47](https://github.com/Pal
 
 ### createdOrganizations
 
-> **createdOrganizations**: [`Organization`](../../../../Organization/type/type-aliases/Organization.md)[]
+> **createdOrganizations**: [`Organization`](../../../../AdminPortal/Organization/type/type-aliases/Organization.md)[]
 
 Defined in: [src/types/shared-components/User/type.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L48)
 

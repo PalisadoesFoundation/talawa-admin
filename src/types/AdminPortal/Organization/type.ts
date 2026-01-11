@@ -1,10 +1,10 @@
-import type { Address, AddressInput } from '../address';
-import type { User } from '../shared-components/User/type';
-import type { ActionItemCategory } from '../actionItem';
-import type { AgendaCategory } from '../Agenda/type';
-import type { MembershipRequest } from '../membership';
-import type { Post } from '../Post/type';
-import type { Venue } from '../venue';
+import type { Address, AddressInput } from 'types/address';
+import type { User } from 'types/shared-components/User/type';
+import type { ActionItemCategory } from 'types/actionItem';
+import type { AgendaCategory } from 'types/Agenda/type';
+import type { MembershipRequest } from 'types/membership';
+import type { Post } from 'types/Post/type';
+import type { Venue } from 'types/venue';
 
 // export const OrganizationOrderByInput = {
 //   apiUrl_ASC: 'apiUrl_ASC',

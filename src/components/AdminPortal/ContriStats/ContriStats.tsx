@@ -1,13 +1,11 @@
 /**
  * A React functional component that displays contribution statistics.
  *
- * @component
- * @param {InterfaceContriStatsProps} props - The props for the component.
- * @param {number} props.recentAmount - The most recent contribution amount.
- * @param {number} props.highestAmount - The highest contribution amount.
- * @param {number} props.totalAmount - The total contribution amount.
+ * @param recentAmount - The most recent contribution amount.
+ * @param highestAmount - The highest contribution amount.
+ * @param totalAmount - The total contribution amount.
  *
- * @returns {JSX.Element} A JSX element displaying the contribution statistics.
+ * @returns A JSX element displaying the contribution statistics.
  *
  * @remarks
  * This component uses the `useTranslation` hook from the `react-i18next` library
