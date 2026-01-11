@@ -1,0 +1,118 @@
+.btnsContainer {
+  display: flex;
+  margin: var(--space-9) 0;
+  align-items: center;
+}
+
+.btnsContainer > :first-child {
+  flex: 1 1 var(--space-21);
+  min-width: var(--space-18);
+  max-width: 100%;
+}
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer {
+    flex-direction: column;
+    margin: var(--space-7) 0;
+  }
+
+  .btnsContainer > :first-child {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (max-width: 768px) {
+  .btnsContainer {
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.listBox {
+  width: 100%;
+  flex: 1;
+}
+
+.custom_table {
+  border-radius: var(--radius-xl);
+  background-color: var(--color-gray-100);
+}
+
+.custom_table tbody tr {
+  background-color: var(--color-gray-200);
+}
+
+.custom_table tbody tr:hover {
+  background-color: var(--color-gray-100);
+  box-shadow: 0 0 0 var(--shadow-spread-xs) rgba(0, 0, 0, 0.1);
+}
+
+.custom_table tbody tr:focus-within {
+  outline: var(--border-2) solid var(--color-black);
+  outline-offset: calc(var(--border-2) * -1);
+}
+
+.custom_table tbody td:focus {
+  outline: var(--border-2) solid var(--color-black);
+  outline-offset: calc(var(--border-2) * -1);
+}
+
+.unblockButton.unblockButton {
+  margin-bottom: var(--space-4);
+  color: var(--color-gray-600);
+  background-color: var(--color-blue-200);
+  border-color: var(--color-gray-100);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.unblockButton.unblockButton:is(:hover, :active, :focus) {
+  background-color: var(--color-blue-500);
+  border-color: var(--color-blue-500);
+}
+
+.unbanIcon {
+  color: var(--color-gray-600);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-0-5);
+  margin-right: var(--space-2);
+}
+
+.unblockButton.unblockButton:hover .unbanIcon {
+  color: var(--color-white);
+}
+
+.banIcon {
+  color: var(--color-red-500);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-0-5);
+  margin-right: var(--space-2);
+}
+
+.removeButton.removeButton:hover .banIcon {
+  color: var(--color-white);
+}
+
+.removeButton.removeButton {
+  margin-bottom: var(--space-4);
+  background-color: var(--color-red-100);
+  color: var(--color-red-500);
+  margin-right: var(--space-4);
+  --bs-btn-border-color: var(--color-red-100);
+}
+
+.removeButton.removeButton:is(:hover, :active, :focus) {
+  background-color: var(--color-red-500);
+  border-color: var(--color-red-500);
+  color: var(--color-white);
+}

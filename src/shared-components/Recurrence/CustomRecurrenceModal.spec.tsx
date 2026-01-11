@@ -7,8 +7,6 @@ import {
   act,
   waitFor,
 } from '@testing-library/react';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -20,6 +18,51 @@ vi.mock('react-toastify', () => ({
   toast: {
     error: vi.fn(),
     success: vi.fn(),
+  },
+}));
+
+vi.mock('shared-components/DatePicker', () => ({
+  __esModule: true,
+  default: (props: {
+    label: string;
+    value: string;
+    onChange: (value: dayjs.Dayjs | null) => void;
+    disabled?: boolean;
+    slotProps?: { textField?: { 'aria-label'?: string } };
+    'data-testid'?: string;
+    'data-cy'?: string;
+  }) => {
+    const { value, onChange, disabled, slotProps } = props;
+    const testId = props['data-testid'];
+    const dataCy = props['data-cy'];
+
+    const inputId = `date-picker-${testId || 'input'}`;
+
+    return (
+      <>
+        {slotProps?.textField?.['aria-label'] && (
+          <label htmlFor={inputId}>{slotProps.textField['aria-label']}</label>
+        )}
+        <input
+          id={inputId}
+          type="text"
+          data-testid={testId || 'mocked-date-picker'}
+          data-cy={dataCy}
+          disabled={disabled}
+          aria-label={slotProps?.textField?.['aria-label']}
+          value={value ? dayjs(value).format('YYYY-MM-DD') : ''}
+          onChange={(e) => {
+            const val = e.target.value;
+            if (val) {
+              const parsed = dayjs(val, ['MM/DD/YYYY', 'YYYY-MM-DD']);
+              onChange(parsed);
+            } else {
+              onChange(null);
+            }
+          }}
+        />
+      </>
+    );
   },
 }));
 
@@ -66,9 +109,9 @@ const renderModal = (
   };
 
   render(
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <>
       <CustomRecurrenceModal {...props} />
-    </LocalizationProvider>,
+    </>,
   );
 
   return {

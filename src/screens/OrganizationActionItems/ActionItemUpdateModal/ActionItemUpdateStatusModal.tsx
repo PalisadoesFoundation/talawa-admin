@@ -27,7 +27,7 @@
  *
  */
 import React, { type FC, type FormEvent, useEffect, useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
 import styles from 'style/app-fixed.module.css';
@@ -43,7 +43,8 @@ import type {
   IActionItemInfo,
   IUpdateActionItemInput,
   IMarkActionItemAsPendingInput,
-} from 'types/ActionItems/interface';
+} from 'types/shared-components/ActionItems/interface';
+import { BaseModal } from 'shared-components/BaseModal';
 
 export interface IItemUpdateStatusModalProps {
   isOpen: boolean;
@@ -222,105 +223,97 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
   }, [actionItem]);
 
   return (
-    <Modal className={styles.itemModal} show={isOpen} onHide={hide}>
-      <Modal.Header>
-        <p className={styles.titlemodal}>{t('actionItemStatus')}</p>
-        <Button
-          variant="danger"
-          onClick={hide}
-          className={styles.closeButton}
-          data-testid="modalCloseBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-      </Modal.Header>
-      <Modal.Body>
-        <Form onSubmitCapture={updateActionItemHandler} className="p-2">
-          {!isCompleted ? (
-            <FormControl fullWidth className="mb-2">
-              <TextField
-                label={t('postCompletionNotes')}
-                data-cy="postCompletionNotes"
-                variant="outlined"
-                className={styles.noOutline}
-                value={postCompletionNotes}
-                onChange={(e) => setPostCompletionNotes(e.target.value)}
-                multiline
-                maxRows={4}
-                required
-              />
-            </FormControl>
-          ) : (
-            <p>{t('updateStatusMsg')}</p>
-          )}
+    <BaseModal
+      show={isOpen}
+      onHide={hide}
+      title={t('actionItemStatus')}
+      showCloseButton
+    >
+      <Form onSubmitCapture={updateActionItemHandler} className="p-2">
+        {!isCompleted ? (
+          <FormControl fullWidth className="mb-2">
+            <TextField
+              label={t('postCompletionNotes')}
+              data-cy="postCompletionNotes"
+              variant="outlined"
+              className={styles.noOutline}
+              value={postCompletionNotes}
+              onChange={(e) => setPostCompletionNotes(e.target.value)}
+              multiline
+              maxRows={4}
+              required
+            />
+          </FormControl>
+        ) : (
+          <p>{t('updateStatusMsg')}</p>
+        )}
 
-          {isCompleted ? (
-            <>
-              {actionItem.isTemplate ? (
-                <div className="d-flex gap-3 justify-content-end">
-                  <Button
-                    onClick={markActionAsPendingForInstanceHandler}
-                    className={styles.addButton}
-                  >
-                    {t('pendingForInstance')}
+        {isCompleted ? (
+          <>
+            {actionItem.isTemplate ? (
+              <div className="d-flex gap-3 justify-content-end">
+                <Button
+                  onClick={markActionAsPendingForInstanceHandler}
+                  className={styles.addButton}
+                >
+                  {t('pendingForInstance')}
+                </Button>
+                {/* Only show 'pending for series' if this action item is not showing instance exception data */}
+                {!actionItem.isInstanceException && (
+                  <Button type="submit" className={styles.addButton}>
+                    {t('pendingForSeries')}
                   </Button>
-                  {/* Only show 'pending for series' if this action item is not showing instance exception data */}
-                  {!actionItem.isInstanceException && (
-                    <Button type="submit" className={styles.addButton}>
-                      {t('pendingForSeries')}
-                    </Button>
-                  )}
-                </div>
-              ) : (
-                <div className="d-flex gap-3 justify-content-end">
-                  <Button
-                    type="submit"
-                    className={styles.addButton}
-                    data-testid="yesBtn"
-                  >
-                    {tCommon('yes')}
-                  </Button>
-                  <Button
-                    className={`btn btn-danger ${styles.removeButton}`}
-                    onClick={hide}
-                  >
-                    {tCommon('no')}
-                  </Button>
-                </div>
-              )}
-            </>
-          ) : (
-            <>
-              {actionItem.isTemplate ? (
-                <div className="d-flex gap-3 justify-content-end">
-                  <Button
-                    onClick={completeActionForInstanceHandler}
-                    className={styles.addButton}
-                  >
-                    {t('completeForInstance')}
-                  </Button>
-                  {/* Only show 'complete for series' if this action item is not showing instance exception data */}
-                  {!actionItem.isInstanceException && (
-                    <Button type="submit" className={styles.addButton}>
-                      {t('completeForSeries')}
-                    </Button>
-                  )}
-                </div>
-              ) : (
+                )}
+              </div>
+            ) : (
+              <div className="d-flex gap-3 justify-content-end">
                 <Button
                   type="submit"
-                  className={`${styles.addButton}`}
-                  data-testid="createBtn"
-                  data-cy="markCompletionForSeries"
+                  className={styles.addButton}
+                  data-testid="yesBtn"
                 >
-                  {t('markCompletion')}
+                  {tCommon('yes')}
                 </Button>
-              )}
-            </>
-          )}
-        </Form>
-      </Modal.Body>
-    </Modal>
+                <Button
+                  className={`btn btn-danger ${styles.removeButton}`}
+                  onClick={hide}
+                >
+                  {tCommon('no')}
+                </Button>
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            {actionItem.isTemplate ? (
+              <div className="d-flex gap-3 justify-content-end">
+                <Button
+                  onClick={completeActionForInstanceHandler}
+                  className={styles.addButton}
+                >
+                  {t('completeForInstance')}
+                </Button>
+                {/* Only show 'complete for series' if this action item is not showing instance exception data */}
+                {!actionItem.isInstanceException && (
+                  <Button type="submit" className={styles.addButton}>
+                    {t('completeForSeries')}
+                  </Button>
+                )}
+              </div>
+            ) : (
+              <Button
+                type="submit"
+                className={`${styles.addButton}`}
+                data-testid="createBtn"
+                data-cy="markCompletionForSeries"
+              >
+                {t('markCompletion')}
+              </Button>
+            )}
+          </>
+        )}
+      </Form>
+    </BaseModal>
   );
 };
 

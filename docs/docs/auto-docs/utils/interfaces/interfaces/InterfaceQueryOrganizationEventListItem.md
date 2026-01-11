@@ -18,6 +18,20 @@ Extends `InterfaceBaseEvent` with additional properties for an organization even
 
 ## Properties
 
+### \_id
+
+> **\_id**: `string`
+
+Defined in: [src/utils/interfaces.ts:425](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L425)
+
+The unique identifier of the event.
+
+#### Inherited from
+
+[`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`_id`](InterfaceBaseEvent.md#_id)
+
+***
+
 ### allDay
 
 > **allDay**: `boolean`
@@ -71,20 +85,6 @@ The end time of the event.
 #### Inherited from
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`endTime`](InterfaceBaseEvent.md#endtime)
-
-***
-
-### id
-
-> **id**: `string`
-
-Defined in: [src/utils/interfaces.ts:425](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L425)
-
-The unique identifier of the event.
-
-#### Inherited from
-
-[`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`id`](InterfaceBaseEvent.md#id)
 
 ***
 

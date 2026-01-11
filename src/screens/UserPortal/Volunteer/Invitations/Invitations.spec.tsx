@@ -3,8 +3,10 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 import { MockedProvider } from '@apollo/client/testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -22,22 +24,29 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { vi, expect, beforeEach, afterEach, describe, it } from 'vitest';
 
 const sharedMocks = vi.hoisted(() => ({
-  toast: {
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
   },
   navigate: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: sharedMocks.toast,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: sharedMocks.NotificationToast,
 }));
 
-vi.mock('@mui/icons-material', () => ({
-  WarningAmberRounded: () => (
-    <span data-test-id="warning-amber-icon">WarningAmberRounded</span>
-  ),
-}));
+vi.mock('@mui/icons-material', async () => {
+  const actual = (await vi.importActual('@mui/icons-material')) as Record<
+    string,
+    unknown
+  >;
+  return {
+    ...actual,
+    WarningAmberRounded: () => (
+      <span data-test-id="warning-amber-icon">WarningAmberRounded</span>
+    ),
+  };
+});
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
@@ -519,18 +528,23 @@ describe('Testing Invitations Screen', () => {
 
   it('should render Invitations screen', async () => {
     renderInvitations(link1);
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
     const searchInput = await screen.findByTestId('searchByInput');
     expect(searchInput).toBeInTheDocument();
   });
 
   it('Check Sorting Functionality', async () => {
     renderInvitations(link1);
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
     const searchInput = await screen.findByTestId('searchByInput');
     expect(searchInput).toBeInTheDocument();
 
     let sortBtn = await screen.findByTestId('sort');
     expect(sortBtn).toBeInTheDocument();
-
     // Sort by createdAt_DESC (default)
     await waitFor(() => {
       const inviteSubject = screen.getAllByTestId('inviteSubject');
@@ -556,9 +570,12 @@ describe('Testing Invitations Screen', () => {
 
   it('Filter Invitations (all)', async () => {
     renderInvitations(link1);
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
+
     const searchInput = await screen.findByTestId('searchByInput');
     expect(searchInput).toBeInTheDocument();
-
     // Filter by All
     const filter = await screen.findByTestId('filter');
     expect(filter).toBeInTheDocument();
@@ -576,9 +593,12 @@ describe('Testing Invitations Screen', () => {
 
   it('Filter Invitations (group)', async () => {
     renderInvitations(link1);
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
+
     const searchInput = await screen.findByTestId('searchByInput');
     expect(searchInput).toBeInTheDocument();
-
     // Filter by group
     const filter = await screen.findByTestId('filter');
     expect(filter).toBeInTheDocument();
@@ -603,9 +623,13 @@ describe('Testing Invitations Screen', () => {
 
   it('Filter Invitations (individual)', async () => {
     renderInvitations(link1);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
+
     const searchInput = await screen.findByTestId('searchByInput');
     expect(searchInput).toBeInTheDocument();
-
     // Filter by individual
     const filter = await screen.findByTestId('filter');
     expect(filter).toBeInTheDocument();
@@ -630,9 +654,12 @@ describe('Testing Invitations Screen', () => {
 
   it('Search Invitations', async () => {
     renderInvitations(link1);
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
+
     const searchInput = await screen.findByTestId('searchByInput');
     expect(searchInput).toBeInTheDocument();
-
     // Search by name on press of search button
     await userEvent.type(searchInput, '1');
     await debounceWait();
@@ -651,23 +678,28 @@ describe('Testing Invitations Screen', () => {
     renderInvitations(link3);
 
     await waitFor(() => {
-      expect(screen.getByText(t.noInvitations)).toBeInTheDocument();
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
+    expect(screen.getByText(t.noInvitations)).toBeInTheDocument();
   });
 
   it('Error while fetching invitations data', async () => {
     renderInvitations(link2);
 
     await waitFor(() => {
-      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
+    expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
   });
 
   it('Accept Invite', async () => {
     renderInvitations(link1);
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
+
     const searchInput = await screen.findByTestId('searchByInput');
     expect(searchInput).toBeInTheDocument();
-
     const acceptBtn = await screen.findAllByTestId('acceptBtn');
     expect(acceptBtn.length).toBeGreaterThan(0);
 
@@ -675,7 +707,7 @@ describe('Testing Invitations Screen', () => {
     await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
-      expect(sharedMocks.toast.success).toHaveBeenCalledWith(
+      expect(sharedMocks.NotificationToast.success).toHaveBeenCalledWith(
         t.invitationAccepted,
       );
     });
@@ -683,9 +715,12 @@ describe('Testing Invitations Screen', () => {
 
   it('Reject Invite', async () => {
     renderInvitations(link1);
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
+
     const searchInput = await screen.findByTestId('searchByInput');
     expect(searchInput).toBeInTheDocument();
-
     const rejectBtn = await screen.findAllByTestId('rejectBtn');
     expect(rejectBtn.length).toBeGreaterThan(0);
 
@@ -693,7 +728,7 @@ describe('Testing Invitations Screen', () => {
     await userEvent.click(rejectBtn[0]);
 
     await waitFor(() => {
-      expect(sharedMocks.toast.success).toHaveBeenCalledWith(
+      expect(sharedMocks.NotificationToast.success).toHaveBeenCalledWith(
         t.invitationRejected,
       );
     });
@@ -701,9 +736,11 @@ describe('Testing Invitations Screen', () => {
 
   it('Error in Update Invite Mutation', async () => {
     renderInvitations(link4);
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
     const searchInput = await screen.findByTestId('searchByInput');
     expect(searchInput).toBeInTheDocument();
-
     const acceptBtn = await screen.findAllByTestId('acceptBtn');
     expect(acceptBtn.length).toBeGreaterThan(0);
 
@@ -711,7 +748,7 @@ describe('Testing Invitations Screen', () => {
     await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
-      expect(sharedMocks.toast.error).toHaveBeenCalled();
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -721,12 +758,13 @@ describe('Testing Invitations Screen', () => {
       renderInvitations(groupRecurringLink);
 
       await waitFor(() => {
-        expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
-        const inviteSubject = screen.getByTestId('inviteSubject');
-        expect(inviteSubject).toHaveTextContent(
-          t.groupInvitationRecurringSubject,
-        );
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
+      expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+      const inviteSubject = screen.getByTestId('inviteSubject');
+      expect(inviteSubject).toHaveTextContent(
+        t.groupInvitationRecurringSubject,
+      );
     });
 
     it('should display group invitation subject for group invitations without recurrence rule', async () => {
@@ -736,10 +774,11 @@ describe('Testing Invitations Screen', () => {
       renderInvitations(groupNonRecurringLink);
 
       await waitFor(() => {
-        expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
-        const inviteSubject = screen.getByTestId('inviteSubject');
-        expect(inviteSubject).toHaveTextContent(t.groupInvitationSubject);
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
+      expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+      const inviteSubject = screen.getByTestId('inviteSubject');
+      expect(inviteSubject).toHaveTextContent(t.groupInvitationSubject);
     });
 
     it('should display event invitation recurring subject for individual invitations with recurrence rule', async () => {
@@ -749,12 +788,13 @@ describe('Testing Invitations Screen', () => {
       renderInvitations(individualRecurringLink);
 
       await waitFor(() => {
-        expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
-        const inviteSubject = screen.getByTestId('inviteSubject');
-        expect(inviteSubject).toHaveTextContent(
-          t.eventInvitationRecurringSubject,
-        );
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
+      expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+      const inviteSubject = screen.getByTestId('inviteSubject');
+      expect(inviteSubject).toHaveTextContent(
+        t.eventInvitationRecurringSubject,
+      );
     });
 
     it('should display event invitation subject for individual invitations without recurrence rule', async () => {
@@ -764,10 +804,11 @@ describe('Testing Invitations Screen', () => {
       renderInvitations(individualNonRecurringLink);
 
       await waitFor(() => {
-        expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
-        const inviteSubject = screen.getByTestId('inviteSubject');
-        expect(inviteSubject).toHaveTextContent(t.eventInvitationSubject);
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
+      expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+      const inviteSubject = screen.getByTestId('inviteSubject');
+      expect(inviteSubject).toHaveTextContent(t.eventInvitationSubject);
     });
   });
 });

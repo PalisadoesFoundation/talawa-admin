@@ -3,8 +3,6 @@ import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import dayjs from 'dayjs';
@@ -23,33 +21,35 @@ import {
 import { green } from '@mui/material/colors';
 
 // Mock the DatePicker to capture its onChange prop
-interface ITestMockDatePickerProps {
-  onChange?: (value: dayjs.Dayjs | null) => void;
-  [key: string]: unknown;
-}
 
-vi.mock('@mui/x-date-pickers', async () => {
-  const actual = await vi.importActual('@mui/x-date-pickers');
-  return {
-    ...actual,
-    DatePicker: ({ onChange, ...props }: ITestMockDatePickerProps) => {
-      return (
-        <input
-          {...props}
-          type="text"
-          data-testid="mocked-date-picker"
-          onChange={(e) => {
-            // Mock a dayjs date object
-            const mockDate = dayjs.utc((e.target as HTMLInputElement).value);
-            if (onChange && mockDate.isValid()) {
-              onChange(mockDate);
-            }
-          }}
-        />
-      );
-    },
-  };
-});
+vi.mock('shared-components/DatePicker', () => ({
+  __esModule: true,
+  default: ({
+    value,
+    onChange,
+    slotProps,
+    'data-testid': dataTestId,
+  }: {
+    value: dayjs.Dayjs | null;
+    onChange: (value: dayjs.Dayjs | null) => void;
+    slotProps: {
+      textField?: { inputProps?: { 'aria-label'?: string; max?: string } };
+    };
+    'data-testid': string;
+  }) => (
+    <input
+      data-testid={dataTestId}
+      type="text"
+      aria-label={slotProps?.textField?.inputProps?.['aria-label']}
+      max={slotProps?.textField?.inputProps?.max}
+      value={value ? value.format('MM/DD/YYYY') : ''}
+      onChange={(e) => {
+        const val = e.target.value;
+        onChange?.(val ? dayjs(val, ['MM/DD/YYYY', 'YYYY-MM-DD']) : null);
+      }}
+    />
+  ),
+}));
 
 const theme = createTheme({
   palette: {
@@ -78,13 +78,11 @@ const renderComponent = (props = mockProps) => {
   return render(
     <Provider store={store}>
       <BrowserRouter>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <ThemeProvider theme={theme}>
-            <I18nextProvider i18n={i18n}>
-              <CustomRecurrenceModal {...props} />
-            </I18nextProvider>
-          </ThemeProvider>
-        </LocalizationProvider>
+        <ThemeProvider theme={theme}>
+          <I18nextProvider i18n={i18n}>
+            <CustomRecurrenceModal {...props} />
+          </I18nextProvider>
+        </ThemeProvider>
       </BrowserRouter>
     </Provider>,
   );
@@ -96,7 +94,7 @@ describe('CustomRecurrenceModal', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders modal when open', () => {
@@ -276,7 +274,7 @@ describe('CustomRecurrenceModal', () => {
     await userEvent.click(onOption);
 
     // The date picker should be enabled
-    const datePicker = screen.getByTestId('mocked-date-picker');
+    const datePicker = screen.getByTestId('customRecurrenceEndDatePicker');
     expect(datePicker).not.toBeDisabled();
   });
 
@@ -463,7 +461,7 @@ describe('CustomRecurrenceModal', () => {
     await userEvent.click(onOption);
 
     // Find and interact with the date picker
-    const datePicker = screen.getByTestId('mocked-date-picker');
+    const datePicker = screen.getByTestId('customRecurrenceEndDatePicker');
     expect(datePicker).not.toBeDisabled();
 
     // The onChange handler should be called when date changes (lines 531-539)
@@ -635,6 +633,8 @@ describe('CustomRecurrenceModal', () => {
     // Verify early return behavior (lines 319-322)
     expect(consoleSpy).toHaveBeenCalledWith('Invalid count:', '0');
     expect(mockSetModalOpen).not.toHaveBeenCalled(); // Modal should not close on error
+
+    consoleSpy.mockRestore();
   });
 
   test('handles form submission with string count parsing (lines 317-318)', async () => {
@@ -1046,12 +1046,15 @@ describe('CustomRecurrenceModal', () => {
 
     // Test the callback function directly
     const updateFunction = mockSetRecurrenceRuleState.mock.calls[0][0];
-    const prevState = { ...mockProps.recurrenceRuleState };
+    const prevState = {
+      ...mockProps.recurrenceRuleState,
+      frequency: Frequency.MONTHLY,
+    };
     const newState = updateFunction(prevState);
 
     expect(newState).toEqual({
       ...prevState,
-      byMonthDay: [dayjs.utc(mockProps.startDate).date()], // Should use startDate's day
+      byMonthDay: [new Date(mockProps.startDate).getDate()],
       byDay: undefined,
     });
   });
@@ -1154,11 +1157,11 @@ describe('CustomRecurrenceModal', () => {
     mockSetRecurrenceRuleState.mockClear();
 
     // Find the mocked DatePicker input
-    const dateInput = screen.getByTestId('mocked-date-picker');
+    const dateInput = screen.getByTestId('customRecurrenceEndDatePicker');
     expect(dateInput).toBeInTheDocument();
 
     // Trigger the DatePicker onChange by changing the input value
-    const nextMonth = dayjs.utc().add(1, 'month').format('YYYY-MM-DD');
+    const nextMonth = dayjs.utc().add(1, 'month').format('MM/DD/YYYY');
     fireEvent.change(dateInput, { target: { value: nextMonth } });
 
     // Wait for the state update

@@ -10,7 +10,6 @@ import {
   UNBLOCK_USER_MUTATION_PG,
   UPDATE_USER_ROLE_IN_ORG_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import Avatar from 'components/Avatar/Avatar';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal, Row, Table } from 'react-bootstrap';
@@ -21,6 +20,8 @@ import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItemForAdmin } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
+import usertableStyles from './UsersTableItem.module.css';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 type Props = {
   user: InterfaceQueryUserListItemForAdmin;
@@ -126,7 +127,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   }
 
   function handleCreator(): void {
-    toast.success('Profile Page Coming Soon !');
+    toast.success(t('profilePageComingSoon') as string);
   }
 
   const searchJoinedOrgs = (value: string): void => {
@@ -258,11 +259,10 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             className="p-0"
                             onClick={() => goToOrg(org.id)}
                           >
-                            {org.avatarURL ? (
-                              <img src={org.avatarURL} alt="orgImage" />
-                            ) : (
-                              <Avatar name={org.name} alt="orgImage" />
-                            )}
+                            <ProfileAvatarDisplay
+                              fallbackName={org.name}
+                              imageUrl={org.avatarURL}
+                            />
                             {org.name}
                           </Button>
                         </td>
@@ -275,15 +275,17 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             onClick={() => handleCreator()}
                             data-testid={`creator${org.id}`}
                           >
-                            {org.creator.avatarURL ? (
-                              <img src={org.creator.avatarURL} alt="creator" />
-                            ) : (
-                              <Avatar name={org.creator.name} alt="creator" />
-                            )}
+                            <ProfileAvatarDisplay
+                              fallbackName={org.creator.name}
+                              imageUrl={org.creator.avatarURL}
+                            />
                             {org.creator.name}
                           </Button>
                         </td>
-                        <td> {isAdmin ? 'ADMIN' : 'USER'} </td>
+                        <td>
+                          {' '}
+                          {isAdmin ? tCommon('admin') : tCommon('user')}{' '}
+                        </td>
                         <td>
                           <Form.Select
                             size="sm"
@@ -296,18 +298,30 @@ const UsersTableItem = (props: Props): JSX.Element => {
                           >
                             {isAdmin ? (
                               <>
-                                <option value={`ADMIN?${org.id}`}>ADMIN</option>
-                                <option value={`USER?${org.id}`}>USER</option>
+                                <option value={`ADMIN?${org.id}`}>
+                                  {tCommon('admin')}
+                                </option>
+                                <option value={`USER?${org.id}`}>
+                                  {tCommon('user')}
+                                </option>
                               </>
                             ) : isAdmin ? (
                               <>
-                                <option value={`ADMIN?${org.id}`}>ADMIN</option>
-                                <option value={`USER?${org.id}`}>USER</option>
+                                <option value={`ADMIN?${org.id}`}>
+                                  {tCommon('admin')}
+                                </option>
+                                <option value={`USER?${org.id}`}>
+                                  {tCommon('user')}
+                                </option>
                               </>
                             ) : (
                               <>
-                                <option value={`USER?${org.id}`}>USER</option>
-                                <option value={`ADMIN?${org.id}`}>ADMIN</option>
+                                <option value={`USER?${org.id}`}>
+                                  {tCommon('user')}
+                                </option>
+                                <option value={`ADMIN?${org.id}`}>
+                                  {tCommon('admin')}
+                                </option>
                               </>
                             )}
                           </Form.Select>
@@ -359,7 +373,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             {t('removeUserFrom', { org: removeUserProps.orgName })}
           </Modal.Title>
         </Modal.Header>
-        <hr style={{ margin: 0 }} />
+        <hr className={usertableStyles.divider} />
         <Modal.Body>
           <p>
             {t('removeConfirmation', {
@@ -444,17 +458,10 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             className="p-0"
                             onClick={() => goToOrg(org.id)}
                           >
-                            {org.organization.avatarURL ? (
-                              <img
-                                src={org.organization.avatarURL}
-                                alt="orgImage"
-                              />
-                            ) : (
-                              <Avatar
-                                name={org.organization.name}
-                                alt="orgImage"
-                              />
-                            )}
+                            <ProfileAvatarDisplay
+                              fallbackName={org.organization.name}
+                              imageUrl={org.organization.avatarURL}
+                            />
                             {org.organization.name}
                           </Button>
                         </td>
@@ -467,21 +474,16 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             onClick={() => handleCreator()}
                             data-testid={`creator${org.id}`}
                           >
-                            {org.organization.avatarURL ? (
-                              <img
-                                src={org.organization.avatarURL}
-                                alt="creator"
-                              />
-                            ) : (
-                              <Avatar
-                                name={org.organization.name}
-                                alt="creator"
-                              />
-                            )}
+                            <ProfileAvatarDisplay
+                              fallbackName={org.organization.creator.name}
+                            />
                             {org.organization.creator.name}
                           </Button>
                         </td>
-                        <td> {isAdmin ? 'ADMIN' : 'USER'} </td>
+                        <td>
+                          {' '}
+                          {isAdmin ? tCommon('admin') : tCommon('user')}{' '}
+                        </td>
                         <td>
                           <Button
                             className={`btn btn-danger ${styles.removeButton}`}
@@ -529,7 +531,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             {t('unblockUserFrom', { org: removeUserProps.orgName })}
           </Modal.Title>
         </Modal.Header>
-        <hr style={{ margin: 0 }} />
+        <hr className={usertableStyles.divider} />
         <Modal.Body>
           <p>
             {t('unblockConfirmation', {

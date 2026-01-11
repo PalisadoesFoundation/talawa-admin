@@ -1,7 +1,10 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
+
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -249,7 +252,12 @@ describe('Testing VolunteerGroups Screen', () => {
     mockRouteParams();
     renderVolunteerGroups(link1);
 
-    const createGroupBtn = await screen.findByTestId('createGroupBtn');
+    // Wait for LoadingState to complete and table data to render
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    const createGroupBtn = screen.getByTestId('createGroupBtn');
     await userEvent.click(createGroupBtn);
 
     expect(await screen.findAllByText(t.createGroup)).toHaveLength(2);

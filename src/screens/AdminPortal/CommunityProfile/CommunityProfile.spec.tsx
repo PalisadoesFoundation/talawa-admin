@@ -513,7 +513,8 @@ describe('Testing Community Profile Screen', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
+    const spinners = screen.getAllByTestId('spinner');
+    expect(spinners.length).toBeGreaterThan(0);
   });
 
   test('should handle mutation error correctly', async () => {
@@ -615,6 +616,13 @@ describe('Testing Community Profile Screen', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+
+    // Wait for LoadingState to complete and form inputs to be rendered
+    await waitFor(() => {
+      expect(
+        screen.getByPlaceholderText(/Community Name/i),
+      ).toBeInTheDocument();
+    });
 
     const form = container.querySelector('form') as HTMLFormElement;
     const nameInput = screen.getByPlaceholderText(
@@ -872,5 +880,44 @@ describe('Testing Community Profile Screen', () => {
     await wait();
 
     expect(convertToBase64Module.default).toHaveBeenCalledTimes(2);
+  });
+
+  describe('LoadingState Behavior', () => {
+    it('should show LoadingState spinner while community data is loading', async () => {
+      render(
+        <MockedProvider mocks={LOADING_MOCK}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              <CommunityProfile />
+            </I18nextProvider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      const spinners = screen.getAllByTestId('spinner');
+      expect(spinners.length).toBeGreaterThan(0);
+    });
+
+    it('should hide spinner and render form after LoadingState completes', async () => {
+      render(
+        <MockedProvider link={link1}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18n}>
+              <CommunityProfile />
+            </I18nextProvider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(
+          screen.getByPlaceholderText(/Community Name/i),
+        ).toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+      });
+    });
   });
 });

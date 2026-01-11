@@ -1,14 +1,16 @@
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18n from 'utils/i18nForTest';
 import { MOCKS, UPDATE_ERROR_MOCKS } from './Groups.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';

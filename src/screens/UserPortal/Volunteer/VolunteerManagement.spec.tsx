@@ -22,15 +22,22 @@ import { MOCKS } from './UpcomingEvents/UpcomingEvents.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
 
-vi.mock('@mui/icons-material', () => ({
-  SettingsInputComponentSharp: () =>
-    React.createElement('div', { 'data-testid': 'settings-icon' }),
-  Circle: () => React.createElement('div', { 'data-testid': 'circle-icon' }),
-  WarningAmberRounded: () =>
-    React.createElement('div', { 'data-testid': 'warning-icon' }),
-  ExpandMore: () =>
-    React.createElement('div', { 'data-testid': 'expand-more-icon' }),
-}));
+vi.mock('@mui/icons-material', async () => {
+  const actual = (await vi.importActual('@mui/icons-material')) as Record<
+    string,
+    unknown
+  >;
+  return {
+    ...actual,
+    SettingsInputComponentSharp: () =>
+      React.createElement('div', { 'data-testid': 'settings-icon' }),
+    Circle: () => React.createElement('div', { 'data-testid': 'circle-icon' }),
+    WarningAmberRounded: () =>
+      React.createElement('div', { 'data-testid': 'warning-icon' }),
+    ExpandMore: () =>
+      React.createElement('div', { 'data-testid': 'expand-more-icon' }),
+  };
+});
 
 vi.mock('react-icons/io5', () => ({
   IoLocationOutline: () =>

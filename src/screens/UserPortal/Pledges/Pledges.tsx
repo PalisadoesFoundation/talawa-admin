@@ -1,13 +1,13 @@
 /**
  * The `Pledges` component is responsible for rendering a user's pledges within a campaign.
  * It fetches pledges data using Apollo Client's `useQuery` hook and displays the data
- * in a DataGrid with various features such as search, sorting, and modal dialogs.
+ * in a DataGrid with search, sorting, pagination, and modal dialogs.
  */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, ProgressBar } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
-import { WarningAmberRounded } from '@mui/icons-material';
+import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import useLocalStorage from 'utils/useLocalstorage';
 import type {
   InterfacePledgeInfo,
@@ -19,29 +19,18 @@ import {
   useQuery,
 } from '@apollo/client';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
-  DataGrid,
+  DataGridWrapper,
   type GridCellParams,
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
-import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import dayjs from 'dayjs';
 import { currencySymbols } from 'utils/currency';
-import PledgeDeleteModal from 'screens/FundCampaignPledge/deleteModal/PledgeDeleteModal';
+import PledgeDeleteModal from 'screens/AdminPortal/FundCampaignPledge/deleteModal/PledgeDeleteModal';
 import { Navigate, useParams } from 'react-router';
 import PledgeModal from '../Campaigns/PledgeModal';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
-
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-};
 
 enum ModalState {
   UPDATE = 'update',
@@ -58,15 +47,8 @@ const Pledges = (): JSX.Element => {
   const { orgId } = useParams();
   const userId = (userIdFromStorage as string | null) ?? null;
 
-  const [searchTerm, setSearchTerm] = useState<string>('');
   const [pledges, setPledges] = useState<InterfacePledgeInfo[]>([]);
   const [pledge, setPledge] = useState<InterfacePledgeInfo | null>(null);
-  const [searchBy, setSearchBy] = useState<'pledgers' | 'campaigns'>(
-    'pledgers',
-  );
-  const [sortBy, setSortBy] = useState<
-    'amount_ASC' | 'amount_DESC' | 'endDate_ASC' | 'endDate_DESC'
-  >('endDate_DESC');
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
   }>({ [ModalState.UPDATE]: false, [ModalState.DELETE]: false });
@@ -96,18 +78,10 @@ const Pledges = (): JSX.Element => {
       ? undefined
       : {
           input: { userId: userId as string },
-          where: searchTerm
-            ? {
-                ...(searchBy === 'pledgers' && {
-                  firstName_contains: searchTerm,
-                }),
-                ...(searchBy === 'campaigns' && {
-                  name_contains: searchTerm,
-                }),
-              }
-            : {},
-          orderBy: sortBy,
+          where: {},
+          orderBy: 'endDate_DESC',
         },
+    fetchPolicy: 'cache-and-network',
   });
 
   if (!orgId || !userId) {
@@ -148,8 +122,6 @@ const Pledges = (): JSX.Element => {
       setPledges([]);
     }
   }, [pledgeData, isNoPledgesFoundError]);
-
-  if (pledgeLoading) return <Loader size="xl" />;
 
   if (pledgeError && !isNoPledgesFoundError) {
     return (
@@ -220,7 +192,10 @@ const Pledges = (): JSX.Element => {
       headerName: tCommon('endDate'),
       flex: 1,
       sortable: false,
-      renderCell: (params) => dayjs(params.row.endDate).format('DD/MM/YYYY'),
+      renderCell: (params) =>
+        params.row.endDate
+          ? dayjs(params.row.endDate).format('DD/MM/YYYY')
+          : '-',
     },
     {
       field: 'amount',
@@ -296,96 +271,73 @@ const Pledges = (): JSX.Element => {
     },
   ];
 
-  const searchByDropdown = {
-    id: 'searchBy',
-    label: t('searchBy'),
-    type: 'filter' as const,
-    options: [
-      { label: t('pledgers'), value: 'pledgers' },
-      { label: t('campaigns'), value: 'campaigns' },
-    ],
-    selectedOption: searchBy,
-    onOptionChange: (value: string | number) =>
-      setSearchBy(value as 'pledgers' | 'campaigns'),
-    dataTestIdPrefix: 'searchBy',
-  };
+  const rows = pledges.map((p) => {
+    const pledger = p.pledger;
+    const users = p.users || (pledger ? [pledger] : []);
+    const pledgerNames = users
+      .map((u: InterfaceUserInfoPG) => u.name)
+      .join(' ');
 
-  const sortDropdown = {
-    id: 'sort',
-    label: tCommon('sort'),
-    type: 'sort' as const,
-    options: [
-      { label: t('lowestAmount'), value: 'amount_ASC' },
-      { label: t('highestAmount'), value: 'amount_DESC' },
-      { label: t('latestEndDate'), value: 'endDate_DESC' },
-      { label: t('earliestEndDate'), value: 'endDate_ASC' },
-    ],
-    selectedOption: sortBy,
-    onOptionChange: (value: string | number) =>
-      setSortBy(
-        value as 'amount_ASC' | 'amount_DESC' | 'endDate_ASC' | 'endDate_DESC',
-      ),
-    dataTestIdPrefix: 'sort',
-  };
+    return {
+      id: p.id,
+      campaign: p.campaign,
+      pledger: p.pledger,
+      users: p.users,
+      amount: p.amount,
+      currency: p.campaign?.currencyCode,
+      goalAmount: p.campaign?.goalAmount,
+      endDate: p.campaign?.endAt,
+      pledgerName: pledgerNames,
+      campaignName: p.campaign?.name || '',
+    };
+  });
 
   return (
-    <div>
-      <AdminSearchFilterBar
-        searchPlaceholder={tCommon('searchBy', {
-          item: `${t('pledgers')} or ${t('campaigns')}`,
-        })}
-        searchValue={searchTerm}
-        onSearchChange={setSearchTerm}
-        searchInputTestId="searchByInput"
-        searchButtonTestId="searchBtn"
-        hasDropdowns={true}
-        dropdowns={[searchByDropdown, sortDropdown]}
-      />
+    <LoadingState isLoading={pledgeLoading} variant="spinner">
+      <div>
+        <DataGridWrapper
+          rows={rows}
+          columns={columns}
+          loading={pledgeLoading}
+          emptyStateProps={{
+            message: t('noPledges'),
+          }}
+          searchConfig={{
+            enabled: true,
+            fields: ['pledgerName', 'campaignName'],
+            placeholder: tCommon('searchBy', {
+              item: `${t('pledgers')} or ${t('campaigns')}`,
+            }),
+          }}
+          paginationConfig={{
+            enabled: true,
+            defaultPageSize: 10,
+            pageSizeOptions: [5, 10, 25, 50],
+          }}
+        />
 
-      <DataGrid
-        disableColumnMenu
-        hideFooter
-        getRowId={(row) => row.id}
-        sx={dataGridStyle}
-        autoHeight
-        rowHeight={65}
-        rows={pledges.map((p) => ({
-          id: p.id,
-          campaign: p.campaign,
-          pledger: p.pledger,
-          users: p.users,
-          amount: p.amount,
-          currency: p.campaign?.currencyCode,
-          goalAmount: p.campaign?.goalAmount,
-          endDate: p.campaign?.endAt,
-        }))}
-        columns={columns}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noPledges')}
-            </Stack>
-          ),
-        }}
-      />
+        {modalState[ModalState.UPDATE] && pledge && pledge.campaign?.id && (
+          <PledgeModal
+            isOpen={modalState[ModalState.UPDATE]}
+            hide={() => closeModal(ModalState.UPDATE)}
+            pledge={pledge}
+            refetchPledge={refetchPledge}
+            campaignId={pledge.campaign.id}
+            userId={userId}
+            mode="edit"
+          />
+        )}
 
-      <PledgeModal
-        isOpen={modalState[ModalState.UPDATE]}
-        hide={() => closeModal(ModalState.UPDATE)}
-        campaignId={pledge?.campaign?.id || ''}
-        userId={userId}
-        pledge={pledge}
-        refetchPledge={refetchPledge}
-        mode="edit"
-      />
-
-      <PledgeDeleteModal
-        isOpen={modalState[ModalState.DELETE]}
-        hide={() => closeModal(ModalState.DELETE)}
-        pledge={pledge}
-        refetchPledge={refetchPledge}
-      />
-    </div>
+        {modalState[ModalState.DELETE] && pledge && (
+          <PledgeDeleteModal
+            isOpen={modalState[ModalState.DELETE]}
+            hide={() => closeModal(ModalState.DELETE)}
+            pledge={pledge}
+            refetchPledge={refetchPledge}
+          />
+        )}
+      </div>
+    </LoadingState>
   );
 };
 

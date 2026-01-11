@@ -61,7 +61,9 @@ describe('Testing Member Request Card', () => {
     ]);
 
     // Performance: Group assertions for single DOM query
-    expect(screen.getByAltText(/userImage/i)).toBeInTheDocument();
+    expect(
+      screen.getByAltText(/Profile picture of John Doe/i),
+    ).toBeInTheDocument();
     expect(screen.getByText(/Joined:/i)).toBeInTheDocument();
     expect(screen.getByText(defaultProps.memberName)).toBeInTheDocument();
     expect(screen.getByText(defaultProps.memberLocation)).toBeInTheDocument();
@@ -98,7 +100,7 @@ describe('Testing Member Request Card', () => {
     ]);
 
     // Efficient assertions
-    expect(screen.getByAltText(/userImage/i)).toBeInTheDocument();
+    expect(screen.getByAltText(/Profile picture of/i)).toBeInTheDocument();
     expect(screen.getByText(/Joined:/i)).toBeInTheDocument();
     expect(screen.queryByText(defaultProps.memberName)).not.toBeInTheDocument();
     expect(screen.getByText('India')).toBeInTheDocument();

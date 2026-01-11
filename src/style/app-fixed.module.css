@@ -41,6 +41,7 @@
 :root {
   --errorState-border: #f5c2c7;
   --primary-theme-color: #1778f2;
+  --success-green-color: #31bb6b;
 
   --addButton-font: #555555;
   --addButton-border: #eaebef;
@@ -135,7 +136,6 @@
 
   --font-size-header: 16px;
   --font-size-table-body: 14px;
-  --avatar-placeholder-bg: #ccc;
 
   --tableHeader-bg: #eaebef;
   --tableHeader-color: #000000;
@@ -196,6 +196,15 @@
   --register-button-border-active: #eaebef;
   --register-button-color: #555555;
   --register-button-color-hover: #555555;
+
+  /* Progress indicator colors */
+  --progress-track-color: #e0e0e0;
+  --progress-complete-color: #4caf50;
+  --progress-half-color: #ff9800;
+  --progress-low-color: #2196f3;
+
+  /* Row hover background */
+  --row-hover-bg: #f0f0f0;
 
   --row-bg: #fff;
   --row-bg-scroll: #00000029;
@@ -365,9 +374,7 @@
   --memberfontbtn-border: #e8e5e5;
   --memberfont-bg: #eaebef;
   --memberfont-color: #fff;
-  --removeMemberCancel-bg: #f8d6dc;
-  --removeMemberCancel-border: #f8d6dc;
-  --loader-size: 10em;
+  --removeMemberCancel-bg: #f8d6dc --loader-size: 10em;
   --loader-border: #ffffff33;
   --loader-border-left: #febc59;
 
@@ -760,8 +767,7 @@
   --primary-theme-color: #1778f2;
   --advertisement-dropdown-border: 1px solid rgba(0, 0, 0, 0.15);
   --advertisement-dropdown-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
-  --advertisement-media-height: 12.5rem;
-  --pledgeModal-bg: #ffffff;
+  --advertisement-media-height: 12.5rem --pledgeModal-bg: #ffffff;
   --pledgeModal-header-text: #000000;
   --pledgeModal-title-text: #4b5563;
   --pledgeModal-close-button-bg: #f8d6dc;
@@ -872,6 +878,12 @@
 
   --input-bg: #f2f7ff;
 
+  --peopleTabUserTagTableBody: #ffffff;
+
+  --peopleTabUserTagTableHeaderCell-color: #000000;
+
+  --empty-state-bg: #ffffff;
+  --empty-state-border-color: #e7e7e7;
   --empty-state-bg: #fafafa;
   --empty-state-border-color: #eeeeee;
 
@@ -882,6 +894,28 @@
   --orgSelector-option-hover-bg: #f8f9fa;
   --orgSelector-option-selected-bg: rgba(13, 110, 253, 0.1);
   --orgSelector-no-results-color: #6c757d;
+}
+
+/* Action Item Category Status Styles */
+.actionItemCategoryStatusIcon {
+  font-size: 0.8rem;
+  margin-right: 8px;
+}
+
+.statusIconActive {
+  color: var(--bs-success, #31bb6b);
+}
+
+.statusIconDisabled {
+  color: var(--bs-danger, #dc3545);
+}
+
+.statusTextActive {
+  color: var(--bs-success, #31bb6b);
+}
+
+.statusTextDisabled {
+  color: var(--bs-danger, #dc3545);
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -1025,17 +1059,23 @@
     border-color 0.2s ease,
     box-shadow 0.2s ease;
   overflow: hidden;
-
-  /* Flex properties to make it sit on the same line */
   flex-grow: 1;
-  /* Allow it to grow to fill space */
   flex-shrink: 1;
-  /* Allow it to shrink if needed */
   width: auto;
-  /* Stop forcing 100% width */
   min-width: 200px;
   max-width: 100%;
-  height: 48px;
+  height: 57px;
+  margin: 2.5rem 0;
+  align-items: center;
+  max-width: 775px;
+  margin: 2.5rem 0;
+  gap: 0.75rem;
+}
+
+.searchBarContainer > :first-child {
+  flex: 1 1 320px;
+  min-width: 240px;
+  max-width: 100%;
 }
 
 .searchBarContainerWithButton {
@@ -1053,6 +1093,7 @@
   display: flex;
   align-items: center;
   min-height: 48px;
+  min-width: 40rem;
   padding: 0.75rem 2.5rem 0.75rem 1.25rem;
   background-color: transparent;
 }
@@ -1124,6 +1165,21 @@
   display: inline-flex;
   font-size: 1.2rem;
   pointer-events: none;
+}
+
+.searchBarTrailingIcon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: var(--search-button-bg, #b3ceff);
+  color: #2f3f5f;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.75rem;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
 }
 
 .searchBarClearButton {
@@ -1455,6 +1511,16 @@ form label,
     margin-right: 0;
   }
 
+  .peopleTabBtnBlock {
+    height: 100%;
+    padding-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #808080;
+    border: 1px solid #dddddd;
+  }
+
   .btnsContainer .btnsBlock div {
     flex: 1;
   }
@@ -1576,7 +1642,7 @@ form label,
 
 .removeMemberCancel {
   background-color: var(--removeMemberCancel-bg);
-  color: var(--removeButton-color);
+  color: '#C8102E';
   border: 1px solid var(--removeMemberCancel-border);
 }
 
@@ -1766,6 +1832,15 @@ form label,
   color: var(--createButton-color) !important;
   border: 1px solid var(--createButton-border) !important;
   margin: 5px 10px;
+  width: 10rem;
+  height: 3rem;
+}
+
+.createFundButton {
+  background-color: var(--createButton-bg) !important;
+  color: var(--createButton-color) !important;
+  border: 1px solid var(--createButton-border) !important;
+  margin: 5px 5px;
   width: 10rem;
   height: 3rem;
 }
@@ -2739,7 +2814,6 @@ form label,
 
 .calendarEventHeader {
   width: 100%;
-  margin-bottom: 20px;
   border-radius: 10px;
   padding: 5px;
 }
@@ -2773,6 +2847,24 @@ form label,
 .selectTypeEventHeader {
   border-radius: 10px;
   margin: 8px;
+}
+
+.peopleTabEventHeader {
+  display: flex;
+  align-items: center;
+  color: grey;
+}
+.peopleTabEventHeader:hover {
+  color: var(--groupsLabel-color);
+}
+
+.calendar__header {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-right: 0;
 }
 
 .calendar__search {
@@ -4251,6 +4343,373 @@ form label,
   align-items: center;
 }
 
+.peopleTabIconWrapper {
+  display: flex;
+  align-items: center;
+  color: #dddddd;
+  border: 1px solid grey;
+  border-radius: 9px;
+  padding: 0 20px;
+  color: #808080;
+  border: 1px solid #ddd;
+}
+
+.peopleTabActiveButton {
+  color: #555555;
+  background: #eaebef;
+  border-radius: 9px;
+  border: 1px solid #555555;
+}
+
+.peopleTabActiveHeader {
+  color: #555555;
+  background: #eaebef;
+}
+
+.peopleTabIcon {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  color: grey;
+  padding: 1rem 1.2rem;
+}
+
+.peopleTabComponent {
+  background: #fff;
+  padding-top: 1rem;
+  border-radius: 20px;
+  margin: 1rem;
+}
+
+.peopleTabComponentSection {
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 1rem 3rem;
+}
+
+.peopleTabUserTagContainer {
+  width: 100%;
+}
+
+.peopleTabUserTagComponentSection {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-radius: 10px;
+}
+
+.peopleTabUserTagColumnHeader {
+  background: #dddddd;
+  border: 1px solid #ddd;
+}
+
+.peopleTabUserTagTableCell {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.peopleTabUserTagCreatedByButton {
+  color: #2563eb;
+  cursor: pointer;
+  transition: 0.2s ease;
+  text-decoration: underline #5f5fd9;
+}
+
+.peopleTabUserTagCreatedByButton:hover {
+  text-decoration: underline;
+  color: #1d4ed8;
+}
+
+.peopleTabUserTagTableHeader {
+  background-color: #f9fafb; /* bg-gray-50 */
+  border-top-width: 1px; /* border-y */
+  border-bottom-width: 1px;
+  border-color: #e5e7eb; /* border-gray-200 */
+  border-style: solid;
+}
+
+.peopleTabUserTagTableRow:hover {
+  background-color: #f9fafb;
+}
+
+.peopleTabUserTagTableHeaderCell {
+  padding: 0.75rem 1.5rem;
+  text-align: left;
+  font-size: 0.9rem;
+  color: var(--peopleTabUserTagTableHeaderCell-color);
+  text-transform: uppercase;
+  height: 4rem;
+}
+
+.peopleTabUserTagTableBody {
+  background: var(--peopleTabUserTagTableBody-bg);
+  border: 1px solid #ddd;
+}
+
+.peopleTabUserTagTable {
+  width: 100%;
+}
+
+.peopleTabNavbarButtonHeader {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-left: 4rem;
+  margin-top: 2rem;
+}
+
+.peopleTabIconWrapper:hover {
+  color: #808080;
+  border: 1px solid #dddddd;
+  cursor: pointer;
+}
+
+.peopleTabUserEventsContainer {
+  width: 100%;
+}
+
+.peopleTabUserEventContainer {
+  background: white;
+  border-radius: 3px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 2rem;
+  margin: 0.5rem;
+  border-left: 6px solid #a8c7fa;
+  border-right: 1px solid #80808036;
+  border-top: 1px solid #80808036;
+  border-bottom: 1px solid #80808036;
+}
+
+.peopleTabUserEventTime {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.peopleTabUserEventDate {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.peopleTabUserEventInfo {
+  flex: 1;
+  margin: 2rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+.peoplePageUserEventCardBody {
+  display: grid;
+  gap: 1rem;
+  justify-content: center;
+  grid-template-columns: repeat(2, minmax(650px, 1fr));
+}
+
+.peopleTabUserEventActionButton {
+  background-color: #a8c7fa;
+  border: none;
+  border-radius: 4px;
+  padding: 3px 9px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: -1rem -1.8rem;
+  width: 7rem;
+  padding: 4px 11px;
+  height: 2.5rem;
+}
+
+.peopleTabUserEventTimeWrapper {
+  text-align: center;
+  min-width: 80px;
+}
+
+.timeText {
+  margin: 0;
+}
+
+.timeSeparator {
+  margin: 4px 0;
+}
+
+.dateText {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.eventName {
+  margin: 0 0 8px 0;
+}
+
+.eventDescription {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.peopleTabUserEventAction {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.actionIcon {
+  display: flex;
+  align-items: center;
+}
+
+.peopleTabUserEventActionButton:hover {
+  background-color: #92b5f5;
+}
+
+.peopleTabUserOrganizationsCard {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #fff;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  height: 230px;
+  width: 660x;
+  align-items: center;
+  justify-content: center;
+}
+
+.peopleTabUserOrganizationsCardContent {
+  display: flex;
+  gap: 3rem;
+}
+
+.peopleTabUserOrganizationsCardImage {
+  width: 140px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: #eaebef;
+  border: 2px solid #eaebef;
+  box-shadow:
+    0 6px 12px rgba(0, 0, 0, 0.12),
+    0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.peopleTabUserOrganizationsCardText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.peopleTabUserOrganizationEventPageTime {
+  margin: 0;
+  font-weight: bold;
+  font-size: 1.5rem;
+  line-height: 1.3;
+}
+
+.peopleTabUserOrganizationEventPageTimeSeparator {
+  margin: 4px 0;
+  font-size: 1rem;
+}
+
+.peopleTabUserOrganizationEventPageEventDescription {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.peopleTabUserOrganizationsCardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.peopleTabUserOrganizationsCardDescription {
+  font-size: 0.875rem;
+  color: #666;
+  margin: 0.25rem 0;
+}
+
+.peopleTabUserOrganizationsCardStats {
+  font-size: 0.875rem;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.peopleTabUserOrganizationsCardAction {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+  width: 100%;
+}
+
+.peopleTabUserOrganizationsEditButton {
+  padding: 0.4rem 0.8rem;
+  background-color: #92b5f5;
+  border: none;
+  border-radius: 8px;
+  color: #555555;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  width: 7.3rem;
+  height: 2.5rem;
+}
+
+.peopleTabUserOrganizationsEditButton:hover {
+  background-color: #90c1ff;
+}
+
+.peopleTabUserOrganizationsContainer {
+  width: 100%;
+}
+
+.peopleTabUserOrganizationsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.peopleTabUserEventsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.peopleTabNavbarAlignment {
+  display: flex;
+  gap: 4rem;
+  align-items: center;
+}
+
+/* Optional: mobile fallback */
+@media (max-width: 768px) {
+  .peopleTabUserEventsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .cardItem .iconWrapper .themeOverlay {
   background: var(--cardItem-iconWrapper-bg);
   position: absolute;
@@ -5275,7 +5734,6 @@ form label,
 /* -- RequestsTableItem.tsx -- */
 
 .requestsTableItemIndex {
-  padding-inline-start: 2.5rem;
   vertical-align: middle;
 }
 
@@ -5788,6 +6246,27 @@ form {
 }
 
 /* SortingButton.tsx */
+.sortingImgIcon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px; /* space between icon & text */
+}
+
+.dropdownItemButton {
+  background-color: var(--dropdownItem-bg) !important;
+  color: var(--dropdownItem-color) !important;
+  border: none !important;
+  box-shadow: var(--dropdownItem-box-shadow);
+  border-radius: 9px;
+}
+
+.iconRightMargin {
+  margin-right: 0.6rem;
+}
 
 .dropdownItem {
   background-color: var(--dropdownItem-bg) !important;
@@ -5804,7 +6283,10 @@ form {
 .dropdownItem:hover,
 .dropdownItem:focus,
 .dropdownItem:active {
-  background-color: var(--dropdownItem-hover-bg, #eff1f7) !important;
+  background-color: var(
+    --dropdownItem-hover-bg,
+    #eff1f7 var(--dropdownItem-hover-bg) #e8e5e5
+  ) !important;
   color: var(--dropdownItem-color) !important;
   outline: none !important;
 }
@@ -6026,37 +6508,43 @@ form {
 }
 
 /* -- CreateGroupChat.tsx -- */
-/* Donation card styles */
+
 /* -- DonationCard.tsx -- */
 
-.donationAvatar {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background-color: var(--people-card-header-bg);
-  flex-shrink: 0;
+.mainContainerDonateCard {
+  width: 49%;
+  height: 8rem;
+  min-width: max-content;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--mainContainerDonateCard-bg);
+  border: 1px solid var(--mainContainerDonateCard-border);
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-.donationDetails {
+.img {
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: var(--mainContainerDonateCard-bg);
+}
+
+.personDetails {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  justify-content: center;
 }
 
-.donationRow {
-  font-size: 14px;
-  color: var(--primaryText-color);
+.btnDonate {
+  display: flex;
+  align-items: flex-end;
 }
 
-/* Donor name */
-.donorName {
-  font-weight: 600;
-  font-size: 15px;
-}
-
-.donationMeta {
-  font-size: 13px;
-  color: var(--secondText-color);
+.btnDonate button {
+  padding-inline: 2rem !important;
+  border-radius: 5px;
 }
 
 /* -- EventCard.tsx -- */
@@ -7652,6 +8140,8 @@ form {
 .topRadius {
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
+  color: '#555';
+  background: #eaebef;
 }
 
 .inputColor {
@@ -8275,6 +8765,7 @@ form {
 }
 
 .list_box {
+  height: 70vh;
   overflow-y: auto;
   width: auto;
 }
@@ -8391,7 +8882,6 @@ form {
   color: var(--infoButton-color);
   margin-right: 0.5rem;
   border-radius: 0.25rem;
-  min-width: 32px;
 }
 
 .infoButton:hover {
@@ -8423,14 +8913,6 @@ form {
   border-color: var(--checkbox-focus-border);
   outline: none;
   box-shadow: none;
-}
-
-.assigneeCellContainer {
-  height: 100%;
-}
-
-.groupIconSecondary {
-  color: var(--view-color);
 }
 
 /* -- OrganizationDashboard.tsx -- */
@@ -8541,6 +9023,10 @@ form {
   min-height: 100vh;
 }
 
+.titleMargin {
+  margin-top: 0.75rem;
+}
+
 .message {
   margin-top: 25%;
   display: flex;
@@ -8616,8 +9102,6 @@ form {
 .colorWhite {
   color: var(--colorWhite);
 }
-
-/* -- OrganizationPeople.tsx -- */
 
 /* -- OrganizationTags.tsx -- */
 
@@ -9208,10 +9692,14 @@ form {
 
 .checkboxdivEvents {
   display: flex;
+  flex-wrap: wrap;
+  --events-gap: 1rem;
+  gap: var(--events-gap, 1rem);
 }
 
 .checkboxdivEvents > div {
-  width: 50%;
+  flex: 0 0 calc(50% - (var(--events-gap, 1rem) / 2));
+  min-width: 200px;
 }
 
 .dispflexEvents {
@@ -9232,6 +9720,7 @@ form {
   max-height: 100%;
   width: 100%;
   overflow: auto;
+  overflow-x: 'hidden';
 }
 
 .maxWidth {
@@ -9318,6 +9807,48 @@ form {
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
   background-color: var(--people-card-container-bg);
+}
+
+.userContactDetailPersonalCardHeader {
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  background: #eaebef;
+}
+
+.userContactDetailContactCardHeader {
+  background-color: #a8c7fa;
+  color: #555;
+}
+
+.userContactDetailProfileImage {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.userContactDetailEditAvatarIcon {
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.userContactDetailSaveChangesBtn {
+  background-color: #a8c7fa;
+  color: #555;
+}
+
+.userContactDetailContactAvatarUrl {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.userContactDetailContactAvatarEditIcon {
+  cursor: pointer;
+  font-size: '1.2rem';
 }
 
 .custom_row_center {
@@ -9774,10 +10305,6 @@ form {
   margin: 1px;
 }
 
-.iconLarge {
-  font-size: 1.5rem;
-}
-
 .chipIcon {
   height: 0.9rem !important;
 }
@@ -10194,8 +10721,6 @@ form {
   flex-wrap: nowrap !important;
   width: 100%;
   gap: 1rem;
-  margin-bottom: 2rem;
-  margin-top: 1rem;
 }
 
 /* 3. Mobile responsiveness: Only allow wrapping on actual small screens */
@@ -10211,147 +10736,171 @@ form {
   }
 }
 
-.btnsBlock > button,
-.btnsBlock > .btn {
-  margin: 0;
-  height: 100%;
-  display: inline-flex;
-  align-items: center;
-  min-height: 2.4rem;
+.btnsBlock > * {
+  margin: 0 !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  min-height: auto !important;
 }
 
 /* ----------------------------------------------------- */
-.orgListContainer {
-  padding-left: 40px;
-  padding-right: 30px;
+
+.whiteContainer {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
-@media (max-width: 768px) {
-  .orgListContainer {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
+/* -- Common Layout Classes -- */
+
+/* Flex container for title area in screens */
+.flexContainerColumn {
+  flex: 1;
 }
 
-.addButtonIcon {
-  font-size: 25px;
-  margin-bottom: 2px;
-  margin-right: 2px;
+/* Breadcrumbs margin spacing */
+.breadcrumbsMargin {
+  margin-top: 0.5rem;
 }
 
-/* Utility classes for inline style replacements */
-.flexCenter {
+/* Search container row layout for fund campaign/funds screens */
+.searchContainerRow {
   display: flex;
-  justify-content: center;
   align-items: center;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  gap: 1rem;
 }
 
-.flexColumn {
+/* Search container row layout without top margin */
+.searchContainerRowNoTopMargin {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 1rem;
 }
 
-.flexWrap {
+/* Search bar margin reset with flex grow */
+.searchBarMarginReset {
+  margin: 0;
+}
+
+/* Button style to prevent text wrapping */
+.buttonNoWrap {
+  white-space: nowrap;
+}
+
+/* Button margin reset for flex containers with gap */
+.buttonMarginReset {
+  margin: 0;
+}
+
+/* Search container for Campaigns screen with min/max width */
+.searchContainerCampaigns {
+  max-width: 700px;
+  min-width: 400px;
+  margin: 0;
+}
+
+/* UserScreen main content margin when expanded */
+.userScreenExpandedMargin {
+  margin-left: 100px;
+}
+
+/* -- Progress Indicator Styles for Campaign Tables -- */
+
+/* Progress indicator container */
+.progressIndicatorContainer {
   display: flex;
-  flex-wrap: wrap;
-}
-
-.flexWrapGap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem;
-}
-
-.maxHeight120 {
-  max-height: 120px;
-}
-
-.cursorPointer {
-  cursor: pointer;
-}
-
-.fullWidthHeight {
-  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   height: 100%;
 }
 
-.progressBarHeight {
-  height: 1.5rem;
-  font-size: 0.9rem;
+/* Progress indicator wrapper (relative positioning) */
+.progressIndicatorWrapper {
+  position: relative;
+  display: inline-flex;
 }
 
-.memberNameFontSize {
-  font-size: 15px;
+/* Progress indicator base track color */
+.progressIndicatorBase {
+  color: var(--progress-track-color, #e0e0e0);
 }
 
-/* Avatar placeholder background */
-.avatarPlaceholder {
-  background-color: var(--avatar-placeholder-bg, #ccc);
+/* Progress indicator overlay (absolute positioning) */
+.progressIndicatorAbsolute {
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
-.avatarImage {
-  border-radius: 50%;
-  object-fit: cover;
-  width: var(--avatar-size, 40px);
-  height: var(--avatar-size, 40px);
+/* Progress indicator color states */
+.progressComplete {
+  color: var(--progress-complete-color, #4caf50);
 }
 
-.avatarPlaceholderSize {
-  width: var(--avatar-size, 40px);
-  height: var(--avatar-size, 40px);
-  font-size: calc(var(--avatar-size, 40px) * 0.4);
-  border-radius: 50%;
+.progressHalf {
+  color: var(--progress-half-color, #ff9800);
 }
 
-/* MUI DataGrid styles - using global selectors to target MUI classes */
-.dataGridNoHover :global(.MuiDataGrid-row:hover),
-.dataGridNoHover :global(.MuiDataGrid-row.Mui-hovered) {
-  background-color: transparent;
+.progressLow {
+  color: var(--progress-low-color, #2196f3);
 }
 
-.dataGridRounded :global(.MuiDataGrid-root),
-.dataGridRounded :global(.MuiDataGrid-main) {
-  border-radius: 0.5rem;
+/* Progress percentage text */
+.progressTypography {
+  font-weight: bold;
+}
+
+/* -- DataGrid Row Hover Styles -- */
+
+/* DataGrid row hover background */
+.dataGridRowHover:hover {
+  background-color: var(--row-hover-bg, #f0f0f0);
+}
+
+/* Error icon large size */
+.errorIconLarge {
+  font-size: 2rem;
+}
+
+/* Progress cell container */
+.progressCellContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+}
+
+/* Button width 8rem - for visit and join buttons */
+.buttonWidth8rem {
+  width: 8rem;
+}
+
+/* Video full width - for video elements */
+.videoFullWidth {
+  width: 100%;
+}
+
+/* Margin left auto - for positioning elements to the right */
+.marginLeftAuto {
+  margin-left: auto;
+}
+
+/* Background paper - matches MUI background.paper */
+.backgroundPaper {
+  background-color: var(--popup-bg, #fff);
 }
 
 .addIconStyle {
   font-size: 25px;
   margin-bottom: 2px;
   margin-right: 2px;
-}
-
-.postContainer {
-  min-height: 100vh;
-}
-
-.addPost {
-  font-size: 20px;
-  margin-right: 6px;
-}
-
-.noPostsFound {
-  text-align: center;
-}
-
-.postInfiniteScroll {
-  overflow: visible;
-}
-
-.createPostModalContainer {
-  position: absolute;
-}
-
-.pinnedPostModal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-}
-
-.pinnedPostModalBody {
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 20px;
-  position: relative;
 }
 
 .dataGridContainer {

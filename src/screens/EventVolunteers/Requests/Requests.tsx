@@ -3,7 +3,7 @@
  * @description This component renders a table displaying volunteer membership requests for a specific event.
  * It allows administrators to search, sort, filter, and manage these requests by accepting or rejecting them.
  *
- * @module Requests
+ * module Requests
  *
  * @requires react
  * @requires react-i18next
@@ -22,7 +22,7 @@
  * @function Requests
  * @returns {JSX.Element} A React component that displays a searchable, sortable, and filterable table of volunteer membership requests.
  *
- * @remarks
+ * remarks
  * - Displays a loader while fetching data and handles errors gracefully.
  * - Uses Apollo Client's `useQuery` to fetch data and `useMutation` to update membership status.
  * - Uses DataGridWrapper for unified search, sort, and filter interface with debouncing.
@@ -42,7 +42,7 @@ import { FaXmark } from 'react-icons/fa6';
 import { WarningAmberRounded } from '@mui/icons-material';
 
 import { useMutation, useQuery } from '@apollo/client';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   type GridCellParams,
   type GridColDef,
@@ -119,8 +119,6 @@ function Requests(): JSX.Element {
     }));
   }, [requestsData]);
 
-  // loads the requests when the component mounts
-  if (requestsLoading) return <Loader size="xl" />;
   if (requestsError) {
     // Displays an error message if there is an issue loading the requests
     return (

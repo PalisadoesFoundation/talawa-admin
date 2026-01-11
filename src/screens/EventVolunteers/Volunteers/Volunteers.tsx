@@ -1,11 +1,11 @@
 /**
- * @file Volunteers.tsx
- * @description This component renders the Volunteers page for an event in the Talawa Admin application.
+ * Volunteers.tsx
+ * This component renders the Volunteers page for an event in the Talawa Admin application.
  * It provides functionalities to view, search, filter, sort, and manage volunteers for a specific event.
  * The page uses DataGridWrapper to display volunteer details with integrated search, sort, and filter capabilities,
  * along with modals for adding, viewing, and deleting volunteers.
  *
- * @module Volunteers
+ * module Volunteers
  *
  * @requires react
  * @requires react-i18next
@@ -24,20 +24,21 @@
  * @requires ./viewModal/VolunteerViewModal
  * @requires style/app.module.css
  *
- * @typedef {InterfaceEventVolunteerInfo} InterfaceEventVolunteerInfo - Interface for volunteer information.
+ * typedef InterfaceEventVolunteerInfo - Interface for volunteer information.
  *
- * @component
- * @returns {JSX.Element} The Volunteers page component.
+ * @returns The Volunteers page component.
  *
  * @example
+ * ```tsx
  * // Usage
  * import Volunteers from './Volunteers';
  *
  * function App() {
  *   return <Volunteers />;
  * }
+ * ```
  *
- * @remarks
+ * remarks
  * - The component uses Apollo Client's `useQuery` to fetch volunteer data.
  * - Uses DataGridWrapper for unified search, sort, and filter interface with debouncing.
  * - Provides search by volunteer name.
@@ -58,7 +59,7 @@ import {
 } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   type GridCellParams,
   type GridColDef,
@@ -197,7 +198,11 @@ function Volunteers(): JSX.Element {
   }, [eventData]);
 
   if (volunteersLoading) {
-    return <Loader size="xl" />;
+    return (
+      <LoadingState isLoading={volunteersLoading} variant="spinner">
+        <div></div>
+      </LoadingState>
+    );
   }
 
   if (volunteersError) {

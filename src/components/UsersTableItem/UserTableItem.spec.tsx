@@ -306,7 +306,7 @@ describe('Testing User Table Item', () => {
     fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorabc`));
-    expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon !');
+    expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon!');
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Joined Organization 1/i));
     expect(window.location.replace).toHaveBeenCalledWith('/orgdash/abc');
@@ -828,7 +828,7 @@ describe('Testing User Table Item', () => {
     fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorghi`));
-    expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon !');
+    expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon!');
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Blocked Organization 1/i));
     expect(window.location.replace).toHaveBeenCalledWith('/orgdash/ghi');

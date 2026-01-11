@@ -6,7 +6,7 @@
  * pinned posts in a carousel layout and regular posts in a paginated list with interactive
  * features for post management.
  *
- * @returns {JSX.Element} A JSX element representing the complete posts interface with:
+ * @returns A JSX element representing the complete posts interface with:
  * - Header with search and sorting controls
  * - Pinned posts carousel section
  * - Paginated posts list with infinite scroll
@@ -25,7 +25,7 @@
  * - Supports both admin and user role-based interactions
  * - Implements proper data formatting for PostCard components
  *
- * @dependencies
+ * Dependencies:
  * - Apollo Client for GraphQL operations
  * - React Router for URL parameters
  * - React i18n for internationalization
@@ -55,7 +55,7 @@ import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import { Add, Close } from '@mui/icons-material';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import PinnedPostsLayout from 'shared-components/pinnedPosts/pinnedPostsLayout';
 import PostCard from 'shared-components/postCard/PostCard';
@@ -63,7 +63,7 @@ import styles from 'style/app-fixed.module.css';
 import { Box, Typography } from '@mui/material';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
-import { Modal } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { formatDate } from 'utils/dateFormatter';
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
 
@@ -316,7 +316,14 @@ export default function PostsPage() {
   }, [allPosts, filteredPosts, isFiltering, sortingOption]);
 
   if (orgPostListLoading || orgPinnedPostListLoading) {
-    return <Loader />;
+    return (
+      <LoadingState
+        isLoading={orgPostListLoading || orgPinnedPostListLoading}
+        variant="spinner"
+      >
+        <div />
+      </LoadingState>
+    );
   }
 
   const pinnedPosts =
@@ -460,16 +467,16 @@ export default function PostsPage() {
 
       {/* Pinned Post Modal */}
       {selectedPinnedPost && (
-        <Modal
+        <BaseModal
           show={showPinnedPostModal}
           onHide={handleClosePinnedModal}
-          data-testid="pinned-post-modal"
-          centered
+          dataTestId="pinned-post-modal"
           size="lg"
           backdrop="static"
           className={styles.pinnedPostModal}
+          showCloseButton={false}
         >
-          <Modal.Body className={styles.pinnedPostModalBody}>
+          <div className={styles.pinnedPostModalBody}>
             <Button
               variant="light"
               onClick={handleClosePinnedModal}
@@ -481,8 +488,8 @@ export default function PostsPage() {
             </Button>
             {/* Render the pinned post */}
             <PostCard {...formatPostForCard(selectedPinnedPost)} />
-          </Modal.Body>
-        </Modal>
+          </div>
+        </BaseModal>
       )}
     </>
   );

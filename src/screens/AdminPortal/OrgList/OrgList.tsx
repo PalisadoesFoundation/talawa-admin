@@ -1,51 +1,49 @@
 /**
- * The `orgList` component is responsible for rendering a list of organizations
- * and providing functionality for searching, sorting, and creating new organizations.
- * It also includes modals for creating organizations and managing features after creation.
- *
- * @component
- * @returns {JSX.Element} The rendered organization list component.
+ * The orgList component renders a list of organizations with search, sort, and
+ * creation flows.
  *
  * @remarks
- * - Utilizes GraphQL queries and mutations for fetching and managing organization data.
- * - Includes search and sorting functionality for better user experience.
- * - Displays loading states and handles errors gracefully.
+ * Features:
+ * - Fetches organization data via GraphQL queries and mutations.
+ * - Supports searching and sorting, with loading and error states.
+ * - Provides modals for creating organizations and managing features.
  *
- * @dependencies
- * - `useQuery` and `useMutation` from `@apollo/client` for GraphQL operations.
- * - `useTranslation` from `react-i18next` for localization.
- * - `useLocalStorage` for accessing local storage data.
- * - `OrgListCard`, `SortingButton`, `SearchBar`, and `OrganizationModal` for UI components.
- * - `NotificationToast` for notifications.
- * - `react-bootstrap` and `@mui/material` for modal and button components.
+ * State:
+ * - dialogModalisOpen: Controls the visibility of the plugin notification modal.
+ * - dialogRedirectOrgId: Stores the ID of the organization to redirect after creation.
+ * - isLoading: Indicates whether the organization data is loading.
+ * - sortingState: Manages the sorting option and its label.
+ * - searchByName: Stores the search query for filtering organizations.
+ * - showModal: Controls the visibility of the organization creation modal.
+ * - formState: Manages the state of the organization creation form.
  *
- * @state
- * - `dialogModalisOpen` - Controls the visibility of the plugin notification modal.
- * - `dialogRedirectOrgId` - Stores the ID of the organization to redirect after creation.
- * - `isLoading` - Indicates whether the organization data is loading.
- * - `sortingState` - Manages the sorting option and its label.
- * - `searchByName` - Stores the search query for filtering organizations.
- * - `showModal` - Controls the visibility of the organization creation modal.
- * - `formState` - Manages the state of the organization creation form.
+ * Methods:
+ * - openDialogModal(redirectOrgId): Opens the plugin notification modal.
+ * - closeDialogModal(): Closes the plugin notification modal.
+ * - toggleDialogModal(): Toggles the plugin notification modal visibility.
+ * - createOrg(e): Handles organization creation.
+ * - handleChangeFilter(value): Filters organizations based on the search query.
+ * - handleSortChange(value): Updates sorting state and refetches organizations.
  *
- * @methods
- * - `openDialogModal(redirectOrgId: string): void` - Opens the plugin notification modal.
- * - `closeDialogModal(): void` - Closes the plugin notification modal.
- * - `toggleDialogModal(): void` - Toggles the plugin notification modal visibility.
- * - `createOrg(e: ChangeEvent<HTMLFormElement>): Promise<void>` - Handles organization creation.
- * - `handleSearch(value: string): void` - Filters organizations based on the search query.
- * - `handleSortChange(value: string): void` - Updates sorting state and refetches organizations.
- *
- * @errorHandling
- * - Handles errors from GraphQL queries and mutations using `errorHandler`.
+ * Error handling:
+ * - Uses `errorHandler` for GraphQL and network errors.
  * - Clears local storage and redirects to the home page on critical errors.
  *
- * @modals
- * - `OrganizationModal` - For creating new organizations.
- * - `Modal` - For managing features after organization creation.
+ * Dependencies:
+ * - Apollo Client for GraphQL operations.
+ * - react-i18next for localization.
+ * - useLocalStorage for local storage data.
+ * - NotificationToast and shared UI components.
+ * - Material UI for buttons and icons.
+ *
+ * @returns The rendered organization list component.
  */
-import React, { useEffect, useState, useMemo } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import React, { type ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
+import { Group, Search } from '@mui/icons-material';
+import { Button } from '@mui/material';
+import { Link } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
@@ -54,28 +52,21 @@ import {
   CURRENT_USER,
   ORGANIZATION_FILTER_LIST,
 } from 'GraphQl/Queries/Queries';
-
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
-import { useTranslation } from 'react-i18next';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { errorHandler } from 'utils/errorHandler';
 import type {
   InterfaceCurrentUserTypePG,
   InterfaceOrgInfoTypePG,
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from 'style/app-fixed.module.css';
-import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { Link } from 'react-router';
-import { Modal } from 'react-bootstrap';
-import type { ChangeEvent } from 'react';
-import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
-import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
-import EmptyState from 'shared-components/EmptyState/EmptyState';
-import style from './OrgList.module.css';
-import { Group, Search } from '@mui/icons-material';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import styles from './OrgList.module.css';
 
 const { getItem } = useLocalStorage();
 
@@ -258,7 +249,6 @@ function orgList(): JSX.Element {
         },
       });
 
-      //     toggleModal;
       if (data) {
         NotificationToast.success(t('congratulationOrgCreated'));
         refetchOrgs();
@@ -282,7 +272,7 @@ function orgList(): JSX.Element {
   };
 
   /**
-   * Note: The explicit refetchOrgs({ filter: val }) call is intentional.
+   * Note: The explicit refetchOrgs call with a filter argument is intentional.
    * While Apollo Client auto-refetches when filterName changes, the explicit
    * call ensures immediate network request execution and avoids timing issues
    * from React's batched state updates. This pattern is used consistently
@@ -327,7 +317,7 @@ function orgList(): JSX.Element {
     <div className={styles.orgListContainer}>
       {/* Buttons Container */}
       <div className={styles.calendar__header}>
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={true}
           searchPlaceholder={t('searchOrganizations')}
           searchValue={typedValue}
@@ -429,7 +419,7 @@ function orgList(): JSX.Element {
             })}
           </div>
           {/* pagination */}
-          <table className={style.table_fullWidth}>
+          <table className={styles.table_fullWidth}>
             <tbody>
               <tr>
                 <PaginationList
@@ -445,19 +435,6 @@ function orgList(): JSX.Element {
         </>
       )}
       {/* Create Organization Modal */}
-      {/**
-       * Renders the `OrganizationModal` component.
-       *
-       * @param showModal - A boolean indicating whether the modal should be displayed.
-       * @param toggleModal - A function to toggle the visibility of the modal.
-       * @param formState - The state of the form in the organization modal.
-       * @param setFormState - A function to update the state of the form in the organization modal.
-       * @param createOrg - A function to handle the submission of the organization creation form.
-       * @param t - A translation function for localization.
-       * @param userData - Information about the current user.
-       * @returns JSX element representing the `OrganizationModal`.
-       */}
-
       <OrganizationModal
         showModal={showModal}
         toggleModal={toggleModal}
@@ -469,45 +446,41 @@ function orgList(): JSX.Element {
         userData={userData}
       />
       {/* Plugin Notification Modal after Org is Created */}
-      <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
-        <Modal.Header
-          className={styles.modalHeader}
-          closeButton
-          data-testid="pluginNotificationHeader"
-        >
-          <Modal.Title className="text-white">
-            {t('manageFeatures')}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <section id={styles.grid_wrapper}>
-            <div>
-              <h4 className={styles.titlemodaldialog}>
-                {t('manageFeaturesInfo')}
-              </h4>
-
-              <div className={styles.pluginStoreBtnContainer}>
-                <Link
-                  className={pluginBtnClass}
-                  data-testid="goToStore"
-                  to={storeUrl}
-                >
-                  {t('goToStore')}
-                </Link>
-                <Button
-                  type="submit"
-                  className={styles.enableEverythingBtn}
-                  onClick={closeDialogModal}
-                  value="invite"
-                  data-testid="enableEverythingForm"
-                >
-                  {t('enableEverything')}
-                </Button>
-              </div>
+      <BaseModal
+        show={dialogModalisOpen}
+        onHide={toggleDialogModal}
+        title={t('manageFeatures')}
+        headerClassName={styles.modalHeader}
+        dataTestId="pluginNotificationHeader"
+        centered={false}
+        backdrop={true}
+      >
+        <section id={styles.grid_wrapper}>
+          <div>
+            <h4 className={styles.titlemodaldialog}>
+              {t('manageFeaturesInfo')}
+            </h4>
+            <div className={styles.pluginStoreBtnContainer}>
+              <Link
+                className={pluginBtnClass}
+                data-testid="goToStore"
+                to={storeUrl}
+              >
+                {t('goToStore')}
+              </Link>
+              <Button
+                type="submit"
+                className={styles.enableEverythingBtn}
+                onClick={closeDialogModal}
+                value="invite"
+                data-testid="enableEverythingForm"
+              >
+                {t('enableEverything')}
+              </Button>
             </div>
-          </section>
-        </Modal.Body>
-      </Modal>
+          </div>
+        </section>
+      </BaseModal>
     </div>
   );
 }

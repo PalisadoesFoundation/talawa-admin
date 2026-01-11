@@ -46,7 +46,6 @@ import {
 } from 'shared-components/DataGridWrapper';
 
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
-import Loader from 'components/Loader/Loader';
 import Avatar from 'components/Avatar/Avatar';
 import styles from 'style/app-fixed.module.css';
 import { GET_EVENT_VOLUNTEER_GROUPS } from 'GraphQl/Queries/EventVolunteerQueries';
@@ -54,6 +53,7 @@ import VolunteerGroupModal from './modal/VolunteerGroupModal';
 import VolunteerGroupDeleteModal from './deleteModal/VolunteerGroupDeleteModal';
 import VolunteerGroupViewModal from './viewModal/VolunteerGroupViewModal';
 import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 
 enum ModalState {
   SAME = 'same',
@@ -150,7 +150,11 @@ function volunteerGroups(): JSX.Element {
   }, [eventData]);
 
   if (groupsLoading) {
-    return <Loader size="xl" />;
+    return (
+      <LoadingState isLoading={groupsLoading} variant="spinner">
+        <div></div>
+      </LoadingState>
+    );
   }
 
   if (groupsError) {

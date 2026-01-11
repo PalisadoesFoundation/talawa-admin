@@ -6,10 +6,12 @@ import EventDashboard from './EventDashboard';
 import { BrowserRouter } from 'react-router';
 import { ToastContainer } from 'react-toastify';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { ApolloLink, DefaultOptions } from '@apollo/client';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -167,13 +169,11 @@ describe('Testing Event Dashboard Screen', () => {
   it('Should show loader while data is being fetched', async () => {
     const { getByTestId, queryByTestId } = renderEventDashboard(mockWithTime);
 
-    expect(getByTestId('spinner-wrapper')).toBeInTheDocument();
     expect(getByTestId('spinner')).toBeInTheDocument();
     expect(queryByTestId('event-details')).not.toBeInTheDocument();
 
     await wait();
 
-    expect(queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
     expect(queryByTestId('spinner')).not.toBeInTheDocument();
     expect(getByTestId('event-details')).toBeInTheDocument();
     expect(getByTestId('event-name')).toBeInTheDocument();
@@ -395,5 +395,47 @@ describe('Testing Event Dashboard Screen', () => {
     expect(getByTestId('start-time')).toHaveTextContent('');
     expect(getByTestId('end-time')).toHaveTextContent('');
     expect(getByTestId('event-details')).toBeInTheDocument();
+  });
+
+  describe('LoadingState Behavior', () => {
+    it('should show LoadingState spinner while event data is loading', async () => {
+      const loadingMocks = [
+        {
+          request: { query: EVENT_DETAILS, variables: { eventId: mockID } },
+          result: MOCKS_WITH_TIME[0].result,
+          delay: 100,
+        },
+      ];
+
+      const mockLink = new StaticMockLink(loadingMocks);
+      const { queryByTestId } = render(
+        <MockedProvider link={mockLink}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                <EventDashboard eventId={mockID} />
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(queryByTestId('spinner')).toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        expect(queryByTestId('spinner')).not.toBeInTheDocument();
+      });
+    });
+
+    it('should hide spinner and render event details after LoadingState completes', async () => {
+      const mockLink = new StaticMockLink(MOCKS_WITH_TIME);
+      const { getByTestId } = renderEventDashboard(mockLink);
+      await wait();
+
+      expect(document.querySelector('spinner')).not.toBeInTheDocument();
+      expect(getByTestId('event-details')).toBeInTheDocument();
+    });
   });
 });

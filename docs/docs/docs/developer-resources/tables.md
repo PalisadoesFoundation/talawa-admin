@@ -1,50 +1,3 @@
-## Pagination
-
-The DataTable supports both client-side and server-side pagination for consistent UX across screens.
-
-### Client-side Pagination
-
-Use for small datasets. Data is sliced in memory.
-
-```tsx
-import { DataTable } from 'src/shared-components/DataTable/DataTable';
-
-<DataTable<User>
-  data={users}
-  columns={[nameCol, emailCol]}
-  rowKey="id"
-  paginationMode="client"
-  pageSize={10}
-/>;
-```
-
-### Server-side Pagination (GraphQL cursor)
-
-Use for large datasets. Relies on GraphQL-style `pageInfo` and `onLoadMore`.
-
-```tsx
-<DataTable<User>
-  data={rows}
-  columns={[nameCol]}
-  rowKey="id"
-  paginationMode="server"
-  pageInfo={pageInfo}
-  loadingMore={loadingMore}
-  onLoadMore={() => fetchMore({ variables: { after: pageInfo?.endCursor } })}
-/>;
-```
-
-### Accessibility notes
-
-- Pagination controls use `aria-label` and `aria-live` for screen reader support.
-- Disabled states are set for prev/next buttons on first/last page.
-- The "Load more" button in server mode uses `aria-busy` and disables while loading.
-
-:::note Trade-offs
-- Client mode: simple and fast for small datasets; slices in memory.
-- Server mode: required for large lists; relies on pageInfo and onLoadMore.
-:::
-
 ---
 id: tablefix-tables
 title: Data Tables
@@ -67,6 +20,8 @@ tags:
     accessibility,
   ]
 ---
+
+## Introduction
 
 What you’ll learn
 
@@ -212,8 +167,21 @@ export interface DataTableProps<T> {
   loadingMore?: boolean;
 
   // Loading optimizations
+  /**
+   * Number of skeleton rows to render during loading/overlay states.
+   * Default: 5
+   */
   skeletonRows?: number;
+  /**
+   * When true and data is already present, show a translucent overlay on top of the table
+   * while a refetch is in flight. Overlay displays skeleton grid matching table columns.
+   */
   loadingOverlay?: boolean;
+  /**
+   * When true, append skeleton rows at the end of the table body to indicate a partial
+   * loading state (e.g., while fetchMore is running in incremental pagination).
+   */
+  loadingMore?: boolean;
 
   // Sorting
   serverSort?: boolean;
@@ -349,7 +317,11 @@ Empty and Error
 />
 ```
 
-## Hook: useTableData
+## Hooks
+
+This section explains how we use hooks in the table related components.
+
+### Hook: useTableData
 
 The useTableData hook flattens GraphQL connections (edges → rows) and exposes pagination signals.
 
@@ -364,23 +336,29 @@ type Connection<T> =
   | null
   | undefined;
 
-export interface UseTableDataOptions<TNode, TRow> {
-  path: string[] | ((data: any) => Connection<TNode> | undefined);
+export interface UseTableDataOptions<TNode, TRow, TData> {
+  path: ((data: TData) => Connection<TNode> | undefined) | (string | number)[];
   transformNode?: (node: TNode) => TRow;
   deps?: ReadonlyArray<unknown>;
 }
 
-export function useTableData<TRow = unknown, TNode = unknown>(
-  result: QueryResult<any>,
-  options: UseTableDataOptions<TNode, TRow>,
+export function useTableData<TData = unknown, TRow = unknown, TNode = unknown>(
+  result: QueryResult<TData>,
+  options: UseTableDataOptions<TNode, TRow, TData>,
 ) {
   const { data, loading, error, refetch, fetchMore, networkStatus } = result;
   const { path, transformNode, deps = [] } = options;
 
-  const getConnection = (d: any): Connection<TNode> =>
+  const getConnection = (d: TData): Connection<TNode> =>
     typeof path === 'function'
       ? path(d)
-      : path.reduce((acc, k) => (acc ? acc[k] : undefined), d);
+      : path.reduce<unknown>(
+          (acc, k) =>
+            acc != null && typeof acc === 'object'
+              ? (acc as Record<string | number, unknown>)[k]
+              : undefined,
+          d as unknown,
+        );
 
   const connection = useMemo(() => getConnection(data), [data, ...deps]);
 
@@ -414,15 +392,21 @@ Example with GraphQL connection
 import { useQuery } from '@apollo/client';
 import { useTableData } from 'src/shared-components/DataTable/hooks/useTableData';
 import { DataTable } from 'src/shared-components/DataTable/DataTable';
+import type { PageInfo } from 'src/shared-components/DataTable/types';
 
 type User = { id: string; name: string; email: string };
+type UsersQuery = {
+  users?: {
+    edges?: Array<{ node: User | null } | null> | null;
+    pageInfo?: PageInfo | null;
+  } | null;
+};
 
-const { data, loading, error, fetchMore, networkStatus } =
-  useQuery(/* GET_USERS */);
-const { rows, pageInfo, loadingMore } = useTableData<User, User>(
-  { data, loading, error, fetchMore, networkStatus } as any,
-  { path: ['users'], transformNode: (n) => n },
-);
+const result = useQuery<UsersQuery>(/* GET_USERS */);
+const { rows, pageInfo, loadingMore } = useTableData<UsersQuery, User, User>(result, {
+  path: ['users'],
+  transformNode: (n) => n,
+});
 
 <DataTable<User>
   data={rows}
@@ -431,16 +415,20 @@ const { rows, pageInfo, loadingMore } = useTableData<User, User>(
   paginationMode="server"
   pageInfo={pageInfo}
   loadingMore={loadingMore}
-  onLoadMore={() => fetchMore({ variables: { after: pageInfo?.endCursor } })}
+  onLoadMore={() => result.fetchMore({ variables: { after: pageInfo?.endCursor } })}
 />;
 ```
 
 ## Pagination
 
-Client mode
+The DataTable supports both client-side and server-side pagination for consistent UX across screens.
+
+### Client-side Pagination
+
+Use for small datasets. Data is sliced in memory.
 
 ```tsx
-import { PaginationControls } from 'src/shared-components/DataTable/Pagination';
+import { DataTable } from 'src/shared-components/DataTable/DataTable';
 
 <DataTable<User>
   data={users}
@@ -451,7 +439,9 @@ import { PaginationControls } from 'src/shared-components/DataTable/Pagination';
 />;
 ```
 
-Server mode (cursor)
+### Server-side Pagination (GraphQL cursor)
+
+Use for large datasets. Relies on GraphQL-style `pageInfo` and `onLoadMore`.
 
 ```tsx
 <DataTable<User>
@@ -465,7 +455,13 @@ Server mode (cursor)
 />
 ```
 
-:::note Trade‑offs
+### Accessibility notes
+
+- Pagination controls use `aria-label` and `aria-live` for screen reader support.
+- Disabled states are set for prev/next buttons on first/last page.
+- The "Load more" button in server mode uses `aria-busy` and disables while loading.
+
+:::note Trade-offs
 
 - Client mode: simple and fast for small datasets; slices in memory.
 - Server mode: required for large lists; relies on pageInfo and onLoadMore.
@@ -473,33 +469,56 @@ Server mode (cursor)
 
 ## Loading state optimizations
 
-Initial skeleton, refetch overlay, and “loading more” rows.
+Optimized loading states prevent layout shift and improve perceived performance. Skeleton rows match the table's column structure.
+
+### Initial load skeleton
+
+When `loading=true` and no data yet, displays a skeleton grid.
 
 ```tsx
 <DataTable<User>
   data={[]}
   columns={[nameCol, emailCol]}
   loading
-  skeletonRows={5}
+  skeletonRows={5}  // default: 5
 />
 ```
 
+### Refetch overlay
+
+When `loading=true` AND data already present, shows a translucent overlay with skeleton grid on top of existing rows.
+This avoids content jump during refresh.
+
 ```tsx
-// overlay during refetch when rows already present
 <DataTable<User>
   data={users}
   columns={[nameCol, emailCol]}
   loading
-  loadingOverlay
+  loadingOverlay  // true to show overlay
 />
 ```
 
+### Partial loading (fetchMore)
+
+When `loadingMore=true`, appends skeleton rows at the bottom of the table to indicate incremental data fetching.
+
 ```tsx
-// append skeleton rows while fetching more pages
-<DataTable<User> data={users} columns={[nameCol, emailCol]} loadingMore />
+<DataTable<User>
+  data={users}
+  columns={[nameCol, emailCol]}
+  loadingMore  // append skeleton rows
+  skeletonRows={5}
+/>
 ```
 
-Essential CSS extracts
+### Accessibility & styling
+
+Skeleton cells render with:
+- `aria-hidden="true"` (visual placeholder, not announced)
+- `role="status"` + `aria-live="polite"` (grid announces loading to screen readers)
+- Shimmer animation (linear gradient) for visual feedback
+
+Essential CSS extracts:
 
 ```css
 /* src/shared-components/DataTable/DataTable.module.css */
@@ -511,22 +530,39 @@ Essential CSS extracts
     background-position: 200% 50%;
   }
 }
-.skeletonCell {
+.dataSkeletonCell {
   height: 16px;
   border-radius: 6px;
   background: linear-gradient(90deg, #eee 0%, #f5f5f5 50%, #eee 100%);
   background-size: 200% 100%;
   animation: shimmer 1.2s ease-in-out infinite;
 }
-.loadingOverlay {
+.dataLoadingOverlay {
   position: absolute;
   inset: 0;
-  display: grid;
-  place-items: center;
-  background: rgba(255, 255, 255, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.6);
   backdrop-filter: blur(1px);
   pointer-events: none;
+  z-index: 10;
+  border-radius: 6px;
 }
+```
+
+### TableLoader component
+
+For reusable skeleton grids (e.g., in dialogs or custom loading states):
+
+```tsx
+import { TableLoader } from 'src/shared-components/DataTable/TableLoader';
+
+// Grid variant (no overlay)
+<TableLoader columns={columns} rows={5} ariaLabel="Loading users" />
+
+// Overlay variant (translucent with grid)
+<TableLoader columns={columns} rows={3} asOverlay />
 ```
 
 ## Sorting

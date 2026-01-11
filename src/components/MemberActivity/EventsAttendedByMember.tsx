@@ -26,7 +26,7 @@ import React from 'react';
 import { useQuery } from '@apollo/client';
 import { EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
 import EventAttendedCard from './Card/EventsAttendedCardItem';
-import { Spinner } from 'react-bootstrap';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 
 interface InterfaceEventsAttendedByMember {
   eventsId: string;
@@ -43,13 +43,6 @@ function EventsAttendedByMember({
     variables: { eventId: eventsId },
   });
 
-  if (loading)
-    return (
-      <div data-testid="loading" className="loading-state">
-        <Spinner />
-        <p>Loading event details...</p>
-      </div>
-    );
   if (error)
     return (
       <div data-testid="error" className="error-state">
@@ -58,18 +51,23 @@ function EventsAttendedByMember({
     );
 
   // Support both legacy and current schema fields from EVENT_DETAILS
+  const eventData = events?.event;
   const { organization, id, _id, startAt, startDate, name, title, location } =
-    events.event;
+    eventData || {};
 
   return (
-    <EventAttendedCard
-      orgId={organization._id ?? organization.id}
-      eventId={_id ?? id}
-      key={_id ?? id}
-      startdate={startDate ?? startAt}
-      title={title ?? name}
-      location={location}
-    />
+    <LoadingState isLoading={loading} variant="spinner">
+      {eventData && (
+        <EventAttendedCard
+          orgId={organization._id ?? organization.id}
+          eventId={_id ?? id}
+          key={_id ?? id}
+          startdate={startDate ?? startAt}
+          title={title ?? name}
+          location={location}
+        />
+      )}
+    </LoadingState>
   );
 }
 

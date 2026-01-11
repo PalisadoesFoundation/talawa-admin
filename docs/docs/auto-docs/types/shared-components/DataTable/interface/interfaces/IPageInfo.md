@@ -4,7 +4,7 @@
 
 # Interface: IPageInfo
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L54)
+Defined in: [src/types/shared-components/DataTable/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L57)
 
 PageInfo for DataTable component with server-side pagination
 
@@ -14,7 +14,7 @@ PageInfo for DataTable component with server-side pagination
 
 > `optional` **endCursor**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L70)
+Defined in: [src/types/shared-components/DataTable/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L73)
 
 Cursor for the end of the current page
 
@@ -24,7 +24,7 @@ Cursor for the end of the current page
 
 > **hasNextPage**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L58)
+Defined in: [src/types/shared-components/DataTable/interface.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L61)
 
 Indicates if there is a next page available
 
@@ -34,7 +34,7 @@ Indicates if there is a next page available
 
 > **hasPreviousPage**: `boolean`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L62)
+Defined in: [src/types/shared-components/DataTable/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L65)
 
 Indicates if there is a previous page available
 
@@ -44,6 +44,6 @@ Indicates if there is a previous page available
 
 > `optional` **startCursor**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L66)
+Defined in: [src/types/shared-components/DataTable/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L69)
 
 Cursor for the start of the current page

@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/shared-components/BaseModal/BaseModal.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/BaseModal/BaseModal.tsx#L69)
+Defined in: [src/shared-components/BaseModal/BaseModal.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/BaseModal/BaseModal.tsx#L28)
 
 ## Parameters
 

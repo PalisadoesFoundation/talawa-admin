@@ -18,6 +18,16 @@ Base interface for common event properties.
 
 ## Properties
 
+### \_id
+
+> **\_id**: `string`
+
+Defined in: [src/utils/interfaces.ts:425](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L425)
+
+The unique identifier of the event.
+
+***
+
 ### allDay
 
 > **allDay**: `boolean`
@@ -55,16 +65,6 @@ The end date of the event.
 Defined in: [src/utils/interfaces.ts:432](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L432)
 
 The end time of the event.
-
-***
-
-### id
-
-> **id**: `string`
-
-Defined in: [src/utils/interfaces.ts:425](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L425)
-
-The unique identifier of the event.
 
 ***
 

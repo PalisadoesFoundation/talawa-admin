@@ -12,21 +12,21 @@ import { getPluginManager } from 'plugin/manager';
 import { discoverAndRegisterAllPlugins } from 'plugin/registry';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 const OrganizationScreen = lazy(
-  () => import('components/OrganizationScreen/OrganizationScreen'),
+  () => import('components/AdminPortal/OrganizationScreen/OrganizationScreen'),
 );
 const PostsPage = lazy(() => import('shared-components/posts/posts'));
 
 const SuperAdminScreen = lazy(
-  () => import('components/SuperAdminScreen/SuperAdminScreen'),
+  () => import('components/AdminPortal/SuperAdminScreen/SuperAdminScreen'),
 );
-const BlockUser = lazy(() => import('screens/BlockUser/BlockUser'));
+const BlockUser = lazy(() => import('screens/AdminPortal/BlockUser/BlockUser'));
 const EventManagement = lazy(
   () => import('screens/AdminPortal/EventManagement/EventManagement'),
 );
@@ -34,13 +34,15 @@ const ForgotPassword = lazy(
   () => import('screens/ForgotPassword/ForgotPassword'),
 );
 const MemberDetail = lazy(
-  () => import('screens/AdminPortal/MemberDetail/MemberDetail'),
+  () => import('shared-components/ProfileForm/ProfileForm'),
 );
 const OrgContribution = lazy(
-  () => import('screens/OrgContribution/OrgContribution'),
+  () => import('screens/AdminPortal/OrgContribution/OrgContribution'),
 );
 const OrgList = lazy(() => import('screens/AdminPortal/OrgList/OrgList'));
-const OrgSettings = lazy(() => import('screens/OrgSettings/OrgSettings'));
+const OrgSettings = lazy(
+  () => import('screens/AdminPortal/OrgSettings/OrgSettings'),
+);
 
 const OrganizationDashboard = lazy(
   () =>
@@ -59,7 +61,7 @@ const OrganizationTransactions = lazy(
     ),
 );
 const FundCampaignPledge = lazy(
-  () => import('screens/FundCampaignPledge/FundCampaignPledge'),
+  () => import('screens/AdminPortal/FundCampaignPledge/FundCampaignPledge'),
 );
 const OrganizationPeople = lazy(
   () => import('screens/AdminPortal/OrganizationPeople/OrganizationPeople'),
@@ -75,11 +77,13 @@ const CommunityProfile = lazy(
   () => import('screens/AdminPortal/CommunityProfile/CommunityProfile'),
 );
 const OrganizationVenues = lazy(
-  () => import('screens/OrganizationVenues/OrganizationVenues'),
+  () => import('screens/AdminPortal/OrganizationVenues/OrganizationVenues'),
 );
-const Leaderboard = lazy(() => import('screens/Leaderboard/Leaderboard'));
+const Leaderboard = lazy(
+  () => import('screens/AdminPortal/Leaderboard/Leaderboard'),
+);
 const Advertisements = lazy(
-  () => import('components/Advertisements/Advertisements'),
+  () => import('components/AdminPortal/Advertisements/Advertisements'),
 );
 const Donate = lazy(() => import('screens/UserPortal/Donate/Donate'));
 const Transactions = lazy(
@@ -90,7 +94,6 @@ const Organizations = lazy(
   () => import('screens/UserPortal/Organizations/Organizations'),
 );
 const People = lazy(() => import('screens/UserPortal/People/People'));
-const Settings = lazy(() => import('screens/UserPortal/Settings/Settings'));
 const Chat = lazy(() => import('screens/UserPortal/Chat/Chat'));
 const EventDashboardScreen = lazy(
   () => import('components/EventDashboardScreen/EventDashboardScreen'),
@@ -194,7 +197,13 @@ function App(): React.ReactElement {
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
     >
-      <Suspense fallback={<Loader />}>
+      <Suspense
+        fallback={
+          <LoadingState isLoading={true} variant="spinner">
+            <div />
+          </LoadingState>
+        }
+      >
         <NotificationToastContainer />
         <Routes>
           <Route path="/" element={<LoginPage />} />
@@ -204,7 +213,7 @@ function App(): React.ReactElement {
             <Route element={<SuperAdminScreen />}>
               <Route path="/orglist" element={<OrgList />} />
               <Route path="/notification" element={<Notification />} />
-              <Route path="/member" element={<MemberDetail />} />
+              <Route path="/admin/profile" element={<MemberDetail />} />
               <Route path="/users" element={<Users />} />
               <Route path="/communityProfile" element={<CommunityProfile />} />
               <Route path="/pluginstore" element={<PluginStore />} />
@@ -241,7 +250,7 @@ function App(): React.ReactElement {
                 path="orgtags/:orgId/subTags/:tagId"
                 element={<SubTags />}
               />
-              <Route path="/member/:orgId" element={<MemberDetail />} />
+              <Route path="/member/:orgId/:userId" element={<MemberDetail />} />
               <Route
                 path="/orgevents/:orgId"
                 element={<OrganizationEvents />}
@@ -299,7 +308,7 @@ function App(): React.ReactElement {
           {/* User Portal Routes */}
           <Route element={<SecuredRouteForUser />}>
             <Route path="/user/organizations" element={<Organizations />} />
-            <Route path="/user/settings" element={<Settings />} />
+            <Route path="/user/settings" element={<MemberDetail />} />
             {/* User global plugin routes (no orgId required) */}
             <Route element={<UserGlobalScreen />}>
               {userGlobalPluginRoutes.map((route) => (

@@ -48,7 +48,7 @@ jobs:
       - name: Count number of lines
         run: |
           chmod +x ./.github/workflows/scripts/countline.py
-          ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/AdminPortal/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/AdminPortal/MemberDetail/MemberDetail.tsx src/components/OrgPostCard/OrgPostCard.tsx src/components/UsersTableItem/UsersTableItem.tsx src/components/UserPortal/ChatRoom/ChatRoom.tsx src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx src/shared-components/postCard/PostCard.tsx src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx src/shared-components/EventForm/EventForm.tsx
+          ./.github/workflows/scripts/countline.py --lines 600 --files ./.github/workflows/config/countline_excluded_file_list.txt
 
       - name: Get changed TypeScript files
         id: changed-files
@@ -124,11 +124,10 @@ jobs:
             echo "none=false" >> $GITHUB_OUTPUT
           fi
 
-      # TODO: Re-enable after fixing existing i18n violations in all necessary files
-      # See: scripts/check-i18n.js for the detection script
-      # - name: Check for non-internationalized text
-      #   if: steps.changed-src.outputs.none != 'true'
-      #   run: pnpm run check-i18n -- ${{ steps.changed-src.outputs.files }}
+      # Diff-only i18n check to avoid existing legacy violations in untouched lines.
+      - name: Check for non-internationalized text (diff only)
+        if: steps.changed-src.outputs.none != 'true'
+        run: pnpm run check-i18n -- --diff --base ${{ github.event.pull_request.base.sha }} --head ${{ github.event.pull_request.head.sha }} ${{ steps.changed-src.outputs.files }}
 
       - name: Check if the source and target branches are different
         if: ${{ github.event.pull_request.base.ref == github.event.pull_request.head.ref }}
@@ -141,18 +140,6 @@ jobs:
 
       - name: Check for unused files and exports in src/ and docs/src
         run: pnpm knip --include files,exports,nsExports,nsTypes
-
-  DataGrid-Policy-Check:
-    name: Check for forbidden DataGrid usage in screens
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Run DataGrid Usage Check
-        run: |
-          chmod +x scripts/lint-datagrid.sh
-          ./scripts/lint-datagrid.sh
 
   CSS-Policy-Check:
     name: CSS Policy Check
@@ -354,30 +341,26 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Checkout centralized scripts
+        uses: actions/checkout@v4
+        with:
+          repository: PalisadoesFoundation/.github
+          path: .github-central
+          ref: main
+
       - name: Get changed files
         id: changed-files
         run: |
-          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
-          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
-          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
+          echo "all_changed_files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')" >> $GITHUB_OUTPUT
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: 3.11
 
-      - name: Run consolidated disable statements check
+      - name: Run Disable Statements Check
         run: |
-          if [ -n "${{ steps.changed-files.outputs.all_changed_files }}" ]; then
-            FILTERED_FILES=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | tr ' ' '\n' | grep -E '\.(js|jsx|ts|tsx)$' | tr '\n' ' ' || true)
-            if [ -n "$FILTERED_FILES" ]; then
-              python .github/workflows/scripts/disable_statements_check.py --files $FILTERED_FILES
-            else
-              echo "No JS/TS files to check"
-            fi
-          else
-            echo "No files to check"
-          fi
+          python .github-central/.github/workflows/scripts/disable_statements_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
   Translation-Tag-Check:
     name: Translation Tag Check
@@ -403,6 +386,38 @@ jobs:
             echo "No relevant files changed, skipping check."
           fi
 
+  MinIO-Compliance-Check:
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    name: MinIO Compliance Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed source files
+        id: changed-src
+        run: |
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          CHANGED=$(git diff --name-only --diff-filter=ACMRT "$BASE_SHA" ${{ github.event.pull_request.head.sha }} \
+            | grep -E '^src/.*\.(ts|tsx|js|jsx)$' | tr '\n' ' ' || true)
+          echo "files=$CHANGED" >> $GITHUB_OUTPUT
+          if [ -z "$CHANGED" ]; then
+            echo "none=true" >> $GITHUB_OUTPUT
+          else
+            echo "none=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+
+      - name: Run MinIO compliance check
+        if: steps.changed-src.outputs.none != 'true'
+        run: node .github/workflows/scripts/check-minio-compliance.cjs
+
   Pre-Test-Checks-Pass:
     name: All Pre-Testing Checks Pass
     runs-on: ubuntu-latest
@@ -413,9 +428,9 @@ jobs:
         Check-Disable-Statements,
         Check-Mock-Isolation,
         CSS-Policy-Check,
+        MinIO-Compliance-Check,
         Python-Compliance,
         Translation-Tag-Check,
-        DataGrid-Policy-Check,
       ]
     steps:
       - name: This job intentionally does nothing

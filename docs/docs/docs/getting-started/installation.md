@@ -30,6 +30,14 @@ If you're using Windows with WSL:
 
 The only prerequisite is having `git` installed on your system (usually pre-installed on macOS/Linux, or install via your package manager).
 
+**Additional prerequisites for contributors:**
+- **curl** or **wget**: Required by pre-commit hooks to download centralized scripts
+  - **macOS**: `curl` is pre-installed
+  - **Linux (Ubuntu/Debian)**: Install with `sudo apt install curl`
+  - **Linux (Fedora/RHEL)**: Install with `sudo dnf install curl`
+  - **Windows (WSL)**: Install with `sudo apt install curl` (inside WSL)
+  - Alternatively, you can install `wget` instead
+
 ### Setting up the repository
 
 First you need a local copy of `talawa-admin`. Run the following command in the directory of choice on your local system.
