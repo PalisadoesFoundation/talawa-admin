@@ -5,9 +5,9 @@
  * Handles loading and error states appropriately.
  *
  * @param props - The props for the component containing:
- * - orgId: Organization ID to fetch and display
- * - hideDrawer: Whether the drawer is hidden/collapsed
- * - isProfilePage: Whether current page is the profile page
+ * @param orgId - Organization ID to fetch and display
+ * @param hideDrawer - Whether the drawer is hidden/collapsed
+ * @param isProfilePage - Whether current page is the profile page
  *
  * @returns The rendered SidebarOrgSection component or null if drawer is hidden
  *
