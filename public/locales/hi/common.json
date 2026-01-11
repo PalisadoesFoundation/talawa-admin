@@ -160,7 +160,6 @@
   "mobilePhoneNumber": "मोबाइल फोन नंबर",
   "personalDetailsHeading": "प्रोफ़ाइल विवरण",
   "workPhoneNumber": "कार्य फोन नंबर",
-
   "showPassword": "पासवर्ड दिखाएं",
   "hidePassword": "पासवर्ड छुपाएं",
   "volunteer": "स्वयंसेवक",
@@ -254,13 +253,11 @@
   "invalidDetailsMessage": "अमान्य विवरण। कृपया अपना इनपुट जांचें।",
   "logoutFailed": "लॉगआउट विफल रहा। कृपया पुनः प्रयास करें।",
   "or": "या",
-  "eventNotFound": "ईवेंट आईडी {{id}} के साथ नहीं मिला"
+  "eventNotFound": "ईवेंट आईडी {{id}} के साथ नहीं मिला",
   "sortingIcon": "क्रमबद्ध करने का आइकन",
   "createEvent": "कार्यक्रम बनाएँ",
   "eventCreated": "कार्यक्रम सफलतापूर्वक बनाया गया",
   "eventDetails": "कार्यक्रम विवरण",
   "peopleTabTagName": "लोग",
-  "or": "या",
-  "eventNotFound": "ईवेंट आईडी {{id}} के साथ नहीं मिला",
   "required": "आवश्यक"
 }

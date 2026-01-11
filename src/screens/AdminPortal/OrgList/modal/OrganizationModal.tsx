@@ -44,14 +44,6 @@
  *
  * @returns The rendered organization modal.
  */
-import React from 'react';
-import { Form, Row, Col, Button } from 'react-bootstrap';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
-import { useMinioUpload } from 'utils/MinioUpload';
-import type { ChangeEvent } from 'react';
-import styles from 'style/app-fixed.module.css';
-import { countryOptions } from 'utils/formEnumFields';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import React, { type ChangeEvent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -110,15 +102,11 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
       dataTestId="modalOrganization"
       title={t('createOrganization')}
       headerClassName={styles.modalHeader}
-      title={t('createOrganization')}
-      headerClassName={styles.modalHeader}
-      dataTestId="modalOrganizationHeader"
     >
       <Form onSubmitCapture={createOrg}>
         <Form.Label htmlFor="orgname">{tCommon('name')}</Form.Label>
         <Form.Control
           type="name"
-          type="description"
           id="orgname"
           className={`mb-3 ${styles.inputField}`}
           placeholder={t('enterName')}
@@ -128,7 +116,6 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           value={formState.name}
           onChange={(e): void => {
             const inputText = e.target.value;
-            if (inputText.length < 50) {
             if (inputText.length <= 50) {
               setFormState({ ...formState, name: e.target.value });
             }
@@ -147,7 +134,6 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           value={formState.description}
           onChange={(e): void => {
             const descriptionText = e.target.value;
-            if (descriptionText.length < 200) {
             if (descriptionText.length <= 200) {
               setFormState({ ...formState, description: e.target.value });
             }
@@ -163,7 +149,6 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               value={formState.countryCode}
               onChange={(e): void => {
                 const inputText = e.target.value;
-                if (inputText.length < 50) {
                 if (inputText.length <= 50) {
                   setFormState({ ...formState, countryCode: e.target.value });
                 }
@@ -192,7 +177,6 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               value={formState.state}
               onChange={(e): void => {
                 const inputText = e.target.value;
-                if (inputText.length < 50) {
                 if (inputText.length <= 50) {
                   setFormState({ ...formState, state: e.target.value });
                 }
@@ -211,7 +195,6 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               value={formState.city}
               onChange={(e): void => {
                 const inputText = e.target.value;
-                if (inputText.length < 50) {
                 if (inputText.length <= 50) {
                   setFormState({ ...formState, city: e.target.value });
                 }
@@ -227,7 +210,6 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               value={formState.postalCode}
               onChange={(e): void => {
                 const inputText = e.target.value;
-                if (inputText.length < 50) {
                 if (inputText.length <= 50) {
                   setFormState({ ...formState, postalCode: e.target.value });
                 }
@@ -246,7 +228,6 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               value={formState.addressLine1}
               onChange={(e): void => {
                 const inputText = e.target.value;
-                if (inputText.length < 50) {
                 if (inputText.length <= 50) {
                   setFormState({
                     ...formState,
@@ -265,7 +246,6 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               value={formState.addressLine2}
               onChange={(e): void => {
                 const inputText = e.target.value;
-                if (inputText.length < 50) {
                 if (inputText.length <= 50) {
                   setFormState({
                     ...formState,
@@ -295,7 +275,6 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
 
               if (!validation.isValid) {
                 NotificationToast.error(
-                  validation.errorMessage || t('invalidFileType'),
                   validation.errorMessage ?? t('imageUploadError'),
                 );
                 return;
@@ -306,7 +285,6 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                   await uploadFileToMinio(file, 'organization');
                 setFormState({ ...formState, avatar: avatarobjectName });
                 NotificationToast.success(t('imageUploadSuccess'));
-              } catch {
               } catch (error) {
                 console.error('Error uploading image:', error);
                 NotificationToast.error(t('imageUploadError'));

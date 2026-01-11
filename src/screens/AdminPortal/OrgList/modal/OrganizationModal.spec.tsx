@@ -436,7 +436,6 @@ describe('OrganizationModal Component', () => {
     await waitFor(() => {
       expect(NotificationToastMocks.error).toHaveBeenCalledWith(
         'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
-        expect.any(Object),
       );
     });
     expect(mockUploadFileToMinio).not.toHaveBeenCalled();
@@ -504,9 +503,7 @@ describe('OrganizationModal Component', () => {
       </Provider>,
     );
 
-    expect(
-      screen.queryByTestId('modalOrganization'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByTestId('modalOrganization')).not.toBeInTheDocument();
   });
 
   test('should call toggleModal when close button is clicked', async () => {
@@ -581,7 +578,6 @@ describe('OrganizationModal Component', () => {
     await waitFor(() => {
       expect(NotificationToastMocks.error).toHaveBeenCalledWith(
         'File is too large. Maximum size is 5MB.',
-        expect.any(Object),
       );
       expect(mockUploadFileToMinio).not.toHaveBeenCalled();
       expect(mockSetFormState).not.toHaveBeenCalled();
@@ -598,9 +594,6 @@ describe('OrganizationModal Component', () => {
     await waitFor(() => {
       expect(NotificationToastMocks.success).toHaveBeenCalledWith(
         'imageUploadSuccess',
-      expect(toastMocks.success).toHaveBeenCalledWith(
-        'imageUploadSuccess',
-        expect.any(Object),
       );
     });
     expect(mockSetFormState).toHaveBeenCalledWith(
@@ -619,9 +612,6 @@ describe('OrganizationModal Component', () => {
     await waitFor(() => {
       expect(NotificationToastMocks.error).toHaveBeenCalledWith(
         'imageUploadError',
-      expect(toastMocks.error).toHaveBeenCalledWith(
-        'imageUploadError',
-        expect.any(Object),
       );
     });
     expect(mockSetFormState).not.toHaveBeenCalled();

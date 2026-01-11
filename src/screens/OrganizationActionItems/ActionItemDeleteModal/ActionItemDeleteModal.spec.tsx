@@ -36,14 +36,6 @@ const NotificationToastMocks = vi.hoisted(() => ({
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: NotificationToastMocks,
-vi.mock('components/NotificationToast/NotificationToast', () => ({
-  NotificationToast: {
-    success: vi.fn(),
-    error: vi.fn(),
-    warning: vi.fn(),
-    info: vi.fn(),
-    dismiss: vi.fn(),
-  },
 }));
 
 let successLink: StaticMockLink;

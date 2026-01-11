@@ -23,7 +23,6 @@ import {
   InterfaceDonation,
   InterfaceDonationCardProps,
 } from 'types/Donation/interface';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 /**
  * Component for handling donations to an organization.
@@ -106,14 +105,8 @@ export default function Donate(): JSX.Element {
         },
       });
 
-      try {
-        await refetch();
-        NotificationToast.success(t('success'));
-      } catch (error) {
-        errorHandler(t, error);
-      }
-      refetch();
-      NotificationToast.success(t('success') as string);
+      await refetch();
+      NotificationToast.success(t('success'));
     } catch (error) {
       errorHandler(t, error);
     }

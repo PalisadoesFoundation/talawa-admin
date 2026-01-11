@@ -256,10 +256,8 @@
   "invalidDetailsMessage": "Detalles inválidos. Por favor verifique su entrada.",
   "logoutFailed": "Error al cerrar sesión. Por favor, inténtelo de nuevo.",
   "or": "o",
-  "eventNotFound": "Evento con id {{id}} no encontrado"
+  "eventNotFound": "Evento con id {{id}} no encontrado",
   "sortingIcon": "icono de ordenación",
   "peopleTabTagName": "Personas",
-  "or": "o",
-  "eventNotFound": "Evento con id {{id}} no encontrado",
   "required": "Obligatorio"
 }

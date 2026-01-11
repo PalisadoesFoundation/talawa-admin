@@ -43,48 +43,13 @@
  * - `OrganizationModal` - For creating new organizations.
  * - `Modal` - For managing features after organization creation.
  */
-import React, { useEffect, useState, useMemo, useRef } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
- * The orgList component renders a list of organizations with search, sort, and
- * creation flows.
- *
- * @remarks
- * Features:
- * - Fetches organization data via GraphQL queries and mutations.
- * - Supports searching and sorting, with loading and error states.
- * - Provides modals for creating organizations and managing features.
- *
- * State:
- * - dialogModalisOpen: Controls the visibility of the plugin notification modal.
- * - dialogRedirectOrgId: Stores the ID of the organization to redirect after creation.
- * - isLoading: Indicates whether the organization data is loading.
- * - sortingState: Manages the sorting option and its label.
- * - searchByName: Stores the search query for filtering organizations.
- * - showModal: Controls the visibility of the organization creation modal.
- * - formState: Manages the state of the organization creation form.
- *
- * Methods:
- * - openDialogModal(redirectOrgId): Opens the plugin notification modal.
- * - closeDialogModal(): Closes the plugin notification modal.
- * - toggleDialogModal(): Toggles the plugin notification modal visibility.
- * - createOrg(e): Handles organization creation.
- * - handleChangeFilter(value): Filters organizations based on the search query.
- * - handleSortChange(value): Updates sorting state and refetches organizations.
- *
- * Error handling:
- * - Uses `errorHandler` for GraphQL and network errors.
- * - Clears local storage and redirects to the home page on critical errors.
- *
- * Dependencies:
- * - Apollo Client for GraphQL operations.
- * - react-i18next for localization.
- * - useLocalStorage for local storage data.
- * - NotificationToast and shared UI components.
- * - Material UI for buttons and icons.
- *
- * @returns The rendered organization list component.
- */
-import React, { type ChangeEvent, useEffect, useMemo, useState } from 'react';
+import React, {
+  type ChangeEvent,
+  useEffect,
+  useMemo,
+  useState,
+  useRef,
+} from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { Group, Search } from '@mui/icons-material';
 import { Button } from '@mui/material';
@@ -112,16 +77,6 @@ import type {
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
 import OrganizationModal from './modal/OrganizationModal';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { Link } from 'react-router';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
-import type { ChangeEvent } from 'react';
-import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
-import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
-import EmptyState from 'shared-components/EmptyState/EmptyState';
-import style from './OrgList.module.css';
-import { Group, Search } from '@mui/icons-material';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import styles from './OrgList.module.css';
 
 const { getItem } = useLocalStorage();
@@ -438,9 +393,9 @@ function orgList(): JSX.Element {
       {/* Text Infos for list */}
 
       {!isLoading &&
-        (!sortedOrganizations || sortedOrganizations.length === 0) &&
-        searchByName.length === 0 &&
-        (!userData || adminFor.length === 0) ? (
+      (!sortedOrganizations || sortedOrganizations.length === 0) &&
+      searchByName.length === 0 &&
+      (!userData || adminFor.length === 0) ? (
         <EmptyState
           icon={<Group />}
           message={t('noOrgErrorTitle')}
@@ -484,9 +439,9 @@ function orgList(): JSX.Element {
           <div className={`${styles.listBoxOrgList}`}>
             {(rowsPerPage > 0
               ? sortedOrganizations.slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage,
-              )
+                  page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage,
+                )
               : sortedOrganizations
             )?.map((item: InterfaceOrgInfoTypePG) => {
               return (
@@ -529,11 +484,6 @@ function orgList(): JSX.Element {
         onHide={closeDialogModal}
         dataTestId="pluginNotificationModal"
         headerClassName={styles.modalHeader}
-        show={dialogModalisOpen}
-        onHide={toggleDialogModal}
-        title={t('manageFeatures')}
-        headerClassName={styles.modalHeader}
-        dataTestId="pluginNotificationHeader"
         centered={false}
         backdrop={true}
       >

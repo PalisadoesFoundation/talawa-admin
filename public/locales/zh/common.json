@@ -147,7 +147,6 @@
   "workPhoneNumber": "工作电话号码",
   "unblock": "解封",
   "unblockedSuccessfully": "{{item}} 解封成功",
-
   "pluginSettings": "插件设置",
   "profilePicture": "头像",
   "profilePicturePlaceholder": "占位图片",
@@ -257,10 +256,8 @@
   "invalidDetailsMessage": "无效的详细信息。请检查您的输入。",
   "logoutFailed": "登出失败。请重试。",
   "or": "或",
-  "eventNotFound": "未找到 ID 为 {{id}} 的活动"
+  "eventNotFound": "未找到 ID 为 {{id}} 的活动",
   "sortingIcon": "排序图标",
   "peopleTabTagName": "人员",
-  "or": "或",
-  "eventNotFound": "未找到 ID 为 {{id}} 的活动",
   "required": "必填"
 }

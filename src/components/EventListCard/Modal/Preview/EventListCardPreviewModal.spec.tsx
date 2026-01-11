@@ -725,11 +725,6 @@ describe('EventListCardPreviewModal', () => {
     ).getByLabelText(/choose date/i);
     await userEvent.click(calendarButton);
 
-    const calendarGrid = await screen.findByRole('grid');
-    const dateToSelect = within(calendarGrid).getByRole('gridcell', {
-      name: '20',
-    });
-
     const grid = screen.getByRole('grid');
     const dateToSelect = within(grid)
       .getAllByRole('gridcell')
