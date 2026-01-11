@@ -75,6 +75,11 @@ function Groups(): JSX.Element {
   // Get the organization ID from URL parameters
   const { orgId } = useParams();
 
+  // Early return must happen before any other hooks
+  if (!orgId || !userId) {
+    return <Navigate to={'/'} replace />;
+  }
+
   const [group, setGroup] = useState<InterfaceVolunteerGroupInfo | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'volunteers_ASC' | 'volunteers_DESC'>(
@@ -140,10 +145,6 @@ function Groups(): JSX.Element {
     () => groupsData?.getEventVolunteerGroups || [],
     [groupsData],
   );
-
-  if (!orgId || !userId) {
-    return <Navigate to={'/'} replace />;
-  }
 
   const closeModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: false }));

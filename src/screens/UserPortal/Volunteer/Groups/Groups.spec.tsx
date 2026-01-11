@@ -13,7 +13,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import Groups from './Groups';
-import './Groups.mocks';
+
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
@@ -324,14 +324,14 @@ describe('Groups Screen [User Portal]', () => {
   });
 
   it('redirects when orgId param is missing', async () => {
-    routerMocks.useParams.mockReturnValue({ orgId: '' });
+    routerMocks.useParams.mockReturnValue({ orgId: undefined } as any); // No orgId
     render(
       <MockedProvider link={linkSuccess}>
-        <MemoryRouter initialEntries={['/user/volunteer/']}>
+        <MemoryRouter initialEntries={['/user/volunteer/:orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
               <Routes>
-                <Route path="/user/volunteer/" element={<Groups />} />
+                <Route path="/user/volunteer/:orgId" element={<Groups />} />
                 <Route path="/" element={<div data-testid="paramsError" />} />
               </Routes>
             </I18nextProvider>
@@ -940,5 +940,35 @@ describe('Groups Screen [User Portal]', () => {
 
     // Assert groups are displayed
     expect(screen.getByText('Group 1')).toBeInTheDocument();
+  });
+
+  it('covers whereVariables useMemo return statement', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    // Change searchBy to something other than 'group' or 'leader' to ensure
+    // both conditions are false and return vars; executes
+    const searchByDropdown = screen.getByTestId('searchBy');
+    await userEvent.click(searchByDropdown);
+
+    // Switch to leader first
+    const leaderOption = await screen.findByTestId('leader');
+    await userEvent.click(leaderOption);
+
+    // Then switch back to group - this forces useMemo recalculation
+    await userEvent.click(searchByDropdown);
+    const groupOption = await screen.findByTestId('group');
+    await userEvent.click(groupOption);
+
+    // Ensure searchTerm is empty to make both conditions false
+    const searchInput = screen.getByTestId('searchByInput');
+    await userEvent.clear(searchInput);
+
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
   });
 });
