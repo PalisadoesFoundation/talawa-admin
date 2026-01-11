@@ -12,22 +12,15 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-<<<<<<< HEAD
-=======
 import {
   LocalizationProvider,
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
->>>>>>> b9933f25b8d (Fix: CI check passed)
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
 import dayjs, { type Dayjs } from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import CustomRecurrenceModal from 'screens/AdminPortal/OrganizationEvents/CustomRecurrenceModal';
-import {
-  AdapterDayjs,
-  LocalizationProvider,
-} from 'shared-components/DateRangePicker';
 
 dayjs.extend(utc);
 
@@ -736,9 +729,6 @@ describe('EventListCardPreviewModal', () => {
     const dateToSelect = within(calendarGrid).getByRole('gridcell', {
       name: '20',
     });
-<<<<<<< HEAD
-    await userEvent.click(dateToSelect);
-=======
 
     const allText20 = screen.getAllByText('20');
     const dateButton = allText20.find((el) => {
@@ -750,7 +740,6 @@ describe('EventListCardPreviewModal', () => {
     if (button) {
       fireEvent.click(button);
     }
->>>>>>> b9933f25b8d (Fix: CI check passed)
 
     await waitFor(() => {
       expect(mockSetEventStartDate).toHaveBeenCalled();
