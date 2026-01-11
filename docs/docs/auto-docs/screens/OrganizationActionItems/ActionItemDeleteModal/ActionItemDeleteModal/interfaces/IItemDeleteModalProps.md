@@ -10,7 +10,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionIte
 
 ### actionItem
 
-> **actionItem**: [`IActionItemInfo`](../../../../../types/ActionItems/interface/interfaces/IActionItemInfo.md)
+> **actionItem**: [`IActionItemInfo`](../../../../../types/shared-components/ActionItems/interface/interfaces/IActionItemInfo.md)
 
 Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L50)
 

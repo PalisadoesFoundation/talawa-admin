@@ -66,7 +66,7 @@ import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan, faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { DataTable } from 'shared-components/DataTable/DataTable';
 
@@ -313,7 +313,7 @@ const BlockUser = (): JSX.Element => {
     <>
       <div>
         <div className={styles.btnsContainer} data-testid="testcomp">
-          <AdminSearchFilterBar
+          <SearchFilterBar
             hasDropdowns={true}
             searchPlaceholder={t('searchByName')}
             searchValue={searchTerm}

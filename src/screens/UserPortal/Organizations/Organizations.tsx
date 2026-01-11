@@ -45,7 +45,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../../style/app-fixed.module.css';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import type { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
 
@@ -297,7 +297,7 @@ export default function Organizations(): React.JSX.Element {
 
           {/* Refactored Header Structure */}
           <div className={styles.calendar__header}>
-            <AdminSearchFilterBar
+            <SearchFilterBar
               hasDropdowns={true}
               dropdowns={[
                 {

@@ -1,5 +1,5 @@
 /**
- * OrganizationModal Component
+ * OrganizationModal component.
  *
  * This component renders a modal for creating or editing an organization.
  * It includes a form with fields for organization details such as name,
@@ -12,8 +12,19 @@
  * @param createOrg - Function to handle form submission for creating an organization.
  * @param t - Translation function for component-specific strings.
  * @param tCommon - Translation function for common strings.
+ * @param props - Component props for the modal. See {@link InterfaceOrganizationModalProps}.
  *
  * @remarks
+ * Props:
+ * - showModal: Determines whether the modal is visible.
+ * - toggleModal: Function to toggle the visibility of the modal.
+ * - formState: The current state of the form fields.
+ * - setFormState: Function to update the form state.
+ * - createOrg: Function to handle form submission for creating an organization.
+ * - t: Translation function for component-specific strings.
+ * - tCommon: Translation function for common strings.
+ * - userData: Current user data, if available.
+ *
  * - The form includes validation for input fields such as name, description, and address.
  * - The `uploadFileToMinio` function is used to handle image uploads to MinIO storage.
  * - Displays success or error messages using `NotificationToast` for image upload feedback.
@@ -30,6 +41,8 @@
  *   tCommon={translateCommon}
  * />
  * ```
+ *
+ * @returns The rendered organization modal.
  */
 import React from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
@@ -39,7 +52,15 @@ import type { ChangeEvent } from 'react';
 import styles from 'style/app-fixed.module.css';
 import { countryOptions } from 'utils/formEnumFields';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import React, { type ChangeEvent } from 'react';
+import { Button, Col, Form, Row } from 'react-bootstrap';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { useMinioUpload } from 'utils/MinioUpload';
+import { countryOptions } from 'utils/formEnumFields';
+import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
 import { validateFile } from 'utils/fileValidation';
+import styles from './OrganizationModal.module.css';
 
 interface InterfaceFormStateType {
   addressLine1: string;
@@ -89,11 +110,15 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
       dataTestId="modalOrganization"
       title={t('createOrganization')}
       headerClassName={styles.modalHeader}
+      title={t('createOrganization')}
+      headerClassName={styles.modalHeader}
+      dataTestId="modalOrganizationHeader"
     >
       <Form onSubmitCapture={createOrg}>
         <Form.Label htmlFor="orgname">{tCommon('name')}</Form.Label>
         <Form.Control
           type="name"
+          type="description"
           id="orgname"
           className={`mb-3 ${styles.inputField}`}
           placeholder={t('enterName')}
@@ -104,6 +129,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           onChange={(e): void => {
             const inputText = e.target.value;
             if (inputText.length < 50) {
+            if (inputText.length <= 50) {
               setFormState({ ...formState, name: e.target.value });
             }
           }}
@@ -122,6 +148,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           onChange={(e): void => {
             const descriptionText = e.target.value;
             if (descriptionText.length < 200) {
+            if (descriptionText.length <= 200) {
               setFormState({ ...formState, description: e.target.value });
             }
           }}
@@ -137,6 +164,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               onChange={(e): void => {
                 const inputText = e.target.value;
                 if (inputText.length < 50) {
+                if (inputText.length <= 50) {
                   setFormState({ ...formState, countryCode: e.target.value });
                 }
               }}
@@ -165,6 +193,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               onChange={(e): void => {
                 const inputText = e.target.value;
                 if (inputText.length < 50) {
+                if (inputText.length <= 50) {
                   setFormState({ ...formState, state: e.target.value });
                 }
               }}
@@ -183,6 +212,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               onChange={(e): void => {
                 const inputText = e.target.value;
                 if (inputText.length < 50) {
+                if (inputText.length <= 50) {
                   setFormState({ ...formState, city: e.target.value });
                 }
               }}
@@ -198,6 +228,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               onChange={(e): void => {
                 const inputText = e.target.value;
                 if (inputText.length < 50) {
+                if (inputText.length <= 50) {
                   setFormState({ ...formState, postalCode: e.target.value });
                 }
               }}
@@ -216,6 +247,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               onChange={(e): void => {
                 const inputText = e.target.value;
                 if (inputText.length < 50) {
+                if (inputText.length <= 50) {
                   setFormState({
                     ...formState,
                     addressLine1: e.target.value,
@@ -234,6 +266,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               onChange={(e): void => {
                 const inputText = e.target.value;
                 if (inputText.length < 50) {
+                if (inputText.length <= 50) {
                   setFormState({
                     ...formState,
                     addressLine2: e.target.value,
@@ -244,6 +277,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             />
           </Col>
         </Row>
+        <Row className="mb-1"></Row>
         <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}</Form.Label>
         <Form.Control
           accept="image/*"
@@ -262,6 +296,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               if (!validation.isValid) {
                 NotificationToast.error(
                   validation.errorMessage || t('invalidFileType'),
+                  validation.errorMessage ?? t('imageUploadError'),
                 );
                 return;
               }
@@ -272,6 +307,8 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 setFormState({ ...formState, avatar: avatarobjectName });
                 NotificationToast.success(t('imageUploadSuccess'));
               } catch {
+              } catch (error) {
+                console.error('Error uploading image:', error);
                 NotificationToast.error(t('imageUploadError'));
               }
             }

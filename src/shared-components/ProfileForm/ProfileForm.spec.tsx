@@ -220,8 +220,8 @@ describe('MemberDetail', () => {
       expect(screen.getAllByText(/name/i)).toBeTruthy();
       expect(screen.getAllByText(/Birth Date/i)).toBeTruthy();
       expect(screen.getAllByText(/Gender/i)).toBeTruthy();
-      expect(screen.getAllByText(/Profile Details/i)).toBeTruthy();
-      expect(screen.getAllByText(/Profile Details/i)).toHaveLength(1);
+      expect(screen.getAllByText(/Profile Information/i)).toBeTruthy();
+      expect(screen.getAllByText(/Profile Information/i)).toHaveLength(1);
       expect(screen.getAllByText(/Contact Information/i)).toHaveLength(1);
     });
 
@@ -268,8 +268,8 @@ describe('MemberDetail', () => {
       expect(screen.getAllByText(/name/i)).toBeTruthy();
       expect(screen.getAllByText(/Birth Date/i)).toBeTruthy();
       expect(screen.getAllByText(/Gender/i)).toBeTruthy();
-      expect(screen.getAllByText(/Profile Details/i)).toBeTruthy();
-      expect(screen.getAllByText(/Profile Details/i)).toHaveLength(1);
+      expect(screen.getAllByText(/Profile Information/i)).toBeTruthy();
+      expect(screen.getAllByText(/Profile Information/i)).toHaveLength(1);
       expect(screen.getAllByText(/Contact Information/i)).toHaveLength(1);
     });
 
@@ -640,7 +640,7 @@ describe('MemberDetail', () => {
       await userEvent.upload(fileInput, largeFile);
 
       expect(NotificationToast.error).toHaveBeenCalledWith(
-        'File is too large. Maximum allowed size is 5MB.',
+        'File is too large. Maximum size is 5MB.',
       );
     });
   });
@@ -705,7 +705,7 @@ describe('MemberDetail', () => {
       });
       await userEvent.upload(fileInput, largeFile);
       expect(NotificationToast.error).toHaveBeenCalledWith(
-        'File is too large. Maximum allowed size is 5MB.',
+        'File is too large. Maximum size is 5MB.',
       );
     });
 
@@ -1049,7 +1049,7 @@ describe('MemberDetail', () => {
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
-          'File is too large. Maximum allowed size is 5MB.',
+          'File is too large. Maximum size is 5MB.',
         );
       });
     });

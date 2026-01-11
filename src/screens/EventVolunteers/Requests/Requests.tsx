@@ -16,7 +16,7 @@
  * - NotificationToast
  * - shared-components/LoadingState/LoadingState
  * - components/Avatar/Avatar
- * - components/AdminSearchFilterBar/AdminSearchFilterBar
+ * - components/SearchFilterBar/SearchFilterBar
  * - GraphQl/Queries/EventVolunteerQueries
  * - GraphQl/Mutations/EventVolunteerMutation
  * - utils/interfaces
@@ -27,7 +27,7 @@
  * remarks
  * - Displays a loader while fetching data and handles errors gracefully.
  * - Uses Apollo Client's `useQuery` to fetch data and `useMutation` to update membership status.
- * - Uses AdminSearchFilterBar for unified search and filter interface with debouncing.
+ * - Uses SearchFilterBar for unified search and filter interface with debouncing.
  * - Provides sorting by creation date (latest/earliest) and filtering by request type (all/individuals/groups).
  * - Displays volunteer details with accessible avatar alt text, request type, request date, and action buttons.
  * - All UI text is internationalized using i18n translation keys.
@@ -58,7 +58,7 @@ import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 function Requests(): JSX.Element {
   const { t } = useTranslation('translation');
@@ -299,7 +299,7 @@ function Requests(): JSX.Element {
     <LoadingState isLoading={requestsLoading} variant="spinner">
       <div>
         {/* Header with search, filter  and Create Button */}
-        <AdminSearchFilterBar
+        <SearchFilterBar
           searchPlaceholder={tCommon('searchBy', { item: tCommon('name') })}
           searchValue={searchTerm}
           onSearchChange={debouncedSearch}

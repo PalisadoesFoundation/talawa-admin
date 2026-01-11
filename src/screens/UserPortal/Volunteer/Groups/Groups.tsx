@@ -61,7 +61,7 @@ import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQuerie
 import VolunteerGroupViewModal from 'screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal';
 import useLocalStorage from 'utils/useLocalstorage';
 import GroupModal from './GroupModal';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 enum ModalState {
   EDIT = 'edit',
@@ -197,7 +197,7 @@ function Groups(): JSX.Element {
   const columns: GridColDef[] = [
     {
       field: 'group',
-      headerName: 'Group',
+      headerName: t('groupHeader'),
       flex: 1,
       align: 'left',
       minWidth: 100,
@@ -217,7 +217,7 @@ function Groups(): JSX.Element {
     },
     {
       field: 'leader',
-      headerName: 'Leader',
+      headerName: t('leaderHeader'),
       flex: 1,
       align: 'center',
       minWidth: 100,
@@ -256,7 +256,7 @@ function Groups(): JSX.Element {
     },
     {
       field: 'volunteers',
-      headerName: 'No. of Volunteers',
+      headerName: t('numVolunteersHeader'),
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -272,7 +272,7 @@ function Groups(): JSX.Element {
     },
     {
       field: 'options',
-      headerName: 'Options',
+      headerName: t('optionsHeader'),
       align: 'center',
       flex: 1,
       minWidth: 100,
@@ -288,6 +288,7 @@ function Groups(): JSX.Element {
               className={`${styles.groupsViewButton} me-2 rounded`}
               data-testid="viewGroupBtn"
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
+              aria-label={t('viewGroup')}
             >
               <i className="fa fa-info" />
             </Button>
@@ -298,6 +299,7 @@ function Groups(): JSX.Element {
                 className="me-2 rounded"
                 data-testid="editGroupBtn"
                 onClick={() => handleModalClick(params.row, ModalState.EDIT)}
+                aria-label={t('editGroup')}
               >
                 <i className="fa fa-edit" />
               </Button>
@@ -311,7 +313,7 @@ function Groups(): JSX.Element {
   return (
     <LoadingState isLoading={groupsLoading} variant="spinner">
       <div>
-        <AdminSearchFilterBar
+        <SearchFilterBar
           searchPlaceholder={tCommon('searchBy', { item: t('groupOrLeader') })}
           searchValue={searchTerm}
           onSearchChange={setSearchTerm}
