@@ -1,7 +1,6 @@
 export class PeoplePage {
   private readonly _peopleTabButton = '[data-cy="leftDrawerButton-People"]';
   private readonly _searchInput = '[data-testid="searchbtn"]';
-  private readonly _searchButton = '[data-testid="searchBtn"]';
   private readonly _tableRows = 'table tbody tr';
   private readonly _addMembersBtn = '[data-testid="addMembers"]';
   private readonly _existingUserToggle = '[data-testid="existingUser"]';
@@ -20,7 +19,8 @@ export class PeoplePage {
       .should('be.visible')
       .clear()
       .type(name);
-    cy.get(this._searchButton, { timeout }).should('be.visible').click();
+    // Wait for debounce (SearchFilterBar has 300ms debounce by default)
+    cy.wait(500);
     return this;
   }
 
@@ -59,12 +59,11 @@ export class PeoplePage {
 
   deleteMember(name: string, timeout = 40000) {
     this.searchMemberByName(name, timeout);
-    this.verifyMemberInList(name, timeout);
 
-    // Wait for table to stabilize after search
-    cy.wait(1000);
+    // Wait for loading state to disappear if present
+    cy.get('[data-testid="organization-people-loading"]').should('not.exist');
 
-    // Find the table row containing the member name and click the remove button
+    // Wait for search results to load and find the remove button
     cy.get(this._tableRows, { timeout })
       .contains(name)
       .should('be.visible')
@@ -93,7 +92,8 @@ export class PeoplePage {
 
   resetSearch(timeout = 40000) {
     cy.get(this._searchInput, { timeout }).should('be.visible').clear();
-    cy.get(this._searchButton, { timeout }).should('be.visible').click();
+    // Wait for debounce after clearing
+    cy.wait(500);
     return this;
   }
 }
