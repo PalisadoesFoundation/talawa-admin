@@ -15,8 +15,8 @@
  * ```tsx
  * <SidebarOrgSection
  *   orgId="123456"
- *   hideDrawer=\{false\}
- *   isProfilePage=\{false\}
+ *   hideDrawer={false}
+ *   isProfilePage={false}
  * />
  * ```
  */
