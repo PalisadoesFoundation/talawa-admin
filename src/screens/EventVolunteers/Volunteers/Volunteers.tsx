@@ -284,11 +284,10 @@ function Volunteers(): JSX.Element {
           >
             <div className={styles.tableImageWrapper}>
               <ProfileAvatarDisplay
-                key={id}
                 fallbackName={name}
                 imageUrl={avatarURL}
                 size="small"
-                dataTestId="volunteer_avatar"
+                dataTestId={'volunteer_avatar_' + id}
               />
             </div>
             {name}

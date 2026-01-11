@@ -331,8 +331,8 @@ describe('Testing Volunteers Screen', () => {
     });
 
     await waitFor(() => {
-      // All volunteers should render ProfileAvatarDisplay with volunteer_avatar testId
-      const avatars = screen.queryAllByTestId('volunteer_avatar');
+      // All volunteers should render ProfileAvatarDisplay with volunteer_avatar_* testId
+      const avatars = screen.queryAllByTestId(/^volunteer_avatar_/);
       expect(avatars.length).toBeGreaterThan(0);
     });
   });
@@ -618,7 +618,7 @@ describe('Testing Volunteers Screen', () => {
     });
 
     // Now check for avatar components - all volunteers use ProfileAvatarDisplay
-    const avatars = screen.queryAllByTestId('volunteer_avatar');
+    const avatars = screen.queryAllByTestId(/^volunteer_avatar_/);
     // All volunteers should have avatars rendered via ProfileAvatarDisplay
     expect(avatars.length).toBeGreaterThan(0);
   });

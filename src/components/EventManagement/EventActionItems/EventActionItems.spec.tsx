@@ -387,10 +387,9 @@ const renderEventActionItems = (
 describe('EventActionItems', () => {
   afterEach(() => {
     vi.restoreAllMocks();
-  });
-  beforeEach(() => {
     vi.clearAllMocks();
   });
+  beforeEach(() => {});
 
   describe('Component Rendering', () => {
     it('should render loading state initially', () => {
