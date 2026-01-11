@@ -1813,6 +1813,7 @@
     "checkedInSuccessfully": "Registrado con éxito"
   },
   "eventRegistrantsModal": {
+    "title": "Registrantes del Evento",
     "errorAddingAttendee": "Error al agregar asistente",
     "errorRemovingAttendee": "Error al eliminar asistente",
     "inviteByEmail": {
@@ -1829,7 +1830,15 @@
       "errorSendingInvites": "Error al enviar invitaciones",
       "emailsLabel": "Correos electrónicos y nombres de destinatarios",
       "emailsHelp": "Proporcione el correo electrónico y el nombre opcional para cada destinatario. Agregue varios destinatarios según sea necesario."
-    }
+    },
+    "inviteByEmailButton": "Invitar por Correo",
+    "addRegistrant": "Agregar Registrante",
+    "noRegistrationsFound": "No se encontraron registros",
+    "addOnspotRegistration": "Agregar Registro en el Lugar",
+    "registrantLabel": "Agregar un Registrante",
+    "registrantPlaceholder": "Elija el usuario que desea agregar",
+    "chooseUser": "¡Por favor, elija un usuario para agregar primero!",
+    "addingAttendee": "Agregando asistente..."
   },
   "userCampaigns": {
     "title": "Campañas de recaudación de fondos",

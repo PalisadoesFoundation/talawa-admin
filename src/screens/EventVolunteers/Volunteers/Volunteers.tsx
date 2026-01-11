@@ -65,7 +65,7 @@ import {
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
 import { Chip, debounce } from '@mui/material';
-import Avatar from 'components/Avatar/Avatar';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import styles from '../../../style/app-fixed.module.css';
 import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
@@ -282,25 +282,15 @@ function Volunteers(): JSX.Element {
             className="d-flex fw-bold align-items-center justify-content-center ms-2"
             data-testid="volunteerName"
           >
-            {avatarURL ? (
-              <img
-                src={avatarURL}
-                alt={tCommon('volunteer')}
-                data-testid="volunteer_image"
-                className={styles.TableImages}
+            <div className={styles.tableImageWrapper}>
+              <ProfileAvatarDisplay
+                key={id}
+                fallbackName={name}
+                imageUrl={avatarURL}
+                size="small"
+                dataTestId="volunteer_avatar"
               />
-            ) : (
-              <div className={styles.avatarContainer}>
-                <Avatar
-                  key={id + '1'}
-                  dataTestId="volunteer_avatar"
-                  containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImages}
-                  name={name}
-                  alt={name}
-                />
-              </div>
-            )}
+            </div>
             {name}
           </div>
         );

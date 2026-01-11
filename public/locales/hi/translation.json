@@ -1814,6 +1814,7 @@
     "checkedInSuccessfully": "सफलतापूर्वक चेक-इन किया गया"
   },
   "eventRegistrantsModal": {
+    "title": "कार्यक्रम पंजीकृत",
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
     "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
     "inviteByEmail": {
@@ -1830,7 +1831,15 @@
       "errorSendingInvites": "निमंत्रण भेजने में त्रुटि",
       "emailsLabel": "प्राप्तकर्ता ईमेल और नाम",
       "emailsHelp": "प्रत्येक प्राप्तकर्ता के लिए ईमेल और वैकल्पिक नाम प्रदान करें। आवश्यकतानुसार कई प्राप्तकर्ता जोड़ें।"
-    }
+    },
+    "inviteByEmailButton": "ईमेल द्वारा आमंत्रित करें",
+    "addRegistrant": "पंजीकृत जोड़ें",
+    "noRegistrationsFound": "कोई पंजीकरण नहीं मिला",
+    "addOnspotRegistration": "ऑनस्पॉट पंजीकरण जोड़ें",
+    "registrantLabel": "एक पंजीकृत जोड़ें",
+    "registrantPlaceholder": "वह उपयोगकर्ता चुनें जिसे आप जोड़ना चाहते हैं",
+    "chooseUser": "कृपया पहले जोड़ने के लिए एक उपयोगकर्ता चुनें!",
+    "addingAttendee": "उपस्थित व्यक्ति को जोड़ा जा रहा है..."
   },
   "userCampaigns": {
     "title": "धन उगाहने के अभियान",

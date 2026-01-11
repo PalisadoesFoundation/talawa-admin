@@ -1813,6 +1813,7 @@
     "checkedInSuccessfully": "Checked in successfully"
   },
   "eventRegistrantsModal": {
+    "title": "Event Registrants",
     "errorAddingAttendee": "Error adding attendee",
     "errorRemovingAttendee": "Error removing attendee",
     "inviteByEmail": {
@@ -1829,7 +1830,15 @@
       "errorSendingInvites": "Error sending invites",
       "emailsLabel": "Recipient emails and names",
       "emailsHelp": "Provide email and optional name for each recipient. Add multiple recipients as needed."
-    }
+    },
+    "inviteByEmailButton": "Invite by Email",
+    "addRegistrant": "Add Registrant",
+    "noRegistrationsFound": "No Registrations found",
+    "addOnspotRegistration": "Add Onspot Registration",
+    "registrantLabel": "Add an Registrant",
+    "registrantPlaceholder": "Choose the user that you want to add",
+    "chooseUser": "Please choose an user to add first!",
+    "addingAttendee": "Adding the attendee..."
   },
   "userCampaigns": {
     "title": "Fundraising Campaigns",

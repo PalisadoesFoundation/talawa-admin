@@ -232,5 +232,6 @@
   "to": "À",
   "or": "ou",
   "eventNotFound": "Événement avec l'id {{id}} non trouvé",
-  "required": "Obligatoire"
+  "required": "Obligatoire",
+  "unknownUser": "Utilisateur Inconnu"
 }

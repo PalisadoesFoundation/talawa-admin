@@ -6,19 +6,10 @@
  * - Add new attendees from the organization's member list or through on-spot registration.
  * - Remove existing attendees from the event.
  *
- * @component
- * @param {ModalPropType} props - The properties passed to the component.
- * @param {boolean} props.show - Determines whether the modal is visible.
- * @param {string} props.eventId - The ID of the event for which registrants are being managed.
- * @param {string} props.orgId - The ID of the organization associated with the event.
- * @param {() => void} props.handleClose - Callback function to close the modal.
- *
- * @returns {JSX.Element} The rendered EventRegistrantsModal component.
- *
  * @remarks
  * - Uses Apollo Client's `useQuery` and `useMutation` hooks to fetch and modify data.
  * - Displays a loading spinner while data is being fetched.
- * - Integrates with `react-toastify` for user notifications.
+ * - Integrates with NotificationToast for user notifications.
  * - Supports translations using `react-i18next`.
  *
  * @example
@@ -30,16 +21,10 @@
  *   handleClose={() => setShowModal(false)}
  * />
  * ```
- *
- * @dependencies
- * - `react-bootstrap` for modal and button components.
- * - `@apollo/client` for GraphQL queries and mutations.
- * - `@mui/material` for UI components like Avatar, Chip, and Autocomplete.
- * - `react-toastify` for toast notifications.
- * - `react-i18next` for translations.
  */
 import React, { useState, useEffect } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   EVENT_ATTENDEES,
@@ -55,6 +40,7 @@ import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
 import type { InterfaceUser } from 'types/User/interface';
 import styles from '../EventRegistrants.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 type ModalPropType = {
   show: boolean;
@@ -104,10 +90,10 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   // Function to add a new registrant to the event
   const addRegistrant = (): void => {
     if (member == null) {
-      NotificationToast.warning('Please choose an user to add first!');
+      NotificationToast.warning(t('chooseUser') as string);
       return;
     }
-    NotificationToast.warning('Adding the attendee...');
+    NotificationToast.warning(t('addingAttendee') as string);
     const addVariables = isRecurring
       ? { userId: member.id, recurringEventInstanceId: eventId }
       : { userId: member.id, eventId: eventId };
@@ -129,7 +115,26 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
 
   return (
     <>
-      <Modal show={show} onHide={handleClose} backdrop="static" centered>
+      <BaseModal
+        show={show}
+        onHide={handleClose}
+        title={t('title')}
+        headerClassName={styles.modalHeader}
+        dataTestId="event-registrants-modal"
+        footer={
+          <>
+            <Button
+              className={styles.inviteButton}
+              onClick={() => setInviteOpen(true)}
+            >
+              {t('inviteByEmailButton')}
+            </Button>
+            <Button className={styles.addButton} onClick={addRegistrant}>
+              {t('addRegistrant')}
+            </Button>
+          </>
+        }
+      >
         <AddOnSpotAttendee
           show={open}
           handleClose={() => setOpen(false)}
@@ -146,55 +151,53 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             attendeesRefetch();
           }}
         />
-        <Modal.Header closeButton className={styles.modalHeader}>
-          <Modal.Title>Event Registrants</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Autocomplete
-            id="addRegistrant"
-            onChange={(_, newMember): void => {
-              setMember(newMember);
-            }}
-            noOptionsText={
-              <div className="d-flex ">
-                <p className="me-2">No Registrations found</p>
-                <span
-                  className={`underline ${styles.underlineText}`}
-                  onClick={() => {
-                    setOpen(true);
-                  }}
-                >
-                  Add Onspot Registration
-                </span>
+        <Autocomplete
+          id="addRegistrant"
+          onChange={(_, newMember): void => {
+            setMember(newMember);
+          }}
+          noOptionsText={
+            <div className="d-flex ">
+              <p className="me-2">{t('noRegistrationsFound')}</p>
+              <span
+                className={`underline ${styles.underlineText}`}
+                onClick={() => {
+                  setOpen(true);
+                }}
+              >
+                {t('addOnspotRegistration')}
+              </span>
+            </div>
+          }
+          options={memberData?.usersByOrganizationId || []}
+          getOptionLabel={(member: InterfaceUser): string =>
+            member.name || tCommon('unknownUser')
+          }
+          renderOption={(props, member: InterfaceUser): React.ReactNode => (
+            <li {...props} key={member.id}>
+              <div className="d-flex align-items-center">
+                <div className="me-2">
+                  <ProfileAvatarDisplay
+                    fallbackName={member.name || tCommon('unknownUser')}
+                    imageUrl={member.avatarURL}
+                    size="small"
+                  />
+                </div>
+                <span>{member.name || tCommon('unknownUser')}</span>
               </div>
-            }
-            options={memberData?.usersByOrganizationId || []}
-            getOptionLabel={(member: InterfaceUser): string =>
-              member.name || 'Unknown User'
-            }
-            renderInput={(params): React.ReactNode => (
-              <TextField
-                {...params}
-                data-testid="autocomplete"
-                label="Add an Registrant"
-                placeholder="Choose the user that you want to add"
-              />
-            )}
-          />
-          <br />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            className={styles.inviteButton}
-            onClick={() => setInviteOpen(true)}
-          >
-            Invite by Email
-          </Button>
-          <Button className={styles.addButton} onClick={addRegistrant}>
-            Add Registrant
-          </Button>
-        </Modal.Footer>
-      </Modal>
+            </li>
+          )}
+          renderInput={(params): React.ReactNode => (
+            <TextField
+              {...params}
+              data-testid="autocomplete"
+              label={t('registrantLabel')}
+              placeholder={t('registrantPlaceholder')}
+            />
+          )}
+        />
+        <br />
+      </BaseModal>
     </>
   );
 };

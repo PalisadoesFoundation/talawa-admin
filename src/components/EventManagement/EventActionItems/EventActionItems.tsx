@@ -46,7 +46,7 @@ import { Chip, debounce, Stack } from '@mui/material';
 import ItemViewModal from 'screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal';
 import ItemModal from 'screens/OrganizationActionItems/ActionItemModal/ActionItemModal';
 import ItemDeleteModal from 'screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal';
-import Avatar from 'components/Avatar/Avatar';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
@@ -245,14 +245,17 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
         let avatarKey = 'no-assignment';
         let isAssigned = false;
         let isGroup = false;
+        let avatarUrl: string | null = null;
 
         if (volunteer?.user) {
           displayName = volunteer.user.name || 'Unknown Volunteer';
           avatarKey = volunteer.id;
+          avatarUrl = volunteer.user.avatarURL || null;
           isAssigned = true;
         } else if (volunteerGroup) {
           displayName = volunteerGroup.name;
           avatarKey = volunteerGroup.id;
+          avatarUrl = volunteerGroup.leaderUser?.avatarURL || null;
           isAssigned = true;
           isGroup = true;
         }
@@ -262,8 +265,13 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
             className={`d-flex fw-bold align-items-center ms-2 ${styles.assigneeCellContainer}`}
             data-testid="assigneeName"
           >
-            <div className={styles.TableImage}>
-              <Avatar key={avatarKey} name={displayName} alt={displayName} />
+            <div className={styles.tableImageWrapper}>
+              <ProfileAvatarDisplay
+                key={avatarKey}
+                fallbackName={displayName}
+                imageUrl={avatarUrl}
+                size="small"
+              />
             </div>
             <span className={!isAssigned ? 'text-muted' : ''}>
               {displayName}

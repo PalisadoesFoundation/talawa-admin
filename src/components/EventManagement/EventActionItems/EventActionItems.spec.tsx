@@ -63,11 +63,18 @@ vi.mock('shared-components/LoadingState/LoadingState', () => ({
   },
 }));
 
-vi.mock('components/Avatar/Avatar', () => ({
-  default: ({ name }: { name: string }) => (
-    <div data-testid="avatar">{name}</div>
-  ),
-}));
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => {
+  const mockProfileAvatar = ({
+    fallbackName,
+    dataTestId,
+  }: {
+    fallbackName: string;
+    dataTestId?: string;
+  }): JSX.Element => (
+    <div data-testid={dataTestId || 'avatar'}>{fallbackName}</div>
+  );
+  return { ProfileAvatarDisplay: mockProfileAvatar };
+});
 
 vi.mock('subComponents/SortingButton', () => ({
   default: ({

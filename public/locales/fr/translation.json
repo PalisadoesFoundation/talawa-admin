@@ -1814,6 +1814,7 @@
     "checkedInSuccessfully": "Enregistrement réussi"
   },
   "eventRegistrantsModal": {
+    "title": "Inscrits à l'Événement",
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
     "errorRemovingAttendee": "Erreur lors de la suppression du participant",
     "inviteByEmail": {
@@ -1830,7 +1831,15 @@
       "errorSendingInvites": "Erreur lors de l'envoi des invitations",
       "emailsLabel": "Emails et noms des destinataires",
       "emailsHelp": "Fournissez l'email et le nom facultatif pour chaque destinataire. Ajoutez plusieurs destinataires si nécessaire."
-    }
+    },
+    "inviteByEmailButton": "Inviter par Email",
+    "addRegistrant": "Ajouter un Inscrit",
+    "noRegistrationsFound": "Aucune inscription trouvée",
+    "addOnspotRegistration": "Ajouter une Inscription sur Place",
+    "registrantLabel": "Ajouter un Inscrit",
+    "registrantPlaceholder": "Choisissez l'utilisateur que vous souhaitez ajouter",
+    "chooseUser": "Veuillez d'abord choisir un utilisateur à ajouter!",
+    "addingAttendee": "Ajout du participant..."
   },
   "userCampaigns": {
     "title": "Campagnes de financement",
