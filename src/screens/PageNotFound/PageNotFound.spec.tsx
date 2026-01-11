@@ -8,13 +8,14 @@ import { store } from 'state/store';
 import PageNotFound from './PageNotFound';
 import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
-import { it, expect, describe, afterEach } from 'vitest';
+import { it, expect, describe, afterEach, vi } from 'vitest';
 
 const { clearAllItems } = useLocalStorage();
 
 describe('Testing Page not found component', () => {
   afterEach(() => {
     clearAllItems();
+    vi.clearAllMocks();
   });
   it('should render component properly for User, ADMIN and SUPERADMIN', () => {
     render(
