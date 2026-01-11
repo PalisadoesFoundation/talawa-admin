@@ -251,15 +251,23 @@ describe('Testing User Table Item', () => {
       keyCode: 27,
       charCode: 27,
     });
-    expect(
-      screen.queryByRole('dialog')?.className.includes('show'),
-    ).toBeFalsy();
+    await waitFor(() => {
+      expect(
+        screen
+          .queryByTestId('modal-joined-org-123')
+          ?.className.includes('show'),
+      ).toBeFalsy();
+    });
     fireEvent.click(showJoinedOrgsBtn);
     // Close using close button and reopen
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
-    expect(
-      screen.queryByRole('dialog')?.className.includes('show'),
-    ).toBeFalsy();
+    await waitFor(() => {
+      expect(
+        screen
+          .queryByTestId('modal-joined-org-123')
+          ?.className.includes('show'),
+      ).toBeFalsy();
+    });
     fireEvent.click(showJoinedOrgsBtn);
     // Expect the following to exist in modal
     const inputBox = screen.getByTestId(`searchByNameJoinedOrgs`);
@@ -306,7 +314,10 @@ describe('Testing User Table Item', () => {
     fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorabc`));
-    expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon!');
+    expect(toast.success).toHaveBeenCalledWith(
+      'Profile Page Coming Soon!',
+      expect.anything(),
+    );
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Joined Organization 1/i));
     expect(window.location.replace).toHaveBeenCalledWith('/orgdash/abc');
@@ -776,14 +787,22 @@ describe('Testing User Table Item', () => {
       keyCode: 27,
       charCode: 27,
     });
-    expect(
-      screen.queryByRole('dialog')?.className.includes('show'),
-    ).toBeFalsy();
+    await waitFor(() => {
+      expect(
+        screen
+          .queryByTestId('modal-blocked-org-123')
+          ?.className.includes('show'),
+      ).toBeFalsy();
+    });
     fireEvent.click(showBlockedOrgsBtn);
     fireEvent.click(screen.getByTestId(`closeUnblockOrgsBtn${123}`));
-    expect(
-      screen.queryByRole('dialog')?.className.includes('show'),
-    ).toBeFalsy();
+    await waitFor(() => {
+      expect(
+        screen
+          .queryByTestId('modal-blocked-org-123')
+          ?.className.includes('show'),
+      ).toBeFalsy();
+    });
     fireEvent.click(showBlockedOrgsBtn);
     const inputBox = screen.getByTestId(`searchByNameBlockedOrgs`);
     expect(inputBox).toBeInTheDocument();
@@ -828,7 +847,10 @@ describe('Testing User Table Item', () => {
     fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorghi`));
-    expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon!');
+    expect(toast.success).toHaveBeenCalledWith(
+      'Profile Page Coming Soon!',
+      expect.anything(),
+    );
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Blocked Organization 1/i));
     expect(window.location.replace).toHaveBeenCalledWith('/orgdash/ghi');
