@@ -37,14 +37,6 @@ const PageNotFound = (): JSX.Element => {
       <div className="container text-center">
         <div className="brand">
           <img src={Logo} alt="Logo" className="img-fluid" />
-          {/* Display a message based on admin status */}
-          {isAdmin ? (
-            <h3 className="text-uppercase mt-4">
-              {tCommon('talawaAdminPortal')}
-            </h3>
-          ) : (
-            <h3 className="text-uppercase mt-4">{t('talawaUser')}</h3>
-          )}
         </div>
         {/* Display the 404 error code */}
         <h1 className={styles.head}>
@@ -52,19 +44,6 @@ const PageNotFound = (): JSX.Element => {
         </h1>
         {/* Display a not found message */}
         <p>{tErrors('notFoundMsg')}</p>
-        {/* Provide a link to redirect users based on admin status */}
-        {isAdmin ? (
-          <Link to="/orglist" className="btn btn-outline-success mt-3">
-            <i className="fas fa-home"></i> {t('backToHome')}
-          </Link>
-        ) : (
-          <Link
-            to="/user/organizations"
-            className="btn btn-outline-success mt-3"
-          >
-            <i className="fas fa-home"></i> {t('backToHome')}
-          </Link>
-        )}
       </div>
     </section>
   );
