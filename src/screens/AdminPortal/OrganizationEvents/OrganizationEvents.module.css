@@ -7,7 +7,8 @@
   display: inline-block;
 }
 
-.dropdown:is(:hover, :active, .show) {
+.dropdown:is(:hover, :active, :focus, :focus-visible),
+:global(.show).dropdown {
   box-shadow:
     0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
       rgba(168, 199, 250, 1),
@@ -18,33 +19,24 @@
 }
 
 .dropdown:is(:focus, :focus-visible) {
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
-  border: var(--border-1) solid var(--color-gray-700);
-  color: var(--color-gray-700);
   outline: var(--space-1) solid var(--color-blue-200);
+  outline-offset: var(--space-1);
 }
 
 .mainpageright > hr {
-  margin-top: var(--space-6);
   width: 100%;
-  margin-left: calc(var(--space-5) * -1);
-  margin-right: calc(var(--space-5) * -1);
-  margin-bottom: var(--space-6);
+  margin-block: var(--space-6);
+  margin-inline: calc(var(--space-5) * -1);
+}
+@media screen and (max-width: 1200px) {
+  .mainpageright {
+    width: 100%;
+  }
 }
 
 @media screen and (max-width: 575.5px) {
   .mainpageright {
     width: 98%;
-  }
-}
-
-@media screen and (max-width: 1200px) {
-  .mainpageright {
-    width: 100%;
   }
 }
 
@@ -76,8 +68,12 @@
   border: var(--border-1) solid var(--color-white);
 }
 
-.closeButtonOrganizationEvents:hover {
+.closeButtonOrganizationEvents:is(:hover, :focus-visible) {
   color: var(--color-red-100);
   background-color: var(--color-red-500);
   border: var(--border-1) solid var(--color-white);
+}
+
+.closeButtonOrganizationEvents:focus-visible {
+  outline: var(--space-1) solid var(--color-blue-200);
 }
