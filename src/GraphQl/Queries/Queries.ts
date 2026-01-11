@@ -83,7 +83,7 @@ export const ORGANIZATION_FILTER_LIST = gql`
   ${ORG_FIELDS}
 `;
 
-// Lightweight version without members and other fieds for registration page
+// Lightweight version without members and other fields for registration page
 export const ORGANIZATION_LIST_NO_MEMBERS = gql`
   query OrganizationListBasic {
     organizations {
