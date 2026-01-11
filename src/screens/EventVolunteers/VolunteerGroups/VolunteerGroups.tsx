@@ -39,7 +39,7 @@ import { GET_EVENT_VOLUNTEER_GROUPS } from 'GraphQl/Queries/EventVolunteerQuerie
 import VolunteerGroupModal from './modal/VolunteerGroupModal';
 import VolunteerGroupDeleteModal from './deleteModal/VolunteerGroupDeleteModal';
 import VolunteerGroupViewModal from './viewModal/VolunteerGroupViewModal';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 enum ModalState {
@@ -53,7 +53,7 @@ enum ModalState {
  *
  * Responsibilities:
  * - Displays volunteer groups for an event
- * - Supports searching by group name or leader via AdminSearchFilterBar
+ * - Supports searching by group name or leader via SearchFilterBar
  * - Enables sorting by volunteer count
  * - Handles create, edit, view, and delete group flows
  * - Renders assignee avatars and volunteer counts
@@ -342,7 +342,7 @@ function volunteerGroups(): JSX.Element {
     <LoadingState isLoading={groupsLoading} variant="spinner">
       <div>
         {/* Header with search, filter  and Create Button */}
-        <AdminSearchFilterBar
+        <SearchFilterBar
           searchPlaceholder={tCommon('searchBy', {
             item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
           })}

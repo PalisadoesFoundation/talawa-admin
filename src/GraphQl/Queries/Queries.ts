@@ -925,6 +925,10 @@ export const USER_DETAILS = gql`
           node {
             id
             name
+            membersCount
+            adminsCount
+            description
+            avatarURL
           }
         }
       }
@@ -932,6 +936,10 @@ export const USER_DETAILS = gql`
       createdOrganizations {
         id
         name
+        membersCount
+        adminsCount
+        description
+        avatarURL
       }
     }
   }

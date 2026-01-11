@@ -1,6 +1,10 @@
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import {
   fireEvent,
@@ -32,6 +36,14 @@ const NotificationToastMocks = vi.hoisted(() => ({
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: NotificationToastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
+  },
 }));
 
 let successLink: StaticMockLink;

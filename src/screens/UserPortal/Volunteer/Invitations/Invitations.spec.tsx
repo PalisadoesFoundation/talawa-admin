@@ -24,15 +24,15 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { vi, expect, beforeEach, afterEach, describe, it } from 'vitest';
 
 const sharedMocks = vi.hoisted(() => ({
-  toast: {
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
   },
   navigate: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: sharedMocks.toast,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: sharedMocks.NotificationToast,
 }));
 
 vi.mock('@mui/icons-material', async () => {
@@ -707,7 +707,7 @@ describe('Testing Invitations Screen', () => {
     await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
-      expect(sharedMocks.toast.success).toHaveBeenCalledWith(
+      expect(sharedMocks.NotificationToast.success).toHaveBeenCalledWith(
         t.invitationAccepted,
       );
     });
@@ -728,7 +728,7 @@ describe('Testing Invitations Screen', () => {
     await userEvent.click(rejectBtn[0]);
 
     await waitFor(() => {
-      expect(sharedMocks.toast.success).toHaveBeenCalledWith(
+      expect(sharedMocks.NotificationToast.success).toHaveBeenCalledWith(
         t.invitationRejected,
       );
     });
@@ -748,7 +748,7 @@ describe('Testing Invitations Screen', () => {
     await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
-      expect(sharedMocks.toast.error).toHaveBeenCalled();
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalled();
     });
   });
 

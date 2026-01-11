@@ -22,7 +22,7 @@ import {
   USER_VOLUNTEER_MEMBERSHIP,
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import { FaCheck } from 'react-icons/fa';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 /**
@@ -249,7 +249,7 @@ const UpcomingEvents = (): JSX.Element => {
       isLoading={eventsLoading || membershipLoading}
       variant="spinner"
     >
-      <AdminSearchFilterBar
+      <SearchFilterBar
         searchPlaceholder={tCommon('searchBy', { item: t('titleOrLocation') })}
         searchValue={searchTerm}
         onSearchChange={setSearchTerm}

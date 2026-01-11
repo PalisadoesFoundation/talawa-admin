@@ -45,6 +45,51 @@
  */
 import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
+ * The orgList component renders a list of organizations with search, sort, and
+ * creation flows.
+ *
+ * @remarks
+ * Features:
+ * - Fetches organization data via GraphQL queries and mutations.
+ * - Supports searching and sorting, with loading and error states.
+ * - Provides modals for creating organizations and managing features.
+ *
+ * State:
+ * - dialogModalisOpen: Controls the visibility of the plugin notification modal.
+ * - dialogRedirectOrgId: Stores the ID of the organization to redirect after creation.
+ * - isLoading: Indicates whether the organization data is loading.
+ * - sortingState: Manages the sorting option and its label.
+ * - searchByName: Stores the search query for filtering organizations.
+ * - showModal: Controls the visibility of the organization creation modal.
+ * - formState: Manages the state of the organization creation form.
+ *
+ * Methods:
+ * - openDialogModal(redirectOrgId): Opens the plugin notification modal.
+ * - closeDialogModal(): Closes the plugin notification modal.
+ * - toggleDialogModal(): Toggles the plugin notification modal visibility.
+ * - createOrg(e): Handles organization creation.
+ * - handleChangeFilter(value): Filters organizations based on the search query.
+ * - handleSortChange(value): Updates sorting state and refetches organizations.
+ *
+ * Error handling:
+ * - Uses `errorHandler` for GraphQL and network errors.
+ * - Clears local storage and redirects to the home page on critical errors.
+ *
+ * Dependencies:
+ * - Apollo Client for GraphQL operations.
+ * - react-i18next for localization.
+ * - useLocalStorage for local storage data.
+ * - NotificationToast and shared UI components.
+ * - Material UI for buttons and icons.
+ *
+ * @returns The rendered organization list component.
+ */
+import React, { type ChangeEvent, useEffect, useMemo, useState } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
+import { Group, Search } from '@mui/icons-material';
+import { Button } from '@mui/material';
+import { Link } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
@@ -53,17 +98,19 @@ import {
   CURRENT_USER,
   ORGANIZATION_FILTER_LIST,
 } from 'GraphQl/Queries/Queries';
-
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
-import { useTranslation } from 'react-i18next';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { errorHandler } from 'utils/errorHandler';
 import type {
   InterfaceCurrentUserTypePG,
   InterfaceOrgInfoTypePG,
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from 'style/app-fixed.module.css';
-import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Link } from 'react-router';
@@ -75,6 +122,7 @@ import EmptyState from 'shared-components/EmptyState/EmptyState';
 import style from './OrgList.module.css';
 import { Group, Search } from '@mui/icons-material';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import styles from './OrgList.module.css';
 
 const { getItem } = useLocalStorage();
 
@@ -295,6 +343,11 @@ function orgList(): JSX.Element {
    * network flooding on every keystroke. The 250ms delay provides immediate UX feedback
    * (via setTypedValue) while batching network requests. This pattern prevents jittery
    * UI behavior under latency while maintaining Apollo Client's auto-refetch benefits.
+   * Note: The explicit refetchOrgs call with a filter argument is intentional.
+   * While Apollo Client auto-refetches when filterName changes, the explicit
+   * call ensures immediate network request execution and avoids timing issues
+   * from React's batched state updates. This pattern is used consistently
+   * elsewhere (e.g., Organizations.tsx) to prevent UI state race conditions.
    */
   const handleChangeFilter = (val: string) => {
     setTypedValue(val);
@@ -444,7 +497,7 @@ function orgList(): JSX.Element {
             })}
           </div>
           {/* pagination */}
-          <table className={style.table_fullWidth}>
+          <table className={styles.table_fullWidth}>
             <tbody>
               <tr>
                 <PaginationList
@@ -460,19 +513,6 @@ function orgList(): JSX.Element {
         </>
       )}
       {/* Create Organization Modal */}
-      {/**
-       * Renders the `OrganizationModal` component.
-       *
-       * @param showModal - A boolean indicating whether the modal should be displayed.
-       * @param toggleModal - A function to toggle the visibility of the modal.
-       * @param formState - The state of the form in the organization modal.
-       * @param setFormState - A function to update the state of the form in the organization modal.
-       * @param createOrg - A function to handle the submission of the organization creation form.
-       * @param t - A translation function for localization.
-       * @param userData - Information about the current user.
-       * @returns JSX element representing the `OrganizationModal`.
-       */}
-
       <OrganizationModal
         showModal={showModal}
         toggleModal={toggleModal}
@@ -489,6 +529,13 @@ function orgList(): JSX.Element {
         onHide={closeDialogModal}
         dataTestId="pluginNotificationModal"
         headerClassName={styles.modalHeader}
+        show={dialogModalisOpen}
+        onHide={toggleDialogModal}
+        title={t('manageFeatures')}
+        headerClassName={styles.modalHeader}
+        dataTestId="pluginNotificationHeader"
+        centered={false}
+        backdrop={true}
       >
         <section id={styles.grid_wrapper}>
           <div>

@@ -43,6 +43,9 @@ import type {
   IDeleteActionItemInput,
 } from 'types/shared-components/ActionItems/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+} from 'types/shared-components/ActionItems/interface';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 
 export interface IItemDeleteModalProps {
   isOpen: boolean;
@@ -118,6 +121,10 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
       title={t('deleteActionItem')}
       footer={
         <>
+      title={t('deleteActionItem')}
+      showCloseButton
+      footer={
+        <div>
           <Button variant="secondary" data-testid="deletenobtn" onClick={hide}>
             {tCommon('no')}
           </Button>
@@ -129,6 +136,7 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
             {tCommon('yes')}
           </Button>
         </>
+        </div>
       }
     >
       <p>{t('deleteActionItemMsg')}</p>

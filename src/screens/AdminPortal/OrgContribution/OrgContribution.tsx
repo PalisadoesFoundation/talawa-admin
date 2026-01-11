@@ -1,5 +1,5 @@
 /**
- * OrgContribution Component
+ * OrgContribution component.
  *
  * This component renders the "Organization Contribution" page, which includes:
  * - A sidebar for filtering contributions by organization name and transaction ID.
@@ -11,28 +11,21 @@
  * - Dynamically sets the document title based on the translated page title.
  * - Includes reusable components such as `ContriStats` and `OrgContriCards`.
  *
- * @component
- * @returns {JSX.Element} The rendered JSX for the OrgContribution page.
- *
  * @remarks
  * - The sidebar includes input fields for filtering contributions and displays recent statistics.
  * - The main content area lists contribution details such as user name, date, amount, transaction ID, and email.
- *
- * @dependencies
- * - `react-bootstrap` for layout and form controls.
- * - `react-i18next` for translation and localization.
- * - `ContriStats` and `OrgContriCards` for displaying contribution-related data.
+ * - Dependencies include `react-bootstrap`, `react-i18next`, `ContriStats`, and `OrgContriCards`.
  *
  * @example
- * // Example usage of OrgContribution component
+ * ```tsx
  * import OrgContribution from './OrgContribution';
  *
  * function App() {
  *   return <OrgContribution />;
  * }
+ * ```
  *
- * @file OrgContribution.tsx
- * @module OrgContribution
+ * @returns The rendered JSX for the OrgContribution page.
  */
 import React, { useState } from 'react';
 import Col from 'react-bootstrap/Col';
@@ -40,7 +33,7 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import ContriStats from 'components/ContriStats/ContriStats';
 import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
-import styles from 'style/app-fixed.module.css';
+import styles from './OrgContribution.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 function OrgContribution(): JSX.Element {
