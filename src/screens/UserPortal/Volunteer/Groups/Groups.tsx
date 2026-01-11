@@ -74,9 +74,7 @@ function Groups(): JSX.Element {
   const userId = getItem('userId');
   // Get the organization ID from URL parameters
   const { orgId } = useParams();
-  if (!orgId || !userId) {
-    return <Navigate to={'/'} replace />;
-  }
+
   const [group, setGroup] = useState<InterfaceVolunteerGroupInfo | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<'volunteers_ASC' | 'volunteers_DESC'>(
@@ -121,16 +119,13 @@ function Groups(): JSX.Element {
       orderBy: sortBy,
     },
   });
-  const openModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: true }));
-  const closeModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: false }));
+
   const handleModalClick = useCallback(
     (group: InterfaceVolunteerGroupInfo | null, modal: ModalState): void => {
       setGroup(group);
-      openModal(modal);
+      setModalState((prevState) => ({ ...prevState, [modal]: true }));
     },
-    [openModal],
+    [],
   );
 
   const handleSearchChange = useCallback((term: string, _searchBy?: string) => {
@@ -145,6 +140,13 @@ function Groups(): JSX.Element {
     () => groupsData?.getEventVolunteerGroups || [],
     [groupsData],
   );
+
+  if (!orgId || !userId) {
+    return <Navigate to={'/'} replace />;
+  }
+
+  const closeModal = (modal: ModalState): void =>
+    setModalState((prevState) => ({ ...prevState, [modal]: false }));
 
   if (groupsError) {
     return (
