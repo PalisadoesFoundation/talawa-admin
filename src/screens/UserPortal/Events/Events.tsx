@@ -70,8 +70,9 @@ import type {
   IEventFormValues,
 } from 'types/EventForm/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import DateRangePicker from 'shared-components/DateRangePicker/DateRangePicker';
 
-export default function events(): JSX.Element {
+export default function Events(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });
   const { t: tCommon } = useTranslation('common');
 
@@ -80,14 +81,23 @@ export default function events(): JSX.Element {
   const [viewType, setViewType] = React.useState<ViewType>(ViewType.MONTH);
   const [createEventModal, setCreateEventmodalisOpen] = React.useState(false);
   const { orgId: organizationId } = useParams();
-  const [currentMonth, setCurrentMonth] = React.useState(new Date().getMonth());
-  const [currentYear, setCurrentYear] = React.useState(
-    new Date().getFullYear(),
-  );
-  const onMonthChange = (month: number, year: number): void => {
-    setCurrentMonth(month);
-    setCurrentYear(year);
-  };
+  const [dateRange, setDateRange] = React.useState<{
+    startDate: Date | null;
+    endDate: Date | null;
+  }>({
+    startDate: dayjs().startOf('month').toDate(),
+    endDate: dayjs().endOf('month').toDate(),
+  });
+
+  const calendarMonth = React.useMemo(() => {
+    if (!dateRange.startDate) return new Date().getMonth();
+    return dayjs(dateRange.startDate).month();
+  }, [dateRange.startDate]);
+
+  const calendarYear = React.useMemo(() => {
+    if (!dateRange.startDate) return new Date().getFullYear();
+    return dayjs(dateRange.startDate).year();
+  }, [dateRange.startDate]);
 
   // Query to fetch events for the organization
   const {
@@ -99,12 +109,12 @@ export default function events(): JSX.Element {
       id: organizationId,
       first: 100,
       after: null,
-      startAt: dayjs(new Date(currentYear, currentMonth, 1))
-        .startOf('month')
-        .toISOString(),
-      endAt: dayjs(new Date(currentYear, currentMonth, 1))
-        .endOf('month')
-        .toISOString(),
+      startAt: dateRange.startDate
+        ? dayjs(dateRange.startDate).startOf('day').toISOString()
+        : null,
+      endAt: dateRange.endDate
+        ? dayjs(dateRange.endDate).endOf('day').toISOString()
+        : null,
       includeRecurring: true,
     },
     notifyOnNetworkStatusChange: true,
@@ -237,13 +247,14 @@ export default function events(): JSX.Element {
       // For other errors (like empty results), handle them properly
       errorHandler(t, eventDataError);
     }
-  }, [eventDataError]);
+  }, [eventDataError, t]);
 
   /**
    * Shows the modal for creating a new event.
    *
    * @returns Void.
    */
+
   const showInviteModal = (): void => {
     setCreateEventmodalisOpen(true);
   };
@@ -272,6 +283,14 @@ export default function events(): JSX.Element {
           />
         </div>
       </div>
+
+      <DateRangePicker
+        value={dateRange}
+        onChange={setDateRange}
+        dataTestId="events-date-range"
+        showPresets
+      />
+
       {/* <div className="mt-4"> */}
       <EventCalendar
         viewType={viewType}
@@ -280,9 +299,9 @@ export default function events(): JSX.Element {
         orgData={orgData}
         userRole={userRole}
         userId={userId}
-        onMonthChange={onMonthChange}
-        currentMonth={currentMonth}
-        currentYear={currentYear}
+        onMonthChange={() => {}}
+        currentMonth={calendarMonth}
+        currentYear={calendarYear}
       />
       {/* </div> */}
       <Modal show={createEventModal} onHide={toggleCreateEventModal}>

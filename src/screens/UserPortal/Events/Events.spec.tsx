@@ -644,46 +644,71 @@ const CREATE_EVENT_NULL_MOCKS = [
 
 // Mock where creator is null and id, name omitted to trigger fallback in mapping
 const CREATOR_NULL_MOCKS = (() => {
-  const baseGet = JSON.parse(JSON.stringify(MOCKS[0]));
-  baseGet.result = {
-    data: {
-      organization: {
-        events: {
-          edges: [
-            {
-              node: {
-                id: null,
-                name: null,
-                description: null,
-                startAt: dayjs().month(2).date(5).startOf('day').toISOString(),
-                endAt: dayjs().month(2).date(5).endOf('day').toISOString(),
-                location: null,
-                allDay: true,
-                isPublic: true,
-                isRegisterable: true,
-                isRecurringEventTemplate: false,
-                baseEvent: null,
-                sequenceNumber: null,
-                totalCount: null,
-                hasExceptions: false,
-                progressLabel: null,
-                recurrenceDescription: null,
-                recurrenceRule: null,
-                creator: null,
-                attachments: [],
+  const mockStartDate = dayjs().startOf('month').startOf('day').toISOString();
+
+  const mockEndDate = dayjs().endOf('month').endOf('day').toISOString();
+
+  return [
+    {
+      request: {
+        query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
+        variables: {
+          id: 'org123',
+          first: 100,
+          after: null,
+          startAt: mockStartDate,
+          endAt: mockEndDate,
+          includeRecurring: true,
+        },
+      },
+      result: {
+        data: {
+          organization: {
+            events: {
+              edges: [
+                {
+                  node: {
+                    id: null,
+                    name: null,
+                    description: null,
+                    startAt: dayjs()
+                      .startOf('month')
+                      .startOf('day')
+                      .toISOString(),
+                    endAt: dayjs().endOf('month').endOf('day').toISOString(),
+                    location: null,
+                    allDay: true,
+                    isPublic: true,
+                    isRegisterable: true,
+                    isRecurringEventTemplate: false,
+                    baseEvent: null,
+                    sequenceNumber: null,
+                    totalCount: null,
+                    hasExceptions: false,
+                    progressLabel: null,
+                    recurrenceDescription: null,
+                    recurrenceRule: null,
+                    creator: null,
+                    attachments: [],
+                    organization: {
+                      id: 'org123',
+                      name: 'Test Org',
+                    },
+                  },
+                  cursor: 'cursor1',
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: 'cursor1',
               },
-              cursor: 'cursor1',
             },
-          ],
-          pageInfo: {
-            hasNextPage: false,
-            endCursor: 'cursor1',
           },
         },
       },
     },
-  };
-  return [baseGet, MOCKS[1]];
+    MOCKS[1],
+  ];
 })();
 
 const link = new StaticMockLink(MOCKS, true);
@@ -1018,8 +1043,10 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('allDayEventCheck'));
 
     const newDateSet = dayjs(new Date());
-    const startDatePicker = screen.getByLabelText('Start Date');
-    const endDatePicker = screen.getByLabelText('End Date');
+    const startDatePicker = screen.getByTestId(
+      'eventStartAt',
+    ) as HTMLInputElement;
+    const endDatePicker = screen.getByTestId('eventEndAt') as HTMLInputElement;
     fireEvent.change(startDatePicker, {
       target: { value: newDateSet.format('YYYY-MM-DD') },
     });
@@ -1238,13 +1265,13 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
+      expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
     });
 
-    const startDatePicker = screen.getByLabelText(
-      'Start Date',
+    const startDatePicker = screen.getByTestId(
+      'eventStartAt',
     ) as HTMLInputElement;
-    const endDatePicker = screen.getByLabelText('End Date') as HTMLInputElement;
+    const endDatePicker = screen.getByTestId('eventEndAt') as HTMLInputElement;
     const newDate = dayjs().add(1, 'day');
 
     fireEvent.change(startDatePicker, {
@@ -1258,8 +1285,8 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     // Date pickers should accept the changes - re-query as elements might have been detached
-    expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
-    expect(screen.getByLabelText('End Date')).toBeInTheDocument();
+    expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
+    expect(screen.getByTestId('eventEndAt')).toBeInTheDocument();
   });
 
   it('Should handle time picker changes when all-day is disabled', async () => {
@@ -1342,13 +1369,13 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
+      screen.getByTestId('eventStartAt');
     });
 
-    const startDatePicker = screen.getByLabelText(
-      'Start Date',
+    const startDatePicker = screen.getByTestId(
+      'eventStartAt',
     ) as HTMLInputElement;
-    const endDatePicker = screen.getByLabelText('End Date') as HTMLInputElement;
+    const endDatePicker = screen.getByTestId('eventEndAt') as HTMLInputElement;
     fireEvent.change(startDatePicker, {
       target: { value: '' },
     });
@@ -1360,7 +1387,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     // Should handle null values without crashing
-    expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
+    expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
   });
 
   it('Should handle network error gracefully', async () => {
@@ -1588,6 +1615,12 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait();
 
+    await waitFor(() => {
+      expect(screen.getByTestId('calendar-view-type')).toHaveTextContent(
+        'Month View',
+      );
+    });
+
     // Change view to DAY first
     const dayViewButton = screen.getByTestId('selectDay');
     await userEvent.click(dayViewButton);
@@ -1598,6 +1631,7 @@ describe('Testing Events Screen [User Portal]', () => {
     // Now call handleChangeView(null)
     await userEvent.click(screen.getByTestId('handleChangeNullBtn'));
 
+    await wait();
     // View type should remain DAY
     await waitFor(() => {
       expect(screen.getByTestId('calendar-view-type')).toHaveTextContent('DAY');
@@ -1690,7 +1724,9 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should map missing creator to default (fallback) in eventData mapping', async () => {
     const testLink = new StaticMockLink(CREATOR_NULL_MOCKS, true);
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({
+      addTypename: false,
+    });
     render(
       <MockedProvider link={testLink} cache={cache}>
         <BrowserRouter>
@@ -1707,16 +1743,19 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(
+      () => {
+        // EventCalendar mock renders eventData JSON in `event-data-json`
+        const jsonPre = screen.getByTestId('event-data-json');
+        const parsed = JSON.parse(jsonPre.textContent || '[]');
 
-    // EventCalendar mock renders eventData JSON in `event-data-json`
-    const jsonPre = screen.getByTestId('event-data-json');
-    const parsed = JSON.parse(jsonPre.textContent || '[]');
-
-    expect(parsed).toBeInstanceOf(Array);
-    expect(parsed.length).toBeGreaterThan(0);
-    // Creator fallback should be used when creator is null
-    expect(parsed[0].creator).toEqual({ id: '', name: '' });
+        expect(parsed).toBeInstanceOf(Array);
+        expect(parsed.length).toBeGreaterThan(0);
+        // Creator fallback should be used when creator is null
+        expect(parsed[0].creator).toEqual({ id: '', name: '' });
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('Should create an event with recurrence rule successfully', async () => {
