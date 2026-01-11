@@ -6,21 +6,19 @@
  * image or video, and optionally pin the post. The component handles file preview,
  * file hashing, GraphQL mutation submission, and UI state reset on success.
  *
- * @component
- * @param {ICreatePostModalProps} props - The props for the CreatePostModal component.
- * @param {boolean} props.show - Controls the visibility of the modal.
- * @param {() => void} props.onHide - Callback invoked to close the modal.
- * @param {() => Promise<unknown>} props.refetch - Function to refetch posts after a successful creation.
- * @param {string | undefined} props.orgId - The organization ID where the post will be created.
+ * @param show - Controls the visibility of the modal.
+ * @param onHide - Callback invoked to close the modal.
+ * @param refetch - Function to refetch posts after a successful creation.
+ * @param orgId - The organization ID where the post will be created.
  *
- * @returns {JSX.Element} A JSX element representing the create post modal.
+ * @returns A JSX element representing the create post modal.
  *
  * @remarks
  * - Uses `@apollo/client` for executing the `CREATE_POST_MUTATION`.
  * - Supports image and video uploads with MIME type validation.
  * - File integrity is ensured by generating a SHA-256 hash using the Web Crypto API.
  * - Displays media previews using `URL.createObjectURL`.
- * - Uses `react-i18next` for localization and `react-toastify` for user feedback.
+ * - Uses `react-i18next` for localization and `NotificationToast` for user feedback.
  * - Automatically resets form state and clears file inputs after successful submission.
  * - The modal can be dismissed by clicking the backdrop or pressing the `Escape` key.
  *
@@ -50,9 +48,9 @@ import {
   CREATE_POST_MUTATION,
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import { useTranslation } from 'react-i18next';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { ICreatePostData, ICreatePostInput } from 'types/Post/type';
 import { ICreatePostModalProps } from 'types/Post/interface';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
@@ -138,7 +136,7 @@ function CreatePostModal({
     if (getMimeTypeEnum(file.type) === '0') {
       setFile(null);
       setPreview(null);
-      toast.error(t('createPostModal.unsupportedFileType'));
+      NotificationToast.error(t('createPostModal.unsupportedFileType'));
       return;
     }
     if (file.type.startsWith('image/')) {
@@ -154,7 +152,7 @@ function CreatePostModal({
   };
 
   const onSuccess = async (type: 'edited' | 'created') => {
-    toast.success(
+    NotificationToast.success(
       type === 'created'
         ? (t('createPostModal.postCreatedSuccess') as string)
         : (t('createPostModal.postUpdatedSuccess') as string),
@@ -181,7 +179,7 @@ function CreatePostModal({
 
     try {
       if (!orgId) {
-        toast.error(t('createPostModal.organizationIdMissing'));
+        NotificationToast.error(t('createPostModal.organizationIdMissing'));
         return;
       }
       if (type === 'create') {

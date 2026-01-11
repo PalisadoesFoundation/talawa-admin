@@ -22,8 +22,8 @@
  */
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   IconButton,
   Button,
@@ -124,7 +124,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       setIsLikedByUser(!isLikedByUser);
       setLikeCount(isLikedByUser ? likeCount - 1 : likeCount + 1);
     } catch (error) {
-      toast.error(error as string);
+      NotificationToast.error(error as string);
     }
   };
 
@@ -168,7 +168,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         },
       });
       await props.fetchPosts();
-      toast.success(
+      NotificationToast.success(
         isPinned
           ? t('postCard.postUnpinnedSuccess')
           : t('postCard.postPinnedSuccess'),
@@ -184,7 +184,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
     try {
       await deletePost({ variables: { input: { id: props.id } } });
       await props.fetchPosts();
-      toast.success(t('postCard.postDeletedSuccess'));
+      NotificationToast.success(t('postCard.postDeletedSuccess'));
       setDropdownAnchor(null);
     } catch (error) {
       errorHandler(t, error);
