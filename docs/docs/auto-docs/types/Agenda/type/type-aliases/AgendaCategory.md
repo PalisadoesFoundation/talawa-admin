@@ -52,7 +52,7 @@ Defined in: [src/types/Agenda/type.ts:9](https://github.com/PalisadoesFoundation
 
 ### organization
 
-> **organization**: [`Organization`](../../../Organization/type/type-aliases/Organization.md)
+> **organization**: [`Organization`](../../../AdminPortal/Organization/type/type-aliases/Organization.md)
 
 Defined in: [src/types/Agenda/type.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L10)
 
