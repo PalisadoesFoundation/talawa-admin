@@ -1254,7 +1254,7 @@
     "nothingToShow": "这里没有可显示的内容。",
     "sNo": "序号",
     "avatar": "头像",
-    "avatar_alt": "头像 {{name}}",
+    "avatar_alt": "{{name}} 的头像",
     "name": "姓名",
     "email": "邮箱",
     "role": "角色",

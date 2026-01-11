@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 
 import PeopleCard from './PeopleCard';
-import type { InterfacePeopleCardProps } from 'types/UserPortal/People/interface';
+import type { InterfacePeopleCardProps } from 'types/UserPortal/PeopleCard/interface';
 
 const baseProps: InterfacePeopleCardProps = {
   id: '1',

@@ -315,12 +315,20 @@ function OrganizationPeople(): JSX.Element {
                       )}
                     </td>
                     <td className={`${styles.tableCell} ${styles.centerAlign}`}>
-                      <Link
-                        to={`/member/${currentUrl}/${memberItem.id}`}
-                        className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.memberNameFontSize}`}
-                      >
-                        {memberItem.name}
-                      </Link>
+                      {currentUrl ? (
+                        <Link
+                          to={`/member/${currentUrl}/${memberItem.id}`}
+                          className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.memberNameFontSize}`}
+                        >
+                          {memberItem.name}
+                        </Link>
+                      ) : (
+                        <span
+                          className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.memberNameFontSize}`}
+                        >
+                          {memberItem.name}
+                        </span>
+                      )}
                     </td>
                     <td className={`${styles.tableCell} ${styles.centerAlign}`}>
                       {memberItem.emailAddress || '-'}

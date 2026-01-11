@@ -127,7 +127,7 @@ export interface InterfaceCursorPaginationManagerProps<
 
   /**
    * When true, renders items without wrapper divs for table contexts
-   * Use this when renderItem returns <tr> elements to be placed inside <tbody>
+   * Use this when renderItem returns `<tr>` elements to be placed inside `<tbody>`
    * @defaultValue false
    */
   tableMode?: boolean;
