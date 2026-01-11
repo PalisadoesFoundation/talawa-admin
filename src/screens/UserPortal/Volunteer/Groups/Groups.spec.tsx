@@ -944,8 +944,19 @@ describe('Groups Screen [User Portal]', () => {
     expect(screen.getByText('Group 1')).toBeInTheDocument();
   });
 
-  it('tests whereVariables useMemo with empty search conditions', async () => {
-    let capturedVariables: { where: Record<string, unknown>; orderBy: string };
+  it('sends only orgId and userId when search conditions are empty', async () => {
+    let capturedVariables:
+      | {
+          where: {
+            userId: string;
+            orgId: string;
+            name_contains?: string;
+            leaderName?: string;
+          };
+          orderBy: string;
+        }
+      | undefined;
+
     const mockLink = new MockLink([
       {
         request: {
@@ -964,12 +975,25 @@ describe('Groups Screen [User Portal]', () => {
             data: {
               getEventVolunteerGroups: [
                 {
-                  _id: '1',
+                  __typename: 'EventVolunteerGroup',
+                  id: '1',
                   name: 'Group 1',
+                  description: 'Test group description',
                   volunteersRequired: 10,
                   volunteers: [],
-                  leader: { _id: '1', firstName: 'Leader', lastName: 'One' },
-                  event: { _id: 'eventId' },
+                  createdAt: dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+                  leader: {
+                    __typename: 'User',
+                    id: '1',
+                    firstName: 'Leader',
+                    lastName: 'One',
+                    email: 'leader@example.com',
+                    avatarURL: null,
+                  },
+                  event: {
+                    __typename: 'Event',
+                    id: 'eventId',
+                  },
                 },
               ],
             },
@@ -1006,6 +1030,7 @@ describe('Groups Screen [User Portal]', () => {
     await userEvent.clear(searchInput);
 
     await waitFor(() => {
+      expect(capturedVariables).toBeDefined();
       expect(capturedVariables).toEqual({
         where: { userId: 'userId', orgId: 'orgId' },
         orderBy: 'volunteers_DESC',
