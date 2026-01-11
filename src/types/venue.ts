@@ -1,4 +1,4 @@
-import type { Organization } from 'types//AdminPortal/Organization/type';
+import type { Organization } from 'types/AdminPortal/Organization/type';
 
 export type Venue = {
   _id: string;

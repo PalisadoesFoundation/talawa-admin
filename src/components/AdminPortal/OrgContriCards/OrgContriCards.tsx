@@ -1,7 +1,6 @@
 /**
  * A React functional component that displays contribution details for an organization.
  *
- * @param props - The properties passed to the component.
  * @param userName - The name of the user who made the contribution.
  * @param userEmail - The email address of the user who made the contribution.
  * @param contriDate - The date when the contribution was made.
@@ -32,7 +31,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { useTranslation } from 'react-i18next';
 
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import type { InterfaceOrgContriCardsProps } from 'types/Contribution/interface';
 
 function orgContriCards(props: InterfaceOrgContriCardsProps): JSX.Element {

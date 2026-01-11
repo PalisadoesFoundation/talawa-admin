@@ -1,7 +1,6 @@
 /**
  * A React functional component that displays contribution statistics.
  *
- * @param props - The props for the component.
  * @param recentAmount - The most recent contribution amount.
  * @param highestAmount - The highest contribution amount.
  * @param totalAmount - The total contribution amount.
