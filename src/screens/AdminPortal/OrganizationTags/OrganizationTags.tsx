@@ -226,6 +226,7 @@ function OrganizationTags(): JSX.Element {
                   key={tag.id}
                   className={styles.tagsBreadCrumbs}
                   data-testid="ancestorTagsBreadCrumbs"
+                  data-text={tag.name}
                 >
                   {tag.name}
                   <i className={'mx-2 fa fa-caret-right'} />
@@ -391,7 +392,10 @@ function OrganizationTags(): JSX.Element {
                   <IconComponent name="Tag" />
                 </div>
 
-                <div className={'fs-4 ms-3 my-1 ' + styles.tagsBreadCrumbs}>
+                <div
+                  className={'fs-4 ms-3 my-1 ' + styles.tagsBreadCrumbs}
+                  data-text={t('tags')}
+                >
                   {t('tags')}
                 </div>
               </div>

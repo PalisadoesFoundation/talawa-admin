@@ -12,7 +12,7 @@ import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQu
 import { DELETE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/AdvertisementMutations';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { client } from 'components/AdminPortal/Advertisements/AdvertisementsMocks';
-import { AdvertisementType } from 'types/Advertisement/type';
+import { AdvertisementType } from 'types/AdminPortal/Advertisement/type';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 

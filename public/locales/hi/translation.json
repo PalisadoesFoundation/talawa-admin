@@ -70,8 +70,12 @@
     "admin": "व्यवस्थापक",
     "user": "उपयोगकर्ता",
     "loading": "लोड हो रहा है",
+    "userImage": "उपयोगकर्ता छवि",
+    "userEditProfilePicture": "प्रोफ़ाइल चित्र संपादित करें",
     "communityLogo": "समुदाय लोगो",
-    "organizations": "संगठन"
+    "organizations": "संगठन",
+    "accountLocked": "बहुत अधिक असफल लॉगिन प्रयासों के कारण आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया बाद में पुनः प्रयास करें।",
+    "accountLockedWithTimer": "आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया {{minutes}} मिनट में पुनः प्रयास करें।"
   },
   "adminProfile": {
     "title": "एडमिन प्रोफ़ाइल",
@@ -441,6 +445,18 @@
     "viewSubTags": "{{count}} उप-टैग देखें",
     "tags": "टैग"
   },
+  "statusBadge": {
+    "completed": "पूर्ण",
+    "pending": "लंबित",
+    "active": "सक्रिय",
+    "inactive": "निष्क्रिय",
+    "approved": "अनुमोदित",
+    "rejected": "अस्वीकृत",
+    "disabled": "अक्षम",
+    "accepted": "स्वीकृत",
+    "declined": "अस्वीकार किया गया",
+    "no_response": "कोई प्रतिक्रिया नहीं"
+  },
   "manageTag": {
     "title": "टैग विवरण",
     "addPeopleToTag": "टैग में लोगों को जोड़ें",
@@ -459,7 +475,6 @@
     "userName": "उपयोगकर्ता नाम",
     "actions": "क्रियाएँ",
     "noOneSelected": "कोई चयनित नहीं",
-    "addMember": "सदस्य जोड़ें",
     "assignToTags": "टैग्स को असाइन करें",
     "removeFromTags": "टैग्स से हटाएं",
     "assign": "असाइन करें",
@@ -789,9 +804,9 @@
     "viewCampaigns": "कैम्पेंस देखें",
     "assocCampaigns": "संबद्ध अभियान",
     "associatedCampaigns": "संबद्ध अभियान",
-    "searchFunds": "फंड खोजें",
     "errorLoadingFundsData": "फंड डेटा लोड करते समय त्रुटि हुई",
-    "editFund": "फंड संपादित करें"
+    "editFund": "फंड संपादित करें",
+    "searchFunds": "फंड खोजें"
   },
   "fundCampaign": {
     "title": "फंडरेजिंग कैंपेन",
@@ -820,6 +835,7 @@
     "earliestEndDate": "सबसे पहली समाप्ति तिथि",
     "lowestGoal": "सबसे कम उद्देश्य",
     "highestGoal": "सबसे ऊंचा उद्देश्य",
+    "errorLoading": "अभियान डेटा लोड करते समय त्रुटि हुई",
     "percentageRaised": "% एकत्रित",
     "campaignProgress": "अभियान प्रगति: {{percentage}}%"
   },
@@ -1197,7 +1213,20 @@
     "unassignUserTagMessage": "क्या आप इस उपयोगकर्ता से टैग हटाना चाहते हैं?",
     "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया",
     "tagsAssigned": "टैग सौंपे गए",
-    "noTagsAssigned": "कोई टैग सौंपा नहीं गया"
+    "noTagsAssigned": "कोई टैग सौंपा नहीं गया",
+    "to": "को",
+    "overview": "अवलोकन",
+    "tags": "टैग",
+    "invalidFileType": "अमान्य फ़ाइल प्रकार",
+    "fileTooLarge": "फ़ाइल बहुत बड़ी है",
+    "memberDetailNumberExample": "उदाहरण: 1234567890",
+    "memberDetailExampleLane": "उदाहरण: मुख्य मार्ग",
+    "memberDetailPostalExample": "उदाहरण: 110001",
+    "enterCity": "शहर दर्ज करें",
+    "enterState": "राज्य दर्ज करें",
+    "select": "चुनें",
+    "asYourCountry": "अपने देश के रूप में",
+    "actions": "कार्रवाई"
   },
   "people": {
     "title": "लोग",
@@ -1359,7 +1388,8 @@
     "event": "आयोजन",
     "article": "लेख",
     "postNowVisibleInFeed": "पोस्ट अब फीड में दिखाई दे रहा है",
-    "processingPost": "आपकी पोस्ट प्रसंस्करण कर रहे हैं। कृपया प्रतीक्षा करें।"
+    "processingPost": "आपकी पोस्ट प्रसंस्करण कर रहे हैं। कृपया प्रतीक्षा करें।",
+    "postImagePreview": "पोस्ट छवि पूर्वावलोकन"
   },
   "eventAttendance": {
     "event_attendance_table": "इवेंट उपस्थिति तालिका",
@@ -1396,7 +1426,13 @@
     "createdAt": "निर्माण तिथि",
     "options": "विकल्प",
     "addRegistrant": "पंजीकृत व्यक्ति जोड़ें",
-    "noRegistrantsFound": "कोई पंजीकृत व्यक्ति नहीं मिला"
+    "noRegistrantsFound": "कोई पंजीकृत व्यक्ति नहीं मिला",
+    "removingAttendee": "प्रतिभागी को हटाया जा रहा है...",
+    "attendeeRemovedSuccessfully": "प्रतिभागी सफलतापूर्वक हटा दिया गया",
+    "errorRemovingAttendee": "प्रतिभागी को हटाने में त्रुटि हुई। कृपया पुनः प्रयास करें।",
+    "checkedIn": "चेक इन किया गया",
+    "unregister": "पंजीकरण रद्द करें",
+    "cannotUnregisterCheckedInTooltip": "पहले से चेक इन किए गए उपयोगकर्ता का पंजीकरण रद्द नहीं किया जा सकता"
   },
   "onSpotAttendee": {
     "title": "ऑन-स्पॉट प्रतिभागी",
@@ -1531,7 +1567,9 @@
     "latestFirst": "नवीनतम पहले",
     "earliestFirst": "सबसे पहले",
     "noTransactionsFound": "कोई लेन-देन नहीं मिला",
-    "errorLoadingTransactions": "लेन-देन लोड करने में त्रुटि"
+    "errorLoadingTransactions": "लेन-देन लोड करने में त्रुटि",
+    "eventType": "कार्यक्रम प्रकार",
+    "tagCreationFailed": "टैग निर्माण विफल रहा"
   },
   "userEvents": {
     "title": "कार्यक्रम",
@@ -1818,6 +1856,13 @@
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
     "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
+    "eventRegistrantsTitle": "कार्यक्रम पंजीकृत व्यक्ति",
+    "inviteByEmailButton": "ईमेल द्वारा आमंत्रित करें",
+    "addRegistrantButton": "पंजीकृत व्यक्ति जोड़ें",
+    "noRegistrationsFound": "कोई पंजीकरण नहीं मिला",
+    "addOnspotRegistrationLink": "ऑन-स्पॉट पंजीकरण जोड़ें लिंक",
+    "addRegistrantLabel": "पंजीकृत व्यक्ति जोड़ें",
+    "addRegistrantPlaceholder": "पंजीकृत व्यक्ति का नाम या ईमेल दर्ज करें",
     "inviteByEmail": {
       "addRecipient": "प्राप्तकर्ता जोड़ें",
       "email": "ईमेल",
@@ -1859,17 +1904,17 @@
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
     "noCampaigns": "कोई अभियान नहीं मिला",
     "raised": "एकत्रित",
+    "campaignName": "अभियान का नाम",
+    "startDate": "आरंभ करने की तिथि",
+    "endDate": "अंतिम तिथि",
+    "fundingGoal": "निधि लक्ष्य",
+    "viewPledge": "प्रतिज्ञा देखें",
     "amountRaised": "एकत्रित राशि",
     "campaignIndex": "#",
-    "campaignName": "अभियान का नाम",
-    "startDate": "शुरुआत तिथि",
-    "endDate": "अंतिम तिथि",
     "fundGoal": "वित्त पोषण लक्ष्य",
     "percentRaised": "% एकत्रित",
     "createFirstCampaign": "इसे यहाँ देखने के लिए अपना पहला धन उगाहने का अभियान बनाएं।",
-    "campaignEnded": "अभियान समाप्त हो गया",
-    "fundingGoal": "फंडिंग उद्देश्य",
-    "viewPledge": "प्लेज देखें"
+    "campaignEnded": "अभियान समाप्त हो गया"
   },
   "userPledges": {
     "title": "मेरी प्रतिज्ञाएँ",

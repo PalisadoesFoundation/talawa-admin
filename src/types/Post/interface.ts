@@ -1,4 +1,4 @@
-import type { User } from 'types/User/type';
+import type { User } from 'types/shared-components/User/type';
 import type { Comment } from 'types/Comment/type';
 export interface InterfacePostCard {
   _id: string;

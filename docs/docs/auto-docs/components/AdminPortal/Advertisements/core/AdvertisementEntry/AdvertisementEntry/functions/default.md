@@ -14,7 +14,7 @@ Defined in: [src/components/AdminPortal/Advertisements/core/AdvertisementEntry/A
 
 #### advertisement
 
-[`Advertisement`](../../../../../../../types/Advertisement/type/type-aliases/Advertisement.md)
+[`Advertisement`](../../../../../../../types/AdminPortal/Advertisement/type/type-aliases/Advertisement.md)
 
 #### setAfterActive
 
