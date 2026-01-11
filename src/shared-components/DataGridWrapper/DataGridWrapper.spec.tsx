@@ -47,6 +47,160 @@ describe('DataGridWrapper', () => {
     vi.useRealTimers();
   });
 
+  // Server-side search tests
+  describe('Server-side search functionality', () => {
+    test('renders SearchFilterBar for server-side search with searchByOptions', () => {
+      const mockOnSearchChange = vi.fn();
+      const mockOnSearchByChange = vi.fn();
+
+      render(
+        <DataGridWrapper
+          rows={defaultProps.rows}
+          columns={defaultProps.columns}
+          searchConfig={{
+            enabled: true,
+            serverSide: true,
+            searchTerm: 'test',
+            searchByOptions: [
+              { label: 'Name', value: 'name' },
+              { label: 'Role', value: 'role' },
+            ],
+            selectedSearchBy: 'name',
+            onSearchChange: mockOnSearchChange,
+            onSearchByChange: mockOnSearchByChange,
+            searchInputTestId: 'server-search-input',
+          }}
+        />,
+      );
+
+      expect(screen.getByTestId('server-search-input')).toBeInTheDocument();
+    });
+
+    test('calls server-side search callbacks when search changes', () => {
+      vi.useFakeTimers();
+      const mockOnSearchChange = vi.fn();
+      const mockOnSearchByChange = vi.fn();
+
+      render(
+        <DataGridWrapper
+          rows={defaultProps.rows}
+          columns={defaultProps.columns}
+          searchConfig={{
+            enabled: true,
+            serverSide: true,
+            searchTerm: '',
+            searchByOptions: [
+              { label: 'Name', value: 'name' },
+              { label: 'Role', value: 'role' },
+            ],
+            selectedSearchBy: 'name',
+            onSearchChange: mockOnSearchChange,
+            onSearchByChange: mockOnSearchByChange,
+            searchInputTestId: 'server-search-input',
+          }}
+        />,
+      );
+
+      const searchInput = screen.getByTestId('server-search-input');
+      fireEvent.change(searchInput, { target: { value: 'Alice' } });
+
+      // Advance timers to trigger debounced callback
+      vi.advanceTimersByTime(300);
+
+      expect(mockOnSearchChange).toHaveBeenCalledWith('Alice', 'name');
+    });
+
+    test('calls server-side sort callback when sort changes', () => {
+      const mockOnSortChange = vi.fn();
+
+      render(
+        <DataGridWrapper
+          rows={defaultProps.rows}
+          columns={defaultProps.columns}
+          searchConfig={{
+            enabled: true,
+            serverSide: true,
+            searchByOptions: [{ label: 'Name', value: 'name' }],
+          }}
+          sortConfig={{
+            sortingOptions: [
+              { label: 'Name A-Z', value: 'name_asc' },
+              { label: 'Name Z-A', value: 'name_desc' },
+            ],
+            selectedSort: 'name_asc',
+            onSortChange: mockOnSortChange,
+          }}
+        />,
+      );
+
+      const sortButton = screen.getByTestId('sort');
+      fireEvent.click(sortButton);
+
+      const sortOption = screen.getByText('Name Z-A');
+      fireEvent.click(sortOption);
+
+      expect(mockOnSortChange).toHaveBeenCalledWith('name_desc');
+    });
+
+    test('shows runtime validation warning for missing onSearchChange', () => {
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+      render(
+        <DataGridWrapper
+          rows={defaultProps.rows}
+          columns={defaultProps.columns}
+          searchConfig={{
+            enabled: true,
+            serverSide: true,
+            // Missing onSearchChange callback
+          }}
+        />,
+      );
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        '[DataGridWrapper] Server-side search enabled but onSearchChange callback is missing',
+      );
+
+      consoleSpy.mockRestore();
+    });
+
+    test('skips client-side filtering when serverSide is true', () => {
+      render(
+        <DataGridWrapper
+          rows={defaultProps.rows}
+          columns={defaultProps.columns}
+          searchConfig={{
+            enabled: true,
+            serverSide: true,
+            searchTerm: 'Alice', // This should not filter client-side
+            fields: ['name'],
+          }}
+        />,
+      );
+
+      // All rows should be visible since server-side mode skips client filtering
+      expect(screen.getByText('Alice')).toBeInTheDocument();
+      expect(screen.getByText('Bob')).toBeInTheDocument();
+      expect(screen.getByText('Charlie')).toBeInTheDocument();
+    });
+
+    test('uses server-side selectedSort when provided', () => {
+      render(
+        <DataGridWrapper
+          rows={defaultProps.rows}
+          columns={defaultProps.columns}
+          sortConfig={{
+            selectedSort: 'custom_sort',
+            sortingOptions: [{ label: 'Custom Sort', value: 'custom_sort' }],
+          }}
+        />,
+      );
+
+      // Component should initialize with the provided selectedSort
+      expect(screen.getByText('Sort')).toBeInTheDocument();
+    });
+  });
+
   test('renders loading state (spinner)', () => {
     render(<DataGridWrapper {...defaultProps} loading={true} />);
     expect(screen.getByTestId('loading-state')).toBeInTheDocument();
