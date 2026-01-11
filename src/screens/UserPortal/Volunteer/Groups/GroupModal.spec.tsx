@@ -537,6 +537,63 @@ describe('Testing GroupModal', () => {
     expect(userName[0]).toHaveTextContent('John Doe');
   });
 
+  it('should display image when user has avatarURL', async () => {
+    // Create a custom itemProps with a user that has an avatarURL
+    const propsWithAvatar: InterfaceGroupModal = {
+      ...itemProps[0],
+      group: {
+        ...itemProps[0].group,
+      },
+    };
+
+    const link3 = new StaticMockLink([
+      {
+        request: {
+          query: USER_VOLUNTEER_MEMBERSHIP,
+          variables: {
+            where: {
+              eventId: 'eventId',
+              groupId: 'groupId',
+              status: 'requested',
+            },
+          },
+        },
+        result: {
+          data: {
+            getVolunteerMembership: [
+              {
+                __typename: 'VolunteerMembership',
+                id: 'membershipId1',
+                status: 'requested',
+                volunteer: {
+                  __typename: 'EventVolunteer',
+                  user: {
+                    __typename: 'User',
+                    id: 'userId1',
+                    name: 'John Doe',
+                    avatarURL: 'https://example.com/avatar.jpg',
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    ]);
+
+    renderGroupModal(link3, propsWithAvatar);
+    const requestsRadio = screen.getByLabelText(t.requests);
+    await userEvent.click(requestsRadio);
+
+    // Wait for the image to be rendered
+    const avatarImage = await screen.findByAltText(t.volunteerAlt);
+    expect(avatarImage).toBeInTheDocument();
+    expect(avatarImage).toHaveAttribute(
+      'src',
+      'https://example.com/avatar.jpg',
+    );
+  });
+
   it('GroupModal -> Requests -> Accept -> Error', async () => {
     renderGroupModal(link2, itemProps[0]);
     expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
