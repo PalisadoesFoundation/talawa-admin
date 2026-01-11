@@ -1,6 +1,5 @@
 /**
- * @module shared-components/DataGridWrapper
- * @summary DataGridWrapper component for displaying tabular data with integrated search, sorting, and pagination capabilities.
+ * DataGridWrapper component for displaying tabular data with integrated search, sorting, and pagination capabilities.
  *
  * This module provides a reusable wrapper around Material-UI's DataGrid component,
  * enhancing it with built-in search functionality, configurable sorting options,
@@ -15,6 +14,7 @@ import type { InterfaceDataGridWrapperProps } from '../../types/DataGridWrapper/
 import styles from './DataGridWrapper.module.css';
 
 import SearchBar from '../SearchBar/SearchBar';
+import SearchFilterBar from '../SearchFilterBar/SearchFilterBar';
 
 import SortingButton from '../../subComponents/SortingButton';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
@@ -23,8 +23,7 @@ import { DataGridErrorOverlay } from './DataGridErrorOverlay';
 /**
  * A generic wrapper around MUI DataGrid with built-in search, sorting, and pagination.
  *
- * @template T - The row data type (must include `id: string | number`)
- * @param props - Component props defined by InterfaceDataGridWrapperProps\<T\>
+ * @param props - Component props defined by InterfaceDataGridWrapperProps
  * @returns A data grid with optional toolbar controls (search, sort) and enhanced features
  *
  * @example
@@ -100,8 +99,18 @@ export function DataGridWrapper<T extends { id: string | number }>(
     paginationConfig?.defaultPageSize ?? 10,
   );
 
-  // Debounce search term to improve performance
+  // Use server-side search values if provided, otherwise use internal state
+  const currentSearchTerm = searchConfig?.serverSide
+    ? (searchConfig.searchTerm ?? '')
+    : searchTerm;
+  const currentDebouncedSearchTerm = searchConfig?.serverSide
+    ? (searchConfig.searchTerm ?? '')
+    : debouncedSearchTerm;
+
+  // Debounce search term to improve performance (client-side only)
   useEffect(() => {
+    if (searchConfig?.serverSide) return; // Skip debouncing for server-side
+
     const debounceDelay = searchConfig?.debounceMs ?? 300;
     const timer = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
@@ -110,18 +119,28 @@ export function DataGridWrapper<T extends { id: string | number }>(
     return () => {
       clearTimeout(timer);
     };
-  }, [searchTerm]);
+  }, [searchTerm, searchConfig?.debounceMs, searchConfig?.serverSide]);
 
   const filtered = useMemo(() => {
-    if (!searchConfig?.enabled || !debouncedSearchTerm) return rows;
-    return rows.filter((r: T) =>
-      searchConfig.fields.some((f) =>
+    // Skip client-side filtering for server-side mode
+    if (searchConfig?.serverSide) return rows;
+
+    if (
+      !searchConfig?.enabled ||
+      !currentDebouncedSearchTerm ||
+      !searchConfig.fields
+    )
+      return rows;
+
+    return rows.filter((r: T) => {
+      const fields = searchConfig.fields as Array<keyof T & string>;
+      return fields.some((f) =>
         String(r[f as keyof T] ?? '')
           .toLowerCase()
-          .includes(debouncedSearchTerm.toLowerCase()),
-      ),
-    );
-  }, [rows, debouncedSearchTerm, searchConfig]);
+          .includes(currentDebouncedSearchTerm.toLowerCase()),
+      );
+    });
+  }, [rows, currentDebouncedSearchTerm, searchConfig]);
 
   const sortModel = useMemo(() => {
     if (!selectedSort) return [];
@@ -152,18 +171,95 @@ export function DataGridWrapper<T extends { id: string | number }>(
   return (
     <div>
       <div className={styles.toolbar}>
-        {searchConfig?.enabled && (
+        {searchConfig?.enabled && searchConfig.searchByOptions ? (
+          // Server-side search with SearchFilterBar
+          <SearchFilterBar
+            searchPlaceholder={searchConfig.placeholder ?? tCommon('search')}
+            searchValue={currentSearchTerm}
+            onSearchChange={(value) => {
+              if (searchConfig.serverSide && searchConfig.onSearchChange) {
+                searchConfig.onSearchChange(
+                  value,
+                  searchConfig.selectedSearchBy,
+                );
+              } else {
+                setSearchTerm(value);
+              }
+            }}
+            onSearchSubmit={(value) => {
+              if (searchConfig.serverSide && searchConfig.onSearchChange) {
+                searchConfig.onSearchChange(
+                  value,
+                  searchConfig.selectedSearchBy,
+                );
+              } else {
+                setSearchTerm(value);
+              }
+            }}
+            searchInputTestId={searchConfig.searchInputTestId ?? 'searchInput'}
+            searchButtonTestId="searchButton"
+            hasDropdowns={true}
+            dropdowns={[
+              {
+                id: 'search-by',
+                label: tCommon('searchBy', { item: '' }),
+                type: 'filter' as const,
+                options: searchConfig.searchByOptions,
+                selectedOption: searchConfig.selectedSearchBy ?? '',
+                onOptionChange: (value: string | number) => {
+                  if (searchConfig.onSearchByChange) {
+                    searchConfig.onSearchByChange(value as string);
+                  }
+                },
+                dataTestIdPrefix: 'searchBy',
+              },
+              ...(sortConfig?.sortingOptions
+                ? [
+                    {
+                      id: 'sort',
+                      label: tCommon('sort'),
+                      type: 'sort' as const,
+                      options: sortConfig.sortingOptions,
+                      selectedOption: selectedSort,
+                      onOptionChange: (value: string | number) =>
+                        setSelectedSort(value),
+                      dataTestIdPrefix: 'sort',
+                    },
+                  ]
+                : []),
+            ]}
+          />
+        ) : searchConfig?.enabled ? (
+          // Client-side search with SearchBar
           <SearchBar
             placeholder={searchConfig.placeholder ?? tCommon('search')}
-            value={searchTerm}
-            onChange={(val) => setSearchTerm(val)}
-            onSearch={(val) => setSearchTerm(val)}
-            onClear={() => setSearchTerm('')}
-            inputTestId="search-bar"
+            value={currentSearchTerm}
+            onChange={(val) => {
+              if (searchConfig.serverSide && searchConfig.onSearchChange) {
+                searchConfig.onSearchChange(val);
+              } else {
+                setSearchTerm(val);
+              }
+            }}
+            onSearch={(val) => {
+              if (searchConfig.serverSide && searchConfig.onSearchChange) {
+                searchConfig.onSearchChange(val);
+              } else {
+                setSearchTerm(val);
+              }
+            }}
+            onClear={() => {
+              if (searchConfig.serverSide && searchConfig.onSearchChange) {
+                searchConfig.onSearchChange('');
+              } else {
+                setSearchTerm('');
+              }
+            }}
+            inputTestId={searchConfig.searchInputTestId ?? 'search-bar'}
             aria-label={tCommon('search')}
           />
-        )}
-        {sortConfig?.sortingOptions && (
+        ) : null}
+        {sortConfig?.sortingOptions && !searchConfig?.searchByOptions && (
           <SortingButton
             dataTestIdPrefix="sort"
             sortingOptions={sortConfig.sortingOptions}
