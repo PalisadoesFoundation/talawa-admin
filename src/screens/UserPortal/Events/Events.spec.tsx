@@ -1631,6 +1631,7 @@ describe('Testing Events Screen [User Portal]', () => {
     // Now call handleChangeView(null)
     await userEvent.click(screen.getByTestId('handleChangeNullBtn'));
 
+    // Wait for state to settle after no-op view change
     await wait();
     // View type should remain DAY
     await waitFor(() => {
@@ -1724,6 +1725,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should map missing creator to default (fallback) in eventData mapping', async () => {
     const testLink = new StaticMockLink(CREATOR_NULL_MOCKS, true);
+    // Disable __typename to test raw data mapping without Apollo's type augmentation
     const cache = new InMemoryCache({
       addTypename: false,
     });

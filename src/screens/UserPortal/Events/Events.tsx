@@ -1,5 +1,5 @@
 /**
- * The `events` component is responsible for managing and displaying events for a user portal.
+ * The `Events` component is responsible for managing and displaying events for a user portal.
  * It includes functionality for creating, viewing, and managing events within an organization.
  *
  * @remarks
@@ -11,30 +11,29 @@
  * Dependencies:
  * - `EventCalendar`: Displays events in a calendar view.
  * - `EventHeader`: Provides controls for calendar view and event creation.
- * - `DatePicker` and `TimePicker`: Used for selecting event dates and times.
+ * - `DateRangePicker`: Used for selecting arbitrary event date ranges.
+ * - `EventForm`: Form component for event creation with validation.
  *
  * State:
- * - `events`: List of events fetched from the server.
- * - `eventTitle`, `eventDescription`, `eventLocation`: Input fields for event details.
- * - `startAt`, `endAt`: Start and end dates for the event.
- * - `startTime`, `endTime`: Start and end times for the event.
- * - `isPublic`, `isRegisterable`, `isRecurring`, `isAllDay`: Event configuration flags.
+ * - `dateRange`: Selected date range with `startDate` and `endDate` controlling event queries.
  * - `viewType`: Current calendar view type (e.g., month, week).
  * - `createEventModal`: Controls visibility of the event creation modal.
- * - `createChatCheck`: Determines if a chat should be created for the event.
+ * - `formResetKey`: Key used to reset the event form after successful creation.
+ * Computed Values:
+ * - `calendarMonth`: Derived from `dateRange.startDate` for calendar display.
+ * - `calendarYear`: Derived from `dateRange.startDate` for calendar display.
  *
  * Methods:
- * - `createEvent`: Handles the creation of a new event by submitting a GraphQL mutation.
+ * - `handleCreateEvent`: Handles the creation of a new event by submitting a GraphQL mutation.
  * - `toggleCreateEventModal`: Toggles the visibility of the event creation modal.
- * - `handleEventTitleChange`, `handleEventLocationChange`, `handleEventDescriptionChange`:
- *   Update respective state variables when input fields change.
+ * - `showInviteModal`: Opens the event creation modal.
  * - `handleChangeView`: Updates the calendar view type.
  *
  * Hooks:
  * - `useQuery`: Fetches events and organization details.
  * - `useMutation`: Executes the event creation mutation.
  * - `useLocalStorage`: Retrieves user details from local storage.
- * - `useEffect`: Updates the event list when query data changes.
+ * - `useEffect`: Handles error logging for event query failures (rate-limit aware).
  *
  * @returns The rendered events component.
  *
