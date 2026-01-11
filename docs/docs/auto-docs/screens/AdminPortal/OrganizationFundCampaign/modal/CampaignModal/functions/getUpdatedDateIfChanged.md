@@ -6,17 +6,22 @@
 
 > **getUpdatedDateIfChanged**(`newDate`, `existingDate`): `string`
 
-Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx#L60)
+Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx#L68)
 
-Modal component for creating or editing a campaign.
+Returns an ISO date string when `newDate` differs from `existingDate`
+(compared at second precision). Otherwise returns `undefined`.
 
 ## Parameters
 
 ### newDate
 
+Newly selected date.
+
 `string` | `Date`
 
 ### existingDate
+
+Previously stored date.
 
 `string` | `Date`
 
@@ -24,4 +29,4 @@ Modal component for creating or editing a campaign.
 
 `string`
 
-JSX.Element
+ISO string when changed; otherwise undefined.

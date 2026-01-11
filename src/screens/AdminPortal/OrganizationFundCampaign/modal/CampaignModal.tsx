@@ -56,6 +56,14 @@ import type { IDateRangeValue } from 'types/shared-components/DateRangePicker/in
  * @param props - The props for the CampaignModal component.
  * @returns JSX.Element
  */
+/**
+ * Returns an ISO date string when `newDate` differs from `existingDate`
+ * (compared at second precision). Otherwise returns `undefined`.
+ *
+ * @param newDate - Newly selected date.
+ * @param existingDate - Previously stored date.
+ * @returns ISO string when changed; otherwise undefined.
+ */
 
 export const getUpdatedDateIfChanged = (
   newDate: Date | string | null | undefined,
@@ -188,7 +196,7 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
       NotificationToast.error(t('campaignNotFound'));
       return;
     }
-
+    setIsSubmitting(true);
     try {
       const updatedFields: { [key: string]: string | number | undefined } = {};
       if (campaign?.name !== campaignName) {
@@ -237,6 +245,8 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
       NotificationToast.success(t('updatedCampaign') as string);
     } catch (error: unknown) {
       errorHandler(t, error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
   return (

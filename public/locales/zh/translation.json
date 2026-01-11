@@ -822,8 +822,8 @@
     "highestGoal": "最高目标",
     "errorLoading": "加载活动数据时出错",
     "percentageRaised": "% 已筹集",
-    "campaignProgress": "活动进度: {{percentage}}%",
-    "campaignNotFound": "未找到活动",
+    "campaignProgress": "活动进度：{{percentage}}%",
+    "campaignNotFound": "未找到募捐活动",
     "dateRangeRequired": "请选择有效的日期范围",
     "campaignNameRequired": "活动名称是必填项"
   },

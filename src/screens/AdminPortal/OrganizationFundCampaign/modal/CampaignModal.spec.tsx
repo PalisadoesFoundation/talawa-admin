@@ -76,7 +76,8 @@ type DateRangeValue = {
   endDate: Date | null;
 };
 
-const formatDateForInput = (date: Date) => dayjs.utc(date).format('DD/MM/YYYY');
+const formatDateForInput = (date?: Date | null) =>
+  date ? dayjs.utc(date).format('DD/MM/YYYY') : '';
 
 type DateRangePickerProps = {
   value: DateRangeValue | null;
@@ -99,7 +100,7 @@ vi.mock('shared-components/DateRangePicker', async () => {
           value={value?.startDate ? formatDateForInput(value.startDate) : ''}
           onChange={(e) => {
             const nextStart = e.target.value
-              ? dayjs(e.target.value, 'DD/MM/YYYY').toDate()
+              ? dayjs.utc(e.target.value, 'DD/MM/YYYY', true).toDate()
               : null;
 
             onChange({
@@ -118,7 +119,7 @@ vi.mock('shared-components/DateRangePicker', async () => {
             onChange({
               startDate: value?.startDate ?? null,
               endDate: e.target.value
-                ? dayjs(e.target.value, 'DD/MM/YYYY').toDate()
+                ? dayjs.utc(e.target.value, 'DD/MM/YYYY', true).toDate()
                 : null,
             })
           }
@@ -292,7 +293,7 @@ const currencyOnlyMockLink = new StaticMockLink(UPDATE_CURRENCY_ONLY_MOCK);
 
 describe('CampaignModal', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
     cleanup();
   });
 
@@ -698,14 +699,32 @@ describe('CampaignModal', () => {
     });
   });
 
+  it('shows error when campaign name is empty', async () => {
+    renderCampaignModal(link1, campaignProps[0]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: '' },
+    });
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.campaignNameRequired,
+      );
+    });
+  });
+
   it('shows error when submitting without date range', async () => {
     renderCampaignModal(link1, campaignProps[0]);
 
-    const startDateInput = getStartDateInput();
-    fireEvent.change(startDateInput, { target: { value: '' } });
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: 'Valid name' },
+    });
 
-    const endDateInput = getEndDateInput();
-    fireEvent.change(endDateInput, { target: { value: '' } });
+    fireEvent.change(getStartDateInput(), { target: { value: '' } });
+    fireEvent.change(getEndDateInput(), { target: { value: '' } });
 
     const submitBtn = screen.getByTestId('submitCampaignBtn');
     fireEvent.click(submitBtn);
@@ -720,26 +739,49 @@ describe('CampaignModal', () => {
   it('shows error when updating without campaign id', async () => {
     const badProps: InterfaceCampaignModalProps = {
       ...campaignProps[1],
-      campaign: null, // simulate missing campaign id
+      campaign: null,
     };
 
     renderCampaignModal(link1, badProps);
-    const nameInput = screen.getByLabelText(translations.campaignName);
-    fireEvent.change(nameInput, { target: { value: 'Valid Name' } });
 
-    const startInput = screen.getByTestId('campaign-date-range-start-input');
-    const endInput = screen.getByTestId('campaign-date-range-end-input');
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: 'Valid Name' },
+    });
 
-    fireEvent.change(startInput, { target: { value: '11/01/2027' } });
-    fireEvent.change(endInput, { target: { value: '11/01/2028' } });
+    const start = dayjs.utc().add(1, 'year').format('DD/MM/YYYY');
+    const end = dayjs.utc().add(2, 'year').format('DD/MM/YYYY');
 
-    const submitBtn = screen.getByTestId('submitCampaignBtn');
-    fireEvent.click(submitBtn);
+    fireEvent.change(getStartDateInput(), { target: { value: start } });
+    fireEvent.change(getEndDateInput(), { target: { value: end } });
+
+    fireEvent.click(screen.getByTestId('submitCampaignBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
         translations.campaignNotFound,
       );
+    });
+  });
+
+  it('re-enables submit button after update error', async () => {
+    renderCampaignModal(link2, campaignProps[1]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: 'New Name' },
+    });
+
+    const start = dayjs.utc().add(1, 'month').format('DD/MM/YYYY');
+    const end = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
+
+    fireEvent.change(getStartDateInput(), { target: { value: start } });
+    fireEvent.change(getEndDateInput(), { target: { value: end } });
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalled();
+      expect(submitBtn).not.toBeDisabled();
     });
   });
 });
