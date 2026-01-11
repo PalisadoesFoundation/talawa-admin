@@ -1,6 +1,7 @@
 /**
  * Recurrence options builder for EventForm component.
  */
+// translation-check-keyPrefix: organizationEvents
 import {
   Frequency,
   WeekDays,
@@ -11,7 +12,7 @@ import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 /**
  * Represents a recurrence option in the dropdown.
  */
-export interface RecurrenceOption {
+export interface InterfaceRecurrenceOption {
   label: string;
   value: InterfaceRecurrenceRule | 'custom' | null;
 }
@@ -25,7 +26,7 @@ export interface RecurrenceOption {
 export const buildRecurrenceOptions = (
   startDate: Date,
   t: (key: string, options?: Record<string, unknown>) => string,
-): RecurrenceOption[] => {
+): InterfaceRecurrenceOption[] => {
   const eventDate = new Date(startDate);
   const isValidDate = !Number.isNaN(eventDate.getTime());
   const safeDate = isValidDate ? eventDate : new Date();

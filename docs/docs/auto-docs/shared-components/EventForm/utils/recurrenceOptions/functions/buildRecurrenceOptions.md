@@ -4,9 +4,9 @@
 
 # Function: buildRecurrenceOptions()
 
-> **buildRecurrenceOptions**(`startDate`, `t`): [`RecurrenceOption`](../interfaces/RecurrenceOption.md)[]
+> **buildRecurrenceOptions**(`startDate`, `t`): [`InterfaceRecurrenceOption`](../interfaces/InterfaceRecurrenceOption.md)[]
 
-Defined in: [src/shared-components/EventForm/utils/recurrenceOptions.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EventForm/utils/recurrenceOptions.ts#L25)
+Defined in: [src/shared-components/EventForm/utils/recurrenceOptions.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EventForm/utils/recurrenceOptions.ts#L26)
 
 Builds an array of recurrence options based on the event start date.
 
@@ -26,6 +26,6 @@ Translation function for option labels
 
 ## Returns
 
-[`RecurrenceOption`](../interfaces/RecurrenceOption.md)[]
+[`InterfaceRecurrenceOption`](../interfaces/InterfaceRecurrenceOption.md)[]
 
 Array of recurrence options for the dropdown
