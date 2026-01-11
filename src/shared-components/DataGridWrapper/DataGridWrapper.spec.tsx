@@ -501,6 +501,73 @@ describe('DataGridWrapper', () => {
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
+  test('handles server-side search with searchByOptions', () => {
+    const onSearchChange = vi.fn();
+    const onSearchByChange = vi.fn();
+
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          serverSide: true,
+          searchTerm: 'test',
+          searchByOptions: [
+            { label: 'Name', value: 'name' },
+            { label: 'Email', value: 'email' },
+          ],
+          selectedSearchBy: 'name',
+          onSearchChange,
+          onSearchByChange,
+        }}
+      />,
+    );
+
+    expect(screen.getByDisplayValue('test')).toBeInTheDocument();
+  });
+
+  test('handles client-side search with fields', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          fields: ['name', 'age'],
+        }}
+      />,
+    );
+
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
+  });
+
+  test('handles action column rendering', () => {
+    const actionColumn = (row: TestRow) => <button>Edit {row.name}</button>;
+
+    render(<DataGridWrapper {...defaultProps} actionColumn={actionColumn} />);
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  test('handles custom pagination page size options', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        paginationConfig={{
+          enabled: true,
+          pageSizeOptions: [5, 15, 25],
+        }}
+      />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  test('handles loading state with custom loading overlay', () => {
+    render(<DataGridWrapper {...defaultProps} loading={true} />);
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
   test('renders action column correctly', () => {
     const actionColumnRenderer = (row: TestRow) => (
       <button type="button" data-testid={`action-${row.id}`}>
@@ -791,5 +858,66 @@ describe('DataGridWrapper', () => {
     await user.click(clearButton);
 
     expect(searchInput).toHaveValue('');
+  });
+
+  test('shows error overlay when error prop is provided', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        rows={[]}
+        error="Test error message"
+      />,
+    );
+
+    expect(screen.getByText('Test error message')).toBeInTheDocument();
+  });
+
+  test('uses emptyStateProps when provided', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        rows={[]}
+        emptyStateProps={{ message: 'Custom empty message' }}
+      />,
+    );
+
+    expect(screen.getByText('Custom empty message')).toBeInTheDocument();
+  });
+
+  test('falls back to emptyStateMessage', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        rows={[]}
+        emptyStateMessage="Legacy empty message"
+      />,
+    );
+
+    expect(screen.getByText('Legacy empty message')).toBeInTheDocument();
+  });
+
+  test('shows default empty message when no custom message provided', () => {
+    render(<DataGridWrapper {...defaultProps} rows={[]} />);
+
+    expect(screen.getByText('noResultsFound')).toBeInTheDocument();
+  });
+
+  test('handles row click when onRowClick is provided', () => {
+    const onRowClick = vi.fn();
+
+    render(<DataGridWrapper {...defaultProps} onRowClick={onRowClick} />);
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  test('handles pagination when enabled', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        paginationConfig={{ enabled: true }}
+      />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 });

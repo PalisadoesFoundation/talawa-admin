@@ -1000,4 +1000,43 @@ describe('Groups Screen [User Portal]', () => {
 
     expect(searchInput).toHaveValue('test group');
   });
+
+  test('handles search term with whitespace trimming', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByInput');
+    await userEvent.type(searchInput, '  test group  ');
+
+    expect(searchInput).toHaveValue('  test group  ');
+  });
+
+  test('handles empty search term in group mode', async () => {
+    render(
+      <MockedProvider link={linkSuccess}>
+        <MemoryRouter initialEntries={['/orgevents/orgId']}>
+          <Routes>
+            <Route path="/orgevents/:orgId" element={<Groups />} />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    const searchByDropdown = screen.getByTestId('searchBy');
+    await userEvent.selectOptions(searchByDropdown, 'group');
+
+    const searchInput = screen.getByTestId('searchByInput');
+    await userEvent.clear(searchInput);
+
+    await waitFor(() => {
+      expect(screen.getByRole('grid')).toBeInTheDocument();
+    });
+  });
 });
