@@ -63,7 +63,7 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceQueryUserTagsAssignedMembers } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './ManageTag.module.css';
 import {
   DataGrid,
   type GridCellParams,
@@ -483,6 +483,7 @@ function ManageTag(): JSX.Element {
                     onClick={() => navigate(`/orgtags/${orgId}`)}
                     className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
                     data-testid="allTagsBtn"
+                    data-text={t('tags')}
                   >
                     {t('tags')}
                     <i className={'mx-2 fa fa-caret-right'} />
@@ -493,6 +494,7 @@ function ManageTag(): JSX.Element {
                       className={`ms-2 my-1 ${tag._id === currentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
                       onClick={() => redirectToManageTag(tag._id as string)}
                       data-testid="redirectToManageTag"
+                      data-text={tag.name}
                     >
                       {tag.name}
                       {orgUserTagAncestors.length - 1 !== index && (

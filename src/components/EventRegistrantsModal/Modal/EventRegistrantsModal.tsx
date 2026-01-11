@@ -6,6 +6,14 @@
  * - Add new attendees from the organization's member list or through on-spot registration.
  * - Remove existing attendees from the event.
  *
+ * @param props - The properties passed to the component.
+ * @param show - Determines whether the modal is visible.
+ * @param eventId - The ID of the event for which registrants are being managed.
+ * @param orgId - The ID of the organization associated with the event.
+ * @param handleClose - Callback function to close the modal.
+ *
+ * @returns The rendered EventRegistrantsModal component.
+ *
  * @remarks
  * - Uses Apollo Client's `useQuery` and `useMutation` hooks to fetch and modify data.
  * - Displays a loading spinner while data is being fetched.
@@ -21,6 +29,13 @@
  *   handleClose={() => setShowModal(false)}
  * />
  * ```
+ *
+ * Dependencies:
+ * - `react-bootstrap` for modal and button components.
+ * - `@apollo/client` for GraphQL queries and mutations.
+ * - `@mui/material` for UI components like Avatar, Chip, and Autocomplete.
+ * - `react-toastify` for toast notifications.
+ * - `react-i18next` for translations.
  */
 import React, { useState, useEffect } from 'react';
 import { Button } from 'react-bootstrap';
@@ -37,7 +52,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
-import type { InterfaceUser } from 'types/User/interface';
+import type { InterfaceUser } from 'types/shared-components/User/interface';
 import styles from '../EventRegistrants.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
@@ -125,11 +140,16 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
           <>
             <Button
               className={styles.inviteButton}
+              data-testid="invite-by-email-btn"
               onClick={() => setInviteOpen(true)}
             >
               {t('inviteByEmailButton')}
             </Button>
-            <Button className={styles.addButton} onClick={addRegistrant}>
+            <Button
+              className={styles.addButton}
+              data-testid="add-registrant-btn"
+              onClick={addRegistrant}
+            >
               {t('addRegistrant')}
             </Button>
           </>
@@ -160,6 +180,14 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             <div className="d-flex ">
               <p className="me-2">{t('noRegistrationsFound')}</p>
               <span
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setOpen(true);
+                  }
+                }}
                 className={`underline ${styles.underlineText}`}
                 onClick={() => {
                   setOpen(true);

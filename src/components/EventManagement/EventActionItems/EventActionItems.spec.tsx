@@ -17,7 +17,7 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 import EventActionItems from './EventActionItems';
 import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
-import type { IActionItemInfo } from 'types/ActionItems/interface';
+import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 
 // Mock dependencies
 vi.mock('react-router', async () => {
