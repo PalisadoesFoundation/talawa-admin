@@ -917,12 +917,18 @@ export const USER_DETAILS = gql`
       mobilePhoneNumber
       homePhoneNumber
       workPhoneNumber
-
+      eventsAttended {
+        id
+      }
       organizationsWhereMember(first: 10) {
         edges {
           node {
             id
             name
+            membersCount
+            adminsCount
+            description
+            avatarURL
           }
         }
       }
@@ -930,6 +936,10 @@ export const USER_DETAILS = gql`
       createdOrganizations {
         id
         name
+        membersCount
+        adminsCount
+        description
+        avatarURL
       }
     }
   }

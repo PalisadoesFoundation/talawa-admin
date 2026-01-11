@@ -493,6 +493,13 @@ describe('CursorPaginationManager', () => {
       await waitFor(() => {
         expect(screen.getByText('User 3')).toBeInTheDocument();
       });
+
+      // Wait for loading state to finish (button disappears because hasNextPage is false)
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('load-more-button'),
+        ).not.toBeInTheDocument();
+      });
     });
 
     it('appends new items to existing items array', async () => {
@@ -520,9 +527,14 @@ describe('CursorPaginationManager', () => {
       await user.click(loadMoreBtn);
 
       await waitFor(() => {
-        expect(screen.getByText('User 1')).toBeInTheDocument();
-        expect(screen.getByText('User 2')).toBeInTheDocument();
         expect(screen.getByText('User 3')).toBeInTheDocument();
+      });
+
+      // Wait for loading state to finish (button disappears because hasNextPage is false)
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('load-more-button'),
+        ).not.toBeInTheDocument();
       });
     });
 
@@ -552,6 +564,13 @@ describe('CursorPaginationManager', () => {
 
       // Button should be disabled during loading
       expect(loadMoreBtn).toBeDisabled();
+
+      // Wait for operation to complete (button disappears because hasNextPage is false)
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('load-more-button'),
+        ).not.toBeInTheDocument();
+      });
     });
 
     it('prevents concurrent load more requests', async () => {
@@ -584,6 +603,13 @@ describe('CursorPaginationManager', () => {
       // Should still work correctly
       await waitFor(() => {
         expect(screen.getByText('User 3')).toBeInTheDocument();
+      });
+
+      // Wait for loading state to finish (button disappears because hasNextPage is false)
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('load-more-button'),
+        ).not.toBeInTheDocument();
       });
     });
 
@@ -625,6 +651,13 @@ describe('CursorPaginationManager', () => {
             expect.objectContaining({ id: '3' }),
           ]),
         );
+      });
+
+      // Wait for loading state to finish (button disappears because hasNextPage is false)
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('load-more-button'),
+        ).not.toBeInTheDocument();
       });
     });
 

@@ -1,24 +1,24 @@
 /**
- * Component for creating a new group chat.
+ * Renders a modal interface for creating a new group chat.
  *
- * This component provides a modal interface for creating a group chat,
- * allowing users to set a title, description, and add members to the group.
- * It also supports uploading a group image and integrates with GraphQL
- * mutations and queries for managing chat data.
- *
- * @component
- * @param {InterfaceCreateGroupChatProps} props - Component props.
- * @param {() => void} props.toggleCreateGroupChatModal - Function to toggle the visibility of the create group chat modal.
- * @param {boolean} props.createGroupChatModalisOpen - Boolean indicating whether the create group chat modal is open.
- * @param {(variables?: Partial<{ id: string }> | undefined) => Promise<ApolloQueryResult<unknown>>} props.chatsListRefetch - Function to refetch the chat list.
- *
- * @returns {JSX.Element} The rendered CreateGroupChat component.
+ * This component allows users to create a group chat by setting a title,
+ * description, selecting members, and optionally uploading a group image.
+ * It integrates with GraphQL mutations and queries to manage chat data.
  *
  * @remarks
- * - Uses `useMutation` to create a new chat via the `CREATE_CHAT` GraphQL mutation.
- * - Fetches user data using the `USERS_CONNECTION_LIST` GraphQL query.
- * - Allows users to search for and add members to the group.
- * - Supports image upload functionality using MinIO.
+ * Key features include:
+ * - Creating a chat using the `CREATE_CHAT` GraphQL mutation.
+ * - Fetching users via the `USERS_CONNECTION_LIST` GraphQL query.
+ * - Searching for and adding members to the group.
+ * - Uploading a group image using MinIO.
+ * - Displaying loading states using the shared `LoadingState` component.
+ *
+ * @param props - Component props.
+ * @param toggleCreateGroupChatModal - Toggles the visibility of the create group chat modal.
+ * @param createGroupChatModalisOpen - Indicates whether the create group chat modal is open.
+ * @param chatsListRefetch - Refetch function for updating the chat list after creation.
+ *
+ * @returns A React element that renders the CreateGroupChat modal.
  *
  * @example
  * ```tsx
@@ -29,25 +29,23 @@
  * />
  * ```
  *
- * @dependencies
+ * @remarks
+ * Dependencies used by this component include:
  * - React
- * - @apollo/client
- * - @mui/material
+ * - \@apollo/client
+ * - \@mui/material
  * - react-bootstrap
  * - react-router-dom
  * - utils/useLocalstorage
  * - utils/MinioUpload
- * - components/Loader
+ * - shared-components/LoadingState/LoadingState
  * - components/ProfileAvatarDisplay
- *
- * @fileoverview
- * This file defines the `CreateGroupChat` component, which is used in the
- * user portal for creating group chats within an organization.
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { Paper, TableBody } from '@mui/material';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -216,216 +214,89 @@ export default function CreateGroupChat({
       resetButtonText={tErrors('resetButton')}
       onReset={chatsListRefetch}
     >
-      <Modal
-        data-testid="createGroupChatModal"
+      <BaseModal
         show={createGroupChatModalisOpen}
         onHide={() => {
           toggleCreateGroupChatModal();
           reset();
         }}
-        contentClassName={styles.modalContent}
+        title={t('newGroup', { defaultValue: 'New Group' })}
+        dataTestId="createGroupChatModal"
+        className={styles.modalContent}
       >
-        <Modal.Header closeButton data-testid="">
-          <Modal.Title>
-            {t('newGroup', { defaultValue: 'New Group' })}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            style={{ display: 'none' }}
-            onChange={handleImageChange}
-            data-testid="fileInput"
+        <input
+          type="file"
+          accept="image/*"
+          ref={fileInputRef}
+          style={{ display: 'none' }}
+          onChange={handleImageChange}
+          data-testid="fileInput"
+        />
+        <div className={styles.groupInfo}>
+          <ProfileAvatarDisplay
+            className={styles.chatImage}
+            fallbackName={title}
+            imageUrl={selectedImage}
           />
-          <div className={styles.groupInfo}>
-            <ProfileAvatarDisplay
-              className={styles.chatImage}
-              fallbackName={title}
-              imageUrl={selectedImage}
+          <button
+            type="button"
+            data-testid="editImageBtn"
+            onClick={handleImageClick}
+            className={styles.editImgBtn}
+          >
+            <FiEdit />
+          </button>
+        </div>
+        <Form>
+          <Form.Group className="mb-3" controlId="groupTitleInput">
+            <Form.Label>{t('title', { defaultValue: 'Title' })}</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder={t('groupName', { defaultValue: 'Group name' })}
+              autoComplete="off"
+              required
+              data-testid="groupTitleInput"
+              value={title}
+              onChange={(e): void => {
+                setTitle(e.target.value);
+              }}
             />
-            <button
-              data-testid="editImageBtn"
-              onClick={handleImageClick}
-              className={styles.editImgBtn}
-            >
-              <FiEdit />
-            </button>
-          </div>
-          <Form>
-            <Form.Group className="mb-3" controlId="registerForm.Rname">
-              <Form.Label>{t('title', { defaultValue: 'Title' })}</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder={t('groupName', { defaultValue: 'Group name' })}
-                autoComplete="off"
-                required
-                data-testid="groupTitleInput"
-                value={title}
-                onChange={(e): void => {
-                  setTitle(e.target.value);
-                }}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="registerForm.Rname">
-              <Form.Label>
-                {tCommon('description', { defaultValue: 'Description' })}
-              </Form.Label>
-              <Form.Control
-                type="text"
-                placeholder={t('groupDescription', {
-                  defaultValue: 'Group Description',
-                })}
-                autoComplete="off"
-                required
-                data-testid="groupDescriptionInput" //corrected spelling
-                value={description}
-                onChange={(e): void => {
-                  setDescription(e.target.value);
-                }}
-              />
-            </Form.Group>
-            <Button
-              className={`${styles.colorPrimary} ${styles.borderNone}`}
-              variant="success"
-              onClick={openAddUserModal}
-              data-testid="nextBtn"
-            >
-              {t('next', { defaultValue: 'Next' })}
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
-      <Modal
-        data-testid="addExistingUserModal"
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="groupDescriptionInput">
+            <Form.Label>
+              {tCommon('description', { defaultValue: 'Description' })}
+            </Form.Label>
+            <Form.Control
+              type="text"
+              placeholder={t('groupDescription', {
+                defaultValue: 'Group Description',
+              })}
+              autoComplete="off"
+              required
+              data-testid="groupDescriptionInput"
+              value={description}
+              onChange={(e): void => {
+                setDescription(e.target.value);
+              }}
+            />
+          </Form.Group>
+          <Button
+            className={`${styles.colorPrimary} ${styles.borderNone}`}
+            variant="success"
+            onClick={openAddUserModal}
+            data-testid="nextBtn"
+          >
+            {t('next', { defaultValue: 'Next' })}
+          </Button>
+        </Form>
+      </BaseModal>
+      <BaseModal
         show={addUserModalisOpen}
         onHide={toggleAddUserModal}
-        contentClassName={styles.modalContent}
-      >
-        <Modal.Header closeButton data-testid="pluginNotificationHeader">
-          <Modal.Title>{t('chat', { defaultValue: 'Chat' })}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <LoadingState
-            isLoading={allUsersLoading}
-            variant="inline"
-            size="lg"
-            data-testid="loading-state"
-          >
-            <>
-              <div className={styles.input}>
-                <SearchBar
-                  placeholder={t('searchFullName', {
-                    defaultValue: 'Search full name',
-                  })}
-                  value={userName}
-                  onChange={(value) => setUserName(value)}
-                  onSearch={(value) => handleUserModalSearchChange(value)}
-                  onClear={() => {
-                    setUserName('');
-                    handleUserModalSearchChange('');
-                  }}
-                  inputTestId="searchUser"
-                  buttonTestId="submitBtn"
-                />
-              </div>
-
-              <TableContainer
-                className={styles.tableContainer}
-                component={Paper}
-              >
-                <Table
-                  aria-label={t('organizationMembersTable', {
-                    defaultValue: 'Organization Members Table',
-                  })}
-                >
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>
-                        {tCommon('hash', { defaultValue: '#' })}
-                      </TableCell>
-                      <TableCell align="center">
-                        {t('user', { defaultValue: 'User' })}
-                      </TableCell>
-                      <TableCell align="center">
-                        {t('chat', { defaultValue: 'Chat' })}
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {allUsersData &&
-                      allUsersData.organization?.members?.edges?.length > 0 &&
-                      allUsersData.organization.members.edges
-                        .filter(
-                          ({
-                            node: userDetails,
-                          }: {
-                            node: {
-                              id: string;
-                              name: string;
-                              avatarURL?: string;
-                              role: string;
-                            };
-                          }) => userDetails.id !== userId,
-                        )
-                        .map(
-                          (
-                            {
-                              node: userDetails,
-                            }: {
-                              node: {
-                                id: string;
-                                name: string;
-                                avatarURL?: string;
-                                role: string;
-                              };
-                            },
-                            index: number,
-                          ) => (
-                            <TableRow data-testid="user" key={userDetails.id}>
-                              <TableCell component="th" scope="row">
-                                {index + 1}
-                              </TableCell>
-                              <TableCell align="center">
-                                {userDetails.name}
-                                <br />
-                                {userDetails.role || 'Member'}
-                              </TableCell>
-                              <TableCell align="center">
-                                {userIds.includes(userDetails.id) ? (
-                                  <Button
-                                    variant="danger"
-                                    onClick={() => {
-                                      const updatedUserIds = userIds.filter(
-                                        (id) => id !== userDetails.id,
-                                      );
-                                      setUserIds(updatedUserIds);
-                                    }}
-                                    data-testid="removeBtn"
-                                  >
-                                    {t('remove', { defaultValue: 'Remove' })}
-                                  </Button>
-                                ) : (
-                                  <Button
-                                    className={`${styles.colorPrimary} ${styles.borderNone}`}
-                                    onClick={() => {
-                                      setUserIds([...userIds, userDetails.id]);
-                                    }}
-                                    data-testid="addBtn"
-                                  >
-                                    {t('add', { defaultValue: 'Add' })}
-                                  </Button>
-                                )}
-                              </TableCell>
-                            </TableRow>
-                          ),
-                        )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </>
-          </LoadingState>
+        title={t('chat', { defaultValue: 'Chat' })}
+        dataTestId="addExistingUserModal"
+        className={styles.modalContent}
+        footer={
           <Button
             className={`${styles.colorPrimary} ${styles.borderNone}`}
             variant="success"
@@ -434,8 +305,126 @@ export default function CreateGroupChat({
           >
             {t('create', { defaultValue: 'Create' })}
           </Button>
-        </Modal.Body>
-      </Modal>
+        }
+      >
+        <LoadingState
+          isLoading={allUsersLoading}
+          variant="inline"
+          size="lg"
+          data-testid="loading-state"
+        >
+          <>
+            <div className={styles.input}>
+              <SearchBar
+                placeholder={t('searchFullName', {
+                  defaultValue: 'Search full name',
+                })}
+                value={userName}
+                onChange={(value) => setUserName(value)}
+                onSearch={(value) => handleUserModalSearchChange(value)}
+                onClear={() => {
+                  setUserName('');
+                  handleUserModalSearchChange('');
+                }}
+                inputTestId="searchUser"
+                buttonTestId="submitBtn"
+              />
+            </div>
+
+            <TableContainer className={styles.tableContainer} component={Paper}>
+              <Table
+                aria-label={t('organizationMembersTable', {
+                  defaultValue: 'Organization Members Table',
+                })}
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell>
+                      {tCommon('hash', { defaultValue: '#' })}
+                    </TableCell>
+                    <TableCell align="center">
+                      {t('user', { defaultValue: 'User' })}
+                    </TableCell>
+                    <TableCell align="center">
+                      {t('chat', { defaultValue: 'Chat' })}
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {allUsersData &&
+                    allUsersData.organization?.members?.edges?.length > 0 &&
+                    allUsersData.organization.members.edges
+                      .filter(
+                        ({
+                          node: userDetails,
+                        }: {
+                          node: {
+                            id: string;
+                            name: string;
+                            avatarURL?: string;
+                            role: string;
+                          };
+                        }) => userDetails.id !== userId,
+                      )
+                      .map(
+                        (
+                          {
+                            node: userDetails,
+                          }: {
+                            node: {
+                              id: string;
+                              name: string;
+                              avatarURL?: string;
+                              role: string;
+                            };
+                          },
+                          index: number,
+                        ) => (
+                          <TableRow data-testid="user" key={userDetails.id}>
+                            <TableCell component="th" scope="row">
+                              {index + 1}
+                            </TableCell>
+                            <TableCell align="center">
+                              {userDetails.name}
+                              <br />
+                              {userDetails.role ||
+                                tCommon('member', { defaultValue: 'Member' })}
+                            </TableCell>
+                            <TableCell align="center">
+                              {userIds.includes(userDetails.id) ? (
+                                <Button
+                                  variant="danger"
+                                  onClick={() => {
+                                    const updatedUserIds = userIds.filter(
+                                      (id) => id !== userDetails.id,
+                                    );
+                                    setUserIds(updatedUserIds);
+                                  }}
+                                  data-testid="removeBtn"
+                                >
+                                  {t('remove', { defaultValue: 'Remove' })}
+                                </Button>
+                              ) : (
+                                <Button
+                                  className={`${styles.colorPrimary} ${styles.borderNone}`}
+                                  onClick={() => {
+                                    setUserIds([...userIds, userDetails.id]);
+                                  }}
+                                  data-testid="addBtn"
+                                >
+                                  {t('add', { defaultValue: 'Add' })}
+                                </Button>
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ),
+                      )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </>
+        </LoadingState>
+      </BaseModal>
     </ErrorBoundaryWrapper>
   );
 }

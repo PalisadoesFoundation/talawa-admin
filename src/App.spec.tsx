@@ -51,12 +51,12 @@ vi.mock('./plugin', () => ({
   PluginInjector: vi.fn(() => <div>Mock Plugin Injector</div>),
 }));
 
-vi.mock('screens/UserPortal/Settings/Settings', () => ({
-  default: () => <div data-testid="mock-settings">Mock Settings</div>,
+vi.mock('shared-components/ProfileForm/ProfileForm', () => ({
+  default: () => <div data-testid="mock-profile-form">Mock Settings</div>,
 }));
 
 // Mock all lazy loaded components
-vi.mock('components/OrganizationScreen/OrganizationScreen', () => ({
+vi.mock('components/AdminPortal/OrganizationScreen/OrganizationScreen', () => ({
   default: () => (
     <div data-testid="mock-organization-screen">Mock Organization Screen</div>
   ),
@@ -66,7 +66,7 @@ vi.mock('shared-components/posts/posts', () => ({
   default: () => <div data-testid="mock-posts">Mock Posts</div>,
 }));
 
-vi.mock('components/SuperAdminScreen/SuperAdminScreen', () => ({
+vi.mock('components/AdminPortal/SuperAdminScreen/SuperAdminScreen', () => ({
   default: () => (
     <div data-testid="mock-super-admin-screen">Mock Super Admin Screen</div>
   ),
@@ -190,7 +190,7 @@ vi.mock('screens/AdminPortal/Leaderboard/Leaderboard', () => ({
   default: () => <div data-testid="mock-leaderboard">Mock Leaderboard</div>,
 }));
 
-vi.mock('components/Advertisements/Advertisements', () => ({
+vi.mock('components/AdminPortal/Advertisements/Advertisements', () => ({
   default: () => (
     <div data-testid="mock-advertisements">Mock Advertisements</div>
   ),
@@ -694,7 +694,7 @@ describe('Testing the App Component', () => {
     removeItem('AdminFor');
 
     renderApp(link, '/user/settings');
-    expect(await screen.findByTestId('mock-settings')).toBeInTheDocument();
+    expect(await screen.findByTestId('mock-profile-form')).toBeInTheDocument();
   });
 
   it('blocks /user/settings when not logged in', async () => {
@@ -715,7 +715,9 @@ describe('Testing the App Component', () => {
 
       // Guard blocks route; mocked Settings must NOT appear
       await waitFor(() => {
-        expect(screen.queryByTestId('mock-settings')).not.toBeInTheDocument();
+        expect(
+          screen.queryByTestId('mock-profile-form'),
+        ).not.toBeInTheDocument();
       });
     } finally {
       lsSpy.mockRestore();
@@ -744,7 +746,9 @@ describe('Testing the App Component', () => {
 
       // Guard takes "not allowed" branch; mocked Settings must NOT appear
       await waitFor(() => {
-        expect(screen.queryByTestId('mock-settings')).not.toBeInTheDocument();
+        expect(
+          screen.queryByTestId('mock-profile-form'),
+        ).not.toBeInTheDocument();
       });
     } finally {
       lsSpy.mockRestore();

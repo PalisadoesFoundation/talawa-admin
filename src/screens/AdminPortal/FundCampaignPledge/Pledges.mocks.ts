@@ -26,8 +26,10 @@ const createUser = (
   image,
   email,
   createdAt,
-  organizationsBlockedBy: [],
   name: `${firstName} ${lastName}`,
+  eventsAttended: [],
+  organizationsWhereMember: { edges: [] },
+  createdOrganizations: [],
 });
 
 const memberList = {

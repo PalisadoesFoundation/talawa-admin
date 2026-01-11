@@ -14,61 +14,52 @@ import type {
 /*                                MUI MOCK                                     */
 /* -------------------------------------------------------------------------- */
 
-type TestableInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
-  'data-testid'?: string;
-};
-
-type MockTextFieldParams = {
-  inputProps: TestableInputProps;
-  ref?: React.Ref<HTMLInputElement>;
-  disabled?: boolean;
-  required?: boolean;
-};
-
-type MockDatePickerProps = {
-  value: unknown;
-  onChange: (value: unknown) => void;
-  minDate?: unknown;
-  slots?: {
-    textField?: (params: MockTextFieldParams) => JSX.Element;
-  };
-  'data-testid'?: string;
-};
-
 const datePickerSpy = vi.fn();
 
-vi.mock('@mui/x-date-pickers', () => ({
-  DatePicker: ({
+vi.mock('shared-components/DatePicker', () => ({
+  __esModule: true,
+  default: ({
     value,
     onChange,
     minDate,
-    slots,
+    slotProps,
     'data-testid': dataTestId,
-  }: MockDatePickerProps) => {
+  }: {
+    value: dayjs.Dayjs | null;
+    onChange: (value: dayjs.Dayjs | null) => void;
+    minDate?: dayjs.Dayjs;
+    slotProps?: {
+      textField: {
+        'aria-label'?: string;
+        inputProps?: { 'aria-label': string };
+      };
+    };
+    'data-testid': string;
+  }) => {
     datePickerSpy({ minDate });
 
-    const renderTextField = slots?.textField;
-    if (!renderTextField) return null;
-
     const formattedValue =
-      value instanceof Date && !Number.isNaN(value.getTime())
-        ? value.toISOString().split('T')[0]
-        : '';
+      value && value.isValid() ? value.format('MM/DD/YYYY') : '';
 
-    return renderTextField({
-      inputProps: {
-        value: formattedValue,
-        'data-testid': dataTestId,
-        onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+    return (
+      <input
+        type="text"
+        value={formattedValue}
+        data-testid={dataTestId}
+        aria-label={
+          slotProps?.textField?.['aria-label'] ||
+          slotProps?.textField?.inputProps?.['aria-label']
+        }
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           const inputValue = e.target.value;
           if (!inputValue) {
-            onChange(undefined);
+            onChange?.(null);
             return;
           }
-          onChange(new Date(`${inputValue}T00:00:00`));
-        },
-      },
-    });
+          onChange?.(dayjs(inputValue, ['MM/DD/YYYY', 'YYYY-MM-DD']));
+        }}
+      />
+    );
   },
 }));
 
@@ -87,7 +78,6 @@ describe('DateRangePicker', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   function renderComponent(

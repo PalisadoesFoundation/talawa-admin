@@ -27,7 +27,7 @@ import { useQuery } from '@apollo/client';
 import { debounce } from '@mui/material';
 
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   DataGrid,
   type GridCellParams,
@@ -39,7 +39,7 @@ import { GET_EVENT_VOLUNTEER_GROUPS } from 'GraphQl/Queries/EventVolunteerQuerie
 import VolunteerGroupModal from './modal/VolunteerGroupModal';
 import VolunteerGroupDeleteModal from './deleteModal/VolunteerGroupDeleteModal';
 import VolunteerGroupViewModal from './viewModal/VolunteerGroupViewModal';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 enum ModalState {
@@ -53,7 +53,7 @@ enum ModalState {
  *
  * Responsibilities:
  * - Displays volunteer groups for an event
- * - Supports searching by group name or leader via AdminSearchFilterBar
+ * - Supports searching by group name or leader via SearchFilterBar
  * - Enables sorting by volunteer count
  * - Handles create, edit, view, and delete group flows
  * - Renders assignee avatars and volunteer counts
@@ -193,10 +193,6 @@ function volunteerGroups(): JSX.Element {
 
     return finalGroups;
   }, [eventData, searchTerm, searchBy, sortBy]);
-
-  if (groupsLoading) {
-    return <Loader size="xl" />;
-  }
 
   if (groupsError) {
     return (
@@ -343,128 +339,130 @@ function volunteerGroups(): JSX.Element {
   ];
 
   return (
-    <div>
-      {/* Header with search, filter  and Create Button */}
-      <AdminSearchFilterBar
-        searchPlaceholder={tCommon('searchBy', {
-          item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
-        })}
-        searchValue={searchTerm}
-        onSearchChange={debouncedSearch}
-        onSearchSubmit={(value) => {
-          setSearchTerm(value);
-        }}
-        searchInputTestId="searchBy"
-        searchButtonTestId="searchBtn"
-        hasDropdowns
-        dropdowns={[
-          {
-            id: 'searchBy',
-            title: tCommon('searchBy'),
-            label: tCommon('searchBy', { item: '' }),
-            dataTestIdPrefix: 'searchByToggle',
-            selectedOption: searchBy,
-            options: [
-              { label: t('eventVolunteers.leader'), value: 'leader' },
-              { label: t('eventVolunteers.group'), value: 'group' },
-            ],
-            onOptionChange: (value) => {
-              setSearchBy(value as 'leader' | 'group');
-            },
-            type: 'filter',
-          },
-          {
-            id: 'sort',
-            title: tCommon('sort'),
-            label: tCommon('sort'),
-            dataTestIdPrefix: 'sort',
-            selectedOption: sortBy ?? '',
-            options: [
-              {
-                label: t('eventVolunteers.mostVolunteers'),
-                value: 'volunteers_DESC',
+    <LoadingState isLoading={groupsLoading} variant="spinner">
+      <div>
+        {/* Header with search, filter  and Create Button */}
+        <SearchFilterBar
+          searchPlaceholder={tCommon('searchBy', {
+            item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
+          })}
+          searchValue={searchTerm}
+          onSearchChange={debouncedSearch}
+          onSearchSubmit={(value) => {
+            setSearchTerm(value);
+          }}
+          searchInputTestId="searchBy"
+          searchButtonTestId="searchBtn"
+          hasDropdowns
+          dropdowns={[
+            {
+              id: 'searchBy',
+              title: tCommon('searchBy'),
+              label: tCommon('searchBy', { item: '' }),
+              dataTestIdPrefix: 'searchByToggle',
+              selectedOption: searchBy,
+              options: [
+                { label: t('eventVolunteers.leader'), value: 'leader' },
+                { label: t('eventVolunteers.group'), value: 'group' },
+              ],
+              onOptionChange: (value) => {
+                setSearchBy(value as 'leader' | 'group');
               },
-              {
-                label: t('eventVolunteers.leastVolunteers'),
-                value: 'volunteers_ASC',
-              },
-            ],
-            onOptionChange: (value) => {
-              setSortBy(value as 'volunteers_DESC' | 'volunteers_ASC');
+              type: 'filter',
             },
-            type: 'sort',
-          },
-        ]}
-        additionalButtons={
-          <Button
-            variant="success"
-            onClick={() => handleModalClick(null, ModalState.SAME)}
-            className={styles.actionsButton}
-            data-testid="createGroupBtn"
-            aria-label={tCommon('createNew', { item: 'Volunteer Group' })}
-          >
-            <i className="fa fa-plus me-2" aria-hidden="true" />
-            {tCommon('create')}
-          </Button>
-        }
-      />
+            {
+              id: 'sort',
+              title: tCommon('sort'),
+              label: tCommon('sort'),
+              dataTestIdPrefix: 'sort',
+              selectedOption: sortBy ?? '',
+              options: [
+                {
+                  label: t('eventVolunteers.mostVolunteers'),
+                  value: 'volunteers_DESC',
+                },
+                {
+                  label: t('eventVolunteers.leastVolunteers'),
+                  value: 'volunteers_ASC',
+                },
+              ],
+              onOptionChange: (value) => {
+                setSortBy(value as 'volunteers_DESC' | 'volunteers_ASC');
+              },
+              type: 'sort',
+            },
+          ]}
+          additionalButtons={
+            <Button
+              variant="success"
+              onClick={() => handleModalClick(null, ModalState.SAME)}
+              className={styles.actionsButton}
+              data-testid="createGroupBtn"
+              aria-label={tCommon('createNew', { item: 'Volunteer Group' })}
+            >
+              <i className="fa fa-plus me-2" aria-hidden="true" />
+              {tCommon('create')}
+            </Button>
+          }
+        />
 
-      {/* Table with Volunteer Groups */}
-      <DataGrid
-        disableColumnMenu
-        columnBufferPx={7}
-        hideFooter={true}
-        getRowId={(row) => row.id}
-        slots={{
-          noRowsOverlay: () => (
-            <EmptyState
-              icon={<Groups />}
-              message={t('eventVolunteers.noVolunteerGroups')}
-              dataTestId="volunteerGroups-empty-state"
+        {/* Table with Volunteer Groups */}
+        <DataGrid
+          disableColumnMenu
+          columnBufferPx={7}
+          hideFooter={true}
+          getRowId={(row) => row.id}
+          slots={{
+            noRowsOverlay: () => (
+              <EmptyState
+                icon={<Groups />}
+                message={t('eventVolunteers.noVolunteerGroups')}
+                dataTestId="volunteerGroups-empty-state"
+              />
+            ),
+          }}
+          className={styles.dataGridContainer}
+          getRowClassName={() => `${styles.rowBackgrounds}`}
+          autoHeight
+          rowHeight={65}
+          rows={groups}
+          columns={columns}
+          isRowSelectable={() => false}
+        />
+
+        <VolunteerGroupModal
+          isOpen={modalState[ModalState.SAME]}
+          hide={() => closeModal(ModalState.SAME)}
+          refetchGroups={refetchGroups}
+          eventId={eventId}
+          orgId={orgId}
+          group={group}
+          mode={modalMode}
+          isRecurring={isRecurring}
+          baseEvent={baseEvent}
+          recurringEventInstanceId={eventId}
+        />
+
+        {group && (
+          <>
+            <VolunteerGroupViewModal
+              isOpen={modalState[ModalState.VIEW]}
+              hide={() => closeModal(ModalState.VIEW)}
+              group={group}
             />
-          ),
-        }}
-        className={styles.dataGridContainer}
-        getRowClassName={() => `${styles.rowBackgrounds}`}
-        autoHeight
-        rowHeight={65}
-        rows={groups}
-        columns={columns}
-        isRowSelectable={() => false}
-      />
 
-      <VolunteerGroupModal
-        isOpen={modalState[ModalState.SAME]}
-        hide={() => closeModal(ModalState.SAME)}
-        refetchGroups={refetchGroups}
-        eventId={eventId}
-        orgId={orgId}
-        group={group}
-        mode={modalMode}
-        isRecurring={isRecurring}
-        baseEvent={baseEvent}
-        recurringEventInstanceId={eventId}
-      />
-
-      {group && (
-        <>
-          <VolunteerGroupViewModal
-            isOpen={modalState[ModalState.VIEW]}
-            hide={() => closeModal(ModalState.VIEW)}
-            group={group}
-          />
-
-          <VolunteerGroupDeleteModal
-            isOpen={modalState[ModalState.DELETE]}
-            hide={() => closeModal(ModalState.DELETE)}
-            refetchGroups={refetchGroups}
-            group={group}
-            isRecurring={isRecurring}
-            eventId={eventId}
-          />
-        </>
-      )}
-    </div>
+            <VolunteerGroupDeleteModal
+              isOpen={modalState[ModalState.DELETE]}
+              hide={() => closeModal(ModalState.DELETE)}
+              refetchGroups={refetchGroups}
+              group={group}
+              isRecurring={isRecurring}
+              eventId={eventId}
+            />
+          </>
+        )}
+      </div>
+    </LoadingState>
   );
 }
 

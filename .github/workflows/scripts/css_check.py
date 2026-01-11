@@ -354,7 +354,7 @@ def format_violation_output(violations: list[DetailedViolation]) -> str:
 
 
 def main():
-    """Main function to run the CSS check.
+    """Run the CSS check.
 
     Args:
         None

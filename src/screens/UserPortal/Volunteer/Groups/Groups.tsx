@@ -4,8 +4,7 @@
  * This component renders a table of volunteer groups for a specific organization and event.
  * It provides functionalities such as searching, sorting, and viewing/editing group details.
  *
- * @component
- * @returns {JSX.Element} The rendered Groups component.
+ * @returns The rendered Groups component.
  *
  * @remarks
  * - Uses `@apollo/client` to fetch volunteer group data from the GraphQL API.
@@ -13,29 +12,29 @@
  * - Displays a loader while data is being fetched and an error message if the query fails.
  * - Integrates modals for viewing and editing group details.
  *
- * @requires
+ * requires
  * - `react`, `react-i18next` for translations.
  * - `@apollo/client` for GraphQL queries.
  * - `@mui/x-data-grid` for rendering the data grid.
  * - `react-bootstrap` for UI components.
  * - Custom components: `Loader`, `Avatar`, `GroupModal`, `VolunteerGroupViewModal`, `SearchBar`, `SortingButton`.
  *
- * @enum {ModalState}
+ * enum [ModalState]
  * - `EDIT`: Represents the edit modal state.
  * - `VIEW`: Represents the view modal state.
  *
- * @state
+ * state
  * - `group`: Stores the currently selected group for modal interactions.
  * - `searchTerm`: Stores the search input value.
  * - `sortBy`: Stores the sorting criteria for volunteer groups.
  * - `searchBy`: Determines whether to search by group name or leader name.
  * - `modalState`: Tracks the visibility of the edit and view modals.
  *
- * @query
+ * query
  * - `EVENT_VOLUNTEER_GROUP_LIST`: Fetches the list of volunteer groups based on filters and sorting.
  *
- * @param {string} orgId - The organization ID retrieved from the URL parameters.
- * @param {string} userId - The user ID retrieved from local storage.
+ * @param  orgId - The organization ID retrieved from the URL parameters.
+ * @param  userId - The user ID retrieved from local storage.
  *
  * @example
  * ```tsx
@@ -50,7 +49,7 @@ import { WarningAmberRounded } from '@mui/icons-material';
 import { useQuery } from '@apollo/client';
 import { Stack } from '@mui/material';
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   DataGrid,
   type GridCellParams,
@@ -62,7 +61,7 @@ import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQuerie
 import VolunteerGroupViewModal from 'screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal';
 import useLocalStorage from 'utils/useLocalstorage';
 import GroupModal from './GroupModal';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 enum ModalState {
   EDIT = 'edit',
@@ -184,9 +183,7 @@ function Groups(): JSX.Element {
     () => groupsData?.getEventVolunteerGroups || [],
     [groupsData],
   );
-  if (groupsLoading) {
-    return <Loader size="xl" />;
-  }
+
   if (groupsError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
@@ -200,7 +197,7 @@ function Groups(): JSX.Element {
   const columns: GridColDef[] = [
     {
       field: 'group',
-      headerName: 'Group',
+      headerName: t('groupHeader'),
       flex: 1,
       align: 'left',
       minWidth: 100,
@@ -220,7 +217,7 @@ function Groups(): JSX.Element {
     },
     {
       field: 'leader',
-      headerName: 'Leader',
+      headerName: t('leaderHeader'),
       flex: 1,
       align: 'center',
       minWidth: 100,
@@ -259,7 +256,7 @@ function Groups(): JSX.Element {
     },
     {
       field: 'volunteers',
-      headerName: 'No. of Volunteers',
+      headerName: t('numVolunteersHeader'),
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -275,7 +272,7 @@ function Groups(): JSX.Element {
     },
     {
       field: 'options',
-      headerName: 'Options',
+      headerName: t('optionsHeader'),
       align: 'center',
       flex: 1,
       minWidth: 100,
@@ -291,6 +288,7 @@ function Groups(): JSX.Element {
               className={`${styles.groupsViewButton} me-2 rounded`}
               data-testid="viewGroupBtn"
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
+              aria-label={t('viewGroup')}
             >
               <i className="fa fa-info" />
             </Button>
@@ -301,6 +299,7 @@ function Groups(): JSX.Element {
                 className="me-2 rounded"
                 data-testid="editGroupBtn"
                 onClick={() => handleModalClick(params.row, ModalState.EDIT)}
+                aria-label={t('editGroup')}
               >
                 <i className="fa fa-edit" />
               </Button>
@@ -312,54 +311,56 @@ function Groups(): JSX.Element {
   ];
 
   return (
-    <div>
-      <AdminSearchFilterBar
-        searchPlaceholder={tCommon('searchBy', { item: t('groupOrLeader') })}
-        searchValue={searchTerm}
-        onSearchChange={setSearchTerm}
-        searchInputTestId="searchByInput"
-        searchButtonTestId="searchBtn"
-        hasDropdowns={true}
-        dropdowns={[searchByDropdown, sortDropdown]}
-      />
-      {/* Table with Volunteer Groups */}
-      <DataGrid
-        disableColumnMenu
-        columnBufferPx={7}
-        hideFooter={true}
-        getRowId={(row) => row.id}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noVolunteerGroups')}
-            </Stack>
-          ),
-        }}
-        sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
-        autoHeight
-        rowHeight={65}
-        rows={groups}
-        columns={columns}
-        isRowSelectable={() => false}
-      />
-      {group && (
-        <>
-          <GroupModal
-            isOpen={modalState[ModalState.EDIT]}
-            hide={() => closeModal(ModalState.EDIT)}
-            refetchGroups={refetchGroups}
-            group={group}
-            eventId={group.event.id}
-          />
-          <VolunteerGroupViewModal
-            isOpen={modalState[ModalState.VIEW]}
-            hide={() => closeModal(ModalState.VIEW)}
-            group={group}
-          />
-        </>
-      )}
-    </div>
+    <LoadingState isLoading={groupsLoading} variant="spinner">
+      <div>
+        <SearchFilterBar
+          searchPlaceholder={tCommon('searchBy', { item: t('groupOrLeader') })}
+          searchValue={searchTerm}
+          onSearchChange={setSearchTerm}
+          searchInputTestId="searchByInput"
+          searchButtonTestId="searchBtn"
+          hasDropdowns={true}
+          dropdowns={[searchByDropdown, sortDropdown]}
+        />
+        {/* Table with Volunteer Groups */}
+        <DataGrid
+          disableColumnMenu
+          columnBufferPx={7}
+          hideFooter={true}
+          getRowId={(row) => row.id}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack height="100%" alignItems="center" justifyContent="center">
+                {t('noVolunteerGroups')}
+              </Stack>
+            ),
+          }}
+          sx={dataGridStyle}
+          getRowClassName={() => `${styles.rowBackground}`}
+          autoHeight
+          rowHeight={65}
+          rows={groups}
+          columns={columns}
+          isRowSelectable={() => false}
+        />
+        {group && (
+          <>
+            <GroupModal
+              isOpen={modalState[ModalState.EDIT]}
+              hide={() => closeModal(ModalState.EDIT)}
+              refetchGroups={refetchGroups}
+              group={group}
+              eventId={group.event.id}
+            />
+            <VolunteerGroupViewModal
+              isOpen={modalState[ModalState.VIEW]}
+              hide={() => closeModal(ModalState.VIEW)}
+              group={group}
+            />
+          </>
+        )}
+      </div>
+    </LoadingState>
   );
 }
 

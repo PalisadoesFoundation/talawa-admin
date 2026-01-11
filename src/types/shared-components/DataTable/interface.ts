@@ -18,14 +18,16 @@ export type Accessor<T, TValue = unknown> = keyof T | ((row: T) => TValue);
  * Generic column definition for DataTable
  *
  * @example
+ * ```ts
  * interface User {
  *   id: string;
  *   name: string;
  * }
  *
  * const columns: ColumnDef<User>[] = [
- *   { id: 'name', header: 'Name', accessor: 'name' }
+ *   { id: 'name', header: 'Name', accessor: 'name' },
  * ];
+ * ```
  */
 export interface IColumnDef<T, TValue = unknown> {
   /** Unique column identifier */
@@ -113,9 +115,9 @@ type DataPath<TNode, TData> =
 /**
  * Options for the useTableData hook
  *
- * @template TNode - The GraphQL node type extracted from the connection
- * @template TRow - The transformed row type after optional transformation
- * @template TData - The complete query result data type
+ * @typeParam TNode - The GraphQL node type extracted from the connection
+ * @typeParam TRow - The transformed row type after optional transformation
+ * @typeParam TData - The complete query result data type
  */
 export interface IUseTableDataOptions<TNode, TRow, TData = unknown> {
   /**
@@ -200,7 +202,7 @@ export interface IUseTableDataOptions<TNode, TRow, TData = unknown> {
    * **Type Signature:** `(node: TNode) => TRow | null | undefined`
    *
    * Called for each non-null node. Return null/undefined to drop a row, or a TRow to keep it.
-   * Defaults to identity when omitted (TNode -> TRow), matching the hook implementation.
+   * Defaults to identity when omitted (TNode to TRow), matching the hook implementation.
    *
    * @example Basic field transformation
    * ```tsx
@@ -247,7 +249,6 @@ export interface IUseTableDataOptions<TNode, TRow, TData = unknown> {
    * }
    * ```
    *
-   * @type {(node: TNode) => TRow | null | undefined}
    */
   transformNode?: (node: TNode) => TRow | null | undefined;
 
@@ -315,6 +316,14 @@ export interface IBaseDataTableProps<T, TValue = unknown> {
    * If a property name is provided, its value will be coerced to string or number.
    */
   rowKey?: keyof T | ((row: T) => string | number);
+  /**
+   * Optional className applied to the underlying table element.
+   */
+  tableClassName?: string;
+  /**
+   * Optional custom row renderer. When provided, rows are rendered using this function.
+   */
+  renderRow?: (row: T, index: number) => React.ReactNode;
   emptyMessage?: string;
   error?: Error | null;
   renderError?: (error: Error) => React.ReactNode;
@@ -323,10 +332,27 @@ export interface IBaseDataTableProps<T, TValue = unknown> {
    * This improves accessibility for screen readers and navigation.
    */
   ariaLabel?: string;
-  /** Number of skeleton rows to show when loading (default: 6) */
+  /** Number of skeleton rows to show when loading (default: 5) */
   skeletonRows?: number;
+  /**
+   * When true and data is already present, show a translucent overlay on top of the table
+   * while a refetch is in flight. This avoids content jump during refresh.
+   */
+  loadingOverlay?: boolean;
 }
 
+/**
+ * Client-side pagination props.
+ * In client mode, the component manages pagination internally by slicing the data array.
+ *
+ * Details:
+ * - `paginationMode`: Strictly 'client' for client-side pagination.
+ * - `pageSize`: Items per page (default: 10).
+ * - `currentPage`: Controlled page number (1-indexed); if provided, requires `onPageChange`.
+ * - `onPageChange`: Callback when user navigates to a different page.
+ * - `totalItems`: Total item count (default: data.length); used for pagination control display.
+ * - `loadingMore`: When true, append skeleton rows at the end of the table to indicate incremental data loading. Typically used when fetching additional items within the current page. Has no effect when `loading=true` and no data exists.
+ */
 type ClientPaginationProps = {
   paginationMode: 'client';
   pageSize?: number; // default: 10
@@ -335,9 +361,29 @@ type ClientPaginationProps = {
   totalItems?: number; // default: data.length (client mode)
   pageInfo?: never;
   onLoadMore?: never;
-  loadingMore?: never;
+  loadingMore?: boolean;
 };
-// Server pagination requires both pageInfo and onLoadMore together (or neither).
+/**
+ * Server-side pagination props.
+ * In server mode, the component passes pagination state to the parent; parent manages data fetching and state.
+ * Two variants: with pageInfo+onLoadMore (Variant A: cursor/graphql-style) or without (Variant B: static data).
+ *
+ * Variant A (with pageInfo and onLoadMore):
+ * - `paginationMode`: Strictly 'server'.
+ * - `pageInfo`: Cursor info (hasNextPage, hasPreviousPage, startCursor, endCursor) from server.
+ * - `onLoadMore`: Callback to fetch the next page of data.
+ * - `loadingMore`: When true, append skeleton rows to indicate data is being fetched for the next page. Parent sets this while onLoadMore is executing and resolves when data arrives.
+ * - `onPageChange`: Optional callback for programmatic page navigation or initial page selection.
+ * - `totalItems`: Optional total item count for display purposes.
+ *
+ * Variant B (without pageInfo and onLoadMore):
+ * - `paginationMode`: Strictly 'server'.
+ * - `pageInfo`: Omitted (undefined).
+ * - `onLoadMore`: Omitted (undefined); parent manages all fetching outside the component.
+ * - `loadingMore`: When true, append skeleton rows (e.g., for infinite scroll or manual refetch scenarios). Parent controls when to show appended skeletons.
+ * - `onPageChange`: Optional callback if parent needs page notifications.
+ * - `totalItems`: Optional total item count.
+ */
 type ServerPaginationProps =
   | {
       paginationMode: 'server';
@@ -357,9 +403,17 @@ type ServerPaginationProps =
       totalItems?: number;
       pageInfo?: undefined;
       onLoadMore?: undefined;
-      loadingMore?: undefined;
+      loadingMore?: boolean;
     };
 
+/**
+ * No-pagination props.
+ * When paginationMode is undefined/omitted, pagination controls are hidden and all data is displayed.
+ *
+ * Details:
+ * - `paginationMode`: Omitted (undefined); no pagination.
+ * - `loadingMore`: When true, append skeleton rows to indicate additional data is being loaded (e.g., infinite scroll). The component displays all loaded data plus skeleton rows for pending data. Parent manages the loadingMore state and appends new items to the data array as they arrive.
+ */
 type NoPaginationProps = {
   paginationMode?: undefined;
   pageSize?: never;
@@ -368,7 +422,7 @@ type NoPaginationProps = {
   totalItems?: never;
   pageInfo?: never;
   onLoadMore?: never;
-  loadingMore?: never;
+  loadingMore?: boolean;
 };
 
 type PaginationProps =
@@ -403,4 +457,24 @@ export interface ITableState {
   filters?: IFilterState[];
   globalSearch?: string;
   selectedRows?: Set<string | number>;
+}
+
+/**
+ * Props for the table loading skeleton component
+ *
+ * Used to display placeholder loading states while data is being fetched,
+ * either as a full table skeleton or as an overlay on top of existing data.
+ */
+export interface ITableLoaderProps<T> {
+  /** Column definitions to match the structure of the actual table */
+  columns: IColumnDef<T>[];
+
+  /** Number of skeleton rows to display (default: 5) */
+  rows?: number;
+
+  /** When true, render as a translucent overlay over existing table content instead of standalone */
+  asOverlay?: boolean;
+
+  /** Accessible label for the loading table, used for screen readers */
+  ariaLabel?: string;
 }

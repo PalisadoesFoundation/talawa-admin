@@ -6,7 +6,7 @@
 
 > **Edge**\<`TNode`\> = \{ `node`: `TNode` \| `null`; \} \| `null`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L82)
+Defined in: [src/types/shared-components/DataTable/interface.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L84)
 
 GraphQL connection helpers used by DataTable hooks
 

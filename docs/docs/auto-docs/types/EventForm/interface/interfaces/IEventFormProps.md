@@ -4,10 +4,24 @@
 
 # Interface: IEventFormProps
 
-Defined in: [src/types/EventForm/interface.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L59)
+Defined in: [src/types/EventForm/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L68)
 
 Props interface for the EventForm component.
 Provides a reusable form for creating and editing events across Admin and User portals.
+
+- `initialValues`: Initial form values
+- `onSubmit`: Callback fired when form is submitted with valid data
+- `onCancel`: Callback fired when form is cancelled
+- `submitLabel`: Label text for the submit button
+- `t`: Translation function for event-specific keys
+- `tCommon`: Translation function for common keys
+- `showCreateChat`: Whether to show the "Create Chat" toggle
+- `showRegisterable`: Whether to show the "Is Registerable" toggle
+- `showPublicToggle`: Whether to show the "Is Public" toggle
+- `disableRecurrence`: Whether to disable recurrence options
+- `submitting`: Whether the form is currently submitting
+- `showRecurrenceToggle`: Whether to show the recurrence toggle
+- `showCancelButton`: Whether to show the cancel button
 
 ## Properties
 
@@ -15,9 +29,7 @@ Provides a reusable form for creating and editing events across Admin and User p
 
 > `optional` **disableRecurrence**: `boolean`
 
-Defined in: [src/types/EventForm/interface.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L70)
-
-Whether to disable recurrence options
+Defined in: [src/types/EventForm/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L79)
 
 ***
 
@@ -25,9 +37,7 @@ Whether to disable recurrence options
 
 > **initialValues**: [`IEventFormValues`](IEventFormValues.md)
 
-Defined in: [src/types/EventForm/interface.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L60)
-
-Initial form values
+Defined in: [src/types/EventForm/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L69)
 
 ***
 
@@ -35,9 +45,7 @@ Initial form values
 
 > **onCancel**: () => `void`
 
-Defined in: [src/types/EventForm/interface.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L62)
-
-Callback fired when form is cancelled
+Defined in: [src/types/EventForm/interface.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L71)
 
 #### Returns
 
@@ -49,9 +57,7 @@ Callback fired when form is cancelled
 
 > **onSubmit**: (`payload`) => `void` \| `Promise`\<`void`\>
 
-Defined in: [src/types/EventForm/interface.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L61)
-
-Callback fired when form is submitted with valid data
+Defined in: [src/types/EventForm/interface.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L70)
 
 #### Parameters
 
@@ -69,9 +75,7 @@ Callback fired when form is submitted with valid data
 
 > `optional` **showCancelButton**: `boolean`
 
-Defined in: [src/types/EventForm/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L73)
-
-Whether to show the cancel button
+Defined in: [src/types/EventForm/interface.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L82)
 
 ***
 
@@ -79,9 +83,7 @@ Whether to show the cancel button
 
 > `optional` **showCreateChat**: `boolean`
 
-Defined in: [src/types/EventForm/interface.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L66)
-
-Whether to show the "Create Chat" toggle
+Defined in: [src/types/EventForm/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L75)
 
 ***
 
@@ -89,9 +91,7 @@ Whether to show the "Create Chat" toggle
 
 > `optional` **showPublicToggle**: `boolean`
 
-Defined in: [src/types/EventForm/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L68)
-
-Whether to show the "Is Public" toggle
+Defined in: [src/types/EventForm/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L77)
 
 ***
 
@@ -99,9 +99,7 @@ Whether to show the "Is Public" toggle
 
 > `optional` **showRecurrenceToggle**: `boolean`
 
-Defined in: [src/types/EventForm/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L72)
-
-Whether to show the recurrence toggle
+Defined in: [src/types/EventForm/interface.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L81)
 
 ***
 
@@ -109,9 +107,7 @@ Whether to show the recurrence toggle
 
 > `optional` **showRegisterable**: `boolean`
 
-Defined in: [src/types/EventForm/interface.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L67)
-
-Whether to show the "Is Registerable" toggle
+Defined in: [src/types/EventForm/interface.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L76)
 
 ***
 
@@ -119,9 +115,7 @@ Whether to show the "Is Registerable" toggle
 
 > **submitLabel**: `string`
 
-Defined in: [src/types/EventForm/interface.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L63)
-
-Label text for the submit button
+Defined in: [src/types/EventForm/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L72)
 
 ***
 
@@ -129,9 +123,7 @@ Label text for the submit button
 
 > `optional` **submitting**: `boolean`
 
-Defined in: [src/types/EventForm/interface.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L71)
-
-Whether the form is currently submitting
+Defined in: [src/types/EventForm/interface.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L80)
 
 ***
 
@@ -139,9 +131,7 @@ Whether the form is currently submitting
 
 > **t**: (`key`, `options?`) => `string`
 
-Defined in: [src/types/EventForm/interface.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L64)
-
-Translation function for event-specific keys
+Defined in: [src/types/EventForm/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L73)
 
 #### Parameters
 
@@ -163,9 +153,7 @@ Translation function for event-specific keys
 
 > **tCommon**: (`key`, `options?`) => `string`
 
-Defined in: [src/types/EventForm/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L65)
-
-Translation function for common keys
+Defined in: [src/types/EventForm/interface.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L74)
 
 #### Parameters
 

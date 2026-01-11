@@ -41,7 +41,7 @@
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import React from 'react';
 import { ButtonGroup, Dropdown } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -64,7 +64,6 @@ const ProfileCard = ({
   const lastName = nameParts.slice(1).join(' ') || '';
   const userImage = getItem<string>('UserImage') || '';
   const navigate = useNavigate();
-  const { orgId } = useParams();
 
   const MAX_NAME_LENGTH = 20;
   const fullName = `${firstName} ${lastName}`;
@@ -75,7 +74,6 @@ const ProfileCard = ({
   const profileDestination = resolveProfileNavigation({
     portal,
     role,
-    orgId,
   });
 
   return (

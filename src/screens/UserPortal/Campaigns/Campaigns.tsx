@@ -19,7 +19,7 @@ import { USER_FUND_CAMPAIGNS } from 'GraphQl/Queries/fundQueries';
 import { useQuery } from '@apollo/client';
 import type { InterfaceUserCampaign } from 'utils/interfaces';
 import { currencySymbols } from 'utils/currency';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import dayjs from 'dayjs';
 import {
@@ -249,7 +249,7 @@ const Campaigns = (): JSX.Element => {
     },
     {
       field: 'action',
-      headerName: 'Add Pledge',
+      headerName: t('addPledge'),
       flex: 1.5,
       minWidth: 120,
       align: 'center',
@@ -308,7 +308,7 @@ const Campaigns = (): JSX.Element => {
 
   return (
     <>
-      <AdminSearchFilterBar
+      <SearchFilterBar
         searchPlaceholder={t('searchCampaigns')}
         searchValue={searchText}
         onSearchChange={setSearchText}

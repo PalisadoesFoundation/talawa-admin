@@ -1,7 +1,9 @@
 import React from 'react';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -15,7 +17,7 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 import EventActionItems from './EventActionItems';
 import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
-import type { IActionItemInfo } from 'types/ActionItems/interface';
+import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 
 // Mock dependencies
 vi.mock('react-router', async () => {
@@ -48,8 +50,17 @@ vi.mock('react-toastify', () => ({
 }));
 
 // Mock sub-components
-vi.mock('components/Loader/Loader', () => ({
-  default: () => <div data-testid="loader">Loading...</div>,
+vi.mock('shared-components/LoadingState/LoadingState', () => ({
+  default: ({
+    isLoading,
+    children,
+  }: {
+    isLoading: boolean;
+    children: React.ReactNode;
+  }) => {
+    if (isLoading) return <div data-testid="loader">Loading...</div>;
+    return children;
+  },
 }));
 
 vi.mock('components/Avatar/Avatar', () => ({
@@ -1432,6 +1443,43 @@ describe('EventActionItems', () => {
       await waitFor(() => {
         const checkbox = screen.getByTestId('statusCheckboxactionItemId1');
         expect(checkbox).toHaveAttribute('aria-label', 'markCompletion');
+      });
+    });
+
+    it('should display loading state while fetching action items', async () => {
+      const loadingMocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: {
+            data: {
+              event: {
+                id: 'eventId1',
+                recurrenceRule: null,
+                baseEvent: null,
+                actionItems: {
+                  edges: [],
+                  pageInfo: {
+                    hasNextPage: false,
+                    endCursor: null,
+                  },
+                },
+              },
+            },
+          },
+          delay: 100,
+        },
+      ];
+
+      renderEventActionItems('eventId1', loadingMocks);
+
+      expect(screen.getByTestId('loader')).toBeInTheDocument();
+
+      // Verify component renders and eventually loads data
+      await waitFor(() => {
+        expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
       });
     });
   });

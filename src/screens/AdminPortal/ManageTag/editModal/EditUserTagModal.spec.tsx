@@ -8,7 +8,7 @@ import EditUserTagModal, {
 import type { TFunction } from 'i18next';
 
 // Mock the CSS module
-vi.mock('style/app-fixed.module.css', () => ({
+vi.mock('./EditUserTagModal.module.css', () => ({
   default: {
     modalHeader: 'modalHeader-class',
     inputField: 'inputField-class',

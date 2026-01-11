@@ -4,20 +4,9 @@
  * A reusable, controlled component that provides unified date range selection
  * across the Talawa Admin application.
  *
- * @component
+ * @param props - Component props
  *
- * @param {InterfaceDateRangePickerProps} props - Component props
- * @param {IDateRangeValue} props.value - Controlled value containing startDate and endDate
- * @param {(val: IDateRangeValue) => void} props.onChange - Callback fired when the date range changes
- * @param {IDateRangePreset[]} [props.presets] - Optional preset configurations
- * @param {boolean} [props.disabled=false] - Disables all interactions
- * @param {boolean} [props.error=false] - Displays error styling
- * @param {string} [props.helperText] - Helper or validation text
- * @param {string} [props.className] - Optional className for root container
- * @param {string} [props.dataTestId='date-range-picker'] - Base test id
- * @param {boolean} [props.showPresets=true] - Controls preset visibility
- *
- * @returns {JSX.Element} DateRangePicker component
+ * @returns DateRangePicker component
  *
  * @remarks
  * - Fully controlled component
@@ -32,7 +21,7 @@
  */
 
 import React, { useCallback, useMemo } from 'react';
-import { DatePicker } from '@mui/x-date-pickers';
+import DatePicker from 'shared-components/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import Form from 'react-bootstrap/Form';
@@ -177,43 +166,28 @@ export default function DateRangePicker({
               value={startDayjs}
               onChange={handleStartChange}
               disabled={disabled}
-              enableAccessibleFieldDOMStructure={false}
-              slots={{
-                textField: (props) => (
-                  <Form.Control
-                    {...props.inputProps}
-                    ref={props.ref}
-                    disabled={props.disabled}
-                    required={props.required}
-                    aria-label={t('startDate')}
-                    data-testid={`${dataTestId}-start-input`}
-                  />
-                ),
+              data-testid={`${dataTestId}-start-input`}
+              slotProps={{
+                textField: {
+                  'aria-label': t('startDate'),
+                },
               }}
             />
           </Col>
-
           <Col xs={12} sm={6}>
             <Form.Label>{t('endDate')}</Form.Label>
             <DatePicker
               value={endDayjs}
               onChange={handleEndChange}
               disabled={disabled}
-              enableAccessibleFieldDOMStructure={false}
               minDate={
                 normalizedStartDate ? dayjs(normalizedStartDate) : undefined
               }
-              slots={{
-                textField: (props) => (
-                  <Form.Control
-                    {...props.inputProps}
-                    ref={props.ref}
-                    disabled={props.disabled}
-                    required={props.required}
-                    aria-label={t('endDate')}
-                    data-testid={`${dataTestId}-end-input`}
-                  />
-                ),
+              data-testid={`${dataTestId}-end-input`}
+              slotProps={{
+                textField: {
+                  'aria-label': t('endDate'),
+                },
               }}
             />
           </Col>
@@ -255,3 +229,16 @@ export default function DateRangePicker({
     </div>
   );
 }
+
+/**
+ * Re-exported MUI date picker LocalizationProvider for test utilities and localization support.
+ * Allows tests and other modules to import MUI date picker localization without direct \@mui dependencies.
+ * Requires \@mui/x-date-pickers to be installed.
+ */
+export { LocalizationProvider } from '@mui/x-date-pickers';
+
+/**
+ * Re-exported MUI date picker AdapterDayjs for Day.js integration.
+ * Provides Day.js adapter for MUI date pickers. Requires both \@mui/x-date-pickers and dayjs to be installed and configured.
+ */
+export { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';

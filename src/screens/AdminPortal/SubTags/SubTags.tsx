@@ -37,7 +37,7 @@
  * - This component is used in the context of managing organizational tags
  *   and their hierarchy within the Talawa Admin application.
  *
- * @returns {JSX.Element} The rendered SubTags component.
+ * @returns The rendered SubTags component.
  */
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
@@ -53,7 +53,7 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './SubTags.module.css';
 import { DataGrid } from 'shared-components/DataGridWrapper';
 import type {
   InterfaceOrganizationSubTagsQuery,
@@ -71,7 +71,7 @@ import { Stack } from '@mui/material';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 function SubTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -348,7 +348,7 @@ function SubTags(): JSX.Element {
     <>
       <Row>
         <div>
-          <AdminSearchFilterBar
+          <SearchFilterBar
             searchPlaceholder={tCommon('searchByName')}
             searchValue={tagSearchName}
             onSearchChange={(value) => setTagSearchName(value.trim())}
@@ -384,6 +384,7 @@ function SubTags(): JSX.Element {
                   }}
                   className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
                   data-testid="allTagsBtn"
+                  data-text={t('tags')}
                 >
                   {t('tags')}
                   <i className={'mx-2 fa fa-caret-right'} aria-hidden="true" />
@@ -404,6 +405,7 @@ function SubTags(): JSX.Element {
                       }
                     }}
                     data-testid="redirectToSubTags"
+                    data-text={tag.name}
                   >
                     {tag.name}
 

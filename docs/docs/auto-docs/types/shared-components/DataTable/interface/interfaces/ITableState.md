@@ -4,7 +4,7 @@
 
 # Interface: ITableState
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:401](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L401)
+Defined in: [src/types/shared-components/DataTable/interface.ts:455](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L455)
 
 Shared table UI state
 
@@ -14,7 +14,7 @@ Shared table UI state
 
 > `optional` **filters**: [`IFilterState`](IFilterState.md)[]
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:403](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L403)
+Defined in: [src/types/shared-components/DataTable/interface.ts:457](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L457)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:403](https://git
 
 > `optional` **globalSearch**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:404](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L404)
+Defined in: [src/types/shared-components/DataTable/interface.ts:458](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L458)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:404](https://git
 
 > `optional` **selectedRows**: `Set`\<`string` \| `number`\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:405](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L405)
+Defined in: [src/types/shared-components/DataTable/interface.ts:459](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L459)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:405](https://git
 
 > `optional` **sorting**: [`ISortState`](ISortState.md)[]
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:402](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L402)
+Defined in: [src/types/shared-components/DataTable/interface.ts:456](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L456)

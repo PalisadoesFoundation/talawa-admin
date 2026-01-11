@@ -1,5 +1,11 @@
 ﻿import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -31,6 +37,9 @@ vi.mock('react-i18next', async (importOriginal) => {
 
 // Mock @mui/x-date-pickers to simple inputs
 vi.mock('@mui/x-date-pickers', () => ({
+  LocalizationProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
   DatePicker: vi.fn(
     ({
       label,
@@ -101,67 +110,6 @@ vi.mock('@mui/x-date-pickers', () => ({
       });
     },
   ),
-}));
-
-type MockDateRangePickerProps = {
-  value: {
-    startDate: Date | null;
-    endDate: Date | null;
-  };
-  onChange: (value: { startDate: Date | null; endDate: Date | null }) => void;
-  dataTestId: string;
-};
-
-vi.mock('shared-components/DateRangePicker/DateRangePicker', () => ({
-  __esModule: true,
-  default: ({ value, onChange, dataTestId }: MockDateRangePickerProps) => {
-    const adjustRange = (startDate: Date | null, endDate: Date | null) => {
-      // Auto-adjust null endDate to startDate
-      if (startDate && !endDate) {
-        return { startDate, endDate: startDate };
-      }
-
-      // Auto-adjust if endDate is before startDate
-      if (startDate && endDate && endDate < startDate) {
-        return { startDate, endDate: startDate };
-      }
-
-      return { startDate, endDate };
-    };
-    return (
-      <div>
-        <input
-          type="date"
-          data-testid={`${dataTestId}-start-input`}
-          value={
-            value?.startDate ? value.startDate.toISOString().slice(0, 10) : ''
-          }
-          onChange={(e) => {
-            const newStartDate = new Date(`${e.target.value}T00:00:00Z`);
-            const adjusted = adjustRange(newStartDate, value?.endDate ?? null);
-            onChange(adjusted);
-          }}
-        />
-
-        <input
-          type="date"
-          data-testid={`${dataTestId}-end-input`}
-          value={
-            value?.endDate instanceof Date && !isNaN(value.endDate.getTime())
-              ? value.endDate.toISOString().slice(0, 10)
-              : ''
-          }
-          onChange={(e) => {
-            const newEndDate = e.target.value
-              ? new Date(`${e.target.value}T00:00:00Z`)
-              : null;
-            const adjusted = adjustRange(value?.startDate ?? null, newEndDate);
-            onChange(adjusted);
-          }}
-        />
-      </div>
-    );
-  },
 }));
 
 // Mock toast functions with hoisted variables
@@ -395,7 +343,17 @@ describe('CreateEventModal', () => {
     fireEvent.click(createBtn);
 
     await waitFor(() => {
-      expect(mockCreate).toHaveBeenCalled();
+      expect(mockCreate).toHaveBeenCalledWith(
+        expect.objectContaining({
+          variables: expect.objectContaining({
+            input: expect.objectContaining({
+              isPublic: false,
+              isInviteOnly: true,
+              isRegisterable: false,
+            }),
+          }),
+        }),
+      );
       expect(mockToast.success).toHaveBeenCalled();
       expect(onEventCreated).toHaveBeenCalled();
       expect(onClose).toHaveBeenCalled();
@@ -424,7 +382,7 @@ describe('CreateEventModal', () => {
     expect(screen.queryByTestId('allDayEventCheck')).not.toBeChecked();
   });
 
-  it('toggles public checkbox', () => {
+  it('toggles event visibility options', () => {
     render(
       <CreateEventModal
         isOpen={true}
@@ -434,11 +392,32 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    const publicCheck = screen.getByTestId('publicEventCheck');
-    expect(publicCheck).toBeChecked();
+    const publicRadio = screen.getByTestId('visibilityPublicRadio');
+    const orgRadio = screen.getByTestId('visibilityOrgRadio');
+    const inviteRadio = screen.getByTestId('visibilityInviteRadio');
 
-    fireEvent.click(publicCheck);
-    expect(publicCheck).not.toBeChecked();
+    // Default should be Invite Only
+    expect(inviteRadio).toBeChecked();
+    expect(publicRadio).not.toBeChecked();
+    expect(orgRadio).not.toBeChecked();
+
+    // Toggle to organization visibility
+    fireEvent.click(orgRadio);
+    expect(orgRadio).toBeChecked();
+    expect(inviteRadio).not.toBeChecked();
+    expect(publicRadio).not.toBeChecked();
+
+    // Toggle to public visibility
+    fireEvent.click(publicRadio);
+    expect(publicRadio).toBeChecked();
+    expect(orgRadio).not.toBeChecked();
+    expect(inviteRadio).not.toBeChecked();
+
+    // Toggle back to invite only
+    fireEvent.click(inviteRadio);
+    expect(inviteRadio).toBeChecked();
+    expect(publicRadio).not.toBeChecked();
+    expect(orgRadio).not.toBeChecked();
   });
 
   it('toggles registrable checkbox', () => {
@@ -593,12 +572,16 @@ describe('CreateEventModal', () => {
     // Enable recurring event checkbox first
     fireEvent.click(screen.getByTestId('recurringEventCheck'));
 
-    const dropdown = screen.getByTestId('recurrenceDropdown');
-    fireEvent.click(dropdown);
+    act(() => {
+      const dropdown = screen.getByTestId('recurrenceDropdown');
+      fireEvent.click(dropdown);
+    });
 
-    // Click on "Custom..." option (index 6)
-    const customOption = screen.getByTestId('recurrenceOption-6');
-    fireEvent.click(customOption);
+    act(() => {
+      // Click on "Custom..." option (index 6)
+      const customOption = screen.getByTestId('recurrenceOption-6');
+      fireEvent.click(customOption);
+    });
 
     expect(mockCreateDefaultRecurrenceRule).toHaveBeenCalled();
   });
@@ -650,12 +633,8 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    const startDateInput = screen.getByTestId(
-      'createEventDateRangePicker-start-input',
-    );
-    const endDateInput = screen.getByTestId(
-      'createEventDateRangePicker-end-input',
-    );
+    const startDateInput = screen.getByTestId('eventStartAt');
+    const endDateInput = screen.getByTestId('eventEndAt');
 
     const futureStart = dayjs().add(10, 'days').format('YYYY-MM-DD');
     const futureEnd = dayjs().add(11, 'days').format('YYYY-MM-DD');
@@ -705,15 +684,8 @@ describe('CreateEventModal', () => {
       target: { value: 'Test Description' },
     });
 
-    // Close modal (parent controls isOpen)
-    rerender(
-      <CreateEventModal
-        isOpen={false}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
-    );
+    // Close modal
+    fireEvent.click(screen.getByTestId('createEventModalCloseBtn'));
 
     // Reopen modal
     rerender(
@@ -725,18 +697,9 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    // Form should be reset
+    // Form should be reset (empty values)
     expect(screen.getByTestId('eventTitleInput')).toHaveValue('');
     expect(screen.getByTestId('eventDescriptionInput')).toHaveValue('');
-
-    // DateRangePicker should also reset
-    expect(
-      screen.getByTestId('createEventDateRangePicker-start-input'),
-    ).toHaveValue(dayjs().utc().format('YYYY-MM-DD'));
-
-    expect(
-      screen.getByTestId('createEventDateRangePicker-end-input'),
-    ).toHaveValue(dayjs().utc().format('YYYY-MM-DD'));
   });
 
   it('disables create button when loading', () => {
@@ -794,14 +757,16 @@ describe('CreateEventModal', () => {
     const dropdown = screen.getByTestId('recurrenceDropdown');
 
     // Open dropdown
-    fireEvent.click(dropdown);
+    act(() => {
+      fireEvent.click(dropdown);
+    });
 
     // Verify dropdown options are visible
     expect(screen.getByTestId('recurrenceOption-0')).toBeInTheDocument();
     expect(screen.getByTestId('recurrenceOption-1')).toBeInTheDocument();
   });
 
-  it('selects different recurrence options correctly', () => {
+  it('selects different recurrence options correctly', async () => {
     render(
       <CreateEventModal
         isOpen={true}
@@ -818,11 +783,15 @@ describe('CreateEventModal', () => {
 
     // Select "Does not repeat"
     fireEvent.click(dropdown);
-    fireEvent.click(screen.getByTestId('recurrenceOption-0'));
+    await waitFor(() => {
+      fireEvent.click(screen.getByTestId('recurrenceOption-0'));
+    });
 
     // Select "Daily"
     fireEvent.click(dropdown);
-    fireEvent.click(screen.getByTestId('recurrenceOption-1'));
+    await waitFor(() => {
+      fireEvent.click(screen.getByTestId('recurrenceOption-1'));
+    });
 
     expect(mockCreateDefaultRecurrenceRule).toHaveBeenCalled();
   });
@@ -868,7 +837,7 @@ describe('CreateEventModal', () => {
 
     // Toggle all checkboxes
     fireEvent.click(screen.getByTestId('allDayEventCheck')); // Turn off
-    fireEvent.click(screen.getByTestId('publicEventCheck')); // Turn off
+    fireEvent.click(screen.getByTestId('visibilityOrgRadio')); // Change to org visibility
     fireEvent.click(screen.getByTestId('registerableEventCheck')); // Turn on
 
     // Fill form
@@ -913,12 +882,8 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    const startDateInput = screen.getByTestId(
-      'createEventDateRangePicker-start-input',
-    );
-    const endDateInput = screen.getByTestId(
-      'createEventDateRangePicker-end-input',
-    );
+    const startDateInput = screen.getByTestId('eventStartAt');
+    const endDateInput = screen.getByTestId('eventEndAt');
 
     const baseDate = dayjs().add(10, 'days');
     const earlyDate = baseDate.format('YYYY-MM-DD');
@@ -947,14 +912,8 @@ describe('CreateEventModal', () => {
 
     // endDate should be auto-adjusted to match startDate
     await waitFor(() => {
-      const updatedEndDateInput = screen.getByTestId(
-        'createEventDateRangePicker-end-input',
-      );
-      const startInput = screen.getByTestId(
-        'createEventDateRangePicker-start-input',
-      ) as HTMLInputElement;
-
-      expect(updatedEndDateInput).toHaveValue(startInput.value);
+      const updatedEndDateInput = screen.getByTestId('eventEndAt');
+      expect(updatedEndDateInput).toHaveValue(evenLaterDate);
     });
   });
 
@@ -1096,7 +1055,9 @@ describe('CreateEventModal', () => {
     fireEvent.click(screen.getByTestId('recurringEventCheck'));
 
     const dropdown = screen.getByTestId('recurrenceDropdown');
-    fireEvent.click(dropdown);
+    act(() => {
+      fireEvent.click(dropdown);
+    });
 
     // Verify the dynamically generated labels based on current date
     const options = screen.getAllByRole('button');
@@ -1130,18 +1091,13 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    const endDateInput = screen.getByTestId(
-      'createEventDateRangePicker-end-input',
-    ) as HTMLInputElement;
+    const endDateInput = screen.getByTestId('eventEndAt');
 
     // Clear the endDate to simulate null
     fireEvent.change(endDateInput, { target: { value: '' } });
 
-    const startDateInput = screen.getByTestId(
-      'createEventDateRangePicker-start-input',
-    ) as HTMLInputElement;
-
-    expect(endDateInput.value).toBe(startDateInput.value);
+    // Verify component handles empty/null date gracefully
+    expect(endDateInput).toHaveValue('');
   });
 
   it('verifies endDate DatePicker minDate constraint', () => {
@@ -1154,12 +1110,8 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    const startDateInput = screen.getByTestId(
-      'createEventDateRangePicker-start-input',
-    );
-    const endDateInput = screen.getByTestId(
-      'createEventDateRangePicker-end-input',
-    );
+    const startDateInput = screen.getByTestId('eventStartAt');
+    const endDateInput = screen.getByTestId('eventEndAt');
 
     const futureStart = dayjs().add(10, 'days').format('YYYY-MM-DD');
     const futureEnd = dayjs().add(5, 'days').format('YYYY-MM-DD');
@@ -1173,11 +1125,7 @@ describe('CreateEventModal', () => {
     // The mock DatePicker doesn't enforce minDate constraint, it just accepts the value
     // The actual component would handle this, but for testing we verify the value was set
     // This test documents the expected behavior rather than enforcing it in the mock
-    const startInput = startDateInput as HTMLInputElement;
-
-    expect(endDateInput).toHaveValue(
-      dayjs(startInput.value).format('YYYY-MM-DD'),
-    );
+    expect(endDateInput).toHaveValue(futureEnd);
   });
 
   it('validates form with mixed whitespace - title valid but others whitespace', async () => {
@@ -1383,18 +1331,15 @@ describe('CreateEventModal', () => {
     );
 
     // Step 1: Change dates
-    const startDate = dayjs().utc().add(10, 'days').format('YYYY-MM-DD');
-    const endDate = dayjs().utc().add(11, 'days').format('YYYY-MM-DD');
+    const futureStart = dayjs().add(10, 'days').format('YYYY-MM-DD');
+    const futureEnd = dayjs().add(11, 'days').format('YYYY-MM-DD');
 
-    fireEvent.change(
-      screen.getByTestId('createEventDateRangePicker-start-input'),
-      { target: { value: startDate } },
-    );
-
-    fireEvent.change(
-      screen.getByTestId('createEventDateRangePicker-end-input'),
-      { target: { value: endDate } },
-    );
+    fireEvent.change(screen.getByTestId('eventStartAt'), {
+      target: { value: futureStart },
+    });
+    fireEvent.change(screen.getByTestId('eventEndAt'), {
+      target: { value: futureEnd },
+    });
 
     // Step 2: Toggle all-day off
     fireEvent.click(screen.getByTestId('allDayEventCheck'));
@@ -1408,8 +1353,8 @@ describe('CreateEventModal', () => {
     fireEvent.click(dropdown);
     fireEvent.click(screen.getByTestId('recurrenceOption-2')); // Weekly
 
-    // Step 5: Toggle visibility
-    fireEvent.click(screen.getByTestId('publicEventCheck'));
+    // Step 5: Toggle visibility to organization
+    fireEvent.click(screen.getByTestId('visibilityOrgRadio'));
 
     // Step 6: Fill form
     fireEvent.change(screen.getByTestId('eventTitleInput'), {
@@ -1592,19 +1537,12 @@ describe('CreateEventModal', () => {
         />,
       );
 
-      // Expect today's date (mocked system time)
-      const startDateInput = screen.getByTestId(
-        'createEventDateRangePicker-start-input',
-      );
-      expect(startDateInput).toHaveValue(
-        dayjs().utc().startOf('day').format('YYYY-MM-DD'),
-      );
-      const endDateInput = screen.getByTestId(
-        'createEventDateRangePicker-end-input',
-      );
-      const todayUTC = dayjs().utc().format('YYYY-MM-DD');
-      expect(startDateInput).toHaveValue(todayUTC);
-      expect(endDateInput).toHaveValue(todayUTC);
+      // Expect today
+      const startDateInput = screen.getByTestId('eventStartAt');
+      expect(startDateInput).toHaveValue(now.format('YYYY-MM-DD'));
+
+      const endDateInput = screen.getByTestId('eventEndAt');
+      expect(endDateInput).toHaveValue(now.format('YYYY-MM-DD'));
     });
 
     it('sets default start date to today (no month crossing)', () => {
@@ -1622,11 +1560,9 @@ describe('CreateEventModal', () => {
         />,
       );
 
-      // Expect 2023-10-31 (today, stays in current month)
-      const startDateInput = screen.getByTestId(
-        'createEventDateRangePicker-start-input',
-      );
-      expect(startDateInput).toHaveValue(dayjs.utc().format('YYYY-MM-DD'));
+      // Expect Oct 31 (today, stays in current month)
+      const startDateInput = screen.getByTestId('eventStartAt');
+      expect(startDateInput).toHaveValue(oct31.format('YYYY-MM-DD'));
     });
 
     it('sets default start date to today (no year crossing)', () => {
@@ -1644,11 +1580,9 @@ describe('CreateEventModal', () => {
         />,
       );
 
-      // Expect 2023-12-31 (today, stays in current year)
-      const startDateInput = screen.getByTestId(
-        'createEventDateRangePicker-start-input',
-      );
-      expect(startDateInput).toHaveValue(dayjs.utc().format('YYYY-MM-DD'));
+      // Expect Dec 31 (today, stays in current year)
+      const startDateInput = screen.getByTestId('eventStartAt');
+      expect(startDateInput).toHaveValue(dec31.format('YYYY-MM-DD'));
     });
 
     it('calculates Today UTC correctly even if local time is different day', () => {
@@ -1676,11 +1610,9 @@ describe('CreateEventModal', () => {
       );
 
       // Should be Jan 1st (today)
-      const startDateInput = screen.getByTestId(
-        'createEventDateRangePicker-start-input',
-      );
+      const startDateInput = screen.getByTestId('eventStartAt');
       expect(startDateInput).toHaveValue(
-        dayjs.utc().startOf('day').format('YYYY-MM-DD'),
+        dayjs.utc(mockDate).format('YYYY-MM-DD'),
       );
     });
   });

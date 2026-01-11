@@ -1,7 +1,9 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -32,11 +34,18 @@ vi.mock('react-router', async () => {
   };
 });
 
-vi.mock('@mui/icons-material', () => ({
-  WarningAmberRounded: () => (
-    <span data-testid="warning-icon">WarningAmberRounded</span>
-  ),
-}));
+vi.mock('@mui/icons-material', async () => {
+  const actual = (await vi.importActual('@mui/icons-material')) as Record<
+    string,
+    unknown
+  >;
+  return {
+    ...actual,
+    WarningAmberRounded: () => (
+      <span data-testid="warning-icon">WarningAmberRounded</span>
+    ),
+  };
+});
 
 vi.mock('./GroupModal', () => ({
   default: ({
@@ -357,18 +366,22 @@ describe('Groups Screen [User Portal]', () => {
 
   it('renders groups screen with search bar and data', async () => {
     renderGroups(linkSuccess);
-    expect(await screen.findByTestId('searchByInput')).toBeInTheDocument();
-    expect(await screen.findByText('Group 1')).toBeInTheDocument();
+    // Wait for data to load (LoadingState completes)
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+    expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
   });
 
   it('search filters groups by name', async () => {
     renderGroups(linkSuccess);
-    const searchInput = await screen.findByTestId('searchByInput');
 
-    // Wait for initial data to load
+    // Wait for initial data to load (LoadingState completes)
     await waitFor(() => {
       expect(screen.getByText('Group 1')).toBeInTheDocument();
     });
+
+    const searchInput = screen.getByTestId('searchByInput');
 
     // Clear and type in the search input
     await userEvent.clear(searchInput);
@@ -893,5 +906,39 @@ describe('Groups Screen [User Portal]', () => {
     // Verify groups are displayed in DataGrid
     const groupNames = screen.getAllByTestId('groupName');
     expect(groupNames).toHaveLength(2);
+  });
+
+  it('should display LoadingState spinner while data is loading', async () => {
+    const DELAYED_MOCKS = [
+      {
+        request: {
+          query: EVENT_VOLUNTEER_GROUP_LIST,
+          variables: {
+            where: { orgId: 'orgId', userId: 'userId' },
+            orderBy: 'volunteers_DESC',
+          },
+        },
+        result: {
+          data: {
+            getEventVolunteerGroups: [group1, group2],
+          },
+        },
+        delay: 100, // Add delay to simulate loading
+      },
+    ];
+
+    const linkDelayed = new StaticMockLink(DELAYED_MOCKS);
+    renderGroups(linkDelayed);
+
+    // Assert spinner is visible during loading
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+
+    // Wait for data to load
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
+
+    // Assert groups are displayed
+    expect(screen.getByText('Group 1')).toBeInTheDocument();
   });
 });

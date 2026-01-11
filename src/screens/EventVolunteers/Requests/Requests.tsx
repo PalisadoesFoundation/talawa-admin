@@ -1,32 +1,33 @@
 /**
- * @file Requests.tsx
- * @description This component renders a table displaying volunteer membership requests for a specific event.
+ * Requests.tsx
+ * This component renders a table displaying volunteer membership requests for a specific event.
  * It allows administrators to search, sort, and manage these requests by accepting or rejecting them.
  *
- * @module Requests
+ * module Requests
  *
- * @requires react
- * @requires react-i18next
- * @requires react-bootstrap
- * @requires react-router-dom
- * @requires @apollo/client
- * @requires @mui/x-data-grid
- * @requires dayjs
- * @requires NotificationToast
- * @requires components/Loader/Loader
- * @requires components/Avatar/Avatar
- * @requires components/AdminSearchFilterBar/AdminSearchFilterBar
- * @requires GraphQl/Queries/EventVolunteerQueries
- * @requires GraphQl/Mutations/EventVolunteerMutation
- * @requires utils/interfaces
+ * requires
+ * - react
+ * - react-i18next
+ * - react-bootstrap
+ * - react-router-dom
+ * - \@apollo/client
+ * - \@mui/x-data-grid
+ * - dayjs
+ * - NotificationToast
+ * - shared-components/LoadingState/LoadingState
+ * - components/Avatar/Avatar
+ * - components/SearchFilterBar/SearchFilterBar
+ * - GraphQl/Queries/EventVolunteerQueries
+ * - GraphQl/Mutations/EventVolunteerMutation
+ * - utils/interfaces
  *
- * @function Requests
- * @returns {JSX.Element} A React component that displays a searchable and sortable table of volunteer membership requests.
+ * function Requests
+ * @returns A React component that displays a searchable and sortable table of volunteer membership requests.
  *
- * @remarks
+ * remarks
  * - Displays a loader while fetching data and handles errors gracefully.
  * - Uses Apollo Client's `useQuery` to fetch data and `useMutation` to update membership status.
- * - Uses AdminSearchFilterBar for unified search and filter interface with debouncing.
+ * - Uses SearchFilterBar for unified search and filter interface with debouncing.
  * - Provides sorting by creation date (latest/earliest) and filtering by request type (all/individuals/groups).
  * - Displays volunteer details with accessible avatar alt text, request type, request date, and action buttons.
  * - All UI text is internationalized using i18n translation keys.
@@ -44,7 +45,7 @@ import { FaXmark } from 'react-icons/fa6';
 import { WarningAmberRounded } from '@mui/icons-material';
 
 import { useMutation, useQuery } from '@apollo/client';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   DataGrid,
   type GridCellParams,
@@ -57,7 +58,7 @@ import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 function Requests(): JSX.Element {
   const { t } = useTranslation('translation');
@@ -151,8 +152,6 @@ function Requests(): JSX.Element {
     return filteredRequests;
   }, [requestsData, filterBy]);
 
-  // loads the requests when the component mounts
-  if (requestsLoading) return <Loader size="xl" />;
   if (requestsError) {
     // Displays an error message if there is an issue loading the requests
     return (
@@ -297,77 +296,79 @@ function Requests(): JSX.Element {
   ];
 
   return (
-    <div>
-      {/* Header with search, filter  and Create Button */}
-      <AdminSearchFilterBar
-        searchPlaceholder={tCommon('searchBy', { item: tCommon('name') })}
-        searchValue={searchTerm}
-        onSearchChange={debouncedSearch}
-        onSearchSubmit={(value: string) => {
-          setSearchTerm(value);
-        }}
-        searchInputTestId="searchBy"
-        searchButtonTestId="searchBtn"
-        hasDropdowns
-        dropdowns={[
-          {
-            id: 'sort',
-            type: 'sort',
-            label: tCommon('sort'),
-            options: [
-              { label: t('eventVolunteers.latest'), value: 'createdAt_DESC' },
-              {
-                label: t('eventVolunteers.earliest'),
-                value: 'createdAt_ASC',
-              },
-            ],
-            selectedOption: sortBy ?? '',
-            onOptionChange: (value: string | number) =>
-              setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC'),
-            dataTestIdPrefix: 'sort',
-          },
-          {
-            id: 'filter',
-            type: 'filter',
-            label: tCommon('filter'),
-            options: [
-              { label: tCommon('all'), value: 'all' },
-              {
-                label: t('eventVolunteers.individuals'),
-                value: 'individual',
-              },
-              { label: t('eventVolunteers.groups'), value: 'group' },
-            ],
-            selectedOption: filterBy,
-            onOptionChange: (value: string | number) =>
-              setFilterBy(value as 'all' | 'individual' | 'group'),
-            dataTestIdPrefix: 'filter',
-          },
-        ]}
-      />
-
-      {/* Table with Volunteer Membership Requests */}
-
-      {requests.length > 0 ? (
-        <DataGrid
-          disableColumnMenu
-          columnBufferPx={5}
-          hideFooter={true}
-          getRowId={(row) => row.id}
-          className={styles.dataGridContainer}
-          getRowClassName={() => `${styles.rowBackgrounds}`}
-          autoHeight
-          rowHeight={65}
-          rows={requests}
-          columns={columns}
-          isRowSelectable={() => false}
+    <LoadingState isLoading={requestsLoading} variant="spinner">
+      <div>
+        {/* Header with search, filter  and Create Button */}
+        <SearchFilterBar
+          searchPlaceholder={tCommon('searchBy', { item: tCommon('name') })}
+          searchValue={searchTerm}
+          onSearchChange={debouncedSearch}
+          onSearchSubmit={(value: string) => {
+            setSearchTerm(value);
+          }}
+          searchInputTestId="searchBy"
+          searchButtonTestId="searchBtn"
+          hasDropdowns
+          dropdowns={[
+            {
+              id: 'sort',
+              type: 'sort',
+              label: tCommon('sort'),
+              options: [
+                { label: t('eventVolunteers.latest'), value: 'createdAt_DESC' },
+                {
+                  label: t('eventVolunteers.earliest'),
+                  value: 'createdAt_ASC',
+                },
+              ],
+              selectedOption: sortBy ?? '',
+              onOptionChange: (value: string | number) =>
+                setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC'),
+              dataTestIdPrefix: 'sort',
+            },
+            {
+              id: 'filter',
+              type: 'filter',
+              label: tCommon('filter'),
+              options: [
+                { label: tCommon('all'), value: 'all' },
+                {
+                  label: t('eventVolunteers.individuals'),
+                  value: 'individual',
+                },
+                { label: t('eventVolunteers.groups'), value: 'group' },
+              ],
+              selectedOption: filterBy,
+              onOptionChange: (value: string | number) =>
+                setFilterBy(value as 'all' | 'individual' | 'group'),
+              dataTestIdPrefix: 'filter',
+            },
+          ]}
         />
-      ) : (
-        <div className="d-flex justify-content-center align-items-center mt-5">
-          <h5>{t('eventVolunteers.noRequests')}</h5>
-        </div>
-      )}
-    </div>
+
+        {/* Table with Volunteer Membership Requests */}
+
+        {requests.length > 0 ? (
+          <DataGrid
+            disableColumnMenu
+            columnBufferPx={5}
+            hideFooter={true}
+            getRowId={(row) => row.id}
+            className={styles.dataGridContainer}
+            getRowClassName={() => `${styles.rowBackgrounds}`}
+            autoHeight
+            rowHeight={65}
+            rows={requests}
+            columns={columns}
+            isRowSelectable={() => false}
+          />
+        ) : (
+          <div className="d-flex justify-content-center align-items-center mt-5">
+            <h5>{t('eventVolunteers.noRequests')}</h5>
+          </div>
+        )}
+      </div>
+    </LoadingState>
   );
 }
 

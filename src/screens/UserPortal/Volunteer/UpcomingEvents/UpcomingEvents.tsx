@@ -16,13 +16,13 @@ import {
 } from 'types/Volunteer/interface';
 import { IoLocationOutline } from 'react-icons/io5';
 import { IoIosHand } from 'react-icons/io';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   USER_EVENTS_VOLUNTEER,
   USER_VOLUNTEER_MEMBERSHIP,
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import { FaCheck } from 'react-icons/fa';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 /**
@@ -215,9 +215,7 @@ const UpcomingEvents = (): JSX.Element => {
         };
     }
   };
-  if (eventsLoading || membershipLoading) {
-    return <Loader size="xl" data-testid="loader" />;
-  }
+
   if (eventsError) {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
@@ -247,8 +245,11 @@ const UpcomingEvents = (): JSX.Element => {
     dataTestIdPrefix: 'searchBy',
   };
   return (
-    <>
-      <AdminSearchFilterBar
+    <LoadingState
+      isLoading={eventsLoading || membershipLoading}
+      variant="spinner"
+    >
+      <SearchFilterBar
         searchPlaceholder={tCommon('searchBy', { item: t('titleOrLocation') })}
         searchValue={searchTerm}
         onSearchChange={setSearchTerm}
@@ -410,7 +411,7 @@ const UpcomingEvents = (): JSX.Element => {
         onSelectSeries={() => {}}
         onSelectInstance={() => {}}
       />
-    </>
+    </LoadingState>
   );
 };
 export default UpcomingEvents;

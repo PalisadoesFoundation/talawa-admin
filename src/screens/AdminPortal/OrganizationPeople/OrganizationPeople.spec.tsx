@@ -346,10 +346,28 @@ describe('OrganizationPeople', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('jane@example.com')).toBeInTheDocument();
-    expect(
-      screen.getByText(dayjs.utc().subtract(3, 'day').format('DD/MM/YYYY')),
-    ).toBeInTheDocument(); // Formatted date
+    const joinedLabels = screen.getAllByText(/Joined :/i);
+    expect(joinedLabels).toHaveLength(2);
+
+    // Use the same Intl.DateTimeFormat as the component
+    const dateFormatter = new Intl.DateTimeFormat('en-GB', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      timeZone: 'UTC',
+    });
+    const expectedDate1 = dateFormatter.format(
+      dayjs.utc().subtract(3, 'day').toDate(),
+    );
+    const expectedDate2 = dateFormatter.format(
+      dayjs.utc().subtract(2, 'day').toDate(),
+    );
+    expect(screen.getByTestId('org-people-joined-member1')).toHaveTextContent(
+      `Joined : ${expectedDate1}`,
+    );
+    expect(screen.getByTestId('org-people-joined-member2')).toHaveTextContent(
+      `Joined : ${expectedDate2}`,
+    );
   });
 
   test('handles search functionality correctly', async () => {
@@ -391,16 +409,21 @@ describe('OrganizationPeople', () => {
     const searchInput = screen.getByTestId('searchbtn');
     await userEvent.type(searchInput, 'Jane');
 
-    // Wait for debounced search (AdminSearchFilterBar has 300ms debounce)
+    // Wait for debounced search (SearchFilterBar has 300ms debounce)
     await waitFor(
       () => {
         expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
       },
-      { timeout: 1000 },
+      { timeout: 3000 },
     );
 
     // Should show Jane but not John
-    expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+    await waitFor(
+      () => {
+        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Clear search
     await userEvent.clear(searchInput);
@@ -1419,5 +1442,254 @@ describe('OrganizationPeople', () => {
 
     vi.doUnmock('shared-components/ReportingTable/ReportingTable');
     vi.resetModules();
+  });
+
+  test('skips storing cursors when startCursor or endCursor is missing', async () => {
+    // This test targets line 256 - the ELSE path (when condition is false)
+    const mockWithPartialCursors = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: {
+          orgId: 'orgid',
+          first: 10,
+          after: null,
+          last: null,
+          before: null,
+        },
+      },
+      result: {
+        data: {
+          organization: {
+            members: {
+              edges: [
+                {
+                  node: {
+                    id: 'member1',
+                    name: 'John Doe',
+                    emailAddress: 'john@example.com',
+                    avatarURL: null,
+                    createdAt: dayjs.utc().subtract(3, 'day').toISOString(),
+                    role: 'member',
+                  },
+                  cursor: 'cursor1',
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: false,
+                startCursor: '', // Empty string (falsy)
+                endCursor: 'cursor1',
+              },
+            },
+          },
+        },
+      },
+    };
+
+    const link = new StaticMockLink([mockWithPartialCursors], true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+  });
+
+  test('prevents backward navigation attempt when hasPreviousPage is false', async () => {
+    // This test targets line 353 - the second return statement
+    const firstPageMock = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      },
+      {
+        edges: [
+          {
+            node: {
+              id: 'member1',
+              name: 'John Doe',
+              emailAddress: 'john@example.com',
+              avatarURL: null,
+              createdAt: dayjs.utc().toISOString(),
+              role: 'member',
+            },
+            cursor: 'cursor1',
+          },
+        ],
+        pageInfo: {
+          hasNextPage: true,
+          hasPreviousPage: false, // We're on the first page
+          startCursor: 'cursor1',
+          endCursor: 'cursor1',
+        },
+      },
+    );
+
+    const link = new StaticMockLink([firstPageMock], true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    // Click the previous page button (should be prevented from navigating)
+    const prevPageButton = screen.getByRole('button', {
+      name: /previous page/i,
+    });
+
+    // This click should trigger the line 353 return statement
+    fireEvent.click(prevPageButton);
+
+    // Verify we're still showing the same data
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+  });
+
+  test('renders img element when member has avatarURL', async () => {
+    // This test targets line 473 - the img element rendering
+    const mockWithAvatar = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      },
+      {
+        edges: [
+          {
+            node: {
+              id: 'member-with-image',
+              name: 'User With Image',
+              emailAddress: 'user@example.com',
+              avatarURL: 'https://example.com/user-avatar.jpg',
+              createdAt: dayjs.utc().toISOString(),
+              role: 'member',
+            },
+            cursor: 'cursor1',
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: 'cursor1',
+          endCursor: 'cursor1',
+        },
+      },
+    );
+
+    const link = new StaticMockLink([mockWithAvatar], true);
+
+    const { container } = render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('User With Image')).toBeInTheDocument();
+    });
+
+    // Find the actual img element - this covers line 473
+    const imgElement = container.querySelector(
+      'img[src="https://example.com/user-avatar.jpg"]',
+    );
+    expect(imgElement).toBeInTheDocument();
+    expect(imgElement).toHaveAttribute('crossorigin', 'anonymous');
+  });
+
+  test('calls getRowClassName for each rendered row', async () => {
+    // This test targets line 565 - the getRowClassName function
+    const mocks = [
+      createMemberConnectionMock({
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      }),
+    ];
+
+    const link = new StaticMockLink(mocks, true);
+
+    const { container } = render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+    });
+
+    // Verify rows exist and getRowClassName was called for each
+    const dataGridRows = container.querySelectorAll('.MuiDataGrid-row');
+    expect(dataGridRows.length).toBeGreaterThanOrEqual(2);
+
+    // Verify each row has a class attribute (indicating getRowClassName returned a class)
+    dataGridRows.forEach((row) => {
+      expect(row).toHaveAttribute('class');
+      expect(row.getAttribute('class')).not.toBe('');
+      // Verify the class contains the transformed CSS module class (will include rowBackground)
+      expect(row.getAttribute('class')).toMatch(/rowBackground/);
+    });
   });
 });

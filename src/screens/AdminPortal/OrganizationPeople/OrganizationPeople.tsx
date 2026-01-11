@@ -5,8 +5,6 @@
  * administrators, or users. It provides functionality for sorting, searching, and
  * managing members within an organization.
  *
- * @component
- *
  * @remarks
  * - Uses Apollo Client's `useLazyQuery` for fetching data.
  * - Implements server-side pagination with cursor-based navigation.
@@ -14,39 +12,12 @@
  * - Includes local search functionality for filtering rows by name or email.
  * - Displays a modal for removing members.
  *
- * @requires
- * - `react`, `react-router-dom` for routing and state management.
- * - `@apollo/client` for GraphQL queries.
- * - `@mui/x-data-grid` for table rendering.
- * - `NotificationToast` for error notifications.
- * - `dayjs` for date formatting.
- * - Custom components: `SearchBar`, `SortingButton`, `Avatar`, `AddMember`, `OrgPeopleListCard`.
- *
  * @example
  * ```tsx
  * <OrganizationPeople />
  * ```
  *
- * @returns {JSX.Element} A JSX element rendering the organization people table.
- *
- * @state
- * - `state` (number): Current tab state (0: members, 1: administrators, 2: users).
- * - `searchTerm` (string): Search input for filtering rows.
- * - `paginationModel` (GridPaginationModel): Pagination state for the table.
- * - `currentRows` (ProcessedRow[]): Processed rows for the current page.
- * - `paginationMeta` (object): Metadata for pagination (hasNextPage, hasPreviousPage).
- * - `showRemoveModal` (boolean): Controls visibility of the remove member modal.
- * - `selectedMemId` (string | undefined): ID of the member selected for removal.
- *
- * @methods
- * - `handlePaginationModelChange`: Handles pagination changes and fetches data accordingly.
- * - `handleSortChange`: Updates the tab state based on sorting selection.
- * - `toggleRemoveModal`: Toggles the visibility of the remove member modal.
- * - `toggleRemoveMemberModal`: Sets the selected member ID and toggles the modal.
- *
- * @dependencies
- * - GraphQL Queries: `ORGANIZATIONS_MEMBER_CONNECTION_LIST`, `USER_LIST_FOR_TABLE`.
- * - Styles: `style/app-fixed.module.css`.
+ * @returns A JSX element rendering the organization people table.
  */
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -68,7 +39,7 @@ import {
   COLUMN_BUFFER_PX,
   PAGE_SIZE,
 } from 'types/ReportingTable/utils';
-import dayjs from 'dayjs';
+
 import styles from 'style/app-fixed.module.css';
 import TableLoader from 'components/TableLoader/TableLoader';
 import {
@@ -76,24 +47,30 @@ import {
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
 import { Button } from 'react-bootstrap';
-import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
+import OrgPeopleListCard from 'components/AdminPortal/OrgPeopleListCard/OrgPeopleListCard';
 import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { errorHandler } from 'utils/errorHandler';
+import { languages } from 'utils/languages';
 
 /**
  * Maps numeric filter state to string option identifiers.
- * @type {Record<number, string>}
- * @description Converts internal numeric state values to their corresponding string filter options:
+ *
+ * @remarks
+ * Converts internal numeric state values to their corresponding string filter options:
  * - 0 = 'members': Regular organization members
  * - 1 = 'admin': Organization administrators
  * - 2 = 'users': All users
+ *
+ * This mapping must stay in sync with OPTION_TO_STATE. Any changes to one require updating the other.
+ *
  * @example
+ * ```ts
  * const option = STATE_TO_OPTION[0]; // 'members'
- * @note This mapping must stay in sync with OPTION_TO_STATE. Any changes to one require updating the other.
+ * ```
  */
 const STATE_TO_OPTION: Record<number, string> = {
   0: 'members',
@@ -103,14 +80,19 @@ const STATE_TO_OPTION: Record<number, string> = {
 
 /**
  * Maps string option identifiers to numeric filter state.
- * @type {Record<string, number>}
- * @description Converts string filter options to their corresponding internal numeric state values:
+ *
+ * @remarks
+ * Converts string filter options to their corresponding internal numeric state values:
  * - 'members' = 0: Regular organization members
  * - 'admin' = 1: Organization administrators
  * - 'users' = 2: All users
+ *
+ * This mapping must stay in sync with STATE_TO_OPTION. Any changes to one require updating the other.
+ *
  * @example
+ * ```ts
  * const state = OPTION_TO_STATE['admin']; // 1
- * @note This mapping must stay in sync with STATE_TO_OPTION. Any changes to one require updating the other.
+ * ```
  */
 const OPTION_TO_STATE: Record<string, number> = {
   members: 0,
@@ -150,7 +132,7 @@ interface IQueryVariable {
 }
 
 function OrganizationPeople(): JSX.Element {
-  const { t } = useTranslation('translation', {
+  const { t, i18n } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
   const { t: tCommon } = useTranslation('common');
@@ -455,7 +437,7 @@ function OrganizationPeople(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <Link
-            to={`/member/${currentUrl}`}
+            to={`/member/${currentUrl}/${params.row.id}`}
             state={{ id: params.row.id }}
             className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.memberNameFontSize}`}
           >
@@ -483,8 +465,26 @@ function OrganizationPeople(): JSX.Element {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) =>
-        dayjs(params.row.createdAt).format('DD/MM/YYYY'),
+      renderCell: (params: GridCellParams) => {
+        const currentLang = languages.find(
+          (lang: { code: string; country_code: string }) =>
+            lang.code === i18n.language,
+        );
+        const locale = currentLang
+          ? `${currentLang.code}-${currentLang.country_code}`
+          : 'en-US';
+        return (
+          <div data-testid={`org-people-joined-${params.row.id}`}>
+            {t('joined')} :{' '}
+            {new Intl.DateTimeFormat(locale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              timeZone: 'UTC',
+            }).format(new Date(params.row.createdAt))}
+          </div>
+        );
+      },
     },
     {
       field: 'action',
@@ -544,7 +544,7 @@ function OrganizationPeople(): JSX.Element {
 
   return (
     <>
-      <AdminSearchFilterBar
+      <SearchFilterBar
         hasDropdowns={true}
         searchPlaceholder={t('searchFullName')}
         searchValue={searchTerm}

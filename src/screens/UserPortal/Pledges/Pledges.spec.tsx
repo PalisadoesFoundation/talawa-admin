@@ -1,8 +1,10 @@
 import React from 'react';
 import { GraphQLError } from 'graphql';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -512,482 +514,7 @@ const USER_PLEDGES_NO_ASSOCIATED_RESOURCES_ERROR = [
   },
 ];
 
-const SEARCH_MOCKS = [
-  {
-    request: {
-      query: USER_PLEDGES,
-      variables: {
-        input: { userId: 'userId' },
-        where: {
-          firstName_contains: 'Harve',
-        },
-        orderBy: 'endDate_DESC',
-      },
-    },
-    result: {
-      data: {
-        getPledgesByUserId: [
-          {
-            id: 'pledgeId1',
-            amount: 700,
-            note: 'Hospital pledge note',
-            updatedAt: dayjs().toISOString(),
-            campaign: {
-              id: 'campaignId1',
-              name: 'Hospital Campaign',
-              startAt: dayjs().startOf('month').toISOString(),
-              endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
-              currencyCode: 'USD',
-              goalAmount: 10000,
-              __typename: 'FundraisingCampaign',
-            },
-            pledger: {
-              id: 'userId',
-              name: 'Harve Lance',
-              avatarURL: 'image-url',
-              __typename: 'User',
-            },
-            updater: {
-              id: 'userId',
-              __typename: 'User',
-            },
-            __typename: 'FundraisingCampaignPledge',
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_PLEDGES,
-      variables: {
-        input: { userId: 'userId' },
-        where: {
-          name_contains: 'School',
-        },
-        orderBy: 'endDate_DESC',
-      },
-    },
-    result: {
-      data: {
-        getPledgesByUserId: [
-          {
-            id: 'pledgeId2',
-            amount: 100,
-            note: 'School pledge note',
-            updatedAt: dayjs().toISOString(),
-            campaign: {
-              id: 'campaignId2',
-              name: 'School Campaign',
-              startAt: dayjs().startOf('month').toISOString(),
-              endAt: dayjs().add(2, 'months').endOf('month').toISOString(),
-              currencyCode: 'USD',
-              goalAmount: 5000,
-              __typename: 'FundraisingCampaign',
-            },
-            pledger: {
-              id: 'userId5',
-              name: 'John Doe',
-              avatarURL: null,
-              __typename: 'User',
-            },
-            updater: {
-              id: 'userId5',
-              __typename: 'User',
-            },
-            __typename: 'FundraisingCampaignPledge',
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_PLEDGES,
-      variables: {
-        input: { userId: 'userId' },
-        where: {
-          name_contains: 'School',
-        },
-        orderBy: 'endDate_DESC',
-      },
-    },
-    result: {
-      data: {
-        getPledgesByUserId: [
-          {
-            id: 'pledgeId2',
-            amount: 100,
-            note: 'School pledge note',
-            updatedAt: dayjs().toISOString(),
-            campaign: {
-              id: 'campaignId2',
-              name: 'School Campaign',
-              startAt: dayjs().startOf('month').toISOString(),
-              endAt: dayjs().add(2, 'months').endOf('month').toISOString(),
-              currencyCode: 'USD',
-              goalAmount: 5000,
-              __typename: 'FundraisingCampaign',
-            },
-            pledger: {
-              id: 'userId5',
-              name: 'John Doe',
-              avatarURL: null,
-              __typename: 'User',
-            },
-            updater: {
-              id: 'userId5',
-              __typename: 'User',
-            },
-            __typename: 'FundraisingCampaignPledge',
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_PLEDGES,
-      variables: {
-        input: { userId: 'userId' },
-        where: {},
-        orderBy: 'endDate_DESC',
-      },
-    },
-    result: {
-      data: {
-        getPledgesByUserId: [
-          {
-            id: 'pledgeId2',
-            amount: 100,
-            note: 'School pledge note',
-            updatedAt: dayjs().toISOString(),
-            campaign: {
-              id: 'campaignId2',
-              name: 'School Campaign',
-              startAt: dayjs().startOf('month').toISOString(),
-              endAt: dayjs().add(2, 'months').endOf('month').toISOString(),
-              currencyCode: 'USD',
-              goalAmount: 5000,
-              __typename: 'FundraisingCampaign',
-            },
-            pledger: {
-              id: 'userId5',
-              name: 'John Doe',
-              avatarURL: null,
-              __typename: 'User',
-            },
-            updater: {
-              id: 'userId5',
-              __typename: 'User',
-            },
-            __typename: 'FundraisingCampaignPledge',
-          },
-          {
-            id: 'pledgeId1',
-            amount: 700,
-            note: 'Hospital pledge note',
-            updatedAt: dayjs().toISOString(),
-            campaign: {
-              id: 'campaignId1',
-              name: 'Hospital Campaign',
-              startAt: dayjs().startOf('month').toISOString(),
-              endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
-              currencyCode: 'USD',
-              goalAmount: 10000,
-              __typename: 'FundraisingCampaign',
-            },
-            pledger: {
-              id: 'userId',
-              name: 'Harve Lance',
-              avatarURL: 'image-url',
-              __typename: 'User',
-            },
-            updater: {
-              id: 'userId',
-              __typename: 'User',
-            },
-            __typename: 'FundraisingCampaignPledge',
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_PLEDGES,
-      variables: {
-        input: { userId: 'userId' },
-        where: {},
-        orderBy: 'endDate_DESC',
-      },
-    },
-    result: {
-      data: {
-        getPledgesByUserId: [
-          {
-            id: 'pledgeId2',
-            amount: 100,
-            note: 'School pledge note',
-            updatedAt: dayjs().toISOString(),
-            campaign: {
-              id: 'campaignId2',
-              name: 'School Campaign',
-              startAt: dayjs().startOf('month').toISOString(),
-              endAt: dayjs().add(2, 'months').endOf('month').toISOString(),
-              currencyCode: 'USD',
-              goalAmount: 5000,
-              __typename: 'FundraisingCampaign',
-            },
-            pledger: {
-              id: 'userId5',
-              name: 'John Doe',
-              avatarURL: null,
-              __typename: 'User',
-            },
-            updater: {
-              id: 'userId5',
-              __typename: 'User',
-            },
-            __typename: 'FundraisingCampaignPledge',
-          },
-          {
-            id: 'pledgeId1',
-            amount: 700,
-            note: 'Hospital pledge note',
-            updatedAt: dayjs().toISOString(),
-            campaign: {
-              id: 'campaignId1',
-              name: 'Hospital Campaign',
-              startAt: dayjs().startOf('month').toISOString(),
-              endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
-              currencyCode: 'USD',
-              goalAmount: 10000,
-              __typename: 'FundraisingCampaign',
-            },
-            pledger: {
-              id: 'userId',
-              name: 'Harve Lance',
-              avatarURL: 'image-url',
-              __typename: 'User',
-            },
-            updater: {
-              id: 'userId',
-              __typename: 'User',
-            },
-            __typename: 'FundraisingCampaignPledge',
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_PLEDGES,
-      variables: {
-        input: { userId: 'userId' },
-        where: {},
-        orderBy: 'amount_ASC',
-      },
-    },
-    result: {
-      data: {
-        getPledgesByUserId: [
-          {
-            id: 'pledgeId2',
-            amount: 100,
-            note: 'School pledge note',
-            updatedAt: dayjs().toISOString(),
-            campaign: {
-              id: 'campaignId2',
-              name: 'School Campaign',
-              startAt: dayjs().startOf('month').toISOString(),
-              endAt: dayjs().add(2, 'months').endOf('month').toISOString(),
-              currencyCode: 'USD',
-              goalAmount: 5000,
-              __typename: 'FundraisingCampaign',
-            },
-            pledger: {
-              id: 'userId5',
-              name: 'John Doe',
-              avatarURL: null,
-              __typename: 'User',
-            },
-            updater: {
-              id: 'userId5',
-              __typename: 'User',
-            },
-            __typename: 'FundraisingCampaignPledge',
-          },
-          {
-            id: 'pledgeId1',
-            amount: 700,
-            note: 'Hospital pledge note',
-            updatedAt: dayjs().toISOString(),
-            campaign: {
-              id: 'campaignId1',
-              name: 'Hospital Campaign',
-              startAt: dayjs().startOf('month').toISOString(),
-              endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
-              currencyCode: 'USD',
-              goalAmount: 10000,
-              __typename: 'FundraisingCampaign',
-            },
-            pledger: {
-              id: 'userId',
-              name: 'Harve Lance',
-              avatarURL: 'image-url',
-              __typename: 'User',
-            },
-            updater: {
-              id: 'userId',
-              __typename: 'User',
-            },
-            __typename: 'FundraisingCampaignPledge',
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_PLEDGES,
-      variables: {
-        input: { userId: 'userId' },
-        where: {},
-        orderBy: 'amount_DESC',
-      },
-    },
-    result: {
-      data: {
-        getPledgesByUserId: [
-          {
-            id: 'pledgeId1',
-            amount: 700,
-            note: 'Hospital pledge note',
-            updatedAt: dayjs().toISOString(),
-            campaign: {
-              id: 'campaignId1',
-              name: 'Hospital Campaign',
-              startAt: dayjs().startOf('month').toISOString(),
-              endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
-              currencyCode: 'USD',
-              goalAmount: 10000,
-              __typename: 'FundraisingCampaign',
-            },
-            pledger: {
-              id: 'userId',
-              name: 'Harve Lance',
-              avatarURL: 'image-url',
-              __typename: 'User',
-            },
-            updater: {
-              id: 'userId',
-              __typename: 'User',
-            },
-            __typename: 'FundraisingCampaignPledge',
-          },
-          {
-            id: 'pledgeId2',
-            amount: 100,
-            note: 'School pledge note',
-            updatedAt: dayjs().toISOString(),
-            campaign: {
-              id: 'campaignId2',
-              name: 'School Campaign',
-              startAt: dayjs().startOf('month').toISOString(),
-              endAt: dayjs().add(2, 'months').endOf('month').toISOString(),
-              currencyCode: 'USD',
-              goalAmount: 5000,
-              __typename: 'FundraisingCampaign',
-            },
-            pledger: {
-              id: 'userId5',
-              name: 'John Doe',
-              avatarURL: null,
-              __typename: 'User',
-            },
-            updater: {
-              id: 'userId5',
-              __typename: 'User',
-            },
-            __typename: 'FundraisingCampaignPledge',
-          },
-        ],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_PLEDGES,
-      variables: {
-        input: { userId: 'userId' },
-        where: {},
-        orderBy: 'endDate_ASC',
-      },
-    },
-    result: {
-      data: {
-        getPledgesByUserId: [
-          {
-            id: 'pledgeId1',
-            amount: 700,
-            note: 'Hospital pledge note',
-            updatedAt: dayjs().toISOString(),
-            campaign: {
-              id: 'campaignId1',
-              name: 'Hospital Campaign',
-              startAt: dayjs().startOf('month').toISOString(),
-              endAt: dayjs().add(1, 'month').endOf('month').toISOString(),
-              currencyCode: 'USD',
-              goalAmount: 10000,
-              __typename: 'FundraisingCampaign',
-            },
-            pledger: {
-              id: 'userId',
-              name: 'Harve Lance',
-              avatarURL: 'image-url',
-              __typename: 'User',
-            },
-            updater: {
-              id: 'userId',
-              __typename: 'User',
-            },
-            __typename: 'FundraisingCampaignPledge',
-          },
-          {
-            id: 'pledgeId2',
-            amount: 100,
-            note: 'School pledge note',
-            updatedAt: dayjs().toISOString(),
-            campaign: {
-              id: 'campaignId2',
-              name: 'School Campaign',
-              startAt: dayjs().startOf('month').toISOString(),
-              endAt: dayjs().add(2, 'months').endOf('month').toISOString(),
-              currencyCode: 'USD',
-              goalAmount: 5000,
-              __typename: 'FundraisingCampaign',
-            },
-            pledger: {
-              id: 'userId5',
-              name: 'John Doe',
-              avatarURL: null,
-              __typename: 'User',
-            },
-            updater: {
-              id: 'userId5',
-              __typename: 'User',
-            },
-            __typename: 'FundraisingCampaignPledge',
-          },
-        ],
-      },
-    },
-  },
-];
-
-const link1 = new StaticMockLink([...MOCKS, ...SEARCH_MOCKS]);
+const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(USER_PLEDGES_ERROR);
 const link3 = new StaticMockLink(EMPTY_MOCKS);
 const link4 = new StaticMockLink(MOCKS_WITH_SINGLE_PLEDGER);
@@ -1044,7 +571,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render the Campaign Pledge screen', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
@@ -1083,7 +610,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render user image when avatarURL is provided', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
       expect(screen.getByTestId('image-pledger-userId')).toHaveAttribute(
         'src',
         'image-url',
@@ -1094,7 +621,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render avatar when no avatarURL is provided', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
       expect(screen.getByTestId('avatar-pledger-userId5')).toHaveAttribute(
         'alt',
         'John Doe',
@@ -1105,113 +632,21 @@ describe('Testing User Pledge Screen', () => {
   it('should handle missing campaign data', async () => {
     renderMyPledges(link8);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
     });
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
   it('should handle invalid end date', async () => {
     renderMyPledges(link9);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
-    });
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
-  });
-
-  it('should sort pledges by lowest amount', async () => {
-    renderMyPledges(link1);
-    await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
-    });
-
-    await userEvent.click(screen.getByTestId('sort'));
-    await userEvent.click(screen.getByTestId('amount_ASC'));
-    await waitFor(() => {
-      expect(screen.getAllByTestId('amountCell')[0]).toHaveTextContent('$100');
-    });
-  });
-
-  it('should sort pledges by highest amount', async () => {
-    renderMyPledges(link1);
-    await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
-    });
-
-    await userEvent.click(screen.getByTestId('sort'));
-    await userEvent.click(screen.getByTestId('amount_DESC'));
-    await waitFor(() => {
-      expect(screen.getAllByTestId('amountCell')[0]).toHaveTextContent('$700');
-    });
-  });
-
-  it('should sort pledges by earliest end date', async () => {
-    renderMyPledges(link1);
-    await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
-    });
-
-    await userEvent.click(screen.getByTestId('sort'));
-    await userEvent.click(screen.getByTestId('endDate_ASC'));
-
-    await waitFor(() => {
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
-    });
-  });
-
-  it('should sort pledges by latest end date', async () => {
-    renderMyPledges(link1);
-    await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
-    });
-
-    await userEvent.click(screen.getByTestId('sort'));
-    await userEvent.click(screen.getByTestId('endDate_DESC'));
-
-    await waitFor(() => {
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
-    });
-  });
-
-  it('should search pledges by user name', async () => {
-    renderMyPledges(link1);
-    await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
-    });
-
-    await userEvent.click(screen.getByTestId('searchBy'));
-    await userEvent.click(screen.getByTestId('pledgers'));
-    await userEvent.type(screen.getByTestId('searchByInput'), 'Harve');
-    await userEvent.click(screen.getByTestId('searchBtn'));
-    await waitFor(() => {
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
-      expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
-    });
-  });
-
-  it('should search pledges by campaign name', async () => {
-    renderMyPledges(link1);
-    await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
-    });
-
-    await userEvent.click(screen.getByTestId('searchBy'));
-    await userEvent.click(screen.getByTestId('campaigns'));
-    await userEvent.type(screen.getByTestId('searchByInput'), 'School');
-    await userEvent.click(screen.getByTestId('searchBtn'));
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.queryByText('Harve Lance')).not.toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
     });
   });
 
   it('should render all pledges as separate rows', async () => {
     renderMyPledges(link10);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
       expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(screen.getByText('Jeramy Gracia')).toBeInTheDocument();
@@ -1222,18 +657,17 @@ describe('Testing User Pledge Screen', () => {
   it('should display single pledger correctly', async () => {
     renderMyPledges(link4);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
       expect(screen.getByTestId('amountCell')).toHaveTextContent('$700');
-      expect(screen.queryByTestId('moreContainer')).not.toBeInTheDocument();
     });
   });
 
   it('should render correct currency symbol', async () => {
     renderMyPledges(link5);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
       expect(screen.getByTestId('amountCell')).toHaveTextContent('€700');
       expect(screen.getByTestId('paidCell')).toHaveTextContent('€0');
     });
@@ -1242,7 +676,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render ProgressBar with zero goal amount', async () => {
     renderMyPledges(link6);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
       expect(screen.getByTestId('progressBar')).toHaveTextContent('0%');
     });
   });
@@ -1250,14 +684,16 @@ describe('Testing User Pledge Screen', () => {
   it('should open and close delete pledge modal', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
     });
 
     const deletePledgeBtn = await screen.findAllByTestId('deletePledgeBtn');
     await userEvent.click(deletePledgeBtn[0]);
     await waitFor(() => {
       expect(
-        screen.getByText(translations.pledges.deletePledge),
+        screen.getByText((content) =>
+          content.includes(translations.pledges.deletePledge),
+        ),
       ).toBeInTheDocument();
     });
 
@@ -1270,7 +706,7 @@ describe('Testing User Pledge Screen', () => {
   it('should open and close update pledge modal', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
     });
 
     const editPledgeBtn = await screen.findAllByTestId('editPledgeBtn');
@@ -1320,27 +756,9 @@ describe('Testing User Pledge Screen', () => {
     });
   });
 
-  it('should handle empty search input', async () => {
-    renderMyPledges(link1);
-    await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
-    });
-
-    const searchInput = screen.getByTestId('searchByInput');
-    const searchButton = screen.getByTestId('searchBtn');
-    await userEvent.clear(searchInput);
-    await userEvent.click(searchButton);
-    expect(searchInput).toHaveValue('');
-    await waitFor(() => {
-      expect(screen.getByText('Harve Lance')).toBeInTheDocument();
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
-  });
-
   it('should render DataGrid with correct styling', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       const dataGrid = document.querySelector('.MuiDataGrid-root');
       expect(dataGrid).toBeInTheDocument();
       expect(dataGrid).toHaveClass('MuiDataGrid-root');
@@ -1350,10 +768,10 @@ describe('Testing User Pledge Screen', () => {
   it('should handle component unmounting', async () => {
     const { unmount } = renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
     });
     unmount();
-    expect(screen.queryByTestId('searchByInput')).not.toBeInTheDocument();
+    expect(screen.queryByRole('grid')).not.toBeInTheDocument();
   });
 
   it('should update pledges on pledgeData change', async () => {
@@ -1373,71 +791,36 @@ describe('Testing User Pledge Screen', () => {
     });
   });
 
-  it('should handle search input changes', async () => {
-    renderMyPledges(link1);
-    await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
-    });
-
-    const searchInput = screen.getByTestId('searchByInput');
-    await userEvent.type(searchInput, 'test search');
-    expect(searchInput).toHaveValue('test search');
-
-    await userEvent.clear(searchInput);
-    expect(searchInput).toHaveValue('');
-  });
-
-  it('should handle dropdown interactions', async () => {
-    renderMyPledges(link1);
-    await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
-    });
-
-    const searchByDropdown = screen.getByTestId('searchBy');
-    await userEvent.click(searchByDropdown);
-
-    const filterDropdown = screen.getByTestId('sort');
-    await userEvent.click(filterDropdown);
-
-    expect(screen.getByTestId('amount_ASC')).toBeInTheDocument();
-    expect(screen.getByTestId('amount_DESC')).toBeInTheDocument();
-    expect(screen.getByTestId('endDate_ASC')).toBeInTheDocument();
-    expect(screen.getByTestId('endDate_DESC')).toBeInTheDocument();
-  });
-
   it('should handle pledge with null campaign gracefully', async () => {
     renderMyPledges(link8);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     });
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
   it('should handle invalid date formatting', async () => {
     renderMyPledges(link9);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     });
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
   it('should display progress bar correctly', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
       const progressBars = screen.getAllByTestId('progressBar');
       expect(progressBars.length).toBeGreaterThan(0);
       expect(progressBars[0]).toBeInTheDocument();
     });
   });
+
   it('should handle different currency codes', async () => {
     renderMyPledges(link5);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
       expect(screen.getByTestId('amountCell')).toBeInTheDocument();
       expect(screen.getByTestId('paidCell')).toBeInTheDocument();
     });
@@ -1446,9 +829,8 @@ describe('Testing User Pledge Screen', () => {
   it('should render pledges with pledger data', async () => {
     renderMyPledges(link10);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
     });
-    expect(screen.getByRole('grid')).toBeInTheDocument();
 
     await waitFor(() => {
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
@@ -1458,15 +840,14 @@ describe('Testing User Pledge Screen', () => {
   it('should handle zero goal amount', async () => {
     renderMyPledges(link6);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
     });
-    expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
   it('should display pledger avatar when available', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
     });
 
     expect(screen.getByTestId('image-pledger-userId')).toHaveAttribute(
@@ -1478,9 +859,8 @@ describe('Testing User Pledge Screen', () => {
   it('should handle campaign with missing data gracefully', async () => {
     renderMyPledges(link8);
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
     });
-    expect(screen.getByRole('grid')).toBeInTheDocument();
 
     await waitFor(() => {
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
@@ -1531,10 +911,8 @@ describe('Testing User Pledge Screen', () => {
     renderMyPledges(mockWithNullPledger);
 
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
     });
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
   it('should render pledger with avatarURL in main row', async () => {
@@ -1647,13 +1025,46 @@ describe('Testing User Pledge Screen', () => {
     renderMyPledges(mockWithPledger);
 
     await waitFor(() => {
-      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      expect(screen.getByRole('grid')).toBeInTheDocument();
     });
-
-    expect(screen.getByRole('grid')).toBeInTheDocument();
 
     await waitFor(() => {
       expect(screen.getByText('Pledger User')).toBeInTheDocument();
+    });
+  });
+
+  describe('LoadingState Behavior', () => {
+    it('should show LoadingState spinner while pledges are loading', async () => {
+      const loadingMocks = [
+        {
+          request: {
+            query: USER_PLEDGES,
+            variables: {
+              input: { userId: 'userId' },
+              where: {},
+              orderBy: 'endDate_DESC',
+            },
+          },
+          result: { data: { getPledgesByUserId: [] } },
+          delay: 100,
+        },
+      ];
+
+      renderMyPledges(new StaticMockLink(loadingMocks));
+      await waitFor(() => {
+        const spinners = screen.getAllByTestId('spinner');
+        expect(spinners.length).toBeGreaterThan(0);
+      });
+    });
+
+    it('should hide spinner and render pledges after LoadingState completes', async () => {
+      renderMyPledges(new StaticMockLink(MOCKS));
+
+      await waitFor(() => {
+        expect(screen.getByRole('grid')).toBeInTheDocument();
+      });
+
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
   });
 });

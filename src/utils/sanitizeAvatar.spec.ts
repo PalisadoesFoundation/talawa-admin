@@ -1,18 +1,14 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { sanitizeAvatars } from './sanitizeAvatar';
 
 describe('sanitizeAvatars', () => {
   let mockCreateObjectURL: ReturnType<typeof vi.fn>;
-  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
 
   beforeEach(() => {
     vi.clearAllMocks();
     mockCreateObjectURL = vi.fn();
     global.URL.createObjectURL = mockCreateObjectURL;
     mockCreateObjectURL.mockReturnValue('blob:mock-url');
-
-    // Reset console.error spy for each test
-    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     Object.defineProperty(window, 'location', {
       value: { origin: 'https://example.com' },
@@ -21,7 +17,7 @@ describe('sanitizeAvatars', () => {
   });
 
   afterEach(() => {
-    consoleErrorSpy.mockRestore();
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -30,6 +26,24 @@ describe('sanitizeAvatars', () => {
     const result = sanitizeAvatars(mockFile, 'https://fallback.com/avatar.jpg');
     expect(mockCreateObjectURL).toHaveBeenCalledWith(mockFile);
     expect(result).toBe('blob:mock-url');
+  });
+
+  it('should reject SVG files and use fallback', () => {
+    const mockFile = new File([''], 'test.svg', { type: 'image/svg+xml' });
+    const fallbackUrl = 'https://fallback.com/avatar.jpg';
+    const result = sanitizeAvatars(mockFile, fallbackUrl);
+    expect(mockCreateObjectURL).not.toHaveBeenCalled();
+    expect(result).toBe(fallbackUrl);
+  });
+
+  it('should return empty string when object URL does not start with blob:', () => {
+    mockCreateObjectURL.mockReturnValue(
+      'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD',
+    );
+    const mockFile = new File([''], 'test.jpg', { type: 'image/jpeg' });
+    const result = sanitizeAvatars(mockFile, 'https://fallback.com/avatar.jpg');
+    expect(mockCreateObjectURL).toHaveBeenCalledWith(mockFile);
+    expect(result).toBe('');
   });
 
   it('should reject non-image files and use fallback', () => {
@@ -54,26 +68,46 @@ describe('sanitizeAvatars', () => {
 
   it('should handle empty fallbackUrl', () => {
     const result = sanitizeAvatars(null, '');
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Invalid fallback URL provided',
-    );
     expect(result).toBe('');
   });
 
   it('should handle undefined fallbackUrl', () => {
     // @ts-expect-error Testing undefined case
     const result = sanitizeAvatars(null, undefined);
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Invalid fallback URL provided',
-    );
     expect(result).toBe('');
   });
 
   it('should handle invalid URLs and return empty string', () => {
-    const result = sanitizeAvatars(null, '');
-    expect(consoleErrorSpy).toHaveBeenCalledWith(
-      'Invalid fallback URL provided',
-    );
+    const result = sanitizeAvatars(null, 'ht://invalid-url');
+    expect(result).toBe('');
+  });
+
+  it('should handle malformed URLs that trigger catch block', () => {
+    // Mock URL constructor to throw an error
+    const originalURL = global.URL;
+    global.URL = class extends originalURL {
+      constructor(url: string | URL, base?: string | URL) {
+        if (url === 'malformed-url') {
+          throw new Error('Invalid URL');
+        }
+        super(url, base);
+      }
+    } as typeof URL;
+
+    const result = sanitizeAvatars(null, 'malformed-url');
+    expect(result).toBe('');
+
+    // Restore original URL constructor
+    global.URL = originalURL;
+  });
+
+  it('should reject URLs with non-http/https protocols', () => {
+    const result = sanitizeAvatars(null, 'ftp://example.com/avatar.jpg');
+    expect(result).toBe('');
+  });
+
+  it('should reject javascript: URLs', () => {
+    const result = sanitizeAvatars(null, 'javascript:alert(1)');
     expect(result).toBe('');
   });
 
