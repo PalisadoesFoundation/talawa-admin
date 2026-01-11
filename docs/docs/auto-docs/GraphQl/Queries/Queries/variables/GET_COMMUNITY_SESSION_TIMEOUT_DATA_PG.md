@@ -6,4 +6,4 @@
 
 > `const` **GET\_COMMUNITY\_SESSION\_TIMEOUT\_DATA\_PG**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:1193](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L1193)
+Defined in: [src/GraphQl/Queries/Queries.ts:1220](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L1220)

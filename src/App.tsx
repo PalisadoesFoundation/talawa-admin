@@ -33,9 +33,7 @@ const EventManagement = lazy(
 const ForgotPassword = lazy(
   () => import('screens/ForgotPassword/ForgotPassword'),
 );
-const MemberDetail = lazy(
-  () => import('shared-components/ProfileForm/ProfileForm'),
-);
+const MemberDetail = lazy(() => import('screens/MemberDetail/MemberDetail'));
 const OrgContribution = lazy(
   () => import('screens/AdminPortal/OrgContribution/OrgContribution'),
 );
