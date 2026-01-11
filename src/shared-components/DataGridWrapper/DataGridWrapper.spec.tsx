@@ -920,4 +920,63 @@ describe('DataGridWrapper', () => {
 
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
+
+  test('handles server-side search without onSearchByChange', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          serverSide: true,
+          searchByOptions: [{ label: 'Name', value: 'name' }],
+          onSearchChange: vi.fn(),
+        }}
+      />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  test('handles sort change with onSortChange callback', () => {
+    const onSortChange = vi.fn();
+
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        sortConfig={{
+          sortingOptions: [{ label: 'Name', value: 'name_asc' }],
+          onSortChange,
+        }}
+      />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  test('handles client-side search configuration', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          fields: ['name'],
+        }}
+      />,
+    );
+
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
+  });
+
+  test('handles sort config without searchByOptions', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        sortConfig={{
+          sortingOptions: [{ label: 'Name', value: 'name_asc' }],
+        }}
+      />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
 });
