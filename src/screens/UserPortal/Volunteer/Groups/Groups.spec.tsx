@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider, MockLink } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing';
 import {
   LocalizationProvider,
   AdapterDayjs,
@@ -957,7 +957,7 @@ describe('Groups Screen [User Portal]', () => {
         }
       | undefined;
 
-    const mockLink = new MockLink([
+    const customMockLink = new StaticMockLink([
       {
         request: {
           query: EVENT_VOLUNTEER_GROUP_LIST,
@@ -973,48 +973,14 @@ describe('Groups Screen [User Portal]', () => {
           };
           return {
             data: {
-              getEventVolunteerGroups: [
-                {
-                  __typename: 'EventVolunteerGroup',
-                  id: '1',
-                  name: 'Group 1',
-                  description: 'Test group description',
-                  volunteersRequired: 10,
-                  volunteers: [],
-                  createdAt: dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-                  leader: {
-                    __typename: 'User',
-                    id: '1',
-                    firstName: 'Leader',
-                    lastName: 'One',
-                    email: 'leader@example.com',
-                    avatarURL: null,
-                  },
-                  event: {
-                    __typename: 'Event',
-                    id: 'eventId',
-                  },
-                },
-              ],
+              getEventVolunteerGroups: [group1],
             },
           };
         },
       },
     ]);
 
-    render(
-      <MockedProvider link={mockLink}>
-        <MemoryRouter initialEntries={['/user/volunteer/orgId']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <Routes>
-                <Route path="/user/volunteer/:orgId" element={<Groups />} />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
+    renderGroups(customMockLink);
 
     await waitFor(() => {
       expect(screen.getByText('Group 1')).toBeInTheDocument();
