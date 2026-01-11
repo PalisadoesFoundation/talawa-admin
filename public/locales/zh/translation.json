@@ -969,7 +969,12 @@
     "disabled": "已禁用",
     "accepted": "已接受",
     "declined": "已谢绝",
-    "no_response": "无响应"
+    "no_response": "无响应",
+    "success": "成功",
+    "warning": "警告",
+    "error": "错误",
+    "info": "信息",
+    "neutral": "中性"
   },
   "blockUnblockUser": {
     "title": "阻止/取消阻止用户",
@@ -1586,7 +1591,6 @@
     "enterName": "输入名称",
     "enterDescription": "输入描述",
     "enterLocation": "输入位置",
-
     "registerable": "可注册",
     "monthlyCalendarView": "月历",
     "yearlyCalendarView": "年历",

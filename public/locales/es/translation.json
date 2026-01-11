@@ -2108,7 +2108,12 @@
     "disabled": "Deshabilitado",
     "accepted": "Aceptado",
     "declined": "Declinado",
-    "no_response": "Sin respuesta"
+    "no_response": "Sin respuesta",
+    "success": "Éxito",
+    "warning": "Advertencia",
+    "error": "Error",
+    "info": "Información",
+    "neutral": "Neutral"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comentario eliminado exitosamente",

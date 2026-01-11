@@ -5,7 +5,6 @@
  * control. Shows empty states for no orgs, no results, and no pending requests.
  *
  * Features:
- * - Infinite scroll pagination.
  * - Name search via SearchFilterBar.
  * - Accept/reject actions with toast feedback.
  *
@@ -35,27 +34,19 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import TableLoader from 'components/TableLoader/TableLoader';
-import { GridCellParams } from 'shared-components/DataGridWrapper';
-import type {
-  ReportingTableColumn,
-  ReportingTableGridProps,
-  InfiniteScrollProps,
-  ReportingRow,
-} from 'types/ReportingTable/interface';
-
+import {
+  GridCellParams,
+  GridColDef,
+  DataGridWrapper,
+} from 'shared-components/DataGridWrapper';
 import Avatar from 'components/Avatar/Avatar';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
-import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import styles from './Requests.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
-import {
-  dataGridStyle,
-  PAGE_SIZE,
-  ROW_HEIGHT,
-} from 'types/ReportingTable/utils';
+import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { Group, Search } from '@mui/icons-material';
 
@@ -100,7 +91,6 @@ const Requests = (): JSX.Element => {
 
   // Define constants and state variables
   const [isLoading, setIsLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState<string>('');
   const userRole = getItem('role') as string;
@@ -108,20 +98,17 @@ const Requests = (): JSX.Element => {
   const organizationId = orgId;
 
   // Query to fetch membership requests
-  const { data, loading, fetchMore, refetch } = useQuery(
-    MEMBERSHIP_REQUEST_PG,
-    {
-      variables: {
-        input: {
-          id: organizationId,
-        },
-        first: PAGE_SIZE,
-        skip: 0,
-        name_contains: '',
+  const { data, loading, refetch } = useQuery(MEMBERSHIP_REQUEST_PG, {
+    variables: {
+      input: {
+        id: organizationId,
       },
-      notifyOnNetworkStatusChange: true,
+      first: PAGE_SIZE,
+      skip: 0,
+      name_contains: '',
     },
-  );
+    notifyOnNetworkStatusChange: true,
+  });
 
   const { data: orgsData } = useQuery(ORGANIZATION_LIST);
   const [displayedRequests, setDisplayedRequests] = useState<
@@ -141,13 +128,6 @@ const Requests = (): JSX.Element => {
     setIsLoading(false);
     setIsLoadingMore(false);
     setDisplayedRequests(pendingRequests);
-
-    // Update hasMore based on whether we have a full page of results
-    if (allRequests.length < PAGE_SIZE) {
-      setHasMore(false);
-    } else {
-      setHasMore(true);
-    }
   }, [data]);
 
   // Clear search on unmount
@@ -225,51 +205,6 @@ const Requests = (): JSX.Element => {
       skip: 0,
       name_contains: '',
     });
-    setHasMore(true);
-  };
-
-  /**
-   * Loads more requests when scrolling to the bottom of the page.
-   */
-
-  const loadMoreRequests = (): void => {
-    setIsLoadingMore(true);
-
-    const currentLength = data?.organization?.membershipRequests?.length ?? 0;
-
-    fetchMore({
-      variables: {
-        input: { id: organizationId },
-        first: PAGE_SIZE,
-        skip: currentLength,
-        name_contains: searchByName,
-      },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        setIsLoadingMore(false);
-
-        if (!fetchMoreResult?.organization?.membershipRequests) {
-          setHasMore(false);
-          return prev;
-        }
-
-        const newRequests = fetchMoreResult.organization.membershipRequests;
-
-        // If we got fewer results than requested, we've reached the end
-        if (newRequests.length < PAGE_SIZE) {
-          setHasMore(false);
-        }
-        return {
-          organization: {
-            ...prev.organization,
-            id: organizationId,
-            membershipRequests: [
-              ...prev.organization.membershipRequests,
-              ...newRequests,
-            ],
-          },
-        };
-      },
-    });
   };
 
   // Header titles for the table
@@ -283,7 +218,7 @@ const Requests = (): JSX.Element => {
   ];
 
   // Columns for ReportingTable (DataGrid)
-  const columns: ReportingTableColumn[] = [
+  const columns: GridColDef[] = [
     {
       field: 'sl_no',
       headerName: t('requests.sl_no'),
@@ -435,28 +370,6 @@ const Requests = (): JSX.Element => {
     },
   ];
 
-  const gridProps: ReportingTableGridProps = {
-    sx: { ...dataGridStyle },
-    paginationMode: 'client',
-    getRowId: (row: InterfaceRequestsListItem) => row.membershipRequestId,
-    rowCount: displayedRequests.length,
-    pageSizeOptions: [PAGE_SIZE],
-    loading: isLoading || isLoadingMore,
-    hideFooter: true,
-    getRowClassName: () => `${styles.rowBackground}`,
-    isRowSelectable: () => false,
-    disableColumnMenu: true,
-    rowHeight: ROW_HEIGHT,
-    autoHeight: true,
-    style: { overflow: 'visible' },
-  };
-
-  const infiniteProps: InfiniteScrollProps = {
-    dataLength: displayedRequests.length,
-    next: loadMoreRequests,
-    hasMore,
-  };
-
   // Mutations for accept/reject
   const [acceptUser] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
   const [rejectUser] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
@@ -532,28 +445,16 @@ const Requests = (): JSX.Element => {
           {isLoading ? (
             <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
           ) : (
-            <ReportingTable
-              rows={
-                displayedRequests.map((req) => ({
-                  ...req,
-                  id: req.membershipRequestId,
-                })) as ReportingRow[]
-              }
+            <DataGridWrapper
+              rows={displayedRequests.map((req) => {
+                return { ...req, id: req.membershipRequestId };
+              })}
               columns={columns}
-              gridProps={gridProps}
-              infiniteProps={infiniteProps}
-              listProps={{
-                loader: <TableLoader noOfCols={6} noOfRows={2} />,
-                className: styles.listTable,
-                ['data-testid']: 'requests-list',
-                scrollThreshold: 0.9,
-                style: { overflow: 'visible' },
-                endMessage:
-                  displayedRequests.length > 0 ? (
-                    <div className={'w-100 text-center my-4'}>
-                      <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
-                    </div>
-                  ) : null,
+              emptyStateMessage={t('requests.noRequestsFound')}
+              paginationConfig={{
+                enabled: true,
+                defaultPageSize: PAGE_SIZE,
+                pageSizeOptions: [10, 25, 50, 100],
               }}
             />
           )}

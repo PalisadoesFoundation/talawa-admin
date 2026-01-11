@@ -2108,7 +2108,12 @@
     "disabled": "Disabled",
     "accepted": "Accepted",
     "declined": "Declined",
-    "no_response": "No Response"
+    "no_response": "No Response",
+    "success": "Success",
+    "warning": "Warning",
+    "error": "Error",
+    "info": "Info",
+    "neutral": "Neutral"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comment deleted successfully",
