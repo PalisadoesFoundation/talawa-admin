@@ -92,6 +92,10 @@ export interface InterfaceDataGridWrapperProps<
     defaultSortOrder?: 'asc' | 'desc';
     /** Array of sorting options for the SortingButton component. */
     sortingOptions?: { label: string; value: string | number }[];
+    /** Current selected sort option for server-side mode. */
+    selectedSort?: string | number;
+    /** Callback when sort changes in server-side mode. */
+    onSortChange?: (value: string | number) => void;
   };
 
   /**
