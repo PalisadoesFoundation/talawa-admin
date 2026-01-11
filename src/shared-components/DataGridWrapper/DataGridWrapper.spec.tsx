@@ -1,4 +1,5 @@
 import { render, screen, fireEvent, within, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { DataGridWrapper } from './index';
 import { vi } from 'vitest';
 
@@ -42,6 +43,8 @@ const defaultProps = {
 };
 
 describe('DataGridWrapper', () => {
+  const user = userEvent.setup();
+
   afterEach(() => {
     vi.clearAllMocks();
     vi.useRealTimers();
@@ -641,5 +644,49 @@ describe('DataGridWrapper', () => {
     // Verify filter is active
     expect(screen.getByText('Bob')).toBeInTheDocument();
     expect(screen.queryByText('Alice')).toBeNull();
+  });
+
+  it('handles server-side search without onSearchByChange callback', async () => {
+    render(
+      <DataGridWrapper
+        rows={defaultProps.rows}
+        columns={defaultProps.columns}
+        searchConfig={{
+          enabled: true,
+          fields: ['name'],
+          serverSide: true,
+          searchByOptions: [{ label: 'Name', value: 'name' }],
+          onSearchChange: vi.fn(),
+        }}
+      />,
+    );
+
+    const dropdown = screen.getByTestId('searchBy');
+    await user.click(dropdown);
+    const option = screen.getByTestId('name');
+    await user.click(option);
+
+    expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+  });
+
+  it('handles client-side search onClear', async () => {
+    render(
+      <DataGridWrapper
+        rows={defaultProps.rows}
+        columns={defaultProps.columns}
+        searchConfig={{
+          enabled: true,
+          fields: ['name'],
+        }}
+      />,
+    );
+
+    const searchInput = screen.getByTestId('search-bar');
+    await user.type(searchInput, 'test');
+
+    const clearButton = screen.getByRole('button', { name: /clear/i });
+    await user.click(clearButton);
+
+    expect(searchInput).toHaveValue('');
   });
 });
