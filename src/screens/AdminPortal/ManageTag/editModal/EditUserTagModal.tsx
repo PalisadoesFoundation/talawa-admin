@@ -29,6 +29,7 @@ import type { FormEvent } from 'react';
 import React from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { BaseModal } from 'shared-components/BaseModal';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import styles from './EditUserTagModal.module.css';
 
 export interface InterfaceEditUserTagModalProps {
@@ -94,20 +95,27 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
           }
         }}
       >
-        <Form.Label htmlFor="tagName">{t('tagName')}</Form.Label>
-        <Form.Control
-          type="text"
-          id="tagName"
-          className={`mb-3 ${styles.inputField}`}
-          placeholder={t('tagNamePlaceholder')}
-          data-testid="tagNameInput"
-          autoComplete="off"
+        <FormFieldGroup
+          name="tagName"
+          label={t('tagName')}
           required
-          value={newTagName}
-          onChange={(e): void => {
-            setNewTagName(e.target.value);
-          }}
-        />
+          touched={false}
+          error={undefined}
+        >
+          <Form.Control
+            type="text"
+            id="tagName"
+            className={`mb-3 ${styles.inputField}`}
+            placeholder={t('tagNamePlaceholder')}
+            data-testid="tagNameInput"
+            autoComplete="off"
+            required
+            value={newTagName}
+            onChange={(e): void => {
+              setNewTagName(e.target.value);
+            }}
+          />
+        </FormFieldGroup>
       </Form>
     </BaseModal>
   );

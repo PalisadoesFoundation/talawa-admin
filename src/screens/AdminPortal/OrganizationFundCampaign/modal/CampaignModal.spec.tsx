@@ -5,7 +5,6 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
 import {
   cleanup,
@@ -18,7 +17,6 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -90,11 +88,9 @@ const renderCampaignModal = (
     <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <I18nextProvider i18n={i18nForTest}>
-              <CampaignModal {...props} />
-            </I18nextProvider>
-          </LocalizationProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <CampaignModal {...props} />
+          </I18nextProvider>
         </BrowserRouter>
       </Provider>
     </MockedProvider>,
@@ -199,6 +195,119 @@ const getPickerInputByLabel = (label: string) =>
   screen.getByLabelText(label, { selector: 'input' }) as HTMLInputElement;
 
 describe('CampaignModal', () => {
+  it('should update form state when campaign prop changes', async () => {
+    const { rerender } = renderCampaignModal(link1, campaignProps[1]);
+
+    // Initial values
+    expect(screen.getByLabelText(translations.campaignName)).toHaveValue(
+      'Campaign 1',
+    );
+
+    // Create new props with different campaign data
+    const updatedProps: InterfaceCampaignModal = {
+      ...campaignProps[1],
+      campaign: {
+        id: 'campaignId2',
+        name: 'Updated Campaign',
+        goalAmount: 500,
+        startAt: dayjs.utc().add(6, 'month').toDate(),
+        endAt: dayjs.utc().add(18, 'month').toDate(),
+        currencyCode: 'EUR',
+        createdAt: dayjs.utc().subtract(6, 'month').toISOString(),
+      },
+    };
+
+    // Re-render with new campaign prop
+    rerender(
+      <MockedProvider link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <CampaignModal {...updatedProps} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // Verify form state updated
+    await waitFor(() => {
+      expect(screen.getByLabelText(translations.campaignName)).toHaveValue(
+        'Updated Campaign',
+      );
+      expect(screen.getByLabelText(translations.fundingGoal)).toHaveValue(
+        '500',
+      );
+      const startDateInput = getPickerInputByLabel('Start Date');
+      const endDateInput = getPickerInputByLabel('End Date');
+      expect(startDateInput).toHaveValue(
+        dayjs.utc(updatedProps.campaign?.startAt).format('DD/MM/YYYY'),
+      );
+      expect(endDateInput).toHaveValue(
+        dayjs.utc(updatedProps.campaign?.endAt).format('DD/MM/YYYY'),
+      );
+    });
+  });
+
+  it('should reset form state when campaign prop changes to null', async () => {
+    const { rerender } = renderCampaignModal(link1, campaignProps[1]);
+
+    // Initial values
+    expect(screen.getByLabelText(translations.campaignName)).toHaveValue(
+      'Campaign 1',
+    );
+
+    // Create props with null campaign
+    const updatedProps: InterfaceCampaignModal = {
+      ...campaignProps[1],
+      campaign: null,
+    };
+
+    // Re-render with null campaign
+    rerender(
+      <MockedProvider link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <CampaignModal {...updatedProps} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // Verify form state is reset to defaults
+    await waitFor(() => {
+      expect(screen.getByLabelText(translations.campaignName)).toHaveValue('');
+      expect(screen.getByLabelText(translations.fundingGoal)).toHaveValue('0');
+    });
+  });
+
+  it('should not update start date when null date is selected', async () => {
+    renderCampaignModal(link1, campaignProps[1]);
+
+    const startDateInput = getPickerInputByLabel('Start Date');
+    const initialValue = startDateInput.value;
+
+    // Try to set null/invalid date
+    fireEvent.change(startDateInput, { target: { value: '' } });
+
+    // Value should remain unchanged
+    expect(startDateInput).toHaveValue(initialValue);
+  });
+
+  it('should not update end date when null date is selected', async () => {
+    renderCampaignModal(link1, campaignProps[1]);
+
+    const endDateInput = getPickerInputByLabel('End Date');
+    const initialValue = endDateInput.value;
+
+    // Try to set null/invalid date
+    fireEvent.change(endDateInput, { target: { value: '' } });
+
+    // Value should remain unchanged
+    expect(endDateInput).toHaveValue(initialValue);
+  });
   afterEach(() => {
     vi.clearAllMocks();
     cleanup();

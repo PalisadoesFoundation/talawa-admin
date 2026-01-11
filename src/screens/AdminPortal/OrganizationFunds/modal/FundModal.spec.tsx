@@ -1,7 +1,6 @@
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
 import {
   cleanup,
@@ -14,7 +13,6 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -124,11 +122,9 @@ const renderFundModal = (
     <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <I18nextProvider i18n={i18nForTest}>
-              <FundModal {...props} />
-            </I18nextProvider>
-          </LocalizationProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <FundModal {...props} />
+          </I18nextProvider>
         </BrowserRouter>
       </Provider>
     </MockedProvider>,
@@ -320,6 +316,104 @@ describe('PledgeModal', () => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
         'Mock graphql error',
       );
+    });
+  });
+
+  it('should update form state when fund prop changes', async () => {
+    const { rerender } = renderFundModal(link1, fundProps[1]);
+
+    // Initial values
+    expect(screen.getByLabelText(translations.fundName)).toHaveValue('Fund 1');
+
+    // Create new props with different fund data
+    const updatedProps: InterfaceFundModal = {
+      ...fundProps[1],
+      fund: {
+        id: 'fundId',
+        name: 'Updated Fund',
+        refrenceNumber: '9999',
+        isTaxDeductible: false,
+        isDefault: true,
+        isArchived: true,
+        createdAt: dayjs().month(5).date(22).format('YYYY-MM-DD'),
+        organizationId: 'orgId',
+        creator: {
+          name: 'John Doe',
+        },
+        organization: {
+          name: 'Organization 1',
+        },
+        updater: {
+          name: 'John Doe',
+        },
+        edges: {
+          node: {
+            id: 'nodeId',
+            name: 'Node Name',
+            fundingGoal: 1000,
+            startDate: dayjs().format('YYYY-MM-DD'),
+            endDate: dayjs().endOf('year').format('YYYY-MM-DD'),
+            currency: 'USD',
+            createdAt: dayjs().month(5).date(22).format('YYYY-MM-DD'),
+          },
+        },
+      },
+    };
+
+    // Re-render with new fund prop
+    rerender(
+      <MockedProvider link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <FundModal {...updatedProps} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // Verify form state updated
+    await waitFor(() => {
+      expect(screen.getByLabelText(translations.fundName)).toHaveValue(
+        'Updated Fund',
+      );
+      expect(screen.getByLabelText(translations.fundId)).toHaveValue('9999');
+      expect(screen.getByTestId('setisTaxDeductibleSwitch')).not.toBeChecked();
+      expect(screen.getByTestId('setDefaultSwitch')).toBeChecked();
+      expect(screen.getByTestId('archivedSwitch')).toBeChecked();
+    });
+  });
+
+  it('should reset form state when fund prop changes to null', async () => {
+    const { rerender } = renderFundModal(link1, fundProps[1]);
+
+    // Initial values
+    expect(screen.getByLabelText(translations.fundName)).toHaveValue('Fund 1');
+
+    // Create props with null fund
+    const updatedProps: InterfaceFundModal = {
+      ...fundProps[1],
+      fund: null,
+    };
+
+    // Re-render with null fund
+    rerender(
+      <MockedProvider link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <FundModal {...updatedProps} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // Verify form state is reset
+    await waitFor(() => {
+      expect(screen.getByLabelText(translations.fundName)).toHaveValue('');
+      expect(screen.getByLabelText(translations.fundId)).toHaveValue('');
     });
   });
 });
