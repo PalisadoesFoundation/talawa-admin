@@ -173,7 +173,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     if (data?.user) setFormState({ ...data.user });
   };
   if (loading) {
-    return <div>{tCommon('loading')}</div>;
+    return <div data-testid="loader">{tCommon('loading')}</div>;
   }
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>

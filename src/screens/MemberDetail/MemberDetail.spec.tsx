@@ -49,26 +49,28 @@ vi.mock('components/UserDetails/UserTags', () => ({
   default: () => <div data-testid="user-tags" />,
 }));
 
-// ✅ FIXED mock path (THIS was the bug)
-vi.mock('shared-components/PeopleTabNavButton/PeopleTabNavButton', () => ({
-  default: ({
-    title,
-    action,
-    isActive,
-  }: {
-    title: string;
-    action: () => void;
-    isActive: boolean;
-  }) => (
-    <button
-      data-testid={`tab-${title}`}
-      data-active={isActive}
-      onClick={action}
-    >
-      {title}
-    </button>
-  ),
-}));
+vi.mock(
+  'shared-components/PeopleTabNavbarButton/PeopleTabNavbarButton',
+  () => ({
+    default: ({
+      title,
+      action,
+      isActive,
+    }: {
+      title: string;
+      action: () => void;
+      isActive: boolean;
+    }) => (
+      <button
+        data-testid={`tab-${title}`}
+        data-active={isActive}
+        onClick={action}
+      >
+        {title}
+      </button>
+    ),
+  }),
+);
 
 /* -------------------- tests -------------------- */
 

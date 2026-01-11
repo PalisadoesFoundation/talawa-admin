@@ -48,7 +48,7 @@ describe('UserTags Component', () => {
   it('renders table headers correctly', () => {
     render(<UserTags />);
 
-    expect(screen.getByText('title')).toBeInTheDocument();
+    expect(screen.getByText('peopleTabTagName')).toBeInTheDocument();
     expect(screen.getByText('assignedTo')).toBeInTheDocument();
     expect(screen.getByText('createdOn')).toBeInTheDocument();
     expect(screen.getByText('createdBy')).toBeInTheDocument();

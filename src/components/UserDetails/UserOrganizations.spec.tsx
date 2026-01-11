@@ -343,7 +343,8 @@ describe('UserOrganizations', () => {
     renderComponent();
 
     await waitFor(() => {
-      const orgsAsc = screen.getAllByTestId('org-card');
+      const orgsAsc = screen.getAllByRole('heading', { level: 3 });
+
       expect(orgsAsc).toHaveLength(3);
       // Default sort is ASC, so order should be: Belong, Created, Joined
       expect(orgsAsc[0]).toHaveTextContent('Belong Org');
@@ -356,7 +357,7 @@ describe('UserOrganizations', () => {
     });
 
     await waitFor(() => {
-      const orgsDesc = screen.getAllByTestId('org-card');
+      const orgsDesc = screen.getAllByRole('heading', { level: 3 });
       expect(orgsDesc).toHaveLength(3);
       // DESC sort order should be: Joined, Created, Belong
       expect(orgsDesc[0]).toHaveTextContent('Joined Org');
