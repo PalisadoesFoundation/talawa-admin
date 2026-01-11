@@ -698,6 +698,69 @@ describe('CampaignModal', () => {
       );
     });
   });
+  it('resets fundingGoal to 0 when input is cleared', async () => {
+    renderCampaignModal(link1, campaignProps[1]);
+
+    const goalInput = screen.getByLabelText(translations.fundingGoal);
+
+    fireEvent.change(goalInput, { target: { value: '500' } });
+    expect(goalInput).toHaveValue('500');
+
+    fireEvent.change(goalInput, { target: { value: '' } });
+
+    await waitFor(() => {
+      expect(goalInput).toHaveValue('0');
+    });
+  });
+  it('does not update fundingGoal when input is non-numeric', async () => {
+    renderCampaignModal(link1, campaignProps[1]);
+
+    const goalInput = screen.getByLabelText(translations.fundingGoal);
+    expect(goalInput).toHaveValue('100');
+
+    fireEvent.change(goalInput, { target: { value: 'abc' } });
+
+    expect(goalInput).toHaveValue('100');
+  });
+  it('shows error when campaign name is empty in edit mode', async () => {
+    renderCampaignModal(link1, campaignProps[1]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: '   ' },
+    });
+
+    const start = dayjs.utc().add(1, 'year').format('DD/MM/YYYY');
+    const end = dayjs.utc().add(2, 'year').format('DD/MM/YYYY');
+
+    fireEvent.change(getStartDateInput(), { target: { value: start } });
+    fireEvent.change(getEndDateInput(), { target: { value: end } });
+
+    fireEvent.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.campaignNameRequired,
+      );
+    });
+  });
+  it('shows error when date range is missing in edit mode', async () => {
+    renderCampaignModal(link1, campaignProps[1]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: 'Valid Name' },
+    });
+
+    fireEvent.change(getStartDateInput(), { target: { value: '' } });
+    fireEvent.change(getEndDateInput(), { target: { value: '' } });
+
+    fireEvent.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.dateRangeRequired,
+      );
+    });
+  });
 
   it('shows error when campaign name is empty', async () => {
     renderCampaignModal(link1, campaignProps[0]);

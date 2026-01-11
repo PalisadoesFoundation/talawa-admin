@@ -837,12 +837,12 @@
     "earliestEndDate": "सबसे पहली समाप्ति तिथि",
     "lowestGoal": "सबसे कम उद्देश्य",
     "highestGoal": "सबसे ऊंचा उद्देश्य",
-    "errorLoading": "अभियान डेटा लोड करते समय त्रुटि हुई",
+    "errorLoading": "कैंपेन डेटा लोड करते समय त्रुटि हुई",
     "percentageRaised": "% एकत्रित",
-    "campaignProgress": "अभियान प्रगति: {{percentage}}%",
-    "campaignNotFound": "अभियान नहीं मिला",
+    "campaignProgress": "कैंपेन प्रगति: {{percentage}}%",
+    "campaignNotFound": "कैंपेन नहीं मिली",
     "dateRangeRequired": "कृपया एक मान्य तिथि सीमा चुनें",
-    "campaignNameRequired": "अभियान का नाम आवश्यक है"
+    "campaignNameRequired": "कैंपेन का नाम आवश्यक है"
   },
   "pledges": {
     "title": "निधि अभियान प्रतिज्ञाएँ",

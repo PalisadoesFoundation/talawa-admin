@@ -51,11 +51,19 @@ import type { IDateRangeValue } from 'types/shared-components/DateRangePicker/in
  */
 
 /**
- * Modal component for creating or editing a campaign.
+ * Modal component for creating or editing a fund campaign.
  *
- * @param props - The props for the CampaignModal component.
+ * @param isOpen - Controls whether the modal is visible.
+ * @param hide - Callback to close the modal.
+ * @param fundId - Identifier of the fund the campaign belongs to.
+ * @param orgId - Identifier of the organization.
+ * @param campaign - Existing campaign data (edit mode) or null (create mode).
+ * @param refetchCampaign - Callback to refresh the campaign list after save.
+ * @param mode - Determines whether the modal is in "create" or "edit" mode.
+ *
  * @returns JSX.Element
  */
+
 /**
  * Returns an ISO date string when `newDate` differs from `existingDate`
  * (compared at second precision). Otherwise returns `undefined`.
