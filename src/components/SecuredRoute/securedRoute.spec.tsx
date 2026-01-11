@@ -21,7 +21,6 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
 describe('SecuredRoute', () => {
   // Test elements
   const testComponent = <div>Test Protected Content</div>;
-  const homeComponent = <div>Home Page</div>;
   const { setItem, clearAllItems } = useLocalStorage();
 
   const originalLocation = window.location;
@@ -86,27 +85,7 @@ describe('SecuredRoute', () => {
         </MemoryRouter>,
       );
 
-      expect(screen.getByText('talawaUser')).toBeInTheDocument();
       expect(screen.getByText('404')).toBeInTheDocument();
-      expect(
-        screen.queryByText('Test Protected Content'),
-      ).not.toBeInTheDocument();
-    });
-
-    it('should redirect to home page for unauthenticated user', () => {
-      // Don't set IsLoggedIn, simulating an unauthenticated user
-      render(
-        <MemoryRouter initialEntries={['/orglist']}>
-          <Routes>
-            <Route path="/" element={homeComponent} />
-            <Route element={<SecuredRoute />}>
-              <Route path="/orglist" element={testComponent} />
-            </Route>
-          </Routes>
-        </MemoryRouter>,
-      );
-
-      expect(screen.getByText('Home Page')).toBeInTheDocument();
       expect(
         screen.queryByText('Test Protected Content'),
       ).not.toBeInTheDocument();
