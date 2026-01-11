@@ -16,7 +16,7 @@ describe('Testing Page not found component', () => {
   afterEach(() => {
     clearAllItems();
   });
-  it('should render component properly for User,ADMIN and SUPERADMIN', () => {
+  it('should render component properly for User, ADMIN and SUPERADMIN', () => {
     render(
       <BrowserRouter>
         <Provider store={store}>
