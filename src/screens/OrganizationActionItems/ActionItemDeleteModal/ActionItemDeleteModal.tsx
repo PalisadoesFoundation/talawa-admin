@@ -41,7 +41,7 @@ import {
 import type {
   IActionItemInfo,
   IDeleteActionItemInput,
-} from 'types/ActionItems/interface';
+} from 'types/shared-components/ActionItems/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 export interface IItemDeleteModalProps {

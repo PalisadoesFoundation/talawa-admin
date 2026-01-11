@@ -203,11 +203,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         size="xl"
         dataTestId={`modal-joined-org-${user.id}`}
         onHide={() => setShowJoinedOrganizations(false)}
-        title={
-          <>
-            {t('orgJoinedBy')} {user.name} ({memberOrgs.length})
-          </>
-        }
+        title={`${t('orgJoinedBy')} ${user.name} (${memberOrgs.length})`}
         headerClassName={styles.modalHeader}
         footer={
           <Button
@@ -401,11 +397,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         size="xl"
         dataTestId={`modal-blocked-org-${user.id}`}
         onHide={() => setShowBlockedOrganizations(false)}
-        title={
-          <>
-            {t('orgThatBlocked')} {user.name} ({blockedUsers.length})
-          </>
-        }
+        title={`${t('orgThatBlocked')} ${user.name} (${blockedUsers.length})`}
         headerClassName={styles.modalHeader}
         footer={
           <Button
