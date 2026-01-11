@@ -33,5 +33,4 @@ describe('Testing Page not found component', () => {
       screen.getByText(/Oops! The Page you requested was not found!/i),
     ).toBeInTheDocument();
   });
-
 });
