@@ -389,7 +389,6 @@ describe('EventActionItems', () => {
     vi.restoreAllMocks();
     vi.clearAllMocks();
   });
-  beforeEach(() => {});
 
   describe('Component Rendering', () => {
     it('should render loading state initially', () => {

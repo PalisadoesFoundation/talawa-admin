@@ -146,6 +146,13 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     [],
   );
 
+  // Debounce cleanup effect
+  useEffect(() => {
+    return () => {
+      debouncedSearch.clear();
+    };
+  }, [debouncedSearch]);
+
   useEffect(() => {
     if (eventData && eventData.event) {
       const items = eventData.event.actionItems.edges.map(
