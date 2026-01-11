@@ -208,6 +208,7 @@
   "talawa": "Talawa",
   "talawaBranding": "Image de marque Talawa",
   "unableToLoadData": "Impossible de charger les données.",
+  "peopleTabTagName": "Nom de l'étiquette",
   "unassign": "Désassigner",
   "userName": "Nom d'utilisateur",
   "example": "Ex. {{example}}",

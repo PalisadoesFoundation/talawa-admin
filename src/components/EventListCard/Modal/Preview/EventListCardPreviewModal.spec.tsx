@@ -1178,14 +1178,14 @@ describe('EventListCardPreviewModal', () => {
       );
       fireEvent.click(calendarButton);
 
+      // Wait for calendar grid to appear
+      const calendarGrid = await screen.findByRole('grid');
+      const dateToSelect = within(calendarGrid).getByRole('gridcell', {
+        name: '20',
+      });
+      fireEvent.click(dateToSelect);
+
       await waitFor(() => {
-        const dateElements = screen.getAllByText('20');
-        // Click the button element (calendar day), not the input field
-        const dateToSelect = dateElements.find((el) => el.tagName === 'BUTTON');
-        expect(dateToSelect).toBeDefined();
-        if (dateToSelect) {
-          fireEvent.click(dateToSelect);
-        }
         expect(mockSetEventStartDate).toHaveBeenCalled();
         expect(mockSetEventEndDate).toHaveBeenCalled();
       });

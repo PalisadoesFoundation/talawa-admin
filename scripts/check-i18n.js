@@ -104,6 +104,10 @@ const NON_USER_VISIBLE_ATTRS = [
   'aria-colindextext',
 ];
 
+// Treat certain component-specific props as non-user-visible
+// (e.g., infinite-scroll props)
+NON_USER_VISIBLE_ATTRS.push('scrollableTarget');
+
 const POSIX_SEP = path.posix.sep;
 
 const parseArgs = (args) => {
@@ -267,6 +271,8 @@ const shouldAnalyzeFile = (filePath) => {
 
   // Normalize separators so test/mock exclusions work cross-platform
   const normalizedPath = filePath.split(path.sep).join(POSIX_SEP);
+  // Skip internal type definition files which are not user-visible
+  if (normalizedPath.includes(`${POSIX_SEP}types${POSIX_SEP}`)) return false;
   return !TEST_PATTERNS.some((pattern) => pattern.test(normalizedPath));
 };
 

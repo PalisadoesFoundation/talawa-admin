@@ -200,6 +200,7 @@
   "unassign": "Desasignar",
   "userName": "Nombre de usuario",
   "unableToLoadData": "No se pudo cargar los datos.",
+  "peopleTabTagName": "Nombre de la etiqueta",
   "fileTooLarge": "El archivo es demasiado grande. El tamaño máximo permitido es de {{size}}MB.",
   "invalidFileType": "Tipo de archivo inválido. Por favor, suba un archivo {{types}}.",
   "enterDescription": "Ingrese Descripción",
