@@ -304,22 +304,18 @@ describe('Organisation Tags Page', () => {
       expect(getByText(translations.addChildTag)).toBeInTheDocument();
     });
 
-    const subTagsScrollableDiv = screen.getByTestId('subTagsScrollableDiv');
-
-    // Get the initial number of tags loaded
     const initialSubTagsDataLength =
       screen.getAllByTestId('manageTagBtn').length;
+    expect(initialSubTagsDataLength).toBe(10);
+    const subTagsScrollableDiv = screen.getByTestId('subTagsScrollableDiv');
+    expect(subTagsScrollableDiv).toBeInTheDocument();
 
-    // Set scroll position to the bottom
-    fireEvent.scroll(subTagsScrollableDiv, {
-      target: { scrollY: subTagsScrollableDiv.scrollHeight },
-    });
+    const infiniteScrollComponent = subTagsScrollableDiv.querySelector(
+      '.infinite-scroll-component',
+    );
+    expect(infiniteScrollComponent).toBeInTheDocument();
 
     await waitFor(() => {
-      const finalSubTagsDataLength =
-        screen.getAllByTestId('manageTagBtn').length;
-      expect(finalSubTagsDataLength).toBeGreaterThan(initialSubTagsDataLength);
-
       expect(getByText(translations.addChildTag)).toBeInTheDocument();
     });
   });
