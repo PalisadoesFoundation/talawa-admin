@@ -21,7 +21,6 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 describe('SecuredRoute', () => {
   // Test elements
   const testComponent = <div>Test Protected Content</div>;
-  const homeComponent = <div>Home Page</div>;
   const { setItem, clearAllItems } = useLocalStorage();
 
   const originalLocation = window.location;
