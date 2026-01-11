@@ -12,6 +12,13 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
+<<<<<<< HEAD
+=======
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
+>>>>>>> b9933f25b8d (Fix: CI check passed)
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
 import dayjs, { type Dayjs } from 'dayjs';
@@ -723,13 +730,27 @@ describe('EventListCardPreviewModal', () => {
     const calendarButton = within(
       startDatePicker as HTMLElement,
     ).getByLabelText(/choose date/i);
-    await userEvent.click(calendarButton);
+    fireEvent.click(calendarButton);
 
     const calendarGrid = await screen.findByRole('grid');
     const dateToSelect = within(calendarGrid).getByRole('gridcell', {
       name: '20',
     });
+<<<<<<< HEAD
     await userEvent.click(dateToSelect);
+=======
+
+    const allText20 = screen.getAllByText('20');
+    const dateButton = allText20.find((el) => {
+      return el.closest('button[role="gridcell"]') !== null;
+    });
+    expect(dateButton).toBeDefined();
+    const button = dateButton?.closest('button[role="gridcell"]');
+    expect(button).toBeDefined();
+    if (button) {
+      fireEvent.click(button);
+    }
+>>>>>>> b9933f25b8d (Fix: CI check passed)
 
     await waitFor(() => {
       expect(mockSetEventStartDate).toHaveBeenCalled();

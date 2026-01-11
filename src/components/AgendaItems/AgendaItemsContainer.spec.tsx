@@ -6,9 +6,10 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import i18nForTest from 'utils/i18nForTest';
-import { toast } from 'react-toastify';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { DropResult } from '@hello-pangea/dnd';
 
 import { store } from 'state/store';
@@ -34,6 +35,18 @@ const callOnDragEnd = (result: DropResult): void => {
     capturedOnDragEnd(result);
   }
 };
+
+const sharedMocks = vi.hoisted(() => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
+  navigate: vi.fn(),
+}));
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: sharedMocks.NotificationToast,
+}));
 
 // Mock @hello-pangea/dnd to capture onDragEnd callback
 vi.mock('@hello-pangea/dnd', () => ({
@@ -414,7 +427,7 @@ describe('Testing Agenda Items components', () => {
     await userEvent.click(screen.getByTestId('updateAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -468,7 +481,7 @@ describe('Testing Agenda Items components', () => {
     await userEvent.click(screen.getByTestId('deleteAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(sharedMocks.NotificationToast.success).toHaveBeenCalledWith(
         translations.agendaItemDeleted,
       );
     });
@@ -521,7 +534,7 @@ describe('Testing Agenda Items components', () => {
     await userEvent.click(screen.getByTestId('deleteAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -789,7 +802,7 @@ describe('Testing Agenda Items components', () => {
 
     // Should toast an error
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalled();
     });
   });
 
