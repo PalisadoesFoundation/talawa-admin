@@ -12,9 +12,7 @@
  * ```
  */
 import React from 'react';
-import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import useLocalStorage from 'utils/useLocalstorage';
 
 import styles from './PageNotFound.module.css';
 import Logo from 'assets/images/talawa-logo-600x600.png';
@@ -22,15 +20,10 @@ import Logo from 'assets/images/talawa-logo-600x600.png';
 const PageNotFound = (): JSX.Element => {
   // Translation hooks for internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'pageNotFound' });
-  const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
   // Set the document title to the translated title for the 404 page
   document.title = t('title');
-
-  // Get the admin status from local storage
-  const { getItem } = useLocalStorage();
-  const isAdmin = getItem('role') === 'administrator';
 
   return (
     <section className={styles.pageNotFound}>
