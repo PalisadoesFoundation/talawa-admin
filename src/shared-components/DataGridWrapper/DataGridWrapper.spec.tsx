@@ -446,7 +446,7 @@ describe('DataGridWrapper', () => {
       />,
     );
 
-    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    expect(screen.getByRole('searchbox')).toBeInTheDocument();
   });
 
   test('handles sortConfig with defaultSortField and defaultSortOrder', () => {
@@ -537,7 +537,7 @@ describe('DataGridWrapper', () => {
       />,
     );
 
-    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    expect(screen.getByRole('searchbox')).toBeInTheDocument();
   });
 
   test('handles action column rendering', () => {
@@ -966,7 +966,7 @@ describe('DataGridWrapper', () => {
       />,
     );
 
-    expect(screen.getByRole('textbox')).toBeInTheDocument();
+    expect(screen.getByRole('searchbox')).toBeInTheDocument();
   });
 
   test('handles sort config without searchByOptions', () => {
