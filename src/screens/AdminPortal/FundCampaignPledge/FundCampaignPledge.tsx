@@ -352,7 +352,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 id: 'sort-pledges',
                 label: tCommon('sort'),
                 title: tCommon('sort'),
-                dataTestIdPrefix: 'filter',
+                dataTestIdPrefix: 'sort',
                 selectedOption: sortBy,
                 onOptionChange: (value) =>
                   setSortBy(

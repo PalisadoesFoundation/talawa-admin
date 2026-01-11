@@ -35,7 +35,6 @@ import VolunteerGroupModal from './modal/VolunteerGroupModal';
 import VolunteerGroupDeleteModal from './deleteModal/VolunteerGroupDeleteModal';
 import VolunteerGroupViewModal from './viewModal/VolunteerGroupViewModal';
 import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
-import LoadingState from 'shared-components/LoadingState/LoadingState';
 
 enum ModalState {
   SAME = 'same',
@@ -43,7 +42,7 @@ enum ModalState {
   VIEW = 'view',
 }
 
-function volunteerGroups(): JSX.Element {
+function VolunteerGroups(): JSX.Element {
   const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
@@ -130,14 +129,6 @@ function volunteerGroups(): JSX.Element {
       groupName: group.name || '',
     }));
   }, [eventData]);
-
-  if (groupsLoading) {
-    return (
-      <LoadingState isLoading={groupsLoading} variant="spinner">
-        <div></div>
-      </LoadingState>
-    );
-  }
 
   if (groupsError) {
     return (
@@ -354,4 +345,4 @@ function volunteerGroups(): JSX.Element {
   );
 }
 
-export default volunteerGroups;
+export default VolunteerGroups;

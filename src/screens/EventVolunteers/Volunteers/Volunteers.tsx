@@ -25,7 +25,6 @@ import {
 } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
-import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   type GridCellParams,
   type GridColDef,
@@ -162,14 +161,6 @@ function Volunteers(): JSX.Element {
       volunteerName: volunteer.user?.name || '',
     }));
   }, [eventData]);
-
-  if (volunteersLoading) {
-    return (
-      <LoadingState isLoading={volunteersLoading} variant="spinner">
-        <div></div>
-      </LoadingState>
-    );
-  }
 
   if (volunteersError) {
     return (

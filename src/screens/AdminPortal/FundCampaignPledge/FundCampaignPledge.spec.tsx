@@ -638,16 +638,35 @@ describe('Testing Campaign Pledge Screen', () => {
 
   it('Search the Pledges list by Users', async () => {
     renderFundCampaignPledge(link1);
-    const searchPledger = await screen.findByTestId('searchPledger');
-    fireEvent.change(searchPledger, {
-      target: { value: 'John' },
+
+    // Wait for all pledgers to initially render
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+      expect(screen.getByText('John Doe3')).toBeInTheDocument();
     });
 
-    // Wait for debounced search to complete (DataGridWrapper auto-searches)
+    // Find the search input
+    const searchPledger = screen.getByTestId('searchPledger');
+    expect(searchPledger).toBeInTheDocument();
+
+    // Clear and type search query
+    await userEvent.clear(searchPledger);
+    await userEvent.type(searchPledger, 'John');
+
+    // Wait for debounce (300ms default) to complete
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 350));
+    });
+
+    // Wait for search results to update - only Johns should be visible
     await waitFor(
       () => {
+        // Only users with "John" in their name should be visible
         expect(screen.getByText('John Doe')).toBeInTheDocument();
-        expect(screen.queryByText('Jane Doe')).toBeNull();
+        expect(screen.getByText('John Doe3')).toBeInTheDocument();
+        // Jane Doe should be filtered out
+        expect(screen.queryByText('Jane Doe')).not.toBeInTheDocument();
       },
       { timeout: 2000 },
     );
