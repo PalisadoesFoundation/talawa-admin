@@ -68,7 +68,7 @@ Defined in: [src/types/Post/type.ts:13](https://github.com/PalisadoesFoundation/
 
 ### organization
 
-> **organization**: [`Organization`](../../../Organization/type/type-aliases/Organization.md)
+> **organization**: [`Organization`](../../../AdminPortal/Organization/type/type-aliases/Organization.md)
 
 Defined in: [src/types/Post/type.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L14)
 

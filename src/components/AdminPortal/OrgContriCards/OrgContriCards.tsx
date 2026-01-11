@@ -1,13 +1,12 @@
 /**
  * A React functional component that displays contribution details for an organization.
  *
- * @component
  * @param props - The properties passed to the component.
- * @param props.userName - The name of the user who made the contribution.
- * @param props.userEmail - The email address of the user who made the contribution.
- * @param props.contriDate - The date when the contribution was made.
- * @param props.contriTransactionId - The transaction ID associated with the contribution.
- * @param props.contriAmount - The amount contributed by the user.
+ * @param userName - The name of the user who made the contribution.
+ * @param userEmail - The email address of the user who made the contribution.
+ * @param contriDate - The date when the contribution was made.
+ * @param contriTransactionId - The transaction ID associated with the contribution.
+ * @param contriAmount - The amount contributed by the user.
  *
  * @returns A JSX element that renders a card with contribution details.
  *
@@ -27,7 +26,6 @@
  * />
  * ```
  *
- * @module OrgContriCards
  */
 import React from 'react';
 import Row from 'react-bootstrap/Row';

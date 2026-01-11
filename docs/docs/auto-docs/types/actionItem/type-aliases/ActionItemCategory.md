@@ -52,7 +52,7 @@ Defined in: [src/types/actionItem.ts:27](https://github.com/PalisadoesFoundation
 
 ### organization?
 
-> `optional` **organization**: [`Organization`](../../Organization/type/type-aliases/Organization.md)
+> `optional` **organization**: [`Organization`](../../AdminPortal/Organization/type/type-aliases/Organization.md)
 
 Defined in: [src/types/actionItem.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/actionItem.ts#L28)
 
