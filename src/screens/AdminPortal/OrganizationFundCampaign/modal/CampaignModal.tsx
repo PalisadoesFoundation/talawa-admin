@@ -51,20 +51,6 @@ import type { IDateRangeValue } from 'types/shared-components/DateRangePicker/in
  */
 
 /**
- * Modal component for creating or editing a fund campaign.
- *
- * @param isOpen - Controls whether the modal is visible.
- * @param hide - Callback to close the modal.
- * @param fundId - Identifier of the fund the campaign belongs to.
- * @param orgId - Identifier of the organization.
- * @param campaign - Existing campaign data (edit mode) or null (create mode).
- * @param refetchCampaign - Callback to refresh the campaign list after save.
- * @param mode - Determines whether the modal is in "create" or "edit" mode.
- *
- * @returns JSX.Element
- */
-
-/**
  * Returns an ISO date string when `newDate` differs from `existingDate`
  * (compared at second precision). Otherwise returns `undefined`.
  *
@@ -85,6 +71,12 @@ export const getUpdatedDateIfChanged = (
 
   return undefined;
 };
+/**
+ * Modal component for creating or editing a fund campaign.
+ *
+ * @param props - Props for the CampaignModal component.
+ * @returns JSX.Element representing the create/edit campaign modal.
+ */
 
 const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
   isOpen,
@@ -325,13 +317,15 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
                 variant="outlined"
                 className={styles.noOutline}
                 value={campaignGoal}
+                inputProps={{ min: 0 }}
                 onChange={(e) => {
                   if (e.target.value === '') {
                     setFormState({ ...formState, campaignGoal: 0 });
                     return;
                   }
+
                   const value = parseInt(e.target.value, 10);
-                  if (!isNaN(value) && value > 0) {
+                  if (!isNaN(value) && value >= 0) {
                     setFormState({ ...formState, campaignGoal: value });
                   }
                 }}
