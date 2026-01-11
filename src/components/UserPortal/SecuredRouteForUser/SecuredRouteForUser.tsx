@@ -5,12 +5,10 @@
  * role can access certain routes. It uses a custom hook to interact with
  * local storage for retrieving authentication and role information.
  *
- * @component
- *
- * @returns {JSX.Element} - A JSX element that conditionally renders:
+ * @returns A JSX element that conditionally renders:
  * - The child route components if the user is logged in and does not have an admin role.
  * - A `PageNotFound` component if the user has an admin role.
- * - A redirection to the home page (`"/"`) if the user is not logged in.
+ * - A redirection to the home page ("/") if the user is not logged in.
  *
  * @example
  * ```tsx
@@ -24,15 +22,15 @@
  * - The `adminFor` value is retrieved from local storage using the key `'AdminFor'`.
  * - If `isLoggedIn` is `'TRUE'` and `adminFor` is `undefined`, the child routes are rendered.
  * - If `isLoggedIn` is not `'TRUE'`, the user is redirected to the home page.
- *
- * @requires `react-router-dom` for navigation and route handling.
- * @requires `useLocalStorage` custom hook for local storage interaction.
+ * - Uses `react-router-dom` for navigation and route handling.
+ * - Uses `useLocalStorage` custom hook for local storage interaction.
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Navigate, Outlet } from 'react-router';
-import { toast } from 'react-toastify';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import useLocalStorage from 'utils/useLocalstorage';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { useTranslation } from 'react-i18next';
 
 // Time constants for session timeout and inactivity interval
 const timeoutMinutes = 15;
@@ -44,16 +42,17 @@ const inactiveIntervalMilliseconds = inactiveIntervalMinutes * 60 * 1000;
 const SecuredRouteForUser = (): JSX.Element => {
   // Custom hook to interact with local storage
   const { getItem, setItem, removeItem } = useLocalStorage();
+  const { t } = useTranslation('translation', { keyPrefix: 'securedRoute' });
   const lastActiveRef = useRef<number>(Date.now());
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Check if the user is logged in and the role of the user
   const isLoggedIn = getItem('IsLoggedIn');
   const adminFor = getItem('AdminFor');
 
-  const updateLastActive = () => {
+  const updateLastActive = useCallback(() => {
     lastActiveRef.current = Date.now();
-  };
+  }, []);
 
   useEffect(() => {
     // Only set up session timeout if user is logged in
@@ -71,7 +70,7 @@ const SecuredRouteForUser = (): JSX.Element => {
 
         // If inactive for longer than the timeout period, show a warning and log out
         if (timeSinceLastActive > timeoutMilliseconds) {
-          toast.warn('Kindly relogin as session has expired');
+          NotificationToast.warning(t('sessionExpired'));
 
           setItem('IsLoggedIn', 'FALSE');
           removeItem('email');
@@ -99,7 +98,7 @@ const SecuredRouteForUser = (): JSX.Element => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [isLoggedIn, setItem, removeItem]);
+  }, [isLoggedIn, removeItem, setItem, t, updateLastActive]);
 
   // Conditional rendering based on authentication status and role
   return isLoggedIn === 'TRUE' ? (

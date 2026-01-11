@@ -707,7 +707,11 @@ describe('EventListCardPreviewModal', () => {
       expect(screen.getByRole('grid')).toBeInTheDocument();
     });
 
-    const dateToSelect = screen.getByText('20');
+    const grid = screen.getByRole('grid');
+    const dateToSelect = within(grid)
+      .getAllByRole('gridcell')
+      .find((el) => el.textContent === '21');
+    if (!dateToSelect) throw new Error('Date button not found');
     await userEvent.click(dateToSelect);
 
     await waitFor(() => {

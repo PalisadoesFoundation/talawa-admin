@@ -19,6 +19,7 @@ import UserProfileDropdown from './UserDropdown';
 import LanguageSelector from './LanguageSelector';
 import { languages } from 'utils/languages';
 import useLocalStorage from 'utils/useLocalstorage';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 import { SvgIconTypeMap } from '@mui/material';
 import {
@@ -39,7 +40,9 @@ import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import styles from './UserPortalNavigationBar.module.css';
 
 // Mock dependencies
-vi.mock('react-toastify', () => ({ toast: { error: vi.fn() } }));
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: { error: vi.fn() },
+}));
 vi.mock('js-cookie', () => ({ default: { get: vi.fn(), set: vi.fn() } }));
 vi.mock('i18next', () => ({ default: { changeLanguage: vi.fn() } }));
 vi.mock('utils/useLocalstorage', () => ({ default: vi.fn() }));
@@ -1027,10 +1030,6 @@ describe('UserPortalNavigationBar', () => {
         clearAllItems,
       });
 
-      // Import toast to spy on it
-      const { toast } = await import('react-toastify');
-      const toastErrorSpy = vi.spyOn(toast, 'error');
-
       render(
         <MockedProvider mocks={[logoutErrorMock]}>
           <MemoryRouter>
@@ -1046,8 +1045,7 @@ describe('UserPortalNavigationBar', () => {
       fireEvent.click(logoutBtn);
 
       await waitFor(() => {
-        // Toast error should be called with logout failed message
-        expect(toastErrorSpy).toHaveBeenCalledWith('logoutFailed');
+        expect(NotificationToast.error).toHaveBeenCalledWith('logoutFailed');
       });
 
       // Storage should still be cleared even on error
