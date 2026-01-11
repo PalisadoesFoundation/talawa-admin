@@ -34,7 +34,7 @@ vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
   }: {
     imageUrl?: string;
     fallbackName: string;
-    crossOrigin?: string;
+    crossOrigin?: 'anonymous' | 'use-credentials' | '';
   }) => (
     <div
       data-testid="mock-profile-avatar-display"
@@ -42,11 +42,7 @@ vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
       data-fallback-name={fallbackName}
     >
       {imageUrl && (
-        <img
-          src={imageUrl}
-          alt={fallbackName}
-          crossOrigin={crossOrigin as any}
-        />
+        <img src={imageUrl} alt={fallbackName} crossOrigin={crossOrigin} />
       )}
     </div>
   ),

@@ -26,7 +26,7 @@
  * Success or error messages are displayed using toast notifications based on the result of the mutation.
  */
 import type { ChangeEvent } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import type {
   InterfaceCreateVolunteerGroup,
   InterfaceVolunteerGroupInfo,
@@ -56,9 +56,9 @@ import {
 import { PiUserListBold } from 'react-icons/pi';
 import { TbListDetails } from 'react-icons/tb';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
-import Avatar from 'components/Avatar/Avatar';
 import { FaXmark } from 'react-icons/fa6';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 
 export interface InterfaceGroupModal {
   isOpen: boolean;
@@ -188,19 +188,14 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
   );
 
   return (
-    <Modal className={styles.groupModal} onHide={hide} show={isOpen}>
-      <Modal.Header>
-        <p className={styles.titlemodal}>{t('manageGroup')}</p>
-        <Button
-          variant="danger"
-          onClick={hide}
-          className={styles.modalCloseBtn}
-          data-testid="modalCloseBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-      </Modal.Header>
-      <Modal.Body>
+    <BaseModal
+      className={styles.groupModal}
+      show={isOpen}
+      onHide={hide}
+      title={t('manageGroup')}
+      data-testid="groupModal"
+    >
+      <>
         <div
           className={`btn-group ${styles.toggleGroup} mt-0 px-3 mb-4 w-100`}
           role="group"
@@ -395,8 +390,8 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             )}
           </div>
         )}
-      </Modal.Body>
-    </Modal>
+      </>
+    </BaseModal>
   );
 };
 export default GroupModal;
