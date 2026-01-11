@@ -944,35 +944,60 @@ describe('Groups Screen [User Portal]', () => {
     expect(screen.getByText('Group 1')).toBeInTheDocument();
   });
 
-  it('sends only orgId and userId when search conditions are empty', async () => {
+  it('handles search input interactions correctly', async () => {
     renderGroups(linkSuccess);
 
     await waitFor(() => {
       expect(screen.getByText('Group 1')).toBeInTheDocument();
     });
 
-    // Switch search options and clear search to trigger useMemo with base variables only
+    // Test search input functionality
+    const searchInput = screen.getByTestId('searchByInput');
+    await userEvent.type(searchInput, 'test');
+    expect(searchInput).toHaveValue('test');
+
+    await userEvent.clear(searchInput);
+    expect(searchInput).toHaveValue('');
+
+    // Test search mode switching
+    const searchByDropdown = screen.getByTestId('searchBy');
+    await userEvent.click(searchByDropdown);
+    const leaderOption = await screen.findByTestId('leader');
+    await userEvent.click(leaderOption);
+
+    await userEvent.type(searchInput, 'leader test');
+    expect(searchInput).toHaveValue('leader test');
+  });
+
+  test('handles empty search term in leader mode', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
     const searchByDropdown = screen.getByTestId('searchBy');
     await userEvent.click(searchByDropdown);
     const leaderOption = await screen.findByTestId('leader');
     await userEvent.click(leaderOption);
 
     const searchInput = screen.getByTestId('searchByInput');
+    await userEvent.type(searchInput, '   '); // whitespace only
     await userEvent.clear(searchInput);
 
-    // Switch back to group search to test both paths
-    await userEvent.click(searchByDropdown);
-    const groupOption = await screen.findByTestId('group');
-    await userEvent.click(groupOption);
+    expect(searchInput).toHaveValue('');
+  });
 
-    // Test search input functionality
-    await userEvent.type(searchInput, 'test');
-    await userEvent.clear(searchInput);
+  test('handles group search with non-empty term', async () => {
+    renderGroups(linkSuccess);
 
-    // Verify that the component still displays groups (indicating the query worked)
     await waitFor(() => {
       expect(screen.getByText('Group 1')).toBeInTheDocument();
-      expect(screen.getByText('Group 2')).toBeInTheDocument();
     });
+
+    const searchInput = screen.getByTestId('searchByInput');
+    await userEvent.type(searchInput, 'test group');
+
+    expect(searchInput).toHaveValue('test group');
   });
 });

@@ -398,6 +398,109 @@ describe('DataGridWrapper', () => {
     expect(mockOnRowClick).toHaveBeenCalledWith(defaultProps.rows[0]);
   });
 
+  test('handles server-side search without onSearchChange callback', () => {
+    const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          serverSide: true,
+          searchTerm: 'test',
+        }}
+      />,
+    );
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'DataGridWrapper: serverSide search enabled but onSearchChange callback not provided',
+    );
+
+    consoleSpy.mockRestore();
+  });
+
+  test('handles sort config with selectedSort', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        sortConfig={{
+          selectedSort: 'name_ASC',
+          onSortChange: vi.fn(),
+        }}
+      />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  test('handles empty searchByOptions in server-side mode', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          serverSide: true,
+          searchTerm: '',
+          onSearchChange: vi.fn(),
+        }}
+      />,
+    );
+
+    expect(screen.getByRole('textbox')).toBeInTheDocument();
+  });
+
+  test('handles sortConfig with defaultSortField and defaultSortOrder', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        sortConfig={{
+          defaultSortField: 'name',
+          defaultSortOrder: 'asc',
+        }}
+      />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  test('renders EmptyState with emptyStateProps', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        rows={[]}
+        emptyStateProps={{
+          message: 'Custom empty message',
+          icon: 'test-icon',
+        }}
+      />,
+    );
+
+    expect(screen.getByText('Custom empty message')).toBeInTheDocument();
+  });
+
+  test('renders EmptyState with legacy emptyStateMessage', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        rows={[]}
+        emptyStateMessage="Legacy empty message"
+      />,
+    );
+
+    expect(screen.getByText('Legacy empty message')).toBeInTheDocument();
+  });
+
+  test('handles pagination disabled', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        paginationConfig={{ enabled: false }}
+      />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
   test('renders action column correctly', () => {
     const actionColumnRenderer = (row: TestRow) => (
       <button type="button" data-testid={`action-${row.id}`}>
