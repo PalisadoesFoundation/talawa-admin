@@ -8,7 +8,7 @@
  *
  * @remarks
  * - Utilizes Apollo Client's `useQuery` and `useMutation` hooks for data fetching and mutations.
- * - Uses ReportingTable for displaying tags in a tabular format with pagination support.
+ * - Uses DataGridWrapper for displaying tags in a tabular format with pagination support.
  * - Includes a modal for creating new tags.
  *
  *

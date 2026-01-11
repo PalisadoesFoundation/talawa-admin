@@ -7,7 +7,7 @@
  *
  * @remarks
  * - Uses Apollo Client's `useLazyQuery` for fetching data.
- * - Implements server-side pagination with cursor-based navigation.
+ * - Uses DataGridWrapper for client-side pagination and display.
  * - Supports filtering by roles (members, administrators, users).
  * - Includes local search functionality for filtering rows by name or email.
  * - Displays a modal for removing members.
@@ -434,7 +434,7 @@ function OrganizationPeople(): JSX.Element {
       <DataGridWrapper<IProcessedRow>
         rows={filteredRows}
         columns={columns}
-        error={memberError?.message || userError?.message}
+        error={state === 2 ? userError?.message : memberError?.message}
         loading={memberLoading || userLoading}
         emptyStateProps={{
           message: tCommon('notFound'),
