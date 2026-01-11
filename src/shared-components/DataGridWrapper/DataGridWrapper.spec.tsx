@@ -413,7 +413,7 @@ describe('DataGridWrapper', () => {
     );
 
     expect(consoleSpy).toHaveBeenCalledWith(
-      'DataGridWrapper: serverSide search enabled but onSearchChange callback not provided',
+      '[DataGridWrapper] Server-side search enabled but onSearchChange callback is missing',
     );
 
     consoleSpy.mockRestore();
@@ -541,7 +541,9 @@ describe('DataGridWrapper', () => {
   });
 
   test('handles action column rendering', () => {
-    const actionColumn = (row: TestRow) => <button>Edit {row.name}</button>;
+    const actionColumn = (row: TestRow) => (
+      <button type="button">Edit {row.name}</button>
+    );
 
     render(<DataGridWrapper {...defaultProps} actionColumn={actionColumn} />);
 
@@ -899,7 +901,7 @@ describe('DataGridWrapper', () => {
   test('shows default empty message when no custom message provided', () => {
     render(<DataGridWrapper {...defaultProps} rows={[]} />);
 
-    expect(screen.getByText('noResultsFound')).toBeInTheDocument();
+    expect(screen.getByText('No results found')).toBeInTheDocument();
   });
 
   test('handles row click when onRowClick is provided', () => {
