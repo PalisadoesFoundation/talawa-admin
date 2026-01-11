@@ -286,8 +286,8 @@ describe('EventRegistrantsModal', () => {
       makeMembersWithOneMock(),
     ]);
 
-    // BaseModal has dataTestId="invite-modal"
-    const modal = await screen.findByTestId('invite-modal');
+    // BaseModal has dataTestId="event-registrants-modal"
+    const modal = await screen.findByTestId('event-registrants-modal');
     expect(modal).toBeInTheDocument();
 
     // Autocomplete input should be rendered
@@ -307,7 +307,7 @@ describe('EventRegistrantsModal', () => {
     );
 
     // Wait for modal to appear using stable test id
-    const modal = await screen.findByTestId('invite-modal');
+    const modal = await screen.findByTestId('event-registrants-modal');
     expect(modal).toBeInTheDocument();
 
     // Close button has data-testid="modalCloseBtn"
@@ -325,7 +325,7 @@ describe('EventRegistrantsModal', () => {
     ]);
 
     // Wait for modal and button to appear
-    await screen.findByTestId('invite-modal');
+    await screen.findByTestId('event-registrants-modal');
     const addButton = await screen.findByTestId('add-registrant-btn');
 
     // Click button
@@ -351,7 +351,7 @@ describe('EventRegistrantsModal', () => {
       makeAddRegistrantSuccessMock(),
     ]);
 
-    await screen.findByTestId('invite-modal');
+    await screen.findByTestId('event-registrants-modal');
 
     const input = await screen.findByTestId('autocomplete');
 
@@ -392,7 +392,7 @@ describe('EventRegistrantsModal', () => {
       makeAddRegistrantErrorMock(),
     ]);
 
-    await screen.findByTestId('invite-modal');
+    await screen.findByTestId('event-registrants-modal');
 
     const input = await screen.findByTestId('autocomplete');
 
@@ -436,7 +436,7 @@ describe('EventRegistrantsModal', () => {
       makeAddRegistrantRecurringSuccessMock(),
     ]);
 
-    await screen.findByTestId('invite-modal');
+    await screen.findByTestId('event-registrants-modal');
 
     const input = await screen.findByTestId('autocomplete');
 
@@ -510,7 +510,7 @@ describe('EventRegistrantsModal', () => {
     ]);
 
     // Wait for main modal to appear
-    await screen.findByTestId('invite-modal');
+    await screen.findByTestId('event-registrants-modal');
 
     // Click invite button using data-testid
     const inviteButton = screen.getByTestId('invite-by-email-btn');
@@ -544,7 +544,7 @@ describe('EventRegistrantsModal', () => {
       makeMembersWithOneMock(),
     ]);
 
-    await screen.findByTestId('invite-modal');
+    await screen.findByTestId('event-registrants-modal');
 
     const inviteButton = screen.getByTestId('invite-by-email-btn');
     fireEvent.click(inviteButton);
