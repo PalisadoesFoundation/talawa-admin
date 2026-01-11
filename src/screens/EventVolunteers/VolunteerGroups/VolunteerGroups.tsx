@@ -1,23 +1,6 @@
 /**
- * @file VolunteerGroups.tsx
- * @description Component for managing volunteer groups within an event.
+ * Component for managing volunteer groups within an event.
  * It allows administrators to view, search, sort, and manage volunteer groups.
- *
- * @module VolunteerGroups
- *
- * @requires react
- * @requires react-i18next
- * @requires react-bootstrap
- * @requires react-router-dom
- * @requires @apollo/client
- * @requires components/Loader/Loader
- * @requires components/Avatar/Avatar
- * @requires shared-components/DataGridWrapper/DataGridWrapper
- * @requires GraphQl/Queries/EventVolunteerQueries
- * @requires utils/interfaces
- *
- * @function volunteerGroups
- * @returns {JSX.Element} A React component that displays a searchable and sortable table of volunteer groups.
  *
  * @remarks
  * - Displays a loader while fetching data and handles errors gracefully.
@@ -30,8 +13,7 @@
  * - All UI text is internationalized using i18n translation keys.
  * - Redirects to the home page if `orgId` or `eventId` is missing in the URL parameters.
  *
- * @example
- * <VolunteerGroups />
+ * @returns A React component that displays a searchable and sortable table of volunteer groups.
  */
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';

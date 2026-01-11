@@ -1,44 +1,10 @@
 /**
- * Volunteers.tsx
  * This component renders the Volunteers page for an event in the Talawa Admin application.
  * It provides functionalities to view, search, filter, sort, and manage volunteers for a specific event.
  * The page uses DataGridWrapper to display volunteer details with integrated search, sort, and filter capabilities,
  * along with modals for adding, viewing, and deleting volunteers.
  *
- * module Volunteers
- *
- * @requires react
- * @requires react-i18next
- * @requires react-bootstrap
- * @requires react-router-dom
- * @requires @mui/icons-material
- * @requires @apollo/client
- * @requires @mui/material
- * @requires components/Loader/Loader
- * @requires components/Avatar/Avatar
- * @requires shared-components/DataGridWrapper/DataGridWrapper
- * @requires GraphQl/Queries/EventVolunteerQueries
- * @requires utils/interfaces
- * @requires ./createModal/VolunteerCreateModal
- * @requires ./deleteModal/VolunteerDeleteModal
- * @requires ./viewModal/VolunteerViewModal
- * @requires style/app.module.css
- *
- * typedef InterfaceEventVolunteerInfo - Interface for volunteer information.
- *
- * @returns The Volunteers page component.
- *
- * @example
- * ```tsx
- * // Usage
- * import Volunteers from './Volunteers';
- *
- * function App() {
- *   return <Volunteers />;
- * }
- * ```
- *
- * remarks
+ * @remarks
  * - The component uses Apollo Client's `useQuery` to fetch volunteer data.
  * - Uses DataGridWrapper for unified search, sort, and filter interface with debouncing.
  * - Provides search by volunteer name.

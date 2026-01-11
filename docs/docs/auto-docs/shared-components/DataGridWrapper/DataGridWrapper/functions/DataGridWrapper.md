@@ -6,7 +6,7 @@
 
 > **DataGridWrapper**\<`T`\>(`props`): `Element`
 
-Defined in: [src/shared-components/DataGridWrapper/DataGridWrapper.tsx:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataGridWrapper/DataGridWrapper.tsx#L72)
+Defined in: [src/shared-components/DataGridWrapper/DataGridWrapper.tsx:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataGridWrapper/DataGridWrapper.tsx#L70)
 
 A generic wrapper around MUI DataGrid with built-in search, sorting, and pagination.
 
@@ -16,15 +16,13 @@ A generic wrapper around MUI DataGrid with built-in search, sorting, and paginat
 
 `T` *extends* `object`
 
-The row data type (must include `id: string | number`)
-
 ## Parameters
 
 ### props
 
-[`InterfaceDataGridWrapperProps`](../../../types/DataGridWrapper/interface/interfaces/InterfaceDataGridWrapperProps.md)\<`T`\>
+[`InterfaceDataGridWrapperProps`](../../../../types/DataGridWrapper/interface/interfaces/InterfaceDataGridWrapperProps.md)\<`T`\>
 
-Component props defined by InterfaceDataGridWrapperProps\<T\>
+Component props defined by InterfaceDataGridWrapperProps
 
 ## Returns
 

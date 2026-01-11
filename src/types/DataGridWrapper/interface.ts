@@ -9,8 +9,6 @@ import type { InterfaceEmptyStateProps } from '../shared-components/EmptyState/i
  *
  * This interface defines the configuration for the `DataGridWrapper`, a standardized wrapper around
  * MUI's DataGrid that provides consistent search, sorting, pagination, and styling across the application.
- *
- * @template T - The type of the row data. Must extend `GridValidRowModel` (typically requires an `id` property).
  */
 export interface InterfaceDataGridWrapperProps<
   T extends GridValidRowModel = GridValidRowModel,
@@ -29,7 +27,6 @@ export interface InterfaceDataGridWrapperProps<
 
   /**
    * If `true`, displays a loading indicator (e.g., Progress Bar) overlaying the grid.
-   * @default false
    */
   loading?: boolean;
 
@@ -159,7 +156,6 @@ export interface InterfaceDataGridWrapperProps<
   /**
    * Custom message to display when there are no rows and `loading` is false.
    * @deprecated Use `emptyStateProps` instead for full customization.
-   * @default "No results found" (localized)
    * @remarks
    * If `emptyStateProps` is provided, this prop is ignored.
    * This property is maintained for backward compatibility.

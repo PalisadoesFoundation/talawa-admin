@@ -1,6 +1,5 @@
 /**
- * @module shared-components/DataGridWrapper
- * @summary DataGridWrapper component for displaying tabular data with integrated search, sorting, and pagination capabilities.
+ * DataGridWrapper component for displaying tabular data with integrated search, sorting, and pagination capabilities.
  *
  * This module provides a reusable wrapper around Material-UI's DataGrid component,
  * enhancing it with built-in search functionality, configurable sorting options,
@@ -23,8 +22,7 @@ import { DataGridErrorOverlay } from './DataGridErrorOverlay';
 /**
  * A generic wrapper around MUI DataGrid with built-in search, sorting, and pagination.
  *
- * @template T - The row data type (must include `id: string | number`)
- * @param props - Component props defined by InterfaceDataGridWrapperProps\<T\>
+ * @param props - Component props defined by InterfaceDataGridWrapperProps
  * @returns A data grid with optional toolbar controls (search, sort) and enhanced features
  *
  * @example

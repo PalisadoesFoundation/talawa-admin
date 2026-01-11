@@ -1,28 +1,8 @@
 /**
- * @file Requests.tsx
- * @description This component renders a table displaying volunteer membership requests for a specific event.
+ * This component renders a table displaying volunteer membership requests for a specific event.
  * It allows administrators to search, sort, filter, and manage these requests by accepting or rejecting them.
  *
- * module Requests
- *
- * @requires react
- * @requires react-i18next
- * @requires react-bootstrap
- * @requires react-router-dom
- * @requires @apollo/client
- * @requires dayjs
- * @requires NotificationToast
- * @requires components/Loader/Loader
- * @requires components/Avatar/Avatar
- * @requires shared-components/DataGridWrapper/DataGridWrapper
- * @requires GraphQl/Queries/EventVolunteerQueries
- * @requires GraphQl/Mutations/EventVolunteerMutation
- * @requires utils/interfaces
- *
- * @function Requests
- * @returns {JSX.Element} A React component that displays a searchable, sortable, and filterable table of volunteer membership requests.
- *
- * remarks
+ * @remarks
  * - Displays a loader while fetching data and handles errors gracefully.
  * - Uses Apollo Client's `useQuery` to fetch data and `useMutation` to update membership status.
  * - Uses DataGridWrapper for unified search, sort, and filter interface with debouncing.
@@ -31,8 +11,7 @@
  * - All UI text is internationalized using i18n translation keys.
  * - Redirects to the home page if `orgId` or `eventId` is missing in the URL parameters.
  *
- * @example
- * <Requests />
+ * @returns A React component that displays a searchable, sortable, and filterable table of volunteer membership requests.
  */
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -42,7 +21,6 @@ import { FaXmark } from 'react-icons/fa6';
 import { WarningAmberRounded } from '@mui/icons-material';
 
 import { useMutation, useQuery } from '@apollo/client';
-import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   type GridCellParams,
   type GridColDef,
