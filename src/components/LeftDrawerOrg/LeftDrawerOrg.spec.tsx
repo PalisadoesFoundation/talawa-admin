@@ -249,7 +249,7 @@ const successMocks: IMockedResponse[] = [
   {
     request: {
       query: GET_ORGANIZATION_DATA_PG,
-      variables: { id: 'org-123', first: 10, after: null },
+      variables: { id: 'org-123', first: 1, after: null },
     },
     result: {
       data: mockOrganizationData,
@@ -261,7 +261,7 @@ const loadingMocks: IMockedResponse[] = [
   {
     request: {
       query: GET_ORGANIZATION_DATA_PG,
-      variables: { id: 'org-123', first: 10, after: null },
+      variables: { id: 'org-123', first: 1, after: null },
     },
     delay: 30000, // Never resolve to simulate loading
   },
@@ -271,7 +271,7 @@ const errorMocks: IMockedResponse[] = [
   {
     request: {
       query: GET_ORGANIZATION_DATA_PG,
-      variables: { id: 'org-123', first: 10, after: null },
+      variables: { id: 'org-123', first: 1, after: null },
     },
     error: new Error('Failed to fetch organization'),
   },
@@ -401,7 +401,7 @@ describe('LeftDrawerOrg', () => {
         expect(screen.getByText('Test City')).toBeInTheDocument();
       });
 
-      const avatar = screen.getByAltText('Test Organization');
+      const avatar = screen.getByAltText('profileAvatar.altText');
       expect(avatar).toBeInTheDocument();
       expect(avatar).toHaveAttribute('src', 'https://example.com/avatar.jpg');
     });
@@ -411,7 +411,7 @@ describe('LeftDrawerOrg', () => {
         {
           request: {
             query: GET_ORGANIZATION_DATA_PG,
-            variables: { id: 'org-123', first: 10, after: null },
+            variables: { id: 'org-123', first: 1, after: null },
           },
           result: {
             data: mockOrganizationDataWithoutAvatar,
@@ -436,7 +436,7 @@ describe('LeftDrawerOrg', () => {
         {
           request: {
             query: GET_ORGANIZATION_DATA_PG,
-            variables: { id: 'org-123', first: 10, after: null },
+            variables: { id: 'org-123', first: 1, after: null },
           },
           result: {
             data: mockOrganizationDataWithoutCity,
@@ -908,7 +908,7 @@ describe('LeftDrawerOrg', () => {
       // The query should be called with correct variables
       expect(successMocks[0].request.variables).toEqual({
         id: 'org-123',
-        first: 10,
+        first: 1,
         after: null,
       });
     });
@@ -918,7 +918,7 @@ describe('LeftDrawerOrg', () => {
         {
           request: {
             query: GET_ORGANIZATION_DATA_PG,
-            variables: { id: 'different-org', first: 10, after: null },
+            variables: { id: 'different-org', first: 1, after: null },
           },
           result: {
             data: {

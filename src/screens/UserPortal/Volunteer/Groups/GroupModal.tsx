@@ -349,7 +349,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                               key={id + '1'}
                               imageUrl={avatarURL}
                               fallbackName={t('volunteerAlt')}
-                              data-testid={`image${id + 1}`}
+                              dataTestId={'image' + (id + 1)}
                               className={styles.TableImage}
                             />
 
