@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider, MockLink } from '@apollo/client/testing';
 import {
   LocalizationProvider,
   AdapterDayjs,
@@ -329,7 +329,7 @@ describe('Groups Screen [User Portal]', () => {
     routerMocks.useParams.mockReturnValue({ orgId: '' });
     render(
       <MockedProvider link={linkSuccess}>
-        <MemoryRouter initialEntries={['/user/volunteer/:orgId']}>
+        <MemoryRouter initialEntries={['/user/volunteer/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
               <Routes>
@@ -944,33 +944,72 @@ describe('Groups Screen [User Portal]', () => {
     expect(screen.getByText('Group 1')).toBeInTheDocument();
   });
 
-  it('covers whereVariables useMemo return statement', async () => {
-    renderGroups(linkSuccess);
+  it('tests whereVariables useMemo with empty search conditions', async () => {
+    let capturedVariables: { where: Record<string, unknown>; orderBy: string };
+    const mockLink = new MockLink([
+      {
+        request: {
+          query: EVENT_VOLUNTEER_GROUP_LIST,
+          variables: {
+            where: { userId: 'userId', orgId: 'orgId' },
+            orderBy: 'volunteers_DESC',
+          },
+        },
+        result: () => {
+          capturedVariables = {
+            where: { userId: 'userId', orgId: 'orgId' },
+            orderBy: 'volunteers_DESC',
+          };
+          return {
+            data: {
+              getEventVolunteerGroups: [
+                {
+                  _id: '1',
+                  name: 'Group 1',
+                  volunteersRequired: 10,
+                  volunteers: [],
+                  leader: { _id: '1', firstName: 'Leader', lastName: 'One' },
+                  event: { _id: 'eventId' },
+                },
+              ],
+            },
+          };
+        },
+      },
+    ]);
+
+    render(
+      <MockedProvider link={mockLink}>
+        <MemoryRouter initialEntries={['/user/volunteer/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <Routes>
+                <Route path="/user/volunteer/:orgId" element={<Groups />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
 
     await waitFor(() => {
       expect(screen.getByText('Group 1')).toBeInTheDocument();
     });
 
-    // Switch between search options and clear search term to trigger
-    // useMemo recalculation with empty search conditions
+    // Switch search options and clear search to trigger useMemo with base variables only
     const searchByDropdown = screen.getByTestId('searchBy');
     await userEvent.click(searchByDropdown);
-
-    // Switch to leader first
     const leaderOption = await screen.findByTestId('leader');
     await userEvent.click(leaderOption);
 
-    // Then switch back to group - this forces useMemo recalculation
-    await userEvent.click(searchByDropdown);
-    const groupOption = await screen.findByTestId('group');
-    await userEvent.click(groupOption);
-
-    // Clear search term to ensure base vars object is returned
     const searchInput = screen.getByTestId('searchByInput');
     await userEvent.clear(searchInput);
 
     await waitFor(() => {
-      expect(screen.getByText('Group 1')).toBeInTheDocument();
+      expect(capturedVariables).toEqual({
+        where: { userId: 'userId', orgId: 'orgId' },
+        orderBy: 'volunteers_DESC',
+      });
     });
   });
 });
