@@ -226,6 +226,7 @@
     "OR": "OU",
     "imageUploadError": "Échec du téléchargement de l'image. Veuillez réessayer.",
     "imageUploadSuccess": "Image téléchargée avec succès.",
+    "invalidFileType": "Type de fichier invalide. Veuillez télécharger une image valide.",
     "congratulationOrgCreated": "Félicitations ! L'organisation est créée.",
     "goToStore": "Aller au magasin",
     "manageFeaturesInfo": "Gérez les fonctionnalités et les plugins disponibles pour cette organisation.",
@@ -1633,7 +1634,9 @@
     "preview": "Aperçu",
     "bannerAd": "Bannière publicitaire",
     "popupAd": "Annonce popup",
-    "menuAd": "Annonce de menu"
+    "menuAd": "Annonce de menu",
+    "searchAdvertisements": "Rechercher des annonces",
+    "advertisementLoading": "Chargement des annonces...."
   },
   "userChat": {
     "title": "Discussions",
@@ -1940,7 +1943,9 @@
     "viewDetails": "Voir les détails de {{name}}",
     "editVolunteerGroup": "Modifier le groupe de bénévoles {{name}}",
     "deleteVolunteerGroup": "Supprimer le groupe de bénévoles {{name}}",
-    "deleteVolunteerEntry": "Supprimer l'entrée bénévole {{name}}"
+    "deleteVolunteerEntry": "Supprimer l'entrée bénévole {{name}}",
+    "viewGroup": "Voir le groupe de bénévoles",
+    "editGroup": "Modifier le groupe de bénévoles"
   },
   "userVolunteer": {
     "title": "Volontariat",

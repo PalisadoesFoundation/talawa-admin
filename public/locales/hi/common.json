@@ -229,5 +229,12 @@
   "organizationEventDescription": "संगठन के सभी सदस्यों के लिए दृश्य",
   "inviteOnlyEvent": "केवल आमंत्रण",
   "inviteOnlyEventDescription": "केवल आमंत्रित सदस्यों और ईवेंट व्यवस्थापकों के लिए दृश्य",
-  "to": "को"
+  "to": "को",
+  "invalidFile": "अमान्य फ़ाइल",
+  "customRecurrence": "कस्टम पुनरावृत्ति",
+  "selectAtLeastOneDay": "कृपया कम से कम एक दिन चुनें",
+  "invalidDetailsMessage": "अमान्य विवरण। कृपया अपना इनपुट जांचें।",
+  "logoutFailed": "लॉगआउट विफल रहा। कृपया पुनः प्रयास करें।",
+  "or": "या",
+  "eventNotFound": "ईवेंट आईडी {{id}} के साथ नहीं मिला"
 }

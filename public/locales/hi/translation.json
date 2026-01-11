@@ -226,6 +226,7 @@
     "OR": "या",
     "imageUploadError": "छवि अपलोड विफल। कृपया पुनः प्रयास करें।",
     "imageUploadSuccess": "छवि सफलतापूर्वक अपलोड की गई।",
+    "invalidFileType": "अमान्य फ़ाइल प्रकार। कृपया एक मान्य छवि अपलोड करें।",
     "congratulationOrgCreated": "बधाई हो! संगठन बनाया गया है।",
     "goToStore": "स्टोर पर जाएं",
     "manageFeaturesInfo": "इस संगठन के लिए उपलब्ध सुविधाओं और प्लगइन्स का प्रबंधन करें।",
@@ -1633,7 +1634,9 @@
     "preview": "पूर्वावलोकन",
     "bannerAd": "बैनर विज्ञापन",
     "popupAd": "पॉपअप विज्ञापन",
-    "menuAd": "मेनू विज्ञापन"
+    "menuAd": "मेनू विज्ञापन",
+    "searchAdvertisements": "विज्ञापन खोजें",
+    "advertisementLoading": "विज्ञापन लोड हो रहा है..."
   },
   "userChat": {
     "title": "चैट्स",
@@ -1940,7 +1943,9 @@
     "viewDetails": "{{name}} का विवरण देखें",
     "editVolunteerGroup": "{{name}} स्वयंसेवक समूह संपादित करें",
     "deleteVolunteerGroup": "{{name}} स्वयंसेवक समूह हटाएं",
-    "deleteVolunteerEntry": "{{name}} स्वयंसेवक प्रविष्टि हटाएं"
+    "deleteVolunteerEntry": "{{name}} स्वयंसेवक प्रविष्टि हटाएं",
+    "viewGroup": "समूह देखें",
+    "editGroup": "समूह संपादित करें"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",

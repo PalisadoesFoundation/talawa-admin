@@ -226,6 +226,7 @@
     "enableEverything": "Habilitar todo",
     "imageUploadError": "Error al cargar la imagen",
     "imageUploadSuccess": "Imagen cargada con éxito",
+    "invalidFileType": "Tipo de archivo inválido. Por favor, cargue una imagen válida.",
     "congratulationOrgCreated": "¡Felicidades! La Organización ha sido creada.",
     "goToStore": "Ir a la tienda",
     "manageFeaturesInfo": "Gestiona las funciones y plugins disponibles para esta organización.",
@@ -1632,7 +1633,9 @@
     "preview": "Vista previa",
     "bannerAd": "Anuncio de banner",
     "popupAd": "Anuncio emergente",
-    "menuAd": "Anuncio de menú"
+    "menuAd": "Anuncio de menú",
+    "searchAdvertisements": "Buscar anuncios",
+    "advertisementLoading": "Cargando anuncios..."
   },
   "userChat": {
     "title": "Chats",
@@ -1939,7 +1942,9 @@
     "viewDetails": "Ver detalles de {{name}}",
     "editVolunteerGroup": "Editar grupo de voluntarios {{name}}",
     "deleteVolunteerGroup": "Eliminar grupo de voluntarios {{name}}",
-    "deleteVolunteerEntry": "Eliminar entrada de voluntario {{name}}"
+    "deleteVolunteerEntry": "Eliminar entrada de voluntario {{name}}",
+    "viewGroup": "Ver grupo",
+    "editGroup": "Editar grupo"
   },
   "userVolunteer": {
     "title": "Voluntariado",

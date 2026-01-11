@@ -229,5 +229,12 @@
   "organizationEventDescription": "组织的所有成员可见",
   "inviteOnlyEvent": "仅限受邀者",
   "inviteOnlyEventDescription": "仅受邀成员和活动管理员可见",
-  "to": "至"
+  "to": "至",
+  "invalidFile": "无效文件",
+  "customRecurrence": "自定义重复",
+  "selectAtLeastOneDay": "请至少选择一天",
+  "invalidDetailsMessage": "无效的详细信息。请检查您的输入。",
+  "logoutFailed": "登出失败。请重试。",
+  "or": "或",
+  "eventNotFound": "未找到 ID 为 {{id}} 的活动"
 }

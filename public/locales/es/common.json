@@ -229,5 +229,12 @@
   "organizationEventDescription": "Visible para todos los miembros de la organización",
   "inviteOnlyEvent": "Solo por invitación",
   "inviteOnlyEventDescription": "Visible solo para miembros invitados y administradores de eventos",
-  "to": "A"
+  "to": "A",
+  "invalidFile": "Archivo inválido",
+  "customRecurrence": "Recurrencia personalizada",
+  "selectAtLeastOneDay": "Por favor seleccione al menos un día",
+  "invalidDetailsMessage": "Detalles inválidos. Por favor verifique su entrada.",
+  "logoutFailed": "Error al cerrar sesión. Por favor, inténtelo de nuevo.",
+  "or": "o",
+  "eventNotFound": "Evento con id {{id}} no encontrado"
 }

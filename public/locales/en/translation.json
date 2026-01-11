@@ -231,6 +231,7 @@
     "manageFeaturesInfo": "Install and manage features from the Plugin Store for your Organization. You can also install these plugins later from Plugin Store.",
     "imageUploadError": "Image upload failed. Please try again.",
     "imageUploadSuccess": "Image uploaded successfully.",
+    "invalidFileType": "Invalid file type. Please upload a valid image.",
     "congratulationOrgCreated": "Congratulations! The Organization is created.",
     "sortOrganizations": "Sort Organizations"
   },
@@ -1632,7 +1633,9 @@
     "preview": "Preview",
     "bannerAd": "Banner Ad",
     "popupAd": "Popup Ad",
-    "menuAd": "Menu Ad"
+    "menuAd": "Menu Ad",
+    "searchAdvertisements": "Search advertisements",
+    "advertisementLoading": "Loading advertisements..."
   },
   "userChat": {
     "title": "Chats",
@@ -1939,7 +1942,9 @@
     "viewDetails": "View {{name}} details",
     "editVolunteerGroup": "Edit {{name}} volunteer group",
     "deleteVolunteerGroup": "Delete {{name}} volunteer group",
-    "deleteVolunteerEntry": "Delete {{name}} volunteer entry"
+    "deleteVolunteerEntry": "Delete {{name}} volunteer entry",
+    "viewGroup": "View group",
+    "editGroup": "Edit group"
   },
   "userVolunteer": {
     "title": "Volunteership",

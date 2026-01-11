@@ -229,5 +229,12 @@
   "organizationEventDescription": "Visible par tous les membres de l'organisation",
   "inviteOnlyEvent": "Sur invitation uniquement",
   "inviteOnlyEventDescription": "Visible uniquement par les membres invités et les administrateurs de l'événement",
-  "to": "À"
+  "to": "À",
+  "invalidFile": "Fichier invalide",
+  "customRecurrence": "Récurrence personnalisée",
+  "selectAtLeastOneDay": "Veuillez sélectionner au moins un jour",
+  "invalidDetailsMessage": "Détails invalides. Veuillez vérifier votre saisie.",
+  "logoutFailed": "Échec de la déconnexion. Veuillez réessayer.",
+  "or": "ou",
+  "eventNotFound": "Événement avec l'id {{id}} non trouvé"
 }

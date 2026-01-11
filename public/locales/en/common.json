@@ -229,5 +229,12 @@
   "organizationEventDescription": "Visible to all members of the organization",
   "inviteOnlyEvent": "Invite Only",
   "inviteOnlyEventDescription": "Visible only to invited members and event admins",
-  "to": "To"
+  "to": "To",
+  "invalidFile": "Invalid file",
+  "customRecurrence": "Custom Recurrence",
+  "selectAtLeastOneDay": "Please select at least one day",
+  "invalidDetailsMessage": "Invalid details. Please check your input.",
+  "logoutFailed": "Logout failed. Please try again.",
+  "or": "or",
+  "eventNotFound": "Event with id {{id}} not found"
 }
