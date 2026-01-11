@@ -824,7 +824,8 @@
     "percentageRaised": "% 已筹集",
     "campaignProgress": "活动进度: {{percentage}}%",
     "campaignNotFound": "未找到活动",
-    "dateRangeRequired": "请选择有效的日期范围"
+    "dateRangeRequired": "请选择有效的日期范围",
+    "campaignNameRequired": "活动名称是必填项"
   },
   "pledges": {
     "title": "基金活动承诺",

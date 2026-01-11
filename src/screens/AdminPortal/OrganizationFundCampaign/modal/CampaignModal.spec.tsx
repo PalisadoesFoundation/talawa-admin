@@ -24,10 +24,10 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { MOCKS, MOCK_ERROR } from '../OrganizationFundCampaignMocks';
-import type { InterfaceCampaignModal } from './CampaignModal';
-import CampaignModal from './CampaignModal';
+import type { InterfaceCampaignModalProps } from 'types/AdminPortal/CampaignModal/interface';
 import { vi } from 'vitest';
 import { UPDATE_CAMPAIGN_MUTATION } from 'GraphQl/Mutations/CampaignMutation';
+import CampaignModal, { getUpdatedDateIfChanged } from './CampaignModal';
 
 import {
   LocalizationProvider,
@@ -134,7 +134,7 @@ const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.fundCampaign),
 );
 
-const campaignProps: InterfaceCampaignModal[] = [
+const campaignProps: InterfaceCampaignModalProps[] = [
   {
     isOpen: true,
     hide: vi.fn(),
@@ -179,7 +179,7 @@ const getEndDateInput = () =>
 
 const renderCampaignModal = (
   link: ApolloLink,
-  props: InterfaceCampaignModal,
+  props: InterfaceCampaignModalProps,
 ): RenderResult => {
   return render(
     <MockedProvider link={link}>
@@ -696,5 +696,69 @@ describe('CampaignModal', () => {
         translations.updatedCampaign,
       );
     });
+  });
+
+  it('shows error when submitting without date range', async () => {
+    renderCampaignModal(link1, campaignProps[0]);
+
+    const startDateInput = getStartDateInput();
+    fireEvent.change(startDateInput, { target: { value: '' } });
+
+    const endDateInput = getEndDateInput();
+    fireEvent.change(endDateInput, { target: { value: '' } });
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.dateRangeRequired,
+      );
+    });
+  });
+
+  it('shows error when updating without campaign id', async () => {
+    const badProps: InterfaceCampaignModalProps = {
+      ...campaignProps[1],
+      campaign: null, // simulate missing campaign id
+    };
+
+    renderCampaignModal(link1, badProps);
+    const nameInput = screen.getByLabelText(translations.campaignName);
+    fireEvent.change(nameInput, { target: { value: 'Valid Name' } });
+
+    const startInput = screen.getByTestId('campaign-date-range-start-input');
+    const endInput = screen.getByTestId('campaign-date-range-end-input');
+
+    fireEvent.change(startInput, { target: { value: '11/01/2027' } });
+    fireEvent.change(endInput, { target: { value: '11/01/2028' } });
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.campaignNotFound,
+      );
+    });
+  });
+});
+
+describe('getUpdatedDateIfChanged', () => {
+  it('returns undefined when newDate is null', () => {
+    expect(getUpdatedDateIfChanged(null, new Date())).toBeUndefined();
+  });
+
+  it('returns undefined when dates are same', () => {
+    const d = dayjs().toISOString();
+    expect(getUpdatedDateIfChanged(d, d)).toBeUndefined();
+  });
+
+  it('returns ISO string when dates are different', () => {
+    const oldDate = dayjs().toISOString();
+    const newDate = dayjs().add(1, 'day').toDate();
+
+    const result = getUpdatedDateIfChanged(newDate, oldDate);
+    expect(typeof result).toBe('string');
   });
 });

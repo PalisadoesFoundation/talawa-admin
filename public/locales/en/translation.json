@@ -824,7 +824,8 @@
     "percentageRaised": "% Raised",
     "campaignProgress": "Campaign progress: {{percentage}}%",
     "campaignNotFound": "Campaign not found",
-    "dateRangeRequired": "Please select a valid date range"
+    "dateRangeRequired": "Please select a valid date range",
+    "campaignNameRequired": "Campaign name is required"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",

@@ -26,8 +26,6 @@ import {
 
 import type { InterfaceCampaignModalProps } from 'types/AdminPortal/CampaignModal/interface';
 
-export type InterfaceCampaignModal = InterfaceCampaignModalProps;
-
 import DateRangePicker from 'shared-components/DateRangePicker';
 import type { IDateRangeValue } from 'types/shared-components/DateRangePicker/interface';
 
@@ -58,6 +56,20 @@ import type { IDateRangeValue } from 'types/shared-components/DateRangePicker/in
  * @param props - The props for the CampaignModal component.
  * @returns JSX.Element
  */
+
+export const getUpdatedDateIfChanged = (
+  newDate: Date | string | null | undefined,
+  existingDate: Date | string | null | undefined,
+): string | undefined => {
+  if (!newDate) return undefined;
+
+  if (!existingDate || !dayjs(existingDate).isSame(dayjs(newDate), 'second')) {
+    return dayjs(newDate).toISOString();
+  }
+
+  return undefined;
+};
+
 const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
   isOpen,
   hide,
@@ -109,6 +121,12 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
+
+    if (!formState.campaignName.trim()) {
+      NotificationToast.error(t('campaignNameRequired'));
+      return;
+    }
+
     if (!campaignDateRange.startDate || !campaignDateRange.endDate) {
       NotificationToast.error(t('dateRangeRequired'));
       return;
@@ -156,6 +174,11 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
+    if (!formState.campaignName.trim()) {
+      NotificationToast.error(t('campaignNameRequired'));
+      return;
+    }
+
     if (!campaignDateRange.startDate || !campaignDateRange.endDate) {
       NotificationToast.error(t('dateRangeRequired'));
       return;
@@ -178,29 +201,20 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
         updatedFields.goalAmount = campaignGoal;
       }
       // START DATE
-      if (
-        campaignDateRange.startDate &&
-        (!campaign?.startAt ||
-          !dayjs(campaign.startAt).isSame(
-            dayjs(campaignDateRange.startDate),
-            'second',
-          ))
-      ) {
-        updatedFields.startAt = dayjs(
-          campaignDateRange.startDate,
-        ).toISOString();
+      const startAtUpdate = getUpdatedDateIfChanged(
+        campaignDateRange.startDate,
+        campaign?.startAt,
+      );
+      if (startAtUpdate) {
+        updatedFields.startAt = startAtUpdate;
       }
 
-      // END DATE
-      if (
-        campaignDateRange.endDate &&
-        (!campaign?.endAt ||
-          !dayjs(campaign.endAt).isSame(
-            dayjs(campaignDateRange.endDate),
-            'second',
-          ))
-      ) {
-        updatedFields.endAt = dayjs(campaignDateRange.endDate).toISOString();
+      const endAtUpdate = getUpdatedDateIfChanged(
+        campaignDateRange.endDate,
+        campaign?.endAt,
+      );
+      if (endAtUpdate) {
+        updatedFields.endAt = endAtUpdate;
       }
 
       await updateCampaign({

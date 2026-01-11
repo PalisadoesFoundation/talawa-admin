@@ -824,7 +824,8 @@
     "percentageRaised": "% Recaudado",
     "campaignProgress": "Progreso de la campaña: {{percentage}}%",
     "campaignNotFound": "Campaña no encontrada",
-    "dateRangeRequired": "Por favor seleccione un rango de fechas válido"
+    "dateRangeRequired": "Por favor seleccione un rango de fechas válido",
+    "campaignNameRequired": "El nombre de la campaña es obligatorio"
   },
   "pledges": {
     "title": "Compromisos de Campaña de Financiamiento",
