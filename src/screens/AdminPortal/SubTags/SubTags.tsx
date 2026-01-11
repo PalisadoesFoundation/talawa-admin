@@ -54,20 +54,16 @@ import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
 import styles from './SubTags.module.css';
-import { DataGrid } from 'shared-components/DataGridWrapper';
+import { DataGridWrapper } from 'shared-components/DataGridWrapper';
 import type {
   InterfaceOrganizationSubTagsQuery,
   SortedByType,
 } from 'utils/organizationTagsUtils';
-import {
-  dataGridStyle,
-  TAGS_QUERY_DATA_CHUNK_SIZE,
-} from 'utils/organizationTagsUtils';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import type {
   GridCellParams,
   GridColDef,
 } from 'shared-components/DataGridWrapper';
-import { Stack } from '@mui/material';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -442,31 +438,15 @@ function SubTags(): JSX.Element {
                   }
                   scrollableTarget="subTagsScrollableDiv"
                 >
-                  <DataGrid
-                    disableColumnMenu
-                    columnBufferPx={7}
-                    hideFooter={true}
-                    getRowId={(row) => row.id}
-                    slots={{
-                      noRowsOverlay: () => (
-                        <Stack
-                          height="100%"
-                          alignItems="center"
-                          justifyContent="center"
-                        >
-                          {t('noTagsFound')}
-                        </Stack>
-                      ),
-                    }}
-                    sx={dataGridStyle}
-                    getRowClassName={() => `${styles.rowBackground}`}
-                    rowHeight={65}
+                  <DataGridWrapper
                     rows={subTagsList?.map((subTag, index) => ({
                       id: index + 1,
                       ...subTag,
                     }))}
                     columns={columns}
-                    isRowSelectable={() => false}
+                    emptyStateProps={{
+                      message: t('noTagsFound'),
+                    }}
                   />
                 </InfiniteScroll>
               </div>

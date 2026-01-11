@@ -1,7 +1,6 @@
 // Reusable types and shared styles for ReportingTable component
 export const ROW_HEIGHT: number = 60;
 export const PAGE_SIZE: number = 10;
-export const COLUMN_BUFFER_PX: number = 7;
 
 /**
  * Shared sx/style object for DataGrid across the app.
