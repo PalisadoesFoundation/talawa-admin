@@ -1032,7 +1032,12 @@
     "disabled": "Désactivé",
     "accepted": "Accepté",
     "declined": "Refusé",
-    "no_response": "Aucune réponse"
+    "no_response": "Aucune réponse",
+    "success": "Succès",
+    "warning": "Avertissement",
+    "error": "Erreur",
+    "info": "Info",
+    "neutral": "Neutre"
   },
   "orgContribution": {
     "title": "Contributions de Talawa",
@@ -1585,7 +1590,6 @@
     "enterName": "Entrez le nom",
     "enterDescription": "Entrez la description",
     "enterLocation": "Entrez l'emplacement",
-
     "registerable": "Est enregistrable",
     "monthlyCalendarView": "Calendrier mensuel",
     "yearlyCalendarView": "Calendrier annuel",
