@@ -23,7 +23,7 @@ MUI's DataGrid that provides consistent search, sorting, pagination, and styling
 
 > `optional` **actionColumn**: (`row`) => `ReactNode`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L120)
+Defined in: [src/types/DataGridWrapper/interface.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L124)
 
 A function to render custom content in the "Actions" column (appended to the right).
 
@@ -58,7 +58,7 @@ Defines headers, widths, and cell rendering logic.
 
 > `optional` **emptyStateMessage**: `string`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:150](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L150)
+Defined in: [src/types/DataGridWrapper/interface.ts:154](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L154)
 
 Custom message to display when there are no rows and `loading` is false.
 Use `emptyStateProps` instead for full customization.
@@ -71,7 +71,7 @@ This property is maintained for backward compatibility.
 
 > `optional` **emptyStateProps**: [`InterfaceEmptyStateProps`](../../../shared-components/EmptyState/interface/interfaces/InterfaceEmptyStateProps.md)
 
-Defined in: [src/types/DataGridWrapper/interface.ts:142](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L142)
+Defined in: [src/types/DataGridWrapper/interface.ts:146](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L146)
 
 Full EmptyState component props for flexible empty state rendering.
 Takes precedence over `emptyStateMessage`.
@@ -99,7 +99,7 @@ emptyStateProps={{
 
 > `optional` **error**: `ReactNode`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:155](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L155)
+Defined in: [src/types/DataGridWrapper/interface.ts:159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L159)
 
 Error message or component to display instead of the grid when data fetch fails.
 
@@ -119,7 +119,7 @@ If `true`, displays a loading indicator (e.g., Progress Bar) overlaying the grid
 
 > `optional` **onRowClick**: (`row`) => `void`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L113)
+Defined in: [src/types/DataGridWrapper/interface.ts:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L117)
 
 Callback fired when a row is clicked.
 
@@ -141,7 +141,7 @@ The data object of the clicked row.
 
 > `optional` **paginationConfig**: `object`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L100)
+Defined in: [src/types/DataGridWrapper/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L104)
 
 Configuration for pagination.
 
@@ -318,6 +318,28 @@ Note: This is separate from MUI DataGrid's native column header sorting.
 #### defaultSortOrder?
 
 > `optional` **defaultSortOrder**: `"desc"` \| `"asc"`
+
+#### onSortChange()?
+
+> `optional` **onSortChange**: (`value`) => `void`
+
+Callback when sort changes in server-side mode.
+
+##### Parameters
+
+###### value
+
+`string` | `number`
+
+##### Returns
+
+`void`
+
+#### selectedSort?
+
+> `optional` **selectedSort**: `string` \| `number`
+
+Current selected sort option for server-side mode.
 
 #### sortingOptions?
 

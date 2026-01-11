@@ -79,7 +79,7 @@ function Groups(): JSX.Element {
   }
   const [group, setGroup] = useState<InterfaceVolunteerGroupInfo | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, _setSortBy] = useState<'volunteers_ASC' | 'volunteers_DESC'>(
+  const [sortBy, setSortBy] = useState<'volunteers_ASC' | 'volunteers_DESC'>(
     'volunteers_DESC',
   );
   const [searchBy, setSearchBy] = useState<'leader' | 'group'>('group');
@@ -299,13 +299,11 @@ function Groups(): JSX.Element {
               { label: t('mostVolunteers'), value: 'volunteers_DESC' },
               { label: t('leastVolunteers'), value: 'volunteers_ASC' },
             ],
+            selectedSort: sortBy,
+            onSortChange: (value: string | number) =>
+              setSortBy(value as 'volunteers_DESC' | 'volunteers_ASC'),
           }}
           emptyStateMessage={t('noVolunteerGroups')}
-          error={
-            groupsError
-              ? tErrors('errorLoading', { entity: 'Volunteer Groups' })
-              : undefined
-          }
         />
         {group && (
           <>

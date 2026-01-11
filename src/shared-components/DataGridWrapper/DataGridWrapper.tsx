@@ -88,6 +88,9 @@ export function DataGridWrapper<T extends { id: string | number }>(
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [selectedSort, setSelectedSort] = useState<string | number>(() => {
+    if (sortConfig?.selectedSort) {
+      return sortConfig.selectedSort;
+    }
     if (sortConfig?.defaultSortField && sortConfig?.defaultSortOrder) {
       return `${sortConfig.defaultSortField}_${sortConfig.defaultSortOrder}`;
     }
@@ -106,6 +109,19 @@ export function DataGridWrapper<T extends { id: string | number }>(
   const currentDebouncedSearchTerm = searchConfig?.serverSide
     ? (searchConfig.searchTerm ?? '')
     : debouncedSearchTerm;
+
+  // Runtime validation for server-side configuration
+  useEffect(() => {
+    if (
+      searchConfig?.serverSide &&
+      searchConfig.enabled &&
+      !searchConfig.onSearchChange
+    ) {
+      console.warn(
+        '[DataGridWrapper] Server-side search enabled but onSearchChange callback is missing',
+      );
+    }
+  }, [searchConfig]);
 
   // Debounce search term to improve performance (client-side only)
   useEffect(() => {
@@ -221,8 +237,13 @@ export function DataGridWrapper<T extends { id: string | number }>(
                       type: 'sort' as const,
                       options: sortConfig.sortingOptions,
                       selectedOption: selectedSort,
-                      onOptionChange: (value: string | number) =>
-                        setSelectedSort(value),
+                      onOptionChange: (value: string | number) => {
+                        if (sortConfig.onSortChange) {
+                          sortConfig.onSortChange(value);
+                        } else {
+                          setSelectedSort(value);
+                        }
+                      },
                       dataTestIdPrefix: 'sort',
                     },
                   ]
@@ -234,27 +255,9 @@ export function DataGridWrapper<T extends { id: string | number }>(
           <SearchBar
             placeholder={searchConfig.placeholder ?? tCommon('search')}
             value={currentSearchTerm}
-            onChange={(val) => {
-              if (searchConfig.serverSide && searchConfig.onSearchChange) {
-                searchConfig.onSearchChange(val);
-              } else {
-                setSearchTerm(val);
-              }
-            }}
-            onSearch={(val) => {
-              if (searchConfig.serverSide && searchConfig.onSearchChange) {
-                searchConfig.onSearchChange(val);
-              } else {
-                setSearchTerm(val);
-              }
-            }}
-            onClear={() => {
-              if (searchConfig.serverSide && searchConfig.onSearchChange) {
-                searchConfig.onSearchChange('');
-              } else {
-                setSearchTerm('');
-              }
-            }}
+            onChange={(val) => setSearchTerm(val)}
+            onSearch={(val) => setSearchTerm(val)}
+            onClear={() => setSearchTerm('')}
             inputTestId={searchConfig.searchInputTestId ?? 'search-bar'}
             aria-label={tCommon('search')}
           />
@@ -264,7 +267,7 @@ export function DataGridWrapper<T extends { id: string | number }>(
             dataTestIdPrefix="sort"
             sortingOptions={sortConfig.sortingOptions}
             selectedOption={selectedSort}
-            onSortChange={setSelectedSort}
+            onSortChange={sortConfig.onSortChange || setSelectedSort}
             type="sort"
             title={tCommon('sortBy')}
             buttonLabel={tCommon('sort')}
