@@ -700,7 +700,6 @@ const ORGANIZATION_BASIC_FIELDS = gql`
     countryCode
     avatarURL
     createdAt
-    updatedAt
     isUserRegistrationRequired
   }
 `;
