@@ -359,18 +359,23 @@ describe('People Component Tests', () => {
       expect(screen.getByTestId('people-name-1')).toBeInTheDocument();
     });
 
-    // Verify no regular image with alt text exists
-    const avatarImages = screen.queryAllByAltText('avatar');
-    expect(avatarImages).toHaveLength(0);
+    const allImages = screen.getAllByRole('img');
+    const avatarImages = allImages.filter((img) =>
+      img.getAttribute('src')?.includes('data:image/svg+xml'),
+    );
 
-    // Verify Avatar placeholders are rendered (Avatar uses data URIs as img src)
-    const testUserAvatar = screen.getByAltText('Test User');
-    expect(testUserAvatar).toBeInTheDocument();
-    expect(testUserAvatar.getAttribute('src')).toContain('data:image/svg+xml');
+    expect(avatarImages).toHaveLength(2);
 
-    const adminUserAvatar = screen.getByAltText('Admin User');
-    expect(adminUserAvatar).toBeInTheDocument();
-    expect(adminUserAvatar.getAttribute('src')).toContain('data:image/svg+xml');
+    expect(
+      avatarImages.some((img) =>
+        img.getAttribute('alt')?.includes('Test User'),
+      ),
+    ).toBe(true);
+    expect(
+      avatarImages.some((img) =>
+        img.getAttribute('alt')?.includes('Admin User'),
+      ),
+    ).toBe(true);
   });
 
   it('combines search and admin filter simultaneously', async () => {

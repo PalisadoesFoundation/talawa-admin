@@ -12,3 +12,14 @@ export interface IUserNode {
   emailAddress?: string | null;
   createdAt?: string | null;
 }
+
+export interface InterfaceRemoveMemberVariables {
+  organizationId: string;
+  memberId: string;
+}
+
+export interface InterfaceRemoveMemberData {
+  deleteOrganizationMembership: {
+    id: string;
+  };
+}

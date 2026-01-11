@@ -207,12 +207,12 @@ for append-only pagination but may cause issues if items are reordered.
 // With keyExtractor for stable keys:
 <CursorPaginationManager
   keyExtractor={(user) => user.id}
-  renderItem={(user) => <div>{user.name}</div>}
+  renderItem={(user) => \<div\>{user.name}\</div\>}
 />
 
 // Without keyExtractor (uses index):
 <CursorPaginationManager
-  renderItem={(user) => <div>{user.name}</div>}
+  renderItem={(user) => \<div\>{user.name}\</div\>}
 />
 ```
 
@@ -222,10 +222,17 @@ for append-only pagination but may cause issues if items are reordered.
 
 > `optional` **tableMode**: `boolean`
 
-Defined in: [src/types/CursorPagination/interface.ts:133](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L133)
+Defined in: [src/types/CursorPagination/interface.ts:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L139)
 
 When true, renders items without wrapper divs for table contexts
-Use this when renderItem returns `<tr>` elements to be placed inside `<tbody>`
+Use this when renderItem returns `\<tr\>` elements to be placed inside `\<tbody\>`
+
+#### Remarks
+
+In tableMode, `renderItem`, `loadingComponent`, and `emptyStateComponent` should
+return table-safe
+nodes (e.g., `<tr>` or fragments containing `<tr>`), suitable as direct children
+of `<tbody>`.
 
 #### Default Value
 

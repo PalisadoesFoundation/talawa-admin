@@ -66,7 +66,11 @@ import EmptyState from 'shared-components/EmptyState/EmptyState';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
-import type { IUserNode } from 'types/AdminPortal/OrganizationPeople/interface';
+import type {
+  IUserNode,
+  InterfaceRemoveMemberData,
+  InterfaceRemoveMemberVariables,
+} from 'types/AdminPortal/OrganizationPeople/interface';
 
 /**
  * Maps numeric filter state to string option identifiers.
@@ -95,7 +99,9 @@ function OrganizationPeople(): JSX.Element {
   const role = location?.state;
   const { orgId: currentUrl } = useParams();
 
-  const [state, setState] = useState(role?.role || 0);
+  const [state, setState] = useState<number>(
+    typeof role?.role === 'number' ? role.role : 0,
+  );
   const [searchTerm, setSearchTerm] = useState('');
 
   const [showRemoveModal, setShowRemoveModal] = useState(false);
@@ -103,7 +109,10 @@ function OrganizationPeople(): JSX.Element {
 
   const [refetchTrigger, setRefetchTrigger] = useState(0);
 
-  const [removeMember] = useMutation(REMOVE_MEMBER_MUTATION_PG);
+  const [removeMember, { loading: isDeleting }] = useMutation<
+    InterfaceRemoveMemberData,
+    InterfaceRemoveMemberVariables
+  >(REMOVE_MEMBER_MUTATION_PG);
 
   useEffect(() => {
     setRefetchTrigger((prev) => prev + 1);
@@ -139,7 +148,7 @@ function OrganizationPeople(): JSX.Element {
         variables: { memberId: selectedMemId, organizationId: currentUrl },
       });
 
-      if (data) {
+      if (data?.deleteOrganizationMembership?.id) {
         NotificationToast.success(
           tCommon('removedSuccessfully', { item: tCommon('removeMember') }),
         );
@@ -207,7 +216,7 @@ function OrganizationPeople(): JSX.Element {
       <Button variant="secondary" onClick={handleCloseModal}>
         {tCommon('cancel')}
       </Button>
-      <Button variant="danger" onClick={handleDeleteUser}>
+      <Button variant="danger" onClick={handleDeleteUser} disabled={isDeleting}>
         {tCommon('remove')}
       </Button>
     </>
@@ -296,7 +305,7 @@ function OrganizationPeople(): JSX.Element {
               renderItem={(memberItem: IUserNode, memberIndex: number) => {
                 const rowNumber = memberIndex + 1;
                 return (
-                  <tr key={memberItem.id} className={styles.rowBackground}>
+                  <tr className={styles.rowBackground}>
                     <td className={`${styles.tableCell} ${styles.centerAlign}`}>
                       {rowNumber}
                     </td>
