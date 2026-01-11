@@ -1,0 +1,68 @@
+.modalHeader:global(.modal-header) {
+  border: none;
+  background-color: var(--color-white);
+  padding: var(--space-5);
+  color: var(--color-black);
+}
+
+/* Make sure the modal title is dark grey */
+.modalHeader:global(.modal-header) div,
+.modalHeader:global(.modal-header) :global(.modal-title) {
+  color: var(--color-gray-700);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xl);
+}
+
+/* Close button styling */
+.modalHeader:global(.modal-header) :global(button.close),
+.modalHeader:global(.modal-header) :global(.btn-close) {
+  color: var(--color-red-500);
+  opacity: 1;
+}
+
+.removeButton:global(.btn) {
+  margin-bottom: var(--space-4);
+  background-color: var(--color-red-100);
+  color: var(--color-red-500);
+  margin-right: var(--space-4);
+  --bs-btn-border-color: var(--color-red-100);
+}
+
+.removeButton:global(.btn):is(:hover, :active) {
+  background-color: var(--color-red-500);
+  border-color: var(--color-red-500);
+  color: var(--color-white);
+}
+
+.removeButton:global(.btn):focus-visible {
+  background-color: var(--color-red-500);
+  border-color: var(--color-red-500);
+  color: var(--color-white);
+  outline: 2px solid var(--color-red-500);
+  outline-offset: 2px;
+}
+
+.addButton:global(.btn) {
+  margin-bottom: var(--space-4);
+  color: var(--color-gray-700);
+  background-color: var(--color-blue-200);
+  border-color: var(--color-blue-200);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.addButton:global(.btn):is(:hover, :active) {
+  background-color: var(--color-blue-500);
+  border-color: var(--color-gray-700);
+}
+
+.addButton:global(.btn):focus-visible {
+  background-color: var(--color-blue-500);
+  border-color: var(--color-gray-700);
+  outline: 2px solid var(--color-blue-500);
+  outline-offset: 2px;
+}
+
+.addButton:disabled {
+  background-color: var(--color-gray-50);
+  border-color: var(--color-blue-200);
+}

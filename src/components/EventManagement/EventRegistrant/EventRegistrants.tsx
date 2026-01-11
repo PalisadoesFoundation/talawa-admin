@@ -1,21 +1,20 @@
 /**
- * @EventRegistrants Component
  *
  * This component is responsible for displaying a list of event registrants
  * and attendees in a tabular format. It fetches data from GraphQL queries
  * and combines registrants and attendees data to display relevant information.
  *
- * @Features
+ * Features
  * - Fetches event registrants and attendees using GraphQL lazy queries.
  * - Combines registrants and attendees data to display enriched information.
  * - Displays a table with serial number, registrant name, registration date,
  *   and creation time.
  * - Provides a button to add new registrants and a wrapper for event check-in.
  *
- * @Props
+ * Props
  * - None
  *
- * @Hooks
+ * Hooks
  * - `useTranslation`: For internationalization of text content.
  * - `useParams`: To extract `orgId` and `eventId` from the route parameters.
  * - `useLazyQuery`: To fetch event registrants and attendees data.
@@ -23,30 +22,19 @@
  * - `useEffect`: To fetch and combine data on component mount and updates.
  * - `useCallback`: To memoize the data refresh function.
  *
- * @GraphQLQueries
+ * GraphQLQueries
  * - `EVENT_REGISTRANTS`: Fetches the list of registrants for the event.
  * - `EVENT_ATTENDEES`: Fetches the list of attendees for the event.
  *
- * @Returns
+ * @returns
  * - A JSX element containing a table of event registrants and attendees.
  *
- * @Usage
+ * Usage
  * - This component is used in the event management section of the application
  *   to display and manage event registrants and attendees.
  */
 import React, { useEffect, useState, useCallback } from 'react';
-import {
-  Paper,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableBody,
-} from '@mui/material';
-import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
-import styles from 'style/app-fixed.module.css';
 import { useLazyQuery, useQuery, useMutation } from '@apollo/client';
 import {
   EVENT_REGISTRANTS,
@@ -57,7 +45,10 @@ import { REMOVE_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
 import { useParams } from 'react-router';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
-import type { InterfaceUserAttendee } from 'types/User/interface';
+import type { InterfaceUserAttendee } from 'types/shared-components/User/interface';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import DataTable from 'shared-components/DataTable/DataTable';
+import { IColumnDef } from 'types/shared-components/DataTable/interface';
 
 function EventRegistrants(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventRegistrant' });
@@ -138,23 +129,25 @@ function EventRegistrants(): JSX.Element {
     (userId: string): void => {
       // Check if user is already checked in
       if (checkedInUsers.includes(userId)) {
-        toast.error('Cannot unregister a user who has already checked in');
+        NotificationToast.error(
+          'Cannot unregister a user who has already checked in',
+        );
         return;
       }
 
-      toast.warn('Removing the attendee...');
+      NotificationToast.warning(t('removingAttendee') as string);
       const removeVariables = isRecurring
         ? { userId, recurringEventInstanceId: eventId }
         : { userId, eventId: eventId };
 
       removeRegistrantMutation({ variables: removeVariables })
         .then(() => {
-          toast.success('Attendee removed successfully');
+          NotificationToast.success(t('attendeeRemovedSuccessfully') as string);
           refreshData(); // Refresh the data after removal
         })
         .catch((err) => {
-          toast.error('Error removing attendee');
-          toast.error(err.message);
+          NotificationToast.error(t('errorRemovingAttendee') as string);
+          NotificationToast.error(err.message);
         });
     },
     [
@@ -195,6 +188,70 @@ function EventRegistrants(): JSX.Element {
       setCombinedData([]);
     }
   }, [registrants, checkedInUsers]);
+
+  const tableData = combinedData.map((row, index) => ({
+    ...row,
+    __serial: index + 1,
+  }));
+
+  const columns: IColumnDef<
+    InterfaceUserAttendee & {
+      isCheckedIn?: boolean;
+      name?: string;
+      __serial: number;
+    }
+  >[] = [
+    {
+      id: 'serial',
+      header: t('serialNumber'),
+      accessor: '__serial',
+    },
+    {
+      id: 'registrant',
+      header: t('registrant'),
+      accessor: 'name',
+    },
+    {
+      id: 'registeredAt',
+      header: t('registeredAt'),
+      accessor: 'createdAt',
+    },
+    {
+      id: 'createdAt',
+      header: t('createdAt'),
+      accessor: (row) =>
+        row.time && row.time !== 'N/A'
+          ? new Date(`1970-01-01T${row.time}`).toLocaleTimeString([], {
+              hour: 'numeric',
+              minute: '2-digit',
+              hour12: true,
+            })
+          : 'N/A',
+    },
+    {
+      id: 'options',
+      header: t('options'),
+      accessor: () => null,
+      render: (_val, row) => (
+        <button
+          type="button"
+          className={`btn btn-sm ${
+            row.isCheckedIn ? 'btn-secondary' : 'btn-outline-danger'
+          }`}
+          onClick={() => deleteRegistrant(row.user.id)}
+          disabled={row.isCheckedIn}
+          title={
+            row.isCheckedIn
+              ? t('cannotUnregisterCheckedInTooltip')
+              : t('unregister')
+          }
+        >
+          {row.isCheckedIn ? t('checkedIn') : t('unregister')}
+        </button>
+      ),
+    },
+  ];
+
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center">
@@ -214,125 +271,14 @@ function EventRegistrants(): JSX.Element {
           />
         )}
       </div>
-      <TableContainer
-        component={Paper}
-        className="mt-3"
-        sx={{ borderRadius: '16px' }}
-      >
-        <Table aria-label={t('eventRegistrantsTable')} role="grid">
-          <TableHead>
-            <TableRow>
-              <TableCell
-                data-testid="table-header-serial"
-                className={styles.customcell}
-                role="columnheader"
-                aria-sort="none"
-              >
-                {t('serialNumber')}
-              </TableCell>
-              <TableCell
-                data-testid="table-header-registrant"
-                className={styles.customcell}
-              >
-                {t('registrant')}
-              </TableCell>
-              <TableCell
-                data-testid="table-header-registered-at"
-                className={styles.customcell}
-              >
-                {t('registeredAt')}
-              </TableCell>
-              <TableCell
-                data-testid="table-header-created-at"
-                className={styles.customcell}
-              >
-                {t('createdAt')}
-              </TableCell>
-              <TableCell
-                data-testid="table-header-options"
-                className={styles.customcell}
-                align="center"
-              >
-                {t('options')}
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {combinedData.length === 0 ? (
-              <TableRow className={styles.noBorderRow}>
-                <TableCell
-                  colSpan={5}
-                  align="center"
-                  data-testid="no-registrants"
-                >
-                  {t('noRegistrantsFound')}
-                </TableCell>
-              </TableRow>
-            ) : (
-              combinedData.map((data, index) => (
-                <TableRow key={data.id} data-testid={`registrant-row-${index}`}>
-                  <TableCell
-                    component="th"
-                    scope="row"
-                    data-testid={`serial-number-${index + 1}`}
-                  >
-                    {index + 1}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    data-testid={`attendee-name-${index}`}
-                  >
-                    {data.name}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    data-testid={`registrant-registered-at-${index}`}
-                  >
-                    {data.createdAt}
-                  </TableCell>
-                  <TableCell
-                    align="left"
-                    data-testid={`registrant-created-at-${index}`}
-                  >
-                    {data.time && data.time !== 'N/A'
-                      ? new Date(`1970-01-01T${data.time}`).toLocaleTimeString(
-                          [],
-                          {
-                            hour: 'numeric',
-                            minute: '2-digit',
-                            hour12: true,
-                          },
-                        )
-                      : 'N/A'}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    data-testid={`registrant-options-${index}`}
-                  >
-                    <button
-                      className={`btn btn-sm ${
-                        data.isCheckedIn
-                          ? 'btn-secondary'
-                          : 'btn-outline-danger'
-                      }`}
-                      onClick={() => deleteRegistrant(data.user.id)}
-                      disabled={data.isCheckedIn}
-                      data-testid={`delete-registrant-${index}`}
-                      title={
-                        data.isCheckedIn
-                          ? 'Cannot unregister checked-in user'
-                          : 'Unregister'
-                      }
-                    >
-                      {data.isCheckedIn ? 'Checked In' : 'Unregister'}
-                    </button>
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
+
+      <DataTable
+        data={tableData}
+        columns={columns}
+        rowKey="id"
+        ariaLabel={t('eventRegistrantsTable')}
+        emptyMessage={t('noRegistrantsFound')}
+      />
     </div>
   );
 }

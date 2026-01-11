@@ -22,7 +22,7 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 }));
 
 // Mock CSS module
-vi.mock('style/app-fixed.module.css', () => ({
+vi.mock('./UnassignUserTagModal.module.css', () => ({
   default: {
     modalHeader: 'modalHeader-class',
     removeButton: 'removeButton-class',

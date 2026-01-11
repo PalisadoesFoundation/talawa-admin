@@ -1418,7 +1418,13 @@
     "createdAt": "Creado en",
     "options": "Opciones",
     "addRegistrant": "Agregar registrado",
-    "noRegistrantsFound": "No se encontraron registrados"
+    "noRegistrantsFound": "No se encontraron registrados",
+    "removingAttendee": "Eliminando asistente...",
+    "attendeeRemovedSuccessfully": "Asistente eliminado con éxito",
+    "errorRemovingAttendee": "Error al eliminar asistente. Por favor, inténtelo de nuevo.",
+    "checkedIn": "Registrado",
+    "unregister": "Dar de baja",
+    "cannotUnregisterCheckedInTooltip": "No se puede dar de baja a un usuario que ya se registró"
   },
   "onSpotAttendee": {
     "title": "Asistente en el lugar",
@@ -1841,6 +1847,13 @@
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",
     "errorRemovingAttendee": "Error al eliminar asistente",
+    "eventRegistrantsTitle": "Registrados al evento",
+    "inviteByEmailButton": "Invitar por correo electrónico",
+    "addRegistrantButton": "Agregar registrado",
+    "noRegistrationsFound": "No se encontraron registros",
+    "addOnspotRegistrationLink": "Agregar enlace de registro en el lugar",
+    "addRegistrantLabel": "Agregar registrado",
+    "addRegistrantPlaceholder": "Ingrese el correo electrónico del registrado",
     "inviteByEmail": {
       "addRecipient": "Agregar destinatario",
       "email": "Correo electrónico",
@@ -2101,7 +2114,12 @@
     "disabled": "Deshabilitado",
     "accepted": "Aceptado",
     "declined": "Declinado",
-    "no_response": "Sin respuesta"
+    "no_response": "Sin respuesta",
+    "success": "Éxito",
+    "warning": "Advertencia",
+    "error": "Error",
+    "info": "Información",
+    "neutral": "Neutral"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comentario eliminado exitosamente",

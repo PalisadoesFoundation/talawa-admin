@@ -43,6 +43,31 @@ const getPickerInputByTestId = (testId: string): HTMLElement => {
   return input;
 };
 
+/**
+ * Helper function to find a date button in the calendar grid by its text content
+ * @param calendarGrid - The calendar grid element
+ * @param dateText - The date text to find (e.g., "20", "22")
+ * @returns The button element containing the date
+ */
+export const getDateButtonByText = (
+  calendarGrid: HTMLElement,
+  dateText: string,
+): HTMLElement => {
+  const gridCells = within(calendarGrid).getAllByRole('gridcell');
+  const dateButton = gridCells.find((cell) => {
+    const text = cell.textContent?.trim();
+    return text === dateText;
+  });
+
+  if (!dateButton) {
+    throw new Error(
+      `Could not find date button with text "${dateText}" in calendar grid`,
+    );
+  }
+
+  return dateButton;
+};
+
 const mockT = (key: string): string => key;
 const mockTCommon = (key: string): string => key;
 
@@ -684,6 +709,7 @@ describe('EventListCardPreviewModal', () => {
     const baseDate = new Date(Date.UTC(2025, 0, 15, 12, 0, 0));
     const mockSetEventStartDate = vi.fn();
     const mockSetEventEndDate = vi.fn();
+
     renderComponent({
       eventStartDate: baseDate,
       eventEndDate: baseDate,
