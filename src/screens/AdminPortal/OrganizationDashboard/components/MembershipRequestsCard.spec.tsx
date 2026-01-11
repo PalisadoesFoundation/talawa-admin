@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import MembershipRequestsCard from './MembershipRequestsCard';
 
 // Mock react-i18next
@@ -11,14 +11,17 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-const toastMocks = vi.hoisted(() => ({
+const NotificationToastMocks = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
+  dismiss: vi.fn(),
 }));
 
-// Mock react-toastify
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+// Mock NotificationToast
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: NotificationToastMocks,
 }));
 
 // Mock CardItem component
@@ -47,8 +50,12 @@ vi.mock(
 
 describe('MembershipRequestsCard Component', () => {
   afterEach(() => {
-    toastMocks.success.mockReset();
-    toastMocks.error.mockReset();
+    NotificationToastMocks.success.mockReset();
+    NotificationToastMocks.error.mockReset();
+    NotificationToastMocks.warning.mockReset();
+    NotificationToastMocks.info.mockReset();
+    NotificationToastMocks.dismiss.mockReset();
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   const mockMembershipRequestData = {
@@ -168,7 +175,7 @@ describe('MembershipRequestsCard Component', () => {
     const leaderboardButton = screen.getByTestId('viewAllLeaderboard');
     fireEvent.click(leaderboardButton);
 
-    expect(toast.success).toHaveBeenCalledWith('comingSoon');
+    expect(NotificationToast.success).toHaveBeenCalledWith('comingSoon');
   });
 
   it('handles async onViewAllClick correctly', async () => {

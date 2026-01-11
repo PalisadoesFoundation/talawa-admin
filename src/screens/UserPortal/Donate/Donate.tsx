@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
-import { toast } from 'react-toastify';
 import { useQuery, useMutation } from '@apollo/client';
 import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useTranslation } from 'react-i18next';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 import {
   ORGANIZATION_DONATION_CONNECTION_LIST,
@@ -18,7 +18,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
 import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import {
   InterfaceDonation,
   InterfaceDonationCardProps,
@@ -79,7 +79,7 @@ export default function Donate(): JSX.Element {
 
   const donateToOrg = async (): Promise<void> => {
     if (amount === '' || Number.isNaN(Number(amount))) {
-      toast.error(t('invalidAmount'));
+      NotificationToast.error(t('invalidAmount'));
       return;
     }
 
@@ -87,7 +87,7 @@ export default function Donate(): JSX.Element {
     const maxDonation = 10000000;
 
     if (Number(amount) < minDonation || Number(amount) > maxDonation) {
-      toast.error(
+      NotificationToast.error(
         t('donationOutOfRange', { min: minDonation, max: maxDonation }),
       );
       return;
@@ -105,8 +105,12 @@ export default function Donate(): JSX.Element {
         },
       });
 
-      refetch();
-      toast.success(t('success') as string);
+      try {
+        await refetch();
+        NotificationToast.success(t('success'));
+      } catch (error) {
+        errorHandler(t, error);
+      }
     } catch (error) {
       errorHandler(t, error);
     }
@@ -115,7 +119,7 @@ export default function Donate(): JSX.Element {
   return (
     <div className="d-flex flex-row mt-4">
       <div className={`${styles.mainContainer50} me-4`}>
-        <AdminSearchFilterBar
+        <SearchFilterBar
           searchPlaceholder={t('searchDonations')}
           searchValue={searchText}
           onSearchChange={setSearchText}

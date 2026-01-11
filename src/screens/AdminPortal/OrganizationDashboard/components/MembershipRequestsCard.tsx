@@ -5,11 +5,9 @@
  * volunteer rankings for an organization. It presents membership requests with user
  * details and provides a dedicated section for volunteer rankings (currently a placeholder).
  *
- * @component
- * @param props - The properties for the MembershipRequestsCard component.
- * @param props.membershipRequestData - Organization membership requests data
- * @param props.isLoading - Loading state indicator
- * @param props.onViewAllClick - Callback for "View All" button click
+ * @param membershipRequestData - Organization membership requests data
+ * @param isLoading - Loading state indicator
+ * @param onViewAllClick - Callback for "View All" button click
  *
  * @returns Styled card with membership requests list and volunteer rankings section
  *
@@ -36,7 +34,7 @@
 import React from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
 import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/CardItemLoading';
 import styles from 'style/app-fixed.module.css';
@@ -127,7 +125,7 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
               variant="light"
               data-testid="viewAllLeaderboard"
               onClick={() => {
-                toast.success(t('comingSoon'));
+                NotificationToast.success(t('comingSoon'));
               }}
             >
               {t('viewAll')}

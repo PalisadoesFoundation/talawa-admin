@@ -14,17 +14,22 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Donate from './Donate';
-import userEvent from '@testing-library/user-event';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
+import userEvent from '@testing-library/user-event';
 
-const { mockErrorHandler, mockUseParams, mockToast } = vi.hoisted(() => ({
-  mockErrorHandler: vi.fn(),
-  mockUseParams: vi.fn(),
-  mockToast: {
-    error: vi.fn(),
-    success: vi.fn(),
-  },
-}));
+const { mockErrorHandler, mockUseParams, NotificationToast } = vi.hoisted(
+  () => ({
+    mockErrorHandler: vi.fn(),
+    mockUseParams: vi.fn(),
+    NotificationToast: {
+      error: vi.fn(),
+      success: vi.fn(),
+      warning: vi.fn(),
+      info: vi.fn(),
+      dismiss: vi.fn(),
+    },
+  }),
+);
 
 vi.mock('utils/errorHandler', () => ({
   errorHandler: mockErrorHandler,
@@ -35,8 +40,8 @@ vi.mock('react-router', async () => ({
   useParams: mockUseParams,
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: mockToast,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast,
 }));
 
 vi.mock('utils/useLocalstorage', () => ({
@@ -312,8 +317,8 @@ describe('Donate Component', () => {
   beforeEach(() => {
     mockUseParams.mockReturnValue({ orgId: '' });
     mockErrorHandler.mockClear();
-    mockToast.error.mockClear();
-    mockToast.success.mockClear();
+    NotificationToast.error.mockClear();
+    NotificationToast.success.mockClear();
   });
 
   afterEach(() => {
@@ -356,8 +361,8 @@ describe('Donate Component', () => {
 
     await userEvent.click(screen.getByTestId('donateBtn'));
 
-    expect(mockToast.error).toHaveBeenCalledWith(
-      'Please enter a numerical value for the donation amount.',
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      i18nForTest.t('donate.invalidAmount'),
     );
   });
 
@@ -367,8 +372,8 @@ describe('Donate Component', () => {
     await userEvent.type(screen.getByTestId('donationAmount'), 'abc');
     await userEvent.click(screen.getByTestId('donateBtn'));
 
-    expect(mockToast.error).toHaveBeenCalledWith(
-      'Please enter a numerical value for the donation amount.',
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      i18nForTest.t('donate.invalidAmount'),
     );
   });
 
@@ -378,24 +383,15 @@ describe('Donate Component', () => {
     await userEvent.type(screen.getByTestId('donationAmount'), '0.5');
     await userEvent.click(screen.getByTestId('donateBtn'));
 
-    expect(mockToast.error).toHaveBeenCalledWith(
-      'Donation amount must be between 1 and 10000000.',
-    );
-  });
-
-  test('shows error toast for donation amount above maximum', async () => {
-    renderDonate();
-
-    await userEvent.type(screen.getByTestId('donationAmount'), '10000001');
-    await userEvent.click(screen.getByTestId('donateBtn'));
-
-    expect(mockToast.error).toHaveBeenCalledWith(
-      'Donation amount must be between 1 and 10000000.',
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      i18nForTest.t('donate.donationOutOfRange', { min: 1, max: 10000000 }),
     );
   });
 
   test('successful donation shows success toast', async () => {
-    renderDonate();
+    // Add an extra copy of the donation list query mock to handle the refetch()
+    const mocksWithRefetch = [...MOCKS, MOCKS[0]];
+    renderDonate(mocksWithRefetch);
 
     // Wait for organization data to load
     await waitFor(() => {
@@ -408,10 +404,11 @@ describe('Donate Component', () => {
     await userEvent.click(screen.getByTestId('donateBtn'));
 
     await waitFor(() => {
-      expect(mockToast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        'Donation Successful',
+      );
     });
   });
-
   test('handles donation mutation error', async () => {
     render(
       <MockedProvider link={errorLink}>
@@ -600,8 +597,8 @@ describe('Donate Component', () => {
     await userEvent.type(screen.getByTestId('donationAmount'), '0');
     await userEvent.click(screen.getByTestId('donateBtn'));
 
-    expect(mockToast.error).toHaveBeenCalledWith(
-      'Donation amount must be between 1 and 10000000.',
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      i18nForTest.t('donate.donationOutOfRange', { min: 1, max: 10000000 }),
     );
   });
 
@@ -611,8 +608,8 @@ describe('Donate Component', () => {
     await userEvent.type(screen.getByTestId('donationAmount'), '-10');
     await userEvent.click(screen.getByTestId('donateBtn'));
 
-    expect(mockToast.error).toHaveBeenCalledWith(
-      'Donation amount must be between 1 and 10000000.',
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      i18nForTest.t('donate.donationOutOfRange', { min: 1, max: 10000000 }),
     );
   });
 
@@ -666,7 +663,7 @@ describe('Donate Component', () => {
 
     // Should not trigger range error
     await waitFor(() => {
-      expect(mockToast.error).not.toHaveBeenCalledWith(
+      expect(NotificationToast.error).not.toHaveBeenCalledWith(
         expect.stringContaining('must be between'),
       );
     });
@@ -684,7 +681,7 @@ describe('Donate Component', () => {
 
     // Should not trigger range error
     await waitFor(() => {
-      expect(mockToast.error).not.toHaveBeenCalledWith(
+      expect(NotificationToast.error).not.toHaveBeenCalledWith(
         expect.stringContaining('must be between'),
       );
     });

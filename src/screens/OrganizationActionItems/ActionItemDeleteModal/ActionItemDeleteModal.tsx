@@ -30,9 +30,9 @@
  *
  */
 import React, { useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useMutation } from '@apollo/client';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import {
   DELETE_ACTION_ITEM_MUTATION,
@@ -42,6 +42,7 @@ import type {
   IActionItemInfo,
   IDeleteActionItemInput,
 } from 'types/ActionItems/interface';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 export interface IItemDeleteModalProps {
   isOpen: boolean;
@@ -102,57 +103,60 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
 
       actionItemsRefetch();
       hide();
-      toast.success(t('successfulDeletion'));
+      NotificationToast.success(t('successfulDeletion'));
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     }
   };
 
   return (
-    <Modal show={isOpen} onHide={hide} centered>
-      <Modal.Header closeButton>
-        <Modal.Title>{t('deleteActionItem')}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <p>{t('deleteActionItemMsg')}</p>
+    <BaseModal
+      show={isOpen}
+      onHide={hide}
+      centered
+      dataTestId="actionItemDeleteModal"
+      title={t('deleteActionItem')}
+      footer={
+        <>
+          <Button variant="secondary" data-testid="deletenobtn" onClick={hide}>
+            {tCommon('no')}
+          </Button>
+          <Button
+            variant="danger"
+            onClick={handleDelete}
+            data-testid="deleteyesbtn"
+          >
+            {tCommon('yes')}
+          </Button>
+        </>
+      }
+    >
+      <p>{t('deleteActionItemMsg')}</p>
 
-        {actionItem.isTemplate && !actionItem.isInstanceException && (
-          <Form.Group className="mt-3">
-            <Form.Label>{t('applyTo')}</Form.Label>
-            <Form.Check
-              type="radio"
-              label={t('entireSeries')}
-              name="applyTo"
-              id="deleteApplyToSeries"
-              data-testid="deleteApplyToSeries"
-              checked={applyTo === 'series'}
-              onChange={() => setApplyTo('series')}
-            />
-            <Form.Check
-              type="radio"
-              label={t('thisEventOnly')}
-              name="applyTo"
-              id="deleteApplyToInstance"
-              data-testid="deleteApplyToInstance"
-              checked={applyTo === 'instance'}
-              onChange={() => setApplyTo('instance')}
-            />
-          </Form.Group>
-        )}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" data-testid="deletenobtn" onClick={hide}>
-          {tCommon('no')}
-        </Button>
-        <Button
-          variant="danger"
-          onClick={handleDelete}
-          data-testid="deleteyesbtn"
-        >
-          {tCommon('yes')}
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      {actionItem.isTemplate && !actionItem.isInstanceException && (
+        <Form.Group className="mt-3">
+          <Form.Label>{t('applyTo')}</Form.Label>
+          <Form.Check
+            type="radio"
+            label={t('entireSeries')}
+            name="applyTo"
+            id="deleteApplyToSeries"
+            data-testid="deleteApplyToSeries"
+            checked={applyTo === 'series'}
+            onChange={() => setApplyTo('series')}
+          />
+          <Form.Check
+            type="radio"
+            label={t('thisEventOnly')}
+            name="applyTo"
+            id="deleteApplyToInstance"
+            data-testid="deleteApplyToInstance"
+            checked={applyTo === 'instance'}
+            onChange={() => setApplyTo('instance')}
+          />
+        </Form.Group>
+      )}
+    </BaseModal>
   );
 };
 

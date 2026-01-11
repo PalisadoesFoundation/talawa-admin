@@ -3,15 +3,14 @@
  * and providing functionality for searching, sorting, and creating new organizations.
  * It also includes modals for creating organizations and managing features after creation.
  *
- * @component
- * @returns {JSX.Element} The rendered organization list component.
+ * @returns The rendered organization list component.
  *
  * @remarks
  * - Utilizes GraphQL queries and mutations for fetching and managing organization data.
  * - Includes search and sorting functionality for better user experience.
  * - Displays loading states and handles errors gracefully.
  *
- * @dependencies
+ * Dependencies:
  * - `useQuery` and `useMutation` from `@apollo/client` for GraphQL operations.
  * - `useTranslation` from `react-i18next` for localization.
  * - `useLocalStorage` for accessing local storage data.
@@ -19,7 +18,7 @@
  * - `NotificationToast` for notifications.
  * - `react-bootstrap` and `@mui/material` for modal and button components.
  *
- * @state
+ * State:
  * - `dialogModalisOpen` - Controls the visibility of the plugin notification modal.
  * - `dialogRedirectOrgId` - Stores the ID of the organization to redirect after creation.
  * - `isLoading` - Indicates whether the organization data is loading.
@@ -28,7 +27,7 @@
  * - `showModal` - Controls the visibility of the organization creation modal.
  * - `formState` - Manages the state of the organization creation form.
  *
- * @methods
+ * Methods:
  * - `openDialogModal(redirectOrgId: string): void` - Opens the plugin notification modal.
  * - `closeDialogModal(): void` - Closes the plugin notification modal.
  * - `toggleDialogModal(): void` - Toggles the plugin notification modal visibility.
@@ -36,15 +35,15 @@
  * - `handleSearch(value: string): void` - Filters organizations based on the search query.
  * - `handleSortChange(value: string): void` - Updates sorting state and refetches organizations.
  *
- * @errorHandling
+ * ErrorHandling:
  * - Handles errors from GraphQL queries and mutations using `errorHandler`.
  * - Clears local storage and redirects to the home page on critical errors.
  *
- * @modals
+ * Modals:
  * - `OrganizationModal` - For creating new organizations.
  * - `Modal` - For managing features after organization creation.
  */
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
@@ -68,14 +67,14 @@ import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Link } from 'react-router';
-import { Modal } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { ChangeEvent } from 'react';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import style from './OrgList.module.css';
 import { Group, Search } from '@mui/icons-material';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 const { getItem } = useLocalStorage();
 
@@ -96,6 +95,7 @@ function orgList(): JSX.Element {
   const { t: tCommon } = useTranslation('common');
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
+  const refetchDebounceRef = useRef<number | undefined>(undefined);
 
   function openDialogModal(redirectOrgId: string): void {
     setDialogRedirectOrgId(redirectOrgId);
@@ -210,6 +210,15 @@ function orgList(): JSX.Element {
     setIsLoading(loadingAll);
   }, [loadingAll]);
 
+  useEffect(() => {
+    // Cleanup debounce timer on unmount
+    return () => {
+      if (refetchDebounceRef.current) {
+        window.clearTimeout(refetchDebounceRef.current);
+      }
+    };
+  }, []);
+
   const createOrg = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -258,7 +267,6 @@ function orgList(): JSX.Element {
         },
       });
 
-      //     toggleModal;
       if (data) {
         NotificationToast.success(t('congratulationOrgCreated'));
         refetchOrgs();
@@ -282,17 +290,24 @@ function orgList(): JSX.Element {
   };
 
   /**
-   * Note: The explicit refetchOrgs({ filter: val }) call is intentional.
-   * While Apollo Client auto-refetches when filterName changes, the explicit
-   * call ensures immediate network request execution and avoids timing issues
-   * from React's batched state updates. This pattern is used consistently
-   * elsewhere (e.g., Organizations.tsx) to prevent UI state race conditions.
+   * Filters organizations by name and debounces the network refetch.
+   * The explicit refetchOrgs({ filter: val }) call is debounced to prevent
+   * network flooding on every keystroke. The 250ms delay provides immediate UX feedback
+   * (via setTypedValue) while batching network requests. This pattern prevents jittery
+   * UI behavior under latency while maintaining Apollo Client's auto-refetch benefits.
    */
   const handleChangeFilter = (val: string) => {
     setTypedValue(val);
     setSearchByName(val);
     setFilterName(val);
-    refetchOrgs({ filter: val });
+
+    // Debounce the refetch to avoid flooding the network
+    if (refetchDebounceRef.current) {
+      window.clearTimeout(refetchDebounceRef.current);
+    }
+    refetchDebounceRef.current = window.setTimeout(() => {
+      refetchOrgs({ filter: val });
+    }, 250);
   };
 
   const handleSortChange = (value: string | number): void => {
@@ -327,7 +342,7 @@ function orgList(): JSX.Element {
     <div className={styles.orgListContainer}>
       {/* Buttons Container */}
       <div className={styles.calendar__header}>
-        <AdminSearchFilterBar
+        <SearchFilterBar
           hasDropdowns={true}
           searchPlaceholder={t('searchOrganizations')}
           searchValue={typedValue}
@@ -370,9 +385,9 @@ function orgList(): JSX.Element {
       {/* Text Infos for list */}
 
       {!isLoading &&
-      (!sortedOrganizations || sortedOrganizations.length === 0) &&
-      searchByName.length === 0 &&
-      (!userData || adminFor.length === 0) ? (
+        (!sortedOrganizations || sortedOrganizations.length === 0) &&
+        searchByName.length === 0 &&
+        (!userData || adminFor.length === 0) ? (
         <EmptyState
           icon={<Group />}
           message={t('noOrgErrorTitle')}
@@ -416,9 +431,9 @@ function orgList(): JSX.Element {
           <div className={`${styles.listBoxOrgList}`}>
             {(rowsPerPage > 0
               ? sortedOrganizations.slice(
-                  page * rowsPerPage,
-                  page * rowsPerPage + rowsPerPage,
-                )
+                page * rowsPerPage,
+                page * rowsPerPage + rowsPerPage,
+              )
               : sortedOrganizations
             )?.map((item: InterfaceOrgInfoTypePG) => {
               return (
@@ -466,48 +481,42 @@ function orgList(): JSX.Element {
         createOrg={createOrg}
         t={t}
         tCommon={tCommon}
-        userData={userData}
       />
       {/* Plugin Notification Modal after Org is Created */}
-      <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
-        <Modal.Header
-          className={styles.modalHeader}
-          closeButton
-          data-testid="pluginNotificationHeader"
-        >
-          <Modal.Title className="text-white">
-            {t('manageFeatures')}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <section id={styles.grid_wrapper}>
-            <div>
-              <h4 className={styles.titlemodaldialog}>
-                {t('manageFeaturesInfo')}
-              </h4>
+      <BaseModal
+        title={t('manageFeatures')}
+        show={dialogModalisOpen}
+        onHide={closeDialogModal}
+        dataTestId="pluginNotificationModal"
+        headerClassName={styles.modalHeader}
+      >
+        <section id={styles.grid_wrapper}>
+          <div>
+            <h4 className={styles.titlemodaldialog}>
+              {t('manageFeaturesInfo')}
+            </h4>
 
-              <div className={styles.pluginStoreBtnContainer}>
-                <Link
-                  className={pluginBtnClass}
-                  data-testid="goToStore"
-                  to={storeUrl}
-                >
-                  {t('goToStore')}
-                </Link>
-                <Button
-                  type="submit"
-                  className={styles.enableEverythingBtn}
-                  onClick={closeDialogModal}
-                  value="invite"
-                  data-testid="enableEverythingForm"
-                >
-                  {t('enableEverything')}
-                </Button>
-              </div>
+            <div className={styles.pluginStoreBtnContainer}>
+              <Link
+                className={pluginBtnClass}
+                data-testid="goToStore"
+                to={storeUrl}
+              >
+                {t('goToStore')}
+              </Link>
+              <Button
+                type="submit"
+                className={styles.enableEverythingBtn}
+                onClick={closeDialogModal}
+                value="invite"
+                data-testid="enableEverythingForm"
+              >
+                {t('enableEverything')}
+              </Button>
             </div>
-          </section>
-        </Modal.Body>
-      </Modal>
+          </div>
+        </section>
+      </BaseModal>
     </div>
   );
 }

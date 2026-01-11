@@ -1,7 +1,6 @@
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
 import {
   fireEvent,
@@ -14,11 +13,10 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from '../../../utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from '../OrganizationActionItem.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
@@ -27,13 +25,13 @@ import ItemDeleteModal, {
 } from './ActionItemDeleteModal';
 import { vi, afterEach, beforeEach } from 'vitest';
 
-const toastMocks = vi.hoisted(() => ({
+const NotificationToastMocks = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: NotificationToastMocks,
 }));
 
 let successLink: StaticMockLink;
@@ -52,11 +50,9 @@ const renderItemDeleteModal = (
     <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ItemDeleteModal {...props} />
-            </I18nextProvider>
-          </LocalizationProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <ItemDeleteModal {...props} />
+          </I18nextProvider>
         </BrowserRouter>
       </Provider>
     </MockedProvider>,
@@ -136,7 +132,9 @@ describe('Testing ItemDeleteModal', () => {
     await waitFor(() => {
       expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
       expect(testItemProps.hide).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.successfulDeletion,
+      );
     });
   });
 
@@ -146,7 +144,9 @@ describe('Testing ItemDeleteModal', () => {
     fireEvent.click(screen.getByTestId('deleteyesbtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Mock Graphql Error',
+      );
     });
   });
 
@@ -257,7 +257,9 @@ describe('Testing ItemDeleteModal', () => {
       await waitFor(() => {
         expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
         expect(testItemProps.hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.successfulDeletion,
+        );
       });
     });
 
@@ -287,7 +289,9 @@ describe('Testing ItemDeleteModal', () => {
       await waitFor(() => {
         expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
         expect(testItemProps.hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.successfulDeletion,
+        );
       });
     });
 
@@ -311,7 +315,9 @@ describe('Testing ItemDeleteModal', () => {
       await waitFor(() => {
         expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
         expect(testItemProps.hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.successfulDeletion,
+        );
       });
     });
 
@@ -335,7 +341,9 @@ describe('Testing ItemDeleteModal', () => {
       await waitFor(() => {
         expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
         expect(testItemProps.hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.successfulDeletion,
+        );
       });
     });
 
@@ -360,7 +368,9 @@ describe('Testing ItemDeleteModal', () => {
       fireEvent.click(screen.getByTestId('deleteyesbtn'));
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Mock Graphql Error',
+        );
       });
     });
   });

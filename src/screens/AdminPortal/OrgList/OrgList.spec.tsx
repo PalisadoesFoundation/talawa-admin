@@ -35,6 +35,7 @@ import {
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
 } from 'GraphQl/Mutations/mutations';
 import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 vi.setConfig({ testTimeout: 30000 });
 
@@ -50,6 +51,15 @@ vi.mock('react-toastify', () => ({
     .mockImplementation(() => <div data-testid="toast-container" />),
 }));
 
+// Mock NotificationToast
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
+}));
 vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
   default: ({ data }: { data: InterfaceOrganizationCardProps }) => (
     <div data-testid="organization-card-mock">{data.name}</div>
@@ -69,6 +79,9 @@ beforeEach(() => {
   setItem('IsLoggedIn', 'TRUE');
   setItem('userId', '123'); // if this screen reads it
   removeItem('AdminFor'); // must be absent (== undefined)
+
+  // Clear NotificationToast mocks
+  vi.clearAllMocks();
 });
 
 const mockLinks = {
@@ -1101,7 +1114,7 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Verify modal is not open initially
     expect(
-      screen.queryByTestId('modalOrganizationHeader'),
+      screen.queryByTestId('modalOrganizationName'),
     ).not.toBeInTheDocument();
 
     // Open the create organization modal
@@ -1111,7 +1124,7 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Verify modal is open
-    expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
+    expect(screen.getByTestId('modalOrganizationName')).toBeInTheDocument();
   });
 
   test('Testing organization creation flow and form handling', async () => {
@@ -1872,6 +1885,11 @@ describe('Advanced Component Functionality Tests', () => {
       ).not.toBeInTheDocument();
     });
 
+    // Verify success toast was triggered
+    expect(NotificationToast.success).toHaveBeenCalledWith(
+      'Congratulations! The Organization is created.',
+    );
+
     // Verify organization creation flow completed successfully:
     // - Membership creation mutation executed
     // - Success condition checked and toast displayed
@@ -2265,7 +2283,7 @@ describe('Advanced Component Functionality Tests', () => {
     expect(mockToast.success).not.toHaveBeenCalled();
 
     // Verify that the modal should still be open since the success path wasn't taken
-    expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
+    expect(screen.getByTestId('modalOrganizationName')).toBeInTheDocument();
   });
 
   test('Testing missing token scenario', async () => {
