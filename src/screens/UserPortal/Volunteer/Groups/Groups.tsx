@@ -299,12 +299,19 @@ function Groups(): JSX.Element {
           }}
           sortConfig={{
             sortingOptions: [
-              { label: t('mostVolunteers'), value: 'volunteers_DESC' },
-              { label: t('leastVolunteers'), value: 'volunteers_ASC' },
+              { label: t('mostVolunteers'), value: 'volunteers_desc' },
+              { label: t('leastVolunteers'), value: 'volunteers_asc' },
             ],
-            selectedSort: sortBy,
+            selectedSort:
+              sortBy === 'volunteers_ASC'
+                ? 'volunteers_asc'
+                : 'volunteers_desc',
             onSortChange: (value: string | number) =>
-              setSortBy(value as 'volunteers_DESC' | 'volunteers_ASC'),
+              setSortBy(
+                value === 'volunteers_asc'
+                  ? 'volunteers_ASC'
+                  : 'volunteers_DESC',
+              ),
           }}
           emptyStateMessage={t('noVolunteerGroups')}
         />

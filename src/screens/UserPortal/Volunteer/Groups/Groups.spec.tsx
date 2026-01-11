@@ -613,7 +613,7 @@ describe('Groups Screen [User Portal]', () => {
     await userEvent.click(sortButton);
 
     // Select ASC sorting
-    const sortAscOption = await screen.findByTestId('volunteers_ASC');
+    const sortAscOption = await screen.findByTestId('volunteers_asc');
     await userEvent.click(sortAscOption);
 
     // Wait for re-query with new sort
