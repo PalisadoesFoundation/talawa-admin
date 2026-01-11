@@ -434,18 +434,12 @@ function OrganizationPeople(): JSX.Element {
       <DataGridWrapper<IProcessedRow>
         rows={filteredRows}
         columns={columns}
-        error={userError?.message}
+        error={memberError?.message || userError?.message}
         loading={memberLoading || userLoading}
         emptyStateProps={{
           message: tCommon('notFound'),
           description: tCommon('noDataDescription'),
           dataTestId: 'organization-people-empty-state',
-        }}
-        searchConfig={{
-          enabled: true,
-          fields: ['name', 'email'],
-          placeholder: t('searchFullName'),
-          debounceMs: 300,
         }}
         paginationConfig={{
           enabled: true,

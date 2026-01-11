@@ -80,6 +80,7 @@ function OrganizationTags(): JSX.Element {
     error: orgUserTagsError,
     refetch: orgUserTagsRefetch,
     fetchMore: fetchMoreTags,
+    loading: orgUserTagsLoading,
   }: InterfaceOrganizationTagsQueryPG = useQuery(
     ORGANIZATION_USER_TAGS_LIST_PG,
     {
@@ -390,7 +391,7 @@ function OrganizationTags(): JSX.Element {
                   <DataGridWrapper<InterfaceTagDataPG>
                     rows={userTagsList}
                     columns={columns}
-                    loading={createTagLoading}
+                    loading={orgUserTagsLoading || createTagLoading}
                     error={undefined}
                     emptyStateProps={{
                       message: t('noTagsFound'),

@@ -1187,10 +1187,6 @@ describe('OrganizationPeople', () => {
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
-
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-    });
   });
 
   test('skips storing cursors when startCursor or endCursor is missing', async () => {
