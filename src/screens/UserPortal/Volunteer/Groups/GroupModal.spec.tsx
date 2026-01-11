@@ -1,336 +1,378 @@
-import React from 'react';
-import type { ApolloLink } from '@apollo/client';
-import { MockedProvider } from '@apollo/react-testing';
-import {
-  LocalizationProvider,
-  AdapterDayjs,
-} from 'shared-components/DateRangePicker';
-import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { I18nextProvider } from 'react-i18next';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
-import { store } from 'state/store';
-import i18n from 'utils/i18nForTest';
-import { MOCKS, UPDATE_ERROR_MOCKS } from './Groups.mocks';
-import { StaticMockLink } from 'utils/StaticMockLink';
+import type { ChangeEvent } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Button, Form } from 'react-bootstrap';
+import type {
+  InterfaceCreateVolunteerGroup,
+  InterfaceVolunteerGroupInfo,
+  InterfaceVolunteerMembership,
+} from 'utils/interfaces';
+import styles from 'style/app-fixed.module.css';
+import { useTranslation } from 'react-i18next';
+import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import type { InterfaceGroupModal } from './GroupModal';
-import GroupModal from './GroupModal';
-import userEvent from '@testing-library/user-event';
-import { vi } from 'vitest';
-import dayjs from 'dayjs';
+import { BaseModal } from 'shared-components/BaseModal';
+import {
+  FormControl,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+} from '@mui/material';
+import {
+  UPDATE_VOLUNTEER_GROUP,
+  UPDATE_VOLUNTEER_MEMBERSHIP,
+} from 'GraphQl/Mutations/EventVolunteerMutation';
+import { PiUserListBold } from 'react-icons/pi';
+import { TbListDetails } from 'react-icons/tb';
+import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
+import Avatar from 'components/Avatar/Avatar';
+import { FaXmark } from 'react-icons/fa6';
+import { FormFieldGroup } from '../../../../shared-components/FormFieldGroup/FormFieldGroup';
+export interface InterfaceGroupModal {
+  isOpen: boolean;
+  hide: () => void;
+  eventId: string;
+  group: InterfaceVolunteerGroupInfo;
+  refetchGroups: () => void;
+}
 
-const sharedMocks = vi.hoisted(() => ({
-  NotificationToast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
-}));
+const GroupModal: React.FC<InterfaceGroupModal> = ({
+  isOpen,
+  hide,
+  eventId,
+  group,
+  refetchGroups,
+}) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventVolunteers',
+  });
+  const { t: tCommon } = useTranslation('common');
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
-  NotificationToast: sharedMocks.NotificationToast,
-}));
+  const [modalType, setModalType] = useState<'details' | 'requests'>('details');
+  const [formState, setFormState] = useState<InterfaceCreateVolunteerGroup>({
+    name: group.name,
+    description: group.description ?? '',
+    leader: group.leader,
+    volunteerUsers: group.volunteers.map((volunteer) => volunteer.user),
+    volunteersRequired: group.volunteersRequired ?? null,
+  });
 
-const link1 = new StaticMockLink(MOCKS);
-const link2 = new StaticMockLink(UPDATE_ERROR_MOCKS);
+  const [updateVolunteerGroup] = useMutation(UPDATE_VOLUNTEER_GROUP);
+  const [updateMembership] = useMutation(UPDATE_VOLUNTEER_MEMBERSHIP);
 
-/**
- * Translations for test cases
- */
+  const updateMembershipStatus = async (
+    id: string,
+    status: 'accepted' | 'rejected',
+  ): Promise<void> => {
+    try {
+      await updateMembership({
+        variables: { id, status },
+      });
+      NotificationToast.success(
+        t(
+          status === 'accepted' ? 'requestAccepted' : 'requestRejected',
+        ) as string,
+      );
+      refetchRequests();
+    } catch (error: unknown) {
+      NotificationToast.error((error as Error).message);
+    }
+  };
 
-const t = {
-  ...JSON.parse(
-    JSON.stringify(
-      i18n.getDataByLanguage('en')?.translation.eventVolunteers ?? {},
-    ),
-  ),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
-  ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
-};
-
-/**
- * Props for `GroupModal` component used in tests
- */
-
-const itemProps: InterfaceGroupModal[] = [
-  {
-    isOpen: true,
-    hide: vi.fn(),
-    eventId: 'eventId',
-    refetchGroups: vi.fn(),
-    group: {
-      id: 'groupId',
-      name: 'Group 1',
-      description: 'desc',
-      volunteersRequired: null,
-      createdAt: dayjs().toISOString(),
-      creator: {
-        id: 'creatorId1',
-        name: 'Wilt Shepherd',
-        emailAddress: 'wilt@example.com',
-        avatarURL: null,
+  const {
+    data: requestsData,
+    refetch: refetchRequests,
+  }: {
+    data?: {
+      getVolunteerMembership: InterfaceVolunteerMembership[];
+    };
+    refetch: () => void;
+  } = useQuery(USER_VOLUNTEER_MEMBERSHIP, {
+    variables: {
+      where: {
+        eventId,
+        groupId: group.id,
+        status: 'requested',
       },
-      leader: {
-        id: 'userId',
-        name: 'Teresa Bradley',
-        emailAddress: 'teresa@example.com',
-        avatarURL: 'img-url',
-      },
-      volunteers: [
-        {
-          id: 'volunteerId1',
-          hasAccepted: true,
-          hoursVolunteered: 5,
-          isPublic: true,
-          user: {
-            id: 'userId',
-            firstName: 'Teresa',
-            lastName: 'Bradley',
-            name: 'Teresa Bradley',
-            avatarURL: null,
+    },
+  });
+
+  const requests = useMemo(() => {
+    if (!requestsData) return [];
+    return requestsData.getVolunteerMembership;
+  }, [requestsData]);
+
+  useEffect(() => {
+    setFormState({
+      name: group.name,
+      description: group.description ?? '',
+      leader: group.leader,
+      volunteerUsers: group.volunteers.map((volunteer) => volunteer.user),
+      volunteersRequired: group.volunteersRequired ?? null,
+    });
+  }, [group]);
+
+  const { name, description, volunteersRequired } = formState;
+
+  const updateGroupHandler = useCallback(
+    async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+      e.preventDefault();
+
+      const updatedFields: {
+        [key: string]: number | string | undefined | null;
+      } = {};
+
+      if (name !== group?.name) {
+        updatedFields.name = name;
+      }
+      if (description !== group?.description) {
+        updatedFields.description = description;
+      }
+      if (volunteersRequired !== group?.volunteersRequired) {
+        updatedFields.volunteersRequired = volunteersRequired;
+      }
+
+      try {
+        await updateVolunteerGroup({
+          variables: {
+            id: group?.id,
+            data: { ...updatedFields, eventId },
           },
-        },
-      ],
-      event: {
-        id: 'eventId',
-      },
-      isTemplate: true,
-      isInstanceException: false,
+        });
+        NotificationToast.success(t('volunteerGroupUpdated'));
+        refetchGroups();
+        hide();
+      } catch (error: unknown) {
+        NotificationToast.error((error as Error).message);
+      }
     },
-  },
-  {
-    isOpen: true,
-    hide: vi.fn(),
-    eventId: 'eventId',
-    refetchGroups: vi.fn(),
-    group: {
-      id: 'groupId',
-      name: 'Group 1',
-      description: null,
-      volunteersRequired: null,
-      createdAt: dayjs().toISOString(),
-      creator: {
-        id: 'creatorId1',
-        name: 'Wilt Shepherd',
-        emailAddress: 'wilt@example.com',
-        avatarURL: null,
-      },
-      leader: {
-        id: 'userId',
-        name: 'Teresa Bradley',
-        emailAddress: 'teresa@example.com',
-        avatarURL: 'img-url',
-      },
-      volunteers: [],
-      event: {
-        id: 'eventId',
-      },
-      isTemplate: true,
-      isInstanceException: false,
-    },
-  },
-];
+    [formState, group],
+  );
 
-const renderGroupModal = (
-  link: ApolloLink,
-  props: InterfaceGroupModal,
-): RenderResult => {
-  return render(
-    <MockedProvider link={link}>
-      <Provider store={store}>
-        <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <I18nextProvider i18n={i18n}>
-              <GroupModal {...props} />
-            </I18nextProvider>
-          </LocalizationProvider>
-        </BrowserRouter>
-      </Provider>
-    </MockedProvider>,
+  return (
+    <BaseModal
+      show={isOpen}
+      onHide={hide}
+      className={styles.groupModal}
+      headerContent={
+        <div className="d-flex justify-content-between align-items-center w-100">
+          <p className={styles.titlemodal}>{t('manageGroup')}</p>
+          <Button
+            variant="danger"
+            onClick={hide}
+            className={styles.modalCloseBtn}
+            data-testid="modalCloseBtn"
+          >
+            <i className="fa fa-times"></i>
+          </Button>
+        </div>
+      }
+    >
+      <div
+        className={`btn-group ${styles.toggleGroup} mt-0 px-3 mb-4 w-100`}
+        role="group"
+      >
+        <input
+          type="radio"
+          className={`btn-check ${styles.toggleBtn}`}
+          name="btnradio"
+          id="detailsRadio"
+          checked={modalType === 'details'}
+          onChange={() => setModalType('details')}
+        />
+        <label
+          className={`btn btn-outline-primary ${styles.toggleBtn}`}
+          htmlFor="detailsRadio"
+        >
+          <TbListDetails className="me-2" />
+          {t('details')}
+        </label>
+
+        <input
+          type="radio"
+          className={`btn-check ${styles.toggleBtn}`}
+          name="btnradio"
+          id="groupsRadio"
+          checked={modalType === 'requests'}
+          onChange={() => setModalType('requests')}
+          data-testid="requestsRadio"
+        />
+        <label
+          className={`btn btn-outline-primary ${styles.toggleBtn}`}
+          htmlFor="groupsRadio"
+        >
+          <PiUserListBold className="me-2" size={21} />
+          {t('requests')}
+        </label>
+      </div>
+
+      {modalType === 'details' ? (
+        <Form
+          data-testid="pledgeForm"
+          onSubmitCapture={updateGroupHandler}
+          className="p-3"
+        >
+          <FormFieldGroup name="name" label={tCommon('name')} required>
+            <FormControl fullWidth>
+              <TextField
+                id="name"
+                aria-label={tCommon('name')}
+                required
+                variant="outlined"
+                className={styles.noOutline}
+                value={name}
+                data-testid="nameInput"
+                onChange={(e) =>
+                  setFormState({ ...formState, name: e.target.value })
+                }
+              />
+            </FormControl>
+          </FormFieldGroup>
+
+          <FormFieldGroup name="description" label={tCommon('description')}>
+            <FormControl fullWidth>
+              <TextField
+                id="description"
+                aria-label={tCommon('description')}
+                multiline
+                rows={3}
+                variant="outlined"
+                className={styles.noOutline}
+                value={description}
+                onChange={(e) =>
+                  setFormState({
+                    ...formState,
+                    description: e.target.value,
+                  })
+                }
+              />
+            </FormControl>
+          </FormFieldGroup>
+
+          <FormFieldGroup
+            name="volunteersRequired"
+            label={t('volunteersRequired')}
+          >
+            <FormControl fullWidth>
+              <TextField
+                id="volunteersRequired"
+                aria-label={t('volunteersRequired')}
+                variant="outlined"
+                className={styles.noOutline}
+                value={volunteersRequired ?? ''}
+                onChange={(e) => {
+                  if (parseInt(e.target.value) > 0) {
+                    setFormState({
+                      ...formState,
+                      volunteersRequired: parseInt(e.target.value),
+                    });
+                  } else if (e.target.value === '') {
+                    setFormState({
+                      ...formState,
+                      volunteersRequired: null,
+                    });
+                  }
+                }}
+              />
+            </FormControl>
+          </FormFieldGroup>
+
+          <Button
+            type="submit"
+            className={styles.regBtn}
+            data-testid="submitBtn"
+          >
+            {t('updateGroup')}
+          </Button>
+        </Form>
+      ) : (
+        <div className="px-3">
+          {requests.length === 0 ? (
+            <Stack height="100%" alignItems="center" justifyContent="center">
+              {t('noRequests')}
+            </Stack>
+          ) : (
+            <TableContainer
+              component={Paper}
+              variant="outlined"
+              className={styles.modalTable}
+            >
+              <Table aria-label={t('groupTable')}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell className="fw-bold">
+                      {t('volunteerName')}
+                    </TableCell>
+                    <TableCell className="fw-bold">
+                      {t('volunteerActions')}
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {requests.map((request, index) => {
+                    const { id: _id, name, avatarURL } = request.volunteer.user;
+                    return (
+                      <TableRow key={index + 1}>
+                        <TableCell
+                          className="d-flex gap-1 align-items-center"
+                          data-testid="userName"
+                        >
+                          {avatarURL ? (
+                            <img
+                              src={avatarURL}
+                              alt={t('volunteerAlt')}
+                              className={styles.TableImage}
+                            />
+                          ) : (
+                            <Avatar
+                              containerStyle={styles.imageContainer}
+                              avatarStyle={styles.TableImage}
+                              name={name}
+                              alt={name}
+                            />
+                          )}
+                          {name}
+                        </TableCell>
+                        <TableCell>
+                          <div className="d-flex gap-2">
+                            <Button
+                              variant="success"
+                              size="sm"
+                              data-testid="acceptBtn"
+                              onClick={() =>
+                                updateMembershipStatus(request.id, 'accepted')
+                              }
+                            >
+                              <i className="fa fa-check" />
+                            </Button>
+                            <Button
+                              variant="danger"
+                              size="sm"
+                              data-testid="rejectBtn"
+                              onClick={() =>
+                                updateMembershipStatus(request.id, 'rejected')
+                              }
+                            >
+                              <FaXmark size={18} />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </div>
+      )}
+    </BaseModal>
   );
 };
 
-describe('Testing GroupModal', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-  it('GroupModal -> Requests -> Accept', async () => {
-    renderGroupModal(link1, itemProps[0]);
-    expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
-
-    const requestsRadio = screen.getByLabelText(t.requests);
-    expect(requestsRadio).toBeInTheDocument();
-    await userEvent.click(requestsRadio);
-
-    const userName = await screen.findAllByTestId('userName');
-    expect(userName).toHaveLength(2);
-    expect(userName[0]).toHaveTextContent('John Doe');
-    expect(userName[1]).toHaveTextContent('Teresa Bradley');
-
-    const acceptBtn = screen.getAllByTestId('acceptBtn');
-    expect(acceptBtn).toHaveLength(2);
-    await userEvent.click(acceptBtn[0]);
-    await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(t.requestAccepted);
-    });
-  });
-
-  it('GroupModal -> Requests -> Reject', async () => {
-    renderGroupModal(link1, itemProps[0]);
-    expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
-
-    const requestsRadio = screen.getByLabelText(t.requests);
-    expect(requestsRadio).toBeInTheDocument();
-    await userEvent.click(requestsRadio);
-
-    const userName = await screen.findAllByTestId('userName');
-    expect(userName).toHaveLength(2);
-    expect(userName[0]).toHaveTextContent('John Doe');
-    expect(userName[1]).toHaveTextContent('Teresa Bradley');
-
-    const rejectBtn = screen.getAllByTestId('rejectBtn');
-    expect(rejectBtn).toHaveLength(2);
-    await userEvent.click(rejectBtn[0]);
-    await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(t.requestRejected);
-    });
-  });
-
-  it('GroupModal -> Click Requests -> Click Details', async () => {
-    renderGroupModal(link1, itemProps[0]);
-    expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
-
-    const requestsRadio = screen.getByLabelText(t.requests);
-    expect(requestsRadio).toBeInTheDocument();
-    await userEvent.click(requestsRadio);
-
-    const detailsRadio = screen.getByLabelText(t.details);
-    expect(detailsRadio).toBeInTheDocument();
-    await userEvent.click(detailsRadio);
-  });
-
-  it('GroupModal -> Details -> Update', async () => {
-    renderGroupModal(link1, itemProps[0]);
-    expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
-
-    const nameInput = screen.getByLabelText(`${t.name} *`);
-    expect(nameInput).toBeInTheDocument();
-    fireEvent.change(nameInput, { target: { value: 'Group 2' } });
-    expect(nameInput).toHaveValue('Group 2');
-
-    const descInput = screen.getByLabelText(t.description);
-    expect(descInput).toBeInTheDocument();
-    fireEvent.change(descInput, { target: { value: 'desc new' } });
-    expect(descInput).toHaveValue('desc new');
-
-    const vrInput = screen.getByLabelText(t.volunteersRequired);
-    expect(vrInput).toBeInTheDocument();
-    fireEvent.change(vrInput, { target: { value: '10' } });
-    expect(vrInput).toHaveValue('10');
-
-    const submitBtn = screen.getByTestId('submitBtn');
-    expect(submitBtn).toBeInTheDocument();
-    await userEvent.click(submitBtn);
-
-    await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(
-        t.volunteerGroupUpdated,
-      );
-      expect(itemProps[0].refetchGroups).toHaveBeenCalled();
-      expect(itemProps[0].hide).toHaveBeenCalled();
-    });
-  });
-
-  it('GroupModal -> Details -> Update -> Error', async () => {
-    renderGroupModal(link2, itemProps[0]);
-    expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
-
-    const nameInput = screen.getByLabelText(`${t.name} *`);
-    expect(nameInput).toBeInTheDocument();
-    fireEvent.change(nameInput, { target: { value: 'Group 2' } });
-    expect(nameInput).toHaveValue('Group 2');
-
-    const descInput = screen.getByLabelText(t.description);
-    expect(descInput).toBeInTheDocument();
-    fireEvent.change(descInput, { target: { value: 'desc new' } });
-    expect(descInput).toHaveValue('desc new');
-
-    const vrInput = screen.getByLabelText(t.volunteersRequired);
-    expect(vrInput).toBeInTheDocument();
-    fireEvent.change(vrInput, { target: { value: '10' } });
-    expect(vrInput).toHaveValue('10');
-
-    const submitBtn = screen.getByTestId('submitBtn');
-    expect(submitBtn).toBeInTheDocument();
-    await userEvent.click(submitBtn);
-
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalled();
-    });
-  });
-
-  it('GroupModal -> Requests -> Accept -> Error', async () => {
-    renderGroupModal(link2, itemProps[0]);
-    expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
-
-    const requestsRadio = screen.getByLabelText(t.requests);
-    expect(requestsRadio).toBeInTheDocument();
-    await userEvent.click(requestsRadio);
-
-    const userNameElements = await screen.findAllByTestId('userName');
-    expect(userNameElements).toHaveLength(2);
-    expect(userNameElements[0]).toHaveTextContent('John Doe');
-    expect(userNameElements[1]).toHaveTextContent('Teresa Bradley');
-
-    const acceptBtn = screen.getAllByTestId('acceptBtn');
-    expect(acceptBtn).toHaveLength(2);
-    await userEvent.click(acceptBtn[0]);
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalled();
-    });
-  });
-
-  it('Try adding different values for volunteersRequired', async () => {
-    renderGroupModal(link1, itemProps[1]);
-    expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
-
-    const vrInput = screen.getByLabelText(t.volunteersRequired);
-    expect(vrInput).toBeInTheDocument();
-    fireEvent.change(vrInput, { target: { value: '-1' } });
-
-    await waitFor(() => {
-      expect(vrInput).toHaveValue('');
-    });
-
-    await userEvent.clear(vrInput);
-    await userEvent.type(vrInput, '1{backspace}');
-
-    await waitFor(() => {
-      expect(vrInput).toHaveValue('');
-    });
-
-    fireEvent.change(vrInput, { target: { value: '0' } });
-    await waitFor(() => {
-      expect(vrInput).toHaveValue('');
-    });
-
-    fireEvent.change(vrInput, { target: { value: '19' } });
-    await waitFor(() => {
-      expect(vrInput).toHaveValue('19');
-    });
-  });
-
-  it('GroupModal -> Details -> No values updated', async () => {
-    renderGroupModal(link1, itemProps[0]);
-    expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
-
-    const submitBtn = screen.getByTestId('submitBtn');
-    expect(submitBtn).toBeInTheDocument();
-    await userEvent.click(submitBtn);
-
-    await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalled();
-    });
-  });
-});
+export default GroupModal;
