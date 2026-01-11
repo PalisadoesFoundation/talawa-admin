@@ -4,7 +4,7 @@ import { ProfileAvatarDisplay } from './ProfileAvatarDisplay';
 import '@testing-library/dom';
 
 // Mock the Avatar component since we want to test ProfileAvatarDisplay's logic, not Avatar's.
-vi.mock('components/Avatar/Avatar', () => ({
+vi.mock('shared-components/Avatar/Avatar', () => ({
   default: ({
     name,
     dataTestId,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { InterfaceProfileAvatarDisplayProps } from 'types/shared-components/ProfileAvatarDisplay/interface';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import Modal from 'react-bootstrap/Modal';
 import styles from './ProfileAvatarDisplay.module.css';
 import { useTranslation } from 'react-i18next';
@@ -8,34 +8,35 @@ import { useTranslation } from 'react-i18next';
 /**
  * ProfileAvatarDisplay component renders a profile avatar based on the provided properties.
  * It handles image loading errors and falls back to an initial-based avatar.
- * @param {InterfaceProfileAvatarDisplayProps} props - The properties of the profile avatar display.
- * @param {string} props.imageUrl - The URL of the avatar image.
- * @param {string} props.fallbackName - The name of the user.
- * @param {"small" | "medium" | "large" | "custom"} props.size - The size of the avatar.
- * @param {"circle" | "square" | "rounded"} props.shape - The shape of the avatar.
- * @param {number} props.customSize - The custom size of the avatar.
- * @param {boolean} props.border - Whether to show a border around the avatar.
- * @param {string} props.className - The CSS class name for the avatar.
- * @param {React.CSSProperties} props.style - The inline styles for the avatar.
- * @param {string} props.dataTestId - The data test ID for the avatar.
- * @param {"cover" | "contain" | "fill" | "none" | "scale-down"} props.objectFit - The object fit for the avatar image.
- * @param {boolean} props.enableEnlarge - Whether to enable click-to-enlarge modal functionality.
- * @returns {JSX.Element} The ProfileAvatarDisplay component.
+ * @param imageUrl - The URL of the avatar image.
+ * @param fallbackName - The name of the user.
+ * @param size - The size of the avatar.
+ * @param shape - The shape of the avatar.
+ * @param customSize - The custom size of the avatar.
+ * @param border - Whether to show a border around the avatar.
+ * @param className - The CSS class name for the avatar.
+ * @param style - The inline styles for the avatar.
+ * @param dataTestId - The data test ID for the avatar.
+ * @param objectFit - The object fit for the avatar image.
+ * @param enableEnlarge - Whether to enable click-to-enlarge modal functionality.
+ * @returns JSX.Element - The ProfileAvatarDisplay component.
  * @example
+ * ```tsx
  * <ProfileAvatarDisplay
  *     imageUrl="https://example.com/avatar.jpg"
  *     altText="User Avatar"
  *     size="medium"
  *     shape="circle"
- *     customSize={48}
+ *     customSize=\{48\}
  *     name="John Doe"
- *     border={false}
+ *     border=\{false\}
  *     className=""
- *     style={{}}
+ *     style=\{\{\}\}
  *     dataTestId="profile-avatar"
  *     objectFit="cover"
- *     enableEnlarge={true}
- * />
+ *     enableEnlarge=\{true\}
+ * /\>
+ * ```
  */
 export const ProfileAvatarDisplay = ({
   imageUrl,
