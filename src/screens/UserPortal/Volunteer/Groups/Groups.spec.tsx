@@ -23,7 +23,9 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
 const routerMocks = vi.hoisted(() => ({
-  useParams: vi.fn(() => ({ orgId: 'orgId' })),
+  useParams: vi.fn(() => ({
+    orgId: 'orgId',
+  })),
 }));
 
 vi.mock('react-router', async () => {
@@ -324,7 +326,7 @@ describe('Groups Screen [User Portal]', () => {
   });
 
   it('redirects when orgId param is missing', async () => {
-    routerMocks.useParams.mockReturnValue({ orgId: undefined } as any); // No orgId
+    routerMocks.useParams.mockReturnValue({ orgId: '' });
     render(
       <MockedProvider link={linkSuccess}>
         <MemoryRouter initialEntries={['/user/volunteer/:orgId']}>
