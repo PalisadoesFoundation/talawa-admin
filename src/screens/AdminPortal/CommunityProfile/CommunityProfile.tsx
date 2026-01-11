@@ -58,7 +58,7 @@ import {
   SlackLogo,
 } from 'assets/svgs/social-icons';
 import convertToBase64 from 'utils/convertToBase64';
-import styles from 'style/app-fixed.module.css';
+import styles from './CommunityProfile.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import UpdateSession from '../../../components/UpdateSession/UpdateSession';
 

@@ -63,7 +63,7 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceQueryUserTagsAssignedMembers } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './ManageTag.module.css';
 import {
   DataGrid,
   type GridCellParams,
@@ -85,14 +85,14 @@ import {
   UPDATE_USER_TAG,
 } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAGS_ASSIGNED_MEMBERS } from 'GraphQl/Queries/userTagQueries';
-import AddPeopleToTag from 'components/AddPeopleToTag/AddPeopleToTag';
-import TagActions from 'components/TagActions/TagActions';
+import AddPeopleToTag from 'components/AdminPortal/AddPeopleToTag/AddPeopleToTag';
+import TagActions from 'components/AdminPortal/TagActions/TagActions';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import EditUserTagModal from './editModal/EditUserTagModal';
 import RemoveUserTagModal from './removeModal/RemoveUserTagModal';
 import UnassignUserTagModal from './unassignModal/UnassignUserTagModal';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 export const getManageTagErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
@@ -421,7 +421,7 @@ function ManageTag(): JSX.Element {
       <Row className={styles.head}>
         <div className={styles.mainpageright}>
           <div className={styles.btnsContainer}>
-            <AdminSearchFilterBar
+            <SearchFilterBar
               hasDropdowns={true}
               searchPlaceholder={tCommon('searchByName')}
               searchValue={assignedMemberSearchInput}
@@ -483,6 +483,7 @@ function ManageTag(): JSX.Element {
                     onClick={() => navigate(`/orgtags/${orgId}`)}
                     className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
                     data-testid="allTagsBtn"
+                    data-text={t('tags')}
                   >
                     {t('tags')}
                     <i className={'mx-2 fa fa-caret-right'} />
@@ -493,6 +494,7 @@ function ManageTag(): JSX.Element {
                       className={`ms-2 my-1 ${tag._id === currentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
                       onClick={() => redirectToManageTag(tag._id as string)}
                       data-testid="redirectToManageTag"
+                      data-text={tag.name}
                     >
                       {tag.name}
                       {orgUserTagAncestors.length - 1 !== index && (

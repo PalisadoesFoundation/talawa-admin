@@ -195,7 +195,7 @@ describe('UpcomingEvents', () => {
     });
   });
 
-  it('renders AdminSearchFilterBar with correct props', async () => {
+  it('renders SearchFilterBar with correct props', async () => {
     const link = new StaticMockLink(MOCKS);
     renderUpcomingEvents(link);
     await waitFor(() => {

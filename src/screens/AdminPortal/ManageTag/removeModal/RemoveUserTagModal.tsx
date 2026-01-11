@@ -1,39 +1,26 @@
 /**
- * A React functional component that renders a modal for confirming the removal of a user tag.
- * This modal is designed to be used in the "Manage Tag" section of the application.
+ * RemoveUserTagModal component.
  *
- * @component
- * @param {InterfaceRemoveUserTagModalProps} props - The props for the component.
- * @param {boolean} props.removeUserTagModalIsOpen - Determines whether the modal is visible.
- * @param {() => void} props.toggleRemoveUserTagModal - Function to toggle the visibility of the modal.
- * @param {() => Promise<void>} props.handleRemoveUserTag - Async function to handle the removal of a user tag.
- * @param {TFunction<'translation', 'manageTag'>} props.t - Translation function for the "manageTag" namespace.
- * @param {TFunction<'common', undefined>} props.tCommon - Translation function for common terms.
+ * This modal confirms removing a user tag in the Manage Tag flow.
  *
- * @returns {JSX.Element} The rendered modal component.
+ * @param props - Component props defined by InterfaceRemoveUserTagModalProps.
  *
  * @remarks
- * - The modal uses `react-bootstrap` for styling and functionality.
- * - The `t` and `tCommon` props are used for internationalization (i18n) support.
- * - The modal includes two buttons:
- *   - A "No" button to close the modal without performing any action.
- *   - A "Yes" button to confirm the removal of the user tag.
+ * - Uses translation functions for localized button labels and messages.
+ * - Disables the submit button while the removal request is in flight.
  *
  * @example
- * ```tsx
- * <RemoveUserTagModal
- *   removeUserTagModalIsOpen={true}
- *   toggleRemoveUserTagModal={handleToggle}
- *   handleRemoveUserTag={handleRemove}
- *   t={tFunction}
- *   tCommon={tCommonFunction}
- * />
- * ```
+ * Example usage:
+ * - removeUserTagModalIsOpen: true
+ * - toggleRemoveUserTagModal: handleToggle
+ * - handleRemoveUserTag: handleRemove
+ *
+ * @returns The rendered remove user tag modal.
  */
 // translation-check-keyPrefix: manageTag
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import styles from './RemoveUserTagModal.module.css';
 import { BaseModal } from 'shared-components/BaseModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';

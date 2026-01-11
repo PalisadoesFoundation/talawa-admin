@@ -56,7 +56,7 @@ vi.mock('shared-components/ProfileForm/ProfileForm', () => ({
 }));
 
 // Mock all lazy loaded components
-vi.mock('components/OrganizationScreen/OrganizationScreen', () => ({
+vi.mock('components/AdminPortal/OrganizationScreen/OrganizationScreen', () => ({
   default: () => (
     <div data-testid="mock-organization-screen">Mock Organization Screen</div>
   ),
@@ -66,7 +66,7 @@ vi.mock('shared-components/posts/posts', () => ({
   default: () => <div data-testid="mock-posts">Mock Posts</div>,
 }));
 
-vi.mock('components/SuperAdminScreen/SuperAdminScreen', () => ({
+vi.mock('components/AdminPortal/SuperAdminScreen/SuperAdminScreen', () => ({
   default: () => (
     <div data-testid="mock-super-admin-screen">Mock Super Admin Screen</div>
   ),
@@ -190,7 +190,7 @@ vi.mock('screens/AdminPortal/Leaderboard/Leaderboard', () => ({
   default: () => <div data-testid="mock-leaderboard">Mock Leaderboard</div>,
 }));
 
-vi.mock('components/Advertisements/Advertisements', () => ({
+vi.mock('components/AdminPortal/Advertisements/Advertisements', () => ({
   default: () => (
     <div data-testid="mock-advertisements">Mock Advertisements</div>
   ),

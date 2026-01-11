@@ -51,7 +51,7 @@ vi.mock('plugin/hooks', () => ({
 }));
 
 // Mock the useDebounce hook
-vi.mock('components/OrgListCard/useDebounce', () => ({
+vi.mock('shared-components/useDebounce/useDebounce', () => ({
   default: vi.fn((callback) => ({
     debouncedCallback: (value: string) => {
       callback(value);
@@ -99,7 +99,7 @@ describe('usePluginFilters', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Initialization', () => {

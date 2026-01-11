@@ -61,7 +61,7 @@ vi.mock('shared-components/IconComponent/IconComponent', () => ({
   ),
 }));
 
-// Debounce duration used by AdminSearchFilterBar component (default: 300ms)
+// Debounce duration used by SearchFilterBar component (default: 300ms)
 const SEARCH_DEBOUNCE_MS = 300;
 
 const link = new StaticMockLink(MOCKS, true);

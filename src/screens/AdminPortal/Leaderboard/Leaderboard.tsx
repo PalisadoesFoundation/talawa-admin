@@ -59,7 +59,7 @@ import leaderboardStyles from './Leaderboard.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import Avatar from 'components/Avatar/Avatar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 import {
   DataGrid,
@@ -239,7 +239,7 @@ function Leaderboard(): JSX.Element {
   return (
     <LoadingState isLoading={loading} variant="spinner">
       <div className={leaderboardStyles.leaderboardContainer}>
-        <AdminSearchFilterBar
+        <SearchFilterBar
           searchPlaceholder={t('searchByVolunteer')}
           searchValue={searchTerm}
           onSearchChange={setSearchTerm}

@@ -4,7 +4,7 @@
 
 # Interface: IUseTableDataOptions\<TNode, TRow, TData\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L120)
+Defined in: [src/types/shared-components/DataTable/interface.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L122)
 
 Options for the useTableData hook
 
@@ -34,7 +34,7 @@ The complete query result data type
 
 > `optional` **deps**: `DependencyList`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:262](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L262)
+Defined in: [src/types/shared-components/DataTable/interface.ts:263](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L263)
 
 React dependency array for memoization. Passed to useMemo() in useTableData.
 Only include values that should trigger path re-evaluation.
@@ -50,7 +50,7 @@ Use this for additional dependencies like query variables or state.
 
 > **path**: `DataPath`\<`TNode`, `TData`\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:195](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L195)
+Defined in: [src/types/shared-components/DataTable/interface.ts:197](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L197)
 
 Path to the GraphQL connection within the query result.
 
@@ -130,14 +130,14 @@ The path (whether string[] or function) must resolve to a GraphQL connection typ
 
 > `optional` **transformNode**: (`node`) => `TRow`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:252](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L252)
+Defined in: [src/types/shared-components/DataTable/interface.ts:253](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L253)
 
 Optional transformation function to convert GraphQL nodes to display rows.
 
 **Type Signature:** `(node: TNode) => TRow | null | undefined`
 
 Called for each non-null node. Return null/undefined to drop a row, or a TRow to keep it.
-Defaults to identity when omitted (TNode -> TRow), matching the hook implementation.
+Defaults to identity when omitted (TNode to TRow), matching the hook implementation.
 
 #### Parameters
 

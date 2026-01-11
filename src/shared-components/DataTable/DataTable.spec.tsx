@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { DataTable } from './DataTable';
+import { TableLoader } from './TableLoader';
 
 describe('DataTable', () => {
   afterEach(() => {
@@ -86,14 +87,14 @@ describe('DataTable', () => {
       name: string;
     }
 
-    interface IColumn {
+    interface IColumnDef {
       id: string;
       header: string;
       accessor: (row: IRow) => string;
       render: (value: unknown, row: IRow) => JSX.Element;
     }
 
-    const columns: IColumn[] = [
+    const columns: IColumnDef[] = [
       {
         id: 'name',
         header: 'Name',
@@ -323,5 +324,215 @@ describe('DataTable', () => {
     caption = document.querySelector('caption');
     expect(caption).toBeInTheDocument();
     expect(caption).toHaveTextContent(ariaLabel);
+  });
+
+  /* ------------------------------------------------------------------
+   * Loading optimizations: overlay and loadingMore
+   * ------------------------------------------------------------------ */
+
+  it('renders loading overlay with existing rows when loadingOverlay is true', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ name: 'Ada' }];
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        loading
+        loadingOverlay
+        skeletonRows={4}
+      />,
+    );
+
+    expect(screen.getByTestId('datatable')).toBeInTheDocument();
+    const overlay = screen.getByTestId('table-loader-overlay');
+    expect(overlay).toBeInTheDocument();
+
+    // Overlay should render a skeleton grid with min(skeletonRows, 3) rows and column-aligned cells
+    const rows = overlay.querySelectorAll('[data-testid^="skeleton-row-"]');
+    expect(rows.length).toBe(3);
+    rows.forEach((row) => {
+      const cells = row.querySelectorAll('[data-testid="table-loader-cell"]');
+      expect(cells.length).toBe(columns.length);
+    });
+  });
+
+  it('appends skeleton rows when loadingMore is true', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ name: 'Ada' }];
+
+    render(
+      <DataTable data={data} columns={columns} loadingMore skeletonRows={2} />,
+    );
+
+    const appended = document.querySelectorAll(
+      '[data-testid^="skeleton-append-"]',
+    );
+    expect(appended.length).toBe(2);
+    appended.forEach((row) => {
+      const cells = row.querySelectorAll('[data-testid="data-skeleton-cell"]');
+      expect(cells.length).toBe(columns.length);
+    });
+  });
+
+  /* ------------------------------------------------------------------
+   * Loading overlay behavior (loadingOverlay prop)
+   * ------------------------------------------------------------------ */
+
+  it('renders loading overlay when loading=true and loadingOverlay=true with existing data', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ name: 'Ada' }, { name: 'Bob' }];
+
+    render(<DataTable data={data} columns={columns} loading loadingOverlay />);
+
+    // Table with data should still render
+    expect(screen.getByTestId('datatable')).toBeInTheDocument();
+    expect(screen.getByText('Ada')).toBeInTheDocument();
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+
+    // Overlay with skeleton grid should render
+    const overlay = screen.getByTestId('table-loader-overlay');
+    expect(overlay).toBeInTheDocument();
+
+    // Overlay should have aria-busy=true on the table
+    expect(screen.getByTestId('datatable')).toHaveAttribute(
+      'aria-busy',
+      'true',
+    );
+  });
+
+  it('does not render overlay when loading=true but loadingOverlay=false (default)', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ name: 'Ada' }];
+
+    render(<DataTable data={data} columns={columns} loading />);
+
+    // Table should render
+    expect(screen.getByTestId('datatable')).toBeInTheDocument();
+    // No overlay
+    expect(
+      screen.queryByTestId('table-loader-overlay'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('does not render overlay when loadingOverlay=true but loading=false', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ name: 'Ada' }];
+
+    render(<DataTable data={data} columns={columns} loadingOverlay />);
+
+    // Table should render
+    expect(screen.getByTestId('datatable')).toBeInTheDocument();
+    // No overlay (loading must be true)
+    expect(
+      screen.queryByTestId('table-loader-overlay'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('does not render overlay when loading=true but no data exists (initial load)', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+
+    render(<DataTable data={[]} columns={columns} loading loadingOverlay />);
+
+    // Initial load: render skeleton grid instead of table
+    expect(screen.queryByTestId('datatable')).not.toBeInTheDocument();
+    // No overlay (only used for refetch with existing data)
+    expect(
+      screen.queryByTestId('table-loader-overlay'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('simulates refetch scenario: overlay appears and disappears when loading state toggles', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ name: 'Ada' }];
+    const { rerender } = render(
+      <DataTable
+        data={data}
+        columns={columns}
+        loading={false}
+        loadingOverlay
+      />,
+    );
+
+    // Initially: no loading, no overlay
+    expect(screen.getByTestId('datatable')).toBeInTheDocument();
+    expect(
+      screen.queryByTestId('table-loader-overlay'),
+    ).not.toBeInTheDocument();
+
+    // Start refetch: loading=true, loadingOverlay=true
+    rerender(
+      <DataTable data={data} columns={columns} loading loadingOverlay />,
+    );
+
+    // During refetch: overlay appears, data still visible
+    expect(screen.getByTestId('datatable')).toBeInTheDocument();
+    expect(screen.getByTestId('table-loader-overlay')).toBeInTheDocument();
+    expect(screen.getByText('Ada')).toBeInTheDocument();
+
+    // Refetch complete: loading=false
+    rerender(
+      <DataTable
+        data={data}
+        columns={columns}
+        loading={false}
+        loadingOverlay
+      />,
+    );
+
+    // Overlay disappears
+    expect(screen.getByTestId('datatable')).toBeInTheDocument();
+    expect(
+      screen.queryByTestId('table-loader-overlay'),
+    ).not.toBeInTheDocument();
+  });
+
+  /* ------------------------------------------------------------------
+   * TableLoader component
+   * ------------------------------------------------------------------ */
+
+  it('TableLoader renders grid with provided rows and columns', () => {
+    type TestRow = { a: string; b: string };
+    const columns: Array<{
+      id: string;
+      header: string;
+      accessor: keyof TestRow;
+    }> = [
+      { id: 'a', header: 'A', accessor: 'a' },
+      { id: 'b', header: 'B', accessor: 'b' },
+    ];
+
+    render(<TableLoader columns={columns} rows={2} />);
+
+    const grid = screen.getByTestId('table-loader-grid');
+    const rows = grid.querySelectorAll('[data-testid^="skeleton-row-"]');
+    expect(rows.length).toBe(2);
+    rows.forEach((row) => {
+      expect(
+        row.querySelectorAll('[data-testid="table-loader-cell"]').length,
+      ).toBe(columns.length);
+    });
+  });
+
+  it('TableLoader overlay uses column-aligned skeleton grid', () => {
+    type TestRow = { a: string };
+    const columns: Array<{
+      id: string;
+      header: string;
+      accessor: keyof TestRow;
+    }> = [{ id: 'a', header: 'A', accessor: 'a' }];
+
+    render(<TableLoader columns={columns} rows={5} asOverlay />);
+
+    const overlay = screen.getByTestId('table-loader-overlay');
+    expect(overlay).toBeInTheDocument();
+    const rows = overlay.querySelectorAll('[data-testid^="skeleton-row-"]');
+    // overlay should clamp rows to max(1, rows) but uses provided rows; columns length should match
+    expect(rows.length).toBe(5);
+    rows.forEach((row) => {
+      expect(
+        row.querySelectorAll('[data-testid="table-loader-cell"]').length,
+      ).toBe(columns.length);
+    });
   });
 });

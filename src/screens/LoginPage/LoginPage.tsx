@@ -1,55 +1,20 @@
 /**
- * @file LoginPage.tsx
- * @description This file contains the implementation of the Login and Registration page for the Talawa Admin application.
- * It includes functionality for user authentication, password validation, reCAPTCHA verification, and organization selection.
- * The page supports both admin and user roles and provides localization support.
+ * LoginPage component.
  *
- * @module LoginPage
+ * Provides login and registration flows with validation, reCAPTCHA, and
+ * organization selection. Supports admin and user roles with localization.
  *
- * @requires react
- * @requires react-router-dom
- * @requires react-bootstrap
- * @requires react-google-recaptcha
- * @requires @apollo/client
- * @requires @mui/icons-material
- * @requires @mui/material
- * @requires NotificationToast
- * @requires i18next
- * @requires utils/errorHandler
- * @requires utils/useLocalstorage
- * @requires utils/useSession
- * @requires utils/i18n
- * @requires GraphQl/Mutations/mutations
- * @requires GraphQl/Queries/Queries
- * @requires components/ChangeLanguageDropdown/ChangeLanguageDropDown
- * @requires components/LoginPortalToggle/LoginPortalToggle
- * @requires assets/svgs/palisadoes.svg
- * @requires assets/svgs/talawa.svg
- *
- * @component
- * @description The `loginPage` component renders a login and registration interface with the following features:
- * - Login and registration forms with validation.
- * - Password strength checks and visibility toggles.
- * - reCAPTCHA integration for bot prevention.
- * - Organization selection using an autocomplete dropdown.
- * - Social media links and community branding.
- * - Role-based navigation for admin and user.
- *
- * @returns {JSX.Element} The rendered login and registration page.
+ * @remarks
+ * Includes password strength checks, social links, and community branding.
  *
  * @example
  * ```tsx
- * import LoginPage from './LoginPage';
- *
- * const App = () => {
- *   return <LoginPage />;
- * };
- *
- * export default App;
+ * <LoginPage />
  * ```
  */
 import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
-import { Check, Clear } from '@mui/icons-material';
+import Check from '@mui/icons-material/Check';
+import Clear from '@mui/icons-material/Clear';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Form } from 'react-bootstrap';
@@ -78,9 +43,10 @@ import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLang
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
-import styles from '../../style/app-fixed.module.css';
+import styles from './LoginPage.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
-import { Autocomplete, TextField } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
 
