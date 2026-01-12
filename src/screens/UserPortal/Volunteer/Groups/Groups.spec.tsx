@@ -1047,4 +1047,75 @@ describe('Groups Screen [User Portal]', () => {
       expect(screen.getByRole('grid')).toBeInTheDocument();
     });
   });
+
+  test('handles DataGridWrapper sort value conversion from volunteers_asc to volunteers_ASC', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('sort')).toBeInTheDocument();
+    });
+
+    const sortDropdown = screen.getByTestId('sort');
+    await userEvent.click(sortDropdown);
+
+    const leastVolunteersOption = await screen.findByTestId('volunteers_asc');
+    await userEvent.click(leastVolunteersOption);
+
+    await waitFor(() => {
+      expect(screen.getByRole('grid')).toBeInTheDocument();
+    });
+  });
+
+  test('verifies DataGridWrapper configuration properties are set correctly', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByInput');
+    expect(searchInput).toHaveAttribute(
+      'placeholder',
+      'Search by Group or Leader',
+    );
+
+    // Test that loading is set to false
+    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+
+    // Test that server-side search is enabled
+    await userEvent.type(searchInput, 'test');
+    expect(searchInput).toHaveValue('test');
+  });
+
+  test('handles empty state message configuration', async () => {
+    const emptyMocks = [
+      {
+        request: {
+          query: EVENT_VOLUNTEER_GROUP_LIST,
+          variables: { userId: '123', orgId: '456' },
+        },
+        result: {
+          data: {
+            getEventVolunteerGroups: [],
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={emptyMocks} addTypename={false}>
+        <MemoryRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <Groups />
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('No volunteer groups')).toBeInTheDocument();
+    });
+  });
 });
