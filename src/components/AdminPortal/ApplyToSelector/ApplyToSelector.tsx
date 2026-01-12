@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 import { Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import type {
@@ -19,6 +19,10 @@ const ApplyToSelector: React.FC<InterfaceApplyToSelectorProps> = ({
   applyTo,
   onChange,
 }) => {
+  const uid = useId();
+  const name = `applyTo-${uid}`;
+  const seriesId = `${name}-series`; // i18n-ignore-line
+  const instanceId = `${name}-instance`; // i18n-ignore-line
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
   });
@@ -29,16 +33,16 @@ const ApplyToSelector: React.FC<InterfaceApplyToSelectorProps> = ({
       <Form.Check
         type="radio"
         label={t('entireSeries')}
-        name="applyTo"
-        id="applyToSeries"
+        name={name}
+        id={seriesId}
         checked={applyTo === 'series'}
         onChange={() => onChange('series')}
       />
       <Form.Check
         type="radio"
         label={t('thisEventOnly')}
-        name="applyTo"
-        id="applyToInstance"
+        name={name}
+        id={instanceId}
         checked={applyTo === 'instance'}
         onChange={() => onChange('instance')}
       />
