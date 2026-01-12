@@ -1,4 +1,4 @@
-import type { ActionItem } from '../actionItem';
+import type { ActionItem } from '../AdminPortal/actionItem';
 import type { Organization } from 'types/AdminPortal/Organization/type';
 import type { CheckInStatus } from '../CheckIn/type';
 
