@@ -263,7 +263,7 @@ describe('Testing VolunteerGroups Screen', () => {
     await userEvent.click(viewGroupBtn[0]);
 
     expect(await screen.findByText(t.groupDetails)).toBeInTheDocument();
-    await userEvent.click(await screen.findByTestId('volunteerGroupViewModal'));
+    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
 
   it('Open and Close Delete Modal', async () => {

@@ -135,7 +135,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                       {leader.avatarURL ? (
                         <img
                           src={leader.avatarURL}
-                          alt={t('volunteer')}
+                          alt={leader.name}
                           data-testid="leader_image"
                           className={styles.TableImages}
                         />

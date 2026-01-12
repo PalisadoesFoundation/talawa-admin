@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { InterfaceProfileAvatarDisplayProps } from 'types/shared-components/ProfileAvatarDisplay/interface';
 import Avatar from 'shared-components/Avatar/Avatar';
-import Modal from 'react-bootstrap/Modal';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import styles from './ProfileAvatarDisplay.module.css';
 import { useTranslation } from 'react-i18next';
 
@@ -123,43 +123,39 @@ export const ProfileAvatarDisplay = ({
 
   // Render the enlarge modal
   const renderModal = (): JSX.Element => (
-    <Modal
+    <BaseModal
       show={modalOpen}
       onHide={() => setModalOpen(false)}
-      centered
-      data-testid={dataTestId ? `${dataTestId}-modal` : 'avatar-modal'}
+      title={fallbackName ? fallbackName : t('profileAvatar.modalTitle')}
+      headerClassName={styles.modalHeader}
+      bodyClassName={styles.modalBody}
+      dataTestId={dataTestId ? dataTestId + '-modal' : 'avatar-modal'}
+      backdrop={true}
     >
-      <Modal.Header closeButton className={styles.modalHeader}>
-        <Modal.Title>
-          {fallbackName ? fallbackName : t('profileAvatar.modalTitle')}
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body className={styles.modalBody}>
-        {imageUrl && imageUrl !== 'null' && !imgError ? (
-          <img
-            src={imageUrl}
-            alt={t('profileAvatar.enlargedAltText', { name: fallbackName })}
-            className={styles.enlargedImage}
-            crossOrigin={crossOrigin}
-            onLoad={() => (onLoad ? onLoad() : null)}
-            onError={() => (onError ? onError() : null)}
+      {imageUrl && imageUrl !== 'null' && !imgError ? (
+        <img
+          src={imageUrl}
+          alt={t('profileAvatar.enlargedAltText', { name: fallbackName })}
+          className={styles.enlargedImage}
+          crossOrigin={crossOrigin}
+          onLoad={() => (onLoad ? onLoad() : null)}
+          onError={() => (onError ? onError() : null)}
+        />
+      ) : (
+        <div className={styles.enlargedFallback}>
+          <Avatar
+            name={fallbackName}
+            radius={shape === 'circle' ? 50 : shape === 'rounded' ? 10 : 0}
+            alt={altText}
+            dataTestId={
+              dataTestId
+                ? dataTestId + '-modal-fallback'
+                : 'avatar-modal-fallback'
+            }
           />
-        ) : (
-          <div className={styles.enlargedFallback}>
-            <Avatar
-              name={fallbackName}
-              radius={shape === 'circle' ? 50 : shape === 'rounded' ? 10 : 0}
-              alt={altText}
-              dataTestId={
-                dataTestId
-                  ? dataTestId + '-modal-fallback'
-                  : 'avatar-modal-fallback'
-              }
-            />
-          </div>
-        )}
-      </Modal.Body>
-    </Modal>
+        </div>
+      )}
+    </BaseModal>
   );
 
   // If imageUrl is present and no error, show image
