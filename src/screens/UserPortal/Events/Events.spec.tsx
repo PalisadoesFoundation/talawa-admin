@@ -799,7 +799,7 @@ describe('Testing Events Screen [User Portal]', () => {
       expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
     });
 
-    // Or use Escape key to close modal
+    // Close modal using Escape key
     await userEvent.keyboard('{Escape}');
     await waitFor(() => {
       expect(screen.queryByTestId('eventTitleInput')).not.toBeInTheDocument();
