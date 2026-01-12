@@ -82,7 +82,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
       headerContent={
         <p className={styles.modalTitle}>{t('volunteerDetails')}</p>
       }
-      dataTestId="modalCloseBtn"
+      dataTestId="volunteerViewModal"
     >
       <Form className={styles.modalForm}>
         {/* Volunteer Name & Avatar */}
