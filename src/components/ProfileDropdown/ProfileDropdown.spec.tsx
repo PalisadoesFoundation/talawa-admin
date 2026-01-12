@@ -10,6 +10,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { vi } from 'vitest';
+import { toast } from 'react-toastify';
 
 const { setItem } = useLocalStorage();
 
@@ -101,7 +102,9 @@ describe('ProfileDropdown Component', () => {
     render(
       <MockedProvider mocks={MOCKS} addTypename={false}>
         <BrowserRouter>
-          <ProfileDropdown />
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileDropdown />
+          </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -112,6 +115,7 @@ describe('ProfileDropdown Component', () => {
 
     await userEvent.click(screen.getByTestId('logoutBtn'));
 
+    expect(toast.success).toHaveBeenCalled();
     expect(global.window.location.pathname).toBe('/');
   });
 
@@ -219,5 +223,38 @@ describe('ProfileDropdown Component', () => {
     });
 
     expect(mockNavigate).toHaveBeenCalledWith('/member/321');
+  });
+
+  test('shows error toast when logout fails', async () => {
+    const ERROR_MOCKS = [
+      {
+        request: { query: REVOKE_REFRESH_TOKEN },
+        error: new Error('Network error'),
+      },
+      {
+        request: { query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG },
+        result: { data: { community: { inactivityTimeoutDuration: 1800 } } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={ERROR_MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileDropdown />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('togDrop'));
+    });
+
+    await act(async () => {
+      await userEvent.click(screen.getByTestId('logoutBtn'));
+    });
+
+    expect(toast.error).toHaveBeenCalled();
   });
 });

@@ -43,6 +43,7 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import useSession from 'utils/useSession';
+import { toast } from 'react-toastify';
 
 const profileDropdown = (): JSX.Element => {
   const { endSession } = useSession();
@@ -58,8 +59,17 @@ const profileDropdown = (): JSX.Element => {
   const logout = async (): Promise<void> => {
     try {
       await revokeRefreshToken();
+      toast.success(tCommon('logoutSuccess') || 'Successfully logged out');
     } catch (error) {
-      console.error('Error revoking refresh token:', error);
+      /* istanbul ignore next */
+      toast.error(
+        tCommon('errorLogout') ||
+          'Failed to logout. Please try again or clear browser cache.',
+      );
+      /* istanbul ignore next */
+      if (error instanceof Error) {
+        console.error('Error revoking refresh token:', error.message);
+      }
     }
     localStorage.clear();
     endSession();
