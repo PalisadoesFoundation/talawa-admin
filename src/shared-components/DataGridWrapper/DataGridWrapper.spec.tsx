@@ -167,4 +167,61 @@ describe('DataGridWrapper', () => {
 
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
+
+  test('handles server-side search with SearchFilterBar', () => {
+    vi.useFakeTimers();
+    const onSearchChange = vi.fn();
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          serverSide: true,
+          searchByOptions: [{ value: 'name', label: 'Name' }],
+          onSearchChange,
+        }}
+      />,
+    );
+
+    const input = screen.getByRole('searchbox');
+    fireEvent.change(input, { target: { value: 'test' } });
+    vi.advanceTimersByTime(300);
+    expect(onSearchChange).toHaveBeenCalledWith('test', undefined);
+    vi.useRealTimers();
+  });
+
+  test('handles sort change with server-side sorting', () => {
+    const onSortChange = vi.fn();
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        sortConfig={{
+          sortingOptions: [{ value: 'name', label: 'Name' }],
+          onSortChange,
+        }}
+      />,
+    );
+
+    const sortButton = screen.getByTestId('sort');
+    fireEvent.click(sortButton);
+    const option = screen.getByTestId('name');
+    fireEvent.click(option);
+    expect(onSortChange).toHaveBeenCalledWith('name');
+  });
+
+  test('handles search clear functionality', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{ enabled: true, fields: ['name'] }}
+      />,
+    );
+
+    const input = screen.getByRole('searchbox');
+    fireEvent.change(input, { target: { value: 'test' } });
+
+    const clearButton = screen.getByLabelText('Clear');
+    fireEvent.click(clearButton);
+    expect(input).toHaveValue('');
+  });
 });
