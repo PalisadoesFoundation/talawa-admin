@@ -316,7 +316,7 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
                 label={t('fundingGoal')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={campaignGoal}
+                value={String(campaignGoal)}
                 inputProps={{ min: 0 }}
                 onChange={(e) => {
                   if (e.target.value === '') {

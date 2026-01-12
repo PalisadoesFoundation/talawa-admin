@@ -820,7 +820,7 @@
     "earliestEndDate": "Earliest End Date",
     "lowestGoal": "Lowest Goal",
     "highestGoal": "Highest Goal",
-    "errorLoading": "Error occured while loading campaigns data",
+    "errorLoading": "Error occurred while loading campaigns data",
     "percentageRaised": "% Raised",
     "campaignProgress": "Campaign progress: {{percentage}}%",
     "campaignNotFound": "Campaign not found",
