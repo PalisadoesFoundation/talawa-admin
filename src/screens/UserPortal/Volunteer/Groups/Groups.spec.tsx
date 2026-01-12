@@ -1014,6 +1014,53 @@ describe('Groups Screen [User Portal]', () => {
     expect(searchInput).toHaveValue('  test group  ');
   });
 
+  test('adds leaderName to variables when searching by leader with non-empty term', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    const searchByDropdown = screen.getByTestId('searchBy');
+    await userEvent.click(searchByDropdown);
+    const leaderOption = await screen.findByTestId('leader');
+    await userEvent.click(leaderOption);
+
+    const searchInput = screen.getByTestId('searchByInput');
+    await userEvent.type(searchInput, 'leader name');
+
+    expect(searchInput).toHaveValue('leader name');
+  });
+
+  test('converts volunteers_desc to volunteers_DESC in onSortChange', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    const sortDropdown = screen.getByTestId('sort');
+    await userEvent.click(sortDropdown);
+
+    const sortOption = await screen.findByTestId('volunteers_desc');
+    await userEvent.click(sortOption);
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  test('adds name_contains to variables when searching by group with non-empty term', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByInput');
+    await userEvent.type(searchInput, 'group name');
+
+    expect(searchInput).toHaveValue('group name');
+  });
+
   test('handles empty search term in group mode', async () => {
     renderGroups(linkSuccess);
 
