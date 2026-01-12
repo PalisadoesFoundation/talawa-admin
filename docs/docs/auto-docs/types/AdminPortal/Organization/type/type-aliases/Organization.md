@@ -20,7 +20,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:25](https://github.com/P
 
 ### actionItemCategories?
 
-> `optional` **actionItemCategories**: [`ActionItemCategory`](../../../../actionItem/type-aliases/ActionItemCategory.md)[]
+> `optional` **actionItemCategories**: [`ActionItemCategory`](../../../actionItem/type-aliases/ActionItemCategory.md)[]
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L26)
 
@@ -156,7 +156,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:42](https://github.com/P
 
 ### venues?
 
-> `optional` **venues**: [`Venue`](../../../../venue/type-aliases/Venue.md)[]
+> `optional` **venues**: [`Venue`](../../../venue/type-aliases/Venue.md)[]
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L44)
 

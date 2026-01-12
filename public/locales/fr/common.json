@@ -254,5 +254,6 @@
   "peopleTabTagName": "Personnes",
   "or": "ou",
   "eventNotFound": "Événement avec l'id {{id}} non trouvé",
-  "required": "Obligatoire"
+  "required": "Obligatoire",
+  "imageNotFound": "Image non trouvée"
 }
