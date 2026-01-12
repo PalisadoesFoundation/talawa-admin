@@ -40,7 +40,7 @@ import { useParams, Navigate } from 'react-router';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import { Close } from '@mui/icons-material';
-import type { InterfaceOrgPeopleListCardProps } from 'types/Organization/interface';
+import type { InterfaceOrgPeopleListCardProps } from 'types/AdminPortal/Organization/interface';
 
 function orgPeopleListCard(
   props: InterfaceOrgPeopleListCardProps,

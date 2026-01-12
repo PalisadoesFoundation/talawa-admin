@@ -1,0 +1,79 @@
+.dropdown {
+  background-color: var(--color-gray-50);
+  min-width: var(--space-15);
+  border: var(--border-1) solid var(--color-gray-700);
+  color: var(--color-gray-700);
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown:is(:hover, :active, :focus, :focus-visible),
+:global(.show).dropdown {
+  box-shadow:
+    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
+      rgba(168, 199, 250, 1),
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
+      rgba(60, 64, 67, 0.15);
+  border: var(--border-1) solid var(--color-gray-700);
+  color: var(--color-gray-700);
+}
+
+.dropdown:is(:focus, :focus-visible) {
+  outline: var(--space-1) solid var(--color-blue-200);
+  outline-offset: var(--space-1);
+}
+
+.mainpageright > hr {
+  width: 100%;
+  margin-block: var(--space-6);
+  margin-inline: calc(var(--space-5) * -1);
+}
+@media screen and (max-width: 1200px) {
+  .mainpageright {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 575.5px) {
+  .mainpageright {
+    width: 98%;
+  }
+}
+
+.justifyspOrganizationEvents {
+  justify-content: space-between;
+  margin-top: var(--space-6);
+}
+
+.addIconStyle {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--space-1);
+  margin-right: var(--space-1);
+}
+
+.titlemodalOrganizationEvents {
+  color: var(--color-gray-700);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-6);
+  padding-bottom: var(--space-2);
+  border-bottom: var(--border-3) solid var(--color-gray-100);
+  width: 65%;
+}
+
+.closeButtonOrganizationEvents {
+  color: var(--color-red-500);
+  margin-right: var(--space-2);
+  background-color: var(--color-red-100);
+  border: var(--border-1) solid var(--color-white);
+}
+
+.closeButtonOrganizationEvents:is(:hover, :focus-visible) {
+  color: var(--color-red-100);
+  background-color: var(--color-red-500);
+  border: var(--border-1) solid var(--color-white);
+}
+
+.closeButtonOrganizationEvents:focus-visible {
+  outline: var(--space-1) solid var(--color-blue-200);
+}
