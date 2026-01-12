@@ -100,7 +100,6 @@
   "successfullyUpdated": "更新成功",
   "sessionWarning": "会话即将过期。",
   "sessionLogOut": "会话已过期。",
-  "sessionExpired": "会话已过期，请重新登录",
   "all": "全部",
   "active": "活跃",
   "disabled": "禁用",
@@ -148,7 +147,6 @@
   "workPhoneNumber": "工作电话号码",
   "unblock": "解封",
   "unblockedSuccessfully": "{{item}} 解封成功",
-
   "pluginSettings": "插件设置",
   "profilePicture": "头像",
   "profilePicturePlaceholder": "占位图片",

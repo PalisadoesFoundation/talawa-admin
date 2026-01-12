@@ -100,7 +100,6 @@
   "successfullyUpdated": "सफलतापूर्वक अपडेट किया गया",
   "sessionWarning": "निष्क्रियता के कारण सत्र समाप्त होने वाला है।",
   "sessionLogOut": "निष्क्रियता के कारण सत्र समाप्त हो गया।",
-  "sessionExpired": "कृपया फिर से लॉगिन करें क्योंकि सत्र समाप्त हो गया है",
   "all": "सभी",
   "active": "सक्रिय",
   "disabled": "अक्षम",
@@ -161,7 +160,6 @@
   "mobilePhoneNumber": "मोबाइल फोन नंबर",
   "personalDetailsHeading": "प्रोफ़ाइल विवरण",
   "workPhoneNumber": "कार्य फोन नंबर",
-
   "showPassword": "पासवर्ड दिखाएं",
   "hidePassword": "पासवर्ड छुपाएं",
   "volunteer": "स्वयंसेवक",
