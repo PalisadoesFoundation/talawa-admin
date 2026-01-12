@@ -71,6 +71,82 @@ import type {
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import DateRangePicker from 'shared-components/DateRangePicker/DateRangePicker';
 
+import type { IDateRangePreset } from 'types/shared-components/DateRangePicker/interface';
+
+/**
+ * Predefined date range presets for quick date selection in the Events calendar.
+ * Each preset provides a label and a function that returns start/end dates.
+ */
+const datePresets: IDateRangePreset[] = [
+  {
+    key: 'today',
+    label: 'Today',
+    getRange: () => ({
+      startDate: dayjs().startOf('day').toDate(),
+      endDate: dayjs().endOf('day').toDate(),
+    }),
+  },
+  {
+    key: 'thisWeek',
+    label: 'This Week',
+    getRange: () => ({
+      startDate: dayjs().startOf('week').toDate(),
+      endDate: dayjs().endOf('week').toDate(),
+    }),
+  },
+  {
+    key: 'thisMonth',
+    label: 'This Month',
+    getRange: () => ({
+      startDate: dayjs().startOf('month').toDate(),
+      endDate: dayjs().endOf('month').toDate(),
+    }),
+  },
+  {
+    key: 'next7Days',
+    label: 'Next 7 Days',
+    getRange: () => ({
+      startDate: dayjs().startOf('day').toDate(),
+      endDate: dayjs().add(7, 'days').endOf('day').toDate(),
+    }),
+  },
+  {
+    key: 'next30Days',
+    label: 'Next 30 Days',
+    getRange: () => ({
+      startDate: dayjs().startOf('day').toDate(),
+      endDate: dayjs().add(30, 'days').endOf('day').toDate(),
+    }),
+  },
+  {
+    key: 'nextMonth',
+    label: 'Next Month',
+    getRange: () => ({
+      startDate: dayjs().add(1, 'month').startOf('month').toDate(),
+      endDate: dayjs().add(1, 'month').endOf('month').toDate(),
+    }),
+  },
+];
+
+export function computeCalendarFromStartDate(startDate: Date | null): {
+  month: number;
+  year: number;
+} {
+  if (!startDate) {
+    const now = new Date();
+    return {
+      month: now.getMonth(),
+      year: now.getFullYear(),
+    };
+  }
+
+  const d = dayjs(startDate);
+  return {
+    month: d.month(),
+    year: d.year(),
+  };
+}
+
 export default function Events(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });
   const { t: tCommon } = useTranslation('common');
@@ -87,16 +163,14 @@ export default function Events(): JSX.Element {
     startDate: dayjs().startOf('month').toDate(),
     endDate: dayjs().endOf('month').toDate(),
   });
-
-  const calendarMonth = React.useMemo(() => {
-    if (!dateRange.startDate) return new Date().getMonth();
-    return dayjs(dateRange.startDate).month();
-  }, [dateRange.startDate]);
-
-  const calendarYear = React.useMemo(() => {
-    if (!dateRange.startDate) return new Date().getFullYear();
-    return dayjs(dateRange.startDate).year();
-  }, [dateRange.startDate]);
+  // Defensive fallback: startDate is typed as nullable, but is always initialized
+  // and cannot be set to null via DateRangePicker in normal usage.
+  // Kept for future-proofing; null handling is covered at the utility level
+  // (computeCalendarFromStartDate) to avoid unrealistic UI scenarios.
+  const { month: calendarMonth, year: calendarYear } = React.useMemo(
+    () => computeCalendarFromStartDate(dateRange.startDate),
+    [dateRange.startDate],
+  );
 
   // Query to fetch events for the organization
   const {
@@ -288,6 +362,7 @@ export default function Events(): JSX.Element {
         onChange={setDateRange}
         dataTestId="events-date-range"
         showPresets
+        presets={datePresets}
       />
 
       {/* <div className="mt-4"> */}
@@ -298,7 +373,7 @@ export default function Events(): JSX.Element {
         orgData={orgData}
         userRole={userRole}
         userId={userId}
-        onMonthChange={() => {}}
+        onMonthChange={() => {}} // No-op: DateRangePicker controls date range
         currentMonth={calendarMonth}
         currentYear={calendarYear}
       />

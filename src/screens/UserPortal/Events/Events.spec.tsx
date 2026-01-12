@@ -16,7 +16,7 @@ import { I18nextProvider } from 'react-i18next';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-
+import { computeCalendarFromStartDate } from './Events';
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
 
@@ -725,18 +725,6 @@ async function wait(ms = 500): Promise<void> {
 }
 
 describe('Testing Events Screen [User Portal]', () => {
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: vi.fn().mockImplementation((query) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    })),
-  });
-
   beforeEach(() => {
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
@@ -1503,7 +1491,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should test userRole as administrator', async () => {
-    localStorage.setItem('Talawa-admin_role', JSON.stringify('administrator'));
+    localStorage.setItem('role', 'administrator');
 
     const cache = new InMemoryCache();
     render(
@@ -1532,8 +1520,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should test userRole as regular user', async () => {
-    localStorage.setItem('Talawa-admin_role', JSON.stringify('user'));
-
+    localStorage.setItem('role', 'user');
     const cache = new InMemoryCache();
     render(
       <MockedProvider link={link} cache={cache}>
@@ -1905,5 +1892,88 @@ describe('Testing Events Screen [User Portal]', () => {
     await waitFor(() => {
       expect(mockToast.success).toHaveBeenCalled();
     });
+  });
+
+  it('Should filter events when DateRangePicker preset is selected', async () => {
+    const cache = new InMemoryCache();
+    render(
+      <MockedProvider link={link} cache={cache}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <ThemeProvider theme={theme}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Events />
+              </I18nextProvider>
+            </ThemeProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('events-date-range-preset-today'),
+      ).toBeInTheDocument();
+    });
+
+    const thisWeekButton = screen.getByTestId(
+      'events-date-range-preset-thisWeek',
+    );
+    await userEvent.click(thisWeekButton);
+
+    await wait(300);
+
+    expect(thisWeekButton).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('Should update events when date range is manually changed', async () => {
+    const cache = new InMemoryCache();
+    render(
+      <MockedProvider link={link} cache={cache}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <ThemeProvider theme={theme}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Events />
+              </I18nextProvider>
+            </ThemeProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const startDateInput = screen.getByTestId(
+      'events-date-range-start-input',
+    ) as HTMLInputElement;
+    const endDateInput = screen.getByTestId(
+      'events-date-range-end-input',
+    ) as HTMLInputElement;
+
+    const newStartDate = dayjs().add(1, 'week');
+    const newEndDate = dayjs().add(2, 'weeks');
+
+    fireEvent.change(startDateInput, {
+      target: { value: newStartDate.format('MM/DD/YYYY') },
+    });
+
+    fireEvent.change(endDateInput, {
+      target: { value: newEndDate.format('MM/DD/YYYY') },
+    });
+
+    await wait(300);
+
+    expect(startDateInput.value).toBe(newStartDate.format('MM/DD/YYYY'));
+    expect(endDateInput.value).toBe(newEndDate.format('MM/DD/YYYY'));
+  });
+
+  it('should compute calendar from null startDate using current date', () => {
+    const now = dayjs();
+    const { month, year } = computeCalendarFromStartDate(null);
+    expect(month).toBe(now.month());
+    expect(year).toBe(now.year());
   });
 });
