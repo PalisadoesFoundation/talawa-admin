@@ -10,7 +10,7 @@ import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import dayjs from 'dayjs';
 
 // Mock Avatar component
-vi.mock('components/Avatar/Avatar', () => ({
+vi.mock('shared-components/Avatar/Avatar', () => ({
   default: ({ name, alt }: { name: string; alt: string }) => (
     <div data-testid="avatar" data-name={name} data-alt={alt}>
       Avatar: {name}
