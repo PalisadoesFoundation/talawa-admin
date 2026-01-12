@@ -37,7 +37,8 @@ jobs:
 
           if [ "${{ github.event_name }}" = "pull_request_target" ]; then
             echo "[SETUP] PR Number: ${{ github.event.pull_request.number }}"
-            echo "[SETUP] PR Title: ${{ github.event.pull_request.title }}"
+            PR_TITLE='${{ github.event.pull_request.title }}'
+            printf "[SETUP] PR Title: %s\n" "${PR_TITLE}"
             echo "[SETUP] Base Branch: ${{ github.event.pull_request.base.ref }}"
             echo "[SETUP] Base SHA: ${{ github.event.pull_request.base.sha }}"
             echo "[SETUP] Head Branch: ${{ github.event.pull_request.head.ref }}"
@@ -168,11 +169,13 @@ jobs:
 
           echo "[CHECK] Files with conflicts in this PR: ${FILTERED_COUNT}"
 
+          PR_TITLE=$(gh pr view ${{ github.event.pull_request.number }} --json title --jq '.title')
+
           # Generate result
           echo "[RESULT] ========================================"
           echo "[RESULT] CONFLICT DETECTION SUMMARY"
           echo "[RESULT] ========================================"
-          echo "[RESULT] PR #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}"
+          printf "[RESULT] PR #%s: %s\n" "${{ github.event.pull_request.number }}" "${PR_TITLE}"
           echo "[RESULT] Base: ${{ github.event.pull_request.base.ref }} @ ${{ github.event.pull_request.base.sha }}"
           echo "[RESULT] Head: ${{ github.event.pull_request.head.ref }} @ ${{ github.event.pull_request.head.sha }}"
           echo "[RESULT] ----------------------------------------"
@@ -216,7 +219,7 @@ jobs:
             echo "[CHECK-ALL] ----------------------------------------"
             echo "[CHECK-ALL] Checking PR #${pr_number}"
             
-            # Get PR details
+            # Get PR details - use jq to safely extract values
             PR_DATA=$(gh pr view ${pr_number} --json headRefName,headRefOid,baseRefName,baseRefOid,title)
             PR_TITLE=$(echo "${PR_DATA}" | jq -r '.title')
             PR_HEAD_REF=$(echo "${PR_DATA}" | jq -r '.headRefName')
@@ -224,7 +227,7 @@ jobs:
             PR_BASE_REF=$(echo "${PR_DATA}" | jq -r '.baseRefName')
             PR_BASE_SHA=$(echo "${PR_DATA}" | jq -r '.baseRefOid')
             
-            echo "[CHECK-ALL] PR #${pr_number}: ${PR_TITLE}"
+            printf "[CHECK-ALL] PR #%s: %s\n" "${pr_number}" "${PR_TITLE}"
             echo "[CHECK-ALL] Base: ${PR_BASE_REF} @ ${PR_BASE_SHA}"
             echo "[CHECK-ALL] Head: ${PR_HEAD_REF} @ ${PR_HEAD_SHA}"
             
@@ -256,9 +259,15 @@ jobs:
             
             # Parse conflicts
             touch "pr_${pr_number}_conflicts.txt"
+            
+            # Look for CONFLICT markers
             echo "${MERGE_OUTPUT}" | grep "^CONFLICT" | \
               sed -E 's/^CONFLICT \([^)]+\): Merge conflict in (.+)$/\1/' | \
               grep -v "^CONFLICT" >> "pr_${pr_number}_conflicts.txt" || true
+            
+            # Also check for "changed in both" indicators (consistent with single PR check)
+            echo "${MERGE_OUTPUT}" | grep -E "^\+<<<<<|^Auto-merging" | \
+              grep -oP "(?<=Auto-merging )\S+" >> "pr_${pr_number}_conflicts.txt" || true
             
             sort -u "pr_${pr_number}_conflicts.txt" | grep -v "^$" > "pr_${pr_number}_conflicts_unique.txt" || touch "pr_${pr_number}_conflicts_unique.txt"
             mv "pr_${pr_number}_conflicts_unique.txt" "pr_${pr_number}_conflicts.txt"
@@ -286,20 +295,37 @@ jobs:
               FAILED_PRS="${FAILED_PRS}${pr_number},"
               FAILED_COUNT=$((FAILED_COUNT + 1))
               
-              # Post comment on PR2
+              # Safely prepare conflict list for comment
+              CONFLICT_LIST=$(cat "pr_${pr_number}_filtered.txt" | sed 's/^/- /' | head -n 100)
+              
+              # Post comment on PR with proper formatting
               gh pr comment ${pr_number} --body "⚠️ **Merge Conflict Detected**
 
-            This PR has merge conflicts with the base branch \`${PR_BASE_REF}\` after recent changes were merged.
+              This PR has merge conflicts with the base branch \`${PR_BASE_REF}\` after recent changes were merged.
 
-            **Conflicted files:**
-            $(cat "pr_${pr_number}_filtered.txt" | sed 's/^/- /')
+              **Conflicted files:**
+              ${CONFLICT_LIST}
 
-            **Action required:** Please update your branch to resolve these conflicts:
-            \`\`\`bash
-            git fetch origin
-            git checkout ${PR_HEAD_REF}
-            git merge origin/${PR_BASE_REF}
-            # Resolve conflicts, then:
-            git push
-            \`\`\`"
+              **Action required:** Please update your branch to resolve these conflicts:
+              \`\`\`bash
+              git fetch origin
+              git checkout ${PR_HEAD_REF}
+              git merge origin/${PR_BASE_REF}
+              # Resolve conflicts, then:
+              git push
+              \`\`\`"
+            else
+              echo "[CHECK-ALL] ✅ PR #${pr_number} has no conflicts"
             fi
+                      
+            done < pr_numbers.txt
+
+            echo "[CHECK-ALL] ========================================"
+            echo "[CHECK-ALL] BATCH CHECK COMPLETE"
+            echo "[CHECK-ALL] Total PRs checked: $(wc -l < pr_numbers.txt | tr -d ' ')"
+            echo "[CHECK-ALL] PRs with conflicts: ${FAILED_COUNT}"
+            
+            if [ "${FAILED_COUNT}" -gt 0 ]; then
+              echo "[CHECK-ALL] Failed PRs: ${FAILED_PRS%,}"
+            fi
+            echo "[CHECK-ALL] ========================================"
