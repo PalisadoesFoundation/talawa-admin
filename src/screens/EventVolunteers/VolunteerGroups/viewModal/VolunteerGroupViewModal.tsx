@@ -76,7 +76,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
       onHide={hide}
       show={isOpen}
       headerContent={<p className={styles.titlemodal}>{t('groupDetails')}</p>}
-      dataTestId="volunteerViewModalCloseBtn"
+      dataTestId="volunteerGroupViewModal"
     >
       <Form className="p-3">
         {/* Group name & Volunteers Required */}
@@ -91,14 +91,14 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
               disabled
             />
           </FormControl>
-          {description && (
+          {volunteersRequired !== null && volunteersRequired !== undefined && (
             <FormControl fullWidth>
               <TextField
                 required
                 label={tCommon('volunteersRequired')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={volunteersRequired ?? '-'}
+                value={volunteersRequired}
                 disabled
               />
             </FormControl>
@@ -128,30 +128,32 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
               className={styles.noOutline}
               value={leader.name}
               disabled
-              InputProps={{
-                startAdornment: (
-                  <>
-                    {leader.avatarURL ? (
-                      <img
-                        src={leader.avatarURL}
-                        alt={t('volunteer')}
-                        data-testid="leader_image"
-                        className={styles.TableImages}
-                      />
-                    ) : (
-                      <div className={styles.avatarContainer}>
-                        <Avatar
-                          key={leader.id + '1'}
-                          containerStyle={styles.imageContainer}
-                          avatarStyle={styles.TableImages}
-                          dataTestId="leader_avatar"
-                          name={leader.name}
-                          alt={leader.name}
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <>
+                      {leader.avatarURL ? (
+                        <img
+                          src={leader.avatarURL}
+                          alt={t('volunteer')}
+                          data-testid="leader_image"
+                          className={styles.TableImages}
                         />
-                      </div>
-                    )}
-                  </>
-                ),
+                      ) : (
+                        <div className={styles.avatarContainer}>
+                          <Avatar
+                            key={`${leader.id}-avatar`}
+                            containerStyle={styles.imageContainer}
+                            avatarStyle={styles.TableImages}
+                            dataTestId="leader_avatar"
+                            name={leader.name}
+                            alt={leader.name}
+                          />
+                        </div>
+                      )}
+                    </>
+                  ),
+                },
               }}
             />
           </FormControl>
@@ -163,30 +165,32 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
               className={styles.noOutline}
               value={creator.name}
               disabled
-              InputProps={{
-                startAdornment: (
-                  <>
-                    {creator.avatarURL ? (
-                      <img
-                        src={creator.avatarURL}
-                        alt={t('volunteer')}
-                        data-testid="creator_image"
-                        className={styles.TableImages}
-                      />
-                    ) : (
-                      <div className={styles.avatarContainer}>
-                        <Avatar
-                          key={creator.id + '1'}
-                          containerStyle={styles.imageContainer}
-                          avatarStyle={styles.TableImages}
-                          dataTestId="creator_avatar"
-                          name={creator.name}
-                          alt={creator.name}
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <>
+                      {creator.avatarURL ? (
+                        <img
+                          src={creator.avatarURL}
+                          alt={t('volunteer')}
+                          data-testid="creator_image"
+                          className={styles.TableImages}
                         />
-                      </div>
-                    )}
-                  </>
-                ),
+                      ) : (
+                        <div className={styles.avatarContainer}>
+                          <Avatar
+                            key={`${creator.id}-avatar`}
+                            containerStyle={styles.imageContainer}
+                            avatarStyle={styles.TableImages}
+                            dataTestId="creator_avatar"
+                            name={creator.name}
+                            alt={creator.name}
+                          />
+                        </div>
+                      )}
+                    </>
+                  ),
+                },
               }}
             />
           </FormControl>

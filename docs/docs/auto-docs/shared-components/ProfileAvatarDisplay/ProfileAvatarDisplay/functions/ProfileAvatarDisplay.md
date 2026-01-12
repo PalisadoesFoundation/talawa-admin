@@ -27,19 +27,19 @@ JSX.Element - The ProfileAvatarDisplay component.
 
 ## Example
 
-```tsx
+```
 <ProfileAvatarDisplay
     imageUrl="https://example.com/avatar.jpg"
     altText="User Avatar"
     size="medium"
     shape="circle"
-    customSize=\{48\}
+    customSize={48}
     name="John Doe"
-    border=\{false\}
+    border={false}
     className=""
-    style=\{\{\}\}
+    style={{}}
     dataTestId="profile-avatar"
     objectFit="cover"
-    enableEnlarge=\{true\}
-/\>
+    enableEnlarge={true}
+/>
 ```

@@ -10,7 +10,7 @@
  * @param hide - Function to close the modal.
  * @param volunteer - The volunteer's information.
  *
- * @returns React.FC - A React functional component.
+ * @returns JSX.Element - The rendered modal component.
  *
  * @remarks
  * - The modal displays the volunteer's name and avatar. If an avatar is not available,
@@ -74,6 +74,40 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
 
   const { user, volunteerStatus, hoursVolunteered, groups } = volunteer;
 
+  /**
+   * Returns the status configuration based on volunteer status.
+   * @param status - The volunteer's status ('accepted', 'rejected', or 'pending').
+   * @returns An object containing the label, icon, and className for the status.
+   */
+  const getStatusConfig = (
+    status: string,
+  ): { label: string; icon: React.ReactNode; className: string } => {
+    switch (status) {
+      case 'accepted':
+        return {
+          label: t('accepted'),
+          icon: <TaskAlt color="success" className={styles.statusIcon} />,
+          className: styles.acceptedStatus,
+        };
+      case 'rejected':
+        return {
+          label: t('rejected'),
+          icon: <Cancel color="error" className={styles.statusIcon} />,
+          className: styles.rejectedStatus,
+        };
+      default:
+        return {
+          label: tCommon('pending'),
+          icon: (
+            <HistoryToggleOff color="warning" className={styles.statusIcon} />
+          ),
+          className: styles.pendingStatus,
+        };
+    }
+  };
+
+  const statusConfig = getStatusConfig(volunteerStatus);
+
   return (
     <BaseModal
       className={styles.volunteerViewModal}
@@ -94,30 +128,32 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
               className={styles.noOutline}
               value={user.name}
               disabled
-              InputProps={{
-                startAdornment: (
-                  <>
-                    {user.avatarURL ? (
-                      <img
-                        src={user.avatarURL}
-                        alt={t('volunteer')}
-                        data-testid="volunteer_image"
-                        className={styles.tableImage}
-                      />
-                    ) : (
-                      <div className={styles.avatarContainer}>
-                        <Avatar
-                          key={user.id + '1'}
-                          containerStyle={styles.imageContainer}
-                          avatarStyle={styles.tableImage}
-                          dataTestId="volunteer_avatar"
-                          name={user.name}
-                          alt={user.name}
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <>
+                      {user.avatarURL ? (
+                        <img
+                          src={user.avatarURL}
+                          alt={t('volunteer')}
+                          data-testid="volunteer_image"
+                          className={styles.tableImage}
                         />
-                      </div>
-                    )}
-                  </>
-                ),
+                      ) : (
+                        <div className={styles.avatarContainer}>
+                          <Avatar
+                            key={`${user.id}-avatar`}
+                            containerStyle={styles.imageContainer}
+                            avatarStyle={styles.tableImage}
+                            dataTestId="volunteer_avatar"
+                            name={user.name}
+                            alt={user.name}
+                          />
+                        </div>
+                      )}
+                    </>
+                  ),
+                },
               }}
             />
           </FormControl>
@@ -127,34 +163,12 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
           <TextField
             label={t('status')}
             fullWidth
-            value={
-              volunteerStatus === 'accepted'
-                ? t('accepted')
-                : volunteerStatus === 'rejected'
-                  ? t('rejected')
-                  : tCommon('pending')
-            }
-            InputProps={{
-              startAdornment: (
-                <>
-                  {volunteerStatus === 'accepted' ? (
-                    <TaskAlt color="success" className={styles.statusIcon} />
-                  ) : volunteerStatus === 'rejected' ? (
-                    <Cancel color="error" className={styles.statusIcon} />
-                  ) : (
-                    <HistoryToggleOff
-                      color="warning"
-                      className={styles.statusIcon}
-                    />
-                  )}
-                </>
-              ),
-              className:
-                volunteerStatus === 'accepted'
-                  ? styles.acceptedStatus
-                  : volunteerStatus === 'rejected'
-                    ? styles.rejectedStatus
-                    : styles.pendingStatus,
+            value={statusConfig.label}
+            slotProps={{
+              input: {
+                startAdornment: statusConfig.icon,
+                className: statusConfig.className,
+              },
             }}
             disabled
           />
