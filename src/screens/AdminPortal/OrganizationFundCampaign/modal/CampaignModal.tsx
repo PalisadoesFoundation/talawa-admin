@@ -238,18 +238,24 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
             label={tCommon('startDate')}
             value={dayjs(campaignStartDate)}
             className={styles.noOutline}
+            data-testid="campaignStartDate"
             onChange={(date: Dayjs | null): void => {
-              if (date) {
-                setFormState({
-                  ...formState,
-                  campaignStartDate: date.toDate(),
-                  campaignEndDate:
-                    campaignEndDate &&
-                    (campaignEndDate < date?.toDate()
-                      ? date.toDate()
-                      : campaignEndDate),
-                });
+              if (!date) {
+                return;
               }
+              const nextStartDate = date.toDate();
+              setFormState((prev) => {
+                const shouldSyncEndDate =
+                  prev.campaignEndDate &&
+                  dayjs(prev.campaignEndDate).isBefore(nextStartDate, 'day');
+                return {
+                  ...prev,
+                  campaignStartDate: nextStartDate,
+                  campaignEndDate: shouldSyncEndDate
+                    ? nextStartDate
+                    : prev.campaignEndDate,
+                };
+              });
             }}
             minDate={dayjs(new Date())}
           />
@@ -259,6 +265,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
             label={tCommon('endDate')}
             className={styles.noOutline}
             value={dayjs(campaignEndDate)}
+            data-testid="campaignEndDate"
             onChange={(date: Dayjs | null): void => {
               if (date) {
                 setFormState({
