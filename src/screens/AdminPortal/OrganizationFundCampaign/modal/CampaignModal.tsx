@@ -36,6 +36,17 @@ export interface InterfaceCampaignModal {
   mode: 'create' | 'edit';
 }
 
+/**
+ * Modal component for creating or editing a Fund Campaign.
+ *
+ * @param isOpen - Whether the modal is open
+ * @param hide - Function to hide the modal
+ * @param fundId - Fund ID associated with the campaign
+ * @param orgId - Organization ID
+ * @param campaign - Existing campaign data or null
+ * @param refetchCampaign - Callback to refresh campaign list
+ * @param mode - 'create' or 'edit'
+ */
 const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   isOpen,
   hide,

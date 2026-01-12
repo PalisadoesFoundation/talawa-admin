@@ -23,6 +23,16 @@ export interface InterfaceFundModal {
   mode: 'create' | 'edit';
 }
 
+/**
+ * Modal component for creating or editing a Fund.
+ *
+ * @param isOpen - Whether the modal is open
+ * @param hide - Function to hide the modal
+ * @param refetchFunds - Callback to refresh funds list
+ * @param fund - Existing fund data or null
+ * @param orgId - Organization ID
+ * @param mode - 'create' or 'edit'
+ */
 const FundModal: React.FC<InterfaceFundModal> = ({
   isOpen,
   hide,

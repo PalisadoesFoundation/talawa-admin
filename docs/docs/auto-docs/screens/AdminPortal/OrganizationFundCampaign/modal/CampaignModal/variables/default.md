@@ -6,4 +6,34 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceCampaignModal`](../interfaces/InterfaceCampaignModal.md)\>
 
-Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx#L39)
+Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx#L50)
+
+Modal component for creating or editing a Fund Campaign.
+
+## Param
+
+Whether the modal is open
+
+## Param
+
+Function to hide the modal
+
+## Param
+
+Fund ID associated with the campaign
+
+## Param
+
+Organization ID
+
+## Param
+
+Existing campaign data or null
+
+## Param
+
+Callback to refresh campaign list
+
+## Param
+
+'create' or 'edit'
