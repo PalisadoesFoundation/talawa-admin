@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganization
 
-Defined in: [src/types/Post/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L50)
+Defined in: [src/types/Post/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L36)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:50](https://github.com/PalisadoesFounda
 
 > **id**: `string`
 
-Defined in: [src/types/Post/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L51)
+Defined in: [src/types/Post/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L37)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/interface.ts:51](https://github.com/PalisadoesFounda
 
 > **pinnedPosts**: `object`
 
-Defined in: [src/types/Post/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L57)
+Defined in: [src/types/Post/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L43)
 
 #### edges
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Post/interface.ts:57](https://github.com/PalisadoesFounda
 
 > **posts**: `object`
 
-Defined in: [src/types/Post/interface.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L52)
+Defined in: [src/types/Post/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L38)
 
 #### edges
 
