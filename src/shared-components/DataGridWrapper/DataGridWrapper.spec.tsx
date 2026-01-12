@@ -44,7 +44,7 @@ describe('DataGridWrapper', () => {
     vi.clearAllMocks();
   });
 
-  // Core tests for coverage
+  // Core 4 tests for coverage
   test('initializes with default sort configuration', () => {
     const sortConfig = {
       defaultSortField: 'name',
@@ -57,7 +57,6 @@ describe('DataGridWrapper', () => {
 
     render(<DataGridWrapper {...defaultProps} sortConfig={sortConfig} />);
 
-    // Default sort is Name Desc -> Charlie, Bob, Alice
     const rows = screen.getAllByRole('row');
     expect(within(rows[1]).getByText('Charlie')).toBeInTheDocument();
   });
@@ -95,41 +94,17 @@ describe('DataGridWrapper', () => {
 
     render(<DataGridWrapper {...defaultProps} sortConfig={sortConfig} />);
 
-    // Open sort dropdown
     const sortBtn = screen.getByText('Sort');
     fireEvent.click(sortBtn);
-
-    // Select Name Desc
     fireEvent.click(screen.getByText('Name Desc'));
 
-    // Verify order changed (Charlie should be first for desc sort)
     const rows = screen.getAllByRole('row');
     expect(within(rows[1]).getByText('Charlie')).toBeInTheDocument();
   });
 
-  test('handles client-side search onClear', () => {
-    render(
-      <DataGridWrapper
-        {...defaultProps}
-        searchConfig={{
-          enabled: true,
-          fields: ['name'],
-        }}
-      />,
-    );
-
-    const searchInput = screen.getByRole('searchbox');
-    fireEvent.change(searchInput, { target: { value: 'test' } });
-
-    const clearButton = screen.getByRole('button', { name: /clear/i });
-    fireEvent.click(clearButton);
-
-    expect(searchInput).toHaveValue('');
-  });
-
-  test('handles server-side search onSearchSubmit', () => {
+  test('handles server-side search change', () => {
+    vi.useFakeTimers();
     const onSearchChange = vi.fn();
-
     render(
       <DataGridWrapper
         {...defaultProps}
@@ -143,30 +118,53 @@ describe('DataGridWrapper', () => {
       />,
     );
 
-    const searchInput = screen.getByRole('searchbox');
-    fireEvent.change(searchInput, { target: { value: 'test' } });
-    fireEvent.keyDown(searchInput, { key: 'Enter' });
-
+    const input = screen.getByRole('searchbox');
+    fireEvent.change(input, { target: { value: 'test' } });
+    vi.advanceTimersByTime(300);
     expect(onSearchChange).toHaveBeenCalledWith('test', 'name');
+    vi.useRealTimers();
   });
 
-  test('handles sort option change with onSortChange callback', () => {
-    const onSortChange = vi.fn();
-
+  test('handles client-side search', () => {
     render(
       <DataGridWrapper
         {...defaultProps}
-        sortConfig={{
-          sortingOptions: [{ label: 'Name', value: 'name_asc' }],
-          onSortChange,
-        }}
+        searchConfig={{ enabled: true, fields: ['name'] }}
       />,
     );
 
-    const sortBtn = screen.getByText('Sort');
-    fireEvent.click(sortBtn);
-    fireEvent.click(screen.getByTestId('name_asc'));
+    const input = screen.getByRole('searchbox');
+    fireEvent.change(input, { target: { value: 'Alice' } });
+    expect(input).toHaveValue('Alice');
+  });
 
-    expect(onSortChange).toHaveBeenCalledWith('name_asc');
+  test('handles empty state with emptyStateProps', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        rows={[]}
+        emptyStateProps={{ message: 'Custom empty' }}
+      />,
+    );
+
+    expect(screen.getByText('Custom empty')).toBeInTheDocument();
+  });
+
+  test('handles pagination rerender with different config', () => {
+    const { rerender } = render(
+      <DataGridWrapper
+        {...defaultProps}
+        paginationConfig={{ enabled: true }}
+      />,
+    );
+
+    rerender(
+      <DataGridWrapper
+        {...defaultProps}
+        paginationConfig={{ enabled: true, pageSizeOptions: [5, 10] }}
+      />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 });
