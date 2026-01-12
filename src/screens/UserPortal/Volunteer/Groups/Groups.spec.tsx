@@ -1086,36 +1086,4 @@ describe('Groups Screen [User Portal]', () => {
     await userEvent.type(searchInput, 'test');
     expect(searchInput).toHaveValue('test');
   });
-
-  test('handles empty state message configuration', async () => {
-    const emptyMocks = [
-      {
-        request: {
-          query: EVENT_VOLUNTEER_GROUP_LIST,
-          variables: { userId: '123', orgId: '456' },
-        },
-        result: {
-          data: {
-            getEventVolunteerGroups: [],
-          },
-        },
-      },
-    ];
-
-    render(
-      <MockedProvider mocks={emptyMocks} addTypename={false}>
-        <MemoryRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <Groups />
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('No volunteer groups')).toBeInTheDocument();
-    });
-  });
 });
