@@ -40,12 +40,6 @@ describe('modifyEnvFile', () => {
 
     expect(updateEnvFile).not.toHaveBeenCalled();
   });
-});
-
-describe('checkEnvFile', () => {
-  beforeEach(() => {
-    vi.resetAllMocks();
-  });
 
   it('should return true if .env file already exists', () => {
     vi.spyOn(fs, 'existsSync').mockImplementation((file) => file === '.env');
