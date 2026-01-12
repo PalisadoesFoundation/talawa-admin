@@ -1,130 +1,64 @@
-import path from 'path';
-import inquirer from 'inquirer';
-import { mkdir, copyFile, access } from 'fs/promises';
-import { backupEnvFile } from './backupEnvFile';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-vi.mock('fs/promises');
-vi.mock('inquirer');
+vi.mock('node:fs/promises');
+
+import path from 'path';
+import { mkdir, copyFile } from 'node:fs/promises';
+import { backupEnvFile } from './backupEnvFile';
 
 describe('backupEnvFile', () => {
   const mockCwd = '/test/path';
-  const originalCwd = process.cwd;
 
   beforeEach(() => {
     vi.clearAllMocks();
-    process.cwd = vi.fn(() => mockCwd);
-    vi.spyOn(console, 'log').mockImplementation(() => {});
-    vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(process, 'cwd').mockReturnValue(mockCwd);
+    vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2023-01-01T12:00:00Z'));
   });
 
   afterEach(() => {
-    process.cwd = originalCwd;
     vi.restoreAllMocks();
+    vi.useRealTimers();
   });
 
-  it('should create backup when user confirms', async () => {
-    vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
+  it('creates a backup directory and copies the .env file', async () => {
     vi.mocked(mkdir).mockResolvedValue(undefined);
-    vi.mocked(access).mockResolvedValue(undefined);
     vi.mocked(copyFile).mockResolvedValue(undefined);
 
-    const mockEpochMs = 1234567890000;
-    const mockEpochSec = 1234567890;
-    vi.spyOn(Date, 'now').mockReturnValue(mockEpochMs);
+    const result = await backupEnvFile();
 
-    await backupEnvFile();
+    const expectedBackupDir = path.join(mockCwd, '.backup');
+    const expectedBackupPath = path.join(
+      expectedBackupDir,
+      '.env-backup-2023-01-01T12-00-00-000Z',
+    );
 
-    expect(mkdir).toHaveBeenCalledWith(path.join(mockCwd, '.backup'), {
+    expect(mkdir).toHaveBeenCalledWith(expectedBackupDir, {
       recursive: true,
     });
-    expect(copyFile).toHaveBeenCalledWith(
-      path.join(mockCwd, '.env'),
-      path.join(mockCwd, '.backup', `.env.${mockEpochSec}`),
-    );
-    expect(console.log).toHaveBeenCalledWith(
-      expect.stringContaining(`.env.${mockEpochSec}`),
-    );
+
+    expect(copyFile).toHaveBeenCalledWith('.env', expectedBackupPath);
+
+    expect(result).toBe(expectedBackupPath);
   });
 
-  it('should not create backup when user declines', async () => {
-    vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: false });
-
-    await backupEnvFile();
-
-    expect(mkdir).not.toHaveBeenCalled();
-    expect(copyFile).not.toHaveBeenCalled();
-  });
-
-  it('should ensure .backup directory exists when backing up', async () => {
-    vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
+  it('uses ISO timestamp format with ":" and "." replaced', async () => {
     vi.mocked(mkdir).mockResolvedValue(undefined);
-    vi.mocked(access).mockResolvedValue(undefined);
     vi.mocked(copyFile).mockResolvedValue(undefined);
 
-    const mockEpochMs = 1234567890000;
-    vi.spyOn(Date, 'now').mockReturnValue(mockEpochMs);
+    const mockTime = '2023-10-27T14:30:05.123Z';
+    vi.setSystemTime(new Date(mockTime));
 
-    await backupEnvFile();
+    const result = await backupEnvFile();
 
-    expect(mkdir).toHaveBeenCalledWith(path.join(mockCwd, '.backup'), {
-      recursive: true,
-    });
-  });
+    const expectedTimestamp = '2023-10-27T14-30-05-123Z';
 
-  it('should handle missing .env file gracefully', async () => {
-    vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
-    vi.mocked(mkdir).mockResolvedValue(undefined);
-    const enoentError = Object.assign(new Error('File not found'), {
-      code: 'ENOENT',
-    });
-    vi.mocked(access).mockRejectedValue(enoentError);
-
-    await backupEnvFile();
-
-    expect(copyFile).not.toHaveBeenCalled();
-    expect(console.log).toHaveBeenCalledWith(
-      expect.stringContaining('No .env file found'),
-    );
-  });
-
-  it('should throw error when directory creation fails', async () => {
-    vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
-    vi.mocked(mkdir).mockRejectedValue(new Error('Permission denied'));
-    vi.spyOn(Date, 'now').mockReturnValue(1234567890000);
-
-    await expect(backupEnvFile()).rejects.toThrow(
-      'Failed to backup .env file: Permission denied',
-    );
-  });
-
-  it('should throw error when file copy fails', async () => {
-    vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
-    vi.mocked(mkdir).mockResolvedValue(undefined);
-    vi.mocked(access).mockResolvedValue(undefined);
-    vi.mocked(copyFile).mockRejectedValue(new Error('Disk full'));
-    vi.spyOn(Date, 'now').mockReturnValue(1234567890000);
-
-    await expect(backupEnvFile()).rejects.toThrow(
-      'Failed to backup .env file: Disk full',
-    );
-  });
-
-  it('should use correct epoch timestamp format', async () => {
-    vi.mocked(inquirer.prompt).mockResolvedValueOnce({ shouldBackup: true });
-    vi.mocked(mkdir).mockResolvedValue(undefined);
-    vi.mocked(access).mockResolvedValue(undefined);
-    vi.mocked(copyFile).mockResolvedValue(undefined);
-
-    const mockEpochMs = 1609459200000;
-    const mockEpochSec = 1609459200;
-    vi.spyOn(Date, 'now').mockReturnValue(mockEpochMs);
-
-    await backupEnvFile();
-
+    expect(result).toContain(`.env-backup-${expectedTimestamp}`);
     expect(copyFile).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.stringContaining(`.env.${mockEpochSec}`),
+      '.env',
+      expect.stringContaining(`.env-backup-${expectedTimestamp}`),
     );
   });
 });
