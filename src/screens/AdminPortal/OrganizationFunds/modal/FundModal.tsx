@@ -244,12 +244,13 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               }
             />
           </Form.Group>
-          <Form.Group className="d-flex">
-            <label>{t('default')} </label>
+          <Form.Group className="d-flex" controlId="defaultSwitch">
+            <Form.Label>{t('default')} </Form.Label>
             <Form.Switch
               type="checkbox"
               className={`ms-2 ${styles.switch}`}
               data-testid="setDefaultSwitch"
+              id="defaultSwitch"
               checked={formState.isDefault}
               onChange={() =>
                 setFormState({
@@ -260,12 +261,13 @@ const FundModal: React.FC<InterfaceFundModal> = ({
             />
           </Form.Group>
           {mode === 'edit' && (
-            <Form.Group className="d-flex">
-              <label>{t('archived')} </label>
+            <Form.Group className="d-flex" controlId="archivedSwitch">
+              <Form.Label>{t('archived')} </Form.Label>
               <Form.Switch
                 type="checkbox"
                 checked={formState.isArchived}
                 data-testid="archivedSwitch"
+                id="archivedSwitch"
                 className={`ms-2 ${styles.switch}`}
                 onChange={() =>
                   setFormState({
