@@ -34,7 +34,7 @@ Defined in: [src/types/Post/interface.ts:13](https://github.com/PalisadoesFounda
 
 ### creator
 
-> **creator**: `Partial`\<[`User`](../../../User/type/type-aliases/User.md)\>
+> **creator**: `Partial`\<[`User`](../../../shared-components/User/type/type-aliases/User.md)\>
 
 Defined in: [src/types/Post/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L5)
 

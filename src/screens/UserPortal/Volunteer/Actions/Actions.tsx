@@ -6,15 +6,15 @@ import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_LIST } from 'GraphQl/Queries/ActionItemQueries';
-import type { IActionItemInfo } from 'types/ActionItems/interface';
+import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 import styles from 'style/app-fixed.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
-  DataGrid,
+  DataGridWrapper,
   type GridCellParams,
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
-import { Chip, Stack } from '@mui/material';
+import { Chip } from '@mui/material';
 import ItemViewModal from 'screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal';
 import Avatar from 'components/Avatar/Avatar';
 import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
@@ -250,16 +250,16 @@ function Actions(): JSX.Element {
           ]}
         />
 
-        <DataGrid
-          autoHeight
-          hideFooter
+        <DataGridWrapper
           rows={actionItems}
           columns={columns}
-          getRowId={(r) => r.id}
-          slots={{
-            noRowsOverlay: () => (
-              <Stack alignItems="center">{t('noActionItems')}</Stack>
-            ),
+          emptyStateProps={{
+            message: t('noActionItems'),
+          }}
+          paginationConfig={{
+            enabled: true,
+            defaultPageSize: 25,
+            pageSizeOptions: [10, 25, 50, 100],
           }}
         />
 

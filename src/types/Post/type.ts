@@ -1,7 +1,7 @@
 import type { VoteState } from 'utils/interfaces';
 import type { Comment } from '../Comment/type';
-import type { User } from '../User/type';
-import type { Organization } from 'types/Organization/type';
+import type { User } from '../shared-components/User/type';
+import type { Organization } from 'types/AdminPortal/Organization/type';
 
 export type Post = {
   _id?: string; // Optional

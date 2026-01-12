@@ -6,4 +6,4 @@
 
 > `const` **MEMBERSHIP\_REQUEST\_PG**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:1017](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L1017)
+Defined in: [src/GraphQl/Queries/Queries.ts:1024](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L1024)

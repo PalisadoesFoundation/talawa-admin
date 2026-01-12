@@ -1,5 +1,5 @@
 import type { ActionItem } from '../actionItem';
-import type { Organization } from 'types/Organization/type';
+import type { Organization } from 'types/AdminPortal/Organization/type';
 import type { CheckInStatus } from '../CheckIn/type';
 
 export type User = {

@@ -196,8 +196,7 @@ describe('LeaveOrganization Component', () => {
       </MockedProvider>,
     );
     // LoadingState renders with data-testid="loading-state"
-    const loadingState = await screen.findByTestId('loading-state');
-    expect(loadingState).toBeInTheDocument();
+    expect(screen.getByTestId('loading-state')).toBeInTheDocument();
     await waitFor(() => {
       expect(screen.getByText('Test Organization')).toBeInTheDocument();
       expect(

@@ -64,7 +64,7 @@ vi.mock('components/Avatar/Avatar', () => ({
   ),
 }));
 
-vi.mock('components/OrgListCard/TruncatedText', () => ({
+vi.mock('shared-components/TruncatedText/TruncatedText', () => ({
   default: ({ text }: { text: string }) => <span>{text}</span>,
 }));
 
