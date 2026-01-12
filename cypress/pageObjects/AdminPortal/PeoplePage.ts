@@ -12,6 +12,14 @@ export class PeoplePage {
   visitPeoplePage(): void {
     cy.get(this._peopleTabButton).should('be.visible').click();
     cy.url().should('match', /\/orgpeople\/[a-f0-9-]+/);
+    // Wait for the table to load on initial page visit
+    cy.get('table', {
+      timeout: 40000,
+    }).should('exist');
+    // Wait for loading state to complete if present
+    cy.get('[data-testid="organization-people-loading"]', {
+      timeout: 40000,
+    }).should('not.exist');
   }
 
   searchMemberByName(name: string, timeout = 40000) {
@@ -52,6 +60,11 @@ export class PeoplePage {
       .should('be.visible')
       .and('contain.text', 'Member added Successfully');
     cy.reload();
+    // Wait for table to reload after page refresh
+    cy.get('table', { timeout: 40000 }).should('exist');
+    cy.get('[data-testid="organization-people-loading"]', {
+      timeout: 40000,
+    }).should('not.exist');
     this.searchMemberByName(name, timeout);
     this.verifyMemberInList(name, timeout);
     return this;
