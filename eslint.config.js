@@ -64,7 +64,7 @@ const restrictedImports = [
     id: 'react-toastify',
     name: 'react-toastify',
     message:
-      'Direct imports from react-toastify are not allowed. Please use the NotificationToast component from src/components/NotificationToast/ instead.',
+      'Direct imports from react-toastify are not allowed. Please use the NotificationToast component from src/shared-components/NotificationToast/ instead.',
   },
 ];
 
@@ -313,8 +313,8 @@ export default [
    */
   {
     files: [
-      'src/components/NotificationToast/**/*.{ts,tsx}',
-      'src/types/NotificationToast/**/*.{ts,tsx}',
+      'src/shared-components/NotificationToast/**/*.{ts,tsx}',
+      'src/types/shared-components/NotificationToast/**/*.{ts,tsx}',
     ],
     rules: restrictImportsExcept(['react-toastify']),
   },
