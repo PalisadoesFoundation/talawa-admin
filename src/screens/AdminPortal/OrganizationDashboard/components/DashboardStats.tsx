@@ -7,21 +7,19 @@
  * to the respective detailed view. The component supports loading states and handles
  * various click interactions through callback functions.
  *
- * @component
- * @param props - The properties for the DashboardStats component.
- * @param props.memberCount - The total number of members in the organization.
- * @param props.adminCount - The total number of administrators in the organization.
- * @param props.eventCount - The total number of events in the organization.
- * @param props.venueCount - The total number of venues in the organization.
- * @param props.blockedCount - The total number of blocked users in the organization.
- * @param props.postsCount - The total number of posts in the organization. Optional parameter.
- * @param props.isLoading - Loading state indicator. When true, shows skeleton loaders instead of actual counts.
- * @param props.onMembersClick - Callback function triggered when the members statistics card is clicked.
- * @param props.onAdminsClick - Callback function triggered when the admins statistics card is clicked.
- * @param props.onPostsClick - Callback function triggered when the posts statistics card is clicked.
- * @param props.onEventsClick - Callback function triggered when the events statistics card is clicked.
- * @param props.onVenuesClick - Callback function triggered when the venues statistics card is clicked.
- * @param props.onBlockedUsersClick - Callback function triggered when the blocked users statistics card is clicked.
+ * @param memberCount - The total number of members in the organization.
+ * @param adminCount - The total number of administrators in the organization.
+ * @param eventCount - The total number of events in the organization.
+ * @param venueCount - The total number of venues in the organization.
+ * @param blockedCount - The total number of blocked users in the organization.
+ * @param postsCount - The total number of posts in the organization. Optional.
+ * @param isLoading - Loading state indicator. When true, shows skeleton loaders instead of actual counts.
+ * @param onMembersClick - Callback function triggered when the members statistics card is clicked.
+ * @param onAdminsClick - Callback function triggered when the admins statistics card is clicked.
+ * @param onPostsClick - Callback function triggered when the posts statistics card is clicked.
+ * @param onEventsClick - Callback function triggered when the events statistics card is clicked.
+ * @param onVenuesClick - Callback function triggered when the venues statistics card is clicked.
+ * @param onBlockedUsersClick - Callback function triggered when the blocked users statistics card is clicked.
  *
  * @returns A JSX element containing a grid layout with six clickable dashboard cards displaying organization statistics.
  *
@@ -51,7 +49,6 @@
  * - The component is fully responsive and adapts to different screen sizes using Bootstrap grid system.
  * - All callback functions are asynchronous to support navigation and API calls.
  *
- * @file This file defines the DashboardStats component used in the Talawa Admin organization dashboard.
  */
 
 import React from 'react';
@@ -66,7 +63,7 @@ import VenuesIcon from 'assets/svgs/venues.svg?react';
 import DashBoardCard from 'components/OrganizationDashCards/DashboardCard';
 import DashboardCardLoading from 'components/OrganizationDashCards/Loader/DashboardCardLoading';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import orgStyles from '../OrganizationDashboard.module.css';
+import styles from '../OrganizationDashboard.module.css';
 
 interface InterfaceDashboardStatsProps {
   memberCount: number;
@@ -106,7 +103,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
       isLoading={isLoading}
       variant="custom"
       customLoader={
-        <Row className={orgStyles.flex}>
+        <Row className={styles.flex}>
           {[...Array(6)].map((_, index) => (
             <Col
               xs={6}
@@ -121,7 +118,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
         </Row>
       }
     >
-      <Row className={orgStyles.flex}>
+      <Row className={styles.flex}>
         <Col xs={6} sm={4} className="mb-4">
           <button
             type="button"
@@ -133,7 +130,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
             <DashBoardCard
               count={memberCount}
               title={tCommon('members')}
-              icon={<UsersIcon className={orgStyles.iconGrey} />}
+              icon={<UsersIcon className={styles.iconGrey} />}
             />
           </button>
         </Col>
@@ -148,7 +145,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
             <DashBoardCard
               count={adminCount}
               title={tCommon('admins')}
-              icon={<AdminsIcon className={orgStyles.iconGrey} />}
+              icon={<AdminsIcon className={styles.iconGrey} />}
             />
           </button>
         </Col>
@@ -163,7 +160,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
             <DashBoardCard
               count={postsCount ?? 0}
               title={tCommon('posts')}
-              icon={<PostsIcon className={orgStyles.iconGrey} />}
+              icon={<PostsIcon className={styles.iconGrey} />}
             />
           </button>
         </Col>
@@ -178,7 +175,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
             <DashBoardCard
               count={eventCount}
               title={tCommon('events')}
-              icon={<EventsIcon className={orgStyles.iconGrey} />}
+              icon={<EventsIcon className={styles.iconGrey} />}
             />
           </button>
         </Col>
@@ -193,7 +190,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
             <DashBoardCard
               count={blockedCount}
               title={tCommon('blockedUsers')}
-              icon={<BlockedUsersIcon className={orgStyles.iconGrey} />}
+              icon={<BlockedUsersIcon className={styles.iconGrey} />}
             />
           </button>
         </Col>
@@ -208,7 +205,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
             <DashBoardCard
               count={venueCount}
               title={tCommon('venues')}
-              icon={<VenuesIcon className={orgStyles.iconGrey} />}
+              icon={<VenuesIcon className={styles.iconGrey} />}
             />
           </button>
         </Col>
