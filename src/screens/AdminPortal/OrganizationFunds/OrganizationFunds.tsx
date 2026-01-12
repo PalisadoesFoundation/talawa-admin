@@ -15,7 +15,6 @@ import TableLoader from 'shared-components/TableLoader/TableLoader';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import FundModal from './modal/FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
-import styles from 'style/app-fixed.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
 import {
   ReportingRow,
@@ -29,7 +28,7 @@ import {
 } from 'types/ReportingTable/utils';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
-import componentStyles from './OrganizationFunds.module.css';
+import styles from './OrganizationFunds.module.css';
 
 const dataGridStyle = {
   ...baseDataGridStyle,
@@ -348,8 +347,7 @@ const organizationFunds = (): JSX.Element => {
         </Stack>
       ),
     },
-    getRowClassName: () =>
-      `${styles.rowBackground} ${componentStyles.overflowVisible}`,
+    getRowClassName: () => `${styles.rowBackground} ${styles.overflowVisible}`,
     isRowSelectable: () => false,
     disableColumnMenu: true,
     rowHeight: ROW_HEIGHT,
@@ -417,7 +415,7 @@ const organizationFunds = (): JSX.Element => {
               gridProps={gridProps}
               listProps={{
                 loader: <TableLoader noOfCols={6} noOfRows={2} />,
-                className: `${styles.listTable} ${componentStyles.overflowVisible}`,
+                className: `${styles.listTable} ${styles.overflowVisible}`,
                 ['data-testid']: 'funds-list',
                 scrollThreshold: 0.9,
                 endMessage:

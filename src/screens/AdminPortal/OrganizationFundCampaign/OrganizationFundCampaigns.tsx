@@ -11,7 +11,6 @@ import TableLoader from 'shared-components/TableLoader/TableLoader';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import CampaignModal from './modal/CampaignModal';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
-import styles from 'style/app-fixed.module.css';
 import { currencySymbols } from 'utils/currency';
 import type {
   InterfaceCampaignInfo,
@@ -26,7 +25,7 @@ import {
 import { PAGE_SIZE, ROW_HEIGHT } from 'types/ReportingTable/utils';
 import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/BreadcrumbsComponent';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
-import componentStyles from './OrganizationFundCampaign.module.css';
+import styles from './OrganizationFundCampaign.module.css';
 
 const dataGridStyle = {
   borderRadius: 'var(--table-head-radius)',
@@ -300,13 +299,13 @@ const orgFundCampaign = (): JSX.Element => {
             className={styles.progressCellContainer}
             data-testid="progressCell"
           >
-            <Box className={componentStyles.progressCircleContainer}>
+            <Box className={styles.progressCircleContainer}>
               <CircularProgress
                 variant="determinate"
                 value={100}
                 size={32}
                 thickness={4}
-                className={componentStyles.progressCircleBackground}
+                className={styles.progressCircleBackground}
               />
               <CircularProgress
                 variant="determinate"
@@ -319,12 +318,12 @@ const orgFundCampaign = (): JSX.Element => {
                 aria-valuemin={0}
                 aria-valuemax={100}
                 aria-valuenow={percentage}
-                className={`${componentStyles.progressCircleForeground} ${
+                className={`${styles.progressCircleForeground} ${
                   percentage >= 100
-                    ? componentStyles.progressComplete
+                    ? styles.progressComplete
                     : percentage >= 50
-                      ? componentStyles.progressHalf
-                      : componentStyles.progressLow
+                      ? styles.progressHalf
+                      : styles.progressLow
                 }`}
               />
             </Box>
@@ -371,7 +370,7 @@ const orgFundCampaign = (): JSX.Element => {
     hideFooter: true,
     compactColumns: columns.length >= 7,
     getRowClassName: () =>
-      `${styles.rowBackgroundOrganizationFundCampaign} ${componentStyles.overflowVisible}`,
+      `${styles.rowBackgroundOrganizationFundCampaign} ${styles.overflowVisible}`,
     isRowSelectable: () => false,
     disableColumnMenu: true,
     rowHeight: ROW_HEIGHT,
@@ -452,7 +451,7 @@ const orgFundCampaign = (): JSX.Element => {
               gridProps={gridProps}
               listProps={{
                 loader: <TableLoader noOfCols={8} noOfRows={2} />,
-                className: `${styles.listTable} ${componentStyles.overflowVisible}`,
+                className: `${styles.listTable} ${styles.overflowVisible}`,
                 ['data-testid']: 'campaigns-list',
                 scrollThreshold: 0.9,
                 endMessage:
