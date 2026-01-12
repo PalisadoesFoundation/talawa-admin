@@ -981,4 +981,55 @@ describe('DataGridWrapper', () => {
 
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
+
+  test('uses sortConfig.selectedSort when provided', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        sortConfig={{
+          selectedSort: 'name_asc',
+          sortingOptions: [{ label: 'Name A-Z', value: 'name_asc' }],
+        }}
+      />,
+    );
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  test('shows runtime validation warning for server-side search without onSearchChange', () => {
+    const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          serverSide: true,
+        }}
+      />,
+    );
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      '[DataGridWrapper] Server-side search enabled but onSearchChange callback is missing',
+    );
+
+    consoleSpy.mockRestore();
+  });
+
+  test('uses server-side search term values', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          serverSide: true,
+          searchTerm: 'server-term',
+          onSearchChange: vi.fn(),
+        }}
+      />,
+    );
+
+    const searchInput = screen.getByRole('searchbox');
+    expect(searchInput).toHaveValue('server-term');
+  });
 });
