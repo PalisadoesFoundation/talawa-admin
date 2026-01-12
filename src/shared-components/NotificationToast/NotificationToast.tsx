@@ -7,7 +7,7 @@ import type {
   InterfaceNotificationToastHelpers,
   NotificationToastMessage,
   NotificationToastNamespace,
-} from 'types/NotificationToast/interface';
+} from 'types/shared-components/NotificationToast/interface';
 
 const DEFAULT_NAMESPACE: NotificationToastNamespace = 'common';
 
@@ -68,7 +68,7 @@ function showToast(
  * NotificationToast.success('Saved');
  *
  * @example
- * NotificationToast.error({ key: 'unknownError', namespace: 'errors' });
+ * NotificationToast.error(\{ key: 'unknownError', namespace: 'errors' \});
  *
  * @example
  * NotificationToast.dismiss(); // Dismiss all active toasts
