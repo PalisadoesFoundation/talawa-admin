@@ -4,10 +4,10 @@
 
 # Function: backupEnvFile()
 
-> **backupEnvFile**(): `Promise`\<`void`\>
+> **backupEnvFile**(): `Promise`\<`string`\>
 
-Defined in: [src/setup/backupEnvFile/backupEnvFile.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/backupEnvFile/backupEnvFile.ts#L6)
+Defined in: [src/setup/backupEnvFile/backupEnvFile.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/backupEnvFile/backupEnvFile.ts#L4)
 
 ## Returns
 
-`Promise`\<`void`\>
+`Promise`\<`string`\>
