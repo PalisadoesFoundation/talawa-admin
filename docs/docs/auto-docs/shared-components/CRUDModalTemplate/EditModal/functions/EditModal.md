@@ -1,0 +1,61 @@
+[Admin Docs](/)
+
+***
+
+# Function: EditModal()
+
+> **EditModal**\<`T`\>(`__namedParameters`): `Element`
+
+Defined in: [src/shared-components/CRUDModalTemplate/EditModal.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CRUDModalTemplate/EditModal.tsx#L45)
+
+EditModal Component
+
+Specialized modal template for editing existing entities.
+Supports data loading states and pre-population of form fields.
+
+Features:
+- Auto-focus on first input field when modal opens and data is loaded
+- Keyboard shortcut: Ctrl/Cmd+Enter to submit form
+- Loading state for data fetching (loadingData prop)
+- Form validation support via submitDisabled prop
+- Prevents duplicate submissions during save
+
+## Type Parameters
+
+### T
+
+`T`
+
+## Parameters
+
+### \_\_namedParameters
+
+[`InterfaceEditModalProps`](../../../../types/CRUDModalTemplate/interface/interfaces/InterfaceEditModalProps.md)\<`T`\>
+
+## Returns
+
+`Element`
+
+## Example
+
+```tsx
+<EditModal
+  open={showModal}
+  title="Edit Campaign"
+  onClose={handleClose}
+  onSubmit={handleUpdate}
+  loading={isSaving}
+  loadingData={isLoadingData}
+  error={error}
+  submitDisabled={!isFormDirty}
+>
+  <Form.Group>
+    <Form.Label>Campaign Name</Form.Label>
+    <Form.Control
+      value={name}
+      onChange={(e) => setName(e.target.value)}
+      required
+    />
+  </Form.Group>
+</EditModal>
+```

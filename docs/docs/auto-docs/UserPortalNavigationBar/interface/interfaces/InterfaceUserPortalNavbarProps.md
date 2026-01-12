@@ -53,7 +53,7 @@ Inline styles
 
 ### expandBreakpoint?
 
-> `optional` **expandBreakpoint**: `"sm"` \| `"md"` \| `"lg"` \| `"xl"`
+> `optional` **expandBreakpoint**: `"sm"` \| `"lg"` \| `"xl"` \| `"md"`
 
 Defined in: [src/types/UserPortalNavigationBar/interface.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L126)
 

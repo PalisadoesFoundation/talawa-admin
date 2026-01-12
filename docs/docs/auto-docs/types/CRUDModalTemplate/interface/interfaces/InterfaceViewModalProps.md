@@ -1,0 +1,239 @@
+[Admin Docs](/)
+
+***
+
+# Interface: InterfaceViewModalProps\<T\>
+
+Defined in: [src/types/CRUDModalTemplate/interface.ts:254](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CRUDModalTemplate/interface.ts#L254)
+
+Props for ViewModal template
+
+Specialized template for read-only entity display.
+
+## Extends
+
+- [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md)
+
+## Type Parameters
+
+### T
+
+`T` = `unknown`
+
+## Properties
+
+### centered?
+
+> `optional` **centered**: `boolean`
+
+Defined in: [src/types/CRUDModalTemplate/interface.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CRUDModalTemplate/interface.ts#L85)
+
+Whether to center the modal vertically on the page
+
+#### Inherited from
+
+[`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`centered`](InterfaceCrudModalBaseProps.md#centered)
+
+***
+
+### children
+
+> **children**: `ReactNode`
+
+Defined in: [src/types/CRUDModalTemplate/interface.ts:260](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CRUDModalTemplate/interface.ts#L260)
+
+Content to display in the modal body
+Typically contains disabled form fields or formatted data display
+
+***
+
+### className?
+
+> `optional` **className**: `string`
+
+Defined in: [src/types/CRUDModalTemplate/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CRUDModalTemplate/interface.ts#L79)
+
+Additional CSS class name for the modal
+
+#### Inherited from
+
+[`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`className`](InterfaceCrudModalBaseProps.md#classname)
+
+***
+
+### customActions?
+
+> `optional` **customActions**: `ReactNode`
+
+Defined in: [src/types/CRUDModalTemplate/interface.ts:277](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CRUDModalTemplate/interface.ts#L277)
+
+Optional custom action buttons to display in the footer
+Useful for actions like "Edit" or "Delete" from the view modal
+
+***
+
+### data
+
+> **data**: `T`
+
+Defined in: [src/types/CRUDModalTemplate/interface.ts:265](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CRUDModalTemplate/interface.ts#L265)
+
+The entity data being viewed
+
+***
+
+### data-testid?
+
+> `optional` **data-testid**: `string`
+
+Defined in: [src/types/CRUDModalTemplate/interface.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CRUDModalTemplate/interface.ts#L90)
+
+Test ID for the modal container (useful for testing)
+
+#### Inherited from
+
+[`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`data-testid`](InterfaceCrudModalBaseProps.md#data-testid)
+
+***
+
+### error?
+
+> `optional` **error**: `string`
+
+Defined in: [src/types/CRUDModalTemplate/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CRUDModalTemplate/interface.ts#L68)
+
+Error message to display in the modal body
+When provided, shows an Alert component with the error
+
+#### Inherited from
+
+[`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`error`](InterfaceCrudModalBaseProps.md#error)
+
+***
+
+### loading?
+
+> `optional` **loading**: `boolean`
+
+Defined in: [src/types/CRUDModalTemplate/interface.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CRUDModalTemplate/interface.ts#L62)
+
+Indicates whether an async operation is in progress
+When true, displays a loading spinner and disables action buttons
+
+#### Inherited from
+
+[`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`loading`](InterfaceCrudModalBaseProps.md#loading)
+
+***
+
+### loadingData?
+
+> `optional` **loadingData**: `boolean`
+
+Defined in: [src/types/CRUDModalTemplate/interface.ts:271](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CRUDModalTemplate/interface.ts#L271)
+
+Whether data is currently being loaded
+
+***
+
+### onClose()
+
+> **onClose**: () => `void`
+
+Defined in: [src/types/CRUDModalTemplate/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CRUDModalTemplate/interface.ts#L43)
+
+Callback function invoked when the modal is closed
+Triggered by close button, backdrop click, or Escape key
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`onClose`](InterfaceCrudModalBaseProps.md#onclose)
+
+***
+
+### open?
+
+> `optional` **open**: `boolean`
+
+Defined in: [src/types/CRUDModalTemplate/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CRUDModalTemplate/interface.ts#L26)
+
+Controls whether the modal is visible (defaults to false)
+
+#### Inherited from
+
+[`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`open`](InterfaceCrudModalBaseProps.md#open)
+
+***
+
+### primaryText?
+
+> `optional` **primaryText**: `string`
+
+Defined in: [src/types/CRUDModalTemplate/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CRUDModalTemplate/interface.ts#L49)
+
+Text for the primary action button
+
+#### Inherited from
+
+[`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`primaryText`](InterfaceCrudModalBaseProps.md#primarytext)
+
+***
+
+### secondaryText?
+
+> `optional` **secondaryText**: `string`
+
+Defined in: [src/types/CRUDModalTemplate/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CRUDModalTemplate/interface.ts#L55)
+
+Text for the secondary action button
+
+#### Inherited from
+
+[`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`secondaryText`](InterfaceCrudModalBaseProps.md#secondarytext)
+
+***
+
+### show?
+
+> `optional` **show**: `boolean`
+
+Defined in: [src/types/CRUDModalTemplate/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CRUDModalTemplate/interface.ts#L32)
+
+Alternative prop name for modal visibility (for compatibility).
+If both `open` and `show` are provided, `open` takes precedence (defaults to false)
+
+#### Inherited from
+
+[`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`show`](InterfaceCrudModalBaseProps.md#show)
+
+***
+
+### size?
+
+> `optional` **size**: [`ModalSize`](../type-aliases/ModalSize.md)
+
+Defined in: [src/types/CRUDModalTemplate/interface.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CRUDModalTemplate/interface.ts#L74)
+
+Modal size variant
+
+#### Inherited from
+
+[`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`size`](InterfaceCrudModalBaseProps.md#size)
+
+***
+
+### title
+
+> **title**: `string`
+
+Defined in: [src/types/CRUDModalTemplate/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CRUDModalTemplate/interface.ts#L37)
+
+Modal title displayed in the header
+
+#### Inherited from
+
+[`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`title`](InterfaceCrudModalBaseProps.md#title)
