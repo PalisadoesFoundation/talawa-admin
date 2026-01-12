@@ -224,4 +224,29 @@ describe('DataGridWrapper', () => {
     fireEvent.click(clearButton);
     expect(input).toHaveValue('');
   });
+
+  test('shows console warning for server-side search without onSearchChange', () => {
+    const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          serverSide: true,
+        }}
+      />,
+    );
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      '[DataGridWrapper] Server-side search enabled but onSearchChange callback is missing',
+    );
+
+    consoleSpy.mockRestore();
+  });
+
+  test('renders loading state', () => {
+    render(<DataGridWrapper {...defaultProps} loading={true} />);
+    expect(screen.getByTestId('loading-state')).toBeInTheDocument();
+  });
 });
