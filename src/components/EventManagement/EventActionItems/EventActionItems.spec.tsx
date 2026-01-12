@@ -63,7 +63,7 @@ vi.mock('shared-components/LoadingState/LoadingState', () => ({
   },
 }));
 
-vi.mock('components/Avatar/Avatar', () => ({
+vi.mock('shared-components/Avatar/Avatar', () => ({
   default: ({ name }: { name: string }) => (
     <div data-testid="avatar">{name}</div>
   ),

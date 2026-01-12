@@ -39,7 +39,7 @@ import {
   GridColDef,
   DataGridWrapper,
 } from 'shared-components/DataGridWrapper';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import styles from './Requests.module.css';
