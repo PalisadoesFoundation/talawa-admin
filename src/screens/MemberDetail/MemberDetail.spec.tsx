@@ -125,4 +125,24 @@ describe('MemberDetail', () => {
       'true',
     );
   });
+
+  it('switches back to overview tab when overview button is clicked', () => {
+    render(<MemberDetail id="123" />);
+
+    // Step 1: switch away from overview
+    fireEvent.click(screen.getByTestId('tab-events'));
+    expect(screen.getByTestId('user-events')).toBeInTheDocument();
+
+    // Step 2: click overview tab
+    fireEvent.click(screen.getByTestId('tab-overview'));
+
+    // Step 3: overview content is rendered again
+    expect(screen.getByTestId('user-contact-details')).toHaveTextContent('123');
+
+    // Step 4: overview tab is active
+    expect(screen.getByTestId('tab-overview')).toHaveAttribute(
+      'data-active',
+      'true',
+    );
+  });
 });

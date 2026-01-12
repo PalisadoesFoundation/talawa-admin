@@ -132,4 +132,28 @@ describe('UserEvents Component', () => {
     const events = screen.getAllByTestId('event-card');
     expect(events.length).toBeGreaterThan(0);
   });
+
+  it('sorts events by name using localeCompare', () => {
+    render(<UserEvents />);
+
+    const sortSelect = screen.getByTestId('eventsSort-select');
+
+    // ---- ASC (A → Z) ----
+    fireEvent.change(sortSelect, { target: { value: 'ASC' } });
+
+    let eventCards = screen.getAllByTestId('event-card');
+    let firstEventName = eventCards[0].querySelector('p')?.textContent;
+
+    // "Node.js Seminar" should come before "React Workshop" in ASC
+    expect(firstEventName).toBe('Node.js Seminar');
+
+    // ---- DESC (Z → A) ----
+    fireEvent.change(sortSelect, { target: { value: 'DESC' } });
+
+    eventCards = screen.getAllByTestId('event-card');
+    firstEventName = eventCards[0].querySelector('p')?.textContent;
+
+    // "React Workshop" should come first in DESC
+    expect(firstEventName).toBe('React Workshop');
+  });
 });

@@ -113,4 +113,22 @@ describe('UserTags Component', () => {
     );
     expect(createdByLinks.length).toBeGreaterThan(0);
   });
+
+  it('reverses tag order when sorting by latest', () => {
+    render(<UserTags />);
+
+    const sortSelect = screen.getByTestId('tagsSort-select');
+
+    // Trigger reverse()
+    fireEvent.change(sortSelect, {
+      target: { value: 'latest' },
+    });
+
+    const rows = screen.getAllByRole('row');
+
+    // rows[0] = header
+    // rows[1] = first data row after sorting
+
+    expect(rows[1]).toHaveTextContent('Security Audit');
+  });
 });
