@@ -8,11 +8,11 @@ import {
   cleanup,
 } from '@testing-library/react';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import SecuredRouteForUser from './SecuredRouteForUser';
 
-vi.mock('react-toastify', () => ({
-  toast: { warn: vi.fn() },
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: { warning: vi.fn() },
 }));
 
 vi.mock('screens/PageNotFound/PageNotFound', () => ({
@@ -235,7 +235,7 @@ describe('SecuredRouteForUser', () => {
         vi.advanceTimersByTime(16 * 60 * 1000);
       });
 
-      expect(toast.warn).toHaveBeenCalledWith(
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
         'Kindly relogin as session has expired',
       );
       expect(mockStorage['Talawa-admin_IsLoggedIn']).toBe('FALSE');
@@ -284,7 +284,7 @@ describe('SecuredRouteForUser', () => {
       });
 
       // Should still be logged in because activity reset the timer
-      expect(toast.warn).not.toHaveBeenCalled();
+      expect(NotificationToast.warning).not.toHaveBeenCalled();
       expect(screen.getByTestId('protected-content')).toBeInTheDocument();
     });
 
@@ -296,7 +296,7 @@ describe('SecuredRouteForUser', () => {
         vi.advanceTimersByTime(20 * 60 * 1000);
       });
 
-      expect(toast.warn).not.toHaveBeenCalled();
+      expect(NotificationToast.warning).not.toHaveBeenCalled();
     });
   });
 
@@ -380,7 +380,7 @@ describe('SecuredRouteForUser', () => {
       act(() => {
         vi.advanceTimersByTime(1 * 60 * 1000);
       });
-      expect(toast.warn).not.toHaveBeenCalled();
+      expect(NotificationToast.warning).not.toHaveBeenCalled();
 
       // Activity to reset timer
       act(() => {
@@ -397,7 +397,7 @@ describe('SecuredRouteForUser', () => {
         });
       }
 
-      expect(toast.warn).not.toHaveBeenCalled();
+      expect(NotificationToast.warning).not.toHaveBeenCalled();
     });
 
     it('handles AdminFor being a string value', () => {
@@ -424,7 +424,7 @@ describe('SecuredRouteForUser', () => {
         });
       }
 
-      expect(toast.warn).not.toHaveBeenCalled();
+      expect(NotificationToast.warning).not.toHaveBeenCalled();
       expect(screen.getByTestId('protected-content')).toBeInTheDocument();
     });
   });
