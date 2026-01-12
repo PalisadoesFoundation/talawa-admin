@@ -228,12 +228,13 @@ const FundModal: React.FC<InterfaceFundModal> = ({
         <div
           className={`d-flex mt-2 mb-3 flex-wrap ${mode === 'edit' ? 'justify-content-between' : 'justify-content-start gap-3'} `}
         >
-          <Form.Group className="d-flex">
-            <label>{t('taxDeductible')} </label>
+          <Form.Group className="d-flex" controlId="taxDeductibleSwitch">
+            <Form.Label>{t('taxDeductible')} </Form.Label>
             <Form.Switch
               type="checkbox"
               checked={formState.isTaxDeductible}
-              data-testid="setisTaxDeductibleSwitch"
+              id="taxDeductibleSwitch"
+              data-testid="setIsTaxDeductibleSwitch"
               className={`ms-2 ${styles.switch}`}
               onChange={() =>
                 setFormState({

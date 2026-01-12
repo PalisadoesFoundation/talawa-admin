@@ -1,7 +1,5 @@
 .fundModal {
   max-width: 80vw;
-  margin-top: 2vh;
-  margin-left: 13vw;
 }
 
 .titlemodal {
@@ -23,16 +21,16 @@
 }
 
 .noOutline input:disabled {
-  -webkit-text-fill-color: var(--color-gray-600) !important;
+  -webkit-text-fill-color: var(--color-gray-600);
 }
 
 .noOutline textarea:disabled {
-  color: var(--color-gray-600) !important;
+  color: var(--color-gray-600);
   opacity: 1;
 }
 
 .noOutline:is(:hover, :focus, :active, :focus-visible, .show) {
-  outline: none !important;
+  outline: none;
 }
 
 .switch input {
@@ -65,7 +63,7 @@
 }
 
 .addButton:is(:hover, :active, :focus) {
-  background-color: var(--color-blue-500) !important;
+  background-color: var(--color-blue-500);
   border-color: var(--color-gray-700);
 }
 

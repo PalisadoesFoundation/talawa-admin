@@ -114,9 +114,9 @@
 }
 
 .createButton {
-  background-color: var(--color-gray-50) !important;
-  color: var(--color-gray-700) !important;
-  border: var(--border-1) solid var(--color-gray-700) !important;
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-700);
+  border: var(--border-1) solid var(--color-gray-700);
   margin: var(--space-2) var(--space-4);
   width: var(--space-16);
   height: var(--space-10);
@@ -125,15 +125,15 @@
 .createButton:hover {
   box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
     var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
-  background-color: var(--color-gray-50) !important;
-  color: var(--color-gray-700) !important;
-  border: var(--border-1) solid var(--color-gray-700) !important;
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-700);
+  border: var(--border-1) solid var(--color-gray-700);
 }
 
 .createButton:active {
-  color: var(--color-gray-400) !important;
-  background-color: var(--color-gray-100) !important;
-  border: var(--border-1) solid var(--color-gray-400) !important;
+  color: var(--color-gray-400);
+  background-color: var(--color-gray-100);
+  border: var(--border-1) solid var(--color-gray-400);
 }
 
 .buttonNoWrap {
