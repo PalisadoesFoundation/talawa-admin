@@ -52,6 +52,6 @@ Defined in: [src/types/venue.ts:8](https://github.com/PalisadoesFoundation/talaw
 
 ### organization
 
-> **organization**: [`Organization`](../../Organization/type/type-aliases/Organization.md)
+> **organization**: [`Organization`](../../AdminPortal/Organization/type/type-aliases/Organization.md)
 
 Defined in: [src/types/venue.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/venue.ts#L9)

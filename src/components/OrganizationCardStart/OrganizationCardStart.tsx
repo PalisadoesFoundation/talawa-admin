@@ -3,9 +3,9 @@
  * with an image, name, and a link to the organization's home page.
  *
  * @param props - The properties required to render the organization card.
- * @param props.id - The unique identifier for the organization. Used to construct the link URI.
- * @param props.name - The name of the organization to be displayed on the card.
- * @param props.image - The URL of the organization's image. If not provided, a placeholder image is used.
+ * @param id - The unique identifier for the organization. Used to construct the link URI.
+ * @param name - The name of the organization to be displayed on the card.
+ * @param image - The URL of the organization's image. If not provided, a placeholder image is used.
  *
  * @returns A JSX element representing the organization card.
  *
@@ -27,7 +27,7 @@
  */
 import React from 'react';
 import styles from 'style/app-fixed.module.css';
-import type { InterfaceOrganizationCardStartProps } from 'types/Organization/interface';
+import type { InterfaceOrganizationCardStartProps } from 'types/AdminPortal/Organization/interface';
 
 function organizationCardStart(
   props: InterfaceOrganizationCardStartProps,
