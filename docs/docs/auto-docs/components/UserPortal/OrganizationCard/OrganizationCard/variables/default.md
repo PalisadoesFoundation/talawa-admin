@@ -1,9 +1,9 @@
-[Admin Docs](/)
+[**talawa-admin**](../README.md)
 
 ***
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<[`InterfaceOrganizationCardProps`](../../../../../types/OrganizationCard/interface/interfaces/InterfaceOrganizationCardProps.md)\>
+> `const` **default**: `React.FC`\<`InterfaceOrganizationCardProps`\>
 
-Defined in: [src/components/UserPortal/OrganizationCard/OrganizationCard.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/OrganizationCard/OrganizationCard.tsx#L59)
+Defined in: [OrganizationCard.tsx:60](https://github.com/rohanshrma222/talawa-admin/blob/052644e7a17565c7c82b7cc6276a48fb307339e1/src/components/UserPortal/OrganizationCard/OrganizationCard.tsx#L60)
