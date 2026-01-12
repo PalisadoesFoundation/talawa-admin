@@ -249,4 +249,22 @@ describe('DataGridWrapper', () => {
     render(<DataGridWrapper {...defaultProps} loading={true} />);
     expect(screen.getByTestId('loading-state')).toBeInTheDocument();
   });
+
+  test('handles onRowClick callback', () => {
+    const onRowClick = vi.fn();
+    render(<DataGridWrapper {...defaultProps} onRowClick={onRowClick} />);
+
+    fireEvent.click(screen.getByText('Alice'));
+    expect(onRowClick).toHaveBeenCalledWith(defaultProps.rows[0]);
+  });
+
+  test('renders action column', () => {
+    const actionColumn = (row: TestRow) => (
+      <button data-testid={`action-${row.id}`}>Edit</button>
+    );
+    render(<DataGridWrapper {...defaultProps} actionColumn={actionColumn} />);
+
+    expect(screen.getByText('Actions')).toBeInTheDocument();
+    expect(screen.getByTestId('action-1')).toBeInTheDocument();
+  });
 });
