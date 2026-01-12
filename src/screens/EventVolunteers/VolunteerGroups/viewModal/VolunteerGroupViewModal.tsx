@@ -8,10 +8,10 @@
  * @param hide - Function to close the modal.
  * @param group - The volunteer group information to display.
  *
- * @returns React.FC - A React functional component that renders the modal.
+ * @returns JSX.Element - The rendered modal component.
  *
  * @remarks
- * - The modal uses `react-bootstrap` for layout and `@mui/material` for form controls.
+ * - The modal uses `BaseModal` from shared-components and `@mui/material` for form controls.
  * - The `useTranslation` hook is used for internationalization.
  * - Displays leader and creator information with avatars or fallback initials.
  * - Volunteer count is available through the volunteers resolver in the API.
@@ -172,7 +172,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                       {creator.avatarURL ? (
                         <img
                           src={creator.avatarURL}
-                          alt={t('volunteer')}
+                          alt={creator.name}
                           data-testid="creator_image"
                           className={styles.TableImages}
                         />
