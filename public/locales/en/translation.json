@@ -490,7 +490,9 @@
     "tagActions": "Tag Actions",
     "loadAssignedUsersError": "Error occurred while loading assigned users",
     "sortPeople": "Sort People",
-    "noTagsFound": "No tags found"
+    "noTagsFound": "No tags found",
+    "addMember": "Add Member",
+    "removeMember": "Remove Member"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
