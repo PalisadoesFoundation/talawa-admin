@@ -108,10 +108,10 @@ export default function Events(): JSX.Element {
       id: organizationId,
       first: 100,
       after: null,
-      startAt: dateRange.startDate
+      startDate: dateRange.startDate
         ? dayjs(dateRange.startDate).startOf('day').toISOString()
         : null,
-      endAt: dateRange.endDate
+      endDate: dateRange.endDate
         ? dayjs(dateRange.endDate).endOf('day').toISOString()
         : null,
       includeRecurring: true,

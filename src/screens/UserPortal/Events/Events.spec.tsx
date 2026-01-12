@@ -237,8 +237,8 @@ const MOCKS = [
         id: 'org123',
         first: 100,
         after: null,
-        startAt: startDate,
-        endAt: endDate,
+        startDate: startDate,
+        endDate: endDate,
         includeRecurring: true,
       },
     },
@@ -347,13 +347,13 @@ const MOCKS = [
         id: 'org123',
         first: 100,
         after: null,
-        startAt: dayjs()
+        startDate: dayjs()
           .subtract(1, 'year')
           .month(4)
           .endOf('month')
           .subtract(1, 'day')
           .toISOString(),
-        endAt: dayjs()
+        endDate: dayjs()
           .subtract(1, 'year')
           .month(5)
           .endOf('month')
@@ -537,8 +537,8 @@ const ERROR_MOCKS = [
         id: 'org123',
         first: 100,
         after: null,
-        startAt: startDate,
-        endAt: endDate,
+        startDate: startDate,
+        endDate: endDate,
         includeRecurring: true,
       },
     },
@@ -565,8 +565,8 @@ const RATE_LIMIT_MOCKS = [
         id: 'org123',
         first: 100,
         after: null,
-        startAt: startDate,
-        endAt: endDate,
+        startDate: startDate,
+        endDate: endDate,
         includeRecurring: true,
       },
     },
@@ -656,8 +656,8 @@ const CREATOR_NULL_MOCKS = (() => {
           id: 'org123',
           first: 100,
           after: null,
-          startAt: mockStartDate,
-          endAt: mockEndDate,
+          startDate: mockStartDate,
+          endDate: mockEndDate,
           includeRecurring: true,
         },
       },
