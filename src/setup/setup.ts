@@ -27,7 +27,7 @@ const getErrorMessage = (error: unknown): string => {
 // Ask and set up reCAPTCHA
 export const askAndSetRecaptcha = async (): Promise<void> => {
   try {
-    const { shouldUseRecaptcha } = await inquirer.prompt([
+    const answers = await inquirer.prompt<{ shouldUseRecaptcha: boolean }>([
       {
         type: 'confirm',
         name: 'shouldUseRecaptcha',
@@ -36,10 +36,10 @@ export const askAndSetRecaptcha = async (): Promise<void> => {
       },
     ]);
 
-    updateEnvFile('REACT_APP_USE_RECAPTCHA', shouldUseRecaptcha ? 'YES' : 'NO');
+    updateEnvFile('REACT_APP_USE_RECAPTCHA', answers.shouldUseRecaptcha ? 'YES' : 'NO');
 
-    if (shouldUseRecaptcha) {
-      const { recaptchaSiteKeyInput } = await inquirer.prompt([
+    if (answers.shouldUseRecaptcha) {
+      const siteKeyAnswers = await inquirer.prompt<{ recaptchaSiteKeyInput: string }>([
         {
           type: 'input',
           name: 'recaptchaSiteKeyInput',
@@ -56,7 +56,8 @@ export const askAndSetRecaptcha = async (): Promise<void> => {
           },
         },
       ]);
-      updateEnvFile('REACT_APP_RECAPTCHA_SITE_KEY', recaptchaSiteKeyInput);
+
+      updateEnvFile('REACT_APP_RECAPTCHA_SITE_KEY', siteKeyAnswers.recaptchaSiteKeyInput);
     } else {
       updateEnvFile('REACT_APP_RECAPTCHA_SITE_KEY', '');
     }
@@ -68,7 +69,7 @@ export const askAndSetRecaptcha = async (): Promise<void> => {
 
 // Ask and set up logging errors in the console
 export const askAndSetLogErrors = async (): Promise<void> => {
-  const { shouldLogErrors } = await inquirer.prompt({
+  const answers = await inquirer.prompt<{ shouldLogErrors: boolean }>({
     type: 'confirm',
     name: 'shouldLogErrors',
     message:
@@ -76,7 +77,7 @@ export const askAndSetLogErrors = async (): Promise<void> => {
     default: true,
   });
 
-  updateEnvFile('ALLOW_LOGS', shouldLogErrors ? 'YES' : 'NO');
+  updateEnvFile('ALLOW_LOGS', answers.shouldLogErrors ? 'YES' : 'NO');
 };
 
 // Main function to run the setup process
