@@ -17,7 +17,7 @@ import {
   DatePickerSlotProps,
   LocalizationProvider,
 } from '@mui/x-date-pickers';
-import { Form } from 'react-bootstrap';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import type { Dayjs } from 'dayjs';
 import commonStyles from '../SharedPicker.module.css';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -134,7 +134,7 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
                 <div
                   className={`${commonStyles.fullWidth} ${textFieldClassName || ''} d-flex position-relative`.trim()}
                 >
-                  <Form.Control
+                  <FormTextField
                     {...inputProps}
                     {...other}
                     id={dataTestId} // Link label to input

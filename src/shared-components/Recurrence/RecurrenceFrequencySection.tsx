@@ -1,12 +1,13 @@
 import React from 'react';
-import { Dropdown, FormControl } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
 import { Frequency, frequencies } from '../../utils/recurrenceUtils';
 import styles from '../../style/app-fixed.module.css';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 interface InterfaceRecurrenceFrequencySectionProps {
   frequency: Frequency;
   localInterval: number | string;
-  onIntervalChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onIntervalChange: (value: string) => void;
   onFrequencyChange: (newFrequency: Frequency) => void;
   t: (key: string) => string;
 }
@@ -20,14 +21,14 @@ export const RecurrenceFrequencySection: React.FC<
   return (
     <div className="mb-4">
       <span className="fw-semibold text-secondary">{t('repeatsEvery')}</span>{' '}
-      <FormControl
+      <FormTextField
         type="number"
         value={localInterval}
         onChange={onIntervalChange}
-        onDoubleClick={(e) => {
+        onDoubleClick={(e: React.MouseEvent<HTMLInputElement>) => {
           (e.target as HTMLInputElement).select();
         }}
-        onKeyDown={(e) => {
+        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
           if (
             e.key === '-' ||
             e.key === '+' ||

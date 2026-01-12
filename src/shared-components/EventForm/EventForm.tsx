@@ -24,6 +24,7 @@ import {
   validateRecurrenceInput,
 } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 type EventVisibility = 'PUBLIC' | 'ORGANIZATION' | 'INVITE_ONLY';
 
 const getVisibilityType = (
@@ -330,7 +331,7 @@ const EventForm: React.FC<IEventFormProps> = ({
     <>
       <Form onSubmit={handleSubmit}>
         <label htmlFor="eventTitle">{t('eventName')}</label>
-        <Form.Control
+        <FormTextField
           type="text"
           id="eventTitle"
           placeholder={t('enterName')}
@@ -338,15 +339,15 @@ const EventForm: React.FC<IEventFormProps> = ({
           required
           value={formState.name}
           className={styles.inputField}
-          onChange={(e): void => {
-            setFormState({ ...formState, name: e.target.value });
+          onChange={(value): void => {
+            setFormState({ ...formState, name: value });
           }}
           data-testid="eventTitleInput"
           data-cy="eventTitleInput"
           aria-label={t('eventName')}
         />
         <label htmlFor="eventDescription">{tCommon('description')}</label>
-        <Form.Control
+        <FormTextField
           as="textarea"
           id="eventDescription"
           placeholder={t('enterDescription')}
@@ -354,15 +355,15 @@ const EventForm: React.FC<IEventFormProps> = ({
           required
           value={formState.description}
           className={styles.inputField}
-          onChange={(e): void => {
-            setFormState({ ...formState, description: e.target.value });
+          onChange={(value): void => {
+            setFormState({ ...formState, name: value });
           }}
           data-testid="eventDescriptionInput"
           data-cy="eventDescriptionInput"
           aria-label={tCommon('description')}
         />
         <label htmlFor="eventLocation">{tCommon('location')}</label>
-        <Form.Control
+        <FormTextField
           type="text"
           id="eventLocation"
           placeholder={tCommon('enterLocation')}
@@ -370,8 +371,8 @@ const EventForm: React.FC<IEventFormProps> = ({
           required
           value={formState.location}
           className={styles.inputField}
-          onChange={(e): void => {
-            setFormState({ ...formState, location: e.target.value });
+          onChange={(value): void => {
+            setFormState({ ...formState, name: value });
           }}
           data-testid="eventLocationInput"
           data-cy="eventLocationInput"

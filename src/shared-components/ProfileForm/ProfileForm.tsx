@@ -111,7 +111,6 @@ import type { IEvent } from 'types/Event/interface';
 import ProfileFormWrapper from './ProfileFormWrapper';
 import DatePicker from 'shared-components/DatePicker';
 import { removeEmptyFields, validateImageFile } from 'utils/userUpdateUtils';
-
 const MemberDetail: React.FC = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -364,7 +363,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
                       />
                     </div>
                   </div>
-                  <Form.Control
+                  <input
                     accept="image/*"
                     id="postphoto"
                     name="photo"

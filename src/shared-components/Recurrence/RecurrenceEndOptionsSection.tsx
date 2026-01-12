@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, FormControl } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
 import DatePicker from '../DatePicker';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
@@ -15,6 +15,7 @@ import type {
   RecurrenceEndOptionType,
 } from '../../utils/recurrenceUtils';
 import styles from '../../style/app-fixed.module.css';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 interface InterfaceRecurrenceEndOptionsSectionProps {
   frequency: Frequency;
@@ -44,6 +45,14 @@ export const RecurrenceEndOptionsSection: React.FC<
   setRecurrenceRuleState,
   t,
 }) => {
+  const handleCountChange = (value: string) => {
+    const syntheticEvent = {
+      target: { value },
+      currentTarget: { value },
+    } as React.ChangeEvent<HTMLInputElement>;
+    onCountChange(syntheticEvent);
+  };
+
   return (
     <div className="mb-3">
       <span className="fw-semibold text-secondary">{t('ends')}</span>
@@ -109,14 +118,14 @@ export const RecurrenceEndOptionsSection: React.FC<
                 )}
                 {option === endsAfter && (
                   <>
-                    <FormControl
+                    <FormTextField
                       type="number"
                       value={localCount}
-                      onChange={onCountChange}
+                      onChange={handleCountChange}
                       onDoubleClick={(e) => {
                         (e.target as HTMLInputElement).select();
                       }}
-                      onKeyDown={(e) => {
+                      onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                         if (
                           e.key === '-' ||
                           e.key === '+' ||

@@ -17,12 +17,11 @@ import {
   TimePickerSlotProps,
   LocalizationProvider,
 } from '@mui/x-date-pickers';
-import { Form } from 'react-bootstrap';
 import type { Dayjs } from 'dayjs';
 import styles from './TimePicker.module.css';
 import commonStyles from '../SharedPicker.module.css';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 /**
  * Component Props for TimePicker
  */
@@ -136,7 +135,7 @@ const TimePicker: React.FC<InterfaceTimePickerProps> = ({
                 <div
                   className={`${styles.fullWidth} ${textFieldClassName || ''} d-flex position-relative`.trim()}
                 >
-                  <Form.Control
+                  <FormTextField
                     {...inputProps}
                     {...other}
                     id={dataTestId} // Link label to input
