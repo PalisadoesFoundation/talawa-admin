@@ -44,37 +44,51 @@ export const askAndSetRecaptcha = async (): Promise<void> => {
     }
   } catch (error) {
     console.error('Error setting up reCAPTCHA:', error);
-    throw new Error(`Failed to set up reCAPTCHA: ${(error as Error).message}`);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to set up reCAPTCHA: ${errorMessage}`);
   }
 };
 
 // Ask and set up logging errors in the console
 const askAndSetLogErrors = async (): Promise<void> => {
-  const { shouldLogErrors } = await inquirer.prompt({
-    type: 'confirm',
-    name: 'shouldLogErrors',
-    message:
-      'Would you like to log Compiletime and Runtime errors in the console?',
-    default: true,
-  });
+  try {
+    const { shouldLogErrors } = await inquirer.prompt({
+      type: 'confirm',
+      name: 'shouldLogErrors',
+      message:
+        'Would you like to log Compiletime and Runtime errors in the console?',
+      default: true,
+    });
 
-  updateEnvFile('ALLOW_LOGS', shouldLogErrors ? 'YES' : 'NO');
+    updateEnvFile('ALLOW_LOGS', shouldLogErrors ? 'YES' : 'NO');
+  } catch (error) {
+    console.error('Error setting up log configuration:', error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to set log configuration: ${errorMessage}`);
+  }
 };
 
 // Main function to run the setup process
 export async function main(): Promise<void> {
+  let backupPath: string | null = null;
+
   try {
     if (!checkEnvFile()) {
-      return;
+      console.error(
+        '❌ Environment file check failed. Please ensure .env exists.',
+      );
+      process.exit(1);
     }
 
     console.log('Welcome to the Talawa Admin setup! 🚀');
 
-    await backupEnvFile();
-
     modifyEnvFile();
+
+    // Modify backupEnvFile to return backup path
+    backupPath = await backupEnvFile();
+
     await askAndSetDockerOption();
-    const envConfig = dotenv.parse(fs.readFileSync('.env', 'utf8'));
+    const envConfig = dotenv.parse(await fs.promises.readFile('.env', 'utf8'));
     const useDocker = envConfig.USE_DOCKER === 'YES';
 
     if (useDocker) {
@@ -90,11 +104,26 @@ export async function main(): Promise<void> {
     console.log(
       '\nCongratulations! Talawa Admin has been successfully set up! 🥂🎉',
     );
+    console.log('DEBUG: backupPath is:', backupPath);
   } catch (error) {
     console.error('\n❌ Setup failed:', error);
+
+    if (backupPath) {
+      console.log('🔄 Attempting to restore from backup...');
+      try {
+        fs.copyFileSync(backupPath, '.env');
+        console.log('✅ Configuration restored from backup.');
+      } catch (restoreError) {
+        console.error('❌ Failed to restore backup:', restoreError);
+        console.log(`Manual restore needed. Backup location: ${backupPath}`);
+      }
+    }
+
     console.log('\nPlease try again or contact support if the issue persists.');
     process.exit(1);
   }
 }
 
-main();
+if (process.env.NODE_ENV !== 'test') {
+  main();
+}
