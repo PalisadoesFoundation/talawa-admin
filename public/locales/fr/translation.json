@@ -1,4 +1,7 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "Veuillez vous reconnecter car la session a expiré"
+  },
   "ends": "Prend fin",
   "occurrences": "Occurrences",
   "leaderboard": {

@@ -1,4 +1,7 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "Kindly relogin as session has expired"
+  },
   "ends": "Ends",
   "occurrences": "Occurrences",
   "leaderboard": {

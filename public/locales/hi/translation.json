@@ -1,4 +1,7 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "कृपया फिर से लॉगिन करें क्योंकि सत्र समाप्त हो गया है"
+  },
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
   "leaderboard": {

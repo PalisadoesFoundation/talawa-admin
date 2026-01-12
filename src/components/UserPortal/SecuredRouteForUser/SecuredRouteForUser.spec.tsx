@@ -235,9 +235,7 @@ describe('SecuredRouteForUser', () => {
         vi.advanceTimersByTime(16 * 60 * 1000);
       });
 
-      expect(NotificationToast.warning).toHaveBeenCalledWith(
-        'Kindly relogin as session has expired',
-      );
+      expect(NotificationToast.warning).toHaveBeenCalledWith('sessionExpired');
       expect(mockStorage['Talawa-admin_IsLoggedIn']).toBe('FALSE');
       expect(mockStorage['Talawa-admin_email']).toBeUndefined();
       expect(mockStorage['Talawa-admin_id']).toBeUndefined();

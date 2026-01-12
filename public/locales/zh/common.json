@@ -100,6 +100,7 @@
   "successfullyUpdated": "更新成功",
   "sessionWarning": "会话即将过期。",
   "sessionLogOut": "会话已过期。",
+  "sessionExpired": "会话已过期，请重新登录",
   "all": "全部",
   "active": "活跃",
   "disabled": "禁用",

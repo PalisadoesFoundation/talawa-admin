@@ -1,4 +1,7 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "Por favor, vuelva a iniciar sesión ya que la sesión ha expirado"
+  },
   "ends": "Finaliza",
   "occurrences": "ocurrencias",
   "leaderboard": {

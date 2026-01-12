@@ -1,4 +1,7 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "会话已过期，请重新登录"
+  },
   "ends": "结束",
   "occurrences": "次",
   "leaderboard": {
