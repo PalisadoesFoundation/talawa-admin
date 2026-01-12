@@ -267,4 +267,24 @@ describe('DataGridWrapper', () => {
     expect(screen.getByText('Actions')).toBeInTheDocument();
     expect(screen.getByTestId('action-1')).toBeInTheDocument();
   });
+
+  test('shows console warning for invalid sort format', () => {
+    const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        sortConfig={{
+          selectedSort: 'invalid_format',
+          sortingOptions: [{ label: 'Invalid', value: 'invalid_format' }],
+        }}
+      />,
+    );
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      '[DataGridWrapper] Invalid sort format: "invalid_format". Expected format: "field_asc" or "field_desc"',
+    );
+
+    consoleSpy.mockRestore();
+  });
 });
