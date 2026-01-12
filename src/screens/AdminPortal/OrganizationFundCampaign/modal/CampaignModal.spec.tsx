@@ -1,8 +1,10 @@
-import React from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 dayjs.extend(utc);
+dayjs.extend(customParseFormat);
+
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
 

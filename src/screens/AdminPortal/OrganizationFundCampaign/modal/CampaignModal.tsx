@@ -288,11 +288,11 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
 
           <Form.Group className="d-flex gap-4 mb-4">
             <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">
+              <InputLabel id="campaign-currency-select-label">
                 {t('currency')}
               </InputLabel>
               <Select
-                labelId="demo-simple-select-label"
+                labelId="campaign-currency-select-label"
                 value={campaignCurrency}
                 label={t('currency')}
                 data-testid="currencySelect"
