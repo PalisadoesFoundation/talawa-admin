@@ -44,7 +44,7 @@ describe('VenueCard Component', () => {
       </I18nextProvider>,
     );
     const imgElement = screen.getByAltText(
-      'image not found',
+      'Image not found',
     ) as HTMLImageElement;
     expect(imgElement).toBeInTheDocument();
     expect(imgElement.src).toContain('defaultImg.png');
@@ -61,7 +61,7 @@ describe('VenueCard Component', () => {
       </I18nextProvider>,
     );
     const imgElement = screen.getByAltText(
-      'image not found',
+      'Image not found',
     ) as HTMLImageElement;
     expect(imgElement).toBeInTheDocument();
     expect(imgElement.src).toBe('https://surl.li/odyiad');
