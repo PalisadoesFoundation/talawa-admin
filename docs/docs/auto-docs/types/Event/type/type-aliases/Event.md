@@ -156,7 +156,7 @@ Defined in: [src/types/Event/type.ts:34](https://github.com/PalisadoesFoundation
 
 ### organization?
 
-> `optional` **organization**: [`Organization`](../../../Organization/type/type-aliases/Organization.md)
+> `optional` **organization**: [`Organization`](../../../AdminPortal/Organization/type/type-aliases/Organization.md)
 
 Defined in: [src/types/Event/type.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L35)
 
