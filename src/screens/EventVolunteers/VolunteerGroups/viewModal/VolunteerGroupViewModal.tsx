@@ -83,7 +83,6 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
         <Form.Group className="d-flex gap-3 mb-3">
           <FormControl fullWidth>
             <TextField
-              required
               label={tCommon('name')}
               variant="outlined"
               className={styles.noOutline}
@@ -94,7 +93,6 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
           {volunteersRequired !== null && volunteersRequired !== undefined && (
             <FormControl fullWidth>
               <TextField
-                required
                 label={tCommon('volunteersRequired')}
                 variant="outlined"
                 className={styles.noOutline}
