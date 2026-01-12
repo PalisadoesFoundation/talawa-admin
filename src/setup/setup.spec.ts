@@ -469,6 +469,169 @@ describe('Talawa Admin Setup', () => {
         mockError,
       );
     });
+
+    it('should handle validation function throwing error', async () => {
+      vi.mocked(inquirer.prompt)
+        .mockResolvedValueOnce({ shouldUseRecaptcha: true })
+        .mockResolvedValueOnce({ recaptchaSiteKeyInput: 'test-key' });
+
+      await askAndSetRecaptcha();
+
+      const promptCall = vi.mocked(inquirer.prompt).mock.calls[1][0] as
+        | PromptQuestion
+        | PromptQuestion[];
+      const questions = Array.isArray(promptCall) ? promptCall : [promptCall];
+      const validateFn = questions[0].validate;
+
+      expect(validateFn).toBeDefined();
+
+      // Test validation when validateRecaptcha throws
+      vi.mocked(validateRecaptcha).mockImplementation(() => {
+        throw new Error('Validation error');
+      });
+
+      const result = validateFn!('test-key');
+      expect(result).toBe('Validation error: Validation error');
+    });
+
+    it('should handle validation function with non-Error thrown object', async () => {
+      vi.mocked(inquirer.prompt)
+        .mockResolvedValueOnce({ shouldUseRecaptcha: true })
+        .mockResolvedValueOnce({ recaptchaSiteKeyInput: 'test-key' });
+
+      await askAndSetRecaptcha();
+
+      const promptCall = vi.mocked(inquirer.prompt).mock.calls[1][0] as
+        | PromptQuestion
+        | PromptQuestion[];
+      const questions = Array.isArray(promptCall) ? promptCall : [promptCall];
+      const validateFn = questions[0].validate;
+
+      expect(validateFn).toBeDefined();
+
+      // Test validation when validateRecaptcha throws non-Error
+      vi.mocked(validateRecaptcha).mockImplementation(() => {
+        throw 'String error';
+      });
+
+      const result = validateFn!('test-key');
+      expect(result).toBe('Validation error: String error');
+    });
+
+    it('should handle validation function with object thrown', async () => {
+      vi.mocked(inquirer.prompt)
+        .mockResolvedValueOnce({ shouldUseRecaptcha: true })
+        .mockResolvedValueOnce({ recaptchaSiteKeyInput: 'test-key' });
+
+      await askAndSetRecaptcha();
+
+      const promptCall = vi.mocked(inquirer.prompt).mock.calls[1][0] as
+        | PromptQuestion
+        | PromptQuestion[];
+      const questions = Array.isArray(promptCall) ? promptCall : [promptCall];
+      const validateFn = questions[0].validate;
+
+      expect(validateFn).toBeDefined();
+
+      // Test validation when validateRecaptcha throws object
+      vi.mocked(validateRecaptcha).mockImplementation(() => {
+        throw { code: 'ERR', message: 'Object error' };
+      });
+
+      const result = validateFn!('test-key');
+      expect(result).toContain('Validation error:');
+      expect(result).toContain('ERR');
+    });
+
+    it('should handle validation function with circular reference object', async () => {
+      vi.mocked(inquirer.prompt)
+        .mockResolvedValueOnce({ shouldUseRecaptcha: true })
+        .mockResolvedValueOnce({ recaptchaSiteKeyInput: 'test-key' });
+
+      await askAndSetRecaptcha();
+
+      const promptCall = vi.mocked(inquirer.prompt).mock.calls[1][0] as
+        | PromptQuestion
+        | PromptQuestion[];
+      const questions = Array.isArray(promptCall) ? promptCall : [promptCall];
+      const validateFn = questions[0].validate;
+
+      expect(validateFn).toBeDefined();
+
+      // Test validation when validateRecaptcha throws circular object
+      vi.mocked(validateRecaptcha).mockImplementation(() => {
+        const circular: any = { a: 1 };
+        circular.self = circular;
+        throw circular;
+      });
+
+      const result = validateFn!('test-key');
+      expect(result).toContain('Validation error:');
+    });
+
+    it('should handle error with string type in catch block', async () => {
+      vi.mocked(inquirer.prompt).mockImplementation(() => {
+        throw 'String error thrown';
+      });
+
+      await expect(askAndSetRecaptcha()).rejects.toThrow(
+        'Failed to set up reCAPTCHA: String error thrown',
+      );
+    });
+
+    it('should handle error with object type in catch block', async () => {
+      const objectError = { code: 'TEST', msg: 'Object error' };
+      vi.mocked(inquirer.prompt).mockImplementation(() => {
+        throw objectError;
+      });
+
+      await expect(askAndSetRecaptcha()).rejects.toThrow(
+        'Failed to set up reCAPTCHA:',
+      );
+    });
+
+    it('should handle error with circular object in catch block', async () => {
+      const circular: any = { a: 1 };
+      circular.self = circular;
+      
+      vi.mocked(inquirer.prompt).mockImplementation(() => {
+        throw circular;
+      });
+
+      await expect(askAndSetRecaptcha()).rejects.toThrow(
+        'Failed to set up reCAPTCHA:',
+      );
+    });
+
+    it('should handle error with number type in catch block', async () => {
+      vi.mocked(inquirer.prompt).mockImplementation(() => {
+        throw 123;
+      });
+
+      await expect(askAndSetRecaptcha()).rejects.toThrow(
+        'Failed to set up reCAPTCHA: 123',
+      );
+    });
+
+    it('should handle error with null in catch block', async () => {
+      vi.mocked(inquirer.prompt).mockImplementation(() => {
+        throw null;
+      });
+
+      await expect(askAndSetRecaptcha()).rejects.toThrow(
+        'Failed to set up reCAPTCHA: null',
+      );
+    });
+
+    it('should handle error with undefined in catch block', async () => {
+      vi.mocked(inquirer.prompt).mockImplementation(() => {
+        throw undefined;
+      });
+
+      await expect(askAndSetRecaptcha()).rejects.toThrow(
+        'Failed to set up reCAPTCHA: undefined',
+      );
+    });
   });
 
   describe('askAndSetLogErrors function', () => {

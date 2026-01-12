@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
 import fs from 'fs';
-import { fileURLToPath } from 'url';
 import inquirer from 'inquirer';
 import { checkEnvFile, modifyEnvFile } from './checkEnvFile/checkEnvFile';
 import { validateRecaptcha } from './validateRecaptcha/validateRecaptcha';
@@ -9,6 +8,21 @@ import updateEnvFile from './updateEnvFile/updateEnvFile';
 import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
 import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
 import { backupEnvFile } from './backupEnvFile/backupEnvFile';
+
+// Helper to extract error message safely
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) {
+    return error.message;
+  }
+  if (typeof error === 'string') {
+    return error;
+  }
+  try {
+    return JSON.stringify(error);
+  } catch {
+    return String(error);
+  }
+};
 
 // Ask and set up reCAPTCHA
 export const askAndSetRecaptcha = async (): Promise<void> => {
@@ -31,21 +45,24 @@ export const askAndSetRecaptcha = async (): Promise<void> => {
           name: 'recaptchaSiteKeyInput',
           message: 'Enter your reCAPTCHA site key:',
           validate: (input: string): boolean | string => {
-            return (
-              validateRecaptcha(input) ||
-              'Invalid reCAPTCHA site key. Please try again.'
-            );
+            try {
+              return (
+                validateRecaptcha(input) ||
+                'Invalid reCAPTCHA site key. Please try again.'
+              );
+            } catch (err) {
+              return `Validation error: ${getErrorMessage(err)}`;
+            }
           },
         },
       ]);
-
       updateEnvFile('REACT_APP_RECAPTCHA_SITE_KEY', recaptchaSiteKeyInput);
     } else {
       updateEnvFile('REACT_APP_RECAPTCHA_SITE_KEY', '');
     }
   } catch (error) {
     console.error('Error setting up reCAPTCHA:', error);
-    throw new Error(`Failed to set up reCAPTCHA: ${(error as Error).message}`);
+    throw new Error(`Failed to set up reCAPTCHA: ${getErrorMessage(error)}`);
   }
 };
 
@@ -72,9 +89,9 @@ export async function main(): Promise<void> {
     console.log('Welcome to the Talawa Admin setup! 🚀');
 
     await backupEnvFile();
-
     modifyEnvFile();
     await askAndSetDockerOption();
+
     const envConfig = dotenv.parse(fs.readFileSync('.env', 'utf8'));
     const useDocker = envConfig.USE_DOCKER === 'YES';
 
@@ -96,12 +113,4 @@ export async function main(): Promise<void> {
     console.log('\nPlease try again or contact support if the issue persists.');
     process.exit(1);
   }
-}
-
-// ES module compatible execution guard with Windows compatibility and proper error handling
-if (fileURLToPath(import.meta.url) === process.argv[1]) {
-  Promise.resolve(main()).catch((err) => {
-    console.error('Uncaught error in main:', err);
-    process.exit(1);
-  });
 }
