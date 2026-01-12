@@ -32,7 +32,7 @@ import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
 import { Edit } from '@mui/icons-material';
-import EventListCardModals from 'components/EventListCard/Modal/EventListCardModals';
+import EventListCardModals from 'shared-components/EventListCard/Modal/EventListCardModals';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import { formatDate } from 'utils/dateFormatter';

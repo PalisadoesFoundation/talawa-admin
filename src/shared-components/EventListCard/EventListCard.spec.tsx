@@ -15,7 +15,7 @@ import { toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import useLocalStorage from 'utils/useLocalstorage';
-import { props } from './EventListCardProps';
+import { props } from 'types/shared-components/EventListCard/EventListCardProps';
 import { ERROR_MOCKS, MOCKS } from './Modal/EventListCardMocks';
 import { vi, beforeAll, afterAll, expect, it } from 'vitest';
 

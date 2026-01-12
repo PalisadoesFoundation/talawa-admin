@@ -31,7 +31,7 @@
  * ```
  *
  */
-import EventListCard from 'components/EventListCard/EventListCard';
+import EventListCard from 'shared-components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect, type JSX } from 'react';
