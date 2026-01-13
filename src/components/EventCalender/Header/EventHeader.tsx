@@ -86,6 +86,7 @@ function EventHeader({
             dataTestIdPrefix="selectViewType"
             className={styles.dropdown}
           />
+<<<<<<< HEAD
           <SortingButton
             title={t('eventType')}
             sortingOptions={[
@@ -108,6 +109,30 @@ function EventHeader({
             <AddIcon className={styles.addButtonIcon} />
             <span>{tCommon('create')}</span>
           </Button>
+=======
+        </div>
+
+        <div className={styles.btnsBlock}>
+          <div className={styles.selectTypeEventHeader}>
+            <Button
+              className={styles.dropdown}
+              onClick={showInviteModal}
+              data-testid="createEventModalBtn"
+              data-cy="createEventModalBtn"
+            >
+              <div className="">
+                <AddIcon
+                  sx={{
+                    fontSize: '25px',
+                    marginBottom: '2px',
+                    marginRight: '2px',
+                  }}
+                />
+                <span>Create</span>
+              </div>
+            </Button>
+          </div>
+>>>>>>> 20a4dd546db (fix(events): remove event type button)
         </div>
       </div>
     </div>
