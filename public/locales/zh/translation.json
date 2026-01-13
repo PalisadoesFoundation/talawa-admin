@@ -712,7 +712,8 @@
     "deleteAgendaItem": "删除议程项目",
     "deleteAgendaItemMsg": "您要删除此议程项目吗？",
     "event": "活动",
-    "search": "搜索"
+    "search": "搜索",
+    "attachmentPreview": "附件預覽"
   },
   "eventListCard": {
     "deleteEvent": "删除事件",
@@ -1859,7 +1860,12 @@
   },
   "checkIn": {
     "errorCheckingIn": "签到错误",
-    "checkedInSuccessfully": "成功签到"
+    "checkedInSuccessfully": "成功签到",
+    "searchAttendees": "搜尋參與者",
+    "checkedIn": "已簽到",
+    "downloadTag": "下載標籤",
+    "checkIn": "簽到",
+    "eventCheckInManagement": "活動簽到管理"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "添加与会者时出错",

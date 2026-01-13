@@ -712,7 +712,8 @@
     "deleteAgendaItem": "Supprimer le point de l'ordre du jour",
     "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?",
     "event": "Événement",
-    "search": "Rechercher"
+    "search": "Rechercher",
+    "attachmentPreview": "Aperçu de la pièce jointe"
   },
   "eventListCard": {
     "deleteEvent": "Supprimer l'événement",
@@ -1859,7 +1860,12 @@
   },
   "checkIn": {
     "errorCheckingIn": "Erreur lors de l'enregistrement",
-    "checkedInSuccessfully": "Enregistrement réussi"
+    "checkedInSuccessfully": "Enregistrement réussi",
+    "searchAttendees": "Rechercher des participants",
+    "checkedIn": "Enregistré",
+    "downloadTag": "Télécharger l'étiquette",
+    "checkIn": "Enregistrer",
+    "eventCheckInManagement": "Gestion des enregistrements d'événement"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
