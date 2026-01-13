@@ -1843,11 +1843,7 @@
     "errorRemovingAttendee": "Error al eliminar asistente",
     "eventRegistrantsTitle": "Registrados al evento",
     "inviteByEmailButton": "Invitar por correo electrónico",
-    "addRegistrantButton": "Agregar registrado",
     "noRegistrationsFound": "No se encontraron registros",
-    "addOnspotRegistrationLink": "Agregar enlace de registro en el lugar",
-    "addRegistrantLabel": "Agregar registrado",
-    "addRegistrantPlaceholder": "Ingrese el correo electrónico del registrado",
     "inviteByEmail": {
       "addRecipient": "Agregar destinatario",
       "email": "Correo electrónico",

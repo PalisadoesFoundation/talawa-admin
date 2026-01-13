@@ -1860,11 +1860,7 @@
     "errorRemovingAttendee": "Erreur lors de la suppression du participant",
     "eventRegistrantsTitle": "Inscrits à l'événement",
     "inviteByEmailButton": "Inviter par email",
-    "addRegistrantButton": "Ajouter un inscrit",
     "noRegistrationsFound": "Aucune inscription trouvée.",
-    "addOnspotRegistrationLink": "Ajouter une inscription sur place",
-    "addRegistrantLabel": "Ajouter un inscrit",
-    "addRegistrantPlaceholder": "Entrez le nom complet ou l'email de l'utilisateur",
     "inviteByEmail": {
       "addRecipient": "Ajouter un destinataire",
       "email": "Email",

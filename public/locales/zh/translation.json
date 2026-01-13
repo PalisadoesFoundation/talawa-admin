@@ -1860,11 +1860,7 @@
     "errorRemovingAttendee": "删除与会者时出错",
     "eventRegistrantsTitle": "活动注册者",
     "inviteByEmailButton": "通过电子邮件邀请",
-    "addRegistrantButton": "添加注册者",
     "noRegistrationsFound": "未找到注册",
-    "addOnspotRegistrationLink": "添加现场注册链接",
-    "addRegistrantLabel": "添加注册者",
-    "addRegistrantPlaceholder": "输入注册者的全名",
     "inviteByEmail": {
       "addRecipient": "添加收件人",
       "email": "邮箱",
