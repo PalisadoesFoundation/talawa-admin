@@ -112,7 +112,7 @@ describe('ChangeLanguageDropDown', () => {
 
     await waitFor(() => {
       expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
-        'User not found',
+        'noUsersFound',
       );
     });
   });

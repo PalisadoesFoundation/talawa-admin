@@ -557,7 +557,7 @@ describe('AgendaItemsUpdateModal', () => {
       'src',
       'data:image/jpeg;base64,image-data',
     );
-    expect(imageElement).toHaveAttribute('alt', 'Attachment preview');
+    expect(imageElement).toHaveAttribute('alt', 'attachmentPreview');
   });
 
   test('handles URL display truncation correctly', async () => {
