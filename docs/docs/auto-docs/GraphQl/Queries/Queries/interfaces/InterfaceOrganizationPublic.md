@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationPublic
 
-Defined in: [src/GraphQl/Queries/Queries.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L87)
+Defined in: [src/GraphQl/Queries/Queries.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L98)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/GraphQl/Queries/Queries.ts:87](https://github.com/PalisadoesFou
 
 > **addressLine1**: `string`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L90)
+Defined in: [src/GraphQl/Queries/Queries.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L101)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/GraphQl/Queries/Queries.ts:90](https://github.com/PalisadoesFou
 
 > **id**: `string`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L88)
+Defined in: [src/GraphQl/Queries/Queries.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L99)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/GraphQl/Queries/Queries.ts:88](https://github.com/PalisadoesFou
 
 > **name**: `string`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L89)
+Defined in: [src/GraphQl/Queries/Queries.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L100)

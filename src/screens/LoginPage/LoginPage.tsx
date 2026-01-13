@@ -16,7 +16,7 @@ import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
 import Check from '@mui/icons-material/Check';
 import Clear from '@mui/icons-material/Clear';
 import type { ChangeEvent } from 'react';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -33,11 +33,10 @@ import {
 } from 'Constant/constant';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
-  ORGANIZATION_LIST_PUBLIC,
-  InterfaceOrganizationListPublicQueryData,
   InterfaceOrganizationPublic,
   SIGNIN_QUERY,
   GET_COMMUNITY_DATA_PG,
+  ORGANIZATION_LIST_NO_MEMBERS,
 } from 'GraphQl/Queries/Queries';
 import PalisadoesLogo from 'assets/svgs/palisadoes.svg?react';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
@@ -46,7 +45,6 @@ import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
 import styles from './LoginPage.module.css';
-import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import useSession from 'utils/useSession';
@@ -167,7 +165,7 @@ const loginPage = (): JSX.Element => {
       );
       setOrganizations(options);
     }
-  }, [orgData, orgLoading, orgError]);
+  }, [orgData, loginLoading, onerror]);
 
   useEffect(() => {
     async function loadResource(): Promise<void> {
@@ -856,7 +854,7 @@ const loginPage = (): JSX.Element => {
                     <div className="position-relative">
                       <Autocomplete
                         disablePortal
-                        disabled={orgLoading || !!orgError}
+                        disabled={loginLoading || !!onerror}
                         data-testid="selectOrg"
                         onChange={(
                           event,
@@ -878,13 +876,13 @@ const loginPage = (): JSX.Element => {
                             label={t('organizations')}
                             className={styles.selectOrgText}
                             helperText={
-                              orgLoading
+                              loginLoading
                                 ? t('loadingOrganizations')
-                                : orgError
+                                : onerror
                                   ? t('errorLoadingOrganizations')
                                   : undefined
                             }
-                            error={!!orgError}
+                            error={!!onerror}
                           />
                         )}
                       />

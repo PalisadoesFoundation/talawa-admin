@@ -6,4 +6,4 @@
 
 > `const` **EVENT\_FEEDBACKS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:439](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L439)
+Defined in: [src/GraphQl/Queries/Queries.ts:450](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L450)
