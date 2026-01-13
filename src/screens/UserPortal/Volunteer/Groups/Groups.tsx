@@ -48,7 +48,6 @@ import { Navigate, useParams } from 'react-router';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { useQuery } from '@apollo/client';
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
-import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   type GridCellParams,
   type GridColDef,
@@ -71,14 +70,7 @@ function Groups(): JSX.Element {
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
-  // Get the organization ID from URL parameters
   const { orgId } = useParams();
-
-  // Early return must happen before any other hooks
-  if (!orgId || !userId) {
-    return <Navigate to={'/'} replace />;
-  }
 
   const [group, setGroup] = useState<InterfaceVolunteerGroupInfo | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -89,6 +81,13 @@ function Groups(): JSX.Element {
   const [modalState, setModalState] = useState<{
     [key in ModalState]: boolean;
   }>({ [ModalState.EDIT]: false, [ModalState.VIEW]: false });
+
+  const userId = getItem('userId');
+
+  // Early return after all hooks
+  if (!orgId || !userId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   // Build where variables conditionally (omit if empty string)
   const whereVariables = useMemo(() => {
@@ -154,7 +153,7 @@ function Groups(): JSX.Element {
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={styles.icon} />
         <h6 className="fw-bold text-danger text-center">
-          {tErrors('errorLoading', { entity: 'Volunteer Groups' })}
+          {tErrors('errorLoading', { entity: t('volunteerGroups') })}
         </h6>
       </div>
     );
@@ -276,63 +275,57 @@ function Groups(): JSX.Element {
   ];
 
   return (
-    <LoadingState isLoading={groupsLoading} variant="spinner">
-      <div>
-        <DataGridWrapper
-          rows={groups}
-          columns={columns}
-          loading={false}
-          searchConfig={{
-            enabled: true,
-            serverSide: true,
-            searchTerm: searchTerm,
-            searchByOptions: [
-              { label: t('group'), value: 'group' },
-              { label: t('leader'), value: 'leader' },
-            ],
-            selectedSearchBy: searchBy,
-            onSearchChange: handleSearchChange,
-            onSearchByChange: handleSearchByChange,
-            searchInputTestId: 'searchByInput',
-            placeholder: tCommon('searchBy', { item: t('groupOrLeader') }),
-            debounceMs: 300,
-          }}
-          sortConfig={{
-            sortingOptions: [
-              { label: t('mostVolunteers'), value: 'volunteers_desc' },
-              { label: t('leastVolunteers'), value: 'volunteers_asc' },
-            ],
-            selectedSort:
-              sortBy === 'volunteers_ASC'
-                ? 'volunteers_asc'
-                : 'volunteers_desc',
-            onSortChange: (value: string | number) =>
-              setSortBy(
-                value === 'volunteers_asc'
-                  ? 'volunteers_ASC'
-                  : 'volunteers_DESC',
-              ),
-          }}
-          emptyStateMessage={t('noVolunteerGroups')}
-        />
-        {group && (
-          <>
-            <GroupModal
-              isOpen={modalState[ModalState.EDIT]}
-              hide={() => closeModal(ModalState.EDIT)}
-              refetchGroups={refetchGroups}
-              group={group}
-              eventId={group.event.id}
-            />
-            <VolunteerGroupViewModal
-              isOpen={modalState[ModalState.VIEW]}
-              hide={() => closeModal(ModalState.VIEW)}
-              group={group}
-            />
-          </>
-        )}
-      </div>
-    </LoadingState>
+    <div>
+      <DataGridWrapper
+        rows={groups}
+        columns={columns}
+        loading={groupsLoading}
+        searchConfig={{
+          enabled: true,
+          serverSide: true,
+          searchTerm: searchTerm,
+          searchByOptions: [
+            { label: t('group'), value: 'group' },
+            { label: t('leader'), value: 'leader' },
+          ],
+          selectedSearchBy: searchBy,
+          onSearchChange: handleSearchChange,
+          onSearchByChange: handleSearchByChange,
+          searchInputTestId: 'searchByInput',
+          placeholder: tCommon('searchBy', { item: t('groupOrLeader') }),
+          debounceMs: 300,
+        }}
+        sortConfig={{
+          sortingOptions: [
+            { label: t('mostVolunteers'), value: 'volunteers_desc' },
+            { label: t('leastVolunteers'), value: 'volunteers_asc' },
+          ],
+          selectedSort:
+            sortBy === 'volunteers_ASC' ? 'volunteers_asc' : 'volunteers_desc',
+          onSortChange: (value: string | number) =>
+            setSortBy(
+              value === 'volunteers_asc' ? 'volunteers_ASC' : 'volunteers_DESC',
+            ),
+        }}
+        emptyStateMessage={t('noVolunteerGroups')}
+      />
+      {group && (
+        <>
+          <GroupModal
+            isOpen={modalState[ModalState.EDIT]}
+            hide={() => closeModal(ModalState.EDIT)}
+            refetchGroups={refetchGroups}
+            group={group}
+            eventId={group.event.id}
+          />
+          <VolunteerGroupViewModal
+            isOpen={modalState[ModalState.VIEW]}
+            hide={() => closeModal(ModalState.VIEW)}
+            group={group}
+          />
+        </>
+      )}
+    </div>
   );
 }
 
