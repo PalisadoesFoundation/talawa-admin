@@ -155,6 +155,27 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
 
     setIsSubmitting(true);
     try {
+      const start = campaignDateRange.startDate;
+      const end = campaignDateRange.endDate;
+
+      if (!start || !end) {
+        NotificationToast.error(t('dateRangeRequired'));
+        return;
+      }
+
+      const startDay = dayjs(start);
+      const endDay = dayjs(end);
+
+      if (!startDay.isValid() || !endDay.isValid()) {
+        NotificationToast.error(t('invalidDate'));
+        return;
+      }
+
+      if (endDay.isBefore(startDay)) {
+        NotificationToast.error(t('endDateBeforeStart'));
+        return;
+      }
+
       await createCampaign({
         variables: {
           name: formState.campaignName.trim(),
@@ -211,6 +232,26 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
     }
     setIsSubmitting(true);
     try {
+      const start = campaignDateRange.startDate;
+      const end = campaignDateRange.endDate;
+
+      if (!start || !end) {
+        NotificationToast.error(t('dateRangeRequired'));
+        return;
+      }
+
+      const startDay = dayjs(start);
+      const endDay = dayjs(end);
+
+      if (!startDay.isValid() || !endDay.isValid()) {
+        NotificationToast.error(t('invalidDate'));
+        return;
+      }
+
+      if (endDay.isBefore(startDay)) {
+        NotificationToast.error(t('endDateBeforeStart'));
+        return;
+      }
       const updatedFields: { [key: string]: string | number | undefined } = {};
       if (campaign?.name !== campaignName) {
         updatedFields.name = campaignName.trim();

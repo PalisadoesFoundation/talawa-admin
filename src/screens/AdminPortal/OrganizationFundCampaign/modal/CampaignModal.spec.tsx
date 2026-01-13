@@ -138,9 +138,14 @@ vi.mock('shared-components/DateRangePicker', async () => {
           data-testid={`${dataTestId}-start-input`}
           value={value?.startDate ? formatDateForInput(value.startDate) : ''}
           onChange={(e) => {
-            const nextStart = e.target.value
-              ? dayjs.utc(e.target.value, 'DD/MM/YYYY', true).toDate()
+            const parsedStart = e.target.value
+              ? dayjs.utc(e.target.value, 'DD/MM/YYYY', true)
               : null;
+
+            const nextStart =
+              parsedStart && parsedStart.isValid()
+                ? parsedStart.toDate()
+                : null;
 
             onChange({
               startDate: nextStart,
@@ -157,9 +162,11 @@ vi.mock('shared-components/DateRangePicker', async () => {
           onChange={(e) =>
             onChange({
               startDate: value?.startDate ?? null,
-              endDate: e.target.value
-                ? dayjs.utc(e.target.value, 'DD/MM/YYYY', true).toDate()
-                : null,
+              endDate: (() => {
+                if (!e.target.value) return null;
+                const parsedEnd = dayjs.utc(e.target.value, 'DD/MM/YYYY', true);
+                return parsedEnd.isValid() ? parsedEnd.toDate() : null;
+              })(),
             })
           }
         />
