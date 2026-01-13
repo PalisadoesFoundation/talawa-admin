@@ -158,11 +158,6 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
       const start = campaignDateRange.startDate;
       const end = campaignDateRange.endDate;
 
-      if (!start || !end) {
-        NotificationToast.error(t('dateRangeRequired'));
-        return;
-      }
-
       const startDay = dayjs(start);
       const endDay = dayjs(end);
 
@@ -234,11 +229,6 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
     try {
       const start = campaignDateRange.startDate;
       const end = campaignDateRange.endDate;
-
-      if (!start || !end) {
-        NotificationToast.error(t('dateRangeRequired'));
-        return;
-      }
 
       const startDay = dayjs(start);
       const endDay = dayjs(end);
