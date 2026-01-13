@@ -2381,6 +2381,55 @@ describe('Organization dropdown data fetching', () => {
     setLocationPath('/');
   });
 
+  it('renders organization dropdown options from mapped orgData', async () => {
+    render(
+      <MockedProvider link={link3}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Switch to register tab
+    const registerButton = screen.queryByTestId('goToRegisterPortion');
+    if (registerButton) {
+      await userEvent.click(registerButton);
+      await wait();
+
+      // Open the Autocomplete dropdown
+      const autocomplete = screen.getByTestId('selectOrg');
+      const input = within(autocomplete).getByRole('combobox');
+      // Focus and type to trigger options
+      input.focus();
+      fireEvent.change(input, { target: { value: 'Unity' } });
+      fireEvent.keyDown(input, { key: 'ArrowDown' });
+      fireEvent.keyDown(input, { key: 'Enter' });
+      // Wait for the dropdown options to appear in the document body (MUI portal)
+      expect(
+        await screen.findByText(
+          (content) =>
+            content.includes('Unity Foundation') &&
+            content.includes('123 Random Street'),
+          {},
+        ),
+      ).toBeInTheDocument();
+      expect(
+        await screen.findByText(
+          (content) =>
+            content.includes('Mills Group') &&
+            content.includes('5112 Dare Centers'),
+          {},
+        ),
+      ).toBeInTheDocument();
+    }
+  });
+
   it('sets recaptcha token when recaptcha is completed', async () => {
     render(
       <MockedProvider link={link}>
