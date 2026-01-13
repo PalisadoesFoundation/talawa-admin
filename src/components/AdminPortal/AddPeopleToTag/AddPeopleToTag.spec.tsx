@@ -16,9 +16,8 @@ import { I18nextProvider } from 'react-i18next';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast } from 'react-toastify';
 import { InMemoryCache, type ApolloLink } from '@apollo/client';
-import type { InterfaceAddPeopleToTagProps } from 'types/Tag/interface';
+import type { InterfaceAddPeopleToTagProps } from 'types/AdminPortal/Tag/interface';
 import AddPeopleToTag from './AddPeopleToTag';
 import i18n from 'utils/i18nForTest';
 import {
@@ -28,6 +27,7 @@ import {
   MOCKS_ERROR,
 } from './AddPeopleToTagsMocks';
 import type { TFunction } from 'i18next';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR, true);
@@ -39,12 +39,21 @@ async function wait(): Promise<void> {
   });
 }
 
-vi.mock('react-toastify', () => ({
-  toast: {
+const toastMocks = vi.hoisted(() => {
+  return {
     success: vi.fn(),
     error: vi.fn(),
-  },
-}));
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
+  };
+});
+
+vi.mock('components/NotificationToast/NotificationToast', async () => {
+  return {
+    NotificationToast: toastMocks,
+  };
+});
 
 const translations = {
   ...JSON.parse(
@@ -356,7 +365,9 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(translations.noOneSelected);
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.noOneSelected,
+      );
     });
   });
 
@@ -384,7 +395,7 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(NotificationToast.success).toHaveBeenCalledWith(
         translations.successfullyAssignedToPeople,
       );
     });
@@ -456,7 +467,7 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 });

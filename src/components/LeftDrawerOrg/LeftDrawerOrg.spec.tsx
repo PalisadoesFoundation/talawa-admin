@@ -113,7 +113,7 @@ vi.mock('components/IconComponent/IconComponent', () => ({
   )),
 }));
 
-vi.mock('components/Avatar/Avatar', () => ({
+vi.mock('shared-components/Avatar/Avatar', () => ({
   default: vi.fn(({ name, alt }) => (
     <div data-testid="avatar" data-name={name} data-alt={alt}>
       Avatar: {name}

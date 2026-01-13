@@ -4,10 +4,8 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
-
 import type { ApolloLink } from '@apollo/client';
-import { MockedProvider } from '@apollo/client/testing';
-
+import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import {
   cleanup,
@@ -38,6 +36,49 @@ import {
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: { success: vi.fn(), error: vi.fn() },
+}));
+
+vi.mock('shared-components/DatePicker', () => ({
+  __esModule: true,
+  default: ({
+    label,
+    value,
+    onChange,
+    minDate,
+    format,
+    'data-testid': dataTestId,
+  }: {
+    label?: string;
+    value?: dayjs.Dayjs | null;
+    onChange: (date: dayjs.Dayjs | null) => void;
+    minDate?: dayjs.Dayjs;
+    format?: string;
+    'data-testid'?: string;
+  }) => {
+    const displayFormat = format ?? 'MM/DD/YYYY';
+    return (
+      <div data-testid={`${dataTestId || label}-wrapper`}>
+        {label ? <label htmlFor={dataTestId || label}>{label}</label> : null}
+        <input
+          data-testid={dataTestId || label}
+          id={dataTestId || label}
+          value={value ? value.format(displayFormat) : ''}
+          onChange={(e) => {
+            const nextValue = e.target.value;
+            const nextDate = nextValue ? dayjs(nextValue, displayFormat) : null;
+            if (
+              !minDate ||
+              !nextDate ||
+              nextDate.isAfter(minDate, 'day') ||
+              nextDate.isSame(minDate, 'day')
+            ) {
+              onChange(nextDate);
+            }
+          }}
+        />
+      </div>
+    );
+  },
 }));
 
 vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
@@ -188,11 +229,9 @@ const renderCampaignModal = (
     <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <I18nextProvider i18n={i18nForTest}>
-              <CampaignModal {...props} />
-            </I18nextProvider>
-          </LocalizationProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <CampaignModal {...props} />
+          </I18nextProvider>
         </BrowserRouter>
       </Provider>
     </MockedProvider>,
@@ -608,6 +647,7 @@ describe('CampaignModal', () => {
       .add(1, 'month')
       .format('DD/MM/YYYY');
     fireEvent.change(startDateInput, { target: { value: testDate } });
+    fireEvent.blur(startDateInput);
 
     // Verify that end date was automatically updated to match the new start date
     await waitFor(() => {

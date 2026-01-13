@@ -507,7 +507,9 @@
     "sortPeople": "लोगों को सॉर्ट करें",
     "tagActions": "टैग क्रियाएँ",
     "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
-    "noTagsFound": "कोई टैग नहीं मिला"
+    "noTagsFound": "कोई टैग नहीं मिला",
+    "addMember": "सदस्य जोड़ें",
+    "removeMember": "सदस्य हटाएँ"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",

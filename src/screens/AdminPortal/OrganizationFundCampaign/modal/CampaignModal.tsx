@@ -12,11 +12,6 @@ import { errorHandler } from 'utils/errorHandler';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import {
-  CREATE_CAMPAIGN_MUTATION,
-  UPDATE_CAMPAIGN_MUTATION,
-} from 'GraphQl/Mutations/CampaignMutation';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import {
   FormControl,
   InputLabel,
   MenuItem,
