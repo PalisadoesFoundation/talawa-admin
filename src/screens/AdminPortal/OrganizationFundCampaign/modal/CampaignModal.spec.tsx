@@ -281,7 +281,7 @@ const UPDATE_ALL_FIELDS_MOCK = [
       return (
         input.id === 'campaignId1' &&
         input.name === 'Updated Name' &&
-        input.currencyCode === 'USD' &&
+        (!('currencyCode' in input) || input.currencyCode === 'USD') &&
         input.goalAmount === 500 &&
         typeof input.startAt === 'string' &&
         typeof input.endAt === 'string' &&
@@ -596,6 +596,11 @@ describe('CampaignModal', () => {
     fireEvent.click(submitBtn);
 
     // Wait for success message which indicates the mutation was called
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.updatedCampaign,
+      );
+    });
   });
 
   it('should not update any fields when nothing is changed', async () => {
@@ -754,6 +759,7 @@ describe('CampaignModal', () => {
       );
     });
   });
+
   it('resets fundingGoal to 0 when input is cleared', async () => {
     renderCampaignModal(link1, campaignProps[1]);
 
@@ -901,6 +907,92 @@ describe('CampaignModal', () => {
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();
       expect(submitBtn).not.toBeDisabled();
+    });
+  });
+  it('shows error when creating campaign with invalid date', async () => {
+    renderCampaignModal(link1, campaignProps[0]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: 'Valid Campaign' },
+    });
+
+    // Set invalid dates
+    fireEvent.change(getStartDateInput(), {
+      target: { value: 'invalid-date' },
+    });
+    fireEvent.change(getEndDateInput(), { target: { value: '01/01/2024' } });
+
+    fireEvent.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.dateRangeRequired,
+      );
+    });
+  });
+  it('shows error when end date is before start date in create mode', async () => {
+    renderCampaignModal(link1, campaignProps[0]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: 'Valid Campaign' },
+    });
+
+    // Set end date before start date
+    const startDate = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
+    const endDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY'); // Earlier than start
+
+    fireEvent.change(getStartDateInput(), { target: { value: startDate } });
+    fireEvent.change(getEndDateInput(), { target: { value: endDate } });
+
+    fireEvent.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.endDateBeforeStart,
+      );
+    });
+  });
+
+  it('shows error when updating campaign with invalid date', async () => {
+    renderCampaignModal(link1, campaignProps[1]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: 'Valid Campaign' },
+    });
+
+    // Set one invalid date
+    fireEvent.change(getStartDateInput(), { target: { value: 'not-a-date' } });
+    fireEvent.change(getEndDateInput(), { target: { value: '01/01/2024' } });
+
+    fireEvent.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.dateRangeRequired,
+      );
+    });
+  });
+
+  it('shows error when end date is before start date in edit mode', async () => {
+    renderCampaignModal(link1, campaignProps[1]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: 'Valid Campaign' },
+    });
+
+    // Set end date before start date
+    const startDate = dayjs.utc().add(3, 'month').format('DD/MM/YYYY');
+    const endDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY'); // Earlier
+
+    fireEvent.change(getStartDateInput(), { target: { value: startDate } });
+    fireEvent.change(getEndDateInput(), { target: { value: endDate } });
+
+    fireEvent.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.endDateBeforeStart,
+      );
     });
   });
 });
