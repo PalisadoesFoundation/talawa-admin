@@ -1880,9 +1880,7 @@
       "emailsLabel": "Emails et noms des destinataires",
       "emailsHelp": "Fournissez l'email et le nom facultatif pour chaque destinataire. Ajoutez plusieurs destinataires si nécessaire."
     },
-    "inviteByEmailButton": "Inviter par Email",
     "addRegistrant": "Ajouter un Inscrit",
-    "noRegistrationsFound": "Aucune inscription trouvée",
     "addOnspotRegistration": "Ajouter une Inscription sur Place",
     "registrantLabel": "Ajouter un Inscrit",
     "registrantPlaceholder": "Choisissez l'utilisateur que vous souhaitez ajouter",

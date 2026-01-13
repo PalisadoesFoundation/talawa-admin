@@ -122,6 +122,7 @@ export const GET_EVENT_ACTION_ITEMS = gql`
               user {
                 id
                 name
+                avatarURL
               }
             }
             volunteerGroup {
@@ -132,6 +133,7 @@ export const GET_EVENT_ACTION_ITEMS = gql`
               leader {
                 id
                 name
+                avatarURL
               }
             }
             category {

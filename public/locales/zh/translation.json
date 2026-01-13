@@ -1880,9 +1880,7 @@
       "emailsLabel": "收件人邮箱和姓名",
       "emailsHelp": "为每个收件人提供邮箱和可选姓名。根据需要添加多个收件人。"
     },
-    "inviteByEmailButton": "通过邮件邀请",
     "addRegistrant": "添加注册者",
-    "noRegistrationsFound": "未找到注册",
     "addOnspotRegistration": "添加现场注册",
     "registrantLabel": "添加一名注册者",
     "registrantPlaceholder": "选择您要添加的用户",

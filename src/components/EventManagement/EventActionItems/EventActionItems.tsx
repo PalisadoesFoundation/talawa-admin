@@ -81,10 +81,6 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
 
   const { orgId } = useParams();
 
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const [actionItem, setActionItem] = useState<IActionItemInfo | null>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -215,6 +211,11 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     eventActionItemsRefetch();
   }, [eventId, eventActionItemsRefetch]);
 
+  // Early return if orgId is not available - must be after all hooks
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
+
   if (eventInfoLoading) {
     return (
       <LoadingState isLoading={eventInfoLoading} variant="spinner">
@@ -262,7 +263,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
         } else if (volunteerGroup) {
           displayName = volunteerGroup.name;
           avatarKey = volunteerGroup.id;
-          avatarUrl = volunteerGroup.leaderUser?.avatarURL || null;
+          avatarUrl = volunteerGroup.leader?.avatarURL || null;
           isAssigned = true;
           isGroup = true;
         }

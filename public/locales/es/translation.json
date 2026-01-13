@@ -1863,9 +1863,7 @@
       "emailsLabel": "Correos electrónicos y nombres de destinatarios",
       "emailsHelp": "Proporcione el correo electrónico y el nombre opcional para cada destinatario. Agregue varios destinatarios según sea necesario."
     },
-    "inviteByEmailButton": "Invitar por Correo",
     "addRegistrant": "Agregar Registrante",
-    "noRegistrationsFound": "No se encontraron registros",
     "addOnspotRegistration": "Agregar Registro en el Lugar",
     "registrantLabel": "Agregar un Registrante",
     "registrantPlaceholder": "Elija el usuario que desea agregar",
