@@ -33,7 +33,7 @@ import dayjs from 'dayjs';
 import { useQuery } from '@apollo/client';
 import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
 
-import type { IActionItemInfo } from 'types/ActionItems/interface';
+import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 
 import styles from 'style/app-fixed.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -46,7 +46,7 @@ import { Chip, debounce, Stack } from '@mui/material';
 import ItemViewModal from 'screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal';
 import ItemModal from 'screens/OrganizationActionItems/ActionItemModal/ActionItemModal';
 import ItemDeleteModal from 'screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';

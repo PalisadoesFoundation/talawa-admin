@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import MembershipRequestsCard from './MembershipRequestsCard';
 
 // Mock react-i18next
@@ -9,16 +9,19 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
   }),
+  initReactI18next: { type: '3rdParty', init: () => {} },
 }));
 
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
 }));
 
-// Mock react-toastify
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+// Mock NotificationToast
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: toastMocks,
 }));
 
 // Mock CardItem component
@@ -168,7 +171,7 @@ describe('MembershipRequestsCard Component', () => {
     const leaderboardButton = screen.getByTestId('viewAllLeaderboard');
     fireEvent.click(leaderboardButton);
 
-    expect(toast.success).toHaveBeenCalledWith('comingSoon');
+    expect(NotificationToast.success).toHaveBeenCalledWith('comingSoon');
   });
 
   it('handles async onViewAllClick correctly', async () => {

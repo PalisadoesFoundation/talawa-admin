@@ -3,12 +3,12 @@
  *
  * Displays up to 5 recent posts with loading/empty states and "View All" navigation.
  *
- * @component
- * @param props - The properties for the RecentPostsCard component.
- * @param props.postData - Organization data containing posts connection with edges.
- * @param props.postsCount - Total number of posts in the organization.
- * @param props.isLoading - Loading state indicator.
- * @param props.onViewAllClick - Callback triggered when "View All" button is clicked.
+ * @param postData - Organization data containing posts connection with edges.
+ * @param postsCount - Total number of posts in the organization.
+ * @param isLoading - Loading state indicator.
+ * @param onViewAllClick - Callback triggered when "View All" button is clicked.
+ *
+ * @returns A JSX element rendering a card with recent posts and actions.
  */
 
 import React from 'react';
@@ -17,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
 import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/CardItemLoading';
 import type { InterfaceOrganizationPg } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from '../OrganizationDashboard.module.css';
 
 interface InterfaceRecentPostsCardProps {
   postData: InterfaceOrganizationPg;

@@ -23,7 +23,7 @@
   font-size: var(--font-size-8xl);
   font-weight: var(--font-weight-heavy);
   color: var(--color-blue-200);
-  letter-spacing: var(--letter-spacing-extra-wide);
+  letter-spacing: 0;
   margin: var(--space-4) 0 0 0;
 }
 
@@ -53,14 +53,14 @@
 @media (max-width: 992px) {
   .pageNotFound h1.head {
     font-size: var(--font-size-7xl);
-    letter-spacing: var(--letter-spacing-extra-wide);
+    letter-spacing: 0;
   }
 }
 
 @media (max-width: 768px) {
   .pageNotFound h1.head {
     font-size: var(--font-size-6xl);
-    letter-spacing: var(--letter-spacing-extra-wide);
+    letter-spacing: 0;
   }
 }
 

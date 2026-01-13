@@ -17,7 +17,7 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 import EventActionItems from './EventActionItems';
 import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
-import type { IActionItemInfo } from 'types/ActionItems/interface';
+import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 
 // Mock dependencies
 vi.mock('react-router', async () => {
@@ -63,7 +63,7 @@ vi.mock('shared-components/LoadingState/LoadingState', () => ({
   },
 }));
 
-vi.mock('components/Avatar/Avatar', () => ({
+vi.mock('shared-components/Avatar/Avatar', () => ({
   default: ({ name }: { name: string }) => (
     <div data-testid="avatar">{name}</div>
   ),

@@ -28,6 +28,6 @@ Defined in: [src/types/CheckIn/type.ts:25](https://github.com/PalisadoesFoundati
 
 ### user
 
-> **user**: [`User`](../../../User/type/type-aliases/User.md)
+> **user**: [`User`](../../../shared-components/User/type/type-aliases/User.md)
 
 Defined in: [src/types/CheckIn/type.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L26)

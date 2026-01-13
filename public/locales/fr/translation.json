@@ -70,8 +70,12 @@
     "admin": "Administrateur",
     "user": "Utilisateur",
     "loading": "Chargement",
-    "communityLogo": "Logo Communautaire",
-    "organizations": "Organisations"
+    "userImage": "Image de l'utilisateur",
+    "userEditProfilePicture": "Modifier la photo de profil",
+    "communityLogo": "Logo de la Communauté",
+    "organizations": "Organisations",
+    "accountLocked": "Votre compte a été temporairement verrouillé en raison de trop nombreuses tentatives de connexion échouées. Veuillez réessayer plus tard.",
+    "accountLockedWithTimer": "Votre compte a été temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s)."
   },
   "adminProfile": {
     "title": "Profil Administrateur",
@@ -458,7 +462,6 @@
     "userName": "Nom d'utilisateur",
     "actions": "Actions",
     "noOneSelected": "Personne sélectionnée",
-    "addMember": "Ajouter un membre",
     "assignToTags": "Attribuer aux étiquettes",
     "removeFromTags": "Retirer des étiquettes",
     "assign": "Attribuer",
@@ -488,7 +491,8 @@
     "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
     "sortPeople": "Trier les personnes",
     "noTagsFound": "Aucun tag trouvé",
-    "removeMember": "Retirer le membre"
+    "addMember": "Ajouter un membre",
+    "removeMember": "Supprimer un membre"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
@@ -799,7 +803,6 @@
     "progress": "Progrès",
     "raised": "Collecté",
     "addCampaign": "Ajouter une campagne",
-    "editCampaign": "Modifier la campagne",
     "createdCampaign": "Campagne créée avec succès",
     "updatedCampaign": "Campagne mise à jour avec succès",
     "deletedCampaign": "Campagne supprimée avec succès",
@@ -811,13 +814,15 @@
     "currency": "Devise",
     "selectCurrency": "Sélectionner la devise",
     "searchFullName": "Rechercher par nom",
-    "searchCampaigns": "Rechercher des campagnes",
     "viewPledges": "Voir les promesses de dons",
     "noCampaignsFound": "Aucune campagne trouvée",
     "latestEndDate": "Dernière date de fin",
     "earliestEndDate": "Date de fin la plus ancienne",
     "lowestGoal": "Objectif le plus bas",
     "highestGoal": "Objectif le plus élevé",
+    "editCampaign": "Modifier la campagne",
+    "searchCampaigns": "Rechercher des campagnes",
+    "errorLoading": "Erreur lors du chargement des données de la campagne",
     "percentageRaised": "% Collecté",
     "campaignProgress": "Progression de la campagne: {{percentage}}%"
   },
@@ -1019,6 +1024,23 @@
     "notFoundMsg": "Oops! ",
     "backToHome": "De retour à la maison"
   },
+  "statusBadge": {
+    "completed": "Terminé",
+    "pending": "En attente",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "approved": "Approuvé",
+    "rejected": "Rejeté",
+    "disabled": "Désactivé",
+    "accepted": "Accepté",
+    "declined": "Refusé",
+    "no_response": "Aucune réponse",
+    "success": "Succès",
+    "warning": "Avertissement",
+    "error": "Erreur",
+    "info": "Info",
+    "neutral": "Neutre"
+  },
   "orgContribution": {
     "title": "Contributions de Talawa",
     "filterByName": "Filtrer par nom",
@@ -1195,7 +1217,20 @@
     "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
     "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
     "tagsAssigned": "étiquettes assignées",
-    "noTagsAssigned": "Aucune étiquette assignée"
+    "noTagsAssigned": "Aucune étiquette assignée",
+    "to": "À",
+    "overview": "Aperçu",
+    "tags": "Étiquettes",
+    "invalidFileType": "Type de fichier invalide",
+    "fileTooLarge": "Fichier trop volumineux",
+    "memberDetailNumberExample": "Exemple de numéro",
+    "memberDetailExampleLane": "Exemple de rue",
+    "memberDetailPostalExample": "Exemple de code postal",
+    "enterCity": "Entrez la ville",
+    "enterState": "Entrez l'état",
+    "select": "Sélectionner",
+    "asYourCountry": "comme votre pays",
+    "actions": "Actions"
   },
   "people": {
     "title": "Personnes",
@@ -1357,7 +1392,8 @@
     "event": "Événement",
     "article": "Article",
     "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité",
-    "processingPost": "Traitement de votre publication. Veuillez patienter."
+    "processingPost": "Traitement de votre publication. Veuillez patienter.",
+    "postImagePreview": "Aperçu de l’image de la publication"
   },
   "eventAttendance": {
     "event_attendance_table": "Table de présence aux événements",
@@ -1394,7 +1430,13 @@
     "createdAt": "Créé le",
     "options": "Options",
     "addRegistrant": "Ajouter un inscrit",
-    "noRegistrantsFound": "Aucun inscrit trouvé."
+    "noRegistrantsFound": "Aucun inscrit trouvé.",
+    "removingAttendee": "Suppression du participant...",
+    "attendeeRemovedSuccessfully": "Participant supprimé avec succès",
+    "errorRemovingAttendee": "Erreur lors de la suppression du participant. Veuillez réessayer.",
+    "checkedIn": "Enregistré",
+    "unregister": "Désinscrire",
+    "cannotUnregisterCheckedInTooltip": "Impossible de désinscrire un utilisateur déjà enregistré"
   },
   "onSpotAttendee": {
     "title": "Participant sur place",
@@ -1529,7 +1571,9 @@
     "latestFirst": "Plus Récent en Premier",
     "earliestFirst": "Plus Ancien en Premier",
     "noTransactionsFound": "Aucune transaction trouvée",
-    "errorLoadingTransactions": "Erreur lors du chargement des transactions"
+    "errorLoadingTransactions": "Erreur lors du chargement des transactions",
+    "eventType": "Type d'événement",
+    "tagCreationFailed": "Échec de la création du tag"
   },
   "userEvents": {
     "title": "Événements",
@@ -1548,7 +1592,6 @@
     "enterName": "Entrez le nom",
     "enterDescription": "Entrez la description",
     "enterLocation": "Entrez l'emplacement",
-
     "registerable": "Est enregistrable",
     "monthlyCalendarView": "Calendrier mensuel",
     "yearlyCalendarView": "Calendrier annuel",
@@ -1816,6 +1859,13 @@
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
     "errorRemovingAttendee": "Erreur lors de la suppression du participant",
+    "eventRegistrantsTitle": "Inscrits à l'événement",
+    "inviteByEmailButton": "Inviter par email",
+    "addRegistrantButton": "Ajouter un inscrit",
+    "noRegistrationsFound": "Aucune inscription trouvée.",
+    "addOnspotRegistrationLink": "Ajouter une inscription sur place",
+    "addRegistrantLabel": "Ajouter un inscrit",
+    "addRegistrantPlaceholder": "Entrez le nom complet ou l'email de l'utilisateur",
     "inviteByEmail": {
       "addRecipient": "Ajouter un destinataire",
       "email": "Email",
@@ -1862,7 +1912,7 @@
     "startDate": "Date de début",
     "endDate": "Date de fin",
     "fundingGoal": "Objectif de financement",
-    "viewPledge": "Voir la promesse de don",
+    "viewPledge": "Voir l'engagement",
     "campaignIndex": "#",
     "fundGoal": "Objectif de Financement",
     "percentRaised": "% Collecté",

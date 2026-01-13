@@ -6,11 +6,11 @@ import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import SidebarOrgSection from './SidebarOrgSection';
 import type { ISidebarOrgSectionProps } from 'types/SidebarOrgSection/interface';
-import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import dayjs from 'dayjs';
 
 // Mock Avatar component
-vi.mock('components/Avatar/Avatar', () => ({
+vi.mock('shared-components/Avatar/Avatar', () => ({
   default: ({ name, alt }: { name: string; alt: string }) => (
     <div data-testid="avatar" data-name={name} data-alt={alt}>
       Avatar: {name}
@@ -57,17 +57,8 @@ describe('SidebarOrgSection Component', () => {
       avatarURL: 'https://example.com/avatar.png',
       // Use dynamic dates to avoid test staleness
       createdAt: dayjs().subtract(30, 'days').format('YYYY-MM-DD'),
-      updatedAt: dayjs().subtract(29, 'days').format('YYYY-MM-DD'),
-      creator: {
-        id: 'creator123',
-        name: 'Creator Name',
-        emailAddress: 'creator@test.com',
-      },
-      updater: {
-        id: 'updater123',
-        name: 'Updater Name',
-        emailAddress: 'updater@test.com',
-      },
+      isUserRegistrationRequired: false,
+      __typename: 'Organization',
     },
   };
 
@@ -88,8 +79,8 @@ describe('SidebarOrgSection Component', () => {
   const successMocks = [
     {
       request: {
-        query: GET_ORGANIZATION_DATA_PG,
-        variables: { id: mockOrgId, first: 10, after: null },
+        query: GET_ORGANIZATION_BASIC_DATA,
+        variables: { id: mockOrgId },
       },
       result: {
         data: mockOrganizationData,
@@ -100,8 +91,8 @@ describe('SidebarOrgSection Component', () => {
   const loadingMocks = [
     {
       request: {
-        query: GET_ORGANIZATION_DATA_PG,
-        variables: { id: mockOrgId, first: 10, after: null },
+        query: GET_ORGANIZATION_BASIC_DATA,
+        variables: { id: mockOrgId },
       },
       delay: 1000000, // Very long delay to keep in loading state
       result: {
@@ -113,8 +104,8 @@ describe('SidebarOrgSection Component', () => {
   const errorMocks = [
     {
       request: {
-        query: GET_ORGANIZATION_DATA_PG,
-        variables: { id: mockOrgId, first: 10, after: null },
+        query: GET_ORGANIZATION_BASIC_DATA,
+        variables: { id: mockOrgId },
       },
       result: {
         data: { organization: null },
@@ -125,8 +116,8 @@ describe('SidebarOrgSection Component', () => {
   const noAvatarMocks = [
     {
       request: {
-        query: GET_ORGANIZATION_DATA_PG,
-        variables: { id: mockOrgId, first: 10, after: null },
+        query: GET_ORGANIZATION_BASIC_DATA,
+        variables: { id: mockOrgId },
       },
       result: {
         data: mockOrganizationWithoutAvatar,
@@ -137,8 +128,8 @@ describe('SidebarOrgSection Component', () => {
   const noCityMocks = [
     {
       request: {
-        query: GET_ORGANIZATION_DATA_PG,
-        variables: { id: mockOrgId, first: 10, after: null },
+        query: GET_ORGANIZATION_BASIC_DATA,
+        variables: { id: mockOrgId },
       },
       result: {
         data: mockOrganizationWithoutCity,
@@ -314,8 +305,8 @@ describe('SidebarOrgSection Component', () => {
       renderComponent({ orgId: customOrgId }, [
         {
           request: {
-            query: GET_ORGANIZATION_DATA_PG,
-            variables: { id: customOrgId, first: 10, after: null },
+            query: GET_ORGANIZATION_BASIC_DATA,
+            variables: { id: customOrgId },
           },
           result: {
             data: mockOrganizationData,
