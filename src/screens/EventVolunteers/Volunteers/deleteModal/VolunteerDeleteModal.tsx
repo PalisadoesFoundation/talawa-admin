@@ -3,37 +3,9 @@
  *
  * This component renders a modal for confirming the deletion of a volunteer.
  * It provides options to either confirm or cancel the deletion process.
- *
- * @component
- * @param {InterfaceDeleteVolunteerModal} props - The props for the component.
- * @param {boolean} props.isOpen - Determines whether the modal is visible.
- * @param {() => void} props.hide - Function to hide the modal.
- * @param {InterfaceEventVolunteerInfo} props.volunteer - The volunteer information to be deleted.
- * @param {() => void} props.refetchVolunteers - Function to refetch the list of volunteers after deletion.
- *
- * @returns {React.FC} A React functional component rendering the delete confirmation modal.
- *
- * @example
- * ```tsx
- * <VolunteerDeleteModal
- *   isOpen={isModalOpen}
- *   hide={closeModal}
- *   volunteer={selectedVolunteer}
- *   refetchVolunteers={fetchVolunteers}
- * />
- * ```
- *
- * @remarks
- * - Uses `react-bootstrap` for modal and button components.
- * - Integrates `react-i18next` for translations.
- * - Utilizes Apollo Client's `useMutation` hook to perform the delete operation.
- * - Displays success or error messages using `react-toastify`.
- *
- * @dependencies
- * - `DELETE_VOLUNTEER` GraphQL mutation for deleting a volunteer.
- * - `styles` for custom modal styling.
  */
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
+import BaseModal from 'components/BaseModal/BaseModal';
 import styles from 'style/app-fixed.module.css';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -97,50 +69,33 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
       toast.error((error as Error).message);
     }
   };
-  return (
-    <>
-      <Modal className={styles.volunteerModal} onHide={hide} show={isOpen}>
-        <Modal.Header>
-          <p className={styles.titlemodal}> {t('removeVolunteer')}</p>
-          <Button
-            variant="danger"
-            onClick={hide}
-            className={styles.modalCloseBtn}
-            data-testid="modalCloseBtn"
-          >
-            {' '}
-            <i className="fa fa-times"></i>
-          </Button>
-        </Modal.Header>
-        <Modal.Body>
-          <p> {t('removeVolunteerMsg')}</p>
 
-          {/* Radio buttons for recurring events - Template-First: All recurring event volunteers are templates */}
-          {volunteer.isTemplate && !volunteer.isInstanceException && (
-            <Form.Group className="mb-3">
-              <Form.Label>{t('applyTo')}</Form.Label>
-              <Form.Check
-                type="radio"
-                label={t('entireSeries')}
-                name="applyTo"
-                id="deleteApplyToSeries"
-                data-testid="deleteApplyToSeries"
-                checked={applyTo === 'series'}
-                onChange={() => setApplyTo('series')}
-              />
-              <Form.Check
-                type="radio"
-                label={t('thisEventOnly')}
-                name="applyTo"
-                id="deleteApplyToInstance"
-                data-testid="deleteApplyToInstance"
-                checked={applyTo === 'instance'}
-                onChange={() => setApplyTo('instance')}
-              />
-            </Form.Group>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
+  const customHeader = (
+    <>
+      <p className={styles.titlemodal}> {t('removeVolunteer')}</p>
+      <Button
+        variant="danger"
+        onClick={hide}
+        className={styles.modalCloseBtn}
+        data-testid="modalCloseBtn"
+      >
+        {' '}
+        <i className="fa fa-times"></i>
+      </Button>
+    </>
+  );
+
+  return (
+    <BaseModal
+      show={isOpen}
+      onHide={hide}
+      title={t('removeVolunteer')}
+      className={styles.volunteerModal}
+      customHeader={customHeader}
+      centered={false}
+      backdrop={true}
+      footer={
+        <>
           <Button
             variant="danger"
             onClick={deleteHandler}
@@ -151,9 +106,36 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
           <Button variant="secondary" onClick={hide} data-testid="deletenobtn">
             {tCommon('no')}
           </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+        </>
+      }
+    >
+      <p> {t('removeVolunteerMsg')}</p>
+
+      {/* Radio buttons for recurring events - Template-First: All recurring event volunteers are templates */}
+      {volunteer.isTemplate && !volunteer.isInstanceException && (
+        <Form.Group className="mb-3">
+          <Form.Label>{t('applyTo')}</Form.Label>
+          <Form.Check
+            type="radio"
+            label={t('entireSeries')}
+            name="applyTo"
+            id="deleteApplyToSeries"
+            data-testid="deleteApplyToSeries"
+            checked={applyTo === 'series'}
+            onChange={() => setApplyTo('series')}
+          />
+          <Form.Check
+            type="radio"
+            label={t('thisEventOnly')}
+            name="applyTo"
+            id="deleteApplyToInstance"
+            data-testid="deleteApplyToInstance"
+            checked={applyTo === 'instance'}
+            onChange={() => setApplyTo('instance')}
+          />
+        </Form.Group>
+      )}
+    </BaseModal>
   );
 };
 export default VolunteerDeleteModal;

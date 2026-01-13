@@ -125,7 +125,14 @@ describe('Testing Group Delete Modal', () => {
     renderGroupDeleteModal(link1, itemProps[0]);
     expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();
 
-    const btn = screen.getByTestId(testId);
+    let btn;
+    if (testId === 'modalCloseBtn') {
+      // The BaseModal close button uses aria-label="Close", not a data-testid
+      btn = screen.getByLabelText('Close');
+    } else {
+      btn = screen.getByTestId(testId);
+    }
+
     expect(btn).toBeInTheDocument();
     await userEvent.click(btn);
 
