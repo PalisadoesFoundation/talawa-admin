@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import MemberDetail from './MemberDetail';
 import { ReactNode } from 'react';
@@ -63,6 +63,7 @@ vi.mock(
     }) => (
       <button
         data-testid={`tab-${title}`}
+        type="button"
         data-active={isActive}
         onClick={action}
       >
@@ -76,10 +77,6 @@ vi.mock(
 
 describe('MemberDetail', () => {
   afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  beforeEach(() => {
     vi.clearAllMocks();
   });
 

@@ -9,9 +9,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import { useLocation } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import styles from 'style/app-fixed.module.css';
-import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
+import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_USER_BY_ID } from 'GraphQl/Queries/Queries';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
@@ -71,12 +71,23 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     state: '',
     workPhoneNumber: '',
   });
-  const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
+  const isUser = location.pathname.split('/')[1] === 'user';
+  const isAdmin = location.pathname.split('/')[1] === 'admin';
+  const params = useParams();
+  const userId: string =
+    (!(isUser || isAdmin)
+      ? params.userId
+      : getItem('userId') || getItem('id')) || '';
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
+  const [updateUser] = useMutation(UPDATE_USER_MUTATION);
   const { data, loading } = useQuery(GET_USER_BY_ID, {
     variables: {
       input: {
         id: currentId,
       },
+      fetchPolicy: 'no-cache',
     },
   });
   useEffect(() => {
@@ -119,7 +130,10 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     const passwordError = formState.password
       ? validatePassword(formState.password)
       : null;
-    if (passwordError) NotificationToast.error(passwordError);
+    if (passwordError) {
+      NotificationToast.error(passwordError);
+      return;
+    }
     const avatarFile =
       !selectedAvatar && formState.avatarURL
         ? await urlToFile(formState.avatarURL).catch(() => {
@@ -129,35 +143,42 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
             return null;
           })
         : null;
-    let normalizedBirthDate: string | null = null;
-    if (formState.birthDate) {
-      const date = dayjs(formState.birthDate);
-      normalizedBirthDate = date.isValid() ? date.format('YYYY-MM-DD') : null;
-    }
-    const data: Omit<typeof formState, 'avatarURL' | 'emailAddress'> = {
-      addressLine1: sanitizeInput(formState.addressLine1),
-      addressLine2: sanitizeInput(formState.addressLine2),
-      birthDate: normalizedBirthDate,
-      city: sanitizeInput(formState.city),
-      countryCode: sanitizeInput(formState.countryCode),
-      description: sanitizeInput(formState.description),
-      educationGrade: sanitizeInput(formState.educationGrade),
-      employmentStatus: sanitizeInput(formState.employmentStatus),
-      homePhoneNumber: sanitizeInput(formState.homePhoneNumber),
-      maritalStatus: sanitizeInput(formState.maritalStatus),
-      mobilePhoneNumber: sanitizeInput(formState.mobilePhoneNumber),
-      name: sanitizeInput(formState.name),
-      natalSex: sanitizeInput(formState.natalSex),
-      naturalLanguageCode: sanitizeInput(formState.naturalLanguageCode),
-      password: sanitizeInput(formState.password),
-      postalCode: sanitizeInput(formState.postalCode),
-      state: sanitizeInput(formState.state),
-      workPhoneNumber: sanitizeInput(formState.workPhoneNumber),
+    const data: Omit<typeof formState, 'avatarURL' | 'emailAddress'> & {
+      id?: string;
+    } = {
+      addressLine1: formState.addressLine1,
+      addressLine2: formState.addressLine2,
+      birthDate: formState.birthDate,
+      city: formState.city,
+      countryCode: formState.countryCode,
+      description: formState.description,
+      educationGrade: formState.educationGrade,
+      employmentStatus: formState.employmentStatus,
+      homePhoneNumber: formState.homePhoneNumber,
+      maritalStatus: formState.maritalStatus,
+      mobilePhoneNumber: formState.mobilePhoneNumber,
+      name: formState.name,
+      natalSex: formState.natalSex,
+      naturalLanguageCode: formState.naturalLanguageCode,
+      password: formState.password,
+      postalCode: formState.postalCode,
+      state: formState.state,
+      workPhoneNumber: formState.workPhoneNumber,
       avatar: selectedAvatar ? selectedAvatar : avatarFile,
+      ...(!isUser && !isAdmin ? { id: userId } : {}),
     };
+
     const input = removeEmptyFields(data);
     try {
-      const { data: updateData } = await updateUser({ variables: { input } });
+      const { data: updateData } = await updateUser({
+        variables: { input },
+        refetchQueries: [
+          {
+            query: GET_USER_BY_ID,
+            variables: { input: { id: currentId } },
+          },
+        ],
+      });
       if (updateData)
         NotificationToast.success(
           tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
@@ -269,6 +290,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                     setFormState={setFormState}
                     fieldOptions={genderEnum}
                     fieldName="natalSex"
+                    data-testid="inputNatalSex"
                     handleChange={(e) =>
                       handleFieldChange('natalSex', e.target.value)
                     }

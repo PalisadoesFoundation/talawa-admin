@@ -95,6 +95,37 @@ export const UPDATE_CURRENT_USER_MUTATION = gql`
   }
 `;
 
+export const UPDATE_USER_MUTATION = gql`
+  mutation UpdateUser($input: MutationUpdateUserInput!) {
+    updateUser(input: $input) {
+      addressLine1
+      addressLine2
+      avatarMimeType
+      avatarURL
+      birthDate
+      city
+      countryCode
+      createdAt
+      description
+      educationGrade
+      emailAddress
+      employmentStatus
+      homePhoneNumber
+      id
+      isEmailAddressVerified
+      maritalStatus
+      mobilePhoneNumber
+      name
+      natalSex
+      naturalLanguageCode
+      postalCode
+      role
+      state
+      updatedAt
+      workPhoneNumber
+    }
+  }
+`;
 // to update the password of user
 
 export const UPDATE_USER_PASSWORD_MUTATION = gql`

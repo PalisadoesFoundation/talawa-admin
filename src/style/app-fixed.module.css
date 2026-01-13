@@ -2858,6 +2858,36 @@ form label,
   color: var(--groupsLabel-color);
 }
 
+.avatarImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarPlaceholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 6px;
+}
+.avatarPlaceholderSize {
+  width: 40px;
+  height: 40px;
+}
 .calendar__header {
   display: flex;
   align-items: stretch;

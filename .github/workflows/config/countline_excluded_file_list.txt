@@ -12,3 +12,4 @@ src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx
 src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx
 src/shared-components/postCard/PostCard.tsx
 src/shared-components/EventForm/EventForm.tsx
+src/screens/MemberDetail/UserContactDetails.tsx
