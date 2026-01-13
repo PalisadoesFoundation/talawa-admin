@@ -4,7 +4,7 @@
 
 # Variable: CreateModal
 
-> `const` **CreateModal**: `React.FC`\<[`InterfaceCreateModalProps`](../../../../types/CRUDModalTemplate/interface/interfaces/InterfaceCreateModalProps.md)\>
+> `const` **CreateModal**: `React.FC`\<[`InterfaceCreateModalProps`](../../../../types/shared-components/CRUDModalTemplate/interface/interfaces/InterfaceCreateModalProps.md)\>
 
 Defined in: [src/shared-components/CRUDModalTemplate/CreateModal.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CRUDModalTemplate/CreateModal.tsx#L44)
 

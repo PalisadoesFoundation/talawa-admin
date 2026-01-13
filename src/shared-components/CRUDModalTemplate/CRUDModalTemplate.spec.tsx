@@ -56,31 +56,6 @@ describe('CRUDModalTemplate', () => {
       expect(screen.queryByText('Modal Content')).not.toBeInTheDocument();
     });
 
-    it('should support show prop as alternative to open', () => {
-      renderWithI18n(
-        <CRUDModalTemplate show={true} title="Test Modal" onClose={mockOnClose}>
-          <div>Modal Content</div>
-        </CRUDModalTemplate>,
-      );
-
-      expect(screen.getByText('Modal Content')).toBeInTheDocument();
-    });
-
-    it('should prioritize open prop over show prop', () => {
-      renderWithI18n(
-        <CRUDModalTemplate
-          open={true}
-          show={false}
-          title="Test Modal"
-          onClose={mockOnClose}
-        >
-          <div>Modal Content</div>
-        </CRUDModalTemplate>,
-      );
-
-      expect(screen.getByText('Modal Content')).toBeInTheDocument();
-    });
-
     it('should call onClose when close button is clicked', () => {
       renderWithI18n(
         <CRUDModalTemplate open={true} title="Test Modal" onClose={mockOnClose}>
@@ -209,7 +184,7 @@ describe('CRUDModalTemplate', () => {
           open={true}
           title="Test Modal"
           onClose={mockOnClose}
-          customFooter={<button>Custom Action</button>}
+          customFooter={<button type="button">Custom Action</button>}
         >
           <div>Content</div>
         </CRUDModalTemplate>,
@@ -989,8 +964,12 @@ describe('ViewModal', () => {
         data={{ id: '1' }}
         customActions={
           <>
-            <button onClick={mockEdit}>Edit</button>
-            <button onClick={mockDelete}>Delete</button>
+            <button type="button" onClick={mockEdit}>
+              Edit
+            </button>
+            <button type="button" onClick={mockDelete}>
+              Delete
+            </button>
           </>
         }
       >

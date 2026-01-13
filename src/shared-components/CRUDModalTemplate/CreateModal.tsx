@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { CRUDModalTemplate } from './CRUDModalTemplate';
-import type { InterfaceCreateModalProps } from 'types/CRUDModalTemplate/interface';
+import type { InterfaceCreateModalProps } from 'types/shared-components/CRUDModalTemplate/interface';
 import styles from './CRUDModalTemplate.module.css';
 import globalStyles from 'style/app-fixed.module.css';
 
@@ -43,7 +43,6 @@ import globalStyles from 'style/app-fixed.module.css';
  */
 export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
   open,
-  show,
   title,
   onClose,
   children,
@@ -57,7 +56,7 @@ export const CreateModal: React.FC<InterfaceCreateModalProps> = ({
   submitDisabled = false,
 }) => {
   const { t: tCommon } = useTranslation('common');
-  const isOpen = open ?? show ?? false;
+  const isOpen = open ?? false;
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {

@@ -4,7 +4,7 @@
 
 # Variable: DeleteModal
 
-> `const` **DeleteModal**: `React.FC`\<[`InterfaceDeleteModalProps`](../../../../types/CRUDModalTemplate/interface/interfaces/InterfaceDeleteModalProps.md)\>
+> `const` **DeleteModal**: `React.FC`\<[`InterfaceDeleteModalProps`](../../../../types/shared-components/CRUDModalTemplate/interface/interfaces/InterfaceDeleteModalProps.md)\>
 
 Defined in: [src/shared-components/CRUDModalTemplate/DeleteModal.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CRUDModalTemplate/DeleteModal.tsx#L63)
 

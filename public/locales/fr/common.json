@@ -254,5 +254,8 @@
   "peopleTabTagName": "Personnes",
   "or": "ou",
   "eventNotFound": "Événement avec l'id {{id}} non trouvé",
-  "required": "Obligatoire"
+  "required": "Obligatoire",
+  "deleteConfirmation": "Êtes-vous sûr de vouloir supprimer cet élément ? Cette action ne peut pas être annulée.",
+  "deleteEntityConfirmation": "Êtes-vous sûr de vouloir supprimer {{entityName}} ? Cette action ne peut pas être annulée.",
+  "update": "Mettre à jour"
 }

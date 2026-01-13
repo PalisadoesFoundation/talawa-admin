@@ -2,7 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 import { Button, Alert } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import type { InterfaceCRUDModalTemplateProps } from 'types/CRUDModalTemplate/interface';
+import type { InterfaceCRUDModalTemplateProps } from 'types/shared-components/CRUDModalTemplate/interface';
 import styles from './CRUDModalTemplate.module.css';
 import globalStyles from 'style/app-fixed.module.css';
 
@@ -41,7 +41,6 @@ import globalStyles from 'style/app-fixed.module.css';
  */
 export const CRUDModalTemplate: React.FC<InterfaceCRUDModalTemplateProps> = ({
   open,
-  show,
   title,
   onClose,
   children,
@@ -60,7 +59,7 @@ export const CRUDModalTemplate: React.FC<InterfaceCRUDModalTemplateProps> = ({
   customFooter,
   showFooter = true,
 }) => {
-  const isOpen = open ?? show ?? false;
+  const isOpen = open ?? false;
 
   const handleEscapeKey = useCallback(
     (event: KeyboardEvent) => {

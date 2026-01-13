@@ -30,7 +30,7 @@ Features:
 
 ### \_\_namedParameters
 
-[`InterfaceEditModalProps`](../../../../types/CRUDModalTemplate/interface/interfaces/InterfaceEditModalProps.md)\<`T`\>
+[`InterfaceEditModalProps`](../../../../types/shared-components/CRUDModalTemplate/interface/interfaces/InterfaceEditModalProps.md)\<`T`\>
 
 ## Returns
 

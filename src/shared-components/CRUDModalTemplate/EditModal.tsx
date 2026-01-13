@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { CRUDModalTemplate } from './CRUDModalTemplate';
-import type { InterfaceEditModalProps } from 'types/CRUDModalTemplate/interface';
+import type { InterfaceEditModalProps } from 'types/shared-components/CRUDModalTemplate/interface';
 import styles from './CRUDModalTemplate.module.css';
 import globalStyles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
@@ -44,7 +44,6 @@ import { useTranslation } from 'react-i18next';
  */
 export const EditModal = <T,>({
   open,
-  show,
   title,
   onClose,
   children,
@@ -59,7 +58,7 @@ export const EditModal = <T,>({
   submitDisabled = false,
 }: InterfaceEditModalProps<T>): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
-  const isOpen = open ?? show ?? false;
+  const isOpen = open ?? false;
   const formRef = useRef<HTMLFormElement>(null);
   const isLoading = loading || loadingData;
 

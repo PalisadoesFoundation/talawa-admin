@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { CRUDModalTemplate } from './CRUDModalTemplate';
-import type { InterfaceDeleteModalProps } from 'types/CRUDModalTemplate/interface';
+import type { InterfaceDeleteModalProps } from 'types/shared-components/CRUDModalTemplate/interface';
 import styles from './CRUDModalTemplate.module.css';
 import globalStyles from 'style/app-fixed.module.css';
 
@@ -62,7 +62,6 @@ import globalStyles from 'style/app-fixed.module.css';
  */
 export const DeleteModal: React.FC<InterfaceDeleteModalProps> = ({
   open,
-  show,
   title,
   onClose,
   children,
@@ -78,7 +77,7 @@ export const DeleteModal: React.FC<InterfaceDeleteModalProps> = ({
   recurringEventContent,
 }) => {
   const { t: tCommon } = useTranslation('common');
-  const isOpen = open ?? show ?? false;
+  const isOpen = open ?? false;
 
   const handleDelete = () => {
     if (!loading) {

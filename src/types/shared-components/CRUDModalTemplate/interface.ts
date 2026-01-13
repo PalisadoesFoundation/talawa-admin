@@ -6,7 +6,7 @@
  * when creating, editing, viewing, and deleting entities.
  */
 
-import type { ReactNode } from 'react';
+import type { ReactNode, FormEvent } from 'react';
 
 /**
  * Size variants for modals
@@ -24,12 +24,6 @@ export interface InterfaceCrudModalBaseProps {
    * Controls whether the modal is visible (defaults to false)
    */
   open?: boolean;
-
-  /**
-   * Alternative prop name for modal visibility (for compatibility).
-   * If both `open` and `show` are provided, `open` takes precedence (defaults to false)
-   */
-  show?: boolean;
 
   /**
    * Modal title displayed in the header
@@ -155,7 +149,7 @@ export interface InterfaceCreateModalProps extends InterfaceCrudModalBaseProps {
    * Callback function invoked when the form is submitted
    * Should handle the creation logic and return a Promise
    */
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void | Promise<void>;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void | Promise<void>;
 
   /**
    * Whether the submit button should be disabled
@@ -184,7 +178,7 @@ export interface InterfaceEditModalProps<T = unknown>
    * Callback function invoked when the form is submitted
    * Should handle the update logic and return a Promise
    */
-  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void | Promise<void>;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void | Promise<void>;
 
   /**
    * The entity data being edited

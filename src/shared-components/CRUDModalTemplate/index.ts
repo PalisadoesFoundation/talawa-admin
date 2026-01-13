@@ -38,4 +38,4 @@ export type {
   InterfaceModalFormState,
   InterfaceRecurringEventProps,
   ModalSize,
-} from 'types/CRUDModalTemplate/interface';
+} from 'types/shared-components/CRUDModalTemplate/interface';

@@ -4,7 +4,7 @@
 
 # Variable: CRUDModalTemplate
 
-> `const` **CRUDModalTemplate**: `React.FC`\<[`InterfaceCRUDModalTemplateProps`](../../../../types/CRUDModalTemplate/interface/interfaces/InterfaceCRUDModalTemplateProps.md)\>
+> `const` **CRUDModalTemplate**: `React.FC`\<[`InterfaceCRUDModalTemplateProps`](../../../../types/shared-components/CRUDModalTemplate/interface/interfaces/InterfaceCRUDModalTemplateProps.md)\>
 
 Defined in: [src/shared-components/CRUDModalTemplate/CRUDModalTemplate.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CRUDModalTemplate/CRUDModalTemplate.tsx#L42)
 

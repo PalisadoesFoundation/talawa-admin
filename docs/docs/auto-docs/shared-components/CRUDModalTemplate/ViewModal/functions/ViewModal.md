@@ -29,7 +29,7 @@ Features:
 
 ### \_\_namedParameters
 
-[`InterfaceViewModalProps`](../../../../types/CRUDModalTemplate/interface/interfaces/InterfaceViewModalProps.md)\<`T`\>
+[`InterfaceViewModalProps`](../../../../types/shared-components/CRUDModalTemplate/interface/interfaces/InterfaceViewModalProps.md)\<`T`\>
 
 ## Returns
 
