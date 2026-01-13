@@ -175,7 +175,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               variant="outlined"
               className={`${styles.noOutline} w-100`}
               value={formState.fundName}
-              inputProps={{ id: 'fundName' }}
+              id="fundName"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 setFormState({ ...formState, fundName: e.target.value });
               }}
@@ -189,7 +189,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               variant="outlined"
               className={`${styles.noOutline} w-100`}
               value={formState.fundRef}
-              inputProps={{ id: 'fundId' }}
+              id="fundId"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 setFormState({ ...formState, fundRef: e.target.value });
               }}
@@ -205,9 +205,10 @@ const FundModal: React.FC<InterfaceFundModal> = ({
           }`}
         >
           <Form.Group className="d-flex">
-            <label>{t('taxDeductible')}</label>
+            <label htmlFor="isTaxDeductibleSwitch">{t('taxDeductible')}</label>
             <Form.Switch
               type="checkbox"
+              id="isTaxDeductibleSwitch"
               checked={formState.isTaxDeductible}
               data-testid="setisTaxDeductibleSwitch"
               className={`ms-2 ${styles.switch}`}
@@ -221,9 +222,10 @@ const FundModal: React.FC<InterfaceFundModal> = ({
           </Form.Group>
 
           <Form.Group className="d-flex">
-            <label>{t('default')}</label>
+            <label htmlFor="isDefaultSwitch">{t('default')}</label>
             <Form.Switch
               type="checkbox"
+              id="isDefaultSwitch"
               className={`ms-2 ${styles.switch}`}
               data-testid="setDefaultSwitch"
               checked={formState.isDefault}
@@ -238,9 +240,10 @@ const FundModal: React.FC<InterfaceFundModal> = ({
 
           {mode === 'edit' && (
             <Form.Group className="d-flex">
-              <label>{t('archived')}</label>
+              <label htmlFor="archivedSwitch">{t('archived')}</label>
               <Form.Switch
                 type="checkbox"
+                id="archivedSwitch"
                 checked={formState.isArchived}
                 data-testid="archivedSwitch"
                 className={`ms-2 ${styles.switch}`}

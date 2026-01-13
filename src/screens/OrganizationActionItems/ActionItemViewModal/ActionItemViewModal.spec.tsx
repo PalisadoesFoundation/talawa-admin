@@ -1,315 +1,3 @@
-describe('ItemViewModal - Helper Functions Coverage', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
-  describe('getUserDisplayName helper function', () => {
-    it('should return user name when user has name property', async () => {
-      const mockActionItemWithUserName = {
-        ...createActionItem(),
-      };
-      const props: IViewModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        item: mockActionItemWithUserName,
-      };
-      renderItemViewModal(link1, props);
-      await waitFor(() => {
-        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
-      });
-      const creatorField = screen.getByLabelText(/creator/i);
-      expect(creatorField).toHaveValue('Jane Smith');
-    });
-
-    it('should return combined firstName and lastName when name is not available', async () => {
-      const mockActionItemWithFirstLastName = {
-        ...createActionItem(),
-        creatorId: 'userId2',
-        creator: null,
-      };
-      const props: IViewModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        item: mockActionItemWithFirstLastName,
-      };
-      renderItemViewModal(link1, props);
-      await waitFor(() => {
-        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
-      });
-      const creatorField = screen.getByLabelText(/creator/i);
-      expect(creatorField).toHaveValue('Jane Smith');
-    });
-
-    it('should return "Unknown" when user is null', async () => {
-      const mockActionItemWithNullCreator = {
-        ...createActionItem(),
-        creatorId: null,
-        creator: null,
-      };
-      const props: IViewModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        item: mockActionItemWithNullCreator,
-      };
-      renderItemViewModal(link1, props);
-      await waitFor(() => {
-        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
-      });
-      const creatorField = screen.getByLabelText(/creator/i);
-      expect(creatorField).toHaveValue('Unknown');
-    });
-
-    it('should return "Unknown" when user is undefined', async () => {
-      const mockActionItemWithUndefinedCreator = {
-        ...createActionItem(),
-        creatorId: null,
-        creator: null,
-      };
-      const props: IViewModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        item: mockActionItemWithUndefinedCreator,
-      };
-      renderItemViewModal(link1, props);
-      await waitFor(() => {
-        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
-      });
-      const creatorField = screen.getByLabelText(/creator/i);
-      expect(creatorField).toHaveValue('Unknown');
-    });
-
-    it('should return "Unknown" when firstName and lastName are empty after trim', async () => {
-      const mockActionItemWithEmptyNames = {
-        ...createActionItem(),
-        creatorId: 'emptyUser',
-        creator: null,
-      };
-      // Add a mock member with empty first and last names
-      const mockMembersWithEmptyUser = [
-        {
-          id: 'emptyUser',
-          firstName: '   ',
-          lastName: '   ',
-          image: null,
-          name: null,
-          emailAddress: 'empty@example.com',
-          role: 'USER',
-          avatarURL: '',
-          createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-          updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-        },
-        ...mockMembers.slice(1),
-      ];
-      const MOCKS_EMPTY_USER = [
-        {
-          request: {
-            query: GET_ACTION_ITEM_CATEGORY,
-            variables: { input: { id: 'categoryId1' } },
-          },
-          result: { data: { actionItemCategory: mockCategory } },
-        },
-        {
-          request: {
-            query: MEMBERS_LIST,
-            variables: { organizationId: 'orgId1' },
-          },
-          result: { data: { usersByOrganizationId: mockMembersWithEmptyUser } },
-        },
-      ];
-      const linkEmptyUser = new StaticMockLink(MOCKS_EMPTY_USER);
-      const props: IViewModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        item: mockActionItemWithEmptyNames,
-      };
-      renderItemViewModal(linkEmptyUser, props);
-      await waitFor(() => {
-        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
-      });
-      const creatorField = screen.getByLabelText(/creator/i);
-      expect(creatorField).toHaveValue('Unknown');
-    });
-  });
-
-  describe('getEventDisplayName helper function', () => {
-    describe('getEventDisplayName helper function - edge cases', () => {
-      it('should return "No event" when event name is empty string', async () => {
-        const mockActionItemWithEmptyStringEventName = {
-          ...createActionItem(),
-          event: {
-            ...mockEvent,
-            name: '', // Empty string, not undefined/null
-          },
-          recurringEventInstance: null,
-        };
-        const props: IViewModalProps = {
-          isOpen: true,
-          hide: vi.fn(),
-          item: mockActionItemWithEmptyStringEventName,
-        };
-        renderItemViewModal(link1, props);
-        await waitFor(() => {
-          expect(screen.getByText('Action Item Details')).toBeInTheDocument();
-        });
-        const eventField = screen.getByLabelText(/event/i);
-        expect(eventField).toHaveValue('No event');
-      });
-
-      it('should return event name from recurringEventInstance when it has empty name in regular event', async () => {
-        const mockActionItemWithEmptyEventButRecurring = {
-          ...createActionItem(),
-          recurringEventInstance: {
-            ...mockEvent,
-            name: 'Recurring Event Name',
-          },
-          event: {
-            ...mockEvent,
-            name: '', // Empty string in event
-          },
-        };
-        const props: IViewModalProps = {
-          isOpen: true,
-          hide: vi.fn(),
-          item: mockActionItemWithEmptyEventButRecurring,
-        };
-        renderItemViewModal(link1, props);
-        await waitFor(() => {
-          expect(screen.getByText('Action Item Details')).toBeInTheDocument();
-        });
-        const eventField = screen.getByLabelText(/event/i);
-        expect(eventField).toHaveValue('Recurring Event Name');
-      });
-
-      it('should handle recurringEventInstance with empty name', async () => {
-        const mockActionItemWithEmptyRecurringName = {
-          ...createActionItem(),
-          recurringEventInstance: {
-            ...mockEvent,
-            name: '', // Empty string
-          },
-          event: null,
-        };
-        const props: IViewModalProps = {
-          isOpen: true,
-          hide: vi.fn(),
-          item: mockActionItemWithEmptyRecurringName,
-        };
-        renderItemViewModal(link1, props);
-        await waitFor(() => {
-          expect(screen.getByText('Action Item Details')).toBeInTheDocument();
-        });
-        const eventField = screen.getByLabelText(/event/i);
-        expect(eventField).toHaveValue('No event');
-      });
-    });
-    it('should return event name when event has name property', async () => {
-      const mockActionItemWithEvent = {
-        ...createActionItem(),
-        event: {
-          ...mockEvent,
-          name: 'Community Meetup',
-        },
-        recurringEventInstance: null,
-      };
-      const props: IViewModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        item: mockActionItemWithEvent,
-      };
-      renderItemViewModal(link1, props);
-      await waitFor(() => {
-        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
-      });
-      const eventField = screen.getByLabelText(/event/i);
-      expect(eventField).toHaveValue('Community Meetup');
-    });
-
-    it('should return "No event" when event is null', async () => {
-      const mockActionItemWithNullEvent = {
-        ...createActionItem(),
-        event: null,
-        recurringEventInstance: null,
-      };
-      const props: IViewModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        item: mockActionItemWithNullEvent,
-      };
-      renderItemViewModal(link1, props);
-      await waitFor(() => {
-        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
-      });
-      const eventField = screen.getByLabelText(/event/i);
-      expect(eventField).toHaveValue('No event');
-    });
-
-    it('should return "No event" when event is undefined', async () => {
-      const mockActionItemWithUndefinedEvent = {
-        ...createActionItem(),
-        event: null,
-        recurringEventInstance: null,
-      };
-      const props: IViewModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        item: mockActionItemWithUndefinedEvent,
-      };
-      renderItemViewModal(link1, props);
-      await waitFor(() => {
-        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
-      });
-      const eventField = screen.getByLabelText(/event/i);
-      expect(eventField).toHaveValue('No event');
-    });
-
-    it('should return "No event" when event name is empty or undefined', async () => {
-      const mockActionItemWithEmptyEventName = {
-        ...createActionItem(),
-        event: {
-          ...mockEvent,
-          name: '',
-        },
-        recurringEventInstance: null,
-      };
-      const props: IViewModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        item: mockActionItemWithEmptyEventName,
-      };
-      renderItemViewModal(link1, props);
-      await waitFor(() => {
-        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
-      });
-      const eventField = screen.getByLabelText(/event/i);
-      expect(eventField).toHaveValue('No event');
-    });
-
-    it('should prioritize recurringEventInstance over event when both exist', async () => {
-      const mockActionItemWithBothEvents = {
-        ...createActionItem(),
-        recurringEventInstance: {
-          ...mockEvent,
-          name: 'Recurring Instance Event',
-        },
-        event: {
-          ...mockEvent,
-          name: 'Regular Event',
-        },
-      };
-      const props: IViewModalProps = {
-        isOpen: true,
-        hide: vi.fn(),
-        item: mockActionItemWithBothEvents,
-      };
-      renderItemViewModal(link1, props);
-      await waitFor(() => {
-        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
-      });
-      const eventField = screen.getByLabelText(/event/i);
-      expect(eventField).toHaveValue('Recurring Instance Event');
-    });
-  });
-});
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
@@ -537,6 +225,299 @@ const renderItemViewModal = (
     </MockedProvider>,
   );
 };
+
+describe('ItemViewModal - Helper Functions Coverage', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe('getUserDisplayName helper function', () => {
+    it('should return user name when user has name property', async () => {
+      const mockActionItemWithUserName = {
+        ...createActionItem(),
+      };
+      const props: IViewModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        item: mockActionItemWithUserName,
+      };
+      renderItemViewModal(link1, props);
+      await waitFor(() => {
+        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
+      });
+      const creatorField = screen.getByLabelText(/creator/i);
+      expect(creatorField).toHaveValue('Jane Smith');
+    });
+
+    it('should return combined firstName and lastName when name is not available', async () => {
+      const mockActionItemWithFirstLastName = {
+        ...createActionItem(),
+        creatorId: 'userId2',
+        creator: null,
+      };
+      const props: IViewModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        item: mockActionItemWithFirstLastName,
+      };
+      renderItemViewModal(link1, props);
+      await waitFor(() => {
+        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
+      });
+      const creatorField = screen.getByLabelText(/creator/i);
+      expect(creatorField).toHaveValue('Jane Smith');
+    });
+
+    it('should return "Unknown" when user is null', async () => {
+      const mockActionItemWithNullCreator = {
+        ...createActionItem(),
+        creatorId: null,
+        creator: null,
+      };
+      const props: IViewModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        item: mockActionItemWithNullCreator,
+      };
+      renderItemViewModal(link1, props);
+      await waitFor(() => {
+        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
+      });
+      const creatorField = screen.getByLabelText(/creator/i);
+      expect(creatorField).toHaveValue('Unknown');
+    });
+
+    it('should return "Unknown" when user is undefined', async () => {
+      const mockActionItemWithUndefinedCreator = {
+        ...createActionItem(),
+        creatorId: null,
+        creator: null,
+      };
+      const props: IViewModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        item: mockActionItemWithUndefinedCreator,
+      };
+      renderItemViewModal(link1, props);
+      await waitFor(() => {
+        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
+      });
+      const creatorField = screen.getByLabelText(/creator/i);
+      expect(creatorField).toHaveValue('Unknown');
+    });
+
+    it('should return "Unknown" when firstName and lastName are empty after trim', async () => {
+      const mockActionItemWithEmptyNames = {
+        ...createActionItem(),
+        creatorId: 'emptyUser',
+        creator: null,
+      };
+      // Add a mock member with empty first and last names
+      const mockMembersWithEmptyUser = [
+        {
+          id: 'emptyUser',
+          firstName: '   ',
+          lastName: '   ',
+          image: null,
+          name: null,
+          emailAddress: 'empty@example.com',
+          role: 'USER',
+          avatarURL: '',
+          createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+          updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+        },
+        ...mockMembers.slice(1),
+      ];
+      const MOCKS_EMPTY_USER = [
+        {
+          request: {
+            query: GET_ACTION_ITEM_CATEGORY,
+            variables: { input: { id: 'categoryId1' } },
+          },
+          result: { data: { actionItemCategory: mockCategory } },
+        },
+        {
+          request: {
+            query: MEMBERS_LIST,
+            variables: { organizationId: 'orgId1' },
+          },
+          result: { data: { usersByOrganizationId: mockMembersWithEmptyUser } },
+        },
+      ];
+      const linkEmptyUser = new StaticMockLink(MOCKS_EMPTY_USER);
+      const props: IViewModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        item: mockActionItemWithEmptyNames,
+      };
+      renderItemViewModal(linkEmptyUser, props);
+      await waitFor(() => {
+        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
+      });
+      const creatorField = screen.getByLabelText(/creator/i);
+      expect(creatorField).toHaveValue('Unknown');
+    });
+  });
+
+  describe('getEventDisplayName helper function', () => {
+    it('should return "No event" when event name is empty string', async () => {
+      const mockActionItemWithEmptyStringEventName = {
+        ...createActionItem(),
+        event: {
+          ...mockEvent,
+          name: '', // Empty string, not undefined/null
+        },
+        recurringEventInstance: null,
+      };
+      const props: IViewModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        item: mockActionItemWithEmptyStringEventName,
+      };
+      renderItemViewModal(link1, props);
+      await waitFor(() => {
+        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
+      });
+      const eventField = screen.getByLabelText(/event/i);
+      expect(eventField).toHaveValue('No event');
+    });
+
+    it('should return event name from recurringEventInstance when it has empty name in regular event', async () => {
+      const mockActionItemWithEmptyEventButRecurring = {
+        ...createActionItem(),
+        recurringEventInstance: {
+          ...mockEvent,
+          name: 'Recurring Event Name',
+        },
+        event: {
+          ...mockEvent,
+          name: '', // Empty string in event
+        },
+      };
+      const props: IViewModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        item: mockActionItemWithEmptyEventButRecurring,
+      };
+      renderItemViewModal(link1, props);
+      await waitFor(() => {
+        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
+      });
+      const eventField = screen.getByLabelText(/event/i);
+      expect(eventField).toHaveValue('Recurring Event Name');
+    });
+
+    it('should handle recurringEventInstance with empty name', async () => {
+      const mockActionItemWithEmptyRecurringName = {
+        ...createActionItem(),
+        recurringEventInstance: {
+          ...mockEvent,
+          name: '', // Empty string
+        },
+        event: null,
+      };
+      const props: IViewModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        item: mockActionItemWithEmptyRecurringName,
+      };
+      renderItemViewModal(link1, props);
+      await waitFor(() => {
+        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
+      });
+      const eventField = screen.getByLabelText(/event/i);
+      expect(eventField).toHaveValue('No event');
+    });
+    it('should return event name when event has name property', async () => {
+      const mockActionItemWithEvent = {
+        ...createActionItem(),
+        event: {
+          ...mockEvent,
+          name: 'Community Meetup',
+        },
+        recurringEventInstance: null,
+      };
+      const props: IViewModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        item: mockActionItemWithEvent,
+      };
+      renderItemViewModal(link1, props);
+      await waitFor(() => {
+        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
+      });
+      const eventField = screen.getByLabelText(/event/i);
+      expect(eventField).toHaveValue('Community Meetup');
+    });
+
+    it('should return "No event" when event is null', async () => {
+      const mockActionItemWithNullEvent = {
+        ...createActionItem(),
+        event: null,
+        recurringEventInstance: null,
+      };
+      const props: IViewModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        item: mockActionItemWithNullEvent,
+      };
+      renderItemViewModal(link1, props);
+      await waitFor(() => {
+        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
+      });
+      const eventField = screen.getByLabelText(/event/i);
+      expect(eventField).toHaveValue('No event');
+    });
+
+    it('should return "No event" when event is undefined', async () => {
+      const mockActionItemWithUndefinedEvent = {
+        ...createActionItem(),
+        event: null, // Fix: use null instead of undefined
+        recurringEventInstance: null,
+      };
+      const props: IViewModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        item: mockActionItemWithUndefinedEvent,
+      };
+      renderItemViewModal(link1, props);
+      await waitFor(() => {
+        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
+      });
+      const eventField = screen.getByLabelText(/event/i);
+      expect(eventField).toHaveValue('No event');
+    });
+
+    it('should prioritize recurringEventInstance over event when both exist', async () => {
+      const mockActionItemWithBothEvents = {
+        ...createActionItem(),
+        recurringEventInstance: {
+          ...mockEvent,
+          name: 'Recurring Instance Event',
+        },
+        event: {
+          ...mockEvent,
+          name: 'Regular Event',
+        },
+      };
+      const props: IViewModalProps = {
+        isOpen: true,
+        hide: vi.fn(),
+        item: mockActionItemWithBothEvents,
+      };
+      renderItemViewModal(link1, props);
+      await waitFor(() => {
+        expect(screen.getByText('Action Item Details')).toBeInTheDocument();
+      });
+      const eventField = screen.getByLabelText(/event/i);
+      expect(eventField).toHaveValue('Recurring Instance Event');
+    });
+  });
+});
 
 describe('Testing ItemViewModal', () => {
   beforeEach(() => {

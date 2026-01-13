@@ -25,6 +25,7 @@ import {
   TextField,
 } from '@mui/material';
 import type { InterfaceCampaignInfo } from 'utils/interfaces';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 export interface InterfaceCampaignModal {
   isOpen: boolean;
@@ -66,6 +67,10 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
     campaignEndDate: campaign?.endAt ?? new Date(),
   });
 
+  const [touched, setTouched] = useState<{ campaignName: boolean }>({
+    campaignName: false,
+  });
+
   useEffect(() => {
     setFormState({
       campaignCurrency: campaign?.currencyCode ?? 'USD',
@@ -74,6 +79,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       campaignName: campaign?.name ?? '',
       campaignStartDate: campaign?.startAt ?? new Date(),
     });
+    setTouched({ campaignName: false });
   }, [campaign]);
 
   const {
@@ -87,16 +93,24 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   const [createCampaign] = useMutation(CREATE_CAMPAIGN_MUTATION);
   const [updateCampaign] = useMutation(UPDATE_CAMPAIGN_MUTATION);
 
+  const isNameInvalid = touched.campaignName && !campaignName.trim();
+
   const createCampaignHandler = async (
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
+
+    if (!campaignName.trim()) {
+      setTouched((prev) => ({ ...prev, campaignName: true }));
+      return;
+    }
+
     try {
       await createCampaign({
         variables: {
           name: campaignName,
           currencyCode: campaignCurrency,
-          goalAmount: Number.parseInt(campaignGoal.toString()),
+          goalAmount: campaignGoal,
           startAt: dayjs(campaignStartDate).toISOString(),
           endAt: dayjs(campaignEndDate).toISOString(),
           fundId,
@@ -110,6 +124,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         campaignStartDate: new Date(),
         campaignEndDate: new Date(),
       });
+      setTouched({ campaignName: false });
       refetchCampaign();
       hide();
     } catch (error: unknown) {
@@ -121,6 +136,12 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
+
+    if (!campaignName.trim()) {
+      setTouched((prev) => ({ ...prev, campaignName: true }));
+      return;
+    }
+
     try {
       const updatedFields: { [key: string]: string | number | undefined } = {};
       if (campaign?.name !== campaignName) {
@@ -132,10 +153,10 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       if (campaign?.goalAmount !== campaignGoal) {
         updatedFields.goalAmount = campaignGoal;
       }
-      if (campaign?.startAt !== campaignStartDate) {
+      if (!dayjs(campaign?.startAt).isSame(dayjs(campaignStartDate))) {
         updatedFields.startAt = dayjs(campaignStartDate).toISOString();
       }
-      if (campaign?.endAt !== campaignEndDate) {
+      if (!dayjs(campaign?.endAt).isSame(dayjs(campaignEndDate))) {
         updatedFields.endAt = dayjs(campaignEndDate).toISOString();
       }
       await updateCampaign({
@@ -153,6 +174,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         campaignStartDate: new Date(),
         campaignEndDate: new Date(),
       });
+      setTouched({ campaignName: false });
       refetchCampaign();
       hide();
       NotificationToast.success(t('updatedCampaign') as string);
@@ -188,22 +210,33 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         }
         className="p-3"
       >
-        <Form.Group className="d-flex mb-3 w-100">
-          <FormControl fullWidth>
-            <TextField
-              label={t('campaignName')}
-              variant="outlined"
-              className={`${styles.noOutline} w-100`}
-              value={campaignName}
-              onChange={(e) =>
-                setFormState({
-                  ...formState,
-                  campaignName: e.target.value,
-                })
-              }
-            />
-          </FormControl>
-        </Form.Group>
+        <div className="d-flex mb-3 w-100">
+          <FormFieldGroup
+            name="campaignName"
+            label={t('campaignName')}
+            error={isNameInvalid ? tCommon('required') : undefined}
+            touched={touched.campaignName}
+          >
+            <FormControl fullWidth>
+              <TextField
+                variant="outlined"
+                className={`${styles.noOutline} w-100`}
+                value={campaignName}
+                error={isNameInvalid}
+                inputProps={{ 'aria-describedby': 'campaignName-error' }}
+                onBlur={() =>
+                  setTouched((prev) => ({ ...prev, campaignName: true }))
+                }
+                onChange={(e) =>
+                  setFormState({
+                    ...formState,
+                    campaignName: e.target.value,
+                  })
+                }
+              />
+            </FormControl>
+          </FormFieldGroup>
+        </div>
 
         <Form.Group className="d-flex gap-4 mx-auto mb-3">
           <DatePicker
@@ -276,10 +309,11 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
               className={styles.noOutline}
               value={campaignGoal}
               onChange={(e) => {
-                if (parseInt(e.target.value) > 0) {
+                const val = Number(e.target.value);
+                if (val > 0) {
                   setFormState({
                     ...formState,
-                    campaignGoal: parseInt(e.target.value),
+                    campaignGoal: val,
                   });
                 }
               }}

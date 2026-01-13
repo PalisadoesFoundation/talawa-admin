@@ -99,12 +99,12 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
           name="tagName"
           label={t('tagName')}
           required
+          // Validation is managed via HTML5 'required' attribute and onSubmit capture
           touched={false}
           error={undefined}
         >
           <Form.Control
             type="text"
-            id="tagName"
             className={`mb-3 ${styles.inputField}`}
             placeholder={t('tagNamePlaceholder')}
             data-testid="tagNameInput"
