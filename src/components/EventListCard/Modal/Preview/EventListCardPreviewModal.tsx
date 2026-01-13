@@ -441,8 +441,8 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
               />
             </div>
             <div className={styles.dispflexOrganizationEvents}>
-              <div className="mb-3">
-                <label className="mb-2">{t('visibility')}</label>
+              <fieldset className="mb-3">
+                <legend className="mb-2">{t('visibility')}</legend>
                 <div>
                   <Form.Check
                     inline
@@ -484,7 +484,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                     disabled={!canEditEvent}
                   />
                 </div>
-              </div>
+              </fieldset>
             </div>
             <div className={styles.dispflexOrganizationEvents}>
               <label htmlFor="registrable">{t('isRegistrable')}?</label>

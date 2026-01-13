@@ -1,12 +1,6 @@
 import React from 'react';
 import Calendar from './EventCalender';
-import {
-  render,
-  screen,
-  fireEvent,
-  act,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
@@ -1657,31 +1651,23 @@ describe('Calendar', () => {
         </MemoryRouter>,
       );
 
-      // First wait for the component to render and process effects
-      await waitFor(() => {
-        // We expect either the public event to be visible OR the "View all" button to be there
-        // If neither is there, we are likely still loading/filtering
-        const event = screen.queryByText('Public Event');
-        const button = screen.queryByTestId('more');
-        if (!event && !button) {
-          throw new Error('Waiting for events to render...');
-        }
-      });
+      // Wait for the public event to be rendered (stable UI signal)
+      await screen.findByText('Public Event');
 
-      // If "View all" is present, click it once
+      // If "View all" button exists, click it to expand all events
       const viewAllButton = screen.queryByTestId('more');
       if (viewAllButton) {
         fireEvent.click(viewAllButton);
+        // Wait for the expanded view to stabilize
+        await screen.findByText('Public Event');
       }
 
-      // Now verify visibility
-      await waitFor(() => {
-        expect(screen.getByText('Public Event')).toBeInTheDocument();
-        expect(screen.getByText('My Invite Only Event')).toBeInTheDocument();
-        expect(
-          screen.queryByText('Other Invite Only Event'),
-        ).not.toBeInTheDocument();
-      });
+      // Now verify visibility with explicit assertions
+      expect(screen.getByText('Public Event')).toBeInTheDocument();
+      expect(screen.getByText('My Invite Only Event')).toBeInTheDocument();
+      expect(
+        screen.queryByText('Other Invite Only Event'),
+      ).not.toBeInTheDocument();
     });
   });
   describe('Additional Coverage Tests (Day View & Edge Cases)', () => {

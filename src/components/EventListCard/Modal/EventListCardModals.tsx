@@ -71,7 +71,7 @@ function EventListCardModals({
   const { refetchEvents } = eventListCardProps;
 
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId') || getItem('id');
+  const userId = getItem('userId') || getItem('id') || '';
 
   const { orgId } = useParams();
   const navigate = useNavigate();
@@ -446,7 +446,8 @@ function EventListCardModals({
       {/* update modal */}
       <BaseModal
         size="lg"
-        dataTestId={`updateEventModal${eventListCardProps.id}`} // i18n-ignore-line
+        // i18n-ignore-next-line
+        dataTestId={`updateEventModal${eventListCardProps.id}`}
         show={eventUpdateModalIsOpen}
         onHide={toggleUpdateModal}
         backdrop="static"

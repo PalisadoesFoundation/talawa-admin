@@ -248,9 +248,9 @@ describe('EventListCardModals', () => {
   });
 
   test('passes correct userId to PreviewModal', () => {
-    // This test ensures that we are fetching the correct 'id' from local storage
+    // This test ensures that we are fetching the correct 'userId' from local storage
     // and passing it as 'userId' to the PreviewModal.
-    // The mock works such that getItem('id') -> 'user1', getItem('userId') -> null.
+    // The mock works such that getItem('userId') -> 'user1', getItem('id') -> null.
     renderComponent();
     const previewProps = MockPreviewModal.mock.calls[0][0];
     expect(previewProps.userId).toBe('user1');

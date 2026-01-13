@@ -303,6 +303,7 @@ export const EVENT_DETAILS = gql`
       allDay
       isPublic
       isRegisterable
+      isInviteOnly
       startAt
       endAt
       createdAt
