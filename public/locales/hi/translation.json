@@ -844,7 +844,9 @@
     "campaignProgress": "कैंपेन प्रगति: {{percentage}}%",
     "campaignNotFound": "कैंपेन नहीं मिली",
     "dateRangeRequired": "कृपया एक मान्य तिथि सीमा चुनें",
-    "campaignNameRequired": "कैंपेन का नाम आवश्यक है"
+    "campaignNameRequired": "कैंपेन का नाम आवश्यक है",
+    "invalidDate": "अमान्य तिथि चुनी गई है",
+    "endDateBeforeStart": "समाप्ति तिथि प्रारंभ तिथि से पहले नहीं हो सकती"
   },
   "pledges": {
     "title": "निधि अभियान प्रतिज्ञाएँ",

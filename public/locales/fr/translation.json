@@ -827,7 +827,9 @@
     "campaignProgress": "Progression de la campagne : {{percentage}}%",
     "campaignNotFound": "Campagne introuvable",
     "dateRangeRequired": "Veuillez sélectionner une plage de dates valide",
-    "campaignNameRequired": "Le nom de la campagne est obligatoire"
+    "campaignNameRequired": "Le nom de la campagne est obligatoire",
+    "invalidDate": "Date invalide sélectionnée",
+    "endDateBeforeStart": "La date de fin ne peut pas être antérieure à la date de début"
   },
   "pledges": {
     "title": "Engagements de campagne de financement",
