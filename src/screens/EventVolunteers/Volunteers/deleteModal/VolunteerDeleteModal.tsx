@@ -3,27 +3,9 @@
  *
  * This component renders a modal for confirming the deletion of a volunteer.
  * It provides options to either confirm or cancel the deletion process.
- *
- * @returns A modal element for confirming volunteer deletion.
- *
- * @example
- * ```tsx
- * <VolunteerDeleteModal
- *   isOpen={isModalOpen}
- *   hide={closeModal}
- *   volunteer={selectedVolunteer}
- *   refetchVolunteers={fetchVolunteers}
- * />
- * ```
- *
- * @remarks
- * - Uses `react-bootstrap` for modal and button components.
- * - Integrates `react-i18next` for translations.
- * - Utilizes Apollo Client's `useMutation` hook to perform the delete operation.
- * - Displays success or error messages using `NotificationToast`.
  */
 import { Button, Form } from 'react-bootstrap';
-import styles from './VolunteerDeleteModal.module.css';
+import styles from 'style/app-fixed.module.css';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
@@ -87,14 +69,30 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
       NotificationToast.error((error as Error).message);
     }
   };
+  const customHeader = (
+    <>
+      <p className={styles.titlemodal}> {t('removeVolunteer')}</p>
+      <Button
+        variant="danger"
+        onClick={hide}
+        className={styles.modalCloseBtn}
+        data-testid="modalCloseBtn"
+      >
+        {' '}
+        <i className="fa fa-times"></i>
+      </Button>
+    </>
+  );
+
   return (
     <BaseModal
-      className={styles.volunteerModal}
-      onHide={hide}
       show={isOpen}
-      headerContent={
-        <p className={styles.titlemodal}> {t('removeVolunteer')}</p>
-      }
+      onHide={hide}
+      title={t('removeVolunteer')}
+      className={styles.volunteerModal}
+      customHeader={customHeader}
+      centered={false}
+      backdrop={true}
       footer={
         <>
           <Button

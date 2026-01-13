@@ -1,21 +1,11 @@
 /**
- * Modal that confirms deletion of a volunteer group.
+ * VolunteerGroupDeleteModal Component
  *
- * @remarks
- * Uses Apollo mutations for delete operations and shows toast notifications for success or failure.
- *
- * @example
- * ```tsx
- * <VolunteerGroupDeleteModal
- *   isOpen
- *   hide={() => setShowModal(false)}
- *   group={selectedGroup}
- *   refetchGroups={fetchGroups}
- * />
- * ```
+ * This component renders a modal for deleting a volunteer group. It provides
+ * confirmation options to either proceed with the deletion or cancel the action.
  */
 import { Button, Form } from 'react-bootstrap';
-import styles from './VolunteerGroupDeleteModal.module.css';
+import styles from 'style/app-fixed.module.css';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
@@ -74,12 +64,30 @@ const VolunteerGroupDeleteModal: React.FC<
       NotificationToast.error((error as Error).message);
     }
   };
+  const customHeader = (
+    <>
+      <p className={styles.titlemodal}> {t('deleteGroup')}</p>
+      <Button
+        variant="danger"
+        onClick={hide}
+        className={styles.modalCloseBtn}
+        data-testid="modalCloseBtn"
+      >
+        {' '}
+        <i className="fa fa-times"></i>
+      </Button>
+    </>
+  );
+
   return (
     <BaseModal
-      className={styles.volunteerModal}
-      onHide={hide}
       show={isOpen}
-      headerContent={<p className={styles.titlemodal}> {t('deleteGroup')}</p>}
+      onHide={hide}
+      title={t('deleteGroup')}
+      className={styles.volunteerModal}
+      customHeader={customHeader}
+      centered={false}
+      backdrop={true}
       footer={
         <>
           <Button
