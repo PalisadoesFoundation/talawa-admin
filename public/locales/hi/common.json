@@ -257,5 +257,6 @@
   "eventNotFound": "ईवेंट आईडी {{id}} के साथ नहीं मिला",
   "required": "आवश्यक",
   "imageNotFound": "छवि नहीं मिली",
-  "changeLanguage": "भाषा बदलें"
+  "changeLanguage": "भाषा बदलें",
+  "selectField": "{{fieldName}} चुनें"
 }
