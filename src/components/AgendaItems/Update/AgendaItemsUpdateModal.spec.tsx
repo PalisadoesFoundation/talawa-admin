@@ -12,11 +12,11 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DatePicker';
 import AgendaItemsUpdateModal from './AgendaItemsUpdateModal';
-import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import type { MockedFunction } from 'vitest';
 import { describe, test, expect, vi } from 'vitest';
@@ -27,12 +27,18 @@ let mockSetFormState: ReturnType<typeof vi.fn>;
 let mockUpdateAgendaItemHandler: ReturnType<typeof vi.fn>;
 const mockT = (key: string): string => key;
 
-vi.mock('react-toastify', () => ({
-  toast: {
+const sharedMocks = vi.hoisted(() => ({
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
   },
+  navigate: vi.fn(),
 }));
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: sharedMocks.NotificationToast,
+}));
+
 vi.mock('utils/convertToBase64');
 let mockedConvertToBase64: MockedFunction<typeof convertToBase64>;
 
@@ -213,7 +219,9 @@ describe('AgendaItemsUpdateModal', () => {
     fireEvent.click(linkBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('invalidUrl');
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
+        'invalidUrl',
+      );
     });
   });
 
@@ -253,7 +261,9 @@ describe('AgendaItemsUpdateModal', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('fileSizeExceedsLimit');
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
+        'fileSizeExceedsLimit',
+      );
     });
   });
 
@@ -411,7 +421,9 @@ describe('AgendaItemsUpdateModal', () => {
     fireEvent.click(linkBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('invalidUrl');
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
+        'invalidUrl',
+      );
     });
 
     // Test whitespace-only URL
@@ -419,7 +431,9 @@ describe('AgendaItemsUpdateModal', () => {
     fireEvent.click(linkBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('invalidUrl');
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
+        'invalidUrl',
+      );
     });
   });
 

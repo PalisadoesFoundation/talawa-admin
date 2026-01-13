@@ -140,7 +140,7 @@ export const CheckInModal = ({
         headerClassName={styles.checkInModalHeader}
         headerContent={
           <div className="text-tableHeader-color" data-testid="modal-title">
-            Event Check In Management
+            {t('eventCheckInManagement')}
           </div>
         }
       >

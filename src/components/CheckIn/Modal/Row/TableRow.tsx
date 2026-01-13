@@ -31,7 +31,7 @@ import type { InterfaceTableCheckIn } from 'types/CheckIn/interface';
 import Button from '@mui/material/Button';
 import { useMutation } from '@apollo/client';
 import { MARK_CHECKIN } from 'GraphQl/Mutations/mutations';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { generate } from '@pdfme/generator';
 import { tagTemplate } from '../../tagTemplate';
 import { useTranslation } from 'react-i18next';
@@ -60,21 +60,21 @@ export const TableRow = ({
       variables: variables,
     })
       .then(() => {
-        toast.success(t('checkedInSuccessfully') as string);
+        NotificationToast.success(t('checkedInSuccessfully') as string);
         refetch();
         // Call the callback to refresh data in parent component (EventRegistrants)
         onCheckInUpdate?.();
       })
       .catch((err) => {
-        toast.error(t('errorCheckingIn') as string);
-        toast.error(err.message);
+        NotificationToast.error(t('errorCheckingIn') as string);
+        NotificationToast.error(err.message);
       });
   };
   /**
    * Triggers a notification while generating and downloading a PDF tag.
    */
   const notify = (): Promise<void> =>
-    toast.promise(generateTag, {
+    NotificationToast.promise(generateTag, {
       pending: 'Generating pdf...',
       success: 'PDF generated successfully!',
       error: 'Error generating pdf!',
@@ -96,12 +96,8 @@ export const TableRow = ({
       });
       const url = URL.createObjectURL(blob);
       window.open(url);
-
-      toast.success('PDF generated successfully!');
     } catch (error: unknown) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error';
-      toast.error(`Error generating pdf: ${errorMessage}`);
+      throw error instanceof Error ? error : new Error('Unknown error');
     }
   };
 
@@ -116,15 +112,15 @@ export const TableRow = ({
       {data.isCheckedIn ? (
         <div>
           <Button variant="contained" disabled className="m-2 p-2">
-            Checked In
+            {t('checkedIn')}
           </Button>
           <Button variant="contained" className="m-2 p-2" onClick={notify}>
-            Download Tag
+            {t('downloadTag')}
           </Button>
         </div>
       ) : (
         <Button onClick={markCheckIn} className={styles.buttonStyle}>
-          Check In
+          {t('checkIn')}
         </Button>
       )}
     </ErrorBoundaryWrapper>

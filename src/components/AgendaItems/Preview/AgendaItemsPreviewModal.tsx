@@ -14,6 +14,7 @@ import type { InterfaceAgendaItemsPreviewModalProps } from 'types/Agenda/interfa
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
 import { BaseModal } from 'shared-components/BaseModal';
+// translation-check-keyPrefix: agendaItems
 const AgendaItemsPreviewModal: React.FC<
   InterfaceAgendaItemsPreviewModalProps
 > = ({
@@ -46,7 +47,7 @@ const AgendaItemsPreviewModal: React.FC<
           </a>
         ) : (
           <a href={attachment} target="_blank" rel="noopener noreferrer">
-            <img src={attachment} alt="Attachment preview" />
+            <img src={attachment} alt={t('attachmentPreview')} />
           </a>
         )}
       </div>

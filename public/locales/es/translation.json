@@ -712,7 +712,8 @@
     "deleteAgendaItem": "Eliminar punto del orden del día",
     "deleteAgendaItemMsg": "¿Desea eliminar este punto del orden del día?",
     "event": "Evento",
-    "search": "Buscar"
+    "search": "Buscar",
+    "attachmentPreview": "Vista previa del adjunto"
   },
   "eventListCard": {
     "location": "Lugar del evento",
@@ -1838,7 +1839,11 @@
   "checkIn": {
     "errorCheckingIn": "Error al registrarse",
     "checkedInSuccessfully": "Registrado con éxito",
-    "searchAttendees": "Buscar asistentes"
+    "searchAttendees": "Buscar asistentes",
+    "checkedIn": "Registrado",
+    "downloadTag": "Descargar etiqueta",
+    "checkIn": "Registrar",
+    "eventCheckInManagement": "Gestión de registro de eventos"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",
