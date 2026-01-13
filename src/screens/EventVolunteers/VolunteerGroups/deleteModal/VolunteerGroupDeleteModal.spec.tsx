@@ -46,6 +46,8 @@ const itemProps: InterfaceDeleteVolunteerGroupModal[] = [
     isOpen: true,
     hide: vi.fn(),
     refetchGroups: vi.fn(),
+    isRecurring: true,
+    eventId: 'eventId',
     group: {
       id: 'groupId',
       name: 'Group 1',
@@ -88,7 +90,7 @@ const renderGroupDeleteModal = (
   props: InterfaceDeleteVolunteerGroupModal,
 ): RenderResult => {
   return render(
-    <MockedProvider link={link} addTypename={false}>
+    <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>

@@ -1593,7 +1593,12 @@
     "noPluginsAvailable": "没有可用的插件",
     "installPluginsToSeeHere": "安装插件以在此查看",
     "checkBackLater": "稍后查看新插件",
-    "noResultsFoundFor": "未找到相关结果"
+    "noResultsFoundFor": "未找到相关结果",
+    "uninstallPluginTitle": "卸载插件",
+    "cancelButton": "取消",
+    "removePermanentlyButton": "永久删除",
+    "uninstallConfirmationTitle": "您确定要卸载 {{name}} 吗？",
+    "uninstallConfirmationDescription": "此操作将永久删除该插件及其所有数据。此操作无法撤销。"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "评论删除成功",

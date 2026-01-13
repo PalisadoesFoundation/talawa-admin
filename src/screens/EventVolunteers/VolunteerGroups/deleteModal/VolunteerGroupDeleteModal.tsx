@@ -1,9 +1,3 @@
-/**
- * VolunteerGroupDeleteModal Component
- *
- * This component renders a modal for deleting a volunteer group. It provides
- * confirmation options to either proceed with the deletion or cancel the action.
- */
 import { Button, Form } from 'react-bootstrap';
 import BaseModal from 'components/BaseModal/BaseModal';
 import styles from 'style/app-fixed.module.css';
@@ -69,12 +63,11 @@ const VolunteerGroupDeleteModal: React.FC<
     <>
       <p className={styles.titlemodal}> {t('deleteGroup')}</p>
       <Button
-        variant="danger"
+        variant="outline-secondary"
         onClick={hide}
         className={styles.modalCloseBtn}
         data-testid="modalCloseBtn"
       >
-        {' '}
         <i className="fa fa-times"></i>
       </Button>
     </>
@@ -107,7 +100,7 @@ const VolunteerGroupDeleteModal: React.FC<
       <p> {t('deleteVolunteerGroupMsg')}</p>
 
       {/* Radio buttons for recurring events - Template-First: All recurring event volunteer groups are templates */}
-      {group?.isTemplate && !group?.isInstanceException && (
+      {isRecurring && group?.isTemplate && !group?.isInstanceException && (
         <Form.Group className="mb-3">
           <Form.Label>{t('applyTo')}</Form.Label>
           <Form.Check
@@ -133,4 +126,5 @@ const VolunteerGroupDeleteModal: React.FC<
     </BaseModal>
   );
 };
+
 export default VolunteerGroupDeleteModal;

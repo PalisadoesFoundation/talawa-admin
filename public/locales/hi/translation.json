@@ -1593,7 +1593,12 @@
     "noPluginsAvailable": "कोई प्लगइन उपलब्ध नहीं",
     "installPluginsToSeeHere": "प्लगइन देखने के लिए उन्हें स्थापित करें",
     "checkBackLater": "नए प्लगइन के लिए बाद में जांचें",
-    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला"
+    "noResultsFoundFor": "के लिए कोई 결과 नहीं मिला",
+    "uninstallPluginTitle": "प्लगइन अनइंस्टॉल करें",
+    "cancelButton": "रद्द करें",
+    "removePermanentlyButton": "स्थायी रूप से हटाएं",
+    "uninstallConfirmationTitle": "क्या आप वाकई {{name}} को अनइंस्टॉल करना चाहते हैं?",
+    "uninstallConfirmationDescription": "यह क्रिया प्लगइन और उसके सभी डेटा को स्थायी रूप से हटा देगी। इस क्रिया को पूर्ववत नहीं किया जा सकता।"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "टिप्पणी सफलतापूर्वक हटा दी गई",

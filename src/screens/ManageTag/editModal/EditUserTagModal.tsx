@@ -30,12 +30,12 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
   t,
   tCommon,
 }) => {
-  const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
-    e.preventDefault();
-    if (newTagName.trim()) {
-      handleEditUserTag(e);
-    }
-  };
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+  e.preventDefault();
+  if (newTagName.trim()) {
+    await handleEditUserTag(e); 
+  }
+};
 
   return (
     <BaseModal

@@ -1593,7 +1593,12 @@
     "noPluginsAvailable": "No plugins available",
     "installPluginsToSeeHere": "Install plugins to see them here",
     "checkBackLater": "Check back later for new plugins",
-    "noResultsFoundFor": "No results found for"
+    "noResultsFoundFor": "No results found for",
+    "uninstallPluginTitle": "Uninstall Plugin",
+    "cancelButton": "Cancel",
+    "removePermanentlyButton": "Remove Permanently",
+    "uninstallConfirmationTitle": "Are you sure you want to uninstall {{name}}?",
+    "uninstallConfirmationDescription": "This action will permanently remove the plugin and all its data. This action cannot be undone."
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comment deleted successfully",

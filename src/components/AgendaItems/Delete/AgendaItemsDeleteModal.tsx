@@ -31,9 +31,7 @@ const AgendaItemsDeleteModal: React.FC<
       footer={
         <>
           <Button
-            type="button"
-            className="btn btn-danger"
-            data-dismiss="modal"
+            variant="secondary" 
             onClick={toggleDeleteModal}
             data-testid="deleteAgendaItemCloseBtn"
           >
@@ -41,7 +39,7 @@ const AgendaItemsDeleteModal: React.FC<
           </Button>
           <Button
             type="button"
-            className="btn btn-success"
+            variant="danger"
             onClick={deleteAgendaItemHandler}
             data-testid="deleteAgendaItemBtn"
           >

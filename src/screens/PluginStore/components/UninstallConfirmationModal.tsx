@@ -5,6 +5,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import BaseModal from 'components/BaseModal/BaseModal';
 import type { IPluginMeta } from 'plugin';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceUninstallConfirmationModalProps {
   show: boolean;
@@ -19,11 +20,13 @@ export default function UninstallConfirmationModal({
   onConfirm,
   plugin,
 }: InterfaceUninstallConfirmationModalProps) {
+  const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
+
   return (
     <BaseModal
       show={show}
       onHide={onClose}
-      title="Uninstall Plugin"
+      title={t('uninstallPluginTitle')}
       footer={
         <>
           <Button
@@ -32,25 +35,24 @@ export default function UninstallConfirmationModal({
             data-testid="uninstall-cancel-btn"
             className="me-2"
           >
-            Cancel
+            {t('cancelButton')}
           </Button>
           <Button
             variant="danger"
             onClick={onConfirm}
             data-testid="uninstall-remove-btn"
           >
-            Remove Permanently
+            {t('removePermanentlyButton')}
           </Button>
         </>
       }
     >
       <div data-testid="uninstall-modal">
         <p className="mb-2" data-testid="uninstall-modal-title">
-          Are you sure you want to uninstall {plugin?.name}?
+          {t('uninstallConfirmationTitle', { name: plugin?.name })}
         </p>
         <p className="text-secondary small">
-          This action will permanently remove the plugin and all its data. This
-          action cannot be undone.
+          {t('uninstallConfirmationDescription')}
         </p>
       </div>
     </BaseModal>

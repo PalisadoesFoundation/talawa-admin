@@ -1596,7 +1596,12 @@
     "noPluginsAvailable": "No hay plugins disponibles",
     "installPluginsToSeeHere": "Instala plugins para verlos aquí",
     "checkBackLater": "Vuelve más tarde para nuevos plugins",
-    "noResultsFoundFor": "No se encontraron resultados para"
+    "noResultsFoundFor": "No se encontraron resultados para",
+    "uninstallPluginTitle": "Desinstalar plugin",
+    "cancelButton": "Cancelar",
+    "removePermanentlyButton": "Eliminar permanentemente",
+    "uninstallConfirmationTitle": "¿Seguro que quieres desinstalar {{name}}?",
+    "uninstallConfirmationDescription": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer."
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comentario eliminado exitosamente",

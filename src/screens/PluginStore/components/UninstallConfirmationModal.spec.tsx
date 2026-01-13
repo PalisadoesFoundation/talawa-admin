@@ -5,6 +5,27 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import UninstallConfirmationModal from './UninstallConfirmationModal';
 import type { IPluginMeta } from 'plugin';
 
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string, options?: { name?: string }) => {
+      const translations: Record<string, string> = {
+        uninstallPluginTitle: 'Uninstall Plugin',
+        uninstallConfirmationTitle: 'Are you sure you want to uninstall {{name}}?',
+        uninstallConfirmationDescription:
+          'This action will permanently remove the plugin and all its data. This cannot be undone.',
+        cancelButton: 'Cancel',
+        removePermanentlyButton: 'Remove Permanently',
+      };
+      let translation = translations[key] || key;
+      if (options?.name) {
+        translation = translation.replace('{{name}}', options.name);
+      }
+      return translation;
+    },
+  }),
+}));
+
 describe('UninstallConfirmationModal', () => {
   const mockOnClose = vi.fn();
   const mockOnConfirm = vi.fn();
