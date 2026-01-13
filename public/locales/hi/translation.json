@@ -2127,7 +2127,12 @@
     "uploading": "अपलोड हो रहा है...",
     "screenshotCounter": "{{current}} में से {{total}}",
     "uninstallWarning": "यह क्रिया प्लगइन और उसके सभी डेटा को स्थायी रूप से हटा देगी। इस क्रिया को पूर्ववत नहीं किया जा सकता।",
-    "errorInstalling": "प्लगइन विवरण लोड करने में विफल"
+    "errorInstalling": "प्लगइन विवरण लोड करने में विफल",
+    "uninstallPluginTitle": "प्लगइन अनइंस्टॉल करें",
+    "cancelButton": "रद्द करें",
+    "removePermanentlyButton": "स्थायी रूप से हटाएं",
+    "uninstallConfirmationTitle": "क्या आप वाकई {{name}} को अनइंस्टॉल करना चाहते हैं?",
+    "uninstallConfirmationDescription": "यह क्रिया प्लगइन और उसके सभी डेटा को स्थायी रूप से हटा देगी। इस क्रिया को पूर्ववत नहीं किया जा सकता।"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "टिप्पणी सफलतापूर्वक हटा दी गई",

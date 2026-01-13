@@ -2110,7 +2110,12 @@
     "uploading": "Subiendo...",
     "screenshotCounter": "{{current}} de {{total}}",
     "uninstallWarning": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer.",
-    "errorInstalling": "Error al cargar los detalles del plugin"
+    "errorInstalling": "Error al cargar los detalles del plugin",
+    "uninstallPluginTitle": "Desinstalar plugin",
+    "cancelButton": "Cancelar",
+    "removePermanentlyButton": "Eliminar permanentemente",
+    "uninstallConfirmationTitle": "¿Seguro que quieres desinstalar {{name}}?",
+    "uninstallConfirmationDescription": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer."
   },
   "statusBadge": {
     "completed": "Completado",

@@ -2110,7 +2110,12 @@
     "uploading": "Uploading...",
     "screenshotCounter": "{{current}} of {{total}}",
     "uninstallWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
-    "errorInstalling": "Failed to load plugin details"
+    "errorInstalling": "Failed to load plugin details",
+    "uninstallPluginTitle": "Uninstall Plugin",
+    "cancelButton": "Cancel",
+    "removePermanentlyButton": "Remove Permanently",
+    "uninstallConfirmationTitle": "Are you sure you want to uninstall {{name}}?",
+    "uninstallConfirmationDescription": "This action will permanently remove the plugin and all its data. This action cannot be undone."
   },
   "statusBadge": {
     "completed": "Completed",

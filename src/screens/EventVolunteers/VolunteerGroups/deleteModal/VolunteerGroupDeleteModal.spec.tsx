@@ -54,6 +54,8 @@ const itemProps: InterfaceDeleteVolunteerGroupModal[] = [
     isOpen: true,
     hide: vi.fn(),
     refetchGroups: vi.fn(),
+    isRecurring: true,
+    eventId: 'eventId',
     group: {
       id: 'groupId',
       name: 'Group 1',

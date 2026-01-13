@@ -2127,7 +2127,12 @@
     "uploading": "Téléchargement...",
     "screenshotCounter": "{{current}} sur {{total}}",
     "uninstallWarning": "Cette action supprimera définitivement le plugin et toutes ses données. Cette action ne peut pas être annulée.",
-    "errorInstalling": "Échec du chargement des détails du plugin"
+    "errorInstalling": "Échec du chargement des détails du plugin",
+    "uninstallPluginTitle": "Désinstaller le plugin",
+    "cancelButton": "Annuler",
+    "removePermanentlyButton": "Supprimer définitivement",
+    "uninstallConfirmationTitle": "Êtes-vous sûr de vouloir désinstaller {{name}} ?",
+    "uninstallConfirmationDescription": "Cette action supprimera définitivement le plugin et toutes ses données. Cette action est irréversible."
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Commentaire supprimé avec succès",

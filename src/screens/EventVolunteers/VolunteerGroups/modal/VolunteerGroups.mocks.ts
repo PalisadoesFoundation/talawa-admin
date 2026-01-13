@@ -187,7 +187,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        removeEventVolunteerGroup: {
+        deleteEventVolunteerGroup: {
           id: 'groupId',
         },
       },
