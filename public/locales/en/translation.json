@@ -774,7 +774,11 @@
     "close": "close",
     "talawaApiUnavailable": "talawaApiUnavailable",
     "done": "done",
+<<<<<<< HEAD
     "invalidDate": "Invalid Date"
+=======
+    "eventManagementDashboard": "Event Management Dashboard"
+>>>>>>> 93685b5836d (fix(events): enable user event dashboard access and correct Upcoming Events visibility)
   },
   "funds": {
     "title": "Funds",

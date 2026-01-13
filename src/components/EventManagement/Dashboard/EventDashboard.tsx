@@ -115,7 +115,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     allDay: eventData.event.allDay,
     isPublic: eventData.event.isPublic,
     isRegisterable: eventData.event.isRegisterable,
-    attendees: [],
+    attendees: eventData.event.attendees || [],
     creator: eventData.event.creator,
     userId: userId as string,
   };
@@ -139,7 +139,9 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
             <img src="/images/svg/attendees.svg" alt="userImage" className="" />
             <div>
               <h1>
-                <b data-testid="registrations-count">N/A</b>
+                <b data-testid="registrations-count">
+                  {eventData.event.registrantsCount ?? 0}
+                </b>
               </h1>
               <span>No of Registrations</span>
             </div>
@@ -148,7 +150,9 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
             <img src="/images/svg/attendees.svg" alt="userImage" className="" />
             <div>
               <h1>
-                <b data-testid="attendees-count">N/A</b>
+                <b data-testid="attendees-count">
+                  {eventData.event.attendeesCount ?? 0}
+                </b>
               </h1>
               <span>No of Attendees</span>
             </div>
@@ -166,13 +170,16 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
         <Col>
           <div className={styles.eventContainer} data-testid="event-details">
             <div className={styles.eventDetailsBox}>
-              <button
-                className="btn btn-light rounded-circle position-absolute end-0 me-3 p-1 mt-2"
-                onClick={showViewModal}
-                data-testid="edit-event-button"
-              >
-                <Edit fontSize="medium" />
-              </button>
+              {(userRole === UserRole.ADMINISTRATOR ||
+                eventData.event.creator?.id === userId) && (
+                <button
+                  className="btn btn-light rounded-circle position-absolute end-0 me-3 p-1 mt-2"
+                  onClick={showViewModal}
+                  data-testid="edit-event-button"
+                >
+                  <Edit fontSize="medium" />
+                </button>
+              )}
               <h3 className={styles.titlename} data-testid="event-name">
                 {eventData.event.name}
               </h3>
@@ -185,11 +192,12 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
               </p>
               {/* Attendees not available; remove or adjust */}
               <p className={styles.toporgloc} data-testid="event-registrants">
-                <b>Registrants:</b> <span>N/A</span>
+                <b>Registrants:</b>{' '}
+                <span>{eventData.event.registrantsCount ?? 0}</span>
               </p>
             </div>
             <div className={styles.time} data-testid="event-time">
-              <p>
+              <div>
                 <b className={styles.startTime} data-testid="start-time">
                   {!eventData.event.allDay && eventData.event.startAt
                     ? formatTimeFromDateTime(eventData.event.startAt)
@@ -198,9 +206,9 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                 <span className={styles.startDate} data-testid="start-date">
                   {formatDate(eventData.event.startAt)}{' '}
                 </span>
-              </p>
-              <p className={styles.to}>{t('to')}</p>
-              <p>
+              </div>
+              <div className={`${styles.to} mx-2`}>{t('to')}</div>
+              <div>
                 <b className={styles.endTime} data-testid="end-time">
                   {!eventData.event.allDay && eventData.event.endAt
                     ? formatTimeFromDateTime(eventData.event.endAt)
@@ -209,7 +217,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                 <span className={styles.endDate} data-testid="end-date">
                   {formatDate(eventData.event.endAt)}{' '}
                 </span>
-              </p>
+              </div>
             </div>
           </div>
         </Col>

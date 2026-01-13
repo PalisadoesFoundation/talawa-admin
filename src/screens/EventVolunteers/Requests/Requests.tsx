@@ -188,16 +188,16 @@ function Requests(): JSX.Element {
       field: 'volunteer',
       headerName: tCommon('volunteer'),
       flex: 3,
-      align: 'center',
+      align: 'left',
       minWidth: 100,
-      headerAlign: 'center',
+      headerAlign: 'left',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         const { name, avatarURL } = params.row.volunteer.user;
         return (
           <div
-            className="d-flex fw-bold align-items-center justify-content-center ms-2"
+            className="d-flex fw-bold align-items-center ms-2"
             data-testid="volunteerName"
           >
             {avatarURL ? (
@@ -205,6 +205,7 @@ function Requests(): JSX.Element {
                 src={avatarURL}
                 alt={`${name} ${tCommon('avatar')}`}
                 data-testid={`volunteer_image`}
+<<<<<<< HEAD
                 className={styles.tableImages}
               />
             ) : (
@@ -217,6 +218,18 @@ function Requests(): JSX.Element {
                   alt={name}
                 />
               </div>
+=======
+                className={styles.volunteerAvatar}
+              />
+            ) : (
+              <Avatar
+                key="volunteer_avatar"
+                containerStyle={styles.volunteerAvatar}
+                avatarStyle={styles.volunteerAvatar}
+                name={name}
+                alt={name}
+              />
+>>>>>>> 93685b5836d (fix(events): enable user event dashboard access and correct Upcoming Events visibility)
             )}
             {name}
           </div>

@@ -125,7 +125,11 @@ function organizationEvents(): JSX.Element {
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: {
       id: currentUrl,
+<<<<<<< HEAD:src/screens/AdminPortal/OrganizationEvents/OrganizationEvents.tsx
       first: 100,
+=======
+      first: 100, // Changed from 150 to 100 (API maximum)
+>>>>>>> 93685b5836d (fix(events): enable user event dashboard access and correct Upcoming Events visibility):src/screens/OrganizationEvents/OrganizationEvents.tsx
       after: null,
       startDate: dayjs(new Date(currentYear, currentMonth, 1))
         .startOf('month')

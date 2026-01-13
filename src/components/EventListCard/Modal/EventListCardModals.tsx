@@ -70,7 +70,7 @@ function EventListCardModals({
   const { refetchEvents } = eventListCardProps;
 
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
+  const userId = getItem('userId') || getItem('id');
 
   const { orgId } = useParams();
   const navigate = useNavigate();

@@ -3565,6 +3565,8 @@ form label,
   background: var(--time-bg);
   box-shadow: 0 3px 8px var(--time-box-shadow);
   border-radius: 8px;
+  margin-top: 20px;
+  margin-left: auto;
 }
 
 @supports (-webkit-line-clamp: 1) {
@@ -3581,7 +3583,7 @@ form label,
 
 .startTime,
 .endTime {
-  display: flex;
+  display: inline-flex;
   font-size: 20px;
 }
 
@@ -10739,6 +10741,7 @@ form {
 
 /* ----------------------------------------------------- */
 
+<<<<<<< HEAD
 .whiteContainer {
   background-color: #ffffff;
   border-radius: 1rem;
@@ -11205,4 +11208,14 @@ form {
 .actionItemCategoriesDataGrid :global(.MuiDataGrid-root),
 .actionItemCategoriesDataGrid :global(.MuiDataGrid-main) {
   border-radius: 0.5rem;
+=======
+.volunteerAvatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+>>>>>>> 93685b5836d (fix(events): enable user event dashboard access and correct Upcoming Events visibility)
 }

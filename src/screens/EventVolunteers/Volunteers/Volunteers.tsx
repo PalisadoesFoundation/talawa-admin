@@ -267,16 +267,16 @@ function Volunteers(): JSX.Element {
       field: 'volunteer',
       headerName: t('eventVolunteers.volunteerHeader'),
       flex: 1,
-      align: 'center',
+      align: 'left',
       minWidth: 100,
-      headerAlign: 'center',
+      headerAlign: 'left',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         const { id, name, avatarURL } = params.row.user;
         return (
           <div
-            className="d-flex fw-bold align-items-center justify-content-center ms-2"
+            className="d-flex fw-bold align-items-center ms-2"
             data-testid="volunteerName"
           >
             {avatarURL ? (
@@ -284,6 +284,7 @@ function Volunteers(): JSX.Element {
                 src={avatarURL}
                 alt={tCommon('volunteer')}
                 data-testid="volunteer_image"
+<<<<<<< HEAD
                 className={styles.tableImages}
               />
             ) : (
@@ -297,6 +298,19 @@ function Volunteers(): JSX.Element {
                   alt={name}
                 />
               </div>
+=======
+                className={styles.volunteerAvatar}
+              />
+            ) : (
+              <Avatar
+                key={id + '1'}
+                dataTestId="volunteer_avatar"
+                containerStyle={styles.volunteerAvatar}
+                avatarStyle={styles.volunteerAvatar}
+                name={name}
+                alt={name}
+              />
+>>>>>>> 93685b5836d (fix(events): enable user event dashboard access and correct Upcoming Events visibility)
             )}
             {name}
           </div>
@@ -528,7 +542,63 @@ function Volunteers(): JSX.Element {
           </>
         )}
       </div>
+<<<<<<< HEAD
     </LoadingState>
+=======
+
+      {/* Table with Volunteers */}
+      <DataGrid
+        disableColumnMenu
+        disableColumnResize
+        columnBufferPx={7}
+        hideFooter={true}
+        getRowId={(row) => row.id}
+        slots={{
+          noRowsOverlay: () => (
+            <Stack height="100%" alignItems="center" justifyContent="center">
+              {t('noVolunteers')}
+            </Stack>
+          ),
+        }}
+        sx={dataGridStyle}
+        getRowClassName={() => `${styles.rowBackgrounds}`}
+        autoHeight
+        rowHeight={100}
+        rows={volunteers}
+        columns={columns}
+        isRowSelectable={() => false}
+      />
+
+      <VolunteerCreateModal
+        isOpen={modalState[ModalState.ADD]}
+        hide={() => closeModal(ModalState.ADD)}
+        eventId={eventId}
+        orgId={orgId}
+        refetchVolunteers={refetchVolunteers}
+        isRecurring={isRecurring}
+        baseEvent={baseEvent}
+        recurringEventInstanceId={eventId}
+      />
+
+      {volunteer && (
+        <>
+          <VolunteerViewModal
+            isOpen={modalState[ModalState.VIEW]}
+            hide={() => closeModal(ModalState.VIEW)}
+            volunteer={volunteer}
+          />
+          <VolunteerDeleteModal
+            isOpen={modalState[ModalState.DELETE]}
+            hide={() => closeModal(ModalState.DELETE)}
+            volunteer={volunteer}
+            refetchVolunteers={refetchVolunteers}
+            isRecurring={isRecurring}
+            eventId={eventId}
+          />
+        </>
+      )}
+    </div>
+>>>>>>> 93685b5836d (fix(events): enable user event dashboard access and correct Upcoming Events visibility)
   );
 }
 

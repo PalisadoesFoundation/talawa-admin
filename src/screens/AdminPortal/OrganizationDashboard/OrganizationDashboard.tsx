@@ -119,10 +119,14 @@ function OrganizationDashboard(): JSX.Element {
     loading: orgEventsLoading,
     error: orgEventsError,
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
+<<<<<<< HEAD:src/screens/AdminPortal/OrganizationDashboard/OrganizationDashboard.tsx
     variables: { id: orgId ?? '', first: 8, after: null },
     skip: !orgId,
     fetchPolicy: 'cache-and-network',
     notifyOnNetworkStatusChange: true,
+=======
+    variables: { id: orgId, first: 8, after: null, upcomingOnly: true },
+>>>>>>> 93685b5836d (fix(events): enable user event dashboard access and correct Upcoming Events visibility):src/screens/OrganizationDashboard/OrganizationDashboard.tsx
   });
 
   const {
@@ -157,20 +161,13 @@ function OrganizationDashboard(): JSX.Element {
 
   useEffect(() => {
     if (orgEventsData) {
-      const now = new Date();
-
       const allEvents = orgEventsData.organization.events.edges;
-
-      const upcomingEvents = allEvents.filter((event: IEvent) => {
-        // Filter events that start after the current date
-        return new Date(event?.node?.startAt) > now;
-      });
 
       // Set to actual total count since fetchMore accumulates results
       setEventCount(orgEventsData.organization.eventsCount);
 
-      // For upcoming events, we need to replace with new filtered results
-      setUpcomingEvents(upcomingEvents);
+      // The API already filters for upcoming events due to upcomingOnly: true
+      setUpcomingEvents(allEvents);
     }
   }, [orgEventsData, orgId]);
 

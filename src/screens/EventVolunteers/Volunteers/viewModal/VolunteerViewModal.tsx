@@ -140,6 +140,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                           className={styles.tableImage}
                         />
                       ) : (
+<<<<<<< HEAD
                         <div className={styles.avatarContainer}>
                           <Avatar
                             key={`${user.id}-avatar`}
@@ -150,6 +151,16 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                             alt={user.name}
                           />
                         </div>
+=======
+                        <Avatar
+                          key={user.id + '1'}
+                          containerStyle={styles.volunteerAvatar}
+                          avatarStyle={styles.volunteerAvatar}
+                          dataTestId="volunteer_avatar"
+                          name={user.name}
+                          alt={user.name}
+                        />
+>>>>>>> 93685b5836d (fix(events): enable user event dashboard access and correct Upcoming Events visibility)
                       )}
                     </>
                   ),
