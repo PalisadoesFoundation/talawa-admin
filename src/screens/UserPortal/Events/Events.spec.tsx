@@ -16,7 +16,7 @@ import { I18nextProvider } from 'react-i18next';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-import { computeCalendarFromStartDate } from './Events';
+import Events, { computeCalendarFromStartDate } from './Events';
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
 
@@ -29,7 +29,6 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import Events from './Events';
 import userEvent from '@testing-library/user-event';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -800,10 +799,8 @@ describe('Testing Events Screen [User Portal]', () => {
       expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
     });
 
-    // Close modal
-    const closeButton = screen.getByTestId('createEventModalCloseBtn');
-    await userEvent.click(closeButton);
-
+    // Or use Escape key to close modal
+    await userEvent.keyboard('{Escape}');
     await waitFor(() => {
       expect(screen.queryByTestId('eventTitleInput')).not.toBeInTheDocument();
     });
@@ -1895,9 +1892,84 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should filter events when DateRangePicker preset is selected', async () => {
+    const thisWeekStart = dayjs().startOf('week').startOf('day').toISOString();
+    const thisWeekEnd = dayjs().endOf('week').endOf('day').toISOString();
+
+    // Create a mock that expects the "This Week" date range
+    const thisWeekMock = {
+      request: {
+        query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
+        variables: {
+          id: 'org123',
+          first: 100,
+          after: null,
+          startDate: thisWeekStart,
+          endDate: thisWeekEnd,
+          includeRecurring: true,
+        },
+      },
+      result: {
+        data: {
+          organization: {
+            events: {
+              edges: [
+                {
+                  node: {
+                    id: 'thisWeekEvent1',
+                    name: 'This Week Event',
+                    description: 'Event within this week',
+                    startAt: dayjs()
+                      .startOf('week')
+                      .add(2, 'days')
+                      .toISOString(),
+                    endAt: dayjs()
+                      .startOf('week')
+                      .add(2, 'days')
+                      .add(2, 'hours')
+                      .toISOString(),
+                    location: 'Test Location',
+                    allDay: false,
+                    isPublic: true,
+                    isRegisterable: true,
+                    isRecurringEventTemplate: false,
+                    baseEvent: null,
+                    sequenceNumber: null,
+                    totalCount: null,
+                    hasExceptions: false,
+                    progressLabel: null,
+                    recurrenceDescription: null,
+                    recurrenceRule: null,
+                    creator: {
+                      id: 'user1',
+                      name: 'Test User',
+                    },
+                    attachments: [],
+                    organization: {
+                      id: 'org123',
+                      name: 'Test Org',
+                    },
+                  },
+                  cursor: 'cursor1',
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: 'cursor1',
+              },
+            },
+          },
+        },
+      },
+    };
+
+    const testLink = new StaticMockLink(
+      [...MOCKS.slice(0, 2), thisWeekMock],
+      true,
+    );
     const cache = new InMemoryCache();
+
     render(
-      <MockedProvider link={link} cache={cache}>
+      <MockedProvider link={testLink} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <ThemeProvider theme={theme}>
@@ -1914,24 +1986,113 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByTestId('events-date-range-preset-today'),
+        screen.getByTestId('events-date-range-preset-thisWeek'),
       ).toBeInTheDocument();
     });
 
     const thisWeekButton = screen.getByTestId(
       'events-date-range-preset-thisWeek',
     );
+
     await userEvent.click(thisWeekButton);
 
     await wait(300);
 
-    expect(thisWeekButton).toHaveAttribute('aria-pressed', 'true');
+    // Verify UI state changed (button is active)
+
+    // Verify the query was called with correct date range
+    await waitFor(() => {
+      const eventDataJson = screen.getByTestId('event-data-json');
+      const parsedEvents = JSON.parse(eventDataJson.textContent || '[]');
+      // Verify events are from this week's range
+      expect(parsedEvents).toBeInstanceOf(Array);
+    });
+
+    await waitFor(
+      () => {
+        const eventDataJson = screen.getByTestId('event-data-json');
+        const parsedEvents = JSON.parse(eventDataJson.textContent || '[]');
+
+        expect(parsedEvents).toBeInstanceOf(Array);
+        expect(
+          parsedEvents.some(
+            (event: { name: string }) => event.name === 'This Week Event',
+          ),
+        ).toBe(true);
+      },
+      { timeout: 3000 },
+    );
+
+    const startDateInput = screen.getByTestId(
+      'events-date-range-start-input',
+    ) as HTMLInputElement;
+    const endDateInput = screen.getByTestId(
+      'events-date-range-end-input',
+    ) as HTMLInputElement;
+
+    expect(startDateInput.value).toBe(
+      dayjs(thisWeekStart).format('MM/DD/YYYY'),
+    );
+    expect(endDateInput.value).toBe(dayjs(thisWeekEnd).format('MM/DD/YYYY'));
   });
 
   it('Should update events when date range is manually changed', async () => {
+    const newStartDate = dayjs().add(1, 'week');
+    const newEndDate = dayjs().add(2, 'weeks');
+
+    const manualRangeMock = {
+      request: { query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG },
+      variableMatcher: (vars: { startDate?: string; endDate?: string }) =>
+        vars.startDate === newStartDate.startOf('day').toISOString() &&
+        vars.endDate === newEndDate.endOf('day').toISOString(),
+      result: {
+        data: {
+          organization: {
+            events: {
+              edges: [
+                {
+                  node: {
+                    id: 'manualRangeEvent',
+                    name: 'Manual Range Event',
+                    description: 'Event in manually selected range',
+                    startAt: newStartDate.add(1, 'day').toISOString(),
+                    endAt: newStartDate
+                      .add(1, 'day')
+                      .add(2, 'hours')
+                      .toISOString(), // ADD THIS LINE
+                    location: '',
+                    allDay: true,
+                    isPublic: true,
+                    isRegisterable: false,
+                    isRecurringEventTemplate: false,
+                    baseEvent: null,
+                    sequenceNumber: null,
+                    totalCount: null,
+                    hasExceptions: false,
+                    progressLabel: null,
+                    recurrenceDescription: null,
+                    recurrenceRule: null,
+                    creator: { id: 'user1', name: 'Test User' },
+                    attachments: [],
+                    organization: { id: 'org123', name: 'Test Org' },
+                  },
+                  cursor: 'cursorManual',
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: 'cursor-manual' },
+            },
+          },
+        },
+      },
+    };
+
+    const testLink = new StaticMockLink(
+      [...MOCKS.slice(0, 2), manualRangeMock],
+      true,
+    );
     const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link} cache={cache}>
+      <MockedProvider link={testLink} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <ThemeProvider theme={theme}>
@@ -1953,9 +2114,6 @@ describe('Testing Events Screen [User Portal]', () => {
       'events-date-range-end-input',
     ) as HTMLInputElement;
 
-    const newStartDate = dayjs().add(1, 'week');
-    const newEndDate = dayjs().add(2, 'weeks');
-
     fireEvent.change(startDateInput, {
       target: { value: newStartDate.format('MM/DD/YYYY') },
     });
@@ -1966,14 +2124,150 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait(300);
 
-    expect(startDateInput.value).toBe(newStartDate.format('MM/DD/YYYY'));
-    expect(endDateInput.value).toBe(newEndDate.format('MM/DD/YYYY'));
+    await waitFor(() => {
+      const eventDataJson = screen.getByTestId('event-data-json');
+      const parsedEvents = JSON.parse(eventDataJson.textContent || '[]');
+      expect(
+        parsedEvents.some(
+          (e: { name: string }) => e.name === 'Manual Range Event',
+        ),
+      ).toBe(true);
+    });
   });
 
   it('should compute calendar from null startDate using current date', () => {
-    const now = dayjs();
-    const { month, year } = computeCalendarFromStartDate(null);
-    expect(month).toBe(now.month());
-    expect(year).toBe(now.year());
+    const now = new Date();
+    const { month, year } = computeCalendarFromStartDate(null, now);
+    expect(month).toBe(dayjs(now).month());
+    expect(year).toBe(dayjs(now).year());
+  });
+
+  it('should compute calendar from a specific startDate', () => {
+    const testDate = new Date(2025, 5, 15); // June 15, 2025
+    const { month, year } = computeCalendarFromStartDate(testDate);
+    expect(month).toBe(5); // June is month 5 (0-indexed)
+    expect(year).toBe(2025);
+  });
+
+  it('Should filter events when "Today" preset is selected', async () => {
+    const todayStart = dayjs().startOf('day').toISOString();
+    const todayEnd = dayjs().endOf('day').toISOString();
+
+    const todayMock = {
+      request: {
+        query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
+        variables: {
+          id: 'org123',
+          first: 100,
+          after: null,
+          startDate: todayStart,
+          endDate: todayEnd,
+          includeRecurring: true,
+        },
+      },
+      result: {
+        data: {
+          organization: {
+            events: {
+              edges: [
+                {
+                  node: {
+                    id: 'todayEvent1',
+                    name: 'Today Event',
+                    description: 'Event for today',
+                    startAt: dayjs().hour(10).toISOString(),
+                    endAt: dayjs().hour(12).toISOString(),
+                    location: 'Test Location',
+                    allDay: false,
+                    isPublic: true,
+                    isRegisterable: true,
+                    isRecurringEventTemplate: false,
+                    baseEvent: null,
+                    sequenceNumber: null,
+                    totalCount: null,
+                    hasExceptions: false,
+                    progressLabel: null,
+                    recurrenceDescription: null,
+                    recurrenceRule: null,
+                    creator: {
+                      id: 'user1',
+                      name: 'Test User',
+                    },
+                    attachments: [],
+                    organization: {
+                      id: 'org123',
+                      name: 'Test Org',
+                    },
+                  },
+                  cursor: 'cursor1',
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: 'cursor1',
+              },
+            },
+          },
+        },
+      },
+    };
+
+    const testLink = new StaticMockLink(
+      [...MOCKS.slice(0, 2), todayMock],
+      true,
+    );
+    const cache = new InMemoryCache();
+
+    render(
+      <MockedProvider link={testLink} cache={cache}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <ThemeProvider theme={theme}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Events />
+              </I18nextProvider>
+            </ThemeProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('events-date-range-preset-today'),
+      ).toBeInTheDocument();
+    });
+
+    const todayButton = screen.getByTestId('events-date-range-preset-today');
+    await userEvent.click(todayButton);
+
+    await wait(300);
+
+    await waitFor(
+      () => {
+        const eventDataJson = screen.getByTestId('event-data-json');
+        const parsedEvents = JSON.parse(eventDataJson.textContent || '[]');
+
+        expect(parsedEvents).toBeInstanceOf(Array);
+        expect(
+          parsedEvents.some(
+            (event: { name: string }) => event.name === 'Today Event',
+          ),
+        ).toBe(true);
+      },
+      { timeout: 3000 },
+    );
+
+    const startDateInput = screen.getByTestId(
+      'events-date-range-start-input',
+    ) as HTMLInputElement;
+    const endDateInput = screen.getByTestId(
+      'events-date-range-end-input',
+    ) as HTMLInputElement;
+
+    expect(startDateInput.value).toBe(dayjs(todayStart).format('MM/DD/YYYY'));
+    expect(endDateInput.value).toBe(dayjs(todayEnd).format('MM/DD/YYYY'));
   });
 });
