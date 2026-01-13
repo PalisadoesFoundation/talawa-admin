@@ -55,6 +55,7 @@ const mockEventListCardProps: MockEventListCardProps = {
   allDay: false,
   isPublic: true,
   isRegisterable: true,
+  isInviteOnly: false,
   attendees: [],
   creator: {
     id: 'user1',
@@ -97,6 +98,7 @@ const buildHandlerInput = (overrides: HandlerOverrides = {}): HandlerArgs => ({
   alldaychecked: mockEventListCardProps.allDay,
   publicchecked: mockEventListCardProps.isPublic,
   registrablechecked: mockEventListCardProps.isRegisterable,
+  inviteonlychecked: mockEventListCardProps.isInviteOnly,
   eventStartDate: new Date(mockEventListCardProps.startAt),
   eventEndDate: new Date(mockEventListCardProps.endAt),
   recurrence: null as InterfaceRecurrenceRule | null,
@@ -257,6 +259,24 @@ describe('useUpdateEventHandler', () => {
       const calledInputs =
         mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
       expect(calledInputs.isRegisterable).toBe(false);
+    });
+
+    it('handles standalone event update with isInviteOnly change', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          inviteonlychecked: true,
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
+      expect(calledInputs.isInviteOnly).toBe(true);
     });
 
     it('shows success toast, closes modals and refetches on successful update', async () => {

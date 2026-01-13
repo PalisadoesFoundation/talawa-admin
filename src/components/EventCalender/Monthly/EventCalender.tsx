@@ -92,31 +92,39 @@ const Calendar: React.FC<
     userRole?: string,
     userId?: string,
   ): InterfaceEvent[] => {
-    const filteredEvents: InterfaceEvent[] = [];
-
+    // If no user info, only show public events
     if (!userRole || !userId) {
       return eventData.filter((event) => event.isPublic);
     }
 
+    // Admins see everything
     if (userRole === UserRole.ADMINISTRATOR) {
       return eventData;
     }
 
-    eventData.forEach((event) => {
+    // For regular users:
+    // - Backend already filters Organization Members events based on membership
+    // - We need to check Invite Only events for creator OR attendee status
+    // - All other events returned by backend should be shown
+    return eventData.filter((event) => {
+      // Public events - always visible (backend returns them)
       if (event.isPublic) {
-        filteredEvents.push(event);
-        return;
+        return true;
       }
 
-      const isMember = orgData?.members?.edges.some(
-        (edge) => edge.node.id === userId,
-      );
-      if (!event.isPublic && isMember) {
-        filteredEvents.push(event);
+      // Invite Only events - visible to creator OR attendees
+      if (event.isInviteOnly) {
+        const isCreator = event.creator && event.creator.id === userId;
+        const isAttendee = event.attendees?.some(
+          (attendee) => attendee.id === userId,
+        );
+        return isCreator || isAttendee;
       }
+
+      // Organization Members events - trust backend filtering
+      // If backend returned it, user should see it (either member or creator)
+      return true;
     });
-
-    return filteredEvents;
   };
 
   useEffect(() => {
@@ -238,6 +246,7 @@ const Calendar: React.FC<
           allDay={datas.allDay}
           isPublic={datas.isPublic}
           isRegisterable={datas.isRegisterable}
+          isInviteOnly={datas.isInviteOnly}
           isRecurringEventTemplate={datas.isRecurringEventTemplate}
           baseEvent={datas.baseEvent}
           sequenceNumber={datas.sequenceNumber}
@@ -421,6 +430,7 @@ const Calendar: React.FC<
               allDay={datas.allDay}
               isPublic={datas.isPublic}
               isRegisterable={datas.isRegisterable}
+              isInviteOnly={datas.isInviteOnly}
               attendees={datas.attendees || []}
               creator={datas.creator}
               userId={userId}

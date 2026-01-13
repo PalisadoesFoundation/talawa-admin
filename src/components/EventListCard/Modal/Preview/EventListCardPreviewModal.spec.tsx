@@ -89,6 +89,7 @@ const mockEventListCardProps = {
   allDay: false,
   isPublic: true,
   isRegisterable: true,
+  isInviteOnly: false,
   attendees: [],
   creator: {
     id: 'creator123',
@@ -127,6 +128,8 @@ const mockDefaultProps = {
   setPublicChecked: vi.fn(),
   registrablechecked: true,
   setRegistrableChecked: vi.fn(),
+  inviteonlychecked: false,
+  setInviteOnlyChecked: vi.fn(),
   formState: mockFormState,
   setFormState: vi.fn(),
   registerEventHandler: vi.fn(),
@@ -325,14 +328,125 @@ describe('EventListCardPreviewModal', () => {
     expect(mockSetAllDayChecked).toHaveBeenCalledWith(true);
   });
 
-  test('toggles public checkbox', async () => {
-    const mockSetPublicChecked = vi.fn();
-    renderComponent({ setPublicChecked: mockSetPublicChecked });
+  test('renders visibility radio buttons for administrators', () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        userRole: UserRole.ADMINISTRATOR,
+      },
+    });
 
-    const publicCheckbox = screen.getByTestId('updateIsPublic');
-    await userEvent.click(publicCheckbox);
+    expect(screen.getByLabelText('public')).toBeInTheDocument();
+    expect(screen.getByLabelText('organizationMembers')).toBeInTheDocument();
+    expect(screen.getByLabelText('inviteOnly')).toBeInTheDocument();
+  });
+
+  test('selects public radio button when event is public', () => {
+    renderComponent({
+      publicchecked: true,
+      inviteonlychecked: false,
+    });
+
+    const publicRadio = screen.getByLabelText('public') as HTMLInputElement;
+    expect(publicRadio.checked).toBe(true);
+  });
+
+  test('selects organization members radio when event is not public and not invite only', () => {
+    renderComponent({
+      publicchecked: false,
+      inviteonlychecked: false,
+    });
+
+    const orgMembersRadio = screen.getByLabelText(
+      'organizationMembers',
+    ) as HTMLInputElement;
+    expect(orgMembersRadio.checked).toBe(true);
+  });
+
+  test('selects invite only radio when event is invite only', () => {
+    renderComponent({
+      publicchecked: false,
+      inviteonlychecked: true,
+    });
+
+    const inviteOnlyRadio = screen.getByLabelText(
+      'inviteOnly',
+    ) as HTMLInputElement;
+    expect(inviteOnlyRadio.checked).toBe(true);
+  });
+
+  test('clicking public radio sets publicchecked to true and inviteonlychecked to false', async () => {
+    const mockSetPublicChecked = vi.fn();
+    const mockSetInviteOnlyChecked = vi.fn();
+    renderComponent({
+      publicchecked: false,
+      inviteonlychecked: false,
+      setPublicChecked: mockSetPublicChecked,
+      setInviteOnlyChecked: mockSetInviteOnlyChecked,
+    });
+
+    const publicRadio = screen.getByLabelText('public');
+    await userEvent.click(publicRadio);
+
+    expect(mockSetPublicChecked).toHaveBeenCalledWith(true);
+    expect(mockSetInviteOnlyChecked).toHaveBeenCalledWith(false);
+  });
+
+  test('clicking organization members radio sets both flags to false', async () => {
+    const mockSetPublicChecked = vi.fn();
+    const mockSetInviteOnlyChecked = vi.fn();
+    renderComponent({
+      publicchecked: true,
+      inviteonlychecked: false,
+      setPublicChecked: mockSetPublicChecked,
+      setInviteOnlyChecked: mockSetInviteOnlyChecked,
+    });
+
+    const orgMembersRadio = screen.getByLabelText('organizationMembers');
+    await userEvent.click(orgMembersRadio);
 
     expect(mockSetPublicChecked).toHaveBeenCalledWith(false);
+    expect(mockSetInviteOnlyChecked).toHaveBeenCalledWith(false);
+  });
+
+  test('clicking invite only radio sets publicchecked to false and inviteonlychecked to true', async () => {
+    const mockSetPublicChecked = vi.fn();
+    const mockSetInviteOnlyChecked = vi.fn();
+    renderComponent({
+      publicchecked: true,
+      inviteonlychecked: false,
+      setPublicChecked: mockSetPublicChecked,
+      setInviteOnlyChecked: mockSetInviteOnlyChecked,
+    });
+
+    const inviteOnlyRadio = screen.getByLabelText('inviteOnly');
+    await userEvent.click(inviteOnlyRadio);
+
+    expect(mockSetPublicChecked).toHaveBeenCalledWith(false);
+    expect(mockSetInviteOnlyChecked).toHaveBeenCalledWith(true);
+  });
+
+  test('visibility radio buttons are disabled for non-editors', () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        creator: { id: 'creator123' },
+        userRole: UserRole.REGULAR,
+      },
+      userId: 'user456',
+    });
+
+    const publicRadio = screen.getByLabelText('public') as HTMLInputElement;
+    const orgMembersRadio = screen.getByLabelText(
+      'organizationMembers',
+    ) as HTMLInputElement;
+    const inviteOnlyRadio = screen.getByLabelText(
+      'inviteOnly',
+    ) as HTMLInputElement;
+
+    expect(publicRadio.disabled).toBe(true);
+    expect(orgMembersRadio.disabled).toBe(true);
+    expect(inviteOnlyRadio.disabled).toBe(true);
   });
 
   test('toggles registrable checkbox', async () => {
@@ -476,6 +590,22 @@ describe('EventListCardPreviewModal', () => {
     const alreadyRegisteredBtn = screen.getByText('alreadyRegistered');
     expect(alreadyRegisteredBtn).toBeInTheDocument();
     expect(alreadyRegisteredBtn).toBeDisabled();
+  });
+
+  test('hides register button when event is not registerable (Bug #1 fix)', () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        isRegisterable: false,
+        creator: { id: 'creator123' },
+        userRole: UserRole.REGULAR,
+      },
+      userId: 'user456',
+      isRegistered: false,
+    });
+
+    expect(screen.queryByTestId('registerEventBtn')).not.toBeInTheDocument();
+    expect(screen.queryByText('alreadyRegistered')).not.toBeInTheDocument();
   });
 
   test('calls registerEventHandler when register button is clicked', async () => {

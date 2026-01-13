@@ -42,7 +42,8 @@ import { errorHandler } from 'utils/errorHandler';
 
 import EventListCardDeleteModal from './Delete/EventListCardDeleteModal';
 import EventListCardPreviewModal from './Preview/EventListCardPreviewModal';
-import { Button, Modal, Form } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { Button, Form } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 
 // Extend dayjs with utc plugin
@@ -70,7 +71,7 @@ function EventListCardModals({
   const { refetchEvents } = eventListCardProps;
 
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId');
+  const userId = getItem('userId') || getItem('id');
 
   const { orgId } = useParams();
   const navigate = useNavigate();
@@ -81,6 +82,9 @@ function EventListCardModals({
   );
   const [registrablechecked, setRegistrableChecked] = useState(
     eventListCardProps.isRegisterable,
+  );
+  const [inviteonlychecked, setInviteOnlyChecked] = useState(
+    eventListCardProps.isInviteOnly,
   );
   const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
   const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
@@ -165,6 +169,8 @@ function EventListCardModals({
     const publicChanged = publicchecked !== eventListCardProps.isPublic;
     const registrableChanged =
       registrablechecked !== eventListCardProps.isRegisterable;
+    const inviteOnlyChanged =
+      inviteonlychecked !== eventListCardProps.isInviteOnly;
     const allDayChanged = alldaychecked !== eventListCardProps.allDay;
     const recurrenceChanged = hasRecurrenceChanged();
 
@@ -174,6 +180,7 @@ function EventListCardModals({
       !locationChanged &&
       !publicChanged &&
       !registrableChanged &&
+      !inviteOnlyChanged &&
       !allDayChanged &&
       !recurrenceChanged
     );
@@ -212,6 +219,7 @@ function EventListCardModals({
     formState,
     publicchecked,
     registrablechecked,
+    inviteonlychecked,
     alldaychecked,
     eventStartDate,
     eventEndDate,
@@ -251,6 +259,7 @@ function EventListCardModals({
         alldaychecked,
         publicchecked,
         registrablechecked,
+        inviteonlychecked,
         eventStartDate,
         eventEndDate,
         recurrence,
@@ -411,6 +420,8 @@ function EventListCardModals({
         setPublicChecked={setPublicChecked}
         registrablechecked={registrablechecked}
         setRegistrableChecked={setRegistrableChecked}
+        inviteonlychecked={inviteonlychecked}
+        setInviteOnlyChecked={setInviteOnlyChecked}
         formState={formState}
         setFormState={setFormState}
         registerEventHandler={registerEventHandler}
@@ -433,105 +444,100 @@ function EventListCardModals({
       />
 
       {/* update modal */}
-      <Modal
+      <BaseModal
         size="lg"
-        id={`updateEventModal${eventListCardProps.id}`}
+        dataTestId={`updateEventModal${eventListCardProps.id}`} // i18n-ignore-line
         show={eventUpdateModalIsOpen}
         onHide={toggleUpdateModal}
         backdrop="static"
         keyboard={false}
         centered
+        title={t('updateEvent')}
+        headerClassName={`${styles.modalHeader} text-white`}
+        footer={
+          <>
+            <Button
+              type="button"
+              className={`btn btn-secondary ${styles.removeButton}`}
+              data-dismiss="modal"
+              onClick={toggleUpdateModal}
+              data-testid="eventUpdateModalCloseBtn"
+            >
+              {tCommon('cancel')}
+            </Button>
+            <Button
+              type="button"
+              className={`btn ${styles.addButton}`}
+              onClick={() =>
+                updateEventHandler({
+                  eventListCardProps,
+                  formState,
+                  alldaychecked,
+                  publicchecked,
+                  registrablechecked,
+                  inviteonlychecked,
+                  eventStartDate,
+                  eventEndDate,
+                  recurrence,
+                  updateOption,
+                  hasRecurrenceChanged: hasRecurrenceChanged(), // Pass the recurrence change status
+                  t,
+                  hideViewModal,
+                  setEventUpdateModalIsOpen,
+                  refetchEvents,
+                })
+              }
+              data-testid="confirmUpdateEventBtn"
+            >
+              {t('updateEvent')}
+            </Button>
+          </>
+        }
       >
-        <Modal.Header closeButton className={`${styles.modalHeader}`}>
-          <Modal.Title
-            className="text-white"
-            id={`updateEventModalLabel${eventListCardProps.id}`}
-          >
-            {t('updateEvent')}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <div>
-            <p>{t('updateRecurringEventMsg')}</p>
-            <Form>
-              {/* Only show "update this instance" option if recurrence rule hasn't changed */}
-              {availableUpdateOptions.single && (
-                <Form.Check
-                  type="radio"
-                  id="update-single"
-                  name="updateOption"
-                  value="single"
-                  checked={updateOption === 'single'}
-                  onChange={() => setUpdateOption('single')}
-                  label={t('updateThisInstance')}
-                  className="mb-2"
-                />
-              )}
-              {availableUpdateOptions.following && (
-                <Form.Check
-                  type="radio"
-                  id="update-following"
-                  name="updateOption"
-                  value="following"
-                  checked={updateOption === 'following'}
-                  onChange={() => setUpdateOption('following')}
-                  label={t('updateThisAndFollowing')}
-                  className="mb-2"
-                />
-              )}
-              {/* Show "update entire series" option only when only name/description changed */}
-              {availableUpdateOptions.entireSeries && (
-                <Form.Check
-                  type="radio"
-                  id="update-entire-series"
-                  name="updateOption"
-                  value="entireSeries"
-                  checked={updateOption === 'entireSeries'}
-                  onChange={() => setUpdateOption('entireSeries')}
-                  label={t('updateEntireSeries')}
-                  className="mb-2"
-                />
-              )}
-            </Form>
-          </div>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            type="button"
-            className={`btn btn-secondary ${styles.removeButton}`}
-            data-dismiss="modal"
-            onClick={toggleUpdateModal}
-            data-testid="eventUpdateModalCloseBtn"
-          >
-            {tCommon('cancel')}
-          </Button>
-          <Button
-            type="button"
-            className={`btn ${styles.addButton}`}
-            onClick={() =>
-              updateEventHandler({
-                eventListCardProps,
-                formState,
-                alldaychecked,
-                publicchecked,
-                registrablechecked,
-                eventStartDate,
-                eventEndDate,
-                recurrence,
-                updateOption,
-                hasRecurrenceChanged: hasRecurrenceChanged(), // Pass the recurrence change status
-                t,
-                hideViewModal,
-                setEventUpdateModalIsOpen,
-                refetchEvents,
-              })
-            }
-            data-testid="confirmUpdateEventBtn"
-          >
-            {t('updateEvent')}
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        <div>
+          <p>{t('updateRecurringEventMsg')}</p>
+          <Form>
+            {/* Only show "update this instance" option if recurrence rule hasn't changed */}
+            {availableUpdateOptions.single && (
+              <Form.Check
+                type="radio"
+                id="update-single"
+                name="updateOption"
+                value="single"
+                checked={updateOption === 'single'}
+                onChange={() => setUpdateOption('single')}
+                label={t('updateThisInstance')}
+                className="mb-2"
+              />
+            )}
+            {availableUpdateOptions.following && (
+              <Form.Check
+                type="radio"
+                id="update-following"
+                name="updateOption"
+                value="following"
+                checked={updateOption === 'following'}
+                onChange={() => setUpdateOption('following')}
+                label={t('updateThisAndFollowing')}
+                className="mb-2"
+              />
+            )}
+            {/* Show "update entire series" option only when only name/description changed */}
+            {availableUpdateOptions.entireSeries && (
+              <Form.Check
+                type="radio"
+                id="update-entire-series"
+                name="updateOption"
+                value="entireSeries"
+                checked={updateOption === 'entireSeries'}
+                onChange={() => setUpdateOption('entireSeries')}
+                label={t('updateEntireSeries')}
+                className="mb-2"
+              />
+            )}
+          </Form>
+        </div>
+      </BaseModal>
     </>
   );
 }

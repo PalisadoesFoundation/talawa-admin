@@ -203,6 +203,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: true,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [
         { id: 'user1', name: 'User 1', emailAddress: 'user1@example.com' },
       ],
@@ -224,6 +225,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: false,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [
         { id: 'user2', name: 'User 2', emailAddress: 'user2@example.com' },
       ],
@@ -653,6 +655,7 @@ describe('Calendar Component', () => {
       ...mockEventData[1],
       name: 'Member Private Event',
       isPublic: false,
+      isInviteOnly: false,
       startDate: janFirst.toISOString(),
       endDate: janFirst.toISOString(),
       startTime: '12:00:00',
@@ -705,6 +708,7 @@ describe('Calendar Component', () => {
       ...mockEventData[1],
       name: 'NonMember Private Event',
       isPublic: false,
+      isInviteOnly: false,
       startDate: todayDate.toISOString(),
       endDate: todayDate.toISOString(),
       startTime: '12:00:00',
@@ -806,6 +810,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: true,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: undefined as unknown as CalendarEventItem['attendees'],
       creator: { id: 'creator-x', name: 'A B', emailAddress: 'a@example.com' },
     };
@@ -856,6 +861,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: true,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [],
       creator: {
         id: 'creator1',
@@ -876,6 +882,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: false,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [],
       creator: {
         id: 'creator2',
@@ -942,6 +949,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: true,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [],
       creator: {
         id: 'creator1',
@@ -962,6 +970,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: false,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [],
       creator: {
         id: 'creator2',
@@ -1030,6 +1039,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: false,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [],
       creator: {
         id: 'creator2',
@@ -1081,6 +1091,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: false,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [],
       creator: {
         id: 'creator2',
@@ -1141,6 +1152,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: true,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [],
       creator: {
         id: 'creator1',
@@ -1161,6 +1173,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: false,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [],
       creator: {
         id: 'creator2',
@@ -1181,6 +1194,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: false,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [],
       creator: {
         id: 'creator3',

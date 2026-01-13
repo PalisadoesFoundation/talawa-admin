@@ -225,6 +225,7 @@ const mockActionItem: IActionItemInfo = {
     allDay: false,
     isPublic: true,
     isRegisterable: true,
+    isInviteOnly: false,
     attendees: [],
     creator: {
       id: 'userId2',

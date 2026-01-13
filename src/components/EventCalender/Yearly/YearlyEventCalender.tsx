@@ -199,6 +199,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
             allDay={event.allDay}
             isPublic={event.isPublic}
             isRegisterable={event.isRegisterable}
+            isInviteOnly={event.isInviteOnly}
             attendees={event.attendees || []}
             creator={event.creator}
             userId={userId}

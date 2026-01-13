@@ -55,6 +55,7 @@ export interface IEvent {
    */
   isPublic: boolean;
   isRegisterable: boolean;
+  isInviteOnly: boolean;
   attendees: Partial<User>[];
   creator: Partial<User>;
   averageFeedbackScore?: number;
@@ -154,6 +155,8 @@ export interface IPreviewEventModalProps {
   setPublicChecked: Dispatch<SetStateAction<boolean>>;
   registrablechecked: boolean;
   setRegistrableChecked: Dispatch<SetStateAction<boolean>>;
+  inviteonlychecked: boolean;
+  setInviteOnlyChecked: Dispatch<SetStateAction<boolean>>;
   formState: {
     name: string;
     eventdescrip: string;
@@ -220,6 +223,7 @@ export interface IEventEdge {
      */
     isPublic: boolean;
     isRegisterable: boolean;
+    isInviteOnly: boolean;
     // Recurring event fields
     isRecurringEventTemplate?: boolean;
     baseEvent?: {
@@ -237,6 +241,10 @@ export interface IEventEdge {
       id: string;
       name: string;
     };
+    attendees?: {
+      id: string;
+      name: string;
+    }[];
   };
   cursor: string;
 }

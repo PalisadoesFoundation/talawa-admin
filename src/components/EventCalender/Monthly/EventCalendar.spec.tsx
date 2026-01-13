@@ -1,13 +1,24 @@
 import React from 'react';
 import Calendar from './EventCalender';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  act,
+  waitFor,
+} from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { weekdays, months } from 'types/Event/utils';
-import { BrowserRouter as Router } from 'react-router';
+import {
+  BrowserRouter as Router,
+  MemoryRouter,
+  Routes,
+  Route,
+} from 'react-router';
 import { vi, describe, it, expect, afterEach, test } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -198,6 +209,7 @@ describe('Calendar', () => {
         allDay: false,
         isPublic: true,
         isRegisterable: true,
+        isInviteOnly: false,
         attendees: [],
         creator: {},
       },
@@ -308,6 +320,7 @@ describe('Calendar', () => {
         allDay: true,
         isPublic: true,
         isRegisterable: true,
+        isInviteOnly: false,
         attendees: [],
         creator: {},
       },
@@ -323,6 +336,7 @@ describe('Calendar', () => {
         allDay: true,
         isPublic: true,
         isRegisterable: true,
+        isInviteOnly: false,
         attendees: [],
         creator: {},
       },
@@ -338,6 +352,7 @@ describe('Calendar', () => {
         allDay: false,
         isPublic: true,
         isRegisterable: true,
+        isInviteOnly: false,
         attendees: [],
         creator: {},
       },
@@ -353,6 +368,7 @@ describe('Calendar', () => {
         allDay: false,
         isPublic: true,
         isRegisterable: true,
+        isInviteOnly: false,
         attendees: [],
         creator: {},
       },
@@ -368,6 +384,7 @@ describe('Calendar', () => {
         allDay: false,
         isPublic: true,
         isRegisterable: true,
+        isInviteOnly: false,
         attendees: [],
         creator: {},
       },
@@ -816,6 +833,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -831,6 +849,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -846,6 +865,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -903,6 +923,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -918,6 +939,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -973,6 +995,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -988,6 +1011,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1003,6 +1027,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1084,6 +1109,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1099,6 +1125,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1175,6 +1202,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1190,6 +1218,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1266,6 +1295,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1281,6 +1311,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1368,6 +1399,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1383,6 +1415,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1459,6 +1492,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1474,6 +1508,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1489,6 +1524,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1529,6 +1565,124 @@ describe('Calendar', () => {
       // 3. The filtering allows both public and private events for org members
       expect(viewAllButton).toHaveTextContent('View all');
     });
+    it('should show invite-only events only to creator and admins', async () => {
+      const today = dayjs();
+
+      const inviteOnlyTestEventData = [
+        {
+          id: 'event1',
+          name: 'Public Event',
+          description: 'This is a public event',
+          startAt: today.hour(10).minute(0).toISOString(),
+          endAt: today.hour(12).minute(0).toISOString(),
+          location: 'Public Location',
+          startTime: '10:00',
+          endTime: '12:00',
+          allDay: false,
+          isPublic: true,
+          isRegisterable: true,
+          isInviteOnly: false,
+          attendees: [],
+          creator: {
+            id: 'other',
+            name: 'Other',
+            emailAddress: 'other@example.com',
+          },
+        },
+        {
+          id: 'event2',
+          name: 'My Invite Only Event',
+          description: 'This is an invite only event',
+          startAt: today.hour(14).minute(0).toISOString(),
+          endAt: today.hour(16).minute(0).toISOString(),
+          location: 'Secret Location',
+          startTime: '14:00',
+          endTime: '16:00',
+          allDay: false,
+          isPublic: false,
+          isRegisterable: true,
+          isInviteOnly: true,
+          attendees: [],
+          creator: {
+            id: 'user1',
+            name: 'User 1',
+            emailAddress: 'user1@example.com',
+          },
+        },
+        {
+          id: 'event3',
+          name: 'Other Invite Only Event',
+          description: 'This is another invite only event',
+          startAt: today.hour(18).minute(0).toISOString(),
+          endAt: today.hour(20).minute(0).toISOString(),
+          location: 'Top Secret Location',
+          startTime: '18:00',
+          endTime: '20:00',
+          allDay: false,
+          isPublic: false,
+          isRegisterable: true,
+          isInviteOnly: true,
+          attendees: [],
+          creator: {
+            id: 'other',
+            name: 'Other',
+            emailAddress: 'other@example.com',
+          },
+        },
+      ];
+
+      render(
+        <MemoryRouter initialEntries={['/org/test-org/events']}>
+          <MockedProvider link={link}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/org/:orgId/events"
+                  element={
+                    <Calendar
+                      eventData={inviteOnlyTestEventData}
+                      orgData={mockOrgData}
+                      userRole="REGULAR"
+                      userId="user1"
+                      viewType={ViewType.MONTH}
+                      onMonthChange={vi.fn()}
+                      currentMonth={new Date().getMonth()}
+                      currentYear={new Date().getFullYear()}
+                    />
+                  }
+                />
+              </Routes>
+            </I18nextProvider>
+          </MockedProvider>
+        </MemoryRouter>,
+      );
+
+      // First wait for the component to render and process effects
+      await waitFor(() => {
+        // We expect either the public event to be visible OR the "View all" button to be there
+        // If neither is there, we are likely still loading/filtering
+        const event = screen.queryByText('Public Event');
+        const button = screen.queryByTestId('more');
+        if (!event && !button) {
+          throw new Error('Waiting for events to render...');
+        }
+      });
+
+      // If "View all" is present, click it once
+      const viewAllButton = screen.queryByTestId('more');
+      if (viewAllButton) {
+        fireEvent.click(viewAllButton);
+      }
+
+      // Now verify visibility
+      await waitFor(() => {
+        expect(screen.getByText('Public Event')).toBeInTheDocument();
+        expect(screen.getByText('My Invite Only Event')).toBeInTheDocument();
+        expect(
+          screen.queryByText('Other Invite Only Event'),
+        ).not.toBeInTheDocument();
+      });
+    });
   });
   describe('Additional Coverage Tests (Day View & Edge Cases)', () => {
     it('should toggle "View all" and "View less" specifically in DAY View', async () => {
@@ -1550,6 +1704,7 @@ describe('Calendar', () => {
         allDay: false,
         isPublic: true,
         isRegisterable: true,
+        isInviteOnly: false,
         attendees: [],
         creator: { id: 'user-1' } as InterfaceEvent['creator'],
       }));

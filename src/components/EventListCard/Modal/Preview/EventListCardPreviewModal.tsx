@@ -70,6 +70,9 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   setPublicChecked,
   registrablechecked,
   setRegistrableChecked,
+
+  inviteonlychecked,
+  setInviteOnlyChecked,
   formState,
   setFormState,
   registerEventHandler,
@@ -271,7 +274,8 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 {t('deleteEvent')}
               </Button>
             )}
-            {eventListCardProps.userRole === UserRole.REGULAR &&
+            {eventListCardProps.isRegisterable &&
+              eventListCardProps.userRole === UserRole.REGULAR &&
               !(eventListCardProps.creator?.id === userId) &&
               (isRegistered ? (
                 <Button className={styles.addButton} variant="success" disabled>
@@ -437,16 +441,50 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
               />
             </div>
             <div className={styles.dispflexOrganizationEvents}>
-              <label htmlFor="ispublic">{t('isPublic')}?</label>
-              <Form.Switch
-                id="ispublic"
-                type="checkbox"
-                data-testid="updateIsPublic"
-                className={`me-4 ${styles.switch}`}
-                checked={publicchecked}
-                onChange={() => setPublicChecked(!publicchecked)}
-                disabled={!canEditEvent}
-              />
+              <div className="mb-3">
+                <label className="mb-2">{t('visibility')}</label>
+                <div>
+                  <Form.Check
+                    inline
+                    type="radio"
+                    label={t('public')}
+                    name="eventVisibility"
+                    id="visibility-public"
+                    checked={publicchecked}
+                    onChange={() => {
+                      setPublicChecked(true);
+                      setInviteOnlyChecked(false);
+                    }}
+                    disabled={!canEditEvent}
+                  />
+                  <Form.Check
+                    inline
+                    type="radio"
+                    label={t('organizationMembers')}
+                    name="eventVisibility"
+                    id="visibility-members"
+                    checked={!publicchecked && !inviteonlychecked}
+                    onChange={() => {
+                      setPublicChecked(false);
+                      setInviteOnlyChecked(false);
+                    }}
+                    disabled={!canEditEvent}
+                  />
+                  <Form.Check
+                    inline
+                    type="radio"
+                    label={t('inviteOnly')}
+                    name="eventVisibility"
+                    id="visibility-inviteonly"
+                    checked={!publicchecked && inviteonlychecked}
+                    onChange={() => {
+                      setPublicChecked(false);
+                      setInviteOnlyChecked(true);
+                    }}
+                    disabled={!canEditEvent}
+                  />
+                </div>
+              </div>
             </div>
             <div className={styles.dispflexOrganizationEvents}>
               <label htmlFor="registrable">{t('isRegistrable')}?</label>

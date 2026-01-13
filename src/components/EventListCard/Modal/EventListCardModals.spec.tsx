@@ -97,6 +97,7 @@ const mockEventListCardProps: MockEventListCardProps = {
   allDay: false,
   isPublic: true,
   isRegisterable: true,
+  isInviteOnly: false,
   attendees: [],
   creator: { id: 'user1', name: 'User 1', emailAddress: 'user1@example.com' },
   userRole: UserRole.ADMINISTRATOR,
@@ -195,7 +196,9 @@ describe('EventListCardModals', () => {
     });
     mockUseNavigate.mockReturnValue(mockNavigate);
     mockUseParams.mockReturnValue({ orgId: 'org1' });
-    mockUseLocalStorage.mockReturnValue({ getItem: () => 'user1' });
+    mockUseLocalStorage.mockReturnValue({
+      getItem: (key: string) => (key === 'userId' ? 'user1' : null),
+    });
 
     // Mock the preview modal to render nothing and capture props
     MockPreviewModal.mockImplementation(() => {
@@ -242,6 +245,15 @@ describe('EventListCardModals', () => {
     });
     const previewProps = MockPreviewModal.mock.calls[0][0];
     expect(previewProps.isRegistered).toBe(true);
+  });
+
+  test('passes correct userId to PreviewModal', () => {
+    // This test ensures that we are fetching the correct 'id' from local storage
+    // and passing it as 'userId' to the PreviewModal.
+    // The mock works such that getItem('id') -> 'user1', getItem('userId') -> null.
+    renderComponent();
+    const previewProps = MockPreviewModal.mock.calls[0][0];
+    expect(previewProps.userId).toBe('user1');
   });
 
   test('handles standalone event update successfully', async () => {
@@ -358,6 +370,26 @@ describe('EventListCardModals', () => {
         input: {
           id: 'event1',
           isRegisterable: false,
+        },
+      },
+    });
+  });
+
+  test('handles standalone event update with isInviteOnly change', async () => {
+    renderComponent();
+    const initialPreviewProps = MockPreviewModal.mock.calls[0][0];
+    act(() => {
+      initialPreviewProps.setInviteOnlyChecked(true);
+    });
+    const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+    await act(async () => {
+      await updatedPreviewProps.handleEventUpdate();
+    });
+    expect(mockUpdateStandaloneEvent).toHaveBeenCalledWith({
+      variables: {
+        input: {
+          id: 'event1',
+          isInviteOnly: true,
         },
       },
     });

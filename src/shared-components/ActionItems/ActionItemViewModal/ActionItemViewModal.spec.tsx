@@ -117,6 +117,7 @@ const mockEvent: InterfaceEvent = {
   allDay: false,
   isPublic: true,
   isRegisterable: true,
+  isInviteOnly: false,
   attendees: [],
   creator: {},
 };

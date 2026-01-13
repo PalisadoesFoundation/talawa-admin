@@ -27,6 +27,7 @@ interface IEventUpdateInput {
   location?: string;
   isPublic?: boolean;
   isRegisterable?: boolean;
+  isInviteOnly?: boolean;
   allDay?: boolean;
   startAt?: string;
   endAt?: string;
@@ -48,6 +49,7 @@ interface IUpdateEventHandlerProps {
   alldaychecked: boolean;
   publicchecked: boolean;
   registrablechecked: boolean;
+  inviteonlychecked: boolean;
   eventStartDate: Date;
   eventEndDate: Date;
   recurrence: InterfaceRecurrenceRule | null;
@@ -77,6 +79,7 @@ export const useUpdateEventHandler = () => {
     alldaychecked,
     publicchecked,
     registrablechecked,
+    inviteonlychecked,
     eventStartDate,
     eventEndDate,
     recurrence,
@@ -110,6 +113,9 @@ export const useUpdateEventHandler = () => {
       }
       if (registrablechecked !== eventListCardProps.isRegisterable) {
         updateInput.isRegisterable = registrablechecked;
+      }
+      if (inviteonlychecked !== eventListCardProps.isInviteOnly) {
+        updateInput.isInviteOnly = inviteonlychecked;
       }
       if (alldaychecked !== eventListCardProps.allDay) {
         updateInput.allDay = alldaychecked;
