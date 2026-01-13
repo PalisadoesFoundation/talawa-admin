@@ -1264,6 +1264,7 @@
     "errorLoadingTransactions": "लेन-देन लोड करने में त्रुटि"
   },
   "userEvents": {
+    "title": "ईवेंट",
     "name": "ईवेंट",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "createEvent": "कार्यक्रम बनाएँ",

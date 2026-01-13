@@ -1264,6 +1264,7 @@
     "errorLoadingTransactions": "加载交易记录时出错"
   },
   "userEvents": {
+    "title": "活动",
     "name": "活动",
     "nothingToShow": "这里没有什么可显示的。",
     "createEvent": "创建事件",
