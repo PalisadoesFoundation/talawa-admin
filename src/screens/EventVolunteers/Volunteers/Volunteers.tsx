@@ -321,7 +321,7 @@ function Volunteers(): JSX.Element {
               ? 'rejected'
               : 'pending';
 
-        return <StatusBadge variant={statusVariant} data-testid="statusChip" />;
+        return <StatusBadge variant={statusVariant} dataTestId="statusChip" />;
       },
     },
     {

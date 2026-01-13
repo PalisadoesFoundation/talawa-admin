@@ -73,6 +73,7 @@ const StatusBadge: React.FC<InterfaceStatusBadgeProps> = ({
   icon,
   ariaLabel,
   className,
+  dataTestId,
 }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'statusBadge',
@@ -97,6 +98,7 @@ const StatusBadge: React.FC<InterfaceStatusBadgeProps> = ({
       role="status"
       aria-label={ariaLabelText}
       className={`${styles.statusBadge} ${styles[semanticVariant]} ${styles[size]} ${className || ''}`}
+      data-testid={dataTestId}
     />
   );
 };
