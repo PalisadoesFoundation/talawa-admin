@@ -97,7 +97,6 @@ describe('SecuredRouteForUser', () => {
     vi.clearAllMocks();
     vi.clearAllTimers();
     vi.useRealTimers();
-    vi.restoreAllMocks();
     mockStorage = {};
     Object.defineProperty(window, 'location', {
       configurable: true,

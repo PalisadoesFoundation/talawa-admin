@@ -46,7 +46,7 @@ const SecuredRouteForUser = (): JSX.Element => {
   // Custom hook to interact with local storage
   const { getItem, setItem, removeItem } = useLocalStorage();
   const lastActiveRef = useRef<number>(Date.now());
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Check if the user is logged in and the role of the user
   const isLoggedIn = getItem('IsLoggedIn');
@@ -73,7 +73,10 @@ const SecuredRouteForUser = (): JSX.Element => {
         // If inactive for longer than the timeout period, show a warning and log out
         if (timeSinceLastActive > timeoutMilliseconds) {
           NotificationToast.warning(t('sessionExpired'));
-
+          if (intervalRef.current) {
+            clearInterval(intervalRef.current);
+            intervalRef.current = null;
+          }
           setItem('IsLoggedIn', 'FALSE');
           removeItem('email');
           removeItem('id');
