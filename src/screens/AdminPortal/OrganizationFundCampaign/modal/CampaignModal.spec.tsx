@@ -29,11 +29,6 @@ import { vi } from 'vitest';
 import { UPDATE_CAMPAIGN_MUTATION } from 'GraphQl/Mutations/CampaignMutation';
 import CampaignModal, { getUpdatedDateIfChanged } from './CampaignModal';
 
-import {
-  LocalizationProvider,
-  AdapterDayjs,
-} from 'shared-components/DateRangePicker';
-
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: { success: vi.fn(), error: vi.fn() },
 }));
@@ -906,6 +901,8 @@ describe('getUpdatedDateIfChanged', () => {
     const newDate = dayjs().add(1, 'day').toDate();
 
     const result = getUpdatedDateIfChanged(newDate, oldDate);
-    expect(typeof result).toBe('string');
+    expect(result).toBeDefined();
+    expect(dayjs(result).isValid()).toBe(true);
+    expect(dayjs(result).isSame(dayjs(newDate), 'second')).toBe(true);
   });
 });

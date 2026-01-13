@@ -18,6 +18,11 @@ import {
   Select,
   TextField,
 } from '@mui/material';
+import {
+  CREATE_CAMPAIGN_MUTATION,
+  UPDATE_CAMPAIGN_MUTATION,
+} from 'GraphQl/Mutations/CampaignMutation';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 import type { InterfaceCampaignModalProps } from 'types/AdminPortal/CampaignModal/interface';
 
@@ -245,99 +250,97 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
     }
   };
   return (
-    <>
-      <BaseModal
-        className={styles.campaignModal}
-        show={isOpen}
-        onHide={hide}
-        title={t(mode === 'edit' ? 'updateCampaign' : 'createCampaign')}
-        dataTestId="campaignModal"
+    <BaseModal
+      className={styles.campaignModal}
+      show={isOpen}
+      onHide={hide}
+      title={t(mode === 'edit' ? 'updateCampaign' : 'createCampaign')}
+      dataTestId="campaignModal"
+    >
+      <Form
+        onSubmitCapture={
+          mode === 'edit' ? updateCampaignHandler : createCampaignHandler
+        }
+        className="p-3"
       >
-        <Form
-          onSubmitCapture={
-            mode === 'edit' ? updateCampaignHandler : createCampaignHandler
-          }
-          className="p-3"
-        >
-          <Form.Group className="d-flex mb-3 w-100">
-            <FormControl fullWidth>
-              <TextField
-                label={t('campaignName')}
-                variant="outlined"
-                className={`${styles.noOutline} w-100`}
-                value={campaignName}
-                onChange={(e) =>
-                  setFormState({ ...formState, campaignName: e.target.value })
-                }
-              />
-            </FormControl>
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <DateRangePicker
-              value={campaignDateRange}
-              onChange={setCampaignDateRange}
-              dataTestId="campaign-date-range"
+        <Form.Group className="d-flex mb-3 w-100">
+          <FormControl fullWidth>
+            <TextField
+              label={t('campaignName')}
+              variant="outlined"
+              className={`${styles.noOutline} w-100`}
+              value={campaignName}
+              onChange={(e) =>
+                setFormState({ ...formState, campaignName: e.target.value })
+              }
             />
-          </Form.Group>
+          </FormControl>
+        </Form.Group>
 
-          <Form.Group className="d-flex gap-4 mb-4">
-            <FormControl fullWidth>
-              <InputLabel id="campaign-currency-select-label">
-                {t('currency')}
-              </InputLabel>
-              <Select
-                labelId="campaign-currency-select-label"
-                value={campaignCurrency}
-                label={t('currency')}
-                data-testid="currencySelect"
-                onChange={(e) => {
-                  setFormState({
-                    ...formState,
-                    campaignCurrency: e.target.value,
-                  });
-                }}
-              >
-                {currencyOptions.map((currency) => (
-                  <MenuItem key={currency.label} value={currency.value}>
-                    {currency.label} ({currencySymbols[currency.value]})
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+        <Form.Group className="mb-3">
+          <DateRangePicker
+            value={campaignDateRange}
+            onChange={setCampaignDateRange}
+            dataTestId="campaign-date-range"
+          />
+        </Form.Group>
 
-            <FormControl fullWidth>
-              <TextField
-                label={t('fundingGoal')}
-                variant="outlined"
-                className={styles.noOutline}
-                value={String(campaignGoal)}
-                inputProps={{ min: 0 }}
-                onChange={(e) => {
-                  if (e.target.value === '') {
-                    setFormState({ ...formState, campaignGoal: 0 });
-                    return;
-                  }
+        <Form.Group className="d-flex gap-4 mb-4">
+          <FormControl fullWidth>
+            <InputLabel id="campaign-currency-select-label">
+              {t('currency')}
+            </InputLabel>
+            <Select
+              labelId="campaign-currency-select-label"
+              value={campaignCurrency}
+              label={t('currency')}
+              data-testid="currencySelect"
+              onChange={(e) => {
+                setFormState({
+                  ...formState,
+                  campaignCurrency: e.target.value,
+                });
+              }}
+            >
+              {currencyOptions.map((currency) => (
+                <MenuItem key={currency.label} value={currency.value}>
+                  {currency.label} ({currencySymbols[currency.value]})
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-                  const value = parseInt(e.target.value, 10);
-                  if (!isNaN(value) && value >= 0) {
-                    setFormState({ ...formState, campaignGoal: value });
-                  }
-                }}
-              />
-            </FormControl>
-          </Form.Group>
-          <Button
-            type="submit"
-            className={styles.addButton}
-            data-testid="submitCampaignBtn"
-            disabled={isSubmitting}
-          >
-            {t(mode === 'edit' ? 'updateCampaign' : 'createCampaign')}
-          </Button>
-        </Form>
-      </BaseModal>
-    </>
+          <FormControl fullWidth>
+            <TextField
+              label={t('fundingGoal')}
+              variant="outlined"
+              className={styles.noOutline}
+              value={String(campaignGoal)}
+              inputProps={{ min: 0 }}
+              onChange={(e) => {
+                if (e.target.value === '') {
+                  setFormState({ ...formState, campaignGoal: 0 });
+                  return;
+                }
+
+                const value = parseInt(e.target.value, 10);
+                if (!isNaN(value) && value >= 0) {
+                  setFormState({ ...formState, campaignGoal: value });
+                }
+              }}
+            />
+          </FormControl>
+        </Form.Group>
+        <Button
+          type="submit"
+          className={styles.addButton}
+          data-testid="submitCampaignBtn"
+          disabled={isSubmitting}
+        >
+          {t(mode === 'edit' ? 'updateCampaign' : 'createCampaign')}
+        </Button>
+      </Form>
+    </BaseModal>
   );
 };
 
