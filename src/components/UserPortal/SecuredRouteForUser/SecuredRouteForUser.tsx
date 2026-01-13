@@ -22,10 +22,10 @@
  * - The `adminFor` value is retrieved from local storage using the key `'AdminFor'`.
  * - If `isLoggedIn` is `'TRUE'` and `adminFor` is `undefined`, the child routes are rendered.
  * - If `isLoggedIn` is not `'TRUE'`, the user is redirected to the home page.
- * - Requires `react-router-dom` for navigation and route handling.
+ * - Requires `react-router` for navigation and route handling.
  * - Requires `useLocalStorage` custom hook for local storage interaction.
  */
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { Navigate, Outlet } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -52,9 +52,9 @@ const SecuredRouteForUser = (): JSX.Element => {
   const isLoggedIn = getItem('IsLoggedIn');
   const adminFor = getItem('AdminFor');
 
-  const updateLastActive = () => {
+  const updateLastActive = useCallback(() => {
     lastActiveRef.current = Date.now();
-  };
+  }, []);
 
   useEffect(() => {
     // Only set up session timeout if user is logged in
@@ -100,7 +100,7 @@ const SecuredRouteForUser = (): JSX.Element => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [isLoggedIn, setItem, removeItem]);
+  }, [isLoggedIn, setItem, removeItem, t, updateLastActive]);
 
   // Conditional rendering based on authentication status and role
   return isLoggedIn === 'TRUE' ? (
