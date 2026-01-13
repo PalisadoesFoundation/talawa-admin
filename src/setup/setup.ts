@@ -10,12 +10,18 @@ import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
 import { backupEnvFile } from './backupEnvFile/backupEnvFile';
 
 // Helper to extract error message safely
-const getErrorMessage = (error: unknown): string => {
+export const getErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
     return error.message;
   }
   if (typeof error === 'string') {
     return error;
+  }
+  if (error === undefined) {
+    return 'undefined';
+  }
+  if (error === null) {
+    return 'null';
   }
   try {
     return JSON.stringify(error);
@@ -27,7 +33,9 @@ const getErrorMessage = (error: unknown): string => {
 // Ask and set up reCAPTCHA
 export const askAndSetRecaptcha = async (): Promise<void> => {
   try {
-    const answers = await inquirer.prompt<{ shouldUseRecaptcha: boolean }>([
+    const { shouldUseRecaptcha } = await inquirer.prompt<{
+      shouldUseRecaptcha: boolean;
+    }>([
       {
         type: 'confirm',
         name: 'shouldUseRecaptcha',
@@ -36,28 +44,30 @@ export const askAndSetRecaptcha = async (): Promise<void> => {
       },
     ]);
 
-    updateEnvFile('REACT_APP_USE_RECAPTCHA', answers.shouldUseRecaptcha ? 'YES' : 'NO');
+    updateEnvFile('REACT_APP_USE_RECAPTCHA', shouldUseRecaptcha ? 'YES' : 'NO');
 
-    if (answers.shouldUseRecaptcha) {
-      const siteKeyAnswers = await inquirer.prompt<{ recaptchaSiteKeyInput: string }>([
+    if (shouldUseRecaptcha) {
+      const { recaptchaSiteKeyInput } = await inquirer.prompt<{
+        recaptchaSiteKeyInput: string;
+      }>([
         {
           type: 'input',
           name: 'recaptchaSiteKeyInput',
           message: 'Enter your reCAPTCHA site key:',
-          validate: (input: string): boolean | string => {
+          validate: (input: string) => {
             try {
-              return (
-                validateRecaptcha(input) ||
-                'Invalid reCAPTCHA site key. Please try again.'
-              );
+              const isValid = validateRecaptcha(input);
+              if (isValid) {
+                return true;
+              }
+              return 'Invalid reCAPTCHA site key. Please try again.';
             } catch (err) {
               return `Validation error: ${getErrorMessage(err)}`;
             }
           },
         },
       ]);
-
-      updateEnvFile('REACT_APP_RECAPTCHA_SITE_KEY', siteKeyAnswers.recaptchaSiteKeyInput);
+      updateEnvFile('REACT_APP_RECAPTCHA_SITE_KEY', recaptchaSiteKeyInput);
     } else {
       updateEnvFile('REACT_APP_RECAPTCHA_SITE_KEY', '');
     }
@@ -69,15 +79,22 @@ export const askAndSetRecaptcha = async (): Promise<void> => {
 
 // Ask and set up logging errors in the console
 export const askAndSetLogErrors = async (): Promise<void> => {
-  const answers = await inquirer.prompt<{ shouldLogErrors: boolean }>({
-    type: 'confirm',
-    name: 'shouldLogErrors',
-    message:
-      'Would you like to log Compiletime and Runtime errors in the console?',
-    default: true,
-  });
+  try {
+    const { shouldLogErrors } = await inquirer.prompt<{
+      shouldLogErrors: boolean;
+    }>({
+      type: 'confirm',
+      name: 'shouldLogErrors',
+      message:
+        'Would you like to log Compiletime and Runtime errors in the console?',
+      default: true,
+    });
 
-  updateEnvFile('ALLOW_LOGS', answers.shouldLogErrors ? 'YES' : 'NO');
+    updateEnvFile('ALLOW_LOGS', shouldLogErrors ? 'YES' : 'NO');
+  } catch (error) {
+    console.error('Error setting up logging:', error);
+    throw new Error(`Failed to set up logging: ${getErrorMessage(error)}`);
+  }
 };
 
 // Main function to run the setup process
