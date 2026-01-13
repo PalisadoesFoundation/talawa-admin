@@ -100,7 +100,9 @@ describe('OrganizationCard [PR-2]', () => {
       });
     });
 
-    expect(NotificationToast.success).toHaveBeenCalled();
+    expect(NotificationToast.success).toHaveBeenCalledWith(
+      i18nForTest.t('organizationCard.join_success'),
+    );
   });
 
   it('calls mutation and shows success toast on withdraw click', async () => {
@@ -122,7 +124,9 @@ describe('OrganizationCard [PR-2]', () => {
       });
     });
 
-    expect(NotificationToast.success).toHaveBeenCalled();
+    expect(NotificationToast.success).toHaveBeenCalledWith(
+      i18nForTest.t('organizationCard.withdraw_success'),
+    );
   });
 
   it('shows error toast when withdraw mutation fails', async () => {

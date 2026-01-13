@@ -1,4 +1,4 @@
-[**talawa-admin**](../README.md)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [SecuredRouteForUser.tsx:42](https://github.com/rohanshrma222/talawa-admin/blob/052644e7a17565c7c82b7cc6276a48fb307339e1/src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx#L42)
+Defined in: [src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx:42](https://github.com/rohanshrma222/talawa-admin/blob/9a5c750bca9f4ebc84dc1c79d6dcd08b32520ea5/src/components/UserPortal/SecuredRouteForUser/SecuredRouteForUser.tsx#L42)
 
 ## Returns
 

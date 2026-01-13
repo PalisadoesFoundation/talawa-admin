@@ -1,6 +1,9 @@
 {
   "securedRouteForUser": {
-    "sessionExpired": "Por favor, vuelva a iniciar sesión ya que la sesión ha expirado"
+    "sessionExpired": "Por favor, inicie sesión nuevamente; su sesión ha expirado."
+  },
+  "securedRoute": {
+    "sessionExpired": "Por favor, inicie sesión nuevamente; su sesión ha expirado."
   },
   "ends": "Finaliza",
   "occurrences": "ocurrencias",
@@ -2151,9 +2154,6 @@
   },
   "contact": {
     "card_aria": "Tarjeta de contacto"
-  },
-  "securedRoute": {
-    "sessionExpired": "Por favor, vuelva a iniciar sesión ya que la sesión ha expirado"
   },
   "common": {
     "signOut": "Cerrar sesión",
