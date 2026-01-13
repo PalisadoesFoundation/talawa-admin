@@ -12,8 +12,8 @@ Renders a dropdown for selecting recurrence patterns.
 
 ## Param
 
-Component props
+Component props from InterfaceRecurrenceDropdownProps
 
 ## Returns
 
-The recurrence dropdown JSX
+JSX.Element - The recurrence dropdown component

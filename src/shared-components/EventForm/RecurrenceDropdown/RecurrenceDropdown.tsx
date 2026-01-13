@@ -10,8 +10,8 @@ import type { InterfaceRecurrenceDropdownProps } from 'types/shared-components/R
 
 /**
  * Renders a dropdown for selecting recurrence patterns.
- * @param props - Component props
- * @returns The recurrence dropdown JSX
+ * @param props - Component props from InterfaceRecurrenceDropdownProps
+ * @returns JSX.Element - The recurrence dropdown component
  */
 const RecurrenceDropdown: React.FC<InterfaceRecurrenceDropdownProps> = ({
   recurrenceOptions,
@@ -22,30 +22,28 @@ const RecurrenceDropdown: React.FC<InterfaceRecurrenceDropdownProps> = ({
   t,
 }) => {
   return (
-    <div>
-      <Dropdown show={isOpen} onToggle={onToggle}>
-        <Dropdown.Toggle
-          variant="outline-secondary"
-          id="recurrence-dropdown"
-          data-testid="recurrenceDropdown"
-          className={`${styles.dropdown}`}
-          aria-label={t('recurring')}
-        >
-          {currentLabel}
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          {recurrenceOptions.map((option, index) => (
-            <Dropdown.Item
-              key={`recurrence-${index}`}
-              onClick={() => onSelect(option)}
-              data-testid={`recurrenceOption-${index}`}
-            >
-              {option.label}
-            </Dropdown.Item>
-          ))}
-        </Dropdown.Menu>
-      </Dropdown>
-    </div>
+    <Dropdown show={isOpen} onToggle={onToggle}>
+      <Dropdown.Toggle
+        variant="outline-secondary"
+        id="recurrence-dropdown"
+        data-testid="recurrenceDropdown"
+        className={`${styles.dropdown}`}
+        aria-label={t('recurring')}
+      >
+        {currentLabel}
+      </Dropdown.Toggle>
+      <Dropdown.Menu>
+        {recurrenceOptions.map((option, index) => (
+          <Dropdown.Item
+            key={JSON.stringify(option.value)}
+            onClick={() => onSelect(option)}
+            data-testid={`recurrenceOption-${index}`}
+          >
+            {option.label}
+          </Dropdown.Item>
+        ))}
+      </Dropdown.Menu>
+    </Dropdown>
   );
 };
 
