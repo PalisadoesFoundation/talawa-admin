@@ -35,7 +35,7 @@ const RecurrenceDropdown: React.FC<InterfaceRecurrenceDropdownProps> = ({
       <Dropdown.Menu>
         {recurrenceOptions.map((option, index) => (
           <Dropdown.Item
-            key={JSON.stringify(option.value)}
+            key={index}
             onClick={() => onSelect(option)}
             data-testid={`recurrenceOption-${index}`}
           >
