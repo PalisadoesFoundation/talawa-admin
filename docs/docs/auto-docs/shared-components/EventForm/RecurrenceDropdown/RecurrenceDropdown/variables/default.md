@@ -4,9 +4,9 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<[`InterfaceRecurrenceDropdownProps`](../interfaces/InterfaceRecurrenceDropdownProps.md)\>
+> `const` **default**: `React.FC`\<[`InterfaceRecurrenceDropdownProps`](../../../../../types/shared-components/RecurrenceDropdown/interface/interfaces/InterfaceRecurrenceDropdownProps.md)\>
 
-Defined in: [src/shared-components/EventForm/RecurrenceDropdown/RecurrenceDropdown.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EventForm/RecurrenceDropdown/RecurrenceDropdown.tsx#L29)
+Defined in: [src/shared-components/EventForm/RecurrenceDropdown/RecurrenceDropdown.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EventForm/RecurrenceDropdown/RecurrenceDropdown.tsx#L16)
 
 Renders a dropdown for selecting recurrence patterns.
 

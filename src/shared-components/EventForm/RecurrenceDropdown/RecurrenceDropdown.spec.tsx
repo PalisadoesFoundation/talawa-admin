@@ -2,8 +2,9 @@
  * Tests for RecurrenceDropdown sub-component.
  */
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import RecurrenceDropdown from './RecurrenceDropdown';
 import { Frequency } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceOption } from '../utils';
@@ -21,6 +22,10 @@ const mockOptions: InterfaceRecurrenceOption[] = [
 
 describe('RecurrenceDropdown', () => {
   beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
     vi.clearAllMocks();
   });
 
@@ -57,7 +62,8 @@ describe('RecurrenceDropdown', () => {
     expect(screen.getByTestId('recurrenceOption-2')).toBeInTheDocument();
   });
 
-  it('calls onToggle when dropdown toggle is clicked', () => {
+  it('calls onToggle when dropdown toggle is clicked', async () => {
+    const user = userEvent.setup();
     const onToggle = vi.fn();
     render(
       <RecurrenceDropdown
@@ -70,11 +76,12 @@ describe('RecurrenceDropdown', () => {
       />,
     );
 
-    fireEvent.click(screen.getByTestId('recurrenceDropdown'));
+    await user.click(screen.getByTestId('recurrenceDropdown'));
     expect(onToggle).toHaveBeenCalled();
   });
 
-  it('calls onSelect when an option is clicked', () => {
+  it('calls onSelect when an option is clicked', async () => {
+    const user = userEvent.setup();
     const onSelect = vi.fn();
     render(
       <RecurrenceDropdown
@@ -87,7 +94,7 @@ describe('RecurrenceDropdown', () => {
       />,
     );
 
-    fireEvent.click(screen.getByTestId('recurrenceOption-1'));
+    await user.click(screen.getByTestId('recurrenceOption-1'));
     expect(onSelect).toHaveBeenCalledWith(
       expect.objectContaining({ label: 'Daily' }),
     );

@@ -5,16 +5,7 @@
 // translation-check-keyPrefix: common
 import React from 'react';
 import { Form } from 'react-bootstrap';
-import type { EventVisibility } from '../utils';
-
-/**
- * Props for the VisibilitySelector component.
- */
-export interface InterfaceVisibilitySelectorProps {
-  visibility: EventVisibility;
-  setVisibility: (visibility: EventVisibility) => void;
-  tCommon: (key: string) => string;
-}
+import type { InterfaceVisibilitySelectorProps } from 'types/shared-components/VisibilitySelector/interface';
 
 /**
  * Renders a radio button group for selecting event visibility.

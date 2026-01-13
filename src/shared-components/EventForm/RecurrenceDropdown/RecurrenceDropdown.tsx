@@ -6,20 +6,7 @@
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
-import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
-import type { InterfaceRecurrenceOption } from '../utils';
-
-/**
- * Props for the RecurrenceDropdown component.
- */
-export interface InterfaceRecurrenceDropdownProps {
-  recurrenceOptions: InterfaceRecurrenceOption[];
-  currentLabel: string;
-  isOpen: boolean;
-  onToggle: (isOpen: boolean) => void;
-  onSelect: (option: InterfaceRecurrenceOption) => void;
-  t: (key: string) => string;
-}
+import type { InterfaceRecurrenceDropdownProps } from 'types/shared-components/RecurrenceDropdown/interface';
 
 /**
  * Renders a dropdown for selecting recurrence patterns.
@@ -50,15 +37,7 @@ const RecurrenceDropdown: React.FC<InterfaceRecurrenceDropdownProps> = ({
           {recurrenceOptions.map((option, index) => (
             <Dropdown.Item
               key={option.label}
-              onClick={() =>
-                onSelect({
-                  ...option,
-                  value: option.value as
-                    | InterfaceRecurrenceRule
-                    | 'custom'
-                    | null,
-                })
-              }
+              onClick={() => onSelect(option)}
               data-testid={`recurrenceOption-${index}`}
             >
               {option.label}

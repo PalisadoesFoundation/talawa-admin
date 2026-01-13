@@ -2,14 +2,19 @@
  * Tests for VisibilitySelector sub-component.
  */
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import VisibilitySelector from './VisibilitySelector';
 
 const mockTCommon = vi.fn((key: string) => key);
 
 describe('VisibilitySelector', () => {
   beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
     vi.clearAllMocks();
   });
 
@@ -65,7 +70,8 @@ describe('VisibilitySelector', () => {
     expect(screen.getByTestId('visibilityInviteRadio')).toBeChecked();
   });
 
-  it('calls setVisibility with PUBLIC when public radio is clicked', () => {
+  it('calls setVisibility with PUBLIC when public radio is clicked', async () => {
+    const user = userEvent.setup();
     const setVisibility = vi.fn();
     render(
       <VisibilitySelector
@@ -75,11 +81,12 @@ describe('VisibilitySelector', () => {
       />,
     );
 
-    fireEvent.click(screen.getByTestId('visibilityPublicRadio'));
+    await user.click(screen.getByTestId('visibilityPublicRadio'));
     expect(setVisibility).toHaveBeenCalledWith('PUBLIC');
   });
 
-  it('calls setVisibility with ORGANIZATION when org radio is clicked', () => {
+  it('calls setVisibility with ORGANIZATION when org radio is clicked', async () => {
+    const user = userEvent.setup();
     const setVisibility = vi.fn();
     render(
       <VisibilitySelector
@@ -89,11 +96,12 @@ describe('VisibilitySelector', () => {
       />,
     );
 
-    fireEvent.click(screen.getByTestId('visibilityOrgRadio'));
+    await user.click(screen.getByTestId('visibilityOrgRadio'));
     expect(setVisibility).toHaveBeenCalledWith('ORGANIZATION');
   });
 
-  it('calls setVisibility with INVITE_ONLY when invite radio is clicked', () => {
+  it('calls setVisibility with INVITE_ONLY when invite radio is clicked', async () => {
+    const user = userEvent.setup();
     const setVisibility = vi.fn();
     render(
       <VisibilitySelector
@@ -103,7 +111,7 @@ describe('VisibilitySelector', () => {
       />,
     );
 
-    fireEvent.click(screen.getByTestId('visibilityInviteRadio'));
+    await user.click(screen.getByTestId('visibilityInviteRadio'));
     expect(setVisibility).toHaveBeenCalledWith('INVITE_ONLY');
   });
 
@@ -118,7 +126,10 @@ describe('VisibilitySelector', () => {
 
     expect(mockTCommon).toHaveBeenCalledWith('eventVisibility');
     expect(mockTCommon).toHaveBeenCalledWith('publicEvent');
+    expect(mockTCommon).toHaveBeenCalledWith('publicEventDescription');
     expect(mockTCommon).toHaveBeenCalledWith('organizationEvent');
+    expect(mockTCommon).toHaveBeenCalledWith('organizationEventDescription');
     expect(mockTCommon).toHaveBeenCalledWith('inviteOnlyEvent');
+    expect(mockTCommon).toHaveBeenCalledWith('inviteOnlyEventDescription');
   });
 });
