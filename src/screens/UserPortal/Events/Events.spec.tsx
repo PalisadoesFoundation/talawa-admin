@@ -2053,7 +2053,7 @@ describe('Testing Events Screen [User Portal]', () => {
                     endAt: newStartDate
                       .add(1, 'day')
                       .add(2, 'hours')
-                      .toISOString(), // ADD THIS LINE
+                      .toISOString(),
                     location: '',
                     allDay: true,
                     isPublic: true,
