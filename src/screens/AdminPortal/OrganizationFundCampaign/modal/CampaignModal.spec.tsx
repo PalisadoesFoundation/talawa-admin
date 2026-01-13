@@ -179,7 +179,6 @@ const campaignProps: InterfaceCampaignModalProps[] = [
     isOpen: true,
     hide: vi.fn(),
     fundId: 'fundId',
-    orgId: 'orgId',
     campaign: {
       id: 'campaignId1',
       name: 'Campaign 1',
@@ -196,7 +195,6 @@ const campaignProps: InterfaceCampaignModalProps[] = [
     isOpen: true,
     hide: vi.fn(),
     fundId: 'fundId',
-    orgId: 'orgId',
     campaign: {
       id: 'campaignId1',
       name: 'Campaign 1',

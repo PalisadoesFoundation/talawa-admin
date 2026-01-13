@@ -13,9 +13,6 @@ export interface InterfaceCampaignModalProps {
   /** ID of the fund this campaign belongs to */
   fundId: string;
 
-  /** ID of the organization */
-  orgId: string;
-
   /** Campaign data for edit mode, null when creating a new campaign */
   campaign: InterfaceCampaignInfo | null;
 
