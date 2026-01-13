@@ -1,6 +1,7 @@
 export class PeoplePage {
   private readonly _peopleTabButton = '[data-cy="leftDrawerButton-People"]';
   private readonly _searchInput = '[data-testid="searchbtn"]';
+  private readonly _searchButton = '[data-testid="searchBtn"]';
   private readonly _tableRows = 'table tbody tr';
   private readonly _addMembersBtn = '[data-testid="addMembers"]';
   private readonly _existingUserToggle = '[data-testid="existingUser"]';
@@ -12,14 +13,6 @@ export class PeoplePage {
   visitPeoplePage(): void {
     cy.get(this._peopleTabButton).should('be.visible').click();
     cy.url().should('match', /\/orgpeople\/[a-f0-9-]+/);
-    // Wait for the table to load on initial page visit
-    cy.get('table', {
-      timeout: 40000,
-    }).should('exist');
-    // Wait for loading state to complete if present
-    cy.get('[data-testid="organization-people-loading"]', {
-      timeout: 40000,
-    }).should('not.exist');
   }
 
   searchMemberByName(name: string, timeout = 40000) {
@@ -27,8 +20,7 @@ export class PeoplePage {
       .should('be.visible')
       .clear()
       .type(name);
-    // Wait for debounce (SearchFilterBar has 300ms debounce by default)
-    cy.wait(500);
+    cy.get(this._searchButton, { timeout }).should('be.visible').click();
     return this;
   }
 
@@ -60,11 +52,6 @@ export class PeoplePage {
       .should('be.visible')
       .and('contain.text', 'Member added Successfully');
     cy.reload();
-    // Wait for table to reload after page refresh
-    cy.get('table', { timeout: 40000 }).should('exist');
-    cy.get('[data-testid="organization-people-loading"]', {
-      timeout: 40000,
-    }).should('not.exist');
     this.searchMemberByName(name, timeout);
     this.verifyMemberInList(name, timeout);
     return this;
@@ -73,12 +60,8 @@ export class PeoplePage {
   deleteMember(name: string, timeout = 40000) {
     this.searchMemberByName(name, timeout);
 
-    // Wait for loading state to disappear if present
-    cy.get('[data-testid="organization-people-loading"]').should('not.exist');
-
-    // Wait for search results to load and find the remove button
-    cy.get(this._tableRows, { timeout })
-      .contains(name)
+    // Wait for search to complete and find the remove button directly
+    cy.contains(this._tableRows, name, { timeout })
       .should('be.visible')
       .parents('tr')
       .within(() => {
@@ -105,8 +88,7 @@ export class PeoplePage {
 
   resetSearch(timeout = 40000) {
     cy.get(this._searchInput, { timeout }).should('be.visible').clear();
-    // Wait for debounce after clearing
-    cy.wait(500);
+    cy.get(this._searchButton, { timeout }).should('be.visible').click();
     return this;
   }
 }

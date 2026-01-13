@@ -1,18 +1,8 @@
 /**
  * Represents a card item component that displays information about an event, post, or membership request.
  *
- * @component
- * @param props - The properties for the `CardItem` component.
  *
- * @property {'Event' | 'Post' | 'MembershipRequest'} type - The type of the card item. Determines the layout and displayed information.
- * @property {string} title - The title of the card item. Displayed as the main heading, truncated to 25 characters if too long.
- * @property {string} [time] - The timestamp for posts, formatted as "MMM D, YYYY". Used when `type` is 'Post'.
- * @property {string} [startdate] - The start date of an event, formatted as "MMM D, YYYY". Used when `type` is 'Event'.
- * @property {string} [enddate] - The end date of an event, formatted as "MMM D, YYYY". Used when `type` is 'Event'.
- * @property {{ id: string | number; name: string }} [creator] - The creator of the card item. Displays the author's name if provided.
- * @property {string} [location] - The location of the event. Displays an icon and the location name if provided.
- *
- * @returns {JSX.Element} A styled card item component displaying the provided information.
+ * @returns JSX.Element - A styled card item component displaying the provided information.
  *
  * @example
  * ```tsx
@@ -36,7 +26,7 @@ import MarkerIcon from 'assets/svgs/cardItemLocation.svg?react';
 import DateIcon from 'assets/svgs/cardItemDate.svg?react';
 import dayjs from 'dayjs';
 import styles from 'style/app-fixed.module.css';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import DefaultImg from 'assets/images/defaultImg.png';
 
 export interface InterfaceCardItem {

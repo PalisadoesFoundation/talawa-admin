@@ -257,5 +257,6 @@
   "peopleTabTagName": "人员",
   "or": "或",
   "eventNotFound": "未找到 ID 为 {{id}} 的活动",
-  "required": "必填"
+  "required": "必填",
+  "imageNotFound": "未找到图片"
 }

@@ -20,10 +20,9 @@
  */
 
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 
 import UserPortalCard from 'components/UserPortal/UserPortalCard/UserPortalCard';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import type { InterfacePeopleCardProps } from 'types/UserPortal/PeopleCard/interface';
 
 import styles from './PeopleCard.module.css';
@@ -36,22 +35,15 @@ const PeopleCard: React.FC<InterfacePeopleCardProps> = ({
   role,
   sno,
 }) => {
-  const { t } = useTranslation();
-
-  const avatarAlt = t('people.avatar_alt', {
-    defaultValue: name,
-    name,
-  });
-
   const imageSlot = image ? (
     <img
       src={image}
-      alt={avatarAlt}
+      alt={name}
       className={styles.avatarImage}
       data-testid={`people-${id}-image`}
     />
   ) : (
-    <Avatar name={name} alt={avatarAlt} avatarStyle={styles.avatarImage} />
+    <Avatar name={name} alt={name} avatarStyle={styles.avatarImage} />
   );
 
   return (

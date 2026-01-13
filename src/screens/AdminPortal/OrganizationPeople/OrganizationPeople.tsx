@@ -58,7 +58,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { Button } from 'react-bootstrap';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import CursorPaginationManager from 'components/CursorPaginationManager/CursorPaginationManager';

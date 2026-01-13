@@ -57,7 +57,7 @@ import styles from 'style/app-fixed.module.css';
 import leaderboardStyles from './Leaderboard.module.css';
 
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
