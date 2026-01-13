@@ -255,5 +255,7 @@
   "peopleTabTagName": "लोग",
   "or": "या",
   "eventNotFound": "ईवेंट आईडी {{id}} के साथ नहीं मिला",
-  "required": "आवश्यक"
+  "required": "आवश्यक",
+  "imageNotFound": "छवि नहीं मिली",
+  "changeLanguage": "भाषा बदलें"
 }

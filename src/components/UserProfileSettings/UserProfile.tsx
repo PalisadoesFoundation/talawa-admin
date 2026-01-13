@@ -28,7 +28,7 @@
  * - `Avatar` component for displaying a placeholder profile picture.
  *
  */
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';

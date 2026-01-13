@@ -490,7 +490,9 @@
     "tagActions": "Tag Actions",
     "loadAssignedUsersError": "Error occurred while loading assigned users",
     "sortPeople": "Sort People",
-    "noTagsFound": "No tags found"
+    "noTagsFound": "No tags found",
+    "addMember": "Add Member",
+    "removeMember": "Remove Member"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
@@ -710,7 +712,8 @@
     "deleteAgendaItem": "Delete Agenda Item",
     "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
     "event": "Event",
-    "search": "Search"
+    "search": "Search",
+    "attachmentPreview": "Attachment preview"
   },
   "eventListCard": {
     "deleteEvent": "Delete Event",
@@ -1835,7 +1838,12 @@
   },
   "checkIn": {
     "errorCheckingIn": "Error checking in",
-    "checkedInSuccessfully": "Checked in successfully"
+    "checkedInSuccessfully": "Checked in successfully",
+    "searchAttendees": "Search Attendees",
+    "checkedIn": "Checked In",
+    "downloadTag": "Download Tag",
+    "checkIn": "Check In",
+    "eventCheckInManagement": "Event Check In Management"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",

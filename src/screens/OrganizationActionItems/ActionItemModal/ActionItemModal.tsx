@@ -8,9 +8,12 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import type { FormEvent, FC } from 'react';
 import styles from 'style/app-fixed.module.css';
-import DatePicker from 'shared-components/DatePicker';
+import DatePicker from 'shared-components/DatePicker/DatePicker';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+import ApplyToSelector from 'components/AdminPortal/ApplyToSelector/ApplyToSelector';
+import type { ApplyToType } from 'types/AdminPortal/ApplyToSelector/interface';
 
 import type {
   IActionItemCategoryInfo,
@@ -45,7 +48,6 @@ import {
   GET_EVENT_VOLUNTEER_GROUPS,
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'types/Volunteer/interface';
-import { BaseModal } from 'shared-components/BaseModal';
 
 const initializeFormState = (
   actionItem: IActionItemInfo | null,
@@ -93,7 +95,7 @@ const ItemModal: FC<IItemModalProps> = ({
     initializeFormState(actionItem),
   );
 
-  const [applyTo, setApplyTo] = useState<'series' | 'instance'>('instance');
+  const [applyTo, setApplyTo] = useState<ApplyToType>('instance');
 
   const {
     assignedAt,
@@ -164,13 +166,11 @@ const ItemModal: FC<IItemModalProps> = ({
   }, [volunteerGroupsData, applyTo]);
 
   // Determine if assignment type chips should be disabled
-  const isVolunteerChipDisabled = useMemo(() => {
-    return editMode && actionItem?.volunteerGroup?.id;
-  }, [editMode, actionItem]);
+  const isVolunteerChipDisabled =
+    editMode && Boolean(actionItem?.volunteerGroup?.id);
 
-  const isVolunteerGroupChipDisabled = useMemo(() => {
-    return editMode && actionItem?.volunteer?.id;
-  }, [editMode, actionItem]);
+  const isVolunteerGroupChipDisabled =
+    editMode && Boolean(actionItem?.volunteer?.id);
 
   const actionItemCategories = useMemo(
     () => actionItemCategoriesData?.actionCategoriesByOrganization || [],
@@ -434,54 +434,18 @@ const ItemModal: FC<IItemModalProps> = ({
     <BaseModal
       show={isOpen}
       onHide={hide}
+      className={styles.itemModal}
       title={editMode ? t('updateActionItem') : t('createActionItem')}
-      showCloseButton={true}
-      dataTestId="itemModal"
+      dataTestId="actionItemModal"
     >
-      <Form onSubmitCapture={getSubmitHandler()} className="p-2">
-        {isRecurring && !editMode ? (
-          <Form.Group className="mb-3">
-            <Form.Label>{t('applyTo')}</Form.Label>
-            <Form.Check
-              type="radio"
-              label={t('entireSeries')}
-              name="applyTo"
-              id="applyToSeries"
-              checked={applyTo === 'series'}
-              onChange={() => setApplyTo('series')}
-            />
-            <Form.Check
-              type="radio"
-              label={t('thisEventOnly')}
-              name="applyTo"
-              id="applyToInstance"
-              checked={applyTo === 'instance'}
-              onChange={() => setApplyTo('instance')}
-            />
-          </Form.Group>
-        ) : null}
+      <Form onSubmit={getSubmitHandler()} className="p-2">
+        {isRecurring && !editMode && (
+          <ApplyToSelector applyTo={applyTo} onChange={setApplyTo} />
+        )}
         {editMode &&
           actionItem?.isTemplate &&
           !actionItem.isInstanceException && (
-            <Form.Group className="mb-3">
-              <Form.Label>{t('applyTo')}</Form.Label>
-              <Form.Check
-                type="radio"
-                label={t('entireSeries')}
-                name="applyTo"
-                id="applyToSeries"
-                checked={applyTo === 'series'}
-                onChange={() => setApplyTo('series')}
-              />
-              <Form.Check
-                type="radio"
-                label={t('thisEventOnly')}
-                name="applyTo"
-                id="applyToInstance"
-                checked={applyTo === 'instance'}
-                onChange={() => setApplyTo('instance')}
-              />
-            </Form.Group>
+            <ApplyToSelector applyTo={applyTo} onChange={setApplyTo} />
           )}
         <Form.Group className="d-flex gap-3 mb-3">
           <Autocomplete
@@ -528,6 +492,7 @@ const ItemModal: FC<IItemModalProps> = ({
                     }
                   }}
                   clickable={!isVolunteerChipDisabled}
+                  aria-disabled={isVolunteerChipDisabled}
                   sx={{
                     opacity: isVolunteerChipDisabled ? 0.6 : 1,
                     cursor: isVolunteerChipDisabled ? 'not-allowed' : 'pointer',
@@ -550,6 +515,7 @@ const ItemModal: FC<IItemModalProps> = ({
                     }
                   }}
                   clickable={!isVolunteerGroupChipDisabled}
+                  aria-disabled={isVolunteerGroupChipDisabled}
                   sx={{
                     opacity: isVolunteerGroupChipDisabled ? 0.6 : 1,
                     cursor: isVolunteerGroupChipDisabled
@@ -628,12 +594,12 @@ const ItemModal: FC<IItemModalProps> = ({
 
             <Form.Group className="d-flex gap-3 mx-auto mb-3">
               <DatePicker
-                data-testid="assignmentDatePicker"
                 format="DD/MM/YYYY"
                 label={t('assignmentDate')}
                 className={styles.noOutline}
                 value={dayjs(assignedAt)}
                 disabled={editMode}
+                data-testid="assignmentDate"
                 onChange={(date: Dayjs | null): void => {
                   if (date && !editMode) {
                     handleFormChange('assignedAt', date.toDate());

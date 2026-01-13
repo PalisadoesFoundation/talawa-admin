@@ -1,4 +1,4 @@
-import type { Organization } from 'types/Organization/type';
+import type { Organization } from 'types/AdminPortal/Organization/type';
 // types/user.ts
 
 export type User = {

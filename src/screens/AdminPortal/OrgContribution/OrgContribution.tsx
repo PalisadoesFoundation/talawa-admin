@@ -31,8 +31,8 @@ import React, { useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
-import ContriStats from 'components/ContriStats/ContriStats';
-import OrgContriCards from 'components/OrgContriCards/OrgContriCards';
+import ContriStats from 'components/AdminPortal/ContriStats/ContriStats';
+import OrgContriCards from 'components/AdminPortal/OrgContriCards/OrgContriCards';
 import styles from './OrgContribution.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 

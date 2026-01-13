@@ -25,7 +25,7 @@ import {
   type GridCellParams,
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import dayjs from 'dayjs';
 import { currencySymbols } from 'utils/currency';
 import PledgeDeleteModal from 'screens/AdminPortal/FundCampaignPledge/deleteModal/PledgeDeleteModal';

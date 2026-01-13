@@ -45,6 +45,20 @@ export type NotificationToastMessage =
   | InterfaceNotificationToastI18nMessage;
 
 /**
+ * interface for the messages
+ */
+export interface InterfacePromiseMessages {
+  pending: NotificationToastMessage;
+  success: NotificationToastMessage;
+  error: NotificationToastMessage;
+}
+
+/**
+ * Promisified function type
+ */
+export type PromiseFunction = () => Promise<void>;
+
+/**
  * Reusable helper API exposed by `NotificationToast`.
  */
 export interface InterfaceNotificationToastHelpers {
@@ -72,6 +86,20 @@ export interface InterfaceNotificationToastHelpers {
    * Dismiss all active toasts.
    */
   dismiss: () => void;
+
+  /**
+   * Promisified toast
+   */
+
+  promise: (
+    promisifiedFunction: () => Promise<void>,
+    messages: {
+      pending: NotificationToastMessage;
+      success: NotificationToastMessage;
+      error: NotificationToastMessage;
+    },
+    options?: ToastOptions,
+  ) => Promise<void>;
 }
 
 /**
