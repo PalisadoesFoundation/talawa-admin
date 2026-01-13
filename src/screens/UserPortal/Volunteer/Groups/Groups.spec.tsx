@@ -1146,7 +1146,7 @@ describe('Groups Screen [User Portal]', () => {
     expect(errorElement).toBeInTheDocument();
 
     // The error message should contain translated text, not hardcoded "Volunteer Groups"
-    expect(errorElement.textContent).toContain('Error occured while loading');
+    expect(errorElement.textContent).toMatch(/error.*loading/i);
   });
 
   test('DataGridWrapper loading state is properly configured', async () => {

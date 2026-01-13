@@ -84,13 +84,10 @@ function Groups(): JSX.Element {
 
   const userId = getItem('userId');
 
-  // Early return after all hooks
-  if (!orgId || !userId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   // Build where variables conditionally (omit if empty string)
   const whereVariables = useMemo(() => {
+    if (!userId || !orgId) return {};
+
     const vars: Record<string, unknown> = {
       userId,
       orgId,
@@ -122,6 +119,7 @@ function Groups(): JSX.Element {
       where: whereVariables,
       orderBy: sortBy,
     },
+    skip: !userId || !orgId,
   });
 
   const handleModalClick = useCallback(
@@ -145,8 +143,16 @@ function Groups(): JSX.Element {
     [groupsData],
   );
 
-  const closeModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: false }));
+  const closeModal = useCallback(
+    (modal: ModalState): void =>
+      setModalState((prevState) => ({ ...prevState, [modal]: false })),
+    [],
+  );
+
+  // Early return after all hooks
+  if (!orgId || !userId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   if (groupsError) {
     return (
