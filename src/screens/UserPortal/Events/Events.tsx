@@ -395,6 +395,7 @@ export default function Events(): JSX.Element {
         currentYear={calendarYear}
       />
       {/* </div> */}
+<<<<<<< HEAD
       <BaseModal
         show={createEventModal}
         onHide={toggleCreateEventModal}
@@ -415,6 +416,193 @@ export default function Events(): JSX.Element {
           showRecurrenceToggle
         />
       </BaseModal>
+=======
+      <Modal show={createEventModal} onHide={toggleCreateEventModal}>
+        <Modal.Header>
+          <p className={styles.titlemodalOrganizationEvents}>
+            {t('eventDetails')}
+          </p>
+          <Button
+            variant="danger"
+            onClick={toggleCreateEventModal}
+            data-testid="createEventModalCloseBtn"
+          >
+            <i className="fa fa-times"></i>
+          </Button>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmitCapture={createEvent}>
+            <label htmlFor="eventtitle">{t('eventName')}</label>
+            <Form.Control
+              type="title"
+              id="eventitle"
+              placeholder={t('enterName')}
+              autoComplete="off"
+              required
+              value={eventTitle}
+              className={styles.inputField}
+              onChange={handleEventTitleChange}
+              data-testid="eventTitleInput"
+            />
+            <label htmlFor="eventdescrip">{tCommon('description')}</label>
+            <Form.Control
+              type="eventdescrip"
+              id="eventdescrip"
+              placeholder={t('enterDescription')}
+              autoComplete="off"
+              required
+              value={eventDescription}
+              className={styles.inputField}
+              onChange={handleEventDescriptionChange}
+              data-testid="eventDescriptionInput"
+            />
+            <label htmlFor="eventLocation">{tCommon('location')}</label>
+            <Form.Control
+              type="text"
+              id="eventLocation"
+              placeholder={tCommon('enterLocation')}
+              autoComplete="off"
+              required
+              value={eventLocation}
+              className={styles.inputField}
+              onChange={handleEventLocationChange}
+              data-testid="eventLocationInput"
+            />
+            <div className={styles.datedivEvents}>
+              <div>
+                <DatePicker
+                  label={tCommon('startDate')}
+                  className={styles.dateboxEvents}
+                  value={dayjs(startAt)}
+                  onChange={(date: Dayjs | null): void => {
+                    if (date) {
+                      setStartAt(date?.toDate());
+                      setEndAt(date?.toDate());
+                    }
+                  }}
+                  data-testid="eventStartAt"
+                />
+              </div>
+              <div>
+                <DatePicker
+                  label={tCommon('endDate')}
+                  className={styles.dateboxEvents}
+                  value={dayjs(endAt)}
+                  onChange={(date: Dayjs | null): void => {
+                    if (date) {
+                      setEndAt(date?.toDate());
+                    }
+                  }}
+                  minDate={dayjs(startAt)}
+                  data-testid="eventEndAt"
+                />
+              </div>
+            </div>
+            <div className={styles.datediv}>
+              <div className="mr-3">
+                <TimePicker
+                  label={tCommon('startTime')}
+                  className={styles.dateboxEvents}
+                  timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
+                  value={timeToDayJs(startTime)}
+                  onChange={(time): void => {
+                    if (time) {
+                      setStartTime(time?.format('HH:mm:ss'));
+                      setEndTime(time?.format('HH:mm:ss'));
+                    }
+                  }}
+                  disabled={isAllDay}
+                />
+              </div>
+              <div>
+                <TimePicker
+                  label={tCommon('endTime')}
+                  className={styles.dateboxEvents}
+                  timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
+                  value={timeToDayJs(endTime)}
+                  onChange={(time): void => {
+                    if (time) {
+                      setEndTime(time?.format('HH:mm:ss'));
+                    }
+                  }}
+                  minTime={timeToDayJs(startTime)}
+                  disabled={isAllDay}
+                />
+              </div>
+            </div>
+            <div className={styles.checkboxdivEvents}>
+              <div className={styles.dispflexEvents}>
+                <label htmlFor="allday">{t('allDay')}?</label>
+                <Form.Switch
+                  className={`me-4 ${styles.switch}`}
+                  id="allday"
+                  type="checkbox"
+                  checked={isAllDay}
+                  data-testid="allDayEventCheck"
+                  onChange={(): void => setIsAllDay(!isAllDay)}
+                />
+              </div>
+              <div className={styles.dispflexEvents}>
+                <label htmlFor="recurring">{t('recurring')}:</label>
+                <Form.Switch
+                  className={`me-4 ${styles.switch}`}
+                  id="recurring"
+                  type="checkbox"
+                  checked={isRecurring}
+                  data-testid="recurringEventCheck"
+                  onChange={(): void => setIsRecurring(!isRecurring)}
+                />
+              </div>
+            </div>
+            <div className={styles.checkboxdivEvents}>
+              <div className={styles.dispflexEvents}>
+                <label htmlFor="ispublic">{t('publicEvent')}?</label>
+                <Form.Switch
+                  className={`me-4 ${styles.switch}`}
+                  id="ispublic"
+                  type="checkbox"
+                  checked={isPublic}
+                  data-testid="publicEventCheck"
+                  onChange={(): void => setIsPublic(!isPublic)}
+                />
+              </div>
+              <div className={styles.dispflexEvents}>
+                <label htmlFor="registrable">{t('registerable')}?</label>
+                <Form.Switch
+                  className={`me-4 ${styles.switch}`}
+                  id="registrable"
+                  type="checkbox"
+                  checked={isRegisterable}
+                  data-testid="registerableEventCheck"
+                  onChange={(): void => setIsRegisterable(!isRegisterable)}
+                />
+              </div>
+            </div>
+            <div>
+              <div className={styles.dispflex}>
+                <label htmlFor="createChat">{t('createChat')}?</label>
+                <Form.Switch
+                  className={`me-4 ${styles.switch}`}
+                  id="chat"
+                  type="checkbox"
+                  data-testid="createChatCheck"
+                  checked={createChatCheck}
+                  onChange={(): void => setCreateChatCheck(!createChatCheck)}
+                />
+              </div>
+            </div>
+            <Button
+              type="submit"
+              className={styles.addButton}
+              value="createevent"
+              data-testid="createEventBtn"
+            >
+              {t('createEvent')}
+            </Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
+>>>>>>> a6ae6c4b3a0 (fix(events): show proper event title label for members)
 
       {/* </div> */}
     </>
