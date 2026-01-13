@@ -6,9 +6,20 @@
 .input {
   flex: 1;
   position: relative;
-  padding-right: var(--space-26);
-  padding-inline-end: var(--space-26);
-  width: var(--space-24);
+  width: 100%;
+  max-width: 100%;
+  padding-right: 0;
+  padding-inline-end: 0;
+}
+
+.input :global(.searchBarContainer) {
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.input :global(.searchBarInputWrapper) {
+  min-width: 0;
 }
 
 .input:active {

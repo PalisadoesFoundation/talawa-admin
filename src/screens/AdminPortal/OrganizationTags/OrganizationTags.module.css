@@ -217,28 +217,6 @@
   margin-top: 0;
 }
 
-@media (max-width: 520px) {
-  .btnsContainer {
-    margin-bottom: 0;
-  }
-
-  .btnsContainer .btnsBlock {
-    display: block;
-    margin-top: var(--space-5);
-    margin-right: 0;
-  }
-
-  .btnsContainer .btnsBlock div {
-    flex: 1;
-  }
-
-  .btnsContainer .btnsBlock button {
-    margin-bottom: var(--space-5);
-    margin-right: 0;
-    width: 100%;
-  }
-}
-
 @media (max-width: 1020px) {
   .btnsContainer {
     flex-direction: column;
@@ -266,5 +244,27 @@
 
   .btnsContainer .btnsBlock div button {
     margin-right: var(--space-7);
+  }
+}
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin-top: var(--space-5);
+    margin-right: 0;
+  }
+
+  .btnsContainer .btnsBlock div {
+    flex: 1;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-bottom: var(--space-5);
+    margin-right: 0;
+    width: 100%;
   }
 }
