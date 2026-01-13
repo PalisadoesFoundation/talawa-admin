@@ -60,15 +60,15 @@ export class PeoplePage {
   deleteMember(name: string, timeout = 40000) {
     this.searchMemberByName(name, timeout);
 
-    // Wait for search to complete and find the remove button directly
-    cy.contains(this._tableRows, name, { timeout })
-      .should('be.visible')
+    // Wait for search to complete - break the chain to avoid detachment issues
+    cy.contains(this._tableRows, name, { timeout }).should('be.visible');
+
+    // Re-query to find the row and click remove button
+    cy.contains(this._tableRows, name)
       .parents('tr')
-      .within(() => {
-        cy.get('button[data-testid^="removeMemberModalBtn-"]')
-          .should('be.visible')
-          .click();
-      });
+      .find('button[data-testid^="removeMemberModalBtn-"]')
+      .should('be.visible')
+      .click();
 
     // Click the confirm remove button in the modal footer
     cy.get('[data-testid="remove-member-modal"]', { timeout })
