@@ -4,8 +4,7 @@
  * This component allows admins to view and manage transaction history for an organization.
  * It includes features such as transaction filtering, sorting, and detailed transaction information.
  *
- * @component
- * @returns {JSX.Element} The OrganizationTransactions component.
+ * @returns The OrganizationTransactions component.
  *
  *
  * @example
@@ -16,7 +15,7 @@
  */
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from './OrganizationTransactions.module.css';
 import { PluginInjector } from 'plugin';
 
 export default function OrganizationTransactions(): JSX.Element {

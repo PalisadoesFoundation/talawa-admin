@@ -12,6 +12,13 @@ import {
   ViewModal,
 } from './index';
 
+/**
+ * Helper to render components with i18n support.
+ *
+ * Note: When using the returned `rerender` function, you must manually wrap
+ * the component with I18nextProvider again, as RTL's rerender does not
+ * preserve the original wrapper.
+ */
 const renderWithI18n = (component: React.ReactElement) => {
   return render(
     <I18nextProvider i18n={i18nForTest}>{component}</I18nextProvider>,
@@ -511,14 +518,16 @@ describe('CreateModal', () => {
       );
 
       rerender(
-        <CreateModal
-          open={true}
-          title="Create Item"
-          onClose={mockOnClose}
-          onSubmit={mockOnSubmit}
-        >
-          <Form.Control type="text" data-testid="first-input" />
-        </CreateModal>,
+        <I18nextProvider i18n={i18nForTest}>
+          <CreateModal
+            open={true}
+            title="Create Item"
+            onClose={mockOnClose}
+            onSubmit={mockOnSubmit}
+          >
+            <Form.Control type="text" data-testid="first-input" />
+          </CreateModal>
+        </I18nextProvider>,
       );
 
       await waitFor(
@@ -547,18 +556,20 @@ describe('CreateModal', () => {
       );
 
       rerender(
-        <CreateModal
-          open={true}
-          title="Create Item"
-          onClose={mockOnClose}
-          onSubmit={mockOnSubmit}
-        >
-          <>
-            <Form.Control type="hidden" />
-            <Form.Control type="text" disabled />
-            <Form.Control type="text" data-testid="visible-input" />
-          </>
-        </CreateModal>,
+        <I18nextProvider i18n={i18nForTest}>
+          <CreateModal
+            open={true}
+            title="Create Item"
+            onClose={mockOnClose}
+            onSubmit={mockOnSubmit}
+          >
+            <>
+              <Form.Control type="hidden" />
+              <Form.Control type="text" disabled />
+              <Form.Control type="text" data-testid="visible-input" />
+            </>
+          </CreateModal>
+        </I18nextProvider>,
       );
 
       await waitFor(

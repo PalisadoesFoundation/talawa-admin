@@ -5,6 +5,7 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type { InterfaceCRUDModalTemplateProps } from 'types/shared-components/CRUDModalTemplate/interface';
 import styles from './CRUDModalTemplate.module.css';
 import globalStyles from 'style/app-fixed.module.css';
+import { useTranslation } from 'react-i18next';
 
 /**
  * Base CRUD Modal Template Component
@@ -45,8 +46,8 @@ export const CRUDModalTemplate: React.FC<InterfaceCRUDModalTemplateProps> = ({
   onClose,
   children,
   onPrimary,
-  primaryText = 'Save',
-  secondaryText = 'Cancel',
+  primaryText,
+  secondaryText,
   loading = false,
   error,
   size,
@@ -59,6 +60,10 @@ export const CRUDModalTemplate: React.FC<InterfaceCRUDModalTemplateProps> = ({
   customFooter,
   showFooter = true,
 }) => {
+  const { t: tCommon } = useTranslation('common');
+  const resolvedPrimaryText = primaryText ?? tCommon('save');
+  const resolvedSecondaryText = secondaryText ?? tCommon('cancel');
+
   const isOpen = open ?? false;
 
   const handleEscapeKey = useCallback(
@@ -95,7 +100,7 @@ export const CRUDModalTemplate: React.FC<InterfaceCRUDModalTemplateProps> = ({
             disabled={loading}
             data-testid="modal-secondary-btn"
           >
-            {secondaryText}
+            {resolvedSecondaryText}
           </Button>
         )}
         {onPrimary && (
@@ -112,7 +117,7 @@ export const CRUDModalTemplate: React.FC<InterfaceCRUDModalTemplateProps> = ({
             }
             data-testid="modal-primary-btn"
           >
-            {primaryText}
+            {resolvedPrimaryText}
           </Button>
         )}
       </>

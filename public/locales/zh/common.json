@@ -258,5 +258,6 @@
   "required": "必填",
   "deleteConfirmation": "您确定要删除此项吗？此操作无法撤消。",
   "deleteEntityConfirmation": "您确定要删除 {{entityName}} 吗？此操作无法撤消。",
-  "update": "更新"
+  "update": "更新",
+  "imageNotFound": "未找到图片"
 }

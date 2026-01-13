@@ -81,7 +81,7 @@ export const DeleteModal: React.FC<InterfaceDeleteModalProps> = ({
 
   const handleDelete = () => {
     if (!loading) {
-      onDelete();
+      return onDelete();
     }
   };
 
@@ -122,7 +122,7 @@ export const DeleteModal: React.FC<InterfaceDeleteModalProps> = ({
     >
       {showWarning && (
         <div className={styles.deleteWarningIcon}>
-          <i className="fa fa-exclamation-triangle"></i>
+          <i className="fa fa-exclamation-triangle" aria-hidden="true"></i>
         </div>
       )}
 

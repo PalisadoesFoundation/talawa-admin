@@ -257,5 +257,6 @@
   "required": "Obligatorio",
   "deleteConfirmation": "¿Está seguro de que desea eliminar este elemento? Esta acción no se puede deshacer.",
   "deleteEntityConfirmation": "¿Está seguro de que desea eliminar {{entityName}}? Esta acción no se puede deshacer.",
-  "update": "Actualizar"
+  "update": "Actualizar",
+  "imageNotFound": "Imagen no encontrada"
 }

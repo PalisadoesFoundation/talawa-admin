@@ -1,11 +1,12 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 dayjs.extend(utc);
+dayjs.extend(customParseFormat);
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
 import {
   cleanup,
@@ -18,7 +19,6 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -30,6 +30,49 @@ import { UPDATE_CAMPAIGN_MUTATION } from 'GraphQl/Mutations/CampaignMutation';
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: { success: vi.fn(), error: vi.fn() },
+}));
+
+vi.mock('shared-components/DatePicker', () => ({
+  __esModule: true,
+  default: ({
+    label,
+    value,
+    onChange,
+    minDate,
+    format,
+    'data-testid': dataTestId,
+  }: {
+    label?: string;
+    value?: dayjs.Dayjs | null;
+    onChange: (date: dayjs.Dayjs | null) => void;
+    minDate?: dayjs.Dayjs;
+    format?: string;
+    'data-testid'?: string;
+  }) => {
+    const displayFormat = format ?? 'MM/DD/YYYY';
+    return (
+      <div data-testid={`${dataTestId || label}-wrapper`}>
+        {label ? <label htmlFor={dataTestId || label}>{label}</label> : null}
+        <input
+          data-testid={dataTestId || label}
+          id={dataTestId || label}
+          value={value ? value.format(displayFormat) : ''}
+          onChange={(e) => {
+            const nextValue = e.target.value;
+            const nextDate = nextValue ? dayjs(nextValue, displayFormat) : null;
+            if (
+              !minDate ||
+              !nextDate ||
+              nextDate.isAfter(minDate, 'day') ||
+              nextDate.isSame(minDate, 'day')
+            ) {
+              onChange(nextDate);
+            }
+          }}
+        />
+      </div>
+    );
+  },
 }));
 
 vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
@@ -90,11 +133,9 @@ const renderCampaignModal = (
     <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <I18nextProvider i18n={i18nForTest}>
-              <CampaignModal {...props} />
-            </I18nextProvider>
-          </LocalizationProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <CampaignModal {...props} />
+          </I18nextProvider>
         </BrowserRouter>
       </Provider>
     </MockedProvider>,
@@ -195,8 +236,17 @@ const allFieldsMockLink = new StaticMockLink(UPDATE_ALL_FIELDS_MOCK);
 const noFieldsMockLink = new StaticMockLink(UPDATE_NO_FIELDS_MOCK);
 const currencyOnlyMockLink = new StaticMockLink(UPDATE_CURRENCY_ONLY_MOCK);
 
-const getPickerInputByLabel = (label: string) =>
-  screen.getByLabelText(label, { selector: 'input' }) as HTMLInputElement;
+const getPickerInputByLabel = (label: string) => {
+  if (label === 'Start Date') {
+    return screen.getByTestId('campaignStartDate') as HTMLInputElement;
+  }
+  if (label === 'End Date') {
+    return screen.getByTestId('campaignEndDate') as HTMLInputElement;
+  }
+  return screen.getByLabelText(label, {
+    selector: 'input',
+  }) as HTMLInputElement;
+};
 
 describe('CampaignModal', () => {
   afterEach(() => {
@@ -255,7 +305,10 @@ describe('CampaignModal', () => {
   it('should update End Date when a new date is selected', async () => {
     renderCampaignModal(link1, campaignProps[1]);
     const endDateInput = getPickerInputByLabel('End Date');
-    const testDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY');
+    const testDate = dayjs
+      .utc(campaignProps[1].campaign?.startAt)
+      .add(1, 'month')
+      .format('DD/MM/YYYY');
     fireEvent.change(endDateInput, { target: { value: testDate } });
     expect(endDateInput).toHaveValue(testDate);
   });
@@ -506,6 +559,7 @@ describe('CampaignModal', () => {
       .add(1, 'month')
       .format('DD/MM/YYYY');
     fireEvent.change(startDateInput, { target: { value: testDate } });
+    fireEvent.blur(startDateInput);
 
     // Verify that end date was automatically updated to match the new start date
     await waitFor(() => {
