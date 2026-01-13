@@ -78,20 +78,7 @@ function eventHeader({
             className={styles.dropdown}
           />
         </div>
-        <div className={styles.btnsBlock}>
-          <SortingButton
-            title={t('eventType')}
-            sortingOptions={[
-              { label: 'Events', value: 'Events' },
-              { label: 'Workshops', value: 'Workshops' },
-            ]}
-            selectedOption={t('eventType')}
-            onSortChange={(value) => console.log(`Selected: ${value}`)}
-            dataTestIdPrefix="eventType"
-            className={styles.dropdown}
-            buttonLabel={t('eventType')}
-          />
-        </div>
+
         <div className={styles.btnsBlock}>
           <div className={styles.selectTypeEventHeader}>
             <Button
