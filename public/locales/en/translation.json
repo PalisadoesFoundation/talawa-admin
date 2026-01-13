@@ -1960,6 +1960,8 @@
     "earliest": "Earliest",
     "requestAccepted": "Request accepted successfully",
     "requestRejected": "Request rejected successfully",
+    "acceptRequest": "Accept Request",
+    "rejectRequest": "Reject Request",
     "details": "Details",
     "manageGroup": "Manage Group",
     "mostVolunteers": "Most Volunteers",
@@ -2152,6 +2154,9 @@
     "card_aria": "Contact card"
   },
   "securedRoute": {
+    "sessionExpired": "Kindly relogin as session has expired"
+  },
+  "securedRouteForUser": {
     "sessionExpired": "Kindly relogin as session has expired"
   },
   "common": {

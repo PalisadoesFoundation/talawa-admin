@@ -1,4 +1,3 @@
-// translation-check-keyPrefix: fundCampaign
 import DatePicker from 'shared-components/DatePicker';
 import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
@@ -219,6 +218,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
           >
             <FormControl fullWidth>
               <TextField
+                id="campaignName"
                 variant="outlined"
                 className={`${styles.noOutline} w-100`}
                 value={campaignName}
@@ -244,6 +244,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
             label={tCommon('startDate')}
             value={dayjs(campaignStartDate)}
             className={styles.noOutline}
+            data-testid="campaignStartDate"
             onChange={(date: Dayjs | null): void => {
               if (date) {
                 setFormState({
@@ -264,6 +265,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
             label={tCommon('endDate')}
             className={styles.noOutline}
             value={dayjs(campaignEndDate)}
+            data-testid="campaignEndDate"
             onChange={(date: Dayjs | null): void => {
               if (date) {
                 setFormState({

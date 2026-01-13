@@ -1977,6 +1977,8 @@
     "earliest": "प्रारंभिक",
     "requestAccepted": "अनुरोध सफलतापूर्वक स्वीकृत",
     "requestRejected": "अनुरोध सफलतापूर्वक अस्वीकृत",
+    "acceptRequest": "अनुरोध स्वीकार करें",
+    "rejectRequest": "अनुरोध अस्वीकार करें",
     "details": "विवरण",
     "manageGroup": "समूह प्रबंधित करें",
     "mostVolunteers": "सबसे अधिक स्वयंसेवक",
@@ -2152,6 +2154,9 @@
     "card_aria": "संपर्क कार्ड"
   },
   "securedRoute": {
+    "sessionExpired": "कृपया फिर से लॉगिन करें क्योंकि सत्र समाप्त हो गया है"
+  },
+  "securedRouteForUser": {
     "sessionExpired": "कृपया फिर से लॉगिन करें क्योंकि सत्र समाप्त हो गया है"
   },
   "common": {

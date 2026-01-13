@@ -292,11 +292,13 @@ describe('ItemViewModal - Helper Functions Coverage', () => {
     });
 
     it('should return "Unknown" when user is undefined', async () => {
+      // Force properties to be undefined by overriding and casting
       const mockActionItemWithUndefinedCreator = {
         ...createActionItem(),
-        creatorId: null,
-        creator: null,
-      };
+        creator: undefined,
+        creatorId: undefined,
+      } as unknown as IActionItemInfo;
+
       const props: IViewModalProps = {
         isOpen: true,
         hide: vi.fn(),

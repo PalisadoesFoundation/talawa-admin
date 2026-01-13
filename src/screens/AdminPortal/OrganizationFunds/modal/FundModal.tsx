@@ -170,7 +170,12 @@ const FundModal: React.FC<InterfaceFundModal> = ({
         className="p-3"
       >
         <Form.Group className="d-flex mb-3 w-100">
-          <FormFieldGroup label={t('fundName')} name="fundName">
+          <FormFieldGroup
+            label={t('fundName')}
+            name="fundName"
+            touched={false}
+            error={undefined}
+          >
             <TextField
               variant="outlined"
               className={`${styles.noOutline} w-100`}
@@ -184,7 +189,12 @@ const FundModal: React.FC<InterfaceFundModal> = ({
         </Form.Group>
 
         <Form.Group className="d-flex mb-3 w-100">
-          <FormFieldGroup label={t('fundId')} name="fundId">
+          <FormFieldGroup
+            label={t('fundId')}
+            name="fundId"
+            touched={false}
+            error={undefined}
+          >
             <TextField
               variant="outlined"
               className={`${styles.noOutline} w-100`}

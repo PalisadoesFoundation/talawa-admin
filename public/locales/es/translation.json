@@ -1960,6 +1960,8 @@
     "earliest": "Más Antiguo",
     "requestAccepted": "Solicitud aceptada con éxito",
     "requestRejected": "Solicitud rechazada con éxito",
+    "acceptRequest": "Aceptar Solicitud",
+    "rejectRequest": "Rechazar Solicitud",
     "details": "Detalles",
     "manageGroup": "Gestionar Grupo",
     "mostVolunteers": "La mayoría de voluntarios",
@@ -2152,6 +2154,9 @@
     "card_aria": "Tarjeta de contacto"
   },
   "securedRoute": {
+    "sessionExpired": "Por favor, vuelva a iniciar sesión ya que la sesión ha expirado"
+  },
+  "securedRouteForUser": {
     "sessionExpired": "Por favor, vuelva a iniciar sesión ya que la sesión ha expirado"
   },
   "common": {

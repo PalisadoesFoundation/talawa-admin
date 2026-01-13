@@ -1977,6 +1977,8 @@
     "earliest": "最早",
     "requestAccepted": "请求已成功接受",
     "requestRejected": "请求已成功拒绝",
+    "acceptRequest": "接受请求",
+    "rejectRequest": "拒绝请求",
     "details": "详情",
     "manageGroup": "管理小组",
     "mostVolunteers": "最多的志愿者",
@@ -2152,6 +2154,9 @@
     "card_aria": "联系人卡片"
   },
   "securedRoute": {
+    "sessionExpired": "请重新登录，因为会话已过期"
+  },
+  "securedRouteForUser": {
     "sessionExpired": "请重新登录，因为会话已过期"
   },
   "common": {

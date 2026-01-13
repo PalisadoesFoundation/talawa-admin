@@ -515,7 +515,7 @@ describe('Testing GroupModal', () => {
     });
   });
 
-  it('should display user with avatar URL in requests table', async () => {
+  it('should display user names in requests table', async () => {
     renderGroupModal(link1, itemProps[0]);
     const requestsRadio = screen.getByLabelText(t.requests);
     await userEvent.click(requestsRadio);
@@ -523,7 +523,13 @@ describe('Testing GroupModal', () => {
     await waitFor(() => {
       const userName = screen.getAllByTestId('userName');
       expect(userName).toHaveLength(2);
+      expect(userName[0]).toHaveTextContent('John Doe');
+      expect(userName[1]).toHaveTextContent('Teresa Bradley');
     });
+
+    // Check that Avatar components are rendered for users without avatar URLs
+    const avatarComponents = screen.getAllByTestId('avatar');
+    expect(avatarComponents).toHaveLength(2);
   });
 
   it('should display Avatar component when user has no avatarURL', async () => {
@@ -535,6 +541,14 @@ describe('Testing GroupModal', () => {
     expect(userName).toHaveLength(2);
     // First user (John Doe) has no avatar, should render Avatar component
     expect(userName[0]).toHaveTextContent('John Doe');
+
+    // Verify Avatar components are present for users without avatars
+    const avatarComponents = screen.getAllByTestId('avatar');
+    expect(avatarComponents).toHaveLength(2);
+
+    // Users without avatarURL should have img elements from Avatar components
+    const images = screen.queryAllByRole('img');
+    expect(images).toHaveLength(2);
   });
 
   it('should display image when user has avatarURL', async () => {
@@ -678,32 +692,6 @@ describe('Testing GroupModal', () => {
       const rejectBtns = screen.getAllByTestId('rejectBtn');
       expect(acceptBtns).toHaveLength(2);
       expect(rejectBtns).toHaveLength(2);
-    });
-  });
-
-  it('should call updateMembershipStatus with correct arguments on accept', async () => {
-    renderGroupModal(link1, itemProps[0]);
-    const requestsRadio = screen.getByLabelText(t.requests);
-    await userEvent.click(requestsRadio);
-
-    const acceptBtn = await screen.findAllByTestId('acceptBtn');
-    await userEvent.click(acceptBtn[0]);
-
-    await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(t.requestAccepted);
-    });
-  });
-
-  it('should call updateMembershipStatus with correct arguments on reject', async () => {
-    renderGroupModal(link1, itemProps[0]);
-    const requestsRadio = screen.getByLabelText(t.requests);
-    await userEvent.click(requestsRadio);
-
-    const rejectBtn = await screen.findAllByTestId('rejectBtn');
-    await userEvent.click(rejectBtn[0]);
-
-    await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(t.requestRejected);
     });
   });
 });

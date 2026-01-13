@@ -1977,6 +1977,8 @@
     "earliest": "Le Plus Ancien",
     "requestAccepted": "Demande acceptée avec succès",
     "requestRejected": "Demande rejetée avec succès",
+    "acceptRequest": "Accepter la Demande",
+    "rejectRequest": "Rejeter la Demande",
     "details": "Détails",
     "manageGroup": "Gérer le Groupe",
     "mostVolunteers": "Le plus de bénévoles",
@@ -2152,6 +2154,9 @@
     "card_aria": "Carte de contact"
   },
   "securedRoute": {
+    "sessionExpired": "Veuillez vous reconnecter car la session a expiré"
+  },
+  "securedRouteForUser": {
     "sessionExpired": "Veuillez vous reconnecter car la session a expiré"
   },
   "common": {

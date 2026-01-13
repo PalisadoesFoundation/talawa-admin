@@ -26,7 +26,7 @@
 // translation-check-keyPrefix: manageTag
 import type { TFunction } from 'i18next';
 import type { FormEvent } from 'react';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { BaseModal } from 'shared-components/BaseModal';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
@@ -52,6 +52,11 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
   tCommon,
 }) => {
   const formId = 'edit-user-tag-form';
+  const [isTouched, setIsTouched] = useState(false);
+
+  const isTagNameInvalid = !newTagName.trim();
+  const errorMessage =
+    isTouched && isTagNameInvalid ? tCommon('required') : undefined;
 
   return (
     <BaseModal
@@ -90,20 +95,29 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
         id={formId}
         onSubmitCapture={(e: FormEvent<HTMLFormElement>): void => {
           e.preventDefault();
-          if (newTagName.trim()) {
-            handleEditUserTag(e);
+          setIsTouched(true);
+
+          if (isTagNameInvalid) {
+            // Focus the input for screen readers
+            const input = document.getElementById(
+              'tagName',
+            ) as HTMLInputElement;
+            input?.focus();
+            return;
           }
+
+          handleEditUserTag(e);
         }}
       >
         <FormFieldGroup
           name="tagName"
           label={t('tagName')}
           required
-          // Validation is managed via HTML5 'required' attribute and onSubmit capture
-          touched={false}
-          error={undefined}
+          touched={isTouched}
+          error={errorMessage}
         >
           <Form.Control
+            id="tagName"
             type="text"
             className={`mb-3 ${styles.inputField}`}
             placeholder={t('tagNamePlaceholder')}
@@ -111,6 +125,7 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
             autoComplete="off"
             required
             value={newTagName}
+            onBlur={() => setIsTouched(true)}
             onChange={(e): void => {
               setNewTagName(e.target.value);
             }}
