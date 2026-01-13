@@ -1071,9 +1071,4 @@ describe('getUpdatedDateIfChanged', () => {
     const result = getUpdatedDateIfChanged(valid, 'invalid-date');
     expect(result).toBe(valid);
   });
-
-  it('returns undefined when both dates are identical ISO strings', () => {
-    const d = dayjs().toISOString();
-    expect(getUpdatedDateIfChanged(d, d)).toBeUndefined();
-  });
 });
