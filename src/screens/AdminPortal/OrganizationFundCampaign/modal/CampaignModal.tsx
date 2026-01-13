@@ -316,7 +316,6 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
               variant="outlined"
               className={styles.noOutline}
               value={String(campaignGoal)}
-              inputProps={{ min: 0 }}
               onChange={(e) => {
                 if (e.target.value === '') {
                   setFormState({ ...formState, campaignGoal: 0 });

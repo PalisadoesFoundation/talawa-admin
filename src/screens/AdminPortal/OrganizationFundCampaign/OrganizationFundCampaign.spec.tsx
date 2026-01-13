@@ -193,7 +193,7 @@ describe('FundCampaigns Screen', () => {
     );
     await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
-      expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
+      expect(screen.queryByTestId('campaignModal')).toBeNull(),
     );
   });
 
@@ -218,7 +218,7 @@ describe('FundCampaigns Screen', () => {
     );
     await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
-      expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
+      expect(screen.queryByTestId('campaignModal')).toBeNull(),
     );
   });
 
@@ -252,7 +252,7 @@ describe('FundCampaigns Screen', () => {
     const emptyState = await screen.findByTestId('campaigns-empty');
     expect(emptyState).toBeInTheDocument();
 
-    expect(emptyState).toHaveTextContent('No Campaigns Found');
+    expect(emptyState).toHaveTextContent(/No Campaigns Found/i);
   });
 
   it('Should display loading state', () => {

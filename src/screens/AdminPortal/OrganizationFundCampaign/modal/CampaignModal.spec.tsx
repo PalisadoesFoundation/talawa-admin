@@ -19,6 +19,7 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
+import type { ReactNode } from 'react';
 
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -92,7 +93,7 @@ vi.mock('shared-components/BaseModal/BaseModal', () => ({
     title,
     dataTestId,
   }: {
-    children: React.ReactNode;
+    children: ReactNode;
     show: boolean;
     onHide: () => void;
     title: string;

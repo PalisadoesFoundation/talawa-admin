@@ -58,7 +58,7 @@ Whether the modal is currently open
 
 > **mode**: `"create"` \| `"edit"`
 
-Defined in: [src/types/AdminPortal/CampaignModal/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/CampaignModal/interface.ts#L26)
+Defined in: [src/types/AdminPortal/CampaignModal/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/CampaignModal/interface.ts#L25)
 
 Modal mode: 'create' for new campaign, 'edit' for existing campaign
 
@@ -76,7 +76,7 @@ ID of the organization
 
 ### refetchCampaign()
 
-> **refetchCampaign**: () => `void`
+> **refetchCampaign**: () => `void` \| `Promise`\<`void`\>
 
 Defined in: [src/types/AdminPortal/CampaignModal/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/CampaignModal/interface.ts#L23)
 
@@ -84,4 +84,4 @@ Callback to refetch campaign data after create/update
 
 #### Returns
 
-`void`
+`void` \| `Promise`\<`void`\>
