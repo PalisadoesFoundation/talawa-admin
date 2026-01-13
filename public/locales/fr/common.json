@@ -255,5 +255,6 @@
   "or": "ou",
   "eventNotFound": "Événement avec l'id {{id}} non trouvé",
   "required": "Obligatoire",
-  "imageNotFound": "Image non trouvée"
+  "imageNotFound": "Image non trouvée",
+  "changeLanguage": "Changer de langue"
 }

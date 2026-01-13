@@ -49,4 +49,6 @@ export interface InterfaceStatusBadgeProps {
   ariaLabel?: string;
   /** Additional CSS classes to apply */
   className?: string;
+  /** Test ID for component testing (forwarded as data-testid) */
+  dataTestId?: string;
 }
