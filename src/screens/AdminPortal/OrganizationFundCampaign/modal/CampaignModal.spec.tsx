@@ -77,13 +77,6 @@ vi.mock('shared-components/DatePicker', () => ({
   },
 }));
 
-vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
-  const actual = await vi.importActual(
-    '@mui/x-date-pickers/DesktopDateTimePicker',
-  );
-  return { DateTimePicker: actual.DesktopDateTimePicker };
-});
-
 vi.mock('shared-components/BaseModal/BaseModal', () => ({
   __esModule: true,
   default: ({
@@ -130,7 +123,7 @@ vi.mock('shared-components/DateRangePicker', async () => {
 
   return {
     __esModule: true,
-    ...actual, // keeps LocalizationProvider + AdapterDayjs
+    ...actual,
 
     default: ({ value, onChange, dataTestId }: DateRangePickerProps) => (
       <div data-testid={dataTestId}>
@@ -138,10 +131,23 @@ vi.mock('shared-components/DateRangePicker', async () => {
           data-testid={`${dataTestId}-start-input`}
           value={value?.startDate ? formatDateForInput(value.startDate) : ''}
           onChange={(e) => {
-            const parsedStart = e.target.value
-              ? dayjs.utc(e.target.value, 'DD/MM/YYYY', true)
-              : null;
+            const inputValue = e.target.value;
 
+            if (!inputValue) {
+              onChange({ startDate: null, endDate: value?.endDate ?? null });
+              return;
+            }
+
+            // ⭐ special case for tests
+            if (inputValue === 'INVALID_DATE') {
+              onChange({
+                startDate: new Date('invalid'), // non-null but invalid
+                endDate: value?.endDate ?? null,
+              });
+              return;
+            }
+
+            const parsedStart = dayjs.utc(inputValue, 'DD/MM/YYYY', true);
             const nextStart =
               parsedStart && parsedStart.isValid()
                 ? parsedStart.toDate()
@@ -156,19 +162,33 @@ vi.mock('shared-components/DateRangePicker', async () => {
             });
           }}
         />
+
         <input
           data-testid={`${dataTestId}-end-input`}
           value={value?.endDate ? formatDateForInput(value.endDate) : ''}
-          onChange={(e) =>
+          onChange={(e) => {
+            const inputValue = e.target.value;
+
+            if (!inputValue) {
+              onChange({ startDate: value?.startDate ?? null, endDate: null });
+              return;
+            }
+
+            // ⭐ special case for tests
+            if (inputValue === 'INVALID_DATE') {
+              onChange({
+                startDate: value?.startDate ?? null,
+                endDate: new Date('invalid'), // non-null but invalid
+              });
+              return;
+            }
+
+            const parsedEnd = dayjs.utc(inputValue, 'DD/MM/YYYY', true);
             onChange({
               startDate: value?.startDate ?? null,
-              endDate: (() => {
-                if (!e.target.value) return null;
-                const parsedEnd = dayjs.utc(e.target.value, 'DD/MM/YYYY', true);
-                return parsedEnd.isValid() ? parsedEnd.toDate() : null;
-              })(),
-            })
-          }
+              endDate: parsedEnd.isValid() ? parsedEnd.toDate() : null,
+            });
+          }}
         />
       </div>
     ),
@@ -277,7 +297,20 @@ const UPDATE_ALL_FIELDS_MOCK = [
       },
     },
     variableMatcher: (variables: Record<string, unknown>) => {
+      if (
+        !variables ||
+        typeof variables !== 'object' ||
+        !('input' in variables)
+      ) {
+        return false;
+      }
+
       const input = variables.input as Record<string, unknown>;
+
+      if (!input || typeof input !== 'object') {
+        return false;
+      }
+
       return (
         input.id === 'campaignId1' &&
         input.name === 'Updated Name' &&
@@ -289,6 +322,7 @@ const UPDATE_ALL_FIELDS_MOCK = [
         input.endAt.length > 0
       );
     },
+
     result: {
       data: {
         updateFundCampaign: {
@@ -774,6 +808,7 @@ describe('CampaignModal', () => {
       expect(goalInput).toHaveValue('0');
     });
   });
+
   it('does not update fundingGoal when input is non-numeric', async () => {
     renderCampaignModal(link1, campaignProps[1]);
 
@@ -784,6 +819,7 @@ describe('CampaignModal', () => {
 
     expect(goalInput).toHaveValue('100');
   });
+
   it('shows error when campaign name is empty in edit mode', async () => {
     renderCampaignModal(link1, campaignProps[1]);
 
@@ -805,6 +841,7 @@ describe('CampaignModal', () => {
       );
     });
   });
+
   it('shows error when date range is missing in edit mode', async () => {
     renderCampaignModal(link1, campaignProps[1]);
 
@@ -916,20 +953,22 @@ describe('CampaignModal', () => {
       target: { value: 'Valid Campaign' },
     });
 
-    // Set invalid dates
     fireEvent.change(getStartDateInput(), {
-      target: { value: 'invalid-date' },
+      target: { value: 'INVALID_DATE' },
     });
-    fireEvent.change(getEndDateInput(), { target: { value: '01/01/2024' } });
+    fireEvent.change(getEndDateInput(), {
+      target: { value: '01/01/2024' },
+    });
 
     fireEvent.click(screen.getByTestId('submitCampaignBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
-        translations.dateRangeRequired,
+        translations.invalidDate,
       );
     });
   });
+
   it('shows error when end date is before start date in create mode', async () => {
     renderCampaignModal(link1, campaignProps[0]);
 
@@ -960,15 +999,21 @@ describe('CampaignModal', () => {
       target: { value: 'Valid Campaign' },
     });
 
-    // Set one invalid date
-    fireEvent.change(getStartDateInput(), { target: { value: 'not-a-date' } });
-    fireEvent.change(getEndDateInput(), { target: { value: '01/01/2024' } });
+    // first make sure start date is valid (so null-check does not fire)
+    fireEvent.change(getStartDateInput(), {
+      target: { value: '01/01/2024' },
+    });
+
+    // now inject invalid date for end date
+    fireEvent.change(getEndDateInput(), {
+      target: { value: 'INVALID_DATE' },
+    });
 
     fireEvent.click(screen.getByTestId('submitCampaignBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
-        translations.dateRangeRequired,
+        translations.invalidDate,
       );
     });
   });
