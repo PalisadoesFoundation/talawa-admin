@@ -36,6 +36,7 @@ import styles from 'style/app-fixed.module.css';
 import { Navigate, useParams } from 'react-router';
 import EventListCardModals from './Modal/EventListCardModals';
 import type { InterfaceEvent } from 'types/Event/interface';
+
 /**
  * Props for the EventListCard component.
  */

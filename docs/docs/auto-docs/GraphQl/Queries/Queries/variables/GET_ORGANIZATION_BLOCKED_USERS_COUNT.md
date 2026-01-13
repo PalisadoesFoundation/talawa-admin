@@ -6,4 +6,4 @@
 
 > `const` **GET\_ORGANIZATION\_BLOCKED\_USERS\_COUNT**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:477](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L477)
+Defined in: [src/GraphQl/Queries/Queries.ts:482](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L482)

@@ -633,7 +633,8 @@
     "registerEvent": "registerEvent",
     "close": "close",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "done": "done"
+    "done": "done",
+    "eventManagementDashboard": "Event Management Dashboard"
   },
   "funds": {
     "title": "Funds",

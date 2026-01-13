@@ -256,16 +256,16 @@ function volunteers(): JSX.Element {
       field: 'volunteer',
       headerName: 'Volunteer',
       flex: 1,
-      align: 'center',
+      align: 'left',
       minWidth: 100,
-      headerAlign: 'center',
+      headerAlign: 'left',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         const { id, name, avatarURL } = params.row.user;
         return (
           <div
-            className="d-flex fw-bold align-items-center justify-content-center ms-2"
+            className="d-flex fw-bold align-items-center ms-2"
             data-testid="volunteerName"
           >
             {avatarURL ? (
@@ -273,19 +273,17 @@ function volunteers(): JSX.Element {
                 src={avatarURL}
                 alt="volunteer"
                 data-testid="volunteer_image"
-                className={styles.TableImages}
+                className={styles.volunteerAvatar}
               />
             ) : (
-              <div className={styles.avatarContainer}>
-                <Avatar
-                  key={id + '1'}
-                  dataTestId="volunteer_avatar"
-                  containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImages}
-                  name={name}
-                  alt={name}
-                />
-              </div>
+              <Avatar
+                key={id + '1'}
+                dataTestId="volunteer_avatar"
+                containerStyle={styles.volunteerAvatar}
+                avatarStyle={styles.volunteerAvatar}
+                name={name}
+                alt={name}
+              />
             )}
             {name}
           </div>
@@ -494,7 +492,7 @@ function volunteers(): JSX.Element {
         sx={dataGridStyle}
         getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
-        rowHeight={65}
+        rowHeight={100}
         rows={volunteers}
         columns={columns}
         isRowSelectable={() => false}

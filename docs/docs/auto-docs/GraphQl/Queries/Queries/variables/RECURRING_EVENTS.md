@@ -6,4 +6,4 @@
 
 > `const` **RECURRING\_EVENTS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:302](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L302)
+Defined in: [src/GraphQl/Queries/Queries.ts:307](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L307)

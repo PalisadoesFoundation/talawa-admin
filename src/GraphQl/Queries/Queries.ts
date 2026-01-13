@@ -260,6 +260,8 @@ export const EVENT_DETAILS = gql`
       createdAt
       updatedAt
       isRecurringEventTemplate
+      attendeesCount
+      registrantsCount
       baseEvent {
         id
       }
@@ -279,6 +281,9 @@ export const EVENT_DETAILS = gql`
       organization {
         id
         name
+      }
+      attendees {
+        id
       }
     }
   }
@@ -500,6 +505,7 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
     $startDate: DateTime
     $endDate: DateTime
     $includeRecurring: Boolean
+    $upcomingOnly: Boolean
   ) {
     organization(input: { id: $id }) {
       eventsCount
@@ -509,6 +515,7 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
         startDate: $startDate
         endDate: $endDate
         includeRecurring: $includeRecurring
+        upcomingOnly: $upcomingOnly
       ) {
         edges {
           node {
@@ -582,6 +589,7 @@ export const GET_ORGANIZATION_EVENTS_USER_PORTAL_PG = gql`
     $startDate: DateTime
     $endDate: DateTime
     $includeRecurring: Boolean
+    $upcomingOnly: Boolean
   ) {
     organization(input: { id: $id }) {
       events(
@@ -590,6 +598,7 @@ export const GET_ORGANIZATION_EVENTS_USER_PORTAL_PG = gql`
         startDate: $startDate
         endDate: $endDate
         includeRecurring: $includeRecurring
+        upcomingOnly: $upcomingOnly
       ) {
         edges {
           node {
@@ -629,6 +638,11 @@ export const GET_ORGANIZATION_EVENTS_USER_PORTAL_PG = gql`
             attachments {
               url
               mimeType
+            }
+            # Creator information
+            creator {
+              id
+              name
             }
             # Organization
             organization {

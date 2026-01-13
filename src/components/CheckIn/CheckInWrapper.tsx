@@ -47,6 +47,7 @@ export const CheckInWrapper = ({
         onClick={(): void => {
           setShowModal(true);
         }}
+        style={{ width: 'auto', minWidth: 'fit-content', whiteSpace: 'nowrap' }}
       >
         <img
           src="/images/svg/options-outline.svg"

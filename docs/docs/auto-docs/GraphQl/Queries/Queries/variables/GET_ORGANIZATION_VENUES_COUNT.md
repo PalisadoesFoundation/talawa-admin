@@ -6,4 +6,4 @@
 
 > `const` **GET\_ORGANIZATION\_VENUES\_COUNT**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:486](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L486)
+Defined in: [src/GraphQl/Queries/Queries.ts:491](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L491)

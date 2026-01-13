@@ -110,16 +110,14 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                           className={styles.tableImage}
                         />
                       ) : (
-                        <div className={styles.avatarContainer}>
-                          <Avatar
-                            key={user.id + '1'}
-                            containerStyle={styles.imageContainer}
-                            avatarStyle={styles.tableImage}
-                            dataTestId="volunteer_avatar"
-                            name={user.name}
-                            alt={user.name}
-                          />
-                        </div>
+                        <Avatar
+                          key={user.id + '1'}
+                          containerStyle={styles.volunteerAvatar}
+                          avatarStyle={styles.volunteerAvatar}
+                          dataTestId="volunteer_avatar"
+                          name={user.name}
+                          alt={user.name}
+                        />
                       )}
                     </>
                   ),

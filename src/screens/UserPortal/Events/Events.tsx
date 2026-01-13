@@ -112,7 +112,7 @@ export default function events(): JSX.Element {
   } = useQuery(GET_ORGANIZATION_EVENTS_USER_PORTAL_PG, {
     variables: {
       id: organizationId,
-      first: 150,
+      first: 100,
       after: null,
       startAt: dayjs(new Date(currentYear, currentMonth, 1))
         .startOf('month')

@@ -35,10 +35,15 @@
  *
  * @returns {JSX.Element} The rendered EventManagement component.
  */
-import React, { useState } from 'react';
+import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import { Navigate, useNavigate, useParams } from 'react-router';
+import {
+  Navigate,
+  useNavigate,
+  useParams,
+  useSearchParams,
+} from 'react-router-dom';
 import { FaChevronLeft, FaTasks } from 'react-icons/fa';
 import { MdOutlineDashboard } from 'react-icons/md';
 import EventRegistrantsIcon from 'assets/svgs/people.svg?react';
@@ -84,8 +89,15 @@ const EventManagement = (): JSX.Element => {
   // Hook for navigation
   const navigate = useNavigate();
 
-  // State hook for managing the currently selected tab
-  const [tab, setTab] = useState<TabOptions>('dashboard');
+  // Hook for URL search parameters
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // State hook for managing the currently selected tab, initialized from URL param or default to 'dashboard'
+  const tab = (searchParams.get('tab') as TabOptions) || 'dashboard';
+
+  const setTab = (newTab: TabOptions) => {
+    setSearchParams({ tab: newTab });
+  };
 
   // Extract event and organization IDs from URL parameters
   const { eventId, orgId } = useParams();
@@ -113,7 +125,7 @@ const EventManagement = (): JSX.Element => {
       value: 'dashboard',
       icon: <MdOutlineDashboard size={18} className="me-1" />,
       component: (
-        <div data-testid="eventDashboardTab" className="mx-4 p-4 pt-2 mt-5">
+        <div data-testid="eventDashboardTab" className="mx-4 p-4 mt-4">
           <EventDashboard eventId={eventId} />
         </div>
       ),
@@ -122,7 +134,7 @@ const EventManagement = (): JSX.Element => {
       value: 'registrants',
       icon: <EventRegistrantsIcon width={23} height={23} className="me-1" />,
       component: (
-        <div data-testid="eventRegistrantsTab" className="mx-4 p-4 pt-2 mt-5">
+        <div data-testid="eventRegistrantsTab" className="mx-4 p-4 mt-4">
           <EventRegistrants />
         </div>
       ),
@@ -131,7 +143,7 @@ const EventManagement = (): JSX.Element => {
       value: 'attendance',
       icon: <BsPersonCheck size={20} className="me-1" />,
       component: (
-        <div data-testid="eventAttendanceTab" className="mx-4 p-4 pt-2 mt-5">
+        <div data-testid="eventAttendanceTab" className="mx-4 p-4 mt-4">
           <EventAttendance />
         </div>
       ),
@@ -140,7 +152,7 @@ const EventManagement = (): JSX.Element => {
       value: 'agendas',
       icon: <EventAgendaItemsIcon width={23} height={23} className="me-1" />,
       component: (
-        <div data-testid="eventAgendasTab" className="mx-4 p-4 pt-2 mt-5">
+        <div data-testid="eventAgendasTab" className="mx-4 p-4 mt-4">
           <EventAgendaItems eventId={eventId} />
         </div>
       ),
@@ -149,7 +161,7 @@ const EventManagement = (): JSX.Element => {
       value: 'actions',
       icon: <FaTasks size={16} className="me-1" />,
       component: (
-        <div data-testid="eventActionsTab" className="mx-4 p-4 pt-2">
+        <div data-testid="eventActionsTab" className="mx-4 p-4 mt-4">
           <EventActionItems eventId={eventId} />
         </div>
       ),
@@ -158,7 +170,7 @@ const EventManagement = (): JSX.Element => {
       value: 'volunteers',
       icon: <IoIosHand size={20} className="me-1" />,
       component: (
-        <div data-testid="eventVolunteersTab" className="mx-4 p-4 pt-2">
+        <div data-testid="eventVolunteersTab" className="mx-4 p-4 mt-4">
           <VolunteerContainer />
         </div>
       ),
@@ -167,7 +179,7 @@ const EventManagement = (): JSX.Element => {
       value: 'statistics',
       icon: <IoMdStats size={20} className="me-2" />,
       component: (
-        <div data-testid="eventStatsTab" className="mx-4 p-4 pt-2 mt-5"></div>
+        <div data-testid="eventStatsTab" className="mx-4 p-4 mt-4"></div>
       ),
     },
   ];
@@ -215,7 +227,7 @@ const EventManagement = (): JSX.Element => {
 
   return (
     <div className="d-flex flex-column bg-white rounded-4 min-vh-75">
-      <Row className="mx-3 mt-4">
+      <Row className="mx-4 mt-4">
         <Col>
           <div className="d-none d-md-flex gap-3">
             <Button

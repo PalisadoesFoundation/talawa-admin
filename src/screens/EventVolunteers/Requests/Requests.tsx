@@ -194,16 +194,16 @@ function requests(): JSX.Element {
       field: 'volunteer',
       headerName: 'Volunteer',
       flex: 3,
-      align: 'center',
+      align: 'left',
       minWidth: 100,
-      headerAlign: 'center',
+      headerAlign: 'left',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         const { name, avatarURL } = params.row.volunteer.user;
         return (
           <div
-            className="d-flex fw-bold align-items-center justify-content-center ms-2"
+            className="d-flex fw-bold align-items-center ms-2"
             data-testid="volunteerName"
           >
             {avatarURL ? (
@@ -211,18 +211,16 @@ function requests(): JSX.Element {
                 src={avatarURL}
                 alt="volunteer"
                 data-testid={`volunteer_image`}
-                className={styles.TableImages}
+                className={styles.volunteerAvatar}
               />
             ) : (
-              <div className={styles.avatarContainer}>
-                <Avatar
-                  key="volunteer_avatar"
-                  containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImages}
-                  name={name}
-                  alt={name}
-                />
-              </div>
+              <Avatar
+                key="volunteer_avatar"
+                containerStyle={styles.volunteerAvatar}
+                avatarStyle={styles.volunteerAvatar}
+                name={name}
+                alt={name}
+              />
             )}
             {name}
           </div>

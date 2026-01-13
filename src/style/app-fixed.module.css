@@ -3200,6 +3200,8 @@ form label,
   background: var(--time-bg);
   box-shadow: 0 3px 8px var(--time-box-shadow);
   border-radius: 8px;
+  margin-top: 20px;
+  margin-left: auto;
 }
 
 @supports (-webkit-line-clamp: 1) {
@@ -3216,7 +3218,7 @@ form label,
 
 .startTime,
 .endTime {
-  display: flex;
+  display: inline-flex;
   font-size: 20px;
 }
 
@@ -7549,7 +7551,8 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 12px; /* bring controls closer together */
+  margin-left: 12px;
+  /* bring controls closer together */
   gap: 12px;
 }
 
@@ -7561,12 +7564,14 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList {
-  flex: 1 1 640px; /* make input wider and flexible */
+  flex: 1 1 640px;
+  /* make input wider and flexible */
   max-width: 760px;
   position: relative;
   display: flex;
   align-items: center;
-  margin-left: 18px; /* gap from left */
+  margin-left: 18px;
+  /* gap from left */
 }
 
 .btnsContainerSearchBar input {
@@ -7574,7 +7579,8 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList button {
-  width: 44px; /* slightly smaller square button */
+  width: 44px;
+  /* slightly smaller square button */
   height: 38px;
   margin-left: 8px;
   flex: 0 0 44px;
@@ -9676,3 +9682,13 @@ form {
 }
 
 /* ----------------------------------------------------- */
+
+.volunteerAvatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

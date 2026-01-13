@@ -168,6 +168,11 @@ function EventAttendance(): JSX.Element {
           className={`border-1 bg-white text-success ${styles.createButton}`}
           onClick={showModal}
           data-testid="stats-modal"
+          style={{
+            width: 'auto',
+            minWidth: 'fit-content',
+            whiteSpace: 'nowrap',
+          }}
         >
           {t('historical_statistics')}
         </Button>
