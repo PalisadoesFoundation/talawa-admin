@@ -729,7 +729,8 @@
     "deleteAgendaItem": "एजेंडा आइटम हटाएं",
     "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?",
     "event": "कार्यक्रम",
-    "search": "खोज"
+    "search": "खोज",
+    "attachmentPreview": "अटैचमेंट पूर्वावलोकन"
   },
   "eventListCard": {
     "deleteEvent": "ईवेंट हटाएँ",
@@ -1854,7 +1855,12 @@
   },
   "checkIn": {
     "errorCheckingIn": "चेक-इन में त्रुटि",
-    "checkedInSuccessfully": "सफलतापूर्वक चेक-इन किया गया"
+    "checkedInSuccessfully": "सफलतापूर्वक चेक-इन किया गया",
+    "searchAttendees": "उपस्थित लोगों को खोजें",
+    "checkedIn": "चेक इन किया गया",
+    "downloadTag": "टैग डाउनलोड करें",
+    "checkIn": "चेक इन करें",
+    "eventCheckInManagement": "इवेंट चेक इन प्रबंधन"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
