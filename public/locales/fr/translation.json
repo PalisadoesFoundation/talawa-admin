@@ -71,6 +71,8 @@
     "user": "Utilisateur",
     "loading": "Chargement",
     "communityLogo": "Logo Communautaire",
+    "userImage": "Image de l'utilisateur",
+    "userEditProfilePicture": "Modifier la photo de profil",
     "organizations": "Organisations",
     "loadingOrganizations": "Chargement des organisations...",
     "errorLoadingOrganizations": "Erreur lors du chargement des organisations. Veuillez réessayer."

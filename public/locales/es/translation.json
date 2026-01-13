@@ -71,6 +71,8 @@
     "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud.",
     "backToLogin": "Volver al inicio de sesión",
     "communityLogo": "Logo de la comunidad",
+    "userImage": "Imagen de usuario",
+    "userEditProfilePicture": "Editar foto de perfil",
     "organizations": "Organizaciones",
     "loadingOrganizations": "Cargando organizaciones...",
     "errorLoadingOrganizations": "Error al cargar organizaciones. Por favor, inténtelo de nuevo."
