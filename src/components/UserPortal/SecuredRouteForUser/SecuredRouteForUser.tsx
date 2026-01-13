@@ -5,8 +5,6 @@
  * role can access certain routes. It uses a custom hook to interact with
  * local storage for retrieving authentication and role information.
  *
- * component SecuredRouteForUser
- *
  * @returns A JSX element that conditionally renders:
  * - The child route components if the user is logged in and does not have an admin role.
  * - A `PageNotFound` component if the user has an admin role.
