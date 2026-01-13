@@ -660,7 +660,7 @@ describe('CampaignModal', () => {
     const initialValue = startDateInput.value;
 
     // Pass empty string which the mock DatePicker converts to null
-    // This triggers the early return in the onChange handler (line 244)
+    // This triggers the early return in the start date onChange handler
     fireEvent.change(startDateInput, { target: { value: '' } });
 
     // Verify form state unchanged since the early return was triggered
@@ -674,7 +674,7 @@ describe('CampaignModal', () => {
     const initialValue = endDateInput.value;
 
     // Pass empty string which the mock DatePicker converts to null
-    // This triggers the falsy branch in the onChange handler (line 270)
+    // This triggers the falsy branch in the end date onChange handler
     fireEvent.change(endDateInput, { target: { value: '' } });
 
     // Verify form state unchanged since the if(date) condition was false
