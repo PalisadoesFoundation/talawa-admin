@@ -161,3 +161,16 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
 };
 
 export default DatePicker;
+
+/**
+ * Re-exported MUI date picker LocalizationProvider for test utilities and localization support.
+ * Allows tests and other modules to import MUI date picker localization without direct \@mui dependencies.
+ * Requires \@mui/x-date-pickers to be installed.
+ */
+export { LocalizationProvider } from '@mui/x-date-pickers';
+
+/**
+ * Re-exported MUI date picker AdapterDayjs for Day.js integration.
+ * Provides Day.js adapter for MUI date pickers. Requires both \@mui/x-date-pickers and dayjs to be installed and configured.
+ */
+export { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';

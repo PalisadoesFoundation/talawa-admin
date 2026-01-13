@@ -10,7 +10,6 @@ import {
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import React from 'react';
-import { toast } from 'react-toastify';
 import cookies from 'js-cookie';
 import i18next from 'i18next';
 import ChangeLanguageDropDown from './ChangeLanguageDropDown';
@@ -20,7 +19,15 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { urlToFile } from 'utils/urlToFile';
 
 // Mock dependencies
-vi.mock('react-toastify', () => ({ toast: { error: vi.fn() } }));
+const sharedMocks = vi.hoisted(() => ({
+  NotificationToast: {
+    error: vi.fn(),
+  },
+}));
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: sharedMocks.NotificationToast,
+}));
 
 vi.mock('js-cookie', () => ({ default: { get: vi.fn(), set: vi.fn() } }));
 
@@ -104,7 +111,9 @@ describe('ChangeLanguageDropDown', () => {
     fireEvent.click(spanishOption);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('User not found');
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
+        'noUsersFound',
+      );
     });
   });
 
