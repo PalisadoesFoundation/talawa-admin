@@ -1992,7 +1992,9 @@
     "deleteVolunteerGroup": "Supprimer le groupe de bénévoles {{name}}",
     "deleteVolunteerEntry": "Supprimer l'entrée bénévole {{name}}",
     "viewGroup": "Voir le groupe de bénévoles",
-    "editGroup": "Modifier le groupe de bénévoles"
+    "editGroup": "Modifier le groupe de bénévoles",
+    "invalidNumber": "Nombre invalide",
+    "viewToggle": "Basculer la vue"
   },
   "userVolunteer": {
     "title": "Volontariat",

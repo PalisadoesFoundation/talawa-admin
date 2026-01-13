@@ -1992,7 +1992,9 @@
     "deleteVolunteerGroup": "{{name}} स्वयंसेवक समूह हटाएं",
     "deleteVolunteerEntry": "{{name}} स्वयंसेवक प्रविष्टि हटाएं",
     "viewGroup": "समूह देखें",
-    "editGroup": "समूह संपादित करें"
+    "editGroup": "समूह संपादित करें",
+    "invalidNumber": "अमान्य संख्या",
+    "viewToggle": "दृश्य टॉगल"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",

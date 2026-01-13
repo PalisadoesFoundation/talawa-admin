@@ -1975,7 +1975,9 @@
     "deleteVolunteerGroup": "Delete {{name}} volunteer group",
     "deleteVolunteerEntry": "Delete {{name}} volunteer entry",
     "viewGroup": "View group",
-    "editGroup": "Edit group"
+    "editGroup": "Edit group",
+    "invalidNumber": "Invalid number",
+    "viewToggle": "View toggle"
   },
   "userVolunteer": {
     "title": "Volunteership",

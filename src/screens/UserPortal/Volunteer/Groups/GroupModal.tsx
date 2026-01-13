@@ -15,9 +15,9 @@
  * The modal includes:
  * - A header with a title indicating the current mode (create or edit) and a close button.
  * - A form with:
- *   - An input field for entering the group name.
- *   - A textarea for entering the group description.
- *   - An input field for entering the number of volunteers required.
+ * - An input field for entering the group name.
+ * - A textarea for entering the group description.
+ * - An input field for entering the number of volunteers required.
  * - A submit button to create or update the pledge.
  *
  * On form submission, the component either:
@@ -49,6 +49,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  FormHelperText,
 } from '@mui/material';
 import {
   UPDATE_VOLUNTEER_GROUP,
@@ -59,7 +60,7 @@ import { TbListDetails } from 'react-icons/tb';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import Avatar from 'components/Avatar/Avatar';
 import { FaXmark } from 'react-icons/fa6';
-import { FormFieldGroup } from '../../../../shared-components/FormFieldGroup/FormFieldGroup';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 export interface InterfaceGroupModal {
   isOpen: boolean;
@@ -89,6 +90,8 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
     volunteerUsers: group.volunteers.map((volunteer) => volunteer.user),
     volunteersRequired: group.volunteersRequired ?? null,
   });
+  const [volunteersRequiredError, setVolunteersRequiredError] =
+    useState<boolean>(false);
 
   const [updateVolunteerGroup] = useMutation(UPDATE_VOLUNTEER_GROUP);
   const [updateMembership] = useMutation(UPDATE_VOLUNTEER_MEMBERSHIP);
@@ -146,6 +149,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
       volunteerUsers: group.volunteers.map((volunteer) => volunteer.user),
       volunteersRequired: group.volunteersRequired ?? null,
     });
+    setVolunteersRequiredError(false);
   }, [group]);
 
   const { name, description, volunteersRequired } = formState;
@@ -153,6 +157,10 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
   const updateGroupHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
+
+      if (volunteersRequiredError) {
+        return;
+      }
 
       const updatedFields: {
         [key: string]: number | string | undefined | null;
@@ -182,7 +190,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
         NotificationToast.error((error as Error).message);
       }
     },
-    [formState, group],
+    [formState, group, volunteersRequiredError],
   );
 
   return (
@@ -204,10 +212,11 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
         </div>
       }
     >
-      <div
+      <fieldset
         className={`btn-group ${styles.toggleGroup} mt-0 px-3 mb-4 w-100`}
         role="group"
       >
+        <legend className="visually-hidden">{t('viewToggle')}</legend>
         <input
           type="radio"
           className={`btn-check ${styles.toggleBtn}`}
@@ -240,7 +249,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
           <PiUserListBold className="me-2" size={21} />
           {t('requests')}
         </label>
-      </div>
+      </fieldset>
 
       {modalType === 'details' ? (
         <Form
@@ -291,27 +300,45 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             name="volunteersRequired"
             label={t('volunteersRequired')}
           >
-            <FormControl fullWidth>
+            <FormControl fullWidth error={volunteersRequiredError}>
               <TextField
                 id="volunteersRequired"
                 aria-label={t('volunteersRequired')}
                 variant="outlined"
                 className={styles.noOutline}
+                type="number"
+                inputProps={{ min: 1 }}
                 value={volunteersRequired ?? ''}
+                error={volunteersRequiredError}
                 onChange={(e) => {
-                  if (parseInt(e.target.value) > 0) {
-                    setFormState({
-                      ...formState,
-                      volunteersRequired: parseInt(e.target.value),
-                    });
-                  } else if (e.target.value === '') {
+                  const val = e.target.value;
+                  if (val === '') {
                     setFormState({
                       ...formState,
                       volunteersRequired: null,
                     });
+                    setVolunteersRequiredError(false);
+                  } else {
+                    const parsed = parseInt(val, 10);
+                    if (Number.isNaN(parsed) || parsed < 1) {
+                      setVolunteersRequiredError(true);
+                      setFormState({
+                        ...formState,
+                        volunteersRequired: null,
+                      });
+                    } else {
+                      setVolunteersRequiredError(false);
+                      setFormState({
+                        ...formState,
+                        volunteersRequired: parsed,
+                      });
+                    }
                   }
                 }}
               />
+              {volunteersRequiredError && (
+                <FormHelperText>{t('invalidNumber')}</FormHelperText>
+              )}
             </FormControl>
           </FormFieldGroup>
 
@@ -319,6 +346,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             type="submit"
             className={styles.regBtn}
             data-testid="submitBtn"
+            disabled={volunteersRequiredError}
           >
             {t('updateGroup')}
           </Button>
@@ -347,11 +375,11 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {requests.map((request, index) => {
+                  {requests.map((request, _index) => {
                     const { id, name, avatarURL } = request.volunteer.user;
                     return (
                       <TableRow
-                        key={index + 1}
+                        key={request.id}
                         sx={{
                           '&:last-child td, &:last-child th': { border: 0 },
                         }}
@@ -372,7 +400,6 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                           ) : (
                             <div className={styles.avatarContainer}>
                               <Avatar
-                                key={id + '1'}
                                 containerStyle={styles.imageContainer}
                                 avatarStyle={styles.TableImage}
                                 name={name}

@@ -1975,7 +1975,9 @@
     "deleteVolunteerGroup": "Eliminar grupo de voluntarios {{name}}",
     "deleteVolunteerEntry": "Eliminar entrada de voluntario {{name}}",
     "viewGroup": "Ver grupo",
-    "editGroup": "Editar grupo"
+    "editGroup": "Editar grupo",
+    "invalidNumber": "Número inválido",
+    "viewToggle": "Alternar vista"
   },
   "userVolunteer": {
     "title": "Voluntariado",

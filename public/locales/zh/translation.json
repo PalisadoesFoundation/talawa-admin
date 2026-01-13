@@ -1992,7 +1992,9 @@
     "deleteVolunteerGroup": "删除 {{name}} 志愿者小组",
     "deleteVolunteerEntry": "删除 {{name}} 志愿者条目",
     "viewGroup": "查看小组",
-    "editGroup": "编辑小组"
+    "editGroup": "编辑小组",
+    "invalidNumber": "无效数字",
+    "viewToggle": "切换视图"
   },
   "userVolunteer": {
     "title": "志愿服务",
