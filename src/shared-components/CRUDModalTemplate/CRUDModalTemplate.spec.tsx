@@ -216,6 +216,58 @@ describe('CRUDModalTemplate', () => {
 
       expect(screen.queryByTestId('modal-primary-btn')).not.toBeInTheDocument();
     });
+
+    it('should apply primary className when primaryVariant is primary', () => {
+      renderWithI18n(
+        <CRUDModalTemplate
+          open={true}
+          title="Test Modal"
+          onClose={mockOnClose}
+          onPrimary={mockOnPrimary}
+          primaryVariant="primary"
+        >
+          <div>Content</div>
+        </CRUDModalTemplate>,
+      );
+
+      const primaryBtn = screen.getByTestId('modal-primary-btn');
+      expect(primaryBtn).toHaveClass('addButton');
+    });
+
+    it('should apply danger className when primaryVariant is danger', () => {
+      renderWithI18n(
+        <CRUDModalTemplate
+          open={true}
+          title="Test Modal"
+          onClose={mockOnClose}
+          onPrimary={mockOnPrimary}
+          primaryVariant="danger"
+        >
+          <div>Content</div>
+        </CRUDModalTemplate>,
+      );
+
+      const primaryBtn = screen.getByTestId('modal-primary-btn');
+      expect(primaryBtn).toHaveClass('removeButton');
+    });
+
+    it('should not apply special className when primaryVariant is success', () => {
+      renderWithI18n(
+        <CRUDModalTemplate
+          open={true}
+          title="Test Modal"
+          onClose={mockOnClose}
+          onPrimary={mockOnPrimary}
+          primaryVariant="success"
+        >
+          <div>Content</div>
+        </CRUDModalTemplate>,
+      );
+
+      const primaryBtn = screen.getByTestId('modal-primary-btn');
+      expect(primaryBtn).not.toHaveClass('addButton');
+      expect(primaryBtn).not.toHaveClass('removeButton');
+    });
   });
 
   describe('Loading states', () => {
@@ -748,6 +800,60 @@ describe('EditModal', () => {
     const submitButton = screen.getByTestId('modal-submit-btn');
     expect(submitButton).toBeDisabled();
   });
+
+  it('should call onSubmit when form is submitted', () => {
+    renderWithI18n(
+      <EditModal
+        open={true}
+        title="Edit Item"
+        onClose={mockOnClose}
+        onSubmit={mockOnSubmit}
+      >
+        <Form.Control type="text" data-testid="input-field" />
+      </EditModal>,
+    );
+
+    const submitButton = screen.getByTestId('modal-submit-btn');
+    fireEvent.click(submitButton);
+
+    expect(mockOnSubmit).toHaveBeenCalledTimes(1);
+  });
+
+  it('should submit form when Ctrl+Enter is pressed', () => {
+    renderWithI18n(
+      <EditModal
+        open={true}
+        title="Edit Item"
+        onClose={mockOnClose}
+        onSubmit={mockOnSubmit}
+      >
+        <Form.Control type="text" data-testid="input-field" />
+      </EditModal>,
+    );
+
+    const input = screen.getByTestId('input-field');
+    fireEvent.keyDown(input, { key: 'Enter', ctrlKey: true });
+
+    expect(mockOnSubmit).toHaveBeenCalledTimes(1);
+  });
+
+  it('should submit form when Cmd+Enter is pressed (Mac)', () => {
+    renderWithI18n(
+      <EditModal
+        open={true}
+        title="Edit Item"
+        onClose={mockOnClose}
+        onSubmit={mockOnSubmit}
+      >
+        <Form.Control type="text" data-testid="input-field" />
+      </EditModal>,
+    );
+
+    const input = screen.getByTestId('input-field');
+    fireEvent.keyDown(input, { key: 'Enter', metaKey: true });
+
+    expect(mockOnSubmit).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe('DeleteModal', () => {
@@ -833,6 +939,23 @@ describe('DeleteModal', () => {
     fireEvent.click(deleteButton);
 
     expect(mockOnDelete).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not call onDelete when loading state is true', () => {
+    renderWithI18n(
+      <DeleteModal
+        open={true}
+        title="Delete Item"
+        onClose={mockOnClose}
+        onDelete={mockOnDelete}
+        loading={true}
+      />,
+    );
+
+    const deleteButton = screen.getByTestId('modal-delete-btn');
+    fireEvent.click(deleteButton);
+
+    expect(mockOnDelete).not.toHaveBeenCalled();
   });
 
   it('should render translated delete and cancel buttons', () => {
@@ -931,21 +1054,6 @@ describe('ViewModal', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-  });
-
-  it('should use "Close" as default button text', () => {
-    renderWithI18n(
-      <ViewModal
-        open={true}
-        title="View Item"
-        onClose={mockOnClose}
-        data={{ id: '1' }}
-      >
-        <div>Content</div>
-      </ViewModal>,
-    );
-
-    expect(screen.getByText('Close')).toBeInTheDocument();
   });
 
   it('should render translated close button', () => {
