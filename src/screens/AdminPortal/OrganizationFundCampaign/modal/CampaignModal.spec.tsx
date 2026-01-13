@@ -269,6 +269,19 @@ const UPDATE_ALL_FIELDS_MOCK = [
         },
       },
     },
+    variableMatcher: (variables: Record<string, unknown>) => {
+      const input = variables.input as Record<string, unknown>;
+      return (
+        input.id === 'campaignId1' &&
+        input.name === 'Updated Name' &&
+        input.currencyCode === 'USD' &&
+        input.goalAmount === 500 &&
+        typeof input.startAt === 'string' &&
+        typeof input.endAt === 'string' &&
+        input.startAt.length > 0 &&
+        input.endAt.length > 0
+      );
+    },
     result: {
       data: {
         updateFundCampaign: {
@@ -903,5 +916,20 @@ describe('getUpdatedDateIfChanged', () => {
     expect(result).toBeDefined();
     expect(dayjs(result).isValid()).toBe(true);
     expect(dayjs(result).isSame(dayjs(newDate), 'second')).toBe(true);
+  });
+  it('returns undefined for invalid newDate string', () => {
+    expect(getUpdatedDateIfChanged('invalid-date', new Date())).toBeUndefined();
+  });
+
+  it('returns ISO string when existingDate is invalid but newDate is valid', () => {
+    const valid = dayjs().toISOString();
+
+    const result = getUpdatedDateIfChanged(valid, 'invalid-date');
+    expect(result).toBe(valid);
+  });
+
+  it('returns undefined when both dates are identical ISO strings', () => {
+    const d = dayjs().toISOString();
+    expect(getUpdatedDateIfChanged(d, d)).toBeUndefined();
   });
 });

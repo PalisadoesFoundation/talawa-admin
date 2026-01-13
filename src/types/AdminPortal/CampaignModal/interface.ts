@@ -17,7 +17,7 @@ export interface InterfaceCampaignModalProps {
   campaign: InterfaceCampaignInfo | null;
 
   /** Callback to refetch campaign data after create/update */
-  refetchCampaign: () => Promise<void> | void;
+  refetchCampaign: () => void | Promise<void>;
   /** Modal mode: 'create' for new campaign, 'edit' for existing campaign */
   mode: 'create' | 'edit';
 }

@@ -77,15 +77,6 @@ vi.mock('shared-components/BreadcrumbsComponent/BreadcrumbsComponent', () => ({
 
 const mockedUseParams = vi.mocked(useParams);
 
-vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
-  const actual = await vi.importActual(
-    '@mui/x-date-pickers/DesktopDateTimePicker',
-  );
-  return {
-    DateTimePicker: actual.DesktopDateTimePicker,
-  };
-});
-
 const link1 = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCK_ERROR, true);
 const link3 = new StaticMockLink(EMPTY_MOCKS, true);

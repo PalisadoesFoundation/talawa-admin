@@ -65,12 +65,25 @@ export const getUpdatedDateIfChanged = (
 ): string | undefined => {
   if (!newDate) return undefined;
 
-  if (!existingDate || !dayjs(existingDate).isSame(dayjs(newDate), 'second')) {
-    return dayjs(newDate).toISOString();
+  const parsedNew = dayjs(newDate);
+  if (!parsedNew.isValid()) return undefined;
+
+  if (!existingDate) {
+    return parsedNew.toISOString();
+  }
+
+  const parsedExisting = dayjs(existingDate);
+  if (!parsedExisting.isValid()) {
+    return parsedNew.toISOString();
+  }
+
+  if (!parsedExisting.isSame(parsedNew, 'second')) {
+    return parsedNew.toISOString();
   }
 
   return undefined;
 };
+
 /**
  * Modal component for creating or editing a fund campaign.
  *
@@ -144,7 +157,7 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
     try {
       await createCampaign({
         variables: {
-          name: formState.campaignName,
+          name: formState.campaignName.trim(),
           currencyCode: formState.campaignCurrency,
           goalAmount: formState.campaignGoal,
           startAt: dayjs(campaignDateRange.startDate).toISOString(),
@@ -200,7 +213,7 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
     try {
       const updatedFields: { [key: string]: string | number | undefined } = {};
       if (campaign?.name !== campaignName) {
-        updatedFields.name = campaignName;
+        updatedFields.name = campaignName.trim();
       }
       if (campaign?.currencyCode !== campaignCurrency) {
         updatedFields.currencyCode = campaignCurrency;
@@ -240,7 +253,7 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
       });
       setCampaignDateRange({ startDate: null, endDate: null });
 
-      refetchCampaign();
+      await Promise.resolve(refetchCampaign());
       hide();
       NotificationToast.success(t('updatedCampaign') as string);
     } catch (error: unknown) {
