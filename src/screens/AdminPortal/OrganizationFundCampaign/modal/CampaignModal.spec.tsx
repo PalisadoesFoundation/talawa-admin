@@ -1,9 +1,6 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-
-dayjs.extend(utc);
-dayjs.extend(customParseFormat);
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
@@ -30,51 +27,11 @@ import { vi } from 'vitest';
 import { UPDATE_CAMPAIGN_MUTATION } from 'GraphQl/Mutations/CampaignMutation';
 import CampaignModal, { getUpdatedDateIfChanged } from './CampaignModal';
 
+dayjs.extend(utc);
+dayjs.extend(customParseFormat);
+
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: { success: vi.fn(), error: vi.fn() },
-}));
-
-vi.mock('shared-components/DatePicker', () => ({
-  __esModule: true,
-  default: ({
-    label,
-    value,
-    onChange,
-    minDate,
-    format,
-    'data-testid': dataTestId,
-  }: {
-    label?: string;
-    value?: dayjs.Dayjs | null;
-    onChange: (date: dayjs.Dayjs | null) => void;
-    minDate?: dayjs.Dayjs;
-    format?: string;
-    'data-testid'?: string;
-  }) => {
-    const displayFormat = format ?? 'MM/DD/YYYY';
-    return (
-      <div data-testid={`${dataTestId || label}-wrapper`}>
-        {label ? <label htmlFor={dataTestId || label}>{label}</label> : null}
-        <input
-          data-testid={dataTestId || label}
-          id={dataTestId || label}
-          value={value ? value.format(displayFormat) : ''}
-          onChange={(e) => {
-            const nextValue = e.target.value;
-            const nextDate = nextValue ? dayjs(nextValue, displayFormat) : null;
-            if (
-              !minDate ||
-              !nextDate ||
-              nextDate.isAfter(minDate, 'day') ||
-              nextDate.isSame(minDate, 'day')
-            ) {
-              onChange(nextDate);
-            }
-          }}
-        />
-      </div>
-    );
-  },
 }));
 
 vi.mock('shared-components/BaseModal/BaseModal', () => ({
