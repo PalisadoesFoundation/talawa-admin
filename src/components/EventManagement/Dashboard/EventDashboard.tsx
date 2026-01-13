@@ -166,8 +166,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
         <Col>
           <div className={styles.eventContainer} data-testid="event-details">
             <div className={styles.eventDetailsBox}>
-              {(userRole === UserRole.ADMINISTRATOR ||
-                eventData.event.creator?.id === userId) && (
+              {eventData.event.creator?.id === userId && (
                 <button
                   className="btn btn-light rounded-circle position-absolute end-0 me-3 p-1 mt-2"
                   onClick={showViewModal}

@@ -33,9 +33,8 @@
  */
 import LeftDrawerOrg from 'components/LeftDrawerOrg/LeftDrawerOrg';
 import React, { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
-import { Navigate, Outlet, useLocation, useParams } from 'react-router';
+import { Navigate, Outlet, useParams } from 'react-router';
 import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
@@ -43,15 +42,11 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from 'style/app-fixed.module.css';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { InterfaceMapType } from 'utils/interfaces';
 
 const EventDashboardScreen = (): React.JSX.Element => {
   const { getItem } = useLocalStorage();
   const isLoggedIn = getItem('IsLoggedIn');
   const adminFor = getItem('AdminFor');
-  const location = useLocation();
-  const titleKey: string | undefined = map[location.pathname.split('/')[2]];
-  const { t } = useTranslation('translation', { keyPrefix: titleKey });
   const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
     const stored = getItem('sidebar');
     return stored === 'true';
@@ -74,9 +69,6 @@ const EventDashboardScreen = (): React.JSX.Element => {
             <div
               className={`d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
             >
-              <div style={{ flex: 1 }}>
-                <h1>{t('title')}</h1>
-              </div>
               <Outlet />
             </div>
           </div>
@@ -156,10 +148,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
         } `}
         data-testid="mainpageright"
       >
-        <div className="d-flex justify-content-between align-items-center">
-          <div style={{ flex: 1 }}>
-            <h1>{t('title')}</h1>
-          </div>
+        <div className="d-flex justify-content-end align-items-center">
           <ProfileDropdown />
         </div>
         <Outlet />
@@ -169,22 +158,3 @@ const EventDashboardScreen = (): React.JSX.Element => {
 };
 
 export default EventDashboardScreen;
-
-const map: InterfaceMapType = {
-  orgdash: 'dashboard',
-  orgpeople: 'organizationPeople',
-  requests: 'requests',
-  orgads: 'advertisement',
-  member: 'memberDetail',
-  orgevents: 'organizationEvents',
-  orgcontribution: 'orgContribution',
-  orgpost: 'orgPost',
-  orgfunds: 'funds',
-  orgfundcampaign: 'fundCampaign',
-  fundCampaignPledge: 'pledges',
-  orgsetting: 'orgSettings',
-  orgstore: 'addOnStore',
-  blockuser: 'blockUnblockUser',
-  orgvenues: 'organizationVenues',
-  event: 'eventManagement',
-};
