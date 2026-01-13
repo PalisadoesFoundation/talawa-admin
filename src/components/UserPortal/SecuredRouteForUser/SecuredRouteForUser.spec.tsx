@@ -15,6 +15,14 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: { warning: vi.fn() },
 }));
 
+beforeEach(() => {
+  vi.clearAllMocks();
+});
+
+afterEach(() => {
+  vi.clearAllMocks();
+});
+
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
@@ -94,6 +102,7 @@ describe('SecuredRouteForUser', () => {
 
   afterEach(() => {
     cleanup();
+    vi.clearAllMocks();
     vi.clearAllTimers();
     vi.useRealTimers();
     vi.restoreAllMocks();
