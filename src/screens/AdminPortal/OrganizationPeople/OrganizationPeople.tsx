@@ -31,7 +31,7 @@ import {
 import { Delete } from '@mui/icons-material';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
 
-import styles from 'style/app-fixed.module.css';
+import styles from './OrganizationPeople.module.css';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
