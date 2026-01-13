@@ -642,73 +642,67 @@ const CREATE_EVENT_NULL_MOCKS = [
 ];
 
 // Mock where creator is null and id, name omitted to trigger fallback in mapping
-const CREATOR_NULL_MOCKS = (() => {
-  const mockStartDate = dayjs().startOf('month').startOf('day').toISOString();
-
-  const mockEndDate = dayjs().endOf('month').endOf('day').toISOString();
-
-  return [
-    {
-      request: {
-        query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
-        variables: {
-          id: 'org123',
-          first: 100,
-          after: null,
-          startDate: mockStartDate,
-          endDate: mockEndDate,
-          includeRecurring: true,
-        },
+const CREATOR_NULL_MOCKS = [
+  {
+    request: {
+      query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
+      variables: {
+        id: 'org123',
+        first: 100,
+        after: null,
+        startDate: dayjs().startOf('month').startOf('day').toISOString(),
+        endDate: dayjs().endOf('month').endOf('day').toISOString(),
+        includeRecurring: true,
       },
-      result: {
-        data: {
-          organization: {
-            events: {
-              edges: [
-                {
-                  node: {
-                    id: null,
-                    name: null,
-                    description: null,
-                    startAt: dayjs()
-                      .startOf('month')
-                      .startOf('day')
-                      .toISOString(),
-                    endAt: dayjs().endOf('month').endOf('day').toISOString(),
-                    location: null,
-                    allDay: true,
-                    isPublic: true,
-                    isRegisterable: true,
-                    isRecurringEventTemplate: false,
-                    baseEvent: null,
-                    sequenceNumber: null,
-                    totalCount: null,
-                    hasExceptions: false,
-                    progressLabel: null,
-                    recurrenceDescription: null,
-                    recurrenceRule: null,
-                    creator: null,
-                    attachments: [],
-                    organization: {
-                      id: 'org123',
-                      name: 'Test Org',
-                    },
+    },
+    result: {
+      data: {
+        organization: {
+          events: {
+            edges: [
+              {
+                node: {
+                  id: null,
+                  name: null,
+                  description: null,
+                  startAt: dayjs()
+                    .startOf('month')
+                    .startOf('day')
+                    .toISOString(),
+                  endAt: dayjs().endOf('month').endOf('day').toISOString(),
+                  location: null,
+                  allDay: true,
+                  isPublic: true,
+                  isRegisterable: true,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
+                  sequenceNumber: null,
+                  totalCount: null,
+                  hasExceptions: false,
+                  progressLabel: null,
+                  recurrenceDescription: null,
+                  recurrenceRule: null,
+                  creator: null,
+                  attachments: [],
+                  organization: {
+                    id: 'org123',
+                    name: 'Test Org',
                   },
-                  cursor: 'cursor1',
                 },
-              ],
-              pageInfo: {
-                hasNextPage: false,
-                endCursor: 'cursor1',
+                cursor: 'cursor1',
               },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: 'cursor1',
             },
           },
         },
       },
     },
-    MOCKS[1],
-  ];
-})();
+  },
+  MOCKS[1],
+];
 
 const link = new StaticMockLink(MOCKS, true);
 const errorLink = new StaticMockLink(ERROR_MOCKS, true);
