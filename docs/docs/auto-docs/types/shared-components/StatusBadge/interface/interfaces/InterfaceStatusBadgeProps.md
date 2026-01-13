@@ -30,6 +30,16 @@ Additional CSS classes to apply
 
 ***
 
+### dataTestId?
+
+> `optional` **dataTestId**: `string`
+
+Defined in: [src/types/shared-components/StatusBadge/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/StatusBadge/interface.ts#L53)
+
+Test ID for component testing (forwarded as data-testid)
+
+***
+
 ### icon?
 
 > `optional` **icon**: `ReactNode`
