@@ -1,9 +1,9 @@
 {
   "securedRouteForUser": {
-    "sessionExpired": "Veuillez vous reconnecter; votre session a expiré."
+    "sessionExpired": "Veuillez vous reconnecter ; votre session a expiré."
   },
   "securedRoute": {
-    "sessionExpired": "Veuillez vous reconnecter; votre session a expiré."
+    "sessionExpired": "Veuillez vous reconnecter ; votre session a expiré."
   },
   "ends": "Prend fin",
   "occurrences": "Occurrences",

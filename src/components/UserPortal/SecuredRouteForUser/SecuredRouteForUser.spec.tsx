@@ -15,6 +15,12 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: { warning: vi.fn() },
 }));
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
 vi.mock('screens/PageNotFound/PageNotFound', () => ({
   default: () => <div data-testid="page-not-found">Page Not Found</div>,
 }));
