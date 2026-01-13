@@ -60,11 +60,19 @@ export class PeoplePage {
   deleteMember(name: string, timeout = 40000) {
     this.searchMemberByName(name, timeout);
 
-    // Wait for search to complete - break the chain to avoid detachment issues
-    cy.contains(this._tableRows, name, { timeout }).should('be.visible');
+    // Wait for loading state to disappear if present
+    cy.get('body').then(($body: unknown) => {
+      const body = $body as { find: (selector: string) => { length: number } };
+      if (body.find('[data-testid="organization-people-loading"]').length > 0) {
+        cy.get('[data-testid="organization-people-loading"]', {
+          timeout,
+        }).should('not.exist');
+      }
+    });
 
-    // Re-query to find the row and click remove button
-    cy.contains(this._tableRows, name)
+    // Find the row and click remove button
+    cy.contains(this._tableRows, name, { timeout })
+      .should('exist')
       .parents('tr')
       .find('button[data-testid^="removeMemberModalBtn-"]')
       .should('be.visible')
