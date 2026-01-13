@@ -1482,7 +1482,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should test userRole as administrator', async () => {
-    localStorage.setItem('role', 'administrator');
+    localStorage.setItem('Talawa-admin_role', JSON.stringify('administrator'));
 
     const cache = new InMemoryCache();
     render(
@@ -1511,7 +1511,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should test userRole as regular user', async () => {
-    localStorage.setItem('role', 'user');
+    localStorage.setItem('Talawa-admin_role', JSON.stringify('user'));
     const cache = new InMemoryCache();
     render(
       <MockedProvider link={link} cache={cache}>
