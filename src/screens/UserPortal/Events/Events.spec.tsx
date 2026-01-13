@@ -730,8 +730,8 @@ describe('Testing Events Screen [User Portal]', () => {
         dispatchEvent: vi.fn(),
       })),
     });
-    localStorage.setItem('id', 'user123');
-    localStorage.setItem('role', 'administrator');
+    localStorage.setItem('Talawa-admin_role', JSON.stringify('administrator'));
+    localStorage.setItem('Talawa-admin_id', JSON.stringify('user123'));
     mockUseParams.mockReturnValue({ orgId: 'org123' });
   });
 
@@ -2129,18 +2129,20 @@ describe('Testing Events Screen [User Portal]', () => {
     });
   });
 
-  it('should compute calendar from null startDate using current date', () => {
-    const now = new Date();
-    const { month, year } = computeCalendarFromStartDate(null, now);
-    expect(month).toBe(dayjs(now).month());
-    expect(year).toBe(dayjs(now).year());
-  });
+  describe('computeCalendarFromStartDate', () => {
+    it('should compute calendar from null startDate using current date', () => {
+      const now = new Date();
+      const { month, year } = computeCalendarFromStartDate(null, now);
+      expect(month).toBe(dayjs(now).month());
+      expect(year).toBe(dayjs(now).year());
+    });
 
-  it('should compute calendar from a specific startDate', () => {
-    const testDate = new Date(2025, 5, 15); // June 15, 2025
-    const { month, year } = computeCalendarFromStartDate(testDate);
-    expect(month).toBe(5); // June is month 5 (0-indexed)
-    expect(year).toBe(2025);
+    it('should compute calendar from a specific startDate', () => {
+      const testDate = new Date(2025, 5, 15); // June 15, 2025
+      const { month, year } = computeCalendarFromStartDate(testDate);
+      expect(month).toBe(5); // June is month 5 (0-indexed)
+      expect(year).toBe(2025);
+    });
   });
 
   it('Should filter events when "Today" preset is selected', async () => {
