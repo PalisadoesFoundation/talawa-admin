@@ -22,7 +22,7 @@ vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
 }));
 
 // Mock CSS modules
-vi.mock('style/app-fixed.module.css', () => ({
+vi.mock('./UserGlobalScreen.module.css', () => ({
   default: {
     opendrawer: 'opendrawer',
     collapseSidebarButton: 'collapseSidebarButton',
