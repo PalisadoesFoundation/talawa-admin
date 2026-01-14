@@ -1532,9 +1532,10 @@ form label,
 }
 
 .statsButton {
-  width: auto !important;
-  min-width: fit-content !important;
-  white-space: nowrap !important;
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  width: max-content;
 }
 
 /* Add more Global CSS Classes above this */
@@ -7557,7 +7558,7 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 12px;
+  margin-inline-start: 12px;
   /* bring controls closer together */
   gap: 12px;
 }
@@ -7576,7 +7577,7 @@ form {
   position: relative;
   display: flex;
   align-items: center;
-  margin-left: 18px;
+  margin-inline-start: 18px;
   /* gap from left */
 }
 
