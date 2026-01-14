@@ -831,7 +831,12 @@
     "searchCampaigns": "Rechercher des campagnes",
     "errorLoading": "Erreur lors du chargement des données de la campagne",
     "percentageRaised": "% Collecté",
-    "campaignProgress": "Progression de la campagne: {{percentage}}%"
+    "campaignProgress": "Progression de la campagne : {{percentage}}%",
+    "campaignNotFound": "Campagne introuvable",
+    "dateRangeRequired": "Veuillez sélectionner une plage de dates valide",
+    "campaignNameRequired": "Le nom de la campagne est obligatoire",
+    "invalidDate": "Date invalide sélectionnée",
+    "endDateBeforeStart": "La date de fin ne peut pas être antérieure à la date de début"
   },
   "pledges": {
     "title": "Engagements de campagne de financement",
