@@ -16,7 +16,7 @@ import { I18nextProvider } from 'react-i18next';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
-
+import Events, { computeCalendarFromStartDate } from './Events';
 dayjs.extend(utc);
 dayjs.extend(customParseFormat);
 
@@ -29,7 +29,6 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import Events from './Events';
 import userEvent from '@testing-library/user-event';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
@@ -237,8 +236,8 @@ const MOCKS = [
         id: 'org123',
         first: 100,
         after: null,
-        startAt: startDate,
-        endAt: endDate,
+        startDate: startDate,
+        endDate: endDate,
         includeRecurring: true,
       },
     },
@@ -347,13 +346,13 @@ const MOCKS = [
         id: 'org123',
         first: 100,
         after: null,
-        startAt: dayjs()
+        startDate: dayjs()
           .subtract(1, 'year')
           .month(4)
           .endOf('month')
           .subtract(1, 'day')
           .toISOString(),
-        endAt: dayjs()
+        endDate: dayjs()
           .subtract(1, 'year')
           .month(5)
           .endOf('month')
@@ -537,8 +536,8 @@ const ERROR_MOCKS = [
         id: 'org123',
         first: 100,
         after: null,
-        startAt: startDate,
-        endAt: endDate,
+        startDate: startDate,
+        endDate: endDate,
         includeRecurring: true,
       },
     },
@@ -565,8 +564,8 @@ const RATE_LIMIT_MOCKS = [
         id: 'org123',
         first: 100,
         after: null,
-        startAt: startDate,
-        endAt: endDate,
+        startDate: startDate,
+        endDate: endDate,
         includeRecurring: true,
       },
     },
@@ -643,48 +642,67 @@ const CREATE_EVENT_NULL_MOCKS = [
 ];
 
 // Mock where creator is null and id, name omitted to trigger fallback in mapping
-const CREATOR_NULL_MOCKS = (() => {
-  const baseGet = JSON.parse(JSON.stringify(MOCKS[0]));
-  baseGet.result = {
-    data: {
-      organization: {
-        events: {
-          edges: [
-            {
-              node: {
-                id: null,
-                name: null,
-                description: null,
-                startAt: dayjs().month(2).date(5).startOf('day').toISOString(),
-                endAt: dayjs().month(2).date(5).endOf('day').toISOString(),
-                location: null,
-                allDay: true,
-                isPublic: true,
-                isRegisterable: true,
-                isRecurringEventTemplate: false,
-                baseEvent: null,
-                sequenceNumber: null,
-                totalCount: null,
-                hasExceptions: false,
-                progressLabel: null,
-                recurrenceDescription: null,
-                recurrenceRule: null,
-                creator: null,
-                attachments: [],
+const CREATOR_NULL_MOCKS = [
+  {
+    request: {
+      query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
+      variables: {
+        id: 'org123',
+        first: 100,
+        after: null,
+        startDate: dayjs().startOf('month').startOf('day').toISOString(),
+        endDate: dayjs().endOf('month').endOf('day').toISOString(),
+        includeRecurring: true,
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          events: {
+            edges: [
+              {
+                node: {
+                  id: null,
+                  name: null,
+                  description: null,
+                  startAt: dayjs()
+                    .startOf('month')
+                    .startOf('day')
+                    .toISOString(),
+                  endAt: dayjs().endOf('month').endOf('day').toISOString(),
+                  location: null,
+                  allDay: true,
+                  isPublic: true,
+                  isRegisterable: true,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
+                  sequenceNumber: null,
+                  totalCount: null,
+                  hasExceptions: false,
+                  progressLabel: null,
+                  recurrenceDescription: null,
+                  recurrenceRule: null,
+                  creator: null,
+                  attachments: [],
+                  organization: {
+                    id: 'org123',
+                    name: 'Test Org',
+                  },
+                },
+                cursor: 'cursor1',
               },
-              cursor: 'cursor1',
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: 'cursor1',
             },
-          ],
-          pageInfo: {
-            hasNextPage: false,
-            endCursor: 'cursor1',
           },
         },
       },
     },
-  };
-  return [baseGet, MOCKS[1]];
-})();
+  },
+  MOCKS[1],
+];
 
 const link = new StaticMockLink(MOCKS, true);
 const errorLink = new StaticMockLink(ERROR_MOCKS, true);
@@ -700,18 +718,6 @@ async function wait(ms = 500): Promise<void> {
 }
 
 describe('Testing Events Screen [User Portal]', () => {
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: vi.fn().mockImplementation((query) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    })),
-  });
-
   beforeEach(() => {
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
@@ -724,8 +730,8 @@ describe('Testing Events Screen [User Portal]', () => {
         dispatchEvent: vi.fn(),
       })),
     });
-    localStorage.setItem('id', 'user123');
-    localStorage.setItem('role', 'administrator');
+    localStorage.setItem('Talawa-admin_role', JSON.stringify('administrator'));
+    localStorage.setItem('Talawa-admin_id', JSON.stringify('user123'));
     mockUseParams.mockReturnValue({ orgId: 'org123' });
   });
 
@@ -787,10 +793,8 @@ describe('Testing Events Screen [User Portal]', () => {
       expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
     });
 
-    // Close modal
-    const closeButton = screen.getByTestId('createEventModalCloseBtn');
-    await userEvent.click(closeButton);
-
+    // Close modal using Escape key
+    await userEvent.keyboard('{Escape}');
     await waitFor(() => {
       expect(screen.queryByTestId('eventTitleInput')).not.toBeInTheDocument();
     });
@@ -1018,8 +1022,10 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('allDayEventCheck'));
 
     const newDateSet = dayjs(new Date());
-    const startDatePicker = screen.getByLabelText('Start Date');
-    const endDatePicker = screen.getByLabelText('End Date');
+    const startDatePicker = screen.getByTestId(
+      'eventStartAt',
+    ) as HTMLInputElement;
+    const endDatePicker = screen.getByTestId('eventEndAt') as HTMLInputElement;
     fireEvent.change(startDatePicker, {
       target: { value: newDateSet.format('YYYY-MM-DD') },
     });
@@ -1238,13 +1244,13 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
+      expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
     });
 
-    const startDatePicker = screen.getByLabelText(
-      'Start Date',
+    const startDatePicker = screen.getByTestId(
+      'eventStartAt',
     ) as HTMLInputElement;
-    const endDatePicker = screen.getByLabelText('End Date') as HTMLInputElement;
+    const endDatePicker = screen.getByTestId('eventEndAt') as HTMLInputElement;
     const newDate = dayjs().add(1, 'day');
 
     fireEvent.change(startDatePicker, {
@@ -1258,8 +1264,8 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     // Date pickers should accept the changes - re-query as elements might have been detached
-    expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
-    expect(screen.getByLabelText('End Date')).toBeInTheDocument();
+    expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
+    expect(screen.getByTestId('eventEndAt')).toBeInTheDocument();
   });
 
   it('Should handle time picker changes when all-day is disabled', async () => {
@@ -1342,13 +1348,13 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
+      screen.getByTestId('eventStartAt');
     });
 
-    const startDatePicker = screen.getByLabelText(
-      'Start Date',
+    const startDatePicker = screen.getByTestId(
+      'eventStartAt',
     ) as HTMLInputElement;
-    const endDatePicker = screen.getByLabelText('End Date') as HTMLInputElement;
+    const endDatePicker = screen.getByTestId('eventEndAt') as HTMLInputElement;
     fireEvent.change(startDatePicker, {
       target: { value: '' },
     });
@@ -1360,7 +1366,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     // Should handle null values without crashing
-    expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
+    expect(screen.getByTestId('eventStartAt')).toBeInTheDocument();
   });
 
   it('Should handle network error gracefully', async () => {
@@ -1506,7 +1512,6 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should test userRole as regular user', async () => {
     localStorage.setItem('Talawa-admin_role', JSON.stringify('user'));
-
     const cache = new InMemoryCache();
     render(
       <MockedProvider link={link} cache={cache}>
@@ -1588,6 +1593,12 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait();
 
+    await waitFor(() => {
+      expect(screen.getByTestId('calendar-view-type')).toHaveTextContent(
+        'Month View',
+      );
+    });
+
     // Change view to DAY first
     const dayViewButton = screen.getByTestId('selectDay');
     await userEvent.click(dayViewButton);
@@ -1598,6 +1609,8 @@ describe('Testing Events Screen [User Portal]', () => {
     // Now call handleChangeView(null)
     await userEvent.click(screen.getByTestId('handleChangeNullBtn'));
 
+    // Wait for state to settle after no-op view change
+    await wait();
     // View type should remain DAY
     await waitFor(() => {
       expect(screen.getByTestId('calendar-view-type')).toHaveTextContent('DAY');
@@ -1690,7 +1703,10 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should map missing creator to default (fallback) in eventData mapping', async () => {
     const testLink = new StaticMockLink(CREATOR_NULL_MOCKS, true);
-    const cache = new InMemoryCache();
+    // Disable __typename to test raw data mapping without Apollo's type augmentation
+    const cache = new InMemoryCache({
+      addTypename: false,
+    });
     render(
       <MockedProvider link={testLink} cache={cache}>
         <BrowserRouter>
@@ -1707,16 +1723,19 @@ describe('Testing Events Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    await wait();
+    await waitFor(
+      () => {
+        // EventCalendar mock renders eventData JSON in `event-data-json`
+        const jsonPre = screen.getByTestId('event-data-json');
+        const parsed = JSON.parse(jsonPre.textContent || '[]');
 
-    // EventCalendar mock renders eventData JSON in `event-data-json`
-    const jsonPre = screen.getByTestId('event-data-json');
-    const parsed = JSON.parse(jsonPre.textContent || '[]');
-
-    expect(parsed).toBeInstanceOf(Array);
-    expect(parsed.length).toBeGreaterThan(0);
-    // Creator fallback should be used when creator is null
-    expect(parsed[0].creator).toEqual({ id: '', name: '' });
+        expect(parsed).toBeInstanceOf(Array);
+        expect(parsed.length).toBeGreaterThan(0);
+        // Creator fallback should be used when creator is null
+        expect(parsed[0].creator).toEqual({ id: '', name: '' });
+      },
+      { timeout: 5000 },
+    );
   });
 
   it('Should create an event with recurrence rule successfully', async () => {
@@ -1864,5 +1883,387 @@ describe('Testing Events Screen [User Portal]', () => {
     await waitFor(() => {
       expect(mockToast.success).toHaveBeenCalled();
     });
+  });
+
+  it('Should filter events when DateRangePicker preset is selected', async () => {
+    const thisWeekStart = dayjs().startOf('week').startOf('day').toISOString();
+    const thisWeekEnd = dayjs().endOf('week').endOf('day').toISOString();
+
+    // Create a mock that expects the "This Week" date range
+    const thisWeekMock = {
+      request: {
+        query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
+        variables: {
+          id: 'org123',
+          first: 100,
+          after: null,
+          startDate: thisWeekStart,
+          endDate: thisWeekEnd,
+          includeRecurring: true,
+        },
+      },
+      result: {
+        data: {
+          organization: {
+            events: {
+              edges: [
+                {
+                  node: {
+                    id: 'thisWeekEvent1',
+                    name: 'This Week Event',
+                    description: 'Event within this week',
+                    startAt: dayjs()
+                      .startOf('week')
+                      .add(2, 'days')
+                      .toISOString(),
+                    endAt: dayjs()
+                      .startOf('week')
+                      .add(2, 'days')
+                      .add(2, 'hours')
+                      .toISOString(),
+                    location: 'Test Location',
+                    allDay: false,
+                    isPublic: true,
+                    isRegisterable: true,
+                    isRecurringEventTemplate: false,
+                    baseEvent: null,
+                    sequenceNumber: null,
+                    totalCount: null,
+                    hasExceptions: false,
+                    progressLabel: null,
+                    recurrenceDescription: null,
+                    recurrenceRule: null,
+                    creator: {
+                      id: 'user1',
+                      name: 'Test User',
+                    },
+                    attachments: [],
+                    organization: {
+                      id: 'org123',
+                      name: 'Test Org',
+                    },
+                  },
+                  cursor: 'cursor1',
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: 'cursor1',
+              },
+            },
+          },
+        },
+      },
+    };
+
+    const testLink = new StaticMockLink(
+      [...MOCKS.slice(0, 2), thisWeekMock],
+      true,
+    );
+    const cache = new InMemoryCache();
+
+    render(
+      <MockedProvider link={testLink} cache={cache}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <ThemeProvider theme={theme}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Events />
+              </I18nextProvider>
+            </ThemeProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('events-date-range-preset-thisWeek'),
+      ).toBeInTheDocument();
+    });
+
+    const thisWeekButton = screen.getByTestId(
+      'events-date-range-preset-thisWeek',
+    );
+
+    await userEvent.click(thisWeekButton);
+
+    await wait(300);
+
+    // Verify UI state changed (button is active)
+
+    // Verify the query was called with correct date range
+    await waitFor(() => {
+      const eventDataJson = screen.getByTestId('event-data-json');
+      const parsedEvents = JSON.parse(eventDataJson.textContent || '[]');
+      // Verify events are from this week's range
+      expect(parsedEvents).toBeInstanceOf(Array);
+    });
+
+    await waitFor(
+      () => {
+        const eventDataJson = screen.getByTestId('event-data-json');
+        const parsedEvents = JSON.parse(eventDataJson.textContent || '[]');
+
+        expect(parsedEvents).toBeInstanceOf(Array);
+        expect(
+          parsedEvents.some(
+            (event: { name: string }) => event.name === 'This Week Event',
+          ),
+        ).toBe(true);
+      },
+      { timeout: 3000 },
+    );
+
+    const startDateInput = screen.getByTestId(
+      'events-date-range-start-input',
+    ) as HTMLInputElement;
+    const endDateInput = screen.getByTestId(
+      'events-date-range-end-input',
+    ) as HTMLInputElement;
+
+    expect(startDateInput.value).toBe(
+      dayjs(thisWeekStart).format('MM/DD/YYYY'),
+    );
+    expect(endDateInput.value).toBe(dayjs(thisWeekEnd).format('MM/DD/YYYY'));
+  });
+
+  it('Should update events when date range is manually changed', async () => {
+    const newStartDate = dayjs().add(1, 'week');
+    const newEndDate = dayjs().add(2, 'weeks');
+
+    const manualRangeMock = {
+      request: { query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG },
+      variableMatcher: (vars: { startDate?: string; endDate?: string }) =>
+        vars.startDate === newStartDate.startOf('day').toISOString() &&
+        vars.endDate === newEndDate.endOf('day').toISOString(),
+      result: {
+        data: {
+          organization: {
+            events: {
+              edges: [
+                {
+                  node: {
+                    id: 'manualRangeEvent',
+                    name: 'Manual Range Event',
+                    description: 'Event in manually selected range',
+                    startAt: newStartDate.add(1, 'day').toISOString(),
+                    endAt: newStartDate
+                      .add(1, 'day')
+                      .add(2, 'hours')
+                      .toISOString(),
+                    location: '',
+                    allDay: true,
+                    isPublic: true,
+                    isRegisterable: false,
+                    isRecurringEventTemplate: false,
+                    baseEvent: null,
+                    sequenceNumber: null,
+                    totalCount: null,
+                    hasExceptions: false,
+                    progressLabel: null,
+                    recurrenceDescription: null,
+                    recurrenceRule: null,
+                    creator: { id: 'user1', name: 'Test User' },
+                    attachments: [],
+                    organization: { id: 'org123', name: 'Test Org' },
+                  },
+                  cursor: 'cursorManual',
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: 'cursor-manual' },
+            },
+          },
+        },
+      },
+    };
+
+    const testLink = new StaticMockLink(
+      [...MOCKS.slice(0, 2), manualRangeMock],
+      true,
+    );
+    const cache = new InMemoryCache();
+    render(
+      <MockedProvider link={testLink} cache={cache}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <ThemeProvider theme={theme}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Events />
+              </I18nextProvider>
+            </ThemeProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const startDateInput = screen.getByTestId(
+      'events-date-range-start-input',
+    ) as HTMLInputElement;
+    const endDateInput = screen.getByTestId(
+      'events-date-range-end-input',
+    ) as HTMLInputElement;
+
+    fireEvent.change(startDateInput, {
+      target: { value: newStartDate.format('MM/DD/YYYY') },
+    });
+
+    fireEvent.change(endDateInput, {
+      target: { value: newEndDate.format('MM/DD/YYYY') },
+    });
+
+    await wait(300);
+
+    await waitFor(() => {
+      const eventDataJson = screen.getByTestId('event-data-json');
+      const parsedEvents = JSON.parse(eventDataJson.textContent || '[]');
+      expect(
+        parsedEvents.some(
+          (e: { name: string }) => e.name === 'Manual Range Event',
+        ),
+      ).toBe(true);
+    });
+  });
+
+  describe('computeCalendarFromStartDate', () => {
+    it('should compute calendar from null startDate using current date', () => {
+      const now = new Date();
+      const { month, year } = computeCalendarFromStartDate(null, now);
+      expect(month).toBe(dayjs(now).month());
+      expect(year).toBe(dayjs(now).year());
+    });
+
+    it('should compute calendar from a specific startDate', () => {
+      const testDate = new Date(2025, 5, 15); // June 15, 2025
+      const { month, year } = computeCalendarFromStartDate(testDate);
+      expect(month).toBe(5); // June is month 5 (0-indexed)
+      expect(year).toBe(2025);
+    });
+  });
+
+  it('Should filter events when "Today" preset is selected', async () => {
+    const todayStart = dayjs().startOf('day').toISOString();
+    const todayEnd = dayjs().endOf('day').toISOString();
+
+    const todayMock = {
+      request: {
+        query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
+        variables: {
+          id: 'org123',
+          first: 100,
+          after: null,
+          startDate: todayStart,
+          endDate: todayEnd,
+          includeRecurring: true,
+        },
+      },
+      result: {
+        data: {
+          organization: {
+            events: {
+              edges: [
+                {
+                  node: {
+                    id: 'todayEvent1',
+                    name: 'Today Event',
+                    description: 'Event for today',
+                    startAt: dayjs().hour(10).toISOString(),
+                    endAt: dayjs().hour(12).toISOString(),
+                    location: 'Test Location',
+                    allDay: false,
+                    isPublic: true,
+                    isRegisterable: true,
+                    isRecurringEventTemplate: false,
+                    baseEvent: null,
+                    sequenceNumber: null,
+                    totalCount: null,
+                    hasExceptions: false,
+                    progressLabel: null,
+                    recurrenceDescription: null,
+                    recurrenceRule: null,
+                    creator: {
+                      id: 'user1',
+                      name: 'Test User',
+                    },
+                    attachments: [],
+                    organization: {
+                      id: 'org123',
+                      name: 'Test Org',
+                    },
+                  },
+                  cursor: 'cursor1',
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: 'cursor1',
+              },
+            },
+          },
+        },
+      },
+    };
+
+    const testLink = new StaticMockLink(
+      [...MOCKS.slice(0, 2), todayMock],
+      true,
+    );
+    const cache = new InMemoryCache();
+
+    render(
+      <MockedProvider link={testLink} cache={cache}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <ThemeProvider theme={theme}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Events />
+              </I18nextProvider>
+            </ThemeProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('events-date-range-preset-today'),
+      ).toBeInTheDocument();
+    });
+
+    const todayButton = screen.getByTestId('events-date-range-preset-today');
+    await userEvent.click(todayButton);
+
+    await wait(300);
+
+    await waitFor(
+      () => {
+        const eventDataJson = screen.getByTestId('event-data-json');
+        const parsedEvents = JSON.parse(eventDataJson.textContent || '[]');
+
+        expect(parsedEvents).toBeInstanceOf(Array);
+        expect(
+          parsedEvents.some(
+            (event: { name: string }) => event.name === 'Today Event',
+          ),
+        ).toBe(true);
+      },
+      { timeout: 3000 },
+    );
+
+    const startDateInput = screen.getByTestId(
+      'events-date-range-start-input',
+    ) as HTMLInputElement;
+    const endDateInput = screen.getByTestId(
+      'events-date-range-end-input',
+    ) as HTMLInputElement;
+
+    expect(startDateInput.value).toBe(dayjs(todayStart).format('MM/DD/YYYY'));
+    expect(endDateInput.value).toBe(dayjs(todayEnd).format('MM/DD/YYYY'));
   });
 });

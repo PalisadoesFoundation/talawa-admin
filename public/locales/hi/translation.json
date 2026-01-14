@@ -1,4 +1,10 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "कृपया फिर से लॉगिन करें; आपका सत्र समाप्त हो गया है।"
+  },
+  "securedRoute": {
+    "sessionExpired": "कृपया फिर से लॉगिन करें; आपका सत्र समाप्त हो गया है।"
+  },
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
   "leaderboard": {
@@ -1621,7 +1627,8 @@
     "on": "पर",
     "after": "के बाद",
     "customRecurrence": "कस्टम पुनरावृत्ति",
-    "repeatsEvery": "हर बार दोहराता है"
+    "repeatsEvery": "हर बार दोहराता है",
+    "noEventAvailable": "कोई कार्यक्रम उपलब्ध नहीं!"
   },
   "userEventCard": {
     "starts": "प्रारंभ होगा",
@@ -2153,12 +2160,6 @@
   "contact": {
     "card_aria": "संपर्क कार्ड"
   },
-  "securedRoute": {
-    "sessionExpired": "कृपया फिर से लॉगिन करें क्योंकि सत्र समाप्त हो गया है"
-  },
-  "securedRouteForUser": {
-    "sessionExpired": "कृपया फिर से लॉगिन करें क्योंकि सत्र समाप्त हो गया है"
-  },
   "common": {
     "signOut": "साइन आउट",
     "signingOut": "साइन आउट हो रहा है...",
@@ -2195,5 +2196,8 @@
     "sortPeople": "लोगों को क्रमबद्ध करें",
     "unassign": "हटाएँ",
     "tags": "टैग"
+  },
+  "orgProfileField": {
+    "editCustomField": "कस्टम फ़ील्ड संपादित करें"
   }
 }
