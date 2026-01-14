@@ -825,6 +825,8 @@ describe('CampaignModal', () => {
     await waitFor(() => {
       expect(NotificationToast.success).not.toHaveBeenCalled();
     });
+  });
+
   it('should handle null date in start date picker onChange', async () => {
     renderCampaignModal(link1, campaignProps[1]);
 
