@@ -24,7 +24,7 @@ import {
   TextField,
 } from '@mui/material';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import type { InterfaceCampaignModal } from './types';
+import type { IDateRangeValue, InterfaceCampaignModal } from './types';
 
 export type { InterfaceCampaignModal };
 
@@ -41,7 +41,7 @@ export type { InterfaceCampaignModal };
  * @returns The rendered Fund Campaign modal component
  */
 
-const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
+const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   isOpen,
   hide,
   fundId,
@@ -50,12 +50,15 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
   campaign,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'fundCampaign' });
+  const { t: tCommon } = useTranslation('common');
 
   const [formState, setFormState] = useState({
     campaignName: campaign?.name ?? '',
     campaignCurrency: campaign?.currencyCode ?? 'USD',
     campaignGoal: campaign?.goalAmount ?? 0,
   });
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [campaignDateRange, setCampaignDateRange] = useState<IDateRangeValue>({
     startDate: campaign?.startAt ?? null,
@@ -93,18 +96,46 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
     e.preventDefault();
 
     if (!campaignName.trim()) {
+      NotificationToast.error(t('campaignNameRequired') as string);
       setTouched((prev) => ({ ...prev, campaignName: true }));
       return;
     }
 
+    // 1. Check for Missing Dates
+    if (!campaignDateRange.startDate || !campaignDateRange.endDate) {
+      NotificationToast.error(t('dateRangeRequired') as string);
+      return;
+    }
+
+    // 2. Check for Invalid Dates (e.g. manually typed "INVALID_DATE")
+    // dayjs objects created from "Invalid Date" are invalid.
+    if (
+      !dayjs(campaignDateRange.startDate).isValid() ||
+      !dayjs(campaignDateRange.endDate).isValid()
+    ) {
+      NotificationToast.error(t('invalidDate') as string);
+      return;
+    }
+
+    // 3. Check for Date Order (Start > End)
+    if (
+      dayjs(campaignDateRange.startDate).isAfter(
+        dayjs(campaignDateRange.endDate),
+      )
+    ) {
+      NotificationToast.error(t('endDateBeforeStart') as string);
+      return;
+    }
+
     try {
+      setIsSubmitting(true);
       await createCampaign({
         variables: {
-          name: campaignName,
+          name: campaignName.trim(),
           currencyCode: campaignCurrency,
-          goalAmount: campaignGoal,
-          startAt: dayjs(campaignStartDate).toISOString(),
-          endAt: dayjs(campaignEndDate).toISOString(),
+          goalAmount: Number(campaignGoal),
+          startAt: dayjs(campaignDateRange.startDate).toISOString(),
+          endAt: dayjs(campaignDateRange.endDate).toISOString(),
           fundId,
         },
       });
@@ -130,26 +161,61 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
     e.preventDefault();
 
     if (!campaignName.trim()) {
+      NotificationToast.error(t('campaignNameRequired') as string);
       setTouched((prev) => ({ ...prev, campaignName: true }));
       return;
     }
 
+    if (!campaign?.id) {
+      NotificationToast.error(t('campaignNotFound') as string);
+      return;
+    }
+
+    if (!campaignDateRange.startDate || !campaignDateRange.endDate) {
+      NotificationToast.error(t('dateRangeRequired') as string);
+      return;
+    }
+
+    if (
+      !dayjs(campaignDateRange.startDate).isValid() ||
+      !dayjs(campaignDateRange.endDate).isValid()
+    ) {
+      NotificationToast.error(t('invalidDate') as string);
+      return;
+    }
+
+    if (
+      dayjs(campaignDateRange.startDate).isAfter(
+        dayjs(campaignDateRange.endDate),
+      )
+    ) {
+      NotificationToast.error(t('endDateBeforeStart') as string);
+      return;
+    }
+
     try {
+      setIsSubmitting(true);
       const updatedFields: { [key: string]: string | number | undefined } = {};
-      if (campaign?.name !== campaignName) {
-        updatedFields.name = campaignName.trim();
+
+      const trimmedName = campaignName.trim();
+      if (campaign?.name !== trimmedName) {
+        updatedFields.name = trimmedName;
       }
       if (campaign?.currencyCode !== campaignCurrency) {
         updatedFields.currencyCode = campaignCurrency;
       }
       if (campaign?.goalAmount !== campaignGoal) {
-        updatedFields.goalAmount = campaignGoal;
+        updatedFields.goalAmount = Number(campaignGoal);
       }
-      if (!dayjs(campaign?.startAt).isSame(dayjs(campaignStartDate))) {
-        updatedFields.startAt = dayjs(campaignStartDate).toISOString();
+      if (
+        !dayjs(campaign?.startAt).isSame(dayjs(campaignDateRange.startDate))
+      ) {
+        updatedFields.startAt = dayjs(
+          campaignDateRange.startDate,
+        ).toISOString();
       }
-      if (!dayjs(campaign?.endAt).isSame(dayjs(campaignEndDate))) {
-        updatedFields.endAt = dayjs(campaignEndDate).toISOString();
+      if (!dayjs(campaign?.endAt).isSame(dayjs(campaignDateRange.endDate))) {
+        updatedFields.endAt = dayjs(campaignDateRange.endDate).toISOString();
       }
 
       await updateCampaign({
@@ -175,11 +241,13 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
       setIsSubmitting(false);
     }
   };
+
   return (
     <BaseModal
       className={styles.campaignModal}
       show={isOpen}
       onHide={hide}
+      dataTestId="campaignModal"
       headerContent={
         <div className="d-flex justify-content-between align-items-center">
           <p className={styles.titlemodal}>
@@ -238,20 +306,31 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
           <DatePicker
             format="DD/MM/YYYY"
             label={tCommon('startDate')}
-            value={dayjs(campaignStartDate)}
+            value={dayjs(campaignDateRange.startDate)}
             className={styles.noOutline}
             data-testid="campaignStartDate"
             onChange={(date: Dayjs | null): void => {
-              if (date) {
-                setFormState({
-                  ...formState,
-                  campaignStartDate: date.toDate(),
-                  campaignEndDate:
-                    campaignEndDate && campaignEndDate < date.toDate()
-                      ? date.toDate()
-                      : campaignEndDate,
-                });
-              }
+              // We must update state even if null/invalid to let validation catch it
+              const newStart = date ? date.toDate() : null;
+
+              setCampaignDateRange((prev: IDateRangeValue) => {
+                let newEnd = prev.endDate;
+
+                // Auto-update end date if start date moves after it
+                if (date && date.isValid() && prev.endDate) {
+                  const startDay = dayjs(date);
+                  const endDay = dayjs(prev.endDate);
+
+                  if (startDay.isAfter(endDay)) {
+                    newEnd = date.toDate();
+                  }
+                }
+
+                return {
+                  startDate: newStart,
+                  endDate: newEnd,
+                };
+              });
             }}
             minDate={dayjs(new Date())}
           />
@@ -260,17 +339,16 @@ const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
             format="DD/MM/YYYY"
             label={tCommon('endDate')}
             className={styles.noOutline}
-            value={dayjs(campaignEndDate)}
+            value={dayjs(campaignDateRange.endDate)}
             data-testid="campaignEndDate"
             onChange={(date: Dayjs | null): void => {
-              if (date) {
-                setFormState({
-                  ...formState,
-                  campaignEndDate: date.toDate(),
-                });
-              }
+              const newEnd = date ? date.toDate() : null;
+              setCampaignDateRange((prev: IDateRangeValue) => ({
+                ...prev,
+                endDate: newEnd,
+              }));
             }}
-            minDate={dayjs(campaignStartDate)}
+            minDate={dayjs(campaignDateRange.startDate)}
           />
         </Form.Group>
 

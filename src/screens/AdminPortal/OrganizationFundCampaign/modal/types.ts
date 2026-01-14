@@ -20,3 +20,8 @@ export interface InterfaceCampaignModal {
   refetchCampaign: () => void;
   mode: 'create' | 'edit';
 }
+
+export interface IDateRangeValue {
+  startDate: Date | null;
+  endDate: Date | null;
+}
