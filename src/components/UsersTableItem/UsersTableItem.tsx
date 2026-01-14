@@ -202,7 +202,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         show={showJoinedOrganizations}
         key={`modal-joined-org-${index}`}
         size="xl"
-        dataTestId={`modal-joined-org-${user.id}`}
+        dataTestId={`modal-joined-org-${user.id}`} // check-i18n-ignore-line
         onHide={() => setShowJoinedOrganizations(false)}
         headerClassName={styles.modalHeader}
         title={
@@ -368,7 +368,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
       <BaseModal
         show={showRemoveUserModal}
         key={`modal-remove-org-${index}`}
-        dataTestId={`modal-remove-user-${user.id}`}
+        dataTestId={`modal-remove-user-${user.id}`} // check-i18n-ignore-line
         onHide={() => onHideRemoveUserModal()}
         headerClassName={styles.modalHeader}
         title={
@@ -407,7 +407,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         show={showBlockedOrganizations}
         key={`modal-blocked-org-${index}`}
         size="xl"
-        dataTestId={`modal-blocked-org-${user.id}`}
+        dataTestId={`modal-blocked-org-${user.id}`} // check-i18n-ignore-line
         onHide={() => setShowBlockedOrganizations(false)}
         headerClassName={styles.modalHeader}
         title={
@@ -528,7 +528,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
       <BaseModal
         show={showBlockedUserModal}
         key={`modal-unblock-user-${index}`}
-        dataTestId={`modal-unblock-user-${user.id}`}
+        dataTestId={`modal-unblock-user-${user.id}`} // check-i18n-ignore-line
         onHide={() => onHideBlockUserModal()}
         headerClassName={styles.modalHeader}
         title={
