@@ -6,6 +6,7 @@ import {
   waitFor,
   RenderResult,
 } from '@testing-library/react';
+
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { BrowserRouter } from 'react-router';
@@ -15,20 +16,14 @@ import { I18nextProvider } from 'react-i18next';
 import OrganizationModal from './OrganizationModal';
 import i18nForTest from '../../../../utils/i18nForTest'; // Update path based on your project structure
 
-import { validateFile } from 'utils/fileValidation';
-
 // Mock toast
 const toastMocks = vi.hoisted(() => ({
   error: vi.fn(),
   success: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
-}));
-
-vi.mock('utils/fileValidation', () => ({
-  validateFile: vi.fn(() => ({ isValid: true })),
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: toastMocks,
 }));
 
 const { mockUploadFileToMinio } = vi.hoisted(() => ({
@@ -61,11 +56,7 @@ describe('OrganizationModal Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (validateFile as unknown as ReturnType<typeof vi.fn>).mockImplementation(
-      () => ({
-        isValid: true,
-      }),
-    );
+
     mockUploadFileToMinio.mockResolvedValue({
       objectName: 'mocked-object-name',
     });
@@ -427,11 +418,6 @@ describe('OrganizationModal Component', () => {
   });
 
   test('should handle invalid file type', async () => {
-    (validateFile as unknown as ReturnType<typeof vi.fn>).mockReturnValueOnce({
-      isValid: false,
-      errorMessage:
-        'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
-    });
     setup();
     const invalidFile = new File(['content'], 'test.txt', {
       type: 'text/plain',
@@ -441,10 +427,7 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [invalidFile] } });
 
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith(
-        'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
-        expect.any(Object),
-      );
+      expect(toastMocks.error).toHaveBeenCalledWith('invalidFileType');
     });
     expect(mockUploadFileToMinio).not.toHaveBeenCalled();
     expect(mockSetFormState).not.toHaveBeenCalled();
@@ -574,10 +557,6 @@ describe('OrganizationModal Component', () => {
   });
 
   test('should handle file size exceeding 5MB', async () => {
-    (validateFile as unknown as ReturnType<typeof vi.fn>).mockReturnValueOnce({
-      isValid: false,
-      errorMessage: 'File is too large. Maximum size is 5MB.',
-    });
     setup();
     const largeFile = new File(['x'.repeat(6 * 1024 * 1024)], 'large.png', {
       type: 'image/png',
@@ -589,10 +568,7 @@ describe('OrganizationModal Component', () => {
     await userEvent.upload(fileInput, largeFile);
 
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith(
-        'File is too large. Maximum size is 5MB.',
-        expect.any(Object),
-      );
+      expect(toastMocks.error).toHaveBeenCalledWith('fileTooLarge');
       expect(mockUploadFileToMinio).not.toHaveBeenCalled();
       expect(mockSetFormState).not.toHaveBeenCalled();
     });
@@ -606,10 +582,7 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(toastMocks.success).toHaveBeenCalledWith(
-        'imageUploadSuccess',
-        expect.any(Object),
-      );
+      expect(toastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
     });
     expect(mockSetFormState).toHaveBeenCalledWith(
       expect.objectContaining({ avatar: 'mocked-object-name' }),
@@ -625,10 +598,7 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith(
-        'imageUploadError',
-        expect.any(Object),
-      );
+      expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');
     });
     expect(mockSetFormState).not.toHaveBeenCalled();
   });
