@@ -4,18 +4,12 @@
  * This component renders a modal for confirming the deletion of an action item.
  * It provides a user-friendly interface to confirm or cancel the deletion process.
  *
- * @param  props - The props for the ItemDeleteModal component.
- * @param props - Determines whether the modal is visible.
- * @param  props - Function to hide the modal.
- * @param props - The action item to be deleted.
- * @param props - Function to refetch the list of action items after deletion.
- *
  * @returns  A React functional component rendering the delete confirmation modal.
  *
  * @remarks
  * - Uses `react-bootstrap` for modal and button components.
  * - Integrates with Apollo Client's `useMutation` for handling the deletion of the action item.
- * - Displays success or error messages using `react-toastify`.
+ * - Displays success or error messages using `NotificationToast`.
  * - Supports internationalization with `react-i18next`.
  *
  * @example

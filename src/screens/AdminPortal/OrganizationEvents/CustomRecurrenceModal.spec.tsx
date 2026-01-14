@@ -102,7 +102,7 @@ describe('CustomRecurrenceModal', () => {
 
     expect(screen.getByText('customRecurrence')).toBeInTheDocument();
     expect(
-      screen.getByTestId('customRecurrenceModalCloseBtn'),
+      screen.getByTestId('modalCloseBtn'),
     ).toBeInTheDocument();
     expect(screen.getByTestId('customRecurrenceSubmitBtn')).toBeInTheDocument();
   });
@@ -123,7 +123,7 @@ describe('CustomRecurrenceModal', () => {
       hideCustomRecurrenceModal: hideModal,
     });
 
-    await userEvent.click(screen.getByTestId('customRecurrenceModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     expect(hideModal).toHaveBeenCalled();
   });
 
@@ -604,7 +604,7 @@ describe('CustomRecurrenceModal', () => {
   test('handles form submission with invalid count - early return (lines 319-322)', async () => {
     const mockSetRecurrenceRuleState = vi.fn();
     const mockSetModalOpen = vi.fn();
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
 
     renderComponent({
       ...mockProps,
@@ -742,7 +742,7 @@ describe('CustomRecurrenceModal', () => {
   test('Testing form submission with invalid interval - string parsing (lines 288-295)', async () => {
     const mockSetRecurrenceRuleState = vi.fn();
     const mockSetModalOpen = vi.fn();
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
 
     renderComponent({
       ...mockProps,
