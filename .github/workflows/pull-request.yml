@@ -292,6 +292,9 @@ jobs:
             '^docs/docusaurus.config.ts$'
             '^docs/sidebar..*'
             'CNAME$'
+            '^./*md'
+            '^./*txt'
+            '^./*TXT'            
           )
 
           # Check for changes in sensitive files

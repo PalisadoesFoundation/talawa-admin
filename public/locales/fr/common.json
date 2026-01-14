@@ -100,6 +100,7 @@
   "successfullyUpdated": "Mis à jour avec succès",
   "sessionWarning": "Votre session expirera bientôt en raison de l'inactivité. Veuillez interagir avec la page pour prolonger votre session.",
   "sessionLogOut": "Votre session a expiré en raison de l'inactivité. Veuillez vous reconnecter pour continuer.",
+  "logoutFailed": "Échec de la déconnexion",
   "all": "Tous",
   "active": "Actif",
   "disabled": "Désactivé",
@@ -254,5 +255,16 @@
   "peopleTabTagName": "Personnes",
   "or": "ou",
   "eventNotFound": "Événement avec l'id {{id}} non trouvé",
-  "required": "Obligatoire"
+  "required": "Obligatoire",
+  "imageNotFound": "Image non trouvée",
+  "changeLanguage": "Changer de langue",
+  "selectField": "Sélectionner {{fieldName}}",
+  "userEvents": {
+    "presetToday": "Aujourd'hui",
+    "presetThisWeek": "Cette Semaine",
+    "presetThisMonth": "Ce Mois",
+    "presetNext7Days": "7 Prochains Jours",
+    "presetNext30Days": "30 Prochains Jours",
+    "presetNextMonth": "Mois Prochain"
+  }
 }

@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_LIST } from 'GraphQl/Queries/ActionItemQueries';
 import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
-import styles from 'style/app-fixed.module.css';
+import styles from './Actions.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   DataGridWrapper,
@@ -16,7 +16,7 @@ import {
 } from 'shared-components/DataGridWrapper';
 import { Chip } from '@mui/material';
 import ItemViewModal from 'screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
 import useLocalStorage from 'utils/useLocalstorage';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
@@ -145,7 +145,7 @@ function Actions(): JSX.Element {
               name={name}
               alt={name}
               containerStyle={styles.imageContainer}
-              avatarStyle={styles.TableImage}
+              avatarStyle={styles.tableImage}
             />
             <span className="ms-2">{name}</span>
           </div>

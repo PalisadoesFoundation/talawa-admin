@@ -1,6 +1,15 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "Por favor, inicie sesión nuevamente; su sesión ha expirado."
+  },
+  "securedRoute": {
+    "sessionExpired": "Por favor, inicie sesión nuevamente; su sesión ha expirado."
+  },
   "ends": "Finaliza",
   "occurrences": "ocurrencias",
+  "customRecurrence": "Recurrencia personalizada",
+  "invalidDetailsMessage": "Por favor, verifique los detalles ingresados.",
+  "selectAtLeastOneDay": "Por favor, seleccione al menos un día.",
   "leaderboard": {
     "title": "Tabla de Clasificación",
     "searchByVolunteer": "Buscar por Voluntario",
@@ -490,7 +499,9 @@
     "sortPeople": "Ordenar personas",
     "noTagsFound": "No se encontraron etiquetas",
     "tagActions": "Acciones de etiqueta",
-    "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados"
+    "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados",
+    "addMember": "Agregar miembro",
+    "removeMember": "Eliminar miembro"
   },
   "userListCard": {
     "joined": "Unido",
@@ -710,7 +721,8 @@
     "deleteAgendaItem": "Eliminar punto del orden del día",
     "deleteAgendaItemMsg": "¿Desea eliminar este punto del orden del día?",
     "event": "Evento",
-    "search": "Buscar"
+    "search": "Buscar",
+    "attachmentPreview": "Vista previa del adjunto"
   },
   "eventListCard": {
     "location": "Lugar del evento",
@@ -822,7 +834,12 @@
     "highestGoal": "Meta más alta",
     "errorLoading": "Error al cargar los datos de la campaña",
     "percentageRaised": "% Recaudado",
-    "campaignProgress": "Progreso de la campaña: {{percentage}}%"
+    "campaignProgress": "Progreso de la campaña: {{percentage}}%",
+    "campaignNotFound": "Campaña no encontrada",
+    "dateRangeRequired": "Por favor, seleccione un rango de fechas válido",
+    "campaignNameRequired": "El nombre de la campaña es obligatorio",
+    "invalidDate": "Fecha seleccionada no válida",
+    "endDateBeforeStart": "La fecha de finalización no puede ser anterior a la fecha de inicio"
   },
   "pledges": {
     "title": "Compromisos de Campaña de Financiamiento",
@@ -1601,7 +1618,8 @@
     "on": "El",
     "after": "Después de",
     "customRecurrence": "Recurrencia Personalizada",
-    "repeatsEvery": "Se repite cada"
+    "repeatsEvery": "Se repite cada",
+    "noEventAvailable": "¡No hay eventos disponibles!"
   },
   "userEventCard": {
     "location": "Ubicación",
@@ -1835,7 +1853,12 @@
   },
   "checkIn": {
     "errorCheckingIn": "Error al registrarse",
-    "checkedInSuccessfully": "Registrado con éxito"
+    "checkedInSuccessfully": "Registrado con éxito",
+    "searchAttendees": "Buscar asistentes",
+    "checkedIn": "Registrado",
+    "downloadTag": "Descargar etiqueta",
+    "checkIn": "Registrar",
+    "eventCheckInManagement": "Gestión de registro de eventos"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",
@@ -2141,9 +2164,6 @@
   "contact": {
     "card_aria": "Tarjeta de contacto"
   },
-  "securedRoute": {
-    "sessionExpired": "Por favor, vuelva a iniciar sesión ya que la sesión ha expirado"
-  },
   "common": {
     "signOut": "Cerrar sesión",
     "signingOut": "Cerrando sesión...",
@@ -2180,5 +2200,8 @@
     "sortPeople": "Ordenar personas",
     "unassign": "Desasignar",
     "tags": "Etiquetas"
+  },
+  "orgProfileField": {
+    "editCustomField": "Editar campo personalizado"
   }
 }

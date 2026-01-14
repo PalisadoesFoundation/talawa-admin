@@ -32,7 +32,7 @@ import type {
   InterfaceVolunteerGroupInfo,
   InterfaceVolunteerMembership,
 } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './GroupModal.module.css';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
@@ -57,7 +57,7 @@ import {
 import { PiUserListBold } from 'react-icons/pi';
 import { TbListDetails } from 'react-icons/tb';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import { FaXmark } from 'react-icons/fa6';
 import { FormFieldGroup } from '../../../../shared-components/FormFieldGroup/FormFieldGroup';
 

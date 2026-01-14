@@ -189,6 +189,10 @@ describe('Testing Volunteers Screen', () => {
     // Also check for Rejected status chip (volunteer3)
     const rejectedChip = await screen.findByText('Rejected');
     expect(rejectedChip).toBeInTheDocument();
+
+    // Verify dataTestId attribute is properly applied to StatusBadge components
+    const statusChips = screen.getAllByTestId('statusChip');
+    expect(statusChips).toHaveLength(3); // 3 volunteers with different statuses
   });
 
   it('Filter Volunteers by status (All)', async () => {

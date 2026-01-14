@@ -48,17 +48,17 @@
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from './OrganizationVenues.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import { useMutation, useQuery } from '@apollo/client';
 import Col from 'react-bootstrap/Col';
 import { VENUE_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { Navigate, useParams } from 'react-router';
-import VenueModal from 'components/Venues/Modal/VenueModal';
+import VenueModal from 'components/AdminPortal/Venues/Modal/VenueModal';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
-import VenueCard from 'components/Venues/VenueCard';
+import VenueCard from 'components/AdminPortal/Venues/VenueCard';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 function organizationVenues(): JSX.Element {

@@ -1,6 +1,6 @@
 import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
-import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'types/Tag/utils';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'types/AdminPortal/Tag/utils';
 
 export const MOCKS = [
   {

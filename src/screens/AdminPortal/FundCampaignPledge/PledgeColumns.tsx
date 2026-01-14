@@ -6,7 +6,7 @@ import type {
 import type { TFunction } from 'i18next';
 import dayjs from 'dayjs';
 import { Button } from 'react-bootstrap';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import { currencySymbols } from 'utils/currency';
 import type {
   InterfacePledgeInfo,
