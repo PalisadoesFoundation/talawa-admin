@@ -1858,6 +1858,7 @@ form label,
   border: 1px solid var(--createButton-border-active) !important;
 }
 
+<<<<<<< HEAD
 .cardItemAuthor {
   font-size: 12px;
   font-weight: bold;
@@ -1875,6 +1876,12 @@ form label,
 
 .testRedBackground {
   background-color: red;
+=======
+.statsButton {
+  width: auto !important;
+  min-width: fit-content !important;
+  white-space: nowrap !important;
+>>>>>>> 687c3710d50 (fix: resolve failing checks)
 }
 
 /* Add more Global CSS Classes above this */
@@ -3566,7 +3573,7 @@ form label,
   box-shadow: 0 3px 8px var(--time-box-shadow);
   border-radius: 8px;
   margin-top: 20px;
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 
 @supports (-webkit-line-clamp: 1) {
@@ -11213,9 +11220,15 @@ form {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  margin-right: 10px;
+  margin-inline-end: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
+<<<<<<< HEAD
 >>>>>>> 93685b5836d (fix(events): enable user event dashboard access and correct Upcoming Events visibility)
+=======
+  object-fit: cover;
+  overflow: hidden;
+  flex-shrink: 0;
+>>>>>>> 687c3710d50 (fix: resolve failing checks)
 }

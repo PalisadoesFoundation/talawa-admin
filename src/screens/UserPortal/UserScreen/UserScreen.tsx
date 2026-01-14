@@ -18,7 +18,7 @@
  *   - Sets up and cleans up the window resize event listener.
  *
  * ### Dependencies
- * - `react-router-dom` for routing and navigation.
+ * - `react-router` for routing and navigation.
  * - `react-redux` for state management.
  * - `react-bootstrap` for UI components.
  * - `react-i18next` for internationalization.
@@ -61,8 +61,12 @@ const map: InterfaceMapType = {
   volunteer: 'userVolunteer',
   leaveorg: 'leaveOrganization',
   notification: 'notification',
+<<<<<<< HEAD
   organizations: 'userOrganizations',
   settings: 'settings',
+=======
+  event: 'eventManagement',
+>>>>>>> 687c3710d50 (fix: resolve failing checks)
 };
 
 const UserScreen = (): React.JSX.Element => {
@@ -80,12 +84,18 @@ const UserScreen = (): React.JSX.Element => {
   // don't include an `orgId`. In that case render the global user sidebar
   // instead of redirecting to home.
 
+<<<<<<< HEAD
   /* titleKey defaults to 'common' when the path segment is not found in the map.
    * This allows using the existing 'common.title' ("User Portal") from translation.json
    * without adding a new root-level title key.
    */
   const titleKey: string = map[location.pathname.split('/')[2]] || 'common';
   const { t: tScoped } = useTranslation('translation', { keyPrefix: titleKey });
+=======
+  const titleKey: string | undefined =
+    map[location.pathname.split('/')[2]?.toLowerCase()];
+  const { t } = useTranslation('translation', { keyPrefix: titleKey });
+>>>>>>> 687c3710d50 (fix: resolve failing checks)
 
   const userRoutes: { targets: TargetsType[] } = useSelector(
     (state: RootState) => state.userRoutes,

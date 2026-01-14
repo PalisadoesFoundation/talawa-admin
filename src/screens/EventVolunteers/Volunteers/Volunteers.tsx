@@ -273,7 +273,7 @@ function Volunteers(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const { id, name, avatarURL } = params.row.user;
+        const { name, avatarURL } = params.row.user;
         return (
           <div
             className="d-flex fw-bold align-items-center ms-2"
@@ -282,7 +282,11 @@ function Volunteers(): JSX.Element {
             {avatarURL ? (
               <img
                 src={avatarURL}
+<<<<<<< HEAD
                 alt={tCommon('volunteer')}
+=======
+                alt={name}
+>>>>>>> 687c3710d50 (fix: resolve failing checks)
                 data-testid="volunteer_image"
 <<<<<<< HEAD
                 className={styles.tableImages}
@@ -303,7 +307,6 @@ function Volunteers(): JSX.Element {
               />
             ) : (
               <Avatar
-                key={id + '1'}
                 dataTestId="volunteer_avatar"
                 containerStyle={styles.volunteerAvatar}
                 avatarStyle={styles.volunteerAvatar}

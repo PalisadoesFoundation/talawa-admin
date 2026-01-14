@@ -165,14 +165,9 @@ function EventAttendance(): JSX.Element {
       />
       <div className="d-flex justify-content-between align-items-center mb-3">
         <Button
-          className={`border-1 bg-white text-success ${styles.createButton}`}
+          className={`border-1 bg-white text-success ${styles.createButton} ${styles.statsButton}`}
           onClick={showModal}
           data-testid="stats-modal"
-          style={{
-            width: 'auto',
-            minWidth: 'fit-content',
-            whiteSpace: 'nowrap',
-          }}
         >
           {t('historical_statistics')}
         </Button>

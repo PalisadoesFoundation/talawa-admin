@@ -203,7 +203,11 @@ function Requests(): JSX.Element {
             {avatarURL ? (
               <img
                 src={avatarURL}
+<<<<<<< HEAD
                 alt={`${name} ${tCommon('avatar')}`}
+=======
+                alt={name}
+>>>>>>> 687c3710d50 (fix: resolve failing checks)
                 data-testid={`volunteer_image`}
 <<<<<<< HEAD
                 className={styles.tableImages}
