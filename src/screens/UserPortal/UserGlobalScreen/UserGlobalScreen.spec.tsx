@@ -59,6 +59,22 @@ vi.mock('react-router', async () => {
   };
 });
 
+// Mock UserPortalNavigationBar to verify correct props and integration
+vi.mock(
+  'components/UserPortal/UserPortalNavigationBar/UserPortalNavigationBar',
+  () => ({
+    UserPortalNavigationBar: vi.fn((props) => (
+      <nav
+        data-testid="user-portal-navbar"
+        data-variant={props.variant}
+        data-currentpage={props.currentPage || ''}
+      >
+        UserPortalNavigationBar
+      </nav>
+    )),
+  }),
+);
+
 describe('UserGlobalScreen', () => {
   const originalInnerWidth = window.innerWidth;
 
@@ -125,6 +141,14 @@ describe('UserGlobalScreen', () => {
       renderComponent();
 
       expect(screen.getByText('Global Features')).toBeInTheDocument();
+    });
+
+    it('should render UserPortalNavigationBar with correct props for user variant', () => {
+      renderComponent();
+      const navbar = screen.getByTestId('user-portal-navbar');
+      expect(navbar).toBeInTheDocument();
+      expect(navbar).toHaveAttribute('data-variant', 'user');
+      expect(navbar).toHaveAttribute('data-currentpage', '/'); // MemoryRouter default location
     });
   });
 

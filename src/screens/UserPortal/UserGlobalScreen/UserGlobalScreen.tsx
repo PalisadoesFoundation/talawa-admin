@@ -1,3 +1,4 @@
+/* eslint-disable tsdoc/syntax */
 /**
  * Main layout for user routes that do not require an orgId.
  * Manages sidebar visibility and displays nested content via the router outlet.
@@ -15,12 +16,12 @@
  * ```
  */
 import React, { useEffect, useState } from 'react';
-import { Outlet } from 'react-router';
+import { Outlet, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import styles from './UserGlobalScreen.module.css';
-import { Button } from 'react-bootstrap';
+import styles from 'style/app-fixed.module.css';
+import localStyles from './UserGlobalScreen.module.css';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
+import { UserPortalNavigationBar } from 'components/UserPortal/UserPortalNavigationBar/UserPortalNavigationBar';
 
 const UserGlobalScreen = (): JSX.Element => {
   const { t } = useTranslation('translation', {
@@ -49,47 +50,29 @@ const UserGlobalScreen = (): JSX.Element => {
     };
   }, []);
 
+  const location = useLocation();
+  const currentPage = location.pathname;
   return (
-    <>
-      {hideDrawer ? (
-        <Button
-          className={styles.opendrawer}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
-          data-testid="openMenu"
-        >
-          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
-        </Button>
-      ) : (
-        <Button
-          className={styles.collapseSidebarButton}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
-          data-testid="closeMenu"
-        >
-          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
-        </Button>
-      )}
-      <div className={styles.drawer}>
-        <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
-      </div>
-      <div
-        className={`${styles.pageContainer} ${
-          hideDrawer ? styles.expand : styles.contract
-        } `}
-        data-testid="mainpageright"
-      >
-        <div className="d-flex justify-content-between align-items-center">
-          <div className={styles.titleFlex}>
-            <h1>{t('globalFeatures')}</h1>
-          </div>
-          <ProfileDropdown portal="user" />
+    <div className={localStyles.pageContainer}>
+      <UserPortalNavigationBar mode="user" currentPage={currentPage} />
+      <div className={localStyles.flexContainer}>
+        <div className={styles.drawer}>
+          <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
         </div>
-        <Outlet />
+        <div
+          className={`${hideDrawer ? styles.expand : styles.contract} ${localStyles.mainContent}`}
+          data-testid="mainpageright"
+        >
+          <div className="d-flex justify-content-between align-items-center">
+            <div className={localStyles.titleWrapper}>
+              <h1>{t('userGlobalScreen.title')}</h1>
+            </div>
+            {/* <ProfileDropdown portal="user" /> */}
+          </div>
+          <Outlet />
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

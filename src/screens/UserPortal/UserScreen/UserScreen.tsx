@@ -45,6 +45,7 @@ import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from './UserScreen.module.css';
 import UserSidebarOrg from 'components/UserPortal/UserSidebarOrg/UserSidebarOrg';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
+import { UserPortalNavigationBar } from 'components/UserPortal/UserPortalNavigationBar/UserPortalNavigationBar';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -132,54 +133,48 @@ const UserScreen = (): React.JSX.Element => {
     setItem('sidebar', hideDrawer.toString());
   }, [hideDrawer, setItem]);
 
+  const currentPage = location.pathname;
   return (
-    <>
-      {/* {hideDrawer ? (
-        <Button
-          className={styles.opendrawer}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
-          data-testid="openMenu"
-        >
-          <i className="fa fa-angle-double-right" aria-hidden="true"></i>
-        </Button>
-      ) : (
-        <Button
-          className={styles.collapseSidebarButton}
-          onClick={(): void => {
-            setHideDrawer(!hideDrawer);
-          }}
-          data-testid="closeMenu"
-        >
-          <i className="fa fa-angle-double-left" aria-hidden="true"></i>
-        </Button>
-      )} */}
-      <div className={styles.drawer}>
-        {orgId ? (
-          <UserSidebarOrg
-            orgId={orgId}
-            targets={targets}
-            hideDrawer={hideDrawer}
-            setHideDrawer={setHideDrawer}
-          />
-        ) : (
-          <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
-        )}
-      </div>
-      <div
-        className={`${hideDrawer ? styles.expand : styles.contract} ${hideDrawer ? styles.contentContainer : ''}`}
-        data-testid="mainpageright"
-      >
-        <div className="d-flex justify-content-between align-items-center">
-          <div className={styles.titleContainer}>
-            <h1>{tScoped('title')}</h1>
-          </div>
-          {/* <ProfileDropdown /> */}
+    <div
+      className={styles.pageContainer}
+      style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+    >
+      <UserPortalNavigationBar
+        variant="light"
+        organizationId={orgId}
+        currentPage={currentPage}
+      />
+      <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
+        <div className={styles.drawer}>
+          {orgId ? (
+            <UserSidebarOrg
+              orgId={orgId}
+              targets={targets}
+              hideDrawer={hideDrawer}
+              setHideDrawer={setHideDrawer}
+            />
+          ) : (
+            <UserSidebar
+              hideDrawer={hideDrawer}
+              setHideDrawer={setHideDrawer}
+            />
+          )}
         </div>
-        <Outlet />
+        <div
+          className={`${hideDrawer ? styles.expand : styles.contract} ${hideDrawer ? localStyles.contentContainer : ''}`}
+          data-testid="mainpageright"
+          style={{ flex: 1, minWidth: 0 }}
+        >
+          <div className="d-flex justify-content-between align-items-center">
+            <div className={localStyles.titleContainer}>
+              <h1>{tScoped('title')}</h1>
+            </div>
+            {/* <ProfileDropdown /> */}
+          </div>
+          <Outlet />
+        </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -90,6 +90,23 @@ vi.mock('components/ProfileCard/ProfileCard', () => ({
   )),
 }));
 
+// Mock UserPortalNavigationBar to verify correct props and integration
+vi.mock(
+  'components/UserPortal/UserPortalNavigationBar/UserPortalNavigationBar',
+  () => ({
+    UserPortalNavigationBar: vi.fn((props) => (
+      <nav
+        data-testid="user-portal-navbar"
+        data-variant={props.variant}
+        data-orgid={props.organizationId || ''}
+        data-currentpage={props.currentPage || ''}
+      >
+        UserPortalNavigationBar
+      </nav>
+    )),
+  }),
+);
+
 const MOCKS = [
   {
     request: {
@@ -276,5 +293,50 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
 
     const titleElement = screen.getByRole('heading', { level: 1 });
     expect(titleElement).toHaveTextContent('User Portal');
+  });
+
+  it('renders UserPortalNavigationBar with correct props for organization variant', () => {
+    mockID = '123';
+    mockLocation = '/user/organization/123';
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    const navbar = screen.getByTestId('user-portal-navbar');
+    expect(navbar).toBeInTheDocument();
+    expect(navbar).toHaveAttribute('data-variant', 'organization');
+    expect(navbar).toHaveAttribute('data-orgid', '123');
+    expect(navbar).toHaveAttribute(
+      'data-currentpage',
+      '/user/organization/123',
+    );
+  });
+
+  it('renders UserPortalNavigationBar with correct props for user variant (no orgId)', () => {
+    mockID = undefined;
+    mockLocation = '/user/settings';
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    const navbar = screen.getByTestId('user-portal-navbar');
+    expect(navbar).toBeInTheDocument();
+    expect(navbar).toHaveAttribute('data-variant', 'organization'); // still organization variant
+    expect(navbar).toHaveAttribute('data-orgid', '');
+    expect(navbar).toHaveAttribute('data-currentpage', '/user/settings');
   });
 });
