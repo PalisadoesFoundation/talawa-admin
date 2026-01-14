@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { MockedResponse } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
@@ -7,10 +7,15 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import { ToastContainer } from 'react-toastify';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { describe, test, expect, vi } from 'vitest';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
+import { describe, test, expect, vi, afterEach } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 import { EventRegistrantsModal } from './EventRegistrantsModal';
 import {
@@ -19,6 +24,7 @@ import {
   EVENT_DETAILS,
 } from 'GraphQl/Queries/Queries';
 import { ADD_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 vi.mock('./AddOnSpot/AddOnSpotAttendee', () => ({
   __esModule: true,
@@ -67,7 +73,7 @@ vi.mock('./InviteByEmail/InviteByEmailModal', () => ({
     isRecurring?: boolean;
   }) =>
     show ? (
-      <div data-testid="invite-modal">
+      <div data-testid="invite-by-email-modal">
         <span data-testid="invite-event-id">{eventId}</span>
         <span data-testid="invite-is-recurring">
           {String(isRecurring ?? false)}
@@ -86,6 +92,17 @@ vi.mock('./InviteByEmail/InviteByEmailModal', () => ({
         )}
       </div>
     ) : null,
+}));
+
+// Mock NotificationToast
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
+  },
 }));
 
 type ApolloMock = MockedResponse<Record<string, unknown>>;
@@ -125,8 +142,8 @@ const makeMembersWithOneMock = (): ApolloMock => ({
           emailAddress: 'johndoe@example.com',
           role: 'member',
           avatarURL: null,
-          createdAt: '2023-01-01',
-          updatedAt: '2023-01-01',
+          createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+          updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
         },
       ],
     },
@@ -159,8 +176,8 @@ const makeMembersUnknownNameMock = (): ApolloMock => ({
           emailAddress: 'unknown@example.com',
           role: 'member',
           avatarURL: null,
-          createdAt: '2023-01-01',
-          updatedAt: '2023-01-01',
+          createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+          updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
         },
       ],
     },
@@ -249,7 +266,6 @@ const renderWithProviders = (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
               <EventRegistrantsModal {...props} />
             </I18nextProvider>
           </Provider>
@@ -262,22 +278,26 @@ describe('EventRegistrantsModal', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
+
   test('renders modal with basic elements', async () => {
-    const { queryByText, getByTestId } = renderWithProviders([
+    renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
       makeMembersWithOneMock(),
     ]);
 
-    await waitFor(() => {
-      expect(queryByText('Event Registrants')).toBeInTheDocument();
-      expect(getByTestId('autocomplete')).toBeInTheDocument();
-    });
+    // BaseModal has dataTestId="invite-modal"
+    const modal = await screen.findByTestId('invite-modal');
+    expect(modal).toBeInTheDocument();
+
+    // Autocomplete input should be rendered
+    const autocomplete = await screen.findByTestId('autocomplete');
+    expect(autocomplete).toBeInTheDocument();
   });
 
   test('modal close button calls handleClose', async () => {
     const handleClose = vi.fn();
-    const { getAllByRole } = renderWithProviders(
+    renderWithProviders(
       [
         makeEventDetailsNonRecurringMock(),
         makeAttendeesEmptyMock(),
@@ -286,233 +306,276 @@ describe('EventRegistrantsModal', () => {
       { ...defaultProps, handleClose },
     );
 
-    await waitFor(() => {
-      expect(getAllByRole('button', { name: /close/i })[0]).toBeInTheDocument();
-    });
+    // Wait for modal to appear using stable test id
+    const modal = await screen.findByTestId('invite-modal');
+    expect(modal).toBeInTheDocument();
 
-    const closeButton = getAllByRole('button', { name: /close/i })[0];
+    // Close button has data-testid="modalCloseBtn"
+    const closeButton = await screen.findByTestId('modalCloseBtn');
     fireEvent.click(closeButton);
 
     expect(handleClose).toHaveBeenCalled();
   });
 
   test('shows warning when Add Registrant is clicked without selecting a member', async () => {
-    const { queryByText } = renderWithProviders([
+    renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
       makeMembersWithOneMock(),
     ]);
 
-    await waitFor(() =>
-      expect(queryByText('Event Registrants')).toBeInTheDocument(),
-    );
+    // Wait for modal and button to appear
+    await screen.findByTestId('invite-modal');
+    const addButton = await screen.findByTestId('add-registrant-btn');
 
-    fireEvent.click(queryByText('Add Registrant') as Element);
+    // Click button
+    fireEvent.click(addButton);
 
-    await waitFor(() =>
-      expect(
-        queryByText('Please choose an user to add first!'),
-      ).toBeInTheDocument(),
-    );
+    // Assert NotificationToast was called (it's mocked)
+    await waitFor(() => {
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
+        'Please choose an user to add first!',
+      );
+    });
   });
 
   test('successfully adds registrant for non-recurring event', async () => {
-    const { queryByText, queryByLabelText } = renderWithProviders([
+    const user = await import('@testing-library/user-event').then(
+      (m) => m.default,
+    );
+
+    renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
       makeMembersWithOneMock(),
       makeAddRegistrantSuccessMock(),
     ]);
 
-    await waitFor(() =>
-      expect(queryByText('Event Registrants')).toBeInTheDocument(),
-    );
+    await screen.findByTestId('invite-modal');
 
-    const input = queryByLabelText('Add an Registrant') as HTMLElement;
-    fireEvent.change(input, { target: { value: 'John Doe' } });
-    fireEvent.keyDown(input, { key: 'ArrowDown' });
-    fireEvent.keyDown(input, { key: 'Enter' });
+    const input = await screen.findByTestId('autocomplete');
 
-    fireEvent.click(queryByText('Add Registrant') as Element);
+    await user.click(input);
+    await user.type(input, 'John Doe');
 
-    await waitFor(() =>
-      expect(queryByText('Adding the attendee...')).toBeInTheDocument(),
-    );
+    await waitFor(() => {
+      const option = screen.getByText('John Doe');
+      expect(option).toBeInTheDocument();
+    });
 
-    await waitFor(() =>
-      expect(queryByText('Attendee added Successfully')).toBeInTheDocument(),
-    );
+    const option = screen.getByText('John Doe');
+    await user.click(option);
+
+    const addButton = screen.getByTestId('add-registrant-btn');
+    fireEvent.click(addButton);
+
+    await waitFor(() => {
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
+        'Adding the attendee...',
+      );
+    });
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalled();
+    });
   });
 
   test('handles error when add registrant mutation fails', async () => {
-    const { queryByText, queryByLabelText } = renderWithProviders([
+    const user = await import('@testing-library/user-event').then(
+      (m) => m.default,
+    );
+
+    renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
       makeMembersWithOneMock(),
       makeAddRegistrantErrorMock(),
     ]);
 
-    await waitFor(() =>
-      expect(queryByText('Event Registrants')).toBeInTheDocument(),
-    );
+    await screen.findByTestId('invite-modal');
 
-    const input = queryByLabelText('Add an Registrant') as HTMLElement;
-    fireEvent.change(input, { target: { value: 'John Doe' } });
-    fireEvent.keyDown(input, { key: 'ArrowDown' });
-    fireEvent.keyDown(input, { key: 'Enter' });
+    const input = await screen.findByTestId('autocomplete');
 
-    fireEvent.click(queryByText('Add Registrant') as Element);
+    // Use userEvent to type
+    await user.click(input);
+    await user.type(input, 'John Doe');
 
-    await waitFor(() =>
-      expect(queryByText('Adding the attendee...')).toBeInTheDocument(),
-    );
+    // Wait for dropdown and select option
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
 
-    await waitFor(() =>
-      expect(queryByText('Error adding attendee')).toBeInTheDocument(),
-    );
+    const option = screen.getByText('John Doe');
+    await user.click(option);
+
+    const addButton = screen.getByTestId('add-registrant-btn');
+    fireEvent.click(addButton);
+
+    // Assert warning shown first
+    await waitFor(() => {
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
+        'Adding the attendee...',
+      );
+    });
+
+    // Assert error toast
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalled();
+    });
   });
 
   test('uses recurring variables when event is recurring (isRecurring branch)', async () => {
-    const { queryByText, queryByLabelText } = renderWithProviders([
+    const user = await import('@testing-library/user-event').then(
+      (m) => m.default,
+    );
+
+    renderWithProviders([
       makeEventDetailsRecurringMock(),
       makeAttendeesEmptyMock(),
       makeMembersWithOneMock(),
       makeAddRegistrantRecurringSuccessMock(),
     ]);
 
-    await waitFor(() =>
-      expect(queryByText('Event Registrants')).toBeInTheDocument(),
-    );
+    await screen.findByTestId('invite-modal');
 
-    const input = queryByLabelText('Add an Registrant') as HTMLElement;
-    fireEvent.change(input, { target: { value: 'John Doe' } });
-    fireEvent.keyDown(input, { key: 'ArrowDown' });
-    fireEvent.keyDown(input, { key: 'Enter' });
+    const input = await screen.findByTestId('autocomplete');
 
-    fireEvent.click(queryByText('Add Registrant') as Element);
+    // Use userEvent to type
+    await user.click(input);
+    await user.type(input, 'John Doe');
 
-    await waitFor(() =>
-      expect(queryByText('Adding the attendee...')).toBeInTheDocument(),
-    );
+    // Wait for dropdown and select option
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
 
-    await waitFor(() =>
-      expect(queryByText('Attendee added Successfully')).toBeInTheDocument(),
-    );
+    const option = screen.getByText('John Doe');
+    await user.click(option);
+
+    const addButton = screen.getByTestId('add-registrant-btn');
+    fireEvent.click(addButton);
+
+    await waitFor(() => {
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
+        'Adding the attendee...',
+      );
+    });
+
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalled();
+    });
   });
 
   test('noOptionsText and AddOnSpotAttendee modal open & reloadMembers callback', async () => {
-    const { getByPlaceholderText, getByText, getByTestId, queryByTestId } =
-      renderWithProviders([
-        makeEventDetailsNonRecurringMock(),
-        makeAttendeesEmptyMock(),
-        makeMembersEmptyMock(),
-        makeAttendeesEmptyMock(), // for reloadMembers refetch
-      ]);
+    renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersEmptyMock(),
+      makeAttendeesEmptyMock(), // for reloadMembers refetch
+    ]);
 
-    await waitFor(() => {
-      const input = getByPlaceholderText(
-        'Choose the user that you want to add',
-      );
-      expect(input).toBeInTheDocument();
-    });
-
-    const input = getByPlaceholderText(
+    const input = await screen.findByPlaceholderText(
       'Choose the user that you want to add',
-    ) as HTMLElement;
+    );
+    expect(input).toBeInTheDocument();
+
     fireEvent.change(input, { target: { value: 'NonexistentUser' } });
 
     await waitFor(() => {
-      expect(getByText('No Registrations found')).toBeInTheDocument();
-      expect(getByText('Add Onspot Registration')).toBeInTheDocument();
+      expect(screen.getByText('No Registrations found')).toBeInTheDocument();
+      expect(screen.getByText('Add Onspot Registration')).toBeInTheDocument();
     });
 
-    fireEvent.click(getByText('Add Onspot Registration'));
+    fireEvent.click(screen.getByText('Add Onspot Registration'));
 
-    await waitFor(() =>
-      expect(getByTestId('add-onspot-modal')).toBeInTheDocument(),
-    );
+    const onspotModal = await screen.findByTestId('add-onspot-modal');
+    expect(onspotModal).toBeInTheDocument();
 
-    const reloadBtn = getByTestId('reload-members-btn');
+    const reloadBtn = screen.getByTestId('reload-members-btn');
     fireEvent.click(reloadBtn);
 
-    const closeBtn = getByTestId('add-onspot-close');
+    const closeBtn = screen.getByTestId('add-onspot-close');
     fireEvent.click(closeBtn);
 
     await waitFor(() => {
-      expect(queryByTestId('add-onspot-modal')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('add-onspot-modal')).not.toBeInTheDocument();
     });
   });
 
   test('Invite by Email button opens InviteByEmailModal and handleClose closes it', async () => {
-    const { queryByText, getByTestId, queryByTestId } = renderWithProviders([
+    renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
       makeMembersWithOneMock(),
     ]);
 
-    await waitFor(() =>
-      expect(queryByText('Event Registrants')).toBeInTheDocument(),
-    );
+    // Wait for main modal to appear
+    await screen.findByTestId('invite-modal');
 
-    const inviteButton = queryByText('Invite by Email') as HTMLElement;
+    // Click invite button using data-testid
+    const inviteButton = screen.getByTestId('invite-by-email-btn');
     fireEvent.click(inviteButton);
 
-    await waitFor(() =>
-      expect(getByTestId('invite-modal')).toBeInTheDocument(),
-    );
-    expect(getByTestId('invite-event-id').textContent).toBe('event123');
-    expect(getByTestId('invite-is-recurring').textContent).toBe('false');
+    // Wait for invite modal to appear (mocked as a div with data-testid)
+    const inviteModal = await screen.findByTestId('invite-by-email-modal');
+    expect(inviteModal).toBeInTheDocument();
 
-    const closeInvite = getByTestId('invite-close');
+    // Verify props passed to InviteByEmailModal
+    expect(screen.getByTestId('invite-event-id')).toHaveTextContent('event123');
+    expect(screen.getByTestId('invite-is-recurring')).toHaveTextContent(
+      'false',
+    );
+
+    // Close invite modal
+    const closeInvite = screen.getByTestId('invite-close');
     fireEvent.click(closeInvite);
 
     await waitFor(() => {
-      expect(queryByTestId('invite-modal')).not.toBeInTheDocument();
+      expect(
+        screen.queryByTestId('invite-by-email-modal'),
+      ).not.toBeInTheDocument();
     });
   });
 
   test('InviteByEmailModal onInvitesSent callback triggers and isRecurring is true for recurring event', async () => {
-    const { queryByText, getByTestId } = renderWithProviders([
+    renderWithProviders([
       makeEventDetailsRecurringMock(),
       makeAttendeesEmptyMock(),
       makeMembersWithOneMock(),
     ]);
 
-    await waitFor(() =>
-      expect(queryByText('Event Registrants')).toBeInTheDocument(),
-    );
+    await screen.findByTestId('invite-modal');
 
-    const inviteButton = queryByText('Invite by Email') as HTMLElement;
+    const inviteButton = screen.getByTestId('invite-by-email-btn');
     fireEvent.click(inviteButton);
 
-    await waitFor(() =>
-      expect(getByTestId('invite-modal')).toBeInTheDocument(),
-    );
-    expect(getByTestId('invite-is-recurring').textContent).toBe('true');
+    const inviteModal = await screen.findByTestId('invite-by-email-modal');
+    expect(inviteModal).toBeInTheDocument();
 
-    const sendBtn = getByTestId('invite-send');
+    // Verify isRecurring is true
+    expect(screen.getByTestId('invite-is-recurring')).toHaveTextContent('true');
+
+    // Click send button to trigger onInvitesSent
+    const sendBtn = screen.getByTestId('invite-send');
     fireEvent.click(sendBtn);
-    // coverage hits onInvitesSent -> attendeesRefetch
+    // onInvitesSent callback is triggered implicitly
   });
 
   test('getOptionLabel falls back to "Unknown User" when member name is empty', async () => {
-    const { getByLabelText, findByText } = renderWithProviders([
+    renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
       makeMembersUnknownNameMock(),
     ]);
 
-    await waitFor(() =>
-      expect(getByLabelText('Add an Registrant')).toBeInTheDocument(),
-    );
+    const input = await screen.findByTestId('autocomplete');
+    expect(input).toBeInTheDocument();
 
-    const input = getByLabelText('Add an Registrant') as HTMLElement;
-
-    // Open options so the Autocomplete renders the items using getOptionLabel
+    // Open autocomplete options
     fireEvent.keyDown(input, { key: 'ArrowDown' });
 
     // This text only appears via getOptionLabel's "Unknown User" fallback
-    const option = await findByText('Unknown User');
+    const option = await screen.findByText('Unknown User');
     expect(option).toBeInTheDocument();
   });
 });

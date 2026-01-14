@@ -28,6 +28,8 @@ export const FUND_LIST = gql`
             updater {
               name
             }
+            createdAt
+            isArchived
           }
         }
       }
@@ -82,17 +84,19 @@ export const FUND_CAMPAIGN_PLEDGE = gql`
             id
             amount
             note
+            createdAt
+            updatedAt
             campaign {
               id
               name
               fund {
+                id
                 name
               }
             }
             pledger {
               id
               name
-              createdAt
             }
           }
         }
@@ -128,22 +132,16 @@ export const USER_FUND_CAMPAIGNS = gql`
 
 export const USER_PLEDGES = gql`
   query GetPledgesByUserId(
-    $userId: QueryUserInput!
+    $input: QueryFundCampaignPledgesByUserInput!
     $where: QueryPledgeWhereInput
     $orderBy: QueryPledgeOrderByInput
-    $limit: Int
-    $offset: Int
   ) {
-    getPledgesByUserId(
-      userId: $userId
-      where: $where
-      orderBy: $orderBy
-      limit: $limit
-      offset: $offset
-    ) {
+    getPledgesByUserId(input: $input, where: $where, orderBy: $orderBy) {
       id
       amount
       note
+      createdAt
+      updatedAt
       campaign {
         id
         name
@@ -152,11 +150,6 @@ export const USER_PLEDGES = gql`
         currencyCode
       }
       pledger {
-        id
-        name
-        avatarURL
-      }
-      users {
         id
         name
         avatarURL

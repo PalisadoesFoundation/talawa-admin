@@ -1,0 +1,59 @@
+.avatarImage {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0; /* allow truncation */
+}
+
+.row {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.name {
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+
+.email {
+  font-size: 0.875rem;
+  color: rgba(80, 80, 80, 0.9);
+}
+
+.role {
+  font-size: 0.85rem;
+  color: rgba(120, 120, 120, 0.95);
+}
+
+/* actionsSlot — serial number badge */
+.actionsSlot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+}
+
+.serialBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  height: 28px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background-color: rgba(0, 0, 0, 0.06);
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #111827;
+}

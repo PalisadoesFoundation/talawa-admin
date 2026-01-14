@@ -37,13 +37,13 @@
  * - Displays appropriate toast notifications for errors such as user not found,
  *   API unavailability, or email not registered.
  *
- * @returns {JSX.Element} The ForgotPassword component.
+ * @returns The ForgotPassword component.
  */
 import { useMutation } from '@apollo/client';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 import {
   FORGOT_PASSWORD_MUTATION,
@@ -52,12 +52,12 @@ import {
 import KeyLogo from 'assets/svgs/key.svg?react';
 
 import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import styles from 'style/app-fixed.module.css';
+import styles from './ForgotPassword.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const ForgotPassword = (): JSX.Element => {
@@ -112,15 +112,15 @@ const ForgotPassword = (): JSX.Element => {
       const { data } = await otp({ variables: { email: registeredEmail } });
 
       setItem('otpToken', data.otp.otpToken);
-      toast.success(t('OTPsent'));
+      NotificationToast.success(t('OTPsent'));
       setShowEnterEmail(false);
     } catch (error: unknown) {
       if ((error as Error).message === 'User not found') {
-        toast.warn(tErrors('emailNotRegistered'));
+        NotificationToast.warning(tErrors('emailNotRegistered'));
       } else if ((error as Error).message === 'Failed to fetch') {
-        toast.error(tErrors('talawaApiUnavailable'));
+        NotificationToast.error(tErrors('talawaApiUnavailable'));
       } else {
-        toast.error(tErrors('errorSendingMail'));
+        NotificationToast.error(tErrors('errorSendingMail'));
       }
     }
   };
@@ -137,7 +137,7 @@ const ForgotPassword = (): JSX.Element => {
     const { userOtp, newPassword, confirmNewPassword } = forgotPassFormData;
 
     if (newPassword !== confirmNewPassword) {
-      toast.error(t('passwordMismatches') as string);
+      NotificationToast.error(t('passwordMismatches'));
       return;
     }
 
@@ -153,7 +153,7 @@ const ForgotPassword = (): JSX.Element => {
       });
 
       if (data) {
-        toast.success(t('passwordChanges') as string);
+        NotificationToast.success(t('passwordChanges'));
         setShowEnterEmail(true);
         setForgotPassFormData({
           userOtp: '',
@@ -167,13 +167,11 @@ const ForgotPassword = (): JSX.Element => {
     }
   };
 
-  // Show loader while performing OTP or password reset operations
-  if (otpLoading || forgotPasswordLoading) {
-    return <Loader />;
-  }
-
   return (
-    <>
+    <LoadingState
+      isLoading={otpLoading || forgotPasswordLoading}
+      variant="spinner"
+    >
       <div className={styles.pageWrapper}>
         <div className="row container-fluid d-flex justify-content-center items-center">
           <div className="col-12 col-lg-4 px-0">
@@ -287,7 +285,7 @@ const ForgotPassword = (): JSX.Element => {
                 >
                   <ArrowRightAlt
                     fontSize="medium"
-                    style={{ transform: 'rotate(180deg)' }}
+                    sx={{ transform: 'rotate(180deg)' }}
                   />
                   {t('backToLogin')}
                 </Link>
@@ -296,7 +294,7 @@ const ForgotPassword = (): JSX.Element => {
           </div>
         </div>
       </div>
-    </>
+    </LoadingState>
   );
 };
 

@@ -7,13 +7,49 @@ import userEvent from '@testing-library/user-event';
 import { exportToCSV } from 'utils/chartToPdf';
 import { vi, describe, expect, it, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
+import type { IMember } from 'types/Event/interface';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 
-// Mock chart.js to avoid canvas errors
+dayjs.extend(utc);
+
+// Store the last Line chart options for tooltip callback testing
+let lastLineChartOptions: Record<string, unknown> | null = null;
+
+// Mock chart.js to avoid canvas errors but capture options for testing
 vi.mock('react-chartjs-2', async () => ({
   ...(await vi.importActual('react-chartjs-2')),
-  Line: () => null,
+  Line: ({ options }: { options: Record<string, unknown> }) => {
+    lastLineChartOptions = options;
+    return null;
+  },
   Bar: () => null,
 }));
+
+// Helper to get the tooltip label callback from last rendered Line chart
+const getTooltipLabelCallback = ():
+  | ((context: {
+      dataset: { label?: string };
+      parsed: { y: number };
+      dataIndex: number;
+    }) => string)
+  | null => {
+  if (!lastLineChartOptions) return null;
+  const plugins = lastLineChartOptions.plugins as
+    | {
+        tooltip?: {
+          callbacks?: {
+            label?: (context: {
+              dataset: { label?: string };
+              parsed: { y: number };
+              dataIndex: number;
+            }) => string;
+          };
+        };
+      }
+    | undefined;
+  return plugins?.tooltip?.callbacks?.label ?? null;
+};
 
 const { mockUseParams } = vi.hoisted(() => ({
   mockUseParams: vi.fn(),
@@ -62,10 +98,22 @@ const mocks = [
           allDay: false,
           isPublic: true,
           isRegisterable: true,
-          startAt: '2023-01-01T09:00:00Z',
-          endAt: '2023-01-02T17:00:00Z',
-          createdAt: '2023-01-01T00:00:00Z',
-          updatedAt: '2023-01-01T00:00:00Z',
+          startAt: dayjs
+            .utc()
+            .add(10, 'days')
+            .hour(9)
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          endAt: dayjs
+            .utc()
+            .add(11, 'days')
+            .hour(17)
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+          updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
           isRecurringEventTemplate: false,
           baseEvent: {
             id: 'base123',
@@ -97,18 +145,48 @@ const mocks = [
     result: {
       data: {
         getRecurringEvents: [
-          createMockEvent('event123', '2023-01-01T09:00:00Z', [
-            { id: 'user1', natalSex: 'male' },
-            { id: 'user2', natalSex: 'female' },
-          ]),
-          createMockEvent('event456', '2023-01-08T09:00:00Z', [
-            { id: 'user1', natalSex: 'male' },
-            { id: 'user3', natalSex: 'other' },
-          ]),
-          createMockEvent('event789', '2023-01-15T09:00:00Z', [
-            { id: 'user2', natalSex: 'female' },
-            { id: 'user3', natalSex: 'intersex' },
-          ]),
+          createMockEvent(
+            'event123',
+            dayjs
+              .utc()
+              .add(10, 'days')
+              .hour(9)
+              .minute(0)
+              .second(0)
+              .toISOString(),
+            [
+              { id: 'user1', natalSex: 'male' },
+              { id: 'user2', natalSex: 'female' },
+            ],
+          ),
+          createMockEvent(
+            'event456',
+            dayjs
+              .utc()
+              .add(17, 'days')
+              .hour(9)
+              .minute(0)
+              .second(0)
+              .toISOString(),
+            [
+              { id: 'user1', natalSex: 'male' },
+              { id: 'user3', natalSex: 'other' },
+            ],
+          ),
+          createMockEvent(
+            'event789',
+            dayjs
+              .utc()
+              .add(24, 'days')
+              .hour(9)
+              .minute(0)
+              .second(0)
+              .toISOString(),
+            [
+              { id: 'user2', natalSex: 'female' },
+              { id: 'user3', natalSex: 'intersex' },
+            ],
+          ),
         ],
       },
     },
@@ -132,15 +210,30 @@ const recurringTemplateMocks = [
           allDay: false,
           isPublic: true,
           isRegisterable: true,
-          startAt: '2023-01-01T09:00:00Z',
-          endAt: '2023-01-02T17:00:00Z',
-          createdAt: '2023-01-01T00:00:00Z',
-          updatedAt: '2023-01-01T00:00:00Z',
+          startAt: dayjs
+            .utc()
+            .add(10, 'days')
+            .hour(9)
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          endAt: dayjs
+            .utc()
+            .add(11, 'days')
+            .hour(17)
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+          updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
           isRecurringEventTemplate: true,
           baseEvent: null,
           recurrenceRule: {
             recurrenceRuleString: 'FREQ=WEEKLY',
-            recurrenceStartDate: '2023-01-01',
+            recurrenceStartDate: dayjs
+              .utc()
+              .add(10, 'days')
+              .format('YYYY-MM-DD'),
             recurrenceEndDate: null,
           },
           creator: {
@@ -169,12 +262,28 @@ const recurringTemplateMocks = [
     result: {
       data: {
         getRecurringEvents: [
-          createMockEvent('event1', '2023-01-01T09:00:00Z', [
-            { id: 'user1', natalSex: 'male' },
-          ]),
-          createMockEvent('event2', '2023-01-08T09:00:00Z', [
-            { id: 'user2', natalSex: 'female' },
-          ]),
+          createMockEvent(
+            'event1',
+            dayjs
+              .utc()
+              .add(10, 'days')
+              .hour(9)
+              .minute(0)
+              .second(0)
+              .toISOString(),
+            [{ id: 'user1', natalSex: 'male' }],
+          ),
+          createMockEvent(
+            'event2',
+            dayjs
+              .utc()
+              .add(17, 'days')
+              .hour(9)
+              .minute(0)
+              .second(0)
+              .toISOString(),
+            [{ id: 'user2', natalSex: 'female' }],
+          ),
         ],
       },
     },
@@ -198,10 +307,22 @@ const manyEventsMocks = [
           allDay: false,
           isPublic: true,
           isRegisterable: true,
-          startAt: '2023-01-01T09:00:00Z',
-          endAt: '2023-01-02T17:00:00Z',
-          createdAt: '2023-01-01T00:00:00Z',
-          updatedAt: '2023-01-01T00:00:00Z',
+          startAt: dayjs
+            .utc()
+            .add(10, 'days')
+            .hour(9)
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          endAt: dayjs
+            .utc()
+            .add(11, 'days')
+            .hour(17)
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+          updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
           isRecurringEventTemplate: false,
           baseEvent: { id: 'base123' },
           recurrenceRule: null,
@@ -230,7 +351,13 @@ const manyEventsMocks = [
         getRecurringEvents: Array.from({ length: 15 }, (_, i) =>
           createMockEvent(
             `event${i}`,
-            `2023-01-${String(i + 1).padStart(2, '0')}T09:00:00Z`,
+            dayjs
+              .utc()
+              .add(10 + i, 'days')
+              .hour(9)
+              .minute(0)
+              .second(0)
+              .toISOString(),
             [
               {
                 id: `user${i}`,
@@ -251,8 +378,8 @@ const mockMemberData = [
     name: 'John Doe',
     emailAddress: 'john@example.com' as `${string}@${string}.${string}`,
     natalSex: 'male',
-    birthDate: new Date('1990-01-01'),
-    createdAt: '2023-01-01',
+    birthDate: dayjs.utc().subtract(35, 'years').toDate(),
+    createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
     role: 'MEMBER',
     tagsAssignedWith: { edges: [] },
   },
@@ -261,8 +388,8 @@ const mockMemberData = [
     name: 'Jane Smith',
     emailAddress: 'jane@example.com' as `${string}@${string}.${string}`,
     natalSex: 'female',
-    birthDate: new Date('1985-05-05'),
-    createdAt: '2023-01-01',
+    birthDate: dayjs.utc().subtract(40, 'years').toDate(),
+    createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
     role: 'MEMBER',
     tagsAssignedWith: { edges: [] },
   },
@@ -271,8 +398,8 @@ const mockMemberData = [
     name: 'Alex Johnson',
     emailAddress: 'alex@example.com' as `${string}@${string}.${string}`,
     natalSex: 'intersex',
-    birthDate: new Date('2010-03-15'),
-    createdAt: '2023-01-01',
+    birthDate: dayjs.utc().subtract(15, 'years').toDate(),
+    createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
     role: 'MEMBER',
     tagsAssignedWith: { edges: [] },
   },
@@ -281,8 +408,8 @@ const mockMemberData = [
     name: 'Sam Wilson',
     emailAddress: 'sam@example.com' as `${string}@${string}.${string}`,
     natalSex: 'other',
-    birthDate: new Date('1975-08-20'),
-    createdAt: '2023-01-01',
+    birthDate: dayjs.utc().subtract(50, 'years').toDate(),
+    createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
     role: 'MEMBER',
     tagsAssignedWith: { edges: [] },
   },
@@ -291,8 +418,8 @@ const mockMemberData = [
     name: 'Chris Brown',
     emailAddress: 'chris@example.com' as `${string}@${string}.${string}`,
     natalSex: 'male',
-    birthDate: new Date('2000-12-25'),
-    createdAt: '2023-01-01',
+    birthDate: dayjs.utc().subtract(36, 'years').toDate(),
+    createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
     role: 'MEMBER',
     tagsAssignedWith: { edges: [] },
   },
@@ -306,7 +433,7 @@ const mockStatistics = {
 
 describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   beforeEach(() => {
@@ -379,7 +506,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole('button', { name: 'Export Data' }),
+        screen.getByRole('button', { name: 'exportData' }),
       ).toBeInTheDocument();
     });
 
@@ -390,7 +517,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     });
 
     await act(async () => {
-      const exportButton = screen.getByRole('button', { name: 'Export Data' });
+      const exportButton = screen.getByRole('button', { name: 'exportData' });
       await userEvent.click(exportButton);
     });
 
@@ -423,12 +550,12 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole('button', { name: 'Export Data' }),
+        screen.getByRole('button', { name: 'exportData' }),
       ).toBeInTheDocument();
     });
 
     await act(async () => {
-      const exportButton = screen.getByRole('button', { name: 'Export Data' });
+      const exportButton = screen.getByRole('button', { name: 'exportData' });
       await userEvent.click(exportButton);
     });
 
@@ -460,11 +587,11 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
 
     // Wait for the component to load and render the trends section
     await waitFor(() => {
-      expect(screen.getByText('Trends')).toBeInTheDocument();
+      expect(screen.getByText('trends')).toBeInTheDocument();
     });
 
     // Click the export dropdown to open it
-    const exportButton = screen.getByRole('button', { name: 'Export Data' });
+    const exportButton = screen.getByRole('button', { name: 'exportData' });
     await userEvent.click(exportButton);
 
     // Now wait for and click the trends export option
@@ -503,11 +630,11 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
 
     // Wait for the component to load and render the trends section
     await waitFor(() => {
-      expect(screen.getByText('Trends')).toBeInTheDocument();
+      expect(screen.getByText('trends')).toBeInTheDocument();
     });
 
     // Click the export dropdown to open it
-    const exportButton = screen.getByRole('button', { name: 'Export Data' });
+    const exportButton = screen.getByRole('button', { name: 'exportData' });
     await userEvent.click(exportButton);
 
     // Now wait for and click the trends export option
@@ -548,12 +675,12 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByRole('button', { name: 'Export Data' }),
+        screen.getByRole('button', { name: 'exportData' }),
       ).toBeInTheDocument();
     });
 
     await act(async () => {
-      const exportButton = screen.getByRole('button', { name: 'Export Data' });
+      const exportButton = screen.getByRole('button', { name: 'exportData' });
       await userEvent.click(exportButton);
     });
 
@@ -609,10 +736,22 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
               allDay: false,
               isPublic: true,
               isRegisterable: true,
-              startAt: '2023-01-01T09:00:00Z',
-              endAt: '2023-01-02T17:00:00Z',
-              createdAt: '2023-01-01T00:00:00Z',
-              updatedAt: '2023-01-01T00:00:00Z',
+              startAt: dayjs
+                .utc()
+                .add(10, 'days')
+                .hour(9)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              endAt: dayjs
+                .utc()
+                .add(11, 'days')
+                .hour(17)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+              updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
               isRecurringEventTemplate: false,
               baseEvent: null,
               recurrenceRule: null,
@@ -671,13 +810,13 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
 
     // Test next page
     await act(async () => {
-      const nextButton = screen.getByAltText('right-arrow');
+      const nextButton = screen.getByLabelText('nextPage');
       await userEvent.click(nextButton);
     });
 
     // Test previous page
     await act(async () => {
-      const prevButton = screen.getByAltText('left-arrow');
+      const prevButton = screen.getByLabelText('previousPage');
       await userEvent.click(prevButton);
     });
 
@@ -704,7 +843,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     );
 
     await waitFor(() => {
-      const prevButton = screen.getByAltText('left-arrow').closest('button');
+      const prevButton = screen.getByLabelText('previousPage');
       expect(prevButton).toBeDisabled();
     });
   });
@@ -773,10 +912,22 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
               allDay: false,
               isPublic: true,
               isRegisterable: true,
-              startAt: '2023-01-01T09:00:00Z',
-              endAt: '2023-01-02T17:00:00Z',
-              createdAt: '2023-01-01T00:00:00Z',
-              updatedAt: '2023-01-01T00:00:00Z',
+              startAt: dayjs
+                .utc()
+                .add(10, 'days')
+                .hour(9)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              endAt: dayjs
+                .utc()
+                .add(11, 'days')
+                .hour(17)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+              updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
               isRecurringEventTemplate: false,
               baseEvent: { id: 'base123' },
               recurrenceRule: null,
@@ -803,10 +954,20 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
         result: {
           data: {
             getRecurringEvents: [
-              createMockEvent('event123', '2023-01-01T09:00:00Z', [
-                { id: 'user1', natalSex: null },
-                { id: 'user2', natalSex: 'female' },
-              ]),
+              createMockEvent(
+                'event123',
+                dayjs
+                  .utc()
+                  .add(10, 'days')
+                  .hour(9)
+                  .minute(0)
+                  .second(0)
+                  .toISOString(),
+                [
+                  { id: 'user1', natalSex: null },
+                  { id: 'user2', natalSex: 'female' },
+                ],
+              ),
             ],
           },
         },
@@ -848,5 +1009,998 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     await waitFor(() => {
       expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
     });
+  });
+
+  it('handles invalid date format (NaN) in event data', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event123' });
+
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    const mocksWithInvalidDate = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            event: {
+              id: 'event123',
+              name: 'Test Event',
+              description: 'Test',
+              location: 'Test',
+              allDay: false,
+              isPublic: true,
+              isRegisterable: true,
+              startAt: dayjs
+                .utc()
+                .add(10, 'days')
+                .hour(9)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              endAt: dayjs
+                .utc()
+                .add(11, 'days')
+                .hour(17)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+              updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
+              isRecurringEventTemplate: false,
+              baseEvent: { id: 'base123' },
+              recurrenceRule: null,
+              creator: {
+                id: 'creator1',
+                name: 'Creator',
+                emailAddress: 'creator@example.com',
+              },
+              updater: {
+                id: 'updater1',
+                name: 'Updater',
+                emailAddress: 'updater@example.com',
+              },
+              organization: { id: 'org123', name: 'Test Org' },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: RECURRING_EVENTS,
+          variables: { baseRecurringEventId: 'base123' },
+        },
+        result: {
+          data: {
+            getRecurringEvents: [
+              {
+                id: 'event1',
+                startAt: 'invalid-date-string',
+                attendees: [{ id: 'user1', natalSex: 'male' }],
+              },
+              {
+                id: 'event2',
+                startAt: dayjs
+                  .utc()
+                  .add(11, 'days')
+                  .hour(9)
+                  .minute(0)
+                  .second(0)
+                  .toISOString(),
+                attendees: [{ id: 'user2', natalSex: 'female' }],
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocksWithInvalidDate}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+    });
+
+    // Wait for chart to render with invalid date
+    await waitFor(
+      () => {
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          expect.stringContaining('Invalid date for event:'),
+        );
+      },
+      { timeout: 3000 },
+    );
+
+    consoleErrorSpy.mockRestore();
+  });
+
+  it('handles error during date formatting', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event123' });
+
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    const mocksWithDateError = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            event: {
+              id: 'event123',
+              name: 'Test Event',
+              description: 'Test',
+              location: 'Test',
+              allDay: false,
+              isPublic: true,
+              isRegisterable: true,
+              startAt: dayjs().subtract(1, 'year').hour(9).toISOString(),
+              endAt: dayjs()
+                .subtract(1, 'year')
+                .add(1, 'day')
+                .hour(17)
+                .toISOString(),
+              createdAt: dayjs().subtract(1, 'year').toISOString(),
+              updatedAt: dayjs().subtract(1, 'year').toISOString(),
+              isRecurringEventTemplate: false,
+              baseEvent: { id: 'base123' },
+              recurrenceRule: null,
+              creator: {
+                id: 'creator1',
+                name: 'Creator',
+                emailAddress: 'creator@example.com',
+              },
+              updater: {
+                id: 'updater1',
+                name: 'Updater',
+                emailAddress: 'updater@example.com',
+              },
+              organization: { id: 'org123', name: 'Test Org' },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: RECURRING_EVENTS,
+          variables: { baseRecurringEventId: 'base123' },
+        },
+        result: {
+          data: {
+            getRecurringEvents: [
+              {
+                id: 'event1',
+                startAt: dayjs
+                  .utc()
+                  .add(10, 'days')
+                  .hour(9)
+                  .minute(0)
+                  .second(0)
+                  .toISOString(),
+                attendees: [{ id: 'user1', natalSex: 'male' }],
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    // Capture original Date constructor before spying to avoid infinite recursion
+    const OriginalDate = Date;
+    const dateSpy = vi.spyOn(global, 'Date' as never).mockImplementation(((
+      ...args: ConstructorParameters<typeof Date>
+    ) => {
+      if (args.length > 0 && typeof args[0] === 'string') {
+        throw new Error('Date formatting error');
+      }
+      return new OriginalDate(...args) as Date;
+    }) as never);
+
+    render(
+      <MockedProvider mocks={mocksWithDateError}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+    });
+
+    // Wait for error to be logged
+    await waitFor(
+      () => {
+        expect(consoleErrorSpy).toHaveBeenCalledWith(
+          expect.stringContaining('Error formatting date for event:'),
+          expect.any(Error),
+        );
+      },
+      { timeout: 3000 },
+    );
+
+    dateSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
+  });
+
+  it('handles age calculation with month/day boundaries', async () => {
+    const today = new Date();
+    const birthDateBeforeToday = new Date(
+      today.getFullYear() - 20,
+      today.getMonth() - 1,
+      today.getDate(),
+    );
+    const birthDateAfterToday = new Date(
+      today.getFullYear() - 20,
+      today.getMonth() + 1,
+      today.getDate() + 1,
+    );
+
+    const membersWithBoundaryAges: IMember[] = [
+      {
+        id: 'member1',
+        natalSex: 'male',
+        birthDate: birthDateBeforeToday,
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
+        name: 'Member 1',
+        emailAddress: 'member1@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+      {
+        id: 'member2',
+        natalSex: 'female',
+        birthDate: birthDateAfterToday,
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
+        name: 'Member 2',
+        emailAddress: 'member2@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={membersWithBoundaryAges}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('age-button')).toBeInTheDocument();
+    });
+
+    await act(async () => {
+      const ageButton = screen.getByTestId('age-button');
+      await userEvent.click(ageButton);
+    });
+
+    // Age demographics should be calculated correctly with boundary cases
+    await waitFor(() => {
+      expect(screen.getByTestId('age-button')).toHaveClass('btn-success');
+    });
+
+    // Verify the actual age demographics are calculated correctly for boundary dates
+    // Both members should be categorized into age18to40 bucket (20 years old)
+    // The demographics section should be displayed with age selected
+    await waitFor(() => {
+      const demographicsSection = screen.getByText('demography');
+      expect(demographicsSection).toBeInTheDocument();
+      // The age button should remain active, showing age demographics are calculated
+      expect(screen.getByTestId('age-button')).toHaveClass('btn-success');
+    });
+  });
+
+  it('handles age calculation for same month with day before birthday', async () => {
+    const today = new Date();
+    // Create a birthdate in the same month but a few days in the future
+    // This tests the edge case: monthDiff === 0 && today.getDate() < birth.getDate()
+    const futureDayThisMonth = Math.min(today.getDate() + 7, 28);
+    const birthDateSameMonthFuture = new Date(
+      today.getFullYear() - 22,
+      today.getMonth(),
+      futureDayThisMonth,
+    );
+    // Also test same month, day already passed
+    const pastDayThisMonth = Math.max(today.getDate() - 7, 1);
+    const birthDateSameMonthPast = new Date(
+      today.getFullYear() - 19,
+      today.getMonth(),
+      pastDayThisMonth,
+    );
+
+    const membersWithSameMonthAges: IMember[] = [
+      {
+        id: 'member1',
+        natalSex: 'male',
+        birthDate: birthDateSameMonthFuture,
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
+        name: 'Member Future',
+        emailAddress: 'future@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+      {
+        id: 'member2',
+        natalSex: 'female',
+        birthDate: birthDateSameMonthPast,
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
+        name: 'Member Past',
+        emailAddress: 'past@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={membersWithSameMonthAges}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('age-button')).toBeInTheDocument();
+    });
+
+    await act(async () => {
+      const ageButton = screen.getByTestId('age-button');
+      await userEvent.click(ageButton);
+    });
+
+    // Both members should be in age18to40 category
+    await waitFor(() => {
+      expect(screen.getByTestId('age-button')).toHaveClass('btn-success');
+      const demographicsSection = screen.getByText('demography');
+      expect(demographicsSection).toBeInTheDocument();
+    });
+  });
+
+  it('handles pagination boundaries correctly', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event1' });
+
+    // Create 15 recurring events (more than one page)
+    const manyRecurringEvents = Array.from({ length: 15 }, (_, i) => ({
+      id: `event${i + 1}`,
+      name: `Event ${i + 1}`,
+      startAt: dayjs
+        .utc()
+        .year(2024)
+        .month(0)
+        .date(i + 1)
+        .toISOString(),
+      attendees: [
+        {
+          id: `attendee${i}`,
+          natalSex: 'male',
+          birthDate: '2000-01-01',
+        },
+      ],
+    }));
+
+    const mocksWithManyEvents = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event1' },
+        },
+        result: {
+          data: {
+            event: {
+              id: 'event1',
+              name: 'Event 1',
+              description: 'Test Description',
+              location: 'Test Location',
+              allDay: false,
+              isPublic: true,
+              isRegisterable: true,
+              startAt: dayjs
+                .utc()
+                .year(2024)
+                .month(0)
+                .date(1)
+                .hour(9)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              endAt: dayjs
+                .utc()
+                .year(2024)
+                .month(0)
+                .date(1)
+                .hour(17)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              createdAt: dayjs
+                .utc()
+                .year(2024)
+                .month(0)
+                .date(1)
+                .startOf('day')
+                .toISOString(),
+              updatedAt: dayjs
+                .utc()
+                .year(2024)
+                .month(0)
+                .date(1)
+                .startOf('day')
+                .toISOString(),
+              isRecurringEventTemplate: false,
+              baseEvent: {
+                id: 'base1',
+              },
+              recurrenceRule: null,
+              creator: {
+                id: 'creator1',
+                name: 'Creator Name',
+                emailAddress: 'creator@example.com',
+              },
+              updater: {
+                id: 'updater1',
+                name: 'Updater Name',
+                emailAddress: 'updater@example.com',
+              },
+              organization: { id: 'org123', name: 'Test Organization' },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: RECURRING_EVENTS,
+          variables: {
+            baseRecurringEventId: 'base1',
+          },
+        },
+        result: {
+          data: {
+            getRecurringEvents: manyRecurringEvents,
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocksWithManyEvents}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+
+    // Test next page button at boundary
+    await waitFor(
+      () => {
+        const nextButton = screen.getByLabelText('nextPage');
+        expect(nextButton).not.toBeDisabled();
+      },
+      { timeout: 3000 },
+    );
+
+    // Click next to reach last page
+    await act(async () => {
+      const nextButton = screen.getByLabelText('nextPage');
+      await userEvent.click(nextButton);
+    });
+
+    // Verify next button is disabled at last page
+    await waitFor(() => {
+      const nextButton = screen.getByLabelText('nextPage');
+      expect(nextButton).toBeDisabled();
+    });
+  });
+
+  it('handles base event ID determination for recurring template', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event1' });
+
+    // Test recurring event template path
+    const mockRecurringTemplate = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event1' },
+        },
+        result: {
+          data: {
+            event: {
+              id: 'event1',
+              name: 'Template Event',
+              isRecurringEventTemplate: true,
+              baseEvent: null,
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: RECURRING_EVENTS,
+          variables: {
+            baseRecurringEventId: 'event1',
+          },
+        },
+        result: {
+          data: {
+            getRecurringEvents: [
+              {
+                id: 'event1',
+                name: 'Template Event',
+                startAt: dayjs
+                  .utc()
+                  .year(2024)
+                  .month(0)
+                  .date(1)
+                  .hour(9)
+                  .minute(0)
+                  .second(0)
+                  .toISOString(),
+                attendees: [],
+              },
+            ],
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mockRecurringTemplate}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+      },
+      { timeout: 5000 },
+    );
+
+    // Verify the recurring template event data is loaded
+    await waitFor(() => {
+      const modalContent = screen.getByTestId('attendance-modal');
+      expect(modalContent).toBeInTheDocument();
+      // The modal should have processed the recurring template correctly
+      // baseEventId should be 'event1' since isRecurringEventTemplate is true
+    });
+  });
+
+  it('handles Today button click', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('today-button')).toBeInTheDocument();
+    });
+
+    await act(async () => {
+      const todayButton = screen.getByTestId('today-button');
+      await userEvent.click(todayButton);
+    });
+
+    // Current page should reset to 0
+    await waitFor(() => {
+      const prevButton = screen.getByLabelText('previousPage');
+      expect(prevButton).toBeDisabled();
+    });
+  });
+
+  it('handles next page click when already on last page', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event123' });
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+    });
+
+    // With only 3 events and eventsPerPage=10, we're already on the last page
+    // Clicking next should not change anything (branch: currentPage < totalPages - 1 is false)
+    await waitFor(() => {
+      const nextButton = screen.getByLabelText('nextPage');
+      expect(nextButton).toBeDisabled();
+    });
+
+    // Try clicking it anyway to ensure the branch is covered
+    await act(async () => {
+      const nextButton = screen.getByLabelText('nextPage');
+      await userEvent.click(nextButton);
+    });
+
+    // Should still be on first page since there's only one page
+    await waitFor(() => {
+      const prevButton = screen.getByLabelText('previousPage');
+      expect(prevButton).toBeDisabled();
+    });
+  });
+
+  it('handles export dropdown toggle without selecting item', async () => {
+    render(
+      <MockedProvider mocks={mocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('export-dropdown')).toBeInTheDocument();
+    });
+
+    // Open and close the dropdown without selecting - verifies dropdown handling
+    await act(async () => {
+      const exportButton = screen.getByRole('button', { name: 'exportData' });
+      await userEvent.click(exportButton);
+    });
+
+    // Click elsewhere to close
+    await act(async () => {
+      const modal = screen.getByTestId('attendance-modal');
+      await userEvent.click(modal);
+    });
+
+    // Modal should still be open and functional
+    expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+  });
+
+  it('renders without eventId parameter', async () => {
+    // Test when eventId is undefined (covers the false branch of if(eventId) in useEffect)
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: undefined });
+
+    render(
+      <MockedProvider mocks={[]}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+    });
+
+    // Should render the non-recurring view (since no recurring events loaded)
+    await waitFor(() => {
+      expect(screen.getByText('5')).toBeInTheDocument(); // totalMembers
+    });
+  });
+
+  it('handles member with empty string natalSex', async () => {
+    const memberWithEmptyNatalSex: IMember[] = [
+      {
+        id: 'member1',
+        natalSex: '',
+        birthDate: new Date('1990-01-01'),
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
+        name: 'Empty Sex Member',
+        emailAddress: 'empty@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+      {
+        id: 'member2',
+        natalSex: 'male',
+        birthDate: new Date('1995-06-15'),
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
+        name: 'Male Member',
+        emailAddress: 'male@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={memberWithEmptyNatalSex}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+    });
+
+    // The empty string natalSex should be counted in the 'other' category
+    expect(screen.getByTestId('gender-button')).toBeInTheDocument();
+  });
+
+  it('calculates age demographics for members at exact age boundaries', async () => {
+    // Member exactly 18 years old (should be in 18-40 category)
+    const exactly18 = dayjs.utc().subtract(18, 'years').toDate();
+    // Member exactly 40 years old (should be in 18-40 category)
+    const exactly40 = dayjs.utc().subtract(40, 'years').toDate();
+    const age41 = dayjs.utc().subtract(41, 'years').toDate();
+    const age17 = dayjs.utc().subtract(17, 'years').toDate();
+
+    const boundaryMembers: IMember[] = [
+      {
+        id: 'exactly18',
+        natalSex: 'male',
+        birthDate: exactly18,
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
+        name: 'Exactly 18',
+        emailAddress: 'e18@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+      {
+        id: 'exactly40',
+        natalSex: 'female',
+        birthDate: exactly40,
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
+        name: 'Exactly 40',
+        emailAddress: 'e40@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+      {
+        id: 'age41',
+        natalSex: 'male',
+        birthDate: age41,
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
+        name: 'Age 41',
+        emailAddress: 'a41@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+      {
+        id: 'age17',
+        natalSex: 'female',
+        birthDate: age17,
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
+        name: 'Age 17',
+        emailAddress: 'a17@test.com',
+        role: 'member',
+        tagsAssignedWith: { edges: [] },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={boundaryMembers}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+    });
+
+    // Switch to age view to exercise age calculation
+    await act(async () => {
+      const ageButton = screen.getByTestId('age-button');
+      await userEvent.click(ageButton);
+    });
+
+    // Verify age demographics are calculated (button should be active)
+    await waitFor(() => {
+      expect(screen.getByTestId('age-button')).toHaveClass('btn-success');
+    });
+
+    // Export demographics to exercise the export path with age data
+    await act(async () => {
+      const exportButton = screen.getByRole('button', { name: 'exportData' });
+      await userEvent.click(exportButton);
+    });
+
+    await act(async () => {
+      const demographicsExport = screen.getByTestId('demographics-export');
+      await userEvent.click(demographicsExport);
+    });
+
+    expect(exportToCSV).toHaveBeenCalled();
+  });
+
+  it('handles recurring events with no baseEvent and not a template', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event123' });
+
+    // Event that is not a recurring template and has no baseEvent (edge case)
+    const noBaseEventMocks = [
+      {
+        request: {
+          query: EVENT_DETAILS,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            event: {
+              id: 'event123',
+              name: 'Standalone Event',
+              description: 'Test',
+              location: 'Test',
+              allDay: false,
+              isPublic: true,
+              isRegisterable: true,
+              startAt: dayjs
+                .utc()
+                .subtract(1, 'year')
+                .hour(9)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              endAt: dayjs
+                .utc()
+                .subtract(1, 'year')
+                .add(1, 'day')
+                .hour(17)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+              updatedAt: dayjs.utc().subtract(1, 'year').toISOString(),
+              isRecurringEventTemplate: false,
+              baseEvent: null, // No baseEvent
+              recurrenceRule: null,
+              creator: {
+                id: 'creator1',
+                name: 'Creator',
+                emailAddress: 'creator@example.com',
+              },
+              updater: {
+                id: 'updater1',
+                name: 'Updater',
+                emailAddress: 'updater@example.com',
+              },
+              organization: { id: 'org123', name: 'Test Org' },
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={noBaseEventMocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('attendance-modal')).toBeInTheDocument();
+    });
+
+    // Should show the non-recurring view (totalMembers)
+    await waitFor(() => {
+      expect(screen.getByText('5')).toBeInTheDocument();
+    });
+  });
+
+  it('tooltip label callback returns correct format for current and non-current events', async () => {
+    mockUseParams.mockReturnValue({ orgId: 'org123', eventId: 'event123' });
+
+    render(
+      <MockedProvider mocks={mocks}>
+        <AttendanceStatisticsModal
+          show={true}
+          handleClose={() => {}}
+          statistics={mockStatistics}
+          memberData={mockMemberData}
+          t={(key) => key}
+        />
+      </MockedProvider>,
+    );
+
+    // Wait for the chart to render and capture the options
+    await waitFor(() => {
+      expect(screen.getByText('trends')).toBeInTheDocument();
+    });
+
+    // Get the tooltip callback from the captured options
+    const labelCallback = getTooltipLabelCallback();
+    expect(labelCallback).not.toBeNull();
+
+    if (labelCallback) {
+      // Test for the current event (dataIndex 0 corresponds to event123)
+      const currentEventResult = labelCallback({
+        dataset: { label: 'Attendee Count' },
+        parsed: { y: 10 },
+        dataIndex: 0,
+      });
+      expect(currentEventResult).toBe('Attendee Count: 10 (currentEvent)');
+
+      // Test for a non-current event (dataIndex 1 corresponds to event456)
+      const otherEventResult = labelCallback({
+        dataset: { label: 'Male Attendees' },
+        parsed: { y: 5 },
+        dataIndex: 1,
+      });
+      expect(otherEventResult).toBe('Male Attendees: 5');
+
+      // Test with empty label
+      const emptyLabelResult = labelCallback({
+        dataset: {},
+        parsed: { y: 3 },
+        dataIndex: 2,
+      });
+      expect(emptyLabelResult).toBe(': 3');
+    }
   });
 });

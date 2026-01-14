@@ -1,7 +1,10 @@
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import {
   fireEvent,
@@ -14,23 +17,25 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from '../../../utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from '../OrganizationActionItem.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 import ItemDeleteModal, {
   type IItemDeleteModalProps,
 } from './ActionItemDeleteModal';
 import { vi, afterEach, beforeEach } from 'vitest';
-
-const toastMocks = vi.hoisted(() => ({
-  success: vi.fn(),
-  error: vi.fn(),
-}));
-
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
+  },
 }));
 
 let successLink: StaticMockLink;
@@ -80,9 +85,9 @@ describe('Testing ItemDeleteModal', () => {
         organizationId: 'orgId1',
         creatorId: 'userId2',
         updaterId: null,
-        assignedAt: new Date('2024-08-27'),
-        completionAt: new Date('2044-09-03'),
-        createdAt: new Date('2024-01-01T00:00:00.000Z'),
+        assignedAt: dayjs.utc().toDate(),
+        completionAt: dayjs.utc().add(20, 'year').toDate(),
+        createdAt: dayjs.utc().subtract(1, 'year').toDate(),
         updatedAt: null,
         isCompleted: true,
         preCompletionNotes: 'Notes 1',
@@ -103,7 +108,7 @@ describe('Testing ItemDeleteModal', () => {
           name: 'Category 1',
           description: null,
           isDisabled: false,
-          createdAt: '2024-01-01T00:00:00.000Z',
+          createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
           organizationId: 'orgId1',
         },
       },
@@ -133,7 +138,9 @@ describe('Testing ItemDeleteModal', () => {
     await waitFor(() => {
       expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
       expect(testItemProps.hide).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.successfulDeletion,
+      );
     });
   });
 
@@ -143,7 +150,9 @@ describe('Testing ItemDeleteModal', () => {
     fireEvent.click(screen.getByTestId('deleteyesbtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Mock Graphql Error',
+      );
     });
   });
 
@@ -254,7 +263,9 @@ describe('Testing ItemDeleteModal', () => {
       await waitFor(() => {
         expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
         expect(testItemProps.hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.successfulDeletion,
+        );
       });
     });
 
@@ -284,7 +295,9 @@ describe('Testing ItemDeleteModal', () => {
       await waitFor(() => {
         expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
         expect(testItemProps.hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.successfulDeletion,
+        );
       });
     });
 
@@ -308,7 +321,9 @@ describe('Testing ItemDeleteModal', () => {
       await waitFor(() => {
         expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
         expect(testItemProps.hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.successfulDeletion,
+        );
       });
     });
 
@@ -332,7 +347,9 @@ describe('Testing ItemDeleteModal', () => {
       await waitFor(() => {
         expect(testItemProps.actionItemsRefetch).toHaveBeenCalled();
         expect(testItemProps.hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(t.successfulDeletion);
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.successfulDeletion,
+        );
       });
     });
 
@@ -357,7 +374,9 @@ describe('Testing ItemDeleteModal', () => {
       fireEvent.click(screen.getByTestId('deleteyesbtn'));
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Mock Graphql Error',
+        );
       });
     });
   });

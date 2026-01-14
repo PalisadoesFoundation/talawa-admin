@@ -8,4 +8,4 @@ export const FILE_UPLOAD_ALLOWED_TYPES = [
   'image/jpeg',
   'image/png',
   'image/gif',
-] as const;
+];

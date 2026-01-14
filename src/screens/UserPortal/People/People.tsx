@@ -47,16 +47,15 @@
  */
 import React, { useEffect, useState } from 'react';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
-import { Dropdown } from 'react-bootstrap';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
-import { FilterAltOutlined } from '@mui/icons-material';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+
 import { useParams } from 'react-router';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 
 interface IMemberNode {
   id: string;
@@ -204,64 +203,59 @@ export default function People(): React.JSX.Element {
   return (
     <>
       <div className={`${styles.mainContainer_people}`}>
-        <div className={styles.people__header}>
-          <div className={styles.input}>
-            <SearchBar
-              placeholder={t('searchUsers')}
-              onSearch={handleSearch}
-              onClear={() => handleSearch('')}
-              inputTestId="searchInput"
-              buttonTestId="searchBtn"
-            />
-          </div>
-
-          <Dropdown drop="down-centered">
-            <Dropdown.Toggle
-              className={styles.dropdown}
-              id="dropdown-basic"
-              data-testid={`modeChangeBtn`}
-            >
-              <FilterAltOutlined
-                sx={{
-                  fontSize: '25px',
-                  marginBottom: '2px',
-                  marginRight: '2px',
-                }}
-              />
-              {tCommon('filter')}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {modes.map((value, index) => {
-                return (
-                  <Dropdown.Item
-                    key={index}
-                    data-testid={`modeBtn${index}`}
-                    onClick={(): void => setMode(index)}
-                  >
-                    {value}
-                  </Dropdown.Item>
-                );
-              })}
-            </Dropdown.Menu>
-          </Dropdown>
+        {/* Refactored Header Structure */}
+        <div className={styles.calendar__header}>
+          <SearchFilterBar
+            searchPlaceholder={t('searchUsers')}
+            searchValue={searchTerm}
+            onSearchChange={handleSearch}
+            searchInputTestId="searchInput"
+            searchButtonTestId="searchBtn"
+            hasDropdowns={true}
+            dropdowns={[
+              {
+                id: 'people-filter',
+                label: tCommon('filter'),
+                type: 'filter',
+                options: modes.map((value, index) => ({
+                  label: value,
+                  value: index,
+                })),
+                selectedOption: mode,
+                onOptionChange: (value) => setMode(value as number),
+                dataTestIdPrefix: 'modeChangeBtn',
+              },
+            ]}
+          />
         </div>
+
         <div className={styles.people_content}>
           <div className={styles.people_card_header}>
-            <span style={{ flex: '1' }} className={styles.display_flex}>
-              <span style={{ flex: '1' }}>S.No</span>
-              <span style={{ flex: '1' }}>Avatar</span>
+            {/* Nested span groups sNo and avatar in a flex container for horizontal alignment */}
+            <span
+              className={`${styles.display_flex} ${styles.people_card_header_col_1}`}
+            >
+              <span className={styles.people_card_header_col_1}>
+                {t('sNo')}
+              </span>
+              <span className={styles.people_card_header_col_1}>
+                {t('avatar')}
+              </span>
             </span>
-            <span style={{ flex: '2' }}>Name</span>
-            <span style={{ flex: '2' }}>Email</span>
-            <span style={{ flex: '2' }}>Role</span>
+            <span className={styles.people_card_header_col_2}>{t('name')}</span>
+            <span className={styles.people_card_header_col_2}>
+              {t('email')}
+            </span>
+            <span className={styles.people_card_header_col_2}>{t('role')}</span>
           </div>
 
           <div className={styles.people_card_main_container}>
-            {loading ? (
-              <div className={styles.custom_row_center}>
-                <HourglassBottomIcon /> <span>Loading...</span>
-              </div>
-            ) : (
+            <LoadingState
+              isLoading={loading}
+              variant="skeleton"
+              skeletonRows={rowsPerPage}
+              skeletonCols={4}
+            >
               <>
                 {members && members.length > 0 ? (
                   members.map((member: IMemberWithUserType, index) => {
@@ -270,8 +264,7 @@ export default function People(): React.JSX.Element {
                       name,
                       image: member.node.avatarURL ?? '',
                       id: member.node.id ?? '',
-                      email:
-                        member.node.emailAddress ?? '***********************',
+                      email: member.node.emailAddress ?? t('emailNotAvailable'),
                       role: member.userType ?? '',
                       sno: (index + 1 + currentPage * rowsPerPage).toString(),
                     };
@@ -281,7 +274,7 @@ export default function People(): React.JSX.Element {
                   <span>{t('nothingToShow')}</span>
                 )}
               </>
-            )}
+            </LoadingState>
           </div>
           <PaginationList
             count={

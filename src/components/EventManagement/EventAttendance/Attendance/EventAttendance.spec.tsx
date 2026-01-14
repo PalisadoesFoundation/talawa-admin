@@ -1,4 +1,6 @@
-import React from 'react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import {
@@ -140,7 +142,7 @@ describe('Event Attendance Component', () => {
     expect(searchInput).toHaveValue('Bruce');
 
     // SearchBar renders a clear button when value is not empty
-    const clearBtn = screen.getByLabelText('Clear search');
+    const clearBtn = screen.getByLabelText('Clear');
     fireEvent.click(clearBtn);
 
     expect(searchInput).toHaveValue('');
@@ -252,7 +254,7 @@ describe('Event Attendance Component', () => {
               id: 'tagged-123',
               name: 'Tagged Member',
               emailAddress: 'tagged@example.com',
-              createdAt: '2030-04-13T10:23:17.742Z',
+              createdAt: dayjs.utc().add(4, 'year').toISOString(),
               role: 'attendee',
               eventsAttended: [],
               tagsAssignedWith: {
@@ -338,7 +340,7 @@ describe('Event Attendance Component', () => {
               id: 'admin1',
               name: 'Admin User',
               emailAddress: 'admin@example.com',
-              createdAt: '2030-04-13T10:23:17.742Z',
+              createdAt: dayjs.utc().add(4, 'year').toISOString(),
               role: 'administrator',
               eventsAttended: [],
             },
@@ -366,7 +368,7 @@ describe('Event Attendance Component', () => {
               id: 'no-tags-1',
               name: 'ZZZ User',
               emailAddress: 'notags@example.com',
-              createdAt: '2030-04-13T10:23:17.742Z',
+              createdAt: dayjs.utc().add(4, 'year').toISOString(),
               role: 'attendee',
               eventsAttended: null,
             },

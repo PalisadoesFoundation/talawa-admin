@@ -16,7 +16,7 @@
  * @dependencies
  * - `react-bootstrap` for Navbar, Dropdown, and Container components.
  * - `i18next` and `react-i18next` for language translation.
- * - `@apollo/client` for GraphQL mutation to revoke refresh tokens.
+ * - `@apollo/client` for GraphQL logout mutation.
  * - `@mui/icons-material` for icons.
  * - `js-cookie` for managing language preference cookies.
  * - `react-router-dom` for navigation.
@@ -54,14 +54,15 @@ import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 
 function userNavbar(): JSX.Element {
   // Hook for local storage operations
-  const { getItem } = useLocalStorage();
+  const { getItem, clearAllItems } = useLocalStorage();
 
   // Hook for programmatic navigation
   const navigate = useNavigate();
@@ -72,8 +73,8 @@ function userNavbar(): JSX.Element {
   });
   const { t: tCommon } = useTranslation('common');
 
-  // Mutation hook for revoking the refresh token
-  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
+  // Mutation hook for logout
+  const [logout] = useMutation(LOGOUT_MUTATION);
 
   // State for managing the current language code
   const [currentLanguageCode, setCurrentLanguageCode] = React.useState(
@@ -84,14 +85,20 @@ function userNavbar(): JSX.Element {
   const userName = getItem('name') as string;
 
   /**
-   * Handles user logout by revoking the refresh token and clearing local storage.
+   * Handles user logout by revoking the refresh token and clearing the local storage.
    * Redirects to the home page after logout.
    */
 
-  const handleLogout = (): void => {
-    revokeRefreshToken();
-    localStorage.clear();
-    navigate('/');
+  const handleLogout = async (): Promise<void> => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Error during logout:', error);
+      toast.error(tCommon('errorOccurred'));
+    } finally {
+      clearAllItems();
+      navigate('/');
+    }
   };
 
   return (
@@ -102,7 +109,7 @@ function userNavbar(): JSX.Element {
           <img
             className={styles.talawaImage}
             src={TalawaImage}
-            alt="Talawa Branding"
+            alt={t('talawaBranding')}
           />
           <b>{t('talawa')}</b>
         </Navbar.Brand>

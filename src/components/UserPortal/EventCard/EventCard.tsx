@@ -22,8 +22,8 @@
  *   name="Community Meetup"
  *   description="A meetup for community members."
  *   location="Community Hall"
- *   startDate="2023-10-01"
- *   endDate="2023-10-01"
+ *   startAt={dayjs.utc().subtract(1, 'year').month(9).date(1).format('YYYY-MM-DD')}
+ *   endAt={dayjs.utc().subtract(1, 'year').month(9).date(1).format('YYYY-MM-DD')}
  *   startTime="10:00:00"
  *   endTime="12:00:00"
  *   creator={{ firstName: "John", lastName: "Doe" }}
@@ -47,13 +47,13 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import dayjs from 'dayjs';
 import { Button } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
-import { toast } from 'react-toastify';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
 import { REGISTER_EVENT } from 'GraphQl/Mutations/EventMutations';
 import { useTranslation } from 'react-i18next';
 
 import useLocalStorage from 'utils/useLocalstorage';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceEvent } from 'types/Event/interface';
 
 function eventCard(props: InterfaceEvent): JSX.Element {
@@ -94,11 +94,13 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         });
         if (data) {
           setIsRegistered(true);
-          toast.success(`Successfully registered for ${props.name}`);
+          NotificationToast.success(
+            `Successfully registered for ${props.name}`,
+          );
         }
       } catch (error) {
-        toast.error(`Failed to register for the event`);
-        toast.error(error as string);
+        NotificationToast.error(`Failed to register for the event`);
+        NotificationToast.error(error as string);
       }
     }
   };

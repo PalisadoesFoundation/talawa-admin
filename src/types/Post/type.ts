@@ -1,7 +1,7 @@
 import type { VoteState } from 'utils/interfaces';
 import type { Comment } from '../Comment/type';
-import type { User } from '../User/type';
-import type { Organization } from 'types/Organization/type';
+import type { User } from '../shared-components/User/type';
+import type { Organization } from 'types/AdminPortal/Organization/type';
 
 export type Post = {
   _id?: string; // Optional
@@ -152,3 +152,32 @@ export type PostNode = {
     }[];
   };
 };
+
+export interface ICreatePostData {
+  createPost: {
+    id: string;
+    caption: string;
+    pinnedAt?: string;
+    attachments?: {
+      fileHash: string;
+      mimeType: string;
+      name: string;
+      objectName: string;
+    }[];
+  };
+}
+
+export interface ICreatePostInput {
+  caption: string;
+  body?: string;
+  organizationId: string;
+  isPinned: boolean;
+  attachments?: File[];
+}
+
+export interface IFileMetadataInput {
+  fileHash: string;
+  mimetype: string;
+  name: string;
+  objectName: string;
+}

@@ -6,9 +6,11 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import { ToastContainer } from 'react-toastify';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DatePicker';
 import { MockedProvider } from '@apollo/react-testing';
 import {
   checkInMutationSuccess,
@@ -16,6 +18,10 @@ import {
   checkInMutationSuccessRecurring,
 } from '../../CheckInMocks';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 // Mock @pdfme/generator
 vi.mock('@pdfme/generator', () => ({
@@ -61,7 +67,7 @@ describe('Testing Table Row for CheckIn Table', () => {
           <MockedProvider mocks={checkInMutationSuccess}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
+                <NotificationToastContainer />
                 <TableRow {...props} />
               </I18nextProvider>
             </Provider>
@@ -83,7 +89,7 @@ describe('Testing Table Row for CheckIn Table', () => {
         id: '123',
         name: 'John Doe',
         userId: 'user123',
-        checkInTime: '2023-01-01T12:00:00Z',
+        checkInTime: dayjs.utc().toISOString(),
         checkOutTime: null,
         isCheckedIn: true,
         isCheckedOut: false,
@@ -98,7 +104,7 @@ describe('Testing Table Row for CheckIn Table', () => {
           <MockedProvider mocks={checkInMutationSuccess}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
+                <NotificationToastContainer />
                 <TableRow {...props} />
               </I18nextProvider>
             </Provider>
@@ -137,7 +143,7 @@ describe('Testing Table Row for CheckIn Table', () => {
           <MockedProvider mocks={checkInMutationUnsuccess}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
+                <NotificationToastContainer />
                 <TableRow {...props} />
               </I18nextProvider>
             </Provider>
@@ -160,7 +166,7 @@ describe('Testing Table Row for CheckIn Table', () => {
         id: `123`,
         name: '',
         userId: `user123`,
-        checkInTime: '2023-01-01T12:00:00Z',
+        checkInTime: dayjs.utc().toISOString(),
         checkOutTime: null,
         isCheckedIn: true,
         isCheckedOut: false,
@@ -175,7 +181,7 @@ describe('Testing Table Row for CheckIn Table', () => {
           <MockedProvider mocks={checkInMutationSuccess}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
+                <NotificationToastContainer />
                 <TableRow {...props} />
               </I18nextProvider>
             </Provider>
@@ -186,9 +192,7 @@ describe('Testing Table Row for CheckIn Table', () => {
 
     fireEvent.click(await findByText('Download Tag'));
 
-    expect(
-      await findByText('Error generating pdf: Invalid or empty name provided'),
-    ).toBeInTheDocument();
+    expect(await findByText('Error generating pdf!')).toBeInTheDocument();
   });
 
   test('Should check in user for recurring event successfully', async () => {
@@ -213,7 +217,7 @@ describe('Testing Table Row for CheckIn Table', () => {
           <MockedProvider mocks={checkInMutationSuccessRecurring}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
+                <NotificationToastContainer />
                 <TableRow {...props} />
               </I18nextProvider>
             </Provider>
@@ -252,7 +256,7 @@ describe('Testing Table Row for CheckIn Table', () => {
           <MockedProvider mocks={checkInMutationSuccess}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
+                <NotificationToastContainer />
                 <TableRow {...props} />
               </I18nextProvider>
             </Provider>

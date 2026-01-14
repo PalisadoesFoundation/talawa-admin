@@ -1,0 +1,496 @@
+/**
+ * Posts Component
+ *
+ * This component manages and displays organization posts with comprehensive functionality
+ * including pagination, search, sorting, pinning, and infinite scroll. It renders both
+ * pinned posts in a carousel layout and regular posts in a paginated list with interactive
+ * features for post management.
+ *
+ * @returns A JSX element representing the complete posts interface with:
+ * - Header with search and sorting controls
+ * - Pinned posts carousel section
+ * - Paginated posts list with infinite scroll
+ * - Modal for viewing individual pinned posts
+ * - Loading states and error handling
+ *
+ * @remarks
+ * - Uses Apollo Client for GraphQL queries (ORGANIZATION_POST_LIST_WITH_VOTES, ORGANIZATION_PINNED_POST_LIST)
+ * - Implements search functionality that filters posts by caption text
+ * - Supports sorting by creation date (oldest/newest) with local state management
+ * - Features infinite scroll pagination for better performance with large post lists
+ * - Handles pinned posts separately in a carousel layout at the top
+ * - Provides modal view for detailed pinned post interaction
+ * - Includes comprehensive error handling and loading states
+ * - Uses React hooks for state management and side effects
+ * - Supports both admin and user role-based interactions
+ * - Implements proper data formatting for PostCard components
+ *
+ * Dependencies:
+ * - Apollo Client for GraphQL operations
+ * - React Router for URL parameters
+ * - React i18n for internationalization
+ * - React Toastify for notifications
+ * - Local storage utilities for user session data
+ *
+ * @example
+ * ```tsx
+ * // Used in organization routes
+ * <Posts />
+ * ```
+ */
+
+import { useQuery } from '@apollo/client';
+import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
+import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { useParams } from 'react-router';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import {
+  InterfaceOrganizationPostListData,
+  InterfacePost,
+  InterfacePostEdge,
+} from 'types/Post/interface';
+import useLocalStorage from 'utils/useLocalstorage';
+import { useTranslation } from 'react-i18next';
+import Button from 'react-bootstrap/Button';
+import Row from 'react-bootstrap/Row';
+import { Add, Close } from '@mui/icons-material';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
+import PageHeader from 'shared-components/Navbar/Navbar';
+import PinnedPostsLayout from 'shared-components/pinnedPosts/pinnedPostsLayout';
+import PostCard from 'shared-components/postCard/PostCard';
+import styles from 'style/app-fixed.module.css';
+import { Box, Typography } from '@mui/material';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { formatDate } from 'utils/dateFormatter';
+import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
+
+export default function PostsPage() {
+  const { t } = useTranslation('translation', { keyPrefix: 'posts' });
+  const [searchTerm, setSearchTerm] = useState('');
+  const [isFiltering, setIsFiltering] = useState(false);
+  const [filteredPosts, setFilteredPosts] = useState<InterfacePost[]>([]);
+  const { orgId: currentUrl } = useParams();
+  const [sortingOption, setSortingOption] = useState('None');
+  const [allPosts, setAllPosts] = useState<InterfacePost[]>([]);
+  const [after, setAfter] = useState<string | null>(null);
+  const first = 6;
+  const [postModalIsOpen, setPostModalIsOpen] = useState(false);
+  const [selectedPinnedPost, setSelectedPinnedPost] =
+    useState<InterfacePost | null>(null);
+  const [hasMore, setHasMore] = useState(true);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const { getItem } = useLocalStorage();
+  const userId = getItem<string>('userId') ?? getItem<string>('id') ?? null;
+  const [showPinnedPostModal, setShowPinnedPostModal] = useState(false);
+
+  const showCreatePostModal = (): void => {
+    setPostModalIsOpen(true);
+  };
+
+  const hideCreatePostModal = (): void => {
+    setPostModalIsOpen(false);
+  };
+
+  const handleStoryClick = (post: InterfacePost) => {
+    setSelectedPinnedPost(post);
+    setShowPinnedPostModal(true);
+  };
+
+  const handleClosePinnedModal = () => {
+    setShowPinnedPostModal(false);
+    setSelectedPinnedPost(null);
+  };
+
+  const {
+    data: orgPostListData,
+    loading: orgPostListLoading,
+    error: orgPostListError,
+    refetch,
+    fetchMore,
+  } = useQuery<InterfaceOrganizationPostListData>(
+    ORGANIZATION_POST_LIST_WITH_VOTES,
+    {
+      skip: !currentUrl || !userId,
+      variables: {
+        input: { id: currentUrl as string },
+        userId: userId,
+        after: null,
+        before: null,
+        first: first,
+        last: null,
+      },
+    },
+  );
+
+  const {
+    data: orgPinnedPostListData,
+    loading: orgPinnedPostListLoading,
+    error: orgPinnedPostListError,
+  } = useQuery<InterfaceOrganizationPostListData>(
+    ORGANIZATION_PINNED_POST_LIST,
+    {
+      skip: !currentUrl || !userId,
+      variables: {
+        input: { id: currentUrl as string },
+        first: 10,
+        last: null,
+        userId: userId,
+      },
+    },
+  );
+
+  // Initialize posts from query data
+  useEffect(() => {
+    if (orgPostListData?.organization?.posts?.edges) {
+      const posts = orgPostListData.organization.posts.edges.map(
+        (edge: InterfacePostEdge) => edge.node,
+      );
+      setAllPosts(posts);
+      setHasMore(
+        orgPostListData.organization.posts.pageInfo?.hasNextPage ?? false,
+      );
+      setAfter(orgPostListData.organization.posts.pageInfo?.endCursor ?? null);
+    }
+  }, [orgPostListData]);
+
+  // Handle error toasts
+  useEffect(() => {
+    if (orgPostListError) {
+      NotificationToast.error(t('errorLoadingPosts'));
+    }
+  }, [orgPostListError, t]);
+
+  useEffect(() => {
+    if (orgPinnedPostListError)
+      NotificationToast.error(t('pinnedPostsLoadError'));
+  }, [orgPinnedPostListError, t]);
+
+  // Infinite scroll - load more posts
+  const loadMorePosts = useCallback((): void => {
+    if (!currentUrl || !userId) return;
+    if (!hasMore || sortingOption !== 'None') return;
+    if (isFetchingMore) return; // Guard against concurrent requests
+
+    setIsFetchingMore(true);
+
+    fetchMore({
+      variables: {
+        input: { id: currentUrl as string },
+        userId: userId,
+        after: after,
+        before: null,
+        first: first,
+        last: null,
+      },
+      updateQuery: (
+        prevResult: InterfaceOrganizationPostListData,
+        {
+          fetchMoreResult,
+        }: { fetchMoreResult?: InterfaceOrganizationPostListData },
+      ) => {
+        if (!fetchMoreResult?.organization?.posts?.edges) {
+          return prevResult;
+        }
+
+        const newEdges = fetchMoreResult.organization.posts.edges;
+        const pageInfo = fetchMoreResult.organization.posts.pageInfo;
+
+        // Merge the new posts with existing ones
+        return {
+          organization: {
+            ...prevResult.organization,
+            posts: {
+              ...prevResult.organization?.posts,
+              edges: [
+                ...(prevResult.organization?.posts?.edges ?? []),
+                ...newEdges,
+              ],
+              pageInfo,
+            },
+          },
+        };
+      },
+    })
+      .then((res) => {
+        const pageInfo = res.data?.organization?.posts?.pageInfo;
+        setHasMore(pageInfo?.hasNextPage ?? false);
+        setAfter(pageInfo?.endCursor ?? null);
+        setIsFetchingMore(false);
+      })
+      .catch(() => {
+        NotificationToast.error(t('loadMorePostsError'));
+        setIsFetchingMore(false);
+      });
+  }, [
+    hasMore,
+    sortingOption,
+    fetchMore,
+    currentUrl,
+    userId,
+    after,
+    first,
+    isFetchingMore,
+    setIsFetchingMore,
+  ]);
+
+  const handleSearch = (term: string): void => {
+    setSearchTerm(term);
+
+    if (!term.trim()) {
+      setIsFiltering(false);
+      setFilteredPosts([]);
+      return;
+    }
+
+    setIsFiltering(true);
+    const filtered = allPosts.filter((post: InterfacePost) =>
+      post.caption?.toLowerCase().includes(term.toLowerCase()),
+    );
+    setFilteredPosts(filtered);
+  };
+
+  const handleSorting = (option: string | number): void => {
+    setSortingOption(option as string);
+    if (option !== 'None') {
+      setHasMore(false);
+    } else if (orgPostListData?.organization?.posts?.pageInfo?.hasNextPage) {
+      setHasMore(true);
+    }
+  };
+
+  const formatPostForCard = (post: InterfacePost) => ({
+    id: post.id,
+    creator: {
+      id: post.creator?.id ?? 'unknown',
+      name: post.creator?.name ?? t('unknownUser'),
+      avatarURL: post.creator?.avatarURL,
+    },
+    hasUserVoted: post.hasUserVoted ?? { hasVoted: false, voteType: null },
+    postedAt: (() => {
+      try {
+        return formatDate(post.createdAt);
+      } catch {
+        return '';
+      }
+    })(),
+    pinnedAt: post.pinnedAt ?? null,
+    mimeType: post.attachments?.[0]?.mimeType ?? null,
+    attachmentURL: post.attachmentURL ?? null,
+    title: post.caption ?? '',
+    text: post.caption ?? '',
+    body: post.body,
+    commentCount: post.commentsCount ?? 0,
+    upVoteCount: post.upVotesCount ?? 0,
+    downVoteCount: post.downVotesCount ?? 0,
+    fetchPosts: refetch,
+  });
+
+  // Derive postsToDisplay from allPosts with sorting and filtering
+  const postsToDisplay = useMemo(() => {
+    let posts = isFiltering ? filteredPosts : allPosts;
+
+    // Apply sorting if not 'None'
+    if (sortingOption !== 'None' && posts.length > 0) {
+      // Precompute timestamps to avoid duplicate Date creation
+      const postsWithTimestamps = posts.map((post) => {
+        const time = new Date(post.createdAt).getTime();
+        return {
+          post,
+          timestamp: Number.isFinite(time) ? time : 0,
+        };
+      });
+
+      postsWithTimestamps.sort((a, b) =>
+        sortingOption === 'oldest'
+          ? a.timestamp - b.timestamp
+          : b.timestamp - a.timestamp,
+      );
+
+      posts = postsWithTimestamps.map(({ post }) => post);
+    }
+
+    return posts;
+  }, [allPosts, filteredPosts, isFiltering, sortingOption]);
+
+  if (orgPostListLoading || orgPinnedPostListLoading) {
+    return (
+      <LoadingState
+        isLoading={orgPostListLoading || orgPinnedPostListLoading}
+        variant="spinner"
+      >
+        <div />
+      </LoadingState>
+    );
+  }
+
+  const pinnedPosts =
+    orgPinnedPostListData?.organization?.pinnedPosts?.edges ?? [];
+
+  return (
+    <>
+      <Row className={`${styles.head} ${styles.postContainer}`}>
+        <div className={styles.mainpagerightOrgPost}>
+          <PageHeader
+            search={{
+              placeholder: t('searchTitle'),
+              onSearch: handleSearch,
+              inputTestId: 'searchByName',
+            }}
+            sorting={[
+              {
+                title: t('sortPost'),
+                options: [
+                  { label: t('latest'), value: 'latest' },
+                  { label: t('oldest'), value: 'oldest' },
+                  { label: t('none'), value: 'None' },
+                ],
+                selected: sortingOption,
+                onChange: handleSorting,
+                testIdPrefix: 'sortpost-toggle',
+              },
+            ]}
+            showEventTypeFilter={false}
+            actions={
+              <Button
+                variant="success"
+                onClick={showCreatePostModal}
+                disabled={!userId}
+                data-testid="createPostModalBtn"
+                data-cy="createPostModalBtn"
+                className={`${styles.createButton} mb-2`}
+              >
+                <Add className={styles.addPost} />
+                {t('createPost')}
+              </Button>
+            }
+          />
+
+          <div className={`row ${styles.list_box}`}>
+            <div
+              data-testid="posts-renderer"
+              data-loading={String(orgPostListLoading)}
+              data-is-filtering={String(isFiltering)}
+              data-sorting-option={sortingOption}
+              id="posts-scroll-container"
+            >
+              {orgPostListError && (
+                <div data-testid="not-found">{t('errorLoadingPosts')}</div>
+              )}
+
+              {/* Pinned Posts Carousel */}
+              {pinnedPosts.length > 0 && !isFiltering && (
+                <Box sx={{ mb: 3 }}>
+                  <Typography variant="h5" sx={{ mb: 2 }}>
+                    {t('pinnedPosts')}
+                  </Typography>
+                  <PinnedPostsLayout
+                    pinnedPosts={pinnedPosts}
+                    onStoryClick={handleStoryClick}
+                  />
+                </Box>
+              )}
+
+              {/* Search Results Message */}
+              {isFiltering && filteredPosts.length === 0 && searchTerm && (
+                <Box sx={{ py: 4 }} className={styles.noPostsFound}>
+                  <Typography color="text.secondary">
+                    {t('noPostsFoundMatching', { term: searchTerm })}
+                  </Typography>
+                </Box>
+              )}
+
+              {/* Posts List with Infinite Scroll */}
+              {isFiltering ? (
+                // Display filtered posts without infinite scroll
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                  {postsToDisplay.map((post) => (
+                    <PostCard key={post.id} {...formatPostForCard(post)} />
+                  ))}
+                </Box>
+              ) : (
+                // Infinite scroll for regular posts
+                <InfiniteScroll
+                  dataLength={postsToDisplay.length}
+                  next={loadMorePosts}
+                  hasMore={hasMore && sortingOption === 'None'}
+                  loader={<InfiniteScrollLoader />}
+                  endMessage={
+                    postsToDisplay.length > 0 && (
+                      <Box sx={{ py: 2 }} className={styles.noPostsFound}>
+                        <Typography color="text.secondary">
+                          {t('noMorePosts')}
+                        </Typography>
+                      </Box>
+                    )
+                  }
+                  scrollThreshold={0.8}
+                  className={styles.postInfiniteScroll}
+                >
+                  <Box
+                    sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
+                  >
+                    {postsToDisplay.map((post) => (
+                      <PostCard key={post.id} {...formatPostForCard(post)} />
+                    ))}
+                  </Box>
+                </InfiniteScroll>
+              )}
+
+              {/* Empty State */}
+              {postsToDisplay.length === 0 &&
+                !orgPostListLoading &&
+                !isFiltering && (
+                  <Box sx={{ py: 4 }} className={styles.noPostsFound}>
+                    <Typography color="text.secondary">
+                      {t('noPosts')}
+                    </Typography>
+                  </Box>
+                )}
+            </div>
+          </div>
+        </div>
+      </Row>
+      {userId && (
+        <div className={styles.createPostModalContainer}>
+          <CreatePostModal
+            show={postModalIsOpen}
+            onHide={hideCreatePostModal}
+            refetch={refetch}
+            orgId={currentUrl}
+            type="create"
+          />
+        </div>
+      )}
+
+      {/* Pinned Post Modal */}
+      {selectedPinnedPost && (
+        <BaseModal
+          show={showPinnedPostModal}
+          onHide={handleClosePinnedModal}
+          dataTestId="pinned-post-modal"
+          size="lg"
+          backdrop="static"
+          className={styles.pinnedPostModal}
+          showCloseButton={false}
+        >
+          <div className={styles.pinnedPostModalBody}>
+            <Button
+              variant="light"
+              onClick={handleClosePinnedModal}
+              data-testid="close-pinned-post-button"
+              aria-label={t('closePinnedPost')}
+              className={`position-absolute top-0 end-0 m-2 btn-close-custom ${styles.closeButton}`}
+            >
+              <Close className={styles.closeButtonIcon} aria-hidden="true" />
+            </Button>
+            {/* Render the pinned post */}
+            <PostCard {...formatPostForCard(selectedPinnedPost)} />
+          </div>
+        </BaseModal>
+      )}
+    </>
+  );
+}

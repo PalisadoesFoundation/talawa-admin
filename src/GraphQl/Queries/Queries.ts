@@ -83,15 +83,15 @@ export const ORGANIZATION_FILTER_LIST = gql`
   ${ORG_FIELDS}
 `;
 
-// Lightweight version without members
+// Lightweight version without members and other fields for registration page
 export const ORGANIZATION_LIST_NO_MEMBERS = gql`
-  query {
+  query OrganizationListBasic {
     organizations {
-      ...OrgFields
-      isMember
+      id
+      name
+      addressLine1
     }
   }
-  ${ORG_FIELDS}
 `;
 
 export const ORGANIZATION_MEMBER_ADMIN_COUNT = gql`
@@ -449,36 +449,6 @@ export const GET_ORGANIZATION_POSTS_COUNT_PG = gql`
   }
 `;
 
-export const GET_POSTS_BY_ORG = gql`
-  query GetPostsByOrg($input: GetPostsByOrgInput!) {
-    postsByOrganization(input: $input) {
-      id
-      caption
-      pinnedAt
-      createdAt
-      updatedAt
-      attachments {
-        id
-        name
-        mimeType
-        objectName
-      }
-      creator {
-        id
-      }
-    }
-  }
-`;
-
-export const GET_USER_BY_ID = gql`
-  query GetUserById($input: QueryUserInput!) {
-    user(input: $input) {
-      id
-      name
-    }
-  }
-`;
-
 export const GET_ORGANIZATION_MEMBERS_PG = gql`
   query GetOrganizationMembers($id: String!, $first: Int, $after: String) {
     organization(input: { id: $id }) {
@@ -730,7 +700,6 @@ const ORGANIZATION_BASIC_FIELDS = gql`
     countryCode
     avatarURL
     createdAt
-    updatedAt
     isUserRegistrationRequired
   }
 `;
@@ -947,12 +916,18 @@ export const USER_DETAILS = gql`
       mobilePhoneNumber
       homePhoneNumber
       workPhoneNumber
-
+      eventsAttended {
+        id
+      }
       organizationsWhereMember(first: 10) {
         edges {
           node {
             id
             name
+            membersCount
+            adminsCount
+            description
+            avatarURL
           }
         }
       }
@@ -960,6 +935,10 @@ export const USER_DETAILS = gql`
       createdOrganizations {
         id
         name
+        membersCount
+        adminsCount
+        description
+        avatarURL
       }
     }
   }
@@ -1042,7 +1021,7 @@ export const ORGANIZATION_DONATION_CONNECTION_LIST = gql`
 `;
 
 // to take the membership request
-export const MEMBERSHIP_REQUEST = gql`
+export const MEMBERSHIP_REQUEST_PG = gql`
   query Organization(
     $input: QueryOrganizationInput!
     $skip: Int
@@ -1051,7 +1030,7 @@ export const MEMBERSHIP_REQUEST = gql`
   ) {
     organization(input: $input) {
       id
-      membershipRequestsCount
+      # membershipRequestsCount
       membershipRequests(
         skip: $skip
         first: $first
@@ -1065,7 +1044,6 @@ export const MEMBERSHIP_REQUEST = gql`
           id
           name
           emailAddress
-          avatarURL
         }
       }
     }
@@ -1185,8 +1163,18 @@ export const GET_COMMUNITY_DATA_PG = gql`
 `;
 
 export const SIGNIN_QUERY = gql`
-  query SignIn($email: EmailAddress!, $password: String!) {
-    signIn(input: { emailAddress: $email, password: $password }) {
+  query SignIn(
+    $email: EmailAddress!
+    $password: String!
+    $recaptchaToken: String
+  ) {
+    signIn(
+      input: {
+        emailAddress: $email
+        password: $password
+        recaptchaToken: $recaptchaToken
+      }
+    ) {
       user {
         id
         name
@@ -1196,6 +1184,7 @@ export const SIGNIN_QUERY = gql`
         avatarURL
       }
       authenticationToken
+      refreshToken
     }
   }
 `;
@@ -1249,7 +1238,6 @@ export { AGENDA_ITEM_CATEGORY_LIST } from './AgendaCategoryQueries';
 export { IS_SAMPLE_ORGANIZATION_QUERY } from './PlugInQueries';
 
 // display posts
-export { ORGANIZATION_POST_LIST } from './OrganizationQueries';
 export { ORGANIZATION_POST_LIST_WITH_VOTES } from './OrganizationQueries';
 
 // comments

@@ -2,7 +2,7 @@ import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
-import { toast, ToastContainer } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import i18nForTest from 'utils/i18nForTest';
 import EventCard from './EventCard';
 import { render, screen, waitFor } from '@testing-library/react';
@@ -13,8 +13,12 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, it } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 
-const { setItem } = useLocalStorage();
+dayjs.extend(utc);
+
+const { setItem, clearAllItems } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -37,7 +41,7 @@ const MOCKS = [
 const link = new StaticMockLink(MOCKS, true);
 
 afterEach(() => {
-  localStorage.clear();
+  clearAllItems();
   vi.restoreAllMocks();
 });
 
@@ -47,8 +51,9 @@ describe('Testing Event Card In User portal', () => {
     name: 'Test Event',
     description: 'This is a test event',
     location: 'Virtual',
-    startAt: '2023-04-13T17:49:12Z',
-    endAt: '2023-04-15T19:49:12Z',
+    // Use dynamic dates to avoid test staleness
+    startAt: dayjs.utc().add(10, 'days').toISOString(),
+    endAt: dayjs.utc().add(12, 'days').toISOString(),
     isRegisterable: true,
     isPublic: true,
     endTime: '19:49:12',
@@ -78,7 +83,6 @@ describe('Testing Event Card In User portal', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
               <EventCard {...props} />
             </I18nextProvider>
           </Provider>
@@ -91,13 +95,13 @@ describe('Testing Event Card In User portal', () => {
   });
 
   it('Handle register should work properly', async () => {
+    const toastSuccessSpy = vi.spyOn(NotificationToast, 'success');
     setItem('userId', '456');
-    const { queryByText } = render(
+    render(
       <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
               <EventCard {...props} />
             </I18nextProvider>
           </Provider>
@@ -106,14 +110,14 @@ describe('Testing Event Card In User portal', () => {
     );
     await userEvent.click(screen.getByText('Register'));
     await waitFor(() =>
-      expect(
-        queryByText('Successfully registered for Test Event'),
-      ).toBeInTheDocument(),
+      expect(toastSuccessSpy).toHaveBeenCalledWith(
+        'Successfully registered for Test Event',
+      ),
     );
   });
 
   it('should display an error toast when the register mutation fails', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     const errorMocks = [
       {
         request: {
@@ -131,7 +135,6 @@ describe('Testing Event Card In User portal', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
               <EventCard {...props} />
             </I18nextProvider>
           </Provider>
@@ -155,8 +158,9 @@ describe('Event card when start and end time are not given', () => {
     name: 'Test Event',
     description: 'This is a test event',
     location: 'Virtual',
-    startAt: '2023-04-13T00:00:00Z',
-    endAt: '2023-04-15T23:59:59Z',
+    // Use dynamic dates to avoid test staleness
+    startAt: dayjs.utc().add(10, 'days').startOf('day').toISOString(),
+    endAt: dayjs.utc().add(12, 'days').endOf('day').toISOString(),
     isRegisterable: true,
     isPublic: true,
     endTime: '',
@@ -185,7 +189,6 @@ describe('Event card when start and end time are not given', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
               <EventCard {...props} />
             </I18nextProvider>
           </Provider>

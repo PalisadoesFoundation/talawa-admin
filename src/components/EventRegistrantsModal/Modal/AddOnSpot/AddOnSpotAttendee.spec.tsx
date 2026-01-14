@@ -51,9 +51,11 @@ const MOCKS = [
             id: '1',
           },
           authenticationToken: 'mock-access-token',
+          refreshToken: 'mock-refresh-token',
         },
       },
     },
+    delay: 50, // Add delay to capture loading state
   },
 ];
 
@@ -74,7 +76,7 @@ const ERROR_MOCKS = [
 
 const renderAddOnSpotAttendee = (): RenderResult => {
   return render(
-    <MockedProvider mocks={MOCKS}>
+    <MockedProvider mocks={MOCKS} addTypename={false}>
       <Provider store={store}>
         <I18nextProvider i18n={i18nForTest}>
           <BrowserRouter>
@@ -87,11 +89,12 @@ const renderAddOnSpotAttendee = (): RenderResult => {
 };
 
 describe('AddOnSpotAttendee Component', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('renders the component with all form fields', async () => {
@@ -111,17 +114,16 @@ describe('AddOnSpotAttendee Component', () => {
         request: {
           query: SIGNUP_MUTATION,
           variables: {
-            firstName: 'John',
-            lastName: 'Doe',
+            ID: '123',
+            name: 'John Doe',
             email: 'john@example.com',
-            phoneNo: '1234567890',
-            gender: 'Male',
             password: '123456',
-            orgId: '123',
           },
         },
         result: {
-          data: {}, // No signUp property
+          data: {
+            signUp: null,
+          },
         },
       },
     ];
@@ -183,6 +185,7 @@ describe('AddOnSpotAttendee Component', () => {
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(
         expect.stringContaining('Failed to add attendee'),
+        expect.any(Object),
       );
     });
   });
@@ -249,6 +252,49 @@ describe('AddOnSpotAttendee Component', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
+    });
+  });
+
+  it('disables button and shows loading state during form submission', async () => {
+    renderAddOnSpotAttendee();
+
+    await userEvent.type(screen.getByLabelText('First Name'), 'John');
+    await userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
+    await userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
+    await userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
+    const genderSelect = screen.getByLabelText('Gender');
+    fireEvent.change(genderSelect, { target: { value: 'Male' } });
+
+    // Verify initial state before submission
+    const submitButton = screen.getByRole('button', { name: /add/i });
+    expect(submitButton).not.toBeDisabled();
+    expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument();
+
+    fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
+
+    // Wait for loading state to appear AND button to be gone (atomic check)
+    await waitFor(() => {
+      expect(screen.getByTestId('loading-state')).toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: /add/i }),
+      ).not.toBeInTheDocument();
+    });
+
+    // Verify loading state eventually disappears
+    await waitFor(() => {
+      expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument();
+    });
+
+    // Verify success state
+    await waitFor(() => {
+      // Button should reappear (if modal is still open, which it is in this render context)
+      expect(screen.getByRole('button', { name: /add/i })).toBeInTheDocument();
+      expect(toast.success).toHaveBeenCalledWith(
+        'Attendee added successfully!',
+      );
+      // Callbacks should be invoked
+      expect(mockProps.reloadMembers).toHaveBeenCalled();
+      expect(mockProps.handleClose).toHaveBeenCalled();
     });
   });
 });

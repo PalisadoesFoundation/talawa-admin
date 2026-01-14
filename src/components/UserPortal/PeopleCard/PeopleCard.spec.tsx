@@ -1,38 +1,10 @@
-import React, { act } from 'react';
-import { render } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
-import { I18nextProvider } from 'react-i18next';
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 
-import { BrowserRouter } from 'react-router';
-import { Provider } from 'react-redux';
-import { store } from 'state/store';
-import i18nForTest from 'utils/i18nForTest';
-import { StaticMockLink } from 'utils/StaticMockLink';
-import PeopleCard from './PeopleCard';
+import PeopleCard, { InterfacePeopleCardProps } from './PeopleCard';
 
-/**
- * Unit tests for the PeopleCard component in the User Portal.
- *
- * These tests ensure that the PeopleCard component renders correctly with and without an image,
- * validating that all information (name, role, email, etc.) is displayed as expected.
- *
- * 1. **Component renders properly**: Verifies that the component renders correctly with the given props (name, email, role, etc.).
- * 2. **Component renders properly if the person image is provided**: Ensures the component correctly displays the image when a valid image URL is passed in the props.
- *
- * Mocked GraphQL queries are used to simulate backend behavior, though no queries are required for these tests.
- */
-
-const link = new StaticMockLink([], true);
-
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
-
-let props = {
+const baseProps: InterfacePeopleCardProps = {
   id: '1',
   name: 'First Last',
   image: '',
@@ -41,41 +13,31 @@ let props = {
   sno: '1',
 };
 
-describe('Testing PeopleCard Component [User Portal]', () => {
-  it('Component should be rendered properly', async () => {
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PeopleCard {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
+describe('PeopleCard [User Portal]', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
-  it('Component should be rendered properly if person image is not undefined', async () => {
-    props = {
-      ...props,
-      image: 'personImage',
-    };
+  it('renders all person details correctly when image is not provided', () => {
+    render(<PeopleCard {...baseProps} />);
 
-    render(
-      <MockedProvider link={link}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PeopleCard {...props} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
+    expect(screen.getByTestId('people-card-1')).toBeInTheDocument();
+    expect(screen.getByTestId('people-sno-1')).toHaveTextContent('1');
+    expect(screen.getByTestId('people-name-1')).toHaveTextContent('First Last');
+    expect(screen.getByTestId('people-email-1')).toHaveTextContent(
+      'first@last.com',
     );
+    expect(screen.getByTestId('people-role-1')).toHaveTextContent('Admin');
 
-    await wait();
+    // Avatar fallback should be used
+    expect(screen.queryByTestId('people-1-image')).not.toBeInTheDocument();
+  });
+
+  it('renders provided image with correct src when image is passed', () => {
+    render(<PeopleCard {...baseProps} image="http://example.com/avatar.png" />);
+
+    const img = screen.getByTestId('people-1-image') as HTMLImageElement;
+    expect(img).toBeInTheDocument();
+    expect(img.src).toContain('avatar.png');
   });
 });

@@ -1,13 +1,13 @@
 // SKIP_LOCALSTORAGE_CHECK
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { refreshToken } from './getRefreshToken';
+import { refreshToken, handleTokenRefresh } from './getRefreshToken';
 
 const mockApolloClient = {
   mutate: vi.fn(() =>
     Promise.resolve({
       data: {
         refreshToken: {
-          accessToken: 'newAccessToken',
+          authenticationToken: 'newAccessToken',
           refreshToken: 'newRefreshToken',
         },
       },
@@ -26,9 +26,11 @@ vi.mock('@apollo/client', async () => {
 describe('refreshToken', () => {
   let localStorageMock: Storage;
   let mockReload: () => void;
+  let mockLocationHref: string;
 
   beforeEach(() => {
     mockReload = vi.fn();
+    mockLocationHref = '';
 
     localStorageMock = {
       getItem: vi.fn(),
@@ -44,6 +46,12 @@ describe('refreshToken', () => {
       value: {
         ...window.location,
         reload: mockReload,
+        get href() {
+          return mockLocationHref;
+        },
+        set href(value: string) {
+          mockLocationHref = value;
+        },
       },
       writable: true,
     });
@@ -56,22 +64,26 @@ describe('refreshToken', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
-  it('returns true when the token is refreshed successfully', async () => {
+  it('returns true when the token is refreshed successfully via HTTP-Only cookies', async () => {
     const result = await refreshToken();
 
-    expect(localStorage.setItem).toHaveBeenCalledWith(
+    // Verify mutation was called without refreshToken variable (uses cookie)
+    expect(mockApolloClient.mutate).toHaveBeenCalled();
+
+    // No localStorage calls for tokens - they're in HTTP-Only cookies now
+    expect(localStorage.setItem).not.toHaveBeenCalledWith(
       'Talawa-admin_token',
-      JSON.stringify('newAccessToken'),
+      expect.any(String),
     );
-    expect(localStorage.setItem).toHaveBeenCalledWith(
+    expect(localStorage.setItem).not.toHaveBeenCalledWith(
       'Talawa-admin_refreshToken',
-      JSON.stringify('newRefreshToken'),
+      expect.any(String),
     );
+
     expect(result).toBe(true);
-    expect(mockReload).toHaveBeenCalled();
   });
 
   it('returns false and logs error when token refresh fails', async () => {
@@ -91,5 +103,99 @@ describe('refreshToken', () => {
     );
 
     consoleErrorSpy.mockRestore();
+  });
+
+  it('returns false when mutation returns no data', async () => {
+    mockApolloClient.mutate.mockResolvedValueOnce({
+      data: null as unknown as {
+        refreshToken: { authenticationToken: string; refreshToken: string };
+      },
+    });
+
+    const result = await refreshToken();
+
+    expect(result).toBe(false);
+  });
+});
+
+describe('handleTokenRefresh', () => {
+  let localStorageMock: Storage;
+  let mockReload: () => void;
+  let mockLocationHref: string;
+
+  beforeEach(() => {
+    mockReload = vi.fn();
+    mockLocationHref = '';
+
+    localStorageMock = {
+      getItem: vi.fn(),
+      setItem: vi.fn(),
+      clear: vi.fn(),
+      removeItem: vi.fn(),
+      length: 0,
+      key: vi.fn(),
+    };
+
+    Object.defineProperty(window, 'location', {
+      value: {
+        ...window.location,
+        reload: mockReload,
+        get href() {
+          return mockLocationHref;
+        },
+        set href(value: string) {
+          mockLocationHref = value;
+        },
+      },
+      writable: true,
+    });
+
+    vi.clearAllMocks();
+    Object.defineProperty(window, 'localStorage', {
+      value: localStorageMock,
+      writable: true,
+    });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('reloads page on successful token refresh', async () => {
+    mockApolloClient.mutate.mockResolvedValueOnce({
+      data: {
+        refreshToken: {
+          authenticationToken: 'newAccessToken',
+          refreshToken: 'newRefreshToken',
+        },
+      },
+    });
+
+    await handleTokenRefresh();
+
+    expect(mockReload).toHaveBeenCalled();
+  });
+
+  it('clears storage and redirects on failed refresh', async () => {
+    // Set up localStorage to have prefixed items that clearAllItems will remove
+    const storedKeys = [
+      'Talawa-admin_IsLoggedIn',
+      'Talawa-admin_name',
+      'Talawa-admin_email',
+    ];
+
+    mockApolloClient.mutate.mockRejectedValueOnce(new Error('Refresh failed'));
+
+    Object.defineProperty(localStorageMock, 'length', {
+      value: storedKeys.length,
+      writable: true,
+    });
+    localStorageMock.key = vi.fn((index: number) => storedKeys[index] || null);
+
+    await handleTokenRefresh();
+
+    // clearAllItems calls removeItem for each prefixed key
+    expect(localStorageMock.removeItem).toHaveBeenCalled();
+    expect(mockLocationHref).toBe('/');
   });
 });

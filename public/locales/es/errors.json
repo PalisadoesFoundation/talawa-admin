@@ -13,5 +13,15 @@
   "invalidEmploymentStatus": "Por favor seleccione un estado de empleo válido",
   "invalidMaritalStatus": "Por favor seleccione un estado civil válido",
   "error400": "Respuesta no exitosa. Se recibió el código de estado 400 del servidor",
-  "organizationNameAlreadyExists": "Una organización con este nombre ya existe"
+  "organizationNameAlreadyExists": "Una organización con este nombre ya existe",
+  "markAsReadError": "Error al marcar las notificaciones como leídas",
+  "accountLocked": "La cuenta está temporalmente bloqueada debido a demasiados intentos de inicio de sesión fallidos. Por favor, inténtelo de nuevo más tarde.",
+  "accountLockedWithTimer": "La cuenta está temporalmente bloqueada. Por favor, inténtelo de nuevo en {{minutes}} minuto(s).",
+  "title": "Ha ocurrido un error",
+  "defaultErrorMessage": "Ocurrió un error inesperado",
+  "resetButton": "Intentar de nuevo",
+  "resetButtonAriaLabel": "Intentar de nuevo",
+  "fileTooLarge": "Archivo demasiado grande: {{fileName}}",
+  "invalidFileType": "Tipo de archivo no válido: {{fileName}}",
+  "emptyFile": "Archivo vacío seleccionado"
 }

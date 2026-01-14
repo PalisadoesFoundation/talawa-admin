@@ -1,6 +1,9 @@
+import React from 'react';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -8,9 +11,13 @@ import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from '../../../utils/i18nForTest';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import EventActionItems from './EventActionItems';
 import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
-import type { IActionItemInfo } from 'types/ActionItems/interface';
+import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 
 // Mock dependencies
 vi.mock('react-router', async () => {
@@ -43,11 +50,20 @@ vi.mock('react-toastify', () => ({
 }));
 
 // Mock sub-components
-vi.mock('components/Loader/Loader', () => ({
-  default: () => <div data-testid="loader">Loading...</div>,
+vi.mock('shared-components/LoadingState/LoadingState', () => ({
+  default: ({
+    isLoading,
+    children,
+  }: {
+    isLoading: boolean;
+    children: React.ReactNode;
+  }) => {
+    if (isLoading) return <div data-testid="loader">Loading...</div>;
+    return children;
+  },
 }));
 
-vi.mock('components/Avatar/Avatar', () => ({
+vi.mock('shared-components/Avatar/Avatar', () => ({
   default: ({ name }: { name: string }) => (
     <div data-testid="avatar">{name}</div>
   ),
@@ -62,21 +78,32 @@ vi.mock('subComponents/SortingButton', () => ({
     onSortChange: (value: string) => void;
     dataTestIdPrefix: string;
     buttonLabel: string;
-  }) => (
-    <button
-      data-testid={`${dataTestIdPrefix}Btn`}
-      onClick={() => {
-        if (dataTestIdPrefix === 'searchByToggle') {
-          // Switch to category for testing
-          onSortChange('category');
-        } else {
-          onSortChange('test-value');
-        }
-      }}
-    >
-      {buttonLabel}
-    </button>
-  ),
+  }) => {
+    const [filterClickCount, setFilterClickCount] = React.useState(0);
+
+    return (
+      <button
+        data-testid={`${dataTestIdPrefix}Btn`}
+        onClick={() => {
+          if (dataTestIdPrefix === 'searchByToggle') {
+            // Switch to category for testing
+            onSortChange('category');
+          } else if (dataTestIdPrefix === 'filter') {
+            // Cycle through filter states: all -> pending -> completed -> all
+            const nextCount = filterClickCount + 1;
+            setFilterClickCount(nextCount);
+            const filterStates = ['pending', 'completed', 'all'];
+            const currentState = filterStates[(nextCount - 1) % 3];
+            onSortChange(currentState);
+          } else {
+            onSortChange('test-value');
+          }
+        }}
+      >
+        {buttonLabel}
+      </button>
+    );
+  },
 }));
 
 vi.mock('shared-components/SearchBar/SearchBar', () => ({
@@ -147,9 +174,9 @@ const mockActionItem: IActionItemInfo = {
   organizationId: 'orgId1',
   creatorId: 'userId2',
   updaterId: null,
-  assignedAt: new Date('2024-08-27'),
-  completionAt: new Date('2044-09-03'),
-  createdAt: new Date('2024-01-01T00:00:00.000Z'),
+  assignedAt: dayjs.utc().add(10, 'day').toDate(),
+  completionAt: dayjs.utc().add(20, 'years').toDate(),
+  createdAt: dayjs.utc().subtract(1, 'month').toDate(),
   updatedAt: null,
   isCompleted: false,
   preCompletionNotes: 'Notes 1',
@@ -179,8 +206,20 @@ const mockActionItem: IActionItemInfo = {
     name: 'Test Event',
     description: 'Test event description',
     location: 'Test Location',
-    startAt: '2024-08-27T09:00:00Z',
-    endAt: '2024-08-27T17:00:00Z',
+    startAt: dayjs
+      .utc()
+      .add(10, 'day')
+      .hour(9)
+      .minute(0)
+      .second(0)
+      .toISOString(),
+    endAt: dayjs
+      .utc()
+      .add(10, 'day')
+      .hour(17)
+      .minute(0)
+      .second(0)
+      .toISOString(),
     startTime: '09:00:00',
     endTime: '17:00:00',
     allDay: false,
@@ -191,7 +230,7 @@ const mockActionItem: IActionItemInfo = {
       id: 'userId2',
       name: 'Jane Smith',
       emailAddress: 'jane@example.com',
-      createdAt: new Date('2024-01-01T00:00:00.000Z'),
+      createdAt: dayjs.utc().subtract(1, 'month').toDate(),
     },
   },
   recurringEventInstance: null,
@@ -200,7 +239,7 @@ const mockActionItem: IActionItemInfo = {
     name: 'Category 1',
     description: 'Test category',
     isDisabled: false,
-    createdAt: '2024-01-01T00:00:00.000Z',
+    createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
     organizationId: 'orgId1',
   },
 };
@@ -322,7 +361,7 @@ const MOCKS_ERROR = [
 const renderEventActionItems = (
   eventId: string = 'eventId1',
   mocks: MockedResponse[] = MOCKS,
-) => {
+): ReturnType<typeof render> => {
   return render(
     <MockedProvider mocks={mocks}>
       <Provider store={store}>
@@ -388,7 +427,9 @@ describe('EventActionItems', () => {
       renderEventActionItems();
 
       await waitFor(() => {
-        expect(screen.getAllByText('27/08/2024')).toHaveLength(2); // Data grid and date display
+        expect(
+          screen.getAllByText(dayjs.utc().add(10, 'day').format('DD/MM/YYYY')),
+        ).toHaveLength(2);
       });
     });
 
@@ -430,6 +471,45 @@ describe('EventActionItems', () => {
         expect(screen.getByText('No category')).toBeInTheDocument();
       });
     });
+
+    it('should display "No assignment" when neither volunteer nor group assigned', async () => {
+      const mockNoAssignment = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'noAssignment1',
+                  volunteer: null,
+                  volunteerGroup: null,
+                  volunteerId: null,
+                  volunteerGroupId: null,
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      };
+
+      const mocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockNoAssignment },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocks);
+
+      await waitFor(() => {
+        expect(screen.getAllByText('No assignment')).toHaveLength(2);
+      });
+    });
   });
 
   describe('Search Functionality', () => {
@@ -441,7 +521,6 @@ describe('EventActionItems', () => {
         expect(screen.getByText('Category 2')).toBeInTheDocument();
       });
 
-      // Switch to category search
       const searchToggleBtn = screen.getByTestId('searchByToggleBtn');
       fireEvent.click(searchToggleBtn);
 
@@ -449,7 +528,6 @@ describe('EventActionItems', () => {
       fireEvent.change(searchInput, { target: { value: 'Category' } });
 
       await waitFor(() => {
-        // Should show both categories since both contain "Category"
         expect(screen.getByText('Category 1')).toBeInTheDocument();
         expect(screen.getByText('Category 2')).toBeInTheDocument();
       });
@@ -459,17 +537,14 @@ describe('EventActionItems', () => {
       renderEventActionItems();
 
       await waitFor(() => {
-        // Initially should show both items
-        expect(screen.getAllByText('John Doe')).toHaveLength(2); // avatar and grid
-        expect(screen.getAllByText('Bob Wilson')).toHaveLength(2); // avatar and grid
+        expect(screen.getAllByText('John Doe')).toHaveLength(2);
+        expect(screen.getAllByText('Bob Wilson')).toHaveLength(2);
       });
 
-      // Search by assignee (default)
       const searchInput = screen.getByTestId('searchBy');
       fireEvent.change(searchInput, { target: { value: 'John' } });
 
       await waitFor(() => {
-        // Should only show John Doe
         expect(screen.getAllByText('John Doe')).toHaveLength(2);
         expect(screen.queryByText('Bob Wilson')).not.toBeInTheDocument();
       });
@@ -483,15 +558,18 @@ describe('EventActionItems', () => {
         expect(screen.getByText('Category 2')).toBeInTheDocument();
       });
 
-      // Switch to category search
       const searchToggleBtn = screen.getByTestId('searchByToggleBtn');
       fireEvent.click(searchToggleBtn);
 
       const searchInput = screen.getByTestId('searchBy');
       fireEvent.change(searchInput, { target: { value: 'Category 2' } });
 
+      // Ensure `searchBy` state has applied before the debounced search term resolves.
+      // This avoids a race where the first debounced search runs while still in "assignee" mode.
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      fireEvent.change(searchInput, { target: { value: 'Category 2' } });
+
       await waitFor(() => {
-        // Should only show Category 2
         expect(screen.getByText('Category 2')).toBeInTheDocument();
         expect(screen.queryByText('Category 1')).not.toBeInTheDocument();
       });
@@ -505,7 +583,7 @@ describe('EventActionItems', () => {
       });
 
       const searchInput = screen.getByTestId('searchBy');
-      fireEvent.change(searchInput, { target: { value: 'JOHN' } }); // uppercase
+      fireEvent.change(searchInput, { target: { value: 'JOHN' } });
 
       await waitFor(() => {
         expect(screen.getAllByText('John Doe')).toHaveLength(2);
@@ -521,17 +599,18 @@ describe('EventActionItems', () => {
         expect(screen.getAllByText('Bob Wilson')).toHaveLength(2);
       });
 
-      // Search for something specific
       const searchInput = screen.getByTestId('searchBy');
+      const searchButton = screen.getByTestId('searchBtn');
       fireEvent.change(searchInput, { target: { value: 'John' } });
+      fireEvent.click(searchButton);
 
       await waitFor(() => {
         expect(screen.getAllByText('John Doe')).toHaveLength(2);
         expect(screen.queryByText('Bob Wilson')).not.toBeInTheDocument();
       });
 
-      // Clear search
       fireEvent.change(searchInput, { target: { value: '' } });
+      fireEvent.click(searchButton);
 
       await waitFor(() => {
         expect(screen.getAllByText('John Doe')).toHaveLength(2);
@@ -550,16 +629,83 @@ describe('EventActionItems', () => {
       fireEvent.change(searchInput, { target: { value: 'nonexistent' } });
 
       await waitFor(() => {
-        // Should show no items or empty state
         expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
         expect(screen.queryByText('Bob Wilson')).not.toBeInTheDocument();
+      });
+    });
+
+    it('should search by volunteer group name', async () => {
+      const mockWithGroupSearch = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'groupItem1',
+                  volunteer: null,
+                  volunteerId: null,
+                  volunteerGroup: {
+                    id: 'g1',
+                    name: 'Group Search',
+                    description: 'desc',
+                    leaderUser: {
+                      id: 'leader1',
+                      name: 'Leader One',
+                      avatarURL: '',
+                    },
+                  },
+                },
+              },
+              {
+                node: {
+                  ...mockActionItem,
+                  id: 'volItem1',
+                  volunteer: {
+                    id: 'vol1',
+                    hasAccepted: true,
+                    isPublic: true,
+                    hoursVolunteered: 1,
+                    user: { id: 'u1', name: 'Alice Volunteer', avatarURL: '' },
+                  },
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      };
+
+      const mocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockWithGroupSearch },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocks);
+
+      await waitFor(() => {
+        expect(screen.getAllByText('Group Search')).toHaveLength(2);
+        expect(screen.getAllByText('Alice Volunteer')).toHaveLength(2);
+      });
+
+      const searchInput = screen.getByTestId('searchBy');
+      fireEvent.change(searchInput, { target: { value: 'Group Search' } });
+
+      await waitFor(() => {
+        expect(screen.getAllByText('Group Search')).toHaveLength(2);
+        expect(screen.queryByText('Alice Volunteer')).not.toBeInTheDocument();
       });
     });
   });
 
   describe('Sorting Functionality', () => {
     it('should sort items by assigned date in descending order', async () => {
-      // Create mock data with different dates
       const mockDataWithDates = {
         event: {
           ...mockEventData.event,
@@ -569,14 +715,14 @@ describe('EventActionItems', () => {
                 node: {
                   ...mockActionItem,
                   id: 'item1',
-                  assignedAt: new Date('2024-08-25'),
+                  assignedAt: dayjs.utc().add(10, 'day').toDate(),
                 },
               },
               {
                 node: {
                   ...mockActionItem,
                   id: 'item2',
-                  assignedAt: new Date('2024-08-27'),
+                  assignedAt: dayjs.utc().add(12, 'days').toDate(),
                 },
               },
             ],
@@ -601,23 +747,28 @@ describe('EventActionItems', () => {
       renderEventActionItems('eventId1', mocksWithDates);
 
       await waitFor(() => {
-        expect(screen.getByText('25/08/2024')).toBeInTheDocument();
-        expect(screen.getByText('27/08/2024')).toBeInTheDocument();
+        expect(
+          screen.getByText(dayjs.utc().add(10, 'day').format('DD/MM/YYYY')),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByText(dayjs.utc().add(12, 'days').format('DD/MM/YYYY')),
+        ).toBeInTheDocument();
       });
 
-      // Click sort button to sort by latest assigned (DESC)
       const sortBtn = screen.getByTestId('sortBtn');
       fireEvent.click(sortBtn);
 
       await waitFor(() => {
-        // Should maintain the same display since dates are already in DESC order
-        expect(screen.getByText('25/08/2024')).toBeInTheDocument();
-        expect(screen.getByText('27/08/2024')).toBeInTheDocument();
+        expect(
+          screen.getByText(dayjs.utc().add(10, 'day').format('DD/MM/YYYY')),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByText(dayjs.utc().add(12, 'days').format('DD/MM/YYYY')),
+        ).toBeInTheDocument();
       });
     });
 
     it('should sort items by assigned date in ascending order', async () => {
-      // Create mock data with different dates
       const mockDataWithDates = {
         event: {
           ...mockEventData.event,
@@ -627,14 +778,14 @@ describe('EventActionItems', () => {
                 node: {
                   ...mockActionItem,
                   id: 'item1',
-                  assignedAt: new Date('2024-08-27'),
+                  assignedAt: dayjs.utc().add(12, 'days').toDate(),
                 },
               },
               {
                 node: {
                   ...mockActionItem,
                   id: 'item2',
-                  assignedAt: '2024-08-25', // Earlier date
+                  assignedAt: dayjs.utc().add(10, 'day').toDate(),
                 },
               },
             ],
@@ -659,24 +810,29 @@ describe('EventActionItems', () => {
       renderEventActionItems('eventId1', mocksWithDates);
 
       await waitFor(() => {
-        expect(screen.getByText('27/08/2024')).toBeInTheDocument();
-        expect(screen.getByText('25/08/2024')).toBeInTheDocument();
+        expect(
+          screen.getByText(dayjs.utc().add(12, 'days').format('DD/MM/YYYY')),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByText(dayjs.utc().add(10, 'day').format('DD/MM/YYYY')),
+        ).toBeInTheDocument();
       });
 
-      // Click sort button twice to sort by earliest assigned (ASC)
       const sortBtn = screen.getByTestId('sortBtn');
-      fireEvent.click(sortBtn); // First click - DESC
-      fireEvent.click(sortBtn); // Second click - ASC
+      fireEvent.click(sortBtn);
+      fireEvent.click(sortBtn);
 
       await waitFor(() => {
-        // Should maintain the same display since dates are already in ASC order
-        expect(screen.getByText('27/08/2024')).toBeInTheDocument();
-        expect(screen.getByText('25/08/2024')).toBeInTheDocument();
+        expect(
+          screen.getByText(dayjs.utc().add(12, 'days').format('DD/MM/YYYY')),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByText(dayjs.utc().add(10, 'day').format('DD/MM/YYYY')),
+        ).toBeInTheDocument();
       });
     });
 
     it('should handle sorting with same dates', async () => {
-      // Create mock data with same dates
       const mockDataWithSameDates = {
         event: {
           ...mockEventData.event,
@@ -686,14 +842,14 @@ describe('EventActionItems', () => {
                 node: {
                   ...mockActionItem,
                   id: 'item1',
-                  assignedAt: new Date('2024-08-27'),
+                  assignedAt: dayjs.utc().add(10, 'day').toDate(),
                 },
               },
               {
                 node: {
                   ...mockActionItem,
                   id: 'item2',
-                  assignedAt: '2024-08-27', // Same date
+                  assignedAt: dayjs.utc().add(10, 'day').toDate(),
                 },
               },
             ],
@@ -718,21 +874,22 @@ describe('EventActionItems', () => {
       renderEventActionItems('eventId1', mocksWithSameDates);
 
       await waitFor(() => {
-        expect(screen.getAllByText('27/08/2024')).toHaveLength(2);
+        expect(
+          screen.getAllByText(dayjs.utc().add(10, 'day').format('DD/MM/YYYY')),
+        ).toHaveLength(2);
       });
 
-      // Click sort button
       const sortBtn = screen.getByTestId('sortBtn');
       fireEvent.click(sortBtn);
 
       await waitFor(() => {
-        // Should still show both items with same date
-        expect(screen.getAllByText('27/08/2024')).toHaveLength(2);
+        expect(
+          screen.getAllByText(dayjs.utc().add(10, 'day').format('DD/MM/YYYY')),
+        ).toHaveLength(2);
       });
     });
 
     it('should handle sorting with invalid dates gracefully', () => {
-      // Test the sorting logic directly with invalid dates
       const mockItems: IActionItemInfo[] = [
         {
           ...mockActionItem,
@@ -742,7 +899,7 @@ describe('EventActionItems', () => {
         {
           ...mockActionItem,
           id: 'item2',
-          assignedAt: new Date('2024-08-27'),
+          assignedAt: dayjs.utc().add(10, 'day').toDate(),
         },
       ];
 
@@ -764,9 +921,7 @@ describe('EventActionItems', () => {
         );
       }
 
-      // Should handle invalid dates without crashing
       expect(filteredItems).toHaveLength(2);
-      // The sorting behavior with NaN can be unpredictable, so we just check that both items are present
       const itemIds = filteredItems.map((item) => item.id);
       expect(itemIds).toContain('item1');
       expect(itemIds).toContain('item2');
@@ -777,7 +932,7 @@ describe('EventActionItems', () => {
         {
           ...mockActionItem,
           id: 'item1',
-          assignedAt: new Date('2024-08-25'),
+          assignedAt: dayjs.utc().add(1, 'day').toDate(),
         },
         {
           ...mockActionItem,
@@ -787,7 +942,7 @@ describe('EventActionItems', () => {
         {
           ...mockActionItem,
           id: 'item3',
-          assignedAt: new Date('2024-08-27'),
+          assignedAt: dayjs.utc().add(3, 'days').toDate(),
         },
       ];
 
@@ -810,7 +965,6 @@ describe('EventActionItems', () => {
       }
 
       expect(filteredItems).toHaveLength(3);
-      // Check that all items are present, regardless of exact order due to NaN sorting behavior
       const itemIds = filteredItems.map((item) => item.id);
       expect(itemIds).toContain('item1');
       expect(itemIds).toContain('item2');
@@ -822,12 +976,12 @@ describe('EventActionItems', () => {
         {
           ...mockActionItem,
           id: 'item1',
-          assignedAt: new Date('2024-08-25'),
+          assignedAt: dayjs().add(1, 'day').toDate(),
         },
         {
           ...mockActionItem,
           id: 'item2',
-          assignedAt: new Date('2024-08-27'),
+          assignedAt: dayjs().add(3, 'days').toDate(),
         },
       ];
 
@@ -849,7 +1003,6 @@ describe('EventActionItems', () => {
         );
       }
 
-      // Should return original order when sortBy is null
       expect(filteredItems).toHaveLength(2);
       expect(filteredItems[0].id).toBe('item1');
       expect(filteredItems[1].id).toBe('item2');
@@ -857,21 +1010,86 @@ describe('EventActionItems', () => {
   });
 
   describe('Filtering Functionality', () => {
-    it('should show all items when filter is cleared', async () => {
+    it('should filter to show only pending items', async () => {
       renderEventActionItems();
 
+      // Initially both items visible
       await waitFor(() => {
-        expect(screen.getAllByText('Pending').length).toBeGreaterThan(0);
-        expect(screen.getAllByText('Completed').length).toBeGreaterThan(0);
+        expect(screen.getAllByText('John Doe')).toHaveLength(2);
+        expect(screen.getAllByText('Bob Wilson')).toHaveLength(2);
       });
 
+      // Click filter button once to filter by Pending
       const filterBtn = screen.getByTestId('filterBtn');
       fireEvent.click(filterBtn);
 
+      // Verify only pending item (John Doe) is visible
       await waitFor(() => {
-        expect(screen.getAllByText('Pending').length).toBeGreaterThan(0);
-        expect(screen.getAllByText('Completed').length).toBeGreaterThan(0);
+        expect(screen.getAllByText('John Doe')).toHaveLength(2);
       });
+
+      expect(screen.queryByText('Bob Wilson')).not.toBeInTheDocument();
+    });
+
+    it('should filter to show only completed items', async () => {
+      renderEventActionItems();
+
+      // Initially both items visible
+      await waitFor(() => {
+        expect(screen.getAllByText('John Doe')).toHaveLength(2);
+        expect(screen.getAllByText('Bob Wilson')).toHaveLength(2);
+      });
+
+      const filterBtn = screen.getByTestId('filterBtn');
+
+      // Click twice to get to Completed filter
+      fireEvent.click(filterBtn);
+
+      // Small delay between clicks to ensure state updates
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      fireEvent.click(filterBtn);
+
+      // Verify only completed item (Bob Wilson) is visible
+      await waitFor(
+        () => {
+          const bobElements = screen.queryAllByText('Bob Wilson');
+          expect(bobElements).toHaveLength(2);
+        },
+        { timeout: 3000 },
+      );
+
+      expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+    });
+
+    it('should show all items when filter is cleared', async () => {
+      renderEventActionItems();
+
+      // Initially both items visible
+      await waitFor(() => {
+        expect(screen.getAllByText('John Doe')).toHaveLength(2);
+        expect(screen.getAllByText('Bob Wilson')).toHaveLength(2);
+      });
+
+      const filterBtn = screen.getByTestId('filterBtn');
+
+      // Click three times to cycle through all states
+      fireEvent.click(filterBtn);
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      fireEvent.click(filterBtn);
+      await new Promise((resolve) => setTimeout(resolve, 100));
+
+      fireEvent.click(filterBtn);
+
+      // Both items should be visible again
+      await waitFor(
+        () => {
+          expect(screen.getAllByText('John Doe')).toHaveLength(2);
+          expect(screen.getAllByText('Bob Wilson')).toHaveLength(2);
+        },
+        { timeout: 3000 },
+      );
     });
   });
 
@@ -967,9 +1185,6 @@ describe('EventActionItems', () => {
       await waitFor(() => {
         expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
       });
-
-      // The component should pass isRecurring=true to the modal
-      // This is tested implicitly through the modal props
     });
 
     it('should set isRecurring to false for non-recurring events', async () => {
@@ -978,8 +1193,6 @@ describe('EventActionItems', () => {
       await waitFor(() => {
         expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
       });
-
-      // The component should pass isRecurring=false to the modal
     });
 
     it('should pass baseEvent for recurring events', async () => {
@@ -988,8 +1201,6 @@ describe('EventActionItems', () => {
       await waitFor(() => {
         expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
       });
-
-      // The component should pass baseEvent to the modal
     });
   });
 
@@ -1043,7 +1254,6 @@ describe('EventActionItems', () => {
       renderEventActionItems();
 
       await waitFor(() => {
-        // The DataGrid should be configured with disableColumnMenu and disableColumnResize
         const dataGrid = document.querySelector('.MuiDataGrid-root');
         expect(dataGrid).toBeInTheDocument();
       });
@@ -1092,25 +1302,184 @@ describe('EventActionItems', () => {
     });
   });
 
-  describe('Create Button', () => {
-    it('should render create button with correct styling', async () => {
-      renderEventActionItems();
+  describe('Additional Coverage Tests', () => {
+    it('should handle volunteer group assignments correctly', async () => {
+      const mockDataWithVolunteerGroup = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  volunteerId: null,
+                  volunteerGroupId: 'groupId1',
+                  volunteer: null,
+                  volunteerGroup: {
+                    id: 'groupId1',
+                    name: 'Volunteer Group A',
+                    description: 'Test group',
+                    leaderUser: {
+                      id: 'leaderId1',
+                      name: 'Group Leader',
+                      avatarURL: '',
+                    },
+                  },
+                },
+              },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: null,
+            },
+          },
+        },
+      };
+
+      const mocksWithGroup = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockDataWithVolunteerGroup },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocksWithGroup);
 
       await waitFor(() => {
-        const createBtn = screen.getByTestId('createActionItemBtn');
-        expect(createBtn).toBeInTheDocument();
-        expect(createBtn).toHaveClass('btn');
-        expect(createBtn).toHaveClass('btn-success');
+        const groupNameElements = screen.getAllByText('Volunteer Group A');
+        expect(groupNameElements.length).toBeGreaterThan(0);
       });
     });
 
-    it('should have correct icon and text', async () => {
+    it('should display group icon when action item is assigned to volunteer group', async () => {
+      const mockDataWithGroup = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  volunteerId: null,
+                  volunteerGroupId: 'groupId1',
+                  volunteer: null,
+                  volunteerGroup: {
+                    id: 'groupId1',
+                    name: 'Test Group',
+                    description: 'Test',
+                    leaderUser: {
+                      id: 'leaderId',
+                      name: 'Leader',
+                      avatarURL: '',
+                    },
+                  },
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      };
+
+      const mocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockDataWithGroup },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocks);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('groupIcon')).toBeInTheDocument();
+      });
+    });
+
+    it('should have correct aria-label when action item is completed', async () => {
+      const mockDataWithCompleted = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  isCompleted: true,
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      };
+
+      const mocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockDataWithCompleted },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocks);
+
+      await waitFor(() => {
+        const checkbox = screen.getByTestId('statusCheckboxactionItemId1');
+        expect(checkbox).toHaveAttribute('aria-label', 'actionItemCompleted');
+      });
+    });
+
+    it('should have correct aria-label when action item is pending', async () => {
       renderEventActionItems();
 
       await waitFor(() => {
-        const createBtn = screen.getByTestId('createActionItemBtn');
-        expect(createBtn).toHaveTextContent('create');
-        expect(createBtn.querySelector('.fa-plus')).toBeInTheDocument();
+        const checkbox = screen.getByTestId('statusCheckboxactionItemId1');
+        expect(checkbox).toHaveAttribute('aria-label', 'markCompletion');
+      });
+    });
+
+    it('should display loading state while fetching action items', async () => {
+      const loadingMocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: {
+            data: {
+              event: {
+                id: 'eventId1',
+                recurrenceRule: null,
+                baseEvent: null,
+                actionItems: {
+                  edges: [],
+                  pageInfo: {
+                    hasNextPage: false,
+                    endCursor: null,
+                  },
+                },
+              },
+            },
+          },
+          delay: 100,
+        },
+      ];
+
+      renderEventActionItems('eventId1', loadingMocks);
+
+      expect(screen.getByTestId('loader')).toBeInTheDocument();
+
+      // Verify component renders and eventually loads data
+      await waitFor(() => {
+        expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
       });
     });
   });

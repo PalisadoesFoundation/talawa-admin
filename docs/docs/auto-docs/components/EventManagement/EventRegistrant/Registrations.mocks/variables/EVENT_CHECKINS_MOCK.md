@@ -6,4 +6,4 @@
 
 > `const` **EVENT\_CHECKINS\_MOCK**: `MockedResponse`
 
-Defined in: [src/components/EventManagement/EventRegistrant/Registrations.mocks.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts#L43)
+Defined in: [src/components/EventManagement/EventRegistrant/Registrations.mocks.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts#L46)

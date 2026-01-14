@@ -15,7 +15,7 @@
  *
  * @dependencies
  * - `react-router-dom` for navigation (`Navigate`, `Outlet`).
- * - `react-toastify` for toast notifications.
+ * - `NotificationToast` for toast notifications.
  * - `useLocalStorage` custom hook for local storage operations.
  *
  * @example
@@ -33,7 +33,8 @@
 
 import React, { useEffect, useRef } from 'react';
 import { Navigate, Outlet } from 'react-router';
-import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -45,6 +46,7 @@ const inactiveIntervalMin = 1;
 const inactiveIntervalMilsec = inactiveIntervalMin * 60 * 1000;
 
 const SecuredRoute = (): JSX.Element => {
+  const { t } = useTranslation('translation', { keyPrefix: 'securedRoute' });
   const { getItem, setItem, removeItem } = useLocalStorage();
   const lastActiveRef = useRef<number>(Date.now());
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -72,7 +74,7 @@ const SecuredRoute = (): JSX.Element => {
 
         // If inactive for longer than the timeout period, show a warning and log out
         if (timeSinceLastActive > timeoutMilliseconds) {
-          toast.warn('Kindly relogin as sessison has expired');
+          NotificationToast.warning(t('sessionExpired'));
 
           setItem('IsLoggedIn', 'FALSE');
           removeItem('email');

@@ -410,7 +410,7 @@ export interface InterfaceUserInfo {
 /**
  * @interface InterfaceBaseEvent
  * @description Base interface for common event properties.
- * @property {string} id - The unique identifier of the event.
+ * @property {string} _id - The unique identifier of the event.
  * @property {string} title - The title of the event.
  * @property {string} description - The description of the event.
  * @property {string} startDate - The start date of the event.
@@ -422,7 +422,7 @@ export interface InterfaceUserInfo {
  * @property {boolean} recurring - Indicates if the event is a recurring event.
  */
 export interface InterfaceBaseEvent {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   startDate: string;
@@ -1442,10 +1442,10 @@ export interface InterfaceQueryOrganizationPostListItem {
 /**
  * @interface InterfaceTagData
  * @description Defines the structure for tag data.
- * @property {string} _id - The unique identifier of the tag.
+ * @property {string} id - The unique identifier of the tag.
  * @property {string} name - The name of the tag.
  * @property {object} parentTag - The parent tag object.
- * @property {string} parentTag._id - The unique identifier of the parent tag.
+ * @property {string} parentTag.id - The unique identifier of the parent tag.
  * @property {object} usersAssignedTo - Information about users assigned to this tag.
  * @property {number} usersAssignedTo.totalCount - The total count of users assigned to this tag.
  * @property {object} childTags - Information about child tags.
@@ -1470,6 +1470,22 @@ export interface InterfaceTagData {
   }[];
 }
 
+export interface InterfaceTagDataPG {
+  id: string;
+  name: string;
+  parentTag: { id: string };
+  usersAssignedTo: {
+    totalCount: number;
+  };
+  childTags: {
+    totalCount: number;
+  };
+  ancestorTags: {
+    id: string;
+    name: string;
+  }[];
+}
+
 /**
  * @interface InterfaceTagNodeData
  * @description Defines the structure for tag node data, typically used in connections.
@@ -1486,6 +1502,20 @@ export interface InterfaceTagData {
 interface InterfaceTagNodeData {
   edges: {
     node: InterfaceTagData;
+    cursor: string;
+  }[];
+  pageInfo: {
+    startCursor: string;
+    endCursor: string;
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+  };
+  totalCount: number;
+}
+
+interface InterfaceTagNodeDataPG {
+  edges: {
+    node: InterfaceTagDataPG;
     cursor: string;
   }[];
   pageInfo: {
@@ -1532,10 +1562,18 @@ interface InterfaceTagMembersData {
 /**
  * @interface InterfaceQueryOrganizationUserTags
  * @description Defines the structure for a query result containing organization user tags.
- * @property {InterfaceTagNodeData} userTags - The user tags data.
+ * @property {InterfaceTagNodeData} tags - The tags data.
+ * @property {string} id - The organization ID.
+ * @property {string} name - The organization name.
  */
 export interface InterfaceQueryOrganizationUserTags {
   userTags: InterfaceTagNodeData;
+}
+
+export interface InterfaceQueryOrganizationUserTagsPG {
+  id: string;
+  name: string;
+  tags: InterfaceTagNodeDataPG;
 }
 
 /**
@@ -1728,6 +1766,7 @@ export interface InterfaceQueryFundCampaignsPledges {
           id: string;
           name: string;
           fund: {
+            id: string;
             name: string;
           };
         };
@@ -1836,8 +1875,8 @@ export interface InterfaceCampaignInfo {
  * @property {Date} campaign.endDate - The end date of the campaign.
  * @property {number} amount - The amount of the pledge.
  * @property {string} currency - The currency of the pledge.
- * @property {string} endDate - The end date of the pledge.
- * @property {string} startDate - The start date of the pledge.
+ * @property {string} createdAt - The date the pledge was created.
+ * @property {string} updatedAt - The date the pledge was last updated.
  * @property {InterfaceUserInfoPG[]} users - An array of user information associated with the pledge.
  */
 export interface InterfacePledgeInfo {
@@ -1852,8 +1891,8 @@ export interface InterfacePledgeInfo {
   amount: number;
   note?: string | null;
   currency: string;
-  endDate: string;
-  startDate: string;
+  createdAt: string;
+  updatedAt?: string;
   /**
    * The primary pledger who made this pledge
    */
@@ -1875,9 +1914,9 @@ export interface InterfacePledgeInfo {
  * @property {Date} campaign.endDate - The end date of the campaign.
  * @property {number} amount - The amount of the pledge.
  * @property {string} currencyCode - The currency code of the pledge.
- * @property {string} endAt - The end date of the pledge.
- * @property {string} startAt - The start date of the pledge.
- * @property {InterfaceUserInfoPG[]} pledges - An array of user information associated with the pledges.
+ * @property {string} createdAt - The date the pledge was created.
+ * @property {string} [updatedAt] - The date the pledge was last updated.
+ * @property {InterfaceUserInfoPG} pledger - The pledger information.
  */
 export interface InterfacePledgeInfoPG {
   id: string;
@@ -1890,8 +1929,8 @@ export interface InterfacePledgeInfoPG {
   };
   amount: number;
   currencyCode: string;
-  endAt: string;
-  startAt: string;
+  createdAt: string;
+  updatedAt?: string;
   pledger: InterfaceUserInfoPG;
 }
 
@@ -2240,14 +2279,15 @@ export interface InterfacePostCard {
   hasUserVoted: VoteState;
   postedAt: string;
   pinnedAt?: string | null;
-  image: string | null;
-  video: string | null;
+  mimeType?: string | null;
+  attachmentURL?: string | null;
   title: string;
+  body?: string;
   text: string;
   commentCount: number;
   upVoteCount: number;
   downVoteCount: number;
-  fetchPosts: () => void;
+  fetchPosts: () => Promise<unknown>;
 }
 
 export interface InterfaceComment {
@@ -2292,15 +2332,11 @@ export interface InterfaceCommentEdge {
  * @property {InterfaceUserInfoPG[]} pledgeUsers - An array of user information for the pledgers.
  * @property {number} pledgeAmount - The amount of the pledge.
  * @property {string} pledgeCurrency - The currency of the pledge.
- * @property {Date} pledgeStartDate - The start date of the pledge.
- * @property {Date} pledgeEndDate - The end date of the pledge.
  */
 export interface InterfaceCreatePledge {
   pledgeUsers: InterfaceUserInfoPG[];
   pledgeAmount: number;
   pledgeCurrency: string;
-  pledgeStartDate: Date;
-  pledgeEndDate: Date;
 }
 
 /**

@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_MISSING\_DATA**: `object`[]
 
-Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L83)
+Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L99)
 
 ## Type Declaration
 

@@ -35,8 +35,8 @@ export const MOCKS = [
           isPublic: true,
           isRegisterable: true,
           allDay: true,
-          startAt: dayjs('2022-03-18').startOf('day').toISOString(),
-          endAt: dayjs('2022-03-20').endOf('day').toISOString(),
+          startAt: dayjs().add(9, 'days').startOf('day').toISOString(),
+          endAt: dayjs().add(11, 'days').endOf('day').toISOString(),
           location: 'New Delhi',
         },
       },
@@ -47,14 +47,14 @@ export const MOCKS = [
           id: '1',
           name: 'Updated name',
           description: 'This is a new update',
-          startAt: dayjs('2022-03-18').startOf('day').toISOString(),
-          endAt: dayjs('2022-03-20').endOf('day').toISOString(),
+          startAt: dayjs().add(9, 'days').startOf('day').toISOString(),
+          endAt: dayjs().add(11, 'days').endOf('day').toISOString(),
           allDay: true,
           location: 'New Delhi',
           isPublic: true,
           isRegisterable: true,
-          createdAt: '2022-03-18',
-          updatedAt: '2030-03-18',
+          createdAt: dayjs().add(9, 'days').toISOString(),
+          updatedAt: dayjs().add(10, 'years').toISOString(),
           creator: {
             id: '123',
             name: 'Test Creator',
@@ -84,12 +84,14 @@ export const MOCKS = [
           isPublic: false, // props[4].isPublic is true, clicking toggle makes it false
           isRegisterable: true, // props[4].isRegisterable is false, clicking toggle makes it true
           allDay: false, // props[4].allDay is false, not clicking allDay toggle keeps it false
-          startAt: dayjs('2022-03-18')
+          startAt: dayjs()
+            .add(9, 'days')
             .hour(9) // 09:00 AM from updateData.startTime
             .minute(0)
             .second(0)
             .toISOString(),
-          endAt: dayjs('2022-03-20')
+          endAt: dayjs()
+            .add(11, 'days')
             .hour(17) // 05:00 PM from updateData.endTime
             .minute(0)
             .second(0)
@@ -104,18 +106,24 @@ export const MOCKS = [
           id: '1',
           name: 'Updated name',
           description: 'This is a new update',
-          startAt: dayjs('2022-03-18')
+          startAt: dayjs()
+            .add(9, 'days')
             .hour(9)
             .minute(0)
             .second(0)
             .toISOString(),
-          endAt: dayjs('2022-03-20').hour(17).minute(0).second(0).toISOString(),
+          endAt: dayjs()
+            .add(11, 'days')
+            .hour(17)
+            .minute(0)
+            .second(0)
+            .toISOString(),
           allDay: false,
           location: 'New Delhi',
           isPublic: false,
           isRegisterable: true,
-          createdAt: '2022-03-18',
-          updatedAt: '2022-03-18',
+          createdAt: dayjs().add(9, 'days').toISOString(),
+          updatedAt: dayjs().add(9, 'days').toISOString(),
           creator: {
             id: '123',
             name: 'Test Creator',
@@ -144,8 +152,16 @@ export const MOCKS = [
           isPublic: false, // Note: this might be different based on initial state
           isRegisterable: true,
           allDay: true,
-          startAt: dayjs('2030-03-18').startOf('day').toISOString(),
-          endAt: dayjs('2030-03-20').endOf('day').toISOString(),
+          startAt: dayjs()
+            .add(10, 'years')
+            .add(9, 'days')
+            .startOf('day')
+            .toISOString(),
+          endAt: dayjs()
+            .add(10, 'years')
+            .add(11, 'days')
+            .endOf('day')
+            .toISOString(),
           location: 'New Delhi',
         },
       },
@@ -156,14 +172,22 @@ export const MOCKS = [
           id: '1',
           name: 'Updated name',
           description: 'This is a new update',
-          startAt: dayjs('2030-03-18').startOf('day').toISOString(),
-          endAt: dayjs('2030-03-20').endOf('day').toISOString(),
+          startAt: dayjs()
+            .add(10, 'years')
+            .add(9, 'days')
+            .startOf('day')
+            .toISOString(),
+          endAt: dayjs()
+            .add(10, 'years')
+            .add(11, 'days')
+            .endOf('day')
+            .toISOString(),
           allDay: true,
           location: 'New Delhi',
           isPublic: false,
           isRegisterable: true,
-          createdAt: '2030-03-18',
-          updatedAt: '2030-03-18',
+          createdAt: dayjs().add(10, 'years').add(9, 'days').toISOString(),
+          updatedAt: dayjs().add(10, 'years').add(9, 'days').toISOString(),
           creator: {
             id: '123',
             name: 'Test Creator',
@@ -192,12 +216,20 @@ export const MOCKS = [
           location: 'New Delhi',
           isPublic: false,
           isRegisterable: true,
-          startAt: dayjs('2030-03-18')
+          startAt: dayjs()
+            .add(10, 'years')
+            .add(9, 'days')
             .hour(9)
             .minute(0)
             .second(0)
             .toISOString(),
-          endAt: dayjs('2030-03-20').hour(17).minute(0).second(0).toISOString(),
+          endAt: dayjs()
+            .add(10, 'years')
+            .add(11, 'days')
+            .hour(17)
+            .minute(0)
+            .second(0)
+            .toISOString(),
         },
       },
     },
@@ -207,18 +239,26 @@ export const MOCKS = [
           id: '1',
           name: 'Updated name',
           description: 'This is a new update',
-          startAt: dayjs('2030-03-18')
+          startAt: dayjs()
+            .add(10, 'years')
+            .add(9, 'days')
             .hour(9)
             .minute(0)
             .second(0)
             .toISOString(),
-          endAt: dayjs('2030-03-20').hour(17).minute(0).second(0).toISOString(),
+          endAt: dayjs()
+            .add(10, 'years')
+            .add(11, 'days')
+            .hour(17)
+            .minute(0)
+            .second(0)
+            .toISOString(),
           allDay: false,
           location: 'New Delhi',
           isPublic: false,
           isRegisterable: true,
-          createdAt: '2030-03-18',
-          updatedAt: '2030-03-18',
+          createdAt: dayjs().add(10, 'years').add(9, 'days').toISOString(),
+          updatedAt: dayjs().add(10, 'years').add(9, 'days').toISOString(),
           creator: {
             id: '123',
             name: 'Test Creator',

@@ -11,15 +11,35 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
-import { toast } from 'react-toastify';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import useLocalStorage from 'utils/useLocalstorage';
+import {
+  AdapterDayjs,
+  LocalizationProvider,
+} from 'shared-components/DateRangePicker';
+import dayjs from 'dayjs';
+import { useLocalStorage } from 'utils/useLocalstorage';
 import { props } from './EventListCardProps';
 import { ERROR_MOCKS, MOCKS } from './Modal/EventListCardMocks';
-import { vi, beforeAll, afterAll, expect, it } from 'vitest';
+import { vi, beforeAll, afterAll, afterEach, expect, it } from 'vitest';
 
-const { setItem } = useLocalStorage();
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
+  },
+}));
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+
+let setItem: ReturnType<typeof useLocalStorage>['setItem'];
+let clearAllItems: ReturnType<typeof useLocalStorage>['clearAllItems'];
+
+beforeAll(() => {
+  const storage = useLocalStorage();
+  setItem = storage.setItem;
+  clearAllItems = storage.clearAllItems;
+});
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(ERROR_MOCKS, true);
@@ -88,7 +108,8 @@ const renderEventListCard = (
 
 describe('Testing Event List Card', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
+    clearAllItems();
   });
   beforeAll(() => {
     vi.mock('react-router', async () => ({
@@ -97,8 +118,7 @@ describe('Testing Event List Card', () => {
   });
 
   afterAll(() => {
-    localStorage.clear();
-    vi.clearAllMocks();
+    clearAllItems();
   });
 
   it('Should navigate to "/" if orgId is not defined', async () => {
@@ -112,8 +132,8 @@ describe('Testing Event List Card', () => {
               name=""
               location=""
               description=""
-              startAt="2022-03-19T02:00:00Z"
-              endAt="2022-03-26T06:00:00Z"
+              startAt={dayjs().add(10, 'days').toISOString()}
+              endAt={dayjs().add(17, 'days').toISOString()}
               startTime="02:00"
               endTime="06:00"
               allDay={true}
@@ -201,14 +221,12 @@ describe('Testing Event List Card', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByTestId('eventModalCloseBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('eventModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
 
@@ -228,13 +246,13 @@ describe('Testing Event List Card', () => {
     await userEvent.click(screen.getByTestId('deleteEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(translations.eventDeleted);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.eventDeleted,
+      );
     });
 
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
 
@@ -269,7 +287,7 @@ describe('Testing Event List Card', () => {
     await userEvent.click(screen.getByTestId('deleteEventBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -286,25 +304,28 @@ describe('Testing Event List Card', () => {
     await userEvent.click(screen.getByTestId('registerEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(NotificationToast.success).toHaveBeenCalledWith(
         `Successfully registered for ${props[2].name}`,
       );
     });
 
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('eventModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
 
   it('should show already registered text when the user is registered for an event', async () => {
+    setItem('userId', '456');
     renderEventListCard(props[3]);
 
     await userEvent.click(screen.getByTestId('card'));
 
-    expect(
-      screen.getByText(translations.alreadyRegistered),
-    ).toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument(),
+    );
+
+    await waitFor(() => {
+      screen.getByText((text) => text.includes(translations.alreadyRegistered));
+    });
   });
 });

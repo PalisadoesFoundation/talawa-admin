@@ -1,4 +1,4 @@
-import type { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
+import type { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import type { Dispatch, SetStateAction } from 'react';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
 
@@ -49,6 +49,10 @@ export interface IEvent {
   endTime?: string | null;
   allDay: boolean;
   userId?: string;
+  /**
+   * Determines if the event is visible to the entire community.
+   * Often referred to as "Community Visible" in the UI.
+   */
   isPublic: boolean;
   isRegisterable: boolean;
   attendees: Partial<User>[];
@@ -210,6 +214,10 @@ export interface IEventEdge {
     endAt: string;
     allDay: boolean;
     location?: string | null;
+    /**
+     * Determines if the event is visible to the entire community.
+     * Often referred to as "Community Visible" in the UI.
+     */
     isPublic: boolean;
     isRegisterable: boolean;
     // Recurring event fields
@@ -231,6 +239,35 @@ export interface IEventEdge {
     };
   };
   cursor: string;
+}
+
+/**
+ * Input interface for creating events via CREATE_EVENT_MUTATION.
+ * Used by both Admin Portal (CreateEventModal) and User Portal (Events).
+ *
+ * Note: The recurrence property type matches the return type of
+ * formatRecurrenceForPayload from EventForm.tsx
+ */
+export interface ICreateEventInput {
+  name: string;
+  startAt: string;
+  endAt: string;
+  organizationId: string | undefined;
+  allDay: boolean;
+  /**
+   * Determines if the event is visible to the entire community.
+   * Often referred to as "Community Visible" in the UI.
+   */
+  isPublic: boolean;
+  isRegisterable: boolean;
+  isInviteOnly: boolean;
+  description?: string;
+  location?: string;
+  recurrence?:
+    | (Omit<InterfaceRecurrenceRule, 'endDate'> & {
+        endDate?: string;
+      })
+    | null;
 }
 
 // Legacy interface exports for backward compatibility

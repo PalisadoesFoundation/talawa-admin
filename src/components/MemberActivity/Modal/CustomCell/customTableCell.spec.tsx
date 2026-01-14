@@ -1,4 +1,6 @@
-import React from 'react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { BrowserRouter } from 'react-router';
@@ -35,7 +37,7 @@ describe('CustomTableCell', () => {
     expect(screen.getByText('Test Event')).toBeInTheDocument();
     expect(
       screen.getByText(
-        new Date('2030-01-01').toLocaleDateString(undefined, {
+        dayjs.utc().add(4, 'year').toDate().toLocaleDateString(undefined, {
           year: 'numeric',
           month: 'long',
           day: 'numeric',
@@ -151,7 +153,7 @@ describe('CustomTableCell', () => {
             event: {
               id: 'event456',
               name: 'Non-Recurring Event',
-              startAt: '2030-02-01T10:00:00.000Z',
+              startAt: dayjs().add(4, 'year').toISOString(),
               isRecurringEventTemplate: false,
               attendees: [
                 { id: 'user1', gender: 'MALE' },
@@ -199,7 +201,7 @@ describe('CustomTableCell', () => {
             event: {
               id: 'event789',
               name: 'Event with No Attendees',
-              startAt: '2030-03-01T14:00:00.000Z',
+              startAt: dayjs().add(4, 'year').toISOString(),
               isRecurringEventTemplate: true,
               attendees: null,
               organization: { id: 'org789', name: 'Test Org 3' },
@@ -240,7 +242,7 @@ describe('CustomTableCell', () => {
             event: {
               id: 'event000',
               name: 'Event with Empty Attendees',
-              startAt: '2030-04-01T16:00:00.000Z',
+              startAt: dayjs().add(4, 'year').toISOString(),
               isRecurringEventTemplate: false,
               attendees: [],
               organization: { id: 'org000', name: 'Test Org 4' },
@@ -281,7 +283,7 @@ describe('CustomTableCell', () => {
             event: {
               id: 'event111',
               name: 'Event with Undefined Attendees',
-              startAt: '2030-05-01T12:00:00.000Z',
+              startAt: dayjs().add(4, 'year').toISOString(),
               isRecurringEventTemplate: true,
               // attendees property is undefined
               organization: { id: 'org111', name: 'Test Org 5' },
@@ -324,7 +326,7 @@ describe('CustomTableCell', () => {
             event: {
               id: 'event222',
               name: 'Date Test Event',
-              startAt: '2030-12-25T23:59:59.000Z',
+              startAt: dayjs().add(4, 'year').toISOString(),
               isRecurringEventTemplate: false,
               attendees: [{ id: 'user1', gender: 'MALE' }],
               organization: { id: 'org222', name: 'Test Org 6' },
@@ -351,7 +353,7 @@ describe('CustomTableCell', () => {
     expect(screen.getByText('Date Test Event')).toBeInTheDocument();
     expect(
       screen.getByText(
-        new Date('2030-12-25T23:59:59.000Z').toLocaleDateString(undefined, {
+        dayjs().add(4, 'year').toDate().toLocaleDateString(undefined, {
           year: 'numeric',
           month: 'long',
           day: 'numeric',

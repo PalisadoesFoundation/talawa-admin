@@ -98,3 +98,50 @@ mongosh","version":"6.12.0|2.3.8"},"platform":"Node.js v20.18.1, LE","os":{"name
 {"t":{"$date":"2025-02-22T01:14:08.040+00:00"},"s":"I",  "c":"NETWORK",  "id":22943,   "ctx":"listener","msg":"Connection accepted","attr":{"remote":"127.0.0.1:36848","uuid":{"uuid":{"$uuid":"1ef5fcbd-4913-45fe-bc66-7bc3600a941a"}},"connectionId":2195,"connectionCount":24}}
 {"t":{"$date":"2025-02-22T01:14:08.043+00:00"},"s":"I",  "c":"NETWORK",  "id":22943,   "ctx":"listener","msg":"Connection accepted","attr":{"remote":"127.0.0.1:36854","uuid":{"uuid":{"$uuid":"48522796-7b00-46df-a5d1-3e2a9ec7edd8"}},"connectionId":2196,"connectionCount":25}}
 ```
+## Non-Docker
+
+This section covers troubleshooting for non-Docker deployments.
+
+### Check If Application Is Running
+
+```bash
+pgrep -f "pnpm run serve"
+```
+
+If this returns a number, the application is running. No output means it's not running.
+
+### View Application Logs
+
+**Development**: Logs appear in the terminal where you run
+
+```bash
+`pnpm run serve`
+```
+
+**Production**: Redirect output to a log file when starting:
+
+```bash
+pnpm run serve > app.log 2>&1 &
+```
+
+View logs:
+
+```bash
+tail -f app.log
+```
+
+### Common Issues
+
+**Application won't start:**
+- Run `pnpm install` to install dependencies
+- Check `.env` file is configured correctly
+- Check if port 4321 is already in use: `lsof -i :4321`
+
+**Application crashes:**
+- Check logs for error messages
+- Verify Talawa API server is running
+- Verify `.env` variables are correct
+
+**Port already in use:**
+- Find what's using the port: `lsof -i :4321`
+- Stop that process or use a different port

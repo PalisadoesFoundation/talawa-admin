@@ -43,6 +43,8 @@ import {
   type InterfaceIOrgList,
   UserRole,
 } from 'types/Event/interface';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { useTranslation } from 'react-i18next';
 
 const Calendar: React.FC<InterfaceCalendarProps> = ({
   eventData,
@@ -51,6 +53,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   userRole,
   userId,
 }) => {
+  const { t: tErrors } = useTranslation('errors');
+  const { t: tCommon } = useTranslation('common');
+  const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
@@ -232,7 +237,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   {expandedY === expandKey ? (
                     <div className={styles.closebtnYearlyEventCalender}>
                       <br />
-                      <p>Close</p>
+                      <p>{tCommon('close')}</p>
                     </div>
                   ) : (
                     <div className={styles.circularButton}></div>
@@ -248,9 +253,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                     <div className={styles.closebtnYearlyEventCalender}>
                       <br />
                       <br />
-                      No Event Available!
+                      {t('noEventAvailable')}
                       <br />
-                      <p>Close</p>
+                      <p>{tCommon('close')}</p>
                     </div>
                   ) : (
                     <div className={styles.circularButton}></div>
@@ -317,9 +322,16 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   };
 
   return (
-    <div className={styles.calendar}>
-      <div className={styles.yearlyCalender}>{renderYearlyCalendar()}</div>
-    </div>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
+      <div className={styles.calendar}>
+        <div className={styles.yearlyCalender}>{renderYearlyCalendar()}</div>
+      </div>
+    </ErrorBoundaryWrapper>
   );
 };
 

@@ -20,7 +20,7 @@ Defined in: [src/types/Event/type.ts:17](https://github.com/PalisadoesFoundation
 
 ### actionItems
 
-> **actionItems**: [`ActionItem`](../../../actionItem/type-aliases/ActionItem.md)[]
+> **actionItems**: [`ActionItem`](../../../AdminPortal/actionItem/type-aliases/ActionItem.md)[]
 
 Defined in: [src/types/Event/type.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L18)
 
@@ -156,15 +156,15 @@ Defined in: [src/types/Event/type.ts:34](https://github.com/PalisadoesFoundation
 
 ### organization?
 
-> `optional` **organization**: [`Organization`](../../../Organization/type/type-aliases/Organization.md)
+> `optional` **organization**: [`Organization`](../../../AdminPortal/Organization/type/type-aliases/Organization.md)
 
 Defined in: [src/types/Event/type.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L35)
 
 ***
 
-### recurrance?
+### recurrence?
 
-> `optional` **recurrance**: `string`
+> `optional` **recurrence**: `string`
 
 Defined in: [src/types/Event/type.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L36)
 

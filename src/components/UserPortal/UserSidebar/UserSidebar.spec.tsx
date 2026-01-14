@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter } from 'react-router';
+import { MemoryRouter } from 'react-router-dom';
 import type { FetchResult } from '@apollo/client';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import { type MockedResponse } from '@apollo/client/testing';
@@ -8,6 +8,10 @@ import UserSidebar from './UserSidebar';
 import type { InterfaceUserSidebarProps } from './UserSidebar';
 import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 // Mock the dependencies
 let mockT: ReturnType<typeof vi.fn>;
@@ -30,6 +34,7 @@ const mockTCommonImplementation = (key: string) => {
     Settings: 'Settings',
     userPortal: 'User Portal',
     notifications: 'Notifications', // Used by notification button in component
+    pluginSettings: 'Plugin Settings', // Used by SidebarPluginSection
   };
   return translations[key] || key;
 };
@@ -57,12 +62,19 @@ vi.mock('components/ProfileCard/ProfileCard', () => ({
   )),
 }));
 
-vi.mock('components/UserPortal/SignOut/SignOut', () => ({
+vi.mock('components/SignOut/SignOut', () => ({
   default: vi.fn(() => (
     <button data-testid="signOutBtn" type="button">
       Sign Out
     </button>
   )),
+}));
+
+// Mock useSession to prevent router hook errors
+vi.mock('utils/useSession', () => ({
+  default: vi.fn(() => ({
+    endSession: vi.fn(),
+  })),
 }));
 
 type DrawerItems = import('plugin/types').IDrawerExtension[] | undefined;
@@ -144,7 +156,7 @@ describe('UserSidebar', () => {
   const buildCommunityData = () => ({
     community: {
       __typename: 'Community',
-      createdAt: '2024-01-01T00:00:00.000Z',
+      createdAt: dayjs.utc().toISOString(),
       facebookURL: null,
       githubURL: null,
       id: 'community-id',
@@ -156,7 +168,7 @@ describe('UserSidebar', () => {
       name: 'Talawa',
       redditURL: null,
       slackURL: null,
-      updatedAt: '2024-01-01T00:00:00.000Z',
+      updatedAt: dayjs.utc().toISOString(),
       websiteURL: null,
       xURL: null,
       youtubeURL: null,
@@ -231,9 +243,9 @@ describe('UserSidebar', () => {
       expect(screen.getByText('User Portal')).toBeInTheDocument();
       expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
       expect(screen.getByTestId('settingsBtn')).toBeInTheDocument();
-      // Multiple ProfileCards render by design - one at top (with blue bg) and one at bottom
-      const profileDropdowns = screen.getAllByTestId('profile-dropdown');
-      expect(profileDropdowns.length).toBe(2);
+      // ProfileCard renders once in headerContent (with blue bg)
+      const profileDropdown = screen.getByTestId('profile-dropdown');
+      expect(profileDropdown).toBeInTheDocument();
     });
 
     it('should render navigation links with correct text', () => {
@@ -495,7 +507,7 @@ describe('UserSidebar', () => {
       expect(screen.getAllByTestId('plugin-icon')).toHaveLength(1);
     });
 
-    it('should apply active stroke color to plugin icon when plugin route is active', () => {
+    it('should render plugin icon with consistent stroke color', () => {
       const mockPluginItems: import('plugin/types').IDrawerExtension[] = [
         {
           pluginId: 'test-plugin',
@@ -506,13 +518,14 @@ describe('UserSidebar', () => {
       ];
       mockUsePluginDrawerItems.mockReturnValue(mockPluginItems);
 
-      // Render on the plugin route to make it active
+      // Render on the plugin route
       renderWithRoute('/user/plugin/test');
 
       const pluginIcon = screen.getByTestId('plugin-icon');
+      // Plugin icons use a consistent stroke color (inactive color) regardless of active state
       expect(pluginIcon).toHaveAttribute(
         'data-stroke',
-        'var(--sidebar-icon-stroke-active)',
+        'var(--sidebar-icon-stroke-inactive)',
       );
     });
   });
@@ -528,13 +541,12 @@ describe('UserSidebar', () => {
   });
 
   describe('Component Structure', () => {
-    it('should have ProfileDropdown in the bottom section', () => {
+    it('should have ProfileDropdown in the header section', () => {
       renderComponent();
 
-      // ProfileCard count already verified in "Component Rendering" section
-      // This test verifies the bottom ProfileCard specifically exists
-      const profileDropdowns = screen.getAllByTestId('profile-dropdown');
-      expect(profileDropdowns[1]).toBeInTheDocument();
+      // ProfileCard renders once in headerContent
+      const profileDropdown = screen.getByTestId('profile-dropdown');
+      expect(profileDropdown).toBeInTheDocument();
     });
 
     it('should apply correct structure classes', () => {
@@ -543,9 +555,9 @@ describe('UserSidebar', () => {
       const container = screen.getByTestId('leftDrawerContainer');
       expect(container).toHaveClass('leftDrawer');
 
-      // Check for the main content structure
-      const mainContent = screen.getByTestId('sidebar-main-content');
-      expect(mainContent).toBeInTheDocument();
+      // Verify the option list exists (navigation items container)
+      expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
+      expect(screen.getByTestId('settingsBtn')).toBeInTheDocument();
     });
   });
 
@@ -599,12 +611,9 @@ describe('UserSidebar', () => {
       const toggleBtn = screen.getByTestId('toggleBtn');
 
       expect(toggleBtn).toBeInTheDocument();
-      expect(toggleBtn).toHaveAttribute('tabIndex', '0');
-      expect(toggleBtn).toHaveAttribute('role', 'button');
-      // The aria-label is on the FaBars icon inside the toggle button
-      expect(
-        toggleBtn.querySelector('[aria-label="Toggle sidebar"]'),
-      ).toBeInTheDocument();
+      expect(toggleBtn).toHaveAttribute('type', 'button');
+      // The aria-label is on the toggle button itself
+      expect(toggleBtn).toHaveAttribute('aria-label', 'Toggle sidebar');
     });
 
     it('should toggle drawer when toggle button is clicked', () => {
@@ -620,7 +629,7 @@ describe('UserSidebar', () => {
       fireEvent.click(toggleBtn);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
-      expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'true');
+      expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
     });
 
     it('should toggle drawer when Enter key is pressed on toggle button', () => {
@@ -636,7 +645,7 @@ describe('UserSidebar', () => {
       fireEvent.keyDown(toggleBtn, { key: 'Enter' });
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
-      expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'true');
+      expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
     });
 
     it('should toggle drawer when Space key is pressed on toggle button', () => {
@@ -652,7 +661,7 @@ describe('UserSidebar', () => {
       fireEvent.keyDown(toggleBtn, { key: ' ' });
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
-      expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'true');
+      expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
     });
 
     it('should not toggle drawer when other keys are pressed on toggle button', () => {
@@ -686,7 +695,7 @@ describe('UserSidebar', () => {
       fireEvent.click(toggleBtn);
 
       expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
-      expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'false');
+      expect(mockSetItem).toHaveBeenCalledWith('sidebar', false);
     });
   });
 });

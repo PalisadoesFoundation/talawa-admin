@@ -1,0 +1,56 @@
+.requestsIcon {
+  color: var(--color-gray-700);
+}
+
+.membershipEmptyContainer {
+  min-height: var(--space-15);
+}
+
+.memReqCard {
+  min-height: var(--space-17);
+}
+
+.memReqCardBody {
+  min-height: var(--space-15);
+}
+
+.p0 {
+  padding: var(--space-0);
+}
+
+.flex {
+  display: flex;
+}
+
+.iconGrey {
+  fill: var(--color-gray-700);
+}
+
+.cardHeader {
+  padding: var(--space-6) var(--space-5) var(--space-5) var(--space-5);
+  border-bottom: var(--border-1) solid var(--color-gray-100);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cardHeader .cardTitle {
+  font-size: var(--font-size-19);
+  font-weight: var(--font-weight-semibold);
+}
+
+.containerBody {
+  padding: var(--space-5);
+}
+
+.emptyContainer {
+  padding: var(--space-5);
+  text-align: center;
+  color: var(--color-gray-700);
+}
+
+.rankings {
+  aspect-ratio: 1;
+  border-radius: var(--radius-full);
+  width: var(--space-10);
+}

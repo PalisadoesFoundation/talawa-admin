@@ -1,0 +1,35 @@
+:root {
+  --border-0: 0.1px;
+  --border-1: 1px;
+  --border-1-5: 1.5px;
+  --border-2: 2px;
+  --border-3: 3px;
+  --border-4: 4px;
+  --border-8: 8px;
+
+  --radius-none: 0;
+  --radius-xs: 0.125rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.8rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 50%;
+
+  --border-shadow-xs: 2.5px;
+  --border-shadow-1: 4px;
+  --border-shadow-2: 8px;
+
+  --shadow-offset-xs: 1px;
+  --shadow-offset-sm: 2px;
+  --shadow-offset-md: 4px;
+
+  --shadow-blur-xs: 2px;
+  --shadow-blur-sm: 3px;
+  --shadow-blur-md: 4px;
+  --shadow-blur-lg: 8px;
+
+  --shadow-spread-none: 0;
+  --shadow-spread-xs: 1px;
+  --shadow-spread-sm: 3px;
+}

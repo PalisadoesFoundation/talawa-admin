@@ -17,6 +17,7 @@ import i18nForTest from 'utils/i18nForTest';
 import People from './People';
 import userEvent from '@testing-library/user-event';
 import { vi, it, beforeEach, afterEach } from 'vitest';
+import dayjs from 'dayjs';
 /**
  * This file contains unit tests for the People component.
  *
@@ -56,7 +57,7 @@ const memberEdge = (props: InterfaceMemberEdgeProps = {}) => ({
     role: props.role || 'member',
     avatarURL: props.avatarURL || null,
     emailAddress: props.emailAddress || 'user1@example.com',
-    createdAt: '2023-03-02T03:22:08.101Z',
+    createdAt: dayjs().subtract(1, 'year').month(2).toISOString(),
     ...props.node,
   },
 });
@@ -66,6 +67,7 @@ const makeQueryVars = (overrides = {}) => ({
   orgId: DEFAULT_ORG_ID,
   firstName_contains: DEFAULT_SEARCH,
   first: DEFAULT_FIRST,
+  after: undefined,
   ...overrides,
 });
 
@@ -309,6 +311,10 @@ const fiveMembersMock = {
   },
 };
 
+// Debounce duration used by SearchFilterBar component (default: 300ms)
+// NOTE: This value must be manually kept in sync with SearchFilterBar's debounceDelay default
+const SEARCH_DEBOUNCE_MS = 300;
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -388,7 +394,7 @@ describe('Testing People Screen [User Portal]', () => {
     await wait();
 
     await userEvent.type(screen.getByTestId('searchInput'), 'Ad{enter}');
-    await wait();
+    await wait(SEARCH_DEBOUNCE_MS);
 
     expect(screen.queryByText('Admin User')).toBeInTheDocument();
     expect(screen.queryByText('Test User')).not.toBeInTheDocument();
@@ -412,6 +418,7 @@ describe('Testing People Screen [User Portal]', () => {
     await userEvent.clear(screen.getByTestId('searchInput'));
     await userEvent.click(searchBtn);
     await userEvent.type(screen.getByTestId('searchInput'), 'Admin');
+    await wait(SEARCH_DEBOUNCE_MS);
     await userEvent.click(searchBtn);
     await wait();
 
@@ -435,7 +442,7 @@ describe('Testing People Screen [User Portal]', () => {
     await wait();
 
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('modeBtn1'));
+    await userEvent.click(screen.getByTestId('1'));
     await wait();
 
     expect(screen.queryByText('Admin User')).toBeInTheDocument();
@@ -455,7 +462,7 @@ describe('Testing People Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByTestId('loading-state')).toBeInTheDocument();
     await wait();
   });
 
@@ -557,6 +564,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
     );
 
     await userEvent.type(screen.getByTestId('searchInput'), 'Admin');
+    await wait(SEARCH_DEBOUNCE_MS);
     await userEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
@@ -667,7 +675,7 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     expect(screen.getByText('Admin User')).toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('modeBtn1'));
+    await userEvent.click(screen.getByTestId('1'));
     await wait();
 
     expect(screen.getByText('Admin User')).toBeInTheDocument();
@@ -682,14 +690,14 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     expect(screen.getByText('Test User')).toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('modeBtn1'));
+    await userEvent.click(screen.getByTestId('1'));
     await wait();
 
     expect(screen.queryByText('Admin User')).toBeInTheDocument();
     expect(screen.queryByText('Test User')).not.toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('modeBtn0'));
+    await userEvent.click(screen.getByTestId('0'));
     await wait();
 
     expect(screen.getByText('Test User')).toBeInTheDocument();
@@ -705,7 +713,7 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     expect(screen.getByText('test@example.com')).toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('modeBtn1'));
+    await userEvent.click(screen.getByTestId('1'));
     await wait();
 
     expect(screen.getByText('Admin User')).toBeInTheDocument();
@@ -731,9 +739,66 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     expect(searchInput).toHaveValue('Test');
 
     // SearchBar renders a clear button when value is not empty
-    const clearBtn = screen.getByLabelText('Clear search');
+    const clearBtn = screen.getByLabelText('Clear');
     await userEvent.click(clearBtn);
 
     expect(searchInput).toHaveValue('');
+  });
+
+  it('displays localized emailNotAvailable when email is missing', async () => {
+    // Create a mock with a member that has null email
+    const mockWithNullEmail = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: makeQueryVars(),
+      },
+      result: {
+        data: {
+          organization: {
+            members: {
+              edges: [
+                {
+                  cursor: 'cursor1',
+                  node: {
+                    id: 'user-null-email',
+                    name: 'Test User No Email',
+                    role: 'member',
+                    avatarURL: null,
+                    emailAddress: null,
+                    createdAt: dayjs().subtract(2, 'year').toISOString(),
+                  },
+                },
+              ],
+              pageInfo: {
+                endCursor: 'cursor1',
+                hasPreviousPage: false,
+                hasNextPage: false,
+                startCursor: 'cursor1',
+              },
+            },
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[mockWithNullEmail]}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Verify member is rendered
+    expect(screen.getByText('Test User No Email')).toBeInTheDocument();
+    // Verify emailNotAvailable translation is displayed
+    const emailElement = screen.getByTestId('people-email-user-null-email');
+    expect(emailElement).toHaveTextContent('Email not available');
   });
 });

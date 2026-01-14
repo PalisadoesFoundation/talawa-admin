@@ -26,7 +26,7 @@
  * Success or error messages are displayed using toast notifications based on the result of the mutation.
  */
 import type { ChangeEvent } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import type {
   InterfaceCreateVolunteerGroup,
   InterfaceVolunteerGroupInfo,
@@ -36,7 +36,8 @@ import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { BaseModal } from 'shared-components/BaseModal';
 import {
   FormControl,
   Paper,
@@ -56,8 +57,9 @@ import {
 import { PiUserListBold } from 'react-icons/pi';
 import { TbListDetails } from 'react-icons/tb';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import { FaXmark } from 'react-icons/fa6';
+import { FormFieldGroup } from '../../../../shared-components/FormFieldGroup/FormFieldGroup';
 
 export interface InterfaceGroupModal {
   isOpen: boolean;
@@ -102,20 +104,17 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
           status: status,
         },
       });
-      toast.success(
+      NotificationToast.success(
         t(
           status === 'accepted' ? 'requestAccepted' : 'requestRejected',
         ) as string,
       );
       refetchRequests();
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     }
   };
 
-  /**
-   * Query to fetch volunteer Membership requests for the event.
-   */
   const {
     data: requestsData,
     refetch: refetchRequests,
@@ -175,233 +174,251 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             data: { ...updatedFields, eventId },
           },
         });
-        toast.success(t('volunteerGroupUpdated'));
+        NotificationToast.success(t('volunteerGroupUpdated'));
         refetchGroups();
         hide();
       } catch (error: unknown) {
         console.log(error);
-        toast.error((error as Error).message);
+        NotificationToast.error((error as Error).message);
       }
     },
     [formState, group],
   );
 
   return (
-    <Modal className={styles.groupModal} onHide={hide} show={isOpen}>
-      <Modal.Header>
-        <p className={styles.titlemodal}>{t('manageGroup')}</p>
-        <Button
-          variant="danger"
-          onClick={hide}
-          className={styles.modalCloseBtn}
-          data-testid="modalCloseBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-      </Modal.Header>
-      <Modal.Body>
-        <div
-          className={`btn-group ${styles.toggleGroup} mt-0 px-3 mb-4 w-100`}
-          role="group"
-        >
-          <input
-            type="radio"
-            className={`btn-check ${styles.toggleBtn}`}
-            name="btnradio"
-            id="detailsRadio"
-            checked={modalType === 'details'}
-            onChange={() => setModalType('details')}
-          />
-          <label
-            className={`btn btn-outline-primary ${styles.toggleBtn}`}
-            htmlFor="detailsRadio"
+    <BaseModal
+      show={isOpen}
+      onHide={hide}
+      className={styles.groupModal}
+      headerContent={
+        <div className="d-flex justify-content-between align-items-center w-100">
+          <p className={styles.titlemodal}>{t('manageGroup')}</p>
+          <Button
+            variant="danger"
+            onClick={hide}
+            className={styles.modalCloseBtn}
+            data-testid="modalCloseBtn"
           >
-            <TbListDetails className="me-2" />
-            {t('details')}
-          </label>
-
-          <input
-            type="radio"
-            className={`btn-check ${styles.toggleBtn}`}
-            name="btnradio"
-            id="groupsRadio"
-            onChange={() => setModalType('requests')}
-            checked={modalType === 'requests'}
-          />
-          <label
-            className={`btn btn-outline-primary ${styles.toggleBtn}`}
-            htmlFor="groupsRadio"
-          >
-            <PiUserListBold className="me-2" size={21} />
-            {t('requests')}
-          </label>
+            <i className="fa fa-times"></i>
+          </Button>
         </div>
+      }
+    >
+      <div
+        className={`btn-group ${styles.toggleGroup} mt-0 px-3 mb-4 w-100`}
+        role="group"
+      >
+        <input
+          type="radio"
+          className={`btn-check ${styles.toggleBtn}`}
+          name="btnradio"
+          id="detailsRadio"
+          checked={modalType === 'details'}
+          onChange={() => setModalType('details')}
+        />
+        <label
+          className={`btn btn-outline-primary ${styles.toggleBtn}`}
+          htmlFor="detailsRadio"
+        >
+          <TbListDetails className="me-2" />
+          {t('details')}
+        </label>
 
-        {modalType === 'details' ? (
-          <Form
-            data-testid="pledgeForm"
-            onSubmitCapture={updateGroupHandler}
-            className="p-3"
-          >
-            {/* Input field to enter the group name */}
-            <Form.Group className="mb-3">
-              <FormControl fullWidth>
-                <TextField
-                  required
-                  label={tCommon('name')}
-                  variant="outlined"
-                  className={styles.noOutline}
-                  value={name}
-                  data-testid="nameInput"
-                  onChange={(e) =>
-                    setFormState({ ...formState, name: e.target.value })
-                  }
-                />
-              </FormControl>
-            </Form.Group>
-            {/* Input field to enter the group description */}
-            <Form.Group className="mb-3">
-              <FormControl fullWidth>
-                <TextField
-                  multiline
-                  rows={3}
-                  label={tCommon('description')}
-                  variant="outlined"
-                  className={styles.noOutline}
-                  value={description}
-                  onChange={(e) =>
-                    setFormState({ ...formState, description: e.target.value })
-                  }
-                />
-              </FormControl>
-            </Form.Group>
+        <input
+          type="radio"
+          className={`btn-check ${styles.toggleBtn}`}
+          name="btnradio"
+          id="groupsRadio"
+          onChange={() => setModalType('requests')}
+          checked={modalType === 'requests'}
+          data-testid="requestsRadio"
+        />
+        <label
+          className={`btn btn-outline-primary ${styles.toggleBtn}`}
+          htmlFor="groupsRadio"
+        >
+          <PiUserListBold className="me-2" size={21} />
+          {t('requests')}
+        </label>
+      </div>
 
-            <Form.Group className="mb-3">
-              <FormControl fullWidth>
-                <TextField
-                  label={t('volunteersRequired')}
-                  variant="outlined"
-                  className={styles.noOutline}
-                  value={volunteersRequired ?? ''}
-                  onChange={(e) => {
-                    if (parseInt(e.target.value) > 0) {
-                      setFormState({
-                        ...formState,
-                        volunteersRequired: parseInt(e.target.value),
-                      });
-                    } else if (e.target.value === '') {
-                      setFormState({
-                        ...formState,
-                        volunteersRequired: null,
-                      });
-                    }
-                  }}
-                />
-              </FormControl>
-            </Form.Group>
-
-            {/* Button to submit the pledge form */}
-            <Button
-              type="submit"
-              className={styles.regBtn}
-              data-testid="submitBtn"
-            >
-              {t('updateGroup')}
-            </Button>
-          </Form>
-        ) : (
-          <div className="px-3">
-            {requests.length === 0 ? (
-              <Stack height="100%" alignItems="center" justifyContent="center">
-                {t('noRequests')}
-              </Stack>
-            ) : (
-              <TableContainer
-                component={Paper}
+      {modalType === 'details' ? (
+        <Form
+          data-testid="pledgeForm"
+          onSubmitCapture={updateGroupHandler}
+          className="p-3"
+        >
+          {/* Input field to enter the group name */}
+          <FormFieldGroup name="name" label={tCommon('name')} required>
+            <FormControl fullWidth>
+              <TextField
+                id="name"
+                aria-label={tCommon('name')}
+                required
                 variant="outlined"
-                className={styles.modalTable}
-              >
-                <Table aria-label="group table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell className="fw-bold">Name</TableCell>
-                      <TableCell className="fw-bold">Actions</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {requests.map((request, index) => {
-                      const { id, name, avatarURL } = request.volunteer.user;
-                      return (
-                        <TableRow
-                          key={index + 1}
-                          sx={{
-                            '&:last-child td, &:last-child th': { border: 0 },
-                          }}
+                className={styles.noOutline}
+                value={name}
+                data-testid="nameInput"
+                onChange={(e) =>
+                  setFormState({ ...formState, name: e.target.value })
+                }
+              />
+            </FormControl>
+          </FormFieldGroup>
+
+          {/* Input field to enter the group description */}
+          <FormFieldGroup name="description" label={tCommon('description')}>
+            <FormControl fullWidth>
+              <TextField
+                id="description"
+                aria-label={tCommon('description')}
+                multiline
+                rows={3}
+                variant="outlined"
+                className={styles.noOutline}
+                value={description}
+                onChange={(e) =>
+                  setFormState({
+                    ...formState,
+                    description: e.target.value,
+                  })
+                }
+              />
+            </FormControl>
+          </FormFieldGroup>
+
+          <FormFieldGroup
+            name="volunteersRequired"
+            label={t('volunteersRequired')}
+          >
+            <FormControl fullWidth>
+              <TextField
+                id="volunteersRequired"
+                aria-label={t('volunteersRequired')}
+                variant="outlined"
+                className={styles.noOutline}
+                value={volunteersRequired ?? ''}
+                onChange={(e) => {
+                  if (parseInt(e.target.value) > 0) {
+                    setFormState({
+                      ...formState,
+                      volunteersRequired: parseInt(e.target.value),
+                    });
+                  } else if (e.target.value === '') {
+                    setFormState({
+                      ...formState,
+                      volunteersRequired: null,
+                    });
+                  }
+                }}
+              />
+            </FormControl>
+          </FormFieldGroup>
+
+          <Button
+            type="submit"
+            className={styles.regBtn}
+            data-testid="submitBtn"
+          >
+            {t('updateGroup')}
+          </Button>
+        </Form>
+      ) : (
+        <div className="px-3">
+          {requests.length === 0 ? (
+            <Stack height="100%" alignItems="center" justifyContent="center">
+              {t('noRequests')}
+            </Stack>
+          ) : (
+            <TableContainer
+              component={Paper}
+              variant="outlined"
+              className={styles.modalTable}
+            >
+              <Table aria-label={t('groupTable')}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell className="fw-bold">
+                      {t('volunteerName')}
+                    </TableCell>
+                    <TableCell className="fw-bold">
+                      {t('volunteerActions')}
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {requests.map((request, index) => {
+                    const { id, name, avatarURL } = request.volunteer.user;
+                    return (
+                      <TableRow
+                        key={index + 1}
+                        sx={{
+                          '&:last-child td, &:last-child th': { border: 0 },
+                        }}
+                      >
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          className="d-flex gap-1 align-items-center"
+                          data-testid="userName"
                         >
-                          <TableCell
-                            component="th"
-                            scope="row"
-                            className="d-flex gap-1 align-items-center"
-                            data-testid="userName"
-                          >
-                            {avatarURL ? (
-                              <img
-                                src={avatarURL}
-                                alt="volunteer"
-                                data-testid={`image${id + 1}`}
-                                className={styles.TableImage}
+                          {avatarURL ? (
+                            <img
+                              src={avatarURL}
+                              alt={t('volunteerAlt')}
+                              data-testid={`image${id + 1}`}
+                              className={styles.TableImage}
+                            />
+                          ) : (
+                            <div className={styles.avatarContainer}>
+                              <Avatar
+                                key={id + '1'}
+                                containerStyle={styles.imageContainer}
+                                avatarStyle={styles.TableImage}
+                                name={name}
+                                alt={name}
                               />
-                            ) : (
-                              <div className={styles.avatarContainer}>
-                                <Avatar
-                                  key={id + '1'}
-                                  containerStyle={styles.imageContainer}
-                                  avatarStyle={styles.TableImage}
-                                  name={name}
-                                  alt={name}
-                                />
-                              </div>
-                            )}
-                            {name}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            <div className="d-flex gap-2">
-                              <Button
-                                variant="success"
-                                size="sm"
-                                style={{ minWidth: '32px' }}
-                                className="me-2 rounded"
-                                data-testid={`acceptBtn`}
-                                onClick={() =>
-                                  updateMembershipStatus(request.id, 'accepted')
-                                }
-                              >
-                                <i className="fa fa-check" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="danger"
-                                className="rounded"
-                                data-testid={`rejectBtn`}
-                                onClick={() =>
-                                  updateMembershipStatus(request.id, 'rejected')
-                                }
-                              >
-                                <FaXmark size={18} fontWeight={900} />
-                              </Button>
                             </div>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            )}
-          </div>
-        )}
-      </Modal.Body>
-    </Modal>
+                          )}
+                          {name}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          <div className="d-flex gap-2">
+                            <Button
+                              variant="success"
+                              size="sm"
+                              className="me-2 rounded"
+                              data-testid={`acceptBtn`}
+                              onClick={() =>
+                                updateMembershipStatus(request.id, 'accepted')
+                              }
+                            >
+                              <i className="fa fa-check" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="danger"
+                              className="rounded"
+                              data-testid={`rejectBtn`}
+                              onClick={() =>
+                                updateMembershipStatus(request.id, 'rejected')
+                              }
+                            >
+                              <FaXmark size={18} className="fw-bold" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </div>
+      )}
+    </BaseModal>
   );
 };
+
 export default GroupModal;

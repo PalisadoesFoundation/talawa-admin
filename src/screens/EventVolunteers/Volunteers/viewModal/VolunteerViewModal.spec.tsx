@@ -1,7 +1,5 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
@@ -12,6 +10,7 @@ import i18n from 'utils/i18nForTest';
 import type { InterfaceVolunteerViewModal } from './VolunteerViewModal';
 import VolunteerViewModal from './VolunteerViewModal';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import dayjs from 'dayjs';
 
 const t = {
   ...JSON.parse(
@@ -33,8 +32,8 @@ const itemProps: InterfaceVolunteerViewModal[] = [
       volunteerStatus: 'accepted',
       hoursVolunteered: 10,
       isPublic: true,
-      createdAt: '2024-10-25T16:16:32.978Z',
-      updatedAt: '2024-10-25T16:16:32.978Z',
+      createdAt: dayjs().toISOString(),
+      updatedAt: dayjs().toISOString(),
       user: {
         id: 'userId1',
         firstName: 'Teresa',
@@ -81,8 +80,8 @@ const itemProps: InterfaceVolunteerViewModal[] = [
       volunteerStatus: 'pending',
       hoursVolunteered: 0,
       isPublic: false,
-      createdAt: '2024-10-25T16:16:32.978Z',
-      updatedAt: '2024-10-25T16:16:32.978Z',
+      createdAt: dayjs().toISOString(),
+      updatedAt: dayjs().toISOString(),
       user: {
         id: 'userId3',
         firstName: 'Bruce',
@@ -122,11 +121,9 @@ const renderVolunteerViewModal = (
     <MockedProvider>
       <Provider store={store}>
         <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <I18nextProvider i18n={i18n}>
-              <VolunteerViewModal {...props} />
-            </I18nextProvider>
-          </LocalizationProvider>
+          <I18nextProvider i18n={i18n}>
+            <VolunteerViewModal {...props} />
+          </I18nextProvider>
         </BrowserRouter>
       </Provider>
     </MockedProvider>,
@@ -198,9 +195,7 @@ describe('Testing VolunteerViewModal', () => {
         },
       };
       renderVolunteerViewModal(rejectedProps);
-      // Check for the rejected status text - it shows the translation key when not resolved
-      const statusField = screen.getByLabelText('Status');
-      expect(statusField).toHaveValue('eventVolunteers.rejected');
+      expect(screen.getByDisplayValue('Rejected')).toBeInTheDocument();
     });
   });
 
@@ -238,10 +233,10 @@ describe('Testing VolunteerViewModal', () => {
   describe('Groups Table', () => {
     it('should render groups table when groups exist', () => {
       renderVolunteerViewModal(itemProps[0]);
-      expect(screen.getByText('Volunteer Groups Joined')).toBeInTheDocument();
-      expect(screen.getByText('Sr. No.')).toBeInTheDocument();
-      expect(screen.getByText('Group Name')).toBeInTheDocument();
-      expect(screen.getByText('No. of Members')).toBeInTheDocument();
+      expect(screen.getByText(t.volunteerGroups)).toBeInTheDocument();
+      expect(screen.getByText(t.serialNumber)).toBeInTheDocument();
+      expect(screen.getByText(t.group)).toBeInTheDocument();
+      expect(screen.getByText(t.numVolunteersHeader)).toBeInTheDocument();
       expect(screen.getByText('group1')).toBeInTheDocument();
       // Check that table contains the expected data
       const table = screen.getByRole('table');
@@ -250,9 +245,7 @@ describe('Testing VolunteerViewModal', () => {
 
     it('should not render groups table when groups array is empty', () => {
       renderVolunteerViewModal(itemProps[1]);
-      expect(
-        screen.queryByText('Volunteer Groups Joined'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText(t.volunteerGroups)).not.toBeInTheDocument();
     });
 
     it('should display correct member count in groups table', () => {

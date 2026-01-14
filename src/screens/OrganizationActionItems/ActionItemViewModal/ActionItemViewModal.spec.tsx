@@ -1,22 +1,27 @@
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from '../../../utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import ItemViewModal, { type IViewModalProps } from './ActionItemViewModal';
-import type { IActionItemInfo } from 'types/ActionItems/interface';
+import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import { vi, it, describe, beforeEach, afterEach } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
@@ -26,6 +31,23 @@ const toastMocks = vi.hoisted(() => ({
 vi.mock('react-toastify', () => ({
   toast: toastMocks,
 }));
+
+export const getPickerInputByLabel = (label: string): HTMLElement => {
+  const allInputs = screen.getAllByRole('textbox', { hidden: true });
+  for (const input of allInputs) {
+    const formControl = input.closest('.MuiFormControl-root');
+    if (formControl) {
+      const labelEl = formControl.querySelector('label');
+      if (labelEl) {
+        const labelText = labelEl.textContent?.toLowerCase() || '';
+        if (labelText.includes(label.toLowerCase())) {
+          return formControl as HTMLElement;
+        }
+      }
+    }
+  }
+  throw new Error(`Could not find date picker for label: ${label}`);
+};
 
 const t = JSON.parse(
   JSON.stringify(
@@ -45,11 +67,11 @@ const mockCategory = {
   isDisabled: false,
   organizationId: 'orgId1',
   creatorId: 'userId1',
-  createdAt: '2024-01-01T00:00:00.000Z',
-  updatedAt: '2024-01-01T00:00:00.000Z',
+  createdAt: dayjs.utc().toISOString(),
+  updatedAt: dayjs.utc().toISOString(),
 };
 
-const baseTimestamp = '2024-01-01T00:00:00.000Z';
+const baseTimestamp = dayjs.utc().toISOString();
 
 const mockMembers = [
   {
@@ -89,8 +111,8 @@ const mockEvent: InterfaceEvent = {
   id: 'eventId1',
   name: 'Test Event',
   description: 'Test event description',
-  startAt: '2024-01-01T10:00:00Z',
-  endAt: '2024-01-02T18:00:00Z',
+  startAt: dayjs.utc().toISOString(),
+  endAt: dayjs.utc().add(1, 'day').toISOString(),
   startTime: '10:00',
   endTime: '18:00',
   location: 'Test Location',
@@ -144,9 +166,9 @@ const createActionItem = (
   organizationId: 'orgId1',
   creatorId: 'userId2',
   updaterId: null,
-  assignedAt: new Date('2024-01-01T10:00:00.000Z'),
-  completionAt: new Date('2024-01-10T15:30:00.000Z'),
-  createdAt: new Date('2024-01-01T10:00:00.000Z'),
+  assignedAt: dayjs.utc().toDate(),
+  completionAt: dayjs.utc().add(9, 'day').toDate(),
+  createdAt: dayjs.utc().toDate(),
   updatedAt: null,
   isCompleted: true,
   preCompletionNotes: 'Pre-completion notes for testing',
@@ -179,8 +201,8 @@ const createActionItem = (
     isDisabled: false,
     organizationId: 'orgId1',
     creatorId: 'userId1',
-    createdAt: '2024-01-01T00:00:00.000Z',
-    updatedAt: '2024-01-01T00:00:00.000Z',
+    createdAt: dayjs.utc().toISOString(),
+    updatedAt: dayjs.utc().toISOString(),
   },
   ...overrides,
 });
@@ -280,8 +302,8 @@ describe('Testing ItemViewModal', () => {
           isDisabled: false,
           organizationId: 'orgId1',
           creatorId: 'userId1',
-          createdAt: '2024-01-01T00:00:00.000Z',
-          updatedAt: '2024-01-01T00:00:00.000Z',
+          createdAt: dayjs.utc().toISOString(),
+          updatedAt: dayjs.utc().toISOString(),
         },
       });
 
@@ -492,8 +514,11 @@ describe('Testing ItemViewModal', () => {
   });
 
   describe('Date Display', () => {
+    const NOW = dayjs.utc().subtract(1, 'year').startOf('year');
     it('should display assignment date', () => {
-      const item = createActionItem();
+      const item = createActionItem({
+        assignedAt: NOW.toDate(),
+      });
       renderItemViewModal(link1, {
         isOpen: true,
         hide: mockHide,
@@ -501,7 +526,9 @@ describe('Testing ItemViewModal', () => {
       });
 
       // Assignment date should be displayed in DD/MM/YYYY format
-      const assignmentDateInput = screen.getByDisplayValue('01/01/2024');
+      const assignmentDateInput = screen.getByDisplayValue(
+        NOW.format('DD/MM/YYYY'),
+      );
       expect(assignmentDateInput).toBeInTheDocument();
       expect(assignmentDateInput).toBeDisabled();
     });
@@ -509,7 +536,8 @@ describe('Testing ItemViewModal', () => {
     it('should display completion date when item is completed', () => {
       const item = createActionItem({
         isCompleted: true,
-        completionAt: new Date('2024-01-10T15:30:00.000Z'),
+        // Testing completion date 9 days in future to ensure proper date display and formatting
+        completionAt: dayjs.utc().add(9, 'day').toDate(),
       });
       renderItemViewModal(link1, {
         isOpen: true,
@@ -518,7 +546,9 @@ describe('Testing ItemViewModal', () => {
       });
 
       // Completion date should be displayed in DD/MM/YYYY format
-      const completionDateInput = screen.getByDisplayValue('10/01/2024');
+      const completionDateInput = screen.getByDisplayValue(
+        dayjs.utc().add(9, 'day').format('DD/MM/YYYY'),
+      );
       expect(completionDateInput).toBeInTheDocument();
       expect(completionDateInput).toBeDisabled();
     });
@@ -535,7 +565,11 @@ describe('Testing ItemViewModal', () => {
       });
 
       // Completion date should not be displayed
-      expect(screen.queryByDisplayValue('10/01/2024')).not.toBeInTheDocument();
+      expect(
+        screen.queryByDisplayValue(
+          dayjs.utc().add(9, 'day').format('DD/MM/YYYY'),
+        ),
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -649,7 +683,7 @@ describe('Testing ItemViewModal', () => {
       expect(screen.getByLabelText(t.creator)).toBeInTheDocument();
       expect(screen.getByLabelText(t.status)).toBeInTheDocument();
       expect(screen.getByLabelText(t.event)).toBeInTheDocument();
-      expect(screen.getByLabelText(t.assignmentDate)).toBeInTheDocument();
+      expect(screen.getByTestId('assignmentDatePicker')).toBeInTheDocument();
       expect(screen.getByLabelText(t.preCompletionNotes)).toBeInTheDocument();
     });
 

@@ -1,7 +1,11 @@
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider, type MockedResponse } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
+import dayjs from 'dayjs';
 import {
   cleanup,
   fireEvent,
@@ -14,32 +18,66 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
-import type { InterfacePledgeModal } from './PledgeModal';
-import PledgeModal from './PledgeModal';
+import type { InterfaceUserInfoPG } from 'utils/interfaces';
 import React, { act } from 'react';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { vi } from 'vitest';
 import { setupLocalStorageMock } from 'test-utils/localStorageMock';
+import PledgeModal, {
+  type InterfacePledgeModal,
+  areOptionsEqual,
+  getMemberLabel,
+} from './PledgeModal';
+
+// Mock utils/i18n to use the test i18n instance for NotificationToast
+vi.mock('utils/i18n', () => ({
+  default: i18nForTest,
+}));
 
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
-    error: vi.fn(),
+    error: vi.fn((msg) => console.log('Toast Error:', msg)),
   },
 }));
 
-vi.mock('@mui/x-date-pickers/DesktopDateTimePicker', async () => {
-  const { DesktopDateTimePicker } = await vi.importActual(
-    '@mui/x-date-pickers/DesktopDateTimePicker',
+// UPDATE: Add the generic type here
+vi.mock('@mui/x-date-pickers', async () => {
+  const actual = await vi.importActual<typeof import('@mui/x-date-pickers')>(
+    '@mui/x-date-pickers',
   );
+  interface InterfaceMockDatePickerProps {
+    label?: string;
+    value?: dayjs.Dayjs | null;
+    onChange?: (value: dayjs.Dayjs | null) => void;
+    [key: string]: unknown;
+  }
+
   return {
-    DateTimePicker: DesktopDateTimePicker,
+    ...actual,
+    DatePicker: ({ label, value, onChange }: InterfaceMockDatePickerProps) => (
+      <input
+        aria-label={label as string}
+        value={value ? value.format('DD/MM/YYYY') : ''}
+        onChange={(e) =>
+          (onChange as ((value: unknown) => void) | undefined)?.(
+            e.target.value ? dayjs(e.target.value, 'DD/MM/YYYY') : null,
+          )
+        }
+      />
+    ),
   };
+});
+
+afterEach(() => {
+  cleanup();
+  localStorageMock.clear();
+
+  vi.clearAllMocks();
 });
 
 const pledgeProps: InterfacePledgeModal[] = [
@@ -50,8 +88,8 @@ const pledgeProps: InterfacePledgeModal[] = [
       id: '1',
       amount: 100,
       currency: 'USD',
-      startDate: '2024-01-01',
-      endDate: '2024-01-10',
+      createdAt: dayjs().toISOString(),
+      updatedAt: dayjs().date(10).startOf('day').toISOString(),
       pledger: {
         id: '1',
         firstName: 'John',
@@ -63,7 +101,6 @@ const pledgeProps: InterfacePledgeModal[] = [
     refetchPledge: vi.fn(),
     campaignId: 'campaignId',
     userId: 'userId',
-    endDate: new Date(),
     mode: 'create',
   },
   {
@@ -73,8 +110,8 @@ const pledgeProps: InterfacePledgeModal[] = [
       id: '1',
       amount: 100,
       currency: 'USD',
-      startDate: '2024-01-01',
-      endDate: '2024-01-10',
+      createdAt: dayjs().toISOString(),
+      updatedAt: dayjs().date(10).startOf('day').toISOString(),
       pledger: {
         id: '1',
         firstName: 'John',
@@ -86,63 +123,66 @@ const pledgeProps: InterfacePledgeModal[] = [
     refetchPledge: vi.fn(),
     campaignId: 'campaignId',
     userId: 'userId',
-    endDate: new Date(),
     mode: 'edit',
   },
 ];
 
 // Shared user details mock for reuse across tests
+// Shared user details mock for reuse across tests
 const USER_DETAILS_MOCK = {
   request: {
     query: USER_DETAILS,
     variables: {
-      id: 'userId',
+      input: { id: 'userId' },
     },
   },
   result: {
     data: {
       user: {
-        user: {
-          _id: 'userId',
-          joinedOrganizations: [
-            {
-              _id: '6537904485008f171cf29924',
-              __typename: 'Organization',
-            },
-          ],
-          firstName: 'Harve',
-          lastName: 'Lance',
-          email: 'testuser1@example.com',
-          image: null,
-          createdAt: '2023-04-13T04:53:17.742Z',
-          birthDate: null,
-          educationGrade: null,
-          employmentStatus: null,
-          gender: null,
-          maritalStatus: null,
-          phone: null,
-          address: {
-            line1: 'Line1',
-            countryCode: 'CountryCode',
-            city: 'CityName',
-            state: 'State',
-            __typename: 'Address',
-          },
-          registeredEvents: [],
-          membershipRequests: [],
-          __typename: 'User',
-        },
-        appUserProfile: {
-          _id: '67078abd85008f171cf2991d',
-          adminFor: [],
-          isSuperAdmin: false,
-          appLanguageCode: 'en',
-          createdOrganizations: [],
-          createdEvents: [],
-          eventAdmin: [],
-          __typename: 'AppUserProfile',
-        },
-        __typename: 'UserData',
+        id: 'userId',
+        name: 'Harve Lance',
+        emailAddress: 'harve@example.com',
+        avatarURL: null,
+        birthDate: null,
+        city: null,
+        countryCode: null,
+        createdAt: dayjs().toISOString(),
+        updatedAt: dayjs().toISOString(),
+        educationGrade: null,
+        employmentStatus: null,
+        isEmailAddressVerified: false,
+        maritalStatus: null,
+        natalSex: null,
+        naturalLanguageCode: 'en',
+        postalCode: null,
+        role: 'regular',
+        firstName: 'Harve',
+        lastName: 'Lance',
+        state: null,
+        mobilePhoneNumber: null,
+        homePhoneNumber: null,
+        workPhoneNumber: null,
+        organizationsWhereMember: { edges: [] },
+        createdOrganizations: [],
+        __typename: 'User',
+      },
+    },
+  },
+};
+
+// Admin user details mock for tests that need autocomplete visible
+const USER_DETAILS_ADMIN_MOCK = {
+  request: {
+    query: USER_DETAILS,
+    variables: {
+      input: { id: 'userId' },
+    },
+  },
+  result: {
+    data: {
+      user: {
+        ...USER_DETAILS_MOCK.result.data.user,
+        role: 'admin',
       },
     },
   },
@@ -150,10 +190,17 @@ const USER_DETAILS_MOCK = {
 
 // Base mocks shared across all tests
 const BASE_PLEDGE_MODAL_MOCKS = [USER_DETAILS_MOCK];
+const BASE_PLEDGE_MODAL_ADMIN_MOCKS = [USER_DETAILS_ADMIN_MOCK];
 
 // Helper to create UPDATE_PLEDGE mock with custom variables
 const createUpdatePledgeMock = (
-  variables: { id: string; amount: number },
+  variables: {
+    id: string;
+    amount?: number;
+    currency?: string;
+    startDate?: string;
+    endDate?: string;
+  },
   isError = false,
 ): MockedResponse => ({
   request: {
@@ -174,14 +221,13 @@ const createUpdatePledgeMock = (
 });
 
 // Helper to create CREATE_PLEDGE mock with custom variables
+// Helper to create CREATE_PLEDGE mock with custom variables
+// Note: startDate and endDate are removed as dates are now auto-generated by the backend
 const createCreatePledgeMock = (
   variables: {
     campaignId: string;
     amount: number;
-    currency: string;
-    startDate: string;
-    endDate: string;
-    userIds: string[];
+    pledgerId: string;
   },
   isError = false,
 ): MockedResponse => ({
@@ -194,8 +240,20 @@ const createCreatePledgeMock = (
     : {
         result: {
           data: {
-            createFundraisingCampaignPledge: {
-              _id: '3',
+            createFundCampaignPledge: {
+              id: '3',
+              amount: variables.amount,
+              note: null,
+              createdAt: new Date().toISOString(),
+              updatedAt: new Date().toISOString(),
+              campaign: {
+                id: variables.campaignId,
+                name: 'Campaign Name',
+              },
+              pledger: {
+                id: variables.pledgerId,
+                name: 'Pledger Name',
+              },
             },
           },
         },
@@ -209,10 +267,7 @@ const PLEDGE_MODAL_MOCKS = [
   createCreatePledgeMock({
     campaignId: 'campaignId',
     amount: 200,
-    currency: 'USD',
-    startDate: '2024-01-02',
-    endDate: '2024-01-02',
-    userIds: ['1'],
+    pledgerId: 'userId', // Use 'userId' to match USER_DETAILS_MOCK id
   }),
 ];
 
@@ -259,21 +314,15 @@ describe('PledgeModal', () => {
     vi.clearAllMocks();
   });
 
-  afterEach(() => {
-    cleanup();
-    localStorageMock.clear();
-    vi.restoreAllMocks();
-  });
-
   it('should populate form fields with correct values in edit mode', async () => {
-    renderPledgeModal(link1, pledgeProps[1]);
+    const adminLink = new StaticMockLink(BASE_PLEDGE_MODAL_ADMIN_MOCKS);
+    renderPledgeModal(adminLink, pledgeProps[1]);
     await waitFor(() =>
       expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
     );
-    // Use getAllByText to find the text content anywhere in the component
-    expect(screen.getAllByText(/John Doe/i)[0]).toBeInTheDocument();
-    expect(screen.getByLabelText('Start Date')).toHaveValue('01/01/2024');
-    expect(screen.getByLabelText('End Date')).toHaveValue('10/01/2024');
+    // Use getByDisplayValue to find the input with the value "John Doe"
+    expect(screen.getByDisplayValue(/John Doe/i)).toBeInTheDocument();
+
     expect(screen.getByLabelText('Currency')).toHaveTextContent('USD ($)');
     expect(screen.getByLabelText('Amount')).toHaveValue('100');
   });
@@ -289,20 +338,18 @@ describe('PledgeModal', () => {
 
       expect(screen.getByLabelText('Amount')).toBeInTheDocument();
       expect(screen.getByLabelText('Currency')).toBeInTheDocument();
-      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
-      expect(screen.getByLabelText('End Date')).toBeInTheDocument();
       expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
     });
 
     it('should render edit mode modal with populated form fields', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
+      const adminLink = new StaticMockLink(BASE_PLEDGE_MODAL_ADMIN_MOCKS);
+      renderPledgeModal(adminLink, pledgeProps[1]);
       await waitFor(() =>
         expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
       );
 
-      expect(screen.getAllByText(/John Doe/i)[0]).toBeInTheDocument();
-      expect(screen.getByLabelText('Start Date')).toHaveValue('01/01/2024');
-      expect(screen.getByLabelText('End Date')).toHaveValue('10/01/2024');
+      const pledgerInput = screen.getByRole('combobox', { name: /pledger/i });
+      expect(pledgerInput).toHaveValue('John Doe');
       expect(screen.getByLabelText('Currency')).toHaveTextContent('USD ($)');
       expect(screen.getByLabelText('Amount')).toHaveValue('100');
     });
@@ -320,6 +367,41 @@ describe('PledgeModal', () => {
 
       expect(pledgeProps[0].hide).toHaveBeenCalled();
     });
+  });
+
+  it('handles USER_DETAILS returning null user data', async () => {
+    const loadingMock = {
+      request: {
+        query: USER_DETAILS,
+        variables: { input: { id: 'userId' } },
+      },
+      result: {
+        data: {
+          user: null,
+        },
+      },
+    };
+
+    const link = new StaticMockLink([loadingMock]);
+    renderPledgeModal(link, pledgeProps[0]);
+
+    expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
+  });
+
+  it('handles USER_DETAILS error state gracefully', async () => {
+    const errorMock = {
+      request: {
+        query: USER_DETAILS,
+        variables: { input: { id: 'userId' } },
+      },
+      error: new Error('USER_DETAILS failed'),
+    };
+
+    const link = new StaticMockLink([errorMock]);
+
+    renderPledgeModal(link, pledgeProps[0]);
+
+    expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
   });
 
   describe('Form Field Updates', () => {
@@ -350,39 +432,7 @@ describe('PledgeModal', () => {
       expect(amountInput).toHaveValue('100');
     });
 
-    it('should update pledgeStartDate when a new date is selected', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-      const startDateInput = screen.getByLabelText('Start Date');
-
-      fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
-      expect(startDateInput).toHaveValue('02/01/2024');
-    });
-
-    it('should handle pledgeStartDate onChange when value is null', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-      const startDateInput = screen.getByLabelText('Start Date');
-
-      fireEvent.change(startDateInput, { target: { value: null } });
-      // When the change value is null, the field is cleared
-      expect(startDateInput).toHaveValue('');
-    });
-
-    it('should update pledgeEndDate when a new date is selected', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-      const endDateInput = screen.getByLabelText('End Date');
-
-      fireEvent.change(endDateInput, { target: { value: '02/01/2024' } });
-      expect(endDateInput).toHaveValue('02/01/2024');
-    });
-
-    it('should handle pledgeEndDate onChange when value is null', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-      const endDateInput = screen.getByLabelText('End Date');
-
-      fireEvent.change(endDateInput, { target: { value: null } });
-      // When the change value is null, the field is cleared
-      expect(endDateInput).toHaveValue('');
-    });
+    // Date picker tests removed - dates are now auto-generated by the backend
 
     it('should update currency when changed', async () => {
       renderPledgeModal(link1, pledgeProps[0]);
@@ -402,20 +452,24 @@ describe('PledgeModal', () => {
         expect(screen.getByLabelText('Currency')).toHaveTextContent('EUR (€)');
       });
     });
-  });
 
-  describe('Pledge Creation', () => {
-    it('should successfully create a new pledge with all fields', async () => {
-      renderPledgeModal(link1, pledgeProps[0]);
+    it('should successfully update pledge with only amount change', async () => {
+      const amountChangeMock = [
+        ...BASE_PLEDGE_MODAL_MOCKS,
+        createUpdatePledgeMock({
+          id: '1',
+          amount: 200,
+        }),
+      ];
+      const link = new StaticMockLink(amountChangeMock);
+      renderPledgeModal(link, pledgeProps[1]);
+
+      await waitFor(() =>
+        expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
+      );
 
       fireEvent.change(screen.getByLabelText('Amount'), {
         target: { value: '200' },
-      });
-      fireEvent.change(screen.getByLabelText('Start Date'), {
-        target: { value: '02/01/2024' },
-      });
-      fireEvent.change(screen.getByLabelText('End Date'), {
-        target: { value: '02/01/2024' },
       });
 
       const form = screen.getByTestId('pledgeForm');
@@ -424,16 +478,28 @@ describe('PledgeModal', () => {
       await waitFor(
         () => {
           expect(toast.success).toHaveBeenCalledWith(
-            translations.pledgeCreated,
+            translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
       );
 
-      expect(pledgeProps[0].refetchPledge).toHaveBeenCalled();
-      expect(pledgeProps[0].hide).toHaveBeenCalled();
+      expect(pledgeProps[1].refetchPledge).toHaveBeenCalled();
+      expect(pledgeProps[1].hide).toHaveBeenCalled();
     });
-
+    it('hides pledger autocomplete for regular users in create mode', async () => {
+      const regularLink = new StaticMockLink([USER_DETAILS_MOCK]); // role: 'regular'
+      renderPledgeModal(regularLink, {
+        ...pledgeProps[0],
+        mode: 'create',
+        pledge: null,
+      });
+      await waitFor(() =>
+        expect(screen.getByTestId('pledgeForm')).toBeInTheDocument(),
+      );
+      expect(screen.queryByRole('combobox', { name: /pledger/i })).toBeNull();
+    });
     it('should handle pledge creation error', async () => {
       const errorMock = [
         ...BASE_PLEDGE_MODAL_MOCKS,
@@ -441,10 +507,7 @@ describe('PledgeModal', () => {
           {
             campaignId: 'campaignId',
             amount: 200,
-            currency: 'USD',
-            startDate: '2024-01-02',
-            endDate: '2024-01-02',
-            userIds: ['1'],
+            pledgerId: 'userId',
           },
           true,
         ),
@@ -453,14 +516,12 @@ describe('PledgeModal', () => {
       const errorLink = new StaticMockLink(errorMock);
       renderPledgeModal(errorLink, pledgeProps[0]);
 
+      await waitFor(() => {
+        expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
+      });
+
       fireEvent.change(screen.getByLabelText('Amount'), {
         target: { value: '200' },
-      });
-      fireEvent.change(screen.getByLabelText('Start Date'), {
-        target: { value: '02/01/2024' },
-      });
-      fireEvent.change(screen.getByLabelText('End Date'), {
-        target: { value: '02/01/2024' },
       });
 
       const form = screen.getByTestId('pledgeForm');
@@ -499,6 +560,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -531,6 +593,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -563,23 +626,85 @@ describe('PledgeModal', () => {
         { timeout: 2000 },
       );
     });
+
+    it('should submit update with only ID if no fields are changed', async () => {
+      const updateMock = [
+        ...BASE_PLEDGE_MODAL_MOCKS,
+        createUpdatePledgeMock({ id: '1' }),
+      ];
+
+      const updateLink = new StaticMockLink(updateMock);
+      renderPledgeModal(updateLink, pledgeProps[1]);
+
+      await waitFor(() =>
+        expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
+      );
+
+      // Change: Submit immediately without editing any fields
+      const form = screen.getByTestId('pledgeForm');
+      fireEvent.submit(form);
+
+      await waitFor(
+        () => {
+          expect(toast.success).toHaveBeenCalledWith(
+            translations.pledgeUpdated,
+            expect.any(Object),
+          );
+        },
+        { timeout: 2000 },
+      );
+    });
   });
 
   describe('Edge Cases and Error Handling', () => {
-    it('should handle invalid date formats gracefully', async () => {
+    it('should show error toast when submitting without selecting a pledger', async () => {
+      // Create props with no pledger selected for create mode
+      const noPledgerProps: InterfacePledgeModal = {
+        isOpen: true,
+        hide: vi.fn(),
+        pledge: null, // No existing pledge, so pledgeUsers will be empty initially
+        refetchPledge: vi.fn(),
+        campaignId: 'campaignId',
+        userId: 'userId',
+        mode: 'create',
+      };
+
+      const adminLink = new StaticMockLink([USER_DETAILS_ADMIN_MOCK]);
+      renderPledgeModal(adminLink, noPledgerProps);
+
+      // Wait for the admin user data to load and autocomplete to be visible
+      await waitFor(() => {
+        expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
+      });
+
+      // For admin users with no existing pledge, pledgeUsers starts as empty array
+      // Submit the form without selecting any pledger
+      const form = screen.getByTestId('pledgeForm');
+      fireEvent.submit(form);
+
+      await waitFor(
+        () => {
+          expect(toast.error).toHaveBeenCalledWith(
+            translations.selectPledger,
+            expect.any(Object),
+          );
+        },
+        { timeout: 2000 },
+      );
+    });
+
+    // Date validation test removed - dates are now auto-generated by the backend
+    it('should handle form validation gracefully', async () => {
       renderPledgeModal(link1, pledgeProps[0]);
-
-      const startDateInput = screen.getByLabelText('Start Date');
-      fireEvent.change(startDateInput, { target: { value: 'invalid-date' } });
-
       expect(screen.getByLabelText('Amount')).toBeInTheDocument();
     });
 
     it('should handle empty autocomplete selection', async () => {
-      renderPledgeModal(link1, pledgeProps[0]);
+      const adminLink = new StaticMockLink(BASE_PLEDGE_MODAL_ADMIN_MOCKS);
+      renderPledgeModal(adminLink, pledgeProps[0]);
 
       const userAutocomplete = screen
-        .getByLabelText('Pledgers')
+        .getByRole('combobox', { name: /pledger/i })
         .closest('.MuiAutocomplete-root');
       const input = within(userAutocomplete as HTMLElement).getByRole(
         'combobox',
@@ -609,23 +734,29 @@ describe('PledgeModal', () => {
 
   describe('User Autocomplete', () => {
     it('should display pledgers autocomplete field', async () => {
-      renderPledgeModal(link1, pledgeProps[0]);
+      const adminLink = new StaticMockLink([...BASE_PLEDGE_MODAL_ADMIN_MOCKS]);
+      renderPledgeModal(adminLink, pledgeProps[0]);
 
       await waitFor(() => {
-        expect(screen.getByLabelText('Pledgers')).toBeInTheDocument();
+        expect(
+          screen.getByRole('combobox', { name: /pledger/i }),
+        ).toBeInTheDocument();
       });
     });
 
     it('should show current pledger in edit mode', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
+      const adminLink = new StaticMockLink([...BASE_PLEDGE_MODAL_ADMIN_MOCKS]);
+      renderPledgeModal(adminLink, pledgeProps[1]);
 
       await waitFor(() => {
-        expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
+        const pledgerInput = screen.getByRole('combobox', { name: /pledger/i });
+        expect(pledgerInput).toHaveValue('John Doe');
       });
     });
 
     it('should have readonly input in edit mode autocomplete', async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
+      const adminLink = new StaticMockLink([...BASE_PLEDGE_MODAL_ADMIN_MOCKS]);
+      renderPledgeModal(adminLink, pledgeProps[1]);
 
       await waitFor(() => {
         const autocomplete = screen.getByTestId('pledgerSelect');
@@ -635,19 +766,16 @@ describe('PledgeModal', () => {
     });
 
     it('should trigger onChange when autocomplete selection changes in create mode', async () => {
-      const createMockWithEmptyUsers = [
-        ...BASE_PLEDGE_MODAL_MOCKS,
+      const createMockWithAdminUser = [
+        ...BASE_PLEDGE_MODAL_ADMIN_MOCKS,
         createCreatePledgeMock({
           campaignId: 'campaignId',
           amount: 150,
-          currency: 'USD',
-          startDate: '2024-01-02',
-          endDate: '2024-01-02',
-          userIds: [],
+          pledgerId: 'userId',
         }),
       ];
 
-      const link = new StaticMockLink(createMockWithEmptyUsers);
+      const link = new StaticMockLink(createMockWithAdminUser);
       renderPledgeModal(link, pledgeProps[0]);
 
       await waitFor(() => {
@@ -655,31 +783,41 @@ describe('PledgeModal', () => {
       });
 
       const autocomplete = screen.getByTestId('pledgerSelect');
-      const clearButton = within(autocomplete).queryByLabelText('Clear');
+      const input = within(autocomplete).getByRole('combobox');
 
-      if (clearButton) {
-        await act(async () => {
-          fireEvent.click(clearButton);
-        });
+      // Open the autocomplete to select a pledger
+      await act(async () => {
+        input.focus();
+        fireEvent.mouseDown(input);
+      });
 
-        // Verify that clearing the autocomplete removes the selected users
-        await waitFor(() => {
-          const chips = within(autocomplete).queryAllByRole('button', {
-            name: /remove/i,
-          });
-          expect(chips).toHaveLength(0);
-        });
-      }
+      // Wait for options to appear
+      await waitFor(
+        () => {
+          const options = screen.queryAllByRole('option');
+          expect(options.length).toBeGreaterThan(0);
+        },
+        { timeout: 2000 },
+      );
 
-      // Submit the form to verify empty userIds is sent to GraphQL
+      // Select the first option (Harve Lance - admin user)
+      const options = screen.getAllByRole('option');
+      await act(async () => {
+        // Find the option with text 'Harve Lance' to be safe, or just first one
+        const harveOption =
+          options.find((o) => o.textContent?.includes('Harve Lance')) ||
+          options[0];
+        fireEvent.click(harveOption);
+      });
+
+      // Wait for selection to be applied
+      await waitFor(() => {
+        expect(input).toHaveValue('Harve Lance');
+      });
+
+      // Submit the form with selected pledger
       fireEvent.change(screen.getByLabelText('Amount'), {
         target: { value: '150' },
-      });
-      fireEvent.change(screen.getByLabelText('Start Date'), {
-        target: { value: '02/01/2024' },
-      });
-      fireEvent.change(screen.getByLabelText('End Date'), {
-        target: { value: '02/01/2024' },
       });
 
       const form = screen.getByTestId('pledgeForm');
@@ -689,6 +827,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeCreated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -697,143 +836,12 @@ describe('PledgeModal', () => {
   });
 
   describe('Update field change flows', () => {
-    it('should update pledge with currency change', async () => {
-      const updateMock = [
-        ...PLEDGE_MODAL_MOCKS,
-        {
-          request: {
-            query: UPDATE_PLEDGE,
-            variables: {
-              id: '1',
-              currency: 'EUR',
-            },
-          },
-          result: {
-            data: {
-              updateFundraisingCampaignPledge: {
-                _id: '1',
-              },
-            },
-          },
-        },
-      ];
-
-      const updateLink = new StaticMockLink(updateMock);
-      renderPledgeModal(updateLink, pledgeProps[1]);
-
-      await waitFor(() =>
-        expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
-      );
-
-      // Change currency
-      const currencyDropdown = screen.getByLabelText('Currency');
-      fireEvent.mouseDown(currencyDropdown);
-      const eurOption = await screen.findByText('EUR (€)');
-      fireEvent.click(eurOption);
-
-      const form = screen.getByTestId('pledgeForm');
-      fireEvent.submit(form);
-
-      await waitFor(
-        () => {
-          expect(toast.success).toHaveBeenCalledWith(
-            translations.pledgeUpdated,
-          );
-        },
-        { timeout: 2000 },
-      );
-    });
-
-    it('should update pledge with start date change', async () => {
-      const updateMock = [
-        ...PLEDGE_MODAL_MOCKS,
-        {
-          request: {
-            query: UPDATE_PLEDGE,
-            variables: {
-              id: '1',
-              startDate: '2024-01-02',
-            },
-          },
-          result: {
-            data: {
-              updateFundraisingCampaignPledge: {
-                _id: '1',
-              },
-            },
-          },
-        },
-      ];
-
-      const updateLink = new StaticMockLink(updateMock);
-      renderPledgeModal(updateLink, pledgeProps[1]);
-
-      await waitFor(() =>
-        expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
-      );
-
-      const startDateInput = screen.getByLabelText('Start Date');
-      fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
-
-      const form = screen.getByTestId('pledgeForm');
-      fireEvent.submit(form);
-
-      await waitFor(
-        () => {
-          expect(toast.success).toHaveBeenCalledWith(
-            translations.pledgeUpdated,
-          );
-        },
-        { timeout: 2000 },
-      );
-    });
-
-    it('should update pledge with end date change', async () => {
-      const updateMock = [
-        ...PLEDGE_MODAL_MOCKS,
-        {
-          request: {
-            query: UPDATE_PLEDGE,
-            variables: {
-              id: '1',
-              endDate: '2024-01-15',
-            },
-          },
-          result: {
-            data: {
-              updateFundraisingCampaignPledge: {
-                _id: '1',
-              },
-            },
-          },
-        },
-      ];
-
-      const updateLink = new StaticMockLink(updateMock);
-      renderPledgeModal(updateLink, pledgeProps[1]);
-
-      await waitFor(() =>
-        expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
-      );
-
-      const endDateInput = screen.getByLabelText('End Date');
-      fireEvent.change(endDateInput, { target: { value: '15/01/2024' } });
-
-      const form = screen.getByTestId('pledgeForm');
-      fireEvent.submit(form);
-
-      await waitFor(
-        () => {
-          expect(toast.success).toHaveBeenCalledWith(
-            translations.pledgeUpdated,
-          );
-        },
-        { timeout: 2000 },
-      );
-    });
+    // Note: The component now only supports updating the amount field during pledge edit.
+    // Currency, startDate, and endDate changes are no longer sent to the backend.
 
     it('should cover remaining edge cases for 100% coverage', async () => {
-      renderPledgeModal(link1, pledgeProps[0]);
+      const adminLink = new StaticMockLink([...BASE_PLEDGE_MODAL_ADMIN_MOCKS]);
+      renderPledgeModal(adminLink, pledgeProps[0]);
 
       await waitFor(() => {
         expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
@@ -845,33 +853,64 @@ describe('PledgeModal', () => {
       const autocomplete = screen.getByTestId('pledgerSelect');
       expect(autocomplete).toBeInTheDocument();
     });
+  });
 
-    it('should trigger autocomplete onChange handler in create mode', async () => {
-      renderPledgeModal(link1, pledgeProps[0]);
+  describe('PledgeModal helper logic (coverage)', () => {
+    it('areOptionsEqual returns true when ids match', () => {
+      const option: InterfaceUserInfoPG = {
+        id: '1',
+        firstName: 'Alice',
+        lastName: 'Smith',
+        name: 'Alice Smith',
+      };
 
-      await waitFor(() => {
-        expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
-      });
+      const value: InterfaceUserInfoPG = {
+        id: '1',
+        firstName: 'Bob',
+        lastName: 'Jones',
+        name: 'Bob Jones',
+      };
 
-      // Test the onChange by simulating MUI Autocomplete onChange
-      const autocomplete = screen.getByTestId('pledgerSelect');
-      const component = autocomplete.querySelector('.MuiAutocomplete-root');
-
-      if (component) {
-        // Directly trigger the onChange event to cover line 274
-        await act(async () => {
-          // This simulates the Autocomplete onChange being called
-          const changeEvent = new Event('change', { bubbles: true });
-          fireEvent(component, changeEvent);
-        });
-      }
-
-      expect(autocomplete).toBeInTheDocument();
+      expect(areOptionsEqual(option, value)).toBe(true);
     });
 
-    it('should properly trigger autocomplete onChange with new pledger data (cover line 279)', async () => {
-      // Test to cover line 279: setFormState({ ...formState, pledgeUsers: newPledgers })
-      renderPledgeModal(link1, pledgeProps[0]);
+    it('getMemberLabel builds full name correctly', () => {
+      const member = {
+        id: '2',
+        firstName: 'John',
+        lastName: 'Doe',
+      };
+
+      expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe('John Doe');
+    });
+
+    // computeAdjustedEndDate tests removed - function no longer exists as dates are auto-generated
+
+    it('areOptionsEqual returns false when ids do not match', () => {
+      const option: InterfaceUserInfoPG = {
+        id: '1',
+        firstName: 'Alice',
+        lastName: 'Smith',
+        name: 'Alice Smith',
+      };
+
+      const value: InterfaceUserInfoPG = {
+        id: '2',
+        firstName: 'A',
+        lastName: 'B',
+        name: 'A B',
+      };
+
+      expect(areOptionsEqual(option, value)).toBe(false);
+    });
+
+    it('getMemberLabel handles missing firstName', () => {
+      const member = { id: '1', firstName: '', lastName: 'Doe' };
+      expect(getMemberLabel(member as InterfaceUserInfoPG)).toBe('Doe');
+    });
+    it('should update pledgeUsers state when selecting a pledger from autocomplete in create mode', async () => {
+      const adminLink = new StaticMockLink([...BASE_PLEDGE_MODAL_ADMIN_MOCKS]);
+      renderPledgeModal(adminLink, pledgeProps[0]);
 
       await waitFor(() => {
         expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
@@ -879,6 +918,14 @@ describe('PledgeModal', () => {
 
       const autocomplete = screen.getByTestId('pledgerSelect');
       const input = within(autocomplete).getByRole('combobox');
+
+      // Clear any existing selection first
+      const clearButton = within(autocomplete).queryByLabelText('Clear');
+      if (clearButton) {
+        await act(async () => {
+          fireEvent.click(clearButton);
+        });
+      }
 
       // Open the autocomplete
       await act(async () => {
@@ -886,74 +933,26 @@ describe('PledgeModal', () => {
         fireEvent.mouseDown(input);
       });
 
-      // Wait for the listbox to appear
-      await waitFor(() => {
-        const listbox = screen.getByRole('listbox');
-        expect(listbox).toBeInTheDocument();
-      });
+      // Wait for options to be available
+      await waitFor(
+        () => {
+          const options = screen.queryAllByRole('option');
+          expect(options.length).toBeGreaterThan(0);
+        },
+        { timeout: 2000 },
+      );
 
-      // Select an option to trigger onChange
+      // Try to select an option if available
       const options = screen.getAllByRole('option');
-      expect(options.length).toBeGreaterThan(0);
-
-      await act(async () => {
-        fireEvent.click(options[0]);
-      });
+      if (options.length > 0) {
+        await act(async () => {
+          fireEvent.click(options[0]);
+        });
+      }
 
       // Verify the autocomplete is still there after selection
       await waitFor(() => {
         expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
-      });
-
-      // Fill in required fields to enable form submission
-      const amountInput = screen.getByLabelText('Amount');
-      await act(async () => {
-        fireEvent.change(amountInput, { target: { value: '100' } });
-      });
-
-      // The onChange handler should have been triggered, updating the form state
-      // This covers line 279 in the component
-      expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
-    });
-
-    it('should trigger onChange when selecting from autocomplete (line 279)', async () => {
-      // Targets line 279 in PledgeModal.tsx: setFormState({ ...formState, pledgeUsers: newPledgers })
-      // The onChange callback updates pledgeUsers in form state when users are selected/deselected
-
-      renderPledgeModal(link1, pledgeProps[0]);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
-      });
-
-      const autocomplete = screen.getByTestId('pledgerSelect');
-      const input = within(autocomplete).getByRole('combobox');
-
-      // Initially no users selected
-      expect(input).toHaveValue('');
-
-      // Open dropdown to see available users
-      await act(async () => {
-        input.focus();
-        fireEvent.mouseDown(input);
-      });
-
-      await waitFor(() => {
-        expect(screen.getByRole('listbox')).toBeInTheDocument();
-      });
-
-      const options = screen.getAllByRole('option');
-      expect(options.length).toBeGreaterThan(0);
-
-      // Selecting an option triggers the onChange callback on line 279
-      // which calls: setFormState({ ...formState, pledgeUsers: newPledgers })
-      await act(async () => {
-        fireEvent.click(options[0]);
-      });
-
-      // Verify dropdown closes after selection (indicating onChange was triggered)
-      await waitFor(() => {
-        expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
       });
     });
   });

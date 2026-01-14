@@ -8,7 +8,6 @@ const PARAM_DESCRIPTIONS: Record<string, string> = {
   USE_DOCKER: 'Indicates whether Docker is being used.',
   DOCKER_PORT: 'Docker container port mapping for frontend.',
   REACT_APP_TALAWA_URL: 'GraphQL endpoint for the Talawa backend.',
-  REACT_APP_BACKEND_WEBSOCKET_URL: 'WebSocket endpoint for real-time updates.',
   REACT_APP_DOCKER_TALAWA_URL: 'GraphQL endpoint inside Docker container.',
   REACT_APP_USE_RECAPTCHA: 'Enable or disable reCAPTCHA protection.',
   REACT_APP_RECAPTCHA_SITE_KEY:
@@ -49,7 +48,9 @@ export const updateEnvFile = (
       .trim();
 
     // Prepare new variable block
-    const newBlock = `# ${finalDescription}\n${key}=${value ?? ''}`;
+    const commentLine = ['#', finalDescription].join(' ');
+    const valueLine = [key, value ?? ''].join('=');
+    const newBlock = [commentLine, valueLine].join('\n');
 
     // Append block with exactly one blank line separation if not empty
     envContent = envContent ? `${envContent}\n\n${newBlock}` : newBlock;

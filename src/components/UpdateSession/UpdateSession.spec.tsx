@@ -13,7 +13,6 @@ import {
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
-import { toast } from 'react-toastify';
 import UpdateTimeout from './UpdateSession';
 
 import i18n from 'utils/i18nForTest';
@@ -21,6 +20,7 @@ import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 import { vi } from 'vitest';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 /**
  * This file contains unit tests for the `UpdateSession` component.
@@ -104,7 +104,12 @@ describe('Testing UpdateTimeout Component', () => {
       </MockedProvider>,
     );
 
-    const slider = await screen.findByTestId('slider-thumb');
+    // Wait for LoadingState to complete - component will be rendered once data loads
+    await waitFor(() => {
+      expect(screen.getByText(/Update Timeout/i)).toBeInTheDocument();
+    });
+
+    const slider = screen.getByTestId('slider-thumb');
 
     // Simulate dragging to minimum value
     fireEvent.mouseDown(slider, { clientX: -999 }); // Adjust the clientX to simulate different slider positions
@@ -122,7 +127,12 @@ describe('Testing UpdateTimeout Component', () => {
       </MockedProvider>,
     );
 
-    const slider = await screen.findByTestId('slider-thumb');
+    // Wait for LoadingState to complete - component will be rendered once data loads
+    await waitFor(() => {
+      expect(screen.getByText(/Update Timeout/i)).toBeInTheDocument();
+    });
+
+    const slider = screen.getByTestId('slider-thumb');
 
     // Simulate dragging to maximum value
     fireEvent.mouseDown(slider, { clientX: 999 }); // Adjust the clientX to simulate different slider positions
@@ -159,8 +169,13 @@ describe('Testing UpdateTimeout Component', () => {
       </MockedProvider>,
     );
 
-    // Wait for the slider to be present
-    const slider = await screen.findByTestId('slider-thumb');
+    // Wait for LoadingState to complete - component will be rendered once data loads
+    await waitFor(() => {
+      expect(screen.getByText(/Update Timeout/i)).toBeInTheDocument();
+    });
+
+    // Now get the slider
+    const slider = screen.getByTestId('slider-thumb');
 
     fireEvent.mouseDown(slider, { clientX: 45 }); // Adjust the clientX to simulate different slider positions
     fireEvent.mouseUp(slider);
@@ -208,7 +223,7 @@ describe('Testing UpdateTimeout Component', () => {
   it('Should update session timeout', async () => {
     const user = userEvent.setup();
 
-    const toastSpy = vi.spyOn(toast, 'success');
+    const toastSpy = vi.spyOn(NotificationToast, 'success');
 
     const { container } = render(
       <MockedProvider mocks={MOCKS}>
@@ -653,5 +668,64 @@ describe('Testing UpdateTimeout Component', () => {
     handleOnChange(mockChangeEvent);
 
     expect(mockOnValueChange).toHaveBeenCalledWith(Number(largeValue));
+  });
+
+  it('should display loading state while fetching session timeout data', async () => {
+    const mockOnValueChange = vi.fn();
+
+    render(
+      <MockedProvider mocks={MOCKS}>
+        <UpdateTimeout onValueChange={mockOnValueChange} />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('timeout-value')).toBeInTheDocument();
+    });
+
+    // Verify that the timeout value is displayed after loading completes
+    await waitFor(() => {
+      expect(screen.getByTestId('timeout-value')).toHaveTextContent(
+        '30 minutes',
+      );
+    });
+  });
+  it('should display loading spinner during query and hide it after data loads', async () => {
+    // Use a mock that delays the response to keep loading state visible longer
+    const delayedMocks = [
+      {
+        request: {
+          query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
+        },
+        delay: 100, // Delay response
+        result: {
+          data: {
+            community: {
+              inactivityTimeoutDuration: 1800,
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={delayedMocks}>
+        <UpdateTimeout />
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).toBeInTheDocument();
+    });
+
+    // Wait for loading to complete
+    await waitFor(() => {
+      expect(screen.getByTestId('timeout-value')).toBeInTheDocument();
+    });
+
+    // Verify loading spinner is gone
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
   });
 });

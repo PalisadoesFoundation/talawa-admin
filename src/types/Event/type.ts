@@ -1,5 +1,5 @@
-import type { ActionItem } from '../actionItem';
-import type { Organization } from 'types/Organization/type';
+import type { ActionItem } from '../AdminPortal/actionItem';
+import type { Organization } from 'types/AdminPortal/Organization/type';
 import type { CheckInStatus } from '../CheckIn/type';
 
 export type User = {
@@ -33,7 +33,7 @@ export type Event = {
   location?: string; //Optional
   longitude?: number; //Optional
   organization?: Organization; //Optional
-  recurrance?: string; //Optional
+  recurrence?: string; //Optional
   recurring: boolean;
   startDate: Date;
   startTime: string; //Optional
@@ -68,7 +68,7 @@ export type EventInput = {
   location?: string; //Optional
   longitude?: number; //Optional
   organizationId: string;
-  recurrance?: string; //Optional
+  recurrence?: string; //Optional
   recurring: boolean;
   startDate: Date;
   startTime?: string; //Optional
@@ -126,8 +126,8 @@ export const EventOrderByInputEnum = {
   id_DESC: 'id_DESC',
   location_ASC: 'location_ASC',
   location_DESC: 'location_DESC',
-  recurrance_ASC: 'recurrance_ASC',
-  recurrance_DESC: 'recurrance_DESC',
+  recurrence_ASC: 'recurrence_ASC',
+  recurrence_DESC: 'recurrence_DESC',
   startDate_ASC: 'startDate_ASC',
   startDate_DESC: 'startDate_DESC',
   startTime_ASC: 'startTime_ASC',

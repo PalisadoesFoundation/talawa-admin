@@ -6,7 +6,7 @@
 
 > `const` **eventData**: `object`[]
 
-Defined in: [src/components/EventCalender/EventCalenderMocks.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/EventCalenderMocks.ts#L6)
+Defined in: [src/components/EventCalender/EventCalenderMocks.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventCalender/EventCalenderMocks.ts#L10)
 
 ## Type Declaration
 
@@ -28,7 +28,7 @@ Defined in: [src/components/EventCalender/EventCalenderMocks.ts:6](https://githu
 
 ### endAt
 
-> **endAt**: `string` = `'2022-05-01T12:00:00Z'`
+> **endAt**: `string`
 
 ### endTime
 
@@ -56,7 +56,7 @@ Defined in: [src/components/EventCalender/EventCalenderMocks.ts:6](https://githu
 
 ### startAt
 
-> **startAt**: `string` = `'2022-05-01T10:00:00Z'`
+> **startAt**: `string`
 
 ### startTime
 

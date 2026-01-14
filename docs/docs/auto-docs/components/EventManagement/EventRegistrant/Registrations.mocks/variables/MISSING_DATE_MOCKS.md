@@ -6,4 +6,4 @@
 
 > `const` **MISSING\_DATE\_MOCKS**: `MockedResponse`[]
 
-Defined in: [src/components/EventManagement/EventRegistrant/Registrations.mocks.ts:251](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts#L251)
+Defined in: [src/components/EventManagement/EventRegistrant/Registrations.mocks.ts:254](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts#L254)

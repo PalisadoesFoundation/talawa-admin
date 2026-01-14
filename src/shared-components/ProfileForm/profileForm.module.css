@@ -1,0 +1,28 @@
+.personalDetailsHeader {
+  background-color: #a8c7fa;
+  color: #555;
+}
+
+.profileImage {
+  width: var(--space-11);
+  height: var(--space-11);
+  object-fit: cover;
+}
+
+.editProfileIcon {
+  cursor: pointer;
+  font-size: var(--font-size-19);
+}
+
+.hiddenFileInput {
+  display: none;
+}
+
+.contact_btn {
+  border-radius: 20px;
+}
+
+.member_details_style {
+  background-color: #a8c7fa;
+  color: #555;
+}

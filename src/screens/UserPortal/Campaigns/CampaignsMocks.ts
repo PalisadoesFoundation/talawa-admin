@@ -1,5 +1,8 @@
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { USER_FUND_CAMPAIGNS } from 'GraphQl/Queries/fundQueries';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 const userDetailsQuery = {
   request: {
@@ -23,7 +26,7 @@ const userDetailsQuery = {
           lastName: 'Lance',
           email: 'testuser1@example.com',
           image: null,
-          createdAt: '2023-04-13T04:53:17.742Z',
+          createdAt: dayjs.utc().toISOString(),
           birthDate: null,
           educationGrade: null,
           employmentStatus: null,
@@ -80,7 +83,7 @@ export const MOCKS = [
                           name: 'School Campaign',
                           currencyCode: 'USD',
                           goalAmount: 22000,
-                          startAt: '2024-07-28',
+                          startAt: '2024-06-15',
                           endAt: '2099-12-31',
                         },
                       },

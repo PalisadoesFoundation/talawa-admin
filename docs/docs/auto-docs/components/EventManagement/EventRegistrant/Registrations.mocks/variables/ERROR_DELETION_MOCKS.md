@@ -6,4 +6,4 @@
 
 > `const` **ERROR\_DELETION\_MOCKS**: `MockedResponse`[]
 
-Defined in: [src/components/EventManagement/EventRegistrant/Registrations.mocks.ts:263](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts#L263)
+Defined in: [src/components/EventManagement/EventRegistrant/Registrations.mocks.ts:266](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts#L266)

@@ -6,60 +6,331 @@ sidebar_position: 35
 ---
 
 Shared components are UI and functional elements used across multiple sections of the application.
+
 This guide outlines how to create and manage these components to ensure a unified design system and efficient code reuse.
 
-## Before You Begin
+## Quick reference
+
+1. Screens (routing-level UI)
+
+   ```
+   src/screens/Auth/**
+   src/screens/Public/**
+   src/screens/AdminPortal/**
+   src/screens/UserPortal/**
+   ```
+
+1. Admin UI:
+   ```
+   src/components/AdminPortal/**
+   src/types/AdminPortal/**
+   ```
+1. User UI
+   ```
+   src/components/UserPortal/**
+   src/types/UserPortal/**
+   ```
+1. Shared UI
+   ```
+   src/shared-components/**
+   src/types/shared-components/**
+   ```
+1. Props definitions
+   - interface.ts only (no inline interfaces)
+1. Exports
+   - PascalCase, name matches folder/file
+1. Tests
+   - colocated .spec.tsx
+   - target 100% test code coverage
+1. i18n
+   - all user-visible text uses keys
+
+1. TSDoc
+   - brief headers on components and interfaces
+
+## Component Architecture
 
 It's important to understand structure and behavior of shared components before creating or refactoring them.
 
-### Shared Component Directory Structure and Paths
+### Folder Layout
 
 Use the following path structure for shared components.
 
 ```
 src/
-│
-├── shared-components/
-│   ├── ComponentOne/
-│   |   ├── ComponentOne.tsx
-│   |   ├── ComponentOne.spec.tsx
-│   |   └── ComponentOneMocks.ts
-│   └── ComponentTwo/
-│       ├── ComponentTwo.tsx
-│       ├── ComponentTwo.spec.tsx
-│       └── ComponentTwoMocks.ts
-│
-└── types/
-    ├── ComponentOne/
-    |   ├── interface.ts
-    |   └── type.ts
-    └── ComponentTwo/
-        ├── interface.ts
-        └── type.ts
+  components/
+    AdminPortal/                    # Admin-only UI and hooks
+      UserTableRow/
+        UserTableRow.tsx
+        UserTableRow.spec.tsx
+      hooks/
+        useCursorPagination.ts
+        useCursorPagination.spec.ts
+    UserPortal/                     # User-only UI and hooks
+      ...
+  shared-components/                # Shared UI (kebab-case base, PascalCase children)
+    ProfileAvatarDisplay/
+      ProfileAvatarDisplay.tsx
+      ProfileAvatarDisplay.spec.tsx
+    BaseModal/
+      BaseModal.tsx
+      BaseModal.spec.tsx
+    EmptyState/
+      EmptyState.tsx
+      EmptyState.spec.tsx
+    LoadingState/
+      LoadingState.tsx
+      LoadingState.spec.tsx
+  types/
+    AdminPortal/                    # Admin-only types
+      UserTableRow/
+        interface.ts
+      Pagination/
+        interface.ts
+    UserPortal/                     # User-only types (as needed)
+      ...
+    shared-components/              # Shared types mirror components
+      ProfileAvatarDisplay/
+        interface.ts
+      BaseModal/
+        interface.ts
+      EmptyState/
+        interface.ts
+      LoadingState/
+        interface.ts
+  screens/
+    AdminPortal/                    # Admin-only screens
+      Users/
+        Users.tsx
+        Users.spec.tsx
+    UserPortal/                     # User-only screens
+      Campaigns/
+        Canpaigns.stx
+        Campaigns.spec.tsx
+    Auth/                           # Auth-only screens
+      LoginPage/
+        LoginPage.tsx
+        LoginPage.spec.tsx
+    Public/                         # Unauthenticated screens
+      Invitation/
+        Invitation.tsx
+        Invitation.spec.tsx
+
 ```
 
-#### Naming Conventions
+### Rationale
 
-- Use **PascalCase** for component and folder names (e.g., `OrgCard`, `Button`).
-- The component files name should match the component (e.g., `OrgCard.tsx`, `Button.tsx`).
-- Tests should be named `Component.spec.tsx`.
-- Mock files should follow `ComponentMock.ts`.
-- Type interface should be defined in corresponding interface / type file.
+There are many reasons for this structure:
+
+1. Clear ownership: Admin vs User portal code is easy to find.
+
+2. Reuse with intent: Truly shared UI lives in one place.
+
+3. Safer changes: Portal-specific changes can’t silently affect the other portal.
+
+4. Faster onboarding and reviews: Predictable paths and conventions.
+
+### Placement Rules
+
+1. Admin-only UI
+
+   ```
+   src/components/AdminPortal/** (types in src/types/AdminPortal/**).
+   ```
+
+2. User-only UI
+   ```
+   src/components/UserPortal/** (types in src/types/UserPortal/**).
+   ```
+3. Shared UI used by both portals
+   ```
+   src/shared-components/** (types in src/types/shared-components/**).
+   ```
+4. Portal-specific hooks live under that portal (e.g., AdminPortal/hooks). Promote to shared only when used by both portals.
+
+### Screen Placement Rules
+
+  1. Authentication-related screens
+        ```
+        src/screens/Auth/**
+        Examples: Login, ForgotPassword, ResetPassword
+        ```
+  2. Admin-only screens
+        ```
+        src/screens/AdminPortal/**
+        Examples: Users, CommunityProfile, Notification
+        ```
+  3. User-only screens
+        ```
+        src/screens/UserPortal/**
+        Examples: Campaigns, Chat, Donate
+        ```
+  4. Public, unauthenticated screens  
+        ```
+        src/screens/Public/**
+        Examples: Invitation acceptance, PageNotFound, public info pages
+        ```
+
+### Naming Conventions
+
+1. Use PascalCase for component and folder names (e.g., `OrgCard`, `Button`).
+   1. The `types/shared-components` folder is the sole exception
+2. The component files should be PascalCase and the name should match the component (e.g., `OrgCard.tsx`, `Button.tsx`).
+3. Tests should be named `Component.spec.tsx`.
+4. Mock files should follow `ComponentMock.ts`.
+5. Type interface should be defined in corresponding interface / type file.
+   - For example: `src/types/\<Portal or shared-components\>/\<Component\>/interface.ts` (single source of truth for props; no inline prop interfaces).
+
+     ```
+     src/
+     │
+     ├── types/
+         └── AdminPortal
+             ├── Component
+                 └── interface.ts
+                 └── type.ts
+     ```
+
+### Imports (examples)
+
+```ts
+// shared
+import { ProfileAvatarDisplay } from '/shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
+
+// admin
+import { UserTableRow } from 'components/AdminPortal/UserTableRow/UserTableRow';
+```
+
+## Wrapper Components and Restricted Imports
+
+Some shared components are wrappers around third-party UI libraries. To enforce consistent usage, direct imports from those libraries are restricted by ESLint, and only the wrapper implementations may import them.
+
+### What is restricted (and what to use instead)
+
+- `@mui/x-data-grid` and `@mui/x-data-grid-pro` -> use `DataGridWrapper`
+- `react-bootstrap` `Spinner` -> use `LoadingState`
+- `react-bootstrap` `Modal` -> use `BaseModal`
+- `@mui/x-date-pickers` -> use `DateRangePicker`, `DatePicker`, or `TimePicker`
+- `react-toastify` -> use `NotificationToast`
+
+These restrictions are enforced by `no-restricted-imports` in `eslint.config.js`.
+
+### Where direct imports are allowed
+
+Direct imports are only allowed inside the wrapper component implementations. The ESLint config defines a central registry of restricted imports and then allows specific IDs per folder.
+
+```js
+const restrictedImports = [
+  { id: 'mui-data-grid', name: '@mui/x-data-grid', message: '...' },
+  { id: 'mui-data-grid-pro', name: '@mui/x-data-grid-pro', message: '...' },
+  {
+    id: 'rb-spinner',
+    name: 'react-bootstrap',
+    importNames: ['Spinner'],
+    message: '...',
+  },
+  {
+    id: 'rb-modal',
+    name: 'react-bootstrap',
+    importNames: ['Modal'],
+    message: '...',
+  },
+  { id: 'mui-date-pickers', name: '@mui/x-date-pickers', message: '...' },
+];
+
+const restrictImportsExcept = (allowedIds = []) => ({
+  'no-restricted-imports': [
+    'error',
+    {
+      paths: restrictedImports
+        .filter(({ id }) => !allowedIds.includes(id))
+        .map(({ id, ...rule }) => rule),
+    },
+  ],
+});
+```
+
+Allowed IDs by folder:
+
+- DataGridWrapper: `mui-data-grid`, `mui-data-grid-pro`
+  - `src/shared-components/DataGridWrapper/**`
+  - `src/types/DataGridWrapper/**`
+- LoadingState/Loader: `rb-spinner`
+  - `src/shared-components/LoadingState/**`
+  - `src/types/shared-components/LoadingState/**`
+  - `src/components/Loader/**`
+- BaseModal: `rb-modal`
+  - `src/shared-components/BaseModal/**`
+  - `src/types/shared-components/BaseModal/**`
+- Date pickers: `mui-date-pickers`
+  - `src/shared-components/DateRangePicker/**`
+  - `src/types/shared-components/DateRangePicker/**`
+  - `src/shared-components/DatePicker/**`
+  - `src/shared-components/TimePicker/**`
+  - `src/index.tsx`
+- NotificationToast: `react-toastify`
+  - `src/components/NotificationToast/**`
+  - `src/types/NotificationToast/**`
+
+### Adding a new restricted import or wrapper
+
+1. Add a new entry to `restrictedImports` in `eslint.config.js` with a unique `id`, `name`, and `message`.
+2. Allow that ID in the wrapper folder override using `restrictImportsExcept([...])`.
+3. Update this document to list the new restriction and allowed folder(s).
+
+### Troubleshooting
+
+If you see an error like:
 
 ```
-src/
-│
-├── types/
-    ├── Component
-        └── interface.ts
-        └── type.ts
+'@mui/x-data-grid' import is restricted from being used. ...
 ```
 
-### Understanding Components Reuse
+it means you are importing a restricted library outside the allowed wrapper folders. Switch to the shared wrapper component or update the ESLint exception only if you are building the wrapper itself.
+
+### i18n
+
+1. All screen-visible text must use translation keys. No hardcoded strings.
+1. Provide alt text and aria labels via i18n where user-facing.
+
+Example:
+
+```tsx
+<BaseModal
+  title={t('members.remove_title')}
+  confirmLabel={t('common.confirm')}
+  cancelLabel={t('common.cancel')}
+/>
+```
+
+### TSDoc Documentation
+
+Add a brief TSDoc header to:
+
+1. Each component: what it does, key behaviors, important a11y notes.
+1. Each interface.ts: props with short descriptions and defaults.
+
+Example:
+
+```ts
+/**
+ * ProfileAvatarDisplay renders a user’s image or initials fallback.
+ * - Sizes: small | medium | large | custom
+ * - A11y: always sets meaningful alt; handles broken image fallback
+ */
+```
+
+### Accessibility (a11y) essentials
+
+1. Images: meaningful alt; fallback to initials when URL is empty/invalid.
+1. Modals: role="dialog", aria-modal, labelled by title; focus trap; Escape to close.
+1. Buttons/links: accessible names; keyboard operable.
+
+## Understanding Components Reuse
 
 Learn how shared components are integrated and reused across different areas of the application.
 
-#### Props Driven Design
+### Props Driven Design
 
 Props-driven design focuses on building components that adapt their behavior, appearance, and content based on the props rather than hardcoded values. This approach increases flexibility and reusability, allowing the same component to serve multiple purposes across the application. By passing data, event handlers, and configuration options through props.
 
@@ -73,12 +344,19 @@ interface ButtonProps {
   variant?: 'primary' | 'secondary';
 }
 
-const Button: React.FC<ButtonProps> = ({ label, onClick, variant = 'primary' }) => {
+const Button: React.FC<ButtonProps> = ({
+  label,
+  onClick,
+  variant = 'primary',
+}) => {
   const variantStyle =
     variant === 'primary' ? styles.primaryButton : styles.secondaryButton;
 
   return (
-    <button onClick={onClick} className={`${styles.buttonStyle} ${variantStyle}`}>
+    <button
+      onClick={onClick}
+      className={`${styles.buttonStyle} ${variantStyle}`}
+    >
       {label}
     </button>
   );
@@ -87,7 +365,7 @@ const Button: React.FC<ButtonProps> = ({ label, onClick, variant = 'primary' }) 
 export default Button;
 ```
 
-#### Handling Role Based Differences
+### Handling Role Based Differences
 
 In some cases, a shared component needs to behave differently depending on the user's role. Instead of creating separate components for each role, you can handle variations through props. This ensures a single, maintainable source while keeping the UI consistent.
 
@@ -121,10 +399,7 @@ const OrgCard: React.FC<InterfaceOrgCardProps> = ({
         <p className="text-sm text-gray-500">{address}</p>
       </div>
 
-      <button
-        onClick={handleClick}
-        className={styles.orgCardButton}
-      >
+      <button onClick={handleClick} className={styles.orgCardButton}>
         {role === 'admin' ? 'Manage' : isMember ? 'Visit' : 'Join'}
       </button>
     </div>
@@ -134,7 +409,254 @@ const OrgCard: React.FC<InterfaceOrgCardProps> = ({
 export default OrgCard;
 ```
 
-## Creating Shared Component
+## Existing Shared Components
+
+Below are some commonly used shared components available in the codebase.
+
+## EmptyState
+
+`EmptyState` is a reusable shared component for displaying consistent empty, no-data, or no-result states across the application.  
+It replaces legacy `.notFound` CSS-based implementations and standardizes empty UI patterns.
+
+#### Component Location
+
+```text
+src/shared-components/EmptyState/
+```
+
+**Use cases:**
+
+- No search results
+- Empty lists or tables
+- No organizations / users / events
+- First-time onboarding states
+
+**Key features:**
+
+- Optional icon, description, and action button
+- Built-in accessibility (`role="status"`, `aria-label`)
+- i18n-ready (supports translation keys and plain strings)
+- Fully tested with 100% coverage
+
+**Example usage:**
+
+```tsx
+import EmptyState from 'src/shared-components/EmptyState/EmptyState';
+
+<EmptyState
+  message="noResults"
+  description="tryAdjustingFilters"
+  icon="person_off"
+  action={{
+    label: 'createNew',
+    onClick: handleCreate,
+    variant: 'primary',
+  }}
+/>;
+```
+
+#### When to Use EmptyState
+
+_Use EmptyState for:_
+
+- Empty lists or tables
+- No search results
+- No organizations, users, or events
+- First-time or onboarding states
+- Filtered results returning no data
+
+_Do not use EmptyState for:_
+
+- 404 or route-level errors (use NotFound instead)
+
+### Component API
+
+Import
+
+```ts
+import EmptyState from 'src/shared-components/EmptyState/EmptyState';
+```
+
+#### Props
+
+| Prop          | Type                  | Required | Description                                |
+| ------------- | --------------------- | -------- | ------------------------------------------ |
+| `message`     | `string`              | Yes      | Primary message (i18n key or plain string) |
+| `description` | `string`              | No       | Secondary supporting text                  |
+| `icon`        | `string \| ReactNode` | No       | Icon name or custom icon component         |
+| `action`      | `object`              | No       | Optional action button configuration       |
+| `className`   | `string`              | No       | Custom CSS class                           |
+| `dataTestId`  | `string`              | No       | Test identifier                            |
+
+#### Action Prop Shape
+
+```ts
+interface EmptyStateAction {
+  label: string;
+  onClick: () => void;
+  variant?: 'primary' | 'secondary' | 'outlined';
+}
+```
+
+### Usage Example
+
+**1. Simple Empty State:**
+
+```tsx
+<EmptyState message="noDataFound" />
+```
+
+**2. Empty State With Icon:**
+
+```tsx
+<EmptyState
+  icon="groups"
+  message="noOrganizationsFound"
+  description="createOrganizationToGetStarted"
+/>
+```
+
+**3. Search Empty State:**
+
+```tsx
+<EmptyState
+  icon="search"
+  message="noResultsFound"
+  description={tCommon('noResultsFoundFor', {
+    query: searchTerm,
+  })}
+/>
+```
+
+**4. Empty State With Action Button:**
+
+```tsx
+<EmptyState
+  icon="person_off"
+  message="noUsersFound"
+  description="inviteUsersToGetStarted"
+  action={{
+    label: 'inviteUser',
+    onClick: handleInvite,
+    variant: 'primary',
+  }}
+/>
+```
+
+### ErrorBoundaryWrapper
+
+`ErrorBoundaryWrapper` is a error boundary component that catches JavaScript errors in child components, logs them, and displays a fallback UI instead of crashing the entire application.
+
+**Use cases:**
+
+- Wrapping critical components that might throw render errors
+- Protecting modals, forms, and complex UI sections
+- Providing graceful error recovery for users
+- Integrating with error tracking services (e.g., Sentry, LogRocket)
+
+**Key features:**
+
+- Catches render errors that try-catch cannot handle
+- Provides default and custom fallback UI options
+- Integrates with toast notification system
+- Supports error recovery via reset mechanism
+- Allows error logging/tracking integration
+- Fully accessible (keyboard navigation, screen reader support)
+- Fully tested with 100% coverage
+
+**Example usage:**
+
+```tsx
+import { ErrorBoundaryWrapper } from 'src/shared-components/ErrorBoundaryWrapper';
+
+// Basic usage with default fallback
+<ErrorBoundaryWrapper>
+  <YourComponent />
+</ErrorBoundaryWrapper>
+
+// With custom error message and logging
+<ErrorBoundaryWrapper
+  errorMessage={t('errors.defaultErrorMessage')}
+  onError={(error, info) => logToService(error, info)}
+  onReset={() => navigate('/dashboard')}
+>
+  <ComplexModal />
+</ErrorBoundaryWrapper>
+
+// Default fallback with custom i18n strings
+<ErrorBoundaryWrapper
+  fallbackTitle={t('errors.title')}
+  fallbackErrorMessage={t('errors.defaultErrorMessage')}
+  resetButtonText={t('errors.resetButton')}
+  resetButtonAriaLabel={t('errors.resetButtonAriaLabel')}
+>
+  <ComplexModal />
+</ErrorBoundaryWrapper>
+
+// With custom fallback component
+const CustomErrorFallback = ({ error, onReset }) => (
+  <div>
+    <h2>Custom Error UI</h2>
+    <p>{error?.message}</p>
+    <button onClick={onReset}>Retry</button>
+  </div>
+);
+
+<ErrorBoundaryWrapper fallbackComponent={CustomErrorFallback}>
+  <Modal />
+</ErrorBoundaryWrapper>
+
+// With custom JSX fallback
+<ErrorBoundaryWrapper
+  fallback={<div>Something went wrong. Please refresh.</div>}
+>
+  <ComplexForm />
+</ErrorBoundaryWrapper>
+
+// Disable toast notifications
+<ErrorBoundaryWrapper showToast={false}>
+  <Component />
+</ErrorBoundaryWrapper>
+```
+
+#### Props
+
+| Prop                   | Type                                               | Required | Description                                                         |
+| ---------------------- | -------------------------------------------------- | -------- | ------------------------------------------------------------------- |
+| `children`             | `ReactNode`                                        | Yes      | Child components to wrap with error boundary                        |
+| `fallback`             | `ReactNode`                                        | No       | Custom JSX fallback UI                                              |
+| `fallbackComponent`    | `React.ComponentType<InterfaceErrorFallbackProps>` | No       | Custom fallback component that receives `error` and `onReset` props |
+| `errorMessage`         | `string`                                           | No       | Custom error message for toast notification                         |
+| `showToast`            | `boolean`                                          | No       | Whether to show toast notification (default: `true`)                |
+| `onError`              | `function`                                         | No       | Callback invoked when error is caught                               |
+| `onReset`              | `function`                                         | No       | Callback invoked when user clicks reset button                      |
+| `fallbackTitle`        | `string`                                           | No       | Custom error message for default UI                                 |
+| `fallbackErrorMessage` | `string`                                           | No       | Custom error message for default UI                                 |
+| `resetButtonText`      | `string`                                           | No       | Custom error message for default UI                                 |
+| `resetButtonAriaLabel` | `string`                                           | No       | Custom error message for default UI                                 |
+
+**Accessibility:**
+
+- Default fallback includes `role="alert"` and `aria-live="assertive"`
+- Reset button is keyboard accessible (Enter and Space keys)
+- Screen reader friendly error messages
+- High contrast and dark mode support
+
+### Relationship with Loading States
+
+- Use LoadingState while data is being fetched
+- Render EmptyState only after loading completes
+- Never show EmptyState during an active loading state
+
+### Migration Guidance
+
+- Legacy `.notFound` CSS patterns are deprecated
+- All new empty-state implementations must use EmptyState
+- Existing screens should be migrated incrementally
+
+## Creating Shared Components
+
+This section provides guidance on our shared components policy.
 
 ### When Not to Create a Shared Component
 
@@ -173,57 +695,52 @@ It also ensures that any changes in shared components are propagated safely, wit
 - Each prop should serve a single purpose (data, action, or style control).
 - Use clear, descriptive prop names like `isMember`, `variant`, or `role` instead of generic terms like `flag` or `type`.
 
-#### Example
+#### Examples
 
-- **Role based props**
+1. **Role based props:** When a component behaves differently for user types (admin / user), define a `role` prop to handle that difference cleanly.
 
-  When a component behaves differently for user types (admin / user), define a `role` prop to handle that difference cleanly.
+   ```typescript
+   interface InterfaceOrgCardProps {
+     name: string;
+     address: string;
+     membersCount: number;
+     adminsCount?: number;
+     role: 'admin' | 'user';
+     isMember?: boolean;
+   }
+   ```
 
-  ```typescript
-  interface InterfaceOrgCardProps {
-    name: string;
-    address: string;
-    membersCount: number;
-    adminsCount?: number;
-    role: 'admin' | 'user';
-    isMember?: boolean;
-  }
-  ```
+1. **Variant based props:** For components with multiple design or behavior styles (like buttons or cards), define a `variant` prop.
 
-- **Variant based props**
+   ```typescript
+   interface ButtonProps {
+     label: string;
+     onClick: () => void;
+     variant?: 'primary' | 'secondary' | 'outlined';
+   }
+   ```
 
-  For components with multiple design or behavior styles (like buttons or cards), define a `variant` prop.
-
-  ```typescript
-  interface ButtonProps {
-    label: string;
-    onClick: () => void;
-    variant?: 'primary' | 'secondary' | 'outlined';
-  }
-  ```
-
-  The `variant` prop helps the component adapt its appearance dynamically:
-
-  1. `primary` → For main action on a page (example: Save, Submit).
-  2. `secondary` → For supporting action (example: Cancel, Edit).
-  3. `outlined` → For neutral or optional actions (example: Learn more, Back).
+   - The `variant` prop helps the component adapt its appearance dynamically:
+     1. `primary` → For main action on a page (example: Save, Submit).
+     2. `secondary` → For supporting action (example: Cancel, Edit).
+     3. `outlined` → For neutral or optional actions (example: Learn more, Back).
 
 ### Styling Guidelines
 
-- Use existing global or shared CSS modules whenever possible to maintain consistency.
-- Avoid inline styles unles necessary for dynamic cases.
-- When defining styles, prefer semantic class names (e.g., `buttonPrimary`, `cardHeader`).
+1. Use existing global or shared CSS modules whenever possible to maintain consistency.
+1. Avoid inline styles unles necessary for dynamic cases.
+1. When defining styles, prefer semantic class names (e.g., `buttonPrimary`, `cardHeader`).
 
 ### Testing Shared Component
 
-- Each shared component must include a corresponding test file (`Component.spec.tsx`)
-- Refer to the [testing page of the documentation website](https://docs-admin.talawa.io/docs/developer-resources/testing)
+1. Each shared component must include a corresponding test file (`Component.spec.tsx`)
+1. Refer to the [testing page of the documentation website](https://docs-admin.talawa.io/docs/developer-resources/testing)
 
 ### Document Your Code
 
 Use TSDoc comments to document functions, classes, and interfaces within reusable components. Clearly describe the component's purpose, its props and any return value. This practice not only improves readability but also helps maintain consistency across shared components, especially when they are used by multiple developers or teams. Well-documented props and behavior makes it easier for others to quickly understand how to use, extend, or debug the component without needing to inspect its internal implementation.
 
-``` ts
+```ts
 /**
  * Button Component
  *

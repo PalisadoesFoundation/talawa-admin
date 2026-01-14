@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationEventListItem
 
-Defined in: [src/utils/interfaces.ts:1922](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1922)
+Defined in: [src/utils/interfaces.ts:1961](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1961)
 
 InterfaceQueryOrganizationEventListItem
 
@@ -17,6 +17,20 @@ Extends `InterfaceBaseEvent` with additional properties for an organization even
 - [`InterfaceBaseEvent`](InterfaceBaseEvent.md)
 
 ## Properties
+
+### \_id
+
+> **\_id**: `string`
+
+Defined in: [src/utils/interfaces.ts:425](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L425)
+
+The unique identifier of the event.
+
+#### Inherited from
+
+[`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`_id`](InterfaceBaseEvent.md#_id)
+
+***
 
 ### allDay
 
@@ -74,25 +88,11 @@ The end time of the event.
 
 ***
 
-### id
-
-> **id**: `string`
-
-Defined in: [src/utils/interfaces.ts:425](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L425)
-
-The unique identifier of the event.
-
-#### Inherited from
-
-[`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`id`](InterfaceBaseEvent.md#id)
-
-***
-
 ### isPublic
 
 > **isPublic**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1924](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1924)
+Defined in: [src/utils/interfaces.ts:1963](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1963)
 
 Indicates if the event is public.
 
@@ -102,7 +102,7 @@ Indicates if the event is public.
 
 > **isRegisterable**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1925](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1925)
+Defined in: [src/utils/interfaces.ts:1964](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1964)
 
 Indicates if the event is registerable.
 

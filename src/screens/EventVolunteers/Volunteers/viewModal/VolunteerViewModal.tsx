@@ -6,13 +6,11 @@
  * The modal is styled using custom CSS classes and leverages
  * Material-UI and React-Bootstrap components for UI elements.
  *
- * @component
- * @param {InterfaceVolunteerViewModal} props - The props for the component.
- * @param {boolean} props.isOpen - Determines whether the modal is visible.
- * @param {() => void} props.hide - Function to close the modal.
- * @param {InterfaceEventVolunteerInfo} props.volunteer - The volunteer's information.
+ * @param isOpen - Determines whether the modal is visible.
+ * @param hide - Function to close the modal.
+ * @param volunteer - The volunteer's information.
  *
- * @returns {React.FC} A React functional component.
+ * @returns JSX.Element - The rendered modal component.
  *
  * @remarks
  * - The modal displays the volunteer's name and avatar. If an avatar is not available,
@@ -21,7 +19,7 @@
  *   accepted or are pending.
  * - The number of hours volunteered by the volunteer is also displayed.
  *
- * @dependencies
+ * dependencies
  * - `react-bootstrap` for modal and form components.
  * - `@mui/material` for Material-UI components like `TextField`.
  * - `react-i18next` for internationalization.
@@ -40,9 +38,10 @@
  * />
  * ```
  */
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './VolunteerViewModal.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -56,7 +55,7 @@ import {
   TableRow,
   TextField,
 } from '@mui/material';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import { HistoryToggleOff, TaskAlt, Cancel } from '@mui/icons-material';
 
 export interface InterfaceVolunteerViewModal {
@@ -75,44 +74,75 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
 
   const { user, volunteerStatus, hoursVolunteered, groups } = volunteer;
 
+  /**
+   * Returns the status configuration based on volunteer status.
+   * @param status - The volunteer's status ('accepted', 'rejected', or 'pending').
+   * @returns An object containing the label, icon, and className for the status.
+   */
+  const getStatusConfig = (
+    status: string,
+  ): { label: string; icon: React.ReactNode; className: string } => {
+    switch (status) {
+      case 'accepted':
+        return {
+          label: t('accepted'),
+          icon: <TaskAlt color="success" className={styles.statusIcon} />,
+          className: styles.acceptedStatus,
+        };
+      case 'rejected':
+        return {
+          label: t('rejected'),
+          icon: <Cancel color="error" className={styles.statusIcon} />,
+          className: styles.rejectedStatus,
+        };
+      default:
+        return {
+          label: tCommon('pending'),
+          icon: (
+            <HistoryToggleOff color="warning" className={styles.statusIcon} />
+          ),
+          className: styles.pendingStatus,
+        };
+    }
+  };
+
+  const statusConfig = getStatusConfig(volunteerStatus);
+
   return (
-    <Modal className={styles.volunteerViewModal} onHide={hide} show={isOpen}>
-      <Modal.Header>
+    <BaseModal
+      className={styles.volunteerViewModal}
+      onHide={hide}
+      show={isOpen}
+      headerContent={
         <p className={styles.modalTitle}>{t('volunteerDetails')}</p>
-        <Button
-          variant="danger"
-          onClick={hide}
-          className={styles.modalCloseButton}
-          data-testid="modalCloseBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-      </Modal.Header>
-      <Modal.Body>
-        <Form className={styles.modalForm}>
-          {/* Volunteer Name & Avatar */}
-          <Form.Group className={styles.formGroup}>
-            <FormControl fullWidth>
-              <TextField
-                label={t('volunteer')}
-                variant="outlined"
-                className={styles.noOutline}
-                value={user.name}
-                disabled
-                InputProps={{
+      }
+      dataTestId="volunteerViewModal"
+    >
+      <Form className={styles.modalForm}>
+        {/* Volunteer Name & Avatar */}
+        <Form.Group className={styles.formGroup}>
+          <FormControl fullWidth>
+            <TextField
+              label={t('volunteer')}
+              variant="outlined"
+              className={styles.noOutline}
+              value={user.name}
+              disabled
+              slotProps={{
+                input: {
                   startAdornment: (
                     <>
                       {user.avatarURL ? (
                         <img
                           src={user.avatarURL}
-                          alt="Volunteer"
+                          alt={t('volunteer')}
                           data-testid="volunteer_image"
                           className={styles.tableImage}
                         />
                       ) : (
                         <div className={styles.avatarContainer}>
                           <Avatar
-                            key={user.id + '1'}
+                            key={`${user.id}-avatar`}
                             containerStyle={styles.imageContainer}
                             avatarStyle={styles.tableImage}
                             dataTestId="volunteer_avatar"
@@ -123,106 +153,84 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                       )}
                     </>
                   ),
-                }}
-              />
-            </FormControl>
-          </Form.Group>
-          {/* Status and hours volunteered */}
-          <Form.Group className={styles.statusGroup}>
-            <TextField
-              label={t('status')}
-              fullWidth
-              value={
-                volunteerStatus === 'accepted'
-                  ? t('accepted')
-                  : volunteerStatus === 'rejected'
-                    ? t('rejected')
-                    : tCommon('pending')
-              }
-              InputProps={{
-                startAdornment: (
-                  <>
-                    {volunteerStatus === 'accepted' ? (
-                      <TaskAlt color="success" className={styles.statusIcon} />
-                    ) : volunteerStatus === 'rejected' ? (
-                      <Cancel color="error" className={styles.statusIcon} />
-                    ) : (
-                      <HistoryToggleOff
-                        color="warning"
-                        className={styles.statusIcon}
-                      />
-                    )}
-                  </>
-                ),
-                className:
-                  volunteerStatus === 'accepted'
-                    ? styles.acceptedStatus
-                    : volunteerStatus === 'rejected'
-                      ? styles.rejectedStatus
-                      : styles.pendingStatus,
+                },
               }}
-              disabled
             />
+          </FormControl>
+        </Form.Group>
+        {/* Status and hours volunteered */}
+        <Form.Group className={styles.statusGroup}>
+          <TextField
+            label={t('status')}
+            fullWidth
+            value={statusConfig.label}
+            slotProps={{
+              input: {
+                startAdornment: statusConfig.icon,
+                className: statusConfig.className,
+              },
+            }}
+            disabled
+          />
 
-            <TextField
-              label={t('hoursVolunteered')}
+          <TextField
+            label={t('hoursVolunteered')}
+            variant="outlined"
+            className={`${styles.noOutline} ${styles.hoursField}`}
+            value={hoursVolunteered ?? '-'}
+            disabled
+          />
+        </Form.Group>
+        {/* Table for Associated Volunteer Groups */}
+        {groups && groups.length > 0 && (
+          <Form.Group>
+            <Form.Label className={styles.groupsLabel}>
+              {t('volunteerGroups')}
+            </Form.Label>
+
+            <TableContainer
+              component={Paper}
               variant="outlined"
-              className={`${styles.noOutline} ${styles.hoursField}`}
-              value={hoursVolunteered ?? '-'}
-              disabled
-            />
+              className={styles.modalTable}
+            >
+              <Table aria-label={t('groupTable')}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell className={styles.tableHeader}>
+                      {tCommon('serialNumber')}
+                    </TableCell>
+                    <TableCell className={styles.tableHeader}>
+                      {t('group')}
+                    </TableCell>
+                    <TableCell className={styles.tableHeader} align="center">
+                      {t('numVolunteersHeader')}
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {groups.map((group, index) => {
+                    const { id, name, volunteers } = group;
+                    return (
+                      <TableRow key={id} className={styles.tableRow}>
+                        <TableCell component="th" scope="row">
+                          {index + 1}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          {name}
+                        </TableCell>
+                        <TableCell align="center">
+                          {volunteers?.length || 0}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Form.Group>
-          {/* Table for Associated Volunteer Groups */}
-          {groups && groups.length > 0 && (
-            <Form.Group>
-              <Form.Label className={styles.groupsLabel}>
-                Volunteer Groups Joined
-              </Form.Label>
-
-              <TableContainer
-                component={Paper}
-                variant="outlined"
-                className={styles.modalTable}
-              >
-                <Table aria-label="group table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell className={styles.tableHeader}>
-                        Sr. No.
-                      </TableCell>
-                      <TableCell className={styles.tableHeader}>
-                        Group Name
-                      </TableCell>
-                      <TableCell className={styles.tableHeader} align="center">
-                        No. of Members
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {groups.map((group, index) => {
-                      const { id, name, volunteers } = group;
-                      return (
-                        <TableRow key={id} className={styles.tableRow}>
-                          <TableCell component="th" scope="row">
-                            {index + 1}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {name}
-                          </TableCell>
-                          <TableCell align="center">
-                            {volunteers?.length || 0}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Form.Group>
-          )}
-        </Form>
-      </Modal.Body>
-    </Modal>
+        )}
+      </Form>
+    </BaseModal>
   );
 };
 

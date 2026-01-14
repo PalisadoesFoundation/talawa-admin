@@ -77,13 +77,13 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
     cookies.get('i18next') || 'en',
   );
 
-  const { getItem } = useLocalStorage();
+  const { getItem, clearAllItems } = useLocalStorage();
 
   /**
    * Handles user logout by clearing local storage and redirecting to the home page.
    */
   const handleLogout = async (): Promise<void> => {
-    localStorage.clear();
+    clearAllItems();
     window.location.replace('/');
   };
 
@@ -104,7 +104,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
           <img
             className={styles.talawaImage}
             src={TalawaImage}
-            alt="Talawa Branding"
+            alt={t('talawaBranding')}
           />
           <b>{organizationDetails.name}</b>
         </Navbar.Brand>
@@ -116,7 +116,7 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
           className={styles.offcanvasContainer}
         >
           <Offcanvas.Header closeButton>
-            <Offcanvas.Title>Talawa</Offcanvas.Title>
+            <Offcanvas.Title>{t('talawa')}</Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="me-auto flex-grow-1 pe-3 pt-1" variant="dark">

@@ -18,25 +18,27 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18n from 'utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from '../Volunteers.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceVolunteerCreateModal } from './VolunteerCreateModal';
 import VolunteerCreateModal from './VolunteerCreateModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 
 /**
- * Mock implementation of the `react-toastify` module.
- * Mocks the `toast` object with `success` and `error` methods to allow testing
+ * Mock implementation of the `NotificationToast` module.
+ * Mocks the `NotificationToast` object with `success` and `error` methods to allow testing
  * without triggering actual toast notifications.
  */
 
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: toastMocks,
 }));
 
 const link1 = new StaticMockLink(MOCKS);
@@ -108,7 +110,7 @@ describe('Testing VolunteerCreateModal', () => {
     await userEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(t.volunteerAdded);
+      expect(NotificationToast.success).toHaveBeenCalledWith(t.volunteerAdded);
       expect(itemProps[0].refetchVolunteers).toHaveBeenCalled();
       expect(itemProps[0].hide).toHaveBeenCalled();
     });
@@ -133,7 +135,7 @@ describe('Testing VolunteerCreateModal', () => {
     await userEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -198,7 +200,9 @@ describe('Testing VolunteerCreateModal', () => {
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(t.volunteerAdded);
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.volunteerAdded,
+        );
         expect(recurringEventProps.refetchVolunteers).toHaveBeenCalled();
         expect(recurringEventProps.hide).toHaveBeenCalled();
       });
@@ -226,7 +230,9 @@ describe('Testing VolunteerCreateModal', () => {
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(t.volunteerAdded);
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.volunteerAdded,
+        );
         expect(recurringEventProps.refetchVolunteers).toHaveBeenCalled();
         expect(recurringEventProps.hide).toHaveBeenCalled();
       });
@@ -247,7 +253,7 @@ describe('Testing VolunteerCreateModal', () => {
 
       // This test verifies the eventId logic: baseEvent?.id || eventId
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalled();
       });
     });
 
@@ -312,7 +318,7 @@ describe('Testing VolunteerCreateModal', () => {
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalled();
         // After successful submission, applyTo should reset to 'series'
         // This is tested indirectly through the code path
       });

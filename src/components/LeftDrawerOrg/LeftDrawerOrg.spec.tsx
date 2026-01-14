@@ -1,21 +1,23 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
-import { MemoryRouter } from 'react-router';
+import { MemoryRouter } from 'react-router-dom';
 import React from 'react';
 import type { IDrawerExtension } from 'plugin/types';
 import LeftDrawerOrg from './LeftDrawerOrg';
 import type { ILeftDrawerProps } from './LeftDrawerOrg';
-import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 
 // Type definitions for better type safety
 interface IMockedResponse {
   request: {
-    query: typeof GET_ORGANIZATION_DATA_PG;
+    query: typeof GET_ORGANIZATION_BASIC_DATA;
     variables: {
       id: string;
-      first: number;
-      after: null;
     };
   };
   result?: {
@@ -32,17 +34,8 @@ interface IMockedResponse {
         countryCode: string;
         avatarURL: string | null;
         createdAt: string;
-        updatedAt: string;
-        creator: {
-          id: string;
-          name: string;
-          emailAddress: string;
-        };
-        updater: {
-          id: string;
-          name: string;
-          emailAddress: string;
-        };
+        isUserRegistrationRequired: boolean;
+        __typename: string;
       };
     };
   };
@@ -120,7 +113,7 @@ vi.mock('components/IconComponent/IconComponent', () => ({
   )),
 }));
 
-vi.mock('components/Avatar/Avatar', () => ({
+vi.mock('shared-components/Avatar/Avatar', () => ({
   default: vi.fn(({ name, alt }) => (
     <div data-testid="avatar" data-name={name} data-alt={alt}>
       Avatar: {name}
@@ -212,18 +205,9 @@ const mockOrganizationData = {
     postalCode: '12345',
     countryCode: 'US',
     avatarURL: 'https://example.com/avatar.jpg',
-    createdAt: '2023-01-01T00:00:00Z',
-    updatedAt: '2023-01-02T00:00:00Z',
-    creator: {
-      id: 'creator-123',
-      name: 'Creator Name',
-      emailAddress: 'creator@example.com',
-    },
-    updater: {
-      id: 'updater-123',
-      name: 'Updater Name',
-      emailAddress: 'updater@example.com',
-    },
+    createdAt: dayjs.utc().toISOString(),
+    isUserRegistrationRequired: false,
+    __typename: 'Organization',
   },
 };
 
@@ -244,8 +228,8 @@ const mockOrganizationDataWithoutCity = {
 const successMocks: IMockedResponse[] = [
   {
     request: {
-      query: GET_ORGANIZATION_DATA_PG,
-      variables: { id: 'org-123', first: 10, after: null },
+      query: GET_ORGANIZATION_BASIC_DATA,
+      variables: { id: 'org-123' },
     },
     result: {
       data: mockOrganizationData,
@@ -256,8 +240,8 @@ const successMocks: IMockedResponse[] = [
 const loadingMocks: IMockedResponse[] = [
   {
     request: {
-      query: GET_ORGANIZATION_DATA_PG,
-      variables: { id: 'org-123', first: 10, after: null },
+      query: GET_ORGANIZATION_BASIC_DATA,
+      variables: { id: 'org-123' },
     },
     delay: 30000, // Never resolve to simulate loading
   },
@@ -266,8 +250,8 @@ const loadingMocks: IMockedResponse[] = [
 const errorMocks: IMockedResponse[] = [
   {
     request: {
-      query: GET_ORGANIZATION_DATA_PG,
-      variables: { id: 'org-123', first: 10, after: null },
+      query: GET_ORGANIZATION_BASIC_DATA,
+      variables: { id: 'org-123' },
     },
     error: new Error('Failed to fetch organization'),
   },
@@ -406,8 +390,8 @@ describe('LeftDrawerOrg', () => {
       const mocksWithoutAvatar: IMockedResponse[] = [
         {
           request: {
-            query: GET_ORGANIZATION_DATA_PG,
-            variables: { id: 'org-123', first: 10, after: null },
+            query: GET_ORGANIZATION_BASIC_DATA,
+            variables: { id: 'org-123' },
           },
           result: {
             data: mockOrganizationDataWithoutAvatar,
@@ -431,8 +415,8 @@ describe('LeftDrawerOrg', () => {
       const mocksWithoutCity: IMockedResponse[] = [
         {
           request: {
-            query: GET_ORGANIZATION_DATA_PG,
-            variables: { id: 'org-123', first: 10, after: null },
+            query: GET_ORGANIZATION_BASIC_DATA,
+            variables: { id: 'org-123' },
           },
           result: {
             data: mockOrganizationDataWithoutCity,
@@ -560,15 +544,15 @@ describe('LeftDrawerOrg', () => {
     it('should apply active styles when on corresponding route', () => {
       renderComponent({}, successMocks, '/orgpeople/org-123');
 
-      const membersButton = screen.getByText('Members').closest('button');
-      expect(membersButton).toHaveClass('leftDrawerActiveButton');
+      const membersLink = screen.getByText('Members').closest('a');
+      expect(membersLink).toHaveClass('leftDrawerActiveButton');
     });
 
     it('should apply inactive styles when not on corresponding route', () => {
       renderComponent({}, successMocks, '/orgdash/org-123');
 
-      const membersButton = screen.getByText('Members').closest('button');
-      expect(membersButton).toHaveClass('leftDrawerInactiveButton');
+      const membersLink = screen.getByText('Members').closest('a');
+      expect(membersLink).toHaveClass('leftDrawerInactiveButton');
     });
 
     it('should render icon components with correct props', () => {
@@ -775,17 +759,17 @@ describe('LeftDrawerOrg', () => {
     expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
   });
 
-  it('should toggle drawer state and update localStorage on click and keydown events', () => {
+  it('should toggle drawer state and update localStorage on click events', () => {
     // Test with initial hideDrawer = false
     const { unmount: unmount1 } = renderComponent({ hideDrawer: false });
 
     const toggleButton = screen.getByTestId('toggleBtn');
     expect(toggleButton).toBeInTheDocument();
 
-    // Test onClick functionality
+    // Test onClick functionality - clicking when drawer is visible should hide it
     fireEvent.click(toggleButton);
 
-    expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'true');
+    expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
     expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
 
     // Clear mocks and unmount previous component
@@ -797,40 +781,11 @@ describe('LeftDrawerOrg', () => {
     const { unmount: unmount2 } = renderComponent({ hideDrawer: true });
     const toggleButtonCollapsed = screen.getByTestId('toggleBtn');
 
-    // Test onClick when drawer is hidden
+    // Test onClick when drawer is hidden - clicking should show it
     fireEvent.click(toggleButtonCollapsed);
 
-    expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'false');
+    expect(mockSetItem).toHaveBeenCalledWith('sidebar', false);
     expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
-
-    // Clear mocks for keydown tests
-    mockSetItem.mockClear();
-    mockSetHideDrawer.mockClear();
-
-    // Test onKeyDown with Enter key
-    fireEvent.keyDown(toggleButtonCollapsed, { key: 'Enter' });
-
-    expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'false');
-    expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
-
-    // Clear mocks
-    mockSetItem.mockClear();
-    mockSetHideDrawer.mockClear();
-
-    // Test onKeyDown with Space key
-    fireEvent.keyDown(toggleButtonCollapsed, { key: ' ' });
-
-    expect(mockSetItem).toHaveBeenCalledWith('sidebar', 'false');
-    expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
-
-    // Test that other keys don't trigger the toggle
-    mockSetItem.mockClear();
-    mockSetHideDrawer.mockClear();
-
-    fireEvent.keyDown(toggleButtonCollapsed, { key: 'Escape' });
-
-    expect(mockSetItem).not.toHaveBeenCalled();
-    expect(mockSetHideDrawer).not.toHaveBeenCalled();
 
     unmount2();
   });
@@ -933,8 +888,6 @@ describe('LeftDrawerOrg', () => {
       // The query should be called with correct variables
       expect(successMocks[0].request.variables).toEqual({
         id: 'org-123',
-        first: 10,
-        after: null,
       });
     });
 
@@ -942,8 +895,8 @@ describe('LeftDrawerOrg', () => {
       const differentOrgMocks: IMockedResponse[] = [
         {
           request: {
-            query: GET_ORGANIZATION_DATA_PG,
-            variables: { id: 'different-org', first: 10, after: null },
+            query: GET_ORGANIZATION_BASIC_DATA,
+            variables: { id: 'different-org' },
           },
           result: {
             data: {

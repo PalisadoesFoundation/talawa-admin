@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import {
   UPDATE_VOLUNTEER_GROUP,
   UPDATE_VOLUNTEER_MEMBERSHIP,
@@ -13,36 +14,15 @@ const group1 = {
   name: 'Group 1',
   description: 'Volunteer Group Description',
   volunteersRequired: null,
-  createdAt: '2024-10-25T16:16:32.978Z',
-  creator: {
-    __typename: 'User',
-    id: 'creatorId1',
-    name: 'Wilt Shepherd',
-    avatarURL: null,
-  },
+  createdAt: dayjs().toISOString(),
   leader: {
     __typename: 'User',
     id: 'userId',
     name: 'Teresa Bradley',
-    avatarURL: 'img-url',
+    avatarURL: null,
   },
-  volunteers: [
-    {
-      __typename: 'Volunteer',
-      id: 'volunteerId1',
-      hasAccepted: false,
-      user: {
-        __typename: 'User',
-        id: 'userId',
-        name: 'Teresa Bradley',
-        avatarURL: null,
-      },
-    },
-  ],
-  event: {
-    __typename: 'Event',
-    id: 'eventId1',
-  },
+  volunteers: [],
+  event: { __typename: 'Event', id: 'eventId1' },
 };
 
 const group2 = {
@@ -51,118 +31,29 @@ const group2 = {
   name: 'Group 2',
   description: 'Volunteer Group Description',
   volunteersRequired: null,
-  createdAt: '2024-10-27T15:25:13.044Z',
-  creator: {
-    __typename: 'User',
-    id: 'creatorId2',
-    name: 'Wilt Shepherd',
-    avatarURL: null,
-  },
+  createdAt: dayjs().toISOString(),
   leader: {
     __typename: 'User',
     id: 'userId',
     name: 'Teresa Bradley',
     avatarURL: null,
   },
-  volunteers: [
-    {
-      __typename: 'Volunteer',
-      id: 'volunteerId2',
-      hasAccepted: false,
-      user: {
-        __typename: 'User',
-        id: 'userId',
-        name: 'Teresa Bradley',
-        avatarURL: null,
-      },
-    },
-  ],
-  event: {
-    __typename: 'Event',
-    id: 'eventId2',
-  },
-};
-
-const group3 = {
-  __typename: 'EventVolunteerGroup',
-  id: 'groupId3',
-  name: 'Group 3',
-  description: 'Volunteer Group Description',
-  volunteersRequired: null,
-  createdAt: '2024-10-27T15:34:15.889Z',
-  creator: {
-    __typename: 'User',
-    id: 'creatorId3',
-    name: 'Wilt Shepherd',
-    avatarURL: null,
-  },
-  leader: {
-    __typename: 'User',
-    id: 'userId1',
-    name: 'Bruce Garza',
-    avatarURL: null,
-  },
-  volunteers: [
-    {
-      __typename: 'Volunteer',
-      id: 'volunteerId3',
-      hasAccepted: false,
-      user: {
-        __typename: 'User',
-        id: 'userId',
-        name: 'Teresa Bradley',
-        avatarURL: null,
-      },
-    },
-  ],
-  event: {
-    __typename: 'Event',
-    id: 'eventId3',
-  },
+  volunteers: [],
+  event: { __typename: 'Event', id: 'eventId2' },
 };
 
 const membership1 = {
   __typename: 'VolunteerMembership',
   id: 'membershipId1',
   status: 'requested',
-  createdAt: '2024-10-29T10:18:05.851Z',
-  updatedAt: '2024-10-29T10:18:05.851Z',
-  event: {
-    __typename: 'Event',
-    id: 'eventId',
-    name: 'Event 1',
-    startAt: '2044-10-31',
-    endAt: '2044-10-31',
-    recurrenceRule: null,
-  },
   volunteer: {
-    __typename: 'Volunteer',
-    id: 'volunteerId1',
-    hasAccepted: false,
-    hoursVolunteered: 0,
+    __typename: 'EventVolunteer',
     user: {
       __typename: 'User',
       id: 'userId1',
       name: 'John Doe',
-      emailAddress: 'john@example.com',
-      avatarURL: 'img-url',
+      avatarURL: null,
     },
-  },
-  group: {
-    __typename: 'EventVolunteerGroup',
-    id: 'groupId',
-    name: 'Group 1',
-    description: 'Group 1 description',
-  },
-  createdBy: {
-    __typename: 'User',
-    id: 'adminId',
-    name: 'Admin User',
-  },
-  updatedBy: {
-    __typename: 'User',
-    id: 'adminId',
-    name: 'Admin User',
   },
 };
 
@@ -170,44 +61,14 @@ const membership2 = {
   __typename: 'VolunteerMembership',
   id: 'membershipId2',
   status: 'requested',
-  createdAt: '2024-10-29T10:18:05.851Z',
-  updatedAt: '2024-10-29T10:18:05.851Z',
-  event: {
-    __typename: 'Event',
-    id: 'eventId',
-    name: 'Event 1',
-    startAt: '2044-10-31',
-    endAt: '2044-10-31',
-    recurrenceRule: null,
-  },
   volunteer: {
-    __typename: 'Volunteer',
-    id: 'volunteerId2',
-    hasAccepted: false,
-    hoursVolunteered: 0,
+    __typename: 'EventVolunteer',
     user: {
       __typename: 'User',
       id: 'userId2',
       name: 'Teresa Bradley',
-      emailAddress: 'teresa@example.com',
       avatarURL: null,
     },
-  },
-  group: {
-    __typename: 'EventVolunteerGroup',
-    id: 'groupId',
-    name: 'Group 2',
-    description: 'Group 2 description',
-  },
-  createdBy: {
-    __typename: 'User',
-    id: 'adminId',
-    name: 'Admin User',
-  },
-  updatedBy: {
-    __typename: 'User',
-    id: 'adminId',
-    name: 'Admin User',
   },
 };
 
@@ -217,53 +78,13 @@ export const MOCKS = [
       query: EVENT_VOLUNTEER_GROUP_LIST,
       variables: {
         where: {
-          eventId: undefined,
-          userId: 'userId',
           orgId: 'orgId',
+          userId: 'userId',
+          eventId: undefined,
           leaderName: undefined,
           name_contains: '',
         },
         orderBy: null,
-      },
-    },
-    result: {
-      data: {
-        getEventVolunteerGroups: [group1, group2, group3],
-      },
-    },
-  },
-  {
-    request: {
-      query: EVENT_VOLUNTEER_GROUP_LIST,
-      variables: {
-        where: {
-          eventId: undefined,
-          userId: 'userId',
-          orgId: 'orgId',
-          leaderName: 'Bruce',
-          name_contains: undefined,
-        },
-        orderBy: null,
-      },
-    },
-    result: {
-      data: {
-        getEventVolunteerGroups: [group3],
-      },
-    },
-  },
-  {
-    request: {
-      query: EVENT_VOLUNTEER_GROUP_LIST,
-      variables: {
-        where: {
-          eventId: undefined,
-          userId: 'userId',
-          orgId: 'orgId',
-          leaderName: undefined,
-          name_contains: '',
-        },
-        orderBy: 'volunteers_DESC',
       },
     },
     result: {
@@ -277,38 +98,18 @@ export const MOCKS = [
       query: EVENT_VOLUNTEER_GROUP_LIST,
       variables: {
         where: {
-          eventId: undefined,
-          userId: 'userId',
           orgId: 'orgId',
-          leaderName: undefined,
-          name_contains: '',
-        },
-        orderBy: 'volunteers_ASC',
-      },
-    },
-    result: {
-      data: {
-        getEventVolunteerGroups: [group2, group1],
-      },
-    },
-  },
-  {
-    request: {
-      query: EVENT_VOLUNTEER_GROUP_LIST,
-      variables: {
-        where: {
-          eventId: undefined,
           userId: 'userId',
-          orgId: 'orgId',
+          eventId: undefined,
           leaderName: undefined,
-          name_contains: '1',
+          name_contains: 'Group 1',
         },
         orderBy: null,
       },
     },
     result: {
       data: {
-        getEventVolunteerGroups: [group3],
+        getEventVolunteerGroups: [group1],
       },
     },
   },
@@ -343,27 +144,6 @@ export const MOCKS = [
           __typename: 'VolunteerMembership',
           id: 'membershipId1',
           status: 'accepted',
-          updatedAt: '2024-10-29T10:20:05.851Z',
-          volunteer: {
-            __typename: 'Volunteer',
-            id: 'volunteerId1',
-            hasAccepted: false,
-            user: {
-              __typename: 'User',
-              id: 'userId1',
-              name: 'John Doe',
-            },
-          },
-          event: {
-            __typename: 'Event',
-            id: 'eventId',
-            name: 'Event 1',
-          },
-          updatedBy: {
-            __typename: 'User',
-            id: 'adminId',
-            name: 'Admin User',
-          },
         },
       },
     },
@@ -382,27 +162,6 @@ export const MOCKS = [
           __typename: 'VolunteerMembership',
           id: 'membershipId1',
           status: 'rejected',
-          updatedAt: '2024-10-29T10:20:05.851Z',
-          volunteer: {
-            __typename: 'Volunteer',
-            id: 'volunteerId1',
-            hasAccepted: false,
-            user: {
-              __typename: 'User',
-              id: 'userId1',
-              name: 'John Doe',
-            },
-          },
-          event: {
-            __typename: 'Event',
-            id: 'eventId',
-            name: 'Event 1',
-          },
-          updatedBy: {
-            __typename: 'User',
-            id: 'adminId',
-            name: 'Admin User',
-          },
         },
       },
     },
@@ -413,10 +172,10 @@ export const MOCKS = [
       variables: {
         id: 'groupId',
         data: {
-          eventId: 'eventId',
           name: 'Group 2',
           description: 'desc new',
           volunteersRequired: 10,
+          eventId: 'eventId',
         },
       },
     },
@@ -447,64 +206,6 @@ export const MOCKS = [
         },
       },
     },
-  },
-];
-
-export const EMPTY_MOCKS = [
-  {
-    request: {
-      query: EVENT_VOLUNTEER_GROUP_LIST,
-      variables: {
-        where: {
-          eventId: undefined,
-          userId: 'userId',
-          orgId: 'orgId',
-          leaderName: undefined,
-          name_contains: '',
-        },
-        orderBy: null,
-      },
-    },
-    result: {
-      data: {
-        getEventVolunteerGroups: [],
-      },
-    },
-  },
-  {
-    request: {
-      query: USER_VOLUNTEER_MEMBERSHIP,
-      variables: {
-        where: {
-          eventId: 'eventId',
-          groupId: 'groupId',
-          status: 'requested',
-        },
-      },
-    },
-    result: {
-      data: {
-        getVolunteerMembership: [],
-      },
-    },
-  },
-];
-
-export const ERROR_MOCKS = [
-  {
-    request: {
-      query: EVENT_VOLUNTEER_GROUP_LIST,
-      variables: {
-        where: {
-          userId: 'userId',
-          orgId: 'orgId',
-          leaderName: null,
-          name_contains: '',
-        },
-        orderBy: null,
-      },
-    },
-    error: new Error('Mock Graphql EVENT_VOLUNTEER_GROUP_LIST Error'),
   },
 ];
 
@@ -540,12 +241,10 @@ export const UPDATE_ERROR_MOCKS = [
     request: {
       query: UPDATE_VOLUNTEER_GROUP,
       variables: {
-        id: 'groupId',
+        id: 'groupId1',
         data: {
-          eventId: 'eventId',
-          name: 'Group 2',
-          description: 'desc new',
-          volunteersRequired: 10,
+          name: 'Updated Group',
+          description: 'Updated Description',
         },
       },
     },

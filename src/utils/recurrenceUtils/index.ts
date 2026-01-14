@@ -28,6 +28,10 @@ export {
 // Export utility functions
 export {
   validateRecurrenceInput,
+  getWeekOfMonth,
+  getOrdinalString,
+  getDayName,
+  getMonthlyOptions,
   getRecurrenceRuleText,
   getOrdinalSuffix,
   createDefaultRecurrenceRule,

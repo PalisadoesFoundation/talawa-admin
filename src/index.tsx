@@ -7,32 +7,32 @@ import {
   ApolloProvider,
   InMemoryCache,
   split,
+  Observable,
+  fromPromise,
 } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { onError } from '@apollo/link-error';
 import './assets/css/app.css';
+import './style/tokens/index.css';
 import 'bootstrap/dist/js/bootstrap.min.js'; // Bootstrap JS (ensure Bootstrap is installed)
 import 'react-datepicker/dist/react-datepicker.css'; // React Datepicker Styles
 import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { Provider } from 'react-redux';
-import { ToastContainer, toast } from 'react-toastify';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import App from './App';
 import { store } from './state/store';
-import {
-  BACKEND_URL,
-  REACT_APP_BACKEND_WEBSOCKET_URL,
-} from 'Constant/constant';
-import { ThemeProvider, createTheme } from '@mui/material';
+import { BACKEND_URL, BACKEND_WEBSOCKET_URL } from 'Constant/constant';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import './assets/css/scrollStyles.css';
 import './style/app-fixed.module.css';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 const theme = createTheme({
   palette: {
     primary: {
@@ -45,35 +45,118 @@ const theme = createTheme({
 import useLocalStorage from 'utils/useLocalstorage';
 import i18n from './utils/i18n';
 import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
+import { refreshToken } from 'utils/getRefreshToken';
 
-const { getItem } = useLocalStorage();
+const { getItem, clearAllItems } = useLocalStorage();
+const BEARER_PREFIX = 'Bearer ';
+
+// Track if we're currently refreshing to avoid multiple simultaneous refresh attempts
+let isRefreshing = false;
+let pendingRequests: Array<() => void> = [];
+
+const resolvePendingRequests = (): void => {
+  pendingRequests.forEach((callback) => callback());
+  pendingRequests = [];
+};
+
 const authLink = setContext((_, { headers }) => {
   const lng = i18n.language;
   const token = getItem('token');
+  const authHeaders = token ? { authorization: BEARER_PREFIX + token } : {};
+
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : '',
+      ...authHeaders,
       'Accept-Language': lng,
     },
   };
 });
 
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors) {
-    graphQLErrors.map(({ message }) => {
-      if (message === 'You must be authenticated to perform this action.') {
-        localStorage.clear();
+const errorLink = onError(
+  ({ graphQLErrors, networkError, operation, forward }) => {
+    if (graphQLErrors) {
+      for (const error of graphQLErrors) {
+        const errorCode = error.extensions?.code;
+
+        // Skip token refresh logic for authentication operations (login/signup/logout)
+        const operationName = operation.operationName;
+        const authOperations = ['SignIn', 'SignUp', 'RefreshToken', 'Logout'];
+        if (authOperations.includes(operationName)) {
+          continue;
+        }
+
+        // Check for unauthenticated error (token expired)
+        if (
+          errorCode === 'unauthenticated' ||
+          error.message === 'You must be authenticated to perform this action.'
+        ) {
+          // Check if user is logged in via localStorage flag
+          // (actual tokens are in HTTP-Only cookies)
+          const isLoggedIn = getItem('IsLoggedIn');
+          if (isLoggedIn !== 'TRUE') {
+            return;
+          }
+
+          // If already refreshing, queue this request
+          if (isRefreshing) {
+            return new Observable((observer) => {
+              pendingRequests.push(() => {
+                const subscriber = {
+                  next: observer.next.bind(observer),
+                  error: observer.error.bind(observer),
+                  complete: observer.complete.bind(observer),
+                };
+                forward(operation).subscribe(subscriber);
+              });
+            });
+          }
+
+          isRefreshing = true;
+
+          return fromPromise(
+            refreshToken()
+              .then((success) => {
+                if (success) {
+                  resolvePendingRequests();
+                  return true;
+                } else {
+                  // Refresh failed, clear storage and redirect
+                  clearAllItems();
+                  window.location.href = '/';
+                  return false;
+                }
+              })
+              .catch(() => {
+                clearAllItems();
+                window.location.href = '/';
+                return false;
+              })
+              .finally(() => {
+                isRefreshing = false;
+              }),
+          ).flatMap((success) => {
+            if (success) {
+              // Retry the original request
+              // No need to set headers - HTTP-Only cookies are automatically included
+              return forward(operation);
+            }
+            return new Observable((observer) => {
+              observer.error(error);
+            });
+          });
+        }
       }
-    });
-  } else if (networkError) {
-    console.log(`[Network error]: ${networkError}`);
-    toast.error(
-      'API server unavailable. Check your connection or try again later',
-      { toastId: 'apiServer' },
-    );
-  }
-});
+    }
+
+    if (networkError) {
+      NotificationToast.error(
+        'API server unavailable. Check your connection or try again later',
+        { toastId: 'apiServer' },
+      );
+    }
+  },
+);
 
 const uploadLink = createUploadLink({
   uri: BACKEND_URL,
@@ -84,19 +167,17 @@ const uploadLink = createUploadLink({
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: REACT_APP_BACKEND_WEBSOCKET_URL,
+    url: BACKEND_WEBSOCKET_URL,
     connectionParams: () => {
       const token = getItem('token');
+      const authParams = token ? { authorization: BEARER_PREFIX + token } : {};
       return {
-        authorization: token ? `Bearer ${token}` : '',
+        ...authParams,
         'Accept-Language': i18n.language,
       };
     },
     on: {
-      connected: () => console.log('WebSocket connected'),
-      error: (error) => console.log('WebSocket error:', error),
-      closed: (event) => console.log('WebSocket closed:', event),
-      connecting: () => console.log('WebSocket connecting...'),
+      // WebSocket connection events - debug logs removed for production
     },
   }),
 );
@@ -125,7 +206,7 @@ const splitLink = split(
 // Simplified combined link
 const combinedLink = ApolloLink.from([errorLink, splitLink]);
 
-const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
@@ -183,7 +264,6 @@ root.render(
           <ThemeProvider theme={theme}>
             <Provider store={store}>
               <App />
-              <ToastContainer limit={5} />
             </Provider>
           </ThemeProvider>
         </LocalizationProvider>

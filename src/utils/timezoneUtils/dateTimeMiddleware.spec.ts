@@ -2,8 +2,12 @@ import { requestMiddleware, responseMiddleware } from './dateTimeMiddleware';
 import type { Operation, FetchResult } from '@apollo/client/core';
 import { Observable } from '@apollo/client/core';
 import { gql } from '@apollo/client';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import type { DocumentNode } from 'graphql';
 import { describe, it, expect, vi } from 'vitest';
+
+dayjs.extend(utc);
 
 const DUMMY_QUERY: DocumentNode = gql`
   query GetDummyData {
@@ -23,7 +27,10 @@ describe('Date Time Middleware Tests', () => {
       const operation: Operation = {
         query: DUMMY_QUERY,
         operationName: 'GetDummyData',
-        variables: { startDate: '2023-09-01', startTime: '12:00:00' },
+        variables: {
+          startDate: dayjs().format('YYYY-MM-DD'),
+          startTime: '12:00:00',
+        },
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
@@ -32,7 +39,9 @@ describe('Date Time Middleware Tests', () => {
       const forward = vi.fn(
         (op) =>
           new Observable<FetchResult>((observer) => {
-            expect(op.variables['startDate']).toBe('2023-09-01');
+            expect(op.variables['startDate']).toBe(
+              dayjs().format('YYYY-MM-DD'),
+            );
             expect(op.variables['startTime']).toMatch(
               /\d{2}:\d{2}:\d{2}.\d{3}Z/,
             );
@@ -50,8 +59,9 @@ describe('Date Time Middleware Tests', () => {
 
   describe('Response Middleware', () => {
     it('should convert UTC date and time to local format in response data', () => {
+      const utcDate = dayjs.utc().hour(12).minute(0).second(0).millisecond(0);
       const testResponse: FetchResult = {
-        data: { createdAt: '2023-09-01T12:00:00.000Z' },
+        data: { createdAt: utcDate.toISOString() },
         extensions: {},
         context: {},
       };
@@ -84,9 +94,7 @@ describe('Date Time Middleware Tests', () => {
             }
 
             // Now it's safe to assume response.data exists for the following expectations
-            expect(response.data['createdAt']).not.toBe(
-              '2023-09-01T12:00:00.000Z',
-            );
+            expect(response.data['createdAt']).not.toBe(utcDate.toISOString());
             resolve();
           },
           error: reject,
@@ -177,18 +185,23 @@ describe('Date Time Middleware Tests', () => {
 
   describe('Recursive Date Conversion in Nested Objects', () => {
     it('should recursively convert date and time in deeply nested objects in request middleware', () => {
+      const today = dayjs().format('YYYY-MM-DD');
+      const startDateTime = dayjs()
+        .format('YYYY-MM-DD')
+        .concat('T08:00:00.000Z');
+
       const operation: Operation = {
         query: DUMMY_QUERY,
         operationName: 'GetDummyData',
         variables: {
           event: {
-            startDate: '2023-10-01',
+            startDate: today,
             startTime: '08:00:00',
             details: {
-              endDate: '2023-10-01',
+              endDate: today,
               endTime: '18:00:00',
               additionalInfo: {
-                createdAt: '2023-10-01T08:00:00.000Z',
+                createdAt: startDateTime,
               },
             },
           },
@@ -201,11 +214,11 @@ describe('Date Time Middleware Tests', () => {
       const forward = vi.fn(
         (op) =>
           new Observable<FetchResult>((observer) => {
-            expect(op.variables.event.startDate).toBe('2023-10-01');
+            expect(op.variables.event.startDate).toBe(today);
             expect(op.variables.event.startTime).toMatch(
               /\d{2}:\d{2}:\d{2}.\d{3}Z/,
             );
-            expect(op.variables.event.details.endDate).toBe('2023-10-01');
+            expect(op.variables.event.details.endDate).toBe(today);
             expect(op.variables.event.details.endTime).toMatch(
               /\d{2}:\d{2}:\d{2}.\d{3}Z/,
             );

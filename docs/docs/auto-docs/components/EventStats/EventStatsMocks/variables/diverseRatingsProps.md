@@ -6,7 +6,7 @@
 
 > `const` **diverseRatingsProps**: `object`
 
-Defined in: [src/components/EventStats/EventStatsMocks.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/EventStatsMocks.ts#L71)
+Defined in: [src/components/EventStats/EventStatsMocks.ts:113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventStats/EventStatsMocks.ts#L113)
 
 ## Type Declaration
 

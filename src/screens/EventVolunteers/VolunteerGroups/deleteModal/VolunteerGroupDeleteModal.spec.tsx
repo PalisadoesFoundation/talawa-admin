@@ -1,27 +1,30 @@
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DatePicker';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18n from 'utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from '../modal/VolunteerGroups.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceDeleteVolunteerGroupModal } from './VolunteerGroupDeleteModal';
 import VolunteerGroupDeleteModal from './VolunteerGroupDeleteModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { DELETE_VOLUNTEER_GROUP_FOR_INSTANCE } from 'GraphQl/Mutations/EventVolunteerMutation';
+import dayjs from 'dayjs';
 
 /**
- * Mock implementation of the `react-toastify` module.
- * Mocks the `toast` object with `success` and `error` methods to allow testing
+ * Mock implementation of the `NotificationToast` module.
+ * Mocks the `success` and `error` methods to allow testing
  * without triggering actual toast notifications.
  */
 
@@ -30,8 +33,8 @@ const toastMocks = vi.hoisted(() => ({
   error: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: toastMocks,
 }));
 
 const link1 = new StaticMockLink(MOCKS);
@@ -58,7 +61,7 @@ const itemProps: InterfaceDeleteVolunteerGroupModal[] = [
       volunteersRequired: null,
       isTemplate: true,
       isInstanceException: false,
-      createdAt: '2024-10-25T16:16:32.978Z',
+      createdAt: dayjs().toISOString(),
       creator: {
         id: 'creatorId1',
         name: 'Wilt Shepherd',
@@ -127,7 +130,9 @@ describe('Testing Group Delete Modal', () => {
     await waitFor(() => {
       expect(itemProps[0].refetchGroups).toHaveBeenCalled();
       expect(itemProps[0].hide).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith(t.volunteerGroupDeleted);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.volunteerGroupDeleted,
+      );
     });
   });
 
@@ -156,7 +161,7 @@ describe('Testing Group Delete Modal', () => {
     await userEvent.click(yesBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -217,7 +222,7 @@ describe('Testing Group Delete Modal', () => {
         volunteersRequired: null,
         isTemplate: true,
         isInstanceException: false,
-        createdAt: '2024-10-25T16:16:32.978Z',
+        createdAt: dayjs().toISOString(),
         creator: {
           id: 'creatorId1',
           name: 'Wilt Shepherd',
@@ -251,7 +256,7 @@ describe('Testing Group Delete Modal', () => {
               name: 'Group 1',
               description: 'desc',
               volunteersRequired: null,
-              createdAt: '2024-10-25T16:16:32.978Z',
+              createdAt: dayjs().toISOString(),
               leader: {
                 id: 'userId',
                 name: 'Teresa Bradley',
@@ -287,7 +292,9 @@ describe('Testing Group Delete Modal', () => {
     await waitFor(() => {
       expect(recurringGroupProps.refetchGroups).toHaveBeenCalled();
       expect(recurringGroupProps.hide).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith(t.volunteerGroupDeleted);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.volunteerGroupDeleted,
+      );
     });
   });
 
@@ -316,7 +323,7 @@ describe('Testing Group Delete Modal', () => {
           volunteersRequired: null,
           isTemplate,
           isInstanceException,
-          createdAt: '2024-10-25T16:16:32.978Z',
+          createdAt: dayjs().toISOString(),
           creator: {
             id: 'creatorId1',
             name: 'Wilt Shepherd',

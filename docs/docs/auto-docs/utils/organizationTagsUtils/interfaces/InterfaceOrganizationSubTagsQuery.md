@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationSubTagsQuery
 
-Defined in: [src/utils/organizationTagsUtils.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L89)
+Defined in: [src/utils/organizationTagsUtils.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L102)
 
 ## Extends
 
@@ -16,7 +16,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:89](https://github.com/Palisadoe
 
 > `optional` **data**: `object`
 
-Defined in: [src/utils/organizationTagsUtils.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L91)
+Defined in: [src/utils/organizationTagsUtils.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L104)
 
 #### getChildTags
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:91](https://github.com/Palisadoe
 
 > `optional` **error**: `ApolloError`
 
-Defined in: [src/utils/organizationTagsUtils.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L60)
+Defined in: [src/utils/organizationTagsUtils.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L61)
 
 #### Inherited from
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:60](https://github.com/Palisadoe
 
 > **fetchMore**: (`options`) => `void`
 
-Defined in: [src/utils/organizationTagsUtils.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L94)
+Defined in: [src/utils/organizationTagsUtils.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L107)
 
 #### Parameters
 
@@ -58,7 +58,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:94](https://github.com/Palisadoe
 
 > **loading**: `boolean`
 
-Defined in: [src/utils/organizationTagsUtils.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L59)
+Defined in: [src/utils/organizationTagsUtils.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L60)
 
 #### Inherited from
 
@@ -70,7 +70,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:59](https://github.com/Palisadoe
 
 > `optional` **refetch**: () => `void`
 
-Defined in: [src/utils/organizationTagsUtils.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L61)
+Defined in: [src/utils/organizationTagsUtils.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L62)
 
 #### Returns
 

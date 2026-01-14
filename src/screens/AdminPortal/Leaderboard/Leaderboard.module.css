@@ -1,0 +1,61 @@
+.leaderboardContainer {
+  margin-top: var(--space-7);
+  margin-left: var(--space-3);
+  margin-right: var(--space-3);
+  background-color: var(--rowBackground-bg);
+  padding: var(--space-5);
+  padding-top: var(--space-3);
+  border-radius: 1rem;
+  box-shadow: var(--bs-box-shadow-sm);
+}
+
+.dataGridStyle .MuiDataGrid-root .MuiDataGrid-cell:focus-within {
+  outline: var(--border-2) solid var(--primary-theme-color);
+  outline-offset: calc(var(--space-1) * -1);
+}
+
+.dataGridStyle .MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within {
+  outline: var(--border-2) solid var(--primary-theme-color);
+  outline-offset: calc(var(--space-1) * -1);
+}
+
+.dataGridStyle .MuiDataGrid-row:hover {
+  background-color: var(--bs-secondary-bg);
+}
+
+.dataGridStyle .MuiDataGrid-row.Mui-hovered {
+  background-color: var(--bs-secondary-bg);
+}
+
+.dataGridStyle .MuiDataGrid-root {
+  border-radius: 0.5rem;
+}
+
+.dataGridStyle .MuiDataGrid-main {
+  border-radius: 0.5rem;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.volunteerCell {
+  display: flex;
+  font-weight: var(--font-weight-bold);
+  align-items: center;
+  margin-left: var(--space-6);
+  cursor: pointer;
+}
+
+.emailCell {
+  display: flex;
+  justify-content: center;
+}
+
+.hoursCell {
+  font-weight: var(--font-weight-bold);
+}
+
+.headerSm {
+  font-size: var(--font-size-sm);
+}

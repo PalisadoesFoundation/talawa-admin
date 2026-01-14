@@ -746,3 +746,119 @@ describe('mockSingleLink', () => {
     });
   });
 });
+
+describe('StaticMockLink variableMatcher', () => {
+  const MATCHER_QUERY = gql`
+    query MatcherQuery($id: ID!, $flag: Boolean) {
+      node(id: $id) @include(if: $flag) {
+        id
+      }
+    }
+  `;
+
+  function createMatcherOperation(
+    variables: Record<string, unknown>,
+  ): Operation {
+    return {
+      query: MATCHER_QUERY,
+      variables,
+      operationName: 'MatcherQuery',
+      extensions: {},
+      setContext: () => {},
+      getContext: () => ({}),
+    };
+  }
+
+  function runOperation(
+    link: StaticMockLink,
+    variables: Record<string, unknown>,
+  ): Promise<{ data: { node: { id: string } } }> {
+    return new Promise((resolve, reject) => {
+      const observable = link.request(createMatcherOperation(variables));
+      if (!observable) {
+        reject(new Error('No observable returned from link.request'));
+        return;
+      }
+      observable.subscribe({
+        next: (response) =>
+          resolve(response as { data: { node: { id: string } } }),
+        error: reject,
+      });
+    });
+  }
+
+  test('uses variableMatcher when it returns true', async () => {
+    const link = new StaticMockLink([
+      {
+        request: { query: MATCHER_QUERY },
+        variableMatcher: () => false,
+        result: { data: { node: { id: 'X', __typename: 'Node' } } },
+      } as MockedResponse & {
+        variableMatcher: (v: Record<string, unknown>) => boolean;
+      },
+      {
+        request: { query: MATCHER_QUERY },
+        variableMatcher: (v: Record<string, unknown>) =>
+          v.id === '1' && v.flag === true,
+        result: { data: { node: { id: '1', __typename: 'Node' } } },
+      } as MockedResponse & {
+        variableMatcher: (v: Record<string, unknown>) => boolean;
+      },
+    ]);
+
+    const res = await runOperation(link, { id: '1', flag: true });
+    expect(res.data.node.id).toBe('1');
+  });
+
+  test('falls back to deep-equal when matcher returns false', async () => {
+    const link = new StaticMockLink([
+      {
+        request: {
+          query: MATCHER_QUERY,
+          variables: { id: '2', flag: false },
+        },
+        variableMatcher: () => false,
+        result: { data: { node: { id: '2', __typename: 'Node' } } },
+      } as MockedResponse & {
+        variableMatcher: (v: Record<string, unknown>) => boolean;
+      },
+    ]);
+
+    const res = await runOperation(link, { id: '2', flag: false });
+    expect(res.data.node.id).toBe('2');
+  });
+
+  test('matches by deep-equal when no matcher is present', async () => {
+    const link = new StaticMockLink([
+      {
+        request: {
+          query: MATCHER_QUERY,
+          variables: { id: '3', flag: true },
+        },
+        result: { data: { node: { id: '3', __typename: 'Node' } } },
+      },
+    ]);
+
+    const res = await runOperation(link, { id: '3', flag: true });
+    expect(res.data.node.id).toBe('3');
+  });
+
+  test('variableMatcher takes precedence over variables in request', async () => {
+    // Even though request.variables doesn't match, variableMatcher returns true
+    const link = new StaticMockLink([
+      {
+        request: {
+          query: MATCHER_QUERY,
+          variables: { id: 'wrong', flag: false },
+        },
+        variableMatcher: (v: Record<string, unknown>) => v.id === '4',
+        result: { data: { node: { id: '4', __typename: 'Node' } } },
+      } as MockedResponse & {
+        variableMatcher: (v: Record<string, unknown>) => boolean;
+      },
+    ]);
+
+    const res = await runOperation(link, { id: '4', flag: true });
+    expect(res.data.node.id).toBe('4');
+  });
+});

@@ -47,14 +47,11 @@ export type ComponentType = {
 const components: ComponentType[] = [
   { name: 'My Organizations', comp_id: 'orglist', component: 'OrgList' },
   { name: 'Dashboard', comp_id: 'orgdash', component: 'OrganizationDashboard' },
-  { name: 'People', comp_id: 'orgpeople', component: 'OrganizationPeople' },
-  { name: 'Tags', comp_id: 'orgtags', component: 'OrganizationTags' },
-  { name: 'Events', comp_id: 'orgevents', component: 'OrganizationEvents' },
-  { name: 'Venues', comp_id: 'orgvenues', component: 'OrganizationVenues' },
-
   { name: 'Posts', comp_id: 'orgpost', component: 'OrgPost' },
   { name: 'Chat', comp_id: 'orgchat', component: 'Chat' },
-  { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
+  { name: 'Events', comp_id: 'orgevents', component: 'OrganizationEvents' },
+  { name: 'People', comp_id: 'orgpeople', component: 'OrganizationPeople' },
+  { name: 'Tags', comp_id: 'orgtags', component: 'OrganizationTags' },
   { name: 'Advertisement', comp_id: 'orgads', component: 'Advertisements' },
   { name: 'Funds', comp_id: 'orgfunds', component: 'OrganizationFunds' },
   {
@@ -63,6 +60,8 @@ const components: ComponentType[] = [
     component: 'OrganizationTransactions',
   },
   { name: 'Membership Requests', comp_id: 'requests', component: 'Requests' },
+  { name: 'Block/Unblock', comp_id: 'blockuser', component: 'BlockUser' },
+  { name: 'Venues', comp_id: 'orgvenues', component: 'OrganizationVenues' },
   { name: 'Settings', comp_id: 'orgsetting', component: 'OrgSettings' },
   { name: '', comp_id: 'member', component: 'MemberDetail' },
 ];

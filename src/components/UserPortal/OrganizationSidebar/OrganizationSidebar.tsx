@@ -48,7 +48,7 @@ import type {
   InterfaceMemberInfo,
 } from 'utils/interfaces';
 
-export default function organizationSidebar(): JSX.Element {
+export default function OrganizationSidebar(): JSX.Element {
   // Translation functions for different namespaces
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationSidebar',
@@ -173,7 +173,7 @@ export default function organizationSidebar(): JSX.Element {
             events.map((event: InterfaceQueryOrganizationEventListItem) => {
               return (
                 <ListGroup.Item
-                  key={event.id}
+                  key={event._id}
                   action
                   className={`${styles.rounded} ${styles.colorLight} my-1`}
                 >

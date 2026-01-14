@@ -1,7 +1,9 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -118,12 +120,18 @@ describe('Testing Volunteers Screen', () => {
 
   it('should render Volunteers screen', async () => {
     renderVolunteers(link1);
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
   });
 
   it('Check Sorting Functionality', async () => {
     renderVolunteers(link1);
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
@@ -181,16 +189,25 @@ describe('Testing Volunteers Screen', () => {
     // Also check for Rejected status chip (volunteer3)
     const rejectedChip = await screen.findByText('Rejected');
     expect(rejectedChip).toBeInTheDocument();
+
+    // Verify dataTestId attribute is properly applied to StatusBadge components
+    const statusChips = screen.getAllByTestId('statusChip');
+    expect(statusChips).toHaveLength(3); // 3 volunteers with different statuses
   });
 
   it('Filter Volunteers by status (All)', async () => {
     renderVolunteers(link1);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
 
     const filterBtn = await screen.findByTestId('filter');
     expect(filterBtn).toBeInTheDocument();
 
     // Filter by All
     fireEvent.click(filterBtn);
+
     await waitFor(() => {
       expect(screen.getByTestId('all')).toBeInTheDocument();
     });
@@ -202,12 +219,15 @@ describe('Testing Volunteers Screen', () => {
 
   it('Filter Volunteers by status (Pending)', async () => {
     renderVolunteers(link1);
-
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
     const filterBtn = await screen.findByTestId('filter');
     expect(filterBtn).toBeInTheDocument();
 
     // Filter by Pending
     fireEvent.click(filterBtn);
+
     await waitFor(() => {
       expect(screen.getByTestId('pending')).toBeInTheDocument();
     });
@@ -219,12 +239,15 @@ describe('Testing Volunteers Screen', () => {
 
   it('Filter Volunteers by status (Accepted)', async () => {
     renderVolunteers(link1);
-
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
     const filterBtn = await screen.findByTestId('filter');
     expect(filterBtn).toBeInTheDocument();
 
     // Filter by Accepted
     fireEvent.click(filterBtn);
+
     await waitFor(() => {
       expect(screen.getByTestId('accepted')).toBeInTheDocument();
     });
@@ -236,20 +259,31 @@ describe('Testing Volunteers Screen', () => {
 
   it('Search by pressing Enter key', async () => {
     renderVolunteers(link1);
+
+    // Wait for LoadingState to complete (if needed)
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
+
+    // Get element (findBy already waits)
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
-    // Type and press Enter to trigger debouncedSearch
+    // Perform interactions OUTSIDE waitFor
     await userEvent.type(searchInput, 'T');
     await userEvent.keyboard('{Enter}');
     await debounceWait();
 
+    // Assert results
     const volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');
   });
 
   it('Search by clicking search button', async () => {
     renderVolunteers(link1);
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
     const searchInput = await screen.findByTestId('searchBy');
     const searchBtn = await screen.findByTestId('searchBtn');
     expect(searchInput).toBeInTheDocument();
@@ -270,13 +304,39 @@ describe('Testing Volunteers Screen', () => {
     expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');
   });
 
-  it('should render screen with No Volunteers', async () => {
-    renderVolunteers(link3);
+  it('renders avatar image when user has avatarURL (img-url)', async () => {
+    renderVolunteers(link1);
 
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
-      expect(screen.getByText(t.noVolunteers)).toBeInTheDocument();
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
+    expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+
+    // Find volunteer names to ensure DataGrid cells are rendered
+    const volunteerNames = await screen.findAllByTestId('volunteerName');
+    expect(volunteerNames.length).toBeGreaterThanOrEqual(2);
+
+    // Force a re-render/update to ensure all cells are painted
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+
+    await waitFor(() => {
+      // Find the volunteer that has an avatarURL (Bruce Graza)
+      const img = screen.queryByTestId('volunteer_image');
+      expect(img).toBeInTheDocument();
+      expect(img).toHaveAttribute('src', 'img-url');
+    });
+  });
+
+  it('should render screen with No Volunteers', async () => {
+    renderVolunteers(link3);
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
+    expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    expect(screen.getByTestId('volunteers-empty-state')).toBeInTheDocument();
+    expect(screen.getByText(t.noVolunteers)).toBeInTheDocument();
   });
 
   it('Error while fetching volunteers data', async () => {
@@ -309,12 +369,21 @@ describe('Testing Volunteers Screen', () => {
 
   it('Open and close Volunteer Modal (Create)', async () => {
     renderVolunteers(link1);
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
+
+    expect(screen.getByTestId('searchBy')).toBeInTheDocument();
 
     const addVolunteerBtn = await screen.findByTestId('addVolunteerBtn');
     await userEvent.click(addVolunteerBtn);
+    const closeBtn = await screen.findByTestId('modalCloseBtn');
+    await userEvent.click(closeBtn);
 
-    expect(await screen.findAllByText(t.addVolunteer)).toHaveLength(2);
-    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    // Optional: verify modal closed
+    await waitFor(() => {
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
+    });
   });
 
   describe('Client-side Search Filtering', () => {
@@ -590,5 +659,44 @@ describe('Testing Volunteers Screen', () => {
     await waitFor(() => {
       expect(screen.getByText(t.removeVolunteer)).toBeInTheDocument();
     });
+  });
+
+  it('should trigger debounced search when typing in search input', async () => {
+    renderVolunteers(link1);
+
+    // Wait for component to load and all volunteers to be displayed
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // Verify initial state shows multiple volunteers
+    await waitFor(() => {
+      expect(screen.getByText('Teresa Bradley')).toBeInTheDocument();
+      expect(screen.getByText('Bruce Graza')).toBeInTheDocument();
+    });
+
+    // Find the search input
+    const searchInput = screen.getByTestId('searchBy');
+    expect(searchInput).toBeInTheDocument();
+
+    // Type in the search input to trigger the debounced callback
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'Teresa');
+
+    // Wait for debounce to complete (300ms) - the handleSearchChange callback should execute
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 350));
+    });
+
+    // The search term should be set by handleSearchChange callback and query refetched
+    // After debounced search with 'Teresa', only Teresa Bradley should appear
+    await waitFor(
+      () => {
+        expect(screen.getByText('Teresa Bradley')).toBeInTheDocument();
+        // Bruce Graza should no longer be visible after filtering by 'Teresa'
+        expect(screen.queryByText('Bruce Graza')).not.toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 });

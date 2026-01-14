@@ -161,32 +161,6 @@ export const DELETE_VOLUNTEER_GROUP_FOR_INSTANCE = gql`
   }
 `;
 
-export const CREATE_VOLUNTEER_MEMBERSHIP = gql`
-  mutation CreateVolunteerMembership($data: VolunteerMembershipInput!) {
-    createVolunteerMembership(data: $data) {
-      id
-      status
-      createdAt
-      volunteer {
-        id
-        hasAccepted
-        user {
-          id
-          name
-        }
-      }
-      event {
-        id
-        name
-      }
-      createdBy {
-        id
-        name
-      }
-    }
-  }
-`;
-
 /**
  * GraphQL mutation to update an event volunteer group.
  *

@@ -18,13 +18,22 @@ import i18n from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
 
-const { setItem, removeItem } = useLocalStorage();
+const { setItem, removeItem, clearAllItems } = useLocalStorage();
 
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
   warn: vi.fn(),
+  warning: vi.fn(),
 }));
+
+// Mock utils/i18n to use the test i18n instance for NotificationToast
+vi.mock('utils/i18n', async () => {
+  const i18n = await import('utils/i18nForTest');
+  return {
+    default: i18n.default,
+  };
+});
 
 vi.mock('react-toastify', () => ({
   toast: toastMocks,
@@ -116,7 +125,7 @@ beforeEach(() => {
   setItem('IsLoggedIn', 'FALSE');
 });
 afterEach(() => {
-  localStorage.clear();
+  clearAllItems();
   vi.restoreAllMocks();
 });
 
@@ -359,7 +368,10 @@ describe('Testing Forgot Password screen', () => {
 
     await userEvent.click(screen.getByText('Get OTP'));
     await waitFor(() => {
-      expect(toast.warn).toHaveBeenCalledWith(translations.emailNotRegistered);
+      expect(toast.warning).toHaveBeenCalledWith(
+        translations.emailNotRegistered,
+        expect.any(Object),
+      );
     });
   });
 
@@ -386,7 +398,10 @@ describe('Testing Forgot Password screen', () => {
     );
     await userEvent.click(screen.getByText('Get OTP'));
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(translations.errorSendingMail);
+      expect(toast.error).toHaveBeenCalledWith(
+        translations.errorSendingMail,
+        expect.any(Object),
+      );
     });
   });
 
@@ -416,6 +431,7 @@ describe('Testing Forgot Password screen', () => {
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(
         translations.talawaApiUnavailable,
+        expect.any(Object),
       );
     });
   });
@@ -465,5 +481,68 @@ describe('Testing Forgot Password screen', () => {
       formData.confirmNewPassword,
     );
     await userEvent.click(screen.getByText('Change Password'));
+  });
+
+  describe('LoadingState Behavior', () => {
+    it('should show LoadingState spinner while OTP generation is loading', async () => {
+      const loadingMocks = [
+        {
+          request: {
+            query: GENERATE_OTP_MUTATION,
+            variables: { email: 'test@example.com' },
+          },
+          result: { data: null },
+          delay: 100,
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={loadingMocks}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18n}>
+                <ForgotPassword />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      // Enter email to trigger OTP request
+      await userEvent.type(
+        screen.getByPlaceholderText(/Registered email/i),
+        'test@example.com',
+      );
+      await userEvent.click(screen.getByText('Get OTP'));
+
+      // Verify spinner is shown during loading
+      await waitFor(() => {
+        expect(screen.getByTestId('spinner')).toBeInTheDocument();
+      });
+    });
+
+    it('should hide spinner and render form after LoadingState completes', async () => {
+      const link = new StaticMockLink(MOCKS);
+      render(
+        <MockedProvider link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18n}>
+                <ForgotPassword />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(
+          screen.getByPlaceholderText(/Registered email/i),
+        ).toBeInTheDocument();
+        expect(screen.getByText('Get OTP')).toBeInTheDocument();
+      });
+
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
   });
 });

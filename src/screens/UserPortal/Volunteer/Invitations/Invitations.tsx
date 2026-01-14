@@ -1,29 +1,29 @@
 /**
- * @file Invitations.tsx
- * @description This component renders the Invitations screen for the user portal,
+ * Invitations.tsx
+ * This component renders the Invitations screen for the user portal,
  * allowing users to view, search, sort, and manage their volunteer invitations.
  * It integrates with GraphQL queries and mutations to fetch and update invitation data.
  *
- * @module Invitations
+ * module Invitations
  *
- * @enum ItemFilter
- * @description Enum for filtering invitations by type.
- * @property {string} Group - Represents group invitations.
- * @property {string} Individual - Represents individual invitations.
+ * enum ItemFilter
+ * description Enum for filtering invitations by type.
+ * property Group - Represents group invitations.
+ * property Individual - Represents individual invitations.
  *
- * @function Invitations
- * @description Renders the Invitations screen, displaying a list of volunteer invitations
+ * function Invitations
+ * description Renders the Invitations screen, displaying a list of volunteer invitations
  * with options to search, sort, filter, and accept/reject invitations.
  *
- * @returns {JSX.Element} The Invitations component.
+ * @returns The Invitations component.
  *
- * @remarks
+ * remarks
  * - Redirects to the homepage if `orgId` or `userId` is missing.
  * - Displays a loader while fetching data and handles errors gracefully.
  * - Uses `useQuery` to fetch invitations and `useMutation` to update invitation status.
  * - Provides search and sorting functionality using `SearchBar` and `SortingButton` components.
  *
- * @dependencies
+ * dependencies
  * - `react`, `react-router-dom`, `react-bootstrap`, `react-toastify`
  * - `@apollo/client` for GraphQL queries and mutations
  * - `@mui/icons-material`, `react-icons` for icons
@@ -43,18 +43,17 @@ import { Navigate, useParams } from 'react-router';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { TbCalendarEvent } from 'react-icons/tb';
 import { FaUserGroup } from 'react-icons/fa6';
-import { debounce, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 
 import useLocalStorage from 'utils/useLocalstorage';
 import { useMutation, useQuery } from '@apollo/client';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import { FaRegClock } from 'react-icons/fa';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
-import { toast } from 'react-toastify';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 enum ItemFilter {
   Group = 'group',
@@ -78,16 +77,12 @@ const Invitations = (): JSX.Element => {
     return <Navigate to={'/'} replace />;
   }
 
-  const debouncedSearch = useMemo(
-    () => debounce((value: string) => setSearchTerm(value), 300),
-    [],
-  );
-
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [filter, setFilter] = useState<ItemFilter | null>(null);
-  const [sortBy, setSortBy] = useState<
-    'createdAt_ASC' | 'createdAt_DESC' | null
-  >(null);
+  const [appliedSearch, setAppliedSearch] = useState<string>('');
+  const [filter, setFilter] = useState<ItemFilter | 'all'>('all');
+  const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
+    'createdAt_DESC',
+  );
 
   const [updateMembership] = useMutation(UPDATE_VOLUNTEER_MEMBERSHIP);
 
@@ -97,14 +92,14 @@ const Invitations = (): JSX.Element => {
   ): Promise<void> => {
     try {
       await updateMembership({ variables: { id: id, status: status } });
-      toast.success(
+      NotificationToast.success(
         t(
           status === 'accepted' ? 'invitationAccepted' : 'invitationRejected',
         ) as string,
       );
       refetchInvitations();
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     }
   };
 
@@ -123,26 +118,34 @@ const Invitations = (): JSX.Element => {
       where: {
         userId: userId,
         status: 'invited',
-        ...(filter && { filter }),
-        eventTitle: searchTerm ? searchTerm : undefined,
+        eventTitle: appliedSearch || undefined,
       },
-      orderBy: sortBy ? sortBy : undefined,
+      orderBy: sortBy,
     },
   });
 
   const invitations = useMemo(() => {
     if (!invitationData) return [];
-    return invitationData.getVolunteerMembership;
-  }, [invitationData]);
 
-  // loads the invitations when the component mounts
-  if (invitationLoading) return <Loader size="xl" />;
+    let data = invitationData.getVolunteerMembership;
+
+    if (filter === 'group') {
+      data = data.filter((i) => i.group && i.group.id);
+    }
+
+    if (filter === 'individual') {
+      data = data.filter((i) => !i.group || !i.group.id);
+    }
+
+    return data;
+  }, [invitationData, filter]);
+
   if (invitationError) {
     // Displays an error message if there is an issue loading the invitations
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={styles.errorIcon} />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Volunteership Invitations' })}
           </h6>
@@ -152,45 +155,50 @@ const Invitations = (): JSX.Element => {
   }
 
   // Renders the invitations list and UI elements for searching, sorting, and accepting/rejecting invites
+  const sortDropdown = {
+    id: 'sort',
+    label: tCommon('sort'),
+    type: 'sort' as const,
+    options: [
+      { label: t('receivedLatest'), value: 'createdAt_DESC' },
+      { label: t('receivedEarliest'), value: 'createdAt_ASC' },
+    ],
+    selectedOption: sortBy,
+    onOptionChange: (value: string | number) =>
+      setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC'),
+    dataTestIdPrefix: 'sort',
+  };
+
+  const filterDropdown = {
+    id: 'filter',
+    label: t('filter'),
+    type: 'filter' as const,
+    options: [
+      { label: tCommon('all'), value: 'all' },
+      { label: t('groupInvite'), value: 'group' },
+      { label: t('individualInvite'), value: 'individual' },
+    ],
+    selectedOption: filter,
+    onOptionChange: (value: string | number) =>
+      setFilter(value === 'all' ? 'all' : (value as ItemFilter)),
+    dataTestIdPrefix: 'filter',
+  };
+
   return (
-    <>
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        {/* Search input field and button */}
-        <SearchBar
-          placeholder={t('searchByEventName')}
-          onSearch={debouncedSearch}
-          inputTestId="searchBy"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-4 mb-1">
-          <div className="d-flex gap-3 justify-space-between">
-            <SortingButton
-              sortingOptions={[
-                { label: t('receivedLatest'), value: 'createdAt_DESC' },
-                { label: t('receivedEarliest'), value: 'createdAt_ASC' },
-              ]}
-              onSortChange={(value) =>
-                setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
-              }
-              dataTestIdPrefix="sort"
-              buttonLabel={tCommon('sort')}
-            />
-            <SortingButton
-              sortingOptions={[
-                { label: tCommon('all'), value: 'all' },
-                { label: t('groupInvite'), value: 'group' },
-                { label: t('individualInvite'), value: 'individual' },
-              ]}
-              onSortChange={(value) =>
-                setFilter(value === 'all' ? null : (value as ItemFilter))
-              }
-              dataTestIdPrefix="filter"
-              buttonLabel={t('filter')}
-              type="filter"
-            />
-          </div>
-        </div>
-      </div>
+    <LoadingState isLoading={invitationLoading} variant="spinner">
+      <SearchFilterBar
+        searchPlaceholder={t('searchByEventName')}
+        searchValue={searchTerm}
+        onSearchChange={setSearchTerm}
+        onSearchSubmit={() => {
+          setAppliedSearch(searchTerm);
+        }}
+        searchInputTestId="searchByInput"
+        searchButtonTestId="searchBtn"
+        hasDropdowns={true}
+        dropdowns={[sortDropdown, filterDropdown]}
+      />
+
       {invitations.length < 1 ? (
         <Stack height="100%" alignItems="center" justifyContent="center">
           {/* Displayed if no invitations are found */}
@@ -228,8 +236,8 @@ const Invitations = (): JSX.Element => {
                 {invite.group && invite.group.id && (
                   <>
                     <div>
-                      <FaUserGroup className="mb-1 me-1" color="grey" />
-                      <span className="text-muted">Group:</span>{' '}
+                      <FaUserGroup className="mb-1 me-1 text-secondary" />
+                      <span className="text-muted">{t('group')}:</span>{' '}
                       <span>{invite.group.name} </span>
                     </div>
                     |
@@ -237,17 +245,16 @@ const Invitations = (): JSX.Element => {
                 )}
                 <div>
                   <TbCalendarEvent
-                    className="mb-1 me-1"
-                    color="grey"
+                    className="mb-1 me-1 text-secondary"
                     size={20}
                   />
-                  <span className="text-muted">Event:</span>{' '}
+                  <span className="text-muted">{t('event')}:</span>{' '}
                   <span>{invite.event.name}</span>
                 </div>
                 |
                 <div>
-                  <FaRegClock className="mb-1 me-1" color="grey" />
-                  <span className="text-muted">Received:</span>{' '}
+                  <FaRegClock className="mb-1 me-1 text-secondary" />
+                  <span className="text-muted">{t('received')}:</span>{' '}
                   {new Date(invite.createdAt).toLocaleString()}
                 </div>
               </div>
@@ -273,7 +280,7 @@ const Invitations = (): JSX.Element => {
           </div>
         ))
       )}
-    </>
+    </LoadingState>
   );
 };
 

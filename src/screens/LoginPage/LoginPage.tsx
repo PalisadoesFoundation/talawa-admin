@@ -1,55 +1,20 @@
 /**
- * @file LoginPage.tsx
- * @description This file contains the implementation of the Login and Registration page for the Talawa Admin application.
- * It includes functionality for user authentication, password validation, reCAPTCHA verification, and organization selection.
- * The page supports both admin and user roles and provides localization support.
+ * LoginPage component.
  *
- * @module LoginPage
+ * Provides login and registration flows with validation, reCAPTCHA, and
+ * organization selection. Supports admin and user roles with localization.
  *
- * @requires react
- * @requires react-router-dom
- * @requires react-bootstrap
- * @requires react-google-recaptcha
- * @requires @apollo/client
- * @requires @mui/icons-material
- * @requires @mui/material
- * @requires react-toastify
- * @requires i18next
- * @requires utils/errorHandler
- * @requires utils/useLocalstorage
- * @requires utils/useSession
- * @requires utils/i18n
- * @requires GraphQl/Mutations/mutations
- * @requires GraphQl/Queries/Queries
- * @requires components/ChangeLanguageDropdown/ChangeLanguageDropDown
- * @requires components/LoginPortalToggle/LoginPortalToggle
- * @requires assets/svgs/palisadoes.svg
- * @requires assets/svgs/talawa.svg
- *
- * @component
- * @description The `loginPage` component renders a login and registration interface with the following features:
- * - Login and registration forms with validation.
- * - Password strength checks and visibility toggles.
- * - reCAPTCHA integration for bot prevention.
- * - Organization selection using an autocomplete dropdown.
- * - Social media links and community branding.
- * - Role-based navigation for admin and user.
- *
- * @returns {JSX.Element} The rendered login and registration page.
+ * @remarks
+ * Includes password strength checks, social links, and community branding.
  *
  * @example
  * ```tsx
- * import LoginPage from './LoginPage';
- *
- * const App = () => {
- *   return <LoginPage />;
- * };
- *
- * export default App;
+ * <LoginPage />
  * ```
  */
 import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
-import { Check, Clear } from '@mui/icons-material';
+import Check from '@mui/icons-material/Check';
+import Clear from '@mui/icons-material/Clear';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Form } from 'react-bootstrap';
@@ -59,17 +24,14 @@ import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import {
   REACT_APP_USE_RECAPTCHA,
   RECAPTCHA_SITE_KEY,
   BACKEND_URL,
 } from 'Constant/constant';
-import {
-  RECAPTCHA_MUTATION,
-  SIGNUP_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_LIST_NO_MEMBERS,
   SIGNIN_QUERY,
@@ -81,9 +43,10 @@ import ChangeLanguageDropDown from 'components/ChangeLanguageDropdown/ChangeLang
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
-import styles from '../../style/app-fixed.module.css';
+import styles from './LoginPage.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
-import { Autocomplete, TextField } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
 
@@ -183,7 +146,6 @@ const loginPage = (): JSX.Element => {
   }, [data]);
   const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
-  const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
   const { data: orgData } = useQuery(ORGANIZATION_LIST_NO_MEMBERS);
   const { startSession, extendSession } = useSession();
   useEffect(() => {
@@ -206,7 +168,16 @@ const loginPage = (): JSX.Element => {
   useEffect(() => {
     async function loadResource(): Promise<void> {
       try {
-        await fetch(BACKEND_URL as string);
+        // Use a proper GraphQL introspection query instead of plain fetch
+        await fetch(BACKEND_URL as string, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            query: '{ __typename }',
+          }),
+        });
       } catch (error) {
         errorHandler(t, error);
       }
@@ -214,25 +185,6 @@ const loginPage = (): JSX.Element => {
 
     loadResource();
   }, []);
-
-  const verifyRecaptcha = async (
-    recaptchaToken: string | null,
-  ): Promise<boolean | void> => {
-    try {
-      if (REACT_APP_USE_RECAPTCHA !== 'yes') {
-        return true;
-      }
-      const { data } = await recaptcha({
-        variables: {
-          recaptchaToken,
-        },
-      });
-
-      return data.recaptcha;
-    } catch {
-      toast.error(t('captchaError') as string);
-    }
-  };
 
   const handleCaptcha = (token: string | null): void => {
     setRecaptchaToken(token);
@@ -242,13 +194,6 @@ const loginPage = (): JSX.Element => {
     e.preventDefault();
 
     const { signName, signEmail, signPassword, cPassword } = signformState;
-
-    const isVerified = await verifyRecaptcha(recaptchaToken);
-
-    if (!isVerified) {
-      toast.error(t('Please_check_the_captcha') as string);
-      return;
-    }
 
     const isValidName = (value: string): boolean => {
       // Allow letters, spaces, and hyphens, but not consecutive spaces or hyphens
@@ -281,11 +226,12 @@ const loginPage = (): JSX.Element => {
               name: signName,
               email: signEmail,
               password: signPassword,
+              ...(recaptchaToken && { recaptchaToken }),
             },
           });
 
           if (signUpData) {
-            toast.success(
+            NotificationToast.success(
               t(
                 role === 'admin' ? 'successfullyRegistered' : 'afterRegister',
               ) as string,
@@ -299,13 +245,19 @@ const loginPage = (): JSX.Element => {
               signOrg: '',
             });
             SignupRecaptchaRef.current?.reset();
-            // If signup returned an authentication token, set session and resume pending invite
+            // If signup was successful, set session state and resume pending invite
+            // Note: Tokens are now set via HTTP-Only cookies by the server (XSS protection)
             if (signUpData.signUp && signUpData.signUp.authenticationToken) {
-              const authToken = signUpData.signUp.authenticationToken;
-              setItem('token', authToken);
               setItem('IsLoggedIn', 'TRUE');
-              setItem('name', signUpData.signUp.user?.name || '');
-              setItem('email', signUpData.signUp.user?.emailAddress || '');
+              // Use form data for name/email since SIGNUP_MUTATION only returns user.id
+              setItem('name', signName);
+              setItem('email', signEmail);
+              // Persist userId from API response
+              if (signUpData.signUp.user?.id) {
+                setItem('userId', signUpData.signUp.user.id);
+              }
+              // Set default role as 'user' for signup (parity with login flow)
+              setItem('role', 'user');
               if (pendingInvitationToken) {
                 removeItem('pendingInvitationToken');
                 startSession();
@@ -319,34 +271,57 @@ const loginPage = (): JSX.Element => {
           SignupRecaptchaRef.current?.reset();
         }
       } else {
-        toast.warn(t('passwordMismatches') as string);
+        NotificationToast.warning(t('passwordMismatches') as string);
       }
     } else {
       if (!isValidName(signName)) {
-        toast.warn(t('name_invalid') as string);
+        NotificationToast.warning(t('nameInvalid') as string);
       }
       if (!validatePassword(signPassword)) {
-        toast.warn(t('password_invalid') as string);
+        NotificationToast.warning(t('passwordInvalid') as string);
       }
       if (signEmail.length < 8) {
-        toast.warn(t('email_invalid') as string);
+        NotificationToast.warning(t('emailInvalid') as string);
       }
     }
   };
 
   const loginLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    const isVerified = await verifyRecaptcha(recaptchaToken);
-
-    if (!isVerified) {
-      toast.error(t('Please_check_the_captcha') as string);
-      return;
-    }
-
     try {
-      const { data: signInData } = await signin({
-        variables: { email: formState.email, password: formState.password },
+      const { data: signInData, error: signInError } = await signin({
+        variables: {
+          email: formState.email,
+          password: formState.password,
+          ...(recaptchaToken && { recaptchaToken }),
+        },
+        fetchPolicy: 'network-only', // Always make network request to receive Set-Cookie headers
       });
+
+      // Check for GraphQL errors (like account_locked) first
+      if (signInError) {
+        // Check if this is an account_locked error with retryAfter timestamp
+        const graphQLError = signInError.graphQLErrors?.[0];
+        const extensions = graphQLError?.extensions as
+          | { code?: string; retryAfter?: string }
+          | undefined;
+
+        if (extensions?.code === 'account_locked' && extensions?.retryAfter) {
+          // Calculate remaining minutes until unlock
+          const retryAfterDate = new Date(extensions.retryAfter);
+          const now = new Date();
+          const diffMs = retryAfterDate.getTime() - now.getTime();
+          const diffMinutes = Math.max(1, Math.ceil(diffMs / 60000));
+
+          NotificationToast.error(
+            tErrors('accountLockedWithTimer', { minutes: diffMinutes }),
+          );
+        } else {
+          errorHandler(t, signInError);
+        }
+        loginRecaptchaRef.current?.reset();
+        return;
+      }
 
       if (signInData) {
         if (signInData.signIn.user.countryCode !== null) {
@@ -354,23 +329,21 @@ const loginPage = (): JSX.Element => {
         }
 
         const { signIn } = signInData;
-        const { user, authenticationToken } = signIn;
+        const { user } = signIn;
+        // Note: authenticationToken and refreshToken are now set via HTTP-Only cookies by the server (XSS protection)
         const isAdmin: boolean = user.role === 'administrator';
         if (role === 'admin' && !isAdmin) {
-          toast.warn(tErrors('notAuthorised') as string);
+          NotificationToast.warning(tErrors('notAuthorised') as string);
           return;
         }
         const loggedInUserId = user.id;
 
-        setItem('token', authenticationToken);
+        // Store UI state in localStorage (tokens are in HTTP-Only cookies)
         setItem('IsLoggedIn', 'TRUE');
         setItem('name', user.name);
         setItem('email', user.emailAddress);
         setItem('role', user.role);
         setItem('UserImage', user.avatarURL || '');
-        // setItem('FirstName', user.firstName);
-        // setItem('LastName', user.lastName);
-        // setItem('UserImage', user.avatarURL);
         if (role === 'admin') {
           setItem('id', loggedInUserId);
         } else {
@@ -390,7 +363,7 @@ const loginPage = (): JSX.Element => {
         startSession();
         navigate(role === 'admin' ? '/orglist' : '/user/organizations');
       } else {
-        toast.warn(tErrors('notFound') as string);
+        NotificationToast.warning(tErrors('notFound') as string);
       }
     } catch (error) {
       errorHandler(t, error);
@@ -439,7 +412,7 @@ const loginPage = (): JSX.Element => {
                 >
                   <img
                     src={data.community.logoURL}
-                    alt="Community Logo"
+                    alt={t('communityLogo')}
                     data-testid="preLoginLogo"
                   />
                   <p className="text-center">{data.community.name}</p>
@@ -546,7 +519,7 @@ const loginPage = (): JSX.Element => {
                       {tCommon('forgotPassword')}
                     </Link>
                   </div>
-                  {REACT_APP_USE_RECAPTCHA === 'yes' ? (
+                  {REACT_APP_USE_RECAPTCHA === 'YES' ? (
                     <div className="googleRecaptcha">
                       <ReCAPTCHA
                         ref={loginRecaptchaRef}
@@ -555,6 +528,7 @@ const loginPage = (): JSX.Element => {
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
                         onChange={handleCaptcha}
+                        data-cy="loginRecaptcha"
                       />
                     </div>
                   ) : (
@@ -720,7 +694,7 @@ const loginPage = (): JSX.Element => {
                               <span>
                                 <Clear className="" />
                               </span>
-                              {t('atleast_6_char_long')}
+                              {t('atleastSixCharLong')}
                             </p>
                           </div>
                         ) : (
@@ -730,7 +704,7 @@ const loginPage = (): JSX.Element => {
                             <span>
                               <Check />
                             </span>
-                            {t('atleast_6_char_long')}
+                            {t('atleastSixCharLong')}
                           </p>
                         )
                       ) : null}
@@ -745,7 +719,7 @@ const loginPage = (): JSX.Element => {
                             <span>
                               <Check className="size-sm" />
                             </span>
-                            {t('atleast_6_char_long')}
+                            {t('atleastSixCharLong')}
                           </div>
                         )}
                       {isInputFocused && (
@@ -765,7 +739,7 @@ const loginPage = (): JSX.Element => {
                               <Check />
                             </span>
                           )}
-                          {t('lowercase_check')}
+                          {t('lowercaseCheck')}
                         </p>
                       )}
                       {isInputFocused && (
@@ -785,7 +759,7 @@ const loginPage = (): JSX.Element => {
                               <Check />
                             </span>
                           )}
-                          {t('uppercase_check')}
+                          {t('uppercaseCheck')}
                         </p>
                       )}
                       {isInputFocused && (
@@ -805,7 +779,7 @@ const loginPage = (): JSX.Element => {
                               <Check />
                             </span>
                           )}
-                          {t('numeric_value_check')}
+                          {t('numericValueCheck')}
                         </p>
                       )}
                       {isInputFocused && (
@@ -827,7 +801,7 @@ const loginPage = (): JSX.Element => {
                               <Check />
                             </span>
                           )}
-                          {t('special_char_check')}
+                          {t('specialCharCheck')}
                         </p>
                       )}
                     </div>
@@ -869,7 +843,7 @@ const loginPage = (): JSX.Element => {
                           className="form-text text-danger"
                           data-testid="passwordCheck"
                         >
-                          {t('Password_and_Confirm_password_mismatches.')}
+                          {t('passwordMismatches')}
                         </div>
                       )}
                   </div>
@@ -892,14 +866,14 @@ const loginPage = (): JSX.Element => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label="Organizations"
+                            label={t('organizations')}
                             className={styles.selectOrgText}
                           />
                         )}
                       />
                     </div>
                   </div>
-                  {REACT_APP_USE_RECAPTCHA === 'yes' ? (
+                  {REACT_APP_USE_RECAPTCHA === 'YES' ? (
                     <div className="mt-3">
                       <ReCAPTCHA
                         ref={SignupRecaptchaRef}
@@ -907,6 +881,7 @@ const loginPage = (): JSX.Element => {
                           RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'
                         }
                         onChange={handleCaptcha}
+                        data-cy="registrationRecaptcha"
                       />
                     </div>
                   ) : (
@@ -920,6 +895,22 @@ const loginPage = (): JSX.Element => {
                     disabled={signinLoading}
                   >
                     {tCommon('register')}
+                  </Button>
+                  <div className="position-relative my-2">
+                    <hr />
+                    <span className={styles.orText}>{tCommon('OR')}</span>
+                  </div>
+                  <Button
+                    variant="outline-secondary"
+                    className={styles.reg_btn}
+                    data-testid="goToLoginPortion"
+                    onClick={(): void => {
+                      setShowTab('LOGIN');
+                    }}
+                  >
+                    <Link to={'/'} className="text-decoration-none">
+                      {t('backToLogin')}
+                    </Link>
                   </Button>
                 </Form>
               </div>

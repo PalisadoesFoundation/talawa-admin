@@ -8,6 +8,7 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+import dayjs from 'dayjs';
 
 /**
  * Mocks for the GroupChatDetails component
@@ -32,7 +33,7 @@ function createUser(
     firstName,
     lastName,
     email,
-    createdAt: new Date('2024-10-27T10:00:00.000Z'),
+    createdAt: dayjs().toDate(),
   };
 }
 
@@ -45,11 +46,11 @@ function createMessage(
 ): DirectMessage {
   return {
     _id: id,
-    createdAt: new Date('2024-10-27T10:00:00.000Z'),
+    createdAt: dayjs().toDate(),
     sender,
     messageContent: content,
     replyTo,
-    updatedAt: new Date('2024-10-27T10:00:00.000Z'),
+    updatedAt: dayjs().toDate(),
     media,
   };
 }
@@ -93,7 +94,7 @@ const createGroupChat = (
   users,
   unseenMessagesByUsers: JSON.parse('{"user1": 0, "user2": 1}'),
   description: 'Test Description',
-  createdAt: new Date('2024-10-27T10:00:00.000Z'),
+  createdAt: dayjs().toDate(),
 });
 
 export const filledMockChat = createGroupChat(
@@ -169,6 +170,68 @@ export const mocks = [
       },
     },
   },
+  // Organization members mock for name search 'Disha' - duplicate for multiple calls
+  {
+    request: {
+      query: ORGANIZATION_MEMBERS,
+      variables: {
+        input: { id: 'org123' },
+        first: 20,
+        after: null,
+        where: { name_contains: 'Disha' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [
+              {
+                node: {
+                  id: 'user3',
+                  name: 'Disha Smith',
+                  avatarURL: null,
+                  role: 'Member',
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+    },
+  },
+  // Organization members mock for name search 'Smith' - duplicate for multiple calls
+  {
+    request: {
+      query: ORGANIZATION_MEMBERS,
+      variables: {
+        input: { id: 'org123' },
+        first: 20,
+        after: null,
+        where: { name_contains: 'Smith' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [
+              {
+                node: {
+                  id: 'user3',
+                  name: 'Disha Smith',
+                  avatarURL: null,
+                  role: 'Member',
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+    },
+  },
   // Organization members mock for name search 'Smith'
   {
     request: {
@@ -201,6 +264,31 @@ export const mocks = [
     },
   },
   // Mock for ORGANIZATION_MEMBERS used by GroupChatDetails when opening the add-user modal
+  {
+    request: {
+      query: ORGANIZATION_MEMBERS,
+      variables: { input: { id: 'org123' }, first: 20, after: null, where: {} },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [
+              {
+                node: {
+                  id: 'user3',
+                  name: 'Disha Smith',
+                  avatarURL: null,
+                  role: 'Member',
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  // Mock for ORGANIZATION_MEMBERS used by GroupChatDetails for clearing search (duplicate)
   {
     request: {
       query: ORGANIZATION_MEMBERS,

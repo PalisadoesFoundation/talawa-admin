@@ -13,6 +13,7 @@ import Calendar from './YearlyEventCalender';
 import { BrowserRouter, MemoryRouter, useParams } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { UserRole, type InterfaceCalendarProps } from 'types/Event/interface';
+import i18n from 'i18next';
 
 // Helper to get toggle button (expand or no-events) for a given Date
 function getToggleButtonForDate(
@@ -112,6 +113,30 @@ vi.mock('react-router', async () => {
     useNavigate: vi.fn().mockReturnValue(vi.fn()),
     Navigate: () => null,
   } as unknown as typeof import('react-router');
+});
+
+// Initialize i18n for testing
+i18n.init({
+  lng: 'en',
+  resources: {
+    en: {
+      translation: {
+        userEvents: {
+          noEventAvailable: 'No Event Available!',
+        },
+      },
+      common: {
+        none: 'None',
+        close: 'Close',
+      },
+      errors: {
+        defaultErrorMessage: 'An error occurred',
+        title: 'Error',
+        resetButtonAriaLabel: 'Reset',
+        resetButton: 'Reset',
+      },
+    },
+  },
 });
 
 // Simplify EventListCard rendering to avoid router/i18n dependencies in tests
@@ -412,7 +437,7 @@ describe('Calendar Component', () => {
   });
 
   it('displays "No Event Available!" message when no events exist', async () => {
-    const { container, findByText } = renderWithRouterAndPath(
+    const { container } = renderWithRouterAndPath(
       <Calendar eventData={[]} refetchEvents={mockRefetchEvents} />,
     );
 
@@ -421,7 +446,9 @@ describe('Calendar Component', () => {
       await act(async () => {
         fireEvent.click(expandButton);
       });
-      expect(await findByText('No Event Available!')).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText('No Event Available!')).toBeInTheDocument();
+      });
     }
   });
 
@@ -1354,24 +1381,25 @@ describe('Calendar Component', () => {
   });
 
   it('collapses previously expanded day when a new day is expanded', async () => {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
+    // Use fixed mid-month dates to avoid month boundary issues
+    const currentYear = new Date().getFullYear();
+    const dayOne = new Date(currentYear, 5, 10, 12, 0, 0); // June 10
+    const dayTwo = new Date(currentYear, 5, 11, 12, 0, 0); // June 11
 
     const eventA = {
       ...mockEventData[0],
       id: 'A',
       name: 'Event A',
-      startAt: today.toISOString(),
-      endAt: today.toISOString(),
+      startAt: dayOne.toISOString(),
+      endAt: dayOne.toISOString(),
     };
 
     const eventB = {
       ...mockEventData[0],
       id: 'B',
       name: 'Event B',
-      startAt: tomorrow.toISOString(),
-      endAt: tomorrow.toISOString(),
+      startAt: dayTwo.toISOString(),
+      endAt: dayTwo.toISOString(),
     };
 
     const { container } = renderWithRouterAndPath(
@@ -1391,13 +1419,13 @@ describe('Calendar Component', () => {
     const btnA = await clickExpandForDate(container, new Date(eventA.startAt));
     expect(btnA).toBeTruthy();
     await waitFor(() =>
-      expect(screen.queryByText('Event A')).toBeInTheDocument(),
+      expect(screen.getByText('Event A')).toBeInTheDocument(),
     );
 
     const btnB = await clickExpandForDate(container, new Date(eventB.startAt));
     expect(btnB).toBeTruthy();
     await waitFor(() =>
-      expect(screen.queryByText('Event B')).toBeInTheDocument(),
+      expect(screen.getByText('Event B')).toBeInTheDocument(),
     );
 
     expect(screen.queryByText('Event A')).toBeNull();

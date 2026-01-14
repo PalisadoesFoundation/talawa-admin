@@ -12,12 +12,17 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
 import dayjs, { type Dayjs } from 'dayjs';
-import CustomRecurrenceModal from 'screens/OrganizationEvents/CustomRecurrenceModal';
+import utc from 'dayjs/plugin/utc';
+import CustomRecurrenceModal from 'screens/AdminPortal/OrganizationEvents/CustomRecurrenceModal';
+import {
+  AdapterDayjs,
+  LocalizationProvider,
+} from 'shared-components/DateRangePicker';
+
+dayjs.extend(utc);
 
 import PreviewModal from './EventListCardPreviewModal';
 import { UserRole } from 'types/Event/interface';
@@ -26,9 +31,42 @@ import {
   InterfaceRecurrenceRule,
 } from 'utils/recurrenceUtils/recurrenceTypes';
 
-vi.mock('screens/OrganizationEvents/CustomRecurrenceModal', () => ({
+vi.mock('screens/AdminPortal/OrganizationEvents/CustomRecurrenceModal', () => ({
   default: vi.fn(),
 }));
+
+const getPickerInputByTestId = (testId: string): HTMLElement => {
+  const input = screen.getByTestId(testId);
+  if (!input) {
+    throw new Error(`Could not find picker input with testId: ${testId}`);
+  }
+  return input;
+};
+
+/**
+ * Helper function to find a date button in the calendar grid by its text content
+ * @param calendarGrid - The calendar grid element
+ * @param dateText - The date text to find (e.g., "20", "22")
+ * @returns The button element containing the date
+ */
+export const getDateButtonByText = (
+  calendarGrid: HTMLElement,
+  dateText: string,
+): HTMLElement => {
+  const gridCells = within(calendarGrid).getAllByRole('gridcell');
+  const dateButton = gridCells.find((cell) => {
+    const text = cell.textContent?.trim();
+    return text === dateText;
+  });
+
+  if (!dateButton) {
+    throw new Error(
+      `Could not find date button with text "${dateText}" in calendar grid`,
+    );
+  }
+
+  return dateButton;
+};
 
 const mockT = (key: string): string => key;
 const mockTCommon = (key: string): string => key;
@@ -38,8 +76,14 @@ const mockEventListCardProps = {
   name: 'Test Event',
   description: 'Test event description',
   location: 'Test Location',
-  startAt: '2024-01-15T10:00:00Z',
-  endAt: '2024-01-15T12:00:00Z',
+  startAt: dayjs
+    .utc()
+    .add(10, 'days')
+    .hour(10)
+    .minute(0)
+    .second(0)
+    .toISOString(),
+  endAt: dayjs.utc().add(10, 'days').hour(12).minute(0).second(0).toISOString(),
   startTime: '10:00:00',
   endTime: '12:00:00',
   allDay: false,
@@ -73,8 +117,8 @@ const mockDefaultProps = {
   tCommon: mockTCommon,
   isRegistered: false,
   userId: 'user123',
-  eventStartDate: new Date('2024-01-15'),
-  eventEndDate: new Date('2024-01-15'),
+  eventStartDate: dayjs.utc().add(10, 'days').toDate(),
+  eventEndDate: dayjs.utc().add(10, 'days').toDate(),
   setEventStartDate: vi.fn(),
   setEventEndDate: vi.fn(),
   alldaychecked: false,
@@ -143,7 +187,7 @@ describe('EventListCardPreviewModal', () => {
     const mockHideViewModal = vi.fn();
     renderComponent({ hideViewModal: mockHideViewModal });
 
-    const closeButton = screen.getByTestId('eventModalCloseBtn');
+    const closeButton = screen.getByTestId('modalCloseBtn');
     await userEvent.click(closeButton);
 
     expect(mockHideViewModal).toHaveBeenCalledOnce();
@@ -352,6 +396,39 @@ describe('EventListCardPreviewModal', () => {
     expect(screen.getByTestId('deleteEventModalBtn')).toBeInTheDocument();
   });
 
+  test('verifies aria-label for show event dashboard button', () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        userRole: UserRole.ADMINISTRATOR,
+      },
+    });
+
+    expect(screen.getByLabelText('showEventDashboard')).toBeInTheDocument();
+  });
+
+  test('verifies aria-label for edit event button', () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        userRole: UserRole.ADMINISTRATOR,
+      },
+    });
+
+    expect(screen.getByLabelText('editEvent')).toBeInTheDocument();
+  });
+
+  test('verifies aria-label for delete event button', () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        userRole: UserRole.ADMINISTRATOR,
+      },
+    });
+
+    expect(screen.getByLabelText('deleteEvent')).toBeInTheDocument();
+  });
+
   test('hides action buttons for regular users without edit permissions', () => {
     renderComponent({
       eventListCardProps: {
@@ -514,9 +591,21 @@ describe('EventListCardPreviewModal', () => {
     await userEvent.click(dropdownToggle);
 
     expect(screen.getByText('Daily')).toBeInTheDocument();
-    expect(screen.getByText('Weekly on Monday')).toBeInTheDocument();
-    expect(screen.getByText('Monthly on day 15')).toBeInTheDocument();
-    expect(screen.getByText('Annually on January 15')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        `Weekly on ${dayjs.utc(mockEventListCardProps.startAt).format('dddd')}`,
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        `Monthly on day ${dayjs.utc(mockEventListCardProps.startAt).date()}`,
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        `Annually on ${dayjs.utc(mockEventListCardProps.startAt).format('MMMM D')}`,
+      ),
+    ).toBeInTheDocument();
     expect(
       screen.getByText('Every weekday (Monday to Friday)'),
     ).toBeInTheDocument();
@@ -617,24 +706,29 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('updates start date and adjusts end date when start date changes', async () => {
+    const baseDate = new Date(Date.UTC(2025, 0, 15, 12, 0, 0));
     const mockSetEventStartDate = vi.fn();
     const mockSetEventEndDate = vi.fn();
+
     renderComponent({
+      eventStartDate: baseDate,
+      eventEndDate: baseDate,
       setEventStartDate: mockSetEventStartDate,
       setEventEndDate: mockSetEventEndDate,
     });
 
-    const startDatePicker = screen.getByLabelText('startDate').parentElement;
+    const startDateInput = getPickerInputByTestId('startDate');
+    expect(startDateInput.parentElement).toBeTruthy();
+    const startDatePicker = startDateInput.parentElement;
     const calendarButton = within(
       startDatePicker as HTMLElement,
     ).getByLabelText(/choose date/i);
     await userEvent.click(calendarButton);
 
-    await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+    const calendarGrid = await screen.findByRole('grid');
+    const dateToSelect = within(calendarGrid).getByRole('gridcell', {
+      name: '20',
     });
-
-    const dateToSelect = screen.getByText('20');
     await userEvent.click(dateToSelect);
 
     await waitFor(() => {
@@ -643,22 +737,26 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('updates end date when end date changes', async () => {
+    const baseDate = new Date(Date.UTC(2025, 0, 15, 12, 0, 0));
     const mockSetEventEndDate = vi.fn();
     renderComponent({
+      eventStartDate: baseDate,
+      eventEndDate: baseDate,
       setEventEndDate: mockSetEventEndDate,
     });
 
-    const endDatePicker = screen.getByLabelText('endDate').parentElement;
+    const endDateInput = getPickerInputByTestId('endDate');
+    expect(endDateInput.parentElement).toBeTruthy();
+    const endDatePicker = endDateInput.parentElement;
     const calendarButton = within(endDatePicker as HTMLElement).getByLabelText(
       /choose date/i,
     );
     await userEvent.click(calendarButton);
 
-    await waitFor(() => {
-      expect(screen.getByRole('grid')).toBeInTheDocument();
+    const calendarGrid = await screen.findByRole('grid');
+    const dateToSelect = within(calendarGrid).getByRole('gridcell', {
+      name: '20',
     });
-
-    const dateToSelect = screen.getByText('22');
     await userEvent.click(dateToSelect);
 
     await waitFor(() => {
@@ -672,7 +770,9 @@ describe('EventListCardPreviewModal', () => {
       setFormState: mockSetFormState,
     });
 
-    const startTimePicker = screen.getByLabelText('startTime').parentElement;
+    const startTimeInput = getPickerInputByTestId('startTime');
+    expect(startTimeInput.parentElement).toBeTruthy();
+    const startTimePicker = startTimeInput.parentElement;
     const clockButton = within(startTimePicker as HTMLElement).getByLabelText(
       /choose time/i,
     );
@@ -699,7 +799,9 @@ describe('EventListCardPreviewModal', () => {
       setFormState: mockSetFormState,
     });
 
-    const endTimePicker = screen.getByLabelText('endTime').parentElement;
+    const endTimeInput = getPickerInputByTestId('endTime');
+    expect(endTimeInput.parentElement).toBeTruthy();
+    const endTimePicker = endTimeInput.parentElement;
     const clockButton = within(endTimePicker as HTMLElement).getByLabelText(
       /choose time/i,
     );
@@ -745,7 +847,8 @@ describe('EventListCardPreviewModal', () => {
 
     // The CustomRecurrenceModal should be rendered in the DOM
     // (though it may not be visible unless customRecurrenceModalIsOpen is true)
-    expect(screen.getByRole('dialog', { hidden: true })).toBeInTheDocument();
+    const dialogs = screen.getAllByRole('dialog', { hidden: true });
+    expect(dialogs.length).toBeGreaterThan(0);
   });
 
   test('start date picker onChange updates dates correctly', () => {
@@ -757,7 +860,7 @@ describe('EventListCardPreviewModal', () => {
       if (date) {
         mockSetEventStartDate(date.toDate());
         // Simulate the logic: if end date is before new start date, update end date
-        const currentEndDate = new Date('2024-01-10');
+        const currentEndDate = dayjs().subtract(5, 'days').toDate();
         if (currentEndDate < date.toDate()) {
           mockSetEventEndDate(date.toDate());
         }
@@ -765,7 +868,8 @@ describe('EventListCardPreviewModal', () => {
     };
 
     // Trigger the handler with a new date
-    handleStartDateChange(dayjs('2024-01-20'));
+    const targetDate = dayjs().add(5, 'days');
+    handleStartDateChange(targetDate);
 
     // Check that the functions were called and verify the date values
     expect(mockSetEventStartDate).toHaveBeenCalled();
@@ -774,14 +878,14 @@ describe('EventListCardPreviewModal', () => {
     const startDateCall = mockSetEventStartDate.mock.calls[0][0];
     const endDateCall = mockSetEventEndDate.mock.calls[0][0];
 
-    // Verify the date is January 20, 2024 (accounting for timezone)
-    expect(startDateCall.getFullYear()).toBe(2024);
-    expect(startDateCall.getMonth()).toBe(0); // January is 0
-    expect(startDateCall.getDate()).toBe(20);
+    // Verify the date is the target date
+    expect(startDateCall.getFullYear()).toBe(targetDate.year());
+    expect(startDateCall.getMonth()).toBe(targetDate.month());
+    expect(startDateCall.getDate()).toBe(targetDate.date());
 
-    expect(endDateCall.getFullYear()).toBe(2024);
-    expect(endDateCall.getMonth()).toBe(0);
-    expect(endDateCall.getDate()).toBe(20);
+    expect(endDateCall.getFullYear()).toBe(targetDate.year());
+    expect(endDateCall.getMonth()).toBe(targetDate.month());
+    expect(endDateCall.getDate()).toBe(targetDate.date());
   });
 
   test('end date picker onChange updates end date correctly', () => {
@@ -795,16 +899,17 @@ describe('EventListCardPreviewModal', () => {
     };
 
     // Trigger the handler with a new date
-    handleEndDateChange(dayjs('2024-01-25'));
+    const targetDate = dayjs().add(10, 'days');
+    handleEndDateChange(targetDate);
 
     expect(mockSetEventEndDate).toHaveBeenCalled();
 
     const endDateCall = mockSetEventEndDate.mock.calls[0][0];
 
-    // Verify the date is January 25, 2024 (accounting for timezone)
-    expect(endDateCall.getFullYear()).toBe(2024);
-    expect(endDateCall.getMonth()).toBe(0); // January is 0
-    expect(endDateCall.getDate()).toBe(25);
+    // Verify the date is the target date
+    expect(endDateCall.getFullYear()).toBe(targetDate.year());
+    expect(endDateCall.getMonth()).toBe(targetDate.month());
+    expect(endDateCall.getDate()).toBe(targetDate.date());
   });
 
   test('start time picker onChange updates form state correctly', () => {
@@ -1013,13 +1118,13 @@ describe('EventListCardPreviewModal', () => {
       renderWithRecurrenceModal({ setEventEndDate: mockSetEventEndDate });
 
       const customModalProps = (CustomRecurrenceModal as Mock).mock.calls[0][0];
-      const newDate = new Date('2024-05-10');
+      const newDate = dayjs().add(4, 'months').toDate();
       const updateFn = () => newDate;
       customModalProps.setEndDate(updateFn);
 
       expect(mockSetEventEndDate).toHaveBeenCalledWith(expect.any(Function));
 
-      const prevState = new Date('2024-01-01');
+      const prevState = dayjs().toDate();
       const passedFn = mockSetEventEndDate.mock.calls[0][0];
       const newState = passedFn(prevState);
       expect(newState).toEqual(newDate);
@@ -1030,7 +1135,7 @@ describe('EventListCardPreviewModal', () => {
       renderWithRecurrenceModal({ setEventEndDate: mockSetEventEndDate });
 
       const customModalProps = (CustomRecurrenceModal as Mock).mock.calls[0][0];
-      const newDate = new Date('2024-05-10');
+      const newDate = dayjs().add(4, 'months').toDate();
       customModalProps.setEndDate(newDate);
 
       expect(mockSetEventEndDate).toHaveBeenCalledWith(newDate);
@@ -1061,23 +1166,25 @@ describe('EventListCardPreviewModal', () => {
   });
 
   describe('Date and Time Picker onChange handlers', () => {
-    test('updates end date if new start date is later', () => {
+    test('updates end date if new start date is later', async () => {
       const mockSetEventStartDate = vi.fn();
       const mockSetEventEndDate = vi.fn();
       renderComponent({
-        eventStartDate: new Date('2024-01-15'),
-        eventEndDate: new Date('2024-01-15'),
+        eventStartDate: dayjs().add(1, 'day').toDate(),
+        eventEndDate: dayjs().add(1, 'day').toDate(),
         setEventStartDate: mockSetEventStartDate,
         setEventEndDate: mockSetEventEndDate,
       });
 
-      const datePicker = screen.getByLabelText('startDate').parentElement;
+      const dateInput = getPickerInputByTestId('startDate');
+      expect(dateInput.parentElement).toBeDefined();
+      const datePicker = dateInput?.parentElement;
       const calendarButton = within(datePicker as HTMLElement).getByLabelText(
         /choose date/i,
       );
       fireEvent.click(calendarButton);
 
-      waitFor(() => {
+      await waitFor(() => {
         const dateToSelect = screen.getByText('20');
         fireEvent.click(dateToSelect);
         expect(mockSetEventStartDate).toHaveBeenCalled();
@@ -1087,31 +1194,36 @@ describe('EventListCardPreviewModal', () => {
 
     test('updates end time if new start time is later', () => {
       const mockSetFormState = vi.fn();
-      renderComponent({
-        formState: {
-          ...mockFormState,
-          startTime: '10:00:00',
-          endTime: '11:00:00',
-        },
-        setFormState: mockSetFormState,
-      });
 
-      const timePicker = screen.getByLabelText('startTime').parentElement;
-      const clockButton = within(timePicker as HTMLElement).getByLabelText(
-        /choose time/i,
+      const currentFormState = {
+        name: 'Test Event',
+        eventdescrip: 'Test event description',
+        location: 'Test Location',
+        startTime: '10:00:00',
+        endTime: '11:00:00',
+      };
+
+      const handleStartTimeChange = (time: Dayjs | null) => {
+        if (time) {
+          const newStartTime = time.format('HH:mm:ss');
+          const endTime = '11:00:00';
+
+          mockSetFormState({
+            ...currentFormState,
+            startTime: newStartTime,
+            endTime: newStartTime > endTime ? newStartTime : endTime,
+          });
+        }
+      };
+
+      handleStartTimeChange(dayjs().hour(12).minute(0).second(0));
+
+      expect(mockSetFormState).toHaveBeenCalledWith(
+        expect.objectContaining({
+          startTime: '12:00:00',
+          endTime: '12:00:00',
+        }),
       );
-      fireEvent.click(clockButton);
-
-      waitFor(() => {
-        const timeToSelect = screen.getByText('12');
-        fireEvent.click(timeToSelect);
-        expect(mockSetFormState).toHaveBeenCalledWith(
-          expect.objectContaining({
-            startTime: '12:00:00',
-            endTime: '12:00:00',
-          }),
-        );
-      });
     });
 
     test('handles null date in start date picker onChange', () => {
@@ -1124,7 +1236,7 @@ describe('EventListCardPreviewModal', () => {
           const newStartDate = date.toDate();
           mockSetEventStartDate(newStartDate);
           // Auto-adjust end date if it's before the new start date
-          const currentEndDate = new Date('2024-01-15');
+          const currentEndDate = dayjs().toDate();
           if (currentEndDate < newStartDate) {
             mockSetEventEndDate(newStartDate);
           }
@@ -1166,7 +1278,7 @@ describe('EventListCardPreviewModal', () => {
           const newStartDate = date.toDate();
           mockSetEventStartDate(newStartDate);
           // Auto-adjust end date if it's before the new start date
-          const currentEndDate = new Date('2024-01-20'); // Later than the new start date
+          const currentEndDate = dayjs().add(10, 'days').toDate(); // Later than the new start date
           if (currentEndDate < newStartDate) {
             mockSetEventEndDate(newStartDate);
           }
@@ -1174,7 +1286,7 @@ describe('EventListCardPreviewModal', () => {
       };
 
       // Trigger the handler with a date that's before the current end date
-      handleStartDateChange(dayjs('2024-01-15'));
+      handleStartDateChange(dayjs().add(5, 'days'));
 
       // Verify that start date is updated but end date is not
       expect(mockSetEventStartDate).toHaveBeenCalled();
@@ -1191,7 +1303,7 @@ describe('EventListCardPreviewModal', () => {
           const newStartDate = date.toDate();
           mockSetEventStartDate(newStartDate);
           // Auto-adjust end date if it's before the new start date
-          const currentEndDate = new Date('2024-01-10'); // Earlier than the new start date
+          const currentEndDate = dayjs().subtract(5, 'days').toDate(); // Earlier than the new start date
           if (currentEndDate < newStartDate) {
             mockSetEventEndDate(newStartDate);
           }
@@ -1199,7 +1311,7 @@ describe('EventListCardPreviewModal', () => {
       };
 
       // Trigger the handler with a date that's after the current end date
-      handleStartDateChange(dayjs('2024-01-15'));
+      handleStartDateChange(dayjs().add(5, 'days'));
 
       // Verify that both start date and end date are updated
       expect(mockSetEventStartDate).toHaveBeenCalled();

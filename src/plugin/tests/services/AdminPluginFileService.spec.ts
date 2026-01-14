@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { AdminPluginFileService } from '../../services/AdminPluginFileService';
 import { IAdminPluginManifest } from '../../../utils/adminPluginInstaller';
 import { internalFileWriter } from '../../services/InternalFileWriter';
+import dayjs from 'dayjs';
 
 // Mock InternalFileWriter
 vi.mock('../../services/InternalFileWriter', () => ({
@@ -324,7 +325,7 @@ describe('AdminPluginFileService', () => {
         {
           pluginId: 'TestPlugin',
           manifest: validManifest,
-          installedAt: '2023-01-01T00:00:00Z',
+          installedAt: dayjs().subtract(1, 'year').toISOString(),
         },
       ];
 
@@ -473,7 +474,7 @@ describe('AdminPluginFileService', () => {
           {
             pluginId: 'TestPlugin',
             manifest: validManifest,
-            installedAt: '2023-01-01T00:00:00Z',
+            installedAt: dayjs().subtract(1, 'year').toISOString(),
           },
         ],
       });

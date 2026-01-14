@@ -11,6 +11,7 @@ import type {
 } from './type';
 import { PostOrderByInputEnum } from './type';
 import type { VoteState } from 'utils/interfaces';
+import dayjs from 'dayjs';
 
 describe('Post Type Definitions Tests', () => {
   // Test 1: Post type
@@ -19,8 +20,9 @@ describe('Post Type Definitions Tests', () => {
       const validPost: Post = {
         _id: 'post123',
         text: 'Sample post text',
-        createdAt: new Date('2025-12-09'),
-        updatedAt: new Date('2025-12-09'),
+        // Use dynamic dates to avoid test staleness
+        createdAt: dayjs().subtract(30, 'days').toDate(),
+        updatedAt: dayjs().subtract(30, 'days').toDate(),
         organization: {
           _id: 'org123',
           name: 'Test Organization',
@@ -268,7 +270,7 @@ describe('Post Type Definitions Tests', () => {
       const postNode: PostNode = {
         id: 'post123',
         caption: 'Caption text',
-        createdAt: '2025-12-09T00:00:00.000Z',
+        createdAt: dayjs().subtract(30, 'days').toISOString(),
         commentCount: 5,
         creator: {
           id: 'user123',
@@ -293,7 +295,7 @@ describe('Post Type Definitions Tests', () => {
         id: 'post456',
         caption: null,
         pinnedAt: null,
-        createdAt: '2025-12-09T00:00:00.000Z',
+        createdAt: dayjs().subtract(30, 'days').toISOString(),
         commentCount: 0,
         creator: {
           id: 'user456',
@@ -316,7 +318,7 @@ describe('Post Type Definitions Tests', () => {
       const postWithComments: PostNode = {
         id: 'post789',
         caption: 'Test',
-        createdAt: '2025-12-09T00:00:00.000Z',
+        createdAt: dayjs().subtract(30, 'days').toISOString(),
         commentCount: 1,
         creator: {
           id: 'user789',

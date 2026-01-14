@@ -1,3 +1,6 @@
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 import { EVENT_DETAILS, EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
 
 export const mockEventData = {
@@ -8,16 +11,16 @@ export const mockEventData = {
     // Provide name/startAt/endAt to align with EVENT_DETAILS fields
     name: 'Test Event',
     description: 'Test Description',
-    startAt: '2030-01-01T09:00:00.000Z',
-    endAt: '2030-01-02T17:00:00.000Z',
+    startAt: dayjs.utc().add(4, 'year').toISOString(),
+    endAt: dayjs.utc().add(4, 'year').add(1, 'day').toISOString(),
     startTime: '09:00',
     endTime: '17:00',
     allDay: false,
     location: 'Test Location',
     isPublic: true,
     isRegisterable: true,
-    createdAt: '2030-01-01T00:00:00Z',
-    updatedAt: '2030-01-01T00:00:00Z',
+    createdAt: dayjs.utc().add(4, 'year').toISOString(),
+    updatedAt: dayjs.utc().add(4, 'year').toISOString(),
     recurrenceRule: { id: 'rule123' },
     isRecurringEventTemplate: true,
     attendees: [
@@ -43,7 +46,7 @@ export const mockEventBasicData = {
     id: 'event123',
     name: 'Test Event',
     location: 'Test Location',
-    startAt: '2030-01-01T09:00:00Z',
+    startAt: dayjs.utc().add(4, 'year').toISOString(),
     organization: { id: 'org123', name: 'Test Org' },
   },
 };

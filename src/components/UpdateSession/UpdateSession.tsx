@@ -1,24 +1,22 @@
 /**
- * @file UpdateSession.tsx
- * @description A React component that allows users to update the session timeout for a community.
- *              It fetches the current timeout value from the server, displays it, and provides
- *              a slider to update the timeout value. The updated value is submitted to the server
- *              via a GraphQL mutation.
  *
- * @module UpdateTimeout
+ * UpdateTimeout Component
  *
- * @interface TestInterfaceUpdateTimeoutProps
- * @description Props for the `UpdateTimeout` component.
- * @property {function} [onValueChange] - Optional callback function triggered when the slider value changes.
- * @component
- * @name UpdateTimeout
- * @description A React functional component that manages and updates the session timeout for a community.
+ * A React component that allows users to update the session timeout for a community.
+ * It fetches the current timeout value from the server, displays it, and provides
+ * a slider to update the timeout value. The updated value is submitted to the server
+ * via a GraphQL mutation.
  *
- * @param {TestInterfaceUpdateTimeoutProps} props - Component props.
- * @returns {JSX.Element} The rendered component.
+ * Props interface: TestInterfaceUpdateTimeoutProps
+ * - onValueChange: Optional callback function triggered when the slider value changes.
+ *
+ * @param props - Component props.
+ * @returns The rendered component.
  *
  * @example
+ * ```tsx
  * <UpdateTimeout onValueChange={(value) => console.log(value)} />
+ * ```
  *
  * @remarks
  * - Fetches the current session timeout using a GraphQL query.
@@ -26,11 +24,11 @@
  * - Submits the updated timeout value to the server using a GraphQL mutation.
  * - Displays a success toast on successful update or handles errors gracefully.
  *
- * @dependencies
+ * Dependencies:
  * - `react`, `react-bootstrap`, `@mui/material`, `@apollo/client`, `react-toastify`
- * - Custom modules: `GraphQl/Queries/Queries`, `GraphQl/Mutations/mutations`, `utils/errorHandler`, `components/Loader/Loader`
+ * - Custom modules: `GraphQl/Queries/Queries`, `GraphQl/Mutations/mutations`, `utils/errorHandler`, `shared-components/LoadingState/LoadingState`
  *
- * @todo
+ * TODO:
  * - Add additional validation for slider input if needed.
  * - Improve error handling for edge cases.
  */
@@ -41,11 +39,11 @@ import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
-import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
 import styles from 'style/app-fixed.module.css';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 interface TestInterfaceUpdateTimeoutProps {
   onValueChange?: (value: number) => void;
@@ -137,20 +135,15 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
         variables: { inactivityTimeoutDuration: timeout * 60 },
       });
 
-      toast.success(t('profileChangedMsg'));
+      NotificationToast.success(t('profileChangedMsg'));
       setCommunityTimeout(timeout);
     } catch (error: unknown) {
       errorHandler(t, error as Error);
     }
   };
 
-  // Show a loader while the data is being fetched
-  if (loading) {
-    return <Loader />;
-  }
-
   return (
-    <>
+    <LoadingState isLoading={loading} variant="spinner">
       <Card className={`${styles.updateTimeoutCard} rounded-4 shadow-sm`}>
         <Card.Header className={styles.updateTimeoutCardHeader}>
           <div className={styles.updateTimeoutCardTitle}>
@@ -177,7 +170,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
               </Form.Label>
             </div>
 
-            <Box sx={{ width: '100%' }}>
+            <Box>
               <Slider
                 data-testid="slider-thumb"
                 value={timeout}
@@ -211,7 +204,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
           </Form>
         </Card.Body>
       </Card>
-    </>
+    </LoadingState>
   );
 };
 

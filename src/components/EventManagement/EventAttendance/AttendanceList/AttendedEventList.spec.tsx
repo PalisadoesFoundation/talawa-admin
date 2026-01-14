@@ -1,4 +1,5 @@
 import React from 'react';
+import dayjs from 'dayjs';
 import { render, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import AttendedEventList from './AttendedEventList';
@@ -93,7 +94,7 @@ describe('Testing AttendedEventList', () => {
             event: {
               id: 'event123', // Using id instead of _id
               name: 'Fallback Event', // Using name instead of title
-              startAt: '2030-05-01T09:00:00.000Z', // Using startAt instead of startDate
+              startAt: dayjs().add(4, 'year').toISOString(), // Using startAt instead of startDate
               location: 'Fallback Location',
             },
           },
@@ -114,7 +115,7 @@ describe('Testing AttendedEventList', () => {
     await waitFor(() => {
       expect(queryByText('Fallback Event')).toBeInTheDocument();
       expect(
-        queryByText(formatDate('2030-05-01T09:00:00.000Z')),
+        queryByText(formatDate(dayjs().add(4, 'year').toISOString())),
       ).toBeInTheDocument();
     });
   });

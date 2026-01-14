@@ -1,4 +1,7 @@
 import React from 'react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import {
@@ -17,7 +20,8 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import { vi } from 'vitest';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+
 import {
   COMBINED_MOCKS,
   EMPTY_STATE_MOCKS,
@@ -27,12 +31,14 @@ import {
   ERROR_DELETION_MOCKS,
 } from './Registrations.mocks';
 
-// Mock toast
-vi.mock('react-toastify', () => ({
-  toast: {
+// Mock NotificationToast
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
-    warn: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
   },
 }));
 
@@ -81,13 +87,11 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     renderEventRegistrants();
 
     await waitFor(() => {
-      expect(screen.getByTestId('table-header-serial')).toBeInTheDocument();
-      expect(screen.getByTestId('table-header-registrant')).toBeInTheDocument();
-      expect(
-        screen.getByTestId('table-header-registered-at'),
-      ).toBeInTheDocument();
-      expect(screen.getByTestId('table-header-created-at')).toBeInTheDocument();
-      expect(screen.getByTestId('table-header-options')).toBeInTheDocument();
+      expect(screen.getByText('Serial Number')).toBeInTheDocument();
+      expect(screen.getByText('Registrant')).toBeInTheDocument();
+      expect(screen.getByText('Registered At')).toBeInTheDocument();
+      expect(screen.getByText('Created At')).toBeInTheDocument();
+      expect(screen.getByText('Options')).toBeInTheDocument();
     });
   });
 
@@ -95,21 +99,11 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     renderEventRegistrants();
 
     await waitFor(() => {
-      expect(screen.getByTestId('table-header-serial')).toHaveTextContent(
-        'Serial Number',
-      );
-      expect(screen.getByTestId('table-header-registrant')).toHaveTextContent(
-        'Registrant',
-      );
-      expect(
-        screen.getByTestId('table-header-registered-at'),
-      ).toHaveTextContent('Registered At');
-      expect(screen.getByTestId('table-header-created-at')).toHaveTextContent(
-        'Created At',
-      );
-      expect(screen.getByTestId('table-header-options')).toHaveTextContent(
-        'Options',
-      );
+      expect(screen.getByText('Serial Number')).toBeInTheDocument();
+      expect(screen.getByText('Registrant')).toBeInTheDocument();
+      expect(screen.getByText('Registered At')).toBeInTheDocument();
+      expect(screen.getByText('Created At')).toBeInTheDocument();
+      expect(screen.getByText('Options')).toBeInTheDocument();
     });
   });
 
@@ -118,24 +112,25 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     renderEventRegistrants();
 
     await waitFor(() => {
-      expect(screen.getByTestId('registrant-row-0')).toBeInTheDocument();
-      expect(screen.getByTestId('registrant-row-1')).toBeInTheDocument();
-    });
+      const registrantCells = screen.getAllByTestId(
+        'datatable-cell-registrant',
+      );
 
-    expect(screen.getByTestId('attendee-name-0')).toHaveTextContent(
-      'Bruce Garza',
-    );
-    expect(screen.getByTestId('attendee-name-1')).toHaveTextContent(
-      'Jane Smith',
-    );
+      expect(registrantCells[0]).toHaveTextContent('Bruce Garza');
+      expect(registrantCells[1]).toHaveTextContent('Jane Smith');
+    });
   });
 
   test('Displays serial numbers correctly', async () => {
     renderEventRegistrants();
 
     await waitFor(() => {
-      expect(screen.getByTestId('serial-number-1')).toHaveTextContent('1');
-      expect(screen.getByTestId('serial-number-2')).toHaveTextContent('2');
+      expect(
+        screen.getAllByTestId('datatable-cell-serial')[0],
+      ).toHaveTextContent('1');
+      expect(
+        screen.getAllByTestId('datatable-cell-serial')[1],
+      ).toHaveTextContent('2');
     });
   });
 
@@ -143,12 +138,14 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     renderEventRegistrants();
 
     await waitFor(() => {
-      expect(
-        screen.getByTestId('registrant-registered-at-0'),
-      ).toHaveTextContent('2030-04-13');
-      expect(
-        screen.getByTestId('registrant-registered-at-1'),
-      ).toHaveTextContent('2030-04-13');
+      const registeredAtCells = screen.getAllByTestId(
+        'datatable-cell-registeredAt',
+      );
+
+      const expectedDate = dayjs.utc().add(4, 'year').format('YYYY-MM-DD');
+
+      expect(registeredAtCells[0]).toHaveTextContent(expectedDate);
+      expect(registeredAtCells[1]).toHaveTextContent(expectedDate);
     });
   });
 
@@ -156,15 +153,15 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     renderEventRegistrants();
 
     await waitFor(() => {
-      const timeCell0 = screen.getByTestId('registrant-created-at-0');
-      const timeCell1 = screen.getByTestId('registrant-created-at-1');
+      const createdAtCells = screen.getAllByTestId('datatable-cell-createdAt');
 
-      // Should display formatted time (10:23 AM format)
-      expect(timeCell0).toBeInTheDocument();
-      expect(timeCell1).toBeInTheDocument();
-      // The exact format may vary by locale, so we just check it's not N/A
-      expect(timeCell0).not.toHaveTextContent('N/A');
-      expect(timeCell1).not.toHaveTextContent('N/A');
+      expect(createdAtCells.length).toBeGreaterThanOrEqual(2);
+
+      expect(createdAtCells[0]).toBeInTheDocument();
+      expect(createdAtCells[1]).toBeInTheDocument();
+
+      expect(createdAtCells[0]).not.toHaveTextContent('N/A');
+      expect(createdAtCells[1]).not.toHaveTextContent('N/A');
     });
   });
 
@@ -173,10 +170,12 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     renderEventRegistrants();
 
     await waitFor(() => {
-      const deleteButton = screen.getByTestId('delete-registrant-0');
-      expect(deleteButton).toHaveTextContent('Checked In');
-      expect(deleteButton).toBeDisabled();
-      expect(deleteButton).toHaveClass('btn-secondary');
+      const checkedInButton = screen.getByRole('button', {
+        name: 'Checked In',
+      });
+
+      expect(checkedInButton).toBeDisabled();
+      expect(checkedInButton).toHaveClass('btn-secondary');
     });
   });
 
@@ -184,10 +183,17 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     renderEventRegistrants();
 
     await waitFor(() => {
-      const deleteButton = screen.getByTestId('delete-registrant-1');
-      expect(deleteButton).toHaveTextContent('Unregister');
-      expect(deleteButton).not.toBeDisabled();
-      expect(deleteButton).toHaveClass('btn-outline-danger');
+      const buttons = screen.getAllByRole('button', {
+        name: /unregister|checked in/i,
+      });
+
+      const unregisterButton = buttons.find(
+        (btn) => btn.textContent === 'Unregister',
+      );
+
+      expect(unregisterButton).toBeInTheDocument();
+      expect(unregisterButton).not.toBeDisabled();
+      expect(unregisterButton).toHaveClass('btn-outline-danger');
     });
   });
 
@@ -195,8 +201,11 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     renderEventRegistrants();
 
     await waitFor(() => {
-      const deleteButton = screen.getByTestId('delete-registrant-0');
-      expect(deleteButton).toHaveAttribute(
+      const checkedInButton = screen.getByRole('button', {
+        name: 'Checked In',
+      });
+
+      expect(checkedInButton).toHaveAttribute(
         'title',
         'Cannot unregister checked-in user',
       );
@@ -207,42 +216,50 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     renderEventRegistrants();
 
     await waitFor(() => {
-      const deleteButton = screen.getByTestId('delete-registrant-1');
-      expect(deleteButton).toHaveAttribute('title', 'Unregister');
+      const unregisterButton = screen.getByRole('button', {
+        name: 'Unregister',
+      });
+
+      expect(unregisterButton).toHaveAttribute('title', 'Unregister');
     });
   });
 
-  // Deletion tests
   test('Prevents deletion of checked-in user', async () => {
     renderEventRegistrants();
 
     await waitFor(() => {
-      const deleteButton = screen.getByTestId('delete-registrant-0');
-      expect(deleteButton).toBeDisabled();
+      const checkedInButton = screen.getByRole('button', {
+        name: 'Checked In',
+      });
 
-      // Try to click (should do nothing)
-      fireEvent.click(deleteButton);
+      expect(checkedInButton).toBeDisabled();
+
+      fireEvent.click(checkedInButton);
     });
 
-    // Toast should not be called since button is disabled
-    expect(toast.warn).not.toHaveBeenCalled();
+    expect(NotificationToast.warning).not.toHaveBeenCalled();
   });
 
   test('Successfully triggers delete for non-checked-in registrant', async () => {
     renderEventRegistrants();
 
     await waitFor(() => {
-      const deleteButton = screen.getByTestId('delete-registrant-1');
-      fireEvent.click(deleteButton);
+      const unregisterButton = screen.getByRole('button', {
+        name: 'Unregister',
+      });
+
+      fireEvent.click(unregisterButton);
     });
 
     await waitFor(() => {
-      expect(toast.warn).toHaveBeenCalledWith('Removing the attendee...');
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
+        'Removing the attendee...',
+      );
     });
 
     await waitFor(
       () => {
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(NotificationToast.success).toHaveBeenCalledWith(
           'Attendee removed successfully',
         );
       },
@@ -250,19 +267,24 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     );
   });
 
-  test('Prevents deletion with toast error when checked-in user removal attempted programmatically', async () => {
+  test('Prevents deletion with NotificationToast error when checked-in user removal attempted programmatically', async () => {
     renderEventRegistrants();
 
     await waitFor(() => {
-      const deleteButton = screen.getByTestId('delete-registrant-0');
-      // Simulate programmatic attempt to delete
-      if (!deleteButton.hasAttribute('disabled')) {
-        fireEvent.click(deleteButton);
-      }
+      const checkedInButton = screen.getByRole('button', {
+        name: 'Checked In',
+      });
+
+      // Button should be disabled for checked-in users
+      expect(checkedInButton).toBeDisabled();
+
+      // Even if clicked programmatically, no side effects should occur
+      fireEvent.click(checkedInButton);
     });
 
-    // Should not show warning toast since button is disabled
-    expect(toast.warn).not.toHaveBeenCalled();
+    // No warning or error toast should be shown
+    expect(NotificationToast.warning).not.toHaveBeenCalled();
+    expect(NotificationToast.error).not.toHaveBeenCalled();
   });
 
   // Empty state tests
@@ -270,19 +292,17 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     renderEventRegistrants(EMPTY_STATE_MOCKS);
 
     await waitFor(() => {
-      expect(screen.getByTestId('no-registrants')).toBeInTheDocument();
-      expect(screen.getByTestId('no-registrants')).toHaveTextContent(
+      expect(screen.getByTestId('datatable-empty')).toHaveTextContent(
         'No Registrants Found.',
       );
     });
   });
 
-  // Recurring event tests
   test('Handles recurring events correctly', async () => {
     renderEventRegistrants(RECURRING_EVENT_MOCKS);
 
     await waitFor(() => {
-      expect(screen.getByTestId('no-registrants')).toBeInTheDocument();
+      expect(screen.getByText('No Registrants Found.')).toBeInTheDocument();
     });
   });
 
@@ -291,12 +311,13 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     renderEventRegistrants(MISSING_DATE_MOCKS);
 
     await waitFor(() => {
-      expect(
-        screen.getByTestId('registrant-registered-at-0'),
-      ).toHaveTextContent('N/A');
-      expect(screen.getByTestId('registrant-created-at-0')).toHaveTextContent(
-        'N/A',
+      const registeredAtCells = screen.getAllByTestId(
+        'datatable-cell-registeredAt',
       );
+      const createdAtCells = screen.getAllByTestId('datatable-cell-createdAt');
+
+      expect(registeredAtCells[0]).toHaveTextContent('N/A');
+      expect(createdAtCells[0]).toHaveTextContent('N/A');
     });
   });
 
@@ -304,7 +325,8 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     renderEventRegistrants(MISSING_NAME_MOCKS);
 
     await waitFor(() => {
-      expect(screen.getByTestId('attendee-name-0')).toHaveTextContent('N/A');
+      const nameCells = screen.getAllByTestId('datatable-cell-registrant');
+      expect(nameCells[0]).toHaveTextContent('N/A');
     });
   });
 
@@ -313,19 +335,21 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     renderEventRegistrants();
 
     await waitFor(() => {
-      const table = screen.getByRole('grid');
+      const table = screen.getByRole('table');
       expect(table).toBeInTheDocument();
-      expect(table).toHaveAttribute('aria-label', 'Event Registrants Table');
+      expect(table).toHaveAccessibleName('Event Registrants Table');
     });
   });
 
-  test('Table headers have correct role attributes', async () => {
+  test('Table renders column headers correctly', async () => {
     renderEventRegistrants();
 
     await waitFor(() => {
-      const serialHeader = screen.getByTestId('table-header-serial');
-      expect(serialHeader).toHaveAttribute('role', 'columnheader');
-      expect(serialHeader).toHaveAttribute('aria-sort', 'none');
+      expect(screen.getByText('Serial Number')).toBeInTheDocument();
+      expect(screen.getByText('Registrant')).toBeInTheDocument();
+      expect(screen.getByText('Registered At')).toBeInTheDocument();
+      expect(screen.getByText('Created At')).toBeInTheDocument();
+      expect(screen.getByText('Options')).toBeInTheDocument();
     });
   });
 
@@ -334,21 +358,22 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     renderEventRegistrants();
 
     await waitFor(() => {
-      const deleteButton = screen.getByTestId('delete-registrant-1');
-      fireEvent.click(deleteButton);
+      const unregisterButton = screen.getByRole('button', {
+        name: 'Unregister',
+      });
+      fireEvent.click(unregisterButton);
     });
 
     await waitFor(
       () => {
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(NotificationToast.success).toHaveBeenCalledWith(
           'Attendee removed successfully',
         );
       },
       { timeout: 3000 },
     );
 
-    // Data should be refreshed (queries should be called again)
-    // This is implicitly tested by the successful completion of the delete operation
+    // Refetch is implicitly verified by successful mutation completion
   });
 
   // Error handling test
@@ -356,13 +381,17 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     renderEventRegistrants(ERROR_DELETION_MOCKS);
 
     await waitFor(() => {
-      const deleteButton = screen.getByTestId('delete-registrant-0');
-      fireEvent.click(deleteButton);
+      const unregisterButton = screen.getByRole('button', {
+        name: 'Unregister',
+      });
+      fireEvent.click(unregisterButton);
     });
 
     await waitFor(
       () => {
-        expect(toast.error).toHaveBeenCalledWith('Error removing attendee');
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Error removing attendee',
+        );
       },
       { timeout: 3000 },
     );

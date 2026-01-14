@@ -11,8 +11,8 @@
  * - The profile image is displayed if available; otherwise, a default avatar is shown.
  * - Clicking the chevron button navigates the user to different routes based on their role.
  *
- * ### Dependencies
- * - `Avatar`: A component used to display a default avatar when no profile image is available.
+ * ## Dependencies
+ * - `ProfileAvatarDisplay`: A component used to display a default avatar when no profile image is available.
  * - `react-bootstrap`: Provides the `Dropdown` and `ButtonGroup` components for layout.
  * - `react-router-dom`: Used for navigation (`useNavigate`) and extracting route parameters (`useParams`).
  * - `@mui/icons-material`: Provides the `ChevronRightIcon` for the navigation button.
@@ -38,14 +38,15 @@
  * <ProfileCard />
  * ```
  */
-import Avatar from 'components/Avatar/Avatar';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import React from 'react';
 import { ButtonGroup, Dropdown } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { resolveProfileNavigation } from 'utils/profileNavigation';
+import localStyles from './ProfileCard.module.css';
 
 interface InterfaceProfileCardProps {
   portal?: 'admin' | 'user';
@@ -63,7 +64,6 @@ const ProfileCard = ({
   const lastName = nameParts.slice(1).join(' ') || '';
   const userImage = getItem<string>('UserImage') || '';
   const navigate = useNavigate();
-  const { orgId } = useParams();
 
   const MAX_NAME_LENGTH = 20;
   const fullName = `${firstName} ${lastName}`;
@@ -74,38 +74,27 @@ const ProfileCard = ({
   const profileDestination = resolveProfileNavigation({
     portal,
     role,
-    orgId,
   });
 
   return (
-    <Dropdown as={ButtonGroup} variant="none" style={{ width: '100%' }}>
+    <Dropdown
+      as={ButtonGroup}
+      variant="none"
+      className={localStyles.dropdownContainer}
+    >
       <div className={styles.profileContainer}>
         <div className={styles.imageContainer}>
-          {userImage && userImage !== 'null' ? (
-            <img
-              src={userImage}
-              alt={`profile picture`}
-              data-testid="display-img"
-              crossOrigin="anonymous"
-              onError={(e) => {
-                e.currentTarget.onerror = null;
-                e.currentTarget.style.display = 'none';
-              }}
-            />
-          ) : (
-            <Avatar
-              data-testid="display-img"
-              size={45}
-              avatarStyle={styles.avatarStyle}
-              name={`${firstName} ${lastName}`}
-              alt={`dummy picture`}
-            />
-          )}
+          <ProfileAvatarDisplay
+            dataTestId="display-img"
+            className={styles.avatarStyle}
+            size="medium"
+            fallbackName={`${firstName} ${lastName}`}
+            imageUrl={userImage}
+          />
         </div>
         <div className={styles.profileTextUserSidebarOrg}>
           <span
-            style={{ whiteSpace: 'nowrap' }}
-            className={styles.primaryText}
+            className={`${styles.primaryText} ${localStyles.displayName}`}
             data-testid="display-name"
           >
             {displayedName}

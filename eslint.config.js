@@ -9,6 +9,90 @@ import vitest from '@vitest/eslint-plugin';
 import tsdoc from 'eslint-plugin-tsdoc';
 import vitestIsolation from './scripts/eslint-plugin-vitest-isolation/index.js';
 
+/**
+ * Central registry for restricted imports used by the base rule and overrides.
+ * Add new restrictions here, then allow them in specific folders via IDs.
+ * For more details refer `docs/docs/docs/developer-resources/reusable-components.md`
+ */
+const restrictedImports = [
+  {
+    id: 'mui-data-grid',
+    name: '@mui/x-data-grid',
+    message:
+      'Direct imports from @mui/x-data-grid are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead.',
+  },
+  {
+    id: 'mui-data-grid-pro',
+    name: '@mui/x-data-grid-pro',
+    message:
+      'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead.',
+  },
+  {
+    id: 'rb-spinner',
+    name: 'react-bootstrap',
+    importNames: ['Spinner'],
+    message:
+      'Do not import Spinner from react-bootstrap. Use the shared LoadingState component instead.',
+  },
+  {
+    id: 'rb-modal',
+    name: 'react-bootstrap',
+    importNames: ['Modal'],
+    message:
+      'Do not import Modal directly. Use the shared BaseModal component instead.',
+  },
+  {
+    id: 'mui-date-pickers',
+    name: '@mui/x-date-pickers',
+    message:
+      'Direct imports from @mui/x-date-pickers are not allowed. Please use the wrappers (DateRangePicker, DatePicker, TimePicker) from src/shared-components/ instead.',
+  },
+  {
+    id: 'rb-table',
+    name: 'react-bootstrap',
+    importNames: ['Table'],
+    message:
+      'Do not import Table directly. Use the shared DataTable component instead.',
+  },
+  {
+    id: 'rb-table-path',
+    name: 'react-bootstrap/Table',
+    message:
+      'Do not import react-bootstrap/Table directly. Use the shared DataTable component instead.',
+  },
+  {
+    id: 'react-toastify',
+    name: 'react-toastify',
+    message:
+      'Direct imports from react-toastify are not allowed. Please use the NotificationToast component from src/components/NotificationToast/ instead.',
+  },
+  {
+    id: 'dicebear-core',
+    name: '@dicebear/core',
+    message:
+      'Direct imports from @dicebear/core are not allowed. Use the shared createAvatar wrapper instead.',
+  },
+];
+
+const stripId = (entry) => {
+  const { id, ...rule } = entry;
+  void id;
+  return rule;
+};
+
+const restrictedImportPaths = restrictedImports.map(stripId);
+
+const restrictImportsExcept = (allowedIds = []) => ({
+  'no-restricted-imports': [
+    'error',
+    {
+      paths: restrictedImports
+        .filter(({ id }) => !allowedIds.includes(id))
+        .map(stripId),
+    },
+  ],
+});
+
 export default [
   {
     ignores: [
@@ -74,6 +158,9 @@ export default [
     rules: {
       ...js.configs.recommended.rules,
       ...ts.configs.recommended.rules,
+
+      'tsdoc/syntax': 'error',
+
       '@typescript-eslint/no-require-imports': 'error',
       'react/destructuring-assignment': 'error',
       'react/no-multi-comp': ['error', { ignoreStateless: false }],
@@ -81,7 +168,15 @@ export default [
       'import/no-duplicates': 'error',
       'no-undef': 'off',
       '@typescript-eslint/ban-ts-comment': 'error',
-      '@typescript-eslint/no-unused-vars': 'error',
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          ignoreRestSiblings: true, // Allow unused vars when using rest properties for filtering
+          varsIgnorePattern: '^_', // Allow unused vars that start with underscore
+          argsIgnorePattern: '^_', // Allow unused function args that start with underscore
+        },
+      ],
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-non-null-assertion': 'error',
       '@typescript-eslint/consistent-type-assertions': 'error',
@@ -127,7 +222,141 @@ export default [
       'vitest/no-focused-tests': 'error',
       'vitest/no-identical-title': 'error',
       '@typescript-eslint/no-unused-expressions': 'error',
+      'no-restricted-syntax': [
+        'error',
+        // Prevent insecure token handling in authorization headers
+        // See docs/docs/docs/developer-resources/security.md for details on these rules
+        // Note: No current violations exist. This rule is retained to prevent future regressions.
+        // Prohibited: { authorization: localStorage.getItem('token') }
+        // Safe pattern: const token = localStorage.getItem('token'); { authorization: token }
+        {
+          selector:
+            "Property[key.name='authorization'][value.type='CallExpression'][value.callee.type='MemberExpression'][value.callee.property.name='getItem'][value.arguments.0.value='token']",
+          message:
+            "Security Risk: Do not use getItem('token') directly inside authorization headers. Extract it to a variable first to handle null values.",
+        },
+        // Prevent using deprecated REVOKE_REFRESH_TOKEN mutation
+        {
+          selector: "ImportSpecifier[imported.name='REVOKE_REFRESH_TOKEN']",
+          message:
+            'HTTP-Only Cookie Violation: Do not use REVOKE_REFRESH_TOKEN for logout. Use LOGOUT_MUTATION instead, which correctly reads refresh tokens from HTTP-only cookies.',
+        },
+        // Prevent passing refreshToken as a variable to mutations
+        {
+          selector:
+            "Property[key.name='variables'] Property[key.name='refreshToken']",
+          message:
+            'HTTP-Only Cookie Violation: Do not pass refreshToken as a variable. The API reads refresh tokens from HTTP-only cookies automatically.',
+        },
+      ],
+      /**
+       * Enforce usage of standardized DataGridWrapper component
+       * Issue #6099: https://github.com/PalisadoesFoundation/talawa-admin/issues/6099
+       * Parent Issue #5290: DataGridWrapper foundation component
+       *
+       * This rule blocks direct imports from @mui/x-data-grid to ensure all usage
+       * goes through the standardized DataGridWrapper component located at
+       * src/shared-components/DataGridWrapper/
+       *
+       * Note: Approximately 20+ files currently use direct imports and will require
+       * migration in a future ticket. This rule prevents new violations.
+       *
+       * Also enforces usage of standardized date picker wrappers
+       * Issue #6146: https://github.com/PalisadoesFoundation/talawa-admin/issues/6146
+       */
+      'no-restricted-imports': ['error', { paths: restrictedImportPaths }],
     },
+  },
+  /**
+   * Exemption: DataGridWrapper component files
+   *
+   * DataGridWrapper files need direct MUI DataGrid access for wrapper implementation.
+   * These files are the only ones allowed to import from @mui/x-data-grid/-pro.
+   * Allowed IDs: mui-data-grid, mui-data-grid-pro.
+   */
+  {
+    files: [
+      'src/shared-components/DataGridWrapper/**/*.{ts,tsx}',
+      'src/types/DataGridWrapper/**/*.{ts,tsx}',
+    ],
+    rules: restrictImportsExcept(['mui-data-grid', 'mui-data-grid-pro']),
+  },
+  /**
+   * Exemption: LoadingState and Loader component files
+   *
+   * LoadingState/Loader files need direct Spinner access from react-bootstrap for wrapper implementation.
+   * These files are the only ones allowed to import Spinner directly from react-bootstrap.
+   * Allowed ID: rb-spinner.
+   */
+  {
+    files: [
+      'src/shared-components/LoadingState/**/*.{ts,tsx}',
+      'src/types/shared-components/LoadingState/**/*.{ts,tsx}',
+      'src/components/Loader/**/*.{ts,tsx}',
+    ],
+    rules: restrictImportsExcept(['rb-spinner']),
+  },
+  /**
+   * Exemption: BaseModal component files
+   *
+   * BaseModal files need direct react-bootstrap Modal access for wrapper implementation.
+   * These files are the only ones allowed to import Modal directly from react-bootstrap.
+   * Allowed ID: rb-modal.
+   */
+  {
+    files: [
+      'src/shared-components/BaseModal/**/*.{ts,tsx}',
+      'src/types/shared-components/BaseModal/**/*.{ts,tsx}',
+    ],
+    rules: restrictImportsExcept(['rb-modal']),
+  },
+  /**
+   * Exemption: NotificationToast component files
+   *
+   * NotificationToast files need direct react-toastify access for wrapper implementation.
+   * These files are the only ones allowed to import from react-toastify.
+   * Allowed ID: react-toastify.
+   */
+  {
+    files: [
+      'src/components/NotificationToast/**/*.{ts,tsx}',
+      'src/types/NotificationToast/**/*.{ts,tsx}',
+    ],
+    rules: restrictImportsExcept(['react-toastify']),
+  },
+  /**
+   * Exemption: Date picker wrapper components
+   *
+   * These wrapper components need direct access to @mui/x-date-pickers
+   * to provide standardized date/time picker interfaces for the application.
+   *
+   * Note: This exemption is specific - it only allows @mui/x-date-pickers imports.
+   * Other restricted imports (like react-bootstrap Modal) are still blocked.
+   * Allowed ID: mui-date-pickers.
+   */
+  {
+    files: [
+      'src/shared-components/DateRangePicker/**/*.{ts,tsx}',
+      'src/types/shared-components/DateRangePicker/**/*.{ts,tsx}',
+      'src/shared-components/DatePicker/**/*.{ts,tsx}',
+      'src/shared-components/TimePicker/**/*.{ts,tsx}',
+      'src/index.tsx',
+    ],
+    rules: restrictImportsExcept(['mui-date-pickers']),
+  },
+  /**
+   * Exemption: DataTable wrapper component
+   *
+   * DataTable files need direct react-bootstrap Table access for wrapper implementation.
+   * These files are the only ones allowed to import Table directly from react-bootstrap.
+   * Allowed IDs: rb-table, rb-table-path.
+   */
+  {
+    files: [
+      'src/shared-components/DataTable/**/*.{ts,tsx}',
+      'src/types/shared-components/DataTable/**/*.{ts,tsx}',
+    ],
+    rules: restrictImportsExcept(['rb-table', 'rb-table-path']),
   },
   {
     files: ['*.graphql'],
@@ -137,7 +366,6 @@ export default [
     plugins: {
       '@graphql-eslint': graphql,
       prettier,
-      tsdoc,
     },
     rules: {
       '@typescript-eslint/consistent-type-imports': 'off',
@@ -146,8 +374,23 @@ export default [
       '@graphql-eslint/known-type-names': 'error',
       '@graphql-eslint/no-unreachable-types': 'off',
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
-      'tsdoc/syntax': 'error',
     },
+  },
+  /**
+   * Exemption: Avatar and createAvatar component files
+   *
+   * Avatar and createAvatar files need direct `@dicebear/core` access for wrapper implementation.
+   * These files are the only ones allowed to import from `@dicebear/core`.
+   * Allowed ID: dicebear-core.
+   */
+  {
+    files: [
+      'src/shared-components/Avatar/**/*.{ts,tsx,d.ts}',
+      'src/shared-components/createAvatar/**/*.{ts,tsx}',
+      'src/types/shared-components/Avatar/**/*.{ts,tsx,d.ts}',
+      'src/types/shared-components/createAvatar/**/*.{ts,tsx}',
+    ],
+    rules: restrictImportsExcept(['dicebear-core']),
   },
   // Cypress-specific configuration
   {
@@ -231,6 +474,20 @@ export default [
     },
     rules: {
       'vitest-isolation/require-aftereach-cleanup': 'error',
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'Literal[value=/20[2-9]\\d-\\d{2}-\\d{2}/]',
+          message:
+            'Avoid hardcoded date strings in tests. Use dynamic dates with dayjs instead (e.g., dayjs().add(30, "days").format("YYYY-MM-DD")).',
+        },
+        {
+          selector:
+            'Literal[value=/\\d{1,2}\\s+(January|February|March|April|May|June|July|August|September|October|November|December)\\s+20[2-9]\\d/]',
+          message:
+            'Avoid hardcoded date strings like "31 December 2025". Use dynamic dates with dayjs instead.',
+        },
+      ],
     },
   },
 ];

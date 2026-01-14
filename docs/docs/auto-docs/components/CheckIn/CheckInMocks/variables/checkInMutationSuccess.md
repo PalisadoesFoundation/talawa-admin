@@ -6,7 +6,7 @@
 
 > `const` **checkInMutationSuccess**: `object`[]
 
-Defined in: [src/components/CheckIn/CheckInMocks.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/CheckInMocks.ts#L63)
+Defined in: [src/components/CheckIn/CheckInMocks.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/CheckInMocks.ts#L64)
 
 ## Type Declaration
 
@@ -44,7 +44,7 @@ Defined in: [src/components/CheckIn/CheckInMocks.ts:63](https://github.com/Palis
 
 #### result.data.checkIn.checkinTime
 
-> **checkinTime**: `string` = `'2023-01-01T08:00:00Z'`
+> **checkinTime**: `string`
 
 #### result.data.checkIn.checkoutTime
 

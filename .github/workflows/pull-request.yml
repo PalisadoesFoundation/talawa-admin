@@ -48,7 +48,7 @@ jobs:
       - name: Count number of lines
         run: |
           chmod +x ./.github/workflows/scripts/countline.py
-          ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx src/components/OrgPostCard/OrgPostCard.tsx src/components/UsersTableItem/UsersTableItem.tsx src/components/UserPortal/ChatRoom/ChatRoom.tsx
+          ./.github/workflows/scripts/countline.py --lines 600 --files ./.github/workflows/config/countline_excluded_file_list.txt
 
       - name: Get changed TypeScript files
         id: changed-files
@@ -91,16 +91,43 @@ jobs:
           CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: pnpm exec eslint ${CHANGED_FILES}
 
+      - name: Validate design tokens in modified files
+        if: steps.changed-files.outputs.any_changed == 'true'
+        env:
+          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: pnpm exec tsx scripts/validate-tokens.ts --files $CHANGED_FILES
+
       - name: Check for TSDoc comments
         run: pnpm check-tsdoc
 
       - name: Check for localStorage Usage
         run: pnpm exec tsx scripts/githooks/check-localstorage-usage.ts --scan-entire-repo
 
+      - name: Check for unused dependencies
+        run: pnpm knip --config knip.deps.json --include dependencies
+
       - name: Compare translation files
         run: |
           chmod +x .github/workflows/scripts/compare_translations.py
           python .github/workflows/scripts/compare_translations.py --directory public/locales
+
+      - name: Get changed source files
+        id: changed-src
+        run: |
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          CHANGED=$(git diff --name-only --diff-filter=ACMRT "$BASE_SHA" ${{ github.event.pull_request.head.sha }} \
+            | grep -E '^src/.*\.(ts|tsx|js|jsx)$' | tr '\n' ' ' || true)
+          echo "files=$CHANGED" >> $GITHUB_OUTPUT
+          if [ -z "$CHANGED" ]; then
+            echo "none=true" >> $GITHUB_OUTPUT
+          else
+            echo "none=false" >> $GITHUB_OUTPUT
+          fi
+
+      # Diff-only i18n check to avoid existing legacy violations in untouched lines.
+      - name: Check for non-internationalized text (diff only)
+        if: steps.changed-src.outputs.none != 'true'
+        run: pnpm run check-i18n -- --diff --base ${{ github.event.pull_request.base.sha }} --head ${{ github.event.pull_request.head.sha }} ${{ steps.changed-src.outputs.files }}
 
       - name: Check if the source and target branches are different
         if: ${{ github.event.pull_request.base.ref == github.event.pull_request.head.ref }}
@@ -112,10 +139,45 @@ jobs:
           exit 1
 
       - name: Check for unused files and exports in src/ and docs/src
-        run: pnpm knip --include files,exports
+        run: pnpm knip --include files,exports,nsExports,nsTypes
 
+  CSS-Policy-Check:
+    name: CSS Policy Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Get PR changed files
+        run: |
+          git diff --name-only --diff-filter=ACMRT \
+            origin/${{ github.base_ref }}...HEAD > pr_files.txt
+
+      - name: Run CSS policy enforcement
+        run: |
+          if [ -s pr_files.txt ]; then
+            FILTERED_FILES=$(grep -Ev '^src/(utils|types)/' pr_files.txt || true)
+
+            if [ -n "$FILTERED_FILES" ]; then
+              python .github/workflows/scripts/css_check.py \
+                --files $FILTERED_FILES
+            else
+              echo "No relevant files after exclusion"
+            fi
+          else
+            echo "No files changed in this PR"
+          fi
   Check-Mock-Isolation:
     name: Check for proper mock cleanup in test files
+    needs: [Code-Quality-Checks]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the Repository
@@ -128,50 +190,8 @@ jobs:
 
   Check-AutoDocs:
     name: Generate and Validate Documentation
-    runs-on: ubuntu-latest
     needs: [Code-Quality-Checks]
-    steps:
-      - name: Checkout the Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          run_install: false
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24.x'
-          cache: 'pnpm'
-
-      - name: Prepare dependency store
-        run: pnpm fetch
-
-      - name: Install Dependencies (frozen)
-        run: pnpm install --frozen-lockfile --prefer-offline
-
-      - name: Run documentation generation
-        run: pnpm run generate-docs
-
-      - name: Check for uncommitted doc changes
-        run: |
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "::error::Documentation files are outdated or missing."
-            echo "Please run 'pnpm run generate-docs' locally and commit the updated files."
-            echo ""
-            echo "Changed files:"
-            git status --porcelain
-            exit 1
-          else
-            echo "Documentation is up to date."
-          fi
-
-      - name: Check for unused dependencies
-        run: pnpm knip --config knip.deps.json --include dependencies
-
+    uses: PalisadoesFoundation/.github/.github/workflows/typescript-autodocs.yml@main
   Check-Sensitive-Files:
     if: ${{ github.actor != 'dependabot[bot]' }}
     name: Checks if sensitive files have been changed without authorization
@@ -272,6 +292,9 @@ jobs:
             '^docs/docusaurus.config.ts$'
             '^docs/sidebar..*'
             'CNAME$'
+            '^./*md'
+            '^./*txt'
+            '^./*TXT'            
           )
 
           # Check for changes in sensitive files
@@ -310,138 +333,116 @@ jobs:
           exit 1
 
   Count-Changed-Files:
+    uses: PalisadoesFoundation/.github/.github/workflows/count-changed-files.yml@main
+
+  Check-Disable-Statements:
+    name: Check for disable statements (eslint-disable, istanbul-ignore, it.skip)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Checkout centralized scripts
+        uses: actions/checkout@v4
+        with:
+          repository: PalisadoesFoundation/.github
+          path: .github-central
+          ref: main
+
+      - name: Get changed files
+        id: changed-files
+        run: |
+          echo "all_changed_files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')" >> $GITHUB_OUTPUT
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Run Disable Statements Check
+        run: |
+          python .github-central/.github/workflows/scripts/disable_statements_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
+
+  Translation-Tag-Check:
+    name: Translation Tag Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      - name: Install dependencies
+        run: pip install -r .github/workflows/requirements.txt
+      - name: Run Translation Checker
+        run: |
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -E '\.(ts|tsx|js|jsx)$' || true)
+
+          if [ -n "$CHANGED_FILES" ]; then
+            python3 .github/workflows/scripts/translation_check.py --files $CHANGED_FILES
+          else
+            echo "No relevant files changed, skipping check."
+          fi
+
+  MinIO-Compliance-Check:
     if: ${{ github.actor != 'dependabot[bot]' }}
-    name: Checks if number of files changed is acceptable
+    name: MinIO Compliance Check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch all history for all branches and tags
+          fetch-depth: 0
 
-      - name: Get changed files
-        id: changed-files
+      - name: Get changed source files
+        id: changed-src
         run: |
-          # Get the base branch ref
           BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          CHANGED=$(git diff --name-only --diff-filter=ACMRT "$BASE_SHA" ${{ github.event.pull_request.head.sha }} \
+            | grep -E '^src/.*\.(ts|tsx|js|jsx)$' | tr '\n' ' ' || true)
+          echo "files=$CHANGED" >> $GITHUB_OUTPUT
+          if [ -z "$CHANGED" ]; then
+            echo "none=true" >> $GITHUB_OUTPUT
+          else
+            echo "none=false" >> $GITHUB_OUTPUT
+          fi
 
-          # Count all changed files excluding .md files
-          ALL_CHANGED_FILES_COUNT=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -v -i "\.md$" | wc -l | tr -d ' ')
-          echo "all_changed_files_count=$ALL_CHANGED_FILES_COUNT" >> $GITHUB_OUTPUT
-
-      - name: Echo number of changed files
-        env:
-          CHANGED_FILES_COUNT: ${{ steps.changed-files.outputs.all_changed_files_count }}
-        run: |
-          echo "Number of files changed: $CHANGED_FILES_COUNT"
-
-      - name: Check if the number of changed files is less than 100
-        if: steps.changed-files.outputs.all_changed_files_count > 100
-        env:
-          CHANGED_FILES_COUNT: ${{ steps.changed-files.outputs.all_changed_files_count }}
-        run: |
-          echo "Error: Too many files (greater than 100) changed in the pull request."
-          echo "Possible issues:"
-          echo "- Contributor may be merging into an incorrect branch."
-          echo "- Source branch may be incorrect please use develop as source branch."
-          exit 1
-
-  Check-ESlint-Disable:
-    name: Check for eslint-disable
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
         with:
-          fetch-depth: 0 # Fetch all history for all branches and tags
+          node-version: '24.x'
 
-      - name: Get changed files
-        id: changed-files
-        run: |
-          # Get the base branch ref
-          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+      - name: Run MinIO compliance check
+        if: steps.changed-src.outputs.none != 'true'
+        run: node .github/workflows/scripts/check-minio-compliance.cjs
 
-          # Get all changed files
-          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
-          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.9
-
-      - name: Run Python script
-        run: |
-          python .github/workflows/scripts/eslint_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
-
-  Check-Code-Coverage-Disable:
-    name: Check for code coverage disable
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Fetch all history for all branches and tags
-
-      - name: Get changed files
-        id: changed-files
-        run: |
-          # Get the base branch ref
-          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
-
-          # Get all changed files
-          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
-          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.9
-
-      - name: Run Python script
-        run: |
-          python .github/workflows/scripts/code_coverage_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
-
-  Check-ItSkip-Disable:
-    name: Check for it.skip commands
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Fetch all history for all branches and tags
-
-      - name: Get changed files
-        id: changed-files
-        run: |
-          # Get the base branch ref
-          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
-
-          # Get all changed files
-          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
-          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.9
-
-      - name: Run Python script
-        run: |
-          python .github/workflows/scripts/itskip_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
-
-  Test-Application:
-    name: Test Application (Shard ${{ matrix.shard }})
+  Pre-Test-Checks-Pass:
+    name: All Pre-Testing Checks Pass
     runs-on: ubuntu-latest
     needs:
       [
         Code-Quality-Checks,
         Check-AutoDocs,
-        Check-ESlint-Disable,
-        Check-Code-Coverage-Disable,
-        Check-ItSkip-Disable,
+        Check-Disable-Statements,
         Check-Mock-Isolation,
+        CSS-Policy-Check,
+        MinIO-Compliance-Check,
+        Python-Compliance,
+        Translation-Tag-Check,
       ]
+    steps:
+      - name: This job intentionally does nothing
+        run: echo "This job intentionally does nothing"
+
+  Test-Application:
+    name: Test Application (Shard ${{ matrix.shard }})
+    runs-on: ubuntu-latest
+    needs: [Pre-Test-Checks-Pass]
     env:
       TOTAL_SHARDS: 12
     strategy:
@@ -757,7 +758,7 @@ jobs:
   Start-App-Without-Docker:
     name: Check if Talawa Admin app starts (No Docker)
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Merge-Coverage]
+    needs: [Merge-Coverage]
     if: github.actor != 'dependabot'
     steps:
       - name: Checkout the Repository
@@ -814,7 +815,7 @@ jobs:
   Start-App-Using-Docker:
     name: Check if Talawa Admin app starts in Docker
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks, Merge-Coverage]
+    needs: [Merge-Coverage]
     if: github.actor != 'dependabot'
     steps:
       - name: Checkout the Repository
@@ -827,7 +828,6 @@ jobs:
           REACT_APP_TALAWA_URL=http://localhost:4000/graphql
           REACT_APP_USE_RECAPTCHA=
           REACT_APP_RECAPTCHA_SITE_KEY=
-          REACT_APP_BACKEND_WEBSOCKET_URL=ws://localhost:4000/graphql
           ALLOW_LOGS=NO
           USE_DOCKER=YES
           DOCKER_PORT=4321
@@ -886,7 +886,7 @@ jobs:
   Test-Docusaurus-Deployment:
     name: Test Deployment to https://docs-admin.talawa.io
     runs-on: ubuntu-latest
-    needs: [Start-App-Using-Docker, Start-App-Without-Docker]
+    needs: [Merge-Coverage]
     # Run only if the develop branch and not dependabot
     if: ${{ github.actor != 'dependabot[bot]' && github.event.pull_request.base.ref == 'develop' }}
     steps:
@@ -942,7 +942,6 @@ jobs:
   Python-Compliance:
     name: Check Python Code Style
     runs-on: ubuntu-latest
-    needs: [Code-Quality-Checks]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -968,6 +967,10 @@ jobs:
           source venv/bin/activate
           python -m pip install --upgrade pip
           pip install -r .github/workflows/requirements.txt
+      - name: Run Python tests for scripts
+        run: |
+          source venv/bin/activate
+          pytest .github/workflows/scripts/test
 
       - name: Run Black Formatter Check
         run: |
@@ -992,14 +995,7 @@ jobs:
   Test-Application-E2E:
     timeout-minutes: 35
     runs-on: ubuntu-latest
-    needs:
-      [
-        Code-Quality-Checks,
-        Check-AutoDocs,
-        Check-ESlint-Disable,
-        Check-Code-Coverage-Disable,
-        Check-ItSkip-Disable,
-      ]
+    needs: [Merge-Coverage]
     env:
       REACT_APP_TALAWA_URL: http://127.0.0.1:4000/graphql
     steps:
@@ -1014,11 +1010,25 @@ jobs:
           npm install -g @devcontainers/cli
           cp envFiles/.env.devcontainer .env
           devcontainer up --workspace-folder .
-          echo "Waiting for devcontainer services to be ready..."
-          sleep 10
+          echo "Devcontainer started"
 
-      - name: Install Backend Dependencies
-        run: docker exec talawa-api-1 /bin/bash -c 'pnpm install'
+      - name: Wait for Postgres in devcontainer before migrations
+        run: |
+          set -euo pipefail
+          POSTGRES_USER=postgres
+          echo "Waiting for Postgres service via compose..."
+          TIMEOUT=90
+          until docker compose exec -T postgres pg_isready -h localhost -p 5432 -U "$POSTGRES_USER" >/dev/null 2>&1 || [ "$TIMEOUT" -le 0 ]; do
+            echo "Postgres not ready ($TIMEOUT s left)"
+            sleep 1
+            TIMEOUT=$((TIMEOUT - 1))
+          done
+          if [ "$TIMEOUT" -le 0 ]; then
+            echo "Error: Postgres failed to start"
+            docker compose ps
+            docker compose logs postgres --tail 100
+            exit 1
+          fi
 
       - name: Apply Database Migrations
         run: |
@@ -1027,34 +1037,58 @@ jobs:
       - name: Start Backend Server
         run: |
           docker exec -d talawa-api-1 /bin/bash -c 'pnpm run start_development_server'
-          sleep 15
 
-      - name: Wait for GraphQL endpoint to become available
+      - name: Wait for backend to be ready
+        run: |
+          set -euo pipefail
+          echo "Waiting for backend at http://localhost:4000/healthcheck"
+
+          TIMEOUT=60
+          INTERVAL=3
+          ELAPSED=0
+
+          until docker exec talawa-api-1 curl -sf http://localhost:4000/healthcheck > /dev/null; do
+            if [ "$ELAPSED" -ge "$TIMEOUT" ]; then
+              echo "Backend failed to start within ${TIMEOUT}s"
+              echo "=== Backend container logs ==="
+              docker logs talawa-api-1 --tail 100
+              exit 1
+            fi
+            echo "Backend not ready yet... (waited ${ELAPSED}s)"
+            sleep $INTERVAL
+            ELAPSED=$((ELAPSED + INTERVAL))
+          done
+
+          echo "Backend is up and responding"
+
+      - name: Wait for GraphQL endpoint to be ready
         if: success()
         run: |
-          echo "Waiting for the GraphQL endpoint to become available..."
-          for i in {1..40}; do
-            if ! docker ps | grep -q talawa-api-1; then
-              echo "Container talawa-api-1 not found. Waiting..."
-              sleep 2
-              continue
+          set -euo pipefail
+          echo "Waiting for GraphQL endpoint at http://localhost:4000/graphql"
+
+          TIMEOUT=60
+          INTERVAL=3
+          ELAPSED=0
+
+          until docker exec talawa-api-1 curl -sf -X POST \
+            http://localhost:4000/graphql \
+            -H "Content-Type: application/json" \
+            -d '{"query":"{ __typename }"}' | grep -q "__typename"; do
+
+            if [ "$ELAPSED" -ge "$TIMEOUT" ]; then
+              echo "GraphQL endpoint failed to become ready within ${TIMEOUT}s"
+              echo "=== Backend container logs ==="
+              docker logs talawa-api-1 --tail 100
+              exit 1
             fi
-            docker exec talawa-api-1 which curl >/dev/null 2>&1 || {
-              docker exec talawa-api-1 apt-get update && \
-              docker exec talawa-api-1 apt-get install -y curl
-            }
-            RESPONSE=$(docker exec talawa-api-1 curl -s -X POST \
-              http://127.0.0.1:4000/graphql -H "Content-Type: application/json" \
-              -d '{"query":"{__typename}"}' 2>/dev/null || echo "Connection failed")
-            if echo "$RESPONSE" | grep -q '__typename'; then
-              echo "GraphQL endpoint is available, Backend is ready!"
-              exit 0
-            fi
-            echo "GraphQL endpoint not ready. Retrying in 2 seconds..."
-            sleep 2
+
+            echo "GraphQL endpoint not ready yet... (waited ${ELAPSED}s)"
+            sleep $INTERVAL
+            ELAPSED=$((ELAPSED + INTERVAL))
           done
-          echo "GraphQL endpoint did not become available within the expected time."
-          exit 1
+
+          echo "GraphQL endpoint is up and responding"
 
       - name: Seed Sample Data
         run: |
@@ -1121,7 +1155,6 @@ jobs:
         env:
           CYPRESS_BASE_URL: http://localhost:4321
           CYPRESS_API_URL: http://127.0.0.1:4000/graphql
-          REACT_APP_BACKEND_WEBSOCKET_URL: ws://127.0.0.1:4000/graphql
 
       - name: Upload cypress screenshots on failure
         uses: actions/upload-artifact@v4

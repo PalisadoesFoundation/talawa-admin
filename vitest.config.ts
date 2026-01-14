@@ -26,11 +26,26 @@ export default defineConfig({
     sourcemap: false, // Disable sourcemaps for faster tests
   },
   test: {
-    include: ['src/**/*.{spec,test}.{js,jsx,ts,tsx}'],
+    include: [
+      'src/**/*.{spec,test}.{js,jsx,ts,tsx}',
+      'config/**/*.{spec,test}.{js,jsx,ts,tsx}'
+    ],
+    exclude: [
+      '**/node_modules/**',
+      '**/dist/**',
+      '**/cypress/**',
+      '**/.{idea,git,cache,output,temp}/**',
+    ],
     globals: true,
     environment: 'jsdom',
     css: false,
     setupFiles: 'vitest.setup.ts',
+    // Inline specific dependencies to avoid vitest issues
+      server: {
+        deps: {
+          inline: ["@mui/x-charts", "@mui/x-data-grid", "@mui/x-date-pickers"]
+        }
+      },
     testTimeout: 30000,
     hookTimeout: 10000,
     teardownTimeout: 10000,
@@ -60,7 +75,7 @@ export default defineConfig({
         '**/*.{spec,test}.{js,jsx,ts,tsx}',
         '**/*.{mocks,mock,helpers,mockHelpers}.{js,jsx,ts,tsx}', // Exclude mock/helper files from coverage
         'coverage/**',
-        '**/index.{js,ts}',
+        'src/!(install)/index.{js,ts}',  // Exclude index files except in install folder
         '**/*.d.ts',
         'src/test/**',
         'vitest.config.ts',

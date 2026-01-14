@@ -47,10 +47,12 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
+import { Button, Modal, Form, Alert } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router';
 import { getItem } from 'utils/useLocalstorage';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
+import { useTranslation } from 'react-i18next';
 
 const userEmail = (() => {
   try {
@@ -74,6 +76,7 @@ export { userEmail, userId };
 const LeaveOrganization = (): JSX.Element => {
   const navigate = useNavigate();
   const { orgId: organizationId } = useParams();
+  const { t: tCommon } = useTranslation('common');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -99,7 +102,7 @@ const LeaveOrganization = (): JSX.Element => {
     onCompleted: () => {
       // Use a toast notification or in-app message
       setShowModal(false);
-      toast.success('You have successfully left the organization!');
+      NotificationToast.success('You have successfully left the organization!');
       navigate(`/user/organizations`);
     },
     onError: (err) => {
@@ -155,8 +158,9 @@ const LeaveOrganization = (): JSX.Element => {
   if (orgLoading) {
     return (
       <div className="text-center mt-4" role="status">
-        <Spinner animation="border" />
-        <p>Loading organization details...</p>
+        <LoadingState isLoading={orgLoading} variant="spinner">
+          <div />
+        </LoadingState>
       </div>
     );
   }
@@ -253,23 +257,18 @@ const LeaveOrganization = (): JSX.Element => {
                   setError('');
                 }}
               >
-                Back
+                {tCommon('back')}
               </Button>
-              <Button
-                variant="danger"
-                disabled={loading}
-                onClick={handleVerifyAndLeave}
-                aria-label="confirm-leave-button"
-              >
-                {loading ? (
-                  <>
-                    <Spinner animation="border" size="sm" role="status" />
-                    {' Loading...'}
-                  </>
-                ) : (
-                  'Confirm'
-                )}
-              </Button>
+              <LoadingState isLoading={loading} variant="inline">
+                <Button
+                  variant="danger"
+                  disabled={loading}
+                  onClick={handleVerifyAndLeave}
+                  aria-label="confirm-leave-button"
+                >
+                  {tCommon('confirm')}
+                </Button>
+              </LoadingState>
             </>
           )}
         </Modal.Footer>

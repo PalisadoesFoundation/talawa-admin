@@ -11,6 +11,10 @@ import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import i18nForTest from './utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import 'style/app-fixed.module.css';
+import * as useLSModule from 'utils/useLocalstorage';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 vi.mock('@mui/x-charts/PieChart', () => ({
   pieArcLabelClasses: vi.fn(),
@@ -47,9 +51,231 @@ vi.mock('./plugin', () => ({
   PluginInjector: vi.fn(() => <div>Mock Plugin Injector</div>),
 }));
 
-vi.mock('screens/UserPortal/Settings/Settings', () => ({
-  default: () => <div data-testid="mock-settings">Mock Settings</div>,
+vi.mock('shared-components/ProfileForm/ProfileForm', () => ({
+  default: () => <div data-testid="mock-profile-form">Mock Settings</div>,
 }));
+
+// Mock all lazy loaded components
+vi.mock('components/AdminPortal/OrganizationScreen/OrganizationScreen', () => ({
+  default: () => (
+    <div data-testid="mock-organization-screen">Mock Organization Screen</div>
+  ),
+}));
+
+vi.mock('shared-components/posts/posts', () => ({
+  default: () => <div data-testid="mock-posts">Mock Posts</div>,
+}));
+
+vi.mock('components/AdminPortal/SuperAdminScreen/SuperAdminScreen', () => ({
+  default: () => (
+    <div data-testid="mock-super-admin-screen">Mock Super Admin Screen</div>
+  ),
+}));
+
+vi.mock('screens/AdminPortal/BlockUser/BlockUser', () => ({
+  default: () => <div data-testid="mock-block-user">Mock Block User</div>,
+}));
+
+vi.mock('screens/AdminPortal/EventManagement/EventManagement', () => ({
+  default: () => (
+    <div data-testid="mock-event-management">Mock Event Management</div>
+  ),
+}));
+
+vi.mock('screens/ForgotPassword/ForgotPassword', () => ({
+  default: () => (
+    <div data-testid="mock-forgot-password">Mock Forgot Password</div>
+  ),
+}));
+
+vi.mock('screens/AdminPortal/MemberDetail/MemberDetail', () => ({
+  default: () => <div data-testid="mock-member-detail">Mock Member Detail</div>,
+}));
+
+vi.mock('screens/AdminPortal/OrgContribution/OrgContribution', () => ({
+  default: () => (
+    <div data-testid="mock-org-contribution">Mock Org Contribution</div>
+  ),
+}));
+
+vi.mock('screens/AdminPortal/OrgList/OrgList', () => ({
+  default: () => <div data-testid="mock-org-list">Mock Org List</div>,
+}));
+
+vi.mock('screens/AdminPortal/OrgSettings/OrgSettings', () => ({
+  default: () => <div data-testid="mock-org-settings">Mock Org Settings</div>,
+}));
+
+vi.mock(
+  'screens/AdminPortal/OrganizationDashboard/OrganizationDashboard',
+  () => ({
+    default: () => (
+      <div data-testid="mock-organization-dashboard">
+        Mock Organization Dashboard
+      </div>
+    ),
+  }),
+);
+
+vi.mock('screens/AdminPortal/OrganizationEvents/OrganizationEvents', () => ({
+  default: () => (
+    <div data-testid="mock-organization-events">Mock Organization Events</div>
+  ),
+}));
+
+vi.mock('screens/AdminPortal/OrganizationFunds/OrganizationFunds', () => ({
+  default: () => (
+    <div data-testid="mock-organization-funds">Mock Organization Funds</div>
+  ),
+}));
+
+vi.mock(
+  'screens/AdminPortal/OrganizationTransactions/OrganizationTransactions',
+  () => ({
+    default: () => (
+      <div data-testid="mock-organization-transactions">
+        Mock Organization Transactions
+      </div>
+    ),
+  }),
+);
+
+vi.mock('screens/AdminPortal/FundCampaignPledge/FundCampaignPledge', () => ({
+  default: () => (
+    <div data-testid="mock-fund-campaign-pledge">Mock Fund Campaign Pledge</div>
+  ),
+}));
+
+vi.mock('screens/AdminPortal/OrganizationPeople/OrganizationPeople', () => ({
+  default: () => (
+    <div data-testid="mock-organization-people">Mock Organization People</div>
+  ),
+}));
+
+vi.mock('screens/AdminPortal/OrganizationTags/OrganizationTags', () => ({
+  default: () => (
+    <div data-testid="mock-organization-tags">Mock Organization Tags</div>
+  ),
+}));
+
+vi.mock('screens/AdminPortal/ManageTag/ManageTag', () => ({
+  default: () => <div data-testid="mock-manage-tag">Mock Manage Tag</div>,
+}));
+
+vi.mock('screens/AdminPortal/SubTags/SubTags', () => ({
+  default: () => <div data-testid="mock-sub-tags">Mock Sub Tags</div>,
+}));
+
+vi.mock('screens/AdminPortal/Requests/Requests', () => ({
+  default: () => <div data-testid="mock-requests">Mock Requests</div>,
+}));
+
+vi.mock('screens/AdminPortal/Users/Users', () => ({
+  default: () => <div data-testid="mock-users">Mock Users</div>,
+}));
+
+vi.mock('screens/AdminPortal/CommunityProfile/CommunityProfile', () => ({
+  default: () => (
+    <div data-testid="mock-community-profile">Mock Community Profile</div>
+  ),
+}));
+
+vi.mock('screens/AdminPortal/OrganizationVenues/OrganizationVenues', () => ({
+  default: () => (
+    <div data-testid="mock-organization-venues">Mock Organization Venues</div>
+  ),
+}));
+
+vi.mock('screens/AdminPortal/Leaderboard/Leaderboard', () => ({
+  default: () => <div data-testid="mock-leaderboard">Mock Leaderboard</div>,
+}));
+
+vi.mock('components/AdminPortal/Advertisements/Advertisements', () => ({
+  default: () => (
+    <div data-testid="mock-advertisements">Mock Advertisements</div>
+  ),
+}));
+
+vi.mock('screens/UserPortal/Donate/Donate', () => ({
+  default: () => <div data-testid="mock-donate">Mock Donate</div>,
+}));
+
+vi.mock('screens/UserPortal/Transactions/Transactions', () => ({
+  default: () => (
+    <div data-testid="mock-user-transactions">Mock User Transactions</div>
+  ),
+}));
+
+vi.mock('screens/UserPortal/Events/Events', () => ({
+  default: () => <div data-testid="mock-user-events">Mock User Events</div>,
+}));
+
+vi.mock('screens/UserPortal/Organizations/Organizations', () => ({
+  default: () => (
+    <div data-testid="mock-user-organizations">Mock User Organizations</div>
+  ),
+}));
+
+vi.mock('screens/UserPortal/People/People', () => ({
+  default: () => <div data-testid="mock-user-people">Mock User People</div>,
+}));
+
+vi.mock('screens/UserPortal/Chat/Chat', () => ({
+  default: () => <div data-testid="mock-chat">Mock Chat</div>,
+}));
+
+vi.mock('components/EventDashboardScreen/EventDashboardScreen', () => ({
+  default: () => (
+    <div data-testid="mock-event-dashboard-screen">
+      Mock Event Dashboard Screen
+    </div>
+  ),
+}));
+
+vi.mock('screens/Public/Invitation/AcceptInvitation', () => ({
+  default: () => (
+    <div data-testid="mock-accept-invitation">Mock Accept Invitation</div>
+  ),
+}));
+
+vi.mock('screens/UserPortal/Campaigns/Campaigns', () => ({
+  default: () => <div data-testid="mock-campaigns">Mock Campaigns</div>,
+}));
+
+vi.mock('screens/UserPortal/Pledges/Pledges', () => ({
+  default: () => <div data-testid="mock-pledges">Mock Pledges</div>,
+}));
+
+vi.mock('screens/UserPortal/Volunteer/VolunteerManagement', () => ({
+  default: () => (
+    <div data-testid="mock-volunteer-management">Mock Volunteer Management</div>
+  ),
+}));
+
+vi.mock('screens/UserPortal/LeaveOrganization/LeaveOrganization', () => ({
+  default: () => (
+    <div data-testid="mock-leave-organization">Mock Leave Organization</div>
+  ),
+}));
+
+vi.mock('screens/AdminPortal/Notification/Notification', () => ({
+  default: () => <div data-testid="mock-notification">Mock Notification</div>,
+}));
+
+vi.mock('screens/AdminPortal/PluginStore/PluginStore', () => ({
+  default: () => <div data-testid="mock-plugin-store">Mock Plugin Store</div>,
+}));
+
+vi.mock(
+  'screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaigns',
+  () => ({
+    default: () => (
+      <div data-testid="mock-organization-fund-campaign">
+        Mock Organization Fund Campaign
+      </div>
+    ),
+  }),
+);
 
 const MOCKS = [
   {
@@ -59,7 +285,7 @@ const MOCKS = [
         currentUser: {
           id: '123',
           name: 'John Doe',
-          createdAt: '2023-04-13T04:53:17.742+00:00',
+          createdAt: dayjs().subtract(1, 'year').toISOString(),
           image: 'john.jpg',
           emailAddress: 'johndoe@gmail.com',
           birthDate: '1990-01-01',
@@ -150,15 +376,20 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+let logSpy: ReturnType<typeof vi.spyOn> | undefined;
+let errorSpy: ReturnType<typeof vi.spyOn> | undefined;
+
 describe('Testing the App Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    console.log = vi.fn();
-    console.error = vi.fn();
+    logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
-    vi.restoreAllMocks(); // Restores console spies automatically
+    vi.clearAllMocks();
+    logSpy?.mockRestore();
+    errorSpy?.mockRestore();
   });
 
   it('Component should be rendered properly and user is logged in', async () => {
@@ -458,11 +689,69 @@ describe('Testing the App Component', () => {
   });
 
   it('should navigate to user settings', async () => {
-    renderApp(link, '/user/settings');
+    const { setItem, removeItem } = useLSModule.useLocalStorage();
+    setItem('IsLoggedIn', 'TRUE');
+    removeItem('AdminFor');
 
-    await waitFor(() => {
-      // Should render user screen components
-      expect(screen.getByTestId('mock-settings')).toBeInTheDocument();
-    });
+    renderApp(link, '/user/settings');
+    expect(await screen.findByTestId('mock-profile-form')).toBeInTheDocument();
+  });
+
+  it('blocks /user/settings when not logged in', async () => {
+    // Force IsLoggedIn !== 'TRUE'
+    const lsSpy = vi.spyOn(useLSModule, 'default').mockImplementation(
+      () =>
+        ({
+          getItem: (key: string) =>
+            key === 'IsLoggedIn' ? 'FALSE' : undefined,
+          setItem: vi.fn(),
+          removeItem: vi.fn(),
+          getStorageKey: (k: string) => `Talawa-admin_${k}`,
+        }) as unknown as ReturnType<typeof useLSModule.default>,
+    );
+
+    try {
+      renderApp(link, '/user/settings');
+
+      // Guard blocks route; mocked Settings must NOT appear
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('mock-profile-form'),
+        ).not.toBeInTheDocument();
+      });
+    } finally {
+      lsSpy.mockRestore();
+    }
+  });
+
+  it('blocks /user/settings when AdminFor is present', async () => {
+    // Force IsLoggedIn === 'TRUE' and AdminFor present
+    const lsSpy = vi.spyOn(useLSModule, 'default').mockImplementation(
+      () =>
+        ({
+          getItem: (key: string) =>
+            key === 'IsLoggedIn'
+              ? 'TRUE'
+              : key === 'AdminFor'
+                ? 'some-org-id'
+                : undefined,
+          setItem: vi.fn(),
+          removeItem: vi.fn(),
+          getStorageKey: (k: string) => `Talawa-admin_${k}`,
+        }) as unknown as ReturnType<typeof useLSModule.default>,
+    );
+
+    try {
+      renderApp(link, '/user/settings');
+
+      // Guard takes "not allowed" branch; mocked Settings must NOT appear
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('mock-profile-form'),
+        ).not.toBeInTheDocument();
+      });
+    } finally {
+      lsSpy.mockRestore();
+    }
   });
 });

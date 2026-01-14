@@ -8,6 +8,10 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { ToastContainer } from 'react-toastify';
 import { describe, expect, it } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 const nonEmptyReviewProps = {
   data: {
@@ -18,22 +22,22 @@ const nonEmptyReviewProps = {
           _id: 'feedback1',
           review: 'review1',
           rating: 5,
-          createdAt: new Date('2021-08-10T10:00:00.000Z'),
-          updatedAt: new Date('2021-08-10T10:00:00.000Z'),
+          createdAt: dayjs.utc().subtract(1, 'year').toDate(),
+          updatedAt: dayjs.utc().subtract(1, 'year').toDate(),
         },
         {
           _id: 'feedback2',
           review: 'review2',
           rating: 5,
-          createdAt: new Date('2021-08-10T10:00:00.000Z'),
-          updatedAt: new Date('2021-08-10T10:00:00.000Z'),
+          createdAt: dayjs.utc().subtract(1, 'year').toDate(),
+          updatedAt: dayjs.utc().subtract(1, 'year').toDate(),
         },
         {
           _id: 'feedback3',
           review: null,
           rating: 5,
-          createdAt: new Date('2021-08-10T10:00:00.000Z'),
-          updatedAt: new Date('2021-08-10T10:00:00.000Z'),
+          createdAt: dayjs.utc().subtract(1, 'year').toDate(),
+          updatedAt: dayjs.utc().subtract(1, 'year').toDate(),
         },
       ],
       averageFeedbackScore: 5,
@@ -50,8 +54,8 @@ const emptyReviewProps = {
           _id: 'feedback3',
           review: null,
           rating: 5,
-          createdAt: new Date('2021-08-10T10:00:00.000Z'),
-          updatedAt: new Date('2021-08-10T10:00:00.000Z'),
+          createdAt: dayjs.utc().subtract(1, 'year').toDate(),
+          updatedAt: dayjs.utc().subtract(1, 'year').toDate(),
         },
       ],
       averageFeedbackScore: 5,
