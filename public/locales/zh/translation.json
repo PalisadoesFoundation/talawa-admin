@@ -1,4 +1,10 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "请重新登录；您的会话已过期。"
+  },
+  "securedRoute": {
+    "sessionExpired": "请重新登录；您的会话已过期。"
+  },
   "ends": "结束",
   "occurrences": "次",
   "leaderboard": {
@@ -1621,7 +1627,8 @@
     "on": "在",
     "after": "之后",
     "customRecurrence": "自定义重复",
-    "repeatsEvery": "重复周期"
+    "repeatsEvery": "重复周期",
+    "noEventAvailable": "沒有可用的活動！"
   },
   "userEventCard": {
     "starts": "开始",
@@ -2149,9 +2156,6 @@
   "contact": {
     "card_aria": "联系人卡片"
   },
-  "securedRoute": {
-    "sessionExpired": "请重新登录，因为会话已过期"
-  },
   "common": {
     "signOut": "退出登录",
     "signingOut": "正在退出...",
@@ -2188,5 +2192,8 @@
     "sortPeople": "排序人员",
     "unassign": "取消分配",
     "tags": "标签"
+  },
+  "orgProfileField": {
+    "editCustomField": "編輯自定義字段"
   }
 }

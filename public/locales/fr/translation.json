@@ -1,4 +1,10 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "Veuillez vous reconnecter ; votre session a expiré."
+  },
+  "securedRoute": {
+    "sessionExpired": "Veuillez vous reconnecter ; votre session a expiré."
+  },
   "ends": "Prend fin",
   "occurrences": "Occurrences",
   "leaderboard": {
@@ -1621,7 +1627,8 @@
     "on": "Le",
     "after": "Après",
     "customRecurrence": "Récurrence Personnalisée",
-    "repeatsEvery": "Se répète tous les"
+    "repeatsEvery": "Se répète tous les",
+    "noEventAvailable": "Aucun événement disponible !"
   },
   "userEventCard": {
     "starts": "Départs",
@@ -2149,9 +2156,6 @@
   "contact": {
     "card_aria": "Carte de contact"
   },
-  "securedRoute": {
-    "sessionExpired": "Veuillez vous reconnecter car la session a expiré"
-  },
   "common": {
     "signOut": "Se déconnecter",
     "signingOut": "Déconnexion en cours...",
@@ -2188,5 +2192,8 @@
     "sortPeople": "Trier les personnes",
     "unassign": "Désassigner",
     "tags": "Tags"
+  },
+  "orgProfileField": {
+    "editCustomField": "Modifier le champ personnalisé"
   }
 }

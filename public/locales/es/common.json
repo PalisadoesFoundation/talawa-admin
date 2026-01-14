@@ -256,5 +256,14 @@
   "eventNotFound": "Evento con id {{id}} no encontrado",
   "required": "Obligatorio",
   "imageNotFound": "Imagen no encontrada",
-  "changeLanguage": "Cambiar idioma"
+  "changeLanguage": "Cambiar idioma",
+  "selectField": "Seleccionar {{fieldName}}",
+  "userEvents": {
+    "presetToday": "Hoy",
+    "presetThisWeek": "Esta Semana",
+    "presetThisMonth": "Este Mes",
+    "presetNext7Days": "Próximos 7 Días",
+    "presetNext30Days": "Próximos 30 Días",
+    "presetNextMonth": "Próximo Mes"
+  }
 }

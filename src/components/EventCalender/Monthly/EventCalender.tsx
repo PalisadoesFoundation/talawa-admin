@@ -51,6 +51,7 @@ import type {
 } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import { useTranslation } from 'react-i18next';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 const Calendar: React.FC<
   InterfaceCalendarProps & {
@@ -70,6 +71,7 @@ const Calendar: React.FC<
   currentYear,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'eventCalendar' });
+  const { t: tErrors } = useTranslation('errors');
   const [selectedDate] = useState<Date | null>(null);
   const [currentDate, setCurrentDate] = useState(() => new Date().getDate());
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
@@ -486,77 +488,84 @@ const Calendar: React.FC<
   };
 
   return (
-    <div className={styles.calendar}>
-      {viewType !== ViewType.YEAR && (
-        <div className={styles.calendar__header}>
-          <div className={styles.calender_month}>
-            <div className={styles.navigation_buttons}>
-              <Button
-                variant="outlined"
-                className={styles.buttonEventCalendar}
-                onClick={
-                  viewType === ViewType.DAY ? handlePrevDate : handlePrevMonth
-                }
-                data-testid="prevmonthordate"
-              >
-                <ChevronLeft />
-              </Button>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
+      <div className={styles.calendar}>
+        {viewType !== ViewType.YEAR && (
+          <div className={styles.calendar__header}>
+            <div className={styles.calender_month}>
+              <div className={styles.navigation_buttons}>
+                <Button
+                  variant="outlined"
+                  className={styles.buttonEventCalendar}
+                  onClick={
+                    viewType === ViewType.DAY ? handlePrevDate : handlePrevMonth
+                  }
+                  data-testid="prevmonthordate"
+                >
+                  <ChevronLeft />
+                </Button>
 
-              <Button
-                variant="outlined"
-                className={styles.buttonEventCalendar}
-                onClick={
-                  viewType === ViewType.DAY ? handleNextDate : handleNextMonth
-                }
-                data-testid="nextmonthordate"
-              >
-                <ChevronRight />
-              </Button>
-              <div
-                className={styles.calendar__header_month}
-                data-testid="current-date"
-              >
-                {viewType === ViewType.DAY ? `${currentDate} ` : ''}
-                {currentYear} {months[currentMonth]}
+                <Button
+                  variant="outlined"
+                  className={styles.buttonEventCalendar}
+                  onClick={
+                    viewType === ViewType.DAY ? handleNextDate : handleNextMonth
+                  }
+                  data-testid="nextmonthordate"
+                >
+                  <ChevronRight />
+                </Button>
+                <div
+                  className={styles.calendar__header_month}
+                  data-testid="current-date"
+                >
+                  {viewType === ViewType.DAY ? `${currentDate} ` : ''}
+                  {currentYear} {months[currentMonth]}
+                </div>
               </div>
             </div>
-          </div>
-          <div>
-            <Button
-              className={styles.editButton}
-              onClick={handleTodayButton}
-              data-testid="today"
-            >
-              {t('today')}
-            </Button>
-          </div>
-        </div>
-      )}
-      <div>
-        {viewType === ViewType.MONTH ? (
-          <>
-            <div className={styles.calendar__weekdays}>
-              {weekdays.map((weekday, index) => (
-                <div key={index} className={styles.weekday}>
-                  {weekday}
-                </div>
-              ))}
+            <div>
+              <Button
+                className={styles.editButton}
+                onClick={handleTodayButton}
+                data-testid="today"
+              >
+                {t('today')}
+              </Button>
             </div>
-            <div className={styles.calendar__days}>{renderDays()}</div>
-          </>
-        ) : viewType === ViewType.YEAR ? (
-          <YearlyEventCalender
-            eventData={eventData}
-            refetchEvents={refetchEvents}
-            orgData={orgData}
-            userRole={userRole}
-            userId={userId}
-          />
-        ) : (
-          <div className={styles.calendar__hours}>{renderHours()}</div>
+          </div>
         )}
+        <div>
+          {viewType === ViewType.MONTH ? (
+            <>
+              <div className={styles.calendar__weekdays}>
+                {weekdays.map((weekday, index) => (
+                  <div key={index} className={styles.weekday}>
+                    {weekday}
+                  </div>
+                ))}
+              </div>
+              <div className={styles.calendar__days}>{renderDays()}</div>
+            </>
+          ) : viewType === ViewType.YEAR ? (
+            <YearlyEventCalender
+              eventData={eventData}
+              refetchEvents={refetchEvents}
+              orgData={orgData}
+              userRole={userRole}
+              userId={userId}
+            />
+          ) : (
+            <div className={styles.calendar__hours}>{renderHours()}</div>
+          )}
+        </div>
       </div>
-    </div>
+    </ErrorBoundaryWrapper>
   );
 };
 

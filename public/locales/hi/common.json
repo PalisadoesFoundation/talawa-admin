@@ -160,7 +160,6 @@
   "mobilePhoneNumber": "मोबाइल फोन नंबर",
   "personalDetailsHeading": "प्रोफ़ाइल विवरण",
   "workPhoneNumber": "कार्य फोन नंबर",
-
   "showPassword": "पासवर्ड दिखाएं",
   "hidePassword": "पासवर्ड छुपाएं",
   "volunteer": "स्वयंसेवक",
@@ -257,5 +256,14 @@
   "eventNotFound": "ईवेंट आईडी {{id}} के साथ नहीं मिला",
   "required": "आवश्यक",
   "imageNotFound": "छवि नहीं मिली",
-  "changeLanguage": "भाषा बदलें"
+  "changeLanguage": "भाषा बदलें",
+  "selectField": "{{fieldName}} चुनें",
+  "userEvents": {
+    "presetToday": "आज",
+    "presetThisWeek": "इस सप्ताह",
+    "presetThisMonth": "इस महीने",
+    "presetNext7Days": "अगले 7 दिन",
+    "presetNext30Days": "अगले 30 दिन",
+    "presetNextMonth": "अगले महीने"
+  }
 }
