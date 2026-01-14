@@ -33,7 +33,7 @@ import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import LanguageSelector from './LanguageSelector';
 import UserProfileDropdown from './UserDropdown';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 export const UserPortalNavigationBar = (
   props: InterfaceUserPortalNavbarProps,
@@ -129,7 +129,7 @@ export const UserPortalNavigationBar = (
       try {
         await logout();
       } catch {
-        toast.error(tCommon('logoutFailed'));
+        NotificationToast.error(tCommon('logoutFailed'));
       }
 
       clearAllItems();

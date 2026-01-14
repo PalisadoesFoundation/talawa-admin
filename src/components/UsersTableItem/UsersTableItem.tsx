@@ -16,7 +16,7 @@ import { Button, Form, Modal, Row, Table } from 'react-bootstrap';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItemForAdmin } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
@@ -69,7 +69,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         variables: { userid: user.id, orgid: removeUserProps.orgId },
       });
       if (data) {
-        toast.success(
+        NotificationToast.success(
           tCommon('removedSuccessfully', { item: 'User' }) as string,
         );
         resetAndRefetch();
@@ -86,7 +86,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         variables: { organizationId: removeUserProps.orgId, userId: user.id },
       });
       if (data?.unblockUser) {
-        toast.success(
+        NotificationToast.success(
           tCommon('unblockedSuccessfully', { item: 'User' }) as string,
         );
         resetAndRefetch();
@@ -112,7 +112,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
         },
       });
       if (data) {
-        toast.success(t('roleUpdated') as string);
+        NotificationToast.success(t('roleUpdated') as string);
         resetAndRefetch();
       }
     } catch (error: unknown) {
@@ -127,7 +127,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   }
 
   function handleCreator(): void {
-    toast.success(t('profilePageComingSoon') as string);
+    NotificationToast.success(t('profilePageComingSoon') as string);
   }
 
   const searchJoinedOrgs = (value: string): void => {

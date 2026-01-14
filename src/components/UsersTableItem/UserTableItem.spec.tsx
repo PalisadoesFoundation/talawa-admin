@@ -4,7 +4,7 @@ import utc from 'dayjs/plugin/utc';
 import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceQueryUserListItemForAdmin } from 'utils/interfaces';
@@ -29,8 +29,8 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
     warning: vi.fn(),
@@ -306,7 +306,7 @@ describe('Testing User Table Item', () => {
     fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorabc`));
-    expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon!');
+    expect(NotificationToast.success).toHaveBeenCalledWith('Profile Page Coming Soon!');
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Joined Organization 1/i));
     expect(window.location.replace).toHaveBeenCalledWith('/orgdash/abc');
@@ -510,7 +510,7 @@ describe('Testing User Table Item', () => {
     const confirmRemoveBtn = screen.getByTestId(`confirmRemoveUser123`);
     fireEvent.click(confirmRemoveBtn);
     await wait();
-    expect(toast.error).toHaveBeenCalled();
+    expect(NotificationToast.error).toHaveBeenCalled();
   });
   test('change role button should function properly', async () => {
     const props: {
@@ -677,7 +677,7 @@ describe('Testing User Table Item', () => {
     await userEvent.selectOptions(changeRoleBtn, 'USER');
     await wait();
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalled();
       expect(resetAndRefetchMock).toHaveBeenCalled();
     });
   });
@@ -828,7 +828,7 @@ describe('Testing User Table Item', () => {
     fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorghi`));
-    expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon!');
+    expect(NotificationToast.success).toHaveBeenCalledWith('Profile Page Coming Soon!');
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Blocked Organization 1/i));
     expect(window.location.replace).toHaveBeenCalledWith('/orgdash/ghi');
@@ -910,7 +910,7 @@ describe('Testing User Table Item', () => {
     const confirmUnblockBtn = screen.getByTestId(`confirmUnblockUser${123}`);
     fireEvent.click(confirmUnblockBtn);
     await wait();
-    expect(toast.error).toHaveBeenCalled();
+    expect(NotificationToast.error).toHaveBeenCalled();
   });
   test('handles errors in updateUserRole mutation', async () => {
     const props: {
@@ -984,7 +984,7 @@ describe('Testing User Table Item', () => {
     ) as HTMLSelectElement;
     await userEvent.selectOptions(changeRoleBtn, 'ADMIN');
     await wait();
-    expect(toast.error).toHaveBeenCalled();
+    expect(NotificationToast.error).toHaveBeenCalled();
   });
   test('Should handle no joined organizations', async () => {
     const props: {
@@ -1219,7 +1219,7 @@ describe('Testing User Table Item', () => {
     const confirmBtn = screen.getByTestId(`confirmRemoveUser${123}`);
     fireEvent.click(confirmBtn);
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalled();
       expect(resetAndRefetchMock).toHaveBeenCalled();
       expect(
         screen.queryByTestId('modal-remove-user-123'),
@@ -1272,7 +1272,7 @@ describe('Testing User Table Item', () => {
     fireEvent.change(select, { target: { value: 'ADMIN?abc' } });
     await wait();
     expect(select.value).toBe('ADMIN?abc');
-    expect(toast.success).not.toHaveBeenCalled();
+    expect(NotificationToast.success).not.toHaveBeenCalled();
     expect(resetAndRefetchMock).not.toHaveBeenCalled();
   });
   test('Should handle cancel remove user and reopen joined organizations modal', async () => {
@@ -1401,7 +1401,7 @@ describe('Testing User Table Item', () => {
     fireEvent.click(screen.getByTestId(`confirmUnblockUser${123}`));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalled();
       expect(resetAndRefetchMock).toHaveBeenCalled();
     });
   });
