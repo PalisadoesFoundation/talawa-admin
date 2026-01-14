@@ -6,6 +6,7 @@ import {
   waitFor,
   RenderResult,
 } from '@testing-library/react';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { BrowserRouter } from 'react-router';
@@ -15,7 +16,7 @@ import { I18nextProvider } from 'react-i18next';
 import OrganizationModal from './OrganizationModal';
 import i18nForTest from '../../../../utils/i18nForTest'; // Update path based on your project structure
 
-import { validateFile } from 'utils/fileValidation';
+
 
 // Mock toast
 const toastMocks = vi.hoisted(() => ({
@@ -23,13 +24,11 @@ const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: toastMocks,
 }));
 
-vi.mock('utils/fileValidation', () => ({
-  validateFile: vi.fn(() => ({ isValid: true })),
-}));
+
 
 const { mockUploadFileToMinio } = vi.hoisted(() => ({
   mockUploadFileToMinio: vi
@@ -61,11 +60,7 @@ describe('OrganizationModal Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    (validateFile as unknown as ReturnType<typeof vi.fn>).mockImplementation(
-      () => ({
-        isValid: true,
-      }),
-    );
+
     mockUploadFileToMinio.mockResolvedValue({
       objectName: 'mocked-object-name',
     });
@@ -174,7 +169,7 @@ describe('OrganizationModal Component', () => {
   });
 
   test('handles image upload error correctly', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
     mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
 
     setup();
@@ -328,7 +323,7 @@ describe('OrganizationModal Component', () => {
       // Check if the input has either the required attribute or aria-required
       expect(
         input.hasAttribute('required') ||
-          input.getAttribute('aria-required') === 'true',
+        input.getAttribute('aria-required') === 'true',
       ).toBeTruthy();
     });
   });
@@ -427,11 +422,6 @@ describe('OrganizationModal Component', () => {
   });
 
   test('should handle invalid file type', async () => {
-    (validateFile as unknown as ReturnType<typeof vi.fn>).mockReturnValueOnce({
-      isValid: false,
-      errorMessage:
-        'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
-    });
     setup();
     const invalidFile = new File(['content'], 'test.txt', {
       type: 'text/plain',
@@ -442,8 +432,7 @@ describe('OrganizationModal Component', () => {
 
     await waitFor(() => {
       expect(toastMocks.error).toHaveBeenCalledWith(
-        'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
-        expect.any(Object),
+        'invalidFileType',
       );
     });
     expect(mockUploadFileToMinio).not.toHaveBeenCalled();
@@ -574,10 +563,6 @@ describe('OrganizationModal Component', () => {
   });
 
   test('should handle file size exceeding 5MB', async () => {
-    (validateFile as unknown as ReturnType<typeof vi.fn>).mockReturnValueOnce({
-      isValid: false,
-      errorMessage: 'File is too large. Maximum size is 5MB.',
-    });
     setup();
     const largeFile = new File(['x'.repeat(6 * 1024 * 1024)], 'large.png', {
       type: 'image/png',
@@ -590,8 +575,7 @@ describe('OrganizationModal Component', () => {
 
     await waitFor(() => {
       expect(toastMocks.error).toHaveBeenCalledWith(
-        'File is too large. Maximum size is 5MB.',
-        expect.any(Object),
+        'fileTooLarge',
       );
       expect(mockUploadFileToMinio).not.toHaveBeenCalled();
       expect(mockSetFormState).not.toHaveBeenCalled();
@@ -608,7 +592,6 @@ describe('OrganizationModal Component', () => {
     await waitFor(() => {
       expect(toastMocks.success).toHaveBeenCalledWith(
         'imageUploadSuccess',
-        expect.any(Object),
       );
     });
     expect(mockSetFormState).toHaveBeenCalledWith(
@@ -627,7 +610,6 @@ describe('OrganizationModal Component', () => {
     await waitFor(() => {
       expect(toastMocks.error).toHaveBeenCalledWith(
         'imageUploadError',
-        expect.any(Object),
       );
     });
     expect(mockSetFormState).not.toHaveBeenCalled();

@@ -45,7 +45,6 @@ import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { countryOptions } from 'utils/formEnumFields';
 import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
-import { validateFile } from 'utils/fileValidation';
 import styles from './OrganizationModal.module.css';
 
 interface InterfaceFormStateType {
@@ -265,23 +264,30 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             const file = target.files && target.files[0];
 
             if (file) {
-              const validation = validateFile(file);
+              if (file) {
+                // Check file size (5MB limit)
+                const maxSize = 5 * 1024 * 1024;
+                if (file.size > maxSize) {
+                  NotificationToast.error(tCommon('fileTooLarge'));
+                  return;
+                }
 
-              if (!validation.isValid) {
-                NotificationToast.error(
-                  validation.errorMessage ?? t('imageUploadError'),
-                );
-                return;
-              }
+                // Check file type
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                if (!allowedTypes.includes(file.type)) {
+                  NotificationToast.error(tCommon('invalidFileType'));
+                  return;
+                }
 
-              try {
-                const { objectName: avatarobjectName } =
-                  await uploadFileToMinio(file, 'organization');
-                setFormState({ ...formState, avatar: avatarobjectName });
-                NotificationToast.success(t('imageUploadSuccess'));
-              } catch (error) {
-                console.error('Error uploading image:', error);
-                NotificationToast.error(t('imageUploadError'));
+                try {
+                  const { objectName: avatarobjectName } =
+                    await uploadFileToMinio(file, 'organization');
+                  setFormState({ ...formState, avatar: avatarobjectName });
+                  NotificationToast.success(tCommon('imageUploadSuccess'));
+                } catch (error) {
+                  console.error('Error uploading image:', error);
+                  NotificationToast.error(tCommon('imageUploadError'));
+                }
               }
             }
           }}
