@@ -339,6 +339,7 @@ function Volunteers(): JSX.Element {
             variant="outlined"
             color={statusInfo.color}
             className={`${styles.chip} ${statusInfo.className}`}
+            data-testid="statusChip"
           />
         );
       },
