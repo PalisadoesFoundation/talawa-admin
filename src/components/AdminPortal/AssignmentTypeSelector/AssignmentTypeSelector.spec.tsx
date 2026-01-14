@@ -182,8 +182,7 @@ describe('AssignmentTypeSelector', () => {
   it('renders with accessible fieldset structure', () => {
     renderComponent();
 
-    const fieldset = document.querySelector('fieldset');
-    expect(fieldset).toBeInTheDocument();
+    expect(screen.getByRole('group')).toBeInTheDocument();
   });
 
   describe('Keyboard Navigation', () => {
