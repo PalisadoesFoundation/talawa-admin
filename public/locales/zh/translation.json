@@ -1627,7 +1627,8 @@
     "on": "在",
     "after": "之后",
     "customRecurrence": "自定义重复",
-    "repeatsEvery": "重复周期"
+    "repeatsEvery": "重复周期",
+    "noEventAvailable": "沒有可用的活動！"
   },
   "userEventCard": {
     "starts": "开始",
@@ -2191,5 +2192,8 @@
     "sortPeople": "排序人员",
     "unassign": "取消分配",
     "tags": "标签"
+  },
+  "orgProfileField": {
+    "editCustomField": "編輯自定義字段"
   }
 }

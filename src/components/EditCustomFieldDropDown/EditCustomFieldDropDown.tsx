@@ -4,14 +4,13 @@
  * A dropdown component for editing the type of a custom field in an organization profile.
  * It allows users to select a field type from a predefined list of available field types.
  *
- * @param {InterfaceEditCustomFieldDropDownProps} props - The props for the component.
- * @param {InterfaceCustomFieldData} props.customFieldData - The current custom field data object.
- * @param {Dispatch<SetStateAction<InterfaceCustomFieldData>>} props.setCustomFieldData -
- * A state setter function to update the custom field data.
- * @param {string} [props.parentContainerStyle] - Optional CSS class for the parent container.
- * @param {string} [props.btnStyle] - Optional CSS class for the dropdown button.
+ * @param props - The props for the component.
+ * - customFieldData - The current custom field data object.
+ * - setCustomFieldData - A state setter function to update the custom field data.
+ * - parentContainerStyle - Optional CSS class for the parent container.
+ * - btnStyle - Optional CSS class for the dropdown button.
  *
- * @returns {JSX.Element} The rendered dropdown component.
+ * @returns - The rendered dropdown component.
  *
  * @remarks
  * - The component uses `react-bootstrap` for the dropdown UI.
@@ -36,6 +35,7 @@ import availableFieldTypes from 'utils/fieldTypes';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceCustomFieldData } from 'utils/interfaces';
 import type { InterfaceDropDownProps } from 'types/DropDown/interface';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 interface InterfaceEditCustomFieldDropDownProps extends InterfaceDropDownProps {
   customFieldData: InterfaceCustomFieldData;
@@ -52,38 +52,46 @@ const EditOrgCustomFieldDropDown = ({
     keyPrefix: 'orgProfileField',
   });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   return (
-    <Dropdown
-      title="Edit Custom Field"
-      className={`${parentContainerStyle ?? ''}`}
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
     >
-      <Dropdown.Toggle
-        variant="outline-success"
-        className={`${btnStyle ?? ''}`}
-        data-testid="toggleBtn"
+      <Dropdown
+        title={t('editCustomField')}
+        className={`${parentContainerStyle ?? ''}`}
       >
-        {customFieldData.type ? t(customFieldData.type) : tCommon('none')}
-      </Dropdown.Toggle>
-      <Dropdown.Menu>
-        {availableFieldTypes.map((customFieldType, index: number) => (
-          <Dropdown.Item
-            key={`dropdown-item-${index}`}
-            className="dropdown-item"
-            data-testid={`dropdown-btn-${index}`}
-            onClick={(): void => {
-              setCustomFieldData({
-                ...customFieldData,
-                type: customFieldType,
-              });
-            }}
-            disabled={customFieldData.type === customFieldType}
-          >
-            {t(customFieldType)}
-          </Dropdown.Item>
-        ))}
-      </Dropdown.Menu>
-    </Dropdown>
+        <Dropdown.Toggle
+          variant="outline-success"
+          className={`${btnStyle ?? ''}`}
+          data-testid="toggleBtn"
+        >
+          {customFieldData.type ? t(customFieldData.type) : tCommon('none')}
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
+          {availableFieldTypes.map((customFieldType, index: number) => (
+            <Dropdown.Item
+              key={`dropdown-item-${index}`}
+              className="dropdown-item"
+              data-testid={`dropdown-btn-${index}`}
+              onClick={(): void => {
+                setCustomFieldData({
+                  ...customFieldData,
+                  type: customFieldType,
+                });
+              }}
+              disabled={customFieldData.type === customFieldType}
+            >
+              {t(customFieldType)}
+            </Dropdown.Item>
+          ))}
+        </Dropdown.Menu>
+      </Dropdown>
+    </ErrorBoundaryWrapper>
   );
 };
 
