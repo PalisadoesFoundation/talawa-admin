@@ -545,7 +545,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       .calls[0][0];
     expect(
       errorCall === 'invalidDetailsMessage' ||
-      errorCall.includes('valid interval'),
+        errorCall.includes('valid interval'),
     ).toBe(true);
 
     // Verify that modal is NOT closed when validation fails
@@ -593,7 +593,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       .calls[0][0];
     expect(
       errorCall === 'invalidDetailsMessage' ||
-      errorCall.includes('valid interval'),
+        errorCall.includes('valid interval'),
     ).toBe(true);
 
     // Verify that modal is NOT closed when validation fails
@@ -645,7 +645,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       .calls[0][0];
     expect(
       errorCall === 'invalidDetailsMessage' ||
-      errorCall.includes('valid occurrence count'),
+        errorCall.includes('valid occurrence count'),
     ).toBe(true);
 
     // Verify that modal is NOT closed when validation fails
@@ -697,7 +697,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       .calls[0][0];
     expect(
       errorCall === 'invalidDetailsMessage' ||
-      errorCall.includes('valid occurrence count'),
+        errorCall.includes('valid occurrence count'),
     ).toBe(true);
 
     // Verify that modal is NOT closed when validation fails
@@ -843,7 +843,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       .calls[0][0];
     expect(
       errorCall === 'selectAtLeastOneDay' ||
-      errorCall.includes('select at least one day'),
+        errorCall.includes('select at least one day'),
     ).toBe(true);
 
     expect(setCustomRecurrenceModalIsOpen).not.toHaveBeenCalled();
@@ -874,7 +874,7 @@ describe('CustomRecurrenceModal – full coverage', () => {
       .calls[0][0];
     expect(
       errorCall === 'selectAtLeastOneDay' ||
-      errorCall.includes('select at least one day'),
+        errorCall.includes('select at least one day'),
     ).toBe(true);
 
     expect(setCustomRecurrenceModalIsOpen).not.toHaveBeenCalled();

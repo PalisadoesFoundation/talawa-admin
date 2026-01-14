@@ -7,6 +7,9 @@
   },
   "ends": "Ends",
   "occurrences": "Occurrences",
+  "customRecurrence": "Custom Recurrence",
+  "invalidDetailsMessage": "Please check the details you entered.",
+  "selectAtLeastOneDay": "Please select at least one day.",
   "leaderboard": {
     "title": "Leaderboard",
     "searchByVolunteer": "Search By Volunteer",
