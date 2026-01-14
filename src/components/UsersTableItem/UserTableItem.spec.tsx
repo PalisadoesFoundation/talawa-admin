@@ -4,7 +4,7 @@ import utc from 'dayjs/plugin/utc';
 import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceQueryUserListItemForAdmin } from 'utils/interfaces';
@@ -29,8 +29,8 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
     warning: vi.fn(),
@@ -252,13 +252,13 @@ describe('Testing User Table Item', () => {
       charCode: 27,
     });
     expect(
-      screen.queryByRole('dialog')?.className.includes('show'),
+      screen.queryByTestId('modal-joined-org-123')?.className.includes('show'),
     ).toBeFalsy();
     fireEvent.click(showJoinedOrgsBtn);
     // Close using close button and reopen
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
     expect(
-      screen.queryByRole('dialog')?.className.includes('show'),
+      screen.queryByTestId('modal-joined-org-123')?.className.includes('show'),
     ).toBeFalsy();
     fireEvent.click(showJoinedOrgsBtn);
     // Expect the following to exist in modal
@@ -306,7 +306,9 @@ describe('Testing User Table Item', () => {
     fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorabc`));
-    expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon!');
+    expect(NotificationToast.success).toHaveBeenCalledWith(
+      'Profile Page Coming Soon!',
+    );
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Joined Organization 1/i));
     expect(window.location.replace).toHaveBeenCalledWith('/orgdash/abc');
@@ -510,7 +512,7 @@ describe('Testing User Table Item', () => {
     const confirmRemoveBtn = screen.getByTestId(`confirmRemoveUser123`);
     fireEvent.click(confirmRemoveBtn);
     await wait();
-    expect(toast.error).toHaveBeenCalled();
+    expect(NotificationToast.error).toHaveBeenCalled();
   });
   test('change role button should function properly', async () => {
     const props: {
@@ -677,7 +679,7 @@ describe('Testing User Table Item', () => {
     await userEvent.selectOptions(changeRoleBtn, 'USER');
     await wait();
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalled();
       expect(resetAndRefetchMock).toHaveBeenCalled();
     });
   });
@@ -777,12 +779,12 @@ describe('Testing User Table Item', () => {
       charCode: 27,
     });
     expect(
-      screen.queryByRole('dialog')?.className.includes('show'),
+      screen.queryByTestId('modal-blocked-org-123')?.className.includes('show'),
     ).toBeFalsy();
     fireEvent.click(showBlockedOrgsBtn);
     fireEvent.click(screen.getByTestId(`closeUnblockOrgsBtn${123}`));
     expect(
-      screen.queryByRole('dialog')?.className.includes('show'),
+      screen.queryByTestId('modal-blocked-org-123')?.className.includes('show'),
     ).toBeFalsy();
     fireEvent.click(showBlockedOrgsBtn);
     const inputBox = screen.getByTestId(`searchByNameBlockedOrgs`);
@@ -828,7 +830,9 @@ describe('Testing User Table Item', () => {
     fireEvent.click(searchBtn);
     // Click on Creator Link
     fireEvent.click(screen.getByTestId(`creatorghi`));
-    expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon!');
+    expect(NotificationToast.success).toHaveBeenCalledWith(
+      'Profile Page Coming Soon!',
+    );
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Blocked Organization 1/i));
     expect(window.location.replace).toHaveBeenCalledWith('/orgdash/ghi');
@@ -910,7 +914,7 @@ describe('Testing User Table Item', () => {
     const confirmUnblockBtn = screen.getByTestId(`confirmUnblockUser${123}`);
     fireEvent.click(confirmUnblockBtn);
     await wait();
-    expect(toast.error).toHaveBeenCalled();
+    expect(NotificationToast.error).toHaveBeenCalled();
   });
   test('handles errors in updateUserRole mutation', async () => {
     const props: {
@@ -984,7 +988,7 @@ describe('Testing User Table Item', () => {
     ) as HTMLSelectElement;
     await userEvent.selectOptions(changeRoleBtn, 'ADMIN');
     await wait();
-    expect(toast.error).toHaveBeenCalled();
+    expect(NotificationToast.error).toHaveBeenCalled();
   });
   test('Should handle no joined organizations', async () => {
     const props: {
@@ -1219,7 +1223,7 @@ describe('Testing User Table Item', () => {
     const confirmBtn = screen.getByTestId(`confirmRemoveUser${123}`);
     fireEvent.click(confirmBtn);
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalled();
       expect(resetAndRefetchMock).toHaveBeenCalled();
       expect(
         screen.queryByTestId('modal-remove-user-123'),
@@ -1272,7 +1276,7 @@ describe('Testing User Table Item', () => {
     fireEvent.change(select, { target: { value: 'ADMIN?abc' } });
     await wait();
     expect(select.value).toBe('ADMIN?abc');
-    expect(toast.success).not.toHaveBeenCalled();
+    expect(NotificationToast.success).not.toHaveBeenCalled();
     expect(resetAndRefetchMock).not.toHaveBeenCalled();
   });
   test('Should handle cancel remove user and reopen joined organizations modal', async () => {
@@ -1401,7 +1405,7 @@ describe('Testing User Table Item', () => {
     fireEvent.click(screen.getByTestId(`confirmUnblockUser${123}`));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalled();
       expect(resetAndRefetchMock).toHaveBeenCalled();
     });
   });
@@ -2000,5 +2004,102 @@ describe('Testing User Table Item', () => {
     // Verify org name and creator name are displayed (Avatar component used as fallback)
     expect(screen.getByText(/Blocked Org Without Avatar/i)).toBeInTheDocument();
     expect(screen.getByText(/Blocked Creator/i)).toBeInTheDocument();
+  });
+  test('Should clear search when clear button is clicked in blocked organizations modal', async () => {
+    const props = {
+      user: {
+        id: '123',
+        name: 'John Doe',
+        emailAddress: 'john@example.com',
+        avatarURL: null,
+        birthDate: null,
+        city: null,
+        countryCode: null,
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
+        educationGrade: null,
+        employmentStatus: null,
+        isEmailAddressVerified: true,
+        maritalStatus: null,
+        natalSex: null,
+        naturalLanguageCode: null,
+        postalCode: null,
+        role: null,
+        state: null,
+        mobilePhoneNumber: null,
+        homePhoneNumber: null,
+        workPhoneNumber: null,
+        createdOrganizations: [],
+        organizationsWhereMember: {
+          edges: [],
+        },
+        orgsWhereUserIsBlocked: {
+          edges: [
+            {
+              node: {
+                id: 'ghi',
+                createdAt: dayjs.utc().toISOString(),
+                organization: {
+                  name: 'Blocked Org 1',
+                  avatarURL: undefined,
+                  city: 'Toronto',
+                  state: 'ON',
+                  createdAt: dayjs.utc().toISOString(),
+                  creator: {
+                    name: 'Creator 1',
+                  },
+                },
+              },
+            },
+            {
+              node: {
+                id: 'jkl',
+                createdAt: dayjs.utc().toISOString(),
+                organization: {
+                  name: 'Blocked Org 2',
+                  avatarURL: undefined,
+                  city: 'Toronto',
+                  state: 'ON',
+                  createdAt: dayjs.utc().toISOString(),
+                  creator: {
+                    name: 'Creator 2',
+                  },
+                },
+              },
+            },
+          ],
+        },
+      } as InterfaceQueryUserListItemForAdmin,
+      index: 0,
+      loggedInUserId: '123',
+      resetAndRefetch: resetAndRefetchMock,
+    };
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    fireEvent.click(screen.getByTestId(`showBlockedOrgsBtn${123}`));
+
+    const searchInput = screen.getByTestId('searchByNameBlockedOrgs');
+    fireEvent.change(searchInput, { target: { value: 'Blocked Org 1' } });
+    fireEvent.keyDown(searchInput, { key: 'Enter' });
+
+    expect(screen.getByText(/Blocked Org 1/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Blocked Org 2/i)).not.toBeInTheDocument();
+
+    const clearBtn = screen.getByTestId('clearBtnBlockedOrgs');
+    fireEvent.click(clearBtn);
+
+    expect(screen.getByText(/Blocked Org 1/i)).toBeInTheDocument();
+    expect(screen.getByText(/Blocked Org 2/i)).toBeInTheDocument();
   });
 });
