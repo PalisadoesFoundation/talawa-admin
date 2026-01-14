@@ -257,5 +257,13 @@
   "required": "必填",
   "imageNotFound": "未找到图片",
   "changeLanguage": "更改語言",
-  "selectField": "選擇{{fieldName}}"
+  "selectField": "選擇{{fieldName}}",
+  "userEvents": {
+    "presetToday": "今天",
+    "presetThisWeek": "本周",
+    "presetThisMonth": "本月",
+    "presetNext7Days": "未来7天",
+    "presetNext30Days": "未来30天",
+    "presetNextMonth": "下个月"
+  }
 }

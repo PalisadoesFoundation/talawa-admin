@@ -257,5 +257,13 @@
   "required": "Obligatoire",
   "imageNotFound": "Image non trouvée",
   "changeLanguage": "Changer de langue",
-  "selectField": "Sélectionner {{fieldName}}"
+  "selectField": "Sélectionner {{fieldName}}",
+  "userEvents": {
+    "presetToday": "Aujourd'hui",
+    "presetThisWeek": "Cette Semaine",
+    "presetThisMonth": "Ce Mois",
+    "presetNext7Days": "7 Prochains Jours",
+    "presetNext30Days": "30 Prochains Jours",
+    "presetNextMonth": "Mois Prochain"
+  }
 }
