@@ -1,6 +1,8 @@
 /**
  * PersonalDetailsCard Component
+ * 
  * Renders personal information fields including avatar, demographics, and credentials
+ * 
  */
 
 import React from 'react';
