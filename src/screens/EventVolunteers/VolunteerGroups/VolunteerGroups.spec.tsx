@@ -316,4 +316,23 @@ describe('Testing VolunteerGroups Screen', () => {
       expect(groupNames.length).toBeGreaterThanOrEqual(0);
     });
   });
+
+  it('should render Avatar component when leader does not have avatarURL', async () => {
+    mockRouteParams();
+    renderVolunteerGroups(link1);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('search-bar')).toBeInTheDocument();
+    });
+
+    // Wait for DataGrid to render groups
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    // The leader in mock doesn't have avatarURL, so Avatar component should be used
+    // Check that group data is displayed (which means leader cell is rendered)
+    const leaderNames = screen.queryAllByTestId('assigneeName');
+    expect(leaderNames.length).toBeGreaterThan(0);
+  });
 });

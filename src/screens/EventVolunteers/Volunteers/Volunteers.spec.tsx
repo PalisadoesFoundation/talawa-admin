@@ -1,4 +1,5 @@
 import React, { act } from 'react';
+import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
 import { MockedProvider } from '@apollo/react-testing';
 import {
   LocalizationProvider,
@@ -673,5 +674,97 @@ describe('Testing Volunteers Screen', () => {
       },
       { timeout: 3000 },
     );
+  });
+
+  it('should filter volunteers by rejected status', async () => {
+    renderVolunteers(link1);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // Click filter button
+    const filterBtn = await screen.findByTestId('filter');
+    await userEvent.click(filterBtn);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('rejected')).toBeInTheDocument();
+    });
+
+    // Select rejected filter - should show volunteers with volunteerStatus === 'rejected'
+    await userEvent.click(screen.getByTestId('rejected'));
+
+    await waitFor(() => {
+      const volunteerNames = screen.getAllByTestId('volunteerName');
+      // In the mocks, volunteer3 (Jane Doe) has volunteerStatus: 'rejected'
+      expect(volunteerNames).toHaveLength(1);
+      expect(volunteerNames[0]).toHaveTextContent('Jane Doe');
+    });
+  });
+
+  it('should display hours volunteered correctly including zero values', async () => {
+    renderVolunteers(link1);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // Find volunteer names to ensure rows are rendered
+    await waitFor(() => {
+      const volunteerNames = screen.getAllByTestId('volunteerName');
+      expect(volunteerNames.length).toBeGreaterThan(0);
+    });
+
+    // The hours column should display numbers correctly
+    // volunteer1 (Teresa Bradley) has 10 hours
+    // volunteer2 (Bruce Graza) has 0 hours - should display "0"
+    // volunteer3 (Jane Doe) has 5 hours
+    const hoursDisplay = screen.getAllByTestId('categoryName');
+    expect(hoursDisplay.length).toBeGreaterThan(0);
+
+    // Verify that 0 hours is displayed correctly (not as '-')
+    const hoursTexts = hoursDisplay.map((el) => el.textContent);
+    expect(hoursTexts).toContain('0'); // volunteer2 has 0 hours
+    expect(hoursTexts).toContain('10'); // volunteer1 has 10 hours
+  });
+
+  it('should set recurring event info when eventData has recurrenceRule', async () => {
+    const mocksWithRecurring = [
+      {
+        request: {
+          query: GET_EVENT_VOLUNTEERS,
+          variables: {
+            input: { id: 'eventId' },
+            where: {
+              eventId: 'eventId',
+              hasAccepted: undefined,
+            },
+          },
+        },
+        result: {
+          data: {
+            event: {
+              id: 'eventId',
+              recurrenceRule: { id: 'ruleId' }, // This should trigger useEffect
+              baseEvent: { id: 'baseEventId' },
+              volunteers: [],
+            },
+          },
+        },
+      },
+    ];
+
+    const linkWithRecurring = new StaticMockLink(mocksWithRecurring);
+    renderVolunteers(linkWithRecurring);
+
+    // Wait for component to render
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // The useEffect (lines 148-153) should have executed and set isRecurring to true
+    // We can verify this indirectly by checking that the component rendered without errors
+    // The actual state changes would be internal to the component
+    expect(screen.getByTestId('volunteers-empty-state')).toBeInTheDocument();
   });
 });

@@ -344,6 +344,46 @@ describe('Testing Requests Screen', () => {
       expect(volunteerNamesAll).toHaveLength(3);
     });
   });
+
+  it('renders Avatar component when user does not have avatarURL', async () => {
+    renderRequests(link1);
+    await waitFor(() => {
+      expect(screen.getByTestId('search-bar')).toBeInTheDocument();
+    });
+
+    // membership2 has avatarURL: null, so it should render Avatar component
+    const volunteerNames = await screen.findAllByTestId('volunteerName');
+    expect(volunteerNames).toHaveLength(2);
+
+    // Check that Teresa Bradley (membership2) is rendered
+    expect(volunteerNames[1]).toHaveTextContent('Teresa Bradley');
+
+    // Since avatarURL is null, Avatar component should be used
+    // The Avatar component doesn't render an img tag but generates initials
+    const images = screen.queryAllByTestId('volunteer_image');
+    // Only one image should exist (John Doe has avatarURL)
+    expect(images).toHaveLength(1);
+  });
+
+  it('displays group name when request has a group', async () => {
+    renderRequests(link5);
+    await waitFor(() => {
+      expect(screen.getByTestId('search-bar')).toBeInTheDocument();
+    });
+
+    // Wait for all volunteer names to be rendered
+    const volunteerNames = await screen.findAllByTestId('volunteerName');
+    expect(volunteerNames).toHaveLength(3);
+
+    // Find the group volunteer request
+    const groupVolunteer = volunteerNames.find((el) =>
+      el.textContent?.includes('Group Volunteer'),
+    );
+    expect(groupVolunteer).toBeInTheDocument();
+
+    // Check that the group name is displayed
+    expect(screen.getByText('Volunteer Group 1')).toBeInTheDocument();
+  });
 });
 
 describe('Requests Component CSS Styling', () => {
