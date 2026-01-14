@@ -785,12 +785,6 @@ describe('Testing GroupModal', () => {
     await userEvent.clear(nameInput);
     fireEvent.blur(nameInput);
 
-    // Check if error message is displayed (from FormFieldGroup)
-    // The exact error message depends on tCommon('nameRequired'), let's assume it renders something or the input becomes invalid
-    // FormFieldGroup usually renders error text.
-    // Based on the code: error={nameError}
-    // We can check if the input is invalid or if error text appears.
-    // Assuming 'Name is required' or similar text appears, or checking the state implicitly via button disabled
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeDisabled();
   });

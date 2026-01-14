@@ -88,6 +88,9 @@ const link2 = new StaticMockLink(MOCK_ERROR);
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.fundCampaign),
 );
+const tCommon = JSON.parse(
+  JSON.stringify(i18nForTest.getDataByLanguage('en')?.common),
+);
 
 // Use local time for consistent testing across timezones
 // dayjs() creates a date in local time
@@ -773,8 +776,12 @@ describe('CampaignModal', () => {
   it('should mark campaign name as touched on blur', async () => {
     renderCampaignModal(link1, campaignProps[0]);
     const campaignName = screen.getByLabelText(translations.campaignName);
+    fireEvent.change(campaignName, { target: { value: '' } });
     fireEvent.blur(campaignName);
-    // No direct assertion on state, but ensures no crash and covers the line
+    // Assert that validation error appears when field is empty and touched
+    await waitFor(() => {
+      expect(screen.getByText(tCommon.required)).toBeInTheDocument();
+    });
   });
 
   it('should prevent create submission if name is empty', async () => {

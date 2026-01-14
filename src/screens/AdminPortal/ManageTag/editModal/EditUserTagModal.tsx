@@ -94,7 +94,9 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
     >
       <Form
         id={formId}
-        onSubmitCapture={(e: FormEvent<HTMLFormElement>): void => {
+        onSubmitCapture={async (
+          e: FormEvent<HTMLFormElement>,
+        ): Promise<void> => {
           e.preventDefault();
           setIsTouched(true);
 
@@ -104,7 +106,7 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
             return;
           }
 
-          handleEditUserTag(e);
+          await handleEditUserTag(e);
         }}
       >
         <FormFieldGroup
