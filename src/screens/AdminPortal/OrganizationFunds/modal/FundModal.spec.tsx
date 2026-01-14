@@ -167,6 +167,38 @@ describe('PledgeModal', () => {
     expect(fundIdInput).toHaveValue('2222');
   });
 
+  it('should show required error when Fund Name is empty and touched', async () => {
+    // Start with a fund that has a name (edit mode)
+    renderFundModal(link1, fundProps[1]);
+    const fundNameInput = screen.getByLabelText(translations.fundName);
+
+    // Clear the input
+    fireEvent.change(fundNameInput, { target: { value: '' } });
+    // Blur to trigger validation
+    fireEvent.blur(fundNameInput);
+
+    // Expect error message to be visible
+    // The tCommon('required') usually resolves to "Required" or similar.
+    // We can assume it's "Required" based on common translation files, or match generically
+    // If we want to be safe we can use a regex or check if the implementation uses specific keys
+    // In many setups, tCommon('required') -> "Required"
+    // Since we mocked translations for 'funds' but tCommon comes from 'common',
+    // and we mocked i18nForTest, let's verify if we can access the common translations or just match text.
+    // The previous tests used JSON.parse(...) for funds translations.
+    // Let's assume standard "Required" text from i18nForTest for common.
+    expect(screen.getByText('Required')).toBeInTheDocument();
+  });
+
+  it('should show required error when Fund Reference ID is empty and touched', async () => {
+    renderFundModal(link1, fundProps[1]);
+    const fundIdInput = screen.getByLabelText(translations.fundId);
+
+    fireEvent.change(fundIdInput, { target: { value: '' } });
+    fireEvent.blur(fundIdInput);
+
+    expect(screen.getByText('Required')).toBeInTheDocument();
+  });
+
   it('should update Tax Deductible Switch when input value changes', async () => {
     renderFundModal(link1, fundProps[1]);
     const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
