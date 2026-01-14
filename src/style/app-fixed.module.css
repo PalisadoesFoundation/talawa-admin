@@ -1879,6 +1879,7 @@ form label,
 =======
 .statsButton {
 <<<<<<< HEAD
+<<<<<<< HEAD
   width: auto !important;
   min-width: fit-content !important;
   white-space: nowrap !important;
@@ -1889,6 +1890,11 @@ form label,
   white-space: nowrap;
   width: max-content;
 >>>>>>> b379b3c1ad1 (fix: failing checks)
+=======
+  width: auto !important;
+  min-width: fit-content !important;
+  white-space: nowrap !important;
+>>>>>>> 340e60ffa4e (fix: failing checks)
 }
 
 /* Add more Global CSS Classes above this */

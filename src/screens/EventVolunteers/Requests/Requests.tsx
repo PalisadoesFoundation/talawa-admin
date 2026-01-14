@@ -227,7 +227,6 @@ function Requests(): JSX.Element {
               />
             ) : (
               <Avatar
-                key="volunteer_avatar"
                 containerStyle={styles.volunteerAvatar}
                 avatarStyle={styles.volunteerAvatar}
                 name={name}
