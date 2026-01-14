@@ -10,7 +10,7 @@ import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
 import dayjs from 'dayjs';
 
 // Mock Avatar component
-vi.mock('components/Avatar/Avatar', () => ({
+vi.mock('shared-components/Avatar/Avatar', () => ({
   default: ({ name, alt }: { name: string; alt: string }) => (
     <div data-testid="avatar" data-name={name} data-alt={alt}>
       Avatar: {name}
@@ -84,17 +84,8 @@ describe('SidebarOrgSection Component', () => {
       avatarURL: 'https://example.com/avatar.png',
       // Use dynamic dates to avoid test staleness
       createdAt: dayjs().subtract(30, 'days').format('YYYY-MM-DD'),
-      updatedAt: dayjs().subtract(29, 'days').format('YYYY-MM-DD'),
-      creator: {
-        id: 'creator123',
-        name: 'Creator Name',
-        emailAddress: 'creator@test.com',
-      },
-      updater: {
-        id: 'updater123',
-        name: 'Updater Name',
-        emailAddress: 'updater@test.com',
-      },
+      isUserRegistrationRequired: false,
+      __typename: 'Organization',
     },
   };
 

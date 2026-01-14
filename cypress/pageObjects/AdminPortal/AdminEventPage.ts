@@ -20,20 +20,25 @@ export class AdminEventPage {
       }
     });
 
-    // Click create event button and wait for modal to appear
-    cy.get(this._createEventModalButton).should('be.visible').click();
+    cy.get(this._createEventModalButton)
+      .should('be.visible')
+      .should('be.enabled');
+    cy.get(this._createEventModalButton).click({ force: true });
 
     // Wait for modal form to be fully rendered
     cy.get(this._eventTitleInput).should('be.visible').and('be.enabled');
 
-    // Clear and type each field, then verify the value was set
-    cy.get(this._eventTitleInput).clear().type(title);
+    // Clear and type each field, breaking up command chains to handle page re-renders
+    cy.get(this._eventTitleInput).clear();
+    cy.get(this._eventTitleInput).type(title);
     cy.get(this._eventTitleInput).should('have.value', title);
 
-    cy.get(this._eventDescriptionInput).clear().type(description);
+    cy.get(this._eventDescriptionInput).clear();
+    cy.get(this._eventDescriptionInput).type(description);
     cy.get(this._eventDescriptionInput).should('have.value', description);
 
-    cy.get(this._eventLocationInput).clear().type(location);
+    cy.get(this._eventLocationInput).clear();
+    cy.get(this._eventLocationInput).type(location);
     cy.get(this._eventLocationInput).should('have.value', location);
 
     // Submit the form
@@ -94,22 +99,19 @@ export class AdminEventPage {
     // Find and click on the event card
     this.openEventDetails(existingName);
 
-    // Wait for edit form to load and update fields
-    cy.get('[data-cy="updateName"]', { timeout: 10000 })
-      .should('be.visible')
-      .clear()
-      .type(newName);
+    // Wait for edit form to load and update fields, breaking up command chains
+    cy.get('[data-cy="updateName"]', { timeout: 10000 }).should('be.visible');
+    cy.get('[data-cy="updateName"]').clear();
+    cy.get('[data-cy="updateName"]').type(newName);
     cy.get('[data-cy="updateName"]').should('have.value', newName);
 
-    cy.get('[data-cy="updateDescription"]')
-      .should('be.visible')
-      .clear()
-      .type(newDescription);
+    cy.get('[data-cy="updateDescription"]').should('be.visible');
+    cy.get('[data-cy="updateDescription"]').clear();
+    cy.get('[data-cy="updateDescription"]').type(newDescription);
 
-    cy.get('[data-cy="updateLocation"]')
-      .should('be.visible')
-      .clear()
-      .type(newLocation);
+    cy.get('[data-cy="updateLocation"]').should('be.visible');
+    cy.get('[data-cy="updateLocation"]').clear();
+    cy.get('[data-cy="updateLocation"]').type(newLocation);
 
     // Click update button
     cy.get('[data-cy="previewUpdateEventBtn"]')

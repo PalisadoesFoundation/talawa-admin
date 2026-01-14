@@ -10,16 +10,19 @@ import React from 'react';
 import type { IDrawerExtension } from 'plugin/types';
 import LeftDrawerOrg from './LeftDrawerOrg';
 import type { ILeftDrawerProps } from './LeftDrawerOrg';
-import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
+import {
+  GET_ORGANIZATION_BASIC_DATA,
+  GET_ORGANIZATION_DATA_PG,
+} from 'GraphQl/Queries/Queries';
 
 // Type definitions for better type safety
 interface IMockedResponse {
   request: {
-    query: typeof GET_ORGANIZATION_DATA_PG;
+    query: typeof GET_ORGANIZATION_BASIC_DATA;
     variables: {
       id: string;
       first: number;
-      after: null;
+      after: string | null;
     };
   };
   result?: {
@@ -36,17 +39,8 @@ interface IMockedResponse {
         countryCode: string;
         avatarURL: string | null;
         createdAt: string;
-        updatedAt: string;
-        creator: {
-          id: string;
-          name: string;
-          emailAddress: string;
-        };
-        updater: {
-          id: string;
-          name: string;
-          emailAddress: string;
-        };
+        isUserRegistrationRequired: boolean;
+        __typename: string;
       };
     };
   };
@@ -124,7 +118,7 @@ vi.mock('components/IconComponent/IconComponent', () => ({
   )),
 }));
 
-vi.mock('components/Avatar/Avatar', () => ({
+vi.mock('shared-components/Avatar/Avatar', () => ({
   default: vi.fn(({ name, alt }) => (
     <div data-testid="avatar" data-name={name} data-alt={alt}>
       Avatar: {name}
@@ -217,17 +211,8 @@ const mockOrganizationData = {
     countryCode: 'US',
     avatarURL: 'https://example.com/avatar.jpg',
     createdAt: dayjs.utc().toISOString(),
-    updatedAt: dayjs.utc().toISOString(),
-    creator: {
-      id: 'creator-123',
-      name: 'Creator Name',
-      emailAddress: 'creator@example.com',
-    },
-    updater: {
-      id: 'updater-123',
-      name: 'Updater Name',
-      emailAddress: 'updater@example.com',
-    },
+    isUserRegistrationRequired: false,
+    __typename: 'Organization',
   },
 };
 

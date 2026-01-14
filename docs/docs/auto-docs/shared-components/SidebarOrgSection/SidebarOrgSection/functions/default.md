@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `ReactElement`\<`unknown`, `string` \| `JSXElementConstructor`\<`any`\>\>
 
-Defined in: [src/shared-components/SidebarOrgSection/SidebarOrgSection.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/SidebarOrgSection/SidebarOrgSection.tsx#L56)
+Defined in: [src/shared-components/SidebarOrgSection/SidebarOrgSection.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/SidebarOrgSection/SidebarOrgSection.tsx#L46)
 
 ## Parameters
 

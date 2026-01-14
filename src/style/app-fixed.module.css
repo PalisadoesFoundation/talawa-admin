@@ -9378,6 +9378,11 @@ form {
   background-color: var(--outlineBtn-bg);
   color: var(--outlineBtn-color);
   border-color: var(--outlineBtn-border);
+  padding: 10px 10px;
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 8rem;
 }
 
 .outlineBtn:is(:hover, :active) {

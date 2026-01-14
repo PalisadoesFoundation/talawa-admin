@@ -1,0 +1,98 @@
+.tableHeader {
+  background-color: var(--color-red-500);
+  font-weight: var(--font-weight-bold);
+}
+
+.eventsAttended,
+.membername {
+  color: var(--color-blue-200);
+}
+
+.membername {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-blue-200);
+  text-decoration: none;
+}
+
+.membername:hover {
+  color: var(--color-blue-500);
+  text-decoration: underline;
+}
+
+.subtleBlueGrey {
+  color: var(--color-blue-200);
+}
+
+.subtleBlueGrey:hover {
+  color: var(--color-blue-500);
+}
+
+.removeButton {
+  margin-bottom: var(--space-5);
+  background-color: var(--color-red-100);
+  color: var(--color-red-500);
+  margin-right: var(--space-5);
+  --bs-btn-border-color: var(--color-red-100);
+}
+
+.removeButton:is(:hover, :active, :focus) {
+  background-color: var(--color-red-500);
+  border-color: var(--color-red-500);
+  color: var(--color-white);
+}
+
+.calendar__header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  width: 100%;
+  gap: var(--space-5);
+}
+
+@media (max-width: 768px) {
+  .calendar__header {
+    flex-wrap: wrap;
+  }
+}
+
+.flexCenter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flexColumn {
+  flex-direction: column;
+}
+
+.fullWidthHeight {
+  width: 100%;
+  height: 100%;
+}
+
+.avatarImage {
+  object-fit: cover;
+  border-radius: var(--radius-full);
+  width: var(--avatar-size, var(--logo-xs));
+  height: var(--avatar-size, var(--logo-xs));
+}
+
+.avatarPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background-color: var(--color-gray-50);
+}
+
+.avatarPlaceholderSize {
+  width: var(--avatar-size, var(--logo-xs));
+  height: var(--avatar-size, var(--logo-xs));
+}
+
+.memberNameFontSize {
+  font-size: var(--font-size-md);
+}

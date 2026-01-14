@@ -1,4 +1,10 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "Veuillez vous reconnecter ; votre session a expiré."
+  },
+  "securedRoute": {
+    "sessionExpired": "Veuillez vous reconnecter ; votre session a expiré."
+  },
   "ends": "Prend fin",
   "occurrences": "Occurrences",
   "leaderboard": {
@@ -490,7 +496,9 @@
     "tagActions": "Actions d'étiquette",
     "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
     "sortPeople": "Trier les personnes",
-    "noTagsFound": "Aucun tag trouvé"
+    "noTagsFound": "Aucun tag trouvé",
+    "addMember": "Ajouter un membre",
+    "removeMember": "Supprimer un membre"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
@@ -710,7 +718,8 @@
     "deleteAgendaItem": "Supprimer le point de l'ordre du jour",
     "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?",
     "event": "Événement",
-    "search": "Rechercher"
+    "search": "Rechercher",
+    "attachmentPreview": "Aperçu de la pièce jointe"
   },
   "eventListCard": {
     "deleteEvent": "Supprimer l'événement",
@@ -1032,7 +1041,12 @@
     "disabled": "Désactivé",
     "accepted": "Accepté",
     "declined": "Refusé",
-    "no_response": "Aucune réponse"
+    "no_response": "Aucune réponse",
+    "success": "Succès",
+    "warning": "Avertissement",
+    "error": "Erreur",
+    "info": "Info",
+    "neutral": "Neutre"
   },
   "orgContribution": {
     "title": "Contributions de Talawa",
@@ -1585,7 +1599,6 @@
     "enterName": "Entrez le nom",
     "enterDescription": "Entrez la description",
     "enterLocation": "Entrez l'emplacement",
-
     "registerable": "Est enregistrable",
     "monthlyCalendarView": "Calendrier mensuel",
     "yearlyCalendarView": "Calendrier annuel",
@@ -1614,7 +1627,8 @@
     "on": "Le",
     "after": "Après",
     "customRecurrence": "Récurrence Personnalisée",
-    "repeatsEvery": "Se répète tous les"
+    "repeatsEvery": "Se répète tous les",
+    "noEventAvailable": "Aucun événement disponible !"
   },
   "userEventCard": {
     "starts": "Départs",
@@ -1848,7 +1862,12 @@
   },
   "checkIn": {
     "errorCheckingIn": "Erreur lors de l'enregistrement",
-    "checkedInSuccessfully": "Enregistrement réussi"
+    "checkedInSuccessfully": "Enregistrement réussi",
+    "searchAttendees": "Rechercher des participants",
+    "checkedIn": "Enregistré",
+    "downloadTag": "Télécharger l'étiquette",
+    "checkIn": "Enregistrer",
+    "eventCheckInManagement": "Gestion des enregistrements d'événement"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
@@ -2137,9 +2156,6 @@
   "contact": {
     "card_aria": "Carte de contact"
   },
-  "securedRoute": {
-    "sessionExpired": "Veuillez vous reconnecter car la session a expiré"
-  },
   "common": {
     "signOut": "Se déconnecter",
     "signingOut": "Déconnexion en cours...",
@@ -2176,5 +2192,8 @@
     "sortPeople": "Trier les personnes",
     "unassign": "Désassigner",
     "tags": "Tags"
+  },
+  "orgProfileField": {
+    "editCustomField": "Modifier le champ personnalisé"
   }
 }

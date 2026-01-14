@@ -1,4 +1,10 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "कृपया फिर से लॉगिन करें; आपका सत्र समाप्त हो गया है।"
+  },
+  "securedRoute": {
+    "sessionExpired": "कृपया फिर से लॉगिन करें; आपका सत्र समाप्त हो गया है।"
+  },
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
   "leaderboard": {
@@ -454,7 +460,12 @@
     "disabled": "अक्षम",
     "accepted": "स्वीकृत",
     "declined": "अस्वीकार किया गया",
-    "no_response": "कोई प्रतिक्रिया नहीं"
+    "no_response": "कोई प्रतिक्रिया नहीं",
+    "success": "सफलता",
+    "warning": "चेतावनी",
+    "error": "त्रुटि",
+    "info": "जानकारी",
+    "neutral": "तटस्थ"
   },
   "manageTag": {
     "title": "टैग विवरण",
@@ -502,7 +513,9 @@
     "sortPeople": "लोगों को सॉर्ट करें",
     "tagActions": "टैग क्रियाएँ",
     "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
-    "noTagsFound": "कोई टैग नहीं मिला"
+    "noTagsFound": "कोई टैग नहीं मिला",
+    "addMember": "सदस्य जोड़ें",
+    "removeMember": "सदस्य हटाएँ"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
@@ -722,7 +735,8 @@
     "deleteAgendaItem": "एजेंडा आइटम हटाएं",
     "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?",
     "event": "कार्यक्रम",
-    "search": "खोज"
+    "search": "खोज",
+    "attachmentPreview": "अटैचमेंट पूर्वावलोकन"
   },
   "eventListCard": {
     "deleteEvent": "ईवेंट हटाएँ",
@@ -1585,7 +1599,6 @@
     "enterName": "नाम दर्ज करें",
     "enterDescription": "विवरण दर्ज करें",
     "enterLocation": "स्थान दर्ज करें",
-
     "registerable": "पंजीकरण योग्य है",
     "monthlyCalendarView": "मासिक कैलेंडर",
     "yearlyCalendarView": "वार्षिक कैलेंडर",
@@ -1614,7 +1627,8 @@
     "on": "पर",
     "after": "के बाद",
     "customRecurrence": "कस्टम पुनरावृत्ति",
-    "repeatsEvery": "हर बार दोहराता है"
+    "repeatsEvery": "हर बार दोहराता है",
+    "noEventAvailable": "कोई कार्यक्रम उपलब्ध नहीं!"
   },
   "userEventCard": {
     "starts": "प्रारंभ होगा",
@@ -1848,7 +1862,12 @@
   },
   "checkIn": {
     "errorCheckingIn": "चेक-इन में त्रुटि",
-    "checkedInSuccessfully": "सफलतापूर्वक चेक-इन किया गया"
+    "checkedInSuccessfully": "सफलतापूर्वक चेक-इन किया गया",
+    "searchAttendees": "उपस्थित लोगों को खोजें",
+    "checkedIn": "चेक इन किया गया",
+    "downloadTag": "टैग डाउनलोड करें",
+    "checkIn": "चेक इन करें",
+    "eventCheckInManagement": "इवेंट चेक इन प्रबंधन"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
@@ -2137,9 +2156,6 @@
   "contact": {
     "card_aria": "संपर्क कार्ड"
   },
-  "securedRoute": {
-    "sessionExpired": "कृपया फिर से लॉगिन करें क्योंकि सत्र समाप्त हो गया है"
-  },
   "common": {
     "signOut": "साइन आउट",
     "signingOut": "साइन आउट हो रहा है...",
@@ -2176,5 +2192,8 @@
     "sortPeople": "लोगों को क्रमबद्ध करें",
     "unassign": "हटाएँ",
     "tags": "टैग"
+  },
+  "orgProfileField": {
+    "editCustomField": "कस्टम फ़ील्ड संपादित करें"
   }
 }

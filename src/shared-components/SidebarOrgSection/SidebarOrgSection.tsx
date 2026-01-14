@@ -40,17 +40,7 @@ interface IOrganizationData {
   countryCode?: string | null;
   avatarURL?: string | null;
   createdAt: string;
-  updatedAt: string;
-  creator: {
-    id: string;
-    name: string;
-    emailAddress: string;
-  };
-  updater: {
-    id: string;
-    name: string;
-    emailAddress: string;
-  };
+  isUserRegistrationRequired?: boolean;
 }
 
 const SidebarOrgSection = ({

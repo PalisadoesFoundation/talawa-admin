@@ -1,4 +1,10 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "Por favor, inicie sesión nuevamente; su sesión ha expirado."
+  },
+  "securedRoute": {
+    "sessionExpired": "Por favor, inicie sesión nuevamente; su sesión ha expirado."
+  },
   "ends": "Finaliza",
   "occurrences": "ocurrencias",
   "leaderboard": {
@@ -490,7 +496,9 @@
     "sortPeople": "Ordenar personas",
     "noTagsFound": "No se encontraron etiquetas",
     "tagActions": "Acciones de etiqueta",
-    "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados"
+    "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados",
+    "addMember": "Agregar miembro",
+    "removeMember": "Eliminar miembro"
   },
   "userListCard": {
     "joined": "Unido",
@@ -710,7 +718,8 @@
     "deleteAgendaItem": "Eliminar punto del orden del día",
     "deleteAgendaItemMsg": "¿Desea eliminar este punto del orden del día?",
     "event": "Evento",
-    "search": "Buscar"
+    "search": "Buscar",
+    "attachmentPreview": "Vista previa del adjunto"
   },
   "eventListCard": {
     "location": "Lugar del evento",
@@ -1601,7 +1610,8 @@
     "on": "El",
     "after": "Después de",
     "customRecurrence": "Recurrencia Personalizada",
-    "repeatsEvery": "Se repite cada"
+    "repeatsEvery": "Se repite cada",
+    "noEventAvailable": "¡No hay eventos disponibles!"
   },
   "userEventCard": {
     "location": "Ubicación",
@@ -1835,7 +1845,12 @@
   },
   "checkIn": {
     "errorCheckingIn": "Error al registrarse",
-    "checkedInSuccessfully": "Registrado con éxito"
+    "checkedInSuccessfully": "Registrado con éxito",
+    "searchAttendees": "Buscar asistentes",
+    "checkedIn": "Registrado",
+    "downloadTag": "Descargar etiqueta",
+    "checkIn": "Registrar",
+    "eventCheckInManagement": "Gestión de registro de eventos"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",
@@ -2107,7 +2122,12 @@
     "disabled": "Deshabilitado",
     "accepted": "Aceptado",
     "declined": "Declinado",
-    "no_response": "Sin respuesta"
+    "no_response": "Sin respuesta",
+    "success": "Éxito",
+    "warning": "Advertencia",
+    "error": "Error",
+    "info": "Información",
+    "neutral": "Neutral"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comentario eliminado exitosamente",
@@ -2135,9 +2155,6 @@
   },
   "contact": {
     "card_aria": "Tarjeta de contacto"
-  },
-  "securedRoute": {
-    "sessionExpired": "Por favor, vuelva a iniciar sesión ya que la sesión ha expirado"
   },
   "common": {
     "signOut": "Cerrar sesión",
@@ -2175,5 +2192,8 @@
     "sortPeople": "Ordenar personas",
     "unassign": "Desasignar",
     "tags": "Etiquetas"
+  },
+  "orgProfileField": {
+    "editCustomField": "Editar campo personalizado"
   }
 }
