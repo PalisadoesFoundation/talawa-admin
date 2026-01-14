@@ -825,5 +825,31 @@ describe('CampaignModal', () => {
     await waitFor(() => {
       expect(NotificationToast.success).not.toHaveBeenCalled();
     });
+  it('should handle null date in start date picker onChange', async () => {
+    renderCampaignModal(link1, campaignProps[1]);
+
+    const startDateInput = getPickerInputByLabel('Start Date');
+    const initialValue = startDateInput.value;
+
+    // Pass empty string which the mock DatePicker converts to null
+    // This triggers the early return in the start date onChange handler
+    fireEvent.change(startDateInput, { target: { value: '' } });
+
+    // Verify form state unchanged since the early return was triggered
+    expect(startDateInput).toHaveValue(initialValue);
+  });
+
+  it('should handle null date in end date picker onChange', async () => {
+    renderCampaignModal(link1, campaignProps[1]);
+
+    const endDateInput = getPickerInputByLabel('End Date');
+    const initialValue = endDateInput.value;
+
+    // Pass empty string which the mock DatePicker converts to null
+    // This triggers the falsy branch in the end date onChange handler
+    fireEvent.change(endDateInput, { target: { value: '' } });
+
+    // Verify form state unchanged since the if(date) condition was false
+    expect(endDateInput).toHaveValue(initialValue);
   });
 });

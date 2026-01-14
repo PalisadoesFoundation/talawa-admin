@@ -37,7 +37,7 @@
 import { Form } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './VolunteerGroupViewModal.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -72,7 +72,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
 
   return (
     <BaseModal
-      className={styles.volunteerCreateModal}
+      className={styles.volunteerGroupViewModal}
       onHide={hide}
       show={isOpen}
       headerContent={<p className={styles.titlemodal}>{t('groupDetails')}</p>}
@@ -135,14 +135,14 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                           src={leader.avatarURL}
                           alt={leader.name}
                           data-testid="leader_image"
-                          className={styles.TableImages}
+                          className={styles.tableImages}
                         />
                       ) : (
                         <div className={styles.avatarContainer}>
                           <Avatar
                             key={`${leader.id}-avatar`}
                             containerStyle={styles.imageContainer}
-                            avatarStyle={styles.TableImages}
+                            avatarStyle={styles.tableImages}
                             dataTestId="leader_avatar"
                             name={leader.name}
                             alt={leader.name}
@@ -172,14 +172,14 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                           src={creator.avatarURL}
                           alt={creator.name}
                           data-testid="creator_image"
-                          className={styles.TableImages}
+                          className={styles.tableImages}
                         />
                       ) : (
                         <div className={styles.avatarContainer}>
                           <Avatar
                             key={`${creator.id}-avatar`}
                             containerStyle={styles.imageContainer}
-                            avatarStyle={styles.TableImages}
+                            avatarStyle={styles.tableImages}
                             dataTestId="creator_avatar"
                             name={creator.name}
                             alt={creator.name}
