@@ -7,7 +7,6 @@
  *
  *   - fetchPosts: Function to refresh the list of posts
  *
- *   - fetchPosts: Function to refresh the list of posts
  */
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
@@ -113,7 +112,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       setIsLikedByUser(!isLikedByUser);
       setLikeCount(isLikedByUser ? likeCount - 1 : likeCount + 1);
     } catch (error) {
-      NotificationToast.error(error as string);
+      NotificationToast.error(
+        error instanceof Error ? error.message : String(error),
+      );
     }
   };
 

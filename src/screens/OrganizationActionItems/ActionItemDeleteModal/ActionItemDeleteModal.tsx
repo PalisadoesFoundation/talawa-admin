@@ -7,10 +7,10 @@
  * @returns  A React functional component rendering the delete confirmation modal.
  *
  * @remarks
- * - Uses `react-bootstrap` for modal and button components.
- * - Integrates with Apollo Client's `useMutation` for handling the deletion of the action item.
- * - Displays success or error messages using `NotificationToast`.
- * - Supports internationalization with `react-i18next`.
+ * Uses `BaseModal` from `shared-components` for the modal and `react-bootstrap` for button components.
+ * Integrates with Apollo Client's `useMutation` for handling the deletion of the action item.
+ * Displays success or error messages using `NotificationToast`.
+ * Supports internationalization with `react-i18next`.
  *
  * @example
  * ```tsx

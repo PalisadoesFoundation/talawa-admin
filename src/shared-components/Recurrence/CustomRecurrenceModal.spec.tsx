@@ -735,8 +735,6 @@ describe('CustomRecurrenceModal – full coverage', () => {
 
     // Clear previous calls to isolate this test
     setCustomRecurrenceModalIsOpen.mockClear();
-    // Clear previous calls to isolate this test
-    setCustomRecurrenceModalIsOpen.mockClear();
     (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();
 
     // Try to submit with invalid value
@@ -794,8 +792,6 @@ describe('CustomRecurrenceModal – full coverage', () => {
       expect(countInput.value).toBe('0');
     });
 
-    // Clear previous calls to isolate this test
-    setCustomRecurrenceModalIsOpen.mockClear();
     // Clear previous calls to isolate this test
     setCustomRecurrenceModalIsOpen.mockClear();
     (NotificationToast.error as ReturnType<typeof vi.fn>).mockClear();

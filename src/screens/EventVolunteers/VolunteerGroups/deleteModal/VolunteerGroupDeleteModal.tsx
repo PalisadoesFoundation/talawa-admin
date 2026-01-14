@@ -1,8 +1,9 @@
 /**
  * Modal that confirms deletion of a volunteer group.
  *
-/**
- * Modal that confirms deletion of a volunteer group.
+ * component VolunteerGroupDeleteModal
+ * `@param` props - Component props from InterfaceDeleteVolunteerGroupModal
+ * `@returns` JSX.Element
  */
 import { Button, Form } from 'react-bootstrap';
 import styles from './VolunteerGroupDeleteModal.module.css';
