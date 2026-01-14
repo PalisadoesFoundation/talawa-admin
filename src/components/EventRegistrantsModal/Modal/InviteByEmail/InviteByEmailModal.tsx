@@ -176,7 +176,7 @@ const InviteByEmailModal: React.FC<Props> = ({
                 className={styles.nameField}
               />
 
-              {recipients.length > 1 ? (
+              {recipients.length > 1 && (
                 <Button
                   variant="link"
                   onClick={() => {
@@ -187,7 +187,7 @@ const InviteByEmailModal: React.FC<Props> = ({
                 >
                   {t('remove', { defaultValue: 'Remove' })}
                 </Button>
-              ) : null}
+              )}
             </div>
           ))}
 
