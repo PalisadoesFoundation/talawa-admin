@@ -147,7 +147,6 @@
   "workPhoneNumber": "工作电话号码",
   "unblock": "解封",
   "unblockedSuccessfully": "{{item}} 解封成功",
-
   "pluginSettings": "插件设置",
   "profilePicture": "头像",
   "profilePicturePlaceholder": "占位图片",
@@ -256,5 +255,16 @@
   "or": "或",
   "eventNotFound": "未找到 ID 为 {{id}} 的活动",
   "required": "必填",
-  "unknownUser": "未知用户"
+  "unknownUser": "未知用户",
+  "imageNotFound": "未找到图片",
+  "changeLanguage": "更改語言",
+  "selectField": "選擇{{fieldName}}",
+  "userEvents": {
+    "presetToday": "今天",
+    "presetThisWeek": "本周",
+    "presetThisMonth": "本月",
+    "presetNext7Days": "未来7天",
+    "presetNext30Days": "未来30天",
+    "presetNextMonth": "下个月"
+  }
 }

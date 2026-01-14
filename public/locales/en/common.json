@@ -255,5 +255,16 @@
   "or": "or",
   "eventNotFound": "Event with id {{id}} not found",
   "required": "Required",
-  "unknownUser": "Unknown User"
+  "unknownUser": "Unknown User",
+  "imageNotFound": "Image not found",
+  "changeLanguage": "Change Language",
+  "selectField": "Select {{fieldName}}",
+  "userEvents": {
+    "presetToday": "Today",
+    "presetThisWeek": "This Week",
+    "presetThisMonth": "This Month",
+    "presetNext7Days": "Next 7 Days",
+    "presetNext30Days": "Next 30 Days",
+    "presetNextMonth": "Next Month"
+  }
 }

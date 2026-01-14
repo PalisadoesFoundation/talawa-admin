@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import type { InterfaceCreateFund, InterfaceFundInfo } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './FundModal.module.css';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import {
@@ -11,6 +11,7 @@ import {
 } from 'GraphQl/Mutations/FundMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { FormControl, TextField } from '@mui/material';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 
 export interface InterfaceFundModal {
   isOpen: boolean;
@@ -168,9 +169,15 @@ const FundModal: React.FC<InterfaceFundModal> = ({
   };
 
   return (
-    <>
-      <Modal className={styles.fundModal} show={isOpen} onHide={hide}>
-        <Modal.Header>
+    <BaseModal
+      className={styles.fundModal}
+      show={isOpen}
+      onHide={hide}
+      centered={false}
+      backdrop={true}
+      showCloseButton={false}
+      headerContent={
+        <>
           <p className={styles.titlemodal} data-testid="modalTitle">
             {t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}
           </p>
@@ -182,103 +189,105 @@ const FundModal: React.FC<InterfaceFundModal> = ({
           >
             <i className="fa fa-times"></i>
           </Button>
-        </Modal.Header>
-        <Modal.Body>
-          <Form
-            onSubmitCapture={
-              mode === 'create' ? createFundHandler : updateFundHandler
-            }
-            className="p-3"
-          >
-            <Form.Group className="d-flex mb-3 w-100">
-              <FormControl fullWidth>
-                <TextField
-                  label={t('fundName')}
-                  variant="outlined"
-                  className={`${styles.noOutline} w-100`}
-                  value={formState.fundName}
-                  onChange={(e) =>
-                    setFormState({ ...formState, fundName: e.target.value })
-                  }
-                />
-              </FormControl>
-            </Form.Group>
-            <Form.Group className="d-flex mb-3 w-100">
-              <FormControl fullWidth>
-                <TextField
-                  label={t('fundId')}
-                  variant="outlined"
-                  className={`${styles.noOutline} w-100`}
-                  value={formState.fundRef}
-                  onChange={(e) =>
-                    setFormState({ ...formState, fundRef: e.target.value })
-                  }
-                />
-              </FormControl>
-            </Form.Group>
+        </>
+      }
+    >
+      <Form
+        onSubmitCapture={
+          mode === 'create' ? createFundHandler : updateFundHandler
+        }
+        className="p-3"
+      >
+        <Form.Group className="d-flex mb-3 w-100">
+          <FormControl fullWidth>
+            <TextField
+              label={t('fundName')}
+              variant="outlined"
+              className={`${styles.noOutline} w-100`}
+              value={formState.fundName}
+              onChange={(e) =>
+                setFormState({ ...formState, fundName: e.target.value })
+              }
+            />
+          </FormControl>
+        </Form.Group>
+        <Form.Group className="d-flex mb-3 w-100">
+          <FormControl fullWidth>
+            <TextField
+              label={t('fundId')}
+              variant="outlined"
+              className={`${styles.noOutline} w-100`}
+              value={formState.fundRef}
+              onChange={(e) =>
+                setFormState({ ...formState, fundRef: e.target.value })
+              }
+            />
+          </FormControl>
+        </Form.Group>
 
-            <div
-              className={`d-flex mt-2 mb-3 flex-wrap ${mode === 'edit' ? 'justify-content-between' : 'justify-content-start gap-3'} `}
-            >
-              <Form.Group className="d-flex">
-                <label>{t('taxDeductible')} </label>
-                <Form.Switch
-                  type="checkbox"
-                  checked={formState.isTaxDeductible}
-                  data-testid="setisTaxDeductibleSwitch"
-                  className={`ms-2 ${styles.switch}`}
-                  onChange={() =>
-                    setFormState({
-                      ...formState,
-                      isTaxDeductible: !formState.isTaxDeductible,
-                    })
-                  }
-                />
-              </Form.Group>
-              <Form.Group className="d-flex">
-                <label>{t('default')} </label>
-                <Form.Switch
-                  type="checkbox"
-                  className={`ms-2 ${styles.switch}`}
-                  data-testid="setDefaultSwitch"
-                  checked={formState.isDefault}
-                  onChange={() =>
-                    setFormState({
-                      ...formState,
-                      isDefault: !formState.isDefault,
-                    })
-                  }
-                />
-              </Form.Group>
-              {mode === 'edit' && (
-                <Form.Group className="d-flex">
-                  <label>{t('archived')} </label>
-                  <Form.Switch
-                    type="checkbox"
-                    checked={formState.isArchived}
-                    data-testid="archivedSwitch"
-                    className={`ms-2 ${styles.switch}`}
-                    onChange={() =>
-                      setFormState({
-                        ...formState,
-                        isArchived: !formState.isArchived,
-                      })
-                    }
-                  />
-                </Form.Group>
-              )}
-            </div>
-            <Button
-              type="submit"
-              className={styles.addButton}
-              data-testid="createFundFormSubmitBtn"
-            >
-              {t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
-    </>
+        <div
+          className={`d-flex mt-2 mb-3 flex-wrap ${mode === 'edit' ? 'justify-content-between' : 'justify-content-start gap-3'} `}
+        >
+          <Form.Group className="d-flex" controlId="taxDeductibleSwitch">
+            <Form.Label>{t('taxDeductible')} </Form.Label>
+            <Form.Switch
+              type="checkbox"
+              checked={formState.isTaxDeductible}
+              id="taxDeductibleSwitch"
+              data-testid="setIsTaxDeductibleSwitch"
+              className={`ms-2 ${styles.switch}`}
+              onChange={() =>
+                setFormState({
+                  ...formState,
+                  isTaxDeductible: !formState.isTaxDeductible,
+                })
+              }
+            />
+          </Form.Group>
+          <Form.Group className="d-flex" controlId="defaultSwitch">
+            <Form.Label>{t('default')} </Form.Label>
+            <Form.Switch
+              type="checkbox"
+              className={`ms-2 ${styles.switch}`}
+              data-testid="setDefaultSwitch"
+              id="defaultSwitch"
+              checked={formState.isDefault}
+              onChange={() =>
+                setFormState({
+                  ...formState,
+                  isDefault: !formState.isDefault,
+                })
+              }
+            />
+          </Form.Group>
+          {mode === 'edit' && (
+            <Form.Group className="d-flex" controlId="archivedSwitch">
+              <Form.Label>{t('archived')} </Form.Label>
+              <Form.Switch
+                type="checkbox"
+                checked={formState.isArchived}
+                data-testid="archivedSwitch"
+                id="archivedSwitch"
+                className={`ms-2 ${styles.switch}`}
+                onChange={() =>
+                  setFormState({
+                    ...formState,
+                    isArchived: !formState.isArchived,
+                  })
+                }
+              />
+            </Form.Group>
+          )}
+        </div>
+        <Button
+          type="submit"
+          className={styles.addButton}
+          data-testid="createFundFormSubmitBtn"
+        >
+          {t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}
+        </Button>
+      </Form>
+    </BaseModal>
   );
 };
 

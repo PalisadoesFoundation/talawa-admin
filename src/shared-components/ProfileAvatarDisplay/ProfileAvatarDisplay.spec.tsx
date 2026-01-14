@@ -4,7 +4,7 @@ import { ProfileAvatarDisplay } from './ProfileAvatarDisplay';
 import '@testing-library/dom';
 
 // Mock the Avatar component since we want to test ProfileAvatarDisplay's logic, not Avatar's.
-vi.mock('components/Avatar/Avatar', () => ({
+vi.mock('shared-components/Avatar/Avatar', () => ({
   default: ({
     name,
     dataTestId,
@@ -150,7 +150,7 @@ describe('ProfileAvatarDisplay Component', () => {
     fireEvent.click(avatarContainer);
 
     // Modal should be visible
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByTestId('test-avatar-modal')).toBeInTheDocument();
     expect(screen.getByText('John Doe')).toBeInTheDocument();
   });
 
@@ -169,7 +169,7 @@ describe('ProfileAvatarDisplay Component', () => {
     fireEvent.click(avatarContainer);
 
     // Modal should not be visible
-    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(screen.queryByTestId('test-avatar-modal')).toBeNull();
     // onClick should be called
     expect(onClickMock).toHaveBeenCalled();
   });
@@ -185,7 +185,7 @@ describe('ProfileAvatarDisplay Component', () => {
     // Open the modal
     const avatarContainer = screen.getByTestId('test-avatar');
     fireEvent.click(avatarContainer);
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByTestId('test-avatar-modal')).toBeInTheDocument();
 
     // Click the close button (react-bootstrap Modal.Header closeButton has aria-label="Close")
     const closeButton = screen.getByRole('button', { name: /close/i });
@@ -193,7 +193,7 @@ describe('ProfileAvatarDisplay Component', () => {
 
     // Modal should be removed (use waitFor since modal animation is async)
     await waitFor(() => {
-      expect(screen.queryByRole('dialog')).toBeNull();
+      expect(screen.queryByTestId('test-avatar-modal')).toBeNull();
     });
   });
 
@@ -209,7 +209,7 @@ describe('ProfileAvatarDisplay Component', () => {
     // Open the modal
     const avatarContainer = screen.getByTestId('test-avatar');
     fireEvent.click(avatarContainer);
-    const dialog = screen.getByRole('dialog');
+    const dialog = screen.getByTestId('test-avatar-modal');
     expect(dialog).toBeInTheDocument();
 
     // Press Escape key on the dialog
@@ -217,7 +217,7 @@ describe('ProfileAvatarDisplay Component', () => {
 
     // Modal should be removed (async due to modal animation)
     await waitFor(() => {
-      expect(screen.queryByRole('dialog')).toBeNull();
+      expect(screen.queryByTestId('test-avatar-modal')).toBeNull();
     });
   });
 
@@ -236,7 +236,7 @@ describe('ProfileAvatarDisplay Component', () => {
     fireEvent.keyDown(avatarContainer, { key: ' ', code: 'Space' });
 
     // Modal should be visible
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByTestId('test-avatar-modal')).toBeInTheDocument();
   });
 
   test('closes modal when backdrop is clicked', async () => {
@@ -251,7 +251,7 @@ describe('ProfileAvatarDisplay Component', () => {
     // Open the modal
     const avatarContainer = screen.getByTestId('test-avatar');
     fireEvent.click(avatarContainer);
-    const dialog = screen.getByRole('dialog');
+    const dialog = screen.getByTestId('test-avatar-modal');
     expect(dialog).toBeInTheDocument();
 
     // Click the backdrop element (react-bootstrap renders it with .modal-backdrop class)
@@ -264,7 +264,7 @@ describe('ProfileAvatarDisplay Component', () => {
     }
 
     await waitFor(() => {
-      expect(screen.queryByRole('dialog')).toBeNull();
+      expect(screen.queryByTestId('test-avatar-modal')).toBeNull();
     });
   });
 
@@ -282,7 +282,7 @@ describe('ProfileAvatarDisplay Component', () => {
     fireEvent.click(avatarContainer);
 
     // Modal should be visible
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByTestId('test-avatar-modal')).toBeInTheDocument();
     expect(screen.getByText('John Doe')).toBeInTheDocument();
 
     // The modal should render the fallback Avatar, not an image
@@ -357,7 +357,7 @@ describe('ProfileAvatarDisplay Component', () => {
     fireEvent.click(avatarContainer);
 
     // Modal should be visible
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByTestId('avatar-modal')).toBeInTheDocument();
 
     // The modal fallback should use the default 'avatar-modal-fallback' dataTestId
     const modalFallback = screen.getByTestId('avatar-modal-fallback');
@@ -379,7 +379,7 @@ describe('ProfileAvatarDisplay Component', () => {
     fireEvent.keyDown(avatarContainer, { key: 'Enter', code: 'Enter' });
 
     // Modal should be visible
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByTestId('test-avatar-modal')).toBeInTheDocument();
   });
 
   test('opens modal when Space key is pressed on fallback avatar', () => {
@@ -397,7 +397,7 @@ describe('ProfileAvatarDisplay Component', () => {
     fireEvent.keyDown(avatarContainer, { key: ' ', code: 'Space' });
 
     // Modal should be visible
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByTestId('test-avatar-modal')).toBeInTheDocument();
   });
 
   test('does not open modal when other keys are pressed on fallback avatar', () => {
@@ -415,7 +415,7 @@ describe('ProfileAvatarDisplay Component', () => {
     fireEvent.keyDown(avatarContainer, { key: 'Tab', code: 'Tab' });
 
     // Modal should NOT be visible
-    expect(screen.queryByRole('dialog')).toBeNull();
+    expect(screen.queryByTestId('test-avatar-modal')).toBeNull();
   });
 
   test('calls onLoad callback when image loads successfully', () => {
@@ -511,7 +511,7 @@ describe('ProfileAvatarDisplay Component', () => {
     fireEvent.keyDown(avatarContainer, { key: 'Enter', code: 'Enter' });
 
     // Modal should be visible
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    expect(screen.getByTestId('test-avatar-modal')).toBeInTheDocument();
   });
 
   test('does not throw when enlarged modal image loads without onLoad callback', () => {

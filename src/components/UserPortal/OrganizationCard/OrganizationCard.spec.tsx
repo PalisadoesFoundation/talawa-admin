@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { I18nextProvider } from 'react-i18next';
 
 import i18nForTest from 'utils/i18nForTest';
@@ -18,8 +18,8 @@ vi.mock('@apollo/client', async () => {
   };
 });
 
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
   },
@@ -100,7 +100,9 @@ describe('OrganizationCard [PR-2]', () => {
       });
     });
 
-    expect(toast.success).toHaveBeenCalled();
+    expect(NotificationToast.success).toHaveBeenCalledWith(
+      i18nForTest.t('organizationCard.join_success'),
+    );
   });
 
   it('calls mutation and shows success toast on withdraw click', async () => {
@@ -122,7 +124,9 @@ describe('OrganizationCard [PR-2]', () => {
       });
     });
 
-    expect(toast.success).toHaveBeenCalled();
+    expect(NotificationToast.success).toHaveBeenCalledWith(
+      i18nForTest.t('organizationCard.withdraw_success'),
+    );
   });
 
   it('shows error toast when withdraw mutation fails', async () => {
@@ -139,7 +143,7 @@ describe('OrganizationCard [PR-2]', () => {
     fireEvent.click(screen.getByTestId('withdrawBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
+      expect(NotificationToast.error).toHaveBeenCalledWith(
         i18nForTest.t('organizationCard.withdraw_error'),
       );
     });
@@ -153,7 +157,7 @@ describe('OrganizationCard [PR-2]', () => {
     fireEvent.click(screen.getByTestId('joinBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
+      expect(NotificationToast.error).toHaveBeenCalledWith(
         i18nForTest.t('organizationCard.join_error'),
       );
     });
@@ -174,8 +178,8 @@ describe('OrganizationCard [PR-2]', () => {
       expect(mockMutationFn).not.toHaveBeenCalled();
     });
 
-    expect(toast.success).not.toHaveBeenCalled();
-    expect(toast.error).not.toHaveBeenCalled();
+    expect(NotificationToast.success).not.toHaveBeenCalled();
+    expect(NotificationToast.error).not.toHaveBeenCalled();
   });
 
   it('renders with default values when optional props are missing', () => {

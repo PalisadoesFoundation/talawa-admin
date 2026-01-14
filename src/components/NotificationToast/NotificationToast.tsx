@@ -7,6 +7,8 @@ import type {
   InterfaceNotificationToastHelpers,
   NotificationToastMessage,
   NotificationToastNamespace,
+  InterfacePromiseMessages,
+  PromiseFunction,
 } from 'types/NotificationToast/interface';
 
 const DEFAULT_NAMESPACE: NotificationToastNamespace = 'common';
@@ -59,6 +61,33 @@ function showToast(
 }
 
 /**
+ * Shows toast for the promisified function
+ */
+function showPromise(
+  promisifiedFunction: PromiseFunction,
+  messages: InterfacePromiseMessages,
+  options?: ToastOptions,
+): Promise<void> {
+  const mergedOptions: ToastOptions = { ...DEFAULT_TOAST_OPTIONS, ...options };
+  const resolvedPendingMessage = resolveNotificationToastMessage(
+    messages.pending,
+  );
+  const resolvedSuccessMessage = resolveNotificationToastMessage(
+    messages.success,
+  );
+  const resolvedErrorMessage = resolveNotificationToastMessage(messages.error);
+  return toast.promise(
+    promisifiedFunction,
+    {
+      pending: resolvedPendingMessage,
+      error: resolvedErrorMessage,
+      success: resolvedSuccessMessage,
+    },
+    mergedOptions,
+  ) as Promise<void>;
+}
+
+/**
  * NotificationToast
  *
  * A small wrapper around `react-toastify` that standardizes toast defaults and
@@ -68,10 +97,20 @@ function showToast(
  * NotificationToast.success('Saved');
  *
  * @example
+ * ```
  * NotificationToast.error({ key: 'unknownError', namespace: 'errors' });
- *
+ * ```
  * @example
  * NotificationToast.dismiss(); // Dismiss all active toasts
+ *
+ * @example
+ * ```ts
+ * Notification.promise(promisifiedFunction, {
+ *  pending: 'pending message',
+ *  success: 'success message',
+ *  error: 'error message'
+ * });
+ * ```
  */
 export const NotificationToast: InterfaceNotificationToastHelpers = {
   success: (message, options) => showToast('success', message, options),
@@ -79,6 +118,8 @@ export const NotificationToast: InterfaceNotificationToastHelpers = {
   warning: (message, options) => showToast('warning', message, options),
   info: (message, options) => showToast('info', message, options),
   dismiss: () => toast.dismiss(),
+  promise: (promisifiedFunction, messages, options) =>
+    showPromise(promisifiedFunction, messages, options),
 };
 
 /**
