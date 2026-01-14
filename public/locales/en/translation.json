@@ -1610,7 +1610,8 @@
     "on": "On",
     "after": "After",
     "customRecurrence": "Custom Recurrence",
-    "repeatsEvery": "Repeats Every"
+    "repeatsEvery": "Repeats Every",
+    "noEventAvailable": "No Event Available!"
   },
   "userEventCard": {
     "starts": "Starts",
@@ -2191,5 +2192,8 @@
     "sortPeople": "Sort People",
     "unassign": "Unassign",
     "tags": "Tags"
+  },
+  "orgProfileField": {
+    "editCustomField": "Edit Custom Field"
   }
 }

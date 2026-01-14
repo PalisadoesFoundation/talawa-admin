@@ -1627,7 +1627,8 @@
     "on": "Le",
     "after": "Après",
     "customRecurrence": "Récurrence Personnalisée",
-    "repeatsEvery": "Se répète tous les"
+    "repeatsEvery": "Se répète tous les",
+    "noEventAvailable": "Aucun événement disponible !"
   },
   "userEventCard": {
     "starts": "Départs",
@@ -2191,5 +2192,8 @@
     "sortPeople": "Trier les personnes",
     "unassign": "Désassigner",
     "tags": "Tags"
+  },
+  "orgProfileField": {
+    "editCustomField": "Modifier le champ personnalisé"
   }
 }

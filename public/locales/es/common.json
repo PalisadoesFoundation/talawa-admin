@@ -256,5 +256,6 @@
   "eventNotFound": "Evento con id {{id}} no encontrado",
   "required": "Obligatorio",
   "imageNotFound": "Imagen no encontrada",
-  "changeLanguage": "Cambiar idioma"
+  "changeLanguage": "Cambiar idioma",
+  "selectField": "Seleccionar {{fieldName}}"
 }

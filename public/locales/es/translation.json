@@ -1610,7 +1610,8 @@
     "on": "El",
     "after": "Después de",
     "customRecurrence": "Recurrencia Personalizada",
-    "repeatsEvery": "Se repite cada"
+    "repeatsEvery": "Se repite cada",
+    "noEventAvailable": "¡No hay eventos disponibles!"
   },
   "userEventCard": {
     "location": "Ubicación",
@@ -2191,5 +2192,8 @@
     "sortPeople": "Ordenar personas",
     "unassign": "Desasignar",
     "tags": "Etiquetas"
+  },
+  "orgProfileField": {
+    "editCustomField": "Editar campo personalizado"
   }
 }
