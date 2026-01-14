@@ -473,4 +473,291 @@ describe('DataGridWrapper', () => {
     const rowsAsc = screen.getAllByRole('row');
     expect(within(rowsAsc[1]).getByText('Bob')).toBeInTheDocument(); // age 25
   });
+
+  test('handles onSearchByChange callback in SearchFilterBar', () => {
+    const onSearchByChange = vi.fn();
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          searchByOptions: [
+            { label: 'Name', value: 'name' },
+            { label: 'Role', value: 'role' },
+          ],
+          selectedSearchBy: 'name',
+          onSearchByChange,
+        }}
+      />,
+    );
+
+    const searchByButton = screen.getByTestId('searchBy');
+    fireEvent.click(searchByButton);
+    const roleOption = screen.getByTestId('role');
+    fireEvent.click(roleOption);
+
+    expect(onSearchByChange).toHaveBeenCalledWith('role');
+  });
+
+  test('handles onSearchSubmit in SearchFilterBar', () => {
+    const onSearchChange = vi.fn();
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          serverSide: true,
+          searchByOptions: [{ label: 'Name', value: 'name' }],
+          selectedSearchBy: 'name',
+          onSearchChange,
+        }}
+      />,
+    );
+
+    const input = screen.getByRole('searchbox');
+    fireEvent.change(input, { target: { value: 'test query' } });
+
+    const searchButton = screen.getByTestId('searchButton');
+    fireEvent.click(searchButton);
+
+    expect(onSearchChange).toHaveBeenCalledWith('test query', 'name');
+  });
+
+  test('handles client-side search with SearchFilterBar (searchByOptions without serverSide)', () => {
+    vi.useFakeTimers();
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          searchByOptions: [{ label: 'Name', value: 'name' }],
+          fields: ['name'],
+        }}
+      />,
+    );
+
+    const input = screen.getByRole('searchbox');
+    fireEvent.change(input, { target: { value: 'Alice' } });
+
+    // Click the search button to submit (SearchFilterBar requires submission)
+    const searchButton = screen.getByTestId('searchButton');
+    fireEvent.click(searchButton);
+
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+
+    expect(screen.getByText('Alice')).toBeInTheDocument();
+    expect(screen.queryByText('Bob')).toBeNull();
+
+    vi.useRealTimers();
+  });
+
+  test('handles SearchFilterBar with combined search and sort dropdowns', () => {
+    const onSearchChange = vi.fn();
+    const onSortChange = vi.fn();
+
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          serverSide: true,
+          searchByOptions: [{ label: 'Name', value: 'name' }],
+          selectedSearchBy: 'name',
+          onSearchChange,
+        }}
+        sortConfig={{
+          sortingOptions: [
+            { label: 'Name Asc', value: 'name_asc' },
+            { label: 'Name Desc', value: 'name_desc' },
+          ],
+          onSortChange,
+        }}
+      />,
+    );
+
+    // Verify SearchFilterBar renders with both dropdowns
+    expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    expect(screen.getByTestId('sort')).toBeInTheDocument();
+
+    // Test sort dropdown within SearchFilterBar
+    const sortButton = screen.getByTestId('sort');
+    fireEvent.click(sortButton);
+    const sortOption = screen.getByTestId('name_asc');
+    fireEvent.click(sortOption);
+
+    expect(onSortChange).toHaveBeenCalledWith('name_asc');
+  });
+
+  test('handles sort change without onSortChange in SearchFilterBar', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          searchByOptions: [{ label: 'Name', value: 'name' }],
+          fields: ['name'],
+        }}
+        sortConfig={{
+          sortingOptions: [
+            { label: 'Name Asc', value: 'name_asc' },
+            { label: 'Name Desc', value: 'name_desc' },
+          ],
+          // No onSortChange - should use internal state
+        }}
+      />,
+    );
+
+    const sortButton = screen.getByTestId('sort');
+    fireEvent.click(sortButton);
+    const sortOption = screen.getByTestId('name_desc');
+    fireEvent.click(sortOption);
+
+    // Verify sort was applied using internal state
+    const rows = screen.getAllByRole('row');
+    expect(within(rows[1]).getByText('Charlie')).toBeInTheDocument();
+  });
+
+  test('handles search with null/undefined field values', () => {
+    vi.useFakeTimers();
+    const rowsWithNulls: TestRow[] = [
+      { id: 1, name: 'Alice', role: null },
+      { id: 2, name: null, role: 'User' },
+      { id: 3, name: 'Charlie', role: 'Guest' },
+    ];
+
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        rows={rowsWithNulls}
+        searchConfig={{
+          enabled: true,
+          fields: ['name', 'role'],
+        }}
+      />,
+    );
+
+    const input = screen.getByRole('searchbox');
+    fireEvent.change(input, { target: { value: 'User' } });
+
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+
+    // Should find row with role 'User' even though name is null
+    expect(screen.getByText('User')).toBeInTheDocument();
+    expect(screen.queryByText('Alice')).toBeNull();
+    expect(screen.queryByText('Charlie')).toBeNull();
+
+    vi.useRealTimers();
+  });
+
+  test('ignores whitespace-only search terms', () => {
+    vi.useFakeTimers();
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          fields: ['name'],
+        }}
+      />,
+    );
+
+    const input = screen.getByRole('searchbox');
+    fireEvent.change(input, { target: { value: '   ' } });
+
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+
+    // All rows should still be visible (whitespace is trimmed and ignored)
+    expect(screen.getByText('Alice')).toBeInTheDocument();
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+    expect(screen.getByText('Charlie')).toBeInTheDocument();
+
+    vi.useRealTimers();
+  });
+
+  test('uses legacy emptyStateMessage prop', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        rows={[]}
+        emptyStateMessage="No users available"
+      />,
+    );
+
+    expect(screen.getByText('No users available')).toBeInTheDocument();
+  });
+
+  test('uses custom searchInputTestId for SearchBar', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          fields: ['name'],
+          searchInputTestId: 'custom-search-input',
+        }}
+      />,
+    );
+
+    expect(screen.getByTestId('custom-search-input')).toBeInTheDocument();
+  });
+
+  test('uses custom placeholder for SearchBar', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          fields: ['name'],
+          placeholder: 'Search users...',
+        }}
+      />,
+    );
+
+    const input = screen.getByRole('searchbox');
+    expect(input).toHaveAttribute('placeholder', 'Search users...');
+  });
+
+  test('uses custom placeholder for SearchFilterBar', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          serverSide: true,
+          searchByOptions: [{ label: 'Name', value: 'name' }],
+          placeholder: 'Search by name...',
+        }}
+      />,
+    );
+
+    const input = screen.getByRole('searchbox');
+    expect(input).toHaveAttribute('placeholder', 'Search by name...');
+  });
+
+  test('skips filter application when no filter is selected', () => {
+    const filterFunction = vi.fn((rows: readonly TestRow[]) => rows);
+    const filterConfig = {
+      filterOptions: [
+        { label: 'All', value: '' }, // Empty value
+        { label: 'Adults', value: 'adults' },
+      ],
+      filterFunction,
+    };
+
+    render(<DataGridWrapper {...defaultProps} filterConfig={filterConfig} />);
+
+    // All rows should be visible
+    expect(screen.getByText('Alice')).toBeInTheDocument();
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+    expect(screen.getByText('Charlie')).toBeInTheDocument();
+
+    // filterFunction should NOT have been called since selectedFilter is empty
+    expect(filterFunction).not.toHaveBeenCalled();
+  });
 });
