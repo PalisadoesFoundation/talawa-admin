@@ -42,6 +42,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
   mode,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'funds' });
+  const { t: tCommon } = useTranslation('common');
 
   const [formState, setFormState] = useState<InterfaceCreateFund>({
     fundName: fund?.name ?? '',
@@ -50,6 +51,24 @@ const FundModal: React.FC<InterfaceFundModal> = ({
     isTaxDeductible: fund?.isTaxDeductible ?? false,
     isArchived: fund?.isArchived ?? false,
   });
+
+  const [touched, setTouched] = useState<{
+    fundName: boolean;
+    fundRef: boolean;
+  }>({
+    fundName: false,
+    fundRef: false,
+  });
+
+  // Validation logic
+  const fundNameError =
+    touched.fundName && !formState.fundName.trim()
+      ? tCommon('required')
+      : undefined;
+  const fundRefError =
+    touched.fundRef && !formState.fundRef.trim()
+      ? tCommon('required')
+      : undefined;
 
   useEffect(() => {
     setFormState({
@@ -60,6 +79,13 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       isArchived: fund?.isArchived ?? false,
     });
   }, [fund]);
+
+  // Reset touched state when modal opens to prevent stale validation errors
+  useEffect(() => {
+    if (isOpen) {
+      setTouched({ fundName: false, fundRef: false });
+    }
+  }, [isOpen]);
 
   const [createFund] = useMutation(CREATE_FUND_MUTATION);
   const [updateFund] = useMutation(UPDATE_FUND_MUTATION);
@@ -173,8 +199,9 @@ const FundModal: React.FC<InterfaceFundModal> = ({
           <FormFieldGroup
             label={t('fundName')}
             name="fundName"
-            touched={false}
-            error={undefined}
+            required
+            touched={touched.fundName}
+            error={fundNameError}
           >
             <TextField
               variant="outlined"
@@ -184,6 +211,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 setFormState({ ...formState, fundName: e.target.value });
               }}
+              onBlur={() => setTouched((prev) => ({ ...prev, fundName: true }))}
             />
           </FormFieldGroup>
         </Form.Group>
@@ -192,8 +220,9 @@ const FundModal: React.FC<InterfaceFundModal> = ({
           <FormFieldGroup
             label={t('fundId')}
             name="fundId"
-            touched={false}
-            error={undefined}
+            required
+            touched={touched.fundRef}
+            error={fundRefError}
           >
             <TextField
               variant="outlined"
@@ -203,6 +232,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 setFormState({ ...formState, fundRef: e.target.value });
               }}
+              onBlur={() => setTouched((prev) => ({ ...prev, fundRef: true }))}
             />
           </FormFieldGroup>
         </Form.Group>

@@ -51,7 +51,7 @@ import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
 import { FormFieldGroup } from '../../shared-components/FormFieldGroup/FormFieldGroup';
 
-const loginPage = (): JSX.Element => {
+const LoginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
@@ -86,6 +86,42 @@ const loginPage = (): JSX.Element => {
     email: '',
     password: '',
   });
+  const [touched, setTouched] = useState({
+    email: false,
+    password: false,
+  });
+  const [signTouched, setSignTouched] = useState({
+    signName: false,
+    signEmail: false,
+    signPassword: false,
+    cPassword: false,
+  });
+
+  // Validation logic
+  const emailError =
+    touched.email && !formState.email.trim() ? tCommon('required') : undefined;
+  const passwordError =
+    touched.password && !formState.password.trim()
+      ? tCommon('required')
+      : undefined;
+
+  // Signup validation logic
+  const signNameError =
+    signTouched.signName && !signformState.signName.trim()
+      ? tCommon('required')
+      : undefined;
+  const signEmailError =
+    signTouched.signEmail && !signformState.signEmail.trim()
+      ? tCommon('required')
+      : undefined;
+  const signPasswordError =
+    signTouched.signPassword && !signformState.signPassword.trim()
+      ? tCommon('required')
+      : undefined;
+  const cPasswordError =
+    signTouched.cPassword && !signformState.cPassword.trim()
+      ? tCommon('required')
+      : undefined;
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
@@ -128,6 +164,17 @@ const loginPage = (): JSX.Element => {
       setRole('user');
     }
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (showTab === 'REGISTER') {
+      setSignTouched({
+        signName: false,
+        signEmail: false,
+        signPassword: false,
+        cPassword: false,
+      });
+    }
+  }, [showTab]);
 
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
@@ -460,8 +507,8 @@ const loginPage = (): JSX.Element => {
                     name="email"
                     label={tCommon('email')}
                     required
-                    error={undefined}
-                    touched={false}
+                    error={emailError}
+                    touched={touched.email}
                   >
                     <div className="position-relative">
                       <Form.Control
@@ -476,6 +523,7 @@ const loginPage = (): JSX.Element => {
                             email: e.target.value,
                           });
                         }}
+                        onBlur={() => setTouched({ ...touched, email: true })}
                         autoComplete="username"
                         data-testid="loginEmail"
                         data-cy="loginEmail"
@@ -490,8 +538,8 @@ const loginPage = (): JSX.Element => {
                       name="password"
                       label={tCommon('password')}
                       required
-                      error={undefined}
-                      touched={false}
+                      error={passwordError}
+                      touched={touched.password}
                     >
                       <div className="position-relative">
                         <Form.Control
@@ -507,6 +555,9 @@ const loginPage = (): JSX.Element => {
                               password: e.target.value,
                             });
                           }}
+                          onBlur={() =>
+                            setTouched({ ...touched, password: true })
+                          }
                           disabled={loginLoading}
                           autoComplete="current-password"
                           data-cy="loginPassword"
@@ -603,13 +654,12 @@ const loginPage = (): JSX.Element => {
                         name="signName"
                         label={tCommon('Name')}
                         required
-                        error={undefined}
-                        touched={false}
+                        error={signNameError}
+                        touched={signTouched.signName}
                       >
                         <Form.Control
                           disabled={signinLoading}
                           type="text"
-                          id="signname"
                           className="mb-3"
                           placeholder={tCommon('Name')}
                           required
@@ -620,6 +670,9 @@ const loginPage = (): JSX.Element => {
                               signName: e.target.value,
                             });
                           }}
+                          onBlur={() =>
+                            setSignTouched({ ...signTouched, signName: true })
+                          }
                         />
                       </FormFieldGroup>
                     </div>
@@ -649,8 +702,8 @@ const loginPage = (): JSX.Element => {
                     name="signEmail"
                     label={tCommon('email')}
                     required
-                    error={undefined}
-                    touched={false}
+                    error={signEmailError}
+                    touched={signTouched.signEmail}
                   >
                     <div className="position-relative">
                       <Form.Control
@@ -668,6 +721,9 @@ const loginPage = (): JSX.Element => {
                             signEmail: e.target.value.toLowerCase(),
                           });
                         }}
+                        onBlur={() =>
+                          setSignTouched({ ...signTouched, signEmail: true })
+                        }
                       />
                       <Button
                         tabIndex={-1}
@@ -683,8 +739,8 @@ const loginPage = (): JSX.Element => {
                       name="signPassword"
                       label={tCommon('password')}
                       required
-                      error={undefined}
-                      touched={false}
+                      error={signPasswordError}
+                      touched={signTouched.signPassword}
                     >
                       <div className="position-relative">
                         <Form.Control
@@ -694,7 +750,13 @@ const loginPage = (): JSX.Element => {
                           placeholder={tCommon('password')}
                           autoComplete="new-password"
                           onFocus={(): void => setIsInputFocused(true)}
-                          onBlur={(): void => setIsInputFocused(false)}
+                          onBlur={(): void => {
+                            setIsInputFocused(false);
+                            setSignTouched({
+                              ...signTouched,
+                              signPassword: true,
+                            });
+                          }}
                           required
                           value={signformState.signPassword}
                           onChange={(e): void => {
@@ -844,8 +906,8 @@ const loginPage = (): JSX.Element => {
                     name="cPassword"
                     label={tCommon('confirmPassword')}
                     required
-                    error={undefined}
-                    touched={false}
+                    error={cPasswordError}
+                    touched={signTouched.cPassword}
                   >
                     <div className="position-relative">
                       <Form.Control
@@ -860,6 +922,9 @@ const loginPage = (): JSX.Element => {
                             cPassword: e.target.value,
                           });
                         }}
+                        onBlur={() =>
+                          setSignTouched({ ...signTouched, cPassword: true })
+                        }
                         data-testid="cpassword"
                         autoComplete="new-password"
                       />
@@ -960,4 +1025,4 @@ const loginPage = (): JSX.Element => {
   );
 };
 
-export default loginPage;
+export default LoginPage;

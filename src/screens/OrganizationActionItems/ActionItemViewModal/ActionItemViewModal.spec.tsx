@@ -256,7 +256,7 @@ describe('ItemViewModal - Helper Functions Coverage', () => {
     it('should return combined firstName and lastName when name is not available', async () => {
       const mockActionItemWithFirstLastName = {
         ...createActionItem(),
-        creatorId: 'userId2',
+        creatorId: 'userId3',
         creator: null,
       };
       const props: IViewModalProps = {
@@ -269,7 +269,7 @@ describe('ItemViewModal - Helper Functions Coverage', () => {
         expect(screen.getByText('Action Item Details')).toBeInTheDocument();
       });
       const creatorField = screen.getByLabelText(/creator/i);
-      expect(creatorField).toHaveValue('Jane Smith');
+      expect(creatorField).toHaveValue('Bob Johnson');
     });
 
     it('should return "Unknown" when user is null', async () => {
