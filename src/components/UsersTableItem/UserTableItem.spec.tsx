@@ -2005,4 +2005,101 @@ describe('Testing User Table Item', () => {
     expect(screen.getByText(/Blocked Org Without Avatar/i)).toBeInTheDocument();
     expect(screen.getByText(/Blocked Creator/i)).toBeInTheDocument();
   });
+  test('Should clear search when clear button is clicked in blocked organizations modal', async () => {
+    const props = {
+      user: {
+        id: '123',
+        name: 'John Doe',
+        emailAddress: 'john@example.com',
+        avatarURL: null,
+        birthDate: null,
+        city: null,
+        countryCode: null,
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
+        educationGrade: null,
+        employmentStatus: null,
+        isEmailAddressVerified: true,
+        maritalStatus: null,
+        natalSex: null,
+        naturalLanguageCode: null,
+        postalCode: null,
+        role: null,
+        state: null,
+        mobilePhoneNumber: null,
+        homePhoneNumber: null,
+        workPhoneNumber: null,
+        createdOrganizations: [],
+        organizationsWhereMember: {
+          edges: [],
+        },
+        orgsWhereUserIsBlocked: {
+          edges: [
+            {
+              node: {
+                id: 'ghi',
+                createdAt: dayjs.utc().toISOString(),
+                organization: {
+                  name: 'Blocked Org 1',
+                  avatarURL: undefined,
+                  city: 'Toronto',
+                  state: 'ON',
+                  createdAt: dayjs.utc().toISOString(),
+                  creator: {
+                    name: 'Creator 1',
+                  },
+                },
+              },
+            },
+            {
+              node: {
+                id: 'jkl',
+                createdAt: dayjs.utc().toISOString(),
+                organization: {
+                  name: 'Blocked Org 2',
+                  avatarURL: undefined,
+                  city: 'Toronto',
+                  state: 'ON',
+                  createdAt: dayjs.utc().toISOString(),
+                  creator: {
+                    name: 'Creator 2',
+                  },
+                },
+              },
+            },
+          ],
+        },
+      } as InterfaceQueryUserListItemForAdmin,
+      index: 0,
+      loggedInUserId: '123',
+      resetAndRefetch: resetAndRefetchMock,
+    };
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <UsersTableItem {...props} />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    fireEvent.click(screen.getByTestId(`showBlockedOrgsBtn${123}`));
+
+    const searchInput = screen.getByTestId('searchByNameBlockedOrgs');
+    fireEvent.change(searchInput, { target: { value: 'Blocked Org 1' } });
+    fireEvent.keyDown(searchInput, { key: 'Enter' });
+
+    expect(screen.getByText(/Blocked Org 1/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Blocked Org 2/i)).not.toBeInTheDocument();
+
+    const clearBtn = screen.getByTestId('clearBtnBlockedOrgs');
+    fireEvent.click(clearBtn);
+
+    expect(screen.getByText(/Blocked Org 1/i)).toBeInTheDocument();
+    expect(screen.getByText(/Blocked Org 2/i)).toBeInTheDocument();
+  });
 });

@@ -434,6 +434,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
               onClear={() => searchBlockedOrgs('')}
               inputTestId="searchByNameBlockedOrgs"
               buttonTestId="searchBtnBlockedOrgs"
+              clearButtonTestId="clearBtnBlockedOrgs"
             />
           </div>
         )}
