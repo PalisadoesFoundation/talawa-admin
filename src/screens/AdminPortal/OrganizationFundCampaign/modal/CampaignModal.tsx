@@ -1,9 +1,15 @@
 // translation-check-keyPrefix: fundCampaign
-import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+
+import { currencyOptions, currencySymbols } from 'utils/currency';
+import styles from 'style/app-fixed.module.css';
+
+import { errorHandler } from 'utils/errorHandler';
+import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import {
   FormControl,
@@ -12,18 +18,17 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 import {
   CREATE_CAMPAIGN_MUTATION,
   UPDATE_CAMPAIGN_MUTATION,
 } from 'GraphQl/Mutations/CampaignMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
-import DatePicker from 'shared-components/DatePicker';
-import { currencyOptions, currencySymbols } from 'utils/currency';
-import { errorHandler } from 'utils/errorHandler';
-import type { InterfaceCampaignInfo } from 'utils/interfaces';
-import styles from './CampaignModal.module.css';
+
+import type { InterfaceCampaignModalProps } from 'types/AdminPortal/CampaignModal/interface';
+
+import DateRangePicker from 'shared-components/DateRangePicker';
+import type { IDateRangeValue } from 'types/shared-components/DateRangePicker/interface';
+
 /**
  * Props for the CampaignModal component.
  *
@@ -44,23 +49,49 @@ import styles from './CampaignModal.module.css';
  *
  * For more details on the reusable classes, refer to the global CSS file.
  */
-export interface InterfaceCampaignModal {
-  isOpen: boolean;
-  hide: () => void;
-  fundId: string;
-  orgId: string;
-  campaign: InterfaceCampaignInfo | null;
-  refetchCampaign: () => void;
-  mode: 'create' | 'edit';
-}
 
 /**
- * Modal component for creating or editing a campaign.
+ * Returns an ISO date string when `newDate` differs from `existingDate`
+ * (compared at second precision). Otherwise returns `undefined`.
  *
- * @param props - The props for the CampaignModal component.
- * @returns JSX.Element
+ * @param newDate - Newly selected date.
+ * @param existingDate - Previously stored date.
+ * @returns ISO string when changed; otherwise undefined.
  */
-const CampaignModal: React.FC<InterfaceCampaignModal> = ({
+
+export const getUpdatedDateIfChanged = (
+  newDate: Date | string | null | undefined,
+  existingDate: Date | string | null | undefined,
+): string | undefined => {
+  if (!newDate) return undefined;
+
+  const parsedNew = dayjs(newDate);
+  if (!parsedNew.isValid()) return undefined;
+
+  if (!existingDate) {
+    return parsedNew.toISOString();
+  }
+
+  const parsedExisting = dayjs(existingDate);
+  if (!parsedExisting.isValid()) {
+    return parsedNew.toISOString();
+  }
+
+  if (!parsedExisting.isSame(parsedNew, 'second')) {
+    return parsedNew.toISOString();
+  }
+
+  return undefined;
+};
+
+/**
+ * Modal component for creating or editing a fund campaign.
+ *
+ * @param props - Props for the CampaignModal component.
+ * @returns JSX.Element representing the create/edit campaign modal.
+ */
+
+const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
   isOpen,
   hide,
   fundId,
@@ -69,36 +100,37 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   campaign,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'fundCampaign' });
-  const { t: tCommon } = useTranslation('common');
 
   const [formState, setFormState] = useState({
     campaignName: campaign?.name ?? '',
     campaignCurrency: campaign?.currencyCode ?? 'USD',
     campaignGoal: campaign?.goalAmount ?? 0,
-    campaignStartDate: campaign?.startAt ?? new Date(),
-    campaignEndDate: campaign?.endAt ?? new Date(),
+  });
+
+  const [campaignDateRange, setCampaignDateRange] = useState<IDateRangeValue>({
+    startDate: campaign?.startAt ?? null,
+    endDate: campaign?.endAt ?? null,
   });
 
   useEffect(() => {
     setFormState({
       campaignCurrency: campaign?.currencyCode ?? 'USD',
-      campaignEndDate: campaign?.endAt ?? new Date(),
       campaignGoal: campaign?.goalAmount ?? 0,
       campaignName: campaign?.name ?? '',
-      campaignStartDate: campaign?.startAt ?? new Date(),
+    });
+
+    setCampaignDateRange({
+      startDate: campaign?.startAt ?? null,
+      endDate: campaign?.endAt ?? null,
     });
   }, [campaign]);
 
-  const {
-    campaignName,
-    campaignCurrency,
-    campaignEndDate,
-    campaignGoal,
-    campaignStartDate,
-  } = formState;
+  const { campaignName, campaignCurrency, campaignGoal } = formState;
 
   const [createCampaign] = useMutation(CREATE_CAMPAIGN_MUTATION);
   const [updateCampaign] = useMutation(UPDATE_CAMPAIGN_MUTATION);
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   /**
    * Handles form submission to create a new campaign.
@@ -110,14 +142,43 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
+
+    if (!formState.campaignName.trim()) {
+      NotificationToast.error(t('campaignNameRequired'));
+      return;
+    }
+
+    if (!campaignDateRange.startDate || !campaignDateRange.endDate) {
+      NotificationToast.error(t('dateRangeRequired'));
+      return;
+    }
+
+    const start = campaignDateRange.startDate;
+    const end = campaignDateRange.endDate;
+
+    const startDay = dayjs(start);
+    const endDay = dayjs(end);
+
+    if (!startDay.isValid() || !endDay.isValid()) {
+      NotificationToast.error(t('invalidDate'));
+      return;
+    }
+
+    if (endDay.isBefore(startDay)) {
+      NotificationToast.error(t('endDateBeforeStart'));
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
       await createCampaign({
         variables: {
-          name: formState.campaignName,
+          name: formState.campaignName.trim(),
           currencyCode: formState.campaignCurrency,
-          goalAmount: Number.parseInt(formState.campaignGoal.toString()),
-          startAt: dayjs(formState.campaignStartDate).toISOString(),
-          endAt: dayjs(formState.campaignEndDate).toISOString(),
+          goalAmount: formState.campaignGoal,
+          startAt: dayjs(campaignDateRange.startDate).toISOString(),
+          endAt: dayjs(campaignDateRange.endDate).toISOString(),
+
           fundId,
         },
       });
@@ -126,13 +187,16 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         campaignName: '',
         campaignCurrency: 'USD',
         campaignGoal: 0,
-        campaignStartDate: new Date(),
-        campaignEndDate: new Date(),
       });
+
+      setCampaignDateRange({ startDate: null, endDate: null });
+
       refetchCampaign();
       hide();
     } catch (error: unknown) {
       errorHandler(t, error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -147,10 +211,41 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
+    if (!formState.campaignName.trim()) {
+      NotificationToast.error(t('campaignNameRequired'));
+      return;
+    }
+
+    if (!campaignDateRange.startDate || !campaignDateRange.endDate) {
+      NotificationToast.error(t('dateRangeRequired'));
+      return;
+    }
+
+    if (!campaign?.id) {
+      NotificationToast.error(t('campaignNotFound'));
+      return;
+    }
+    const start = campaignDateRange.startDate;
+    const end = campaignDateRange.endDate;
+
+    const startDay = dayjs(start);
+    const endDay = dayjs(end);
+
+    if (!startDay.isValid() || !endDay.isValid()) {
+      NotificationToast.error(t('invalidDate'));
+      return;
+    }
+
+    if (endDay.isBefore(startDay)) {
+      NotificationToast.error(t('endDateBeforeStart'));
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
       const updatedFields: { [key: string]: string | number | undefined } = {};
       if (campaign?.name !== campaignName) {
-        updatedFields.name = campaignName;
+        updatedFields.name = campaignName.trim();
       }
       if (campaign?.currencyCode !== campaignCurrency) {
         updatedFields.currencyCode = campaignCurrency;
@@ -158,16 +253,27 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       if (campaign?.goalAmount !== campaignGoal) {
         updatedFields.goalAmount = campaignGoal;
       }
-      if (campaign?.startAt !== campaignStartDate) {
-        updatedFields.startAt = dayjs(campaignStartDate).toISOString();
+      // START DATE
+      const startAtUpdate = getUpdatedDateIfChanged(
+        campaignDateRange.startDate,
+        campaign?.startAt,
+      );
+      if (startAtUpdate) {
+        updatedFields.startAt = startAtUpdate;
       }
-      if (campaign?.endAt !== formState.campaignEndDate) {
-        updatedFields.endAt = dayjs(formState.campaignEndDate).toISOString();
+
+      const endAtUpdate = getUpdatedDateIfChanged(
+        campaignDateRange.endDate,
+        campaign?.endAt,
+      );
+      if (endAtUpdate) {
+        updatedFields.endAt = endAtUpdate;
       }
+
       await updateCampaign({
         variables: {
           input: {
-            id: campaign?.id, // Ensure the id field is the campaign id
+            id: campaign.id,
             ...updatedFields,
           },
         },
@@ -176,40 +282,25 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         campaignName: '',
         campaignCurrency: 'USD',
         campaignGoal: 0,
-        campaignStartDate: new Date(),
-        campaignEndDate: new Date(),
       });
-      refetchCampaign();
+      setCampaignDateRange({ startDate: null, endDate: null });
+
+      await Promise.resolve(refetchCampaign());
       hide();
       NotificationToast.success(t('updatedCampaign') as string);
     } catch (error: unknown) {
       errorHandler(t, error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
-
   return (
     <BaseModal
       className={styles.campaignModal}
       show={isOpen}
       onHide={hide}
-      centered={false}
-      backdrop={true}
-      showCloseButton={false}
-      headerContent={
-        <>
-          <p className={styles.titlemodal}>
-            {t(mode === 'edit' ? 'updateCampaign' : 'createCampaign')}
-          </p>
-          <Button
-            variant="danger"
-            onClick={hide}
-            className={styles.closeButton}
-            data-testid="campaignCloseBtn"
-          >
-            <i className="fa fa-times"></i>
-          </Button>
-        </>
-      }
+      title={t(mode === 'edit' ? 'updateCampaign' : 'createCampaign')}
+      dataTestId="campaignModal"
     >
       <Form
         onSubmitCapture={
@@ -231,61 +322,21 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
           </FormControl>
         </Form.Group>
 
-        <Form.Group className="d-flex gap-4 mx-auto mb-3">
-          {/* Date Calendar Component to select start date of campaign*/}
-          <DatePicker
-            format="DD/MM/YYYY"
-            label={tCommon('startDate')}
-            value={dayjs(campaignStartDate)}
-            className={styles.noOutline}
-            data-testid="campaignStartDate"
-            onChange={(date: Dayjs | null): void => {
-              if (!date) {
-                return;
-              }
-              const nextStartDate = date.toDate();
-              setFormState((prev) => {
-                const shouldSyncEndDate =
-                  prev.campaignEndDate &&
-                  dayjs(prev.campaignEndDate).isBefore(nextStartDate, 'day');
-                return {
-                  ...prev,
-                  campaignStartDate: nextStartDate,
-                  campaignEndDate: shouldSyncEndDate
-                    ? nextStartDate
-                    : prev.campaignEndDate,
-                };
-              });
-            }}
-            minDate={dayjs(new Date())}
-          />
-          {/* Date Calendar Component to select end Date of campaign */}
-          <DatePicker
-            format="DD/MM/YYYY"
-            label={tCommon('endDate')}
-            className={styles.noOutline}
-            value={dayjs(campaignEndDate)}
-            data-testid="campaignEndDate"
-            onChange={(date: Dayjs | null): void => {
-              if (date) {
-                setFormState({
-                  ...formState,
-                  campaignEndDate: date.toDate(),
-                });
-              }
-            }}
-            minDate={dayjs(campaignStartDate)}
+        <Form.Group className="mb-3">
+          <DateRangePicker
+            value={campaignDateRange}
+            onChange={setCampaignDateRange}
+            dataTestId="campaign-date-range"
           />
         </Form.Group>
 
         <Form.Group className="d-flex gap-4 mb-4">
-          {/* Dropdown to select the currency for funding goal of the campaign*/}
           <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">
+            <InputLabel id="campaign-currency-select-label">
               {t('currency')}
             </InputLabel>
             <Select
-              labelId="demo-simple-select-label"
+              labelId="campaign-currency-select-label"
               value={campaignCurrency}
               label={t('currency')}
               data-testid="currencySelect"
@@ -303,29 +354,32 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
               ))}
             </Select>
           </FormControl>
-          {/* Input field to enter funding goal for the campaign */}
+
           <FormControl fullWidth>
             <TextField
               label={t('fundingGoal')}
               variant="outlined"
               className={styles.noOutline}
-              value={campaignGoal}
+              value={String(campaignGoal)}
               onChange={(e) => {
-                if (parseInt(e.target.value) > 0) {
-                  setFormState({
-                    ...formState,
-                    campaignGoal: parseInt(e.target.value),
-                  });
+                if (e.target.value === '') {
+                  setFormState({ ...formState, campaignGoal: 0 });
+                  return;
+                }
+
+                const value = parseInt(e.target.value, 10);
+                if (!isNaN(value) && value >= 0) {
+                  setFormState({ ...formState, campaignGoal: value });
                 }
               }}
             />
           </FormControl>
         </Form.Group>
-        {/* Button to create the campaign */}
         <Button
           type="submit"
           className={styles.addButton}
           data-testid="submitCampaignBtn"
+          disabled={isSubmitting}
         >
           {t(mode === 'edit' ? 'updateCampaign' : 'createCampaign')}
         </Button>
@@ -333,4 +387,5 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
     </BaseModal>
   );
 };
+
 export default CampaignModal;
