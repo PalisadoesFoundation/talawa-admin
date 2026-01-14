@@ -17,8 +17,7 @@
 
 #individualRadio,
 #requestsRadio,
-#groupsRadio,
-.toggleBtn:hover {
+#groupsRadio {
   color: var(--color-blue-500);
 }
 

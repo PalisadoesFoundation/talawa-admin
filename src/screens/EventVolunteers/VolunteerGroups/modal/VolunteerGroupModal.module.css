@@ -3,15 +3,6 @@
   margin: 2vh auto;
 }
 
-.modalCloseBtn {
-  width: var(--space-9);
-  height: var(--space-9);
-  padding: var(--space-5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .titlemodal {
   color: var(--color-gray-500);
   font-weight: var(--font-weight-semibold);
@@ -54,5 +45,4 @@
   transition:
     transform 0.2s,
     box-shadow 0.2s;
-  width: 100%;
 }

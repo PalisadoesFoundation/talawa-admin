@@ -1,9 +1,9 @@
-.volunteerCreateModal {
+.volunteerGroupViewModal {
   max-width: 80vw;
   margin: 2vh auto;
 }
 
-.TableImages {
+.tableImages {
   object-fit: cover;
   width: 100%;
   height: auto;

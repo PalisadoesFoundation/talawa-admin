@@ -205,14 +205,14 @@ function Requests(): JSX.Element {
                 src={avatarURL}
                 alt={`${name} ${tCommon('avatar')}`}
                 data-testid={`volunteer_image`}
-                className={styles.TableImages}
+                className={styles.tableImages}
               />
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
                   key="volunteer_avatar"
                   containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImages}
+                  avatarStyle={styles.tableImages}
                   name={name}
                   alt={name}
                 />

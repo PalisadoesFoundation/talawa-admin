@@ -250,14 +250,14 @@ function volunteerGroups(): JSX.Element {
                 src={avatarURL}
                 alt={tCommon('assignee')}
                 data-testid={`image${id + 1}`}
-                className={styles.TableImages}
+                className={styles.tableImages}
               />
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
                   key={id + '1'}
                   containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImages}
+                  avatarStyle={styles.tableImages}
                   name={name}
                   alt={name}
                 />

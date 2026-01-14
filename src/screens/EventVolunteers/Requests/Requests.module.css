@@ -33,7 +33,7 @@
   font-weight: var(--font-weight-bold);
 }
 
-.TableImages {
+.tableImages {
   object-fit: cover;
   width: 100%;
   height: auto;

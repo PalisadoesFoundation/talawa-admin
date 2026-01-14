@@ -284,7 +284,7 @@ function Volunteers(): JSX.Element {
                 src={avatarURL}
                 alt={tCommon('volunteer')}
                 data-testid="volunteer_image"
-                className={styles.TableImages}
+                className={styles.tableImages}
               />
             ) : (
               <div className={styles.avatarContainer}>
@@ -292,7 +292,7 @@ function Volunteers(): JSX.Element {
                   key={id + '1'}
                   dataTestId="volunteer_avatar"
                   containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImages}
+                  avatarStyle={styles.tableImages}
                   name={name}
                   alt={name}
                 />

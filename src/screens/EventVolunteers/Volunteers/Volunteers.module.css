@@ -21,7 +21,7 @@
   font-weight: var(--font-weight-semibold);
 }
 
-.TableImages {
+.tableImages {
   object-fit: cover;
   width: 100%;
   height: auto;
@@ -63,7 +63,7 @@
   box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
     var(--shadow-blur-xs) rgba(0, 0, 0, 0.3);
   background-color: var(--color-blue-200);
-  color: var(--color-blue-200);
+  color: var(--color-gray-700);
   border: var(--border-1) solid var(--color-blue-200);
 }
 

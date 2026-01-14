@@ -195,9 +195,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
       }
     >
       <Form
-        onSubmitCapture={
-          mode === 'edit' ? updateGroupHandler : createGroupHandler
-        }
+        onSubmit={mode === 'edit' ? updateGroupHandler : createGroupHandler}
         className="p-3"
       >
         {/* Radio buttons for recurring events - only show in create mode */}

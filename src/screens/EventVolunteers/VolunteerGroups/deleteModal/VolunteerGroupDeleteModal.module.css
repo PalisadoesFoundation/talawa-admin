@@ -10,12 +10,3 @@
   width: 65%;
   margin-bottom: var(--space-0);
 }
-
-.modalCloseBtn {
-  width: var(--space-9);
-  height: var(--space-9);
-  padding: var(--space-5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
