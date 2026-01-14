@@ -32,7 +32,7 @@
   border-radius: var(--radius-full);
 }
 
-.TableImage {
+.tableImage {
   object-fit: cover;
   margin-right: var(--space-2);
   width: var(--space-10);

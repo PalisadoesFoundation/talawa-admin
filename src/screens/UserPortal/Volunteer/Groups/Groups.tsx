@@ -206,14 +206,14 @@ function Groups(): JSX.Element {
                 src={avatarURL}
                 alt={t('leader')}
                 data-testid={`image${id + 1}`}
-                className={styles.TableImage}
+                className={styles.tableImage}
               />
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
                   key={id + '1'}
                   containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImage}
+                  avatarStyle={styles.tableImage}
                   name={name}
                   alt={name}
                 />
