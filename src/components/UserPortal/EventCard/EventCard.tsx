@@ -13,7 +13,7 @@
  * - The `useMutation` hook from Apollo Client is used to handle event registration.
  * - The `react-toastify` library is used to display success or error messages.
  *
- * @component
+ * Component
  *
  * @example
  * ```tsx
@@ -33,7 +33,7 @@
  *
  * @returns JSX.Element - A styled card displaying event details and a registration button.
  *
- * @dependencies
+ * Dependencies
  * - `@mui/icons-material` for icons.
  * - `dayjs` for date and time formatting.
  * - `react-bootstrap` for UI components.
@@ -153,6 +153,10 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         ) : isRegistered ? (
           <Button size="sm" disabled>
             {t('alreadyRegistered')}
+          </Button>
+        ) : props.isInviteOnly ? (
+          <Button size="sm" disabled>
+            {tCommon('inviteOnlyEvent')}
           </Button>
         ) : (
           <Button size="sm" onClick={handleRegister}>

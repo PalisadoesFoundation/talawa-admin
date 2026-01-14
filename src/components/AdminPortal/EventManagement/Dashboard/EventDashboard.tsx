@@ -116,7 +116,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
     allDay: eventData.event.allDay,
     isPublic: eventData.event.isPublic,
     isRegisterable: eventData.event.isRegisterable,
-    isInviteOnly: eventData.event.isInviteOnly,
+    isInviteOnly: eventData.event.isInviteOnly ?? false,
     attendees: [],
     creator: eventData.event.creator,
     userId: userId as string,

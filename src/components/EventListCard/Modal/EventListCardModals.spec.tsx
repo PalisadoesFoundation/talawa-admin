@@ -77,7 +77,7 @@ const MockDeleteModal = EventListCardDeleteModal as Mock;
 const mockT = (key: string) => key;
 
 type MockEventListCardProps = InterfaceEvent & {
-  refetchEvents: Mock;
+  refetchEvents?: Mock;
 };
 
 const mockEventListCardProps: MockEventListCardProps = {
@@ -254,6 +254,19 @@ describe('EventListCardModals', () => {
     renderComponent();
     const previewProps = MockPreviewModal.mock.calls[0][0];
     expect(previewProps.userId).toBe('user1');
+  });
+
+  test('passes correct userId (id) to PreviewModal when userId is null', () => {
+    mockUseLocalStorage.mockReturnValue({
+      getItem: (key: string) => {
+        if (key === 'userId') return null;
+        if (key === 'id') return 'user2';
+        return null;
+      },
+    });
+    renderComponent();
+    const previewProps = MockPreviewModal.mock.calls[0][0];
+    expect(previewProps.userId).toBe('user2');
   });
 
   test('handles standalone event update successfully', async () => {
@@ -521,6 +534,41 @@ describe('EventListCardModals', () => {
         },
       },
     });
+  });
+
+  test('handles explicit selection of "update single instance" option', async () => {
+    renderComponent({
+      eventListCardProps: buildRecurringEventProps(),
+    });
+
+    const previewProps = MockPreviewModal.mock.calls[0][0];
+
+    // Update form state to ensure changes are detected
+    act(() => {
+      previewProps.setFormState({
+        ...previewProps.formState,
+        name: 'Updated Name for Single Instance',
+      });
+    });
+
+    // Open the update modal
+    await act(async () => {
+      await previewProps.handleEventUpdate();
+    });
+
+    // Find the "Update this instance" radio button
+    const singleInstanceRadio = screen.getByLabelText('updateThisInstance');
+
+    // Verify it exists and click it
+    expect(singleInstanceRadio).toBeInTheDocument();
+    await userEvent.click(singleInstanceRadio);
+
+    // Assert it is checked (it should be default, but clicking ensures the handler runs)
+    expect(singleInstanceRadio).toBeChecked();
+
+    const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
+    await userEvent.click(confirmButton);
+    expect(mockUpdateSingleRecurringEvent).toHaveBeenCalled();
   });
 
   test('handles update of this and following recurring events', async () => {
@@ -1078,5 +1126,49 @@ describe('EventListCardModals', () => {
         );
       });
     });
+  });
+  test('handles register event error', async () => {
+    mockRegisterEvent.mockRejectedValue(new Error('Register failed'));
+    renderComponent();
+    const previewProps = MockPreviewModal.mock.calls[0][0];
+
+    await act(async () => {
+      await previewProps.registerEventHandler();
+    });
+
+    expect(mockRegisterEvent).toHaveBeenCalledWith({
+      variables: { id: 'event1' },
+    });
+    expect(errorHandler).toHaveBeenCalledWith(
+      expect.any(Function),
+      expect.objectContaining({ message: 'Register failed' }),
+    );
+    expect(NotificationToast.success).not.toHaveBeenCalled();
+  });
+
+  test('handles delete standalone event safely when refetchEvents is undefined', async () => {
+    // Render with undefined refetchEvents
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        refetchEvents: undefined,
+      },
+    });
+
+    const previewProps = MockPreviewModal.mock.calls[0][0];
+
+    // Toggle delete modal
+    act(() => {
+      previewProps.toggleDeleteModal();
+    });
+
+    // Trigger delete
+    const deleteModalProps = MockDeleteModal.mock.calls[1][0];
+    await act(async () => {
+      await deleteModalProps.deleteEventHandler('single');
+    });
+
+    expect(mockDeleteStandaloneEvent).toHaveBeenCalled();
+    expect(NotificationToast.success).toHaveBeenCalledWith('eventDeleted');
   });
 });

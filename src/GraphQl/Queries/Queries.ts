@@ -540,6 +540,7 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             location
             isPublic
             isRegisterable
+            isInviteOnly
             # Recurring event fields
             isRecurringEventTemplate
             baseEvent {

@@ -20,8 +20,36 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 import { eventData, MOCKS } from '../EventCalenderMocks';
 import type { InterfaceEvent } from 'types/Event/interface';
+import { UserRole } from 'types/Event/interface';
 
 const link = new StaticMockLink(MOCKS, true);
+
+const { mockHolidays } = vi.hoisted(() => {
+  return {
+    mockHolidays: {
+      value: [] as
+        | {
+            name: string;
+            date: string;
+            month: string;
+          }[]
+        | null,
+    },
+  };
+});
+
+vi.mock('types/Event/utils', async () => {
+  const actual =
+    await vi.importActual<typeof import('types/Event/utils')>(
+      'types/Event/utils',
+    );
+  return {
+    ...actual,
+    get holidays() {
+      return mockHolidays.value;
+    },
+  };
+});
 
 async function wait(ms = 200): Promise<void> {
   await act(() => {
@@ -407,7 +435,6 @@ describe('Calendar', () => {
 
     // Check for "View all" button if there are more than 2 events
     const viewAllButton = await screen.findAllByTestId('more');
-    console.log('hi', viewAllButton); // This will show the buttons found in the test
     expect(viewAllButton.length).toBeGreaterThan(0);
 
     // Simulate clicking the "View all" button to expand the list
@@ -774,6 +801,60 @@ describe('Calendar', () => {
 
     // Restore original Date
     globalThis.Date = originalDate;
+  });
+
+  it('should show invite-only event for an attendee', async () => {
+    const inviteOnlyEvent = [
+      {
+        id: 'invite-only-1',
+        name: 'Invite Only Event',
+        description: 'Private meeting',
+        startAt: new Date().toISOString(),
+        endAt: new Date().toISOString(),
+        location: 'Secret Room',
+        startTime: '10:00',
+        endTime: '11:00',
+        allDay: false,
+        isPublic: false,
+        isRegisterable: true,
+        isInviteOnly: true,
+        attendees: [
+          { id: 'user123', name: 'Test User', emailAddress: 'test@test.com' },
+        ],
+        creator: {
+          id: 'creator1',
+          name: 'Creator',
+          emailAddress: 'creator@test.com',
+        },
+      },
+    ];
+
+    render(
+      <MemoryRouter initialEntries={['/org/org1']}>
+        <Routes>
+          <Route
+            path="/org/:orgId"
+            element={
+              <MockedProvider link={link}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Calendar
+                    eventData={inviteOnlyEvent}
+                    userRole={UserRole.REGULAR}
+                    userId="user123"
+                    viewType={ViewType.MONTH}
+                    onMonthChange={onMonthChange}
+                    currentMonth={new Date().getMonth()}
+                    currentYear={new Date().getFullYear()}
+                  />
+                </I18nextProvider>
+              </MockedProvider>
+            }
+          />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    expect(await screen.findByText('Invite Only Event')).toBeInTheDocument();
   });
 
   describe('Event filtering logic tests', () => {
@@ -1669,6 +1750,115 @@ describe('Calendar', () => {
         screen.queryByText('Other Invite Only Event'),
       ).not.toBeInTheDocument();
     });
+
+    it('should show all invite-only events to admins', async () => {
+      const today = dayjs();
+
+      const inviteOnlyTestEventData = [
+        {
+          id: 'event1',
+          name: 'Public Event',
+          description: 'This is a public event',
+          startAt: today.hour(10).minute(0).toISOString(),
+          endAt: today.hour(12).minute(0).toISOString(),
+          location: 'Public Location',
+          startTime: '10:00',
+          endTime: '12:00',
+          allDay: false,
+          isPublic: true,
+          isRegisterable: true,
+          isInviteOnly: false,
+          attendees: [],
+          creator: {
+            id: 'other',
+            name: 'Other',
+            emailAddress: 'other@example.com',
+          },
+        },
+        {
+          id: 'event2',
+          name: 'My Invite Only Event',
+          description: 'This is an invite only event',
+          startAt: today.hour(14).minute(0).toISOString(),
+          endAt: today.hour(16).minute(0).toISOString(),
+          location: 'Secret Location',
+          startTime: '14:00',
+          endTime: '16:00',
+          allDay: false,
+          isPublic: false,
+          isRegisterable: true,
+          isInviteOnly: true,
+          attendees: [],
+          creator: {
+            id: 'user1',
+            name: 'User 1',
+            emailAddress: 'user1@example.com',
+          },
+        },
+        {
+          id: 'event3',
+          name: 'Other Invite Only Event',
+          description: 'This is another invite only event',
+          startAt: today.hour(18).minute(0).toISOString(),
+          endAt: today.hour(20).minute(0).toISOString(),
+          location: 'Top Secret Location',
+          startTime: '18:00',
+          endTime: '20:00',
+          allDay: false,
+          isPublic: false,
+          isRegisterable: true,
+          isInviteOnly: true,
+          attendees: [],
+          creator: {
+            id: 'other',
+            name: 'Other',
+            emailAddress: 'other@example.com',
+          },
+        },
+      ];
+
+      render(
+        <MemoryRouter initialEntries={['/org/test-org/events']}>
+          <MockedProvider link={link}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/org/:orgId/events"
+                  element={
+                    <Calendar
+                      eventData={inviteOnlyTestEventData}
+                      orgData={mockOrgData}
+                      userRole={UserRole.ADMINISTRATOR}
+                      userId="user1"
+                      viewType={ViewType.MONTH}
+                      onMonthChange={vi.fn()}
+                      currentMonth={new Date().getMonth()}
+                      currentYear={new Date().getFullYear()}
+                    />
+                  }
+                />
+              </Routes>
+            </I18nextProvider>
+          </MockedProvider>
+        </MemoryRouter>,
+      );
+
+      // Wait for the public event to be rendered (stable UI signal)
+      await screen.findByText('Public Event');
+
+      // If "View all" button exists, click it to expand all events
+      const viewAllButton = screen.queryByTestId('more');
+      if (viewAllButton) {
+        fireEvent.click(viewAllButton);
+        // Wait for the expanded view to stabilize
+        await screen.findByText('Public Event');
+      }
+
+      // Now verify visibility - Admin should see EVERYTHING
+      expect(screen.getByText('Public Event')).toBeInTheDocument();
+      expect(screen.getByText('My Invite Only Event')).toBeInTheDocument();
+      expect(screen.getByText('Other Invite Only Event')).toBeInTheDocument();
+    });
   });
   describe('Additional Coverage Tests (Day View & Edge Cases)', () => {
     it('should toggle "View all" and "View less" specifically in DAY View', async () => {
@@ -1743,6 +1933,79 @@ describe('Calendar', () => {
       );
 
       expect(screen.getByTestId('current-date')).toBeInTheDocument();
+    });
+
+    it('should log a warning if a holiday has no date and return false', () => {
+      // Explicitly set value for this test
+      const originalValue = mockHolidays.value;
+      mockHolidays.value = [
+        { name: 'Invalid Holiday', date: '', month: 'Unknown' },
+      ];
+
+      const consoleWarnSpy = vi
+        .spyOn(console, 'warn')
+        .mockImplementation(() => {});
+
+      try {
+        render(
+          <Router>
+            <MockedProvider link={link}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Calendar
+                  eventData={[]}
+                  viewType={ViewType.MONTH}
+                  onMonthChange={onMonthChange}
+                  currentMonth={new Date().getMonth()}
+                  currentYear={new Date().getFullYear()}
+                />
+              </I18nextProvider>
+            </MockedProvider>
+          </Router>,
+        );
+
+        // Filter out Apollo Client warnings and check for holiday warning
+        const calls = consoleWarnSpy.mock.calls;
+        const holidayWarnings = calls.filter(
+          (call) =>
+            typeof call[0] === 'string' &&
+            call[0].includes('Holiday') &&
+            call[0].includes('has no date'),
+        );
+
+        expect(holidayWarnings.length).toBeGreaterThan(0);
+      } finally {
+        mockHolidays.value = originalValue;
+        consoleWarnSpy.mockRestore();
+      }
+    });
+    it('should handle non-array holidays gracefully', () => {
+      // Set holidays to explicitly null/undefined to trigger the fallback branch (line 159)
+      const originalValue = mockHolidays.value;
+      mockHolidays.value = null;
+
+      try {
+        render(
+          <Router>
+            <MockedProvider link={link}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Calendar
+                  eventData={[]}
+                  userRole={UserRole.REGULAR}
+                  userId="user1"
+                  onMonthChange={onMonthChange}
+                  currentMonth={new Date().getMonth()}
+                  currentYear={new Date().getFullYear()}
+                />
+              </I18nextProvider>
+            </MockedProvider>
+          </Router>,
+        );
+        // If it renders without crashing, the fallback [] worked
+        // Verify positive rendering by checking for the month/year header or similar stable element
+        expect(screen.getByTestId('current-date')).toBeInTheDocument();
+      } finally {
+        mockHolidays.value = originalValue;
+      }
     });
   });
 });

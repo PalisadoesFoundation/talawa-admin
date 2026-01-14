@@ -20,7 +20,15 @@ Defined in: [src/components/EventCalender/EventCalenderMocks.ts:10](https://gith
 
 ### creator
 
-> **creator**: `object` = `{}`
+> **creator**: `object`
+
+#### creator.id
+
+> **id**: `string` = `'1'`
+
+#### creator.name
+
+> **name**: `string` = `'Creator 1'`
 
 ### description
 

@@ -49,7 +49,7 @@ interface IUpdateEventHandlerProps {
   alldaychecked: boolean;
   publicchecked: boolean;
   registrablechecked: boolean;
-  inviteonlychecked: boolean;
+  inviteOnlyChecked: boolean;
   eventStartDate: Date;
   eventEndDate: Date;
   recurrence: InterfaceRecurrenceRule | null;
@@ -79,7 +79,7 @@ export const useUpdateEventHandler = () => {
     alldaychecked,
     publicchecked,
     registrablechecked,
-    inviteonlychecked,
+    inviteOnlyChecked,
     eventStartDate,
     eventEndDate,
     recurrence,
@@ -114,8 +114,8 @@ export const useUpdateEventHandler = () => {
       if (registrablechecked !== eventListCardProps.isRegisterable) {
         updateInput.isRegisterable = registrablechecked;
       }
-      if (inviteonlychecked !== eventListCardProps.isInviteOnly) {
-        updateInput.isInviteOnly = inviteonlychecked;
+      if (inviteOnlyChecked !== (eventListCardProps.isInviteOnly ?? false)) {
+        updateInput.isInviteOnly = inviteOnlyChecked;
       }
       if (alldaychecked !== eventListCardProps.allDay) {
         updateInput.allDay = alldaychecked;
@@ -230,12 +230,40 @@ export const useUpdateEventHandler = () => {
             const entireSeriesInput: IEventUpdateInput = {
               id: eventListCardProps.id,
             };
+
+            // Propagate all changed fields to the entire series
             if (formState.name !== eventListCardProps.name) {
               entireSeriesInput.name = formState.name;
             }
             if (formState.eventdescrip !== eventListCardProps.description) {
               entireSeriesInput.description = formState.eventdescrip;
             }
+            if (formState.location !== eventListCardProps.location) {
+              entireSeriesInput.location = formState.location;
+            }
+            if (publicchecked !== eventListCardProps.isPublic) {
+              entireSeriesInput.isPublic = publicchecked;
+            }
+            if (registrablechecked !== eventListCardProps.isRegisterable) {
+              entireSeriesInput.isRegisterable = registrablechecked;
+            }
+            if (
+              inviteOnlyChecked !== (eventListCardProps.isInviteOnly ?? false)
+            ) {
+              entireSeriesInput.isInviteOnly = inviteOnlyChecked;
+            }
+            if (alldaychecked !== eventListCardProps.allDay) {
+              entireSeriesInput.allDay = alldaychecked;
+            }
+
+            // Only include timing changes if they actually changed
+            if (newStartAt !== originalStartAt) {
+              entireSeriesInput.startAt = newStartAt;
+            }
+            if (newEndAt !== originalEndAt) {
+              entireSeriesInput.endAt = newEndAt;
+            }
+
             const entireSeriesResult = await updateEntireRecurringEventSeries({
               variables: { input: entireSeriesInput },
             });

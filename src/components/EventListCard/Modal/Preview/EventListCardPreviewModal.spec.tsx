@@ -128,7 +128,7 @@ const mockDefaultProps = {
   setPublicChecked: vi.fn(),
   registrablechecked: true,
   setRegistrableChecked: vi.fn(),
-  inviteonlychecked: false,
+  inviteOnlyChecked: false,
   setInviteOnlyChecked: vi.fn(),
   formState: mockFormState,
   setFormState: vi.fn(),
@@ -344,7 +344,7 @@ describe('EventListCardPreviewModal', () => {
   test('selects public radio button when event is public', () => {
     renderComponent({
       publicchecked: true,
-      inviteonlychecked: false,
+      inviteOnlyChecked: false,
     });
 
     const publicRadio = screen.getByLabelText('public') as HTMLInputElement;
@@ -354,7 +354,7 @@ describe('EventListCardPreviewModal', () => {
   test('selects organization members radio when event is not public and not invite only', () => {
     renderComponent({
       publicchecked: false,
-      inviteonlychecked: false,
+      inviteOnlyChecked: false,
     });
 
     const orgMembersRadio = screen.getByLabelText(
@@ -366,7 +366,7 @@ describe('EventListCardPreviewModal', () => {
   test('selects invite only radio when event is invite only', () => {
     renderComponent({
       publicchecked: false,
-      inviteonlychecked: true,
+      inviteOnlyChecked: true,
     });
 
     const inviteOnlyRadio = screen.getByLabelText(
@@ -380,7 +380,7 @@ describe('EventListCardPreviewModal', () => {
     const mockSetInviteOnlyChecked = vi.fn();
     renderComponent({
       publicchecked: false,
-      inviteonlychecked: false,
+      inviteOnlyChecked: false,
       setPublicChecked: mockSetPublicChecked,
       setInviteOnlyChecked: mockSetInviteOnlyChecked,
     });
@@ -397,7 +397,7 @@ describe('EventListCardPreviewModal', () => {
     const mockSetInviteOnlyChecked = vi.fn();
     renderComponent({
       publicchecked: true,
-      inviteonlychecked: false,
+      inviteOnlyChecked: false,
       setPublicChecked: mockSetPublicChecked,
       setInviteOnlyChecked: mockSetInviteOnlyChecked,
     });
@@ -414,7 +414,7 @@ describe('EventListCardPreviewModal', () => {
     const mockSetInviteOnlyChecked = vi.fn();
     renderComponent({
       publicchecked: true,
-      inviteonlychecked: false,
+      inviteOnlyChecked: false,
       setPublicChecked: mockSetPublicChecked,
       setInviteOnlyChecked: mockSetInviteOnlyChecked,
     });
@@ -447,6 +447,18 @@ describe('EventListCardPreviewModal', () => {
     expect(publicRadio.disabled).toBe(true);
     expect(orgMembersRadio.disabled).toBe(true);
     expect(inviteOnlyRadio.disabled).toBe(true);
+  });
+
+  test('radiogroup has accessible name "visibility"', () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        userRole: UserRole.ADMINISTRATOR,
+      },
+    });
+
+    const radioGroup = screen.getByRole('radiogroup');
+    expect(radioGroup).toHaveAttribute('aria-label', 'visibility');
   });
 
   test('toggles registrable checkbox', async () => {

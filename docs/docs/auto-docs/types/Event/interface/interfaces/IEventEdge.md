@@ -4,7 +4,7 @@
 
 # Interface: IEventEdge
 
-Defined in: [src/types/Event/interface.ts:211](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L211)
+Defined in: [src/types/Event/interface.ts:215](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L215)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:211](https://github.com/PalisadoesFoun
 
 > **cursor**: `string`
 
-Defined in: [src/types/Event/interface.ts:249](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L249)
+Defined in: [src/types/Event/interface.ts:257](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L257)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/interface.ts:249](https://github.com/PalisadoesFoun
 
 > **node**: `object`
 
-Defined in: [src/types/Event/interface.ts:212](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L212)
+Defined in: [src/types/Event/interface.ts:216](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L216)
 
 #### allDay
 
@@ -73,6 +73,9 @@ Defined in: [src/types/Event/interface.ts:212](https://github.com/PalisadoesFoun
 #### isInviteOnly
 
 > **isInviteOnly**: `boolean`
+
+Determines if the event is restricted to invited participants only.
+When true, only invited users, the creator, and admins can see and access the event.
 
 #### isPublic
 

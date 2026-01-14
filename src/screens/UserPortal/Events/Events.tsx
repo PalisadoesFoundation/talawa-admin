@@ -214,7 +214,8 @@ export default function Events(): JSX.Element {
   });
 
   // Get user details from local storage
-  const userId = (getItem('userId') || getItem('id')) as string;
+  // Get user details from local storage
+  const userId = (getItem('userId') || getItem('id') || '') as string;
 
   const storedRole = getItem('role') as string | null;
   const userRole = storedRole === 'administrator' ? 'ADMINISTRATOR' : 'REGULAR';
@@ -265,17 +266,18 @@ export default function Events(): JSX.Element {
       const { data: createEventData, errors } = await create({
         variables: { input },
       });
-      if (createEventData) {
+
+      if (errors && errors.length > 0) {
+        throw new Error(errors[0].message);
+      } else if (createEventData) {
         NotificationToast.success(t('eventCreated') as string);
         try {
           await refetch();
-        } catch (e) {
-          console.warn('Refetch failed after creation', e);
+        } catch {
+          // Refetch failure is non-critical, suppressing error
         }
         setFormResetKey((prev) => prev + 1);
         setCreateEventmodalisOpen(false);
-      } else if (errors && errors.length > 0) {
-        throw new Error(errors[0].message);
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -324,7 +326,9 @@ export default function Events(): JSX.Element {
   React.useEffect(() => {
     if (eventDataError) {
       // Check if we have valid data (partial data scenario)
-      const hasData = data?.organization?.events?.edges;
+      const hasData =
+        Array.isArray(data?.organization?.events?.edges) &&
+        data.organization.events.edges.length > 0;
 
       // Handle rate limiting and auth errors
       const errorMessage = eventDataError.message?.toLowerCase() || '';

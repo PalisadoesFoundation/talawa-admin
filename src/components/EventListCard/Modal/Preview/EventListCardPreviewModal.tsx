@@ -71,7 +71,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   registrablechecked,
   setRegistrableChecked,
 
-  inviteonlychecked,
+  inviteOnlyChecked,
   setInviteOnlyChecked,
   formState,
   setFormState,
@@ -443,7 +443,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             <div className={styles.dispflexOrganizationEvents}>
               <fieldset className="mb-3">
                 <legend className="mb-2">{t('visibility')}</legend>
-                <div>
+                <div role="radiogroup" aria-label={t('visibility')}>
                   <Form.Check
                     inline
                     type="radio"
@@ -463,7 +463,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                     label={t('organizationMembers')}
                     name="eventVisibility"
                     id="visibility-members"
-                    checked={!publicchecked && !inviteonlychecked}
+                    checked={!publicchecked && !inviteOnlyChecked}
                     onChange={() => {
                       setPublicChecked(false);
                       setInviteOnlyChecked(false);
@@ -476,7 +476,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                     label={t('inviteOnly')}
                     name="eventVisibility"
                     id="visibility-inviteonly"
-                    checked={!publicchecked && inviteonlychecked}
+                    checked={!publicchecked && inviteOnlyChecked}
                     onChange={() => {
                       setPublicChecked(false);
                       setInviteOnlyChecked(true);

@@ -98,7 +98,7 @@ const buildHandlerInput = (overrides: HandlerOverrides = {}): HandlerArgs => ({
   alldaychecked: mockEventListCardProps.allDay,
   publicchecked: mockEventListCardProps.isPublic,
   registrablechecked: mockEventListCardProps.isRegisterable,
-  inviteonlychecked: mockEventListCardProps.isInviteOnly,
+  inviteOnlyChecked: mockEventListCardProps.isInviteOnly,
   eventStartDate: new Date(mockEventListCardProps.startAt),
   eventEndDate: new Date(mockEventListCardProps.endAt),
   recurrence: null as InterfaceRecurrenceRule | null,
@@ -269,7 +269,7 @@ describe('useUpdateEventHandler', () => {
 
       await updateEventHandler(
         buildHandlerInput({
-          inviteonlychecked: true,
+          inviteOnlyChecked: true,
         }),
       );
 
@@ -451,6 +451,101 @@ describe('useUpdateEventHandler', () => {
       const calledInputs =
         mockUpdateEntireRecurringEventSeries.mock.calls[0][0].variables.input;
       expect(calledInputs.description).toContain('Changed event description');
+    });
+
+    it('propagates all fields when updating entire series', async () => {
+      mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: buildRecurringEventProps(),
+          updateOption: 'entireSeries',
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+            location: 'New Location',
+          },
+          publicchecked: false, // Changed from true
+          inviteOnlyChecked: true, // Changed from false
+        }),
+      );
+
+      expect(mockUpdateEntireRecurringEventSeries).toHaveBeenCalledTimes(1);
+      const calledInputs =
+        mockUpdateEntireRecurringEventSeries.mock.calls[0][0].variables.input;
+
+      expect(calledInputs.name).toBe('Changed Name');
+      expect(calledInputs.location).toBe('New Location');
+      expect(calledInputs.isPublic).toBe(false);
+      expect(calledInputs.isInviteOnly).toBe(true);
+    });
+
+    it('handles undefined isInviteOnly in props correctly when inviteOnlyChecked is false', async () => {
+      mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      const props = buildRecurringEventProps();
+      delete (props as Partial<MockEventListCardProps>).isInviteOnly;
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: props,
+          updateOption: 'entireSeries',
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+          inviteOnlyChecked: false,
+        }),
+      );
+
+      expect(mockUpdateEntireRecurringEventSeries).toHaveBeenCalledTimes(1);
+      const calledInputs =
+        mockUpdateEntireRecurringEventSeries.mock.calls[0][0].variables.input;
+      expect(calledInputs).not.toHaveProperty('isInviteOnly');
+    });
+
+    it('propagates extended fields (registerable, allDay, dates) when updating entire series', async () => {
+      mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      const newStartDate = dayjs().add(20, 'days').startOf('day').toDate();
+      const newEndDate = dayjs().add(21, 'days').startOf('day').toDate();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: buildRecurringEventProps({
+            isRegisterable: true,
+            allDay: false,
+          }),
+          updateOption: 'entireSeries',
+          formState: {
+            ...mockFormState,
+          },
+          publicchecked: true,
+          registrablechecked: false, // Changed from true
+          alldaychecked: true, // Changed from false
+          eventStartDate: newStartDate,
+          eventEndDate: newEndDate,
+        }),
+      );
+
+      expect(mockUpdateEntireRecurringEventSeries).toHaveBeenCalledTimes(1);
+      const calledInputs =
+        mockUpdateEntireRecurringEventSeries.mock.calls[0][0].variables.input;
+
+      expect(calledInputs.isRegisterable).toBe(false);
+      expect(calledInputs.allDay).toBe(true);
+      // Dates should be propagated
+      expect(calledInputs.startAt).toBeDefined();
+      expect(calledInputs.endAt).toBeDefined();
     });
   });
 

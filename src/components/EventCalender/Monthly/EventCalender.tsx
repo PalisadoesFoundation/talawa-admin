@@ -121,9 +121,14 @@ const Calendar: React.FC<
         return isCreator || isAttendee;
       }
 
-      // Organization Members events - trust backend filtering
-      // If backend returned it, user should see it (either member or creator)
-      return true;
+      // Organization Members events - check membership
+      // If not public and not invite-only, it must be an organization event
+      // Check if user is a member of the organization
+      const isMember =
+        orgData?.members?.edges?.some((edge) => edge.node.id === userId) ||
+        false;
+
+      return isMember || false;
     });
   };
 
@@ -150,13 +155,7 @@ const Calendar: React.FC<
     return Array.isArray(holidays)
       ? holidays.filter((holiday) => {
           if (!holiday.date) {
-            if (
-              typeof globalThis !== 'undefined' &&
-              typeof globalThis.process !== 'undefined' &&
-              globalThis.process.env?.NODE_ENV !== 'test'
-            ) {
-              console.warn(`Holiday "${holiday.name}" has no date specified.`);
-            }
+            console.warn(`Holiday "${holiday.name}" has no date specified.`);
             return false;
           }
           const holidayMonth = dayjs(holiday.date, 'MM-DD', true).month();
@@ -246,7 +245,7 @@ const Calendar: React.FC<
           allDay={datas.allDay}
           isPublic={datas.isPublic}
           isRegisterable={datas.isRegisterable}
-          isInviteOnly={datas.isInviteOnly}
+          isInviteOnly={Boolean(datas.isInviteOnly)}
           isRecurringEventTemplate={datas.isRecurringEventTemplate}
           baseEvent={datas.baseEvent}
           sequenceNumber={datas.sequenceNumber}
@@ -430,7 +429,7 @@ const Calendar: React.FC<
               allDay={datas.allDay}
               isPublic={datas.isPublic}
               isRegisterable={datas.isRegisterable}
-              isInviteOnly={datas.isInviteOnly}
+              isInviteOnly={Boolean(datas.isInviteOnly)}
               attendees={datas.attendees || []}
               creator={datas.creator}
               userId={userId}

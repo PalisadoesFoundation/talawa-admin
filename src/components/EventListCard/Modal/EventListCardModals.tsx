@@ -83,8 +83,8 @@ function EventListCardModals({
   const [registrablechecked, setRegistrableChecked] = useState(
     eventListCardProps.isRegisterable,
   );
-  const [inviteonlychecked, setInviteOnlyChecked] = useState(
-    eventListCardProps.isInviteOnly,
+  const [inviteOnlyChecked, setInviteOnlyChecked] = useState(
+    Boolean(eventListCardProps.isInviteOnly),
   );
   const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
   const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
@@ -170,7 +170,7 @@ function EventListCardModals({
     const registrableChanged =
       registrablechecked !== eventListCardProps.isRegisterable;
     const inviteOnlyChanged =
-      inviteonlychecked !== eventListCardProps.isInviteOnly;
+      inviteOnlyChecked !== eventListCardProps.isInviteOnly;
     const allDayChanged = alldaychecked !== eventListCardProps.allDay;
     const recurrenceChanged = hasRecurrenceChanged();
 
@@ -219,7 +219,7 @@ function EventListCardModals({
     formState,
     publicchecked,
     registrablechecked,
-    inviteonlychecked,
+    inviteOnlyChecked,
     alldaychecked,
     eventStartDate,
     eventEndDate,
@@ -234,10 +234,6 @@ function EventListCardModals({
     ) {
       if (availableUpdateOptions.following) {
         setUpdateOption('following');
-      } else if (availableUpdateOptions.single) {
-        setUpdateOption('single');
-      } else if (availableUpdateOptions.entireSeries) {
-        setUpdateOption('entireSeries');
       }
     }
   }, [availableUpdateOptions, updateOption]);
@@ -259,7 +255,7 @@ function EventListCardModals({
         alldaychecked,
         publicchecked,
         registrablechecked,
-        inviteonlychecked,
+        inviteOnlyChecked,
         eventStartDate,
         eventEndDate,
         recurrence,
@@ -420,7 +416,7 @@ function EventListCardModals({
         setPublicChecked={setPublicChecked}
         registrablechecked={registrablechecked}
         setRegistrableChecked={setRegistrableChecked}
-        inviteonlychecked={inviteonlychecked}
+        inviteOnlyChecked={inviteOnlyChecked}
         setInviteOnlyChecked={setInviteOnlyChecked}
         formState={formState}
         setFormState={setFormState}
@@ -476,7 +472,7 @@ function EventListCardModals({
                   alldaychecked,
                   publicchecked,
                   registrablechecked,
-                  inviteonlychecked,
+                  inviteOnlyChecked,
                   eventStartDate,
                   eventEndDate,
                   recurrence,

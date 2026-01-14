@@ -55,6 +55,10 @@ export interface IEvent {
    */
   isPublic: boolean;
   isRegisterable: boolean;
+  /**
+   * Determines if the event is restricted to invited participants only.
+   * When true, only invited users can see and access the event.
+   */
   isInviteOnly: boolean;
   attendees: Partial<User>[];
   creator: Partial<User>;
@@ -155,7 +159,7 @@ export interface IPreviewEventModalProps {
   setPublicChecked: Dispatch<SetStateAction<boolean>>;
   registrablechecked: boolean;
   setRegistrableChecked: Dispatch<SetStateAction<boolean>>;
-  inviteonlychecked: boolean;
+  inviteOnlyChecked: boolean;
   setInviteOnlyChecked: Dispatch<SetStateAction<boolean>>;
   formState: {
     name: string;
@@ -223,6 +227,10 @@ export interface IEventEdge {
      */
     isPublic: boolean;
     isRegisterable: boolean;
+    /**
+     * Determines if the event is restricted to invited participants only.
+     * When true, only invited users, the creator, and admins can see and access the event.
+     */
     isInviteOnly: boolean;
     // Recurring event fields
     isRecurringEventTemplate?: boolean;

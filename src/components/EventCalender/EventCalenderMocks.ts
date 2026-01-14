@@ -34,7 +34,10 @@ export const eventData = [
     isRegisterable: true,
     isInviteOnly: false,
     attendees: [],
-    creator: {},
+    creator: {
+      id: '1',
+      name: 'Creator 1',
+    },
   },
   {
     id: '2',
@@ -64,7 +67,10 @@ export const eventData = [
     isRegisterable: true,
     isInviteOnly: false,
     attendees: [],
-    creator: {},
+    creator: {
+      id: '2',
+      name: 'Creator 2',
+    },
   },
 ];
 
