@@ -45,7 +45,7 @@ import UpcomingEvents from './UpcomingEvents/UpcomingEvents';
 import Invitations from './Invitations/Invitations';
 import Actions from './Actions/Actions';
 import Groups from './Groups/Groups';
-import styles from 'style/app-fixed.module.css';
+import styles from './VolunteerManagement.module.css';
 
 const volunteerDashboardTabs: { value: TabOptions; icon: JSX.Element }[] = [
   {
@@ -160,9 +160,10 @@ const VolunteerManagement = (): JSX.Element => {
             <Dropdown.Toggle
               variant="success"
               id="dropdown-basic"
+              className={styles.dropdown}
               data-testid="tabsDropdownToggle"
             >
-              <span className={`me-1 ${styles.dropdown}`}>{t(tab)}</span>
+              <span className="me-1">{t(tab)}</span>
             </Dropdown.Toggle>
             <Dropdown.Menu>
               {/* Render dropdown items for each settings category */}

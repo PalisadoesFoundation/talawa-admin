@@ -40,7 +40,8 @@ export type { InterfaceCampaignModal };
  * @param mode - 'create' or 'edit'
  * @returns The rendered Fund Campaign modal component
  */
-const CampaignModal: React.FC<InterfaceCampaignModal> = ({
+
+const CampaignModal: React.FC<InterfaceCampaignModalProps> = ({
   isOpen,
   hide,
   fundId,
@@ -49,14 +50,16 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   campaign,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'fundCampaign' });
-  const { t: tCommon } = useTranslation('common');
 
   const [formState, setFormState] = useState({
     campaignName: campaign?.name ?? '',
     campaignCurrency: campaign?.currencyCode ?? 'USD',
     campaignGoal: campaign?.goalAmount ?? 0,
-    campaignStartDate: campaign?.startAt ?? new Date(),
-    campaignEndDate: campaign?.endAt ?? new Date(),
+  });
+
+  const [campaignDateRange, setCampaignDateRange] = useState<IDateRangeValue>({
+    startDate: campaign?.startAt ?? null,
+    endDate: campaign?.endAt ?? null,
   });
 
   const [touched, setTouched] = useState<{ campaignName: boolean }>({
@@ -66,21 +69,18 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   useEffect(() => {
     setFormState({
       campaignCurrency: campaign?.currencyCode ?? 'USD',
-      campaignEndDate: campaign?.endAt ?? new Date(),
       campaignGoal: campaign?.goalAmount ?? 0,
       campaignName: campaign?.name ?? '',
-      campaignStartDate: campaign?.startAt ?? new Date(),
+    });
+
+    setCampaignDateRange({
+      startDate: campaign?.startAt ?? null,
+      endDate: campaign?.endAt ?? null,
     });
     setTouched({ campaignName: false });
   }, [campaign]);
 
-  const {
-    campaignName,
-    campaignCurrency,
-    campaignEndDate,
-    campaignGoal,
-    campaignStartDate,
-  } = formState;
+  const { campaignName, campaignCurrency, campaignGoal } = formState;
 
   const [createCampaign] = useMutation(CREATE_CAMPAIGN_MUTATION);
   const [updateCampaign] = useMutation(UPDATE_CAMPAIGN_MUTATION);
@@ -113,14 +113,14 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         campaignName: '',
         campaignCurrency: 'USD',
         campaignGoal: 0,
-        campaignStartDate: new Date(),
-        campaignEndDate: new Date(),
       });
       setTouched({ campaignName: false });
       refetchCampaign();
       hide();
     } catch (error: unknown) {
       errorHandler(t, error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -137,7 +137,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
     try {
       const updatedFields: { [key: string]: string | number | undefined } = {};
       if (campaign?.name !== campaignName) {
-        updatedFields.name = campaignName;
+        updatedFields.name = campaignName.trim();
       }
       if (campaign?.currencyCode !== campaignCurrency) {
         updatedFields.currencyCode = campaignCurrency;
@@ -151,6 +151,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       if (!dayjs(campaign?.endAt).isSame(dayjs(campaignEndDate))) {
         updatedFields.endAt = dayjs(campaignEndDate).toISOString();
       }
+
       await updateCampaign({
         variables: {
           input: {
@@ -163,8 +164,6 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         campaignName: '',
         campaignCurrency: 'USD',
         campaignGoal: 0,
-        campaignStartDate: new Date(),
-        campaignEndDate: new Date(),
       });
       setTouched({ campaignName: false });
       refetchCampaign();
@@ -172,9 +171,10 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       NotificationToast.success(t('updatedCampaign') as string);
     } catch (error: unknown) {
       errorHandler(t, error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
-
   return (
     <BaseModal
       className={styles.campaignModal}
@@ -305,7 +305,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
               label={t('fundingGoal')}
               variant="outlined"
               className={styles.noOutline}
-              value={campaignGoal}
+              value={String(campaignGoal)}
               onChange={(e) => {
                 const val = Number(e.target.value);
                 if (val > 0) {
@@ -323,6 +323,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
           type="submit"
           className={styles.addButton}
           data-testid="submitCampaignBtn"
+          disabled={isSubmitting}
         >
           {t(mode === 'edit' ? 'updateCampaign' : 'createCampaign')}
         </Button>

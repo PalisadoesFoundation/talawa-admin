@@ -37,7 +37,7 @@
  */
 import { useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import styles from './Invitations.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
 import { WarningAmberRounded } from '@mui/icons-material';

@@ -4,40 +4,16 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<[`InterfaceCampaignModal`](../../types/interfaces/InterfaceCampaignModal.md)\>
+> `const` **default**: `React.FC`\<[`InterfaceCampaignModalProps`](../../../../../../types/AdminPortal/CampaignModal/interface/interfaces/InterfaceCampaignModalProps.md)\>
 
-Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx#L43)
+Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx#L94)
 
-Modal component for creating or editing a Fund Campaign.
-
-## Param
-
-Whether the modal is open
+Modal component for creating or editing a fund campaign.
 
 ## Param
 
-Function to hide the modal
-
-## Param
-
-Fund ID associated with the campaign
-
-## Param
-
-Organization ID
-
-## Param
-
-Existing campaign data or null
-
-## Param
-
-Callback to refresh campaign list
-
-## Param
-
-'create' or 'edit'
+Props for the CampaignModal component.
 
 ## Returns
 
-The rendered Fund Campaign modal component
+JSX.Element representing the create/edit campaign modal.
