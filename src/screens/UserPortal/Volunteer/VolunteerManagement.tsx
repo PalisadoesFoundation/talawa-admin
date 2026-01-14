@@ -45,7 +45,7 @@ import UpcomingEvents from './UpcomingEvents/UpcomingEvents';
 import Invitations from './Invitations/Invitations';
 import Actions from './Actions/Actions';
 import Groups from './Groups/Groups';
-import styles from 'style/app-fixed.module.css';
+import styles from './VolunteerManagement.module.css';
 
 const volunteerDashboardTabs: { value: TabOptions; icon: JSX.Element }[] = [
   {

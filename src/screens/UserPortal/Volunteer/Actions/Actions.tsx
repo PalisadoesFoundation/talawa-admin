@@ -7,7 +7,7 @@ import dayjs from 'dayjs';
 import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_LIST } from 'GraphQl/Queries/ActionItemQueries';
 import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
-import styles from 'style/app-fixed.module.css';
+import styles from './Actions.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   DataGridWrapper,
