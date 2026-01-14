@@ -112,7 +112,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:7](https://github.com/Palisad
 
 ### type?
 
-> `optional` **type**: `"number"` \| `"text"` \| `"email"` \| `"password"` \| `"tel"` \| `"url"`
+> `optional` **type**: `"number"` \| `"password"` \| `"text"` \| `"email"` \| `"tel"` \| `"url"`
 
 Defined in: [src/types/FormFieldGroup/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L11)
 

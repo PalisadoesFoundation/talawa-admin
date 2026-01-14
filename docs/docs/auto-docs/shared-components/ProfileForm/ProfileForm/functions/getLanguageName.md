@@ -6,7 +6,9 @@
 
 > **getLanguageName**(`code`): `string`
 
-Defined in: [src/shared-components/ProfileForm/ProfileForm.tsx:816](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileForm/ProfileForm.tsx#L816)
+Defined in: [src/shared-components/ProfileForm/ProfileForm.tsx:227](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileForm/ProfileForm.tsx#L227)
+
+Helper function to get language name from language code
 
 ## Parameters
 
@@ -14,6 +16,10 @@ Defined in: [src/shared-components/ProfileForm/ProfileForm.tsx:816](https://gith
 
 `string`
 
+Language code
+
 ## Returns
 
 `string`
+
+Language name or null if not found
