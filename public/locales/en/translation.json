@@ -1,4 +1,10 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "Please log in again; your session has expired."
+  },
+  "securedRoute": {
+    "sessionExpired": "Please log in again; your session has expired."
+  },
   "ends": "Ends",
   "occurrences": "Occurrences",
   "leaderboard": {
@@ -2148,9 +2154,6 @@
   },
   "contact": {
     "card_aria": "Contact card"
-  },
-  "securedRoute": {
-    "sessionExpired": "Kindly relogin as session has expired"
   },
   "common": {
     "signOut": "Sign out",

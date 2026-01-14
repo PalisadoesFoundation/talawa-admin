@@ -1,4 +1,10 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "कृपया फिर से लॉगिन करें; आपका सत्र समाप्त हो गया है।"
+  },
+  "securedRoute": {
+    "sessionExpired": "कृपया फिर से लॉगिन करें; आपका सत्र समाप्त हो गया है।"
+  },
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
   "leaderboard": {
@@ -2148,9 +2154,6 @@
   },
   "contact": {
     "card_aria": "संपर्क कार्ड"
-  },
-  "securedRoute": {
-    "sessionExpired": "कृपया फिर से लॉगिन करें क्योंकि सत्र समाप्त हो गया है"
   },
   "common": {
     "signOut": "साइन आउट",

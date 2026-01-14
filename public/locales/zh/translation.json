@@ -1,4 +1,10 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "请重新登录；您的会话已过期。"
+  },
+  "securedRoute": {
+    "sessionExpired": "请重新登录；您的会话已过期。"
+  },
   "ends": "结束",
   "occurrences": "次",
   "leaderboard": {
@@ -2148,9 +2154,6 @@
   },
   "contact": {
     "card_aria": "联系人卡片"
-  },
-  "securedRoute": {
-    "sessionExpired": "请重新登录，因为会话已过期"
   },
   "common": {
     "signOut": "退出登录",
