@@ -86,7 +86,9 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   };
 
   // Check if the user has permission to edit the event
-  const canEditEvent = eventListCardProps.creator?.id === userId;
+  const canEditEvent =
+    eventListCardProps.creator?.id === userId ||
+    eventListCardProps.userRole === UserRole.ADMINISTRATOR;
 
   const getDayName = (dayIndex: number): string => {
     const days = [

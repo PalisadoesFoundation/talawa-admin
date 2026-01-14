@@ -1878,10 +1878,17 @@ form label,
   background-color: red;
 =======
 .statsButton {
+<<<<<<< HEAD
   width: auto !important;
   min-width: fit-content !important;
   white-space: nowrap !important;
 >>>>>>> 687c3710d50 (fix: resolve failing checks)
+=======
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  width: max-content;
+>>>>>>> b379b3c1ad1 (fix: failing checks)
 }
 
 /* Add more Global CSS Classes above this */
@@ -8439,7 +8446,7 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 12px;
+  margin-inline-start: 12px;
   /* bring controls closer together */
   gap: 12px;
 }
@@ -8458,7 +8465,7 @@ form {
   position: relative;
   display: flex;
   align-items: center;
-  margin-left: 18px;
+  margin-inline-start: 18px;
   /* gap from left */
 }
 

@@ -153,7 +153,6 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                         </div>
 =======
                         <Avatar
-                          key={user.id + '1'}
                           containerStyle={styles.volunteerAvatar}
                           avatarStyle={styles.volunteerAvatar}
                           dataTestId="volunteer_avatar"
