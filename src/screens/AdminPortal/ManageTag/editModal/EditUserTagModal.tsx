@@ -26,7 +26,7 @@
 // translation-check-keyPrefix: manageTag
 import type { TFunction } from 'i18next';
 import type { FormEvent } from 'react';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { BaseModal } from 'shared-components/BaseModal';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
@@ -54,6 +54,13 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
   const formId = 'edit-user-tag-form';
   const [isTouched, setIsTouched] = useState(false);
   const tagNameRef = useRef<HTMLInputElement | null>(null);
+
+  // Reset touched state when modal opens to prevent stale validation errors
+  useEffect(() => {
+    if (editUserTagModalIsOpen) {
+      setIsTouched(false);
+    }
+  }, [editUserTagModalIsOpen]);
 
   const isTagNameInvalid = !newTagName.trim();
   const errorMessage =
