@@ -1434,6 +1434,8 @@ describe('EventActionItems', () => {
       await waitFor(() => {
         const checkbox = screen.getByTestId('statusCheckboxactionItemId1');
         expect(checkbox).toHaveAttribute('aria-label', 'actionItemCompleted');
+        const statusChips = screen.getAllByTestId('statusChip');
+        expect(statusChips[0]).toHaveTextContent('completed'); // Length 0 as only one item
       });
     });
 
@@ -1443,6 +1445,8 @@ describe('EventActionItems', () => {
       await waitFor(() => {
         const checkbox = screen.getByTestId('statusCheckboxactionItemId1');
         expect(checkbox).toHaveAttribute('aria-label', 'markCompletion');
+        const statusChips = screen.getAllByTestId('statusChip');
+        expect(statusChips[0]).toHaveTextContent('pending'); // Length 0 as only one item
       });
     });
 
