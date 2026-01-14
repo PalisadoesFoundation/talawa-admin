@@ -302,6 +302,54 @@ describe('AssignmentTypeSelector', () => {
       expect(onClearVolunteerGroup).not.toHaveBeenCalled();
     });
 
+    it('does not activate volunteer chip on Space when disabled', async () => {
+      const onTypeChange = vi.fn();
+      const onClearVolunteerGroup = vi.fn();
+      renderComponent(
+        'volunteerGroup',
+        onTypeChange,
+        true,
+        false,
+        vi.fn(),
+        onClearVolunteerGroup,
+      );
+
+      const user = userEvent.setup();
+      const volunteerChip = screen
+        .getByText('Volunteer')
+        .closest('.MuiChip-root');
+      expect(volunteerChip).toBeInTheDocument();
+      (volunteerChip as HTMLElement).focus();
+      await user.keyboard(' ');
+
+      expect(onTypeChange).not.toHaveBeenCalled();
+      expect(onClearVolunteerGroup).not.toHaveBeenCalled();
+    });
+
+    it('does not activate volunteerGroup chip on Enter when disabled', async () => {
+      const onTypeChange = vi.fn();
+      const onClearVolunteer = vi.fn();
+      renderComponent(
+        'volunteer',
+        onTypeChange,
+        false,
+        true,
+        onClearVolunteer,
+        vi.fn(),
+      );
+
+      const user = userEvent.setup();
+      const volunteerGroupChip = screen
+        .getByText('Volunteer Group')
+        .closest('.MuiChip-root');
+      expect(volunteerGroupChip).toBeInTheDocument();
+      (volunteerGroupChip as HTMLElement).focus();
+      await user.keyboard('{Enter}');
+
+      expect(onTypeChange).not.toHaveBeenCalled();
+      expect(onClearVolunteer).not.toHaveBeenCalled();
+    });
+
     it('does not activate volunteerGroup chip on Space when disabled', async () => {
       const onTypeChange = vi.fn();
       const onClearVolunteer = vi.fn();
@@ -324,6 +372,60 @@ describe('AssignmentTypeSelector', () => {
 
       expect(onTypeChange).not.toHaveBeenCalled();
       expect(onClearVolunteer).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('No-op scenarios', () => {
+    it('does not call onTypeChange when clicking already selected volunteer chip', async () => {
+      const onTypeChange = vi.fn();
+      const onClearVolunteer = vi.fn();
+      const onClearVolunteerGroup = vi.fn();
+      renderComponent(
+        'volunteer',
+        onTypeChange,
+        false,
+        false,
+        onClearVolunteer,
+        onClearVolunteerGroup,
+      );
+
+      const user = userEvent.setup();
+      const volunteerChip = screen
+        .getByText('Volunteer')
+        .closest('.MuiChip-root');
+      expect(volunteerChip).toBeInTheDocument();
+      await user.click(volunteerChip as HTMLElement);
+
+      // Clicking the already-selected chip should not trigger any changes
+      expect(onTypeChange).not.toHaveBeenCalled();
+      expect(onClearVolunteer).not.toHaveBeenCalled();
+      expect(onClearVolunteerGroup).not.toHaveBeenCalled();
+    });
+
+    it('does not call onTypeChange when clicking already selected volunteerGroup chip', async () => {
+      const onTypeChange = vi.fn();
+      const onClearVolunteer = vi.fn();
+      const onClearVolunteerGroup = vi.fn();
+      renderComponent(
+        'volunteerGroup',
+        onTypeChange,
+        false,
+        false,
+        onClearVolunteer,
+        onClearVolunteerGroup,
+      );
+
+      const user = userEvent.setup();
+      const volunteerGroupChip = screen
+        .getByText('Volunteer Group')
+        .closest('.MuiChip-root');
+      expect(volunteerGroupChip).toBeInTheDocument();
+      await user.click(volunteerGroupChip as HTMLElement);
+
+      // Clicking the already-selected chip should not trigger any changes
+      expect(onTypeChange).not.toHaveBeenCalled();
+      expect(onClearVolunteer).not.toHaveBeenCalled();
+      expect(onClearVolunteerGroup).not.toHaveBeenCalled();
     });
   });
 });

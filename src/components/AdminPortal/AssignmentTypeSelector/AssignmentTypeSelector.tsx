@@ -31,14 +31,14 @@ const AssignmentTypeSelector: React.FC<
   const labelId = useId();
 
   const handleVolunteerClick = (): void => {
-    if (!isVolunteerDisabled) {
+    if (!isVolunteerDisabled && assignmentType !== 'volunteer') {
       onTypeChange('volunteer');
       onClearVolunteerGroup();
     }
   };
 
   const handleVolunteerGroupClick = (): void => {
-    if (!isVolunteerGroupDisabled) {
+    if (!isVolunteerGroupDisabled && assignmentType !== 'volunteerGroup') {
       onTypeChange('volunteerGroup');
       onClearVolunteer();
     }
