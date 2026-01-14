@@ -365,7 +365,6 @@ describe('OrganizationCard', () => {
       {
         request: {
           query: ORGANIZATION_LIST,
-          variables: {},
         },
         result: {
           data: {},

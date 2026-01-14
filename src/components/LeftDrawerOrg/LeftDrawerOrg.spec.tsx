@@ -10,15 +10,12 @@ import React from 'react';
 import type { IDrawerExtension } from 'plugin/types';
 import LeftDrawerOrg from './LeftDrawerOrg';
 import type { ILeftDrawerProps } from './LeftDrawerOrg';
-import {
-  GET_ORGANIZATION_BASIC_DATA,
-  GET_ORGANIZATION_DATA_PG,
-} from 'GraphQl/Queries/Queries';
+import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
 
 // Type definitions for better type safety
 interface IMockedResponse {
   request: {
-    query: typeof GET_ORGANIZATION_BASIC_DATA;
+    query: typeof GET_ORGANIZATION_DATA_PG;
     variables: {
       id: string;
       first: number;
