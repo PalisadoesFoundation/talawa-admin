@@ -41,7 +41,7 @@
 import { Form } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './VolunteerViewModal.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
