@@ -149,6 +149,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
         show={show}
         onHide={handleClose}
         title={t('eventRegistrantsTitle')}
+        headerClassName={styles.modalHeader}
         dataTestId="invite-modal"
         showCloseButton
         footer={

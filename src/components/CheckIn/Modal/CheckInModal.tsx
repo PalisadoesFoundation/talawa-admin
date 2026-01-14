@@ -138,11 +138,7 @@ export const CheckInModal = ({
         centered={true}
         size="lg"
         headerClassName={styles.checkInModalHeader}
-        headerContent={
-          <div className="text-tableHeader-color" data-testid="modal-title">
-            {t('eventCheckInManagement')}
-          </div>
-        }
+        title={t('eventCheckInManagement')}
       >
         <div className="p-2">
           <SearchBar
