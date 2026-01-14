@@ -75,15 +75,16 @@ describe('ApplyToSelector', () => {
   it('renders with accessible fieldset structure', () => {
     renderComponent();
 
-    const fieldset = document.querySelector('fieldset');
-    expect(fieldset).toBeInTheDocument();
+    expect(screen.getByRole('group')).toBeInTheDocument();
   });
 
   it('renders legend element for accessibility', () => {
     renderComponent();
 
-    const legend = document.querySelector('legend');
-    expect(legend).toBeInTheDocument();
+    // Legend text is part of the group's accessible name
+    expect(
+      screen.getByRole('group', { name: /apply to/i }),
+    ).toBeInTheDocument();
   });
 
   it('has unique IDs for radio inputs using useId', () => {
