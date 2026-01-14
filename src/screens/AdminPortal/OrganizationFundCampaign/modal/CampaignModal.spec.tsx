@@ -23,7 +23,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { MOCKS, MOCK_ERROR } from '../OrganizationFundCampaignMocks';
-import type { InterfaceCampaignModal } from './CampaignModal';
+import type { InterfaceCampaignModal } from './types';
 import type { InterfaceCampaignInfo } from 'utils/interfaces';
 import CampaignModal from './CampaignModal';
 import { vi } from 'vitest';
@@ -85,12 +85,29 @@ vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
 
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(MOCK_ERROR);
+
+// Validate i18n fixtures exist with clear error messages
+const i18nData = i18nForTest.getDataByLanguage('en');
+if (!i18nData) {
+  throw new Error(
+    'i18n fixture missing: getDataByLanguage("en") returned undefined. Check i18nForTest configuration.',
+  );
+}
+if (!i18nData.translation?.fundCampaign) {
+  throw new Error(
+    'i18n fixture missing: translation.fundCampaign is undefined. Ensure the fundCampaign namespace exists in test translations.',
+  );
+}
+if (!i18nData.common) {
+  throw new Error(
+    'i18n fixture missing: common namespace is undefined. Ensure the common namespace exists in test translations.',
+  );
+}
+
 const translations = JSON.parse(
-  JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.fundCampaign),
+  JSON.stringify(i18nData.translation.fundCampaign),
 );
-const tCommon = JSON.parse(
-  JSON.stringify(i18nForTest.getDataByLanguage('en')?.common),
-);
+const tCommon = JSON.parse(JSON.stringify(i18nData.common));
 
 // Use local time for consistent testing across timezones
 // dayjs() creates a date in local time
@@ -800,6 +817,11 @@ describe('CampaignModal', () => {
     const submitBtn = screen.getByTestId('submitCampaignBtn');
     fireEvent.click(submitBtn);
 
+    // Assert validation UI shows the required error message
+    await waitFor(() => {
+      expect(screen.getByText(tCommon.required)).toBeInTheDocument();
+    });
+
     // Should not call mutation (NotificationToast.success not called)
     await waitFor(() => {
       expect(NotificationToast.success).not.toHaveBeenCalled();
@@ -820,6 +842,11 @@ describe('CampaignModal', () => {
 
     const submitBtn = screen.getByTestId('submitCampaignBtn');
     fireEvent.click(submitBtn);
+
+    // Assert validation UI shows the required error message
+    await waitFor(() => {
+      expect(screen.getByText(tCommon.required)).toBeInTheDocument();
+    });
 
     // Should not call mutation
     await waitFor(() => {

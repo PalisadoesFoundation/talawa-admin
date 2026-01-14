@@ -23,18 +23,10 @@ import {
   Select,
   TextField,
 } from '@mui/material';
-import type { InterfaceCampaignInfo } from 'utils/interfaces';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import type { InterfaceCampaignModal } from './types';
 
-export interface InterfaceCampaignModal {
-  isOpen: boolean;
-  hide: () => void;
-  fundId: string;
-  orgId: string;
-  campaign: InterfaceCampaignInfo | null;
-  refetchCampaign: () => void;
-  mode: 'create' | 'edit';
-}
+export type { InterfaceCampaignModal };
 
 /**
  * Modal component for creating or editing a Fund Campaign.
