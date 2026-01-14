@@ -6,7 +6,7 @@ import {
   waitFor,
   RenderResult,
 } from '@testing-library/react';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { BrowserRouter } from 'react-router';
