@@ -428,12 +428,12 @@ const UsersTableItem = (props: Props): JSX.Element => {
           <div className="search-bar-container">
             <SearchBar
               placeholder={t('searchByOrgName')}
-              value={searchByNameJoinedOrgs}
-              onChange={searchJoinedOrgs}
-              onSearch={searchJoinedOrgs}
-              onClear={() => searchJoinedOrgs('')}
-              inputTestId="searchByNameJoinedOrgs"
-              buttonTestId="searchBtnJoinedOrgs"
+              value={searchByNameBlockedOrgs}
+              onChange={searchBlockedOrgs}
+              onSearch={searchBlockedOrgs}
+              onClear={() => searchBlockedOrgs('')}
+              inputTestId="searchByNameBlockedOrgs"
+              buttonTestId="searchBtnBlockedOrgs"
             />
           </div>
         )}
