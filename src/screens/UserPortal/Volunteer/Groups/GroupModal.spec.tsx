@@ -586,7 +586,9 @@ describe('Testing GroupModal', () => {
     await userEvent.click(requestsRadio);
 
     // Wait for the image to be rendered
-    const avatarImage = await screen.findByAltText(t.volunteerAlt);
+    const avatarImage = await screen.findByAltText(
+      /Profile picture of Volunteer profile picture/i,
+    );
     expect(avatarImage).toBeInTheDocument();
     expect(avatarImage).toHaveAttribute(
       'src',
