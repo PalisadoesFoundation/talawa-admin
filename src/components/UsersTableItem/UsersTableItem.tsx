@@ -12,7 +12,9 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Modal, Row, Table } from 'react-bootstrap';
+import { Button, Form, Row } from 'react-bootstrap';
+// import Table from 'react-bootstrap/Table'; // Removed
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
@@ -196,48 +198,58 @@ const UsersTableItem = (props: Props): JSX.Element => {
           </Button>
         </td>
       </tr>
-      <Modal
+      <BaseModal
         show={showJoinedOrganizations}
         key={`modal-joined-org-${index}`}
         size="xl"
-        data-testid={`modal-joined-org-${user.id}`}
+        dataTestId={`modal-joined-org-${user.id}`}
         onHide={() => setShowJoinedOrganizations(false)}
-      >
-        <Modal.Header className={styles.modalHeader} closeButton>
-          <Modal.Title className="text-white">
+        headerClassName={styles.modalHeader}
+        title={
+          <span className="text-white">
             {t('orgJoinedBy')} {user.name} ({memberOrgs.length})
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {memberOrgs.length !== 0 && (
-            <div className="mb-4">
-              <SearchBar
-                placeholder={t('searchByOrgName')}
-                value={searchByNameJoinedOrgs}
-                onChange={searchJoinedOrgs}
-                onSearch={searchJoinedOrgs}
-                onClear={() => searchJoinedOrgs('')}
-                inputTestId="searchByNameJoinedOrgs"
-                buttonTestId="searchBtnJoinedOrgs"
-              />
+          </span>
+        }
+        footer={
+          <Button
+            variant="secondary"
+            onClick={() => setShowJoinedOrganizations(false)}
+            data-testid={`closeJoinedOrgsBtn${user.id}`}
+          >
+            {tCommon('close')}
+          </Button>
+        }
+      >
+        {memberOrgs.length !== 0 && (
+          <div className="mb-4">
+            <SearchBar
+              placeholder={t('searchByOrgName')}
+              value={searchByNameJoinedOrgs}
+              onChange={searchJoinedOrgs}
+              onSearch={searchJoinedOrgs}
+              onClear={() => searchJoinedOrgs('')}
+              inputTestId="searchByNameJoinedOrgs"
+              buttonTestId="searchBtnJoinedOrgs"
+            />
+          </div>
+        )}
+        <Row>
+          {memberOrgs.length === 0 ? (
+            <div className={styles.notJoined}>
+              <h4>
+                {user.name} {t('hasNotJoinedAnyOrg')}
+              </h4>
             </div>
-          )}
-          <Row>
-            {memberOrgs.length === 0 ? (
-              <div className={styles.notJoined}>
-                <h4>
-                  {user.name} {t('hasNotJoinedAnyOrg')}
-                </h4>
-              </div>
-            ) : joinedOrgs.length === 0 ? (
-              <div className={styles.notJoined}>
-                <h4>
-                  {tCommon('noResultsFoundFor')} &quot;{searchByNameJoinedOrgs}
-                  &quot;
-                </h4>
-              </div>
-            ) : (
-              <Table className={styles.modalTable} responsive>
+          ) : joinedOrgs.length === 0 ? (
+            <div className={styles.notJoined}>
+              <h4>
+                {tCommon('noResultsFoundFor')} &quot;{searchByNameJoinedOrgs}
+                &quot;
+              </h4>
+            </div>
+          ) : (
+            <div className="table-responsive">
+              <table className={`${styles.modalTable} table`}>
                 <thead>
                   <tr>
                     <th>{tCommon('name')}</th>
@@ -348,96 +360,98 @@ const UsersTableItem = (props: Props): JSX.Element => {
                     );
                   })}
                 </tbody>
-              </Table>
-            )}
-          </Row>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={() => setShowJoinedOrganizations(false)}
-            data-testid={`closeJoinedOrgsBtn${user.id}`}
-          >
-            {tCommon('close')}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <Modal
+              </table>
+            </div>
+          )}
+        </Row>
+      </BaseModal>
+      <BaseModal
         show={showRemoveUserModal}
         key={`modal-remove-org-${index}`}
-        data-testid={`modal-remove-user-${user.id}`}
+        dataTestId={`modal-remove-user-${user.id}`}
         onHide={() => onHideRemoveUserModal()}
-      >
-        <Modal.Header className={styles.modalHeader} closeButton>
-          <Modal.Title className="text-white">
+        headerClassName={styles.modalHeader}
+        title={
+          <span className="text-white">
             {t('removeUserFrom', { org: removeUserProps.orgName })}
-          </Modal.Title>
-        </Modal.Header>
+          </span>
+        }
+        footer={
+          <>
+            <Button
+              variant="secondary"
+              onClick={onHideRemoveUserModal}
+              data-testid={`closeRemoveUserModal${user.id}`}
+            >
+              {tCommon('close')}
+            </Button>
+            <Button
+              className={`btn btn-danger ${styles.removeButton}`}
+              onClick={confirmRemoveUser}
+              data-testid={`confirmRemoveUser${user.id}`}
+            >
+              {tCommon('remove')}
+            </Button>
+          </>
+        }
+      >
         <hr className={usertableStyles.divider} />
-        <Modal.Body>
-          <p>
-            {t('removeConfirmation', {
-              name: user.name,
-              org: removeUserProps.orgName,
-            })}
-          </p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={onHideRemoveUserModal}
-            data-testid={`closeRemoveUserModal${user.id}`}
-          >
-            {tCommon('close')}
-          </Button>
-          <Button
-            className={`btn btn-danger ${styles.removeButton}`}
-            onClick={confirmRemoveUser}
-            data-testid={`confirmRemoveUser${user.id}`}
-          >
-            {tCommon('remove')}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <Modal
+        <p>
+          {t('removeConfirmation', {
+            name: user.name,
+            org: removeUserProps.orgName,
+          })}
+        </p>
+      </BaseModal>
+      <BaseModal
         show={showBlockedOrganizations}
         key={`modal-blocked-org-${index}`}
         size="xl"
-        data-testid={`modal-blocked-org-${user.id}`}
+        dataTestId={`modal-blocked-org-${user.id}`}
         onHide={() => setShowBlockedOrganizations(false)}
-      >
-        <Modal.Header className={styles.modalHeader} closeButton>
-          <Modal.Title className="text-white">
+        headerClassName={styles.modalHeader}
+        title={
+          <span className="text-white">
             {t('orgThatBlocked')} {user.name} ({blockedUsers.length})
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {blockedOrgs.length !== 0 && (
-            <div className="search-bar-container">
-              <SearchBar
-                placeholder={t('searchByOrgName')}
-                onSearch={searchBlockedOrgs}
-                inputTestId="searchByNameBlockedOrgs"
-                buttonTestId="searchBtnBlockedOrgs"
-              />
+          </span>
+        }
+        footer={
+          <Button
+            variant="secondary"
+            onClick={() => setShowBlockedOrganizations(false)}
+            data-testid={`closeUnblockOrgsBtn${user.id}`}
+          >
+            {tCommon('close')}
+          </Button>
+        }
+      >
+        {blockedOrgs.length !== 0 && (
+          <div className="search-bar-container">
+            <SearchBar
+              placeholder={t('searchByOrgName')}
+              onSearch={searchBlockedOrgs}
+              inputTestId="searchByNameBlockedOrgs"
+              buttonTestId="searchBtnBlockedOrgs"
+            />
+          </div>
+        )}
+        <Row>
+          {blockedOrgs.length === 0 ? (
+            <div className={styles.notJoined}>
+              <h4>
+                {user.name} {t('isNotBlockedByAnyOrg')}
+              </h4>
             </div>
-          )}
-          <Row>
-            {blockedOrgs.length === 0 ? (
-              <div className={styles.notJoined}>
-                <h4>
-                  {user.name} {t('isNotBlockedByAnyOrg')}
-                </h4>
-              </div>
-            ) : blockedUsers.length === 0 ? (
-              <div className={styles.notJoined}>
-                <h4>
-                  {tCommon('noResultsFoundFor')} &quot;{searchByNameBlockedOrgs}
-                  &quot;
-                </h4>
-              </div>
-            ) : (
-              <Table className={styles.modalTable} responsive>
+          ) : blockedUsers.length === 0 ? (
+            <div className={styles.notJoined}>
+              <h4>
+                {tCommon('noResultsFoundFor')} &quot;{searchByNameBlockedOrgs}
+                &quot;
+              </h4>
+            </div>
+          ) : (
+            <div className="table-responsive">
+              <table className={`${styles.modalTable} table`}>
                 <thead>
                   <tr>
                     <th>{tCommon('name')}</th>
@@ -506,57 +520,49 @@ const UsersTableItem = (props: Props): JSX.Element => {
                     );
                   })}
                 </tbody>
-              </Table>
-            )}
-          </Row>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={() => setShowBlockedOrganizations(false)}
-            data-testid={`closeUnblockOrgsBtn${user.id}`}
-          >
-            {tCommon('close')}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <Modal
+              </table>
+            </div>
+          )}
+        </Row>
+      </BaseModal>
+      <BaseModal
         show={showBlockedUserModal}
         key={`modal-unblock-user-${index}`}
-        data-testid={`modal-unblock-user-${user.id}`}
+        dataTestId={`modal-unblock-user-${user.id}`}
         onHide={() => onHideBlockUserModal()}
-      >
-        <Modal.Header className={styles.modalHeader} closeButton>
-          <Modal.Title className="text-white">
+        headerClassName={styles.modalHeader}
+        title={
+          <span className="text-white">
             {t('unblockUserFrom', { org: removeUserProps.orgName })}
-          </Modal.Title>
-        </Modal.Header>
+          </span>
+        }
+        footer={
+          <>
+            <Button
+              variant="secondary"
+              onClick={onHideBlockUserModal}
+              data-testid={`closeUnblockUserModal${user.id}`}
+            >
+              {tCommon('close')}
+            </Button>
+            <Button
+              className={`btn btn-danger ${styles.removeButton}`}
+              onClick={confirmUnblockUser}
+              data-testid={`confirmUnblockUser${user.id}`}
+            >
+              {tCommon('unblock')}
+            </Button>
+          </>
+        }
+      >
         <hr className={usertableStyles.divider} />
-        <Modal.Body>
-          <p>
-            {t('unblockConfirmation', {
-              name: user.name,
-              org: removeUserProps.orgName,
-            })}
-          </p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={onHideBlockUserModal}
-            data-testid={`closeUnblockUserModal${user.id}`}
-          >
-            {tCommon('close')}
-          </Button>
-          <Button
-            className={`btn btn-danger ${styles.removeButton}`}
-            onClick={confirmUnblockUser}
-            data-testid={`confirmUnblockUser${user.id}`}
-          >
-            {tCommon('unblock')}
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        <p>
+          {t('unblockConfirmation', {
+            name: user.name,
+            org: removeUserProps.orgName,
+          })}
+        </p>
+      </BaseModal>
     </>
   );
 };

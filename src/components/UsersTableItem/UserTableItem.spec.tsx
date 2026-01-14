@@ -252,13 +252,13 @@ describe('Testing User Table Item', () => {
       charCode: 27,
     });
     expect(
-      screen.queryByRole('dialog')?.className.includes('show'),
+      screen.queryByTestId('modal-joined-org-123')?.className.includes('show'),
     ).toBeFalsy();
     fireEvent.click(showJoinedOrgsBtn);
     // Close using close button and reopen
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
     expect(
-      screen.queryByRole('dialog')?.className.includes('show'),
+      screen.queryByTestId('modal-joined-org-123')?.className.includes('show'),
     ).toBeFalsy();
     fireEvent.click(showJoinedOrgsBtn);
     // Expect the following to exist in modal
@@ -779,12 +779,12 @@ describe('Testing User Table Item', () => {
       charCode: 27,
     });
     expect(
-      screen.queryByRole('dialog')?.className.includes('show'),
+      screen.queryByTestId('modal-blocked-org-123')?.className.includes('show'),
     ).toBeFalsy();
     fireEvent.click(showBlockedOrgsBtn);
     fireEvent.click(screen.getByTestId(`closeUnblockOrgsBtn${123}`));
     expect(
-      screen.queryByRole('dialog')?.className.includes('show'),
+      screen.queryByTestId('modal-blocked-org-123')?.className.includes('show'),
     ).toBeFalsy();
     fireEvent.click(showBlockedOrgsBtn);
     const inputBox = screen.getByTestId(`searchByNameBlockedOrgs`);
