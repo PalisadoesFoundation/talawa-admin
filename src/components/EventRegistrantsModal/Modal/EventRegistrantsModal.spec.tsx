@@ -334,7 +334,7 @@ describe('EventRegistrantsModal', () => {
     // Assert NotificationToast was called (it's mocked)
     await waitFor(() => {
       expect(NotificationToast.warning).toHaveBeenCalledWith(
-        'Please choose an user to add first!',
+        'Please choose a user to add first!',
       );
     });
   });

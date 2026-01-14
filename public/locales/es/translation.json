@@ -1416,7 +1416,22 @@
     "pageNumber": "Página {{page}}",
     "goToToday": "Ir a hoy",
     "genderDistribution": "Distribución por género",
-    "ageDistribution": "Distribución por edad"
+    "ageDistribution": "Distribución por edad",
+    "age": "Edad",
+    "age18to40": "18-40",
+    "attendanceCount": "Recuento de asistencia",
+    "close": "Cerrar",
+    "demographics": "Demografía",
+    "demography": "Demografía",
+    "exportData": "Exportar datos",
+    "female": "Mujer",
+    "gender": "Género",
+    "male": "Hombre",
+    "other": "Otro",
+    "over40": "Más de 40",
+    "today": "Hoy",
+    "trends": "Tendencias",
+    "under18": "Menor de 18"
   },
   "eventRegistrant": {
     "sort": "Ordenar",
@@ -1451,7 +1466,10 @@
     "addingAttendee": "Agregando...",
     "male": "Masculino",
     "female": "Femenino",
-    "other": "Otro"
+    "other": "Otro",
+    "firstNamePlaceholder": "Juan",
+    "lastNamePlaceholder": "García",
+    "emailPlaceholder": "ejemplo@gmail.com"
   },
   "settings": {
     "settings": "Ajustes",
@@ -1884,8 +1902,15 @@
       "errorSendingInvites": "Error al enviar invitaciones",
       "emailsLabel": "Correos electrónicos y nombres de destinatarios",
       "emailsHelp": "Proporcione el correo electrónico y el nombre opcional para cada destinatario. Agregue varios destinatarios según sea necesario."
-    }
+    },
+    "selectUserWarning": "¡Por favor, elija primero un usuario para agregar!",
+    "addingAttendeeProgress": "Agregando al asistente..."
   },
+  "eventRegistrantsWrapper": {
+    "buttonAriaLabel": "Mostrar asistentes",
+    "registerMemberButton": "Registrar miembro"
+  },
+
   "userCampaigns": {
     "title": "Campañas de recaudación de fondos",
     "searchByName": "Buscar por nombre...",
