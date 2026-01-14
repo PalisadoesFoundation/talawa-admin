@@ -17,7 +17,7 @@ import ItemViewModal, { type IViewModalProps } from './ActionItemViewModal';
 import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
-import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import { MEMBERS_LIST_WITH_DETAILS } from 'GraphQl/Queries/Queries';
 import { vi, it, describe, beforeEach, afterEach } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -82,6 +82,8 @@ const mockMembers = [
     avatarURL: 'https://example.com/avatar1.jpg',
     createdAt: baseTimestamp,
     updatedAt: baseTimestamp,
+    firstName: 'John',
+    lastName: 'Doe',
   },
   {
     id: 'userId2',
@@ -140,7 +142,7 @@ const MOCKS = [
   },
   {
     request: {
-      query: MEMBERS_LIST,
+      query: MEMBERS_LIST_WITH_DETAILS,
       variables: { organizationId: 'orgId1' },
     },
     result: {
@@ -268,8 +270,11 @@ describe('ItemViewModal - Helper Functions Coverage', () => {
       await waitFor(() => {
         expect(screen.getByText('Action Item Details')).toBeInTheDocument();
       });
-      const creatorField = screen.getByLabelText(/creator/i);
-      expect(creatorField).toHaveValue('Bob Johnson');
+      // Wait for MEMBERS_LIST query to resolve and update the creator field
+      await waitFor(() => {
+        const creatorField = screen.getByLabelText(/creator/i);
+        expect(creatorField).toHaveValue('Bob Johnson');
+      });
     });
 
     it('should return "Unknown" when user is null', async () => {
@@ -344,7 +349,7 @@ describe('ItemViewModal - Helper Functions Coverage', () => {
         },
         {
           request: {
-            query: MEMBERS_LIST,
+            query: MEMBERS_LIST_WITH_DETAILS,
             variables: { organizationId: 'orgId1' },
           },
           result: { data: { usersByOrganizationId: mockMembersWithEmptyUser } },

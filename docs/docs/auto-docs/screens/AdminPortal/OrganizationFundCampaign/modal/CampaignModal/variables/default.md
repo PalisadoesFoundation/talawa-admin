@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceCampaignModal`](../../types/interfaces/InterfaceCampaignModal.md)\>
 
-Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx#L42)
+Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/modal/CampaignModal.tsx#L43)
 
 Modal component for creating or editing a Fund Campaign.
 
@@ -37,3 +37,7 @@ Callback to refresh campaign list
 ## Param
 
 'create' or 'edit'
+
+## Returns
+
+The rendered Fund Campaign modal component

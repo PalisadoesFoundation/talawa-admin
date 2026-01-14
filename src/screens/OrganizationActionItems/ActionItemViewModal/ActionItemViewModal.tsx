@@ -16,7 +16,7 @@ import { FormControl, TextField } from '@mui/material';
 import { TaskAlt, HistoryToggleOff } from '@mui/icons-material';
 import { useQuery } from '@apollo/client';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
-import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import { MEMBERS_LIST_WITH_DETAILS } from 'GraphQl/Queries/Queries';
 import { BaseModal } from 'shared-components/BaseModal';
 
 export interface IViewModalProps {
@@ -52,7 +52,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
     skip: !categoryId,
   });
 
-  const { data: membersData } = useQuery(MEMBERS_LIST, {
+  const { data: membersData } = useQuery(MEMBERS_LIST_WITH_DETAILS, {
     variables: { organizationId: organizationId },
   });
 

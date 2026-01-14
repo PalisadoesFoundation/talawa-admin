@@ -38,6 +38,7 @@ export type { InterfaceCampaignModal };
  * @param campaign - Existing campaign data or null
  * @param refetchCampaign - Callback to refresh campaign list
  * @param mode - 'create' or 'edit'
+ * @returns The rendered Fund Campaign modal component
  */
 const CampaignModal: React.FC<InterfaceCampaignModal> = ({
   isOpen,
@@ -211,11 +212,14 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
           >
             <FormControl fullWidth>
               <TextField
-                id="campaignName"
                 variant="outlined"
                 className={`${styles.noOutline} w-100`}
                 value={campaignName}
                 error={isNameInvalid}
+                inputProps={{
+                  id: 'campaignName',
+                  'aria-label': t('campaignName'),
+                }}
                 onBlur={() =>
                   setTouched((prev) => ({ ...prev, campaignName: true }))
                 }

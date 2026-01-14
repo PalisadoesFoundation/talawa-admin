@@ -207,7 +207,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               variant="outlined"
               className={`${styles.noOutline} w-100`}
               value={formState.fundName}
-              inputProps={{ id: 'fundName' }}
+              inputProps={{ id: 'fundName', 'aria-label': t('fundName') }}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 setFormState({ ...formState, fundName: e.target.value });
               }}
@@ -228,7 +228,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               variant="outlined"
               className={`${styles.noOutline} w-100`}
               value={formState.fundRef}
-              inputProps={{ id: 'fundId' }}
+              inputProps={{ id: 'fundId', 'aria-label': t('fundId') }}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                 setFormState({ ...formState, fundRef: e.target.value });
               }}
