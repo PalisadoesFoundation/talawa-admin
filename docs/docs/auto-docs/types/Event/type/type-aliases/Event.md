@@ -20,7 +20,7 @@ Defined in: [src/types/Event/type.ts:17](https://github.com/PalisadoesFoundation
 
 ### actionItems
 
-> **actionItems**: [`ActionItem`](../../../actionItem/type-aliases/ActionItem.md)[]
+> **actionItems**: [`ActionItem`](../../../AdminPortal/actionItem/type-aliases/ActionItem.md)[]
 
 Defined in: [src/types/Event/type.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L18)
 

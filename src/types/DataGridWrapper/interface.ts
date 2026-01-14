@@ -31,28 +31,56 @@ export interface InterfaceDataGridWrapperProps<
   loading?: boolean;
 
   /**
-   * Configuration for client-side search functionality.
+   * Configuration for search functionality (client-side or server-side).
    *
    * @example
    * ```ts
+   * // Client-side search
    * searchConfig: {
    *   enabled: true,
    *   fields: ['name', 'email'],
    *   placeholder: 'Search users...',
+   * }
+   *
+   * // Server-side search with search-by dropdown
+   * searchConfig: {
+   *   enabled: true,
+   *   serverSide: true,
+   *   searchTerm: 'john',
+   *   searchByOptions: [
+   *     { label: 'Group', value: 'group' },
+   *     { label: 'Leader', value: 'leader' }
+   *   ],
+   *   selectedSearchBy: 'group',
+   *   onSearchChange: (term, searchBy) => refetchData(term, searchBy),
+   *   onSearchByChange: (searchBy) => setSearchBy(searchBy),
+   *   searchInputTestId: 'searchByInput'
    * }
    * ```
    */
   searchConfig?: {
     /** Enables the search bar in the toolbar. */
     enabled: boolean;
-    /** The fields (keys of T) to include in the search filter. */
-    fields: Array<keyof T & string>;
+    /** The fields (keys of T) to include in the search filter. Client-side only. */
+    fields?: Array<keyof T & string>;
     /** Custom placeholder text for the search input. */
     placeholder?: string;
-    /** Delay in milliseconds for search debounce (if implemented). */
+    /** Delay in milliseconds for search debounce. */
     debounceMs?: number;
     /** Custom test ID for the search input element. */
     searchInputTestId?: string;
+    /** Enable server-side search mode. When true, search is not applied client-side. */
+    serverSide?: boolean;
+    /** Current search term value (for server-side search). */
+    searchTerm?: string;
+    /** Callback fired when search term changes (for server-side search). */
+    onSearchChange?: (searchTerm: string, searchBy?: string) => void;
+    /** Array of search-by options for the SearchFilterBar dropdown. */
+    searchByOptions?: { label: string; value: string }[];
+    /** Currently selected search-by option. */
+    selectedSearchBy?: string;
+    /** Callback fired when search-by option changes. */
+    onSearchByChange?: (searchBy: string) => void;
   };
 
   /**
@@ -73,6 +101,10 @@ export interface InterfaceDataGridWrapperProps<
       rows: readonly T[],
       sortValue: string | number,
     ) => readonly T[];
+    /** Currently selected sort value (for controlled mode). */
+    selectedSort?: string | number;
+    /** Callback fired when sort option changes. */
+    onSortChange?: (sortValue: string | number) => void;
   };
 
   /**

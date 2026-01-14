@@ -1,7 +1,10 @@
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import {
   cleanup,
@@ -14,7 +17,6 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -150,7 +152,7 @@ describe('PledgeModal', () => {
     );
     expect(screen.getByLabelText(translations.fundName)).toHaveValue('Fund 1');
     expect(screen.getByLabelText(translations.fundId)).toHaveValue('1111');
-    expect(screen.getByTestId('setisTaxDeductibleSwitch')).toBeChecked();
+    expect(screen.getByTestId('setIsTaxDeductibleSwitch')).toBeChecked();
     expect(screen.getByTestId('setDefaultSwitch')).not.toBeChecked();
     expect(screen.getByTestId('archivedSwitch')).not.toBeChecked();
   });
@@ -173,7 +175,7 @@ describe('PledgeModal', () => {
 
   it('should update Tax Deductible Switch when input value changes', async () => {
     renderFundModal(link1, fundProps[1]);
-    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
+    const taxDeductibleSwitch = screen.getByTestId('setIsTaxDeductibleSwitch');
     expect(taxDeductibleSwitch).toBeChecked();
     fireEvent.click(taxDeductibleSwitch);
     expect(taxDeductibleSwitch).not.toBeChecked();
@@ -204,7 +206,7 @@ describe('PledgeModal', () => {
     const fundIdInput = screen.getByLabelText(translations.fundId);
     fireEvent.change(fundIdInput, { target: { value: '2222' } });
 
-    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
+    const taxDeductibleSwitch = screen.getByTestId('setIsTaxDeductibleSwitch');
     fireEvent.click(taxDeductibleSwitch);
 
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
@@ -231,7 +233,7 @@ describe('PledgeModal', () => {
     const fundIdInput = screen.getByLabelText(translations.fundId);
     fireEvent.change(fundIdInput, { target: { value: '1111' } });
 
-    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
+    const taxDeductibleSwitch = screen.getByTestId('setIsTaxDeductibleSwitch');
     fireEvent.click(taxDeductibleSwitch);
     fireEvent.click(taxDeductibleSwitch);
 
@@ -258,7 +260,7 @@ describe('PledgeModal', () => {
     const fundNameInput = screen.getByLabelText(translations.fundName);
     fireEvent.change(fundNameInput, { target: { value: 'Fund 2' } });
 
-    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
+    const taxDeductibleSwitch = screen.getByTestId('setIsTaxDeductibleSwitch');
     fireEvent.click(taxDeductibleSwitch); // This will make isTaxDeductible false
 
     fireEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
@@ -281,7 +283,7 @@ describe('PledgeModal', () => {
     const fundIdInput = screen.getByLabelText(translations.fundId);
     fireEvent.change(fundIdInput, { target: { value: '2222' } });
 
-    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
+    const taxDeductibleSwitch = screen.getByTestId('setIsTaxDeductibleSwitch');
     fireEvent.click(taxDeductibleSwitch);
 
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
@@ -305,7 +307,7 @@ describe('PledgeModal', () => {
     const fundIdInput = screen.getByLabelText(translations.fundId);
     fireEvent.change(fundIdInput, { target: { value: '2222' } });
 
-    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
+    const taxDeductibleSwitch = screen.getByTestId('setIsTaxDeductibleSwitch');
     fireEvent.click(taxDeductibleSwitch);
 
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');

@@ -16,10 +16,17 @@ i18n.init({
           NUMBER: 'Number',
           DATE: 'Date',
           BOOLEAN: 'Boolean',
+          editCustomField: 'Edit Custom Field',
         },
-        common: {
-          none: 'None',
-        },
+      },
+      common: {
+        none: 'None',
+      },
+      errors: {
+        defaultErrorMessage: 'An error occurred',
+        title: 'Error',
+        resetButtonAriaLabel: 'Reset',
+        resetButton: 'Reset',
       },
     },
   },

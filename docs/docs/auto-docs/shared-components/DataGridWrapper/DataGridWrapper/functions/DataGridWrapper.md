@@ -6,7 +6,7 @@
 
 > **DataGridWrapper**\<`T`\>(`props`): `Element`
 
-Defined in: [src/shared-components/DataGridWrapper/DataGridWrapper.tsx:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataGridWrapper/DataGridWrapper.tsx#L70)
+Defined in: [src/shared-components/DataGridWrapper/DataGridWrapper.tsx:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataGridWrapper/DataGridWrapper.tsx#L72)
 
 A generic wrapper around MUI DataGrid with built-in search, sorting, and pagination.
 

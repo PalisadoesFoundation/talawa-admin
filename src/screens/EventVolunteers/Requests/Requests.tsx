@@ -25,7 +25,7 @@ import {
   type GridCellParams,
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import styles from '../../../style/app-fixed.module.css';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';

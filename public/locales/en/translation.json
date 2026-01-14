@@ -1,4 +1,10 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "Please log in again; your session has expired."
+  },
+  "securedRoute": {
+    "sessionExpired": "Please log in again; your session has expired."
+  },
   "ends": "Ends",
   "occurrences": "Occurrences",
   "leaderboard": {
@@ -490,7 +496,9 @@
     "tagActions": "Tag Actions",
     "loadAssignedUsersError": "Error occurred while loading assigned users",
     "sortPeople": "Sort People",
-    "noTagsFound": "No tags found"
+    "noTagsFound": "No tags found",
+    "addMember": "Add Member",
+    "removeMember": "Remove Member"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
@@ -710,7 +718,8 @@
     "deleteAgendaItem": "Delete Agenda Item",
     "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
     "event": "Event",
-    "search": "Search"
+    "search": "Search",
+    "attachmentPreview": "Attachment preview"
   },
   "eventListCard": {
     "deleteEvent": "Delete Event",
@@ -1601,7 +1610,8 @@
     "on": "On",
     "after": "After",
     "customRecurrence": "Custom Recurrence",
-    "repeatsEvery": "Repeats Every"
+    "repeatsEvery": "Repeats Every",
+    "noEventAvailable": "No Event Available!"
   },
   "userEventCard": {
     "starts": "Starts",
@@ -1835,7 +1845,12 @@
   },
   "checkIn": {
     "errorCheckingIn": "Error checking in",
-    "checkedInSuccessfully": "Checked in successfully"
+    "checkedInSuccessfully": "Checked in successfully",
+    "searchAttendees": "Search Attendees",
+    "checkedIn": "Checked In",
+    "downloadTag": "Download Tag",
+    "checkIn": "Check In",
+    "eventCheckInManagement": "Event Check In Management"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",
@@ -2141,9 +2156,6 @@
   "contact": {
     "card_aria": "Contact card"
   },
-  "securedRoute": {
-    "sessionExpired": "Kindly relogin as session has expired"
-  },
   "common": {
     "signOut": "Sign out",
     "signingOut": "Signing out...",
@@ -2180,5 +2192,8 @@
     "sortPeople": "Sort People",
     "unassign": "Unassign",
     "tags": "Tags"
+  },
+  "orgProfileField": {
+    "editCustomField": "Edit Custom Field"
   }
 }

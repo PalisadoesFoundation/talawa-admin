@@ -31,14 +31,14 @@ import {
 import { Delete } from '@mui/icons-material';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
 
-import styles from 'style/app-fixed.module.css';
+import styles from './OrganizationPeople.module.css';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
 import { Button } from 'react-bootstrap';
 import OrgPeopleListCard from 'components/AdminPortal/OrgPeopleListCard/OrgPeopleListCard';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { errorHandler } from 'utils/errorHandler';

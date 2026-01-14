@@ -5,24 +5,25 @@
  * Allows users to join an organization, withdraw a pending request,
  * or visit the organization based on their membership status.
  *
- * @component
- * @param props - Props for the OrganizationCard component.
- * @param props.id - Unique identifier of the organization.
- * @param props.name - Name of the organization.
- * @param props.description - Short description of the organization.
- * @param props.addressLine1 - Primary address line of the organization.
- * @param props.adminsCount - Total number of administrators.
- * @param props.membersCount - Total number of members.
- * @param props.membershipRequestStatus - Current membership request status.
- * @param props.membershipRequests - List of membership requests.
- * @param props.isJoined - Whether the current user is already a member.
+ * @param props - Component props containing organization details and membership information
  *
- * @returns JSX.Element representing an organization card.
+ * @returns JSX.Element representing an organization card
  *
  * @remarks
- * - Uses GraphQL mutations to send and cancel membership requests.
- * - Displays success or error feedback using `react-toastify`.
- * - Layout is provided by the reusable `UserPortalCard`.
+ * **Props:**
+ * - `id` - Unique identifier of the organization
+ * - `name` - Name of the organization
+ * - `description` - Short description of the organization
+ * - `addressLine1` - Primary address line of the organization
+ * - `adminsCount` - Total number of administrators
+ * - `membersCount` - Total number of members
+ * - `membershipRequestStatus` - Current membership request status
+ * - `membershipRequests` - List of membership requests
+ * - `isJoined` - Whether the current user is already a member
+ *
+ * Uses GraphQL mutations to send and cancel membership requests.
+ * Displays success or error feedback using NotificationToast.
+ * Layout is provided by the reusable UserPortalCard.
  *
  * @example
  * ```tsx
@@ -43,7 +44,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 import UserPortalCard from 'components/UserPortal/UserPortalCard/UserPortalCard';
 
@@ -85,9 +86,9 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
   const handleJoin = async (): Promise<void> => {
     try {
       await sendRequest({ variables: { organizationId: id } });
-      toast.success(t('join_success'));
+      NotificationToast.success(t('join_success'));
     } catch {
-      toast.error(t('join_error'));
+      NotificationToast.error(t('join_error'));
     }
   };
 
@@ -99,9 +100,9 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
         variables: { membershipRequestId: pendingRequest.id },
       });
 
-      toast.success(t('withdraw_success'));
+      NotificationToast.success(t('withdraw_success'));
     } catch {
-      toast.error(t('withdraw_error'));
+      NotificationToast.error(t('withdraw_error'));
     }
   };
 
