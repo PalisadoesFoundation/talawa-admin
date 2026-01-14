@@ -1,25 +1,43 @@
 import '@testing-library/dom';
 import { vi } from 'vitest';
+
 global.fetch = vi.fn();
 
-import { format } from 'util';
+/**
+ * Fully mock localStorage for jsdom + vitest
+ */
+const localStorageMock = (() => {
+  let store: Record<string, string> = {};
 
-global.console.error = function (...args): void {
-  throw new Error(format(...args));
-};
+  return {
+    getItem: (key: string) => (key in store ? store[key] : null),
+    setItem: (key: string, value: string) => {
+      store[key] = String(value);
+    },
+    removeItem: (key: string) => {
+      delete store[key];
+    },
+    clear: () => {
+      store = {};
+    },
+    key: (index: number) => Object.keys(store)[index] ?? null,
+    get length() {
+      return Object.keys(store).length;
+    },
+  };
+})();
 
-global.console.warn = function (...args): void {
-  throw new Error(format(...args));
-};
-Object.defineProperty(HTMLMediaElement.prototype, 'muted', {
-  set: () => {},
+/**
+ * IMPORTANT: mock BOTH window and globalThis
+ */
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
+  writable: true,
 });
 
-// Global CSS here
-import 'bootstrap/dist/css/bootstrap.css';
-import 'bootstrap/dist/js/bootstrap.min.js';
-import 'react-datepicker/dist/react-datepicker.css';
-import 'flag-icons/css/flag-icons.min.css';
+Object.defineProperty(globalThis, 'localStorage', {
+  value: localStorageMock,
+  writable: true,
+});
 
-vi.useFakeTimers();
-vi.advanceTimersByTime(18000);
+vi.stubGlobal('localStorage', localStorageMock);

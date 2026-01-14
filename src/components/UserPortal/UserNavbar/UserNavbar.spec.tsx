@@ -250,7 +250,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     expect(window.location.pathname).toBe('/user/settings');
   });
   it('Logs out the user and clears local storage', async () => {
-    const clearSpy = vi.spyOn(Storage.prototype, 'clear');
+    const clearSpy = vi.spyOn(window.localStorage, 'clear');
 
     render(
       <MockedProvider addTypename={false} link={link}>

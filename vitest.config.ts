@@ -7,44 +7,58 @@ const isCI = !!process.env.CI;
 
 export default defineConfig({
   plugins: [react(), tsconfigPaths(), svgrPlugin()],
+
   build: {
-    sourcemap: false, // Disable sourcemaps for faster tests
+    sourcemap: false,
   },
+
   esbuild: {
-    sourcemap: false, // Disable sourcemaps for faster tests
+    sourcemap: false,
   },
+
   test: {
     include: ['src/**/*.{spec,test}.{js,jsx,ts,tsx}'],
     globals: true,
     environment: 'jsdom',
     setupFiles: 'vitest.setup.ts',
+
     testTimeout: 30000,
     hookTimeout: 10000,
     teardownTimeout: 10000,
-    // Use threads for better performance in CI
+
     pool: 'threads',
     poolOptions: {
       threads: {
         singleThread: false,
         minThreads: 1,
-        maxThreads: isCI ? 2 : 4, // Conservative in CI to avoid OOM
-        // Keep isolation enabled to prevent test interference
+        maxThreads: isCI ? 2 : 4,
         isolate: true,
       },
     },
-    // Lower concurrency in CI to avoid memory issues
+
     maxConcurrency: isCI ? 1 : 2,
-    // Enable file parallelism for better performance
     fileParallelism: true,
+
     sequence: {
       shuffle: false,
-      concurrent: false, // Disabled for test stability - files still run in parallel across shards
+      concurrent: false,
     },
+
     coverage: {
       enabled: true,
       provider: 'istanbul',
       reportsDirectory: './coverage/vitest',
-      // Don't use 'all: true' with sharding - let merge handle combining partial coverage
+
+      // ✅ FINAL STEP — Coverage gates
+      thresholds: {
+        global: {
+          statements: 95,
+          branches: 85,
+          functions: 90,
+          lines: 95,
+        },
+      },
+
       exclude: [
         'node_modules',
         'dist',
@@ -58,11 +72,12 @@ export default defineConfig({
         'vitest.setup.ts',
         'cypress/**',
         'cypress.config.ts',
-        '.github/**', // Exclude GitHub workflows and scripts
-        'scripts/**', // Exclude build/setup scripts
-        'config/**', // Exclude configuration files
+        '.github/**',
+        'scripts/**',
+        'config/**',
       ],
-      reporter: ['lcov', 'json', 'text', 'text-summary'], // Use json for accurate merging, lcov for final report
+
+      reporter: ['lcov', 'json', 'text', 'text-summary'],
     },
   },
 });

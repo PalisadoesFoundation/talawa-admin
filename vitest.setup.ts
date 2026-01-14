@@ -2,9 +2,10 @@ import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll, vi } from 'vitest';
 
-// Simple console error handler for React 18 warnings
+// Suppress known React 18 warnings
 const originalError = console.error;
 const originalWarn = console.warn;
+
 const shouldSuppressError = (value: unknown): boolean => {
   if (typeof value !== 'string') {
     if (value instanceof Error) {
@@ -20,32 +21,26 @@ const shouldSuppressError = (value: unknown): boolean => {
 
 beforeAll(() => {
   console.error = (...args: unknown[]) => {
-    if (args.some(shouldSuppressError)) {
-      return; // Suppress known React 18 warnings
-    }
+    if (args.some(shouldSuppressError)) return;
     originalError.call(console, ...args);
   };
+
   console.warn = (...args: unknown[]) => {
-    if (args.some(shouldSuppressError)) {
-      return;
-    }
+    if (args.some(shouldSuppressError)) return;
     originalWarn.call(console, ...args);
   };
 });
 
-// Basic cleanup after each test
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
 });
 
-// Global mocks for URL API (needed for file upload tests)
-// TODO: Remove once test isolation is properly fixed in individual test files
+// URL mocks (used by file upload tests)
 global.URL.createObjectURL = vi.fn(() => 'mock-object-url');
 global.URL.revokeObjectURL = vi.fn();
 
-// Mock HTMLFormElement.prototype.requestSubmit for jsdom
-// TODO: Remove once jsdom adds native support
+// HTMLFormElement.requestSubmit mock
 if (typeof HTMLFormElement.prototype.requestSubmit === 'undefined') {
   HTMLFormElement.prototype.requestSubmit = function () {
     if (this.checkValidity()) {
@@ -55,6 +50,43 @@ if (typeof HTMLFormElement.prototype.requestSubmit === 'undefined') {
     }
   };
 }
+
+/**
+ * ✅ Global localStorage mock (CRITICAL)
+ */
+const localStorageMock = (() => {
+  let store: Record<string, string> = {};
+
+  return {
+    getItem: (key: string) => (key in store ? store[key] : null),
+    setItem: (key: string, value: string) => {
+      store[key] = String(value);
+    },
+    removeItem: (key: string) => {
+      delete store[key];
+    },
+    clear: () => {
+      store = {};
+    },
+    key: (index: number) => Object.keys(store)[index] ?? null,
+    get length() {
+      return Object.keys(store).length;
+    },
+  };
+})();
+
+Object.defineProperty(window, 'localStorage', {
+  value: localStorageMock,
+  writable: true,
+});
+
+Object.defineProperty(globalThis, 'localStorage', {
+  value: localStorageMock,
+  writable: true,
+});
+
+vi.stubGlobal('localStorage', localStorageMock);
+
 afterAll(() => {
   console.error = originalError;
   console.warn = originalWarn;
