@@ -414,22 +414,22 @@ describe('Groups Screen [User Portal]', () => {
     const leaderOption = await screen.findByTestId('leader');
     await userEvent.click(leaderOption);
 
-    // Type in search to trigger the leaderName variable assignment
+    // Type in search to trigger the leaderName variable assignment (line 96)
     const searchInput = screen.getByTestId('searchByInput');
     await userEvent.clear(searchInput);
     await userEvent.type(searchInput, 'Teresa');
 
     // Wait for debounce (300ms) and query with leaderName variable to execute
+    // This ensures line 96 (vars.leaderName = searchTerm.trim()) is covered
     await waitFor(
       () => {
-        // This ensures the query with leaderName has completed
-        const groupNames = screen.getAllByTestId('groupName');
-        expect(groupNames.length).toBeGreaterThanOrEqual(1);
+        // Verify that Group 2 is filtered out (only Teresa's group should show)
+        expect(screen.queryByText('Group 2')).not.toBeInTheDocument();
       },
-      { timeout: 1500 },
+      { timeout: 2000 },
     );
 
-    // Verify the filtered result
+    // Verify the filtered result shows only Group 1 (led by Teresa)
     expect(screen.getByText('Group 1')).toBeInTheDocument();
   });
 

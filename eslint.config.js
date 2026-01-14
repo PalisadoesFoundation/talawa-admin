@@ -66,6 +66,12 @@ const restrictedImports = [
     message:
       'Direct imports from react-toastify are not allowed. Please use the NotificationToast component from src/components/NotificationToast/ instead.',
   },
+  {
+    id: 'dicebear-core',
+    name: '@dicebear/core',
+    message:
+      'Direct imports from @dicebear/core are not allowed. Use the shared createAvatar wrapper instead.',
+  },
 ];
 
 const stripId = (entry) => {
@@ -369,6 +375,22 @@ export default [
       '@graphql-eslint/no-unreachable-types': 'off',
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
     },
+  },
+  /**
+   * Exemption: Avatar and createAvatar component files
+   *
+   * Avatar and createAvatar files need direct `@dicebear/core` access for wrapper implementation.
+   * These files are the only ones allowed to import from `@dicebear/core`.
+   * Allowed ID: dicebear-core.
+   */
+  {
+    files: [
+      'src/shared-components/Avatar/**/*.{ts,tsx,d.ts}',
+      'src/shared-components/createAvatar/**/*.{ts,tsx}',
+      'src/types/shared-components/Avatar/**/*.{ts,tsx,d.ts}',
+      'src/types/shared-components/createAvatar/**/*.{ts,tsx}',
+    ],
+    rules: restrictImportsExcept(['dicebear-core']),
   },
   // Cypress-specific configuration
   {
