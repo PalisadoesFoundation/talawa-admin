@@ -283,7 +283,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                   await uploadFileToMinio(file, 'organization');
                 setFormState({ ...formState, avatar: avatarobjectName });
                 NotificationToast.success(tCommon('imageUploadSuccess'));
-              } catch (error) {
+              } catch {
                 NotificationToast.error(tCommon('imageUploadError'));
               }
             }
