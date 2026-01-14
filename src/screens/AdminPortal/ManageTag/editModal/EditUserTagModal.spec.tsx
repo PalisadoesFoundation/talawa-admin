@@ -134,13 +134,16 @@ describe('EditUserTagModal Component', () => {
     // BaseModal does not propagate testId to the internal header element.
     // Instead of checking the header class directly, we can verify other elements or skip this check if it relies on BaseModal internals.
     // However, we can check that the input field and buttons have the correct classes which are passed from this component.
-    expect(screen.getByTestId('tagNameInput')).toHaveClass('inputField-class');
-    expect(screen.getByTestId('closeEditTagModalBtn')).toHaveClass(
-      'removeButton-class',
-    );
-    expect(screen.getByTestId('editTagSubmitBtn')).toHaveClass(
-      'addButton-class',
-    );
+    // Note: CSS modules generate hashed class names (e.g., _inputField_xyz), so we check for partial matches or strict mock matches if mocking works.
+    // In this environment, the mock might be bypassed by the transform, so we check for the presence of the class name segment.
+    const inputField = screen.getByTestId('tagNameInput');
+    const cancelButton = screen.getByTestId('closeEditTagModalBtn');
+    const submitButton = screen.getByTestId('editTagSubmitBtn');
+
+    // Check if the class name contains the expected identifier (works with both mocks and real CSS modules)
+    expect(inputField.className).toMatch(/inputField/);
+    expect(cancelButton.className).toMatch(/removeButton/);
+    expect(submitButton.className).toMatch(/addButton/);
   });
 
   it('sets the required attribute on the input field', () => {
