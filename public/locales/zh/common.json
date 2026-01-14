@@ -147,7 +147,6 @@
   "workPhoneNumber": "工作电话号码",
   "unblock": "解封",
   "unblockedSuccessfully": "{{item}} 解封成功",
-
   "pluginSettings": "插件设置",
   "profilePicture": "头像",
   "profilePicturePlaceholder": "占位图片",
@@ -257,5 +256,6 @@
   "eventNotFound": "未找到 ID 为 {{id}} 的活动",
   "required": "必填",
   "imageNotFound": "未找到图片",
-  "changeLanguage": "更改語言"
+  "changeLanguage": "更改語言",
+  "selectField": "選擇{{fieldName}}"
 }
