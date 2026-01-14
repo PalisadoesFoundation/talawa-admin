@@ -882,6 +882,31 @@ describe('CampaignModal', () => {
     });
   });
 
+  it('re-enables submit button after invalid date validation error', async () => {
+    renderCampaignModal(link1, campaignProps[1]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: 'New Name' },
+    });
+
+    fireEvent.change(getStartDateInput(), {
+      target: { value: 'INVALID_DATE' },
+    });
+    fireEvent.change(getEndDateInput(), {
+      target: { value: '01/01/2024' },
+    });
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.invalidDate,
+      );
+      expect(submitBtn).not.toBeDisabled();
+    });
+  });
+
   it('re-enables submit button after update error', async () => {
     renderCampaignModal(link2, campaignProps[1]);
 
@@ -903,6 +928,7 @@ describe('CampaignModal', () => {
       expect(submitBtn).not.toBeDisabled();
     });
   });
+
   it('shows error when creating campaign with invalid date', async () => {
     renderCampaignModal(link1, campaignProps[0]);
 
@@ -1018,6 +1044,7 @@ describe('getUpdatedDateIfChanged', () => {
     expect(dayjs(result).isValid()).toBe(true);
     expect(dayjs(result).isSame(dayjs(newDate), 'second')).toBe(true);
   });
+
   it('returns undefined for invalid newDate string', () => {
     expect(getUpdatedDateIfChanged('invalid-date', new Date())).toBeUndefined();
   });
