@@ -52,18 +52,14 @@ import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
 import type { InterfaceUser } from 'types/shared-components/User/interface';
+import type { InterfaceEventRegistrantsModalProps } from 'types/components/EventRegistrantsModal/interface';
 import styles from '../EventRegistrants.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { BaseModal } from 'shared-components/BaseModal';
 
-type ModalPropType = {
-  show: boolean;
-  eventId: string;
-  orgId: string;
-  handleClose: () => void;
-};
-
-export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
+export const EventRegistrantsModal = (
+  props: InterfaceEventRegistrantsModalProps,
+): JSX.Element => {
   const { eventId, orgId, handleClose, show } = props;
   const [member, setMember] = useState<InterfaceUser | null>(null);
   const [open, setOpen] = useState(false);

@@ -1,6 +1,18 @@
 /**
  * Modal component to invite users to an event by email.
  * Allows entering multiple recipient emails/names and an optional message, then sends invites.
+ *
+ * @param show - Controls the visibility of the modal.
+ * @param handleClose - Callback function to close the modal.
+ * @param eventId - The ID of the event for which invites are being sent.
+ * @param isRecurring - Whether the event is a recurring event instance.
+ * @param onInvitesSent - Optional callback invoked after invites are successfully sent.
+ *
+ * @returns The rendered InviteByEmailModal component.
+ *
+ * @remarks
+ * Uses Apollo Client's `useMutation` for the SEND_EVENT_INVITATIONS GraphQL mutation.
+ * Integrates with `react-toastify` for user notifications.
  */
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
@@ -13,14 +25,7 @@ import type { ApolloError } from '@apollo/client/errors';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import styles from './InviteByEmail.module.css';
-
-type Props = {
-  show: boolean;
-  handleClose: () => void;
-  eventId: string;
-  isRecurring?: boolean;
-  onInvitesSent?: () => void;
-};
+import type { InterfaceInviteByEmailModalProps } from 'types/components/EventRegistrantsModal/InviteByEmail/interface';
 
 const validateEmails = (emails: string[]): string[] => {
   const invalid: string[] = [];
@@ -31,7 +36,7 @@ const validateEmails = (emails: string[]): string[] => {
   return invalid;
 };
 
-const InviteByEmailModal: React.FC<Props> = ({
+const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
   show,
   handleClose,
   eventId,
@@ -44,8 +49,8 @@ const InviteByEmailModal: React.FC<Props> = ({
   const { t: tCommon } = useTranslation('common');
 
   const [recipients, setRecipients] = useState<
-    { email: string; name?: string }[]
-  >([{ email: '', name: '' }]);
+    { id: string; email: string; name?: string }[]
+  >([{ id: crypto.randomUUID(), email: '', name: '' }]);
   const [message, setMessage] = useState('');
   const [expiresInDays, setExpiresInDays] = useState<number>(7);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -63,13 +68,22 @@ const InviteByEmailModal: React.FC<Props> = ({
       .filter((r) => r.email !== '');
 
     if (cleaned.length === 0) {
-      NotificationToast.error('Please provide at least one recipient email');
+      NotificationToast.error(
+        t('noRecipientsError', {
+          defaultValue: 'Please provide at least one recipient email',
+        }),
+      );
       return;
     }
 
     const invalid = validateEmails(cleaned.map((r) => r.email));
     if (invalid.length) {
-      NotificationToast.error(`Invalid email(s): ${invalid.join(', ')}`);
+      NotificationToast.error(
+        t('invalidEmailsError', {
+          emails: invalid.join(', '),
+          defaultValue: 'Invalid email(s): {{emails}}',
+        }),
+      );
       return;
     }
 
@@ -89,7 +103,7 @@ const InviteByEmailModal: React.FC<Props> = ({
       NotificationToast.success(
         tCommon('addedSuccessfully', { item: 'Invites' }) || 'Invites sent',
       );
-      setRecipients([{ email: '', name: '' }]);
+      setRecipients([{ id: crypto.randomUUID(), email: '', name: '' }]);
       setMessage('');
       setExpiresInDays(7);
       if (onInvitesSent) onInvitesSent();
@@ -148,17 +162,21 @@ const InviteByEmailModal: React.FC<Props> = ({
             {t('emailsLabel', { defaultValue: 'Recipient emails and names' })}
           </Form.Label>
 
-          {recipients.map((r, idx) => (
-            <div key={idx} className="d-flex align-items-center mb-2">
+          {recipients.map((r) => (
+            <div key={r.id} className="d-flex align-items-center mb-2">
               <TextField
                 label={t('email', { defaultValue: 'Email' })}
                 variant="outlined"
                 size="small"
                 value={r.email}
                 onChange={(e) => {
-                  const copy = [...recipients];
-                  copy[idx] = { ...copy[idx], email: e.target.value };
-                  setRecipients(copy);
+                  setRecipients((prev) =>
+                    prev.map((item) =>
+                      item.id === r.id
+                        ? { ...item, email: e.target.value }
+                        : item,
+                    ),
+                  );
                 }}
                 className={styles.emailField}
               />
@@ -169,9 +187,13 @@ const InviteByEmailModal: React.FC<Props> = ({
                 size="small"
                 value={r.name}
                 onChange={(e) => {
-                  const copy = [...recipients];
-                  copy[idx] = { ...copy[idx], name: e.target.value };
-                  setRecipients(copy);
+                  setRecipients((prev) =>
+                    prev.map((item) =>
+                      item.id === r.id
+                        ? { ...item, name: e.target.value }
+                        : item,
+                    ),
+                  );
                 }}
                 className={styles.nameField}
               />
@@ -180,7 +202,7 @@ const InviteByEmailModal: React.FC<Props> = ({
                 <Button
                   variant="link"
                   onClick={() => {
-                    const copy = recipients.filter((_, i) => i !== idx);
+                    const copy = recipients.filter((item) => item.id !== r.id);
                     setRecipients(copy);
                   }}
                   className={styles.removeButton}
@@ -195,7 +217,10 @@ const InviteByEmailModal: React.FC<Props> = ({
             <Button
               variant="outline-primary"
               onClick={() =>
-                setRecipients([...recipients, { email: '', name: '' }])
+                setRecipients([
+                  ...recipients,
+                  { id: crypto.randomUUID(), email: '', name: '' },
+                ])
               }
             >
               {t('addRecipient', { defaultValue: 'Add recipient' })}

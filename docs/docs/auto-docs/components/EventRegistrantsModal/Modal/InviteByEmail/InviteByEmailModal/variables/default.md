@@ -1,9 +1,9 @@
-[**talawa-admin**](../../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<`Props`\>
+> `const` **default**: `React.FC`\<[`InterfaceInviteByEmailModalProps`](../../../../../../types/components/EventRegistrantsModal/InviteByEmail/interface/interfaces/InterfaceInviteByEmailModalProps.md)\>
 
-Defined in: [src/components/EventRegistrantsModal/Modal/InviteByEmail/InviteByEmailModal.tsx:34](https://github.com/rohanshrma222/talawa-admin/blob/f98149de2e105de48acb9be556168658e1c6114c/src/components/EventRegistrantsModal/Modal/InviteByEmail/InviteByEmailModal.tsx#L34)
+Defined in: [src/components/EventRegistrantsModal/Modal/InviteByEmail/InviteByEmailModal.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventRegistrantsModal/Modal/InviteByEmail/InviteByEmailModal.tsx#L39)
