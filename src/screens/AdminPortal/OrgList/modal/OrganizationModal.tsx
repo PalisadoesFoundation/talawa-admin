@@ -264,30 +264,27 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             const file = target.files && target.files[0];
 
             if (file) {
-              if (file) {
-                // Check file size (5MB limit)
-                const maxSize = 5 * 1024 * 1024;
-                if (file.size > maxSize) {
-                  NotificationToast.error(tCommon('fileTooLarge'));
-                  return;
-                }
+              // Check file size (5MB limit)
+              const maxSize = 5 * 1024 * 1024;
+              if (file.size > maxSize) {
+                NotificationToast.error(tCommon('fileTooLarge'));
+                return;
+              }
 
-                // Check file type
-                const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-                if (!allowedTypes.includes(file.type)) {
-                  NotificationToast.error(tCommon('invalidFileType'));
-                  return;
-                }
+              // Check file type
+              const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+              if (!allowedTypes.includes(file.type)) {
+                NotificationToast.error(tCommon('invalidFileType'));
+                return;
+              }
 
-                try {
-                  const { objectName: avatarobjectName } =
-                    await uploadFileToMinio(file, 'organization');
-                  setFormState({ ...formState, avatar: avatarobjectName });
-                  NotificationToast.success(tCommon('imageUploadSuccess'));
-                } catch (error) {
-                  console.error('Error uploading image:', error);
-                  NotificationToast.error(tCommon('imageUploadError'));
-                }
+              try {
+                const { objectName: avatarobjectName } =
+                  await uploadFileToMinio(file, 'organization');
+                setFormState({ ...formState, avatar: avatarobjectName });
+                NotificationToast.success(tCommon('imageUploadSuccess'));
+              } catch (error) {
+                NotificationToast.error(tCommon('imageUploadError'));
               }
             }
           }}
