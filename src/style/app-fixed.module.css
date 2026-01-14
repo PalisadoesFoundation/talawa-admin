@@ -1532,10 +1532,9 @@ form label,
 }
 
 .statsButton {
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
-  width: max-content;
+  width: auto !important;
+  min-width: fit-content !important;
+  white-space: nowrap !important;
 }
 
 /* Add more Global CSS Classes above this */

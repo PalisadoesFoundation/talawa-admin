@@ -42,12 +42,11 @@ export const CheckInWrapper = ({
     <>
       <Button
         data-testid="stats-modal"
-        className={style.createButton}
+        className={`${style.createButton} ${style.statsButton}`}
         aria-label="checkInMembers"
         onClick={(): void => {
           setShowModal(true);
         }}
-        style={{ width: 'auto', minWidth: 'fit-content', whiteSpace: 'nowrap' }}
       >
         <img
           src="/images/svg/options-outline.svg"
