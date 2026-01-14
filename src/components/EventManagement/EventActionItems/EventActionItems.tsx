@@ -42,7 +42,7 @@ import {
   type GridCellParams,
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
-import { Chip, debounce, Stack } from '@mui/material';
+import { debounce, Stack } from '@mui/material';
 import ItemViewModal from 'screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal';
 import ItemModal from 'screens/OrganizationActionItems/ActionItemModal/ActionItemModal';
 import ItemDeleteModal from 'screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal';
@@ -50,6 +50,7 @@ import Avatar from 'shared-components/Avatar/Avatar';
 import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
 enum ItemStatus {
   Pending = 'pending',
@@ -309,12 +310,9 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <Chip
+          <StatusBadge
+            variant={params.row.isCompleted ? 'completed' : 'pending'}
             icon={<Circle className={styles.chipIcon} />}
-            label={params.row.isCompleted ? 'Completed' : 'Pending'}
-            variant="outlined"
-            color="primary"
-            className={`${styles.chip} ${params.row.isCompleted ? styles.active : styles.pending}`}
           />
         );
       },

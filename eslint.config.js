@@ -67,6 +67,13 @@ const restrictedImports = [
       'Direct imports from react-toastify are not allowed. Please use the NotificationToast component from src/components/NotificationToast/ instead.',
   },
   {
+    id: 'mui-chip',
+    name: '@mui/material',
+    importNames: ['Chip'],
+    message:
+      'Do not import Chip from @mui/material. Use the shared StatusBadge component from src/shared-components/StatusBadge/ instead.',
+  },
+  {
     id: 'dicebear-core',
     name: '@dicebear/core',
     message:
@@ -323,6 +330,20 @@ export default [
       'src/types/NotificationToast/**/*.{ts,tsx}',
     ],
     rules: restrictImportsExcept(['react-toastify']),
+  },
+  /**
+   * Exemption: StatusBadge component files
+   *
+   * StatusBadge files need direct Chip access from @mui/material for wrapper implementation.
+   * These files are the only ones allowed to import Chip directly from @mui/material.
+   * Allowed ID: mui-chip.
+   */
+  {
+    files: [
+      'src/shared-components/StatusBadge/**/*.{ts,tsx}',
+      'src/types/shared-components/StatusBadge/**/*.{ts,tsx}',
+    ],
+    rules: restrictImportsExcept(['mui-chip']),
   },
   /**
    * Exemption: Date picker wrapper components

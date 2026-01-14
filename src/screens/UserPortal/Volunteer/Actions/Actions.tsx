@@ -14,7 +14,7 @@ import {
   type GridCellParams,
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
-import { Chip } from '@mui/material';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 import ItemViewModal from 'screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal';
 import Avatar from 'shared-components/Avatar/Avatar';
 import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
@@ -165,9 +165,9 @@ function Actions(): JSX.Element {
       headerName: 'Status',
       flex: 1,
       renderCell: (p) => (
-        <Chip
+        <StatusBadge
+          variant={p.row.isCompleted ? 'completed' : 'pending'}
           icon={<Circle />}
-          label={p.row.isCompleted ? 'Completed' : 'Pending'}
         />
       ),
     },

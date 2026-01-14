@@ -42,11 +42,12 @@ import {
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
 import dayjs from 'dayjs';
-import { Chip, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import CategoryModal from './Modal/ActionItemCategoryModal';
 import CategoryViewModal from './Modal/ActionItemCategoryViewModal';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
 /** Modal state management */
 enum ModalState {
@@ -241,12 +242,9 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <Chip
+          <StatusBadge
+            variant={params.row.isDisabled ? 'disabled' : 'active'}
             icon={<Circle className={styles.chipIcon} />}
-            label={params.row.isDisabled ? 'Disabled' : 'Active'}
-            variant="outlined"
-            color="primary"
-            className={`${styles.chip} ${params.row.isDisabled ? styles.pending : styles.active}`}
           />
         );
       },
