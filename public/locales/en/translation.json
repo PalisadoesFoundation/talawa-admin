@@ -1884,7 +1884,9 @@
       "expiresInDaysLabel": "Expires in (days)",
       "errorSendingInvites": "Error sending invites",
       "emailsLabel": "Recipient emails and names",
-      "emailsHelp": "Provide email and optional name for each recipient. Add multiple recipients as needed."
+      "emailsHelp": "Provide email and optional name for each recipient. Add multiple recipients as needed.",
+      "noRecipientsError": "Please provide at least one recipient email",
+      "invalidEmailsError": "Invalid email(s): {{emails}}"
     }
   },
   "userCampaigns": {

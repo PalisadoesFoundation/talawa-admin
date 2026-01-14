@@ -1901,7 +1901,9 @@
       "expiresInDaysLabel": "有效期（天）",
       "errorSendingInvites": "发送邀请时出错",
       "emailsLabel": "收件人邮箱和姓名",
-      "emailsHelp": "为每个收件人提供邮箱和可选姓名。根据需要添加多个收件人。"
+      "emailsHelp": "为每个收件人提供邮箱和可选姓名。根据需要添加多个收件人。",
+      "noRecipientsError": "Please provide at least one recipient email",
+      "invalidEmailsError": "Invalid email(s): {{emails}}"
     }
   },
   "userCampaigns": {
