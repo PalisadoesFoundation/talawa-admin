@@ -185,4 +185,156 @@ describe('AssignmentTypeSelector', () => {
     const fieldset = document.querySelector('fieldset');
     expect(fieldset).toBeInTheDocument();
   });
+
+  describe('Keyboard Navigation', () => {
+    it('activates volunteer chip on Enter key when not disabled', async () => {
+      const onTypeChange = vi.fn();
+      const onClearVolunteerGroup = vi.fn();
+      renderComponent(
+        'volunteerGroup',
+        onTypeChange,
+        false,
+        false,
+        vi.fn(),
+        onClearVolunteerGroup,
+      );
+
+      const user = userEvent.setup();
+      const volunteerChip = screen
+        .getByText('Volunteer')
+        .closest('.MuiChip-root');
+      if (volunteerChip) {
+        (volunteerChip as HTMLElement).focus();
+        await user.keyboard('{Enter}');
+      }
+
+      expect(onTypeChange).toHaveBeenCalledWith('volunteer');
+      expect(onClearVolunteerGroup).toHaveBeenCalled();
+    });
+
+    it('activates volunteer chip on Space key when not disabled', async () => {
+      const onTypeChange = vi.fn();
+      const onClearVolunteerGroup = vi.fn();
+      renderComponent(
+        'volunteerGroup',
+        onTypeChange,
+        false,
+        false,
+        vi.fn(),
+        onClearVolunteerGroup,
+      );
+
+      const user = userEvent.setup();
+      const volunteerChip = screen
+        .getByText('Volunteer')
+        .closest('.MuiChip-root');
+      if (volunteerChip) {
+        (volunteerChip as HTMLElement).focus();
+        await user.keyboard(' ');
+      }
+
+      expect(onTypeChange).toHaveBeenCalledWith('volunteer');
+      expect(onClearVolunteerGroup).toHaveBeenCalled();
+    });
+
+    it('activates volunteerGroup chip on Enter key when not disabled', async () => {
+      const onTypeChange = vi.fn();
+      const onClearVolunteer = vi.fn();
+      renderComponent(
+        'volunteer',
+        onTypeChange,
+        false,
+        false,
+        onClearVolunteer,
+        vi.fn(),
+      );
+
+      const user = userEvent.setup();
+      const volunteerGroupChip = screen
+        .getByText('Volunteer Group')
+        .closest('.MuiChip-root');
+      if (volunteerGroupChip) {
+        (volunteerGroupChip as HTMLElement).focus();
+        await user.keyboard('{Enter}');
+      }
+
+      expect(onTypeChange).toHaveBeenCalledWith('volunteerGroup');
+      expect(onClearVolunteer).toHaveBeenCalled();
+    });
+
+    it('activates volunteerGroup chip on Space key when not disabled', async () => {
+      const onTypeChange = vi.fn();
+      const onClearVolunteer = vi.fn();
+      renderComponent(
+        'volunteer',
+        onTypeChange,
+        false,
+        false,
+        onClearVolunteer,
+        vi.fn(),
+      );
+
+      const user = userEvent.setup();
+      const volunteerGroupChip = screen
+        .getByText('Volunteer Group')
+        .closest('.MuiChip-root');
+      if (volunteerGroupChip) {
+        (volunteerGroupChip as HTMLElement).focus();
+        await user.keyboard(' ');
+      }
+
+      expect(onTypeChange).toHaveBeenCalledWith('volunteerGroup');
+      expect(onClearVolunteer).toHaveBeenCalled();
+    });
+
+    it('does not activate volunteer chip on Enter when disabled', async () => {
+      const onTypeChange = vi.fn();
+      const onClearVolunteerGroup = vi.fn();
+      renderComponent(
+        'volunteerGroup',
+        onTypeChange,
+        true,
+        false,
+        vi.fn(),
+        onClearVolunteerGroup,
+      );
+
+      const user = userEvent.setup();
+      const volunteerChip = screen
+        .getByText('Volunteer')
+        .closest('.MuiChip-root');
+      if (volunteerChip) {
+        (volunteerChip as HTMLElement).focus();
+        await user.keyboard('{Enter}');
+      }
+
+      expect(onTypeChange).not.toHaveBeenCalled();
+      expect(onClearVolunteerGroup).not.toHaveBeenCalled();
+    });
+
+    it('does not activate volunteerGroup chip on Space when disabled', async () => {
+      const onTypeChange = vi.fn();
+      const onClearVolunteer = vi.fn();
+      renderComponent(
+        'volunteer',
+        onTypeChange,
+        false,
+        true,
+        onClearVolunteer,
+        vi.fn(),
+      );
+
+      const user = userEvent.setup();
+      const volunteerGroupChip = screen
+        .getByText('Volunteer Group')
+        .closest('.MuiChip-root');
+      if (volunteerGroupChip) {
+        (volunteerGroupChip as HTMLElement).focus();
+        await user.keyboard(' ');
+      }
+
+      expect(onTypeChange).not.toHaveBeenCalled();
+      expect(onClearVolunteer).not.toHaveBeenCalled();
+    });
+  });
 });

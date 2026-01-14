@@ -641,9 +641,6 @@ describe('ItemModal - Additional Test Cases', () => {
     vi.clearAllMocks();
   });
 
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
   // Test modal visibility and basic rendering
   describe('Modal Visibility and Basic Rendering', () => {
     it('should not render modal when isOpen is false', () => {

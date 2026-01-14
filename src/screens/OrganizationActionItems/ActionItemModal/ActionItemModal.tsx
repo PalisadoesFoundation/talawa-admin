@@ -59,6 +59,15 @@ const initializeFormState = (
   isCompleted: actionItem?.isCompleted || false,
 });
 
+/**
+ * Modal component for creating and editing action items.
+ *
+ * Supports assigning action items to volunteers or volunteer groups,
+ * with options for applying to recurring event series or single instances.
+ *
+ * @param props - Component props from IItemModalProps
+ * @returns Modal dialog for action item management
+ */
 const ItemModal: FC<IItemModalProps> = ({
   isOpen,
   hide,
@@ -200,6 +209,16 @@ const ItemModal: FC<IItemModalProps> = ({
     },
     [],
   );
+
+  const handleClearVolunteer = useCallback(() => {
+    handleFormChange('volunteerId', '');
+    setSelectedVolunteer(null);
+  }, [handleFormChange]);
+
+  const handleClearVolunteerGroup = useCallback(() => {
+    handleFormChange('volunteerGroupId', '');
+    setSelectedVolunteerGroup(null);
+  }, [handleFormChange]);
 
   const createActionItemHandler = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
@@ -484,14 +503,8 @@ const ItemModal: FC<IItemModalProps> = ({
               onTypeChange={setAssignmentType}
               isVolunteerDisabled={isVolunteerChipDisabled}
               isVolunteerGroupDisabled={isVolunteerGroupChipDisabled}
-              onClearVolunteer={() => {
-                handleFormChange('volunteerId', '');
-                setSelectedVolunteer(null);
-              }}
-              onClearVolunteerGroup={() => {
-                handleFormChange('volunteerGroupId', '');
-                setSelectedVolunteerGroup(null);
-              }}
+              onClearVolunteer={handleClearVolunteer}
+              onClearVolunteerGroup={handleClearVolunteerGroup}
             />
 
             {/* Volunteer Selection */}
