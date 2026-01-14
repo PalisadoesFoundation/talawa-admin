@@ -1,18 +1,9 @@
 /**
  * Modal that confirms deletion of a volunteer group.
  *
- * @remarks
- * Uses Apollo mutations for delete operations and shows toast notifications for success or failure.
- *
- * @example
- * ```tsx
- * <VolunteerGroupDeleteModal
- *   isOpen
- *   hide={() => setShowModal(false)}
- *   group={selectedGroup}
- *   refetchGroups={fetchGroups}
- * />
- * ```
+ * component VolunteerGroupDeleteModal
+ * `@param` props - Component props from InterfaceDeleteVolunteerGroupModal
+ * `@returns` JSX.Element
  */
 import { Button, Form } from 'react-bootstrap';
 import styles from './VolunteerGroupDeleteModal.module.css';

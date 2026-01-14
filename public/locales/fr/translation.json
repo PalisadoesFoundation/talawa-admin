@@ -7,6 +7,9 @@
   },
   "ends": "Prend fin",
   "occurrences": "Occurrences",
+  "customRecurrence": "Récurrence personnalisée",
+  "invalidDetailsMessage": "Veuillez vérifier les détails saisis.",
+  "selectAtLeastOneDay": "Veuillez sélectionner au moins un jour.",
   "leaderboard": {
     "title": "Tableau des Leaders",
     "searchByVolunteer": "Recherche par Bénévole",

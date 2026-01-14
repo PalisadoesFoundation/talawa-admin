@@ -7,6 +7,9 @@
   },
   "ends": "Finaliza",
   "occurrences": "ocurrencias",
+  "customRecurrence": "Recurrencia personalizada",
+  "invalidDetailsMessage": "Por favor, verifique los detalles ingresados.",
+  "selectAtLeastOneDay": "Por favor, seleccione al menos un día.",
   "leaderboard": {
     "title": "Tabla de Clasificación",
     "searchByVolunteer": "Buscar por Voluntario",
