@@ -81,9 +81,8 @@ describe('AssignmentTypeSelector', () => {
     const volunteerChip = screen
       .getByText('Volunteer')
       .closest('.MuiChip-root');
-    if (volunteerChip) {
-      await user.click(volunteerChip);
-    }
+    expect(volunteerChip).toBeInTheDocument();
+    await user.click(volunteerChip as HTMLElement);
 
     expect(onTypeChange).toHaveBeenCalledWith('volunteer');
     expect(onClearVolunteerGroup).toHaveBeenCalled();
@@ -105,9 +104,8 @@ describe('AssignmentTypeSelector', () => {
     const volunteerGroupChip = screen
       .getByText('Volunteer Group')
       .closest('.MuiChip-root');
-    if (volunteerGroupChip) {
-      await user.click(volunteerGroupChip);
-    }
+    expect(volunteerGroupChip).toBeInTheDocument();
+    await user.click(volunteerGroupChip as HTMLElement);
 
     expect(onTypeChange).toHaveBeenCalledWith('volunteerGroup');
     expect(onClearVolunteer).toHaveBeenCalled();
@@ -129,9 +127,8 @@ describe('AssignmentTypeSelector', () => {
     const volunteerChip = screen
       .getByText('Volunteer')
       .closest('.MuiChip-root');
-    if (volunteerChip) {
-      await user.click(volunteerChip);
-    }
+    expect(volunteerChip).toBeInTheDocument();
+    await user.click(volunteerChip as HTMLElement);
 
     expect(onTypeChange).not.toHaveBeenCalled();
     expect(onClearVolunteerGroup).not.toHaveBeenCalled();
@@ -153,9 +150,8 @@ describe('AssignmentTypeSelector', () => {
     const volunteerGroupChip = screen
       .getByText('Volunteer Group')
       .closest('.MuiChip-root');
-    if (volunteerGroupChip) {
-      await user.click(volunteerGroupChip);
-    }
+    expect(volunteerGroupChip).toBeInTheDocument();
+    await user.click(volunteerGroupChip as HTMLElement);
 
     expect(onTypeChange).not.toHaveBeenCalled();
     expect(onClearVolunteer).not.toHaveBeenCalled();
@@ -202,10 +198,9 @@ describe('AssignmentTypeSelector', () => {
       const volunteerChip = screen
         .getByText('Volunteer')
         .closest('.MuiChip-root');
-      if (volunteerChip) {
-        (volunteerChip as HTMLElement).focus();
-        await user.keyboard('{Enter}');
-      }
+      expect(volunteerChip).toBeInTheDocument();
+      (volunteerChip as HTMLElement).focus();
+      await user.keyboard('{Enter}');
 
       expect(onTypeChange).toHaveBeenCalledWith('volunteer');
       expect(onClearVolunteerGroup).toHaveBeenCalled();
@@ -227,10 +222,9 @@ describe('AssignmentTypeSelector', () => {
       const volunteerChip = screen
         .getByText('Volunteer')
         .closest('.MuiChip-root');
-      if (volunteerChip) {
-        (volunteerChip as HTMLElement).focus();
-        await user.keyboard(' ');
-      }
+      expect(volunteerChip).toBeInTheDocument();
+      (volunteerChip as HTMLElement).focus();
+      await user.keyboard(' ');
 
       expect(onTypeChange).toHaveBeenCalledWith('volunteer');
       expect(onClearVolunteerGroup).toHaveBeenCalled();
@@ -252,10 +246,9 @@ describe('AssignmentTypeSelector', () => {
       const volunteerGroupChip = screen
         .getByText('Volunteer Group')
         .closest('.MuiChip-root');
-      if (volunteerGroupChip) {
-        (volunteerGroupChip as HTMLElement).focus();
-        await user.keyboard('{Enter}');
-      }
+      expect(volunteerGroupChip).toBeInTheDocument();
+      (volunteerGroupChip as HTMLElement).focus();
+      await user.keyboard('{Enter}');
 
       expect(onTypeChange).toHaveBeenCalledWith('volunteerGroup');
       expect(onClearVolunteer).toHaveBeenCalled();
@@ -277,10 +270,9 @@ describe('AssignmentTypeSelector', () => {
       const volunteerGroupChip = screen
         .getByText('Volunteer Group')
         .closest('.MuiChip-root');
-      if (volunteerGroupChip) {
-        (volunteerGroupChip as HTMLElement).focus();
-        await user.keyboard(' ');
-      }
+      expect(volunteerGroupChip).toBeInTheDocument();
+      (volunteerGroupChip as HTMLElement).focus();
+      await user.keyboard(' ');
 
       expect(onTypeChange).toHaveBeenCalledWith('volunteerGroup');
       expect(onClearVolunteer).toHaveBeenCalled();
@@ -302,10 +294,9 @@ describe('AssignmentTypeSelector', () => {
       const volunteerChip = screen
         .getByText('Volunteer')
         .closest('.MuiChip-root');
-      if (volunteerChip) {
-        (volunteerChip as HTMLElement).focus();
-        await user.keyboard('{Enter}');
-      }
+      expect(volunteerChip).toBeInTheDocument();
+      (volunteerChip as HTMLElement).focus();
+      await user.keyboard('{Enter}');
 
       expect(onTypeChange).not.toHaveBeenCalled();
       expect(onClearVolunteerGroup).not.toHaveBeenCalled();
@@ -327,10 +318,9 @@ describe('AssignmentTypeSelector', () => {
       const volunteerGroupChip = screen
         .getByText('Volunteer Group')
         .closest('.MuiChip-root');
-      if (volunteerGroupChip) {
-        (volunteerGroupChip as HTMLElement).focus();
-        await user.keyboard(' ');
-      }
+      expect(volunteerGroupChip).toBeInTheDocument();
+      (volunteerGroupChip as HTMLElement).focus();
+      await user.keyboard(' ');
 
       expect(onTypeChange).not.toHaveBeenCalled();
       expect(onClearVolunteer).not.toHaveBeenCalled();
