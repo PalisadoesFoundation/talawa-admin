@@ -43,7 +43,7 @@ import {
   useNavigate,
   useParams,
   useSearchParams,
-} from 'react-router-dom';
+} from 'react-router';
 import { FaChevronLeft, FaTasks } from 'react-icons/fa';
 import { MdOutlineDashboard } from 'react-icons/md';
 import EventRegistrantsIcon from 'assets/svgs/people.svg?react';
@@ -73,6 +73,16 @@ type TabOptions =
   | 'volunteers'
   | 'statistics';
 
+const validTabs: TabOptions[] = [
+  'dashboard',
+  'registrants',
+  'attendance',
+  'agendas',
+  'actions',
+  'volunteers',
+  'statistics',
+];
+
 interface InterfaceTabConfig {
   value: TabOptions;
   icon: JSX.Element;
@@ -93,10 +103,16 @@ const EventManagement = (): JSX.Element => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   // State hook for managing the currently selected tab, initialized from URL param or default to 'dashboard'
-  const tab = (searchParams.get('tab') as TabOptions) || 'dashboard';
+  const tabParam = searchParams.get('tab');
+  const tab: TabOptions = validTabs.includes(tabParam as TabOptions)
+    ? (tabParam as TabOptions)
+    : 'dashboard';
 
   const setTab = (newTab: TabOptions) => {
-    setSearchParams({ tab: newTab });
+    setSearchParams((prev) => {
+      prev.set('tab', newTab);
+      return prev;
+    });
   };
 
   // Extract event and organization IDs from URL parameters

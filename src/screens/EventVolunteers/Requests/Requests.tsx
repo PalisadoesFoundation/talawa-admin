@@ -209,7 +209,7 @@ function requests(): JSX.Element {
             {avatarURL ? (
               <img
                 src={avatarURL}
-                alt="volunteer"
+                alt={name}
                 data-testid={`volunteer_image`}
                 className={styles.volunteerAvatar}
               />

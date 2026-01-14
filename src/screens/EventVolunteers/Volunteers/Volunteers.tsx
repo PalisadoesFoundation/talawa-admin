@@ -262,7 +262,7 @@ function volunteers(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const { id, name, avatarURL } = params.row.user;
+        const { name, avatarURL } = params.row.user;
         return (
           <div
             className="d-flex fw-bold align-items-center ms-2"
@@ -271,13 +271,12 @@ function volunteers(): JSX.Element {
             {avatarURL ? (
               <img
                 src={avatarURL}
-                alt="volunteer"
+                alt={name}
                 data-testid="volunteer_image"
                 className={styles.volunteerAvatar}
               />
             ) : (
               <Avatar
-                key={id + '1'}
                 dataTestId="volunteer_avatar"
                 containerStyle={styles.volunteerAvatar}
                 avatarStyle={styles.volunteerAvatar}

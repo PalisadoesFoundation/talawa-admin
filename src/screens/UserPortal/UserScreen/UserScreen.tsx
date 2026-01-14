@@ -18,7 +18,7 @@
  *   - Sets up and cleans up the window resize event listener.
  *
  * ### Dependencies
- * - `react-router-dom` for routing and navigation.
+ * - `react-router` for routing and navigation.
  * - `react-redux` for state management.
  * - `react-bootstrap` for UI components.
  * - `react-i18next` for internationalization.
@@ -61,6 +61,7 @@ const map: InterfaceMapType = {
   volunteer: 'userVolunteer',
   leaveorg: 'leaveOrganization',
   notification: 'notification',
+  event: 'eventManagement',
 };
 
 const UserScreen = (): React.JSX.Element => {
@@ -78,7 +79,8 @@ const UserScreen = (): React.JSX.Element => {
   // don't include an `orgId`. In that case render the global user sidebar
   // instead of redirecting to home.
 
-  const titleKey: string | undefined = map[location.pathname.split('/')[2]];
+  const titleKey: string | undefined =
+    map[location.pathname.split('/')[2]?.toLowerCase()];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
 
   const userRoutes: { targets: TargetsType[] } = useSelector(

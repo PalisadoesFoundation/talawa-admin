@@ -168,6 +168,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
             <div className={styles.eventDetailsBox}>
               {eventData.event.creator?.id === userId && (
                 <button
+                  type="button"
                   className="btn btn-light rounded-circle position-absolute end-0 me-3 p-1 mt-2"
                   onClick={showViewModal}
                   data-testid="edit-event-button"

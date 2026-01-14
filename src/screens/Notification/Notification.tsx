@@ -13,7 +13,7 @@ import {
   MARK_NOTIFICATION_AS_READ,
 } from 'GraphQl/Queries/NotificationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { ListGroup, Button } from 'react-bootstrap';
 import styles from './Notification.module.css';
 import { FaUserCircle } from 'react-icons/fa';

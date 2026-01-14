@@ -1531,6 +1531,12 @@ form label,
   border: 1px solid var(--createButton-border-active) !important;
 }
 
+.statsButton {
+  width: auto !important;
+  min-width: fit-content !important;
+  white-space: nowrap !important;
+}
+
 /* Add more Global CSS Classes above this */
 
 /* ----------------------------------------------------- */
@@ -3201,7 +3207,7 @@ form label,
   box-shadow: 0 3px 8px var(--time-box-shadow);
   border-radius: 8px;
   margin-top: 20px;
-  margin-left: auto;
+  margin-inline-start: auto;
 }
 
 @supports (-webkit-line-clamp: 1) {
@@ -9687,8 +9693,11 @@ form {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  margin-right: 10px;
+  margin-inline-end: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
+  object-fit: cover;
+  overflow: hidden;
+  flex-shrink: 0;
 }
