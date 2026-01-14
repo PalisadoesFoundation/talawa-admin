@@ -14,7 +14,15 @@ import type {
   IActionItemInfo,
 } from 'types/shared-components/ActionItems/interface';
 import ItemModal from './ActionItemModal';
-import { vi, it, describe, expect, beforeEach, afterEach } from 'vitest';
+import {
+  vi,
+  it,
+  describe,
+  expect,
+  beforeEach,
+  afterEach,
+  afterAll,
+} from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -49,6 +57,10 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
     warning: vi.fn(),
   },
 }));
+
+afterEach(() => {
+  vi.clearAllMocks();
+});
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -955,7 +967,7 @@ describe('ItemModal - Additional Test Cases', () => {
     });
   });
 
-  describe('Assignment type switching', async () => {
+  describe('Assignment type switching', () => {
     it('should clear volunteer selection when switching to volunteer group and back', async () => {
       const props: IItemModalProps = {
         isOpen: true,
@@ -1213,7 +1225,7 @@ describe('ItemModal - Additional Test Cases', () => {
   });
 
   // Test accessibility
-  describe('Accessibility', async () => {
+  describe('Accessibility', () => {
     it('should have proper role for modal dialog', async () => {
       const props: IItemModalProps = {
         isOpen: true,
