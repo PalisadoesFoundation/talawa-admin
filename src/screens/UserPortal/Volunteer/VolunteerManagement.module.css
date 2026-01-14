@@ -1,138 +1,65 @@
-/* Upcoming Events Styles */
-.btnsContainer {
-  display: flex;
-  margin: var(--space-7) var(--space-0);
-}
-
-.btnsContainer .input {
-  flex: 1;
-  min-width: 18rem;
+.activeTab {
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-400);
+  border-color: var(--color-gray-400);
+  align-items: center;
   position: relative;
-}
-
-.btnsContainer input {
-  outline: var(--border-1) solid var(--bs-gray-400);
-  background-color: white;
-}
-
-.btnsContainer .input button {
-  width: var(--space-10);
-}
-
-.accordionSummary {
-  width: 100% !important;
-  padding-right: var(--space-4);
-  display: flex;
-  justify-content: space-between !important;
-  align-items: center;
-}
-
-.accordionSummary button {
-  height: 2.25rem;
-  padding-top: var(--space-2);
-}
-
-.accordionSummary button:hover {
-  background-color: #31bb6a50 !important;
-  color: #31bb6b !important;
-}
-
-.titleContainer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-}
-
-.titleContainer h3 {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-heavy);
-  color: #5e5e5e;
-  margin-top: var(--space-2);
-}
-
-.subContainer span {
-  font-size: var(--font-size-sm);
-  margin-left: var(--space-3);
-  font-weight: var(--font-weight-lighter);
-  color: #707070;
-}
-
-.chipIcon {
-  height: 0.9rem !important;
-}
-
-.chip {
-  height: 1.5rem !important;
-  margin: var(--space-1) var(--space-0) var(--space-0) var(--space-6);
-}
-
-.active {
-  background-color: #31bb6a50 !important;
-}
-
-.pending {
-  background-color: #ffd76950 !important;
-  color: #bb952bd0 !important;
-  border-color: #bb952bd0 !important;
-}
-
-.progress {
-  display: flex;
-  width: 45rem;
-}
-
-.progressBar {
-  margin: var(--space-0) var(--space-4);
-  width: 100%;
-  font-size: var(--font-size-sm);
-  height: 1.25rem;
-}
-
-/* Pledge Modal */
-
-.pledgeModal {
-  max-width: 80vw;
-  margin-top: 2vh;
-  margin-left: 13vw;
-}
-
-.titlemodal {
-  color: #707070;
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-3xl);
-  width: 65%;
-  margin-bottom: var(--space-0);
-}
-
-.modalCloseBtn {
-  width: var(--space-9);
-  height: var(--space-9);
-  padding: var(--space-5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.noOutline input {
   outline: none;
 }
 
-.greenregbtn {
-  margin: var(--space-5) var(--space-0) var(--space-0);
-  margin-top: var(--space-5);
-  border: var(--border-1) solid #e8e5e5;
-  box-shadow: 0 2px 2px #e8e5e5;
-  padding: var(--space-4) var(--space-4);
-  border-radius: 5px;
-  background-color: #31bb6b;
-  width: 100%;
-  font-size: var(--font-size-md);
-  color: white;
+.activeTab:focus-visible {
+  outline: var(--border-2) solid var(--color-gray-400);
+  outline-offset: var(--shadow-offset-sm);
+}
+
+.activeTab:is(:hover, :focus, :active) {
+  background-color: var(--color-gray-500);
+  color: var(--color-white);
+  border-color: var(--color-gray-500);
+  align-items: center;
+}
+
+.inActiveTab {
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-400);
+  border-color: var(--color-gray-400);
+  align-items: center;
+  position: relative;
   outline: none;
-  font-weight: var(--font-weight-semibold);
-  cursor: pointer;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
-  width: 100%;
+}
+
+.inActiveTab:focus-visible {
+  outline: var(--border-2) solid var(--color-gray-400);
+  outline-offset: var(--shadow-offset-sm);
+}
+
+.inActiveTab:is(:hover, :focus, :active) {
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-400);
+  border-color: var(--color-gray-500);
+  align-items: center;
+}
+
+.dropdown {
+  background-color: var(--color-gray-50);
+  min-width: var(--space-15);
+  border: var(--border-1) solid var(--color-gray-700);
+  color: var(--color-gray-700);
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown:is(:hover, :active, .show, :disabled, :checked) {
+  box-shadow:
+    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
+      rgba(168, 199, 250, 1),
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
+      rgba(60, 64, 67, 0.15);
+  border: var(--border-1) solid var(--color-gray-700);
+  color: var(--color-gray-700);
+}
+
+.dropdown:is(:focus, :focus-visible) {
+  outline: var(--border-2) solid var(--color-blue-200);
+  border: var(--border-1) solid var(--color-gray-700);
 }

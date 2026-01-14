@@ -100,6 +100,7 @@
   "successfullyUpdated": "Actualizado con éxito",
   "sessionWarning": "Su sesión expirará pronto debido a la inactividad. Por favor, interactúe con la página para extender su sesión.",
   "sessionLogOut": "Su sesión ha expirado debido a la inactividad. Por favor, inicie sesión nuevamente para continuar.",
+  "logoutFailed": "Falló el cierre de sesión",
   "all": "Todos",
   "active": "Activo",
   "disabled": "Deshabilitado",
