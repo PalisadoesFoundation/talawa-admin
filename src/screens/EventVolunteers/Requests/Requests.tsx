@@ -52,7 +52,7 @@ import {
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
 import Avatar from 'shared-components/Avatar/Avatar';
-import styles from '../../../style/app-fixed.module.css';
+import styles from './Requests.module.css';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';

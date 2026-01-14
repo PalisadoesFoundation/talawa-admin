@@ -63,7 +63,7 @@ import {
 import { debounce } from '@mui/material';
 import Avatar from 'shared-components/Avatar/Avatar';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
-import styles from '../../../style/app-fixed.module.css';
+import styles from './Volunteers.module.css';
 import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import VolunteerCreateModal from './createModal/VolunteerCreateModal';

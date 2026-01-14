@@ -22,7 +22,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 const i18n = i18nForTest;
 import Requests from './Requests';
-import styles from 'style/app-fixed.module.css';
+import styles from './Requests.module.css';
 import type { ApolloLink } from '@apollo/client';
 import {
   MOCKS,

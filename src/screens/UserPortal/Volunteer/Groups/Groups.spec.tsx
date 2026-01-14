@@ -1198,7 +1198,7 @@ describe('Groups Screen [User Portal]', () => {
 
     // If hooks were called after early return, the component wouldn't render properly
     expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
-    expect(screen.getByText('Group 1')).toBeInTheDocument();
+    expect(await screen.findByText('Group 1')).toBeInTheDocument();
   });
 
   test('early return works correctly when orgId is missing', async () => {

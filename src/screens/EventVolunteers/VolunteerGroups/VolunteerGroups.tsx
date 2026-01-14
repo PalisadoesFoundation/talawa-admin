@@ -34,7 +34,7 @@ import {
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
 import Avatar from 'shared-components/Avatar/Avatar';
-import styles from 'style/app-fixed.module.css';
+import styles from './VolunteerGroups.module.css';
 import { GET_EVENT_VOLUNTEER_GROUPS } from 'GraphQl/Queries/EventVolunteerQueries';
 import VolunteerGroupModal from './modal/VolunteerGroupModal';
 import VolunteerGroupDeleteModal from './deleteModal/VolunteerGroupDeleteModal';
