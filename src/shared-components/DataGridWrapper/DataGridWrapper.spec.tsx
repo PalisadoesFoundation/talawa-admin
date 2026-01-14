@@ -760,4 +760,32 @@ describe('DataGridWrapper', () => {
     // filterFunction should NOT have been called since selectedFilter is empty
     expect(filterFunction).not.toHaveBeenCalled();
   });
+
+  test('handles search when fields is undefined (line 169 fallback)', () => {
+    vi.useFakeTimers();
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          // fields is intentionally undefined to trigger line 169 fallback
+        }}
+      />,
+    );
+
+    const input = screen.getByRole('searchbox');
+    fireEvent.change(input, { target: { value: 'Alice' } });
+
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
+
+    // Since fields is undefined, the search filter returns false for all rows
+    // So all rows should still be visible (no filtering applied)
+    expect(screen.getByText('Alice')).toBeInTheDocument();
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+    expect(screen.getByText('Charlie')).toBeInTheDocument();
+
+    vi.useRealTimers();
+  });
 });
