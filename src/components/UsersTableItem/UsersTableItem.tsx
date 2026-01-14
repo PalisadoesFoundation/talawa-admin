@@ -13,7 +13,6 @@ import {
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Row } from 'react-bootstrap';
-// import Table from 'react-bootstrap/Table'; // Removed
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { useTranslation } from 'react-i18next';
@@ -429,9 +428,12 @@ const UsersTableItem = (props: Props): JSX.Element => {
           <div className="search-bar-container">
             <SearchBar
               placeholder={t('searchByOrgName')}
-              onSearch={searchBlockedOrgs}
-              inputTestId="searchByNameBlockedOrgs"
-              buttonTestId="searchBtnBlockedOrgs"
+              value={searchByNameJoinedOrgs}
+              onChange={searchJoinedOrgs}
+              onSearch={searchJoinedOrgs}
+              onClear={() => searchJoinedOrgs('')}
+              inputTestId="searchByNameJoinedOrgs"
+              buttonTestId="searchBtnJoinedOrgs"
             />
           </div>
         )}
