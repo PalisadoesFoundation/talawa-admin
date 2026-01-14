@@ -145,7 +145,7 @@ function Actions(): JSX.Element {
               name={name}
               alt={name}
               containerStyle={styles.imageContainer}
-              avatarStyle={styles.TableImage}
+              avatarStyle={styles.tableImage}
             />
             <span className="ms-2">{name}</span>
           </div>

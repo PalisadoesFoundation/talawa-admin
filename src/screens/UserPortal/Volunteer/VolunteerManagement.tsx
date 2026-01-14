@@ -160,9 +160,10 @@ const VolunteerManagement = (): JSX.Element => {
             <Dropdown.Toggle
               variant="success"
               id="dropdown-basic"
+              className={styles.dropdown}
               data-testid="tabsDropdownToggle"
             >
-              <span className={`me-1 ${styles.dropdown}`}>{t(tab)}</span>
+              <span className="me-1">{t(tab)}</span>
             </Dropdown.Toggle>
             <Dropdown.Menu>
               {/* Render dropdown items for each settings category */}

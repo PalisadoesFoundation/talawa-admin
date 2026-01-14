@@ -61,8 +61,7 @@
 
 #individualRadio,
 #requestsRadio,
-#groupsRadio,
-.toggleBtn:hover {
+#groupsRadio {
   color: var(--color-blue-500);
 }
 
@@ -88,6 +87,11 @@
   outline: none;
 }
 
+.noOutline :is(input, textarea):focus-visible {
+  outline: var(--border-1) solid var(--color-blue-500);
+  outline-offset: var(--space-1);
+}
+
 .regBtn {
   margin-top: var(--space-5);
   border: var(--border-1) solid var(--color-gray-200);
@@ -107,25 +111,14 @@
     box-shadow 0.2s;
 }
 
+.regBtn:focus-visible {
+  outline: var(--border-1) solid var(--color-blue-300);
+  outline-offset: var(--space-1);
+}
+
 .modalTable {
   max-height: var(--space-17);
   overflow-y: auto;
-}
-
-.modalTable img[alt='creator'] {
-  height: var(--space-7);
-  width: var(--space-7);
-  object-fit: contain;
-  border-radius: var(--radius-lg);
-  margin-right: var(--space-3);
-}
-
-.modalTable img[alt='orgImage'] {
-  height: var(--space-7);
-  width: var(--space-7);
-  object-fit: contain;
-  border-radius: var(--radius-sm);
-  margin-right: var(--space-3);
 }
 
 .TableImage {
@@ -133,7 +126,7 @@
   margin-right: var(--space-2);
   width: var(--space-10);
   height: var(--space-10);
-  border-radius: 100%;
+  border-radius: var(--radius-full);
 }
 
 .avatarContainer {
@@ -144,7 +137,7 @@
 .imageContainer {
   width: var(--space-11);
   height: var(--space-11);
-  border-radius: 100%;
+  border-radius: var(--radius-full);
   margin-right: var(--space-4);
   margin-top: var(--space-4);
 }

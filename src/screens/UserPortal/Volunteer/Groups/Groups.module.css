@@ -29,7 +29,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 100%;
+  border-radius: var(--radius-full);
 }
 
 .TableImage {
@@ -37,7 +37,7 @@
   margin-right: var(--space-2);
   width: var(--space-10);
   height: var(--space-10);
-  border-radius: 100%;
+  border-radius: var(--radius-full);
 }
 
 .avatarContainer {
