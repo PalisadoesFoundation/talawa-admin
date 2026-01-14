@@ -257,8 +257,7 @@
   "required": "Obligatoire",
   "imageNotFound": "Image non trouvée",
   "changeLanguage": "Changer de langue",
-  "selectField": "Sélectionner {{fieldName}}"
-,
+  "selectField": "Sélectionner {{fieldName}}",
   "userEvents": {
     "presetToday": "Aujourd'hui",
     "presetThisWeek": "Cette Semaine",
