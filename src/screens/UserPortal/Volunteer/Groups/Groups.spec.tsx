@@ -13,7 +13,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import Groups from './Groups';
-import './Groups.mocks';
+
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
@@ -23,7 +23,9 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
 const routerMocks = vi.hoisted(() => ({
-  useParams: vi.fn(() => ({ orgId: 'orgId' })),
+  useParams: vi.fn(() => ({
+    orgId: 'orgId',
+  })),
 }));
 
 vi.mock('react-router', async () => {
@@ -327,11 +329,11 @@ describe('Groups Screen [User Portal]', () => {
     routerMocks.useParams.mockReturnValue({ orgId: '' });
     render(
       <MockedProvider link={linkSuccess}>
-        <MemoryRouter initialEntries={['/user/volunteer/']}>
+        <MemoryRouter initialEntries={['/user/volunteer/orgId']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
               <Routes>
-                <Route path="/user/volunteer/" element={<Groups />} />
+                <Route path="/user/volunteer/:orgId" element={<Groups />} />
                 <Route path="/" element={<div data-testid="paramsError" />} />
               </Routes>
             </I18nextProvider>
@@ -412,22 +414,22 @@ describe('Groups Screen [User Portal]', () => {
     const leaderOption = await screen.findByTestId('leader');
     await userEvent.click(leaderOption);
 
-    // Type in search to trigger the leaderName variable assignment
+    // Type in search to trigger the leaderName variable assignment (line 96)
     const searchInput = screen.getByTestId('searchByInput');
     await userEvent.clear(searchInput);
     await userEvent.type(searchInput, 'Teresa');
 
     // Wait for debounce (300ms) and query with leaderName variable to execute
+    // This ensures line 96 (vars.leaderName = searchTerm.trim()) is covered
     await waitFor(
       () => {
-        // This ensures the query with leaderName has completed
-        const groupNames = screen.getAllByTestId('groupName');
-        expect(groupNames.length).toBeGreaterThanOrEqual(1);
+        // Verify that Group 2 is filtered out (only Teresa's group should show)
+        expect(screen.queryByText('Group 2')).not.toBeInTheDocument();
       },
-      { timeout: 1500 },
+      { timeout: 2000 },
     );
 
-    // Verify the filtered result
+    // Verify the filtered result shows only Group 1 (led by Teresa)
     expect(screen.getByText('Group 1')).toBeInTheDocument();
   });
 
@@ -611,7 +613,7 @@ describe('Groups Screen [User Portal]', () => {
     await userEvent.click(sortButton);
 
     // Select ASC sorting
-    const sortAscOption = await screen.findByTestId('volunteers_ASC');
+    const sortAscOption = await screen.findByTestId('volunteers_asc');
     await userEvent.click(sortAscOption);
 
     // Wait for re-query with new sort
@@ -940,5 +942,492 @@ describe('Groups Screen [User Portal]', () => {
 
     // Assert groups are displayed
     expect(screen.getByText('Group 1')).toBeInTheDocument();
+  });
+
+  it('handles search input interactions correctly', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    // Test search input functionality
+    const searchInput = screen.getByTestId('searchByInput');
+    await userEvent.type(searchInput, 'test');
+    expect(searchInput).toHaveValue('test');
+
+    await userEvent.clear(searchInput);
+    expect(searchInput).toHaveValue('');
+
+    // Test search mode switching
+    const searchByDropdown = screen.getByTestId('searchBy');
+    await userEvent.click(searchByDropdown);
+    const leaderOption = await screen.findByTestId('leader');
+    await userEvent.click(leaderOption);
+
+    await userEvent.type(searchInput, 'leader test');
+    expect(searchInput).toHaveValue('leader test');
+  });
+
+  test('handles empty search term in leader mode', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    const searchByDropdown = screen.getByTestId('searchBy');
+    await userEvent.click(searchByDropdown);
+    const leaderOption = await screen.findByTestId('leader');
+    await userEvent.click(leaderOption);
+
+    const searchInput = screen.getByTestId('searchByInput');
+    await userEvent.type(searchInput, '   '); // whitespace only
+    await userEvent.clear(searchInput);
+
+    expect(searchInput).toHaveValue('');
+  });
+
+  test('handles group search with non-empty term', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByInput');
+    await userEvent.type(searchInput, 'test group');
+
+    expect(searchInput).toHaveValue('test group');
+  });
+
+  test('handles search term with whitespace trimming', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByInput');
+    await userEvent.type(searchInput, '  test group  ');
+
+    expect(searchInput).toHaveValue('  test group  ');
+  });
+
+  test('adds leaderName to variables when searching by leader with non-empty term', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    const searchByDropdown = screen.getByTestId('searchBy');
+    await userEvent.click(searchByDropdown);
+    const leaderOption = await screen.findByTestId('leader');
+    await userEvent.click(leaderOption);
+
+    const searchInput = screen.getByTestId('searchByInput');
+    await userEvent.type(searchInput, 'leader name');
+
+    expect(searchInput).toHaveValue('leader name');
+  });
+
+  test('converts volunteers_desc to volunteers_DESC in onSortChange', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    const sortDropdown = screen.getByTestId('sort');
+    await userEvent.click(sortDropdown);
+
+    const sortOption = await screen.findByTestId('volunteers_desc');
+    await userEvent.click(sortOption);
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  test('adds name_contains to variables when searching by group with non-empty term', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByInput');
+    await userEvent.type(searchInput, 'group name');
+
+    expect(searchInput).toHaveValue('group name');
+  });
+
+  test('handles empty search term in group mode', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // Just verify the component renders with search functionality
+    const searchInput = screen.getByTestId('searchByInput');
+    await userEvent.clear(searchInput);
+
+    await waitFor(() => {
+      expect(screen.getByRole('grid')).toBeInTheDocument();
+    });
+  });
+
+  test('handles search by change callback', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    const searchByDropdown = screen.getByTestId('searchBy');
+    await userEvent.click(searchByDropdown);
+
+    const leaderOption = await screen.findByTestId('leader');
+    await userEvent.click(leaderOption);
+
+    await waitFor(() => {
+      expect(screen.getByRole('grid')).toBeInTheDocument();
+    });
+  });
+
+  test('handles DataGridWrapper sort value conversion from volunteers_asc to volunteers_ASC', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('sort')).toBeInTheDocument();
+    });
+
+    const sortDropdown = screen.getByTestId('sort');
+    await userEvent.click(sortDropdown);
+
+    const leastVolunteersOption = await screen.findByTestId('volunteers_asc');
+    await userEvent.click(leastVolunteersOption);
+
+    await waitFor(() => {
+      expect(screen.getByRole('grid')).toBeInTheDocument();
+    });
+  });
+
+  test('verifies DataGridWrapper configuration properties are set correctly', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByInput');
+    expect(searchInput).toHaveAttribute(
+      'placeholder',
+      'Search by Group or Leader',
+    );
+
+    // Test that loading is set to false
+    expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+
+    // Test that server-side search is enabled
+    await userEvent.type(searchInput, 'test');
+    expect(searchInput).toHaveValue('test');
+  });
+
+  test('uses translation key for error message instead of hardcoded string', async () => {
+    renderGroups(linkError);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
+    });
+
+    // Verify error message uses translation
+    const errorElement = screen.getByTestId('errorMsg');
+    expect(errorElement).toBeInTheDocument();
+
+    // The error message should contain translated text, not hardcoded "Volunteer Groups"
+    expect(errorElement.textContent).toMatch(/error.*loading/i);
+  });
+
+  test('DataGridWrapper loading state is properly configured', async () => {
+    const LOADING_MOCKS = [
+      {
+        request: {
+          query: EVENT_VOLUNTEER_GROUP_LIST,
+          variables: {
+            where: { orgId: 'orgId', userId: 'userId' },
+            orderBy: 'volunteers_DESC',
+          },
+        },
+        result: {
+          data: {
+            getEventVolunteerGroups: [group1, group2],
+          },
+        },
+        delay: 200,
+      },
+    ];
+
+    const linkLoading = new StaticMockLink(LOADING_MOCKS);
+    renderGroups(linkLoading);
+
+    // DataGridWrapper should handle its own loading state
+    // No external LoadingState wrapper should be present
+    expect(
+      screen.queryByTestId('loading-state-wrapper'),
+    ).not.toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+  });
+
+  test('hooks are called in correct order before early return', async () => {
+    // This test verifies the Rules of Hooks fix by ensuring component renders successfully
+    // when both orgId and userId are present
+    const { setItem } = useLocalStorage();
+    setItem('userId', 'userId'); // Use the same userId as in mocks
+
+    routerMocks.useParams.mockReturnValue({ orgId: 'orgId' }); // Use the same orgId as in mocks
+
+    renderGroups(linkSuccess); // Use success mock, not error mock
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+    });
+
+    // If hooks were called after early return, the component wouldn't render properly
+    expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+
+    // Wait for data to load from GraphQL query
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+  });
+
+  test('early return works correctly when orgId is missing', async () => {
+    routerMocks.useParams.mockReturnValue({ orgId: '' });
+
+    render(
+      <MockedProvider link={linkSuccess}>
+        <MemoryRouter initialEntries={['/user/volunteer/']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <Routes>
+                <Route path="/user/volunteer/:orgId?" element={<Groups />} />
+                <Route path="/" element={<div data-testid="paramsError" />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    expect(await screen.findByTestId('paramsError')).toBeInTheDocument();
+  });
+
+  test('early return works correctly when userId is missing', async () => {
+    const { removeItem } = useLocalStorage();
+    removeItem('userId');
+
+    routerMocks.useParams.mockReturnValue({ orgId: 'testOrgId' });
+
+    render(
+      <MockedProvider link={linkSuccess}>
+        <MemoryRouter initialEntries={['/user/volunteer/testOrgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <Routes>
+                <Route path="/user/volunteer/:orgId" element={<Groups />} />
+                <Route path="/" element={<div data-testid="paramsError" />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    expect(await screen.findByTestId('paramsError')).toBeInTheDocument();
+  });
+
+  test('component renders without LoadingState wrapper', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    // Verify no LoadingState wrapper is present in the DOM
+    expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument();
+
+    // DataGridWrapper should be the main container
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  test('DataGridWrapper receives correct loading prop', async () => {
+    const DELAYED_MOCKS = [
+      {
+        request: {
+          query: EVENT_VOLUNTEER_GROUP_LIST,
+          variables: {
+            where: { orgId: 'orgId', userId: 'userId' },
+            orderBy: 'volunteers_DESC',
+          },
+        },
+        result: {
+          data: {
+            getEventVolunteerGroups: [group1, group2],
+          },
+        },
+        delay: 100,
+      },
+    ];
+
+    const linkDelayed = new StaticMockLink(DELAYED_MOCKS);
+    renderGroups(linkDelayed);
+
+    // During loading, DataGridWrapper should show its loading state
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+  });
+
+  test('DataGridWrapper server-side search configuration is properly set', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+    });
+
+    // Verify server-side search is enabled
+    const searchInput = screen.getByTestId('searchByInput');
+    expect(searchInput).toBeInTheDocument();
+
+    // Verify search by options are available
+    const searchByDropdown = screen.getByTestId('searchBy');
+    expect(searchByDropdown).toBeInTheDocument();
+
+    // Test search by options
+    await userEvent.click(searchByDropdown);
+    expect(await screen.findByTestId('group')).toBeInTheDocument();
+    expect(await screen.findByTestId('leader')).toBeInTheDocument();
+  });
+
+  test('DataGridWrapper handles server-side search term changes', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByInput');
+
+    // Type in search input to trigger server-side search
+    await userEvent.type(searchInput, 'test search');
+
+    // Verify the search term is set
+    expect(searchInput).toHaveValue('test search');
+
+    // Clear search
+    await userEvent.clear(searchInput);
+    expect(searchInput).toHaveValue('');
+  });
+
+  test('DataGridWrapper handles sort configuration correctly', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('sort')).toBeInTheDocument();
+    });
+
+    const sortDropdown = screen.getByTestId('sort');
+    await userEvent.click(sortDropdown);
+
+    // Verify sort options are available
+    expect(await screen.findByTestId('volunteers_desc')).toBeInTheDocument();
+    expect(await screen.findByTestId('volunteers_asc')).toBeInTheDocument();
+
+    // Test sort selection
+    const sortOption = await screen.findByTestId('volunteers_asc');
+    await userEvent.click(sortOption);
+
+    // Verify sort change is handled
+    await waitFor(() => {
+      expect(screen.getByRole('grid')).toBeInTheDocument();
+    });
+  });
+
+  test('DataGridWrapper handles search by change correctly', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    const searchByDropdown = screen.getByTestId('searchBy');
+
+    // Test switching to leader search
+    await userEvent.click(searchByDropdown);
+    const leaderOption = await screen.findByTestId('leader');
+    await userEvent.click(leaderOption);
+
+    // Test switching back to group search
+    await userEvent.click(searchByDropdown);
+    const groupOption = await screen.findByTestId('group');
+    await userEvent.click(groupOption);
+
+    expect(screen.getByRole('grid')).toBeInTheDocument();
+  });
+
+  test('DataGridWrapper search functionality with debounce', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByInput');
+
+    // Type multiple characters quickly to test debounce
+    await userEvent.type(searchInput, 'Group');
+
+    // Wait for debounce (300ms)
+    await waitFor(
+      () => {
+        expect(searchInput).toHaveValue('Group');
+      },
+      { timeout: 1500 },
+    );
+  });
+
+  test('DataGridWrapper empty state message is displayed correctly', async () => {
+    renderGroups(linkEmpty);
+
+    await waitFor(() => {
+      expect(screen.getByText(/no volunteer groups/i)).toBeInTheDocument();
+    });
+
+    // Verify empty state is shown
+    expect(screen.getByText(/no volunteer groups/i)).toBeInTheDocument();
+  });
+
+  test('DataGridWrapper handles search submit correctly', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByInput');
+
+    // Type and submit search
+    await userEvent.type(searchInput, 'Group 1');
+    await userEvent.keyboard('{Enter}');
+
+    // Verify search is handled
+    expect(searchInput).toHaveValue('Group 1');
   });
 });

@@ -67,7 +67,7 @@ import { Link, useParams } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './AddMember.module.css';
 import Avatar from 'shared-components/Avatar/Avatar';
 import { TablePagination } from '@mui/material';
 import PageHeader from 'shared-components/Navbar/Navbar';

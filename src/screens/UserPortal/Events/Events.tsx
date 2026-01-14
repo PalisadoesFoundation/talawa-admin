@@ -1,5 +1,5 @@
 /**
- * The `events` component is responsible for managing and displaying events for a user portal.
+ * The `Events` component is responsible for managing and displaying events for a user portal.
  * It includes functionality for creating, viewing, and managing events within an organization.
  *
  * @remarks
@@ -11,37 +11,42 @@
  * Dependencies:
  * - `EventCalendar`: Displays events in a calendar view.
  * - `EventHeader`: Provides controls for calendar view and event creation.
- * - `DatePicker` and `TimePicker`: Used for selecting event dates and times.
+ * - `DateRangePicker`: Used for selecting arbitrary event date ranges.
+ * - `EventForm`: Form component for event creation with validation.
  *
  * State:
- * - `events`: List of events fetched from the server.
- * - `eventTitle`, `eventDescription`, `eventLocation`: Input fields for event details.
- * - `startAt`, `endAt`: Start and end dates for the event.
- * - `startTime`, `endTime`: Start and end times for the event.
- * - `isPublic`, `isRegisterable`, `isRecurring`, `isAllDay`: Event configuration flags.
+ * - `dateRange`: Selected date range with `startDate` and `endDate` controlling event queries.
  * - `viewType`: Current calendar view type (e.g., month, week).
  * - `createEventModal`: Controls visibility of the event creation modal.
- * - `createChatCheck`: Determines if a chat should be created for the event.
+ * - `formResetKey`: Key used to reset the event form after successful creation.
+ * Computed Values:
+ * - `calendarMonth`: Derived from `dateRange.startDate` for calendar display.
+ * - `calendarYear`: Derived from `dateRange.startDate` for calendar display.
  *
  * Methods:
- * - `createEvent`: Handles the creation of a new event by submitting a GraphQL mutation.
+ * - `handleCreateEvent`: Handles the creation of a new event by submitting a GraphQL mutation.
  * - `toggleCreateEventModal`: Toggles the visibility of the event creation modal.
- * - `handleEventTitleChange`, `handleEventLocationChange`, `handleEventDescriptionChange`:
- *   Update respective state variables when input fields change.
+ * - `showInviteModal`: Opens the event creation modal.
  * - `handleChangeView`: Updates the calendar view type.
  *
  * Hooks:
  * - `useQuery`: Fetches events and organization details.
  * - `useMutation`: Executes the event creation mutation.
  * - `useLocalStorage`: Retrieves user details from local storage.
- * - `useEffect`: Updates the event list when query data changes.
+ * - `useEffect`: Handles error logging for event query failures (rate-limit aware).
  *
  * @returns The rendered events component.
  *
  * @example
  * ```tsx
- * <Events />
+ * // Returns current month/year
+ * const { month, year } = computeCalendarFromStartDate(null);
+ *
+ * // Returns June 2025 (month = 5)
+ * const { month, year } = computeCalendarFromStartDate(new Date(2025, 5, 15));
  * ```
+ * <Events />
+ *
  */
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
@@ -53,8 +58,7 @@ import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
 import EventHeader from 'components/EventCalender/Header/EventHeader';
 import dayjs from 'dayjs';
 import React from 'react';
-import { Button } from 'react-bootstrap';
-import Modal from 'react-bootstrap/Modal';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
@@ -70,24 +74,111 @@ import type {
   IEventFormValues,
 } from 'types/EventForm/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import DateRangePicker from 'shared-components/DateRangePicker/DateRangePicker';
 
-export default function events(): JSX.Element {
+import type { IDateRangePreset } from 'types/shared-components/DateRangePicker/interface';
+
+export function computeCalendarFromStartDate(
+  startDate: Date | null,
+  refDate: Date = new Date(),
+): {
+  month: number;
+  year: number;
+} {
+  if (!startDate) {
+    const now = dayjs(refDate);
+    return {
+      month: now.month(),
+      year: now.year(),
+    };
+  }
+
+  const d = dayjs(startDate);
+  return {
+    month: d.month(),
+    year: d.year(),
+  };
+}
+
+export default function Events(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });
   const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
 
+  // Define date presets using translations (inside component to access t)
+  const datePresets: IDateRangePreset[] = React.useMemo(
+    () => [
+      {
+        key: 'today',
+        label: tCommon('userEvents.presetToday'),
+        getRange: () => ({
+          startDate: dayjs().startOf('day').toDate(),
+          endDate: dayjs().endOf('day').toDate(),
+        }),
+      },
+      {
+        key: 'thisWeek',
+        label: tCommon('userEvents.presetThisWeek'),
+        getRange: () => ({
+          startDate: dayjs().startOf('week').toDate(),
+          endDate: dayjs().endOf('week').toDate(),
+        }),
+      },
+      {
+        key: 'thisMonth',
+        label: tCommon('userEvents.presetThisMonth'),
+        getRange: () => ({
+          startDate: dayjs().startOf('month').toDate(),
+          endDate: dayjs().endOf('month').toDate(),
+        }),
+      },
+      {
+        key: 'next7Days',
+        label: tCommon('userEvents.presetNext7Days'),
+        getRange: () => ({
+          startDate: dayjs().startOf('day').toDate(),
+          endDate: dayjs().add(7, 'days').endOf('day').toDate(),
+        }),
+      },
+      {
+        key: 'next30Days',
+        label: tCommon('userEvents.presetNext30Days'),
+        getRange: () => ({
+          startDate: dayjs().startOf('day').toDate(),
+          endDate: dayjs().add(30, 'days').endOf('day').toDate(),
+        }),
+      },
+      {
+        key: 'nextMonth',
+        label: tCommon('userEvents.presetNextMonth'),
+        getRange: () => ({
+          startDate: dayjs().add(1, 'month').startOf('month').toDate(),
+          endDate: dayjs().add(1, 'month').endOf('month').toDate(),
+        }),
+      },
+    ],
+    [tCommon],
+  );
+
   const [viewType, setViewType] = React.useState<ViewType>(ViewType.MONTH);
   const [createEventModal, setCreateEventmodalisOpen] = React.useState(false);
   const { orgId: organizationId } = useParams();
-  const [currentMonth, setCurrentMonth] = React.useState(new Date().getMonth());
-  const [currentYear, setCurrentYear] = React.useState(
-    new Date().getFullYear(),
+  const [dateRange, setDateRange] = React.useState<{
+    startDate: Date | null;
+    endDate: Date | null;
+  }>({
+    startDate: dayjs().startOf('month').toDate(),
+    endDate: dayjs().endOf('month').toDate(),
+  });
+  // Defensive fallback: startDate is typed as nullable, but is always initialized
+  // and cannot be set to null via DateRangePicker in normal usage.
+  // Kept for future-proofing; null handling is covered at the utility level
+  // (computeCalendarFromStartDate) to avoid unrealistic UI scenarios.
+  const { month: calendarMonth, year: calendarYear } = React.useMemo(
+    () => computeCalendarFromStartDate(dateRange.startDate, new Date()),
+    [dateRange.startDate],
   );
-  const onMonthChange = (month: number, year: number): void => {
-    setCurrentMonth(month);
-    setCurrentYear(year);
-  };
 
   // Query to fetch events for the organization
   const {
@@ -99,12 +190,12 @@ export default function events(): JSX.Element {
       id: organizationId,
       first: 100,
       after: null,
-      startAt: dayjs(new Date(currentYear, currentMonth, 1))
-        .startOf('month')
-        .toISOString(),
-      endAt: dayjs(new Date(currentYear, currentMonth, 1))
-        .endOf('month')
-        .toISOString(),
+      startDate: dateRange.startDate
+        ? dayjs(dateRange.startDate).startOf('day').toISOString()
+        : null,
+      endDate: dateRange.endDate
+        ? dayjs(dateRange.endDate).endOf('day').toISOString()
+        : null,
       includeRecurring: true,
     },
     notifyOnNetworkStatusChange: true,
@@ -237,13 +328,14 @@ export default function events(): JSX.Element {
       // For other errors (like empty results), handle them properly
       errorHandler(t, eventDataError);
     }
-  }, [eventDataError]);
+  }, [eventDataError, t]);
 
   /**
    * Shows the modal for creating a new event.
    *
    * @returns Void.
    */
+
   const showInviteModal = (): void => {
     setCreateEventmodalisOpen(true);
   };
@@ -272,6 +364,15 @@ export default function events(): JSX.Element {
           />
         </div>
       </div>
+
+      <DateRangePicker
+        value={dateRange}
+        onChange={setDateRange}
+        dataTestId="events-date-range"
+        showPresets
+        presets={datePresets}
+      />
+
       {/* <div className="mt-4"> */}
       <EventCalendar
         viewType={viewType}
@@ -280,40 +381,40 @@ export default function events(): JSX.Element {
         orgData={orgData}
         userRole={userRole}
         userId={userId}
-        onMonthChange={onMonthChange}
-        currentMonth={currentMonth}
-        currentYear={currentYear}
+        onMonthChange={(month, year) => {
+          // month assumed 0-indexed (align with Date.getMonth / dayjs().month()).
+          const start = dayjs(new Date(year, month, 1))
+            .startOf('month')
+            .toDate();
+          const end = dayjs(new Date(year, month, 1))
+            .endOf('month')
+            .toDate();
+          setDateRange({ startDate: start, endDate: end });
+        }}
+        currentMonth={calendarMonth}
+        currentYear={calendarYear}
       />
       {/* </div> */}
-      <Modal show={createEventModal} onHide={toggleCreateEventModal}>
-        <Modal.Header>
-          <p className={styles.titlemodalOrganizationEvents}>
-            {t('eventDetails')}
-          </p>
-          <Button
-            variant="danger"
-            onClick={toggleCreateEventModal}
-            data-testid="createEventModalCloseBtn"
-          >
-            <i className="fa fa-times"></i>
-          </Button>
-        </Modal.Header>
-        <Modal.Body>
-          <EventForm
-            key={formResetKey}
-            initialValues={defaultEventValues}
-            onSubmit={handleCreateEvent}
-            onCancel={toggleCreateEventModal}
-            submitLabel={t('createEvent')}
-            t={t}
-            tCommon={tCommon}
-            showCreateChat
-            showRegisterable
-            showPublicToggle
-            showRecurrenceToggle
-          />
-        </Modal.Body>
-      </Modal>
+      <BaseModal
+        show={createEventModal}
+        onHide={toggleCreateEventModal}
+        title={t('eventDetails')}
+        dataTestId="createEventModal"
+      >
+        <EventForm
+          key={formResetKey}
+          initialValues={defaultEventValues}
+          onSubmit={handleCreateEvent}
+          onCancel={toggleCreateEventModal}
+          submitLabel={t('createEvent')}
+          t={t}
+          tCommon={tCommon}
+          showCreateChat
+          showRegisterable
+          showPublicToggle
+          showRecurrenceToggle
+        />
+      </BaseModal>
 
       {/* </div> */}
     </>

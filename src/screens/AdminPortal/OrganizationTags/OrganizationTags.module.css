@@ -1,0 +1,270 @@
+.errorContainer {
+  min-height: 100vh;
+}
+
+.errorMessage {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.errorIcon {
+  font-size: var(--font-size-4xl);
+  color: var(--color-red-500);
+  margin-bottom: var(--space-5);
+
+  &::before {
+    content: '⚠️';
+  }
+}
+
+.tableHeader {
+  background-color: var(--color-red-500);
+  font-weight: var(--font-weight-bold);
+}
+
+.tableItemIndex {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-700);
+}
+
+.tagsBreadCrumbs {
+  color: var(--color-gray-400);
+  cursor: pointer;
+  &::after {
+    display: block;
+    content: attr(data-text);
+    font-weight: var(--font-weight-semibold);
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+  }
+}
+
+.tagsBreadCrumbs:hover,
+.tagsBreadCrumbs:focus {
+  color: var(--color-blue-800);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: underline;
+}
+
+.subTagsLink i {
+  visibility: hidden;
+}
+
+.subTagsLink:hover,
+.subTagsLink:focus {
+  color: var(--color-gray-500);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: underline;
+}
+
+.subTagsLink:hover i,
+.subTagsLink:focus i {
+  visibility: visible;
+}
+
+.subTagsLink {
+  color: var(--color-blue-800);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+
+  &::after {
+    display: block;
+    content: attr(data-text);
+    font-weight: var(--font-weight-semibold);
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+  }
+}
+
+.orgUserTagsScrollableDiv {
+  scrollbar-width: auto;
+  scrollbar-color: var(--color-gray-300) transparent;
+  max-height: calc(100vh - var(--space-20));
+  overflow: auto;
+  position: sticky;
+  top: 0;
+}
+
+.editButton {
+  background-color: var(--color-blue-200);
+  color: var(--color-gray-700);
+  border-color: var(--color-gray-100);
+  --bs-btn-active-bg: var(--color-blue-500);
+  --bs-btn-active-border-color: var(--color-gray-100);
+}
+
+.editButton:is(:hover, :active) {
+  background-color: var(--color-blue-500);
+  border-color: var(--color-gray-700);
+  box-shadow: none;
+}
+
+.createButton {
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-700);
+  border: var(--border-1) solid var(--color-gray-700);
+  margin: var(--space-2) var(--space-3);
+  width: var(--space-16);
+  height: var(--space-10);
+}
+
+.createButton:hover {
+  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
+    var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-700);
+  border: var(--border-1) solid var(--color-gray-700);
+}
+
+.createButton:active {
+  color: var(--color-gray-400);
+  background-color: var(--color-gray-100);
+  border: var(--border-1) solid var(--color-gray-400);
+}
+
+.inputField {
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-4);
+  background-color: var(--color-white);
+  border: var(--border-1) solid var(--color-gray-200);
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg) rgba(0, 0, 0, 0.1);
+}
+
+.inputField::placeholder {
+  color: var(--color-gray-500);
+  opacity: 1;
+}
+
+.inputField:focus {
+  border: var(--border-0) solid var(--color-gray-300);
+  background-color: var(--color-gray-50);
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-md)
+    rgba(0, 0, 0, 0.25);
+  outline: none;
+  transition: box-shadow 0.2s ease;
+}
+
+.removeButton {
+  margin-bottom: var(--space-4);
+  background-color: var(--color-red-100);
+  color: var(--color-red-500);
+  margin-right: var(--space-5);
+  --bs-btn-border-color: var(--color-red-100);
+}
+
+.removeButton:is(:hover, :active, :focus) {
+  background-color: var(--color-red-500);
+  border-color: var(--color-red-500);
+  color: var(--color-white);
+}
+
+.addButton {
+  margin-bottom: var(--space-4);
+  color: var(--color-gray-700);
+  background-color: var(--color-blue-200);
+  border-color: var(--color-blue-200);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.addButton:is(:hover, :active, :focus) {
+  background-color: var(--color-blue-600);
+  border-color: var(--color-gray-700);
+}
+
+.addButton:disabled {
+  margin-bottom: var(--space-4);
+}
+
+.btnsContainer {
+  display: flex;
+  margin: var(--space-9) 0;
+  align-items: center;
+}
+
+.btnsContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.btnsContainer > :first-child {
+  flex: 1 1 var(--space-21);
+  min-width: var(--space-18);
+  max-width: 100%;
+}
+
+.btnsContainer .btnsBlock {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.btnsContainer .btnsBlock button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0;
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer {
+    flex-direction: column;
+    margin: var(--space-7) 0;
+  }
+
+  .btnsContainer > div {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin: var(--space-7) 0 0 0;
+    justify-content: space-between;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin: 0;
+    margin-left: 0;
+    width: 100%;
+    max-width: var(--space-27);
+  }
+
+  .btnsContainer .btnsBlock div button {
+    margin-right: var(--space-7);
+  }
+}
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+
+  .btnsContainer .btnsBlock {
+    display: block;
+    margin-top: var(--space-5);
+    margin-right: 0;
+  }
+
+  .btnsContainer .btnsBlock div {
+    flex: 1;
+  }
+
+  .btnsContainer .btnsBlock button {
+    margin-bottom: var(--space-5);
+    margin-right: 0;
+    width: 100%;
+  }
+}

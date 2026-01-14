@@ -1,4 +1,10 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "Please log in again; your session has expired."
+  },
+  "securedRoute": {
+    "sessionExpired": "Please log in again; your session has expired."
+  },
   "ends": "Ends",
   "occurrences": "Occurrences",
   "leaderboard": {
@@ -1609,7 +1615,8 @@
     "on": "On",
     "after": "After",
     "customRecurrence": "Custom Recurrence",
-    "repeatsEvery": "Repeats Every"
+    "repeatsEvery": "Repeats Every",
+    "noEventAvailable": "No Event Available!"
   },
   "userEventCard": {
     "starts": "Starts",
@@ -2154,9 +2161,6 @@
   "contact": {
     "card_aria": "Contact card"
   },
-  "securedRoute": {
-    "sessionExpired": "Kindly relogin as session has expired"
-  },
   "common": {
     "signOut": "Sign out",
     "signingOut": "Signing out...",
@@ -2193,5 +2197,8 @@
     "sortPeople": "Sort People",
     "unassign": "Unassign",
     "tags": "Tags"
+  },
+  "orgProfileField": {
+    "editCustomField": "Edit Custom Field"
   }
 }
