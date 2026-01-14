@@ -205,6 +205,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
           <FormFieldGroup
             name="campaignName"
             label={t('campaignName')}
+            required
             error={isNameInvalid ? tCommon('required') : undefined}
             touched={touched.campaignName}
           >
@@ -215,7 +216,6 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
                 className={`${styles.noOutline} w-100`}
                 value={campaignName}
                 error={isNameInvalid}
-                inputProps={{ 'aria-describedby': 'campaignName-error' }}
                 onBlur={() =>
                   setTouched((prev) => ({ ...prev, campaignName: true }))
                 }

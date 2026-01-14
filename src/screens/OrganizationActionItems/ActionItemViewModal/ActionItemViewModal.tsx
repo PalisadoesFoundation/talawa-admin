@@ -95,7 +95,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
   ): string => {
     if (!user) return 'Unknown';
 
-    if (user.name) {
+    if (user.name && user.name.trim()) {
       return user.name;
     }
     return `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Unknown';
