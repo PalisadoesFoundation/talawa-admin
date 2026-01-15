@@ -7,6 +7,9 @@
   },
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
+  "customRecurrence": "कस्टम पुनरावृत्ति",
+  "invalidDetailsMessage": "कृपया दर्ज किए गए विवरणों की जाँच करें।",
+  "selectAtLeastOneDay": "कृपया कम से कम एक दिन चुनें।",
   "leaderboard": {
     "title": "लीडरबोर्ड",
     "searchByVolunteer": "स्वयंसेवक द्वारा खोजें",
@@ -846,9 +849,14 @@
     "earliestEndDate": "सबसे पहली समाप्ति तिथि",
     "lowestGoal": "सबसे कम उद्देश्य",
     "highestGoal": "सबसे ऊंचा उद्देश्य",
-    "errorLoading": "अभियान डेटा लोड करते समय त्रुटि हुई",
+    "errorLoading": "कैंपेन डेटा लोड करते समय त्रुटि हुई",
     "percentageRaised": "% एकत्रित",
-    "campaignProgress": "अभियान प्रगति: {{percentage}}%"
+    "campaignProgress": "कैंपेन प्रगति: {{percentage}}%",
+    "campaignNotFound": "कैंपेन नहीं मिली",
+    "dateRangeRequired": "कृपया एक मान्य तिथि सीमा चुनें",
+    "campaignNameRequired": "कैंपेन का नाम आवश्यक है",
+    "invalidDate": "अमान्य तिथि चुनी गई है",
+    "endDateBeforeStart": "समाप्ति तिथि प्रारंभ तिथि से पहले नहीं हो सकती"
   },
   "pledges": {
     "title": "निधि अभियान प्रतिज्ञाएँ",
@@ -1984,6 +1992,8 @@
     "earliest": "प्रारंभिक",
     "requestAccepted": "अनुरोध सफलतापूर्वक स्वीकृत",
     "requestRejected": "अनुरोध सफलतापूर्वक अस्वीकृत",
+    "acceptRequest": "अनुरोध स्वीकार करें",
+    "rejectRequest": "अनुरोध अस्वीकार करें",
     "details": "विवरण",
     "manageGroup": "समूह प्रबंधित करें",
     "mostVolunteers": "सबसे अधिक स्वयंसेवक",
@@ -2007,7 +2017,9 @@
     "deleteVolunteerGroup": "{{name}} स्वयंसेवक समूह हटाएं",
     "deleteVolunteerEntry": "{{name}} स्वयंसेवक प्रविष्टि हटाएं",
     "viewGroup": "समूह देखें",
-    "editGroup": "समूह संपादित करें"
+    "editGroup": "समूह संपादित करें",
+    "invalidNumber": "अमान्य संख्या",
+    "viewToggle": "दृश्य टॉगल"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",
@@ -2200,5 +2212,8 @@
   },
   "orgProfileField": {
     "editCustomField": "कस्टम फ़ील्ड संपादित करें"
+  },
+  "userGlobalScreen": {
+    "globalFeatures": "वैश्विक सुविधाएं"
   }
 }

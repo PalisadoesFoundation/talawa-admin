@@ -1434,6 +1434,8 @@ describe('EventActionItems', () => {
       await waitFor(() => {
         const checkbox = screen.getByTestId('statusCheckboxactionItemId1');
         expect(checkbox).toHaveAttribute('aria-label', 'actionItemCompleted');
+        const statusChips = screen.getAllByTestId('statusChip');
+        expect(statusChips[0]).toHaveTextContent('completed'); // First item as only one item present in mock
       });
     });
 
@@ -1443,6 +1445,8 @@ describe('EventActionItems', () => {
       await waitFor(() => {
         const checkbox = screen.getByTestId('statusCheckboxactionItemId1');
         expect(checkbox).toHaveAttribute('aria-label', 'markCompletion');
+        const statusChips = screen.getAllByTestId('statusChip');
+        expect(statusChips[0]).toHaveTextContent('pending'); // First item as only one item present in mock
       });
     });
 

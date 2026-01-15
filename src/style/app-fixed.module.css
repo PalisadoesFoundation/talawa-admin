@@ -10319,18 +10319,6 @@ form {
   margin: 0.15rem 0 0 1.25rem;
 }
 
-.active {
-  background-color: var(--active-bg) !important;
-  color: var(--active-color) !important;
-  border-color: var(--active-border-color) !important;
-}
-
-.pending {
-  background-color: var(--status-pending-bg) !important;
-  color: var(--pending-color) !important;
-  border-color: var(--pending-border-color) !important;
-}
-
 /* -- GroupModal.tsx -- */
 
 .modalCloseBtn {

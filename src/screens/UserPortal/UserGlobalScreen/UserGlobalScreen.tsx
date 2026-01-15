@@ -1,37 +1,31 @@
 /**
- * UserGlobalScreen component serves as the main layout for user global routes.
- * It manages the sidebar visibility and displays content for routes that don't require an orgId.
+ * Main layout for user routes that do not require an orgId.
+ * Manages sidebar visibility and displays nested content via the router outlet.
  *
- * @component
+ * @returns JSX.Element The rendered UserGlobalScreen component.
  *
  * @remarks
- * - Uses UserSidebar instead of UserSidebarOrg since no orgId is required.
- * - Adjusts the sidebar visibility based on the screen width.
- * - Renders the Outlet for nested routes.
- *
- * @returns {JSX.Element} The rendered UserGlobalScreen component.
+ * - Uses UserSidebar instead of UserSidebarOrg because no orgId is needed.
+ * - Hides the sidebar on narrow screens and shows it on wider screens.
+ * - Provides a profile dropdown alongside the page title area.
  *
  * @example
  * ```tsx
  * <Route path="/user/test/global" element={<UserGlobalScreen />} />
  * ```
- *
- * @property {boolean} hideDrawer - State to manage the visibility of the sidebar.
- *
- * @function handleResize
- * Toggles the sidebar visibility based on the screen width.
- *
- * @hook useEffect
- * Sets up and cleans up the window resize event listener.
  */
 import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router';
-import styles from 'style/app-fixed.module.css';
+import { useTranslation } from 'react-i18next';
+import styles from './UserGlobalScreen.module.css';
 import { Button } from 'react-bootstrap';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 const UserGlobalScreen = (): JSX.Element => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userGlobalScreen',
+  });
   const [hideDrawer, setHideDrawer] = useState<boolean>(false);
 
   /**
@@ -88,8 +82,8 @@ const UserGlobalScreen = (): JSX.Element => {
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
-          <div style={{ flex: 1 }}>
-            <h1>Global Features</h1>
+          <div className={styles.titleFlex}>
+            <h1>{t('globalFeatures')}</h1>
           </div>
           <ProfileDropdown portal="user" />
         </div>

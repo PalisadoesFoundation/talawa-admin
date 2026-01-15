@@ -5,24 +5,12 @@
  * likes, comments, and associated actions like editing, deleting, liking, and commenting.
  * It also includes modals for viewing the post in detail and editing the post content.
  *
- * @param props - The properties of the post card, which include:
- *   - id: Unique identifier for the post
- *   - creator: Object containing the creator's details (id, firstName, lastName, email)
- *   - title: Title of the post
- *   - text: Content of the post
- *   - image: URL of the post's image
- *   - postedAt: Date when the post was created
- *   - likeCount: Number of likes on the post
- *   - likedBy: Array of users who liked the post
- *   - comments: Array of comments on the post
- *   - commentCount: Total number of comments on the post
  *   - fetchPosts: Function to refresh the list of posts
  *
- * @returns A JSX.Element representing the post card.
  */
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import {
   IconButton,
@@ -124,7 +112,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       setIsLikedByUser(!isLikedByUser);
       setLikeCount(isLikedByUser ? likeCount - 1 : likeCount + 1);
     } catch (error) {
-      toast.error(error as string);
+      NotificationToast.error(
+        error instanceof Error ? error.message : String(error),
+      );
     }
   };
 
@@ -168,7 +158,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         },
       });
       await props.fetchPosts();
-      toast.success(
+      NotificationToast.success(
         isPinned
           ? t('postCard.postUnpinnedSuccess')
           : t('postCard.postPinnedSuccess'),
@@ -184,7 +174,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
     try {
       await deletePost({ variables: { input: { id: props.id } } });
       await props.fetchPosts();
-      toast.success(t('postCard.postDeletedSuccess'));
+      NotificationToast.success(t('postCard.postDeletedSuccess'));
       setDropdownAnchor(null);
     } catch (error) {
       errorHandler(t, error);

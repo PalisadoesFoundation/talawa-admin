@@ -21,8 +21,24 @@ vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
   )),
 }));
 
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: (namespace?: string, options?: { keyPrefix?: string }) => {
+    const keyPrefix = options?.keyPrefix || '';
+    return {
+      t: (key: string) => {
+        const translations: Record<string, string> = {
+          globalFeatures: 'Global Features',
+        };
+        const fullKey = keyPrefix ? `${keyPrefix}.${key}` : key;
+        return translations[key] || fullKey;
+      },
+    };
+  },
+}));
+
 // Mock CSS modules
-vi.mock('style/app-fixed.module.css', () => ({
+vi.mock('./UserGlobalScreen.module.css', () => ({
   default: {
     opendrawer: 'opendrawer',
     collapseSidebarButton: 'collapseSidebarButton',
@@ -30,6 +46,7 @@ vi.mock('style/app-fixed.module.css', () => ({
     pageContainer: 'pageContainer',
     expand: 'expand',
     contract: 'contract',
+    titleFlex: 'titleFlex',
   },
 }));
 

@@ -1,3 +1,16 @@
+/**
+ * VolunteerGroupDeleteModal
+ *
+ * A modal component that handles the deletion of volunteer groups.
+ * It supports deleting groups for a single event instance or an entire recurring series.
+ *
+ * @param isOpen - Boolean to control modal visibility
+ * @param hide - Function to close the modal
+ * @param group - The volunteer group object to be deleted
+ * @param refetchGroups - Callback to refresh the list after deletion
+ * @param isRecurring - (Optional) Whether the event is recurring
+ * @param eventId - (Optional) The ID of the specific event instance
+ */
 import { Button, Form } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import React, { useState } from 'react';
@@ -20,19 +33,7 @@ export interface InterfaceDeleteVolunteerGroupModal {
   isRecurring?: boolean;
   eventId?: string;
 }
-/**
- * VolunteerGroupDeleteModal
- *
- * A modal component that handles the deletion of volunteer groups.
- * It supports deleting groups for a single event instance or an entire recurring series.
- *
- * @param isOpen - Boolean to control modal visibility
- * @param hide - Function to close the modal
- * @param group - The volunteer group object to be deleted
- * @param refetchGroups - Callback to refresh the list after deletion
- * @param isRecurring - (Optional) Whether the event is recurring
- * @param eventId - (Optional) The ID of the specific event instance
- */
+
 const VolunteerGroupDeleteModal: React.FC<
   InterfaceDeleteVolunteerGroupModal
 > = ({ isOpen, hide, group, refetchGroups, isRecurring = false, eventId }) => {

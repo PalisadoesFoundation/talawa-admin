@@ -7,6 +7,9 @@
   },
   "ends": "结束",
   "occurrences": "次",
+  "customRecurrence": "自定义重复",
+  "invalidDetailsMessage": "请检查您输入的详细信息。",
+  "selectAtLeastOneDay": "请至少选择一天。",
   "leaderboard": {
     "title": "排行榜",
     "searchByVolunteer": "按志愿者搜索",
@@ -831,7 +834,12 @@
     "highestGoal": "最高目标",
     "errorLoading": "加载活动数据时出错",
     "percentageRaised": "% 已筹集",
-    "campaignProgress": "活动进度: {{percentage}}%"
+    "campaignProgress": "活动进度：{{percentage}}%",
+    "campaignNotFound": "未找到募捐活动",
+    "dateRangeRequired": "请选择有效的日期范围",
+    "campaignNameRequired": "活动名称是必填项",
+    "invalidDate": "选择的日期无效",
+    "endDateBeforeStart": "结束日期不能早于开始日期"
   },
   "pledges": {
     "title": "基金活动承诺",
@@ -1984,6 +1992,8 @@
     "earliest": "最早",
     "requestAccepted": "请求已成功接受",
     "requestRejected": "请求已成功拒绝",
+    "acceptRequest": "接受请求",
+    "rejectRequest": "拒绝请求",
     "details": "详情",
     "manageGroup": "管理小组",
     "mostVolunteers": "最多的志愿者",
@@ -2007,7 +2017,9 @@
     "deleteVolunteerGroup": "删除 {{name}} 志愿者小组",
     "deleteVolunteerEntry": "删除 {{name}} 志愿者条目",
     "viewGroup": "查看小组",
-    "editGroup": "编辑小组"
+    "editGroup": "编辑小组",
+    "invalidNumber": "无效数字",
+    "viewToggle": "切换视图"
   },
   "userVolunteer": {
     "title": "志愿服务",
@@ -2200,5 +2212,8 @@
   },
   "orgProfileField": {
     "editCustomField": "編輯自定義字段"
+  },
+  "userGlobalScreen": {
+    "globalFeatures": "全球功能"
   }
 }

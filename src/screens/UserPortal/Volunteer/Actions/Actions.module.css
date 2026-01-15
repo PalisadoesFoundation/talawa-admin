@@ -1,0 +1,34 @@
+.message {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.icon {
+  margin: var(--space-0-5);
+}
+
+.imageContainer {
+  width: var(--space-11);
+  height: var(--space-11);
+  border-radius: var(--radius-full);
+  margin-right: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.imageContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-full);
+}
+
+.tableImage {
+  object-fit: cover;
+  margin-right: var(--space-2);
+  width: var(--space-10);
+  height: var(--space-10);
+  border-radius: var(--radius-full);
+}
