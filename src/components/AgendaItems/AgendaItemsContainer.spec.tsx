@@ -98,11 +98,11 @@ const link2 = new StaticMockLink(MOCKS_ERROR, true);
 const linkDragDrop = new StaticMockLink(MOCKS_DRAG_DROP, true);
 const linkDragDropError = new StaticMockLink(MOCKS_DRAG_DROP_ERROR, true);
 
-// Define mock toast object before vi.mock to use in assertions without importing
-const mockToast = {
+// Use vi.hoisted() to create mock that survives vi.mock hoisting
+const mockToast = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
-};
+}));
 
 vi.mock('react-toastify', () => ({
   toast: mockToast,
