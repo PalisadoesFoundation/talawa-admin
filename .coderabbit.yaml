@@ -25,6 +25,8 @@ reviews:
   review_status: true
   review_details: false
   collapse_walkthrough: false
+  auto_apply_labels: false
+  suggested_labels: false
   auto_review:
     enabled: true
     drafts: false
