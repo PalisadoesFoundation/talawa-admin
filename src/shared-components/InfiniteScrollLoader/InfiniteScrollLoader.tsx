@@ -4,8 +4,8 @@
  * This component renders a simple loader with a spinner, typically used
  * to indicate loading state during infinite scrolling or data fetching.
  *
- * @component
- * @returns {JSX.Element} A JSX element containing a loader with a spinner.
+ *
+ * @returns A loader with a spinner.
  *
  * @remarks
  * - The loader is styled using CSS modules imported from `style/app-fixed.module.css`.
