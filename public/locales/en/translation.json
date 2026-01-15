@@ -98,6 +98,13 @@
     "signingOut": "Signing out...",
     "signOut": "Sign Out"
   },
+  "uninstallPlugin": {
+  "title": "Uninstall Plugin",
+  "message": "Are you sure you want to uninstall {{name}}?",
+  "warning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
+  "removeBtn": "Remove Permanently"
+},
+"deleting": "Deleting...",
   "orgSelector": {
     "organization": "Organization",
     "selectOrganization": "Select an organization",

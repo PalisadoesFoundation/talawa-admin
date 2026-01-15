@@ -1,14 +1,9 @@
-﻿import React from 'react';
+﻿import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import type { IPluginMeta } from 'plugin';
+import { InterfaceUninstallConfirmationModalProps } from 'types/AdminPortal/PluginStore/components/UninstallConfirmationModal/interface';
 
-interface InterfaceUninstallConfirmationModalProps {
-  show: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  plugin: IPluginMeta | null;
-}
 /**
  * UninstallConfirmationModal
  *
@@ -26,39 +21,53 @@ export default function UninstallConfirmationModal({
   onConfirm,
   plugin,
 }: InterfaceUninstallConfirmationModalProps) {
+  const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Wrapper to handle the "Rapid Click" bug and locking
+  const handleConfirm = async () => {
+    if (isLoading) return; // Prevent double clicks
+    setIsLoading(true); // Lock the button
+    try {
+      await onConfirm();
+    } catch (error) {
+      console.error('Uninstall failed', error);
+      setIsLoading(false); // Only unlock if it failed (otherwise modal closes)
+    }
+  };
+
   return (
     <BaseModal
       show={show}
       onHide={onClose}
-      title="Uninstall Plugin"
+      title={t('uninstallPlugin.title')}
       footer={
         <>
           <Button
             variant="secondary"
             onClick={onClose}
+            disabled={isLoading}
             data-testid="uninstall-cancel-btn"
             className="me-2"
           >
-            Cancel
+            {t('cancel')}
           </Button>
           <Button
             variant="danger"
-            onClick={onConfirm}
+            onClick={handleConfirm}
+            disabled={isLoading} // 🔒 Disable button while loading
             data-testid="uninstall-remove-btn"
           >
-            Remove Permanently
+            {isLoading ? t('deleting') : t('uninstallPlugin.removeBtn')}
           </Button>
         </>
       }
     >
       <div data-testid="uninstall-modal">
         <p className="mb-2" data-testid="uninstall-modal-title">
-          Are you sure you want to uninstall {plugin?.name}?
+          {t('uninstallPlugin.message', { name: plugin?.name })}
         </p>
-        <p className="text-secondary small">
-          This action will permanently remove the plugin and all its data. This
-          action cannot be undone.
-        </p>
+        <p className="text-secondary small">{t('uninstallPlugin.warning')}</p>
       </div>
     </BaseModal>
   );
