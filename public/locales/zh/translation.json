@@ -1859,7 +1859,10 @@
     "checkedIn": "已簽到",
     "downloadTag": "下載標籤",
     "checkIn": "簽到",
-    "eventCheckInManagement": "活動簽到管理"
+    "eventCheckInManagement": "活動簽到管理",
+    "unknownUser": "未知用戶",
+    "user": "用戶",
+    "checkInStatus": "簽到狀態"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "添加与会者时出错",

@@ -1842,7 +1842,10 @@
     "checkedIn": "Registrado",
     "downloadTag": "Descargar etiqueta",
     "checkIn": "Registrar",
-    "eventCheckInManagement": "Gestión de registro de eventos"
+    "eventCheckInManagement": "Gestión de registro de eventos",
+    "unknownUser": "Usuario Desconocido",
+    "user": "Usuario",
+    "checkInStatus": "Estado de Registro"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",

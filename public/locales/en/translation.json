@@ -1842,7 +1842,10 @@
     "checkedIn": "Checked In",
     "downloadTag": "Download Tag",
     "checkIn": "Check In",
-    "eventCheckInManagement": "Event Check In Management"
+    "eventCheckInManagement": "Event Check In Management",
+    "unknownUser": "Unknown User",
+    "user": "User",
+    "checkInStatus": "Check In Status"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",
