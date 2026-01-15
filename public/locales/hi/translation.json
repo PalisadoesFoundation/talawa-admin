@@ -739,7 +739,8 @@
     "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?",
     "event": "कार्यक्रम",
     "search": "खोज",
-    "attachmentPreview": "अटैचमेंट पूर्वावलोकन"
+    "attachmentPreview": "अनुलग्नक पूर्वावलोकन",
+    "fileUploadError": "फ़ाइल अपलोड विफल"
   },
   "eventListCard": {
     "deleteEvent": "ईवेंट हटाएँ",

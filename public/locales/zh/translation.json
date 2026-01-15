@@ -722,7 +722,8 @@
     "deleteAgendaItemMsg": "您要删除此议程项目吗？",
     "event": "活动",
     "search": "搜索",
-    "attachmentPreview": "附件預覽"
+    "attachmentPreview": "附件预览",
+    "fileUploadError": "文件上传失败"
   },
   "eventListCard": {
     "deleteEvent": "删除事件",

@@ -722,7 +722,8 @@
     "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?",
     "event": "Événement",
     "search": "Rechercher",
-    "attachmentPreview": "Aperçu de la pièce jointe"
+    "attachmentPreview": "Aperçu de la pièce jointe",
+    "fileUploadError": "Échec du téléchargement du fichier"
   },
   "eventListCard": {
     "deleteEvent": "Supprimer l'événement",

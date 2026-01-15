@@ -722,7 +722,8 @@
     "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
     "event": "Event",
     "search": "Search",
-    "attachmentPreview": "Attachment preview"
+    "attachmentPreview": "Attachment preview",
+    "fileUploadError": "Error uploading file"
   },
   "eventListCard": {
     "deleteEvent": "Delete Event",

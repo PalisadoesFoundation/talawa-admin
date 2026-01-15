@@ -32,7 +32,7 @@ import React, { useState } from 'react';
 import type { FormEvent, JSX } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useMutation } from '@apollo/client';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import type { DropResult } from '@hello-pangea/dnd';
@@ -144,6 +144,18 @@ function AgendaItemsContainer({
   ): Promise<void> => {
     e.preventDefault();
     try {
+      // Parse JSON attachment metadata strings to FileMetadataInput objects
+      const parsedAttachments = formState.attachments
+        .filter((att) => att.trim() !== '')
+        .map((att) => {
+          try {
+            return JSON.parse(att);
+          } catch {
+            return null;
+          }
+        })
+        .filter(Boolean);
+
       await updateAgendaItem({
         variables: {
           updateAgendaItemId: agendaItemId,
@@ -152,17 +164,17 @@ function AgendaItemsContainer({
             description: formState.description,
             duration: formState.duration,
             categories: formState.agendaItemCategoryIds,
-            attachments: formState.attachments,
+            attachments: parsedAttachments,
             urls: formState.urls,
           },
         },
       });
       agendaItemRefetch();
       hideUpdateModal();
-      toast.success(t('agendaItemUpdated') as string);
+      NotificationToast.success(t('agendaItemUpdated'));
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(`${error.message}`);
+        NotificationToast.error(`${error.message}`);
       }
     }
   };
@@ -179,10 +191,10 @@ function AgendaItemsContainer({
       });
       agendaItemRefetch();
       toggleDeleteModal();
-      toast.success(t('agendaItemDeleted') as string);
+      NotificationToast.success(t('agendaItemDeleted'));
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(`${error.message}`);
+        NotificationToast.error(`${error.message}`);
       }
     }
   };
@@ -256,7 +268,7 @@ function AgendaItemsContainer({
       agendaItemRefetch();
     } catch (error) {
       if (error instanceof Error) {
-        toast.error(`${error.message}`);
+        NotificationToast.error(`${error.message}`);
       }
     }
   };

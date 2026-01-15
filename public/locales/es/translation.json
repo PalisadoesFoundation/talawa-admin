@@ -722,7 +722,8 @@
     "deleteAgendaItemMsg": "¿Desea eliminar este punto del orden del día?",
     "event": "Evento",
     "search": "Buscar",
-    "attachmentPreview": "Vista previa del adjunto"
+    "attachmentPreview": "Vista previa del archivo adjunto",
+    "fileUploadError": "Error al cargar el archivo"
   },
   "eventListCard": {
     "location": "Lugar del evento",

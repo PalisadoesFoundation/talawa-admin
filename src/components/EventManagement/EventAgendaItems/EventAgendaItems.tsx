@@ -40,7 +40,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 
 import { WarningAmberRounded } from '@mui/icons-material';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 import { useMutation, useQuery } from '@apollo/client';
 import {
@@ -130,6 +130,18 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
       : [];
     const nextSequence = agendaItems.length + 1;
     try {
+      // Parse JSON attachment metadata strings to FileMetadataInput objects
+      const parsedAttachments = formState.attachments
+        .filter((att) => att.trim() !== '')
+        .map((att) => {
+          try {
+            return JSON.parse(att);
+          } catch {
+            return null;
+          }
+        })
+        .filter(Boolean);
+
       await createAgendaItem({
         variables: {
           input: {
@@ -140,7 +152,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
             sequence: nextSequence, // Assign sequence based on current length
             duration: formState.duration,
             categories: formState.agendaItemCategoryIds,
-            attachments: formState.attachments,
+            attachments: parsedAttachments,
             urls: formState.urls,
           },
         },
@@ -157,10 +169,10 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
       });
       hideCreateModal();
       refetchAgendaItem();
-      toast.success(t('agendaItemCreated') as string);
+      NotificationToast.success(t('agendaItemCreated'));
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(error.message);
+        NotificationToast.error(error.message);
       }
     }
   };
