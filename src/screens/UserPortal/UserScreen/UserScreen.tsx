@@ -140,7 +140,7 @@ const UserScreen = (): React.JSX.Element => {
       style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
     >
       <UserPortalNavigationBar
-        variant="light"
+        mode="organization"
         organizationId={orgId}
         currentPage={currentPage}
       />

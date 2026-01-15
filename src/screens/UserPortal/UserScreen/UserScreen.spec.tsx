@@ -97,7 +97,7 @@ vi.mock(
     UserPortalNavigationBar: vi.fn((props) => (
       <nav
         data-testid="user-portal-navbar"
-        data-variant={props.variant}
+        data-mode={props.mode}
         data-orgid={props.organizationId || ''}
         data-currentpage={props.currentPage || ''}
       >
@@ -311,7 +311,7 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     );
     const navbar = screen.getByTestId('user-portal-navbar');
     expect(navbar).toBeInTheDocument();
-    expect(navbar).toHaveAttribute('data-variant', 'organization');
+    expect(navbar).toHaveAttribute('data-mode', 'organization');
     expect(navbar).toHaveAttribute('data-orgid', '123');
     expect(navbar).toHaveAttribute(
       'data-currentpage',
@@ -335,7 +335,7 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     );
     const navbar = screen.getByTestId('user-portal-navbar');
     expect(navbar).toBeInTheDocument();
-    expect(navbar).toHaveAttribute('data-variant', 'organization'); // still organization variant
+    expect(navbar).toHaveAttribute('data-mode', 'organization'); // still organization mode
     expect(navbar).toHaveAttribute('data-orgid', '');
     expect(navbar).toHaveAttribute('data-currentpage', '/user/settings');
   });

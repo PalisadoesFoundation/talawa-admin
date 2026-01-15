@@ -1348,6 +1348,9 @@
     "close": "关闭",
     "talawaBranding": "Talawa 品牌形象"
   },
+  "userGlobalScreen": {
+    "title": "全球功能"
+  },
   "userOrganizations": {
     "allOrganizations": "所有组织",
     "joinedOrganizations": "加入组织",

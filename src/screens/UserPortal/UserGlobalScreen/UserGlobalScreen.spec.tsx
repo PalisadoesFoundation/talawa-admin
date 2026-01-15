@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
 import UserGlobalScreen from './UserGlobalScreen';
 
 // Mock the child components
@@ -50,7 +52,7 @@ vi.mock('./UserGlobalScreen.module.css', () => ({
   },
 }));
 
-// Mock react-router Outlet
+// Mock react-router Outlet - DO NOT mock useLocation as it needs to work with MemoryRouter
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
@@ -66,7 +68,7 @@ vi.mock(
     UserPortalNavigationBar: vi.fn((props) => (
       <nav
         data-testid="user-portal-navbar"
-        data-variant={props.variant}
+        data-mode={props.mode}
         data-currentpage={props.currentPage || ''}
       >
         UserPortalNavigationBar
@@ -101,7 +103,9 @@ describe('UserGlobalScreen', () => {
   const renderComponent = () => {
     return render(
       <MemoryRouter>
-        <UserGlobalScreen />
+        <I18nextProvider i18n={i18nForTest}>
+          <UserGlobalScreen />
+        </I18nextProvider>
       </MemoryRouter>,
     );
   };
@@ -140,14 +144,16 @@ describe('UserGlobalScreen', () => {
     it('should render Global Features heading', () => {
       renderComponent();
 
-      expect(screen.getByText('Global Features')).toBeInTheDocument();
+      expect(
+        screen.getByRole('heading', { name: 'Global Features' }),
+      ).toBeInTheDocument();
     });
 
     it('should render UserPortalNavigationBar with correct props for user variant', () => {
       renderComponent();
       const navbar = screen.getByTestId('user-portal-navbar');
       expect(navbar).toBeInTheDocument();
-      expect(navbar).toHaveAttribute('data-variant', 'user');
+      expect(navbar).toHaveAttribute('data-mode', 'user');
       expect(navbar).toHaveAttribute('data-currentpage', '/'); // MemoryRouter default location
     });
   });

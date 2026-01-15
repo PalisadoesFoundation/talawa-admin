@@ -1331,6 +1331,9 @@
     "close": "Cerrar",
     "talawaBranding": "Marca Talawa"
   },
+  "userGlobalScreen": {
+    "title": "Funciones Globales"
+  },
   "userOrganizations": {
     "allOrganizations": "Todas las organizaciones",
     "joinedOrganizations": "Organizaciones unidas",

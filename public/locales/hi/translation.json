@@ -1348,6 +1348,9 @@
     "close": "बंद करें",
     "talawaBranding": "तालावा ब्रांडिंग"
   },
+  "userGlobalScreen": {
+    "title": "वैश्विक सुविधाएं"
+  },
   "userOrganizations": {
     "allOrganizations": "सभी संगठन",
     "joinedOrganizations": "संगठनों से जुड़े",

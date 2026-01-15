@@ -1393,6 +1393,9 @@
     "close": "close",
     "talawaBranding": "Talawa Branding"
   },
+  "userGlobalScreen": {
+    "title": "Global Features"
+  },
   "userOrganizations": {
     "allOrganizations": "All Organizations",
     "joinedOrganizations": "Joined Organizations",
