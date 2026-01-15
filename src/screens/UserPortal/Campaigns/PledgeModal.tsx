@@ -273,6 +273,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             onClick={hide}
             className={styles.modalCloseBtn}
             data-testid="pledgeModalCloseBtn"
+            aria-label={t('close')}
           >
             <i className="fa fa-times"></i>
           </Button>
@@ -282,9 +283,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     >
       <Form
         data-testid="pledgeForm"
-        onSubmitCapture={
-          mode === 'edit' ? updatePledgeHandler : createPledgeHandler
-        }
+        onSubmit={mode === 'edit' ? updatePledgeHandler : createPledgeHandler}
         className="p-3"
       >
         {userData?.user?.role !== 'regular' && (

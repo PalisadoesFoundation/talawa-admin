@@ -21,12 +21,6 @@
   .calendar__header {
     flex-wrap: wrap;
   }
-
-  .btnsBlock {
-    width: 100%;
-    justify-content: flex-end;
-    margin-top: var(--space-4);
-  }
 }
 
 .people_content {
