@@ -31,7 +31,8 @@
  * ```
  *
  * Dependencies:
- * - `react-bootstrap` for modal and button components.
+ * - `shared-components/BaseModal` for modal component.
++* - `react-bootstrap` for button components.
  * - `@apollo/client` for GraphQL queries and mutations.
  * - `@mui/material` for UI components like Avatar, Chip, and Autocomplete.
  * - `react-toastify` for toast notifications.
@@ -100,10 +101,10 @@ export const EventRegistrantsModal = (
   // Function to add a new registrant to the event
   const addRegistrant = (): void => {
     if (member == null) {
-      NotificationToast.warning('Please choose an user to add first!');
+      NotificationToast.warning(t('selectUserFirst'));
       return;
     }
-    NotificationToast.warning('Adding the attendee...');
+    NotificationToast.warning(t('addingAttendee'));
     const addVariables = isRecurring
       ? { userId: member.id, recurringEventInstanceId: eventId }
       : { userId: member.id, eventId: eventId };
@@ -196,7 +197,7 @@ export const EventRegistrantsModal = (
           }
           options={memberData?.usersByOrganizationId || []}
           getOptionLabel={(member: InterfaceUser): string =>
-            member.name || 'Unknown User'
+            member.name || t('unknownUser')
           }
           renderInput={(params): React.ReactNode => (
             <TextField
