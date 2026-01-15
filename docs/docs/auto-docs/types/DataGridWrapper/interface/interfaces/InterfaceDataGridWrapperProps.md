@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceDataGridWrapperProps\<T\>
 
-Defined in: [src/types/DataGridWrapper/interface.ts:13](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/DataGridWrapper/interface.ts#L13)
+Defined in: [src/types/DataGridWrapper/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L13)
 
 Props for the DataGridWrapper component.
 
@@ -23,7 +23,7 @@ MUI's DataGrid that provides consistent search, sorting, pagination, and styling
 
 > `optional` **actionColumn**: (`row`) => `ReactNode`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:124](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/DataGridWrapper/interface.ts#L124)
+Defined in: [src/types/DataGridWrapper/interface.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L124)
 
 A function to render custom content in the "Actions" column (appended to the right).
 
@@ -47,7 +47,7 @@ A ReactNode (e.g., buttons, menu) to display in the actions cell.
 
 > `optional` **columns**: `GridColDef`[]
 
-Defined in: [src/types/DataGridWrapper/interface.ts:26](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/DataGridWrapper/interface.ts#L26)
+Defined in: [src/types/DataGridWrapper/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L26)
 
 Configuration for the grid columns.
 Defines headers, widths, and cell rendering logic.
@@ -58,7 +58,7 @@ Defines headers, widths, and cell rendering logic.
 
 > `optional` **emptyStateMessage**: `string`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:154](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/DataGridWrapper/interface.ts#L154)
+Defined in: [src/types/DataGridWrapper/interface.ts:154](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L154)
 
 Custom message to display when there are no rows and `loading` is false.
 Use `emptyStateProps` instead for full customization.
@@ -71,7 +71,7 @@ This property is maintained for backward compatibility.
 
 > `optional` **emptyStateProps**: [`InterfaceEmptyStateProps`](../../../shared-components/EmptyState/interface/interfaces/InterfaceEmptyStateProps.md)
 
-Defined in: [src/types/DataGridWrapper/interface.ts:146](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/DataGridWrapper/interface.ts#L146)
+Defined in: [src/types/DataGridWrapper/interface.ts:146](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L146)
 
 Full EmptyState component props for flexible empty state rendering.
 Takes precedence over `emptyStateMessage`.
@@ -99,7 +99,7 @@ emptyStateProps={{
 
 > `optional` **error**: `ReactNode`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:159](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/DataGridWrapper/interface.ts#L159)
+Defined in: [src/types/DataGridWrapper/interface.ts:159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L159)
 
 Error message or component to display instead of the grid when data fetch fails.
 
@@ -109,7 +109,7 @@ Error message or component to display instead of the grid when data fetch fails.
 
 > `optional` **loading**: `boolean`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:31](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/DataGridWrapper/interface.ts#L31)
+Defined in: [src/types/DataGridWrapper/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L31)
 
 If `true`, displays a loading indicator (e.g., Progress Bar) overlaying the grid.
 
@@ -119,7 +119,7 @@ If `true`, displays a loading indicator (e.g., Progress Bar) overlaying the grid
 
 > `optional` **onRowClick**: (`row`) => `void`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:117](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/DataGridWrapper/interface.ts#L117)
+Defined in: [src/types/DataGridWrapper/interface.ts:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L117)
 
 Callback fired when a row is clicked.
 
@@ -141,7 +141,7 @@ The data object of the clicked row.
 
 > `optional` **paginationConfig**: `object`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:104](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/DataGridWrapper/interface.ts#L104)
+Defined in: [src/types/DataGridWrapper/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L104)
 
 Configuration for pagination.
 
@@ -169,7 +169,7 @@ Available options for rows per page. default: [10, 25, 50, 100]
 
 > `optional` **rows**: readonly `T`[]
 
-Defined in: [src/types/DataGridWrapper/interface.ts:20](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/DataGridWrapper/interface.ts#L20)
+Defined in: [src/types/DataGridWrapper/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L20)
 
 The array of data rows to display in the grid.
 Each row must include a unique `id` property (string or number).
@@ -180,7 +180,7 @@ Each row must include a unique `id` property (string or number).
 
 > `optional` **searchConfig**: `object`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:61](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/DataGridWrapper/interface.ts#L61)
+Defined in: [src/types/DataGridWrapper/interface.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L61)
 
 Configuration for search functionality (client-side or server-side).
 
@@ -306,7 +306,7 @@ searchConfig: {
 
 > `optional` **sortConfig**: `object`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:90](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/DataGridWrapper/interface.ts#L90)
+Defined in: [src/types/DataGridWrapper/interface.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L90)
 
 Configuration for sorting options displayed in a dropdown.
 Note: This is separate from MUI DataGrid's native column header sorting.

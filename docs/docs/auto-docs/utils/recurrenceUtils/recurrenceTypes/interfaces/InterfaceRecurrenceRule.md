@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceRecurrenceRule
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:7](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/recurrenceUtils/recurrenceTypes.ts#L7)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L7)
 
 Recurrence types for event scheduling
 Based on RFC 5545 (iCalendar) specification
@@ -15,7 +15,7 @@ Based on RFC 5545 (iCalendar) specification
 
 > `optional` **byDay**: [`WeekDays`](../enumerations/WeekDays.md)[]
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:14](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/recurrenceUtils/recurrenceTypes.ts#L14)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L14)
 
 ***
 
@@ -23,7 +23,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:14](https://github.com
 
 > `optional` **byMonth**: `number`[]
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:15](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/recurrenceUtils/recurrenceTypes.ts#L15)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L15)
 
 ***
 
@@ -31,7 +31,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:15](https://github.com
 
 > `optional` **byMonthDay**: `number`[]
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:16](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/recurrenceUtils/recurrenceTypes.ts#L16)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L16)
 
 ***
 
@@ -39,7 +39,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:16](https://github.com
 
 > `optional` **count**: `number`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:12](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/recurrenceUtils/recurrenceTypes.ts#L12)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L12)
 
 ***
 
@@ -47,7 +47,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:12](https://github.com
 
 > `optional` **endDate**: `Date`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:10](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/recurrenceUtils/recurrenceTypes.ts#L10)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L10)
 
 ***
 
@@ -55,7 +55,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:10](https://github.com
 
 > **frequency**: [`Frequency`](../enumerations/Frequency.md)
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:8](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/recurrenceUtils/recurrenceTypes.ts#L8)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L8)
 
 ***
 
@@ -63,7 +63,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:8](https://github.com/
 
 > `optional` **interval**: `number`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:9](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/recurrenceUtils/recurrenceTypes.ts#L9)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L9)
 
 ***
 
@@ -71,7 +71,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:9](https://github.com/
 
 > `optional` **never**: `boolean`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:13](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/recurrenceUtils/recurrenceTypes.ts#L13)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L13)
 
 ***
 
@@ -79,4 +79,4 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:13](https://github.com
 
 > `optional` **recurrenceEndDate**: `Date`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:11](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/recurrenceUtils/recurrenceTypes.ts#L11)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L11)

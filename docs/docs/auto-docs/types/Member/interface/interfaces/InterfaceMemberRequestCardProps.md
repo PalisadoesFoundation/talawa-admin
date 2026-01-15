@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceMemberRequestCardProps
 
-Defined in: [src/types/Member/interface.ts:1](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Member/interface.ts#L1)
+Defined in: [src/types/Member/interface.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L1)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Member/interface.ts:1](https://github.com/Anshikaaa06/tal
 
 > **email**: `string`
 
-Defined in: [src/types/Member/interface.ts:7](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Member/interface.ts#L7)
+Defined in: [src/types/Member/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L7)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Member/interface.ts:7](https://github.com/Anshikaaa06/tal
 
 > **id**: `string`
 
-Defined in: [src/types/Member/interface.ts:2](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Member/interface.ts#L2)
+Defined in: [src/types/Member/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L2)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Member/interface.ts:2](https://github.com/Anshikaaa06/tal
 
 > **joinDate**: `string`
 
-Defined in: [src/types/Member/interface.ts:5](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Member/interface.ts#L5)
+Defined in: [src/types/Member/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L5)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Member/interface.ts:5](https://github.com/Anshikaaa06/tal
 
 > **memberImage**: `string`
 
-Defined in: [src/types/Member/interface.ts:6](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Member/interface.ts#L6)
+Defined in: [src/types/Member/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L6)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Member/interface.ts:6](https://github.com/Anshikaaa06/tal
 
 > **memberLocation**: `string`
 
-Defined in: [src/types/Member/interface.ts:4](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Member/interface.ts#L4)
+Defined in: [src/types/Member/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L4)
 
 ***
 
@@ -52,4 +52,4 @@ Defined in: [src/types/Member/interface.ts:4](https://github.com/Anshikaaa06/tal
 
 > **memberName**: `string`
 
-Defined in: [src/types/Member/interface.ts:3](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Member/interface.ts#L3)
+Defined in: [src/types/Member/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L3)

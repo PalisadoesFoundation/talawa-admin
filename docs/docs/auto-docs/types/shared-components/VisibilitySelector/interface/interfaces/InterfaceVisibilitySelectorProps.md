@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceVisibilitySelectorProps
 
-Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:6](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/VisibilitySelector/interface.ts#L6)
+Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/VisibilitySelector/interface.ts#L6)
 
 Props for the VisibilitySelector component.
 
@@ -14,7 +14,7 @@ Props for the VisibilitySelector component.
 
 > **setVisibility**: (`visibility`) => `void`
 
-Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:8](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/VisibilitySelector/interface.ts#L8)
+Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/VisibilitySelector/interface.ts#L8)
 
 #### Parameters
 
@@ -32,7 +32,7 @@ Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:8](http
 
 > **tCommon**: (`key`) => `string`
 
-Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:9](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/VisibilitySelector/interface.ts#L9)
+Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/VisibilitySelector/interface.ts#L9)
 
 #### Parameters
 
@@ -50,4 +50,4 @@ Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:9](http
 
 > **visibility**: [`EventVisibility`](../../../../../shared-components/EventForm/utils/visibilityUtils/type-aliases/EventVisibility.md)
 
-Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:7](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/VisibilitySelector/interface.ts#L7)
+Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/VisibilitySelector/interface.ts#L7)

@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **DirectMessage** = `object`
 
-Defined in: [src/types/Chat/type.ts:4](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/type.ts#L4)
+Defined in: [src/types/Chat/type.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L4)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Chat/type.ts:4](https://github.com/Anshikaaa06/talawa-adm
 
 > **\_id**: `string`
 
-Defined in: [src/types/Chat/type.ts:5](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/type.ts#L5)
+Defined in: [src/types/Chat/type.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L5)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Chat/type.ts:5](https://github.com/Anshikaaa06/talawa-adm
 
 > `optional` **chatMessageBelongsTo**: [`GroupChat`](GroupChat.md)
 
-Defined in: [src/types/Chat/type.ts:11](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/type.ts#L11)
+Defined in: [src/types/Chat/type.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L11)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Chat/type.ts:11](https://github.com/Anshikaaa06/talawa-ad
 
 > **createdAt**: `Date`
 
-Defined in: [src/types/Chat/type.ts:6](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/type.ts#L6)
+Defined in: [src/types/Chat/type.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L6)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Chat/type.ts:6](https://github.com/Anshikaaa06/talawa-adm
 
 > `optional` **deletedBy**: [`User`](../../../shared-components/User/type/type-aliases/User.md)[]
 
-Defined in: [src/types/Chat/type.ts:14](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/type.ts#L14)
+Defined in: [src/types/Chat/type.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L14)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Chat/type.ts:14](https://github.com/Anshikaaa06/talawa-ad
 
 > `optional` **media**: `string`
 
-Defined in: [src/types/Chat/type.ts:12](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/type.ts#L12)
+Defined in: [src/types/Chat/type.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L12)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Chat/type.ts:12](https://github.com/Anshikaaa06/talawa-ad
 
 > **messageContent**: `string`
 
-Defined in: [src/types/Chat/type.ts:10](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/type.ts#L10)
+Defined in: [src/types/Chat/type.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L10)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Chat/type.ts:10](https://github.com/Anshikaaa06/talawa-ad
 
 > `optional` **receiver**: [`User`](../../../shared-components/User/type/type-aliases/User.md)
 
-Defined in: [src/types/Chat/type.ts:8](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/type.ts#L8)
+Defined in: [src/types/Chat/type.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L8)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Chat/type.ts:8](https://github.com/Anshikaaa06/talawa-adm
 
 > `optional` **replyTo**: `DirectMessage`
 
-Defined in: [src/types/Chat/type.ts:9](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/type.ts#L9)
+Defined in: [src/types/Chat/type.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L9)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [src/types/Chat/type.ts:9](https://github.com/Anshikaaa06/talawa-adm
 
 > **sender**: [`User`](../../../shared-components/User/type/type-aliases/User.md)
 
-Defined in: [src/types/Chat/type.ts:7](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/type.ts#L7)
+Defined in: [src/types/Chat/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L7)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [src/types/Chat/type.ts:7](https://github.com/Anshikaaa06/talawa-adm
 
 > `optional` **type**: `string`
 
-Defined in: [src/types/Chat/type.ts:13](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/type.ts#L13)
+Defined in: [src/types/Chat/type.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L13)
 
 ***
 
@@ -94,4 +94,4 @@ Defined in: [src/types/Chat/type.ts:13](https://github.com/Anshikaaa06/talawa-ad
 
 > **updatedAt**: `Date`
 
-Defined in: [src/types/Chat/type.ts:15](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/type.ts#L15)
+Defined in: [src/types/Chat/type.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L15)

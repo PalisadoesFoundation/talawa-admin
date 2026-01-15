@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfacePostNode
 
-Defined in: [src/types/Post/interface.ts:23](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L23)
+Defined in: [src/types/Post/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L23)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:23](https://github.com/Anshikaaa06/tala
 
 > **caption**: `string`
 
-Defined in: [src/types/Post/interface.ts:25](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L25)
+Defined in: [src/types/Post/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L25)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/interface.ts:25](https://github.com/Anshikaaa06/tala
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Post/interface.ts:31](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L31)
+Defined in: [src/types/Post/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L31)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/interface.ts:31](https://github.com/Anshikaaa06/tala
 
 > `optional` **creator**: [`InterfacePostCreator`](InterfacePostCreator.md)
 
-Defined in: [src/types/Post/interface.ts:29](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L29)
+Defined in: [src/types/Post/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L29)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Post/interface.ts:29](https://github.com/Anshikaaa06/tala
 
 > **id**: `string`
 
-Defined in: [src/types/Post/interface.ts:24](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L24)
+Defined in: [src/types/Post/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L24)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Post/interface.ts:24](https://github.com/Anshikaaa06/tala
 
 > `optional` **imageUrl**: `string`
 
-Defined in: [src/types/Post/interface.ts:27](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L27)
+Defined in: [src/types/Post/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L27)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Post/interface.ts:27](https://github.com/Anshikaaa06/tala
 
 > `optional` **pinned**: `boolean`
 
-Defined in: [src/types/Post/interface.ts:30](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L30)
+Defined in: [src/types/Post/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L30)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Post/interface.ts:30](https://github.com/Anshikaaa06/tala
 
 > `optional` **text**: `string`
 
-Defined in: [src/types/Post/interface.ts:26](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L26)
+Defined in: [src/types/Post/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L26)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/Post/interface.ts:26](https://github.com/Anshikaaa06/tala
 
 > `optional` **videoUrl**: `string`
 
-Defined in: [src/types/Post/interface.ts:28](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L28)
+Defined in: [src/types/Post/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L28)

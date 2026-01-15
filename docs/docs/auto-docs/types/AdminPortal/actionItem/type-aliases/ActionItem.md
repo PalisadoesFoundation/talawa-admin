@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **ActionItem** = `object`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:5](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L5)
+Defined in: [src/types/AdminPortal/actionItem.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L5)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:5](https://github.com/Anshikaaa
 
 > **\_id**: `string`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:6](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L6)
+Defined in: [src/types/AdminPortal/actionItem.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L6)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:6](https://github.com/Anshikaaa
 
 > `optional` **actionItemCategory**: [`ActionItemCategory`](ActionItemCategory.md)
 
-Defined in: [src/types/AdminPortal/actionItem.ts:7](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L7)
+Defined in: [src/types/AdminPortal/actionItem.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L7)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:7](https://github.com/Anshikaaa
 
 > `optional` **assignee**: [`User`](../../../shared-components/User/type/type-aliases/User.md)
 
-Defined in: [src/types/AdminPortal/actionItem.ts:8](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L8)
+Defined in: [src/types/AdminPortal/actionItem.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L8)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:8](https://github.com/Anshikaaa
 
 > `optional` **assigner**: [`User`](../../../shared-components/User/type/type-aliases/User.md)
 
-Defined in: [src/types/AdminPortal/actionItem.ts:9](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L9)
+Defined in: [src/types/AdminPortal/actionItem.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L9)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:9](https://github.com/Anshikaaa
 
 > **assignmentDate**: `Date`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:10](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L10)
+Defined in: [src/types/AdminPortal/actionItem.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L10)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:10](https://github.com/Anshikaa
 
 > **completionDate**: `Date`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:11](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L11)
+Defined in: [src/types/AdminPortal/actionItem.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L11)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:11](https://github.com/Anshikaa
 
 > **createdAt**: `Date`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:12](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L12)
+Defined in: [src/types/AdminPortal/actionItem.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L12)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:12](https://github.com/Anshikaa
 
 > `optional` **creator**: [`User`](../../../shared-components/User/type/type-aliases/User.md)
 
-Defined in: [src/types/AdminPortal/actionItem.ts:13](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L13)
+Defined in: [src/types/AdminPortal/actionItem.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L13)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:13](https://github.com/Anshikaa
 
 > **dueDate**: `Date`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:14](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L14)
+Defined in: [src/types/AdminPortal/actionItem.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L14)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:14](https://github.com/Anshikaa
 
 > `optional` **event**: `Event`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:15](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L15)
+Defined in: [src/types/AdminPortal/actionItem.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L15)
 
 ***
 
@@ -94,7 +94,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:15](https://github.com/Anshikaa
 
 > **isCompleted**: `boolean`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:16](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L16)
+Defined in: [src/types/AdminPortal/actionItem.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L16)
 
 ***
 
@@ -102,7 +102,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:16](https://github.com/Anshikaa
 
 > `optional` **postCompletionNotes**: `string`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:17](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L17)
+Defined in: [src/types/AdminPortal/actionItem.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L17)
 
 ***
 
@@ -110,7 +110,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:17](https://github.com/Anshikaa
 
 > `optional` **preCompletionNotes**: `string`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:18](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L18)
+Defined in: [src/types/AdminPortal/actionItem.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L18)
 
 ***
 
@@ -118,4 +118,4 @@ Defined in: [src/types/AdminPortal/actionItem.ts:18](https://github.com/Anshikaa
 
 > **updatedAt**: `Date`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:19](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L19)
+Defined in: [src/types/AdminPortal/actionItem.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L19)

@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: IEventsAttendedMemberModalProps
 
-Defined in: [src/types/Event/interface.ts:201](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L201)
+Defined in: [src/types/Event/interface.ts:201](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L201)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:201](https://github.com/Anshikaaa06/ta
 
 > **eventsAttended**: `Partial`\<[`IEvent`](IEvent.md)\>[]
 
-Defined in: [src/types/Event/interface.ts:202](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L202)
+Defined in: [src/types/Event/interface.ts:202](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L202)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/interface.ts:202](https://github.com/Anshikaaa06/ta
 
 > `optional` **eventsPerPage**: `number`
 
-Defined in: [src/types/Event/interface.ts:205](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L205)
+Defined in: [src/types/Event/interface.ts:205](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L205)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Event/interface.ts:205](https://github.com/Anshikaaa06/ta
 
 > **setShow**: (`show`) => `void`
 
-Defined in: [src/types/Event/interface.ts:203](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L203)
+Defined in: [src/types/Event/interface.ts:203](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L203)
 
 #### Parameters
 
@@ -46,4 +46,4 @@ Defined in: [src/types/Event/interface.ts:203](https://github.com/Anshikaaa06/ta
 
 > **show**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:204](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L204)
+Defined in: [src/types/Event/interface.ts:204](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L204)

@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_ERROR\_SUBTAGS\_QUERY1**: `object`[]
 
-Defined in: [src/components/AdminPortal/TagActions/Node/TagNodeMocks.ts:64](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/components/AdminPortal/TagActions/Node/TagNodeMocks.ts#L64)
+Defined in: [src/components/AdminPortal/TagActions/Node/TagNodeMocks.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/Node/TagNodeMocks.ts#L64)
 
 ## Type Declaration
 

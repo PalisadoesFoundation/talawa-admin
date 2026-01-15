@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceRequestsListItem
 
-Defined in: [src/types/Member/interface.ts:10](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Member/interface.ts#L10)
+Defined in: [src/types/Member/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L10)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Member/interface.ts:10](https://github.com/Anshikaaa06/ta
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Member/interface.ts:12](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Member/interface.ts#L12)
+Defined in: [src/types/Member/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L12)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Member/interface.ts:12](https://github.com/Anshikaaa06/ta
 
 > **membershipRequestId**: `string`
 
-Defined in: [src/types/Member/interface.ts:11](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Member/interface.ts#L11)
+Defined in: [src/types/Member/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L11)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Member/interface.ts:11](https://github.com/Anshikaaa06/ta
 
 > **status**: `string`
 
-Defined in: [src/types/Member/interface.ts:13](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Member/interface.ts#L13)
+Defined in: [src/types/Member/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L13)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Member/interface.ts:13](https://github.com/Anshikaaa06/ta
 
 > **user**: `object`
 
-Defined in: [src/types/Member/interface.ts:14](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Member/interface.ts#L14)
+Defined in: [src/types/Member/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L14)
 
 #### avatarURL?
 

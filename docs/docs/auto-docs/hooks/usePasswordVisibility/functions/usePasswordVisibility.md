@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **usePasswordVisibility**(`initialVisible`): [`IUsePasswordVisibilityReturn`](../../../types/Auth/usePasswordVisibility/interfaces/IUsePasswordVisibilityReturn.md)
 
-Defined in: [src/hooks/usePasswordVisibility.ts:10](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/hooks/usePasswordVisibility.ts#L10)
+Defined in: [src/hooks/usePasswordVisibility.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/usePasswordVisibility.ts#L10)
 
 Custom hook to manage password visibility state for authentication inputs.
 

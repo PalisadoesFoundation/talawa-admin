@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **Address** = `object`
 
-Defined in: [src/types/address.ts:1](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/address.ts#L1)
+Defined in: [src/types/address.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/address.ts#L1)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/address.ts:1](https://github.com/Anshikaaa06/talawa-admin
 
 > `optional` **city**: `string`
 
-Defined in: [src/types/address.ts:2](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/address.ts#L2)
+Defined in: [src/types/address.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/address.ts#L2)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/address.ts:2](https://github.com/Anshikaaa06/talawa-admin
 
 > `optional` **countryCode**: `string`
 
-Defined in: [src/types/address.ts:3](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/address.ts#L3)
+Defined in: [src/types/address.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/address.ts#L3)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/address.ts:3](https://github.com/Anshikaaa06/talawa-admin
 
 > `optional` **dependentLocality**: `string`
 
-Defined in: [src/types/address.ts:4](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/address.ts#L4)
+Defined in: [src/types/address.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/address.ts#L4)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/address.ts:4](https://github.com/Anshikaaa06/talawa-admin
 
 > `optional` **line1**: `string`
 
-Defined in: [src/types/address.ts:5](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/address.ts#L5)
+Defined in: [src/types/address.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/address.ts#L5)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/address.ts:5](https://github.com/Anshikaaa06/talawa-admin
 
 > `optional` **line2**: `string`
 
-Defined in: [src/types/address.ts:6](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/address.ts#L6)
+Defined in: [src/types/address.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/address.ts#L6)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/address.ts:6](https://github.com/Anshikaaa06/talawa-admin
 
 > `optional` **postalCode**: `string`
 
-Defined in: [src/types/address.ts:7](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/address.ts#L7)
+Defined in: [src/types/address.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/address.ts#L7)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/address.ts:7](https://github.com/Anshikaaa06/talawa-admin
 
 > `optional` **sortingCode**: `string`
 
-Defined in: [src/types/address.ts:8](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/address.ts#L8)
+Defined in: [src/types/address.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/address.ts#L8)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: [src/types/address.ts:8](https://github.com/Anshikaaa06/talawa-admin
 
 > `optional` **state**: `string`
 
-Defined in: [src/types/address.ts:9](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/address.ts#L9)
+Defined in: [src/types/address.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/address.ts#L9)

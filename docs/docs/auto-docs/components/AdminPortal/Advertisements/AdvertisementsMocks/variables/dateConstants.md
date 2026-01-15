@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **dateConstants**: `object`
 
-Defined in: [src/components/AdminPortal/Advertisements/AdvertisementsMocks.ts:138](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/components/AdminPortal/Advertisements/AdvertisementsMocks.ts#L138)
+Defined in: [src/components/AdminPortal/Advertisements/AdvertisementsMocks.ts:138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Advertisements/AdvertisementsMocks.ts#L138)
 
 ## Type Declaration
 

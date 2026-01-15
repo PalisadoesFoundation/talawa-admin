@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **RegistrationForm**(`__namedParameters`): `Element`
 
-Defined in: [src/components/Auth/RegistrationForm/RegistrationForm.tsx:23](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/components/Auth/RegistrationForm/RegistrationForm.tsx#L23)
+Defined in: [src/components/Auth/RegistrationForm/RegistrationForm.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/RegistrationForm/RegistrationForm.tsx#L23)
 
 RegistrationForm component for user registration with validation and reCAPTCHA support
 

@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_MOCK**: `object`[]
 
-Defined in: [src/shared-components/ProfileForm/profileForm.mock.ts:259](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/shared-components/ProfileForm/profileForm.mock.ts#L259)
+Defined in: [src/shared-components/ProfileForm/profileForm.mock.ts:259](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileForm/profileForm.mock.ts#L259)
 
 ## Type Declaration
 

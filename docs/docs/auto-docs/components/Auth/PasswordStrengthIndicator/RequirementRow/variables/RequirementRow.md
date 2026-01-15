@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **RequirementRow**: `React.FC`\<`InterfaceRequirementRowProps`\>
 
-Defined in: [src/components/Auth/PasswordStrengthIndicator/RequirementRow.tsx:19](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/components/Auth/PasswordStrengthIndicator/RequirementRow.tsx#L19)
+Defined in: [src/components/Auth/PasswordStrengthIndicator/RequirementRow.tsx:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/PasswordStrengthIndicator/RequirementRow.tsx#L19)
 
 Row component to display a single password requirement with status indicator.
 

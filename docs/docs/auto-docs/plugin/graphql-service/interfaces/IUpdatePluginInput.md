@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: IUpdatePluginInput
 
-Defined in: [src/plugin/graphql-service.ts:38](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/graphql-service.ts#L38)
+Defined in: [src/plugin/graphql-service.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L38)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/graphql-service.ts:38](https://github.com/Anshikaaa06/ta
 
 > `optional` **backup**: `boolean`
 
-Defined in: [src/plugin/graphql-service.ts:42](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/graphql-service.ts#L42)
+Defined in: [src/plugin/graphql-service.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L42)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/graphql-service.ts:42](https://github.com/Anshikaaa06/ta
 
 > **id**: `string`
 
-Defined in: [src/plugin/graphql-service.ts:39](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/graphql-service.ts#L39)
+Defined in: [src/plugin/graphql-service.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L39)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/plugin/graphql-service.ts:39](https://github.com/Anshikaaa06/ta
 
 > `optional` **isActivated**: `boolean`
 
-Defined in: [src/plugin/graphql-service.ts:40](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/graphql-service.ts#L40)
+Defined in: [src/plugin/graphql-service.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L40)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/plugin/graphql-service.ts:40](https://github.com/Anshikaaa06/ta
 
 > `optional` **isInstalled**: `boolean`
 
-Defined in: [src/plugin/graphql-service.ts:41](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/graphql-service.ts#L41)
+Defined in: [src/plugin/graphql-service.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L41)

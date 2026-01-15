@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **main**(): `Promise`\<`void`\>
 
-Defined in: [src/setup/setup.ts:145](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/setup/setup.ts#L145)
+Defined in: [src/setup/setup.ts:145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L145)
 
 Main setup orchestrator for Talawa Admin initial configuration.
 

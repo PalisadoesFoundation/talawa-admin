@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: IFileWriteResult
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:11](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/services/InternalFileWriter.ts#L11)
+Defined in: [src/plugin/services/InternalFileWriter.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L11)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:11](https://github.com/An
 
 > `optional` **error**: `string`
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:16](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/services/InternalFileWriter.ts#L16)
+Defined in: [src/plugin/services/InternalFileWriter.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L16)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:16](https://github.com/An
 
 > **filesWritten**: `number`
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:14](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/services/InternalFileWriter.ts#L14)
+Defined in: [src/plugin/services/InternalFileWriter.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L14)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:14](https://github.com/An
 
 > **path**: `string`
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:13](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/services/InternalFileWriter.ts#L13)
+Defined in: [src/plugin/services/InternalFileWriter.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L13)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:13](https://github.com/An
 
 > **success**: `boolean`
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:12](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/services/InternalFileWriter.ts#L12)
+Defined in: [src/plugin/services/InternalFileWriter.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L12)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:12](https://github.com/An
 
 > **writtenFiles**: `string`[]
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:15](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/services/InternalFileWriter.ts#L15)
+Defined in: [src/plugin/services/InternalFileWriter.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L15)

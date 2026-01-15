@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: IPackageStatus
 
-Defined in: [src/install/types.ts:11](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/install/types.ts#L11)
+Defined in: [src/install/types.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/types.ts#L11)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/install/types.ts:11](https://github.com/Anshikaaa06/talawa-admi
 
 > **installed**: `boolean`
 
-Defined in: [src/install/types.ts:13](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/install/types.ts#L13)
+Defined in: [src/install/types.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/types.ts#L13)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/install/types.ts:13](https://github.com/Anshikaaa06/talawa-admi
 
 > **name**: `string`
 
-Defined in: [src/install/types.ts:12](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/install/types.ts#L12)
+Defined in: [src/install/types.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/types.ts#L12)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/install/types.ts:12](https://github.com/Anshikaaa06/talawa-admi
 
 > `optional` **version**: `string`
 
-Defined in: [src/install/types.ts:14](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/install/types.ts#L14)
+Defined in: [src/install/types.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/types.ts#L14)

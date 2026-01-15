@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceCreator
 
-Defined in: [src/types/Post/interface.ts:80](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L80)
+Defined in: [src/types/Post/interface.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L80)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:80](https://github.com/Anshikaaa06/tala
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/Post/interface.ts:84](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L84)
+Defined in: [src/types/Post/interface.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L84)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/interface.ts:84](https://github.com/Anshikaaa06/tala
 
 > **email**: `string`
 
-Defined in: [src/types/Post/interface.ts:83](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L83)
+Defined in: [src/types/Post/interface.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L83)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/interface.ts:83](https://github.com/Anshikaaa06/tala
 
 > **id**: `string`
 
-Defined in: [src/types/Post/interface.ts:81](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L81)
+Defined in: [src/types/Post/interface.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L81)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/types/Post/interface.ts:81](https://github.com/Anshikaaa06/tala
 
 > **name**: `string`
 
-Defined in: [src/types/Post/interface.ts:82](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L82)
+Defined in: [src/types/Post/interface.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L82)

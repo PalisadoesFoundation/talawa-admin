@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceBaseQueryResult
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:39](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/Tag/interface.ts#L39)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L39)
 
 ## Extended by
 
@@ -16,7 +16,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:39](https://github.com/Anshi
 
 > `optional` **error**: `ApolloError`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:41](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/Tag/interface.ts#L41)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L41)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:41](https://github.com/Anshi
 
 > **loading**: `boolean`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:40](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/Tag/interface.ts#L40)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L40)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:40](https://github.com/Anshi
 
 > `optional` **refetch**: () => `void`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:42](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/Tag/interface.ts#L42)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L42)
 
 #### Returns
 

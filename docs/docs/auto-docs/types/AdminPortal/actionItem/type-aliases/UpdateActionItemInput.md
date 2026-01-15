@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **UpdateActionItemInput** = `object`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:39](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L39)
+Defined in: [src/types/AdminPortal/actionItem.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L39)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:39](https://github.com/Anshikaa
 
 > `optional` **assigneeId**: `string`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:40](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L40)
+Defined in: [src/types/AdminPortal/actionItem.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L40)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:40](https://github.com/Anshikaa
 
 > `optional` **completionDate**: `Date`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:41](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L41)
+Defined in: [src/types/AdminPortal/actionItem.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L41)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:41](https://github.com/Anshikaa
 
 > `optional` **dueDate**: `Date`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:42](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L42)
+Defined in: [src/types/AdminPortal/actionItem.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L42)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:42](https://github.com/Anshikaa
 
 > `optional` **isCompleted**: `boolean`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:43](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L43)
+Defined in: [src/types/AdminPortal/actionItem.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L43)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:43](https://github.com/Anshikaa
 
 > `optional` **postCompletionNotes**: `string`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:44](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L44)
+Defined in: [src/types/AdminPortal/actionItem.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L44)
 
 ***
 
@@ -54,4 +54,4 @@ Defined in: [src/types/AdminPortal/actionItem.ts:44](https://github.com/Anshikaa
 
 > `optional` **preCompletionNotes**: `string`
 
-Defined in: [src/types/AdminPortal/actionItem.ts:45](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/actionItem.ts#L45)
+Defined in: [src/types/AdminPortal/actionItem.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L45)

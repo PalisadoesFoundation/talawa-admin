@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: IColumnDef\<T, TValue\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:32](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/DataTable/interface.ts#L32)
+Defined in: [src/types/shared-components/DataTable/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L32)
 
 Generic column definition for DataTable
 
@@ -37,7 +37,7 @@ const columns: ColumnDef<User>[] = [
 
 > **accessor**: [`Accessor`](../type-aliases/Accessor.md)\<`T`, `TValue`\>
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:40](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/DataTable/interface.ts#L40)
+Defined in: [src/types/shared-components/DataTable/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L40)
 
 Accessor to extract cell value
 
@@ -47,7 +47,7 @@ Accessor to extract cell value
 
 > **header**: [`HeaderRender`](../type-aliases/HeaderRender.md)
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:37](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/DataTable/interface.ts#L37)
+Defined in: [src/types/shared-components/DataTable/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L37)
 
 Header label or render function
 
@@ -57,7 +57,7 @@ Header label or render function
 
 > **id**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:34](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/DataTable/interface.ts#L34)
+Defined in: [src/types/shared-components/DataTable/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L34)
 
 Unique column identifier
 
@@ -67,7 +67,7 @@ Unique column identifier
 
 > `optional` **meta**: `object`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:46](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/DataTable/interface.ts#L46)
+Defined in: [src/types/shared-components/DataTable/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L46)
 
 Optional metadata for future features
 
@@ -89,7 +89,7 @@ Optional metadata for future features
 
 > `optional` **render**: (`value`, `row`) => `ReactNode`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:43](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/DataTable/interface.ts#L43)
+Defined in: [src/types/shared-components/DataTable/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L43)
 
 Optional custom cell renderer
 

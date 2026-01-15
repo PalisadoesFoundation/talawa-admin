@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **props2**: `object`
 
-Defined in: [src/components/AgendaCategory/AgendaCategoryContainerMocks.ts:36](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/components/AgendaCategory/AgendaCategoryContainerMocks.ts#L36)
+Defined in: [src/components/AgendaCategory/AgendaCategoryContainerMocks.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaCategory/AgendaCategoryContainerMocks.ts#L36)
 
 ## Type Declaration
 

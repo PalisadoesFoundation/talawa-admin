@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **timeToDayJs**(`time`): `Dayjs`
 
-Defined in: [src/shared-components/EventForm/utils/timeUtils.ts:13](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/shared-components/EventForm/utils/timeUtils.ts#L13)
+Defined in: [src/shared-components/EventForm/utils/timeUtils.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EventForm/utils/timeUtils.ts#L13)
 
 Converts a time string (HH:mm:ss) to a dayjs object.
 

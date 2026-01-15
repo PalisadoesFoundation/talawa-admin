@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfacePostCard
 
-Defined in: [src/types/Post/interface.ts:3](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L3)
+Defined in: [src/types/Post/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L3)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:3](https://github.com/Anshikaaa06/talaw
 
 > **\_id**: `string`
 
-Defined in: [src/types/Post/interface.ts:4](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L4)
+Defined in: [src/types/Post/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L4)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/interface.ts:4](https://github.com/Anshikaaa06/talaw
 
 > **commentCount**: `number`
 
-Defined in: [src/types/Post/interface.ts:12](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L12)
+Defined in: [src/types/Post/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L12)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/interface.ts:12](https://github.com/Anshikaaa06/tala
 
 > **comments**: [`Comment`](../../../Comment/type/type-aliases/Comment.md)[]
 
-Defined in: [src/types/Post/interface.ts:13](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L13)
+Defined in: [src/types/Post/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L13)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Post/interface.ts:13](https://github.com/Anshikaaa06/tala
 
 > **creator**: `Partial`\<[`User`](../../../shared-components/User/type/type-aliases/User.md)\>
 
-Defined in: [src/types/Post/interface.ts:5](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L5)
+Defined in: [src/types/Post/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L5)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Post/interface.ts:5](https://github.com/Anshikaaa06/talaw
 
 > **fetchPosts**: () => `void`
 
-Defined in: [src/types/Post/interface.ts:14](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L14)
+Defined in: [src/types/Post/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L14)
 
 #### Returns
 
@@ -56,7 +56,7 @@ Defined in: [src/types/Post/interface.ts:14](https://github.com/Anshikaaa06/tala
 
 > **image**: `string`
 
-Defined in: [src/types/Post/interface.ts:7](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L7)
+Defined in: [src/types/Post/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L7)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [src/types/Post/interface.ts:7](https://github.com/Anshikaaa06/talaw
 
 > **likeCount**: `number`
 
-Defined in: [src/types/Post/interface.ts:11](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L11)
+Defined in: [src/types/Post/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L11)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [src/types/Post/interface.ts:11](https://github.com/Anshikaaa06/tala
 
 > **postedAt**: `string`
 
-Defined in: [src/types/Post/interface.ts:6](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L6)
+Defined in: [src/types/Post/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L6)
 
 ***
 
@@ -80,7 +80,7 @@ Defined in: [src/types/Post/interface.ts:6](https://github.com/Anshikaaa06/talaw
 
 > **text**: `string`
 
-Defined in: [src/types/Post/interface.ts:9](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L9)
+Defined in: [src/types/Post/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L9)
 
 ***
 
@@ -88,7 +88,7 @@ Defined in: [src/types/Post/interface.ts:9](https://github.com/Anshikaaa06/talaw
 
 > **title**: `string`
 
-Defined in: [src/types/Post/interface.ts:10](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L10)
+Defined in: [src/types/Post/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L10)
 
 ***
 
@@ -96,4 +96,4 @@ Defined in: [src/types/Post/interface.ts:10](https://github.com/Anshikaaa06/tala
 
 > **video**: `string`
 
-Defined in: [src/types/Post/interface.ts:8](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L8)
+Defined in: [src/types/Post/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L8)

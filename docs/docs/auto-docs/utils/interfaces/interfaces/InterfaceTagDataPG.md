@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceTagDataPG
 
-Defined in: [src/utils/interfaces.ts:1473](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/interfaces.ts#L1473)
+Defined in: [src/utils/interfaces.ts:1473](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1473)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:1473](https://github.com/Anshikaaa06/talawa
 
 > **ancestorTags**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:1483](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/interfaces.ts#L1483)
+Defined in: [src/utils/interfaces.ts:1483](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1483)
 
 #### id
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:1483](https://github.com/Anshikaaa06/talawa
 
 > **childTags**: `object`
 
-Defined in: [src/utils/interfaces.ts:1480](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/interfaces.ts#L1480)
+Defined in: [src/utils/interfaces.ts:1480](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1480)
 
 #### totalCount
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:1480](https://github.com/Anshikaaa06/talawa
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1474](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/interfaces.ts#L1474)
+Defined in: [src/utils/interfaces.ts:1474](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1474)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:1474](https://github.com/Anshikaaa06/talawa
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1475](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/interfaces.ts#L1475)
+Defined in: [src/utils/interfaces.ts:1475](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1475)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:1475](https://github.com/Anshikaaa06/talawa
 
 > **parentTag**: `object`
 
-Defined in: [src/utils/interfaces.ts:1476](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/interfaces.ts#L1476)
+Defined in: [src/utils/interfaces.ts:1476](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1476)
 
 #### id
 
@@ -68,7 +68,7 @@ Defined in: [src/utils/interfaces.ts:1476](https://github.com/Anshikaaa06/talawa
 
 > **usersAssignedTo**: `object`
 
-Defined in: [src/utils/interfaces.ts:1477](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/interfaces.ts#L1477)
+Defined in: [src/utils/interfaces.ts:1477](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1477)
 
 #### totalCount
 

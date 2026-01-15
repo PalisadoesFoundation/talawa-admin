@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **ReportingTableColumn** = `Partial`\<`GridColDef`\> & `object`
 
-Defined in: [src/types/ReportingTable/interface.ts:15](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/ReportingTable/interface.ts#L15)
+Defined in: [src/types/ReportingTable/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L15)
 
 ReportingTableColumnDef
 App-level column shape used across the app. It's a thin composition over

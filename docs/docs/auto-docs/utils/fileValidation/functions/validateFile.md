@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **validateFile**(`file`, `maxSizeInMB`, `allowedTypes`): `IFileValidationResult`
 
-Defined in: [src/utils/fileValidation.ts:23](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/fileValidation.ts#L23)
+Defined in: [src/utils/fileValidation.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/fileValidation.ts#L23)
 
 Validates a file for size and type
 

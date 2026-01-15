@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: IActionItemCategoryList
 
-Defined in: [src/types/shared-components/ActionItems/interface.ts:14](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/ActionItems/interface.ts#L14)
+Defined in: [src/types/shared-components/ActionItems/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L14)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:14](https://gi
 
 > **actionItemCategoriesByOrganization**: [`IActionItemCategoryInfo`](IActionItemCategoryInfo.md)[]
 
-Defined in: [src/types/shared-components/ActionItems/interface.ts:15](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/ActionItems/interface.ts#L15)
+Defined in: [src/types/shared-components/ActionItems/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L15)

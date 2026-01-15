@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **AppUserProfile** = `object`
 
-Defined in: [src/types/shared-components/User/type.ts:43](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/User/type.ts#L43)
+Defined in: [src/types/shared-components/User/type.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L43)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/shared-components/User/type.ts:43](https://github.com/Ans
 
 > **\_id**: `string`
 
-Defined in: [src/types/shared-components/User/type.ts:44](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/User/type.ts#L44)
+Defined in: [src/types/shared-components/User/type.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L44)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/User/type.ts:44](https://github.com/Ans
 
 > **adminFor**: [`Organization`](../../../../AdminPortal/Organization/type/type-aliases/Organization.md)[]
 
-Defined in: [src/types/shared-components/User/type.ts:45](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/User/type.ts#L45)
+Defined in: [src/types/shared-components/User/type.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L45)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/User/type.ts:45](https://github.com/Ans
 
 > **appLanguageCode**: `string`
 
-Defined in: [src/types/shared-components/User/type.ts:46](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/User/type.ts#L46)
+Defined in: [src/types/shared-components/User/type.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L46)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/User/type.ts:46](https://github.com/Ans
 
 > **createdEvents**: `Event`[]
 
-Defined in: [src/types/shared-components/User/type.ts:47](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/User/type.ts#L47)
+Defined in: [src/types/shared-components/User/type.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L47)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/shared-components/User/type.ts:47](https://github.com/Ans
 
 > **createdOrganizations**: [`Organization`](../../../../AdminPortal/Organization/type/type-aliases/Organization.md)[]
 
-Defined in: [src/types/shared-components/User/type.ts:48](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/User/type.ts#L48)
+Defined in: [src/types/shared-components/User/type.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L48)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/shared-components/User/type.ts:48](https://github.com/Ans
 
 > **eventAdmin**: `Event`[]
 
-Defined in: [src/types/shared-components/User/type.ts:49](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/User/type.ts#L49)
+Defined in: [src/types/shared-components/User/type.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L49)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/shared-components/User/type.ts:49](https://github.com/Ans
 
 > **isSuperAdmin**: `boolean`
 
-Defined in: [src/types/shared-components/User/type.ts:50](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/User/type.ts#L50)
+Defined in: [src/types/shared-components/User/type.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L50)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: [src/types/shared-components/User/type.ts:50](https://github.com/Ans
 
 > **userId**: [`User`](User.md)
 
-Defined in: [src/types/shared-components/User/type.ts:51](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/User/type.ts#L51)
+Defined in: [src/types/shared-components/User/type.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L51)

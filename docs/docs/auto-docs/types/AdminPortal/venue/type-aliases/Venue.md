@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **Venue** = `object`
 
-Defined in: [src/types/AdminPortal/venue.ts:3](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/venue.ts#L3)
+Defined in: [src/types/AdminPortal/venue.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L3)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/venue.ts:3](https://github.com/Anshikaaa06/ta
 
 > **\_id**: `string`
 
-Defined in: [src/types/AdminPortal/venue.ts:4](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/venue.ts#L4)
+Defined in: [src/types/AdminPortal/venue.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L4)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/venue.ts:4](https://github.com/Anshikaaa06/ta
 
 > **capacity**: `number`
 
-Defined in: [src/types/AdminPortal/venue.ts:5](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/venue.ts#L5)
+Defined in: [src/types/AdminPortal/venue.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L5)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/venue.ts:5](https://github.com/Anshikaaa06/ta
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/AdminPortal/venue.ts:6](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/venue.ts#L6)
+Defined in: [src/types/AdminPortal/venue.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L6)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/venue.ts:6](https://github.com/Anshikaaa06/ta
 
 > `optional` **imageUrl**: `string`
 
-Defined in: [src/types/AdminPortal/venue.ts:7](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/venue.ts#L7)
+Defined in: [src/types/AdminPortal/venue.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L7)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/AdminPortal/venue.ts:7](https://github.com/Anshikaaa06/ta
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/venue.ts:8](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/venue.ts#L8)
+Defined in: [src/types/AdminPortal/venue.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L8)
 
 ***
 
@@ -54,4 +54,4 @@ Defined in: [src/types/AdminPortal/venue.ts:8](https://github.com/Anshikaaa06/ta
 
 > **organization**: [`Organization`](../../Organization/type/type-aliases/Organization.md)
 
-Defined in: [src/types/AdminPortal/venue.ts:9](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/venue.ts#L9)
+Defined in: [src/types/AdminPortal/venue.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L9)

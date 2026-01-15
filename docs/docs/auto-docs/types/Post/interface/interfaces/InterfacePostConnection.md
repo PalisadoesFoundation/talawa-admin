@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfacePostConnection
 
-Defined in: [src/types/Post/interface.ts:45](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L45)
+Defined in: [src/types/Post/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L45)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:45](https://github.com/Anshikaaa06/tala
 
 > **edges**: [`InterfacePostEdge`](InterfacePostEdge.md)[]
 
-Defined in: [src/types/Post/interface.ts:46](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L46)
+Defined in: [src/types/Post/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L46)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/types/Post/interface.ts:46](https://github.com/Anshikaaa06/tala
 
 > **pageInfo**: [`InterfacePageInfo`](InterfacePageInfo.md)
 
-Defined in: [src/types/Post/interface.ts:47](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/interface.ts#L47)
+Defined in: [src/types/Post/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L47)

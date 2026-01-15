@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **MOCKS**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id`: `string`; `isSampleOrganizationId?`: `undefined`; `orderBy?`: `undefined`; `organizationId?`: `undefined`; `where?`: `undefined`; \}; \}; `result`: \{ `data`: \{ `actionItemCategoriesByOrganization?`: `undefined`; `agendaItemCategoriesByOrganization?`: `undefined`; `isSampleOrganization?`: `undefined`; `organizations`: `object`[]; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id?`: `undefined`; `isSampleOrganizationId`: `string`; `orderBy?`: `undefined`; `organizationId?`: `undefined`; `where?`: `undefined`; \}; \}; `result`: \{ `data`: \{ `actionItemCategoriesByOrganization?`: `undefined`; `agendaItemCategoriesByOrganization?`: `undefined`; `isSampleOrganization`: `boolean`; `organizations?`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id?`: `undefined`; `isSampleOrganizationId?`: `undefined`; `orderBy?`: `undefined`; `organizationId`: `string`; `where?`: `undefined`; \}; \}; `result`: \{ `data`: \{ `actionItemCategoriesByOrganization?`: `undefined`; `agendaItemCategoriesByOrganization`: `any`[]; `isSampleOrganization?`: `undefined`; `organizations?`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id?`: `undefined`; `isSampleOrganizationId?`: `undefined`; `orderBy`: `string`; `organizationId`: `string`; `where`: \{ `name_contains`: `string`; \}; \}; \}; `result`: \{ `data`: \{ `actionItemCategoriesByOrganization`: `object`[]; `agendaItemCategoriesByOrganization?`: `undefined`; `isSampleOrganization?`: `undefined`; `organizations?`: `undefined`; \}; \}; \})[]
 
-Defined in: [src/screens/AdminPortal/OrgSettings/OrgSettings.mocks.ts:9](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/screens/AdminPortal/OrgSettings/OrgSettings.mocks.ts#L9)
+Defined in: [src/screens/AdminPortal/OrgSettings/OrgSettings.mocks.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgSettings/OrgSettings.mocks.ts#L9)

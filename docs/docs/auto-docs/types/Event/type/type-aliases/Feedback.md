@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **Feedback** = `object`
 
-Defined in: [src/types/Event/type.ts:45](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L45)
+Defined in: [src/types/Event/type.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L45)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Event/type.ts:45](https://github.com/Anshikaaa06/talawa-a
 
 > **\_id**: `string`
 
-Defined in: [src/types/Event/type.ts:46](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L46)
+Defined in: [src/types/Event/type.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L46)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Event/type.ts:46](https://github.com/Anshikaaa06/talawa-a
 
 > **createdAt**: `Date`
 
-Defined in: [src/types/Event/type.ts:47](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L47)
+Defined in: [src/types/Event/type.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L47)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Event/type.ts:47](https://github.com/Anshikaaa06/talawa-a
 
 > `optional` **event**: [`Event`](Event.md)
 
-Defined in: [src/types/Event/type.ts:48](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L48)
+Defined in: [src/types/Event/type.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L48)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Event/type.ts:48](https://github.com/Anshikaaa06/talawa-a
 
 > **rating**: `number`
 
-Defined in: [src/types/Event/type.ts:49](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L49)
+Defined in: [src/types/Event/type.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L49)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Event/type.ts:49](https://github.com/Anshikaaa06/talawa-a
 
 > **review**: `string` \| `null`
 
-Defined in: [src/types/Event/type.ts:50](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L50)
+Defined in: [src/types/Event/type.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L50)
 
 ***
 
@@ -54,4 +54,4 @@ Defined in: [src/types/Event/type.ts:50](https://github.com/Anshikaaa06/talawa-a
 
 > **updatedAt**: `Date`
 
-Defined in: [src/types/Event/type.ts:51](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L51)
+Defined in: [src/types/Event/type.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L51)

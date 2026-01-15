@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **EventInput** = `object`
 
-Defined in: [src/types/Event/type.ts:60](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L60)
+Defined in: [src/types/Event/type.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L60)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Event/type.ts:60](https://github.com/Anshikaaa06/talawa-a
 
 > **allDay**: `boolean`
 
-Defined in: [src/types/Event/type.ts:61](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L61)
+Defined in: [src/types/Event/type.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L61)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Event/type.ts:61](https://github.com/Anshikaaa06/talawa-a
 
 > **description**: `string`
 
-Defined in: [src/types/Event/type.ts:62](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L62)
+Defined in: [src/types/Event/type.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L62)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Event/type.ts:62](https://github.com/Anshikaaa06/talawa-a
 
 > `optional` **endDate**: `Date`
 
-Defined in: [src/types/Event/type.ts:63](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L63)
+Defined in: [src/types/Event/type.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L63)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Event/type.ts:63](https://github.com/Anshikaaa06/talawa-a
 
 > `optional` **endTime**: `string`
 
-Defined in: [src/types/Event/type.ts:64](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L64)
+Defined in: [src/types/Event/type.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L64)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Event/type.ts:64](https://github.com/Anshikaaa06/talawa-a
 
 > **isPublic**: `boolean`
 
-Defined in: [src/types/Event/type.ts:65](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L65)
+Defined in: [src/types/Event/type.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L65)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Event/type.ts:65](https://github.com/Anshikaaa06/talawa-a
 
 > **isRegisterable**: `boolean`
 
-Defined in: [src/types/Event/type.ts:66](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L66)
+Defined in: [src/types/Event/type.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L66)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Event/type.ts:66](https://github.com/Anshikaaa06/talawa-a
 
 > `optional` **latitude**: `number`
 
-Defined in: [src/types/Event/type.ts:67](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L67)
+Defined in: [src/types/Event/type.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L67)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Event/type.ts:67](https://github.com/Anshikaaa06/talawa-a
 
 > `optional` **location**: `string`
 
-Defined in: [src/types/Event/type.ts:68](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L68)
+Defined in: [src/types/Event/type.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L68)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [src/types/Event/type.ts:68](https://github.com/Anshikaaa06/talawa-a
 
 > `optional` **longitude**: `number`
 
-Defined in: [src/types/Event/type.ts:69](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L69)
+Defined in: [src/types/Event/type.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L69)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [src/types/Event/type.ts:69](https://github.com/Anshikaaa06/talawa-a
 
 > **organizationId**: `string`
 
-Defined in: [src/types/Event/type.ts:70](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L70)
+Defined in: [src/types/Event/type.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L70)
 
 ***
 
@@ -94,7 +94,7 @@ Defined in: [src/types/Event/type.ts:70](https://github.com/Anshikaaa06/talawa-a
 
 > `optional` **recurrence**: `string`
 
-Defined in: [src/types/Event/type.ts:71](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L71)
+Defined in: [src/types/Event/type.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L71)
 
 ***
 
@@ -102,7 +102,7 @@ Defined in: [src/types/Event/type.ts:71](https://github.com/Anshikaaa06/talawa-a
 
 > **recurring**: `boolean`
 
-Defined in: [src/types/Event/type.ts:72](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L72)
+Defined in: [src/types/Event/type.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L72)
 
 ***
 
@@ -110,7 +110,7 @@ Defined in: [src/types/Event/type.ts:72](https://github.com/Anshikaaa06/talawa-a
 
 > **startDate**: `Date`
 
-Defined in: [src/types/Event/type.ts:73](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L73)
+Defined in: [src/types/Event/type.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L73)
 
 ***
 
@@ -118,7 +118,7 @@ Defined in: [src/types/Event/type.ts:73](https://github.com/Anshikaaa06/talawa-a
 
 > `optional` **startTime**: `string`
 
-Defined in: [src/types/Event/type.ts:74](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L74)
+Defined in: [src/types/Event/type.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L74)
 
 ***
 
@@ -126,4 +126,4 @@ Defined in: [src/types/Event/type.ts:74](https://github.com/Anshikaaa06/talawa-a
 
 > **title**: `string`
 
-Defined in: [src/types/Event/type.ts:75](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L75)
+Defined in: [src/types/Event/type.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L75)

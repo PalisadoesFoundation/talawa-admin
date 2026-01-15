@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: IFormTextFieldProps
 
-Defined in: [src/types/FormFieldGroup/interface.ts:10](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/FormFieldGroup/interface.ts#L10)
+Defined in: [src/types/FormFieldGroup/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L10)
 
 ## Extends
 
@@ -16,7 +16,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:10](https://github.com/Anshik
 
 > `optional` **error**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:6](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/FormFieldGroup/interface.ts#L6)
+Defined in: [src/types/FormFieldGroup/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L6)
 
 #### Inherited from
 
@@ -28,7 +28,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:6](https://github.com/Anshika
 
 > `optional` **helpText**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:5](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/FormFieldGroup/interface.ts#L5)
+Defined in: [src/types/FormFieldGroup/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L5)
 
 #### Inherited from
 
@@ -40,7 +40,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:5](https://github.com/Anshika
 
 > **label**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:3](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/FormFieldGroup/interface.ts#L3)
+Defined in: [src/types/FormFieldGroup/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L3)
 
 #### Inherited from
 
@@ -52,7 +52,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:3](https://github.com/Anshika
 
 > **name**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:2](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/FormFieldGroup/interface.ts#L2)
+Defined in: [src/types/FormFieldGroup/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L2)
 
 #### Inherited from
 
@@ -64,7 +64,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:2](https://github.com/Anshika
 
 > **onChange**: (`v`) => `void`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:14](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/FormFieldGroup/interface.ts#L14)
+Defined in: [src/types/FormFieldGroup/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L14)
 
 #### Parameters
 
@@ -82,7 +82,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:14](https://github.com/Anshik
 
 > `optional` **placeholder**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:12](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/FormFieldGroup/interface.ts#L12)
+Defined in: [src/types/FormFieldGroup/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L12)
 
 ***
 
@@ -90,7 +90,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:12](https://github.com/Anshik
 
 > `optional` **required**: `boolean`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:4](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/FormFieldGroup/interface.ts#L4)
+Defined in: [src/types/FormFieldGroup/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L4)
 
 #### Inherited from
 
@@ -102,7 +102,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:4](https://github.com/Anshika
 
 > `optional` **touched**: `boolean`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:7](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/FormFieldGroup/interface.ts#L7)
+Defined in: [src/types/FormFieldGroup/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L7)
 
 #### Inherited from
 
@@ -114,7 +114,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:7](https://github.com/Anshika
 
 > `optional` **type**: `"number"` \| `"text"` \| `"email"` \| `"password"` \| `"tel"` \| `"url"`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:11](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/FormFieldGroup/interface.ts#L11)
+Defined in: [src/types/FormFieldGroup/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L11)
 
 ***
 
@@ -122,4 +122,4 @@ Defined in: [src/types/FormFieldGroup/interface.ts:11](https://github.com/Anshik
 
 > **value**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:13](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/FormFieldGroup/interface.ts#L13)
+Defined in: [src/types/FormFieldGroup/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L13)

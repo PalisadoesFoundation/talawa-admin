@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: ISpinner
 
-Defined in: [src/install/utils/logger.ts:26](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/install/utils/logger.ts#L26)
+Defined in: [src/install/utils/logger.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/logger.ts#L26)
 
 ## Methods
 
@@ -12,7 +12,7 @@ Defined in: [src/install/utils/logger.ts:26](https://github.com/Anshikaaa06/tala
 
 > **fail**(`message?`): `void`
 
-Defined in: [src/install/utils/logger.ts:29](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/install/utils/logger.ts#L29)
+Defined in: [src/install/utils/logger.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/logger.ts#L29)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [src/install/utils/logger.ts:29](https://github.com/Anshikaaa06/tala
 
 > **start**(): `void`
 
-Defined in: [src/install/utils/logger.ts:27](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/install/utils/logger.ts#L27)
+Defined in: [src/install/utils/logger.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/logger.ts#L27)
 
 #### Returns
 
@@ -42,7 +42,7 @@ Defined in: [src/install/utils/logger.ts:27](https://github.com/Anshikaaa06/tala
 
 > **stop**(): `void`
 
-Defined in: [src/install/utils/logger.ts:30](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/install/utils/logger.ts#L30)
+Defined in: [src/install/utils/logger.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/logger.ts#L30)
 
 #### Returns
 
@@ -54,7 +54,7 @@ Defined in: [src/install/utils/logger.ts:30](https://github.com/Anshikaaa06/tala
 
 > **succeed**(`message?`): `void`
 
-Defined in: [src/install/utils/logger.ts:28](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/install/utils/logger.ts#L28)
+Defined in: [src/install/utils/logger.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/logger.ts#L28)
 
 #### Parameters
 

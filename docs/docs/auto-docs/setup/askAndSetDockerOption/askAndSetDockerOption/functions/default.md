@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(): `Promise`\<`void`\>
 
-Defined in: [src/setup/askAndSetDockerOption/askAndSetDockerOption.ts:6](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/setup/askAndSetDockerOption/askAndSetDockerOption.ts#L6)
+Defined in: [src/setup/askAndSetDockerOption/askAndSetDockerOption.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/askAndSetDockerOption/askAndSetDockerOption.ts#L6)
 
 ## Returns
 

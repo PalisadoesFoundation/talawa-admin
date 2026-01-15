@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,4 +6,33 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceDeleteVolunteerGroupModal`](../interfaces/InterfaceDeleteVolunteerGroupModal.md)\>
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/deleteModal/VolunteerGroupDeleteModal.tsx:24](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/screens/EventVolunteers/VolunteerGroups/deleteModal/VolunteerGroupDeleteModal.tsx#L24)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/deleteModal/VolunteerGroupDeleteModal.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/deleteModal/VolunteerGroupDeleteModal.tsx#L36)
+
+VolunteerGroupDeleteModal
+
+A modal component that handles the deletion of volunteer groups.
+It supports deleting groups for a single event instance or an entire recurring series.
+
+## Param
+
+Boolean to control modal visibility
+
+## Param
+
+Function to close the modal
+
+## Param
+
+The volunteer group object to be deleted
+
+## Param
+
+Callback to refresh the list after deletion
+
+## Param
+
+(Optional) Whether the event is recurring
+
+## Param
+
+(Optional) The ID of the specific event instance

@@ -10,7 +10,8 @@ vi.mock('react-i18next', () => ({
     t: (key: string, options?: { name?: string }) => {
       const translations: Record<string, string> = {
         uninstallPluginTitle: 'Uninstall Plugin',
-        uninstallConfirmationTitle: 'Are you sure you want to uninstall {{name}}?',
+        uninstallConfirmationTitle:
+          'Are you sure you want to uninstall {{name}}?',
         uninstallConfirmationDescription:
           'This action will permanently remove the plugin and all its data. This cannot be undone.',
         cancelButton: 'Cancel',

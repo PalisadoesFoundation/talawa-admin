@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceBaseFetchMoreOptions\<T\>
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:45](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/Tag/interface.ts#L45)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L45)
 
 ## Type Parameters
 
@@ -18,7 +18,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:45](https://github.com/Anshi
 
 > `optional` **updateQuery**: (`prev`, `options`) => `T`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:47](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/Tag/interface.ts#L47)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L47)
 
 #### Parameters
 
@@ -42,4 +42,4 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:47](https://github.com/Anshi
 
 > **variables**: [`InterfacePaginationVariables`](InterfacePaginationVariables.md)
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:46](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/Tag/interface.ts#L46)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L46)

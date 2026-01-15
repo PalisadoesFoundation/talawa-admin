@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: IAdminPluginZipStructure
 
-Defined in: [src/utils/adminPluginInstaller.ts:27](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/adminPluginInstaller.ts#L27)
+Defined in: [src/utils/adminPluginInstaller.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L27)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:27](https://github.com/Anshikaaa0
 
 > `optional` **adminManifest**: [`IAdminPluginManifest`](IAdminPluginManifest.md)
 
-Defined in: [src/utils/adminPluginInstaller.ts:30](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/adminPluginInstaller.ts#L30)
+Defined in: [src/utils/adminPluginInstaller.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L30)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:30](https://github.com/Anshikaaa0
 
 > `optional` **apiFiles**: `string`[]
 
-Defined in: [src/utils/adminPluginInstaller.ts:34](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/adminPluginInstaller.ts#L34)
+Defined in: [src/utils/adminPluginInstaller.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L34)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:34](https://github.com/Anshikaaa0
 
 > `optional` **apiManifest**: [`IAdminPluginManifest`](IAdminPluginManifest.md)
 
-Defined in: [src/utils/adminPluginInstaller.ts:31](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/adminPluginInstaller.ts#L31)
+Defined in: [src/utils/adminPluginInstaller.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L31)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:31](https://github.com/Anshikaaa0
 
 > **files**: `Record`\<`string`, `string`\>
 
-Defined in: [src/utils/adminPluginInstaller.ts:33](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/adminPluginInstaller.ts#L33)
+Defined in: [src/utils/adminPluginInstaller.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L33)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:33](https://github.com/Anshikaaa0
 
 > **hasAdminFolder**: `boolean`
 
-Defined in: [src/utils/adminPluginInstaller.ts:28](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/adminPluginInstaller.ts#L28)
+Defined in: [src/utils/adminPluginInstaller.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L28)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:28](https://github.com/Anshikaaa0
 
 > **hasApiFolder**: `boolean`
 
-Defined in: [src/utils/adminPluginInstaller.ts:29](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/adminPluginInstaller.ts#L29)
+Defined in: [src/utils/adminPluginInstaller.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L29)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/utils/adminPluginInstaller.ts:29](https://github.com/Anshikaaa0
 
 > `optional` **pluginId**: `string`
 
-Defined in: [src/utils/adminPluginInstaller.ts:32](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/adminPluginInstaller.ts#L32)
+Defined in: [src/utils/adminPluginInstaller.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L32)

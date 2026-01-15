@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **createSpinner**(`message`): [`ISpinner`](../interfaces/ISpinner.md)
 
-Defined in: [src/install/utils/logger.ts:37](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/install/utils/logger.ts#L37)
+Defined in: [src/install/utils/logger.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/logger.ts#L37)
 
 Simple spinner implementation using console
 Can be replaced with ora library later

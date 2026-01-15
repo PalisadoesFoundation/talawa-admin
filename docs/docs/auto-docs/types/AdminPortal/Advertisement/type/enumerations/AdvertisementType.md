@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Enumeration: AdvertisementType
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:5](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/Advertisement/type.ts#L5)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L5)
 
 ## Enumeration Members
 
@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:5](https://github.com/A
 
 > **Banner**: `"banner"`
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:6](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/Advertisement/type.ts#L6)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L6)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:6](https://github.com/A
 
 > **Menu**: `"menu"`
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:7](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/Advertisement/type.ts#L7)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L7)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:7](https://github.com/A
 
 > **Popup**: `"pop_up"`
 
-Defined in: [src/types/AdminPortal/Advertisement/type.ts:8](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/Advertisement/type.ts#L8)
+Defined in: [src/types/AdminPortal/Advertisement/type.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L8)

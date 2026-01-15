@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: IPluginManifest
 
-Defined in: [src/plugin/types.ts:8](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L8)
+Defined in: [src/plugin/types.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L8)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:8](https://github.com/Anshikaaa06/talawa-admin/
 
 > **author**: `string`
 
-Defined in: [src/plugin/types.ts:13](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L13)
+Defined in: [src/plugin/types.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L13)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/types.ts:13](https://github.com/Anshikaaa06/talawa-admin
 
 > **description**: `string`
 
-Defined in: [src/plugin/types.ts:12](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L12)
+Defined in: [src/plugin/types.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L12)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/plugin/types.ts:12](https://github.com/Anshikaaa06/talawa-admin
 
 > `optional` **extensionPoints**: [`IExtensionPoints`](IExtensionPoints.md)
 
-Defined in: [src/plugin/types.ts:15](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L15)
+Defined in: [src/plugin/types.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L15)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/plugin/types.ts:15](https://github.com/Anshikaaa06/talawa-admin
 
 > `optional` **homepage**: `string`
 
-Defined in: [src/plugin/types.ts:17](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L17)
+Defined in: [src/plugin/types.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L17)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/plugin/types.ts:17](https://github.com/Anshikaaa06/talawa-admin
 
 > `optional` **icon**: `string`
 
-Defined in: [src/plugin/types.ts:16](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L16)
+Defined in: [src/plugin/types.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L16)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/plugin/types.ts:16](https://github.com/Anshikaaa06/talawa-admin
 
 > `optional` **license**: `string`
 
-Defined in: [src/plugin/types.ts:18](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L18)
+Defined in: [src/plugin/types.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L18)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/plugin/types.ts:18](https://github.com/Anshikaaa06/talawa-admin
 
 > **main**: `string`
 
-Defined in: [src/plugin/types.ts:14](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L14)
+Defined in: [src/plugin/types.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L14)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/plugin/types.ts:14](https://github.com/Anshikaaa06/talawa-admin
 
 > **name**: `string`
 
-Defined in: [src/plugin/types.ts:9](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L9)
+Defined in: [src/plugin/types.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L9)
 
 ***
 
@@ -76,7 +76,7 @@ Defined in: [src/plugin/types.ts:9](https://github.com/Anshikaaa06/talawa-admin/
 
 > **pluginId**: `string`
 
-Defined in: [src/plugin/types.ts:10](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L10)
+Defined in: [src/plugin/types.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L10)
 
 ***
 
@@ -84,7 +84,7 @@ Defined in: [src/plugin/types.ts:10](https://github.com/Anshikaaa06/talawa-admin
 
 > `optional` **tags**: `string`[]
 
-Defined in: [src/plugin/types.ts:19](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L19)
+Defined in: [src/plugin/types.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L19)
 
 ***
 
@@ -92,4 +92,4 @@ Defined in: [src/plugin/types.ts:19](https://github.com/Anshikaaa06/talawa-admin
 
 > **version**: `string`
 
-Defined in: [src/plugin/types.ts:11](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L11)
+Defined in: [src/plugin/types.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L11)

@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **DefaultConnectionPageInfo** = `object`
 
-Defined in: [src/types/pagination.ts:1](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/pagination.ts#L1)
+Defined in: [src/types/pagination.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/pagination.ts#L1)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/pagination.ts:1](https://github.com/Anshikaaa06/talawa-ad
 
 > `optional` **endCursor**: `string`
 
-Defined in: [src/types/pagination.ts:5](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/pagination.ts#L5)
+Defined in: [src/types/pagination.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/pagination.ts#L5)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/pagination.ts:5](https://github.com/Anshikaaa06/talawa-ad
 
 > **hasNextPage**: `boolean`
 
-Defined in: [src/types/pagination.ts:2](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/pagination.ts#L2)
+Defined in: [src/types/pagination.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/pagination.ts#L2)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/pagination.ts:2](https://github.com/Anshikaaa06/talawa-ad
 
 > **hasPreviousPage**: `boolean`
 
-Defined in: [src/types/pagination.ts:3](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/pagination.ts#L3)
+Defined in: [src/types/pagination.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/pagination.ts#L3)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/types/pagination.ts:3](https://github.com/Anshikaaa06/talawa-ad
 
 > `optional` **startCursor**: `string`
 
-Defined in: [src/types/pagination.ts:4](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/pagination.ts#L4)
+Defined in: [src/types/pagination.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/pagination.ts#L4)

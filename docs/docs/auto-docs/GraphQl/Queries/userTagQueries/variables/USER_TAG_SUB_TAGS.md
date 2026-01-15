@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **USER\_TAG\_SUB\_TAGS**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/userTagQueries.ts:60](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/GraphQl/Queries/userTagQueries.ts#L60)
+Defined in: [src/GraphQl/Queries/userTagQueries.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/userTagQueries.ts#L60)
 
 GraphQL query to retrieve the sub tags of a certain tag.
 

@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceQueryUserTagsMembersToAssignTo
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:50](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/Tag/interface.ts#L50)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L50)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:50](https://github.com/Anshi
 
 > **name**: `string`
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:51](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/Tag/interface.ts#L51)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L51)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:51](https://github.com/Anshi
 
 > **usersToAssignTo**: [`InterfaceTagMembersData`](InterfaceTagMembersData.md)
 
-Defined in: [src/types/AdminPortal/Tag/interface.ts:52](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/AdminPortal/Tag/interface.ts#L52)
+Defined in: [src/types/AdminPortal/Tag/interface.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L52)

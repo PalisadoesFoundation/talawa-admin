@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: IEvent
 
-Defined in: [src/types/Event/interface.ts:39](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L39)
+Defined in: [src/types/Event/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L39)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:39](https://github.com/Anshikaaa06/tal
 
 > **allDay**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:50](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L50)
+Defined in: [src/types/Event/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L50)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/interface.ts:50](https://github.com/Anshikaaa06/tal
 
 > **attendees**: `Partial`\<[`User`](../../type/type-aliases/User.md)\>[]
 
-Defined in: [src/types/Event/interface.ts:58](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L58)
+Defined in: [src/types/Event/interface.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L58)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Event/interface.ts:58](https://github.com/Anshikaaa06/tal
 
 > `optional` **averageFeedbackScore**: `number`
 
-Defined in: [src/types/Event/interface.ts:60](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L60)
+Defined in: [src/types/Event/interface.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L60)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Event/interface.ts:60](https://github.com/Anshikaaa06/tal
 
 > `optional` **baseEvent**: `object`
 
-Defined in: [src/types/Event/interface.ts:64](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L64)
+Defined in: [src/types/Event/interface.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L64)
 
 #### id
 
@@ -48,7 +48,7 @@ Defined in: [src/types/Event/interface.ts:64](https://github.com/Anshikaaa06/tal
 
 > **creator**: `Partial`\<[`User`](../../type/type-aliases/User.md)\>
 
-Defined in: [src/types/Event/interface.ts:59](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L59)
+Defined in: [src/types/Event/interface.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L59)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/types/Event/interface.ts:59](https://github.com/Anshikaaa06/tal
 
 > **description**: `string`
 
-Defined in: [src/types/Event/interface.ts:45](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L45)
+Defined in: [src/types/Event/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L45)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [src/types/Event/interface.ts:45](https://github.com/Anshikaaa06/tal
 
 > **endAt**: `string`
 
-Defined in: [src/types/Event/interface.ts:47](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L47)
+Defined in: [src/types/Event/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L47)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [src/types/Event/interface.ts:47](https://github.com/Anshikaaa06/tal
 
 > `optional` **endTime**: `string`
 
-Defined in: [src/types/Event/interface.ts:49](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L49)
+Defined in: [src/types/Event/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L49)
 
 ***
 
@@ -80,7 +80,7 @@ Defined in: [src/types/Event/interface.ts:49](https://github.com/Anshikaaa06/tal
 
 > `optional` **feedback**: [`Feedback`](../../type/type-aliases/Feedback.md)[]
 
-Defined in: [src/types/Event/interface.ts:61](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L61)
+Defined in: [src/types/Event/interface.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L61)
 
 ***
 
@@ -88,7 +88,7 @@ Defined in: [src/types/Event/interface.ts:61](https://github.com/Anshikaaa06/tal
 
 > `optional` **hasExceptions**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:69](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L69)
+Defined in: [src/types/Event/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L69)
 
 ***
 
@@ -96,7 +96,7 @@ Defined in: [src/types/Event/interface.ts:69](https://github.com/Anshikaaa06/tal
 
 > **id**: `string`
 
-Defined in: [src/types/Event/interface.ts:42](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L42)
+Defined in: [src/types/Event/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L42)
 
 ***
 
@@ -104,7 +104,7 @@ Defined in: [src/types/Event/interface.ts:42](https://github.com/Anshikaaa06/tal
 
 > **isPublic**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:56](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L56)
+Defined in: [src/types/Event/interface.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L56)
 
 Determines if the event is visible to the entire community.
 Often referred to as "Community Visible" in the UI.
@@ -115,7 +115,7 @@ Often referred to as "Community Visible" in the UI.
 
 > `optional` **isRecurringEventTemplate**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:63](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L63)
+Defined in: [src/types/Event/interface.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L63)
 
 ***
 
@@ -123,7 +123,7 @@ Defined in: [src/types/Event/interface.ts:63](https://github.com/Anshikaaa06/tal
 
 > **isRegisterable**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:57](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L57)
+Defined in: [src/types/Event/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L57)
 
 ***
 
@@ -131,7 +131,7 @@ Defined in: [src/types/Event/interface.ts:57](https://github.com/Anshikaaa06/tal
 
 > `optional` **key**: `string`
 
-Defined in: [src/types/Event/interface.ts:41](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L41)
+Defined in: [src/types/Event/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L41)
 
 ***
 
@@ -139,7 +139,7 @@ Defined in: [src/types/Event/interface.ts:41](https://github.com/Anshikaaa06/tal
 
 > **location**: `string`
 
-Defined in: [src/types/Event/interface.ts:43](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L43)
+Defined in: [src/types/Event/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L43)
 
 ***
 
@@ -147,7 +147,7 @@ Defined in: [src/types/Event/interface.ts:43](https://github.com/Anshikaaa06/tal
 
 > **name**: `string`
 
-Defined in: [src/types/Event/interface.ts:44](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L44)
+Defined in: [src/types/Event/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L44)
 
 ***
 
@@ -155,7 +155,7 @@ Defined in: [src/types/Event/interface.ts:44](https://github.com/Anshikaaa06/tal
 
 > `optional` **progressLabel**: `string`
 
-Defined in: [src/types/Event/interface.ts:70](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L70)
+Defined in: [src/types/Event/interface.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L70)
 
 ***
 
@@ -163,7 +163,7 @@ Defined in: [src/types/Event/interface.ts:70](https://github.com/Anshikaaa06/tal
 
 > `optional` **recurrenceDescription**: `string`
 
-Defined in: [src/types/Event/interface.ts:72](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L72)
+Defined in: [src/types/Event/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L72)
 
 ***
 
@@ -171,7 +171,7 @@ Defined in: [src/types/Event/interface.ts:72](https://github.com/Anshikaaa06/tal
 
 > `optional` **recurrenceRule**: [`InterfaceRecurrenceRule`](../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)
 
-Defined in: [src/types/Event/interface.ts:73](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L73)
+Defined in: [src/types/Event/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L73)
 
 ***
 
@@ -179,7 +179,7 @@ Defined in: [src/types/Event/interface.ts:73](https://github.com/Anshikaaa06/tal
 
 > `optional` **sequenceNumber**: `number`
 
-Defined in: [src/types/Event/interface.ts:67](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L67)
+Defined in: [src/types/Event/interface.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L67)
 
 ***
 
@@ -187,7 +187,7 @@ Defined in: [src/types/Event/interface.ts:67](https://github.com/Anshikaaa06/tal
 
 > **startAt**: `string`
 
-Defined in: [src/types/Event/interface.ts:46](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L46)
+Defined in: [src/types/Event/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L46)
 
 ***
 
@@ -195,7 +195,7 @@ Defined in: [src/types/Event/interface.ts:46](https://github.com/Anshikaaa06/tal
 
 > `optional` **startTime**: `string`
 
-Defined in: [src/types/Event/interface.ts:48](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L48)
+Defined in: [src/types/Event/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L48)
 
 ***
 
@@ -203,7 +203,7 @@ Defined in: [src/types/Event/interface.ts:48](https://github.com/Anshikaaa06/tal
 
 > `optional` **totalCount**: `number`
 
-Defined in: [src/types/Event/interface.ts:68](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L68)
+Defined in: [src/types/Event/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L68)
 
 ***
 
@@ -211,7 +211,7 @@ Defined in: [src/types/Event/interface.ts:68](https://github.com/Anshikaaa06/tal
 
 > `optional` **userId**: `string`
 
-Defined in: [src/types/Event/interface.ts:51](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L51)
+Defined in: [src/types/Event/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L51)
 
 ***
 
@@ -219,4 +219,4 @@ Defined in: [src/types/Event/interface.ts:51](https://github.com/Anshikaaa06/tal
 
 > `optional` **userRole**: `string`
 
-Defined in: [src/types/Event/interface.ts:40](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/interface.ts#L40)
+Defined in: [src/types/Event/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L40)

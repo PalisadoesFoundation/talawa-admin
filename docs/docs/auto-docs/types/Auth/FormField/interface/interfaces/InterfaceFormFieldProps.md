@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceFormFieldProps
 
-Defined in: [src/types/Auth/FormField/interface.ts:9](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Auth/FormField/interface.ts#L9)
+Defined in: [src/types/Auth/FormField/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L9)
 
 Props for the FormField component.
 
@@ -18,7 +18,7 @@ Supports optional validator callbacks and aria-live behaviors for accessibility.
 
 > `optional` **ariaLive**: `boolean`
 
-Defined in: [src/types/Auth/FormField/interface.ts:51](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Auth/FormField/interface.ts#L51)
+Defined in: [src/types/Auth/FormField/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L51)
 
 Whether to use aria-live for dynamic error announcements.
 When true, error messages are announced to screen readers.
@@ -35,7 +35,7 @@ true
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [src/types/Auth/FormField/interface.ts:35](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Auth/FormField/interface.ts#L35)
+Defined in: [src/types/Auth/FormField/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L35)
 
 Whether the input is disabled
 
@@ -45,7 +45,7 @@ Whether the input is disabled
 
 > `optional` **error**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:41](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Auth/FormField/interface.ts#L41)
+Defined in: [src/types/Auth/FormField/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L41)
 
 Error message to display - null or undefined means no error
 
@@ -55,7 +55,7 @@ Error message to display - null or undefined means no error
 
 > `optional` **helperText**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:44](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Auth/FormField/interface.ts#L44)
+Defined in: [src/types/Auth/FormField/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L44)
 
 Helper text to display below the input when no error
 
@@ -65,7 +65,7 @@ Helper text to display below the input when no error
 
 > `optional` **label**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:11](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Auth/FormField/interface.ts#L11)
+Defined in: [src/types/Auth/FormField/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L11)
 
 Optional label text displayed above the input
 
@@ -75,7 +75,7 @@ Optional label text displayed above the input
 
 > **name**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:14](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Auth/FormField/interface.ts#L14)
+Defined in: [src/types/Auth/FormField/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L14)
 
 Name attribute for the input field (required for form handling)
 
@@ -85,7 +85,7 @@ Name attribute for the input field (required for form handling)
 
 > `optional` **onBlur**: (`e`) => `void`
 
-Defined in: [src/types/Auth/FormField/interface.ts:26](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Auth/FormField/interface.ts#L26)
+Defined in: [src/types/Auth/FormField/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L26)
 
 Blur handler called when input loses focus
 
@@ -105,7 +105,7 @@ Blur handler called when input loses focus
 
 > **onChange**: (`e`) => `void`
 
-Defined in: [src/types/Auth/FormField/interface.ts:23](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Auth/FormField/interface.ts#L23)
+Defined in: [src/types/Auth/FormField/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L23)
 
 Change handler called when input value changes
 
@@ -125,7 +125,7 @@ Change handler called when input value changes
 
 > `optional` **placeholder**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:29](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Auth/FormField/interface.ts#L29)
+Defined in: [src/types/Auth/FormField/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L29)
 
 Placeholder text for the input
 
@@ -135,7 +135,7 @@ Placeholder text for the input
 
 > `optional` **required**: `boolean`
 
-Defined in: [src/types/Auth/FormField/interface.ts:32](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Auth/FormField/interface.ts#L32)
+Defined in: [src/types/Auth/FormField/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L32)
 
 Whether the field is required - shows asterisk if true
 
@@ -145,7 +145,7 @@ Whether the field is required - shows asterisk if true
 
 > `optional` **testId**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:38](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Auth/FormField/interface.ts#L38)
+Defined in: [src/types/Auth/FormField/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L38)
 
 Test ID for testing purposes
 
@@ -155,7 +155,7 @@ Test ID for testing purposes
 
 > `optional` **type**: `"text"` \| `"email"` \| `"password"` \| `"tel"`
 
-Defined in: [src/types/Auth/FormField/interface.ts:17](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Auth/FormField/interface.ts#L17)
+Defined in: [src/types/Auth/FormField/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L17)
 
 Input type - defaults to 'text'
 
@@ -165,6 +165,6 @@ Input type - defaults to 'text'
 
 > **value**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:20](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Auth/FormField/interface.ts#L20)
+Defined in: [src/types/Auth/FormField/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L20)
 
 Current input value

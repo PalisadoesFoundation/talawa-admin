@@ -1,4 +1,4 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **ComponentType** = `object`
 
-Defined in: [src/state/reducers/routesReducer.ts:34](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/state/reducers/routesReducer.ts#L34)
+Defined in: [src/state/reducers/routesReducer.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L34)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/state/reducers/routesReducer.ts:34](https://github.com/Anshikaa
 
 > **comp\_id**: `string` \| `null`
 
-Defined in: [src/state/reducers/routesReducer.ts:36](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/state/reducers/routesReducer.ts#L36)
+Defined in: [src/state/reducers/routesReducer.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L36)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/state/reducers/routesReducer.ts:36](https://github.com/Anshikaa
 
 > **component**: `string` \| `null`
 
-Defined in: [src/state/reducers/routesReducer.ts:37](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/state/reducers/routesReducer.ts#L37)
+Defined in: [src/state/reducers/routesReducer.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L37)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/state/reducers/routesReducer.ts:37](https://github.com/Anshikaa
 
 > **name**: `string`
 
-Defined in: [src/state/reducers/routesReducer.ts:35](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/state/reducers/routesReducer.ts#L35)
+Defined in: [src/state/reducers/routesReducer.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L35)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/state/reducers/routesReducer.ts:35](https://github.com/Anshikaa
 
 > `optional` **subTargets**: `object`[]
 
-Defined in: [src/state/reducers/routesReducer.ts:38](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/state/reducers/routesReducer.ts#L38)
+Defined in: [src/state/reducers/routesReducer.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L38)
 
 #### comp\_id
 

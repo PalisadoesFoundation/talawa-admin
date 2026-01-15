@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: IExecResult
 
-Defined in: [src/install/utils/exec.ts:15](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/install/utils/exec.ts#L15)
+Defined in: [src/install/utils/exec.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L15)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/install/utils/exec.ts:15](https://github.com/Anshikaaa06/talawa
 
 > **stderr**: `string`
 
-Defined in: [src/install/utils/exec.ts:17](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/install/utils/exec.ts#L17)
+Defined in: [src/install/utils/exec.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L17)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/install/utils/exec.ts:17](https://github.com/Anshikaaa06/talawa
 
 > **stdout**: `string`
 
-Defined in: [src/install/utils/exec.ts:16](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/install/utils/exec.ts#L16)
+Defined in: [src/install/utils/exec.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L16)
