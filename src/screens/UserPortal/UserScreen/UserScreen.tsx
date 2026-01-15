@@ -42,8 +42,7 @@ import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import styles from 'style/app-fixed.module.css';
-import localStyles from './UserScreen.module.css';
+import styles from './UserScreen.module.css';
 import UserSidebarOrg from 'components/UserPortal/UserSidebarOrg/UserSidebarOrg';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import type { InterfaceMapType } from 'utils/interfaces';
@@ -169,11 +168,11 @@ const UserScreen = (): React.JSX.Element => {
         )}
       </div>
       <div
-        className={`${hideDrawer ? styles.expand : styles.contract} ${hideDrawer ? localStyles.contentContainer : ''}`}
+        className={`${hideDrawer ? styles.expand : styles.contract} ${hideDrawer ? styles.contentContainer : ''}`}
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
-          <div className={localStyles.titleContainer}>
+          <div className={styles.titleContainer}>
             <h1>{tScoped('title')}</h1>
           </div>
           {/* <ProfileDropdown /> */}

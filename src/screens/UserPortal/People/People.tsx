@@ -50,7 +50,7 @@ import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
-import styles from 'style/app-fixed.module.css';
+import styles from './People.module.css';
 import { useTranslation } from 'react-i18next';
 
 import { useParams } from 'react-router';
