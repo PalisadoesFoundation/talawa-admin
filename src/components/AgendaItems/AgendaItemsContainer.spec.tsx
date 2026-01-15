@@ -6,7 +6,9 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import i18nForTest from 'utils/i18nForTest';
+// eslint-disable-next-line no-restricted-imports -- Test file needs direct access for mocking
 import { toast } from 'react-toastify';
+// eslint-disable-next-line no-restricted-imports -- Test file needs direct access for mocking
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { DropResult } from '@hello-pangea/dnd';
@@ -470,6 +472,7 @@ describe('Testing Agenda Items components', () => {
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
         translations.agendaItemDeleted,
+        expect.any(Object),
       );
     });
   });
