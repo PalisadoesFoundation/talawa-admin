@@ -1,11 +1,9 @@
 /**
- * Transactions Component
+ * Transactions component renders a user's transaction history for an organization.
  *
- * This component allows users to view their transaction history for an organization.
- * It includes features such as transaction filtering, pagination, and detailed transaction information.
+ * It covers transaction filtering, pagination, and detailed transaction information.
  *
- * @component
- * @returns {JSX.Element} The Transactions component.
+ * @returns JSX.Element The Transactions component.
  *
  * @remarks
  * - Uses `react-bootstrap` for UI components and `react-router-dom` for routing.
@@ -19,7 +17,7 @@
 
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from './Transactions.module.css';
 import { PluginInjector } from 'plugin';
 
 export default function Transactions(): JSX.Element {
