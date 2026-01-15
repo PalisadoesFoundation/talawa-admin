@@ -1,7 +1,9 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -190,9 +192,11 @@ describe('Actions Screen', () => {
   it('renders Actions screen', async () => {
     renderActions(link1);
 
-    expect(await screen.findByTestId('searchByInput')).toBeInTheDocument();
-    const assignees = await screen.findAllByTestId('assigneeName');
-    expect(assignees.length).toBeGreaterThan(0);
+    await waitFor(() => {
+      const assignees = screen.getAllByTestId('assigneeName');
+      expect(assignees.length).toBeGreaterThan(0);
+    });
+    expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
   });
 
   it('shows only action items for current user (direct assignment)', async () => {
@@ -226,8 +230,13 @@ describe('Actions Screen', () => {
   it('sorts by due date ascending', async () => {
     renderActions(link1);
 
-    fireEvent.click(await screen.findByTestId('sort'));
-    fireEvent.click(await screen.findByTestId('dueDate_ASC'));
+    await waitFor(() => {
+      expect(screen.getAllByTestId('assigneeName').length).toBeGreaterThan(0);
+    });
+
+    fireEvent.click(screen.getByTestId('sort'));
+    const dueDateAscOption = await screen.findByTestId('dueDate_ASC');
+    fireEvent.click(dueDateAscOption);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('assigneeName')[0]).toBeInTheDocument();
@@ -237,8 +246,13 @@ describe('Actions Screen', () => {
   it('sorts by due date descending explicitly', async () => {
     renderActions(link1);
 
-    fireEvent.click(await screen.findByTestId('sort'));
-    fireEvent.click(await screen.findByTestId('dueDate_DESC'));
+    await waitFor(() => {
+      expect(screen.getAllByTestId('assigneeName').length).toBeGreaterThan(0);
+    });
+
+    fireEvent.click(screen.getByTestId('sort'));
+    const dueDateDescOption = await screen.findByTestId('dueDate_DESC');
+    fireEvent.click(dueDateDescOption);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('assigneeName')[0]).toBeInTheDocument();
@@ -275,9 +289,14 @@ describe('Actions Screen', () => {
   it('searches by category name', async () => {
     renderActions(link1);
 
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+    });
+
     // Switch to category search
-    fireEvent.click(await screen.findByTestId('searchBy'));
-    fireEvent.click(await screen.findByTestId('category'));
+    fireEvent.click(screen.getByTestId('searchBy'));
+    const categoryOption = await screen.findByTestId('category');
+    fireEvent.click(categoryOption);
 
     const input = screen.getByTestId('searchByInput');
     await userEvent.clear(input);
@@ -293,9 +312,14 @@ describe('Actions Screen', () => {
   it('switches between search by assignee and category', async () => {
     renderActions(link1);
 
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+    });
+
     // Switch to category
-    fireEvent.click(await screen.findByTestId('searchBy'));
-    fireEvent.click(await screen.findByTestId('category'));
+    fireEvent.click(screen.getByTestId('searchBy'));
+    const categoryOption = await screen.findByTestId('category');
+    fireEvent.click(categoryOption);
 
     await waitFor(() => {
       expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
@@ -303,7 +327,8 @@ describe('Actions Screen', () => {
 
     // Switch back to assignee
     fireEvent.click(screen.getByTestId('searchBy'));
-    fireEvent.click(screen.getByTestId('assignee'));
+    const assigneeOption = await screen.findByTestId('assignee');
+    fireEvent.click(assigneeOption);
 
     await waitFor(() => {
       expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
@@ -326,7 +351,12 @@ describe('Actions Screen', () => {
   it('clears search and shows all items', async () => {
     renderActions(link1);
 
-    const input = await screen.findByTestId('searchByInput');
+    await waitFor(() => {
+      const assignees = screen.getAllByTestId('assigneeName');
+      expect(assignees.length).toBeGreaterThan(0);
+    });
+
+    const input = screen.getByTestId('searchByInput') as HTMLInputElement;
     await userEvent.type(input, 'test');
     await debounceWait();
 
@@ -517,23 +547,32 @@ describe('Actions Screen', () => {
   it('handles search with empty results', async () => {
     renderActions(link1);
 
-    const input = await screen.findByTestId('searchByInput');
+    await waitFor(() => {
+      expect(screen.getAllByTestId('assigneeName').length).toBeGreaterThan(0);
+    });
+
+    const input = screen.getByTestId('searchByInput');
     await userEvent.type(input, 'NonexistentSearchTerm12345');
     await debounceWait();
 
     await waitFor(() => {
       // Should show no results or empty state
       const assignees = screen.queryAllByTestId('assigneeName');
-      expect(assignees.length).toBe(0);
+      expect(assignees.length).toEqual(0);
     });
   });
 
   it('maintains sort order after search', async () => {
     renderActions(link1);
 
+    await waitFor(() => {
+      expect(screen.getAllByTestId('assigneeName')).toBeDefined();
+    });
+
     // Set sort order
-    fireEvent.click(await screen.findByTestId('sort'));
-    fireEvent.click(await screen.findByTestId('dueDate_ASC'));
+    fireEvent.click(screen.getByTestId('sort'));
+    const dueDateAscOption = await screen.findByTestId('dueDate_ASC');
+    fireEvent.click(dueDateAscOption);
 
     // Then search
     const input = screen.getByTestId('searchByInput');
@@ -569,9 +608,14 @@ describe('Actions Screen', () => {
   it('handles category search with lowercase matching', async () => {
     renderActions(link1);
 
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+    });
+
     // Switch to category search
-    fireEvent.click(await screen.findByTestId('searchBy'));
-    fireEvent.click(await screen.findByTestId('category'));
+    fireEvent.click(screen.getByTestId('searchBy'));
+    const categoryOption = await screen.findByTestId('category');
+    fireEvent.click(categoryOption);
 
     const input = screen.getByTestId('searchByInput');
     await userEvent.clear(input);
@@ -624,6 +668,15 @@ describe('Actions Screen', () => {
         container.querySelector('.loader') ||
           screen.queryByTestId('searchByInput'),
       ).toBeTruthy();
+    });
+  });
+
+  it('should load actions successfully after fetching data', async () => {
+    renderActions(link1);
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('assigneeName').length).toBeGreaterThan(0);
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
   });
 });

@@ -1,44 +1,46 @@
 /**
- * @file Volunteers.tsx
- * @description This component renders the Volunteers page for an event in the Talawa Admin application.
+ * Volunteers.tsx
+ * This component renders the Volunteers page for an event in the Talawa Admin application.
  * It provides functionalities to view, search, filter, sort, and manage volunteers for a specific event.
  * The page includes a data grid to display volunteer details and modals for adding, viewing, and deleting volunteers.
  *
- * @module Volunteers
+ * module Volunteers
  *
- * @requires react
- * @requires react-i18next
- * @requires react-bootstrap
- * @requires react-router-dom
- * @requires @mui/icons-material
- * @requires @apollo/client
- * @requires @mui/x-data-grid
- * @requires @mui/material
- * @requires components/Loader/Loader
- * @requires components/Avatar/Avatar
- * @requires subComponents/SortingButton
- * @requires shared-components/SearchBar/SearchBar
- * @requires GraphQl/Queries/EventVolunteerQueries
- * @requires utils/interfaces
- * @requires ./createModal/VolunteerCreateModal
- * @requires ./deleteModal/VolunteerDeleteModal
- * @requires ./viewModal/VolunteerViewModal
- * @requires style/app.module.css
+ * requires
+ * - react
+ * - react-i18next
+ * - react-bootstrap
+ * - react-router-dom
+ * - \@mui/icons-material
+ * - \@apollo/client
+ * - \@mui/x-data-grid
+ * - \@mui/material
+ * - shared-components/LoadingState/LoadingState
+ * - components/Avatar/Avatar
+ * - subComponents/SortingButton
+ * - shared-components/SearchBar/SearchBar
+ * - GraphQl/Queries/EventVolunteerQueries
+ * - utils/interfaces
+ * - ./createModal/VolunteerCreateModal
+ * - ./deleteModal/VolunteerDeleteModal
+ * - ./viewModal/VolunteerViewModal
+ * - style/app.module.css
  *
- * @typedef {InterfaceEventVolunteerInfo} InterfaceEventVolunteerInfo - Interface for volunteer information.
+ * typedef InterfaceEventVolunteerInfo - Interface for volunteer information.
  *
- * @component
- * @returns {JSX.Element} The Volunteers page component.
+ * @returns The Volunteers page component.
  *
  * @example
+ * ```tsx
  * // Usage
  * import Volunteers from './Volunteers';
  *
  * function App() {
  *   return <Volunteers />;
  * }
+ * ```
  *
- * @remarks
+ * remarks
  * - The component uses Apollo Client's `useQuery` to fetch volunteer data.
  * - It supports search, sorting, and filtering functionalities.
  * - Modals are used for adding, viewing, and deleting volunteers.
@@ -49,28 +51,25 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
 
-import {
-  Circle,
-  VolunteerActivism,
-  WarningAmberRounded,
-} from '@mui/icons-material';
+import { VolunteerActivism, WarningAmberRounded } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
-import { Chip, debounce } from '@mui/material';
-import Avatar from 'components/Avatar/Avatar';
-import styles from '../../../style/app-fixed.module.css';
+import { debounce } from '@mui/material';
+import Avatar from 'shared-components/Avatar/Avatar';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
+import styles from './Volunteers.module.css';
 import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import VolunteerCreateModal from './createModal/VolunteerCreateModal';
 import VolunteerDeleteModal from './deleteModal/VolunteerDeleteModal';
 import VolunteerViewModal from './viewModal/VolunteerViewModal';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 enum VolunteerStatus {
@@ -91,7 +90,7 @@ enum ModalState {
  *
  * Responsibilities:
  * - Displays volunteer listings with status chips
- * - Supports search and filter via AdminSearchFilterBar
+ * - Supports search and filter via SearchFilterBar
  * - Shows volunteer avatars and hours volunteered
  * - Handles add, view, and delete volunteer flows
  * - Integrates with DataGrid for table display
@@ -249,10 +248,6 @@ function Volunteers(): JSX.Element {
     }
   }, [eventData, status, searchTerm]);
 
-  if (volunteersLoading) {
-    return <Loader size="xl" />;
-  }
-
   if (volunteersError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
@@ -289,7 +284,7 @@ function Volunteers(): JSX.Element {
                 src={avatarURL}
                 alt={tCommon('volunteer')}
                 data-testid="volunteer_image"
-                className={styles.TableImages}
+                className={styles.tableImages}
               />
             ) : (
               <div className={styles.avatarContainer}>
@@ -297,7 +292,7 @@ function Volunteers(): JSX.Element {
                   key={id + '1'}
                   dataTestId="volunteer_avatar"
                   containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImages}
+                  avatarStyle={styles.tableImages}
                   name={name}
                   alt={name}
                 />
@@ -319,41 +314,14 @@ function Volunteers(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         const status = params.row.volunteerStatus;
-        const getStatusInfo = (status: string) => {
-          switch (status) {
-            case 'accepted':
-              return {
-                label: t('eventVolunteers.accepted'),
-                color: 'success' as const,
-                className: styles.active,
-              };
-            case 'rejected':
-              return {
-                label: t('eventVolunteers.rejected'),
-                color: 'error' as const,
-                className: styles.rejected,
-              };
-            case 'pending':
-            default:
-              return {
-                label: t('eventVolunteers.pending'),
-                color: 'warning' as const,
-                className: styles.pending,
-              };
-          }
-        };
+        const statusVariant =
+          status === 'accepted'
+            ? 'accepted'
+            : status === 'rejected'
+              ? 'rejected'
+              : 'pending';
 
-        const statusInfo = getStatusInfo(status);
-
-        return (
-          <Chip
-            icon={<Circle className={styles.chipIcon} />}
-            label={statusInfo.label}
-            variant="outlined"
-            color={statusInfo.color}
-            className={`${styles.chip} ${statusInfo.className}`}
-          />
-        );
+        return <StatusBadge variant={statusVariant} dataTestId="statusChip" />;
       },
     },
     {
@@ -437,128 +405,130 @@ function Volunteers(): JSX.Element {
   ];
 
   return (
-    <div>
-      {/* Header with search, filter  and Create Button */}
-      <AdminSearchFilterBar
-        searchPlaceholder={tCommon('searchBy', { item: tCommon('name') })}
-        searchValue={searchTerm}
-        onSearchChange={debouncedSearch}
-        onSearchSubmit={(value) => setSearchTerm(value)}
-        searchInputTestId="searchBy"
-        searchButtonTestId="searchBtn"
-        hasDropdowns
-        dropdowns={[
-          {
-            id: 'sort',
-            type: 'sort',
-            title: tCommon('sort'),
-            label: tCommon('sort'),
-            dataTestIdPrefix: 'sort',
-            selectedOption: sortBy ?? '',
-            options: [
-              {
-                label: t('eventVolunteers.mostHoursVolunteered'),
-                value: 'hoursVolunteered_DESC',
-              },
-              {
-                label: t('eventVolunteers.leastHoursVolunteered'),
-                value: 'hoursVolunteered_ASC',
-              },
-            ],
-            onOptionChange: (value) =>
-              setSortBy(
-                value as 'hoursVolunteered_DESC' | 'hoursVolunteered_ASC',
-              ),
-          },
-          {
-            id: 'filter',
-            type: 'filter',
-            title: tCommon('filter'),
-            label: t('eventVolunteers.status'),
-            dataTestIdPrefix: 'filter',
-            selectedOption: status,
-            options: [
-              { label: tCommon('all'), value: VolunteerStatus.All },
-              { label: tCommon('pending'), value: VolunteerStatus.Pending },
-              {
-                label: t('eventVolunteers.accepted'),
-                value: VolunteerStatus.Accepted,
-              },
-              {
-                label: t('eventVolunteers.rejected'),
-                value: VolunteerStatus.Rejected,
-              },
-            ],
-            onOptionChange: (value) => setStatus(value as VolunteerStatus),
-          },
-        ]}
-        additionalButtons={
-          <Button
-            variant="success"
-            onClick={() => handleOpenModal(null, ModalState.ADD)}
-            className={styles.actionsButton}
-            data-testid="addVolunteerBtn"
-          >
-            <i className="fa fa-plus me-2" />
-            {t('eventVolunteers.add')}
-          </Button>
-        }
-      />
+    <LoadingState isLoading={volunteersLoading} variant="spinner">
+      <div>
+        {/* Header with search, filter  and Create Button */}
+        <SearchFilterBar
+          searchPlaceholder={tCommon('searchBy', { item: tCommon('name') })}
+          searchValue={searchTerm}
+          onSearchChange={debouncedSearch}
+          onSearchSubmit={(value) => setSearchTerm(value)}
+          searchInputTestId="searchBy"
+          searchButtonTestId="searchBtn"
+          hasDropdowns
+          dropdowns={[
+            {
+              id: 'sort',
+              type: 'sort',
+              title: tCommon('sort'),
+              label: tCommon('sort'),
+              dataTestIdPrefix: 'sort',
+              selectedOption: sortBy ?? '',
+              options: [
+                {
+                  label: t('eventVolunteers.mostHoursVolunteered'),
+                  value: 'hoursVolunteered_DESC',
+                },
+                {
+                  label: t('eventVolunteers.leastHoursVolunteered'),
+                  value: 'hoursVolunteered_ASC',
+                },
+              ],
+              onOptionChange: (value) =>
+                setSortBy(
+                  value as 'hoursVolunteered_DESC' | 'hoursVolunteered_ASC',
+                ),
+            },
+            {
+              id: 'filter',
+              type: 'filter',
+              title: tCommon('filter'),
+              label: t('eventVolunteers.status'),
+              dataTestIdPrefix: 'filter',
+              selectedOption: status,
+              options: [
+                { label: tCommon('all'), value: VolunteerStatus.All },
+                { label: tCommon('pending'), value: VolunteerStatus.Pending },
+                {
+                  label: t('eventVolunteers.accepted'),
+                  value: VolunteerStatus.Accepted,
+                },
+                {
+                  label: t('eventVolunteers.rejected'),
+                  value: VolunteerStatus.Rejected,
+                },
+              ],
+              onOptionChange: (value) => setStatus(value as VolunteerStatus),
+            },
+          ]}
+          additionalButtons={
+            <Button
+              variant="success"
+              onClick={() => handleOpenModal(null, ModalState.ADD)}
+              className={styles.actionsButton}
+              data-testid="addVolunteerBtn"
+            >
+              <i className="fa fa-plus me-2" />
+              {t('eventVolunteers.add')}
+            </Button>
+          }
+        />
 
-      {/* Table with Volunteers */}
-      <DataGrid
-        disableColumnMenu
-        disableColumnResize
-        columnBufferPx={7}
-        hideFooter={true}
-        getRowId={(row) => row.id}
-        slots={{
-          noRowsOverlay: () => (
-            <EmptyState
-              icon={<VolunteerActivism />}
-              message={t('eventVolunteers.noVolunteers')}
-              dataTestId="volunteers-empty-state"
+        {/* Table with Volunteers */}
+        <DataGrid
+          disableColumnMenu
+          disableColumnResize
+          columnBufferPx={7}
+          hideFooter={true}
+          getRowId={(row) => row.id}
+          slots={{
+            noRowsOverlay: () => (
+              <EmptyState
+                icon={<VolunteerActivism />}
+                message={t('eventVolunteers.noVolunteers')}
+                dataTestId="volunteers-empty-state"
+              />
+            ),
+          }}
+          className={styles.dataGridContainer}
+          getRowClassName={() => `${styles.rowBackgrounds}`}
+          autoHeight
+          rowHeight={65}
+          rows={volunteers}
+          columns={columns}
+          isRowSelectable={() => false}
+        />
+
+        <VolunteerCreateModal
+          isOpen={modalState[ModalState.ADD]}
+          hide={() => closeModal(ModalState.ADD)}
+          eventId={eventId}
+          orgId={orgId}
+          refetchVolunteers={refetchVolunteers}
+          isRecurring={isRecurring}
+          baseEvent={baseEvent}
+          recurringEventInstanceId={eventId}
+        />
+
+        {volunteer && (
+          <>
+            <VolunteerViewModal
+              isOpen={modalState[ModalState.VIEW]}
+              hide={() => closeModal(ModalState.VIEW)}
+              volunteer={volunteer}
             />
-          ),
-        }}
-        className={styles.dataGridContainer}
-        getRowClassName={() => `${styles.rowBackgrounds}`}
-        autoHeight
-        rowHeight={65}
-        rows={volunteers}
-        columns={columns}
-        isRowSelectable={() => false}
-      />
-
-      <VolunteerCreateModal
-        isOpen={modalState[ModalState.ADD]}
-        hide={() => closeModal(ModalState.ADD)}
-        eventId={eventId}
-        orgId={orgId}
-        refetchVolunteers={refetchVolunteers}
-        isRecurring={isRecurring}
-        baseEvent={baseEvent}
-        recurringEventInstanceId={eventId}
-      />
-
-      {volunteer && (
-        <>
-          <VolunteerViewModal
-            isOpen={modalState[ModalState.VIEW]}
-            hide={() => closeModal(ModalState.VIEW)}
-            volunteer={volunteer}
-          />
-          <VolunteerDeleteModal
-            isOpen={modalState[ModalState.DELETE]}
-            hide={() => closeModal(ModalState.DELETE)}
-            volunteer={volunteer}
-            refetchVolunteers={refetchVolunteers}
-            isRecurring={isRecurring}
-            eventId={eventId}
-          />
-        </>
-      )}
-    </div>
+            <VolunteerDeleteModal
+              isOpen={modalState[ModalState.DELETE]}
+              hide={() => closeModal(ModalState.DELETE)}
+              volunteer={volunteer}
+              refetchVolunteers={refetchVolunteers}
+              isRecurring={isRecurring}
+              eventId={eventId}
+            />
+          </>
+        )}
+      </div>
+    </LoadingState>
   );
 }
 

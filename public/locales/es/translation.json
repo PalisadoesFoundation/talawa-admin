@@ -1,6 +1,15 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "Por favor, inicie sesión nuevamente; su sesión ha expirado."
+  },
+  "securedRoute": {
+    "sessionExpired": "Por favor, inicie sesión nuevamente; su sesión ha expirado."
+  },
   "ends": "Finaliza",
   "occurrences": "ocurrencias",
+  "customRecurrence": "Recurrencia personalizada",
+  "invalidDetailsMessage": "Por favor, verifique los detalles ingresados.",
+  "selectAtLeastOneDay": "Por favor, seleccione al menos un día.",
   "leaderboard": {
     "title": "Tabla de Clasificación",
     "searchByVolunteer": "Buscar por Voluntario",
@@ -69,9 +78,13 @@
     "loading": "Cargando...",
     "selectOrg": "Seleccione una organización",
     "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud.",
-    "backToLogin": "Volver al inicio de sesión",
-    "communityLogo": "Logo de la comunidad",
-    "organizations": "Organizaciones"
+    "userImage": "Imagen del usuario",
+    "userEditProfilePicture": "Editar foto de perfil",
+    "communityLogo": "Logo de la Comunidad",
+    "organizations": "Organizaciones",
+    "accountLocked": "Su cuenta ha sido bloqueada temporalmente debido a demasiados intentos fallidos de inicio de sesión. Por favor, inténtelo de nuevo más tarde.",
+    "accountLockedWithTimer": "Su cuenta ha sido bloqueada temporalmente. Por favor, inténtelo de nuevo en {{minutes}} minuto(s).",
+    "backToLogin": "Volver al inicio de sesión"
   },
   "adminProfile": {
     "title": "Perfil de Administrador",
@@ -486,7 +499,9 @@
     "sortPeople": "Ordenar personas",
     "noTagsFound": "No se encontraron etiquetas",
     "tagActions": "Acciones de etiqueta",
-    "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados"
+    "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados",
+    "addMember": "Agregar miembro",
+    "removeMember": "Eliminar miembro"
   },
   "userListCard": {
     "joined": "Unido",
@@ -706,7 +721,13 @@
     "agendaItemDeleted": "Punto del orden del día eliminado exitosamente",
     "deleteAgendaItem": "Eliminar punto del orden del día",
     "deleteAgendaItemMsg": "¿Desea eliminar este punto del orden del día?",
+<<<<<<< HEAD
     "attachmentPreview": "Vista previa del archivo adjunto"
+=======
+    "event": "Evento",
+    "search": "Buscar",
+    "attachmentPreview": "Vista previa del adjunto"
+>>>>>>> upstream/develop
   },
   "eventListCard": {
     "location": "Lugar del evento",
@@ -816,8 +837,14 @@
     "earliestEndDate": "Fecha de finalización más temprana",
     "lowestGoal": "Meta más baja",
     "highestGoal": "Meta más alta",
+    "errorLoading": "Error al cargar los datos de la campaña",
     "percentageRaised": "% Recaudado",
-    "campaignProgress": "Progreso de la campaña: {{percentage}}%"
+    "campaignProgress": "Progreso de la campaña: {{percentage}}%",
+    "campaignNotFound": "Campaña no encontrada",
+    "dateRangeRequired": "Por favor, seleccione un rango de fechas válido",
+    "campaignNameRequired": "El nombre de la campaña es obligatorio",
+    "invalidDate": "Fecha seleccionada no válida",
+    "endDateBeforeStart": "La fecha de finalización no puede ser anterior a la fecha de inicio"
   },
   "pledges": {
     "title": "Compromisos de Campaña de Financiamiento",
@@ -1193,7 +1220,20 @@
     "unassignUserTagMessage": "¿Desea eliminar la etiqueta de este usuario?",
     "successfullyUnassigned": "Etiqueta desasignada del usuario",
     "tagsAssigned": "Etiquetas asignadas",
-    "noTagsAssigned": "No se asignaron etiquetas"
+    "noTagsAssigned": "No se asignaron etiquetas",
+    "to": "a",
+    "overview": "Resumen",
+    "tags": "Etiquetas",
+    "invalidFileType": "Tipo de archivo no válido",
+    "fileTooLarge": "El archivo es demasiado grande",
+    "memberDetailNumberExample": "Ejemplo de número",
+    "memberDetailExampleLane": "Ejemplo de calle",
+    "memberDetailPostalExample": "Ejemplo de código postal",
+    "enterCity": "Ingrese la ciudad",
+    "enterState": "Ingrese el estado",
+    "select": "Seleccionar",
+    "asYourCountry": "Como su país",
+    "actions": "Acciones"
   },
   "userLogin": {
     "login": "Acceso",
@@ -1355,7 +1395,8 @@
     "event": "Evento",
     "article": "Artículo",
     "postNowVisibleInFeed": "Publicar ahora visible en el feed",
-    "processingPost": "Procesando tu publicación. Por favor espera."
+    "processingPost": "Procesando tu publicación. Por favor espera.",
+    "postImagePreview": "Vista previa de la imagen de la publicación"
   },
   "eventAttendance": {
     "event_attendance_table": "Tabla de asistencia al evento",
@@ -1393,10 +1434,19 @@
     "options": "Opciones",
     "addRegistrant": "Agregar registrado",
     "noRegistrantsFound": "No se encontraron registrados",
+<<<<<<< HEAD
     "removingAttendee": "Eliminando el asistente...",
     "attendeeRemovedSuccessfully": "Asistente eliminado con éxito",
     "errorRemovingAttendee": "Error al eliminar asistente",
     "cannotUnregisterCheckedIn": "No se puede anular el registro de un usuario que ya se ha registrado"
+=======
+    "removingAttendee": "Eliminando asistente...",
+    "attendeeRemovedSuccessfully": "Asistente eliminado con éxito",
+    "errorRemovingAttendee": "Error al eliminar asistente. Por favor, inténtelo de nuevo.",
+    "checkedIn": "Registrado",
+    "unregister": "Dar de baja",
+    "cannotUnregisterCheckedInTooltip": "No se puede dar de baja a un usuario que ya se registró"
+>>>>>>> upstream/develop
   },
   "onSpotAttendee": {
     "title": "Asistente en el lugar",
@@ -1531,7 +1581,9 @@
     "latestFirst": "Más Reciente Primero",
     "earliestFirst": "Más Antiguo Primero",
     "noTransactionsFound": "No se encontraron transacciones",
-    "errorLoadingTransactions": "Error al cargar transacciones"
+    "errorLoadingTransactions": "Error al cargar transacciones",
+    "eventType": "Tipo de evento",
+    "tagCreationFailed": "Error al crear la etiqueta"
   },
   "userEvents": {
     "title": "Eventos",
@@ -1578,7 +1630,8 @@
     "on": "El",
     "after": "Después de",
     "customRecurrence": "Recurrencia Personalizada",
-    "repeatsEvery": "Se repite cada"
+    "repeatsEvery": "Se repite cada",
+    "noEventAvailable": "¡No hay eventos disponibles!"
   },
   "userEventCard": {
     "location": "Ubicación",
@@ -1634,7 +1687,9 @@
     "preview": "Vista previa",
     "bannerAd": "Anuncio de banner",
     "popupAd": "Anuncio emergente",
-    "menuAd": "Anuncio de menú"
+    "menuAd": "Anuncio de menú",
+    "searchAdvertisements": "Buscar anuncios",
+    "advertisementLoading": "Cargando anuncios..."
   },
   "userChat": {
     "title": "Chats",
@@ -1675,6 +1730,9 @@
     "newGroup": "Nuevo Grupo",
     "groupName": "Nombre del grupo",
     "groupDescription": "Descripción del Grupo",
+    "confirmRemoveMember": "Confirmar eliminar miembro",
+    "failedToAddUser": "Error al agregar usuario",
+    "userAddedSuccessfully": "Usuario agregado exitosamente",
     "next": "Siguiente"
   },
   "userChatRoom": {
@@ -1808,6 +1866,7 @@
   "checkIn": {
     "errorCheckingIn": "Error al registrarse",
     "checkedInSuccessfully": "Registrado con éxito",
+<<<<<<< HEAD
     "generatingPdf": "Generando PDF...",
     "pdfGeneratedSuccessfully": "¡PDF generado con éxito!",
     "errorGeneratingPdf": "Error al generar PDF",
@@ -1815,10 +1874,24 @@
     "checkedIn": "Registrado",
     "downloadTag": "Descargar etiqueta",
     "checkInButton": "Registrarse"
+=======
+    "searchAttendees": "Buscar asistentes",
+    "checkedIn": "Registrado",
+    "downloadTag": "Descargar etiqueta",
+    "checkIn": "Registrar",
+    "eventCheckInManagement": "Gestión de registro de eventos"
+>>>>>>> upstream/develop
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",
     "errorRemovingAttendee": "Error al eliminar asistente",
+    "eventRegistrantsTitle": "Registrados al evento",
+    "inviteByEmailButton": "Invitar por correo electrónico",
+    "addRegistrantButton": "Agregar registrado",
+    "noRegistrationsFound": "No se encontraron registros",
+    "addOnspotRegistrationLink": "Agregar enlace de registro en el lugar",
+    "addRegistrantLabel": "Agregar registrado",
+    "addRegistrantPlaceholder": "Ingrese el correo electrónico del registrado",
     "inviteByEmail": {
       "addRecipient": "Agregar destinatario",
       "email": "Correo electrónico",
@@ -1924,6 +1997,8 @@
     "earliest": "Más Antiguo",
     "requestAccepted": "Solicitud aceptada con éxito",
     "requestRejected": "Solicitud rechazada con éxito",
+    "acceptRequest": "Aceptar Solicitud",
+    "rejectRequest": "Rechazar Solicitud",
     "details": "Detalles",
     "manageGroup": "Gestionar Grupo",
     "mostVolunteers": "La mayoría de voluntarios",
@@ -1945,7 +2020,11 @@
     "viewDetails": "Ver detalles de {{name}}",
     "editVolunteerGroup": "Editar grupo de voluntarios {{name}}",
     "deleteVolunteerGroup": "Eliminar grupo de voluntarios {{name}}",
-    "deleteVolunteerEntry": "Eliminar entrada de voluntario {{name}}"
+    "deleteVolunteerEntry": "Eliminar entrada de voluntario {{name}}",
+    "viewGroup": "Ver grupo",
+    "editGroup": "Editar grupo",
+    "invalidNumber": "Número inválido",
+    "viewToggle": "Alternar vista"
   },
   "userVolunteer": {
     "title": "Voluntariado",
@@ -2067,6 +2146,23 @@
     "uninstallWarning": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer.",
     "errorInstalling": "Error al cargar los detalles del plugin"
   },
+  "statusBadge": {
+    "completed": "Completado",
+    "pending": "Pendiente",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "approved": "Aprobado",
+    "rejected": "Rechazado",
+    "disabled": "Deshabilitado",
+    "accepted": "Aceptado",
+    "declined": "Declinado",
+    "no_response": "Sin respuesta",
+    "success": "Éxito",
+    "warning": "Advertencia",
+    "error": "Error",
+    "info": "Información",
+    "neutral": "Neutral"
+  },
   "commentCard": {
     "commentDeletedSuccessfully": "Comentario eliminado exitosamente",
     "commentUpdatedSuccessfully": "Comentario actualizado exitosamente",
@@ -2093,9 +2189,6 @@
   },
   "contact": {
     "card_aria": "Tarjeta de contacto"
-  },
-  "securedRoute": {
-    "sessionExpired": "Por favor, vuelva a iniciar sesión ya que la sesión ha expirado"
   },
   "common": {
     "signOut": "Cerrar sesión",
@@ -2135,5 +2228,11 @@
     "sortPeople": "Ordenar personas",
     "unassign": "Desasignar",
     "tags": "Etiquetas"
+  },
+  "orgProfileField": {
+    "editCustomField": "Editar campo personalizado"
+  },
+  "userGlobalScreen": {
+    "globalFeatures": "Características Globales"
   }
 }

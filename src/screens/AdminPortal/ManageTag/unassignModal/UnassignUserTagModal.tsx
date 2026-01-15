@@ -1,37 +1,27 @@
 /**
- * A React functional component that renders a modal for unassigning a user tag.
- * This modal provides a confirmation dialog with "Yes" and "No" options.
+ * UnassignUserTagModal component.
  *
- * @component
- * @param {InterfaceUnassignUserTagModalProps} props - The props for the component.
- * @param {boolean} props.unassignUserTagModalIsOpen - Determines if the modal is open or closed.
- * @param {() => void} props.toggleUnassignUserTagModal - Function to toggle the modal's visibility.
- * @param {() => Promise<void>} props.handleUnassignUserTag - Async function to handle the unassigning of a user tag.
- * @param {TFunction<'translation', 'manageTag' | 'memberDetail'>} props.t - Translation function for localized strings specific to the modal.
- * @param {TFunction<'common', undefined>} props.tCommon - Translation function for common localized strings.
+ * This modal provides a confirmation dialog for unassigning a user tag.
  *
- * @returns {JSX.Element} The rendered modal component.
+ * @param props - Component props defined by InterfaceUnassignUserTagModalProps.
  *
  * @remarks
- * - The modal is styled using Bootstrap and custom CSS classes from `app-fixed.module.css`.
- * - The "Yes" button is disabled while the `handleUnassignUserTag` function is executing.
- * - Accessibility attributes such as `aria-label` are used for better screen reader support.
+ * - Uses translation functions for localized labels and messages.
+ * - Disables the submit button while the unassign request is in flight.
+ * - Uses accessible labels for the confirmation buttons.
  *
  * @example
- * ```tsx
- * <UnassignUserTagModal
- *   unassignUserTagModalIsOpen={true}
- *   toggleUnassignUserTagModal={() => console.log('Toggle modal')}
- *   handleUnassignUserTag={async () => console.log('Unassign user tag')}
- *   t={(key) => key}
- *   tCommon={(key) => key}
- * />
- * ```
+ * Example usage:
+ * - unassignUserTagModalIsOpen: true
+ * - toggleUnassignUserTagModal: toggleUnassign
+ * - handleUnassignUserTag: handleUnassign
+ *
+ * @returns The rendered unassign user tag modal.
  */
 // translation-check-keyPrefix: manageTag
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import styles from './UnassignUserTagModal.module.css';
 import { BaseModal } from 'shared-components/BaseModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';

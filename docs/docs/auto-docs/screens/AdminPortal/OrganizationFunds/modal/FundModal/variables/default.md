@@ -6,51 +6,30 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceFundModal`](../interfaces/InterfaceFundModal.md)\>
 
-Defined in: [src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx#L69)
+Defined in: [src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx#L36)
 
-`FundModal` component provides a modal dialog for creating or editing a fund.
-It allows users to input fund details and submit them to the server.
+Modal component for creating or editing a Fund.
 
-This component handles both the creation of new funds and the editing of existing funds,
-based on the `mode` prop. It displays a form with fields for the fund's name, description,
-and other relevant details. Upon submission, it interacts with the GraphQL API to save
-or update the fund details and triggers a refetch of the fund data.
+## Param
 
-### Props
-- `isOpen`: A boolean indicating whether the modal is open or closed.
-- `hide`: A function to close the modal.
-- `refetchFunds`: A function to refetch the fund list after a successful operation.
-- `fund`: The current fund object being edited or `null` if creating a new fund.
-- `orgId`: The ID of the organization to which the fund belongs.
-- `mode`: The mode of the modal, either 'edit' or 'create'.
+Whether the modal is open
 
-### State
-- `name`: The name of the fund.
-- `description`: The description of the fund.
-- `amount`: The amount associated with the fund.
-- `status`: The status of the fund (e.g., active, archived).
+## Param
 
-### Methods
-- `handleSubmit()`: Handles form submission, creates or updates the fund, and triggers a refetch of the fund list.
-- `handleChange(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>)`: Updates the state based on user input.
+Function to hide the modal
 
-## Returns
+## Param
 
-The rendered modal dialog.
+Callback to refresh funds list
 
-## CSS Strategy Explanation:
+## Param
 
-To ensure consistency across the application and reduce duplication, common styles
-(such as button styles) have been moved to the global CSS file. Instead of using
-component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
-class (e.g., .addButton) is now applied.
+Existing fund data or null
 
-### Benefits:
-- **Reduces redundant CSS code.
-- **Improves maintainability by centralizing common styles.
-- **Ensures consistent styling across components.
+## Param
 
-### Global CSS Classes used:
-- `.switch`
+Organization ID
 
-For more details on the reusable classes, refer to the global CSS file.
+## Param
+
+'create' or 'edit'

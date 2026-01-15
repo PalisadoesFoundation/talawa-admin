@@ -4,16 +4,14 @@
  * This component renders a modal to display detailed information about a volunteer group.
  * It includes group details such as name, description, leader, creator, and a list of associated volunteers.
  *
- * @component
- * @param {InterfaceVolunteerGroupViewModal} props - The props for the component.
- * @param {boolean} props.isOpen - Determines whether the modal is open or closed.
- * @param {() => void} props.hide - Function to close the modal.
- * @param {InterfaceVolunteerGroupInfo} props.group - The volunteer group information to display.
+ * @param isOpen - Determines whether the modal is open or closed.
+ * @param hide - Function to close the modal.
+ * @param group - The volunteer group information to display.
  *
- * @returns {React.FC} A React functional component that renders the modal.
+ * @returns JSX.Element - The rendered modal component.
  *
  * @remarks
- * - The modal uses `react-bootstrap` for layout and `@mui/material` for form controls.
+ * - The modal uses `BaseModal` from shared-components and `@mui/material` for form controls.
  * - The `useTranslation` hook is used for internationalization.
  * - Displays leader and creator information with avatars or fallback initials.
  * - Volunteer count is available through the volunteers resolver in the API.
@@ -36,9 +34,10 @@
  * />
  * ```
  */
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './VolunteerGroupViewModal.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -52,7 +51,7 @@ import {
   TableRow,
   TextField,
 } from '@mui/material';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 
 export interface InterfaceVolunteerGroupViewModal {
   isOpen: boolean;
@@ -72,85 +71,78 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
     group;
 
   return (
-    <Modal className={styles.volunteerCreateModal} onHide={hide} show={isOpen}>
-      <Modal.Header>
-        <p className={styles.titlemodal}>{t('groupDetails')}</p>
-        <Button
-          variant="danger"
-          onClick={hide}
-          className={styles.modalCloseBtn}
-          data-testid="volunteerViewModalCloseBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-      </Modal.Header>
-      <Modal.Body>
-        <Form className="p-3">
-          {/* Group name & Volunteers Required */}
-          <Form.Group className="d-flex gap-3 mb-3">
+    <BaseModal
+      className={styles.volunteerGroupViewModal}
+      onHide={hide}
+      show={isOpen}
+      headerContent={<p className={styles.titlemodal}>{t('groupDetails')}</p>}
+      dataTestId="volunteerGroupViewModal"
+    >
+      <Form className="p-3">
+        {/* Group name & Volunteers Required */}
+        <Form.Group className="d-flex gap-3 mb-3">
+          <FormControl fullWidth>
+            <TextField
+              label={tCommon('name')}
+              variant="outlined"
+              className={styles.noOutline}
+              value={name}
+              disabled
+            />
+          </FormControl>
+          {volunteersRequired !== null && volunteersRequired !== undefined && (
             <FormControl fullWidth>
               <TextField
-                required
-                label={tCommon('name')}
+                label={tCommon('volunteersRequired')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={name}
+                value={volunteersRequired}
                 disabled
               />
             </FormControl>
-            {description && (
-              <FormControl fullWidth>
-                <TextField
-                  required
-                  label={tCommon('volunteersRequired')}
-                  variant="outlined"
-                  className={styles.noOutline}
-                  value={volunteersRequired ?? '-'}
-                  disabled
-                />
-              </FormControl>
-            )}
-          </Form.Group>
-          {/* Input field to enter the group description */}
-          {description && (
-            <Form.Group className="mb-3">
-              <FormControl fullWidth>
-                <TextField
-                  multiline
-                  rows={2}
-                  label={tCommon('description')}
-                  variant="outlined"
-                  className={styles.noOutline}
-                  value={description}
-                  disabled
-                />
-              </FormControl>
-            </Form.Group>
           )}
-          <Form.Group className="mb-3 d-flex gap-3">
+        </Form.Group>
+        {/* Input field to enter the group description */}
+        {description && (
+          <Form.Group className="mb-3">
             <FormControl fullWidth>
               <TextField
-                label={t('leader')}
+                multiline
+                rows={2}
+                label={tCommon('description')}
                 variant="outlined"
                 className={styles.noOutline}
-                value={leader.name}
+                value={description}
                 disabled
-                InputProps={{
+              />
+            </FormControl>
+          </Form.Group>
+        )}
+        <Form.Group className="mb-3 d-flex gap-3">
+          <FormControl fullWidth>
+            <TextField
+              label={t('leader')}
+              variant="outlined"
+              className={styles.noOutline}
+              value={leader.name}
+              disabled
+              slotProps={{
+                input: {
                   startAdornment: (
                     <>
                       {leader.avatarURL ? (
                         <img
                           src={leader.avatarURL}
-                          alt="Volunteer"
+                          alt={leader.name}
                           data-testid="leader_image"
-                          className={styles.TableImages}
+                          className={styles.tableImages}
                         />
                       ) : (
                         <div className={styles.avatarContainer}>
                           <Avatar
-                            key={leader.id + '1'}
+                            key={`${leader.id}-avatar`}
                             containerStyle={styles.imageContainer}
-                            avatarStyle={styles.TableImages}
+                            avatarStyle={styles.tableImages}
                             dataTestId="leader_avatar"
                             name={leader.name}
                             alt={leader.name}
@@ -159,33 +151,35 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                       )}
                     </>
                   ),
-                }}
-              />
-            </FormControl>
+                },
+              }}
+            />
+          </FormControl>
 
-            <FormControl fullWidth>
-              <TextField
-                label={t('creator')}
-                variant="outlined"
-                className={styles.noOutline}
-                value={creator.name}
-                disabled
-                InputProps={{
+          <FormControl fullWidth>
+            <TextField
+              label={t('creator')}
+              variant="outlined"
+              className={styles.noOutline}
+              value={creator.name}
+              disabled
+              slotProps={{
+                input: {
                   startAdornment: (
                     <>
                       {creator.avatarURL ? (
                         <img
                           src={creator.avatarURL}
-                          alt="Volunteer"
+                          alt={creator.name}
                           data-testid="creator_image"
-                          className={styles.TableImages}
+                          className={styles.tableImages}
                         />
                       ) : (
                         <div className={styles.avatarContainer}>
                           <Avatar
-                            key={creator.id + '1'}
+                            key={`${creator.id}-avatar`}
                             containerStyle={styles.imageContainer}
-                            avatarStyle={styles.TableImages}
+                            avatarStyle={styles.tableImages}
                             dataTestId="creator_avatar"
                             name={creator.name}
                             alt={creator.name}
@@ -194,58 +188,60 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                       )}
                     </>
                   ),
-                }}
-              />
-            </FormControl>
-          </Form.Group>
-          {/* Table for Associated Volunteers */}
-          {volunteers && volunteers.length > 0 && (
-            <Form.Group>
-              <Form.Label
-                className={`fw-lighter ms-2 mb-0 ${styles.volunteersLabel}`}
-              >
-                Volunteers
-              </Form.Label>
+                },
+              }}
+            />
+          </FormControl>
+        </Form.Group>
+        {/* Table for Associated Volunteers */}
+        {volunteers && volunteers.length > 0 && (
+          <Form.Group>
+            <Form.Label
+              className={`fw-lighter ms-2 mb-0 ${styles.volunteersLabel}`}
+            >
+              {t('volunteers')}
+            </Form.Label>
 
-              <TableContainer
-                component={Paper}
-                variant="outlined"
-                className={styles.modalTable}
-              >
-                <Table aria-label="group table">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell className="fw-bold">Sr. No.</TableCell>
-                      <TableCell className="fw-bold">Name</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {volunteers.map((volunteer, index) => {
-                      const { name: volunteerName } = volunteer.user;
-                      return (
-                        <TableRow
-                          key={volunteer.id}
-                          sx={{
-                            '&:last-child td, &:last-child th': { border: 0 },
-                          }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {index + 1}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {volunteerName}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Form.Group>
-          )}
-        </Form>
-      </Modal.Body>
-    </Modal>
+            <TableContainer
+              component={Paper}
+              variant="outlined"
+              className={styles.modalTable}
+            >
+              <Table aria-label={t('groupTable')}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell className="fw-bold">
+                      {tCommon('serialNumber')}
+                    </TableCell>
+                    <TableCell className="fw-bold">{tCommon('name')}</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {volunteers.map((volunteer, index) => {
+                    const { name: volunteerName } = volunteer.user;
+                    return (
+                      <TableRow
+                        key={volunteer.id}
+                        sx={{
+                          '&:last-child td, &:last-child th': { border: 0 },
+                        }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {index + 1}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          {volunteerName}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Form.Group>
+        )}
+      </Form>
+    </BaseModal>
   );
 };
 export default VolunteerGroupViewModal;

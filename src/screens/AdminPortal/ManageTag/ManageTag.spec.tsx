@@ -109,11 +109,11 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
   },
 }));
 
-vi.mock('components/AddPeopleToTag/AddPeopleToTag', async () => {
+vi.mock('components/AdminPortal/AddPeopleToTag/AddPeopleToTag', async () => {
   return await import('./ManageTagMockComponents/MockAddPeopleToTag');
 });
 
-vi.mock('components/TagActions/TagActions', async () => {
+vi.mock('components/AdminPortal/TagActions/TagActions', async () => {
   return await import('./ManageTagMockComponents/MockTagActions');
 });
 
@@ -1232,6 +1232,130 @@ describe('Manage Tag Page', () => {
     // We can verify this by checking that the component re-renders with the new sort order
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+  });
+
+  describe('LoadingState Behavior', () => {
+    afterEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('should show LoadingState spinner while tag members are loading', async () => {
+      const loadingMocks = [
+        {
+          request: {
+            query: USER_TAGS_ASSIGNED_MEMBERS,
+            variables: {
+              id: '1',
+              first: TAGS_QUERY_DATA_CHUNK_SIZE,
+              where: {
+                firstName: { starts_with: '' },
+                lastName: { starts_with: '' },
+              },
+              sortedBy: { id: 'DESCENDING' },
+            },
+          },
+          result: {
+            data: {
+              getAssignedUsers: {
+                __typename: 'UserTag',
+                name: 'tag1',
+                ancestorTags: [],
+                usersAssignedTo: {
+                  __typename: 'UserTagUsersAssignedToConnection',
+                  edges: [],
+                  pageInfo: {
+                    __typename: 'PageInfo',
+                    startCursor: null,
+                    endCursor: null,
+                    hasNextPage: false,
+                    hasPreviousPage: false,
+                  },
+                  totalCount: 0,
+                },
+              },
+            },
+          },
+          delay: 1000,
+        },
+      ];
+      render(
+        <MockedProvider mocks={loadingMocks}>
+          <MemoryRouter initialEntries={['/orgtags/org-123/manageTag/tag-123']}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18n}>
+                <Routes>
+                  <Route
+                    path="/orgtags/:orgId/manageTag/:tagId"
+                    element={<ManageTag />}
+                  />
+                </Routes>
+              </I18nextProvider>
+            </Provider>
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId('spinner')).toBeInTheDocument();
+      });
+    });
+
+    it('should hide spinner and render members after LoadingState completes', async () => {
+      const loadingMocks = [
+        {
+          request: {
+            query: USER_TAGS_ASSIGNED_MEMBERS,
+            variables: {
+              id: '1',
+              first: TAGS_QUERY_DATA_CHUNK_SIZE,
+              where: {
+                firstName: { starts_with: '' },
+                lastName: { starts_with: '' },
+              },
+              sortedBy: { id: 'DESCENDING' },
+            },
+          },
+          result: {
+            data: {
+              getAssignedUsers: {
+                __typename: 'UserTag',
+                name: 'tag1',
+                ancestorTags: [],
+                usersAssignedTo: {
+                  __typename: 'UserTagUsersAssignedToConnection',
+                  edges: [],
+                  pageInfo: {
+                    __typename: 'PageInfo',
+                    startCursor: null,
+                    endCursor: null,
+                    hasNextPage: false,
+                    hasPreviousPage: false,
+                  },
+                  totalCount: 0,
+                },
+              },
+            },
+          },
+          delay: 1000,
+        },
+      ];
+      const link = new StaticMockLink(loadingMocks);
+
+      renderManageTag(link);
+
+      // Verify spinner is no longer present after loading
+      await waitFor(
+        () => {
+          expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+        },
+        { timeout: 5000 },
+      );
+
+      // Verify actual content is rendered
+      await waitFor(() => {
+        expect(screen.getByTestId('allTagsBtn')).toBeInTheDocument();
+      });
     });
   });
 });

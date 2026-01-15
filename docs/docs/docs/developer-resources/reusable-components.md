@@ -11,6 +11,15 @@ This guide outlines how to create and manage these components to ensure a unifie
 
 ## Quick reference
 
+1. Screens (routing-level UI)
+
+   ```
+   src/screens/Auth/**
+   src/screens/Public/**
+   src/screens/AdminPortal/**
+   src/screens/UserPortal/**
+   ```
+
 1. Admin UI:
    ```
    src/components/AdminPortal/**
@@ -89,6 +98,24 @@ src/
         interface.ts
       LoadingState/
         interface.ts
+  screens/
+    AdminPortal/                    # Admin-only screens
+      Users/
+        Users.tsx
+        Users.spec.tsx
+    UserPortal/                     # User-only screens
+      Campaigns/
+        Canpaigns.stx
+        Campaigns.spec.tsx
+    Auth/                           # Auth-only screens
+      LoginPage/
+        LoginPage.tsx
+        LoginPage.spec.tsx
+    Public/                         # Unauthenticated screens
+      Invitation/
+        Invitation.tsx
+        Invitation.spec.tsx
+
 ```
 
 ### Rationale
@@ -121,6 +148,29 @@ There are many reasons for this structure:
    ```
 4. Portal-specific hooks live under that portal (e.g., AdminPortal/hooks). Promote to shared only when used by both portals.
 
+### Screen Placement Rules
+
+  1. Authentication-related screens
+        ```
+        src/screens/Auth/**
+        Examples: Login, ForgotPassword, ResetPassword
+        ```
+  2. Admin-only screens
+        ```
+        src/screens/AdminPortal/**
+        Examples: Users, CommunityProfile, Notification
+        ```
+  3. User-only screens
+        ```
+        src/screens/UserPortal/**
+        Examples: Campaigns, Chat, Donate
+        ```
+  4. Public, unauthenticated screens  
+        ```
+        src/screens/Public/**
+        Examples: Invitation acceptance, PageNotFound, public info pages
+        ```
+
 ### Naming Conventions
 
 1. Use PascalCase for component and folder names (e.g., `OrgCard`, `Button`).
@@ -150,6 +200,93 @@ import { ProfileAvatarDisplay } from '/shared-components/ProfileAvatarDisplay/Pr
 // admin
 import { UserTableRow } from 'components/AdminPortal/UserTableRow/UserTableRow';
 ```
+
+## Wrapper Components and Restricted Imports
+
+Some shared components are wrappers around third-party UI libraries. To enforce consistent usage, direct imports from those libraries are restricted by ESLint, and only the wrapper implementations may import them.
+
+### What is restricted (and what to use instead)
+
+- `@mui/x-data-grid` and `@mui/x-data-grid-pro` -> use `DataGridWrapper`
+- `react-bootstrap` `Spinner` -> use `LoadingState`
+- `react-bootstrap` `Modal` -> use `BaseModal`
+- `@mui/x-date-pickers` -> use `DateRangePicker`, `DatePicker`, or `TimePicker`
+- `react-toastify` -> use `NotificationToast`
+
+These restrictions are enforced by `no-restricted-imports` in `eslint.config.js`.
+
+### Where direct imports are allowed
+
+Direct imports are only allowed inside the wrapper component implementations. The ESLint config defines a central registry of restricted imports and then allows specific IDs per folder.
+
+```js
+const restrictedImports = [
+  { id: 'mui-data-grid', name: '@mui/x-data-grid', message: '...' },
+  { id: 'mui-data-grid-pro', name: '@mui/x-data-grid-pro', message: '...' },
+  {
+    id: 'rb-spinner',
+    name: 'react-bootstrap',
+    importNames: ['Spinner'],
+    message: '...',
+  },
+  {
+    id: 'rb-modal',
+    name: 'react-bootstrap',
+    importNames: ['Modal'],
+    message: '...',
+  },
+  { id: 'mui-date-pickers', name: '@mui/x-date-pickers', message: '...' },
+];
+
+const restrictImportsExcept = (allowedIds = []) => ({
+  'no-restricted-imports': [
+    'error',
+    {
+      paths: restrictedImports
+        .filter(({ id }) => !allowedIds.includes(id))
+        .map(({ id, ...rule }) => rule),
+    },
+  ],
+});
+```
+
+Allowed IDs by folder:
+
+- DataGridWrapper: `mui-data-grid`, `mui-data-grid-pro`
+  - `src/shared-components/DataGridWrapper/**`
+  - `src/types/DataGridWrapper/**`
+- LoadingState/Loader: `rb-spinner`
+  - `src/shared-components/LoadingState/**`
+  - `src/types/shared-components/LoadingState/**`
+  - `src/components/Loader/**`
+- BaseModal: `rb-modal`
+  - `src/shared-components/BaseModal/**`
+  - `src/types/shared-components/BaseModal/**`
+- Date pickers: `mui-date-pickers`
+  - `src/shared-components/DateRangePicker/**`
+  - `src/types/shared-components/DateRangePicker/**`
+  - `src/shared-components/DatePicker/**`
+  - `src/shared-components/TimePicker/**`
+  - `src/index.tsx`
+- NotificationToast: `react-toastify`
+  - `src/components/NotificationToast/**`
+  - `src/types/NotificationToast/**`
+
+### Adding a new restricted import or wrapper
+
+1. Add a new entry to `restrictedImports` in `eslint.config.js` with a unique `id`, `name`, and `message`.
+2. Allow that ID in the wrapper folder override using `restrictImportsExcept([...])`.
+3. Update this document to list the new restriction and allowed folder(s).
+
+### Troubleshooting
+
+If you see an error like:
+
+```
+'@mui/x-data-grid' import is restricted from being used. ...
+```
+
+it means you are importing a restricted library outside the allowed wrapper folders. Switch to the shared wrapper component or update the ESLint exception only if you are building the wrapper itself.
 
 ### i18n
 
@@ -405,17 +542,20 @@ interface EmptyStateAction {
   }}
 />
 ```
+
 ### ErrorBoundaryWrapper
 
 `ErrorBoundaryWrapper` is a error boundary component that catches JavaScript errors in child components, logs them, and displays a fallback UI instead of crashing the entire application.
 
 **Use cases:**
+
 - Wrapping critical components that might throw render errors
 - Protecting modals, forms, and complex UI sections
 - Providing graceful error recovery for users
 - Integrating with error tracking services (e.g., Sentry, LogRocket)
 
 **Key features:**
+
 - Catches render errors that try-catch cannot handle
 - Provides default and custom fallback UI options
 - Integrates with toast notification system
@@ -481,21 +621,22 @@ const CustomErrorFallback = ({ error, onReset }) => (
 
 #### Props
 
-| Prop                  | Type                                              | Required | Description                                                          |
-| --------------------- | ------------------------------------------------- | -------- | -------------------------------------------------------------------- |
-| `children`            | `ReactNode`                                       | Yes      | Child components to wrap with error boundary                         |
-| `fallback`            | `ReactNode`                                       | No       | Custom JSX fallback UI                                               |
-| `fallbackComponent`   | `React.ComponentType<InterfaceErrorFallbackProps>`| No       | Custom fallback component that receives `error` and `onReset` props  |
-| `errorMessage`        | `string`                                          | No       | Custom error message for toast notification                          |
-| `showToast`           | `boolean`                                         | No       | Whether to show toast notification (default: `true`)                 |
-| `onError`             | `function`                                        | No       | Callback invoked when error is caught                                |
-| `onReset`             | `function`                                        | No       | Callback invoked when user clicks reset button                       |
-| `fallbackTitle`       | `string`                                          | No       | Custom error message for default UI                                  |
-| `fallbackErrorMessage`| `string`                                          | No       | Custom error message for default UI                                  |
-| `resetButtonText`     | `string`                                          | No       | Custom error message for default UI                                  |
-| `resetButtonAriaLabel`| `string`                                          | No       | Custom error message for default UI                                  |
+| Prop                   | Type                                               | Required | Description                                                         |
+| ---------------------- | -------------------------------------------------- | -------- | ------------------------------------------------------------------- |
+| `children`             | `ReactNode`                                        | Yes      | Child components to wrap with error boundary                        |
+| `fallback`             | `ReactNode`                                        | No       | Custom JSX fallback UI                                              |
+| `fallbackComponent`    | `React.ComponentType<InterfaceErrorFallbackProps>` | No       | Custom fallback component that receives `error` and `onReset` props |
+| `errorMessage`         | `string`                                           | No       | Custom error message for toast notification                         |
+| `showToast`            | `boolean`                                          | No       | Whether to show toast notification (default: `true`)                |
+| `onError`              | `function`                                         | No       | Callback invoked when error is caught                               |
+| `onReset`              | `function`                                         | No       | Callback invoked when user clicks reset button                      |
+| `fallbackTitle`        | `string`                                           | No       | Custom error message for default UI                                 |
+| `fallbackErrorMessage` | `string`                                           | No       | Custom error message for default UI                                 |
+| `resetButtonText`      | `string`                                           | No       | Custom error message for default UI                                 |
+| `resetButtonAriaLabel` | `string`                                           | No       | Custom error message for default UI                                 |
 
 **Accessibility:**
+
 - Default fallback includes `role="alert"` and `aria-live="assertive"`
 - Reset button is keyboard accessible (Enter and Space keys)
 - Screen reader friendly error messages

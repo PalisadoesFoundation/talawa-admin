@@ -1,6 +1,15 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "请重新登录；您的会话已过期。"
+  },
+  "securedRoute": {
+    "sessionExpired": "请重新登录；您的会话已过期。"
+  },
   "ends": "结束",
   "occurrences": "次",
+  "customRecurrence": "自定义重复",
+  "invalidDetailsMessage": "请检查您输入的详细信息。",
+  "selectAtLeastOneDay": "请至少选择一天。",
   "leaderboard": {
     "title": "排行榜",
     "searchByVolunteer": "按志愿者搜索",
@@ -70,8 +79,12 @@
     "admin": "管理员",
     "user": "用户",
     "loading": "加载中",
+    "userImage": "用户图片",
+    "userEditProfilePicture": "编辑用户头像",
     "communityLogo": "社区标志",
-    "organizations": "组织"
+    "organizations": "组织",
+    "accountLocked": "由于登录失败次数过多，您的账户已被暂时锁定。请稍后重试。",
+    "accountLockedWithTimer": "您的账户已被暂时锁定。请在 {{minutes}} 分钟后重试。"
   },
   "adminProfile": {
     "title": "管理员资料",
@@ -486,7 +499,9 @@
     "sortPeople": "排序人员",
     "tagActions": "标签操作",
     "loadAssignedUsersError": "加载已分配用户时发生错误",
-    "noTagsFound": "未找到标签"
+    "noTagsFound": "未找到标签",
+    "addMember": "添加会员",
+    "removeMember": "删除会员"
   },
   "userListCard": {
     "addAdmin": "添加管理员",
@@ -706,7 +721,13 @@
     "agendaItemDeleted": "议程项目已成功删除",
     "deleteAgendaItem": "删除议程项目",
     "deleteAgendaItemMsg": "您要删除此议程项目吗？",
+<<<<<<< HEAD
     "attachmentPreview": "附件预览"
+=======
+    "event": "活动",
+    "search": "搜索",
+    "attachmentPreview": "附件預覽"
+>>>>>>> upstream/develop
   },
   "eventListCard": {
     "deleteEvent": "删除事件",
@@ -816,8 +837,14 @@
     "earliestEndDate": "最早结束日期",
     "lowestGoal": "最低目标",
     "highestGoal": "最高目标",
+    "errorLoading": "加载活动数据时出错",
     "percentageRaised": "% 已筹集",
-    "campaignProgress": "活动进度: {{percentage}}%"
+    "campaignProgress": "活动进度：{{percentage}}%",
+    "campaignNotFound": "未找到募捐活动",
+    "dateRangeRequired": "请选择有效的日期范围",
+    "campaignNameRequired": "活动名称是必填项",
+    "invalidDate": "选择的日期无效",
+    "endDateBeforeStart": "结束日期不能早于开始日期"
   },
   "pledges": {
     "title": "基金活动承诺",
@@ -952,6 +979,23 @@
     "yes": "是",
     "close": "关闭",
     "talawaApiUnavailable": "塔拉瓦 API 不可用"
+  },
+  "statusBadge": {
+    "completed": "已完成",
+    "pending": "待处理",
+    "active": "活跃",
+    "inactive": "不活跃",
+    "approved": "已批准",
+    "rejected": "已拒绝",
+    "disabled": "已禁用",
+    "accepted": "已接受",
+    "declined": "已谢绝",
+    "no_response": "无响应",
+    "success": "成功",
+    "warning": "警告",
+    "error": "错误",
+    "info": "信息",
+    "neutral": "中性"
   },
   "blockUnblockUser": {
     "title": "阻止/取消阻止用户",
@@ -1193,7 +1237,20 @@
     "unassignUserTagMessage": "您想从此用户中删除标签吗？",
     "successfullyUnassigned": "标签已从用户中取消分配",
     "tagsAssigned": "已分配标签",
-    "noTagsAssigned": "未分配标签"
+    "noTagsAssigned": "未分配标签",
+    "to": "至",
+    "overview": "概览",
+    "tags": "标签",
+    "invalidFileType": "无效的文件类型",
+    "fileTooLarge": "文件过大",
+    "memberDetailNumberExample": "例如: 1234",
+    "memberDetailExampleLane": "例如: 街道名称",
+    "memberDetailPostalExample": "例如: 邮政编码",
+    "enterCity": "输入城市",
+    "enterState": "输入州/省",
+    "select": "请选择",
+    "asYourCountry": "作为您的国家",
+    "actions": "操作"
   },
   "userLogin": {
     "login": "登录",
@@ -1355,7 +1412,8 @@
     "event": "事件",
     "article": "文章",
     "postNowVisibleInFeed": "帖子现在在动态中可见",
-    "processingPost": "正在处理您的帖子。请稍候。"
+    "processingPost": "正在处理您的帖子。请稍候。",
+    "postImagePreview": "帖子图片预览"
   },
   "eventAttendance": {
     "event_attendance_table": "活动出席表",
@@ -1393,10 +1451,19 @@
     "options": "选项",
     "addRegistrant": "添加注册者",
     "noRegistrantsFound": "未找到注册者",
+<<<<<<< HEAD
     "removingAttendee": "正在删除与会者...",
     "attendeeRemovedSuccessfully": "与会者已成功删除",
     "errorRemovingAttendee": "删除与会者时出错",
     "cannotUnregisterCheckedIn": "无法取消已签到的用户的注册"
+=======
+    "removingAttendee": "正在移除参与者...",
+    "attendeeRemovedSuccessfully": "参与者移除成功！",
+    "errorRemovingAttendee": "移除参与者时出错。请重试。",
+    "checkedIn": "已签到",
+    "unregister": "取消注册",
+    "cannotUnregisterCheckedInTooltip": "无法取消已签到用户的注册"
+>>>>>>> upstream/develop
   },
   "onSpotAttendee": {
     "title": "现场参与者",
@@ -1531,7 +1598,9 @@
     "latestFirst": "最新优先",
     "earliestFirst": "最早优先",
     "noTransactionsFound": "未找到交易记录",
-    "errorLoadingTransactions": "加载交易记录时出错"
+    "errorLoadingTransactions": "加载交易记录时出错",
+    "eventType": "事件类型",
+    "tagCreationFailed": "标签创建失败"
   },
   "userEvents": {
     "title": "活动",
@@ -1550,7 +1619,6 @@
     "enterName": "输入名称",
     "enterDescription": "输入描述",
     "enterLocation": "输入位置",
-
     "registerable": "可注册",
     "monthlyCalendarView": "月历",
     "yearlyCalendarView": "年历",
@@ -1579,7 +1647,8 @@
     "on": "在",
     "after": "之后",
     "customRecurrence": "自定义重复",
-    "repeatsEvery": "重复周期"
+    "repeatsEvery": "重复周期",
+    "noEventAvailable": "沒有可用的活動！"
   },
   "userEventCard": {
     "starts": "开始",
@@ -1635,7 +1704,9 @@
     "preview": "預覽",
     "bannerAd": "橫幅廣告",
     "popupAd": "彈出廣告",
-    "menuAd": "菜單廣告"
+    "menuAd": "菜單廣告",
+    "searchAdvertisements": "搜索广告",
+    "advertisementLoading": "广告加载中..."
   },
   "userChat": {
     "title": "聊天",
@@ -1676,6 +1747,9 @@
     "newGroup": "新群组",
     "groupName": "组名",
     "groupDescription": "群组描述",
+    "confirmRemoveMember": "确认删除成员",
+    "failedToAddUser": "添加用户失败",
+    "userAddedSuccessfully": "用户添加成功",
     "next": "下一步"
   },
   "userChatRoom": {
@@ -1809,6 +1883,7 @@
   "checkIn": {
     "errorCheckingIn": "签到错误",
     "checkedInSuccessfully": "成功签到",
+<<<<<<< HEAD
     "generatingPdf": "正在生成 PDF...",
     "pdfGeneratedSuccessfully": "PDF 生成成功！",
     "errorGeneratingPdf": "生成 PDF 时出错",
@@ -1816,10 +1891,24 @@
     "checkedIn": "已签到",
     "downloadTag": "下载标签",
     "checkInButton": "签到"
+=======
+    "searchAttendees": "搜尋參與者",
+    "checkedIn": "已簽到",
+    "downloadTag": "下載標籤",
+    "checkIn": "簽到",
+    "eventCheckInManagement": "活動簽到管理"
+>>>>>>> upstream/develop
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "添加与会者时出错",
     "errorRemovingAttendee": "删除与会者时出错",
+    "eventRegistrantsTitle": "活动注册者",
+    "inviteByEmailButton": "通过电子邮件邀请",
+    "addRegistrantButton": "添加注册者",
+    "noRegistrationsFound": "未找到注册",
+    "addOnspotRegistrationLink": "添加现场注册链接",
+    "addRegistrantLabel": "添加注册者",
+    "addRegistrantPlaceholder": "输入注册者的全名",
     "inviteByEmail": {
       "addRecipient": "添加收件人",
       "email": "邮箱",
@@ -1925,6 +2014,8 @@
     "earliest": "最早",
     "requestAccepted": "请求已成功接受",
     "requestRejected": "请求已成功拒绝",
+    "acceptRequest": "接受请求",
+    "rejectRequest": "拒绝请求",
     "details": "详情",
     "manageGroup": "管理小组",
     "mostVolunteers": "最多的志愿者",
@@ -1946,7 +2037,11 @@
     "viewDetails": "查看 {{name}} 详情",
     "editVolunteerGroup": "编辑 {{name}} 志愿者小组",
     "deleteVolunteerGroup": "删除 {{name}} 志愿者小组",
-    "deleteVolunteerEntry": "删除 {{name}} 志愿者条目"
+    "deleteVolunteerEntry": "删除 {{name}} 志愿者条目",
+    "viewGroup": "查看小组",
+    "editGroup": "编辑小组",
+    "invalidNumber": "无效数字",
+    "viewToggle": "切换视图"
   },
   "userVolunteer": {
     "title": "志愿服务",
@@ -2095,9 +2190,6 @@
   "contact": {
     "card_aria": "联系人卡片"
   },
-  "securedRoute": {
-    "sessionExpired": "请重新登录，因为会话已过期"
-  },
   "common": {
     "signOut": "退出登录",
     "signingOut": "正在退出...",
@@ -2136,5 +2228,11 @@
     "sortPeople": "排序人员",
     "unassign": "取消分配",
     "tags": "标签"
+  },
+  "orgProfileField": {
+    "editCustomField": "編輯自定義字段"
+  },
+  "userGlobalScreen": {
+    "globalFeatures": "全球功能"
   }
 }

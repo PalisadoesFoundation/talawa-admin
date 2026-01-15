@@ -1,6 +1,15 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "कृपया फिर से लॉगिन करें; आपका सत्र समाप्त हो गया है।"
+  },
+  "securedRoute": {
+    "sessionExpired": "कृपया फिर से लॉगिन करें; आपका सत्र समाप्त हो गया है।"
+  },
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
+  "customRecurrence": "कस्टम पुनरावृत्ति",
+  "invalidDetailsMessage": "कृपया दर्ज किए गए विवरणों की जाँच करें।",
+  "selectAtLeastOneDay": "कृपया कम से कम एक दिन चुनें।",
   "leaderboard": {
     "title": "लीडरबोर्ड",
     "searchByVolunteer": "स्वयंसेवक द्वारा खोजें",
@@ -70,8 +79,12 @@
     "admin": "व्यवस्थापक",
     "user": "उपयोगकर्ता",
     "loading": "लोड हो रहा है",
+    "userImage": "उपयोगकर्ता छवि",
+    "userEditProfilePicture": "प्रोफ़ाइल चित्र संपादित करें",
     "communityLogo": "समुदाय लोगो",
-    "organizations": "संगठन"
+    "organizations": "संगठन",
+    "accountLocked": "बहुत अधिक असफल लॉगिन प्रयासों के कारण आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया बाद में पुनः प्रयास करें।",
+    "accountLockedWithTimer": "आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया {{minutes}} मिनट में पुनः प्रयास करें।"
   },
   "adminProfile": {
     "title": "एडमिन प्रोफ़ाइल",
@@ -440,6 +453,23 @@
     "viewSubTags": "{{count}} उप-टैग देखें",
     "tags": "टैग"
   },
+  "statusBadge": {
+    "completed": "पूर्ण",
+    "pending": "लंबित",
+    "active": "सक्रिय",
+    "inactive": "निष्क्रिय",
+    "approved": "अनुमोदित",
+    "rejected": "अस्वीकृत",
+    "disabled": "अक्षम",
+    "accepted": "स्वीकृत",
+    "declined": "अस्वीकार किया गया",
+    "no_response": "कोई प्रतिक्रिया नहीं",
+    "success": "सफलता",
+    "warning": "चेतावनी",
+    "error": "त्रुटि",
+    "info": "जानकारी",
+    "neutral": "तटस्थ"
+  },
   "manageTag": {
     "title": "टैग विवरण",
     "addPeopleToTag": "टैग में लोगों को जोड़ें",
@@ -486,7 +516,9 @@
     "sortPeople": "लोगों को सॉर्ट करें",
     "tagActions": "टैग क्रियाएँ",
     "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
-    "noTagsFound": "कोई टैग नहीं मिला"
+    "noTagsFound": "कोई टैग नहीं मिला",
+    "addMember": "सदस्य जोड़ें",
+    "removeMember": "सदस्य हटाएँ"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
@@ -706,7 +738,13 @@
     "agendaItemDeleted": "एजेंडा आइटम सफलतापूर्वक हटा दिया गया",
     "deleteAgendaItem": "एजेंडा आइटम हटाएं",
     "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?",
+<<<<<<< HEAD
     "attachmentPreview": "अनुलग्नक पूर्वावलोकन"
+=======
+    "event": "कार्यक्रम",
+    "search": "खोज",
+    "attachmentPreview": "अटैचमेंट पूर्वावलोकन"
+>>>>>>> upstream/develop
   },
   "eventListCard": {
     "deleteEvent": "ईवेंट हटाएँ",
@@ -785,9 +823,9 @@
     "viewCampaigns": "कैम्पेंस देखें",
     "assocCampaigns": "संबद्ध अभियान",
     "associatedCampaigns": "संबद्ध अभियान",
-    "searchFunds": "फंड खोजें",
     "errorLoadingFundsData": "फंड डेटा लोड करते समय त्रुटि हुई",
-    "editFund": "फंड संपादित करें"
+    "editFund": "फंड संपादित करें",
+    "searchFunds": "फंड खोजें"
   },
   "fundCampaign": {
     "title": "फंडरेजिंग कैंपेन",
@@ -816,8 +854,14 @@
     "earliestEndDate": "सबसे पहली समाप्ति तिथि",
     "lowestGoal": "सबसे कम उद्देश्य",
     "highestGoal": "सबसे ऊंचा उद्देश्य",
+    "errorLoading": "कैंपेन डेटा लोड करते समय त्रुटि हुई",
     "percentageRaised": "% एकत्रित",
-    "campaignProgress": "अभियान प्रगति: {{percentage}}%"
+    "campaignProgress": "कैंपेन प्रगति: {{percentage}}%",
+    "campaignNotFound": "कैंपेन नहीं मिली",
+    "dateRangeRequired": "कृपया एक मान्य तिथि सीमा चुनें",
+    "campaignNameRequired": "कैंपेन का नाम आवश्यक है",
+    "invalidDate": "अमान्य तिथि चुनी गई है",
+    "endDateBeforeStart": "समाप्ति तिथि प्रारंभ तिथि से पहले नहीं हो सकती"
   },
   "pledges": {
     "title": "निधि अभियान प्रतिज्ञाएँ",
@@ -1193,7 +1237,20 @@
     "unassignUserTagMessage": "क्या आप इस उपयोगकर्ता से टैग हटाना चाहते हैं?",
     "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया",
     "tagsAssigned": "टैग सौंपे गए",
-    "noTagsAssigned": "कोई टैग सौंपा नहीं गया"
+    "noTagsAssigned": "कोई टैग सौंपा नहीं गया",
+    "to": "को",
+    "overview": "अवलोकन",
+    "tags": "टैग",
+    "invalidFileType": "अमान्य फ़ाइल प्रकार",
+    "fileTooLarge": "फ़ाइल बहुत बड़ी है",
+    "memberDetailNumberExample": "उदाहरण: 1234567890",
+    "memberDetailExampleLane": "उदाहरण: मुख्य मार्ग",
+    "memberDetailPostalExample": "उदाहरण: 110001",
+    "enterCity": "शहर दर्ज करें",
+    "enterState": "राज्य दर्ज करें",
+    "select": "चुनें",
+    "asYourCountry": "अपने देश के रूप में",
+    "actions": "कार्रवाई"
   },
   "people": {
     "title": "लोग",
@@ -1355,7 +1412,8 @@
     "event": "आयोजन",
     "article": "लेख",
     "postNowVisibleInFeed": "पोस्ट अब फीड में दिखाई दे रहा है",
-    "processingPost": "आपकी पोस्ट प्रसंस्करण कर रहे हैं। कृपया प्रतीक्षा करें।"
+    "processingPost": "आपकी पोस्ट प्रसंस्करण कर रहे हैं। कृपया प्रतीक्षा करें।",
+    "postImagePreview": "पोस्ट छवि पूर्वावलोकन"
   },
   "eventAttendance": {
     "event_attendance_table": "इवेंट उपस्थिति तालिका",
@@ -1393,10 +1451,19 @@
     "options": "विकल्प",
     "addRegistrant": "पंजीकृत व्यक्ति जोड़ें",
     "noRegistrantsFound": "कोई पंजीकृत व्यक्ति नहीं मिला",
+<<<<<<< HEAD
     "removingAttendee": "उपस्थित होने वाले को हटाया जा रहा है...",
     "attendeeRemovedSuccessfully": "उपस्थित होने वाला सफलतापूर्वक हटा दिया गया",
     "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
     "cannotUnregisterCheckedIn": "किसी उपयोगकर्ता का पंजीकरण रद्द नहीं किया जा सकता जो पहले से ही चेक-इन कर चुका है"
+=======
+    "removingAttendee": "प्रतिभागी को हटाया जा रहा है...",
+    "attendeeRemovedSuccessfully": "प्रतिभागी सफलतापूर्वक हटा दिया गया",
+    "errorRemovingAttendee": "प्रतिभागी को हटाने में त्रुटि हुई। कृपया पुनः प्रयास करें।",
+    "checkedIn": "चेक इन किया गया",
+    "unregister": "पंजीकरण रद्द करें",
+    "cannotUnregisterCheckedInTooltip": "पहले से चेक इन किए गए उपयोगकर्ता का पंजीकरण रद्द नहीं किया जा सकता"
+>>>>>>> upstream/develop
   },
   "onSpotAttendee": {
     "title": "ऑन-स्पॉट प्रतिभागी",
@@ -1531,7 +1598,9 @@
     "latestFirst": "नवीनतम पहले",
     "earliestFirst": "सबसे पहले",
     "noTransactionsFound": "कोई लेन-देन नहीं मिला",
-    "errorLoadingTransactions": "लेन-देन लोड करने में त्रुटि"
+    "errorLoadingTransactions": "लेन-देन लोड करने में त्रुटि",
+    "eventType": "कार्यक्रम प्रकार",
+    "tagCreationFailed": "टैग निर्माण विफल रहा"
   },
   "userEvents": {
     "title": "कार्यक्रम",
@@ -1550,7 +1619,6 @@
     "enterName": "नाम दर्ज करें",
     "enterDescription": "विवरण दर्ज करें",
     "enterLocation": "स्थान दर्ज करें",
-
     "registerable": "पंजीकरण योग्य है",
     "monthlyCalendarView": "मासिक कैलेंडर",
     "yearlyCalendarView": "वार्षिक कैलेंडर",
@@ -1579,7 +1647,8 @@
     "on": "पर",
     "after": "के बाद",
     "customRecurrence": "कस्टम पुनरावृत्ति",
-    "repeatsEvery": "हर बार दोहराता है"
+    "repeatsEvery": "हर बार दोहराता है",
+    "noEventAvailable": "कोई कार्यक्रम उपलब्ध नहीं!"
   },
   "userEventCard": {
     "starts": "प्रारंभ होगा",
@@ -1635,7 +1704,9 @@
     "preview": "पूर्वावलोकन",
     "bannerAd": "बैनर विज्ञापन",
     "popupAd": "पॉपअप विज्ञापन",
-    "menuAd": "मेनू विज्ञापन"
+    "menuAd": "मेनू विज्ञापन",
+    "searchAdvertisements": "विज्ञापन खोजें",
+    "advertisementLoading": "विज्ञापन लोड हो रहा है..."
   },
   "userChat": {
     "title": "चैट्स",
@@ -1676,6 +1747,9 @@
     "newGroup": "नया समूह",
     "groupName": "समूह का नाम",
     "groupDescription": "समूह विवरण",
+    "confirmRemoveMember": "सदस्य हटाने की पुष्टि करें",
+    "failedToAddUser": "उपयोगकर्ता जोड़ने में विफल",
+    "userAddedSuccessfully": "उपयोगकर्ता सफलतापूर्वक जोड़ा गया",
     "next": "अगला"
   },
   "userChatRoom": {
@@ -1809,6 +1883,7 @@
   "checkIn": {
     "errorCheckingIn": "चेक-इन में त्रुटि",
     "checkedInSuccessfully": "सफलतापूर्वक चेक-इन किया गया",
+<<<<<<< HEAD
     "generatingPdf": "PDF जेनरेट हो रहा है...",
     "pdfGeneratedSuccessfully": "PDF सफलतापूर्वक जेनरेट किया गया!",
     "errorGeneratingPdf": "PDF जेनरेट करने में त्रुटि",
@@ -1816,10 +1891,24 @@
     "checkedIn": "चेक-इन हुआ",
     "downloadTag": "टैग डाउनलोड करें",
     "checkInButton": "चेक इन करें"
+=======
+    "searchAttendees": "उपस्थित लोगों को खोजें",
+    "checkedIn": "चेक इन किया गया",
+    "downloadTag": "टैग डाउनलोड करें",
+    "checkIn": "चेक इन करें",
+    "eventCheckInManagement": "इवेंट चेक इन प्रबंधन"
+>>>>>>> upstream/develop
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
     "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
+    "eventRegistrantsTitle": "कार्यक्रम पंजीकृत व्यक्ति",
+    "inviteByEmailButton": "ईमेल द्वारा आमंत्रित करें",
+    "addRegistrantButton": "पंजीकृत व्यक्ति जोड़ें",
+    "noRegistrationsFound": "कोई पंजीकरण नहीं मिला",
+    "addOnspotRegistrationLink": "ऑन-स्पॉट पंजीकरण जोड़ें लिंक",
+    "addRegistrantLabel": "पंजीकृत व्यक्ति जोड़ें",
+    "addRegistrantPlaceholder": "पंजीकृत व्यक्ति का नाम या ईमेल दर्ज करें",
     "inviteByEmail": {
       "addRecipient": "प्राप्तकर्ता जोड़ें",
       "email": "ईमेल",
@@ -1861,17 +1950,17 @@
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
     "noCampaigns": "कोई अभियान नहीं मिला",
     "raised": "एकत्रित",
+    "campaignName": "अभियान का नाम",
+    "startDate": "आरंभ करने की तिथि",
+    "endDate": "अंतिम तिथि",
+    "fundingGoal": "निधि लक्ष्य",
+    "viewPledge": "प्रतिज्ञा देखें",
     "amountRaised": "एकत्रित राशि",
     "campaignIndex": "#",
-    "campaignName": "अभियान का नाम",
-    "startDate": "शुरुआत तिथि",
-    "endDate": "अंतिम तिथि",
     "fundGoal": "वित्त पोषण लक्ष्य",
     "percentRaised": "% एकत्रित",
     "createFirstCampaign": "इसे यहाँ देखने के लिए अपना पहला धन उगाहने का अभियान बनाएं।",
-    "campaignEnded": "अभियान समाप्त हो गया",
-    "fundingGoal": "फंडिंग उद्देश्य",
-    "viewPledge": "प्लेज देखें"
+    "campaignEnded": "अभियान समाप्त हो गया"
   },
   "userPledges": {
     "title": "मेरी प्रतिज्ञाएँ",
@@ -1925,6 +2014,8 @@
     "earliest": "प्रारंभिक",
     "requestAccepted": "अनुरोध सफलतापूर्वक स्वीकृत",
     "requestRejected": "अनुरोध सफलतापूर्वक अस्वीकृत",
+    "acceptRequest": "अनुरोध स्वीकार करें",
+    "rejectRequest": "अनुरोध अस्वीकार करें",
     "details": "विवरण",
     "manageGroup": "समूह प्रबंधित करें",
     "mostVolunteers": "सबसे अधिक स्वयंसेवक",
@@ -1946,7 +2037,11 @@
     "viewDetails": "{{name}} का विवरण देखें",
     "editVolunteerGroup": "{{name}} स्वयंसेवक समूह संपादित करें",
     "deleteVolunteerGroup": "{{name}} स्वयंसेवक समूह हटाएं",
-    "deleteVolunteerEntry": "{{name}} स्वयंसेवक प्रविष्टि हटाएं"
+    "deleteVolunteerEntry": "{{name}} स्वयंसेवक प्रविष्टि हटाएं",
+    "viewGroup": "समूह देखें",
+    "editGroup": "समूह संपादित करें",
+    "invalidNumber": "अमान्य संख्या",
+    "viewToggle": "दृश्य टॉगल"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",
@@ -2095,9 +2190,6 @@
   "contact": {
     "card_aria": "संपर्क कार्ड"
   },
-  "securedRoute": {
-    "sessionExpired": "कृपया फिर से लॉगिन करें क्योंकि सत्र समाप्त हो गया है"
-  },
   "common": {
     "signOut": "साइन आउट",
     "signingOut": "साइन आउट हो रहा है...",
@@ -2136,5 +2228,11 @@
     "sortPeople": "लोगों को क्रमबद्ध करें",
     "unassign": "हटाएँ",
     "tags": "टैग"
+  },
+  "orgProfileField": {
+    "editCustomField": "कस्टम फ़ील्ड संपादित करें"
+  },
+  "userGlobalScreen": {
+    "globalFeatures": "वैश्विक सुविधाएं"
   }
 }

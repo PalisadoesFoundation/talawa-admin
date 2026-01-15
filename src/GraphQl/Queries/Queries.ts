@@ -83,15 +83,15 @@ export const ORGANIZATION_FILTER_LIST = gql`
   ${ORG_FIELDS}
 `;
 
-// Lightweight version without members
+// Lightweight version without members and other fields for registration page
 export const ORGANIZATION_LIST_NO_MEMBERS = gql`
-  query {
+  query OrganizationListBasic {
     organizations {
-      ...OrgFields
-      isMember
+      id
+      name
+      addressLine1
     }
   }
-  ${ORG_FIELDS}
 `;
 
 export const ORGANIZATION_MEMBER_ADMIN_COUNT = gql`
@@ -700,7 +700,6 @@ const ORGANIZATION_BASIC_FIELDS = gql`
     countryCode
     avatarURL
     createdAt
-    updatedAt
     isUserRegistrationRequired
   }
 `;
@@ -838,6 +837,22 @@ export const MEMBERS_LIST = gql`
   }
 `;
 
+export const MEMBERS_LIST_WITH_DETAILS = gql`
+  query GetMembersByOrganizationWithDetails($organizationId: ID!) {
+    usersByOrganizationId(organizationId: $organizationId) {
+      id
+      name
+      firstName
+      lastName
+      emailAddress
+      role
+      avatarURL
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 // Query to filter out all the members with the macthing query and a particular OrgId
 export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
   query Organizations(
@@ -925,6 +940,10 @@ export const USER_DETAILS = gql`
           node {
             id
             name
+            membersCount
+            adminsCount
+            description
+            avatarURL
           }
         }
       }
@@ -932,6 +951,10 @@ export const USER_DETAILS = gql`
       createdOrganizations {
         id
         name
+        membersCount
+        adminsCount
+        description
+        avatarURL
       }
     }
   }

@@ -7,13 +7,6 @@
  * styling and Material-UI icons for visual elements. The component also
  * supports tooltips for displaying additional information.
  *
- * @param props - Partial properties of the `InterfaceUser` type.
- * @param props.firstName - The first name of the user.
- * @param props.lastName - The last name of the user.
- * @param props.createdAt - The date when the user joined.
- * @param props.email - The email address of the user.
- * @param props.image - The URL of the user's profile picture.
- *
  * @returns A JSX element displaying the user's profile details.
  *
  * @example
@@ -27,23 +20,22 @@
  * />
  * ```
  *
- * @dependencies
+ * Dependencies
  * - `react-bootstrap` for Card and Button components.
  * - `@mui/icons-material` for CalendarMonthOutlinedIcon.
  * - `react-i18next` for translations.
  * - `react-tooltip` for tooltips.
  * - `Avatar` component for displaying a placeholder profile picture.
  *
- * @module UserProfile
  */
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
-import type { InterfaceUser } from 'types/User/interface';
+import type { InterfaceUser } from 'types/shared-components/User/interface';
 
 const joinedDate = (param: string | Date): string => {
   const date = typeof param === 'string' ? new Date(param) : param;

@@ -15,9 +15,9 @@
  * The modal includes:
  * - A header with a title indicating the current mode (create or edit) and a close button.
  * - A form with:
- *   - An input field for entering the group name.
- *   - A textarea for entering the group description.
- *   - An input field for entering the number of volunteers required.
+ * - An input field for entering the group name.
+ * - A textarea for entering the group description.
+ * - An input field for entering the number of volunteers required.
  * - A submit button to create or update the pledge.
  *
  * On form submission, the component either:
@@ -26,17 +26,18 @@
  * Success or error messages are displayed using toast notifications based on the result of the mutation.
  */
 import type { ChangeEvent } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import type {
   InterfaceCreateVolunteerGroup,
   InterfaceVolunteerGroupInfo,
   InterfaceVolunteerMembership,
 } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './GroupModal.module.css';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { BaseModal } from 'shared-components/BaseModal';
 import {
   FormControl,
   Paper,
@@ -48,6 +49,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  FormHelperText,
 } from '@mui/material';
 import {
   UPDATE_VOLUNTEER_GROUP,
@@ -56,8 +58,9 @@ import {
 import { PiUserListBold } from 'react-icons/pi';
 import { TbListDetails } from 'react-icons/tb';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import { FaXmark } from 'react-icons/fa6';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 export interface InterfaceGroupModal {
   isOpen: boolean;
@@ -87,6 +90,20 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
     volunteerUsers: group.volunteers.map((volunteer) => volunteer.user),
     volunteersRequired: group.volunteersRequired ?? null,
   });
+  const [volunteersRequiredError, setVolunteersRequiredError] =
+    useState<boolean>(false);
+
+  const [touched, setTouched] = useState<{
+    name: boolean;
+    volunteersRequired: boolean;
+  }>({
+    name: false,
+    volunteersRequired: false,
+  });
+
+  const { name, description, volunteersRequired } = formState;
+  const nameError =
+    touched.name && !name.trim() ? tCommon('nameRequired') : undefined;
 
   const [updateVolunteerGroup] = useMutation(UPDATE_VOLUNTEER_GROUP);
   const [updateMembership] = useMutation(UPDATE_VOLUNTEER_MEMBERSHIP);
@@ -113,9 +130,6 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
     }
   };
 
-  /**
-   * Query to fetch volunteer Membership requests for the event.
-   */
   const {
     data: requestsData,
     refetch: refetchRequests,
@@ -147,13 +161,16 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
       volunteerUsers: group.volunteers.map((volunteer) => volunteer.user),
       volunteersRequired: group.volunteersRequired ?? null,
     });
+    setVolunteersRequiredError(false);
   }, [group]);
-
-  const { name, description, volunteersRequired } = formState;
 
   const updateGroupHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
+
+      if (volunteersRequiredError || nameError) {
+        return;
+      }
 
       const updatedFields: {
         [key: string]: number | string | undefined | null;
@@ -183,229 +200,279 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
         NotificationToast.error((error as Error).message);
       }
     },
-    [formState, group],
+    [formState, group, volunteersRequiredError, nameError],
   );
 
   return (
-    <Modal className={styles.groupModal} onHide={hide} show={isOpen}>
-      <Modal.Header>
-        <p className={styles.titlemodal}>{t('manageGroup')}</p>
-        <Button
-          variant="danger"
-          onClick={hide}
-          className={styles.modalCloseBtn}
-          data-testid="modalCloseBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-      </Modal.Header>
-      <Modal.Body>
-        <div
-          className={`btn-group ${styles.toggleGroup} mt-0 px-3 mb-4 w-100`}
-          role="group"
-        >
-          <input
-            type="radio"
-            className={`btn-check ${styles.toggleBtn}`}
-            name="btnradio"
-            id="detailsRadio"
-            checked={modalType === 'details'}
-            onChange={() => setModalType('details')}
-          />
-          <label
-            className={`btn btn-outline-primary ${styles.toggleBtn}`}
-            htmlFor="detailsRadio"
+    <BaseModal
+      show={isOpen}
+      onHide={hide}
+      className={styles.groupModal}
+      showCloseButton={false}
+      headerContent={
+        <div className="d-flex justify-content-between align-items-center w-100">
+          <p className={styles.titlemodal}>{t('manageGroup')}</p>
+          <Button
+            variant="danger"
+            onClick={hide}
+            className={styles.modalCloseBtn}
+            data-testid="modalCloseBtn"
           >
-            <TbListDetails className="me-2" />
-            {t('details')}
-          </label>
-
-          <input
-            type="radio"
-            className={`btn-check ${styles.toggleBtn}`}
-            name="btnradio"
-            id="groupsRadio"
-            onChange={() => setModalType('requests')}
-            checked={modalType === 'requests'}
-            data-testid="requestsRadio"
-          />
-          <label
-            className={`btn btn-outline-primary ${styles.toggleBtn}`}
-            htmlFor="groupsRadio"
-          >
-            <PiUserListBold className="me-2" size={21} />
-            {t('requests')}
-          </label>
+            <i className="fa fa-times"></i>
+          </Button>
         </div>
+      }
+    >
+      <fieldset
+        className={`btn-group ${styles.toggleGroup} mt-0 px-3 mb-4 w-100`}
+      >
+        <legend className="visually-hidden">{t('viewToggle')}</legend>
+        <input
+          type="radio"
+          className={`btn-check ${styles.toggleBtn}`}
+          name="btnradio"
+          id="detailsRadio"
+          checked={modalType === 'details'}
+          onChange={() => setModalType('details')}
+        />
+        <label
+          className={`btn btn-outline-primary ${styles.toggleBtn}`}
+          htmlFor="detailsRadio"
+        >
+          <TbListDetails className="me-2" />
+          {t('details')}
+        </label>
 
-        {modalType === 'details' ? (
-          <Form
-            data-testid="pledgeForm"
-            onSubmitCapture={updateGroupHandler}
-            className="p-3"
+        <input
+          type="radio"
+          className={`btn-check ${styles.toggleBtn}`}
+          name="btnradio"
+          id="groupsRadio"
+          onChange={() => setModalType('requests')}
+          checked={modalType === 'requests'}
+          data-testid="requestsRadio"
+        />
+        <label
+          className={`btn btn-outline-primary ${styles.toggleBtn}`}
+          htmlFor="groupsRadio"
+        >
+          <PiUserListBold className="me-2" size={21} />
+          {t('requests')}
+        </label>
+      </fieldset>
+
+      {modalType === 'details' ? (
+        <Form
+          data-testid="pledgeForm"
+          onSubmitCapture={updateGroupHandler}
+          className="p-3"
+        >
+          {/* Input field to enter the group name */}
+          <FormFieldGroup
+            name="name"
+            label={tCommon('name')}
+            required
+            touched={touched.name}
+            error={nameError}
           >
-            {/* Input field to enter the group name */}
-            <Form.Group className="mb-3">
-              <FormControl fullWidth>
-                <TextField
-                  required
-                  label={tCommon('name')}
-                  variant="outlined"
-                  className={styles.noOutline}
-                  value={name}
-                  data-testid="nameInput"
-                  onChange={(e) =>
-                    setFormState({ ...formState, name: e.target.value })
-                  }
-                />
-              </FormControl>
-            </Form.Group>
-            {/* Input field to enter the group description */}
-            <Form.Group className="mb-3">
-              <FormControl fullWidth>
-                <TextField
-                  multiline
-                  rows={3}
-                  label={tCommon('description')}
-                  variant="outlined"
-                  className={styles.noOutline}
-                  value={description}
-                  onChange={(e) =>
-                    setFormState({ ...formState, description: e.target.value })
-                  }
-                />
-              </FormControl>
-            </Form.Group>
+            <FormControl fullWidth>
+              <TextField
+                id="name"
+                aria-label={tCommon('name')}
+                required
+                variant="outlined"
+                className={styles.noOutline}
+                value={name}
+                data-testid="nameInput"
+                onChange={(e) =>
+                  setFormState({ ...formState, name: e.target.value })
+                }
+                onBlur={() => setTouched({ ...touched, name: true })}
+              />
+            </FormControl>
+          </FormFieldGroup>
 
-            <Form.Group className="mb-3">
-              <FormControl fullWidth>
-                <TextField
-                  label={t('volunteersRequired')}
-                  variant="outlined"
-                  className={styles.noOutline}
-                  value={volunteersRequired ?? ''}
-                  onChange={(e) => {
-                    if (parseInt(e.target.value) > 0) {
-                      setFormState({
-                        ...formState,
-                        volunteersRequired: parseInt(e.target.value),
-                      });
-                    } else if (e.target.value === '') {
+          {/* Input field to enter the group description */}
+          <FormFieldGroup name="description" label={tCommon('description')}>
+            <FormControl fullWidth>
+              <TextField
+                id="description"
+                aria-label={tCommon('description')}
+                multiline
+                rows={3}
+                variant="outlined"
+                className={styles.noOutline}
+                value={description}
+                onChange={(e) =>
+                  setFormState({
+                    ...formState,
+                    description: e.target.value,
+                  })
+                }
+              />
+            </FormControl>
+          </FormFieldGroup>
+
+          <FormFieldGroup
+            name="volunteersRequired"
+            label={t('volunteersRequired')}
+            touched={touched.volunteersRequired}
+            error={volunteersRequiredError ? t('invalidNumber') : undefined}
+          >
+            <FormControl fullWidth error={volunteersRequiredError}>
+              <TextField
+                id="volunteersRequired"
+                aria-label={t('volunteersRequired')}
+                variant="outlined"
+                className={styles.noOutline}
+                type="number"
+                slotProps={{
+                  htmlInput: { min: 1 },
+                }}
+                value={volunteersRequired ?? ''}
+                error={volunteersRequiredError}
+                onChange={(e) => {
+                  const val = e.target.value;
+                  if (val === '') {
+                    setFormState({
+                      ...formState,
+                      volunteersRequired: null,
+                    });
+                    setVolunteersRequiredError(false);
+                  } else {
+                    const parsed = parseInt(val, 10);
+                    if (Number.isNaN(parsed) || parsed < 1) {
+                      setVolunteersRequiredError(true);
                       setFormState({
                         ...formState,
                         volunteersRequired: null,
                       });
+                    } else {
+                      setVolunteersRequiredError(false);
+                      setFormState({
+                        ...formState,
+                        volunteersRequired: parsed,
+                      });
                     }
-                  }}
-                />
-              </FormControl>
-            </Form.Group>
+                  }
+                }}
+                onBlur={() =>
+                  setTouched({ ...touched, volunteersRequired: true })
+                }
+              />
+              {volunteersRequiredError && (
+                <FormHelperText>{t('invalidNumber')}</FormHelperText>
+              )}
+            </FormControl>
+          </FormFieldGroup>
 
-            {/* Button to submit the pledge form */}
-            <Button
-              type="submit"
-              className={styles.regBtn}
-              data-testid="submitBtn"
+          <Button
+            type="submit"
+            className={styles.regBtn}
+            data-testid="submitBtn"
+            disabled={volunteersRequiredError || !!nameError}
+          >
+            {t('updateGroup')}
+          </Button>
+        </Form>
+      ) : (
+        <div className="px-3">
+          {requests.length === 0 ? (
+            <Stack height="100%" alignItems="center" justifyContent="center">
+              {t('noRequests')}
+            </Stack>
+          ) : (
+            <TableContainer
+              component={Paper}
+              variant="outlined"
+              className={styles.modalTable}
             >
-              {t('updateGroup')}
-            </Button>
-          </Form>
-        ) : (
-          <div className="px-3">
-            {requests.length === 0 ? (
-              <Stack height="100%" alignItems="center" justifyContent="center">
-                {t('noRequests')}
-              </Stack>
-            ) : (
-              <TableContainer
-                component={Paper}
-                variant="outlined"
-                className={styles.modalTable}
-              >
-                <Table aria-label={t('groupTable')}>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell className="fw-bold">
-                        {t('volunteerName')}
-                      </TableCell>
-                      <TableCell className="fw-bold">
-                        {t('volunteerActions')}
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {requests.map((request, index) => {
-                      const { id, name, avatarURL } = request.volunteer.user;
-                      return (
-                        <TableRow
-                          key={index + 1}
-                          sx={{
-                            '&:last-child td, &:last-child th': { border: 0 },
-                          }}
+              <Table aria-label={t('groupTable')}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell className="fw-bold">
+                      {t('volunteerName')}
+                    </TableCell>
+                    <TableCell className="fw-bold">
+                      {t('volunteerActions')}
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {requests.map((request, _index) => {
+                    const { id, name, avatarURL } = request.volunteer.user;
+                    return (
+                      <TableRow
+                        key={request.id}
+                        sx={{
+                          '&:last-child td, &:last-child th': { border: 0 },
+                        }}
+                      >
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          className="d-flex gap-1 align-items-center"
+                          data-testid="userName"
                         >
-                          <TableCell
-                            component="th"
-                            scope="row"
-                            className="d-flex gap-1 align-items-center"
-                            data-testid="userName"
-                          >
-                            {avatarURL ? (
-                              <img
-                                src={avatarURL}
-                                alt={t('volunteerAlt')}
-                                data-testid={`image${id + 1}`}
-                                className={styles.TableImage}
+                          {avatarURL ? (
+                            <img
+                              src={avatarURL}
+                              alt={t('volunteerAlt')}
+                              data-testid={`image${id + 1}`}
+                              className={styles.TableImage}
+                            />
+                          ) : (
+                            <div className={styles.avatarContainer}>
+                              <Avatar
+                                containerStyle={styles.imageContainer}
+                                avatarStyle={styles.TableImage}
+                                name={name}
+                                alt={name}
+                                dataTestId="avatar"
                               />
-                            ) : (
-                              <div className={styles.avatarContainer}>
-                                <Avatar
-                                  key={id + '1'}
-                                  containerStyle={styles.imageContainer}
-                                  avatarStyle={styles.TableImage}
-                                  name={name}
-                                  alt={name}
-                                />
-                              </div>
-                            )}
-                            {name}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            <div className="d-flex gap-2">
-                              <Button
-                                variant="success"
-                                size="sm"
-                                className="me-2 rounded"
-                                data-testid={`acceptBtn`}
-                                onClick={() =>
-                                  updateMembershipStatus(request.id, 'accepted')
-                                }
-                              >
-                                <i className="fa fa-check" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="danger"
-                                className="rounded"
-                                data-testid={`rejectBtn`}
-                                onClick={() =>
-                                  updateMembershipStatus(request.id, 'rejected')
-                                }
-                              >
-                                <FaXmark size={18} className="fw-bold" />
-                              </Button>
                             </div>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            )}
-          </div>
-        )}
-      </Modal.Body>
-    </Modal>
+                          )}
+                          {name}
+                        </TableCell>
+                        <TableCell component="th" scope="row">
+                          <div className="d-flex gap-2">
+                            <Button
+                              variant="success"
+                              size="sm"
+                              className="me-2 rounded"
+                              data-testid={`acceptBtn`}
+                              aria-label={t('acceptRequest')}
+                              onClick={() =>
+                                updateMembershipStatus(request.id, 'accepted')
+                              }
+                            >
+                              <i className="fa fa-check" />
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="danger"
+                              className="rounded"
+                              data-testid={`rejectBtn`}
+                              aria-label={t('rejectRequest')}
+                              onClick={() =>
+                                updateMembershipStatus(request.id, 'rejected')
+                              }
+                            >
+                              <FaXmark size={18} className="fw-bold" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          )}
+        </div>
+      )}
+    </BaseModal>
   );
 };
+
 export default GroupModal;

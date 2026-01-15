@@ -1,6 +1,15 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "Please log in again; your session has expired."
+  },
+  "securedRoute": {
+    "sessionExpired": "Please log in again; your session has expired."
+  },
   "ends": "Ends",
   "occurrences": "Occurrences",
+  "customRecurrence": "Custom Recurrence",
+  "invalidDetailsMessage": "Please check the details you entered.",
+  "selectAtLeastOneDay": "Please select at least one day.",
   "leaderboard": {
     "title": "Leaderboard",
     "searchByVolunteer": "Search By Volunteer",
@@ -69,9 +78,13 @@
     "OR": "OR",
     "admin": "admin",
     "user": "user",
-    "loading": "Loading...",
+    "loading": "loading",
+    "userImage": "User Image",
+    "userEditProfilePicture": "Edit profile picture",
     "communityLogo": "Community Logo",
-    "organizations": "Organizations"
+    "organizations": "Organizations",
+    "accountLocked": "Your account has been temporarily locked due to too many failed login attempts. Please try again later.",
+    "accountLockedWithTimer": "Your account has been temporarily locked. Please try again in {{minutes}} minute(s)."
   },
   "adminProfile": {
     "title": "Admin Profile",
@@ -486,7 +499,9 @@
     "tagActions": "Tag Actions",
     "loadAssignedUsersError": "Error occurred while loading assigned users",
     "sortPeople": "Sort People",
-    "noTagsFound": "No tags found"
+    "noTagsFound": "No tags found",
+    "addMember": "Add Member",
+    "removeMember": "Remove Member"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
@@ -706,6 +721,11 @@
     "agendaItemDeleted": "Agenda Item deleted successfully",
     "deleteAgendaItem": "Delete Agenda Item",
     "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
+<<<<<<< HEAD
+=======
+    "event": "Event",
+    "search": "Search",
+>>>>>>> upstream/develop
     "attachmentPreview": "Attachment preview"
   },
   "eventListCard": {
@@ -763,6 +783,7 @@
   "funds": {
     "title": "Funds",
     "createFund": "Create Fund",
+    "searchFunds": "Search Funds",
     "fundName": "Fund Name",
     "fundId": "Fund (Reference) ID",
     "taxDeductible": "Tax Deductible",
@@ -772,6 +793,7 @@
     "fundUpdate": "Update Fund",
     "fundDelete": "Delete Fund",
     "noFundsFound": "No Funds Found",
+    "editFund": "Edit Fund",
     "createdBy": "Created By",
     "createdOn": "Created On",
     "status": "Status",
@@ -784,20 +806,19 @@
     "viewCampaigns": "View Campaigns",
     "searchByName": "Search by Name",
     "assocCampaigns": "Associated Campaigns",
-    "associatedCampaigns": "Associated Campaigns",
-    "searchFunds": "Search Funds",
     "errorLoadingFundsData": "Error loading funds data",
-    "editFund": "Edit Fund"
+    "associatedCampaigns": "Associated Campaigns"
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",
+    "editCampaign": "Edit Campaign",
+    "searchCampaigns": "Search Campaigns",
     "campaignName": "Campaign Name",
     "campaignOptions": "Options",
     "fundingGoal": "Funding Goal",
     "progress": "Progress",
     "raised": "Raised",
     "addCampaign": "Add Campaign",
-    "editCampaign": "Edit Campaign",
     "createdCampaign": "Campaign created successfully",
     "updatedCampaign": "Campaign updated successfully",
     "deletedCampaign": "Campaign deleted successfully",
@@ -809,15 +830,20 @@
     "currency": "Currency",
     "selectCurrency": "Select Currency",
     "searchFullName": "Search By Name",
-    "searchCampaigns": "Search Campaigns",
     "viewPledges": "View Pledges",
     "noCampaignsFound": "No Campaigns Found",
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "lowestGoal": "Lowest Goal",
     "highestGoal": "Highest Goal",
+    "errorLoading": "Error occurred while loading campaigns data",
     "percentageRaised": "% Raised",
-    "campaignProgress": "Campaign progress: {{percentage}}%"
+    "campaignProgress": "Campaign progress: {{percentage}}%",
+    "campaignNotFound": "Campaign not found",
+    "dateRangeRequired": "Please select a valid date range",
+    "campaignNameRequired": "Campaign name is required",
+    "invalidDate": "Invalid date selected",
+    "endDateBeforeStart": "End date cannot be before start date"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
@@ -1029,7 +1055,13 @@
     "removingAttendee": "Removing the attendee...",
     "attendeeRemovedSuccessfully": "Attendee removed successfully",
     "errorRemovingAttendee": "Error removing attendee",
+<<<<<<< HEAD
     "cannotUnregisterCheckedIn": "Cannot unregister a user who has already checked in"
+=======
+    "checkedIn": "Checked In",
+    "unregister": "Unregister",
+    "cannotUnregisterCheckedInTooltip": "Cannot unregister checked-in user"
+>>>>>>> upstream/develop
   },
   "onSpotAttendee": {
     "title": "On-spot Attendee",
@@ -1200,6 +1232,7 @@
   },
   "memberDetail": {
     "title": "User Details",
+    "to": "TO",
     "addAdmin": "Add Admin",
     "noeventsAttended": "No Events Attended",
     "alreadyIsAdmin": "Member is already an Admin",
@@ -1231,7 +1264,8 @@
     "eventsAttended": "Events Attended",
     "contactInfoHeading": "Contact Information",
     "actionsHeading": "Actions",
-    "personalDetailsHeading": "Profile Details",
+    "actions": "Action",
+    "personalDetailsHeading": "Profile Information",
     "appLanguageCode": "Choose Language",
     "deleteUser": "Delete User",
     "created": "Created",
@@ -1251,7 +1285,18 @@
     "unassignUserTagMessage": "Do you want to remove the tag from this user?",
     "successfullyUnassigned": "Tag unassigned from user",
     "tagsAssigned": "Tags Assigned",
-    "noTagsAssigned": "No Tags Assigned"
+    "noTagsAssigned": "No Tags Assigned",
+    "overview": "Overview",
+    "tags": "Tags",
+    "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF file.",
+    "fileTooLarge": "File is too large. Maximum size is 5MB.",
+    "memberDetailNumberExample": "Ex. +1234567890",
+    "memberDetailExampleLane": "Ex. Lane 2",
+    "memberDetailPostalExample": "Ex. 12345",
+    "enterCity": "Enter city name",
+    "enterState": "Enter state name",
+    "select": "Select",
+    "asYourCountry": "as your country"
   },
   "people": {
     "title": "People",
@@ -1413,7 +1458,8 @@
     "event": "Event",
     "article": "Article",
     "postNowVisibleInFeed": "Post now visible in feed",
-    "processingPost": "Processing your post. Please wait."
+    "processingPost": "Processing your post. Please wait.",
+    "postImagePreview": "Post Image Preview"
   },
   "settings": {
     "eventAttended": "Events Attended",
@@ -1488,7 +1534,7 @@
     "description": "Description",
     "enterDescription": "Enter Description",
     "atleast_8_char_long": "Password must be at least 8 characters long.",
-    "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF.",
+    "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF file.",
     "fileSizeTooLarge": "File is too large. Maximum size is 5MB.",
     "failedToProcessImage": "Failed to process profile picture. Please try uploading again.",
     "title": "Settings"
@@ -1531,7 +1577,9 @@
     "latestFirst": "Latest First",
     "earliestFirst": "Earliest First",
     "noTransactionsFound": "No transactions found",
-    "errorLoadingTransactions": "Error loading transactions"
+    "errorLoadingTransactions": "Error loading transactions",
+    "eventType": "Event Type",
+    "tagCreationFailed": "Tag creation failed"
   },
   "userEvents": {
     "title": "Events",
@@ -1578,7 +1626,8 @@
     "on": "On",
     "after": "After",
     "customRecurrence": "Custom Recurrence",
-    "repeatsEvery": "Repeats Every"
+    "repeatsEvery": "Repeats Every",
+    "noEventAvailable": "No Event Available!"
   },
   "userEventCard": {
     "starts": "Starts",
@@ -1634,7 +1683,9 @@
     "preview": "Preview",
     "bannerAd": "Banner Ad",
     "popupAd": "Popup Ad",
-    "menuAd": "Menu Ad"
+    "menuAd": "Menu Ad",
+    "searchAdvertisements": "Search advertisements",
+    "advertisementLoading": "Loading advertisements..."
   },
   "userChat": {
     "title": "Chats",
@@ -1675,6 +1726,9 @@
     "newGroup": "New Group",
     "groupName": "Group name",
     "groupDescription": "Group Description",
+    "confirmRemoveMember": "Confirm Remove Member",
+    "failedToAddUser": "Failed to Add User",
+    "userAddedSuccessfully": "User Added Successfully",
     "next": "Next"
   },
   "userChatRoom": {
@@ -1808,6 +1862,7 @@
   "checkIn": {
     "errorCheckingIn": "Error checking in",
     "checkedInSuccessfully": "Checked in successfully",
+<<<<<<< HEAD
     "generatingPdf": "Generating pdf...",
     "pdfGeneratedSuccessfully": "PDF generated successfully!",
     "errorGeneratingPdf": "Error generating pdf",
@@ -1815,10 +1870,24 @@
     "checkedIn": "Checked In",
     "downloadTag": "Download Tag",
     "checkInButton": "Check In"
+=======
+    "searchAttendees": "Search Attendees",
+    "checkedIn": "Checked In",
+    "downloadTag": "Download Tag",
+    "checkIn": "Check In",
+    "eventCheckInManagement": "Event Check In Management"
+>>>>>>> upstream/develop
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",
     "errorRemovingAttendee": "Error removing attendee",
+    "eventRegistrantsTitle": "Event Registrants",
+    "inviteByEmailButton": "Invite by Email",
+    "addRegistrantButton": "Add Registrant",
+    "noRegistrationsFound": "No Registrations found",
+    "addOnspotRegistrationLink": "Add Onspot Registration",
+    "addRegistrantLabel": "Add a Registrant",
+    "addRegistrantPlaceholder": "Choose the user that you want to add",
     "inviteByEmail": {
       "addRecipient": "Add recipient",
       "email": "Email",
@@ -1838,14 +1907,21 @@
   "userCampaigns": {
     "title": "Fundraising Campaigns",
     "searchByName": "Search by Name...",
+    "searchCampaigns": "Search Campaigns",
+    "campaignName": "Campaign Name",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "fundingGoal": "Fund Goal",
+    "raised": "Amount Raised",
+    "progress": "% Raised",
+    "viewPledge": "View Pledge",
     "searchBy": "Search by",
     "pledgers": "Pledgers",
     "pledger": "Pledger",
     "campaigns": "Campaigns",
-    "associatedCampaign": "Associated Campaign",
+    "associatedCampaign": "Associated Campaigns",
     "pledged": "Pledged",
     "donated": "Donated",
-    "progress": "Progress",
     "more": "more",
     "myPledges": "My Pledges",
     "lowestAmount": "Lowest Amount",
@@ -1858,19 +1934,12 @@
     "viewPledges": "View Pledges",
     "noPledges": "No Pledges Found",
     "noCampaigns": "No Campaigns Found",
-    "raised": "Raised",
     "amountRaised": "Amount Raised",
     "campaignIndex": "#",
-    "campaignName": "Campaign Name",
-    "startDate": "Start Date",
-    "endDate": "End Date",
     "fundGoal": "Fund Goal",
-    "fundingGoal": "Funding Goal",
     "percentRaised": "% Raised",
     "createFirstCampaign": "Create your first fundraising campaign to see it here.",
-    "campaignEnded": "Campaign ended",
-    "searchCampaigns": "Search Campaigns",
-    "viewPledge": "View Pledge"
+    "campaignEnded": "Campaign ended"
   },
   "userPledges": {
     "title": "My Pledges",
@@ -1924,6 +1993,8 @@
     "earliest": "Earliest",
     "requestAccepted": "Request accepted successfully",
     "requestRejected": "Request rejected successfully",
+    "acceptRequest": "Accept Request",
+    "rejectRequest": "Reject Request",
     "details": "Details",
     "manageGroup": "Manage Group",
     "mostVolunteers": "Most Volunteers",
@@ -1945,7 +2016,11 @@
     "viewDetails": "View {{name}} details",
     "editVolunteerGroup": "Edit {{name}} volunteer group",
     "deleteVolunteerGroup": "Delete {{name}} volunteer group",
-    "deleteVolunteerEntry": "Delete {{name}} volunteer entry"
+    "deleteVolunteerEntry": "Delete {{name}} volunteer entry",
+    "viewGroup": "View group",
+    "editGroup": "Edit group",
+    "invalidNumber": "Invalid number",
+    "viewToggle": "Toggle view"
   },
   "userVolunteer": {
     "title": "Volunteership",
@@ -2067,6 +2142,23 @@
     "uninstallWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
     "errorInstalling": "Failed to load plugin details"
   },
+  "statusBadge": {
+    "completed": "Completed",
+    "pending": "Pending",
+    "active": "Active",
+    "inactive": "Inactive",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "disabled": "Disabled",
+    "accepted": "Accepted",
+    "declined": "Declined",
+    "no_response": "No Response",
+    "success": "Success",
+    "warning": "Warning",
+    "error": "Error",
+    "info": "Info",
+    "neutral": "Neutral"
+  },
   "commentCard": {
     "commentDeletedSuccessfully": "Comment deleted successfully",
     "commentUpdatedSuccessfully": "Comment updated successfully",
@@ -2093,9 +2185,6 @@
   },
   "contact": {
     "card_aria": "Contact card"
-  },
-  "securedRoute": {
-    "sessionExpired": "Kindly relogin as session has expired"
   },
   "common": {
     "signOut": "Sign out",
@@ -2135,5 +2224,11 @@
     "sortPeople": "Sort People",
     "unassign": "Unassign",
     "tags": "Tags"
+  },
+  "orgProfileField": {
+    "editCustomField": "Edit Custom Field"
+  },
+  "userGlobalScreen": {
+    "globalFeatures": "Global Features"
   }
 }

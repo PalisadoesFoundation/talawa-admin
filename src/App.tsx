@@ -12,19 +12,19 @@ import { getPluginManager } from 'plugin/manager';
 import { discoverAndRegisterAllPlugins } from 'plugin/registry';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 const OrganizationScreen = lazy(
-  () => import('components/OrganizationScreen/OrganizationScreen'),
+  () => import('components/AdminPortal/OrganizationScreen/OrganizationScreen'),
 );
 const PostsPage = lazy(() => import('shared-components/posts/posts'));
 
 const SuperAdminScreen = lazy(
-  () => import('components/SuperAdminScreen/SuperAdminScreen'),
+  () => import('components/AdminPortal/SuperAdminScreen/SuperAdminScreen'),
 );
 const BlockUser = lazy(() => import('screens/AdminPortal/BlockUser/BlockUser'));
 const EventManagement = lazy(
@@ -83,7 +83,7 @@ const Leaderboard = lazy(
   () => import('screens/AdminPortal/Leaderboard/Leaderboard'),
 );
 const Advertisements = lazy(
-  () => import('components/Advertisements/Advertisements'),
+  () => import('components/AdminPortal/Advertisements/Advertisements'),
 );
 const Donate = lazy(() => import('screens/UserPortal/Donate/Donate'));
 const Transactions = lazy(
@@ -197,7 +197,13 @@ function App(): React.ReactElement {
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
     >
-      <Suspense fallback={<Loader />}>
+      <Suspense
+        fallback={
+          <LoadingState isLoading={true} variant="spinner">
+            <div />
+          </LoadingState>
+        }
+      >
         <NotificationToastContainer />
         <Routes>
           <Route path="/" element={<LoginPage />} />

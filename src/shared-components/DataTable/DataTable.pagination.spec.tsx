@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { DataTable } from './DataTable';
 import type { IColumnDef } from '../../types/shared-components/DataTable/interface';
@@ -23,10 +23,6 @@ const columns: IColumnDef<ITestUser>[] = [
 
 describe('DataTable - Pagination Integration', () => {
   afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  beforeEach(() => {
     vi.clearAllMocks();
   });
 
@@ -273,7 +269,11 @@ describe('DataTable - Pagination Integration', () => {
       expect(
         screen.queryByRole('navigation', { name: 'tablePagination' }),
       ).not.toBeInTheDocument();
-      expect(screen.getByTestId('datatable-loading')).toBeInTheDocument();
+      // With data present while loading, we render the table (no pagination) and may overlay only when requested
+      expect(screen.getByTestId('datatable')).toBeInTheDocument();
+      expect(
+        screen.queryByTestId('table-loader-overlay'),
+      ).not.toBeInTheDocument();
     });
 
     it('does not show pagination when empty after slicing', () => {
@@ -919,6 +919,165 @@ describe('DataTable - Pagination Integration', () => {
 
       expect(screen.getByText('No users found')).toBeInTheDocument();
       expect(screen.queryByText(/of/i)).not.toBeInTheDocument();
+    });
+  });
+
+  /* ------------------------------------------------------------------
+   * loadingMore behavior across pagination modes
+   * ------------------------------------------------------------------ */
+
+  describe('loadingMore prop behavior', () => {
+    it('appends skeleton rows when loadingMore=true in client mode', () => {
+      render(
+        <DataTable
+          data={mockUsers.slice(0, 10)}
+          columns={columns}
+          paginationMode="client"
+          pageSize={5}
+          loadingMore
+          skeletonRows={2}
+          rowKey="id"
+        />,
+      );
+
+      // Real data rows should render
+      expect(screen.getByText('User 1')).toBeInTheDocument();
+      expect(screen.getByText('User 5')).toBeInTheDocument();
+
+      // Skeleton rows should be appended
+      const skeletonRows = document.querySelectorAll(
+        '[data-testid^="skeleton-append-"]',
+      );
+      expect(skeletonRows.length).toBe(2);
+    });
+
+    it('appends skeleton rows when loadingMore=true in server mode with pageInfo', () => {
+      const mockOnLoadMore = vi.fn();
+
+      render(
+        <DataTable
+          data={mockUsers.slice(0, 10)}
+          columns={columns}
+          paginationMode="server"
+          pageInfo={{ hasNextPage: true, hasPreviousPage: false }}
+          onLoadMore={mockOnLoadMore}
+          loadingMore
+          skeletonRows={3}
+          rowKey="id"
+        />,
+      );
+
+      // Real data rows should render
+      expect(screen.getByText('User 1')).toBeInTheDocument();
+      expect(screen.getByText('User 10')).toBeInTheDocument();
+
+      // Skeleton rows should be appended
+      const skeletonRows = document.querySelectorAll(
+        '[data-testid^="skeleton-append-"]',
+      );
+      expect(skeletonRows.length).toBe(3);
+    });
+
+    it('appends skeleton rows when loadingMore=true in no-pagination mode', () => {
+      render(
+        <DataTable
+          data={mockUsers.slice(0, 15)}
+          columns={columns}
+          loadingMore
+          skeletonRows={2}
+          rowKey="id"
+        />,
+      );
+
+      // All real data rows should render
+      expect(screen.getByText('User 1')).toBeInTheDocument();
+      expect(screen.getByText('User 15')).toBeInTheDocument();
+
+      // Skeleton rows should be appended
+      const skeletonRows = document.querySelectorAll(
+        '[data-testid^="skeleton-append-"]',
+      );
+      expect(skeletonRows.length).toBe(2);
+    });
+
+    it('does not append skeleton rows when loadingMore=false (default)', () => {
+      render(
+        <DataTable
+          data={mockUsers.slice(0, 10)}
+          columns={columns}
+          paginationMode="client"
+          pageSize={5}
+          rowKey="id"
+        />,
+      );
+
+      // No appended skeleton rows
+      const skeletonRows = document.querySelectorAll(
+        '[data-testid^="skeleton-append-"]',
+      );
+      expect(skeletonRows.length).toBe(0);
+    });
+
+    it('does not append skeleton rows when loadingMore=true but no data exists', () => {
+      render(
+        <DataTable
+          data={[]}
+          columns={columns}
+          paginationMode="client"
+          pageSize={10}
+          loadingMore
+          skeletonRows={2}
+          rowKey="id"
+        />,
+      );
+
+      // Empty state should render instead of skeleton rows
+      expect(screen.getByTestId('datatable-empty')).toBeInTheDocument();
+
+      // No appended skeleton rows
+      const skeletonRows = document.querySelectorAll(
+        '[data-testid^="skeleton-append-"]',
+      );
+      expect(skeletonRows.length).toBe(0);
+    });
+
+    it('respects skeletonRows count for appended rows in loadingMore scenario', () => {
+      const { rerender } = render(
+        <DataTable
+          data={mockUsers.slice(0, 5)}
+          columns={columns}
+          paginationMode="client"
+          pageSize={10}
+          loadingMore
+          skeletonRows={4}
+          rowKey="id"
+        />,
+      );
+
+      // Check initial skeleton count
+      let skeletonRows = document.querySelectorAll(
+        '[data-testid^="skeleton-append-"]',
+      );
+      expect(skeletonRows.length).toBe(4);
+
+      // Change skeletonRows to 6
+      rerender(
+        <DataTable
+          data={mockUsers.slice(0, 5)}
+          columns={columns}
+          paginationMode="client"
+          pageSize={10}
+          loadingMore
+          skeletonRows={6}
+          rowKey="id"
+        />,
+      );
+
+      // Should update to 6 skeleton rows
+      skeletonRows = document.querySelectorAll(
+        '[data-testid^="skeleton-append-"]',
+      );
+      expect(skeletonRows.length).toBe(6);
     });
   });
 });

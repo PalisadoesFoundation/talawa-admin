@@ -1,0 +1,30 @@
+.container {
+  min-height: 100%;
+}
+
+.message {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.errorIcon {
+  font-size: var(--font-size-4xl);
+  color: var(--color-red-500);
+  margin-bottom: var(--space-5);
+}
+
+.titleContainerVolunteer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.titleContainerVolunteer h3 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-gray-700);
+  margin-top: var(--space-2);
+}

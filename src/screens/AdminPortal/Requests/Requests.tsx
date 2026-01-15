@@ -1,51 +1,23 @@
 /**
- * @file Requests.tsx
- * @description This file contains the implementation of the Requests component, which displays
- *              a list of membership requests for an organization. It includes features like
- *              infinite scrolling, search functionality, and role-based access control.
+ * Requests screen for membership requests in an organization.
  *
- * @module Requests
+ * Displays pending membership requests with infinite scroll, search, and role-based access
+ * control. Shows empty states for no orgs, no results, and no pending requests.
  *
- * @requires react
- * @requires @apollo/client
- * @requires react-bootstrap
- * @requires react-i18next
- * @requires react-router-dom
- * @requires @mui/material
- * @requires GraphQl/Queries/Queries
- * @requires components/TableLoader/TableLoader
- * @requires components/RequestsTableItem/RequestsTableItem
- * @requires subComponents/SearchBar
- * @requires utils/interfaces
- * @requires utils/useLocalstorage
- * @requires style/app-fixed.module.css
+ * Features:
+ * - Name search via SearchFilterBar.
+ * - Accept/reject actions with toast feedback.
  *
- *
- * @typedef {Object} InterfaceRequestsListItem
- * @property {string} _id - The unique identifier for the request.
- * @property {Object} user - The user details associated with the request.
- * @property {string} user.firstName - The first name of the user.
- * @property {string} user.lastName - The last name of the user.
- * @property {string} user.email - The email address of the user.
- *
- * @component
- * @name Requests
- * @description Displays a list of membership requests for an organization. Includes search,
- *              infinite scrolling, and role-based access control. Redirects unauthorized users
- *              to the organization list page.
- *
- * @returns {JSX.Element} The rendered Requests component.
- *
- * @example
- * <Requests />
+ * Data:
+ * - Uses `MEMBERSHIP_REQUEST_PG` and `ORGANIZATION_LIST` queries.
+ * - Uses `ACCEPT_ORGANIZATION_REQUEST_MUTATION` and
+ *   `REJECT_ORGANIZATION_REQUEST_MUTATION`.
  *
  * @remarks
- * - Uses Apollo Client's `useQuery` for fetching data.
- * - Implements infinite scrolling using `react-infinite-scroll-component`.
- * - Displays a search bar for filtering requests by user name.
- * - Handles role-based access control for `ADMIN` and `SUPERADMIN` roles.
- * - Displays appropriate messages when no data is available.
+ * Only administrators and superadmins can access this screen; others are redirected to
+ * `/orglist`.
  *
+ * @returns The rendered Requests component.
  */
 import { useQuery, useMutation } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
@@ -62,27 +34,19 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import TableLoader from 'components/TableLoader/TableLoader';
-import { GridCellParams } from 'shared-components/DataGridWrapper';
-import type {
-  ReportingTableColumn,
-  ReportingTableGridProps,
-  InfiniteScrollProps,
-  ReportingRow,
-} from 'types/ReportingTable/interface';
-
-import Avatar from 'components/Avatar/Avatar';
+import {
+  GridCellParams,
+  GridColDef,
+  DataGridWrapper,
+} from 'shared-components/DataGridWrapper';
+import Avatar from 'shared-components/Avatar/Avatar';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
-import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
-import styles from 'style/app-fixed.module.css';
+import styles from './Requests.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
-import {
-  dataGridStyle,
-  PAGE_SIZE,
-  ROW_HEIGHT,
-} from 'types/ReportingTable/utils';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { Group, Search } from '@mui/icons-material';
 
@@ -103,7 +67,7 @@ interface InterfaceRequestsListItem {
  *
  * Responsibilities:
  * - Displays membership requests with infinite scroll support
- * - Supports search submission via AdminSearchFilterBar
+ * - Supports search submission via SearchFilterBar
  * - Shows user avatars and request details
  * - Handles accept and reject request actions
  * - Shows empty state via DataGrid overlay when no requests exist
@@ -127,7 +91,6 @@ const Requests = (): JSX.Element => {
 
   // Define constants and state variables
   const [isLoading, setIsLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState<string>('');
   const userRole = getItem('role') as string;
@@ -135,20 +98,17 @@ const Requests = (): JSX.Element => {
   const organizationId = orgId;
 
   // Query to fetch membership requests
-  const { data, loading, fetchMore, refetch } = useQuery(
-    MEMBERSHIP_REQUEST_PG,
-    {
-      variables: {
-        input: {
-          id: organizationId,
-        },
-        first: PAGE_SIZE,
-        skip: 0,
-        name_contains: '',
+  const { data, loading, refetch } = useQuery(MEMBERSHIP_REQUEST_PG, {
+    variables: {
+      input: {
+        id: organizationId,
       },
-      notifyOnNetworkStatusChange: true,
+      first: PAGE_SIZE,
+      skip: 0,
+      name_contains: '',
     },
-  );
+    notifyOnNetworkStatusChange: true,
+  });
 
   const { data: orgsData } = useQuery(ORGANIZATION_LIST);
   const [displayedRequests, setDisplayedRequests] = useState<
@@ -168,13 +128,6 @@ const Requests = (): JSX.Element => {
     setIsLoading(false);
     setIsLoadingMore(false);
     setDisplayedRequests(pendingRequests);
-
-    // Update hasMore based on whether we have a full page of results
-    if (allRequests.length < PAGE_SIZE) {
-      setHasMore(false);
-    } else {
-      setHasMore(true);
-    }
   }, [data]);
 
   // Clear search on unmount
@@ -252,51 +205,6 @@ const Requests = (): JSX.Element => {
       skip: 0,
       name_contains: '',
     });
-    setHasMore(true);
-  };
-
-  /**
-   * Loads more requests when scrolling to the bottom of the page.
-   */
-
-  const loadMoreRequests = (): void => {
-    setIsLoadingMore(true);
-
-    const currentLength = data?.organization?.membershipRequests?.length ?? 0;
-
-    fetchMore({
-      variables: {
-        input: { id: organizationId },
-        first: PAGE_SIZE,
-        skip: currentLength,
-        name_contains: searchByName,
-      },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        setIsLoadingMore(false);
-
-        if (!fetchMoreResult?.organization?.membershipRequests) {
-          setHasMore(false);
-          return prev;
-        }
-
-        const newRequests = fetchMoreResult.organization.membershipRequests;
-
-        // If we got fewer results than requested, we've reached the end
-        if (newRequests.length < PAGE_SIZE) {
-          setHasMore(false);
-        }
-        return {
-          organization: {
-            ...prev.organization,
-            id: organizationId,
-            membershipRequests: [
-              ...prev.organization.membershipRequests,
-              ...newRequests,
-            ],
-          },
-        };
-      },
-    });
   };
 
   // Header titles for the table
@@ -310,7 +218,7 @@ const Requests = (): JSX.Element => {
   ];
 
   // Columns for ReportingTable (DataGrid)
-  const columns: ReportingTableColumn[] = [
+  const columns: GridColDef[] = [
     {
       field: 'sl_no',
       headerName: t('requests.sl_no'),
@@ -462,28 +370,6 @@ const Requests = (): JSX.Element => {
     },
   ];
 
-  const gridProps: ReportingTableGridProps = {
-    sx: { ...dataGridStyle },
-    paginationMode: 'client',
-    getRowId: (row: InterfaceRequestsListItem) => row.membershipRequestId,
-    rowCount: displayedRequests.length,
-    pageSizeOptions: [PAGE_SIZE],
-    loading: isLoading || isLoadingMore,
-    hideFooter: true,
-    getRowClassName: () => `${styles.rowBackground}`,
-    isRowSelectable: () => false,
-    disableColumnMenu: true,
-    rowHeight: ROW_HEIGHT,
-    autoHeight: true,
-    style: { overflow: 'visible' },
-  };
-
-  const infiniteProps: InfiniteScrollProps = {
-    dataLength: displayedRequests.length,
-    next: loadMoreRequests,
-    hasMore,
-  };
-
   // Mutations for accept/reject
   const [acceptUser] = useMutation(ACCEPT_ORGANIZATION_REQUEST_MUTATION);
   const [rejectUser] = useMutation(REJECT_ORGANIZATION_REQUEST_MUTATION);
@@ -518,7 +404,7 @@ const Requests = (): JSX.Element => {
 
   return (
     <div data-testid="testComp">
-      <AdminSearchFilterBar
+      <SearchFilterBar
         searchPlaceholder={t('requests.searchRequests')}
         searchValue={searchByName}
         onSearchChange={handleSearch}
@@ -559,28 +445,16 @@ const Requests = (): JSX.Element => {
           {isLoading ? (
             <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
           ) : (
-            <ReportingTable
-              rows={
-                displayedRequests.map((req) => ({
-                  ...req,
-                  id: req.membershipRequestId,
-                })) as ReportingRow[]
-              }
+            <DataGridWrapper
+              rows={displayedRequests.map((req) => {
+                return { ...req, id: req.membershipRequestId };
+              })}
               columns={columns}
-              gridProps={gridProps}
-              infiniteProps={infiniteProps}
-              listProps={{
-                loader: <TableLoader noOfCols={6} noOfRows={2} />,
-                className: styles.listTable,
-                ['data-testid']: 'requests-list',
-                scrollThreshold: 0.9,
-                style: { overflow: 'visible' },
-                endMessage:
-                  displayedRequests.length > 0 ? (
-                    <div className={'w-100 text-center my-4'}>
-                      <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
-                    </div>
-                  ) : null,
+              emptyStateMessage={t('requests.noRequestsFound')}
+              paginationConfig={{
+                enabled: true,
+                defaultPageSize: PAGE_SIZE,
+                pageSizeOptions: [10, 25, 50, 100],
               }}
             />
           )}

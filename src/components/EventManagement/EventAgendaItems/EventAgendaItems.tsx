@@ -1,20 +1,23 @@
 /**
  * Component for managing and displaying agenda items for a specific event.
  *
- * @param props - Component props containing:
- *   - `eventId`: The ID of the event for which agenda items are managed
- *
- * @returns A JSX element containing the agenda items management UI
+ * component
+ * @param props - Component props.
+ * @param eventId - The ID of the event for which agenda items are managed.
  *
  * @remarks
  * This component fetches and displays agenda items associated with a specific event.
  * It also allows users to create new agenda items using a modal form.
- * - Uses `useQuery` from `@apollo/client` for fetching agenda categories and agenda items
- * - Uses `useMutation` from `@apollo/client` for creating new agenda items
- * - Uses `useTranslation` from `react-i18next` for internationalization
- * - Uses NotificationToast for displaying success and error notifications
- * - Uses `react-bootstrap` for UI components
- * - Uses `@mui/icons-material` for displaying error icons
+ *
+ * requires-
+ * - `useQuery` from `@apollo/client` for fetching agenda categories and agenda items.
+ * - `useMutation` from `@apollo/client` for creating new agenda items.
+ * - `useTranslation` from `react-i18next` for internationalization.
+ * - `react-toastify` for displaying success and error notifications.
+ * - `react-bootstrap` for UI components.
+ * - `@mui/icons-material` for displaying error icons.
+ *
+ * @returns A JSX element containing the agenda items management UI.
  *
  * @example
  * ```tsx
@@ -54,7 +57,7 @@ import AgendaItemsContainer from 'components/AgendaItems/AgendaItemsContainer';
 import AgendaItemsCreateModal from 'components/AgendaItems/Create/AgendaItemsCreateModal';
 
 import styles from 'style/app-fixed.module.css';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 
 function EventAgendaItems(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
@@ -176,9 +179,6 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     setAgendaItemCreateModalIsOpen(!agendaItemCreateModalIsOpen);
   };
 
-  // Show loader while data is loading
-  if (agendaItemLoading || agendaCategoryLoading) return <Loader size="xl" />;
-
   // Show error message if there is an error loading data
   if (agendaItemError || agendaCategoryError) {
     const errorMessage =
@@ -189,9 +189,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message}>
-          <WarningAmberRounded
-            className={`${styles.errorIcon} ${styles.errorIconLarge}`}
-          />
+          <WarningAmberRounded className={`${styles.errorIcon} fs-3`} />
           <h6 className="fw-bold text-danger text-center">
             Error occurred while loading{' '}
             {agendaCategoryError ? 'Agenda Categories' : 'Agenda Items'} Data
@@ -204,56 +202,62 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
   }
 
   return (
-    <div className={styles.eventAgendaItemContainer}>
-      <div className={`bg-white rounded-4 my-3`}>
-        <div className={`pt-4 mx-4`}>
-          <div className={styles.btnsContainer}>
-            <div className=" d-none d-lg-inline flex-grow-1 d-flex align-items-center border bg-light-subtle rounded-3">
-              {/* <input
+    <LoadingState
+      isLoading={agendaItemLoading || agendaCategoryLoading}
+      variant="spinner"
+    >
+      <div className={styles.eventAgendaItemContainer}>
+        <div className={`bg-white rounded-4 my-3`}>
+          <div className={`pt-4 mx-4`}>
+            <div className={styles.btnsContainer}>
+              <div className=" d-none d-lg-inline flex-grow-1 d-flex align-items-center border bg-light-subtle rounded-3">
+                {/* <input
                 type="search"
                 className="form-control border-0 bg-light-subtle"
                 placeholder={t('search')}
                 onChange={(e) => setSearchValue(e.target.value)}
                 value={searchValue}
                 data-testid="search"
-              /> */}
-            </div>
+                /> */}
+              </div>
 
-            <Button
-              variant="success"
-              onClick={showCreateModal}
-              data-testid="createAgendaItemBtn"
-              className={styles.createAgendaItemButton}
-            >
-              {t('createAgendaItem')}
-            </Button>
+              <Button
+                type="button"
+                variant="success"
+                onClick={showCreateModal}
+                data-testid="createAgendaItemBtn"
+                className={styles.createAgendaItemButton}
+              >
+                {t('createAgendaItem')}
+              </Button>
+            </div>
           </div>
+
+          <hr />
+
+          <AgendaItemsContainer
+            agendaItemConnection={'Event'}
+            agendaItemData={agendaItemData?.agendaItemByEvent}
+            agendaItemRefetch={refetchAgendaItem}
+            agendaItemCategories={
+              agendaCategoryData?.agendaItemCategoriesByOrganization
+            }
+          />
         </div>
 
-        <hr />
-
-        <AgendaItemsContainer
-          agendaItemConnection={`Event`}
-          agendaItemData={agendaItemData?.agendaItemByEvent}
-          agendaItemRefetch={refetchAgendaItem}
+        <AgendaItemsCreateModal
+          agendaItemCreateModalIsOpen={agendaItemCreateModalIsOpen}
+          hideCreateModal={hideCreateModal}
+          formState={formState}
+          setFormState={setFormState}
+          createAgendaItemHandler={createAgendaItemHandler}
+          t={t}
           agendaItemCategories={
             agendaCategoryData?.agendaItemCategoriesByOrganization
           }
         />
       </div>
-
-      <AgendaItemsCreateModal
-        agendaItemCreateModalIsOpen={agendaItemCreateModalIsOpen}
-        hideCreateModal={hideCreateModal}
-        formState={formState}
-        setFormState={setFormState}
-        createAgendaItemHandler={createAgendaItemHandler}
-        t={t}
-        agendaItemCategories={
-          agendaCategoryData?.agendaItemCategoriesByOrganization
-        }
-      />
-    </div>
+    </LoadingState>
   );
 }
 

@@ -19,12 +19,19 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 const { setItem, clearAllItems } = useLocalStorage();
 
-vi.mock('@mui/icons-material', () => ({
-  Edit: vi.fn(() => null),
-  WarningAmberRounded: vi.fn(() => null),
-  Circle: vi.fn(() => null),
-  Group: vi.fn(() => null),
-}));
+vi.mock('@mui/icons-material', async () => {
+  const actual = (await vi.importActual('@mui/icons-material')) as Record<
+    string,
+    unknown
+  >;
+  return {
+    ...actual,
+    Edit: vi.fn(() => null),
+    WarningAmberRounded: vi.fn(() => null),
+    Circle: vi.fn(() => null),
+    Group: vi.fn(() => null),
+  };
+});
 
 const MOCKS_WITH_FIXED_TIME = JSON.parse(JSON.stringify(MOCKS_WITH_TIME));
 MOCKS_WITH_FIXED_TIME[0].result.data.event.startTime =

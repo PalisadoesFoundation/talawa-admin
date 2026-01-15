@@ -1,0 +1,257 @@
+/* Add Button */
+
+.addButton {
+  margin-bottom: var(--space-4);
+  color: var(--color-gray-700);
+  background-color: var(--color-blue-200);
+  border-color: var(--color-blue-200);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.addButton:is(:hover, :active, :focus) {
+  background-color: var(--color-blue-500) !important;
+  border-color: var(--color-gray-700);
+}
+
+.addButton:disabled {
+  margin-bottom: var(--space-4);
+  background-color: var(--color-gray-50);
+  border-color: var(--color-blue-200);
+}
+
+/* Ban Icon*/
+
+.banIcon {
+  color: var(--color-red-500);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-1);
+  margin-right: var(--space-2);
+}
+
+.removeButton:hover .banIcon {
+  color: var(--color-white) !important;
+}
+
+/* Remove Button */
+
+.removeButton {
+  margin-bottom: var(--space-4);
+  background-color: var(--color-red-100);
+  color: var(--color-red-500);
+  margin-right: var(--space-4);
+  --bs-btn-border-color: var(--color-red-100);
+}
+
+.removeButton:is(:hover, :active, :focus) {
+  background-color: var(--color-red-500) !important;
+  border-color: var(--color-red-500);
+  color: var(--color-white);
+}
+
+/* Modal Header*/
+
+.modalHeader {
+  border: none;
+  background-color: var(--color-white) !important;
+  padding: var(--space-5);
+  color: var(--color-black);
+}
+
+/* Make sure the modal title is dark grey */
+.modalHeader div,
+.modalHeader .modal-title {
+  color: var(--color-gray-700) !important;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xl);
+}
+
+/* Close button styling */
+.modalHeader button.close,
+.modalHeader .btn-close {
+  color: var(--color-red-500) !important;
+  opacity: 1;
+}
+
+/* Form Labels */
+.inputField label,
+form label,
+.form-label {
+  color: var(--color-black) !important;
+  font-weight: var(--font-weight-regular);
+  padding-bottom: 0;
+  font-size: var(--font-size-md);
+  margin-top: var(--space-4);
+}
+
+/* Input Fields */
+.inputField {
+  margin-top: var(--space-4);
+  margin-bottom: var(--space-4);
+  background-color: var(--color-white);
+  border: var(--border-1) solid var(--color-gray-100);
+  box-shadow: 0 var(--border-shadow-1) var(--border-shadow-2) rgba(0, 0, 0, 0.1);
+}
+
+/* Placeholder styling */
+.inputField::placeholder {
+  color: var(--color-gray-500) !important;
+  opacity: 1;
+}
+
+.inputField:focus {
+  border: var(--border-0) solid var(--color-gray-300) !important;
+  background-color: var(--color-white) !important;
+  box-shadow: 0 var(--border-shadow-1) var(--border-shadow-1)
+    rgba(0, 0, 0, 0.25);
+  outline: none;
+  transition: box-shadow 0.2s ease;
+}
+
+/* Edit Button */
+
+.editButton {
+  background-color: var(--color-blue-200);
+  color: var(--color-gray-700);
+  border-color: var(--color-gray-100);
+  --bs-btn-active-bg: var(--color-blue-500);
+  --bs-btn-active-border-color: var(--color-gray-100);
+}
+
+.editButton:is(:hover, :active) {
+  background-color: var(--color-blue-500);
+  border-color: var(--color-gray-700);
+  box-shadow: none;
+}
+
+/* Error */
+
+.errorContainer {
+  min-height: 100vh;
+}
+
+.errorMessage {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.errorIcon {
+  font-size: var(--font-size-4xl);
+  color: var(--color-red-500);
+  margin-bottom: var(--space-5);
+}
+
+.errorIcon::before {
+  content: '\26A0\FE0F';
+  margin-right: var(--space-3);
+}
+
+/* Row Background */
+
+.rowBackground {
+  background-color: var(--color-white);
+  color: var(--color-black);
+  max-height: var(--space-14);
+  overflow-y: auto;
+}
+
+.inputField > button {
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-4);
+}
+
+/* Create Button*/
+
+.createButton {
+  background-color: var(--color-gray-50) !important;
+  color: var(--color-gray-700) !important;
+  border: var(--border-1) solid var(--color-gray-700) !important;
+  margin: var(--space-2) var(--space-4);
+  width: var(--space-16);
+  height: var(--space-10);
+}
+
+.createButton:hover {
+  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
+    var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
+  background-color: var(--color-gray-50) !important;
+  color: var(--color-gray-700) !important;
+  border: var(--border-1) solid var(--color-gray-700) !important;
+}
+
+.createButton:active {
+  color: var(--color-gray-400) !important;
+  background-color: var(--color-gray-100) !important;
+  border: var(--border-1) solid var(--color-gray-400) !important;
+}
+
+/* Table Header */
+
+.tableHeader {
+  background-color: var(--color-gray-100);
+  color: var(--color-black);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+}
+
+.tagsBreadCrumbs {
+  color: var(--color-gray-400);
+  cursor: pointer;
+}
+
+.tagsBreadCrumbs::after {
+  display: block;
+  content: attr(data-text);
+  font-weight: var(--font-weight-semibold);
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.tagsBreadCrumbs:hover,
+.tagsBreadCrumbs:focus {
+  color: var(--color-blue-700);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: underline;
+}
+
+.subTagsLink i {
+  visibility: hidden;
+}
+
+.subTagsLink:hover,
+.subTagsLink:focus {
+  color: var(--color-blue-200);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: underline;
+}
+
+.subTagsLink:hover i,
+.subTagsLink:focus i {
+  visibility: visible;
+}
+
+.subTagsLink {
+  color: var(--color-blue-700);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+}
+
+.subTagsLink::after {
+  display: block;
+  content: attr(data-text);
+  font-weight: var(--font-weight-semibold);
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.subTagsScrollableDiv {
+  scrollbar-width: auto;
+  scrollbar-color: var(--color-gray-400) var(--color-gray-100);
+  max-height: calc(100vh - var(--space-20));
+  overflow: auto;
+}

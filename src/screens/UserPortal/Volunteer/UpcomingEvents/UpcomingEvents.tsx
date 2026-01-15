@@ -1,7 +1,7 @@
 // upcomingevents.tsx
 import React, { useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import styles from './UpcomingEvents.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
@@ -16,13 +16,13 @@ import {
 } from 'types/Volunteer/interface';
 import { IoLocationOutline } from 'react-icons/io5';
 import { IoIosHand } from 'react-icons/io';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   USER_EVENTS_VOLUNTEER,
   USER_VOLUNTEER_MEMBERSHIP,
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import { FaCheck } from 'react-icons/fa';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 /**
@@ -215,17 +215,14 @@ const UpcomingEvents = (): JSX.Element => {
         };
     }
   };
-  if (eventsLoading || membershipLoading) {
-    return <Loader size="xl" data-testid="loader" />;
-  }
+
   if (eventsError) {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded
-            className={styles.errorIcon}
-            aria-hidden="true"
-          />
+          <span className={styles.errorIcon} aria-hidden="true">
+            <WarningAmberRounded />
+          </span>
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Events' })}
           </h6>
@@ -247,8 +244,11 @@ const UpcomingEvents = (): JSX.Element => {
     dataTestIdPrefix: 'searchBy',
   };
   return (
-    <>
-      <AdminSearchFilterBar
+    <LoadingState
+      isLoading={eventsLoading || membershipLoading}
+      variant="spinner"
+    >
+      <SearchFilterBar
         searchPlaceholder={tCommon('searchBy', { item: t('titleOrLocation') })}
         searchValue={searchTerm}
         onSearchChange={setSearchTerm}
@@ -410,7 +410,7 @@ const UpcomingEvents = (): JSX.Element => {
         onSelectSeries={() => {}}
         onSelectInstance={() => {}}
       />
-    </>
+    </LoadingState>
   );
 };
 export default UpcomingEvents;

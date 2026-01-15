@@ -37,7 +37,7 @@
  * - Displays appropriate toast notifications for errors such as user not found,
  *   API unavailability, or email not registered.
  *
- * @returns {JSX.Element} The ForgotPassword component.
+ * @returns The ForgotPassword component.
  */
 import { useMutation } from '@apollo/client';
 import type { ChangeEvent } from 'react';
@@ -52,12 +52,12 @@ import {
 import KeyLogo from 'assets/svgs/key.svg?react';
 
 import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import styles from 'style/app-fixed.module.css';
+import styles from './ForgotPassword.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const ForgotPassword = (): JSX.Element => {
@@ -167,13 +167,11 @@ const ForgotPassword = (): JSX.Element => {
     }
   };
 
-  // Show loader while performing OTP or password reset operations
-  if (otpLoading || forgotPasswordLoading) {
-    return <Loader />;
-  }
-
   return (
-    <>
+    <LoadingState
+      isLoading={otpLoading || forgotPasswordLoading}
+      variant="spinner"
+    >
       <div className={styles.pageWrapper}>
         <div className="row container-fluid d-flex justify-content-center items-center">
           <div className="col-12 col-lg-4 px-0">
@@ -296,7 +294,7 @@ const ForgotPassword = (): JSX.Element => {
           </div>
         </div>
       </div>
-    </>
+    </LoadingState>
   );
 };
 

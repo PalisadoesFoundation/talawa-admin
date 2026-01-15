@@ -33,9 +33,11 @@
  */
 // translation-check-keyPrefix: eventListCard
 import React from 'react';
-import { Button, Form, Modal, Dropdown } from 'react-bootstrap';
+import { Button, Form, Dropdown } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import styles from 'style/app-fixed.module.css';
-import { DatePicker, TimePicker } from '@mui/x-date-pickers';
+import DatePicker from 'shared-components/DatePicker/DatePicker';
+import TimePicker from 'shared-components/TimePicker/TimePicker';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 import {
@@ -119,7 +121,10 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
     return months[monthIndex];
   };
 
-  const getRecurrenceOptions = () => {
+  const getRecurrenceOptions = (): Array<{
+    label: string;
+    value: InterfaceRecurrenceRule | 'custom';
+  }> => {
     const eventDate = new Date(eventStartDate);
     const dayOfWeek = eventDate.getDay();
     const dayOfMonth = eventDate.getDate();
@@ -224,289 +229,265 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
 
   return (
     <>
-      <Modal show={eventModalIsOpen} centered dialogClassName="" scrollable>
-        <Modal.Header>
-          <p className={styles.titlemodal}>{t('eventDetails')}</p>
-          <Button
-            variant="danger"
-            onClick={hideViewModal}
-            data-testid="eventModalCloseBtn"
-          >
-            <i className="fa fa-times"></i>
-          </Button>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <p className={styles.previewEventListCardModals}>
-              {t('eventName')}
-            </p>
-            <Form.Control
-              type="name"
-              id="eventname"
-              className={`mb-3 ${styles.inputField}`}
-              autoComplete="off"
-              data-testid="updateName"
-              data-cy="updateName"
-              required
-              value={
-                formState.name?.length > 100
-                  ? formState.name.substring(0, 100) + '...'
-                  : formState.name || ''
-              }
-              onChange={(e): void => {
-                setFormState({ ...formState, name: e.target.value });
-              }}
-              disabled={!canEditEvent}
-            />
-            <p className={styles.previewEventListCardModals}>
-              {tCommon('description')}
-            </p>
-            <Form.Control
-              type="eventdescrip"
-              id="eventdescrip"
-              className={`mb-3 ${styles.inputField}`}
-              autoComplete="off"
-              data-testid="updateDescription"
-              data-cy="updateDescription"
-              required
-              value={
-                formState.eventdescrip?.length > 256
-                  ? formState.eventdescrip.substring(0, 256) + '...'
-                  : formState.eventdescrip || ''
-              }
-              onChange={(e): void => {
-                setFormState({ ...formState, eventdescrip: e.target.value });
-              }}
-              disabled={!canEditEvent}
-            />
-            <p className={styles.previewEventListCardModals}>
-              {tCommon('location')}
-            </p>
-            <Form.Control
-              type="text"
-              id="location"
-              className={`mb-3 ${styles.inputField}`}
-              autoComplete="off"
-              data-testid="updateLocation"
-              data-cy="updateLocation"
-              required
-              value={formState.location || ''}
-              onChange={(e): void => {
-                setFormState({ ...formState, location: e.target.value });
-              }}
-              disabled={!canEditEvent}
-            />
-            <div className={styles.datediv}>
-              <div>
-                <DatePicker
-                  label={tCommon('startDate')}
-                  className={styles.datebox}
-                  value={dayjs(eventStartDate)}
-                  onChange={(date: Dayjs | null): void => {
-                    if (date) {
-                      const newStartDate = date.toDate();
-                      setEventStartDate(newStartDate);
-                      // Auto-adjust end date if it's before the new start date
-                      if (eventEndDate < newStartDate) {
-                        setEventEndDate(newStartDate);
-                      }
-                    }
-                  }}
-                  disabled={!canEditEvent}
-                />
-              </div>
-              <div>
-                <DatePicker
-                  label={tCommon('endDate')}
-                  className={styles.datebox}
-                  value={dayjs(eventEndDate)}
-                  onChange={(date: Dayjs | null): void => {
-                    if (date) {
-                      setEventEndDate(date?.toDate());
-                    }
-                  }}
-                  minDate={dayjs(eventStartDate)}
-                  disabled={!canEditEvent}
-                />
-              </div>
-            </div>
-            {!alldaychecked && (
-              <div className={styles.datediv}>
-                <div>
-                  <TimePicker
-                    label={tCommon('startTime')}
-                    className={styles.datebox}
-                    timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
-                    value={timeToDayJs(formState.startTime)}
-                    onChange={(time): void => {
-                      if (time) {
-                        setFormState({
-                          ...formState,
-                          startTime: time?.format('HH:mm:ss'),
-                          endTime:
-                            timeToDayJs(formState.endTime) < time
-                              ? time?.format('HH:mm:ss')
-                              : formState.endTime,
-                        });
-                      }
-                    }}
-                    disabled={alldaychecked || !canEditEvent}
-                  />
-                </div>
-                <div>
-                  <TimePicker
-                    label={tCommon('endTime')}
-                    className={styles.datebox}
-                    timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
-                    value={timeToDayJs(formState.endTime)}
-                    onChange={(time): void => {
-                      if (time) {
-                        setFormState({
-                          ...formState,
-                          endTime: time?.format('HH:mm:ss'),
-                        });
-                      }
-                    }}
-                    minTime={timeToDayJs(formState.startTime)}
-                    disabled={alldaychecked || !canEditEvent}
-                  />
-                </div>
-              </div>
-            )}
-            <div className={styles.checkboxdiv}>
-              <div className={styles.dispflexOrganizationEvents}>
-                <label htmlFor="allday">{t('allDay')}?</label>
-                <Form.Switch
-                  id="allday"
-                  type="checkbox"
-                  data-testid="updateAllDay"
-                  className={`me-4 ${styles.switch}`}
-                  checked={alldaychecked}
-                  onChange={(): void => {
-                    setAllDayChecked(!alldaychecked);
-                  }}
-                  disabled={!canEditEvent}
-                />
-              </div>
-              <div className={styles.dispflexOrganizationEvents}>
-                <label htmlFor="ispublic">{t('isPublic')}?</label>
-                <Form.Switch
-                  id="ispublic"
-                  type="checkbox"
-                  data-testid="updateIsPublic"
-                  className={`me-4 ${styles.switch}`}
-                  checked={publicchecked}
-                  onChange={(): void => {
-                    setPublicChecked(!publicchecked);
-                  }}
-                  disabled={!canEditEvent}
-                />
-              </div>
-              <div className={styles.dispflexOrganizationEvents}>
-                <label htmlFor="registrable">{t('isRegistrable')}?</label>
-                <Form.Switch
-                  id="registrable"
-                  type="checkbox"
-                  data-testid="updateRegistrable"
-                  className={`me-4 ${styles.switch}`}
-                  checked={registrablechecked}
-                  onChange={(): void => {
-                    setRegistrableChecked(!registrablechecked);
-                  }}
-                  disabled={!canEditEvent}
-                />
-              </div>
-            </div>
-            {canEditEvent && canChangeRecurrence && (
-              <div className="mb-3">
-                <Dropdown drop="down">
-                  <Dropdown.Toggle
-                    variant="outline-secondary"
-                    id="recurrence-dropdown"
-                    data-testid="recurrenceDropdown"
-                    className={`${styles.dropdown}`}
-                    disabled={!canEditEvent}
-                  >
-                    {getCurrentRecurrenceLabel()}
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu className="w-100">
-                    {getRecurrenceOptions().map((option, index) => (
-                      <Dropdown.Item
-                        key={index}
-                        onClick={() =>
-                          handleRecurrenceSelect({
-                            ...option,
-                            value: option.value as
-                              | InterfaceRecurrenceRule
-                              | 'custom'
-                              | null,
-                          })
-                        }
-                        data-testid={`recurrenceOption-${index}`}
-                      >
-                        {option.label}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </div>
-            )}
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          {canEditEvent && (
-            <Button
-              variant="success"
-              onClick={openEventDashboard}
-              data-testid="showEventDashboardBtn"
-              className={styles.addButton}
-              aria-label={t('showEventDashboard')}
-            >
-              {t('showEventDashboard')}
-            </Button>
-          )}
-          {canEditEvent && (
-            <Button
-              variant="success"
-              className={styles.addButton}
-              data-testid="previewUpdateEventBtn"
-              data-cy="previewUpdateEventBtn"
-              onClick={handleEventUpdate}
-              aria-label={t('editEvent')}
-            >
-              {t('editEvent')}
-            </Button>
-          )}
-          {canEditEvent && (
-            <Button
-              variant="danger"
-              data-testid="deleteEventModalBtn"
-              data-cy="deleteEventModalBtn"
-              className={styles.removeButton}
-              onClick={toggleDeleteModal}
-              aria-label={t('deleteEvent')}
-            >
-              {t('deleteEvent')}
-            </Button>
-          )}
-          {eventListCardProps.userRole === UserRole.REGULAR &&
-            !(eventListCardProps.creator?.id === userId) &&
-            (isRegistered ? (
-              <Button className={styles.addButton} variant="success" disabled>
-                {t('alreadyRegistered')}
-              </Button>
-            ) : (
+      <BaseModal
+        show={eventModalIsOpen}
+        onHide={hideViewModal}
+        title={t('eventDetails')}
+        dataTestId="previewEventModal"
+        footer={
+          <>
+            {canEditEvent && (
               <Button
-                className={styles.addButton}
                 variant="success"
-                onClick={registerEventHandler}
-                data-testid="registerEventBtn"
+                onClick={openEventDashboard}
+                data-testid="showEventDashboardBtn"
+                className={styles.addButton}
+                aria-label={t('showEventDashboard')}
               >
-                {tCommon('register')}
+                {t('showEventDashboard')}
               </Button>
-            ))}
-        </Modal.Footer>
-      </Modal>
+            )}
+            {canEditEvent && (
+              <Button
+                variant="success"
+                className={styles.addButton}
+                data-testid="previewUpdateEventBtn"
+                data-cy="previewUpdateEventBtn"
+                onClick={handleEventUpdate}
+                aria-label={t('editEvent')}
+              >
+                {t('editEvent')}
+              </Button>
+            )}
+            {canEditEvent && (
+              <Button
+                variant="danger"
+                data-testid="deleteEventModalBtn"
+                data-cy="deleteEventModalBtn"
+                className={styles.removeButton}
+                onClick={toggleDeleteModal}
+                aria-label={t('deleteEvent')}
+              >
+                {t('deleteEvent')}
+              </Button>
+            )}
+            {eventListCardProps.userRole === UserRole.REGULAR &&
+              !(eventListCardProps.creator?.id === userId) &&
+              (isRegistered ? (
+                <Button className={styles.addButton} variant="success" disabled>
+                  {t('alreadyRegistered')}
+                </Button>
+              ) : (
+                <Button
+                  className={styles.addButton}
+                  variant="success"
+                  onClick={registerEventHandler}
+                  data-testid="registerEventBtn"
+                >
+                  {tCommon('register')}
+                </Button>
+              ))}
+          </>
+        }
+        centered={true}
+      >
+        <Form>
+          {/* Event Name */}
+          <p className={styles.previewEventListCardModals}>{t('eventName')}</p>
+          <Form.Control
+            type="name"
+            id="eventname"
+            className={`mb-3 ${styles.inputField}`}
+            autoComplete="off"
+            data-testid="updateName"
+            data-cy="updateName"
+            required
+            value={
+              formState.name?.length > 100
+                ? formState.name.substring(0, 100) + '...'
+                : formState.name || ''
+            }
+            onChange={(e) =>
+              setFormState({ ...formState, name: e.target.value })
+            }
+            disabled={!canEditEvent}
+          />
+
+          {/* Description */}
+          <p className={styles.previewEventListCardModals}>
+            {tCommon('description')}
+          </p>
+          <Form.Control
+            type="eventdescrip"
+            id="eventdescrip"
+            className={`mb-3 ${styles.inputField}`}
+            autoComplete="off"
+            data-testid="updateDescription"
+            data-cy="updateDescription"
+            required
+            value={
+              formState.eventdescrip?.length > 256
+                ? formState.eventdescrip.substring(0, 256) + '...'
+                : formState.eventdescrip || ''
+            }
+            onChange={(e) =>
+              setFormState({ ...formState, eventdescrip: e.target.value })
+            }
+            disabled={!canEditEvent}
+          />
+
+          {/* Location */}
+          <p className={styles.previewEventListCardModals}>
+            {tCommon('location')}
+          </p>
+          <Form.Control
+            type="text"
+            id="location"
+            className={`mb-3 ${styles.inputField}`}
+            autoComplete="off"
+            data-testid="updateLocation"
+            data-cy="updateLocation"
+            required
+            value={formState.location || ''}
+            onChange={(e) =>
+              setFormState({ ...formState, location: e.target.value })
+            }
+            disabled={!canEditEvent}
+          />
+
+          {/* DatePickers & TimePickers */}
+          <div className={styles.datediv}>
+            <DatePicker
+              label={tCommon('startDate')}
+              className={styles.datebox}
+              value={dayjs(eventStartDate)}
+              data-testid="startDate"
+              onChange={(date) => {
+                if (date) {
+                  const newStartDate = date.toDate();
+                  setEventStartDate(newStartDate);
+                  if (eventEndDate < newStartDate)
+                    setEventEndDate(newStartDate);
+                }
+              }}
+              disabled={!canEditEvent}
+            />
+            <DatePicker
+              label={tCommon('endDate')}
+              className={styles.datebox}
+              value={dayjs(eventEndDate)}
+              data-testid="endDate"
+              onChange={(date) => date && setEventEndDate(date.toDate())}
+              minDate={dayjs(eventStartDate)}
+              disabled={!canEditEvent}
+            />
+          </div>
+
+          {!alldaychecked && (
+            <div className={styles.datediv}>
+              <TimePicker
+                label={tCommon('startTime')}
+                className={styles.datebox}
+                value={timeToDayJs(formState.startTime)}
+                data-testid="startTime"
+                onChange={(time) => {
+                  if (time) {
+                    setFormState({
+                      ...formState,
+                      startTime: time.format('HH:mm:ss'),
+                      endTime:
+                        timeToDayJs(formState.endTime) < time
+                          ? time.format('HH:mm:ss')
+                          : formState.endTime,
+                    });
+                  }
+                }}
+                disabled={!canEditEvent}
+              />
+              <TimePicker
+                label={tCommon('endTime')}
+                className={styles.datebox}
+                value={timeToDayJs(formState.endTime)}
+                data-testid="endTime"
+                onChange={(time) =>
+                  time &&
+                  setFormState({
+                    ...formState,
+                    endTime: time.format('HH:mm:ss'),
+                  })
+                }
+                minTime={timeToDayJs(formState.startTime)}
+                disabled={!canEditEvent}
+              />
+            </div>
+          )}
+
+          {/* Checkboxes */}
+          <div className={styles.checkboxdiv}>
+            <div className={styles.dispflexOrganizationEvents}>
+              <label htmlFor="allday">{t('allDay')}?</label>
+              <Form.Switch
+                id="allday"
+                type="checkbox"
+                data-testid="updateAllDay"
+                className={`me-4 ${styles.switch}`}
+                checked={alldaychecked}
+                onChange={() => setAllDayChecked(!alldaychecked)}
+                disabled={!canEditEvent}
+              />
+            </div>
+            <div className={styles.dispflexOrganizationEvents}>
+              <label htmlFor="ispublic">{t('isPublic')}?</label>
+              <Form.Switch
+                id="ispublic"
+                type="checkbox"
+                data-testid="updateIsPublic"
+                className={`me-4 ${styles.switch}`}
+                checked={publicchecked}
+                onChange={() => setPublicChecked(!publicchecked)}
+                disabled={!canEditEvent}
+              />
+            </div>
+            <div className={styles.dispflexOrganizationEvents}>
+              <label htmlFor="registrable">{t('isRegistrable')}?</label>
+              <Form.Switch
+                id="registrable"
+                type="checkbox"
+                data-testid="updateRegistrable"
+                className={`me-4 ${styles.switch}`}
+                checked={registrablechecked}
+                onChange={() => setRegistrableChecked(!registrablechecked)}
+                disabled={!canEditEvent}
+              />
+            </div>
+          </div>
+
+          {/* Recurrence Dropdown */}
+          {canEditEvent && canChangeRecurrence && (
+            <Dropdown className="mb-3">
+              <Dropdown.Toggle
+                variant="outline-secondary"
+                id="recurrence-dropdown"
+                data-testid="recurrenceDropdown"
+                className={`${styles.dropdown}`}
+              >
+                {getCurrentRecurrenceLabel()}
+              </Dropdown.Toggle>
+              <Dropdown.Menu className="w-100">
+                {getRecurrenceOptions().map((option, index) => (
+                  <Dropdown.Item
+                    key={index}
+                    data-testid={`recurrenceOption-${index}`}
+                    onClick={() => handleRecurrenceSelect(option)}
+                  >
+                    {option.label}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          )}
+        </Form>
+      </BaseModal>
 
       {recurrence && isRecurringEvent && (
         <CustomRecurrenceModal

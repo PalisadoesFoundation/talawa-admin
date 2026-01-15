@@ -18,18 +18,19 @@
  * - Custom components: `Loader` and `UpdateSession`.
  * - Utility functions: `convertToBase64` and `errorHandler`.
  *
- * @returns {JSX.Element} The rendered CommunityProfile component.
+ * @returns The rendered CommunityProfile component.
  *
- * @component
+ * component
  * @example
  * // Usage in a parent component
+ * ```tsx
  * import CommunityProfile from './CommunityProfile';
  *
  * function App() {
  *   return <CommunityProfile />;
  * }
- *
- * @remarks
+ *```
+ * remarks
  * - The component uses `useEffect` to populate the form with fetched data.
  * - Social media links are displayed with corresponding icons.
  * - Form submission and reset operations are handled asynchronously.
@@ -40,7 +41,7 @@ import { Button, Card, Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
 import {
   UPDATE_COMMUNITY_PG,
@@ -57,7 +58,7 @@ import {
   SlackLogo,
 } from 'assets/svgs/social-icons';
 import convertToBase64 from 'utils/convertToBase64';
-import styles from 'style/app-fixed.module.css';
+import styles from './CommunityProfile.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import UpdateSession from '../../../components/UpdateSession/UpdateSession';
 
@@ -220,12 +221,8 @@ const CommunityProfile = (): JSX.Element => {
     }
   };
 
-  if (loading) {
-    <Loader />;
-  }
-
   return (
-    <>
+    <LoadingState isLoading={loading} variant="spinner">
       <Card border="0" className={`${styles.card} "rounded-4 my-4 shadow-sm"`}>
         <div className={styles.cardHeader}>
           <div className={styles.cardTitle}>{t('editProfile')}</div>
@@ -437,7 +434,7 @@ const CommunityProfile = (): JSX.Element => {
       </Card>
 
       <UpdateSession />
-    </>
+    </LoadingState>
   );
 };
 

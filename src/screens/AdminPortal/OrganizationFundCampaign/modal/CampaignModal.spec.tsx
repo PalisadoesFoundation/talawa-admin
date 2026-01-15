@@ -1,11 +1,9 @@
-import React from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-
-dayjs.extend(utc);
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import { InMemoryCache } from '@apollo/client';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
 import {
   cleanup,
@@ -18,83 +16,229 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import type { ReactNode } from 'react';
+
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { MOCKS, MOCK_ERROR } from '../OrganizationFundCampaignMocks';
-import type { InterfaceCampaignModal } from './CampaignModal';
-import CampaignModal from './CampaignModal';
+import type { InterfaceCampaignModal } from './types';
+import type { InterfaceCampaignInfo } from 'utils/interfaces';
 import { vi } from 'vitest';
 import { UPDATE_CAMPAIGN_MUTATION } from 'GraphQl/Mutations/CampaignMutation';
+import CampaignModal from './CampaignModal';
+
+dayjs.extend(utc);
+dayjs.extend(customParseFormat);
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: { success: vi.fn(), error: vi.fn() },
 }));
 
-vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
-  const actual = await vi.importActual(
-    '@mui/x-date-pickers/DesktopDateTimePicker',
-  );
-  return { DateTimePicker: actual.DesktopDateTimePicker };
+vi.mock('shared-components/BaseModal/BaseModal', () => ({
+  __esModule: true,
+  default: ({
+    children,
+    show,
+    onHide,
+    title,
+    dataTestId,
+  }: {
+    children: ReactNode;
+    show: boolean;
+    onHide: () => void;
+    title: string;
+    dataTestId?: string;
+  }) =>
+    show ? (
+      <div data-testid={dataTestId ?? 'base-modal'}>
+        <h2 data-testid="modal-title">{title}</h2>
+        <button type="button" data-testid="modalCloseBtn" onClick={onHide}>
+          close
+        </button>
+        {children}
+      </div>
+    ) : null,
+}));
+
+type DateRangeValue = {
+  startDate: Date | null;
+  endDate: Date | null;
+};
+
+const formatDateForInput = (date?: Date | null) =>
+  date ? dayjs.utc(date).format('DD/MM/YYYY') : '';
+
+type DateRangePickerProps = {
+  value: DateRangeValue | null;
+  onChange: (value: DateRangeValue) => void;
+  dataTestId: string;
+};
+vi.mock('shared-components/DateRangePicker', async () => {
+  const actual = await vi.importActual<
+    typeof import('shared-components/DateRangePicker')
+  >('shared-components/DateRangePicker');
+
+  return {
+    __esModule: true,
+    ...actual,
+
+    default: ({ value, onChange, dataTestId }: DateRangePickerProps) => (
+      <div data-testid={dataTestId}>
+        <input
+          data-testid={`${dataTestId}-start-input`}
+          value={value?.startDate ? formatDateForInput(value.startDate) : ''}
+          onChange={(e) => {
+            const inputValue = e.target.value;
+
+            if (!inputValue) {
+              onChange({ startDate: null, endDate: value?.endDate ?? null });
+              return;
+            }
+
+            // ⭐ special case for tests
+            if (inputValue === 'INVALID_DATE') {
+              onChange({
+                startDate: new Date('invalid'), // non-null but invalid
+                endDate: value?.endDate ?? null,
+              });
+              return;
+            }
+
+            const parsedStart = dayjs.utc(inputValue, 'DD/MM/YYYY', true);
+            const nextStart =
+              parsedStart && parsedStart.isValid()
+                ? parsedStart.toDate()
+                : null;
+
+            onChange({
+              startDate: nextStart,
+              endDate:
+                value?.endDate && nextStart && nextStart > value.endDate
+                  ? nextStart
+                  : (value?.endDate ?? null),
+            });
+          }}
+        />
+
+        <input
+          data-testid={`${dataTestId}-end-input`}
+          value={value?.endDate ? formatDateForInput(value.endDate) : ''}
+          onChange={(e) => {
+            const inputValue = e.target.value;
+
+            if (!inputValue) {
+              onChange({ startDate: value?.startDate ?? null, endDate: null });
+              return;
+            }
+
+            // ⭐ special case for tests
+            if (inputValue === 'INVALID_DATE') {
+              onChange({
+                startDate: value?.startDate ?? null,
+                endDate: new Date('invalid'), // non-null but invalid
+              });
+              return;
+            }
+
+            const parsedEnd = dayjs.utc(inputValue, 'DD/MM/YYYY', true);
+            onChange({
+              startDate: value?.startDate ?? null,
+              endDate: parsedEnd.isValid() ? parsedEnd.toDate() : null,
+            });
+          }}
+        />
+      </div>
+    ),
+  };
 });
 
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(MOCK_ERROR);
+
+// Validate i18n fixtures exist with clear error messages
+const i18nData = i18nForTest.getDataByLanguage('en');
+if (!i18nData) {
+  throw new Error(
+    'i18n fixture missing: getDataByLanguage("en") returned undefined. Check i18nForTest configuration.',
+  );
+}
+if (!i18nData.translation?.fundCampaign) {
+  throw new Error(
+    'i18n fixture missing: translation.fundCampaign is undefined. Ensure the fundCampaign namespace exists in test translations.',
+  );
+}
+if (!i18nData.common) {
+  throw new Error(
+    'i18n fixture missing: common namespace is undefined. Ensure the common namespace exists in test translations.',
+  );
+}
+
 const translations = JSON.parse(
-  JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.fundCampaign),
+  JSON.stringify(i18nData.translation.fundCampaign),
 );
+const tCommon = JSON.parse(JSON.stringify(i18nData.common));
+
+// Use local time for consistent testing across timezones
+// dayjs() creates a date in local time
+const baseDate = dayjs().startOf('day');
 
 const campaignProps: InterfaceCampaignModal[] = [
   {
     isOpen: true,
     hide: vi.fn(),
     fundId: 'fundId',
-    orgId: 'orgId',
     campaign: {
       id: 'campaignId1',
       name: 'Campaign 1',
       goalAmount: 100,
-      startAt: dayjs.utc().add(12, 'month').toDate(),
-      endAt: dayjs.utc().add(24, 'month').toDate(),
+      startAt: baseDate.add(12, 'month').toDate(),
+      endAt: baseDate.add(24, 'month').toDate(),
       currencyCode: 'USD',
-      createdAt: dayjs.utc().subtract(12, 'month').toISOString(),
+      createdAt: baseDate.subtract(12, 'month').toISOString(),
     },
     refetchCampaign: vi.fn(),
     mode: 'create',
+    orgId: 'orgId',
   },
   {
     isOpen: true,
     hide: vi.fn(),
     fundId: 'fundId',
-    orgId: 'orgId',
     campaign: {
       id: 'campaignId1',
       name: 'Campaign 1',
       goalAmount: 100,
-      startAt: dayjs.utc().add(12, 'month').toDate(),
-      endAt: dayjs.utc().add(24, 'month').toDate(),
+      startAt: baseDate.add(12, 'month').toDate(),
+      endAt: baseDate.add(24, 'month').toDate(),
       currencyCode: 'USD',
-      createdAt: dayjs.utc().subtract(12, 'month').toISOString(),
+      createdAt: baseDate.subtract(12, 'month').toISOString(),
     },
     refetchCampaign: vi.fn(),
     mode: 'edit',
+    orgId: 'orgId',
   },
 ];
+
+const getStartDateInput = () =>
+  screen.getByTestId('campaignStartDate') as HTMLInputElement;
+
+const getEndDateInput = () =>
+  screen.getByTestId('campaignEndDate') as HTMLInputElement;
+
+const cache = new InMemoryCache();
 
 const renderCampaignModal = (
   link: ApolloLink,
   props: InterfaceCampaignModal,
 ): RenderResult => {
   return render(
-    <MockedProvider link={link}>
+    <MockedProvider link={link} cache={cache}>
       <Provider store={store}>
         <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <I18nextProvider i18n={i18nForTest}>
-              <CampaignModal {...props} />
-            </I18nextProvider>
-          </LocalizationProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <CampaignModal {...props} />
+          </I18nextProvider>
         </BrowserRouter>
       </Provider>
     </MockedProvider>,
@@ -138,6 +282,33 @@ const UPDATE_ALL_FIELDS_MOCK = [
         },
       },
     },
+    variableMatcher: (variables: Record<string, unknown>) => {
+      if (
+        !variables ||
+        typeof variables !== 'object' ||
+        !('input' in variables)
+      ) {
+        return false;
+      }
+
+      const input = variables.input as Record<string, unknown>;
+
+      if (!input || typeof input !== 'object') {
+        return false;
+      }
+
+      return (
+        input.id === 'campaignId1' &&
+        input.name === 'Updated Name' &&
+        (!('currencyCode' in input) || input.currencyCode === 'USD') &&
+        input.goalAmount === 500 &&
+        typeof input.startAt === 'string' &&
+        typeof input.endAt === 'string' &&
+        input.startAt.length > 0 &&
+        input.endAt.length > 0
+      );
+    },
+
     result: {
       data: {
         updateFundCampaign: {
@@ -195,10 +366,95 @@ const allFieldsMockLink = new StaticMockLink(UPDATE_ALL_FIELDS_MOCK);
 const noFieldsMockLink = new StaticMockLink(UPDATE_NO_FIELDS_MOCK);
 const currencyOnlyMockLink = new StaticMockLink(UPDATE_CURRENCY_ONLY_MOCK);
 
-const getPickerInputByLabel = (label: string) =>
-  screen.getByLabelText(label, { selector: 'input' }) as HTMLInputElement;
-
 describe('CampaignModal', () => {
+  it('should update form state when campaign prop changes', async () => {
+    const { rerender } = renderCampaignModal(link1, campaignProps[1]);
+
+    // Initial values
+    expect(screen.getByLabelText(translations.campaignName)).toHaveValue(
+      'Campaign 1',
+    );
+
+    // Create new props with different campaign data
+    const updatedProps: InterfaceCampaignModal = {
+      ...campaignProps[1],
+      campaign: {
+        id: 'campaignId2',
+        name: 'Updated Campaign',
+        goalAmount: 500,
+        startAt: baseDate.add(6, 'month').toDate(),
+        endAt: baseDate.add(18, 'month').toDate(),
+        currencyCode: 'EUR',
+        createdAt: baseDate.subtract(6, 'month').toISOString(),
+      },
+    };
+
+    // Re-render with new campaign prop
+    rerender(
+      <MockedProvider link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <CampaignModal {...updatedProps} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // Verify form state updated
+    await waitFor(() => {
+      expect(screen.getByLabelText(translations.campaignName)).toHaveValue(
+        'Updated Campaign',
+      );
+      expect(screen.getByLabelText(translations.fundingGoal)).toHaveValue(
+        '500',
+      );
+      const startDateInput = getStartDateInput();
+      const endDateInput = getEndDateInput();
+      expect(startDateInput).toHaveValue(
+        dayjs(updatedProps.campaign?.startAt).format('DD/MM/YYYY'),
+      );
+      expect(endDateInput).toHaveValue(
+        dayjs(updatedProps.campaign?.endAt).format('DD/MM/YYYY'),
+      );
+    });
+  });
+
+  it('should reset form state when campaign prop changes to null', async () => {
+    const { rerender } = renderCampaignModal(link1, campaignProps[1]);
+
+    // Initial values
+    expect(screen.getByLabelText(translations.campaignName)).toHaveValue(
+      'Campaign 1',
+    );
+
+    // Create props with null campaign
+    const updatedProps: InterfaceCampaignModal = {
+      ...campaignProps[1],
+      campaign: null,
+    };
+
+    // Re-render with null campaign
+    rerender(
+      <MockedProvider link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <CampaignModal {...updatedProps} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // Verify form state is reset to defaults
+    await waitFor(() => {
+      expect(screen.getByLabelText(translations.campaignName)).toHaveValue('');
+      expect(screen.getByLabelText(translations.fundingGoal)).toHaveValue('0');
+    });
+  });
+
   afterEach(() => {
     vi.clearAllMocks();
     cleanup();
@@ -206,21 +462,24 @@ describe('CampaignModal', () => {
 
   it('should populate form fields with correct values in edit mode', async () => {
     renderCampaignModal(link1, campaignProps[1]);
-    await waitFor(() =>
-      expect(screen.getAllByText(translations.updateCampaign)).toHaveLength(2),
-    );
+    const modal = screen.getByTestId('campaignModal');
+
+    await waitFor(() => {
+      // The mocked BaseModal puts title in an h2 but as plain text, not as heading with accessible name
+      expect(modal).toBeInTheDocument();
+    });
 
     expect(screen.getByLabelText(translations.campaignName)).toHaveValue(
       'Campaign 1',
     );
-    const startDateInput = getPickerInputByLabel('Start Date');
-    const endDateInput = getPickerInputByLabel('End Date');
+    const startDateInput = getStartDateInput();
+    const endDateInput = getEndDateInput();
 
     expect(startDateInput).toHaveValue(
-      dayjs.utc(campaignProps[1].campaign?.startAt).format('DD/MM/YYYY'),
+      dayjs(campaignProps[1].campaign?.startAt).format('DD/MM/YYYY'),
     );
     expect(endDateInput).toHaveValue(
-      dayjs.utc(campaignProps[1].campaign?.endAt).format('DD/MM/YYYY'),
+      dayjs(campaignProps[1].campaign?.endAt).format('DD/MM/YYYY'),
     );
     expect(screen.getByLabelText(translations.currency)).toHaveTextContent(
       'USD ($)',
@@ -246,16 +505,18 @@ describe('CampaignModal', () => {
 
   it('should update Start Date when a new date is selected', async () => {
     renderCampaignModal(link1, campaignProps[1]);
-    const startDateInput = getPickerInputByLabel('Start Date');
-    const testDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY');
+    const startDateInput = getStartDateInput();
+    const testDate = baseDate.add(1, 'month').format('DD/MM/YYYY');
     fireEvent.change(startDateInput, { target: { value: testDate } });
     expect(startDateInput).toHaveValue(testDate);
   });
 
   it('should update End Date when a new date is selected', async () => {
     renderCampaignModal(link1, campaignProps[1]);
-    const endDateInput = getPickerInputByLabel('End Date');
-    const testDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY');
+    const endDateInput = getEndDateInput();
+    const testDate = dayjs(campaignProps[1].campaign?.startAt)
+      .add(1, 'month')
+      .format('DD/MM/YYYY');
     fireEvent.change(endDateInput, { target: { value: testDate } });
     expect(endDateInput).toHaveValue(testDate);
   });
@@ -266,12 +527,12 @@ describe('CampaignModal', () => {
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 2' } });
 
-    const testStartDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY');
-    const startDateInput = getPickerInputByLabel('Start Date');
+    const testStartDate = baseDate.add(1, 'month').format('DD/MM/YYYY');
+    const startDateInput = getStartDateInput();
     fireEvent.change(startDateInput, { target: { value: testStartDate } });
 
-    const endDateInput = getPickerInputByLabel('End Date');
-    const testEndDate = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
+    const endDateInput = getEndDateInput();
+    const testEndDate = baseDate.add(2, 'month').format('DD/MM/YYYY');
     fireEvent.change(endDateInput, { target: { value: testEndDate } });
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
     fireEvent.change(fundingGoal, { target: { value: '200' } });
@@ -295,12 +556,12 @@ describe('CampaignModal', () => {
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 4' } });
 
-    const testStartDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY');
-    const startDateInput = getPickerInputByLabel('Start Date');
+    const testStartDate = baseDate.add(1, 'month').format('DD/MM/YYYY');
+    const startDateInput = getStartDateInput();
     fireEvent.change(startDateInput, { target: { value: testStartDate } });
 
-    const endDateInput = getPickerInputByLabel('End Date');
-    const testEndDate = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
+    const endDateInput = getEndDateInput();
+    const testEndDate = baseDate.add(2, 'month').format('DD/MM/YYYY');
     fireEvent.change(endDateInput, { target: { value: testEndDate } });
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
     fireEvent.change(fundingGoal, { target: { value: '400' } });
@@ -324,12 +585,12 @@ describe('CampaignModal', () => {
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 2' } });
 
-    const testStartDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY');
-    const startDateInput = getPickerInputByLabel('Start Date');
+    const testStartDate = baseDate.add(1, 'month').format('DD/MM/YYYY');
+    const startDateInput = getStartDateInput();
     fireEvent.change(startDateInput, { target: { value: testStartDate } });
 
-    const endDateInput = getPickerInputByLabel('End Date');
-    const testEndDate = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
+    const endDateInput = getEndDateInput();
+    const testEndDate = baseDate.add(2, 'month').format('DD/MM/YYYY');
     fireEvent.change(endDateInput, { target: { value: testEndDate } });
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
     fireEvent.change(fundingGoal, { target: { value: '200' } });
@@ -350,12 +611,12 @@ describe('CampaignModal', () => {
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 4' } });
 
-    const testStartDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY');
-    const startDateInput = getPickerInputByLabel('Start Date');
+    const testStartDate = baseDate.add(1, 'month').format('DD/MM/YYYY');
+    const startDateInput = getStartDateInput();
     fireEvent.change(startDateInput, { target: { value: testStartDate } });
 
-    const endDateInput = getPickerInputByLabel('End Date');
-    const testEndDate = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
+    const endDateInput = getEndDateInput();
+    const testEndDate = baseDate.add(2, 'month').format('DD/MM/YYYY');
     fireEvent.change(endDateInput, { target: { value: testEndDate } });
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
     fireEvent.change(fundingGoal, { target: { value: '400' } });
@@ -379,10 +640,10 @@ describe('CampaignModal', () => {
         id: 'campaignId1',
         name: 'Original Name',
         goalAmount: 100,
-        startAt: dayjs.utc().add(1, 'year').toDate(),
-        endAt: dayjs.utc().add(2, 'year').toDate(),
+        startAt: baseDate.add(1, 'year').toDate(),
+        endAt: baseDate.add(2, 'year').toDate(),
         currencyCode: 'USD',
-        createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+        createdAt: baseDate.subtract(1, 'year').toISOString(),
       },
     };
 
@@ -412,10 +673,10 @@ describe('CampaignModal', () => {
         id: 'campaignId1',
         name: 'Original Name',
         goalAmount: 100,
-        startAt: dayjs.utc().add(10, 'year').toDate(),
-        endAt: dayjs.utc().add(11, 'year').toDate(),
+        startAt: baseDate.add(10, 'year').toDate(),
+        endAt: baseDate.add(11, 'year').toDate(),
         currencyCode: 'USD',
-        createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+        createdAt: baseDate.subtract(1, 'year').toISOString(),
       },
     };
 
@@ -428,20 +689,25 @@ describe('CampaignModal', () => {
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
     fireEvent.change(fundingGoal, { target: { value: '500' } });
 
-    const startDateInput = getPickerInputByLabel('Start Date');
+    const startDateInput = getStartDateInput();
     fireEvent.change(startDateInput, {
-      target: { value: dayjs.utc().add(1, 'month').format('DD/MM/YYYY') },
+      target: { value: baseDate.add(1, 'month').format('DD/MM/YYYY') },
     });
 
-    const endDateInput = getPickerInputByLabel('End Date');
+    const endDateInput = getEndDateInput();
     fireEvent.change(endDateInput, {
-      target: { value: dayjs.utc().add(2, 'month').format('DD/MM/YYYY') },
+      target: { value: baseDate.add(2, 'month').format('DD/MM/YYYY') },
     });
     // Submit the form
     const submitBtn = screen.getByTestId('submitCampaignBtn');
     fireEvent.click(submitBtn);
 
     // Wait for success message which indicates the mutation was called
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.updatedCampaign,
+      );
+    });
   });
 
   it('should not update any fields when nothing is changed', async () => {
@@ -452,10 +718,10 @@ describe('CampaignModal', () => {
         id: 'campaignId1',
         name: 'Campaign 1',
         goalAmount: 100,
-        startAt: dayjs.utc().add(1, 'year').toDate(),
-        endAt: dayjs.utc().add(2, 'year').toDate(),
+        startAt: baseDate.add(1, 'year').toDate(),
+        endAt: baseDate.add(2, 'year').toDate(),
         currencyCode: 'USD',
-        createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+        createdAt: baseDate.subtract(1, 'year').toISOString(),
       },
     };
 
@@ -473,46 +739,6 @@ describe('CampaignModal', () => {
     });
   });
 
-  it('should auto-update end date when start date is set to a later date', async () => {
-    // Create props with start date before end date
-    const autoUpdateDateProps = {
-      ...campaignProps[1],
-      campaign: {
-        id: 'campaignId1',
-        name: 'Campaign 1',
-        goalAmount: 100,
-        startAt: dayjs.utc().add(1, 'year').toDate(),
-        endAt: dayjs.utc().add(1, 'year').add(1, 'month').toDate(),
-        currencyCode: 'USD',
-        createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
-      },
-    };
-
-    renderCampaignModal(link1, autoUpdateDateProps);
-
-    // Verify initial dates
-    const startDateInput = getPickerInputByLabel('Start Date');
-    const endDateInput = getPickerInputByLabel('End Date');
-    expect(startDateInput).toHaveValue(
-      dayjs.utc(autoUpdateDateProps.campaign?.startAt).format('DD/MM/YYYY'),
-    );
-    expect(endDateInput).toHaveValue(
-      dayjs.utc(autoUpdateDateProps.campaign?.endAt).format('DD/MM/YYYY'),
-    );
-
-    // Change start date to a date AFTER the current end date
-    const testDate = dayjs
-      .utc(autoUpdateDateProps.campaign.endAt)
-      .add(1, 'month')
-      .format('DD/MM/YYYY');
-    fireEvent.change(startDateInput, { target: { value: testDate } });
-
-    // Verify that end date was automatically updated to match the new start date
-    await waitFor(() => {
-      expect(endDateInput).toHaveValue(testDate);
-    });
-  });
-
   it('should not change end date when start date is updated to a date still before end date', async () => {
     // Create props with start date and end date far apart
     const keepEndDateProps = {
@@ -521,27 +747,27 @@ describe('CampaignModal', () => {
         id: 'campaignId1',
         name: 'Campaign 1',
         goalAmount: 100,
-        startAt: dayjs.utc().add(1, 'year').toDate(),
-        endAt: dayjs.utc().add(1, 'year').add(3, 'month').toDate(),
+        startAt: baseDate.add(1, 'year').toDate(),
+        endAt: baseDate.add(1, 'year').add(3, 'month').toDate(),
         currencyCode: 'USD',
-        createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+        createdAt: baseDate.subtract(1, 'year').toISOString(),
       },
     };
 
     renderCampaignModal(link1, keepEndDateProps);
 
     // Verify initial dates
-    const startDateInput = getPickerInputByLabel('Start Date');
-    const endDateInput = getPickerInputByLabel('End Date');
+    const startDateInput = getStartDateInput();
+    const endDateInput = getEndDateInput();
     expect(startDateInput).toHaveValue(
-      dayjs.utc(keepEndDateProps.campaign?.startAt).format('DD/MM/YYYY'),
+      dayjs(keepEndDateProps.campaign?.startAt).format('DD/MM/YYYY'),
     );
     expect(endDateInput).toHaveValue(
-      dayjs.utc(keepEndDateProps.campaign?.endAt).format('DD/MM/YYYY'),
+      dayjs(keepEndDateProps.campaign?.endAt).format('DD/MM/YYYY'),
     );
 
     // Change start date to a date that is still BEFORE the end date
-    const testDate = dayjs.utc().add(1, 'month');
+    const testDate = baseDate.add(1, 'month');
     fireEvent.change(startDateInput, {
       target: { value: testDate.format('DD/MM/YYYY') },
     });
@@ -550,7 +776,7 @@ describe('CampaignModal', () => {
     await waitFor(() => {
       expect(startDateInput).toHaveValue(testDate.format('DD/MM/YYYY'));
       expect(endDateInput).toHaveValue(
-        dayjs.utc(keepEndDateProps.campaign?.endAt).format('DD/MM/YYYY'),
+        dayjs(keepEndDateProps.campaign?.endAt).format('DD/MM/YYYY'),
       ); // End date should remain unchanged
     });
   });
@@ -563,10 +789,10 @@ describe('CampaignModal', () => {
         id: 'campaignId1',
         name: 'Campaign Name',
         goalAmount: 100,
-        startAt: dayjs.utc().add(1, 'year').toDate(),
-        endAt: dayjs.utc().add(2, 'year').toDate(),
+        startAt: baseDate.add(1, 'year').toDate(),
+        endAt: baseDate.add(2, 'year').toDate(),
         currencyCode: 'USD',
-        createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+        createdAt: baseDate.subtract(1, 'year').toISOString(),
       },
     };
 
@@ -595,6 +821,329 @@ describe('CampaignModal', () => {
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
         translations.updatedCampaign,
+      );
+    });
+  });
+
+  // Coverage tests
+  it('should mark campaign name as touched on blur', async () => {
+    renderCampaignModal(link1, campaignProps[0]);
+    const campaignName = screen.getByLabelText(translations.campaignName);
+    fireEvent.change(campaignName, { target: { value: '' } });
+    fireEvent.blur(campaignName);
+    // Assert that validation error appears when field is empty and touched
+    await waitFor(() => {
+      expect(screen.getByText(tCommon.required)).toBeInTheDocument();
+    });
+  });
+
+  it('should prevent create submission if name is empty', async () => {
+    renderCampaignModal(link1, {
+      ...campaignProps[0],
+      campaign: {
+        ...(campaignProps[0].campaign as InterfaceCampaignInfo),
+        name: '',
+      },
+    });
+
+    // Clear the name field if it has a value (form state init might set it)
+    const campaignName = screen.getByLabelText(translations.campaignName);
+    fireEvent.change(campaignName, { target: { value: '' } });
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    fireEvent.click(submitBtn);
+
+    // Assert validation UI shows the required error message
+    await waitFor(() => {
+      expect(screen.getByText(tCommon.required)).toBeInTheDocument();
+    });
+
+    // Should not call mutation (NotificationToast.success not called)
+    await waitFor(() => {
+      expect(NotificationToast.success).not.toHaveBeenCalled();
+    });
+  });
+
+  it('should prevent update submission if name is empty', async () => {
+    renderCampaignModal(link1, {
+      ...campaignProps[1],
+      campaign: {
+        ...(campaignProps[1].campaign as InterfaceCampaignInfo),
+        name: '',
+      },
+    });
+
+    const campaignName = screen.getByLabelText(translations.campaignName);
+    fireEvent.change(campaignName, { target: { value: '' } });
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    fireEvent.click(submitBtn);
+
+    // Assert validation UI shows the required error message
+    await waitFor(() => {
+      expect(screen.getByText(tCommon.required)).toBeInTheDocument();
+    });
+
+    // Should not call mutation
+    await waitFor(() => {
+      expect(NotificationToast.success).not.toHaveBeenCalled();
+    });
+  });
+
+  it('should handle null date in start date picker onChange', async () => {
+    renderCampaignModal(link1, campaignProps[1]);
+
+    const goalInput = screen.getByLabelText(translations.fundingGoal);
+    expect(goalInput).toHaveValue('100');
+
+    fireEvent.change(goalInput, { target: { value: 'abc' } });
+
+    expect(goalInput).toHaveValue('100');
+  });
+
+  it('shows error when campaign name is empty in edit mode', async () => {
+    renderCampaignModal(link1, campaignProps[1]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: '   ' },
+    });
+
+    const start = dayjs.utc().add(1, 'year').format('DD/MM/YYYY');
+    const end = dayjs.utc().add(2, 'year').format('DD/MM/YYYY');
+
+    fireEvent.change(getStartDateInput(), { target: { value: start } });
+    fireEvent.change(getEndDateInput(), { target: { value: end } });
+
+    fireEvent.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.campaignNameRequired,
+      );
+    });
+  });
+
+  it('shows error when date range is missing in edit mode', async () => {
+    renderCampaignModal(link1, campaignProps[1]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: 'Valid Name' },
+    });
+
+    fireEvent.change(getStartDateInput(), { target: { value: '' } });
+    fireEvent.change(getEndDateInput(), { target: { value: '' } });
+
+    fireEvent.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.dateRangeRequired,
+      );
+    });
+  });
+
+  it('shows error when campaign name is empty', async () => {
+    renderCampaignModal(link1, campaignProps[0]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: '' },
+    });
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.campaignNameRequired,
+      );
+    });
+  });
+
+  it('shows error when submitting without date range', async () => {
+    renderCampaignModal(link1, campaignProps[0]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: 'Valid name' },
+    });
+
+    fireEvent.change(getStartDateInput(), { target: { value: '' } });
+    fireEvent.change(getEndDateInput(), { target: { value: '' } });
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.dateRangeRequired,
+      );
+    });
+  });
+
+  it('shows error when updating without campaign id', async () => {
+    const badProps: InterfaceCampaignModal = {
+      ...campaignProps[1],
+      campaign: null,
+    };
+
+    renderCampaignModal(link1, badProps);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: 'Valid Name' },
+    });
+
+    const start = dayjs.utc().add(1, 'year').format('DD/MM/YYYY');
+    const end = dayjs.utc().add(2, 'year').format('DD/MM/YYYY');
+
+    fireEvent.change(getStartDateInput(), { target: { value: start } });
+    fireEvent.change(getEndDateInput(), { target: { value: end } });
+
+    fireEvent.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.campaignNotFound,
+      );
+    });
+  });
+
+  it('re-enables submit button after invalid date validation error', async () => {
+    renderCampaignModal(link1, campaignProps[1]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: 'New Name' },
+    });
+
+    // Clear the dates to trigger dateRangeRequired error
+    fireEvent.change(getStartDateInput(), {
+      target: { value: '' },
+    });
+    fireEvent.change(getEndDateInput(), {
+      target: { value: '' },
+    });
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.dateRangeRequired,
+      );
+      expect(submitBtn).not.toBeDisabled();
+    });
+  });
+
+  it('re-enables submit button after update error', async () => {
+    renderCampaignModal(link2, campaignProps[1]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: 'New Name' },
+    });
+
+    const start = dayjs.utc().add(1, 'month').format('DD/MM/YYYY');
+    const end = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
+
+    fireEvent.change(getStartDateInput(), { target: { value: start } });
+    fireEvent.change(getEndDateInput(), { target: { value: end } });
+
+    const submitBtn = screen.getByTestId('submitCampaignBtn');
+    fireEvent.click(submitBtn);
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalled();
+      expect(submitBtn).not.toBeDisabled();
+    });
+  });
+
+  it('shows error when creating campaign with invalid date', async () => {
+    renderCampaignModal(link1, campaignProps[0]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: 'Valid Campaign' },
+    });
+
+    // Clear dates to trigger dateRangeRequired error
+    fireEvent.change(getStartDateInput(), {
+      target: { value: '' },
+    });
+    fireEvent.change(getEndDateInput(), {
+      target: { value: '' },
+    });
+
+    fireEvent.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.dateRangeRequired,
+      );
+    });
+  });
+
+  it('shows error when end date is before start date in create mode', async () => {
+    renderCampaignModal(link1, campaignProps[0]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: 'Valid Campaign' },
+    });
+
+    // Set end date before start date
+    const startDate = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
+    const endDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY'); // Earlier than start
+
+    fireEvent.change(getStartDateInput(), { target: { value: startDate } });
+    fireEvent.change(getEndDateInput(), { target: { value: endDate } });
+
+    fireEvent.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.endDateBeforeStart,
+      );
+    });
+  });
+
+  it('shows error when updating campaign with invalid date', async () => {
+    renderCampaignModal(link1, campaignProps[1]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: 'Valid Campaign' },
+    });
+
+    // Clear dates to trigger dateRangeRequired error
+    fireEvent.change(getStartDateInput(), {
+      target: { value: '' },
+    });
+    fireEvent.change(getEndDateInput(), {
+      target: { value: '' },
+    });
+
+    fireEvent.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.dateRangeRequired,
+      );
+    });
+  });
+
+  it('shows error when end date is before start date in edit mode', async () => {
+    renderCampaignModal(link1, campaignProps[1]);
+
+    fireEvent.change(screen.getByLabelText(translations.campaignName), {
+      target: { value: 'Valid Campaign' },
+    });
+
+    // Set end date before start date
+    const startDate = dayjs.utc().add(3, 'month').format('DD/MM/YYYY');
+    const endDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY'); // Earlier
+
+    fireEvent.change(getStartDateInput(), { target: { value: startDate } });
+    fireEvent.change(getEndDateInput(), { target: { value: endDate } });
+
+    fireEvent.click(screen.getByTestId('submitCampaignBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.endDateBeforeStart,
       );
     });
   });

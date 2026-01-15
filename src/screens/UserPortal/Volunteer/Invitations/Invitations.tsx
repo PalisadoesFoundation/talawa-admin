@@ -1,24 +1,34 @@
 /**
- * Invitations Component
- *
+ * Invitations.tsx
  * This component renders the Invitations screen for the user portal,
  * allowing users to view, search, sort, and manage their volunteer invitations.
  * It integrates with GraphQL queries and mutations to fetch and update invitation data.
  *
- * @returns The Invitations component
+ * module Invitations
  *
- * @remarks
- * - Redirects to the homepage if `orgId` or `userId` is missing
- * - Displays a loader while fetching data and handles errors gracefully
- * - Uses `useQuery` to fetch invitations and `useMutation` to update invitation status
- * - Provides search and sorting functionality using `SearchBar` and `SortingButton` components
- * - Dependencies: `react`, `react-router-dom`, `react-bootstrap`, `NotificationToast`,
- *   `@apollo/client` for GraphQL queries and mutations, `@mui/icons-material`, `react-icons` for icons,
- *   Custom hooks: `useLocalStorage`, Custom components: `Loader`, `SearchBar`, `SortingButton`
+ * enum ItemFilter
+ * description Enum for filtering invitations by type.
+ * property Group - Represents group invitations.
+ * property Individual - Represents individual invitations.
  *
- * ItemFilter enum:
- * - `Group`: Represents group invitations
- * - `Individual`: Represents individual invitations
+ * function Invitations
+ * description Renders the Invitations screen, displaying a list of volunteer invitations
+ * with options to search, sort, filter, and accept/reject invitations.
+ *
+ * @returns The Invitations component.
+ *
+ * remarks
+ * - Redirects to the homepage if `orgId` or `userId` is missing.
+ * - Displays a loader while fetching data and handles errors gracefully.
+ * - Uses `useQuery` to fetch invitations and `useMutation` to update invitation status.
+ * - Provides search and sorting functionality using `SearchBar` and `SortingButton` components.
+ *
+ * dependencies
+ * - `react`, `react-router-dom`, `react-bootstrap`, `react-toastify`
+ * - `@apollo/client` for GraphQL queries and mutations
+ * - `@mui/icons-material`, `react-icons` for icons
+ * - Custom hooks: `useLocalStorage`
+ * - Custom components: `Loader`, `SearchBar`, `SortingButton`
  *
  * @example
  * ```tsx
@@ -27,7 +37,7 @@
  */
 import { useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import styles from './Invitations.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
 import { WarningAmberRounded } from '@mui/icons-material';
@@ -39,11 +49,11 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { useMutation, useQuery } from '@apollo/client';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import { FaRegClock } from 'react-icons/fa';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 enum ItemFilter {
   Group = 'group',
@@ -130,8 +140,6 @@ const Invitations = (): JSX.Element => {
     return data;
   }, [invitationData, filter]);
 
-  // loads the invitations when the component mounts
-  if (invitationLoading) return <Loader size="xl" />;
   if (invitationError) {
     // Displays an error message if there is an issue loading the invitations
     return (
@@ -177,8 +185,8 @@ const Invitations = (): JSX.Element => {
   };
 
   return (
-    <>
-      <AdminSearchFilterBar
+    <LoadingState isLoading={invitationLoading} variant="spinner">
+      <SearchFilterBar
         searchPlaceholder={t('searchByEventName')}
         searchValue={searchTerm}
         onSearchChange={setSearchTerm}
@@ -228,7 +236,7 @@ const Invitations = (): JSX.Element => {
                 {invite.group && invite.group.id && (
                   <>
                     <div>
-                      <FaUserGroup className="mb-1 me-1" color="grey" />
+                      <FaUserGroup className="mb-1 me-1 text-secondary" />
                       <span className="text-muted">{t('group')}:</span>{' '}
                       <span>{invite.group.name} </span>
                     </div>
@@ -237,8 +245,7 @@ const Invitations = (): JSX.Element => {
                 )}
                 <div>
                   <TbCalendarEvent
-                    className="mb-1 me-1"
-                    color="grey"
+                    className="mb-1 me-1 text-secondary"
                     size={20}
                   />
                   <span className="text-muted">{t('event')}:</span>{' '}
@@ -246,7 +253,7 @@ const Invitations = (): JSX.Element => {
                 </div>
                 |
                 <div>
-                  <FaRegClock className="mb-1 me-1" color="grey" />
+                  <FaRegClock className="mb-1 me-1 text-secondary" />
                   <span className="text-muted">{t('received')}:</span>{' '}
                   {new Date(invite.createdAt).toLocaleString()}
                 </div>
@@ -273,7 +280,7 @@ const Invitations = (): JSX.Element => {
           </div>
         ))
       )}
-    </>
+    </LoadingState>
   );
 };
 

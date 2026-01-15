@@ -21,27 +21,14 @@ import { urlToFile } from 'utils/urlToFile';
 import i18nForTest from 'utils/i18nForTest';
 
 // Mock dependencies
-const mockNotificationToast = vi.hoisted(() => ({
-  success: vi.fn(),
-  error: vi.fn(),
-  warning: vi.fn(),
-  info: vi.fn(),
-  dismiss: vi.fn(),
+const sharedMocks = vi.hoisted(() => ({
+  NotificationToast: {
+    error: vi.fn(),
+  },
 }));
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
-  NotificationToast: mockNotificationToast,
-}));
-
-const mockI18n = {
-  use: vi.fn().mockReturnThis(),
-  changeLanguage: vi.fn(),
-  language: 'en',
-  init: vi.fn(),
-};
-
-vi.mock('utils/i18n', () => ({
-  default: mockI18n,
+  NotificationToast: sharedMocks.NotificationToast,
 }));
 
 vi.mock('js-cookie', () => ({ default: { get: vi.fn(), set: vi.fn() } }));
@@ -130,7 +117,9 @@ describe('ChangeLanguageDropDown', () => {
     fireEvent.click(spanishOption);
 
     await waitFor(() => {
-      expect(mockNotificationToast.error).toHaveBeenCalled();
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
+        'noUsersFound',
+      );
     });
   });
 

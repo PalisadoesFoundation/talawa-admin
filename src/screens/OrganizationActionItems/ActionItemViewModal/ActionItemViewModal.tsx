@@ -2,13 +2,13 @@
  * ItemViewModal Component
  * Updated to work with new GraphQL schema structure and interfaces.
  */
-import { DatePicker } from '@mui/x-date-pickers';
+import DatePicker from 'shared-components/DatePicker';
 import React from 'react';
 import dayjs from 'dayjs';
 import type { FC } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
-import type { IActionItemInfo } from 'types/ActionItems/interface';
-import type { InterfaceUser } from 'types/User/interface';
+import { Form } from 'react-bootstrap';
+import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
+import type { InterfaceUser } from 'types/shared-components/User/interface';
 import type { InterfaceEvent } from 'types/Event/interface';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +16,8 @@ import { FormControl, TextField } from '@mui/material';
 import { TaskAlt, HistoryToggleOff } from '@mui/icons-material';
 import { useQuery } from '@apollo/client';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
-import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import { MEMBERS_LIST_WITH_DETAILS } from 'GraphQl/Queries/Queries';
+import { BaseModal } from 'shared-components/BaseModal';
 
 export interface IViewModalProps {
   isOpen: boolean;
@@ -32,7 +33,6 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
 
   const {
     categoryId,
-
     creatorId,
     completionAt,
     assignedAt,
@@ -45,7 +45,6 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
     organizationId,
   } = item;
 
-  // Query to get category details
   const { data: categoryData } = useQuery(GET_ACTION_ITEM_CATEGORY, {
     variables: {
       input: { id: categoryId },
@@ -53,14 +52,12 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
     skip: !categoryId,
   });
 
-  // Query to get organization members to resolve assignee and creator details
-  const { data: membersData } = useQuery(MEMBERS_LIST, {
+  const { data: membersData } = useQuery(MEMBERS_LIST_WITH_DETAILS, {
     variables: { organizationId: organizationId },
   });
 
   const members = membersData?.usersByOrganizationId || [];
 
-  // Get assigned person/group information
   const getAssignedInfo = () => {
     if (volunteer?.user) {
       return {
@@ -93,13 +90,12 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
 
   const category = categoryData?.actionItemCategory || item.category;
 
-  // Helper function to get display name from user object
   const getUserDisplayName = (
     user: InterfaceUser | null | undefined,
   ): string => {
     if (!user) return 'Unknown';
 
-    if (user.name) {
+    if (user.name && user.name.trim()) {
       return user.name;
     }
     return `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Unknown';
@@ -114,143 +110,141 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
   };
 
   return (
-    <Modal className={styles.itemModal} onHide={hide} show={isOpen}>
-      <Modal.Header>
-        <p className={styles.titlemodal}>{t('actionItemDetails')}</p>
-        <Button
-          variant="danger"
-          onClick={hide}
-          className={styles.closeButton}
-          data-testid="modalCloseBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-      </Modal.Header>
-      <Modal.Body>
-        <Form className="p-3">
-          <Form.Group className="d-flex mb-3 w-100">
-            <FormControl fullWidth>
-              <TextField
-                label={t('category')}
-                variant="outlined"
-                className={styles.noOutline}
-                value={category?.name || 'No category'}
-                disabled
-              />
-            </FormControl>
-          </Form.Group>
-
-          <Form.Group className="d-flex gap-3 mb-3">
-            <FormControl fullWidth>
-              <TextField
-                label={t('assignedTo')}
-                variant="outlined"
-                className={styles.noOutline}
-                data-testid="assignee_input"
-                value={assignedInfo.name}
-                helperText={assignedInfo.details}
-                disabled
-              />
-            </FormControl>
-
-            <FormControl fullWidth>
-              <TextField
-                label={t('creator')}
-                variant="outlined"
-                className={styles.noOutline}
-                value={getUserDisplayName(creator)}
-                disabled
-              />
-            </FormControl>
-          </Form.Group>
-
-          <Form.Group className="d-flex gap-3 mx-auto mb-3">
-            {/* Status of Action Item */}
+    <BaseModal
+      show={isOpen}
+      onHide={hide}
+      title={t('actionItemDetails')}
+      size="lg"
+      showCloseButton
+    >
+      <Form className="p-3">
+        <Form.Group className="d-flex mb-3 w-100">
+          <FormControl fullWidth>
             <TextField
-              label={t('status')}
-              fullWidth
-              value={isCompleted ? tCommon('completed') : tCommon('pending')}
-              InputProps={{
-                startAdornment: (
-                  <>
-                    {isCompleted ? (
-                      <TaskAlt color="success" className="me-2" />
-                    ) : (
-                      <HistoryToggleOff color="warning" className="me-2" />
-                    )}
-                  </>
-                ),
-                style: { color: isCompleted ? 'green' : '#ed6c02' },
-              }}
-              inputProps={{
-                style: {
-                  WebkitTextFillColor: isCompleted ? 'green' : '#ed6c02',
-                },
-              }}
-              disabled
-            />
-
-            {/* Event Information */}
-            <TextField
-              label={t('event')}
+              label={t('category')}
               variant="outlined"
-              className={`${styles.noOutline} w-100`}
-              value={getEventDisplayName(item.recurringEventInstance || event)}
+              className={styles.noOutline}
+              value={category?.name || 'No category'}
               disabled
             />
-          </Form.Group>
+          </FormControl>
+        </Form.Group>
 
-          <Form.Group className={`d-flex gap-3 mb-3`}>
-            {/* Date Calendar Component to display assigned date of Action Item */}
+        <Form.Group className="d-flex gap-3 mb-3">
+          <FormControl fullWidth>
+            <TextField
+              label={t('assignedTo')}
+              variant="outlined"
+              className={styles.noOutline}
+              data-testid="assignee_input"
+              value={assignedInfo.name}
+              helperText={assignedInfo.details}
+              disabled
+            />
+          </FormControl>
+
+          <FormControl fullWidth>
+            <TextField
+              label={t('creator')}
+              variant="outlined"
+              className={styles.noOutline}
+              value={getUserDisplayName(creator)}
+              disabled
+            />
+          </FormControl>
+        </Form.Group>
+
+        <Form.Group className="d-flex gap-3 mx-auto mb-3">
+          <TextField
+            label={t('status')}
+            fullWidth
+            value={isCompleted ? tCommon('completed') : tCommon('pending')}
+            InputProps={{
+              startAdornment: (
+                <>
+                  {isCompleted ? (
+                    <TaskAlt color="success" className="me-2" />
+                  ) : (
+                    <HistoryToggleOff color="warning" className="me-2" />
+                  )}
+                </>
+              ),
+              style: {
+                color: isCompleted
+                  ? 'var(--bs-success)'
+                  : 'var(--pendingStatus-color)',
+              },
+            }}
+            inputProps={{
+              style: {
+                WebkitTextFillColor: isCompleted
+                  ? 'green'
+                  : 'var(--pendingStatus-color)',
+              },
+            }}
+            disabled
+          />
+
+          <TextField
+            label={t('event')}
+            variant="outlined"
+            className={`${styles.noOutline} w-100`}
+            value={getEventDisplayName(item.recurringEventInstance || event)}
+            disabled
+          />
+        </Form.Group>
+
+        <Form.Group className={`d-flex gap-3 mb-3`}>
+          <DatePicker
+            data-testid="assignmentDatePicker"
+            format="DD/MM/YYYY"
+            label={t('assignmentDate')}
+            className={`${styles.noOutline} w-100`}
+            value={dayjs(assignedAt)}
+            disabled
+            onChange={() => null}
+          />
+
+          {isCompleted && completionAt && (
             <DatePicker
               format="DD/MM/YYYY"
-              label={t('assignmentDate')}
+              label={t('completionDate')}
               className={`${styles.noOutline} w-100`}
-              value={dayjs(assignedAt)}
+              value={dayjs(completionAt)}
+              disabled
+              onChange={() => null}
+            />
+          )}
+        </Form.Group>
+
+        <Form.Group className={`d-flex ${isCompleted && 'mb-3'}`}>
+          <FormControl fullWidth>
+            <TextField
+              label={t('preCompletionNotes')}
+              variant="outlined"
+              className={styles.noOutline}
+              value={preCompletionNotes || ''}
+              multiline
+              maxRows={3}
               disabled
             />
+          </FormControl>
+        </Form.Group>
 
-            {/* Date Calendar Component to display completion Date of Action Item */}
-            {isCompleted && completionAt && (
-              <DatePicker
-                format="DD/MM/YYYY"
-                label={t('completionDate')}
-                className={`${styles.noOutline} w-100`}
-                value={dayjs(completionAt)}
-                disabled
-              />
-            )}
-          </Form.Group>
-
-          <Form.Group className={`d-flex ${isCompleted && 'mb-3'}`}>
-            <FormControl fullWidth>
-              <TextField
-                label={t('preCompletionNotes')}
-                variant="outlined"
-                className={styles.noOutline}
-                value={preCompletionNotes || ''}
-                multiline
-                maxRows={3}
-                disabled
-              />
-            </FormControl>
-          </Form.Group>
-
-          {isCompleted && (
-            <FormControl fullWidth>
-              <TextField
-                label={t('postCompletionNotes')}
-                className={styles.noOutline}
-                value={postCompletionNotes || ''}
-                multiline
-                maxRows={3}
-                disabled
-              />
-            </FormControl>
-          )}
-        </Form>
-      </Modal.Body>
-    </Modal>
+        {isCompleted && (
+          <FormControl fullWidth>
+            <TextField
+              label={t('postCompletionNotes')}
+              className={styles.noOutline}
+              value={postCompletionNotes || ''}
+              multiline
+              maxRows={3}
+              disabled
+            />
+          </FormControl>
+        )}
+      </Form>
+    </BaseModal>
   );
 };
 

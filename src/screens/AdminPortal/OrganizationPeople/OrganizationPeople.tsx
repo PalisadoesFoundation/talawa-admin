@@ -7,7 +7,7 @@
  *
  * @remarks
  * - Uses Apollo Client's `useLazyQuery` for fetching data.
- * - Implements server-side pagination with cursor-based navigation.
+ * - Uses DataGridWrapper for client-side pagination and display.
  * - Supports filtering by roles (members, administrators, users).
  * - Includes local search functionality for filtering rows by name or email.
  * - Displays a modal for removing members.
@@ -19,40 +19,28 @@
  *
  * @returns A JSX element rendering the organization people table.
  */
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
 import { useLazyQuery } from '@apollo/client';
 import {
+  DataGridWrapper,
   GridCellParams,
-  GridPaginationModel,
+  GridColDef,
 } from 'shared-components/DataGridWrapper';
 import { Delete } from '@mui/icons-material';
-import type {
-  ReportingRow,
-  ReportingTableColumn,
-  ReportingTableGridProps,
-} from 'types/ReportingTable/interface';
-import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
-import {
-  dataGridStyle,
-  COLUMN_BUFFER_PX,
-  PAGE_SIZE,
-} from 'types/ReportingTable/utils';
+import { PAGE_SIZE } from 'types/ReportingTable/utils';
 
-import styles from 'style/app-fixed.module.css';
-import TableLoader from 'components/TableLoader/TableLoader';
+import styles from './OrganizationPeople.module.css';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
 import { Button } from 'react-bootstrap';
-import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
-import Avatar from 'components/Avatar/Avatar';
+import OrgPeopleListCard from 'components/AdminPortal/OrgPeopleListCard/OrgPeopleListCard';
+import Avatar from 'shared-components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
-
-import EmptyState from 'shared-components/EmptyState/EmptyState';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { errorHandler } from 'utils/errorHandler';
 import { languages } from 'utils/languages';
 
@@ -106,7 +94,6 @@ interface IProcessedRow {
   email: string;
   image: string;
   createdAt: string;
-  cursor: string;
   rowNumber: number;
 }
 
@@ -146,16 +133,6 @@ function OrganizationPeople(): JSX.Element {
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const [selectedMemId, setSelectedMemId] = useState<string>();
 
-  // Pagination state
-  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
-    page: 0,
-    pageSize: PAGE_SIZE,
-  });
-
-  // Cursor management - properly capturing startCursor and endCursor
-  const pageCursors = useRef<{
-    [page: number]: { startCursor: string; endCursor: string };
-  }>({});
   const [currentRows, setCurrentRows] = useState<IProcessedRow[]>([]);
   const [data, setData] = useState<
     | {
@@ -169,12 +146,6 @@ function OrganizationPeople(): JSX.Element {
       }
     | undefined
   >();
-
-  // Pagination metadata
-  const [paginationMeta, setPaginationMeta] = useState<{
-    hasNextPage: boolean;
-    hasPreviousPage: boolean;
-  }>({ hasNextPage: false, hasPreviousPage: false });
 
   // Query hooks
   const [fetchMembers, { loading: memberLoading, error: memberError }] =
@@ -196,8 +167,7 @@ function OrganizationPeople(): JSX.Element {
   // Handle data changes
   useEffect(() => {
     if (data) {
-      const { edges, pageInfo } = data;
-      const baseIndex = paginationModel.page * PAGE_SIZE;
+      const { edges } = data;
       const processedRows = edges.map(
         (edge: IEdges, index: number): IProcessedRow => ({
           id: edge.node.id,
@@ -205,35 +175,16 @@ function OrganizationPeople(): JSX.Element {
           email: edge.node.emailAddress,
           image: edge.node.avatarURL,
           createdAt: edge.node.createdAt || new Date().toISOString(),
-          cursor: edge.cursor,
-          rowNumber: baseIndex + index + 1,
+          rowNumber: index + 1,
         }),
       );
 
-      // Store both start and end cursors for the current page
-      if (pageInfo.startCursor && pageInfo.endCursor) {
-        pageCursors.current[paginationModel.page] = {
-          startCursor: pageInfo.startCursor,
-          endCursor: pageInfo.endCursor,
-        };
-      }
-
-      // Update pagination meta information
-      setPaginationMeta({
-        hasNextPage: pageInfo.hasNextPage,
-        hasPreviousPage: pageInfo.hasPreviousPage,
-      });
-
       setCurrentRows(processedRows);
     }
-  }, [data, paginationModel.page]);
+  }, [data]);
 
   // Handle tab changes (members, admins, users)
   useEffect(() => {
-    // Reset pagination when tab changes
-    setPaginationModel({ page: 0, pageSize: PAGE_SIZE });
-    pageCursors.current = {};
-
     const variables: IQueryVariable = {
       first: PAGE_SIZE,
       after: null,
@@ -272,54 +223,6 @@ function OrganizationPeople(): JSX.Element {
     });
   }, [currentUrl, fetchMembers]);
 
-  // Handle pagination changes
-  const handlePaginationModelChange = async (
-    newPaginationModel: GridPaginationModel,
-  ) => {
-    const isForwardNavigation = newPaginationModel.page > paginationModel.page;
-
-    // Check if navigation is allowed
-    if (isForwardNavigation && !paginationMeta.hasNextPage) {
-      return; // Prevent navigation if there's no next page
-    }
-    if (!isForwardNavigation && !paginationMeta.hasPreviousPage) {
-      return; // Prevent navigation if there's no previous page
-    }
-
-    const currentPage = paginationModel.page;
-    const currentPageCursors = pageCursors.current[currentPage];
-
-    const variables: IQueryVariable = { orgId: currentUrl };
-
-    if (isForwardNavigation) {
-      // Forward navigation uses "after" with the endCursor of the current page
-      variables.first = PAGE_SIZE;
-      variables.after = currentPageCursors?.endCursor;
-      variables.last = null;
-      variables.before = null;
-    } else {
-      // Backward navigation uses "before" with the startCursor of the current page
-      variables.last = PAGE_SIZE;
-      variables.before = currentPageCursors?.startCursor;
-      variables.first = null;
-      variables.after = null;
-    }
-
-    // Add role filter if on admin tab
-    if (state === 1) {
-      variables.where = { role: { equal: 'administrator' } };
-    }
-
-    setPaginationModel(newPaginationModel);
-
-    // Execute the appropriate query based on the current tab
-    if (state === 2) {
-      await fetchUsers({ variables });
-    } else {
-      await fetchMembers({ variables });
-    }
-  };
-
   // Error handling
   useEffect(() => {
     if (memberError) {
@@ -353,18 +256,8 @@ function OrganizationPeople(): JSX.Element {
     setState(OPTION_TO_STATE[value] ?? 0);
   };
 
-  // Header titles for the table
-  const headerTitles: string[] = [
-    tCommon('sl_no'),
-    tCommon('profile'),
-    tCommon('name'),
-    tCommon('email'),
-    tCommon('joinedOn'),
-    tCommon('action'),
-  ];
-
   // Column definitions
-  const columns: ReportingTableColumn[] = [
+  const columns: GridColDef[] = [
     {
       field: 'sl_no',
       headerName: tCommon('sl_no'),
@@ -510,41 +403,9 @@ function OrganizationPeople(): JSX.Element {
     },
   ];
 
-  const gridProps: ReportingTableGridProps = {
-    disableColumnMenu: true,
-    columnBufferPx: COLUMN_BUFFER_PX,
-    getRowId: (row: IProcessedRow) => row.id,
-    rowCount:
-      paginationModel.page * PAGE_SIZE +
-      currentRows.length +
-      (paginationMeta.hasNextPage ? PAGE_SIZE : 0),
-    paginationMode: 'server',
-    pagination: true,
-    paginationModel,
-    onPaginationModelChange: handlePaginationModelChange,
-    pageSizeOptions: [PAGE_SIZE],
-    loading: memberLoading || userLoading,
-    slots: {
-      noRowsOverlay: () => (
-        <EmptyState
-          icon="groups"
-          message={tCommon('notFound')}
-          dataTestId="organization-people-empty-state"
-        />
-      ),
-      loadingOverlay: () => (
-        <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
-      ),
-    },
-    sx: { ...dataGridStyle },
-    getRowClassName: () => `${styles.rowBackground}`,
-    rowHeight: 70,
-    isRowSelectable: () => false,
-  };
-
   return (
     <>
-      <AdminSearchFilterBar
+      <SearchFilterBar
         hasDropdowns={true}
         searchPlaceholder={t('searchFullName')}
         searchValue={searchTerm}
@@ -570,11 +431,23 @@ function OrganizationPeople(): JSX.Element {
         additionalButtons={<AddMember />}
       />
 
-      <ReportingTable
-        rows={filteredRows.map((req) => ({ ...req })) as ReportingRow[]}
+      <DataGridWrapper<IProcessedRow>
+        rows={filteredRows}
         columns={columns}
-        gridProps={{ ...gridProps }}
+        error={state === 2 ? userError?.message : memberError?.message}
+        loading={memberLoading || userLoading}
+        emptyStateProps={{
+          message: tCommon('notFound'),
+          description: tCommon('noDataDescription'),
+          dataTestId: 'organization-people-empty-state',
+        }}
+        paginationConfig={{
+          enabled: true,
+          defaultPageSize: PAGE_SIZE,
+          pageSizeOptions: [10, 25, 50, 100],
+        }}
       />
+
       {showRemoveModal && selectedMemId && (
         <OrgPeopleListCard
           id={selectedMemId}

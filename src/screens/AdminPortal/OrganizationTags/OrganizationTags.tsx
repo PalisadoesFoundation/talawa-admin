@@ -5,11 +5,10 @@
  * It provides functionalities such as searching, sorting, creating, and managing tags.
  * The component integrates with GraphQL queries and mutations to fetch and update data.
  *
- * @component
  *
  * @remarks
  * - Utilizes Apollo Client's `useQuery` and `useMutation` hooks for data fetching and mutations.
- * - Uses ReportingTable for displaying tags in a tabular format with pagination support.
+ * - Uses DataGridWrapper for displaying tags in a tabular format with pagination support.
  * - Includes a modal for creating new tags.
  *
  *
@@ -18,20 +17,8 @@
  * <OrganizationTags />
  * ```
  *
- * @returns {JSX.Element} The rendered OrganizationTags component.
+ * @returns  The rendered OrganizationTags component.
  *
- * @property {boolean} createTagModalIsOpen - State to control the visibility of the create tag modal.
- * @property {string} tagSearchName - State to store the search term for filtering tags.
- * @property {SortedByType} tagSortOrder - State to store the sorting order of tags.
- * @property {string} tagName - State to store the name of the tag being created.
- *
- * @function showCreateTagModal - Opens the create tag modal.
- * @function hideCreateTagModal - Closes the create tag modal.
- * @function createTag - Handles the creation of a new tag.
- * @function loadMoreUserTags - Fetches more tags for infinite scrolling.
- * @function redirectToManageTag - Navigates to the manage tag page for a specific tag.
- * @function redirectToSubTags - Navigates to the sub-tags page for a specific tag.
- * @function handleSortChange - Updates the sorting order of tags.
  */
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
@@ -47,28 +34,21 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import IconComponent from 'components/IconComponent/IconComponent';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type { InterfaceTagDataPG } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
-import type { GridCellParams } from 'shared-components/DataGridWrapper';
+import styles from './OrganizationTags.module.css';
+import {
+  DataGridWrapper,
+  GridColDef,
+  type GridCellParams,
+} from 'shared-components/DataGridWrapper';
 import type {
   InterfaceOrganizationTagsQueryPG,
   SortedByType,
 } from 'utils/organizationTagsUtils';
-import type {
-  ReportingRow,
-  ReportingTableColumn,
-  ReportingTableGridProps,
-} from 'types/ReportingTable/interface';
-import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Stack } from '@mui/material';
-import {
-  dataGridStyle,
-  COLUMN_BUFFER_PX,
-  PAGE_SIZE,
-} from 'types/ReportingTable/utils';
 import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import { PAGE_SIZE } from 'types/ReportingTable/utils';
 
 function OrganizationTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -100,6 +80,7 @@ function OrganizationTags(): JSX.Element {
     error: orgUserTagsError,
     refetch: orgUserTagsRefetch,
     fetchMore: fetchMoreTags,
+    loading: orgUserTagsLoading,
   }: InterfaceOrganizationTagsQueryPG = useQuery(
     ORGANIZATION_USER_TAGS_LIST_PG,
     {
@@ -205,7 +186,7 @@ function OrganizationTags(): JSX.Element {
     </Link>
   );
 
-  const columns: ReportingTableColumn[] = [
+  const columns: GridColDef[] = [
     {
       field: 'id',
       headerName: tCommon('sl_no'),
@@ -239,6 +220,7 @@ function OrganizationTags(): JSX.Element {
                   key={tag.id}
                   className={styles.tagsBreadCrumbs}
                   data-testid="ancestorTagsBreadCrumbs"
+                  data-text={tag.name}
                 >
                   {tag.name}
                   <i className={'mx-2 fa fa-caret-right'} />
@@ -321,36 +303,6 @@ function OrganizationTags(): JSX.Element {
     setTagSortOrder(value === 'latest' ? 'DESCENDING' : 'ASCENDING');
   };
 
-  const gridProps: ReportingTableGridProps = {
-    disableColumnMenu: true,
-    columnBufferPx: COLUMN_BUFFER_PX,
-    hideFooter: true,
-    getRowId: (row: InterfaceTagDataPG) => row.id,
-    slots: {
-      noRowsOverlay: () => (
-        <Stack height="100%" alignItems="center" justifyContent="center">
-          {t('noTagsFound')}
-        </Stack>
-      ),
-      loadingOverlay: () => (
-        <LoadingState
-          isLoading={true}
-          variant="skeleton"
-          size="lg"
-          data-testid="orgTagsLoadingOverlay"
-        >
-          <></>
-        </LoadingState>
-      ),
-    },
-    sx: { ...dataGridStyle },
-    getRowClassName: () => `${styles.rowBackground}`,
-    autoHeight: false,
-    height: 500,
-    rowHeight: 65,
-    isRowSelectable: () => false,
-  };
-
   return (
     <>
       <Row>
@@ -359,7 +311,7 @@ function OrganizationTags(): JSX.Element {
             className={styles.btnsContainer}
             data-testid="organizationTags-header"
           >
-            <AdminSearchFilterBar
+            <SearchFilterBar
               hasDropdowns={true}
               searchPlaceholder={tCommon('searchByName')}
               searchValue={tagSearchName}
@@ -404,7 +356,10 @@ function OrganizationTags(): JSX.Element {
                   <IconComponent name="Tag" />
                 </div>
 
-                <div className={'fs-4 ms-3 my-1 ' + styles.tagsBreadCrumbs}>
+                <div
+                  className={'fs-4 ms-3 my-1 ' + styles.tagsBreadCrumbs}
+                  data-text={t('tags')}
+                >
                   {t('tags')}
                 </div>
               </div>
@@ -433,12 +388,14 @@ function OrganizationTags(): JSX.Element {
                   }
                   scrollableTarget="orgUserTagsScrollableDiv"
                 >
-                  <ReportingTable
-                    rows={
-                      userTagsList?.map((req) => ({ ...req })) as ReportingRow[]
-                    }
+                  <DataGridWrapper<InterfaceTagDataPG>
+                    rows={userTagsList}
                     columns={columns}
-                    gridProps={{ ...gridProps }}
+                    loading={orgUserTagsLoading || createTagLoading}
+                    error={undefined}
+                    emptyStateProps={{
+                      message: t('noTagsFound'),
+                    }}
                   />
                 </InfiniteScroll>
               </div>

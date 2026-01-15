@@ -1,50 +1,56 @@
 /**
- * @file EventActionItems.tsx
- * @summary This component renders a comprehensive management interface for action items associated with a specific event.
+ * Renders a management interface for action items associated with a specific event.
  *
- * @description
- * The EventActionItems component is responsible for fetching, displaying, and managing all action items linked to a given event ID.
- * It provides a user interface that includes:
- * - A data grid to display the list of action items with details like assignee, category, status, and assigned date.
- * - Functionality to create, view, edit, and delete action items through various modal windows.
- * - Controls for searching by assignee or category, sorting by assignment date, and filtering by completion status.
- * - Logic to differentiate between recurring and non-recurring events to handle template action items and instance-specific exceptions correctly.
+ * This component is responsible for fetching, displaying, and managing all action
+ * items linked to a given event ID.
  *
- * @component
- * @param {object} props - The component props.
- * @param {string} props.eventId - The unique identifier for the event whose action items are to be displayed.
- * @param {Function} [props.orgActionItemsRefetch] - An optional callback function to trigger a refetch of action items at the organization level, ensuring data consistency across different views.
+ * @remarks
+ * The interface provides:
+ * - A data grid displaying action item details such as assignee, category, status,
+ *   and assigned date.
+ * - Modals for creating, viewing, editing, and deleting action items.
+ * - Search by assignee or category, sorting by assignment date, and filtering
+ *   by completion status.
+ * - Logic to correctly handle recurring and non-recurring events, including
+ *   template action items and instance-specific exceptions.
  *
- * @returns {JSX.Element} A React component that renders the event action items management view.
+ * @param props - Component props with the following properties:
+ *   - eventId: Unique identifier of the event whose action items are displayed.
+ *   - orgActionItemsRefetch: Optional callback to refetch organization-level
+ *     action items for data consistency.
+ *
+ * @returns A React element that renders the event action items management view.
  */
+
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
 
-import { Circle, WarningAmberRounded, Group } from '@mui/icons-material';
+import { WarningAmberRounded, Group } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
 import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
 
-import type { IActionItemInfo } from 'types/ActionItems/interface';
+import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 
 import styles from 'style/app-fixed.module.css';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
-import { Chip, debounce, Stack } from '@mui/material';
+import { debounce, Stack } from '@mui/material';
 import ItemViewModal from 'screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal';
 import ItemModal from 'screens/OrganizationActionItems/ActionItemModal/ActionItemModal';
 import ItemDeleteModal from 'screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
 enum ItemStatus {
   Pending = 'pending',
@@ -204,7 +210,11 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   }, [eventId, eventActionItemsRefetch]);
 
   if (eventInfoLoading) {
-    return <Loader size="xl" />;
+    return (
+      <LoadingState isLoading={eventInfoLoading} variant="spinner">
+        <div />
+      </LoadingState>
+    );
   }
 
   if (eventInfoError) {
@@ -300,12 +310,10 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <Chip
-            icon={<Circle className={styles.chipIcon} />}
-            label={params.row.isCompleted ? 'Completed' : 'Pending'}
-            variant="outlined"
-            color="primary"
-            className={`${styles.chip} ${params.row.isCompleted ? styles.active : styles.pending}`}
+          <StatusBadge
+            variant={params.row.isCompleted ? 'completed' : 'pending'}
+            size="sm"
+            dataTestId="statusChip"
           />
         );
       },

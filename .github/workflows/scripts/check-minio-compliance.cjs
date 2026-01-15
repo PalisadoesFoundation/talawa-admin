@@ -18,26 +18,26 @@
  * Standardize MinIO File Management - All operations (MVP) #3966
  */
 
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
 /**
  * Files with known legacy violations.
  * These will be removed incrementally as migrations land.
  */
 const LEGACY_EXCEPTIONS = new Set([
-  "src/components/AgendaItems/Create/AgendaItemsCreateModal.tsx",
-  "src/components/AgendaItems/Create/AgendaItemsCreateModal.spec.tsx",
-  "src/components/AgendaItems/Update/AgendaItemsUpdateModal.tsx",
-  "src/components/AgendaItems/Update/AgendaItemsUpdateModal.spec.tsx",
-  "src/components/OrgSettings/General/OrgUpdate/OrgUpdate.spec.tsx",
-  "src/screens/AdminPortal/CommunityProfile/CommunityProfile.tsx",
-  "src/screens/AdminPortal/CommunityProfile/CommunityProfile.spec.tsx",
-  "src/screens/AdminPortal/OrgList/modal/OrganizationModal.spec.tsx",
-  "src/utils/convertToBase64.ts",
-  "src/utils/convertToBase64.spec.ts",
-  "src/index.tsx",
-  "src/index.spec.tsx",
+  'src/components/AgendaItems/Create/AgendaItemsCreateModal.tsx',
+  'src/components/AgendaItems/Create/AgendaItemsCreateModal.spec.tsx',
+  'src/components/AgendaItems/Update/AgendaItemsUpdateModal.tsx',
+  'src/components/AgendaItems/Update/AgendaItemsUpdateModal.spec.tsx',
+  'src/components/AdminPortal/OrgSettings/General/OrgUpdate/OrgUpdate.spec.tsx',
+  'src/screens/AdminPortal/CommunityProfile/CommunityProfile.tsx',
+  'src/screens/AdminPortal/CommunityProfile/CommunityProfile.spec.tsx',
+  'src/screens/AdminPortal/OrgList/modal/OrganizationModal.spec.tsx',
+  'src/utils/convertToBase64.ts',
+  'src/utils/convertToBase64.spec.ts',
+  'src/index.tsx',
+  'src/index.spec.tsx',
 ]);
 
 /**
@@ -54,20 +54,19 @@ const FORBIDDEN_IMPORT_PATTERNS = [
  * Forbidden identifiers/usages.
  * Uses word boundaries to match whole identifiers only.
  */
-const FORBIDDEN_IDENTIFIERS = [
-  /\bconvertToBase64\b/,
-  /\bcreateUploadLink\b/,
-];
+const FORBIDDEN_IDENTIFIERS = [/\bconvertToBase64\b/, /\bcreateUploadLink\b/];
 
-const ROOT_DIR = path.join(process.cwd(), "src");
+const ROOT_DIR = path.join(process.cwd(), 'src');
 const violations = [];
 
 function scanFile(filePath) {
-  const relativePath = path.relative(process.cwd(), filePath).replace(/\\/g, '/');
-  
+  const relativePath = path
+    .relative(process.cwd(), filePath)
+    .replace(/\\/g, '/');
+
   let content;
   try {
-    content = fs.readFileSync(filePath, "utf8");
+    content = fs.readFileSync(filePath, 'utf8');
   } catch (error) {
     console.warn(`Warning: Could not read ${relativePath}: ${error.message}`);
     return;
@@ -79,7 +78,7 @@ function scanFile(filePath) {
       if (!LEGACY_EXCEPTIONS.has(relativePath)) {
         violations.push({
           file: relativePath,
-          reason: "apollo-upload-client import detected",
+          reason: 'apollo-upload-client import detected',
         });
       }
     }
@@ -99,7 +98,13 @@ function scanFile(filePath) {
   });
 }
 
-const EXCLUDED_DIRS = new Set(['node_modules', 'dist', 'build', '__mocks__', 'coverage']);
+const EXCLUDED_DIRS = new Set([
+  'node_modules',
+  'dist',
+  'build',
+  '__mocks__',
+  'coverage',
+]);
 const visitedPaths = new Set();
 
 function walk(dir) {
@@ -111,12 +116,12 @@ function walk(dir) {
     console.warn(`Warning: Could not resolve ${dir}: ${error.message}`);
     return;
   }
-  
+
   if (visitedPaths.has(realPath)) {
     return;
   }
   visitedPaths.add(realPath);
-  
+
   let entries;
   try {
     entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -124,17 +129,20 @@ function walk(dir) {
     console.warn(`Warning: Could not read directory ${dir}: ${error.message}`);
     return;
   }
-  
+
   for (const entry of entries) {
     // Skip common build/dependency directories
     if (entry.isDirectory() && EXCLUDED_DIRS.has(entry.name)) {
       continue;
     }
-    
+
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory() && !entry.isSymbolicLink()) {
       walk(fullPath);
-    } else if ((fullPath.endsWith(".ts") || fullPath.endsWith(".tsx")) && !entry.isSymbolicLink()) {
+    } else if (
+      (fullPath.endsWith('.ts') || fullPath.endsWith('.tsx')) &&
+      !entry.isSymbolicLink()
+    ) {
       scanFile(fullPath);
     }
   }
@@ -148,11 +156,11 @@ try {
 }
 
 if (violations.length > 0) {
-  console.error("\nMinIO compliance violations found:\n");
+  console.error('\nMinIO compliance violations found:\n');
   violations.forEach((v) => {
     console.error(`- ${v.file}: ${v.reason}`);
   });
   process.exit(1);
 }
 
-console.log("MinIO compliance check passed");
+console.log('MinIO compliance check passed');

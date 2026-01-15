@@ -3,10 +3,10 @@
  * the agenda categories for an organization. It provides functionalities to
  * preview, update, and delete agenda categories using modals and GraphQL mutations.
  *
- * @param props - Component props containing:
- *   - `agendaCategoryConnection`: Specifies the connection type, e.g., 'Organization'
- *   - `agendaCategoryData`: Array of agenda category data to display
- *   - `agendaCategoryRefetch`: Function to refetch agenda category data after updates
+ * @param props - Component props.
+ * @param agendaCategoryConnection - Specifies the connection type, e.g., 'Organization'.
+ * @param agendaCategoryData - Array of agenda category data to display.
+ * @param agendaCategoryRefetch - Function to refetch agenda category data after updates.
  *
  * @returns A JSX element that displays a list of agenda categories with options
  *          to preview, edit, and delete each category.
@@ -25,6 +25,7 @@
  *   agendaCategoryRefetch={refetchAgendaCategories}
  * />
  * ```
+ *
  */
 
 import React, { useState } from 'react';
@@ -41,9 +42,9 @@ import {
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
 
-import AgendaCategoryDeleteModal from 'components/OrgSettings/AgendaItemCategories/Delete/AgendaCategoryDeleteModal';
-import AgendaCategoryPreviewModal from 'components/OrgSettings/AgendaItemCategories/Preview/AgendaCategoryPreviewModal';
-import AgendaCategoryUpdateModal from 'components/OrgSettings/AgendaItemCategories/Update/AgendaCategoryUpdateModal';
+import AgendaCategoryDeleteModal from 'components/AdminPortal/OrgSettings/AgendaItemCategories/Delete/AgendaCategoryDeleteModal';
+import AgendaCategoryPreviewModal from 'components/AdminPortal/OrgSettings/AgendaItemCategories/Preview/AgendaCategoryPreviewModal';
+import AgendaCategoryUpdateModal from 'components/AdminPortal/OrgSettings/AgendaItemCategories/Update/AgendaCategoryUpdateModal';
 
 function agendaCategoryContainer({
   agendaCategoryConnection,

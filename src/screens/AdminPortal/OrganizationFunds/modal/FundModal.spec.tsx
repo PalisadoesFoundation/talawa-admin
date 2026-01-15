@@ -1,7 +1,6 @@
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
 import {
   cleanup,
@@ -14,7 +13,6 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -124,11 +122,9 @@ const renderFundModal = (
     <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <I18nextProvider i18n={i18nForTest}>
-              <FundModal {...props} />
-            </I18nextProvider>
-          </LocalizationProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <FundModal {...props} />
+          </I18nextProvider>
         </BrowserRouter>
       </Provider>
     </MockedProvider>,
@@ -169,6 +165,38 @@ describe('PledgeModal', () => {
     expect(fundIdInput).toHaveValue('1111');
     fireEvent.change(fundIdInput, { target: { value: '2222' } });
     expect(fundIdInput).toHaveValue('2222');
+  });
+
+  it('should show required error when Fund Name is empty and touched', async () => {
+    // Start with a fund that has a name (edit mode)
+    renderFundModal(link1, fundProps[1]);
+    const fundNameInput = screen.getByLabelText(translations.fundName);
+
+    // Clear the input
+    fireEvent.change(fundNameInput, { target: { value: '' } });
+    // Blur to trigger validation
+    fireEvent.blur(fundNameInput);
+
+    // Expect error message to be visible
+    // The tCommon('required') usually resolves to "Required" or similar.
+    // We can assume it's "Required" based on common translation files, or match generically
+    // If we want to be safe we can use a regex or check if the implementation uses specific keys
+    // In many setups, tCommon('required') -> "Required"
+    // Since we mocked translations for 'funds' but tCommon comes from 'common',
+    // and we mocked i18nForTest, let's verify if we can access the common translations or just match text.
+    // The previous tests used JSON.parse(...) for funds translations.
+    // Let's assume standard "Required" text from i18nForTest for common.
+    expect(screen.getByText('Required')).toBeInTheDocument();
+  });
+
+  it('should show required error when Fund Reference ID is empty and touched', async () => {
+    renderFundModal(link1, fundProps[1]);
+    const fundIdInput = screen.getByLabelText(translations.fundId);
+
+    fireEvent.change(fundIdInput, { target: { value: '' } });
+    fireEvent.blur(fundIdInput);
+
+    expect(screen.getByText('Required')).toBeInTheDocument();
   });
 
   it('should update Tax Deductible Switch when input value changes', async () => {
@@ -320,6 +348,104 @@ describe('PledgeModal', () => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
         'Mock graphql error',
       );
+    });
+  });
+
+  it('should update form state when fund prop changes', async () => {
+    const { rerender } = renderFundModal(link1, fundProps[1]);
+
+    // Initial values
+    expect(screen.getByLabelText(translations.fundName)).toHaveValue('Fund 1');
+
+    // Create new props with different fund data
+    const updatedProps: InterfaceFundModal = {
+      ...fundProps[1],
+      fund: {
+        id: 'fundId',
+        name: 'Updated Fund',
+        refrenceNumber: '9999',
+        isTaxDeductible: false,
+        isDefault: true,
+        isArchived: true,
+        createdAt: dayjs().month(5).date(22).format('YYYY-MM-DD'),
+        organizationId: 'orgId',
+        creator: {
+          name: 'John Doe',
+        },
+        organization: {
+          name: 'Organization 1',
+        },
+        updater: {
+          name: 'John Doe',
+        },
+        edges: {
+          node: {
+            id: 'nodeId',
+            name: 'Node Name',
+            fundingGoal: 1000,
+            startDate: dayjs().format('YYYY-MM-DD'),
+            endDate: dayjs().endOf('year').format('YYYY-MM-DD'),
+            currency: 'USD',
+            createdAt: dayjs().month(5).date(22).format('YYYY-MM-DD'),
+          },
+        },
+      },
+    };
+
+    // Re-render with new fund prop
+    rerender(
+      <MockedProvider link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <FundModal {...updatedProps} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // Verify form state updated
+    await waitFor(() => {
+      expect(screen.getByLabelText(translations.fundName)).toHaveValue(
+        'Updated Fund',
+      );
+      expect(screen.getByLabelText(translations.fundId)).toHaveValue('9999');
+      expect(screen.getByTestId('setisTaxDeductibleSwitch')).not.toBeChecked();
+      expect(screen.getByTestId('setDefaultSwitch')).toBeChecked();
+      expect(screen.getByTestId('archivedSwitch')).toBeChecked();
+    });
+  });
+
+  it('should reset form state when fund prop changes to null', async () => {
+    const { rerender } = renderFundModal(link1, fundProps[1]);
+
+    // Initial values
+    expect(screen.getByLabelText(translations.fundName)).toHaveValue('Fund 1');
+
+    // Create props with null fund
+    const updatedProps: InterfaceFundModal = {
+      ...fundProps[1],
+      fund: null,
+    };
+
+    // Re-render with null fund
+    rerender(
+      <MockedProvider link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <FundModal {...updatedProps} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // Verify form state is reset
+    await waitFor(() => {
+      expect(screen.getByLabelText(translations.fundName)).toHaveValue('');
+      expect(screen.getByLabelText(translations.fundId)).toHaveValue('');
     });
   });
 });

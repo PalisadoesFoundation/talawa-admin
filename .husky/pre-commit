@@ -29,6 +29,19 @@ pnpm run check-localstorage
 VENV_BIN=$(./.github/workflows/scripts/venv.sh) || exit 1
 
 echo "Running Python CI parity checks..."
+
+# Standard Python Checks (black, pydocstyle, flake8)
+# Running on: .github
+echo "🔍 Running black (formatting)..."
+"$VENV_BIN" -m black --check .github || exit 1
+
+echo "🔍 Running pydocstyle (docstrings)..."
+"$VENV_BIN" -m pydocstyle .github || exit 1
+
+echo "🔍 Running flake8 (linting)..."
+"$VENV_BIN" -m flake8 .github || exit 1
+
+
 # Python CI Parity Checks
 "$VENV_BIN" .github/workflows/scripts/check_docstrings.py --directories .github
 "$VENV_BIN" .github/workflows/scripts/compare_translations.py --directory public/locales

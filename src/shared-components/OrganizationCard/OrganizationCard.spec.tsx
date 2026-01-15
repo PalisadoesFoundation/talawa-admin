@@ -58,13 +58,13 @@ vi.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
 }));
 
-vi.mock('components/Avatar/Avatar', () => ({
+vi.mock('shared-components/Avatar/Avatar', () => ({
   default: ({ name }: { name: string }) => (
     <div data-testid="mock-avatar">{name}</div>
   ),
 }));
 
-vi.mock('components/OrgListCard/TruncatedText', () => ({
+vi.mock('shared-components/TruncatedText/TruncatedText', () => ({
   default: ({ text }: { text: string }) => <span>{text}</span>,
 }));
 

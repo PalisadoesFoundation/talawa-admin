@@ -16,7 +16,7 @@ import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueri
 import type { RenderResult } from '@testing-library/react';
 import { InterfacePostEdge } from 'types/Post/interface';
 import i18nForTest from 'utils/i18nForTest';
-import { I18nextProvider } from 'components/test-utils/I18nextProviderMock';
+import { I18nextProvider } from 'test-utils/I18nextProviderMock';
 import dayjs from 'dayjs';
 
 // Hoisted mocks (must be before vi.mock calls)
@@ -57,13 +57,22 @@ vi.mock('utils/useLocalstorage', () => ({
   }),
 }));
 
-// Mock Loader component
-vi.mock('components/Loader/Loader', () => ({
-  default: () => <div data-testid="loader">Loading...</div>,
+// Mock LoadingState component
+vi.mock('shared-components/LoadingState/LoadingState', () => ({
+  default: ({
+    isLoading,
+    children,
+  }: {
+    isLoading: boolean;
+    children: React.ReactNode;
+  }) => {
+    if (isLoading) return <div data-testid="loader">Loading...</div>;
+    return children;
+  },
 }));
 
 // Mock InfiniteScrollLoader
-vi.mock('components/InfiniteScrollLoader/InfiniteScrollLoader', () => ({
+vi.mock('shared-components/InfiniteScrollLoader/InfiniteScrollLoader', () => ({
   default: () => (
     <div data-testid="infinite-scroll-loader">Loading more...</div>
   ),
@@ -1289,5 +1298,52 @@ describe('FetchMore Success Coverage', () => {
     // Verify infinite scroll reflects the new hasNextPage status
     const infiniteScroll = screen.getByTestId('infinite-scroll');
     expect(infiniteScroll).toHaveAttribute('data-has-more', 'false');
+  });
+});
+
+describe('LoadingState Wrapper', () => {
+  beforeEach(() => {
+    nextId = 1;
+    vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({ orgId: '123' });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('shows loader during initial data loading', async () => {
+    // Create mocks with deliberate delay
+    const delayedOrgPostMock = {
+      ...orgPostListMock,
+      delay: 100, // 100ms delay
+    };
+    const delayedPinnedPostMock = {
+      ...orgPinnedPostListMock,
+      delay: 100,
+    };
+
+    renderComponent([delayedOrgPostMock, delayedPinnedPostMock]);
+
+    // Loader should be present during loading
+    expect(screen.getByTestId('loader')).toBeInTheDocument();
+
+    // Wait for content to load and loader to disappear
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+      expect(screen.getByTestId('page-header')).toBeInTheDocument();
+    });
+  });
+
+  it('renders content when not loading', async () => {
+    renderComponent([orgPostListMock, emptyPinnedPostsMock]);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    // Verify main content is visible
+    expect(screen.getByTestId('page-header')).toBeInTheDocument();
+    expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
   });
 });

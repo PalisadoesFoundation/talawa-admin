@@ -6,15 +6,6 @@
  * description, categories, URLs, and attachments. The modal also includes
  * validation for URLs and file size limits for attachments.
  *
- * @param props - The props for the component containing:
- *   - `agendaItemUpdateModalIsOpen`: Boolean indicating if the modal is open
- *   - `hideUpdateModal`: Function to close the modal
- *   - `formState`: The current state of the agenda item form
- *   - `setFormState`: Function to update the form state
- *   - `updateAgendaItemHandler`: Function to handle form submission
- *   - `t`: Translation function for localized strings
- *   - `agendaItemCategories`: List of available agenda item categories
- *
  * @remarks
  * - The component uses `react-bootstrap` for modal and form elements
  * - `@mui/material` is used for the Autocomplete component
@@ -23,7 +14,8 @@
  * - Dependencies: `react`, `react-bootstrap`, `@mui/material`, `react-icons`, `NotificationToast`
  * - Custom utility functions: `convertToBase64`
  *
- * @example
+ * @remarks
+ * Example usage:
  * ```tsx
  * <AgendaItemsUpdateModal
  *   agendaItemUpdateModalIsOpen={true}
@@ -39,7 +31,6 @@
 
 import React, { useState, useEffect } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { Autocomplete, TextField } from '@mui/material';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -48,6 +39,10 @@ import styles from '../../../style/app-fixed.module.css';
 // translation-check-keyPrefix: agendaItems
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import type { InterfaceAgendaItemsUpdateModalProps } from 'types/Agenda/interface';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { useTranslation } from 'react-i18next';
+import { BaseModal } from 'shared-components/BaseModal';
+// translation-check-keyPrefix: agendaItems
 const AgendaItemsUpdateModal: React.FC<
   InterfaceAgendaItemsUpdateModalProps
 > = ({
@@ -60,6 +55,7 @@ const AgendaItemsUpdateModal: React.FC<
   agendaItemCategories,
 }) => {
   const [newUrl, setNewUrl] = useState('');
+  const { t: tErrors } = useTranslation('errors');
 
   useEffect(() => {
     setFormState((prevState) => ({
@@ -71,9 +67,6 @@ const AgendaItemsUpdateModal: React.FC<
 
   /**
    * Validates if a given URL is in a correct format.
-   *
-   * @param url - The URL to validate.
-   * @returns True if the URL is valid, false otherwise.
    */
   const isValidUrl = (url: string): boolean => {
     // Regular expression for basic URL validation
@@ -99,8 +92,6 @@ const AgendaItemsUpdateModal: React.FC<
 
   /**
    * Handles removing a URL from the form state.
-   *
-   * @param url - The URL to remove.
    */
   const handleRemoveUrl = (url: string): void => {
     setFormState({
@@ -113,8 +104,6 @@ const AgendaItemsUpdateModal: React.FC<
    * Handles file input change event.
    * Converts selected files to base64 format and updates the form state.
    * Displays an error toast if the total file size exceeds the limit.
-   *
-   * @param e - The change event for file input.
    */
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -142,8 +131,6 @@ const AgendaItemsUpdateModal: React.FC<
 
   /**
    * Handles removing an attachment from the form state.
-   *
-   * @param attachment - The attachment to remove.
    */
   const handleRemoveAttachment = (attachment: string): void => {
     setFormState({
@@ -153,44 +140,62 @@ const AgendaItemsUpdateModal: React.FC<
   };
 
   return (
-    <BaseModal
-      className={styles.AgendaItemModal}
-      show={agendaItemUpdateModalIsOpen}
-      onHide={hideUpdateModal}
-      headerContent={
-        <p className={styles.titlemodalAgendaItems}>{t('updateAgendaItem')}</p>
-      }
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+      onReset={hideUpdateModal}
     >
-      <Form onSubmit={updateAgendaItemHandler}>
-        <Form.Group className="d-flex mb-3 w-100">
-          <Autocomplete
-            multiple
-            className={`${styles.noOutline} w-100`}
-            limitTags={2}
-            data-testid="categorySelect"
-            options={agendaItemCategories || []}
-            value={
-              agendaItemCategories?.filter((category) =>
-                formState.agendaItemCategoryIds.includes(category._id),
-              ) || []
-            }
-            filterSelectedOptions={true}
-            getOptionLabel={(
-              category: InterfaceAgendaItemCategoryInfo,
-            ): string => category.name}
-            onChange={(_, newCategories): void => {
-              setFormState({
-                ...formState,
-                agendaItemCategoryIds: newCategories.map(
-                  (category) => category._id,
-                ),
-              });
-            }}
-            renderInput={(params) => (
-              <TextField {...params} label={t('category')} />
-            )}
-          />
-        </Form.Group>
+      <BaseModal
+        className={styles.AgendaItemModal}
+        show={agendaItemUpdateModalIsOpen}
+        onHide={hideUpdateModal}
+        showCloseButton={false}
+        headerContent={
+          <>
+            <p className={styles.titlemodalAgendaItems}>
+              {t('updateAgendaItem')}
+            </p>
+            <Button
+              onClick={hideUpdateModal}
+              data-testid="updateAgendaItemModalCloseBtn"
+            >
+              <i className="fa fa-times" />
+            </Button>
+          </>
+        }
+      >
+        <Form onSubmit={updateAgendaItemHandler}>
+          <Form.Group className="d-flex mb-3 w-100">
+            <Autocomplete
+              multiple
+              className={`${styles.noOutline} w-100`}
+              limitTags={2}
+              data-testid="categorySelect"
+              options={agendaItemCategories || []}
+              value={
+                agendaItemCategories?.filter((category) =>
+                  formState.agendaItemCategoryIds.includes(category._id),
+                ) || []
+              }
+              filterSelectedOptions={true}
+              getOptionLabel={(
+                category: InterfaceAgendaItemCategoryInfo,
+              ): string => category.name}
+              onChange={(_, newCategories): void => {
+                setFormState({
+                  ...formState,
+                  agendaItemCategoryIds: newCategories.map(
+                    (category) => category._id,
+                  ),
+                });
+              }}
+              renderInput={(params) => (
+                <TextField {...params} label={t('category')} />
+              )}
+            />
+          </Form.Group>
 
         <Row className="mb-3">
           <Col>
@@ -246,82 +251,49 @@ const AgendaItemsUpdateModal: React.FC<
               value={newUrl}
               onChange={(e) => setNewUrl(e.target.value)}
             />
-            <Button onClick={handleAddUrl} data-testid="linkBtn">
-              {t('link')}
-            </Button>
-          </div>
-
-          {formState.urls.map((url, index) => (
-            <li key={index} className={styles.urlListItem}>
-              <FaLink className={styles.urlIcon} />
-              <a href={url} target="_blank" rel="noopener noreferrer">
-                {url.length > 50 ? url.substring(0, 50) + '...' : url}
-              </a>
-              <Button
-                variant="danger"
-                size="sm"
-                data-testid="deleteUrl"
-                className={styles.deleteButtonAgendaItems}
-                onClick={() => handleRemoveUrl(url)}
-              >
-                <FaTrash />
-              </Button>
-            </li>
-          ))}
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>{t('attachments')}</Form.Label>
-          <Form.Control
-            accept="image/*, video/*"
-            data-testid="attachment"
-            name="attachment"
-            type="file"
-            id="attachment"
-            multiple={true}
-            onChange={handleFileChange}
-          />
-          <Form.Text>{t('attachmentLimit')}</Form.Text>
-        </Form.Group>
-        {formState.attachments && (
-          <div className={styles.previewFile} data-testid="mediaPreview">
-            {formState.attachments.map((attachment, index) => (
-              <div key={index} className={styles.attachmentPreview}>
-                {attachment.includes('video') ? (
-                  <video
-                    muted
-                    autoPlay={true}
-                    loop={true}
-                    playsInline
-                    crossOrigin="anonymous"
+            <Form.Text>{t('attachmentLimit')}</Form.Text>
+          </Form.Group>
+          {formState.attachments && (
+            <div className={styles.previewFile} data-testid="mediaPreview">
+              {formState.attachments.map((attachment, index) => (
+                <div key={index} className={styles.attachmentPreview}>
+                  {attachment.includes('video') ? (
+                    <video
+                      muted
+                      autoPlay={true}
+                      loop={true}
+                      playsInline
+                      crossOrigin="anonymous"
+                    >
+                      <source src={attachment} type="video/mp4" />
+                    </video>
+                  ) : (
+                    <img src={attachment} alt={t('attachmentPreview')} />
+                  )}
+                  <button
+                    className={styles.closeButtonFile}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleRemoveAttachment(attachment);
+                    }}
+                    data-testid="deleteAttachment"
                   >
-                    <source src={attachment} type="video/mp4" />
-                  </video>
-                ) : (
-                  <img src={attachment} alt={t('attachmentPreview')} />
-                )}
-                <button
-                  className={styles.closeButtonFile}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleRemoveAttachment(attachment);
-                  }}
-                  data-testid="deleteAttachment"
-                >
-                  <i className="fa fa-times" />
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-        <Button
-          type="submit"
-          className={styles.greenregbtnAgendaItems}
-          data-testid="updateAgendaItemBtn"
-        >
-          {t('update')}
-        </Button>
-      </Form>
-    </BaseModal>
+                    <i className="fa fa-times" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          <Button
+            type="submit"
+            className={styles.greenregbtnAgendaItems}
+            data-testid="updateAgendaItemBtn"
+          >
+            {t('update')}
+          </Button>
+        </Form>
+      </BaseModal>
+    </ErrorBoundaryWrapper>
   );
 };
 

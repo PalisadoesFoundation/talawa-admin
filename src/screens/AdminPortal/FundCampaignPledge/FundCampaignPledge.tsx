@@ -1,8 +1,8 @@
 import { useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
-import Loader from 'components/Loader/Loader';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
@@ -13,7 +13,7 @@ import styles from 'style/app-fixed.module.css';
 import PledgeDeleteModal from './deleteModal/PledgeDeleteModal';
 import PledgeModal from './modal/PledgeModal';
 import { Popover } from '@mui/material';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/BreadcrumbsComponent';
 import { DataGrid } from 'shared-components/DataGridWrapper';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
@@ -214,7 +214,6 @@ const fundCampaignPledge = (): JSX.Element => {
     return now.isAfter(start) && now.isBefore(end);
   }, [pledgeData]);
 
-  if (pledgeLoading) return <Loader size="xl" />;
   if (pledgeError) {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
@@ -242,245 +241,246 @@ const fundCampaignPledge = (): JSX.Element => {
   });
 
   return (
-    <div>
-      <BreadcrumbsComponent
-        items={[
-          { label: fundName, to: `/orgfunds/${orgId}` },
-          fundId
-            ? {
-                label: campaignInfo?.name,
-                to: `/orgfundcampaign/${orgId}/${fundId}`,
-              }
-            : { label: campaignInfo?.name },
-          { translationKey: 'pledges.pledges', isCurrent: true },
-        ]}
-      />
-      <div className={styles.overviewContainer}>
-        <div className={styles.titleContainer}>
-          <h3>{campaignInfo?.name}</h3>
-          <span>
-            {t('pledges.endsOn')}{' '}
-            {dayjs(campaignInfo?.endDate).format('DD/MM/YYYY')}
-          </span>
-        </div>
-        <div className={styles.progressContainer}>
-          <div className="d-flex justify-content-center">
-            <div
-              className={`btn-group ${styles.toggleGroup}`}
-              role="group"
-              aria-label={tCommon('togglePledgedRaised')}
-            >
-              <input
-                type="radio"
-                className={`btn-check ${styles.toggleBtnPledge}`}
-                name="btnradio"
-                id="pledgedRadio"
-                checked={progressIndicator === 'pledged'}
-                onChange={() => {
-                  setProgressIndicator('pledged');
-                }}
-              />
-              <label
-                className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
-                htmlFor="pledgedRadio"
-              >
-                {t('pledges.pledgedAmount')}
-              </label>
-
-              <input
-                type="radio"
-                className={`btn-check ${styles.toggleBtnPledge}`}
-                name="btnradio"
-                id="raisedRadio"
-                onChange={() => setProgressIndicator('raised')}
-                checked={progressIndicator === 'raised'}
-              />
-              <label
-                className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
-                htmlFor="raisedRadio"
-              >
-                {t('pledges.raisedAmount')}
-              </label>
-            </div>
-          </div>
-
-          <div className={styles.progress}>
-            <ProgressBar
-              now={
-                progressIndicator === 'pledged'
-                  ? (totalPledged / (campaignInfo?.goal || 1)) * 100
-                  : (totalRaised / (campaignInfo?.goal || 1)) * 100
-              }
-              label={`${
-                currencySymbols[
-                  campaignInfo?.currency as keyof typeof currencySymbols
-                ] || '$'
-              }${progressIndicator === 'pledged' ? totalPledged.toLocaleString('en-US') : totalRaised.toLocaleString('en-US')}`}
-              max={100}
-              data-testid="progressBar"
-              className={`${styles.progressBar} ${styles.progressBarHeight}`}
-            />
-            <div className={styles.endpoints}>
-              <div className={styles.start}>
-                {currencySymbols[
-                  campaignInfo?.currency as keyof typeof currencySymbols
-                ] || '$'}
-                0
-              </div>
-              <div className={styles.end}>
-                {currencySymbols[
-                  campaignInfo?.currency as keyof typeof currencySymbols
-                ] || '$'}
-                {campaignInfo?.goal.toLocaleString('en-US')}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className={`${styles.btnsContainerPledge} align-items-center`}>
-        <AdminSearchFilterBar
-          searchPlaceholder={t('pledges.searchPledger')}
-          searchValue={searchTerm}
-          onSearchChange={(value) => setSearchTerm(value.trim())}
-          onSearchSubmit={(value: string) => {
-            setSearchTerm(value.trim());
-          }}
-          searchInputTestId="searchPledger"
-          searchButtonTestId="searchBtn"
-          hasDropdowns={true}
-          dropdowns={[
-            {
-              id: 'sort-pledges',
-              label: tCommon('sort'),
-              title: tCommon('sort'),
-              dataTestIdPrefix: 'filter',
-              selectedOption: sortBy,
-              onOptionChange: (value) =>
-                setSortBy(
-                  value as
-                    | 'amount_ASC'
-                    | 'amount_DESC'
-                    | 'endDate_ASC'
-                    | 'endDate_DESC',
-                ),
-              options: [
-                { label: t('pledges.lowestAmount'), value: 'amount_ASC' },
-                { label: t('pledges.highestAmount'), value: 'amount_DESC' },
-                { label: t('pledges.latestEndDate'), value: 'endDate_DESC' },
-                { label: t('pledges.earliestEndDate'), value: 'endDate_ASC' },
-              ],
-              type: 'sort',
-            },
+    <LoadingState isLoading={pledgeLoading} variant="spinner">
+      <div>
+        <BreadcrumbsComponent
+          items={[
+            { label: fundName, to: `/orgfunds/${orgId}` },
+            fundId
+              ? {
+                  label: campaignInfo?.name,
+                  to: `/orgfundcampaign/${orgId}/${fundId}`,
+                }
+              : { label: campaignInfo?.name },
+            { translationKey: 'pledges.pledges', isCurrent: true },
           ]}
-          additionalButtons={
-            <Button
-              variant="success"
-              className={styles.dropdown}
-              disabled={!isWithinCampaignDates}
-              onClick={() => handleOpenModal(null, 'create')}
-              data-testid="addPledgeBtn"
-              title={
-                !isWithinCampaignDates ? t('pledges.campaignNotActive') : ''
-              }
-            >
-              <i className={'fa fa-plus me-2'} />
-              {t('pledges.addPledge')}
-            </Button>
-          }
         />
-      </div>
-      <DataGrid
-        disableColumnMenu
-        columnBufferPx={7}
-        hideFooter={true}
-        getRowId={(row) => row.id}
-        slots={{
-          noRowsOverlay: () => (
-            <EmptyState
-              icon="volunteer_activism"
-              message={t('pledges.noPledges')}
-              dataTestId="fund-campaign-pledge-empty-state"
-            />
-          ),
-        }}
-        className={`${styles.dataGridNoHover} ${styles.dataGridRounded}`}
-        sx={{
-          '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-            outline: '2px solid var(--primary-theme-color)',
-            outlineOffset: '-2px',
-          },
-          '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-            outline: '2px solid var(--primary-theme-color)',
-            outlineOffset: '-2px',
-          },
-        }}
-        getRowClassName={() => `${styles.rowBackgroundPledge}`}
-        autoHeight
-        rowHeight={65}
-        rows={pledges.map((pledge) => ({
-          id: pledge.id,
-          users: pledge.users,
-          endDate: pledge.endDate,
-          pledgeDate: pledge.pledgeDate,
-          amount: pledge.amount,
-          currency: pledge.currency,
-        }))}
-        columns={columns}
-        isRowSelectable={() => false}
-      />
-      <PledgeModal
-        isOpen={modalState[ModalState.SAME]}
-        hide={() => closeModal(ModalState.SAME)}
-        campaignId={fundCampaignId}
-        orgId={orgId}
-        pledge={pledge}
-        refetchPledge={refetchPledge}
-        endDate={pledgeData?.fundCampaign?.endAt as Date}
-        mode={pledgeModalMode}
-      />
-      <PledgeDeleteModal
-        isOpen={modalState[ModalState.DELETE]}
-        hide={() => closeModal(ModalState.DELETE)}
-        pledge={pledge}
-        refetchPledge={refetchPledge}
-      />
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={() => setAnchorEl(null)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-      >
-        <div
-          className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
-          data-testid="extra-users-popup"
-        >
-          {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
-            <div
-              className={styles.pledgerContainer}
-              key={user.id}
-              data-testid={`extraUser-${index}`}
-            >
-              {user.avatarURL ? (
-                <img
-                  src={user.avatarURL}
-                  alt={user.name}
-                  className={styles.TableImagePledge}
+        <div className={styles.overviewContainer}>
+          <div className={styles.titleContainer}>
+            <h3>{campaignInfo?.name}</h3>
+            <span>
+              {t('pledges.endsOn')}{' '}
+              {dayjs(campaignInfo?.endDate).format('DD/MM/YYYY')}
+            </span>
+          </div>
+          <div className={styles.progressContainer}>
+            <div className="d-flex justify-content-center">
+              <fieldset
+                className={`btn-group ${styles.toggleGroup}`}
+                aria-label={tCommon('togglePledgedRaised')}
+              >
+                <input
+                  type="radio"
+                  className={`btn-check ${styles.toggleBtnPledge}`}
+                  name="btnradio"
+                  id="pledgedRadio"
+                  checked={progressIndicator === 'pledged'}
+                  onChange={() => {
+                    setProgressIndicator('pledged');
+                  }}
                 />
-              ) : (
-                <Avatar
-                  containerStyle={styles.imageContainerPledge}
-                  avatarStyle={styles.TableImagePledge}
-                  name={user.name}
-                  alt={user.name}
+                <label
+                  className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
+                  htmlFor="pledgedRadio"
+                >
+                  {t('pledges.pledgedAmount')}
+                </label>
+
+                <input
+                  type="radio"
+                  className={`btn-check ${styles.toggleBtnPledge}`}
+                  name="btnradio"
+                  id="raisedRadio"
+                  onChange={() => setProgressIndicator('raised')}
+                  checked={progressIndicator === 'raised'}
                 />
-              )}
-              <span>{user.name}</span>
+                <label
+                  className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
+                  htmlFor="raisedRadio"
+                >
+                  {t('pledges.raisedAmount')}
+                </label>
+              </fieldset>
             </div>
-          ))}
+
+            <div className={styles.progress}>
+              <ProgressBar
+                now={
+                  progressIndicator === 'pledged'
+                    ? (totalPledged / (campaignInfo?.goal || 1)) * 100
+                    : (totalRaised / (campaignInfo?.goal || 1)) * 100
+                }
+                label={`${
+                  currencySymbols[
+                    campaignInfo?.currency as keyof typeof currencySymbols
+                  ] || '$'
+                }${progressIndicator === 'pledged' ? totalPledged.toLocaleString('en-US') : totalRaised.toLocaleString('en-US')}`}
+                max={100}
+                data-testid="progressBar"
+                className={`${styles.progressBar} ${styles.progressBarHeight}`}
+              />
+              <div className={styles.endpoints}>
+                <div className={styles.start}>
+                  {currencySymbols[
+                    campaignInfo?.currency as keyof typeof currencySymbols
+                  ] || '$'}
+                  0
+                </div>
+                <div className={styles.end}>
+                  {currencySymbols[
+                    campaignInfo?.currency as keyof typeof currencySymbols
+                  ] || '$'}
+                  {campaignInfo?.goal.toLocaleString('en-US')}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </Popover>
-    </div>
+        <div className={`${styles.btnsContainerPledge} align-items-center`}>
+          <SearchFilterBar
+            searchPlaceholder={t('pledges.searchPledger')}
+            searchValue={searchTerm}
+            onSearchChange={(value) => setSearchTerm(value.trim())}
+            onSearchSubmit={(value: string) => {
+              setSearchTerm(value.trim());
+            }}
+            searchInputTestId="searchPledger"
+            searchButtonTestId="searchBtn"
+            hasDropdowns={true}
+            dropdowns={[
+              {
+                id: 'sort-pledges',
+                label: tCommon('sort'),
+                title: tCommon('sort'),
+                dataTestIdPrefix: 'filter',
+                selectedOption: sortBy,
+                onOptionChange: (value) =>
+                  setSortBy(
+                    value as
+                      | 'amount_ASC'
+                      | 'amount_DESC'
+                      | 'endDate_ASC'
+                      | 'endDate_DESC',
+                  ),
+                options: [
+                  { label: t('pledges.lowestAmount'), value: 'amount_ASC' },
+                  { label: t('pledges.highestAmount'), value: 'amount_DESC' },
+                  { label: t('pledges.latestEndDate'), value: 'endDate_DESC' },
+                  { label: t('pledges.earliestEndDate'), value: 'endDate_ASC' },
+                ],
+                type: 'sort',
+              },
+            ]}
+            additionalButtons={
+              <Button
+                variant="success"
+                className={styles.dropdown}
+                disabled={!isWithinCampaignDates}
+                onClick={() => handleOpenModal(null, 'create')}
+                data-testid="addPledgeBtn"
+                title={
+                  !isWithinCampaignDates ? t('pledges.campaignNotActive') : ''
+                }
+              >
+                <i className={'fa fa-plus me-2'} />
+                {t('pledges.addPledge')}
+              </Button>
+            }
+          />
+        </div>
+        <DataGrid
+          disableColumnMenu
+          columnBufferPx={7}
+          hideFooter={true}
+          getRowId={(row) => row.id}
+          slots={{
+            noRowsOverlay: () => (
+              <EmptyState
+                icon="volunteer_activism"
+                message={t('pledges.noPledges')}
+                dataTestId="fund-campaign-pledge-empty-state"
+              />
+            ),
+          }}
+          className={`${styles.dataGridNoHover} ${styles.dataGridRounded}`}
+          sx={{
+            '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+              outline: '2px solid var(--primary-theme-color)',
+              outlineOffset: '-2px',
+            },
+            '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
+              outline: '2px solid var(--primary-theme-color)',
+              outlineOffset: '-2px',
+            },
+          }}
+          getRowClassName={() => `${styles.rowBackgroundPledge}`}
+          autoHeight
+          rowHeight={65}
+          rows={pledges.map((pledge) => ({
+            id: pledge.id,
+            users: pledge.users,
+            endDate: pledge.endDate,
+            pledgeDate: pledge.pledgeDate,
+            amount: pledge.amount,
+            currency: pledge.currency,
+          }))}
+          columns={columns}
+          isRowSelectable={() => false}
+        />
+        <PledgeModal
+          isOpen={modalState[ModalState.SAME]}
+          hide={() => closeModal(ModalState.SAME)}
+          campaignId={fundCampaignId}
+          orgId={orgId}
+          pledge={pledge}
+          refetchPledge={refetchPledge}
+          endDate={pledgeData?.fundCampaign?.endAt as Date}
+          mode={pledgeModalMode}
+        />
+        <PledgeDeleteModal
+          isOpen={modalState[ModalState.DELETE]}
+          hide={() => closeModal(ModalState.DELETE)}
+          pledge={pledge}
+          refetchPledge={refetchPledge}
+        />
+        <Popover
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={() => setAnchorEl(null)}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        >
+          <div
+            className={`${styles.popup} ${extraUsers.length > 4 ? styles.popupExtra : ''}`}
+            data-testid="extra-users-popup"
+          >
+            {extraUsers.map((user: InterfaceUserInfoPG, index: number) => (
+              <div
+                className={styles.pledgerContainer}
+                key={user.id}
+                data-testid={`extraUser-${index}`}
+              >
+                {user.avatarURL ? (
+                  <img
+                    src={user.avatarURL}
+                    alt={user.name}
+                    className={styles.TableImagePledge}
+                  />
+                ) : (
+                  <Avatar
+                    containerStyle={styles.imageContainerPledge}
+                    avatarStyle={styles.TableImagePledge}
+                    name={user.name}
+                    alt={user.name}
+                  />
+                )}
+                <span>{user.name}</span>
+              </div>
+            ))}
+          </div>
+        </Popover>
+      </div>
+    </LoadingState>
   );
 };
 export default fundCampaignPledge;

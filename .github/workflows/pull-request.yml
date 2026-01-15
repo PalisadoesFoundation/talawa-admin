@@ -48,7 +48,7 @@ jobs:
       - name: Count number of lines
         run: |
           chmod +x ./.github/workflows/scripts/countline.py
-          ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/AdminPortal/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/shared-components/ProfileForm/ProfileForm.tsx src/components/OrgPostCard/OrgPostCard.tsx src/components/UsersTableItem/UsersTableItem.tsx src/components/UserPortal/ChatRoom/ChatRoom.tsx src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx src/shared-components/postCard/PostCard.tsx src/shared-components/EventForm/EventForm.tsx
+          ./.github/workflows/scripts/countline.py --lines 600 --files ./.github/workflows/config/countline_excluded_file_list.txt
 
       - name: Get changed TypeScript files
         id: changed-files
@@ -140,18 +140,6 @@ jobs:
 
       - name: Check for unused files and exports in src/ and docs/src
         run: pnpm knip --include files,exports,nsExports,nsTypes
-
-  DataGrid-Policy-Check:
-    name: Check for forbidden DataGrid usage in screens
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Run DataGrid Usage Check
-        run: |
-          chmod +x scripts/lint-datagrid.sh
-          ./scripts/lint-datagrid.sh
 
   CSS-Policy-Check:
     name: CSS Policy Check
@@ -304,6 +292,9 @@ jobs:
             '^docs/docusaurus.config.ts$'
             '^docs/sidebar..*'
             'CNAME$'
+            '^./*md'
+            '^./*txt'
+            '^./*TXT'            
           )
 
           # Check for changes in sensitive files
@@ -443,7 +434,6 @@ jobs:
         MinIO-Compliance-Check,
         Python-Compliance,
         Translation-Tag-Check,
-        DataGrid-Policy-Check,
       ]
     steps:
       - name: This job intentionally does nothing

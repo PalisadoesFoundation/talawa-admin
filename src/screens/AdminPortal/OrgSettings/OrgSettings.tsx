@@ -7,8 +7,7 @@
  * the content based on the selected tab and ensures the organization ID is
  * present in the URL parameters.
  *
- * @component
- * @returns {JSX.Element} The rendered organization settings page.
+ * @returns The rendered organization settings page.
  *
  * @remarks
  * - The component uses `useTranslation` from `react-i18next` for internationalization.
@@ -21,18 +20,6 @@
  * <OrgSettings />
  * ```
  *
- * @typedef {('general' | 'actionItemCategories' | 'agendaItemCategories')} SettingType
- * Represents the type of settings tabs available in the component.
- *
- * @property {SettingType[]} settingtabs
- * An array of available settings tabs.
- *
- * @property {SettingType} tab
- * The currently selected settings tab, managed using React state.
- *
- * @function setTab
- * Updates the currently selected tab when a tab button is clicked.
- *
  * @see {@link GeneralSettings} for the General Settings tab content.
  * @see {@link OrgActionItemCategories} for the Action Item Categories tab content.
  * @see {@link OrganizationAgendaCategory} for the Agenda Item Categories tab content.
@@ -40,11 +27,11 @@
 import React, { useState } from 'react';
 import { Button, Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
-import OrgActionItemCategories from 'components/OrgSettings/ActionItemCategories/OrgActionItemCategories';
-import OrganizationAgendaCategory from 'components/OrgSettings/AgendaItemCategories/OrganizationAgendaCategory';
+import styles from './OrgSettings.module.css';
+import OrgActionItemCategories from 'components/AdminPortal/OrgSettings/ActionItemCategories/OrgActionItemCategories';
+import OrganizationAgendaCategory from 'components/AdminPortal/OrgSettings/AgendaItemCategories/OrganizationAgendaCategory';
 import { Navigate, useParams } from 'react-router';
-import GeneralSettings from 'components/OrgSettings/General/GeneralSettings';
+import GeneralSettings from 'components/AdminPortal/OrgSettings/General/GeneralSettings';
 
 type SettingType = 'general' | 'actionItemCategories' | 'agendaItemCategories';
 

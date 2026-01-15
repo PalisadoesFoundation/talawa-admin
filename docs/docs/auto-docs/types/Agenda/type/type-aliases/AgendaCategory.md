@@ -28,7 +28,7 @@ Defined in: [src/types/Agenda/type.ts:6](https://github.com/PalisadoesFoundation
 
 ### createdBy
 
-> **createdBy**: [`User`](../../../User/type/type-aliases/User.md)
+> **createdBy**: [`User`](../../../shared-components/User/type/type-aliases/User.md)
 
 Defined in: [src/types/Agenda/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L7)
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Agenda/type.ts:9](https://github.com/PalisadoesFoundation
 
 ### organization
 
-> **organization**: [`Organization`](../../../Organization/type/type-aliases/Organization.md)
+> **organization**: [`Organization`](../../../AdminPortal/Organization/type/type-aliases/Organization.md)
 
 Defined in: [src/types/Agenda/type.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L10)
 
@@ -68,6 +68,6 @@ Defined in: [src/types/Agenda/type.ts:11](https://github.com/PalisadoesFoundatio
 
 ### updatedBy?
 
-> `optional` **updatedBy**: [`User`](../../../User/type/type-aliases/User.md)
+> `optional` **updatedBy**: [`User`](../../../shared-components/User/type/type-aliases/User.md)
 
 Defined in: [src/types/Agenda/type.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L12)
