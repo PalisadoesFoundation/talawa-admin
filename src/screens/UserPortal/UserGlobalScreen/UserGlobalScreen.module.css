@@ -13,6 +13,26 @@
   flex: 1;
 }
 
+@keyframes moveLeft {
+  from {
+    transform: translateX(var(--space-11));
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes moveRight {
+  from {
+    transform: translateX(calc(-1 * var(--space-11)));
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
 .expand {
   margin-left: var(--space-13);
   padding-left: var(--space-11);
@@ -123,37 +143,5 @@
     width: 100%;
     left: 0;
     right: 0;
-  }
-
-  .hideElemByDefault {
-    display: none;
-  }
-
-  .leftDrawer {
-    width: 100%;
-    left: 0;
-    right: 0;
-  }
-
-  .inactiveDrawer {
-    opacity: 0;
-    left: 0;
-    z-index: -1;
-    animation: closeDrawer 0.4s ease-in-out;
-  }
-
-  .activeDrawer {
-    display: flex;
-    z-index: 100;
-    animation: openDrawer 0.6s ease-in-out;
-  }
-
-  .logout {
-    margin-bottom: var(--space-9);
-  }
-
-  .containerHeightUserPost {
-    height: 100vh;
-    padding: var(--space-8);
   }
 }

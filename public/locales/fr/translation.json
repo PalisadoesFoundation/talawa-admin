@@ -2208,5 +2208,7 @@
   "orgProfileField": {
     "editCustomField": "Modifier le champ personnalisé"
   },
-  "globalFeatures": "Fonctionnalités Globales"
+  "userGlobalScreen": {
+    "globalFeatures": "Fonctionnalités Globales"
+  }
 }

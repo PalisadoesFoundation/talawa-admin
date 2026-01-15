@@ -23,7 +23,9 @@ import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 const UserGlobalScreen = (): JSX.Element => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userGlobalScreen',
+  });
   const [hideDrawer, setHideDrawer] = useState<boolean>(false);
 
   /**

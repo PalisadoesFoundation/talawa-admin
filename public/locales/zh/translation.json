@@ -2208,5 +2208,7 @@
   "orgProfileField": {
     "editCustomField": "編輯自定義字段"
   },
-  "globalFeatures": "全球功能"
+  "userGlobalScreen": {
+    "globalFeatures": "全球功能"
+  }
 }

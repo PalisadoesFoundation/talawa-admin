@@ -20,18 +20,10 @@
   overflow-x: hidden;
 }
 
-.maxWidth {
-  max-width: var(--space-27);
-}
-
 .content {
   width: 100%;
   display: flex;
   flex-direction: column;
-}
-
-.orgCard .innerContainer .content {
-  margin-left: 0;
 }
 
 @media screen and (max-width: 850px) {

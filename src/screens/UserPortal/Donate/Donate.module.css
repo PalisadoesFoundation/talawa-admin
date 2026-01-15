@@ -25,10 +25,6 @@
   display: inline-block;
 }
 
-.customDropdown {
-  width: auto;
-}
-
 .dropdown:is(:hover, :active, .show, :disabled, :checked) {
   box-shadow:
     0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
@@ -78,10 +74,6 @@
   margin: 0;
 }
 
-.btnsContainer .inputContainer button {
-  width: var(--space-10);
-}
-
 .box:hover {
   box-shadow:
     0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
@@ -104,12 +96,6 @@
   font-size: var(--font-size-md);
 }
 
-.donationInputContainer {
-  display: flex;
-  flex-direction: row;
-  margin-top: var(--space-6);
-}
-
 .width100 {
   width: 100%;
 }
@@ -124,16 +110,4 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-}
-
-.content {
-  padding-top: var(--space-4);
-  flex-grow: 1;
-}
-
-.cardGrid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-5);
-  --bs-gutter-x: 0;
 }
