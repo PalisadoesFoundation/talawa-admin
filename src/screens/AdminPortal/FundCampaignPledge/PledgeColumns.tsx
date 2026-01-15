@@ -12,7 +12,7 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './PledgeColumns.module.css';
 
 /**
  * Props for the getPledgeColumns function.
