@@ -84,7 +84,11 @@
     "communityLogo": "Community Logo",
     "organizations": "Organizations",
     "accountLocked": "Your account has been temporarily locked due to too many failed login attempts. Please try again later.",
-    "accountLockedWithTimer": "Your account has been temporarily locked. Please try again in {{minutes}} minute(s)."
+    "accountLockedWithTimer": "Your account has been temporarily locked. Please try again in {{minutes}} minute(s).",
+    "emailNotVerified": "Your email is not verified. Please check your inbox for the verification link.",
+    "resendVerification": "Resend Verification Email",
+    "emailResent": "Verification email sent successfully!",
+    "signupSuccessVerifyEmail": "Registration successful! Please check your email to verify your account."
   },
   "adminProfile": {
     "title": "Admin Profile",
@@ -1122,6 +1126,19 @@
     "forgotPassword": "forgotPassword",
     "password": "password",
     "talawaApiUnavailable": "talawaApiUnavailable"
+  },
+  "verifyEmail": {
+    "title": "Email Verification",
+    "verifying": "Verifying your email...",
+    "success": "Email Verified Successfully!",
+    "successMessage": "Your email has been verified. You can now log in to your account.",
+    "goToLogin": "Go to Login",
+    "error": "Verification Failed",
+    "invalidToken": "The verification link is invalid or has expired.",
+    "resendSuccess": "Verification email sent! Please check your inbox.",
+    "resendButton": "Resend Verification Email",
+    "enterEmail": "Enter your email address",
+    "emailPlaceholder": "Email"
   },
   "pageNotFound": {
     "404": "404",

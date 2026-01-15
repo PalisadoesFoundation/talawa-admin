@@ -264,6 +264,32 @@ export const CREATE_MEMBER_PG = gql`
   }
 `;
 
+// to verify email address with token
+export const VERIFY_EMAIL_MUTATION = gql`
+  mutation VerifyEmail($token: String!) {
+    verifyEmail(token: $token) {
+      success
+      message
+      user {
+        id
+        name
+        emailAddress
+        isEmailAddressVerified
+      }
+    }
+  }
+`;
+
+// to resend email verification
+export const RESEND_VERIFICATION_EMAIL_MUTATION = gql`
+  mutation ResendVerificationEmail($email: EmailAddress!) {
+    resendVerificationEmail(email: $email) {
+      success
+      message
+    }
+  }
+`;
+
 // to login in the talawa admin
 
 // to get the refresh token

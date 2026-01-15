@@ -31,7 +31,10 @@ import {
   RECAPTCHA_SITE_KEY,
   BACKEND_URL,
 } from 'Constant/constant';
-import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  SIGNUP_MUTATION,
+  RESEND_VERIFICATION_EMAIL_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_LIST_NO_MEMBERS,
   SIGNIN_QUERY,
@@ -125,6 +128,8 @@ const LoginPage = (): JSX.Element => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
+  const [emailNotVerified, setEmailNotVerified] = useState<boolean>(false);
+  const [unverifiedEmail, setUnverifiedEmail] = useState<string>('');
   const [showAlert, setShowAlert] = useState<PasswordValidation>({
     lowercaseChar: true,
     uppercaseChar: true,
@@ -194,6 +199,9 @@ const LoginPage = (): JSX.Element => {
   }, [data]);
   const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
+  const [resendVerificationEmail, { loading: resendLoading }] = useMutation(
+    RESEND_VERIFICATION_EMAIL_MUTATION,
+  );
   const { data: orgData } = useQuery(ORGANIZATION_LIST_NO_MEMBERS);
   const { startSession, extendSession } = useSession();
   useEffect(() => {
@@ -238,6 +246,24 @@ const LoginPage = (): JSX.Element => {
     setRecaptchaToken(token);
   };
 
+  const handleResendVerification = async (): Promise<void> => {
+    if (!unverifiedEmail) {
+      return;
+    }
+
+    try {
+      const { data } = await resendVerificationEmail({
+        variables: { email: unverifiedEmail },
+      });
+
+      if (data?.resendVerificationEmail?.success) {
+        NotificationToast.success(t('emailResent') as string);
+      }
+    } catch (error) {
+      errorHandler(t, error);
+    }
+  };
+
   const signupLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
@@ -279,11 +305,7 @@ const LoginPage = (): JSX.Element => {
           });
 
           if (signUpData) {
-            NotificationToast.success(
-              t(
-                role === 'admin' ? 'successfullyRegistered' : 'afterRegister',
-              ) as string,
-            );
+            NotificationToast.success(t('signupSuccessVerifyEmail') as string);
             setShowTab('LOGIN');
             setSignFormState({
               signName: '',
@@ -398,6 +420,12 @@ const LoginPage = (): JSX.Element => {
           setItem('userId', loggedInUserId);
         }
 
+        // Check if email is not verified and show warning
+        if (!user.isEmailAddressVerified) {
+          setEmailNotVerified(true);
+          setUnverifiedEmail(user.emailAddress);
+        }
+
         // If there is a pending invitation token from the public invite flow, resume it
         // We check the component state (captured on mount) rather than localStorage
         // because localStorage may have been cleared by session management code.
@@ -503,6 +531,28 @@ const LoginPage = (): JSX.Element => {
                     {/* {role === 'admin' ? tCommon('login') : t('userLogin')} */}
                     {role === 'admin' ? t('adminLogin') : t('userLogin')}
                   </h1>
+                  {emailNotVerified && (
+                    <div
+                      className="alert alert-warning d-flex align-items-center justify-content-between mb-3"
+                      role="alert"
+                      data-testid="email-not-verified-warning"
+                    >
+                      <div>
+                        <i className="fas fa-exclamation-triangle me-2"></i>
+                        {t('emailNotVerified')}
+                      </div>
+                      <Button
+                        variant="link"
+                        size="sm"
+                        onClick={handleResendVerification}
+                        disabled={resendLoading}
+                        className="p-0 ms-2"
+                        data-testid="resend-verification-btn"
+                      >
+                        {t('resendVerification')}
+                      </Button>
+                    </div>
+                  )}
                   <FormFieldGroup
                     name="email"
                     label={tCommon('email')}

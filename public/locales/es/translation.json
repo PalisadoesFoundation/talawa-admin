@@ -84,6 +84,10 @@
     "organizations": "Organizaciones",
     "accountLocked": "Su cuenta ha sido bloqueada temporalmente debido a demasiados intentos fallidos de inicio de sesión. Por favor, inténtelo de nuevo más tarde.",
     "accountLockedWithTimer": "Su cuenta ha sido bloqueada temporalmente. Por favor, inténtelo de nuevo en {{minutes}} minuto(s).",
+    "emailNotVerified": "Su correo electrónico no está verificado. Por favor, revise su bandeja de entrada para el enlace de verificación.",
+    "resendVerification": "Reenviar correo de verificación",
+    "emailResent": "¡Correo de verificación enviado exitosamente!",
+    "signupSuccessVerifyEmail": "¡Registro exitoso! Por favor, revise su correo para verificar su cuenta.",
     "backToLogin": "Volver al inicio de sesión"
   },
   "adminProfile": {
@@ -1089,6 +1093,19 @@
     "date": "Fecha",
     "transactionId": "ID de transacción",
     "amount": "Monto"
+  },
+  "verifyEmail": {
+    "title": "Verificación de correo electrónico",
+    "verifying": "Verificando su correo electrónico...",
+    "success": "¡Correo electrónico verificado exitosamente!",
+    "successMessage": "Su correo electrónico ha sido verificado. Ahora puede iniciar sesión en su cuenta.",
+    "goToLogin": "Ir a Iniciar Sesión",
+    "error": "Verificación Fallida",
+    "invalidToken": "El enlace de verificación es inválido o ha expirado.",
+    "resendSuccess": "¡Correo de verificación enviado! Por favor, revise su bandeja de entrada.",
+    "resendButton": "Reenviar correo de verificación",
+    "enterEmail": "Ingrese su dirección de correo electrónico",
+    "emailPlaceholder": "Correo electrónico"
   },
   "orgSettings": {
     "title": "Configuración",

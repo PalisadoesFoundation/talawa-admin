@@ -84,7 +84,11 @@
     "communityLogo": "Logo de la Communauté",
     "organizations": "Organisations",
     "accountLocked": "Votre compte a été temporairement verrouillé en raison de trop nombreuses tentatives de connexion échouées. Veuillez réessayer plus tard.",
-    "accountLockedWithTimer": "Votre compte a été temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s)."
+    "accountLockedWithTimer": "Votre compte a été temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s).",
+    "emailNotVerified": "Votre email n'est pas vérifié. Veuillez consulter votre boîte de réception pour le lien de vérification.",
+    "resendVerification": "Renvoyer l'email de vérification",
+    "emailResent": "Email de vérification envoyé avec succès!",
+    "signupSuccessVerifyEmail": "Inscription réussie! Veuillez vérifier votre email pour vérifier votre compte."
   },
   "adminProfile": {
     "title": "Profil Administrateur",
@@ -1061,6 +1065,19 @@
     "forgotPassword": "Mot de passe oublié",
     "password": "Mot de passe",
     "talawaApiUnavailable": "API Talawa non disponible"
+  },
+  "verifyEmail": {
+    "title": "Vérification d'email",
+    "verifying": "Vérification de votre email...",
+    "success": "Email vérifié avec succès!",
+    "successMessage": "Votre email a été vérifié. Vous pouvez maintenant vous connecter à votre compte.",
+    "goToLogin": "Aller à la connexion",
+    "error": "Échec de la vérification",
+    "invalidToken": "Le lien de vérification est invalide ou a expiré.",
+    "resendSuccess": "Email de vérification envoyé! Veuillez vérifier votre boîte de réception.",
+    "resendButton": "Renvoyer l'email de vérification",
+    "enterEmail": "Entrez votre adresse email",
+    "emailPlaceholder": "Email"
   },
   "pageNotFound": {
     "404": "404",

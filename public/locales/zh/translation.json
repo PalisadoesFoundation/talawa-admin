@@ -84,7 +84,11 @@
     "communityLogo": "社区标志",
     "organizations": "组织",
     "accountLocked": "由于登录失败次数过多，您的账户已被暂时锁定。请稍后重试。",
-    "accountLockedWithTimer": "您的账户已被暂时锁定。请在 {{minutes}} 分钟后重试。"
+    "accountLockedWithTimer": "您的账户已被暂时锁定。请在 {{minutes}} 分钟后重试。",
+    "emailNotVerified": "您的电子邮件尚未验证。请检查您的收件箱以获取验证链接。",
+    "resendVerification": "重新发送验证电子邮件",
+    "emailResent": "验证电子邮件已成功发送!",
+    "signupSuccessVerifyEmail": "注册成功!请检查您的电子邮件以验证您的账户。"
   },
   "adminProfile": {
     "title": "管理员资料",
@@ -1079,6 +1083,19 @@
     "forgotPassword": "忘记密码",
     "password": "密码",
     "talawaApiUnavailable": "塔拉瓦 API 不可用"
+  },
+  "verifyEmail": {
+    "title": "电子邮件验证",
+    "verifying": "正在验证您的电子邮件...",
+    "success": "电子邮件验证成功!",
+    "successMessage": "您的电子邮件已验证。现在您可以登录您的账户。",
+    "goToLogin": "去登录",
+    "error": "验证失败",
+    "invalidToken": "验证链接无效或已过期。",
+    "resendSuccess": "验证电子邮件已发送!请检查您的收件箱。",
+    "resendButton": "重新发送验证电子邮件",
+    "enterEmail": "输入您的电子邮件地址",
+    "emailPlaceholder": "电子邮件"
   },
   "pageNotFound": {
     "404": "404",

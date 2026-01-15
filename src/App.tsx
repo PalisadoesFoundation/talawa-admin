@@ -117,6 +117,8 @@ const PluginStore = lazy(
   () => import('screens/AdminPortal/PluginStore/PluginStore'),
 );
 
+const VerifyEmail = lazy(() => import('screens/Auth/VerifyEmail/VerifyEmail'));
+
 const { setItem } = useLocalStorage();
 
 /**
@@ -209,6 +211,7 @@ function App(): React.ReactElement {
           <Route path="/" element={<LoginPage />} />
           <Route path="/register" element={<LoginPage />} />
           <Route path="/admin" element={<LoginPage />} />
+          <Route path="/auth/verify-email" element={<VerifyEmail />} />
           <Route element={<SecuredRoute />}>
             <Route element={<SuperAdminScreen />}>
               <Route path="/orglist" element={<OrgList />} />
