@@ -90,28 +90,31 @@ export const askAndSetRecaptcha = async (): Promise<void> => {
       throw error;
     }
     console.error('Error setting up reCAPTCHA:', error);
-    throw new Error(
-      `Failed to set up reCAPTCHA: ${
-        error instanceof Error ? error.message : String(error)
-      }`,
-    );
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to set up reCAPTCHA: ${errorMessage}`);
   }
 };
 
 // Ask and set up logging errors in the console
 const askAndSetLogErrors = async (): Promise<void> => {
-  const { shouldLogErrors } = await inquirer.prompt({
-    type: 'confirm',
-    name: 'shouldLogErrors',
-    message:
-      'Would you like to log Compiletime and Runtime errors in the console?',
-    default: true,
-  });
+  try {
+    const { shouldLogErrors } = await inquirer.prompt({
+      type: 'confirm',
+      name: 'shouldLogErrors',
+      message:
+        'Would you like to log Compiletime and Runtime errors in the console?',
+      default: true,
+    });
 
-  updateEnvFile(
-    ENV_KEYS.ALLOW_LOGS,
-    shouldLogErrors ? ENV_VALUES.YES : ENV_VALUES.NO,
-  );
+    updateEnvFile(
+      ENV_KEYS.ALLOW_LOGS,
+      shouldLogErrors ? ENV_VALUES.YES : ENV_VALUES.NO,
+    );
+  } catch (error) {
+    console.error('Error setting up log configuration:', error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    throw new Error(`Failed to set log configuration: ${errorMessage}`);
+  }
 };
 
 /**
@@ -143,6 +146,7 @@ const askAndSetLogErrors = async (): Promise<void> => {
  * @throws Error - if any setup step fails.
  */
 export async function main(): Promise<void> {
+  let backupPath: string | null = null;
   // Handle user cancellation (CTRL+C)
   const sigintHandler = (): void => {
     console.log('\n\n⚠️  Setup cancelled by user.');
@@ -156,15 +160,19 @@ export async function main(): Promise<void> {
 
   try {
     if (!checkEnvFile()) {
-      return;
+      console.error(
+        '❌ Environment file check failed. Please ensure .env exists.',
+      );
+      process.exit(1);
     }
 
     console.log('Welcome to the Talawa Admin setup! 🚀');
 
-    await backupEnvFile();
     modifyEnvFile();
-    await askAndSetDockerOption();
 
+    backupPath = await backupEnvFile();
+
+    await askAndSetDockerOption();
     // Use async file read instead of sync
     const envFileContent = await fs.promises.readFile('.env', 'utf8');
     const envConfig = dotenv.parse(envFileContent);
@@ -190,8 +198,17 @@ export async function main(): Promise<void> {
       console.log('\n\n⚠️  Setup cancelled by user.');
       process.exit(130);
     }
-
     console.error('\n❌ Setup failed:', error);
+    if (backupPath) {
+      console.log('🔄 Attempting to restore from backup...');
+      try {
+        fs.copyFileSync(backupPath, '.env');
+        console.log('✅ Configuration restored from backup.');
+      } catch (restoreError) {
+        console.error('❌ Failed to restore backup:', restoreError);
+        console.log(`Manual restore needed. Backup location: ${backupPath}`);
+      }
+    }
     console.log('\nPlease try again or contact support if the issue persists.');
     process.exit(1);
   } finally {
