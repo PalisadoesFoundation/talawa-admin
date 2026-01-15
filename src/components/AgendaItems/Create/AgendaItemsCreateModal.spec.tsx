@@ -13,10 +13,12 @@ import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 
+// eslint-disable-next-line no-restricted-imports -- Test file needs direct access for mocking
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import AgendaItemsCreateModal from './AgendaItemsCreateModal';
+// eslint-disable-next-line no-restricted-imports -- Test file needs direct access for mocking
 import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import type { MockedFunction } from 'vitest';
@@ -220,7 +222,10 @@ describe('AgendaItemsCreateModal', () => {
     fireEvent.click(linkBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('invalidUrl');
+      expect(toast.error).toHaveBeenCalledWith(
+        'invalidUrl',
+        expect.any(Object),
+      );
     });
   });
 
@@ -260,7 +265,10 @@ describe('AgendaItemsCreateModal', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('fileSizeExceedsLimit');
+      expect(toast.error).toHaveBeenCalledWith(
+        'fileSizeExceedsLimit',
+        expect.any(Object),
+      );
     });
   });
 
