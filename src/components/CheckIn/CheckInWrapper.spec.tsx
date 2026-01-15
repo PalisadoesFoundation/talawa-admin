@@ -7,9 +7,11 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import { ToastContainer } from 'react-toastify';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import { checkInQueryMock } from './CheckInMocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
@@ -40,7 +42,6 @@ describe('Testing CheckIn Wrapper', () => {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
                 <CheckInWrapper {...props} />
               </I18nextProvider>
             </Provider>
@@ -53,7 +54,7 @@ describe('Testing CheckIn Wrapper', () => {
     fireEvent.click(screen.getByLabelText('checkInMembers') as Element);
 
     await waitFor(() =>
-      expect(screen.queryByTestId('modal-title')).toBeInTheDocument(),
+      expect(screen.getByText(/Event Check In/i)).toBeInTheDocument(),
     );
 
     //  Close the modal
@@ -62,7 +63,7 @@ describe('Testing CheckIn Wrapper', () => {
     fireEvent.click(closebtn as Element);
 
     await waitFor(() =>
-      expect(screen.queryByTestId('modal-title')).not.toBeInTheDocument(),
+      expect(screen.queryByText(/Event Check In/i)).not.toBeInTheDocument(),
     );
   });
 });

@@ -276,6 +276,7 @@ const renderWithProviders = (
 
 describe('EventRegistrantsModal', () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
