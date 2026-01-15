@@ -85,11 +85,11 @@ export const CheckInModal = ({
       setTableData(
         checkInData.event.attendeesCheckInStatus.map(
           (checkIn: InterfaceAttendeeCheckIn) => ({
-            userName: checkIn.user.name || 'Unknown User',
+            userName: checkIn.user.name || t('unknownUser'),
             id: checkIn.id,
             checkInData: {
               id: checkIn.id,
-              name: checkIn.user.name || 'Unknown User',
+              name: checkIn.user.name || t('unknownUser'),
               userId: checkIn.user.id,
               checkInTime: checkIn.checkInTime,
               checkOutTime: checkIn.checkOutTime,
@@ -106,10 +106,10 @@ export const CheckInModal = ({
 
   // Define columns for the DataGrid
   const columns: GridColDef[] = [
-    { field: 'userName', headerName: 'User', width: 300 }, // Column for user names
+    { field: 'userName', headerName: t('user'), width: 300 }, // Column for user names
     {
       field: 'checkInData',
-      headerName: 'Check In Status',
+      headerName: t('checkInStatus'),
       width: 400,
       renderCell: (props) => (
         // Render a custom row component for check-in status

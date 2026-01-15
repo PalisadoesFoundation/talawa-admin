@@ -92,11 +92,11 @@ const renderAddOnSpotAttendee = (): RenderResult => {
 
 describe('AddOnSpotAttendee Component', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
     mockOrgId = '123';
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
     mockOrgId = '123';
   });
@@ -322,10 +322,9 @@ describe('AddOnSpotAttendee Component', () => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
         'Invalid email format',
       );
+      // Ensure form was not submitted
+      expect(mockProps.reloadMembers).not.toHaveBeenCalled();
+      expect(mockProps.handleClose).not.toHaveBeenCalled();
     });
-
-    // Ensure form was not submitted
-    expect(mockProps.reloadMembers).not.toHaveBeenCalled();
-    expect(mockProps.handleClose).not.toHaveBeenCalled();
   });
 });

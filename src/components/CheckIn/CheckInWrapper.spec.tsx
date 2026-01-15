@@ -77,6 +77,10 @@ describe('CheckInWrapper CSS Tests', () => {
     eventId: 'event123',
   };
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   const renderComponent = (): ReturnType<typeof render> => {
     return render(
       <MockedProvider link={link}>

@@ -17,7 +17,7 @@
  * @remarks
  * - Uses Apollo Client's `useQuery` and `useMutation` hooks to fetch and modify data.
  * - Displays a loading spinner while data is being fetched.
- * - Integrates with `react-toastify` for user notifications.
+ * - Integrates with `NotificationToast` for user notifications..
  * - Supports translations using `react-i18next`.
  *
  * @example
@@ -35,7 +35,7 @@
  * - `react-bootstrap` for button components.
  * - `@apollo/client` for GraphQL queries and mutations.
  * - `@mui/material` for UI components like Avatar, Chip, and Autocomplete.
- * - `react-toastify` for toast notifications.
+ * - `NotificationToast` for toast notifications.
  * - `react-i18next` for translations.
  */
 import React, { useState, useEffect } from 'react';
