@@ -333,4 +333,11 @@ describe('CategorySelector', () => {
     expect(autocomplete).toBeInTheDocument();
     expect(autocomplete).toHaveAttribute('data-cy', 'categorySelect');
   });
+
+  it('has aria-required attribute for accessibility', () => {
+    renderComponent();
+
+    const input = screen.getByRole('combobox');
+    expect(input).toHaveAttribute('aria-required', 'true');
+  });
 });
