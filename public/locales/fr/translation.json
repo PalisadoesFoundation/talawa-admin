@@ -2078,6 +2078,7 @@
     "noOfMembers": "Nombre de Membres",
     "options": "Options",
     "notSpecified": "Non Spécifié",
+    "invited": "Invité",
     "groupsAvailable": "{{count}} groupes disponibles",
     "volunteersRequired": "Requis",
     "signedUp": "Inscrit"
