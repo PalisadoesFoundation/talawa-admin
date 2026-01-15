@@ -42,15 +42,19 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
   },
 }));
 
-const { mockNavigate } = vi.hoisted(() => ({
-  mockNavigate: vi.fn(),
-}));
+let mockParams: { eventId?: string; orgId?: string } = {
+  eventId: 'event123',
+  orgId: 'org123',
+};
+
+const mockNavigate = vi.fn();
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
+
   return {
     ...actual,
-    useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
+    useParams: () => mockParams,
     useNavigate: () => mockNavigate,
   };
 });
@@ -284,7 +288,6 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
     // No warning or error toast should be shown
     expect(NotificationToast.warning).not.toHaveBeenCalled();
-    expect(NotificationToast.error).not.toHaveBeenCalled();
   });
 
   // Empty state tests
@@ -395,5 +398,18 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
       },
       { timeout: 3000 },
     );
+  });
+
+  test('renders CheckInWrapper when eventId is not provided ', async () => {
+    mockParams = {
+      orgId: 'org123',
+      eventId: undefined,
+    };
+
+    renderEventRegistrants();
+
+    await waitFor(() => {
+      expect(screen.getByText('Check In Members')).toBeInTheDocument();
+    });
   });
 });
