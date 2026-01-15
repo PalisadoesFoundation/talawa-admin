@@ -111,7 +111,7 @@ const defaultProps = {
   show: true,
   eventId: 'event123',
   orgId: 'org123',
-  handleClose: () => { },
+  handleClose: () => {},
 };
 
 const makeAttendeesEmptyMock = (): ApolloMock => ({
