@@ -1,4 +1,3 @@
-// upcomingevents.tsx
 import React, { useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from './UpcomingEvents.module.css';
@@ -25,6 +24,7 @@ import { FaCheck } from 'react-icons/fa';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 /**
  * Component for displaying upcoming volunteer events for an organization.
  * Allows users to volunteer for events and groups, and tracks their membership status.
@@ -216,6 +216,25 @@ const UpcomingEvents = (): JSX.Element => {
     }
   };
 
+  /**
+   * Maps membership status to StatusBadge variant and domain
+   */
+  const getStatusBadgeProps = (
+    status: string,
+  ): { variant: 'pending' | 'success' | 'error'; domain: string } => {
+    switch (status) {
+      case 'requested':
+      case 'invited':
+        return { variant: 'pending', domain: 'pending' };
+      case 'accepted':
+        return { variant: 'success', domain: 'volunteered' };
+      case 'rejected':
+        return { variant: 'error', domain: 'rejected' };
+      default:
+        return { variant: 'pending', domain: 'pending' };
+    }
+  };
+
   if (eventsError) {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
@@ -274,7 +293,16 @@ const UpcomingEvents = (): JSX.Element => {
                   className={styles.titleContainerVolunteer}
                   data-testid={`detailContainer${index + 1}`}
                 >
-                  <h3 data-testid="eventTitle">{event.title}</h3>
+                  <div className="d-flex align-items-center gap-2">
+                    <h3 data-testid="eventTitle">{event.title}</h3>
+                    {status.status !== 'none' && (
+                      <StatusBadge
+                        {...getStatusBadgeProps(status.status)}
+                        size="sm"
+                        dataTestId={`event-status-${index}`}
+                      />
+                    )}
+                  </div>
                 </div>
               </AccordionSummary>
               <AccordionDetails className="d-flex gap-3 flex-column">
@@ -360,7 +388,16 @@ const UpcomingEvents = (): JSX.Element => {
                           className="d-flex justify-content-between align-items-center p-2 border rounded mb-2"
                         >
                           <div className="d-flex flex-column gap-1">
-                            <span className="fw-semibold">{group.name}</span>
+                            <div className="d-flex align-items-center gap-2">
+                              <span className="fw-semibold">{group.name}</span>
+                              {groupStatus.status !== 'none' && (
+                                <StatusBadge
+                                  {...getStatusBadgeProps(groupStatus.status)}
+                                  size="sm"
+                                  dataTestId={`group-status-${group._id}`}
+                                />
+                              )}
+                            </div>
                             {group.description && (
                               <span className="text-muted">
                                 {group.description}
@@ -407,8 +444,8 @@ const UpcomingEvents = (): JSX.Element => {
         eventDate={pendingVolunteerRequest?.eventDate || ''}
         isForGroup={!!pendingVolunteerRequest?.groupId}
         groupName={pendingVolunteerRequest?.groupName || ''}
-        onSelectSeries={() => {}}
-        onSelectInstance={() => {}}
+        onSelectSeries={() => { }}
+        onSelectInstance={() => { }}
       />
     </LoadingState>
   );
