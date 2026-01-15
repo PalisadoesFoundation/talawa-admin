@@ -1,0 +1,15 @@
+.noOutline input {
+  outline: none;
+}
+
+.noOutline input:disabled {
+  -webkit-text-fill-color: var(--color-gray-400) !important;
+}
+
+.noOutline textarea:disabled {
+  color: var(--color-gray-400) !important;
+}
+
+.noOutline:is(:hover, :focus, :active, :focus-visible, .show) {
+  outline: none;
+}

@@ -1,0 +1,39 @@
+.itemModal {
+  max-width: 80vw;
+  margin-top: 2vh;
+  margin-left: 13vw;
+}
+
+.noOutline input {
+  outline: none;
+}
+
+.noOutline input:disabled {
+  -webkit-text-fill-color: var(--color-gray-400) !important;
+}
+
+.noOutline textarea:disabled {
+  color: var(--color-gray-400) !important;
+}
+
+.noOutline:is(:hover, :focus, :active, :focus-visible, .show) {
+  outline: none;
+}
+
+.addButton {
+  margin-bottom: var(--space-4);
+  color: var(--color-gray-700);
+  background-color: var(--color-blue-200);
+  border-color: var(--color-blue-200);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.addButton:is(:hover, :active, :focus) {
+  background-color: var(--color-blue-500);
+  border-color: var(--color-gray-700);
+}
+
+.addButton:disabled {
+  background-color: var(--color-gray-50);
+  border-color: var(--color-blue-200);
+}
