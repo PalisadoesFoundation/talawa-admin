@@ -135,16 +135,13 @@ const UserScreen = (): React.JSX.Element => {
 
   const currentPage = location.pathname;
   return (
-    <div
-      className={styles.pageContainer}
-      style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
-    >
+    <div className={styles.pageContainer}>
       <UserPortalNavigationBar
         mode="organization"
         organizationId={orgId}
         currentPage={currentPage}
       />
-      <div style={{ display: 'flex', flex: 1, minHeight: 0 }}>
+      <div className={localStyles.flexContainer}>
         <div className={styles.drawer}>
           {orgId ? (
             <UserSidebarOrg
@@ -161,9 +158,8 @@ const UserScreen = (): React.JSX.Element => {
           )}
         </div>
         <div
-          className={`${hideDrawer ? styles.expand : styles.contract} ${hideDrawer ? localStyles.contentContainer : ''}`}
+          className={`${hideDrawer ? styles.expand : styles.contract} ${hideDrawer ? localStyles.contentContainer : ''} ${localStyles.mainContent}`}
           data-testid="mainpageright"
-          style={{ flex: 1, minWidth: 0 }}
         >
           <div className="d-flex justify-content-between align-items-center">
             <div className={localStyles.titleContainer}>

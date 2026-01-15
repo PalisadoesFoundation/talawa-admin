@@ -63,3 +63,14 @@
 .drawer {
   position: relative;
 }
+
+.flexContainer {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.mainContent {
+  flex: 1;
+  min-width: 0;
+}
