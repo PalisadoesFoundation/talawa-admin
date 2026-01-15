@@ -872,6 +872,7 @@
     "updatePledge": "प्रतिज्ञा अद्यतन करें",
     "deletePledge": "प्रतिज्ञा हटाएँ",
     "amount": "मात्रा",
+    "amountMustBeAtLeastOne": "राशि कम से कम 1 होनी चाहिए",
     "editPledge": "प्रतिज्ञा संपादित करें",
     "deletePledgeMsg": "क्या आप वाकई इस प्रतिज्ञा को हटाना चाहते हैं?",
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",

@@ -9,7 +9,7 @@ import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
 import { currencySymbols } from 'utils/currency';
-import styles from 'style/app-fixed.module.css';
+import styles from './FundCampaignPledge.module.css';
 import PledgeDeleteModal from './deleteModal/PledgeDeleteModal';
 import PledgeModal from './modal/PledgeModal';
 import { Popover } from '@mui/material';

@@ -855,6 +855,7 @@
     "updatePledge": "Update Pledge",
     "deletePledge": "Delete Pledge",
     "amount": "Amount",
+    "amountMustBeAtLeastOne": "Amount must be at least 1",
     "editPledge": "Edit Pledge",
     "deletePledgeMsg": "Are you sure you want to delete this pledge?",
     "noPledges": "No Pledges Found",
