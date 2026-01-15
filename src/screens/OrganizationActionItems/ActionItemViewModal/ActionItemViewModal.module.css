@@ -25,6 +25,6 @@
   outline-offset: var(--shadow-offset-sm);
 }
 
-.noOutline:is(:hover, :active, .show) {
+.noOutline:is(:hover, :active, .show):not(:focus-within) {
   outline: none;
 }
