@@ -6,15 +6,15 @@
   margin-bottom: var(--space-6);
 }
 
-@media screen and (max-width: 575.5px) {
-  .mainpageright {
-    width: 98%;
-  }
-}
-
 @media screen and (max-width: 1200px) {
   .mainpageright {
     width: 100%;
+  }
+}
+
+@media screen and (max-width: 575.5px) {
+  .mainpageright {
+    width: 98%;
   }
 }
 

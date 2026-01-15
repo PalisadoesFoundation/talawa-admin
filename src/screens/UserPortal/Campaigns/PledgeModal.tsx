@@ -102,7 +102,6 @@ export const getMemberLabel = (member: InterfaceUserInfoPG): string =>
  *   userId="456"
  *   pledge={null}
  *   refetchPledge={() => {}}
- *   endDate={new Date()}
  *   mode="create"
  * />
  * ```

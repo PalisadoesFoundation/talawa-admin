@@ -232,9 +232,7 @@ export default function People(): React.JSX.Element {
         <div className={styles.people_content}>
           <div className={styles.people_card_header}>
             {/* Nested span groups sNo and avatar in a flex container for horizontal alignment */}
-            <span
-              className={`${styles.display_flex} ${styles.people_card_header_col_1}`}
-            >
+            <span className={`d-flex ${styles.people_card_header_col_1}`}>
               <span className={styles.people_card_header_col_1}>
                 {t('sNo')}
               </span>
