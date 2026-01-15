@@ -39,7 +39,7 @@ const restrictedImports = [
     name: 'react-bootstrap',
     importNames: ['Modal'],
     message:
-      'Do not import Modal directly. Use the shared BaseModal component instead.',
+      'Do not import Modal directly. Use the shared BaseModal or the CRUDModalTemplate/* components instead.',
   },
   {
     id: 'mui-date-pickers',
