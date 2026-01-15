@@ -53,6 +53,11 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
       NotificationToast.error(t('invalidDetailsMessage'));
       return false;
     }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      NotificationToast.error(t('invalidEmailFormat'));
+      return false;
+    }
     return true;
   };
 
@@ -71,13 +76,9 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >,
   ): void => {
-    const target = e.target as
-      | HTMLInputElement
-      | HTMLSelectElement
-      | HTMLTextAreaElement;
     setFormData((prev) => ({
       ...prev,
-      [target.name]: target.value,
+      [e.target.name]: e.target.value,
     }));
   };
 
@@ -138,6 +139,8 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                 value={formData.firstName}
                 onChange={handleChange}
                 placeholder={t('placeholderFirstName')}
+                required
+                aria-required="true"
               />
             </Form.Group>
             <Form.Group className="mb-1">

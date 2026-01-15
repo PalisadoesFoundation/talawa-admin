@@ -1895,8 +1895,8 @@
     "male": "Masculino",
     "female": "Femenino",
     "other": "Otro",
-    "placeholderFirstName": "John",
-    "placeholderLastName": "Doe",
+    "placeholderFirstName": "Juan",
+    "placeholderLastName": "García",
     "placeholderEmail": "abc@gmail.com"
   },
   "userCampaigns": {
