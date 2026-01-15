@@ -127,7 +127,6 @@ describe('EventRegistrantsWrapper Component', () => {
       expect(button).toBeInTheDocument();
     });
 
-
     test('should apply correct CSS classes to button', () => {
       renderComponent(defaultProps);
 
