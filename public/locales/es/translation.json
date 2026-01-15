@@ -878,7 +878,8 @@
     "pledgeDate": "Fecha de Compromiso",
     "pledged": "Comprometido",
     "donated": "Donado",
-    "campaignNotActive": "La campaña no está actualmente activa"
+    "campaignNotActive": "La campaña no está actualmente activa",
+    "close": "Cerrar"
   },
   "createPostModal": {
     "title": "Publicaciones de Talawa",
