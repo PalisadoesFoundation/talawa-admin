@@ -48,7 +48,7 @@
 import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from './OrganizationVenues.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import { useMutation, useQuery } from '@apollo/client';
 import Col from 'react-bootstrap/Col';

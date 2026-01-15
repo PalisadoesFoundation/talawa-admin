@@ -102,6 +102,7 @@
   "successfullyUpdated": "Successfully Updated",
   "sessionWarning": "Your session will expire soon due to inactivity. Please interact with the page to extend your session.",
   "sessionLogOut": "Your session has expired due to inactivity. Please log in again to continue.",
+  "logoutFailed": "Logout failed",
   "sort": "Sort",
   "all": "All",
   "active": "Active",
@@ -258,5 +259,15 @@
   "deleteConfirmation": "Are you sure you want to delete this item? This action cannot be undone.",
   "deleteEntityConfirmation": "Are you sure you want to delete {{entityName}}? This action cannot be undone.",
   "update": "Update",
-  "imageNotFound": "Image not found"
+  "imageNotFound": "Image not found",
+  "changeLanguage": "Change Language",
+  "selectField": "Select {{fieldName}}",
+  "userEvents": {
+    "presetToday": "Today",
+    "presetThisWeek": "This Week",
+    "presetThisMonth": "This Month",
+    "presetNext7Days": "Next 7 Days",
+    "presetNext30Days": "Next 30 Days",
+    "presetNextMonth": "Next Month"
+  }
 }

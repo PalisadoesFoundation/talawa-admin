@@ -178,6 +178,6 @@ Defined in: [src/types/shared-components/BaseModal/interface.ts:36](https://gith
 
 ### title?
 
-> `optional` **title**: `string`
+> `optional` **title**: `ReactNode`
 
 Defined in: [src/types/shared-components/BaseModal/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/BaseModal/interface.ts#L32)

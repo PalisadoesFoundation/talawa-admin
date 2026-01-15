@@ -42,7 +42,7 @@ import { useTranslation } from 'react-i18next';
  * </EditModal>
  * ```
  */
-export const EditModal = <T,>({
+export const EditModal: React.FC<InterfaceEditModalProps> = ({
   open,
   title,
   onClose,
@@ -56,7 +56,7 @@ export const EditModal = <T,>({
   centered = true,
   'data-testid': dataTestId,
   submitDisabled = false,
-}: InterfaceEditModalProps<T>): JSX.Element => {
+}) => {
   const { t: tCommon } = useTranslation('common');
   const isOpen = open ?? false;
   const formRef = useRef<HTMLFormElement>(null);

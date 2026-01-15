@@ -1,6 +1,15 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "Please log in again; your session has expired."
+  },
+  "securedRoute": {
+    "sessionExpired": "Please log in again; your session has expired."
+  },
   "ends": "Ends",
   "occurrences": "Occurrences",
+  "customRecurrence": "Custom Recurrence",
+  "invalidDetailsMessage": "Please check the details you entered.",
+  "selectAtLeastOneDay": "Please select at least one day.",
   "leaderboard": {
     "title": "Leaderboard",
     "searchByVolunteer": "Search By Volunteer",
@@ -712,7 +721,8 @@
     "deleteAgendaItem": "Delete Agenda Item",
     "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
     "event": "Event",
-    "search": "Search"
+    "search": "Search",
+    "attachmentPreview": "Attachment preview"
   },
   "eventListCard": {
     "deleteEvent": "Delete Event",
@@ -822,9 +832,14 @@
     "earliestEndDate": "Earliest End Date",
     "lowestGoal": "Lowest Goal",
     "highestGoal": "Highest Goal",
-    "errorLoading": "Error occured while loading campaigns data",
+    "errorLoading": "Error occurred while loading campaigns data",
     "percentageRaised": "% Raised",
-    "campaignProgress": "Campaign progress: {{percentage}}%"
+    "campaignProgress": "Campaign progress: {{percentage}}%",
+    "campaignNotFound": "Campaign not found",
+    "dateRangeRequired": "Please select a valid date range",
+    "campaignNameRequired": "Campaign name is required",
+    "invalidDate": "Invalid date selected",
+    "endDateBeforeStart": "End date cannot be before start date"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
@@ -1603,7 +1618,8 @@
     "on": "On",
     "after": "After",
     "customRecurrence": "Custom Recurrence",
-    "repeatsEvery": "Repeats Every"
+    "repeatsEvery": "Repeats Every",
+    "noEventAvailable": "No Event Available!"
   },
   "userEventCard": {
     "starts": "Starts",
@@ -1837,7 +1853,12 @@
   },
   "checkIn": {
     "errorCheckingIn": "Error checking in",
-    "checkedInSuccessfully": "Checked in successfully"
+    "checkedInSuccessfully": "Checked in successfully",
+    "searchAttendees": "Search Attendees",
+    "checkedIn": "Checked In",
+    "downloadTag": "Download Tag",
+    "checkIn": "Check In",
+    "eventCheckInManagement": "Event Check In Management"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",
@@ -1954,6 +1975,8 @@
     "earliest": "Earliest",
     "requestAccepted": "Request accepted successfully",
     "requestRejected": "Request rejected successfully",
+    "acceptRequest": "Accept Request",
+    "rejectRequest": "Reject Request",
     "details": "Details",
     "manageGroup": "Manage Group",
     "mostVolunteers": "Most Volunteers",
@@ -1977,7 +2000,9 @@
     "deleteVolunteerGroup": "Delete {{name}} volunteer group",
     "deleteVolunteerEntry": "Delete {{name}} volunteer entry",
     "viewGroup": "View group",
-    "editGroup": "Edit group"
+    "editGroup": "Edit group",
+    "invalidNumber": "Invalid number",
+    "viewToggle": "Toggle view"
   },
   "userVolunteer": {
     "title": "Volunteership",
@@ -2143,9 +2168,6 @@
   "contact": {
     "card_aria": "Contact card"
   },
-  "securedRoute": {
-    "sessionExpired": "Kindly relogin as session has expired"
-  },
   "common": {
     "signOut": "Sign out",
     "signingOut": "Signing out...",
@@ -2182,5 +2204,8 @@
     "sortPeople": "Sort People",
     "unassign": "Unassign",
     "tags": "Tags"
+  },
+  "orgProfileField": {
+    "editCustomField": "Edit Custom Field"
   }
 }

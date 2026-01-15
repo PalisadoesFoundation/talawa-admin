@@ -163,14 +163,13 @@ export interface InterfaceCreateModalProps extends InterfaceCrudModalBaseProps {
  * Props for EditModal template
  *
  * Specialized template for editing existing entities.
- * Includes data loading and pre-population support.
- *
- *
+ * Parent component handles data fetching and passes pre-populated form fields as children.
  */
-export interface InterfaceEditModalProps<T = unknown>
+export interface InterfaceEditModalProps
   extends InterfaceCrudModalBaseProps {
   /**
    * Form content to render inside the modal body
+   * Parent should pass form fields pre-populated with entity data
    */
   children: ReactNode;
 
@@ -181,22 +180,14 @@ export interface InterfaceEditModalProps<T = unknown>
   onSubmit: (event: FormEvent<HTMLFormElement>) => void | Promise<void>;
 
   /**
-   * The entity data being edited
-   * Used to pre-populate form fields
-   */
-  data?: T | null;
-
-  /**
    * Whether data is currently being loaded
    * Shows a loading state while fetching entity data
-   *
    */
   loadingData?: boolean;
 
   /**
    * Whether the submit button should be disabled
    * Useful for dirty form checking
-   *
    */
   submitDisabled?: boolean;
 }
@@ -242,25 +233,17 @@ export interface InterfaceDeleteModalProps extends InterfaceCrudModalBaseProps {
  * Props for ViewModal template
  *
  * Specialized template for read-only entity display.
- *
- *
+ * Parent component handles data fetching and passes formatted content as children.
  */
-export interface InterfaceViewModalProps<T = unknown>
-  extends InterfaceCrudModalBaseProps {
+export interface InterfaceViewModalProps extends InterfaceCrudModalBaseProps {
   /**
    * Content to display in the modal body
-   * Typically contains disabled form fields or formatted data display
+   * Parent should pass formatted data display as children
    */
   children: ReactNode;
 
   /**
-   * The entity data being viewed
-   */
-  data: T;
-
-  /**
    * Whether data is currently being loaded
-   *
    */
   loadingData?: boolean;
 

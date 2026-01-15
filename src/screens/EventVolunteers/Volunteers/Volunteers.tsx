@@ -51,11 +51,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
 
-import {
-  Circle,
-  VolunteerActivism,
-  WarningAmberRounded,
-} from '@mui/icons-material';
+import { VolunteerActivism, WarningAmberRounded } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -64,9 +60,10 @@ import {
   type GridCellParams,
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
-import { Chip, debounce } from '@mui/material';
+import { debounce } from '@mui/material';
 import Avatar from 'shared-components/Avatar/Avatar';
-import styles from '../../../style/app-fixed.module.css';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
+import styles from './Volunteers.module.css';
 import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import VolunteerCreateModal from './createModal/VolunteerCreateModal';
@@ -287,7 +284,7 @@ function Volunteers(): JSX.Element {
                 src={avatarURL}
                 alt={tCommon('volunteer')}
                 data-testid="volunteer_image"
-                className={styles.TableImages}
+                className={styles.tableImages}
               />
             ) : (
               <div className={styles.avatarContainer}>
@@ -295,7 +292,7 @@ function Volunteers(): JSX.Element {
                   key={id + '1'}
                   dataTestId="volunteer_avatar"
                   containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImages}
+                  avatarStyle={styles.tableImages}
                   name={name}
                   alt={name}
                 />
@@ -317,41 +314,14 @@ function Volunteers(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         const status = params.row.volunteerStatus;
-        const getStatusInfo = (status: string) => {
-          switch (status) {
-            case 'accepted':
-              return {
-                label: t('eventVolunteers.accepted'),
-                color: 'success' as const,
-                className: styles.active,
-              };
-            case 'rejected':
-              return {
-                label: t('eventVolunteers.rejected'),
-                color: 'error' as const,
-                className: styles.rejected,
-              };
-            case 'pending':
-            default:
-              return {
-                label: t('eventVolunteers.pending'),
-                color: 'warning' as const,
-                className: styles.pending,
-              };
-          }
-        };
+        const statusVariant =
+          status === 'accepted'
+            ? 'accepted'
+            : status === 'rejected'
+              ? 'rejected'
+              : 'pending';
 
-        const statusInfo = getStatusInfo(status);
-
-        return (
-          <Chip
-            icon={<Circle className={styles.chipIcon} />}
-            label={statusInfo.label}
-            variant="outlined"
-            color={statusInfo.color}
-            className={`${styles.chip} ${statusInfo.className}`}
-          />
-        );
+        return <StatusBadge variant={statusVariant} dataTestId="statusChip" />;
       },
     },
     {

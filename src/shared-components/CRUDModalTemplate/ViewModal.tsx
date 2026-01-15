@@ -55,7 +55,7 @@ import { useTranslation } from 'react-i18next';
  * </ViewModal>
  * ```
  */
-export const ViewModal = <T,>({
+export const ViewModal: React.FC<InterfaceViewModalProps> = ({
   open,
   title,
   onClose,
@@ -68,7 +68,7 @@ export const ViewModal = <T,>({
   centered = true,
   'data-testid': dataTestId,
   customActions,
-}: InterfaceViewModalProps<T>): JSX.Element => {
+}) => {
   const { t: tCommon } = useTranslation('common');
   const isOpen = open ?? false;
   const isLoading = loading || loadingData;

@@ -17,7 +17,7 @@ export const FormFieldGroup: React.FC<
 
   return (
     <Form.Group controlId={name}>
-      <Form.Label>
+      <Form.Label htmlFor={name}>
         {label}
         {required && <span aria-label={tCommon('required')}>*</span>}
       </Form.Label>

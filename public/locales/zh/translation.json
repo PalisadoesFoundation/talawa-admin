@@ -1,6 +1,15 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "请重新登录；您的会话已过期。"
+  },
+  "securedRoute": {
+    "sessionExpired": "请重新登录；您的会话已过期。"
+  },
   "ends": "结束",
   "occurrences": "次",
+  "customRecurrence": "自定义重复",
+  "invalidDetailsMessage": "请检查您输入的详细信息。",
+  "selectAtLeastOneDay": "请至少选择一天。",
   "leaderboard": {
     "title": "排行榜",
     "searchByVolunteer": "按志愿者搜索",
@@ -712,7 +721,8 @@
     "deleteAgendaItem": "删除议程项目",
     "deleteAgendaItemMsg": "您要删除此议程项目吗？",
     "event": "活动",
-    "search": "搜索"
+    "search": "搜索",
+    "attachmentPreview": "附件預覽"
   },
   "eventListCard": {
     "deleteEvent": "删除事件",
@@ -824,7 +834,12 @@
     "highestGoal": "最高目标",
     "errorLoading": "加载活动数据时出错",
     "percentageRaised": "% 已筹集",
-    "campaignProgress": "活动进度: {{percentage}}%"
+    "campaignProgress": "活动进度：{{percentage}}%",
+    "campaignNotFound": "未找到募捐活动",
+    "dateRangeRequired": "请选择有效的日期范围",
+    "campaignNameRequired": "活动名称是必填项",
+    "invalidDate": "选择的日期无效",
+    "endDateBeforeStart": "结束日期不能早于开始日期"
   },
   "pledges": {
     "title": "基金活动承诺",
@@ -1620,7 +1635,8 @@
     "on": "在",
     "after": "之后",
     "customRecurrence": "自定义重复",
-    "repeatsEvery": "重复周期"
+    "repeatsEvery": "重复周期",
+    "noEventAvailable": "沒有可用的活動！"
   },
   "userEventCard": {
     "starts": "开始",
@@ -1854,7 +1870,12 @@
   },
   "checkIn": {
     "errorCheckingIn": "签到错误",
-    "checkedInSuccessfully": "成功签到"
+    "checkedInSuccessfully": "成功签到",
+    "searchAttendees": "搜尋參與者",
+    "checkedIn": "已簽到",
+    "downloadTag": "下載標籤",
+    "checkIn": "簽到",
+    "eventCheckInManagement": "活動簽到管理"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "添加与会者时出错",
@@ -1971,6 +1992,8 @@
     "earliest": "最早",
     "requestAccepted": "请求已成功接受",
     "requestRejected": "请求已成功拒绝",
+    "acceptRequest": "接受请求",
+    "rejectRequest": "拒绝请求",
     "details": "详情",
     "manageGroup": "管理小组",
     "mostVolunteers": "最多的志愿者",
@@ -1994,7 +2017,9 @@
     "deleteVolunteerGroup": "删除 {{name}} 志愿者小组",
     "deleteVolunteerEntry": "删除 {{name}} 志愿者条目",
     "viewGroup": "查看小组",
-    "editGroup": "编辑小组"
+    "editGroup": "编辑小组",
+    "invalidNumber": "无效数字",
+    "viewToggle": "切换视图"
   },
   "userVolunteer": {
     "title": "志愿服务",
@@ -2143,9 +2168,6 @@
   "contact": {
     "card_aria": "联系人卡片"
   },
-  "securedRoute": {
-    "sessionExpired": "请重新登录，因为会话已过期"
-  },
   "common": {
     "signOut": "退出登录",
     "signingOut": "正在退出...",
@@ -2182,5 +2204,8 @@
     "sortPeople": "排序人员",
     "unassign": "取消分配",
     "tags": "标签"
+  },
+  "orgProfileField": {
+    "editCustomField": "編輯自定義字段"
   }
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { Form } from 'react-bootstrap';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -26,13 +26,13 @@ const renderWithI18n = (component: React.ReactElement) => {
   );
 };
 
+afterEach(() => {
+  vi.clearAllMocks();
+});
+
 describe('CRUDModalTemplate', () => {
   const mockOnClose = vi.fn();
   const mockOnPrimary = vi.fn();
-
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
 
   describe('Modal open/close functionality', () => {
     it('should render modal when open prop is true', () => {
@@ -419,10 +419,6 @@ describe('CreateModal', () => {
   const mockOnClose = vi.fn();
   const mockOnSubmit = vi.fn();
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   describe('Form submission', () => {
     it('should render form with children', () => {
       renderWithI18n(
@@ -712,10 +708,6 @@ describe('EditModal', () => {
   const mockOnClose = vi.fn();
   const mockOnSubmit = vi.fn();
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it('should render edit form with data loading state', () => {
     renderWithI18n(
       <EditModal
@@ -860,10 +852,6 @@ describe('EditModal', () => {
 describe('DeleteModal', () => {
   const mockOnClose = vi.fn();
   const mockOnDelete = vi.fn();
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
 
   it('should render delete confirmation with entity name', () => {
     renderWithI18n(
@@ -1014,20 +1002,11 @@ describe('DeleteModal', () => {
 describe('ViewModal', () => {
   const mockOnClose = vi.fn();
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   it('should render view content', () => {
     const testData = { name: 'Test Item', id: '123' };
 
     renderWithI18n(
-      <ViewModal
-        open={true}
-        title="View Item"
-        onClose={mockOnClose}
-        data={testData}
-      >
+      <ViewModal open={true} title="View Item" onClose={mockOnClose}>
         <div>
           <strong>Name:</strong> {testData.name}
         </div>
@@ -1047,7 +1026,6 @@ describe('ViewModal', () => {
         open={true}
         title="View Item"
         onClose={mockOnClose}
-        data={null}
         loadingData={true}
       >
         <div>Content</div>
@@ -1059,12 +1037,7 @@ describe('ViewModal', () => {
 
   it('should render translated close button', () => {
     renderWithI18n(
-      <ViewModal
-        open={true}
-        title="View Item"
-        onClose={mockOnClose}
-        data={{ id: '1' }}
-      >
+      <ViewModal open={true} title="View Item" onClose={mockOnClose}>
         <div>Content</div>
       </ViewModal>,
     );
@@ -1081,7 +1054,6 @@ describe('ViewModal', () => {
         open={true}
         title="View Item"
         onClose={mockOnClose}
-        data={{ id: '1' }}
         customActions={
           <>
             <button type="button" onClick={mockEdit}>
@@ -1109,12 +1081,7 @@ describe('ViewModal', () => {
 
   it('should only show close button when no custom actions provided', () => {
     renderWithI18n(
-      <ViewModal
-        open={true}
-        title="View Item"
-        onClose={mockOnClose}
-        data={{ id: '1' }}
-      >
+      <ViewModal open={true} title="View Item" onClose={mockOnClose}>
         <div>Content</div>
       </ViewModal>,
     );

@@ -8,7 +8,7 @@ import TimePicker from '../TimePicker';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import type {
   IEventFormProps,
@@ -29,6 +29,8 @@ import {
   buildRecurrenceOptions,
 } from './utils';
 import type { EventVisibility } from './utils';
+import VisibilitySelector from './VisibilitySelector/VisibilitySelector';
+import RecurrenceDropdown from './RecurrenceDropdown/RecurrenceDropdown';
 
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
@@ -475,100 +477,22 @@ const EventForm: React.FC<IEventFormProps> = ({
           )}
         </div>
         {showPublicToggle && (
-          <div className="mb-3">
-            <Form.Label>{tCommon('eventVisibility')}</Form.Label>
-            <div className="ms-3">
-              <Form.Check
-                type="radio"
-                id="visibility-public"
-                label={
-                  <div>
-                    <strong>{tCommon('publicEvent')}</strong>
-                    <div className="text-muted small">
-                      {tCommon('publicEventDescription')}
-                    </div>
-                  </div>
-                }
-                name="eventVisibility"
-                checked={visibility === 'PUBLIC'}
-                onChange={() => setVisibility('PUBLIC')}
-                className="mb-2"
-                data-testid="visibilityPublicRadio"
-              />
-              <Form.Check
-                type="radio"
-                id="visibility-org"
-                label={
-                  <div>
-                    <strong>{tCommon('organizationEvent')}</strong>
-                    <div className="text-muted small">
-                      {tCommon('organizationEventDescription')}
-                    </div>
-                  </div>
-                }
-                name="eventVisibility"
-                checked={visibility === 'ORGANIZATION'}
-                onChange={() => setVisibility('ORGANIZATION')}
-                className="mb-2"
-                data-testid="visibilityOrgRadio"
-              />
-              <Form.Check
-                type="radio"
-                id="visibility-invite"
-                label={
-                  <div>
-                    <strong>{tCommon('inviteOnlyEvent')}</strong>
-                    <div className="text-muted small">
-                      {tCommon('inviteOnlyEventDescription')}
-                    </div>
-                  </div>
-                }
-                name="eventVisibility"
-                checked={visibility === 'INVITE_ONLY'}
-                onChange={() => setVisibility('INVITE_ONLY')}
-                className="mb-2"
-                data-testid="visibilityInviteRadio"
-              />
-            </div>
-          </div>
+          <VisibilitySelector
+            visibility={visibility}
+            setVisibility={setVisibility}
+            tCommon={tCommon}
+          />
         )}
 
         {!disableRecurrence && recurrenceEnabled && (
-          <div>
-            <Dropdown
-              show={recurrenceDropdownOpen}
-              onToggle={setRecurrenceDropdownOpen}
-            >
-              <Dropdown.Toggle
-                variant="outline-secondary"
-                id="recurrence-dropdown"
-                data-testid="recurrenceDropdown"
-                className={`${styles.dropdown}`}
-                aria-label={t('recurring')}
-              >
-                {currentRecurrenceLabel()}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {recurrenceOptions.map((option, index) => (
-                  <Dropdown.Item
-                    key={option.label}
-                    onClick={() =>
-                      handleRecurrenceSelect({
-                        ...option,
-                        value: option.value as
-                          | InterfaceRecurrenceRule
-                          | 'custom'
-                          | null,
-                      })
-                    }
-                    data-testid={`recurrenceOption-${index}`}
-                  >
-                    {option.label}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
+          <RecurrenceDropdown
+            recurrenceOptions={recurrenceOptions}
+            currentLabel={currentRecurrenceLabel()}
+            isOpen={recurrenceDropdownOpen}
+            onToggle={setRecurrenceDropdownOpen}
+            onSelect={handleRecurrenceSelect}
+            t={t}
+          />
         )}
         <Button
           type="submit"
