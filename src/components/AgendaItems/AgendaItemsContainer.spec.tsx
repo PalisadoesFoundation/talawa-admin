@@ -6,11 +6,10 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import i18nForTest from 'utils/i18nForTest';
-// eslint-disable-next-line no-restricted-imports -- Test file needs direct access for mocking
-import { toast } from 'react-toastify';
-// eslint-disable-next-line no-restricted-imports -- Test file needs direct access for mocking
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DatePicker';
 import type { DropResult } from '@hello-pangea/dnd';
 
 import { store } from 'state/store';
@@ -99,11 +98,14 @@ const link2 = new StaticMockLink(MOCKS_ERROR, true);
 const linkDragDrop = new StaticMockLink(MOCKS_DRAG_DROP, true);
 const linkDragDropError = new StaticMockLink(MOCKS_DRAG_DROP_ERROR, true);
 
+// Define mock toast object before vi.mock to use in assertions without importing
+const mockToast = {
+  success: vi.fn(),
+  error: vi.fn(),
+};
+
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: mockToast,
 }));
 
 //temporarily fixes react-beautiful-dnd droppable method's depreciation error
@@ -416,7 +418,7 @@ describe('Testing Agenda Items components', () => {
     await userEvent.click(screen.getByTestId('updateAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(mockToast.error).toHaveBeenCalled();
     });
   });
 
@@ -470,7 +472,7 @@ describe('Testing Agenda Items components', () => {
     await userEvent.click(screen.getByTestId('deleteAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(mockToast.success).toHaveBeenCalledWith(
         translations.agendaItemDeleted,
         expect.any(Object),
       );
@@ -524,7 +526,7 @@ describe('Testing Agenda Items components', () => {
     await userEvent.click(screen.getByTestId('deleteAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(mockToast.error).toHaveBeenCalled();
     });
   });
 
@@ -792,7 +794,7 @@ describe('Testing Agenda Items components', () => {
 
     // Should toast an error
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(mockToast.error).toHaveBeenCalled();
     });
   });
 
