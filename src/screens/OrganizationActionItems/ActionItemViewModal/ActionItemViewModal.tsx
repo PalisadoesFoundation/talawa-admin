@@ -16,7 +16,7 @@ import { FormControl, TextField } from '@mui/material';
 import { TaskAlt, HistoryToggleOff } from '@mui/icons-material';
 import { useQuery } from '@apollo/client';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
-import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import { MEMBERS_LIST_WITH_DETAILS } from 'GraphQl/Queries/Queries';
 import { BaseModal } from 'shared-components/BaseModal';
 
 export interface IViewModalProps {
@@ -33,7 +33,6 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
 
   const {
     categoryId,
-
     creatorId,
     completionAt,
     assignedAt,
@@ -46,7 +45,6 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
     organizationId,
   } = item;
 
-  // Query to get category details
   const { data: categoryData } = useQuery(GET_ACTION_ITEM_CATEGORY, {
     variables: {
       input: { id: categoryId },
@@ -54,14 +52,12 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
     skip: !categoryId,
   });
 
-  // Query to get organization members to resolve assignee and creator details
-  const { data: membersData } = useQuery(MEMBERS_LIST, {
+  const { data: membersData } = useQuery(MEMBERS_LIST_WITH_DETAILS, {
     variables: { organizationId: organizationId },
   });
 
   const members = membersData?.usersByOrganizationId || [];
 
-  // Get assigned person/group information
   const getAssignedInfo = () => {
     if (volunteer?.user) {
       return {
@@ -94,13 +90,12 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
 
   const category = categoryData?.actionItemCategory || item.category;
 
-  // Helper function to get display name from user object
   const getUserDisplayName = (
     user: InterfaceUser | null | undefined,
   ): string => {
     if (!user) return 'Unknown';
 
-    if (user.name) {
+    if (user.name && user.name.trim()) {
       return user.name;
     }
     return `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Unknown';
@@ -160,7 +155,6 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
         </Form.Group>
 
         <Form.Group className="d-flex gap-3 mx-auto mb-3">
-          {/* Status of Action Item */}
           <TextField
             label={t('status')}
             fullWidth
@@ -191,7 +185,6 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
             disabled
           />
 
-          {/* Event Information */}
           <TextField
             label={t('event')}
             variant="outlined"
@@ -202,7 +195,6 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
         </Form.Group>
 
         <Form.Group className={`d-flex gap-3 mb-3`}>
-          {/* Date Calendar Component to display assigned date of Action Item */}
           <DatePicker
             data-testid="assignmentDatePicker"
             format="DD/MM/YYYY"
@@ -213,7 +205,6 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
             onChange={() => null}
           />
 
-          {/* Date Calendar Component to display completion Date of Action Item */}
           {isCompleted && completionAt && (
             <DatePicker
               format="DD/MM/YYYY"

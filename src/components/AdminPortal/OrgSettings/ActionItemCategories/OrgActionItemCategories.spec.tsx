@@ -149,6 +149,10 @@ describe('Testing Organisation Action Item Categories', () => {
     await waitFor(() => {
       expect(screen.queryByText('Category 1')).toBeNull();
       expect(screen.getByText('Category 2')).toBeInTheDocument();
+      // Verify dataTestId attribute is properly applied to StatusBadge components
+      const statusChips = screen.getAllByTestId('statusChip');
+      expect(statusChips).toHaveLength(1); // Only Category 2 is disabled
+      expect(statusChips[0]).toHaveTextContent('Disabled');
     });
   });
 
@@ -171,6 +175,10 @@ describe('Testing Organisation Action Item Categories', () => {
     await waitFor(() => {
       expect(screen.getByText('Category 1')).toBeInTheDocument();
       expect(screen.queryByText('Category 2')).toBeNull();
+      // Verify dataTestId attribute is properly applied to StatusBadge components
+      const statusChips = screen.getAllByTestId('statusChip');
+      expect(statusChips).toHaveLength(1); // Only Category 1 is active
+      expect(statusChips[0]).toHaveTextContent('Active');
     });
   });
 
