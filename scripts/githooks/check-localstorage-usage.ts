@@ -21,17 +21,36 @@ const containsSkipComment = (file: string): boolean => {
   }
 };
 
+/**
+ * Retrieves the list of files to check.
+ * Cross-platform compatible: works on Linux, Windows, and MacOS.
+ */
 const getModifiedFiles = (): string[] => {
   try {
     const options: ExecSyncOptionsWithStringEncoding = { encoding: 'utf-8' };
+    let result: string;
 
     if (scanEntireRepo) {
-      const result = execSync('git ls-files | grep ".tsx\\?$"', options);
-      return result.trim().split('\n');
+      // Get all tracked files without using grep (not available on Windows)
+      result = execSync('git ls-files', options);
+    } else {
+      result = execSync('git diff --cached --name-only', options);
     }
 
-    const result = execSync('git diff --cached --name-only', options);
-    return result.trim().split('\n');
+    // Handle both LF and CRLF line endings for cross-platform compatibility
+    const files = result
+      .trim()
+      .split(/\r?\n/)
+      .map((file) => file.trim())
+      .filter((file) => file.length > 0);
+
+    if (scanEntireRepo) {
+      // Filter for TypeScript files only when scanning entire repo
+      // This replaces the grep command for cross-platform compatibility
+      return files.filter((file) => /\.(ts|tsx)$/.test(file));
+    }
+
+    return files;
   } catch (error) {
     console.error(
       'Error fetching modified files:',
@@ -49,7 +68,9 @@ const checkLocalStorageUsage = (file: string): void => {
     return;
   }
 
-  const fileName = path.basename(file);
+  // Normalize path separators for cross-platform compatibility
+  const normalizedFile = file.replace(/\\/g, '/');
+  const fileName = path.basename(normalizedFile);
 
   // Skip files with specific names, paths, extensions, or containing a skip comment
   if (
@@ -60,9 +81,9 @@ const checkLocalStorageUsage = (file: string): void => {
     fileName === 'localStorageMock.spec.ts' || // Tests for localStorage mock utility
     fileName === 'vitest.setup.ts' || // Clears localStorage after each test providing test isolation
     fileName === 'eslint.config.js' || // Configuration file defining rules about localStorage
-    file.endsWith('.md') || // Skip documentation files
-    file.startsWith('docs/') || // Skip auto-generated docs
-    file.startsWith('cypress/') || // Skip Cypress E2E tests
+    normalizedFile.endsWith('.md') || // Skip documentation files
+    normalizedFile.startsWith('docs/') || // Skip auto-generated docs
+    normalizedFile.startsWith('cypress/') || // Skip Cypress E2E tests
     containsSkipComment(file)
   ) {
     console.log(`Skipping file: ${file}`);
