@@ -1874,10 +1874,12 @@
       "emailsLabel": "Correos electrónicos y nombres de destinatarios",
       "emailsHelp": "Proporcione el correo electrónico y el nombre opcional para cada destinatario. Agregue varios destinatarios según sea necesario.",
       "noRecipientsError": "Por favor proporcione al menos un correo electrónico de destinatario",
-      "invalidEmailsError": "Correo(s) electrónico(s) inválido(s): {{emails}}"
+      "invalidEmailsError": "Correo(s) electrónico(s) inválido(s): {{emails}}",
+      "invitesSentSuccessfully": "Invitaciones enviadas con éxito"
     }
   },
   "onSpotAttendee": {
+    "organizationIdMissing": "Falta el ID de la organización.",
     "title": "Asistente in situ",
     "enterFirstName": "Ingrese el nombre",
     "enterLastName": "Ingrese el apellido",

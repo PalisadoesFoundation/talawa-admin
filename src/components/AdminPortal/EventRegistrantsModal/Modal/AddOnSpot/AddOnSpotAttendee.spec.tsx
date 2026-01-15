@@ -29,9 +29,11 @@ vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
-    useParams: () => ({ eventId: '123', orgId: '123' }),
+    useParams: () => ({ eventId: '123', orgId: mockOrgId }),
   };
 });
+
+let mockOrgId: string | undefined = '123';
 
 const MOCKS = [
   {
@@ -208,20 +210,26 @@ describe('AddOnSpotAttendee Component', () => {
   });
 
   it('displays error when organization ID is missing', async () => {
-    render(
-      <MockedProvider mocks={[]}>
-        <BrowserRouter>
-          <AddOnSpotAttendee {...mockProps} />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    mockOrgId = undefined; // Simulate missing orgId
+    renderAddOnSpotAttendee();
+
+    await userEvent.type(screen.getByLabelText('First Name'), 'John');
+    await userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
+    await userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
+    await userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
+    const genderSelect = screen.getByLabelText('Gender');
+    fireEvent.change(genderSelect, { target: { value: 'Male' } });
 
     fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
 
     await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Organization ID is missing.',
+      );
     });
+    mockOrgId = '123'; // Reset for other tests
   });
+
   it('displays error when required fields are missing', async () => {
     renderAddOnSpotAttendee();
 

@@ -1874,10 +1874,12 @@
       "emailsLabel": "Recipient emails and names",
       "emailsHelp": "Provide email and optional name for each recipient. Add multiple recipients as needed.",
       "noRecipientsError": "Please provide at least one recipient email",
-      "invalidEmailsError": "Invalid email(s): {{emails}}"
+      "invalidEmailsError": "Invalid email(s): {{emails}}",
+      "invitesSentSuccessfully": "Invites sent successfully"
     }
   },
   "onSpotAttendee": {
+    "organizationIdMissing": "Organization ID is missing.",
     "title": "On-spot Attendee",
     "enterFirstName": "Enter First Name",
     "enterLastName": "Enter Last Name",

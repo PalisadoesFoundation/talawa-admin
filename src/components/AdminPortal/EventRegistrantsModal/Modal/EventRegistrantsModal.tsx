@@ -32,7 +32,7 @@
  *
  * Dependencies:
  * - `shared-components/BaseModal` for modal component.
-+* - `react-bootstrap` for button components.
+ * - `react-bootstrap` for button components.
  * - `@apollo/client` for GraphQL queries and mutations.
  * - `@mui/material` for UI components like Avatar, Chip, and Autocomplete.
  * - `react-toastify` for toast notifications.

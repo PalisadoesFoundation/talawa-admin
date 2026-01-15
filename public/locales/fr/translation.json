@@ -1891,10 +1891,12 @@
       "emailsLabel": "Emails et noms des destinataires",
       "emailsHelp": "Fournissez l'email et le nom facultatif pour chaque destinataire. Ajoutez plusieurs destinataires si nécessaire.",
       "noRecipientsError": "Veuillez fournir au moins un email de destinataire",
-      "invalidEmailsError": "Email(s) invalide(s) : {{emails}}"
+      "invalidEmailsError": "Email(s) invalide(s) : {{emails}}",
+      "invitesSentSuccessfully": "Invitations envoyées avec succès"
     }
   },
   "onSpotAttendee": {
+    "organizationIdMissing": "L'identifiant de l'organisation est manquant.",
     "title": "Participant sur place",
     "enterFirstName": "Entrez le prénom",
     "enterLastName": "Entrez le nom de famille",

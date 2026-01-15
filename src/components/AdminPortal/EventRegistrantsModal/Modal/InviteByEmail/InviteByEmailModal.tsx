@@ -101,7 +101,9 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
       await sendInvites({ variables: { input } });
 
       NotificationToast.success(
-        tCommon('addedSuccessfully', { item: 'Invites' }) || 'Invites sent',
+        t('invitesSentSuccessfully', {
+          defaultValue: 'Invites sent successfully',
+        }),
       );
       setRecipients([{ id: crypto.randomUUID(), email: '', name: '' }]);
       setMessage('');
@@ -260,7 +262,10 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
             type="number"
             min={1}
             value={expiresInDays}
-            onChange={(e) => setExpiresInDays(Number(e.target.value))}
+            onChange={(e) => {
+              const value = parseInt(e.target.value, 10);
+              setExpiresInDays(isNaN(value) || value < 1 ? 7 : value);
+            }}
             data-testid="invite-expires"
           />
         </Form.Group>

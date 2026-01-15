@@ -45,6 +45,10 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [addSignUp] = useMutation(SIGNUP_MUTATION);
   const validateForm = (): boolean => {
+    if (!orgId) {
+      NotificationToast.error(t('organizationIdMissing'));
+      return false;
+    }
     if (!formData.firstName || !formData.lastName || !formData.email) {
       NotificationToast.error(t('invalidDetailsMessage'));
       return false;

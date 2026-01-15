@@ -1891,10 +1891,12 @@
       "emailsLabel": "प्राप्तकर्ता ईमेल और नाम",
       "emailsHelp": "प्रत्येक प्राप्तकर्ता के लिए ईमेल और वैकल्पिक नाम प्रदान करें। आवश्यकतानुसार कई प्राप्तकर्ता जोड़ें।",
       "noRecipientsError": "कृपया कम से कम एक प्राप्तकर्ता ईमेल प्रदान करें",
-      "invalidEmailsError": "अमान्य ईमेल: {{emails}}"
+      "invalidEmailsError": "अमान्य ईमेल: {{emails}}",
+      "invitesSentSuccessfully": "आमंत्रण सफलतापूर्वक भेजे गए"
     }
   },
   "onSpotAttendee": {
+    "organizationIdMissing": "संगठन आईडी अनुपलब्ध है।",
     "title": "ऑन-स्पॉट प्रतिभागी",
     "enterFirstName": "प्रथम नाम दर्ज करें",
     "enterLastName": "अंतिम नाम दर्ज करें",
@@ -1910,8 +1912,8 @@
     "male": "पुरुष",
     "female": "महिला",
     "other": "अन्य",
-    "placeholderFirstName": "John",
-    "placeholderLastName": "Doe",
+    "placeholderFirstName": "राम",
+    "placeholderLastName": "शर्मा",
     "placeholderEmail": "abc@gmail.com"
   },
   "userCampaigns": {

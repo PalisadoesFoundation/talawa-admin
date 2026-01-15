@@ -32,13 +32,14 @@ import { Button } from 'react-bootstrap';
 import style from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 
-type PropType = { eventId: string; orgId: string; onUpdate?: () => void };
+import type { InterfaceEventRegistrantsWrapperProps } from 'types/AdminPortal/EventRegistrantsModal/interface';
+
 
 export const EventRegistrantsWrapper = ({
   eventId,
   orgId,
   onUpdate,
-}: PropType): JSX.Element => {
+}: InterfaceEventRegistrantsWrapperProps): JSX.Element => {
   // State to control the visibility of the modal
   const [showModal, setShowModal] = useState(false);
   const { t } = useTranslation('translation', {

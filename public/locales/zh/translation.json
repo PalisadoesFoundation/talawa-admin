@@ -1891,10 +1891,12 @@
       "emailsLabel": "收件人邮箱和姓名",
       "emailsHelp": "为每个收件人提供邮箱和可选姓名。根据需要添加多个收件人。",
       "noRecipientsError": "请提供至少一个收件人电子邮件",
-      "invalidEmailsError": "无效的电子邮件：{{emails}}"
+      "invalidEmailsError": "无效的电子邮件：{{emails}}",
+      "invitesSentSuccessfully": "邀请已成功发送"
     }
   },
   "onSpotAttendee": {
+    "organizationIdMissing": "缺少组织 ID。",
     "title": "现场参与者",
     "enterFirstName": "输入名字",
     "enterLastName": "输入姓氏",
@@ -1910,8 +1912,8 @@
     "male": "男性",
     "female": "女性",
     "other": "其他",
-    "placeholderFirstName": "John",
-    "placeholderLastName": "Doe",
+    "placeholderFirstName": "小明",
+    "placeholderLastName": "张",
     "placeholderEmail": "abc@gmail.com"
   },
   "userCampaigns": {
