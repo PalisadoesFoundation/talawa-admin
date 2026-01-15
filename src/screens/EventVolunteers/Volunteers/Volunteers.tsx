@@ -64,7 +64,8 @@ import {
   type GridCellParams,
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
-import { Chip, debounce } from '@mui/material';
+import { debounce } from '@mui/material';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import styles from '../../../style/app-fixed.module.css';
 import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
@@ -305,41 +306,15 @@ function Volunteers(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        const status = params.row.volunteerStatus;
-        const getStatusInfo = (status: string) => {
-          switch (status) {
-            case 'accepted':
-              return {
-                label: t('eventVolunteers.accepted'),
-                color: 'success' as const,
-                className: styles.active,
-              };
-            case 'rejected':
-              return {
-                label: t('eventVolunteers.rejected'),
-                color: 'error' as const,
-                className: styles.rejected,
-              };
-            case 'pending':
-            default:
-              return {
-                label: t('eventVolunteers.pending'),
-                color: 'warning' as const,
-                className: styles.pending,
-              };
-          }
-        };
-
-        const statusInfo = getStatusInfo(status);
-
+        const status = params.row.volunteerStatus as
+          | 'accepted'
+          | 'rejected'
+          | 'pending';
         return (
-          <Chip
+          <StatusBadge
+            variant={status || 'pending'}
             icon={<Circle className={styles.chipIcon} />}
-            label={statusInfo.label}
-            variant="outlined"
-            color={statusInfo.color}
-            className={`${styles.chip} ${statusInfo.className}`}
-            data-testid="statusChip"
+            dataTestId="statusChip"
           />
         );
       },
