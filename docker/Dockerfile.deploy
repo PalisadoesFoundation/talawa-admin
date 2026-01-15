@@ -14,9 +14,11 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 #  force install ALL deps (including devDeps)
-RUN corepack enable \
- && corepack prepare pnpm@latest --activate \
- && pnpm install --frozen-lockfile --prod=false
+
+ RUN corepack enable \
+ && corepack prepare pnpm@10.4.1 --activate \
+ && pnpm install --prod=false
+
 
 COPY . .
 
