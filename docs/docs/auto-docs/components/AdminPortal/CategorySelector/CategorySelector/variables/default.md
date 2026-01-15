@@ -4,7 +4,7 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<[`InterfaceCategorySelectorProps`](../../../../../types/AdminPortal/CategorySelector/interface/interfaces/InterfaceCategorySelectorProps.md)\>
+> `const` **default**: `FC`\<[`InterfaceCategorySelectorProps`](../../../../../types/AdminPortal/CategorySelector/interface/interfaces/InterfaceCategorySelectorProps.md)\>
 
 Defined in: [src/components/AdminPortal/CategorySelector/CategorySelector.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/CategorySelector/CategorySelector.tsx#L16)
 
