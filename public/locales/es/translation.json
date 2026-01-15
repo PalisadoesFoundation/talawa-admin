@@ -1879,6 +1879,7 @@
     }
   },
   "onSpotAttendee": {
+    "invalidEmailFormat": "Formato de correo electrónico no válido",
     "organizationIdMissing": "Falta el ID de la organización.",
     "title": "Asistente in situ",
     "enterFirstName": "Ingrese el nombre",

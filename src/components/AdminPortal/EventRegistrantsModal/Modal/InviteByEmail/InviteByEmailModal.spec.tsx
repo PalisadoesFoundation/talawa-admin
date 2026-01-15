@@ -251,7 +251,7 @@ describe('InviteByEmailModal', () => {
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
-          'Invites added Successfully',
+          'Invites sent successfully',
         );
       });
 
@@ -304,7 +304,7 @@ describe('InviteByEmailModal', () => {
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
-          'Invites added Successfully',
+          'Invites sent successfully',
         );
       });
       expect(mockHandleClose).toHaveBeenCalledTimes(1);

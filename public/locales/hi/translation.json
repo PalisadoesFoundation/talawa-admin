@@ -1896,6 +1896,7 @@
     }
   },
   "onSpotAttendee": {
+    "invalidEmailFormat": "अमान्य ईमेल प्रारूप",
     "organizationIdMissing": "संगठन आईडी अनुपलब्ध है।",
     "title": "ऑन-स्पॉट प्रतिभागी",
     "enterFirstName": "प्रथम नाम दर्ज करें",

@@ -122,7 +122,7 @@ describe('EventRegistrantsWrapper Component', () => {
       renderComponent(defaultProps);
 
       const button = screen.getByLabelText(
-        i18nForTest.t('eventRegistrantsModal.showAttendees'),
+        i18nForTest.t('eventRegistrantsModal.registerMember'),
       );
       expect(button).toBeInTheDocument();
     });
@@ -541,7 +541,7 @@ describe('EventRegistrantsWrapper Component', () => {
       renderComponent(defaultProps);
 
       const button = screen.getByLabelText(
-        i18nForTest.t('eventRegistrantsModal.showAttendees'),
+        i18nForTest.t('eventRegistrantsModal.registerMember'),
       );
       expect(button).toHaveAccessibleName();
     });

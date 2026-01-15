@@ -1896,6 +1896,7 @@
     }
   },
   "onSpotAttendee": {
+    "invalidEmailFormat": "Format d'email invalide",
     "organizationIdMissing": "L'identifiant de l'organisation est manquant.",
     "title": "Participant sur place",
     "enterFirstName": "Entrez le prénom",
@@ -1912,8 +1913,8 @@
     "male": "Homme",
     "female": "Femme",
     "other": "Autre",
-    "placeholderFirstName": "John",
-    "placeholderLastName": "Doe",
+    "placeholderFirstName": "Jean",
+    "placeholderLastName": "Dupont",
     "placeholderEmail": "abc@gmail.com"
   },
   "userCampaigns": {

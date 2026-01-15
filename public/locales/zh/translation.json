@@ -1896,6 +1896,7 @@
     }
   },
   "onSpotAttendee": {
+    "invalidEmailFormat": "无效的电子邮件格式",
     "organizationIdMissing": "缺少组织 ID。",
     "title": "现场参与者",
     "enterFirstName": "输入名字",

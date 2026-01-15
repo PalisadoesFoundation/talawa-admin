@@ -1879,6 +1879,7 @@
     }
   },
   "onSpotAttendee": {
+    "invalidEmailFormat": "Invalid email format",
     "organizationIdMissing": "Organization ID is missing.",
     "title": "On-spot Attendee",
     "enterFirstName": "Enter First Name",
