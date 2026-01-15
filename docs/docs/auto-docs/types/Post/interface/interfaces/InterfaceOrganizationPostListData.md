@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationPostListData
 
-Defined in: [src/types/Post/interface.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L64)
+Defined in: [src/types/Post/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L51)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/types/Post/interface.ts:64](https://github.com/PalisadoesFounda
 
 > **organization**: [`InterfaceOrganization`](InterfaceOrganization.md)
 
-Defined in: [src/types/Post/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L65)
+Defined in: [src/types/Post/interface.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L52)

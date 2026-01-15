@@ -4,7 +4,7 @@
 
 # Interface: InterfaceMutationCreatePostInput
 
-Defined in: [src/types/Post/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L69)
+Defined in: [src/types/Post/interface.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L56)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:69](https://github.com/PalisadoesFounda
 
 > `optional` **attachments**: `File`[]
 
-Defined in: [src/types/Post/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L73)
+Defined in: [src/types/Post/interface.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L60)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/interface.ts:73](https://github.com/PalisadoesFounda
 
 > **caption**: `string`
 
-Defined in: [src/types/Post/interface.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L70)
+Defined in: [src/types/Post/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L57)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/interface.ts:70](https://github.com/PalisadoesFounda
 
 > **isPinned**: `boolean`
 
-Defined in: [src/types/Post/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L72)
+Defined in: [src/types/Post/interface.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L59)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/types/Post/interface.ts:72](https://github.com/PalisadoesFounda
 
 > **organizationId**: `string`
 
-Defined in: [src/types/Post/interface.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L71)
+Defined in: [src/types/Post/interface.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L58)

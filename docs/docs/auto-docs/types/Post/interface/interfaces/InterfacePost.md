@@ -4,7 +4,7 @@
 
 # Interface: InterfacePost
 
-Defined in: [src/types/Post/interface.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L87)
+Defined in: [src/types/Post/interface.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L74)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:87](https://github.com/PalisadoesFounda
 
 > `optional` **attachments**: [`InterfaceAttachment`](InterfaceAttachment.md)[]
 
-Defined in: [src/types/Post/interface.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L94)
+Defined in: [src/types/Post/interface.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L81)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/interface.ts:94](https://github.com/PalisadoesFounda
 
 > `optional` **caption**: `string`
 
-Defined in: [src/types/Post/interface.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L89)
+Defined in: [src/types/Post/interface.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L76)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/interface.ts:89](https://github.com/PalisadoesFounda
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Post/interface.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L90)
+Defined in: [src/types/Post/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L77)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Post/interface.ts:90](https://github.com/PalisadoesFounda
 
 > `optional` **creator**: [`InterfaceCreator`](InterfaceCreator.md)
 
-Defined in: [src/types/Post/interface.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L93)
+Defined in: [src/types/Post/interface.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L80)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Post/interface.ts:93](https://github.com/PalisadoesFounda
 
 > **id**: `string`
 
-Defined in: [src/types/Post/interface.ts:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L88)
+Defined in: [src/types/Post/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L75)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Post/interface.ts:88](https://github.com/PalisadoesFounda
 
 > `optional` **imageUrl**: `string`
 
-Defined in: [src/types/Post/interface.ts:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L95)
+Defined in: [src/types/Post/interface.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L82)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Post/interface.ts:95](https://github.com/PalisadoesFounda
 
 > `optional` **pinned**: `boolean`
 
-Defined in: [src/types/Post/interface.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L92)
+Defined in: [src/types/Post/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L79)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/types/Post/interface.ts:92](https://github.com/PalisadoesFounda
 
 > `optional` **pinnedAt**: `string`
 
-Defined in: [src/types/Post/interface.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L91)
+Defined in: [src/types/Post/interface.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L78)
 
 ***
 
@@ -76,4 +76,4 @@ Defined in: [src/types/Post/interface.ts:91](https://github.com/PalisadoesFounda
 
 > `optional` **videoUrl**: `string`
 
-Defined in: [src/types/Post/interface.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L96)
+Defined in: [src/types/Post/interface.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L83)

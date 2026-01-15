@@ -4,7 +4,7 @@
 
 # Interface: InterfacePageInfo
 
-Defined in: [src/types/Post/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L38)
+Defined in: [src/types/Post/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L25)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:38](https://github.com/PalisadoesFounda
 
 > **endCursor**: `string`
 
-Defined in: [src/types/Post/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L40)
+Defined in: [src/types/Post/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L27)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/interface.ts:40](https://github.com/PalisadoesFounda
 
 > **hasNextPage**: `boolean`
 
-Defined in: [src/types/Post/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L41)
+Defined in: [src/types/Post/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L28)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/interface.ts:41](https://github.com/PalisadoesFounda
 
 > **hasPreviousPage**: `boolean`
 
-Defined in: [src/types/Post/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L42)
+Defined in: [src/types/Post/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L29)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/types/Post/interface.ts:42](https://github.com/PalisadoesFounda
 
 > **startCursor**: `string`
 
-Defined in: [src/types/Post/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L39)
+Defined in: [src/types/Post/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L26)
