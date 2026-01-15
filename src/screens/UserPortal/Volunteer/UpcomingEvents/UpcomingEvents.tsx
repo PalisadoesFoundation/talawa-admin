@@ -13,6 +13,7 @@ import {
   InterfaceMappedEvent,
   InterfaceVolunteerStatus,
 } from 'types/Volunteer/interface';
+import type { StatusVariant } from 'types/shared-components/StatusBadge/interface';
 import { IoLocationOutline } from 'react-icons/io5';
 import { IoIosHand } from 'react-icons/io';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -217,21 +218,19 @@ const UpcomingEvents = (): JSX.Element => {
   };
 
   /**
-   * Maps membership status to StatusBadge variant and domain
+   * Maps membership status to StatusBadge variant
    */
-  const getStatusBadgeProps = (
-    status: string,
-  ): { variant: 'pending' | 'success' | 'error'; domain: string } => {
+  const getStatusBadgeProps = (status: string): { variant: StatusVariant } => {
     switch (status) {
       case 'requested':
       case 'invited':
-        return { variant: 'pending', domain: 'pending' };
+        return { variant: 'pending' };
       case 'accepted':
-        return { variant: 'success', domain: 'volunteered' };
+        return { variant: 'accepted' };
       case 'rejected':
-        return { variant: 'error', domain: 'rejected' };
+        return { variant: 'rejected' };
       default:
-        return { variant: 'pending', domain: 'pending' };
+        return { variant: 'pending' };
     }
   };
 

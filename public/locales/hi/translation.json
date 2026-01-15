@@ -2077,7 +2077,10 @@
     "groupName": "समूह का नाम",
     "noOfMembers": "सदस्यों की संख्या",
     "options": "विकल्प",
-    "notSpecified": "निर्दिष्ट नहीं"
+    "notSpecified": "निर्दिष्ट नहीं",
+    "groupsAvailable": "{{count}} समूह उपलब्ध",
+    "volunteersRequired": "आवश्यक",
+    "signedUp": "पंजीकृत"
   },
   "pluginStore": {
     "title": "प्लगइन स्टोर",

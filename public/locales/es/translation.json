@@ -2060,7 +2060,10 @@
     "groupName": "Nombre del Grupo",
     "noOfMembers": "Número de Miembros",
     "options": "Opciones",
-    "notSpecified": "No Especificado"
+    "notSpecified": "No Especificado",
+    "groupsAvailable": "{{count}} grupos disponibles",
+    "volunteersRequired": "Requerido",
+    "signedUp": "Registrado"
   },
   "pluginStore": {
     "title": "Tienda de Plugins",
