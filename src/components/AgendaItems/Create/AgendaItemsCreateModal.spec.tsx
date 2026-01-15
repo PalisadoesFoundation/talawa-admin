@@ -29,11 +29,11 @@ let mockSetFormState: ReturnType<typeof vi.fn>;
 let mockCreateAgendaItemHandler: ReturnType<typeof vi.fn>;
 const mockT = (key: string): string => key;
 
-// Define mock toast object before vi.mock to use in assertions without importing
-const mockToast = {
+// Use vi.hoisted() to create mock that survives vi.mock hoisting
+const mockToast = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
-};
+}));
 
 vi.mock('react-toastify', () => ({
   toast: mockToast,
