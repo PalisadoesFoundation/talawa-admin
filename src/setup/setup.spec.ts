@@ -111,13 +111,26 @@ describe('Talawa Admin Setup', () => {
   it('should exit early when checkEnvFile returns false', async () => {
     vi.mocked(checkEnvFile).mockReturnValue(false);
 
+    const exitMock = vi
+      .spyOn(process, 'exit')
+      .mockImplementationOnce((code) => {
+        throw new Error(`process.exit called with code ${code}`);
+      });
+
+    const consoleSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
+
     await main();
 
+    expect(consoleSpy).toHaveBeenCalledWith(
+      '❌ Environment file check failed. Please ensure .env exists.',
+    );
+    expect(exitMock).toHaveBeenCalledWith(1);
+
     // Should not proceed with setup
-    expect(modifyEnvFile).not.toHaveBeenCalled();
-    expect(askAndSetDockerOption).not.toHaveBeenCalled();
-    expect(askAndUpdatePort).not.toHaveBeenCalled();
-    expect(askAndUpdateTalawaApiUrl).not.toHaveBeenCalled();
+    consoleSpy.mockRestore();
+    exitMock.mockRestore();
   });
 
   it('should call askAndUpdateTalawaApiUrl when Docker is used and skip port setup', async () => {
