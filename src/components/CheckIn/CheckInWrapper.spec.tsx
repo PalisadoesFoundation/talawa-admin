@@ -1,5 +1,6 @@
 import React from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { CheckInWrapper } from './CheckInWrapper';
 import { BrowserRouter } from 'react-router';
@@ -36,6 +37,7 @@ describe('Testing CheckIn Wrapper', () => {
   };
 
   it('The button to open and close the modal should work properly', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -51,7 +53,7 @@ describe('Testing CheckIn Wrapper', () => {
     );
 
     // Open the modal
-    fireEvent.click(screen.getByLabelText('checkInMembers') as Element);
+    await user.click(screen.getByLabelText('checkInMembers'));
 
     await waitFor(() =>
       expect(screen.getByText(/Event Check In/i)).toBeInTheDocument(),
@@ -60,7 +62,7 @@ describe('Testing CheckIn Wrapper', () => {
     //  Close the modal
     const closebtn = screen.getByLabelText('Close');
 
-    fireEvent.click(closebtn as Element);
+    await user.click(closebtn);
 
     await waitFor(() =>
       expect(screen.queryByText(/Event Check In/i)).not.toBeInTheDocument(),
