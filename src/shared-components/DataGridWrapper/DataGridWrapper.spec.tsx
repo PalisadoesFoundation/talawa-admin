@@ -31,7 +31,7 @@ vi.mock('react-i18next', () => ({
   }),
 }));
 
-// Mock components with callbacks tracking
+// Mock components with callbacks tracking - reset in beforeEach
 let renderCellCalls: IRenderCellCall[] = [];
 
 // Mock DataGrid
@@ -62,8 +62,6 @@ vi.mock('@mui/x-data-grid', () => ({
         onPaginationModelChange({ page: 1, pageSize: 25 });
       }
     }, [onPaginationModelChange]);
-
-    renderCellCalls = [];
 
     return (
       <div data-testid="data-grid">
@@ -168,12 +166,14 @@ vi.mock('../SearchBar/SearchBar', () => ({
         data-testid={inputTestId || 'search-bar'}
       />
       <button
+        type="button"
         onClick={() => onSearch && onSearch(value)}
         data-testid="search-button"
       >
         Search
       </button>
       <button
+        type="button"
         onClick={() => {
           onClear?.();
           onChange('');
@@ -242,7 +242,7 @@ vi.mock('../SearchFilterBar/SearchFilterBar', () => ({
           type="text"
           value={searchValue}
           onChange={(e) => onSearchChange(e.target.value)}
-          onKeyPress={(e) => {
+          onKeyDown={(e) => {
             if (e.key === 'Enter' && onSearchSubmit) {
               onSearchSubmit(searchValue);
             }
@@ -302,6 +302,10 @@ const defaultProps = {
 };
 
 describe('DataGridWrapper', () => {
+  beforeEach(() => {
+    renderCellCalls = [];
+  });
+
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -447,7 +451,9 @@ describe('DataGridWrapper', () => {
 
   test('renders action column', () => {
     const actionColumn = (row: TestRow) => (
-      <button data-testid={`action-${row.id}`}>Edit</button>
+      <button type="button" data-testid={`action-${row.id}`}>
+        Edit
+      </button>
     );
     render(<DataGridWrapper {...defaultProps} actionColumn={actionColumn} />);
     expect(screen.getByText('Actions')).toBeInTheDocument();
@@ -786,13 +792,12 @@ describe('DataGridWrapper', () => {
 
     // Simulate typing and pressing Enter
     fireEvent.change(searchInput, { target: { value: 'manual-enter-test' } });
-    fireEvent.keyPress(searchInput, {
+    fireEvent.keyDown(searchInput, {
       key: 'Enter',
       code: 'Enter',
-      charCode: 13,
     });
 
-    // This should trigger lines 196-202 through the onKeyPress handler
+    // This should trigger lines 196-202 through the onKeyDown handler
     expect(onSearchChange).toHaveBeenCalledWith('manual-enter-test', 'name');
   });
 
@@ -873,10 +878,9 @@ describe('DataGridWrapper', () => {
     fireEvent.change(searchInput, { target: { value: 'test search' } });
 
     // Press Enter to trigger onSearchSubmit
-    fireEvent.keyPress(searchInput, {
+    fireEvent.keyDown(searchInput, {
       key: 'Enter',
       code: 'Enter',
-      charCode: 13,
     });
 
     vi.advanceTimersByTime(300);
