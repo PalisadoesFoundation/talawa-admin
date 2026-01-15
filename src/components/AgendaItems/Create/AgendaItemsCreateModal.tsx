@@ -144,10 +144,10 @@ const AgendaItemsCreateModal: React.FC<
       }
 
       setPreviewUrls((prev) => [...prev, ...newPreviewUrls]);
-      setFormState({
-        ...formState,
-        attachments: [...formState.attachments, ...uploadedFiles],
-      });
+      setFormState((prevState) => ({
+        ...prevState,
+        attachments: [...prevState.attachments, ...uploadedFiles],
+      }));
     }
   };
 
@@ -157,10 +157,10 @@ const AgendaItemsCreateModal: React.FC<
    * @param attachment - Attachment to remove.
    */
   const handleRemoveAttachment = (attachment: string): void => {
-    setFormState({
-      ...formState,
-      attachments: formState.attachments.filter((item) => item !== attachment),
-    });
+    setFormState((prevState) => ({
+      ...prevState,
+      attachments: prevState.attachments.filter((item) => item !== attachment),
+    }));
   };
 
   return (
