@@ -7,6 +7,9 @@
   },
   "ends": "Ends",
   "occurrences": "Occurrences",
+  "customRecurrence": "Custom Recurrence",
+  "invalidDetailsMessage": "Please check the details you entered.",
+  "selectAtLeastOneDay": "Please select at least one day.",
   "leaderboard": {
     "title": "Leaderboard",
     "searchByVolunteer": "Search By Volunteer",
@@ -1972,6 +1975,8 @@
     "earliest": "Earliest",
     "requestAccepted": "Request accepted successfully",
     "requestRejected": "Request rejected successfully",
+    "acceptRequest": "Accept Request",
+    "rejectRequest": "Reject Request",
     "details": "Details",
     "manageGroup": "Manage Group",
     "mostVolunteers": "Most Volunteers",
@@ -1995,7 +2000,9 @@
     "deleteVolunteerGroup": "Delete {{name}} volunteer group",
     "deleteVolunteerEntry": "Delete {{name}} volunteer entry",
     "viewGroup": "View group",
-    "editGroup": "Edit group"
+    "editGroup": "Edit group",
+    "invalidNumber": "Invalid number",
+    "viewToggle": "Toggle view"
   },
   "userVolunteer": {
     "title": "Volunteership",

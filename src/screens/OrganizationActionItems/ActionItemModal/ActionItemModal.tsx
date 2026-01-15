@@ -4,7 +4,7 @@
  * The modal handles both creation and editing of action items, including specific logic for recurring events.
  * It allows users to specify whether an action item should apply to an entire series of recurring events or just a single instance.
  */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import type { FormEvent, FC } from 'react';
 import styles from 'style/app-fixed.module.css';
@@ -14,6 +14,8 @@ import type { Dayjs } from 'dayjs';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import ApplyToSelector from 'components/AdminPortal/ApplyToSelector/ApplyToSelector';
 import type { ApplyToType } from 'types/AdminPortal/ApplyToSelector/interface';
+import AssignmentTypeSelector from 'components/AdminPortal/AssignmentTypeSelector/AssignmentTypeSelector';
+import type { AssignmentType } from 'types/AdminPortal/AssignmentTypeSelector/interface';
 
 import type {
   IActionItemCategoryInfo,
@@ -35,14 +37,7 @@ import {
   UPDATE_ACTION_ITEM_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
-import {
-  Autocomplete,
-  FormControl,
-  TextField,
-  Chip,
-  Box,
-  Typography,
-} from '@mui/material';
+import { Autocomplete, FormControl, TextField } from '@mui/material';
 import {
   GET_EVENT_VOLUNTEERS,
   GET_EVENT_VOLUNTEER_GROUPS,
@@ -64,6 +59,15 @@ const initializeFormState = (
   isCompleted: actionItem?.isCompleted || false,
 });
 
+/**
+ * Modal component for creating and editing action items.
+ *
+ * Supports assigning action items to volunteers or volunteer groups,
+ * with options for applying to recurring event series or single instances.
+ *
+ * @param props - Component props from IItemModalProps
+ * @returns Modal dialog for action item management
+ */
 const ItemModal: FC<IItemModalProps> = ({
   isOpen,
   hide,
@@ -87,9 +91,8 @@ const ItemModal: FC<IItemModalProps> = ({
     useState<InterfaceEventVolunteerInfo | null>(null);
   const [selectedVolunteerGroup, setSelectedVolunteerGroup] =
     useState<IEventVolunteerGroup | null>(null);
-  const [assignmentType, setAssignmentType] = useState<
-    'volunteer' | 'volunteerGroup'
-  >('volunteer');
+  const [assignmentType, setAssignmentType] =
+    useState<AssignmentType>('volunteer');
 
   const [formState, setFormState] = useState<IFormStateType>(
     initializeFormState(actionItem),
@@ -133,37 +136,38 @@ const ItemModal: FC<IItemModalProps> = ({
     skip: !eventId,
   });
 
+  const isApplyToRelevant =
+    Boolean(isRecurring) &&
+    (!editMode ||
+      (Boolean(actionItem?.isTemplate) && !actionItem?.isInstanceException));
+
   const volunteers = useMemo(() => {
     const allVolunteers = volunteersData?.event?.volunteers || [];
 
-    // Apply filtering based on applyTo selection for both create and edit modes
+    if (!isApplyToRelevant) return allVolunteers;
     if (applyTo === 'series') {
       // For entire series, show only template volunteers
       return allVolunteers.filter(
         (volunteer: InterfaceEventVolunteerInfo) =>
           volunteer.isTemplate === true,
       );
-    } else {
-      // For this event only, show all volunteers (template and non-template)
-      return allVolunteers;
     }
-  }, [volunteersData, applyTo]);
+    return allVolunteers;
+  }, [volunteersData, applyTo, isApplyToRelevant]);
 
   const volunteerGroups = useMemo(() => {
     const allVolunteerGroups =
       volunteerGroupsData?.event?.volunteerGroups || [];
 
-    // Apply filtering based on applyTo selection for both create and edit modes
+    if (!isApplyToRelevant) return allVolunteerGroups;
     if (applyTo === 'series') {
       // For entire series, show only template volunteer groups
       return allVolunteerGroups.filter(
         (group: IEventVolunteerGroup) => group.isTemplate === true,
       );
-    } else {
-      // For this event only, show all volunteer groups (template and non-template)
-      return allVolunteerGroups;
     }
-  }, [volunteerGroupsData, applyTo]);
+    return allVolunteerGroups;
+  }, [volunteerGroupsData, applyTo, isApplyToRelevant]);
 
   // Determine if assignment type chips should be disabled
   const isVolunteerChipDisabled =
@@ -196,12 +200,25 @@ const ItemModal: FC<IItemModalProps> = ({
     orgActionItemsRefetch?.();
   };
 
-  const handleFormChange = (
-    field: keyof IFormStateType,
-    value: string | boolean | Date | undefined | null,
-  ): void => {
-    setFormState((prevState) => ({ ...prevState, [field]: value }));
-  };
+  const handleFormChange = useCallback(
+    (
+      field: keyof IFormStateType,
+      value: string | boolean | Date | undefined | null,
+    ): void => {
+      setFormState((prevState) => ({ ...prevState, [field]: value }));
+    },
+    [],
+  );
+
+  const handleClearVolunteer = useCallback(() => {
+    handleFormChange('volunteerId', '');
+    setSelectedVolunteer(null);
+  }, [handleFormChange]);
+
+  const handleClearVolunteerGroup = useCallback(() => {
+    handleFormChange('volunteerGroupId', '');
+    setSelectedVolunteerGroup(null);
+  }, [handleFormChange]);
 
   const createActionItemHandler = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
@@ -357,8 +374,10 @@ const ItemModal: FC<IItemModalProps> = ({
   useEffect(() => {
     if (actionItem?.isInstanceException) {
       setApplyTo('instance');
-    } else if (actionItem) {
+    } else if (actionItem?.isTemplate) {
       setApplyTo('series');
+    } else if (actionItem) {
+      setApplyTo('instance');
     }
   }, [actionItem]);
 
@@ -396,6 +415,7 @@ const ItemModal: FC<IItemModalProps> = ({
 
   // Clear volunteer/volunteer group selections when applyTo changes
   useEffect(() => {
+    if (!isApplyToRelevant) return;
     // Check if current selections are still valid with the new filter (for both create and edit modes)
     if (
       selectedVolunteer &&
@@ -413,7 +433,13 @@ const ItemModal: FC<IItemModalProps> = ({
       setSelectedVolunteerGroup(null);
       handleFormChange('volunteerGroupId', '');
     }
-  }, [applyTo, selectedVolunteer, selectedVolunteerGroup]);
+  }, [
+    applyTo,
+    selectedVolunteer,
+    selectedVolunteerGroup,
+    isApplyToRelevant,
+    handleFormChange,
+  ]);
 
   // Reset applyTo to default when modal opens for creating a new action item
   useEffect(() => {
@@ -472,59 +498,14 @@ const ItemModal: FC<IItemModalProps> = ({
         {!isCompleted && (
           <>
             {/* Assignment Type Selection */}
-            <Box className="mb-3">
-              <Typography variant="subtitle2" className="mb-2">
-                {t('assignTo')}
-              </Typography>
-              <Box className="d-flex gap-2">
-                <Chip
-                  label={t('volunteer')}
-                  variant={
-                    assignmentType === 'volunteer' ? 'filled' : 'outlined'
-                  }
-                  color={assignmentType === 'volunteer' ? 'primary' : 'default'}
-                  onClick={() => {
-                    if (!isVolunteerChipDisabled) {
-                      setAssignmentType('volunteer');
-                      // Clear volunteer group assignment when switching to volunteer
-                      handleFormChange('volunteerGroupId', '');
-                      setSelectedVolunteerGroup(null);
-                    }
-                  }}
-                  clickable={!isVolunteerChipDisabled}
-                  aria-disabled={isVolunteerChipDisabled}
-                  sx={{
-                    opacity: isVolunteerChipDisabled ? 0.6 : 1,
-                    cursor: isVolunteerChipDisabled ? 'not-allowed' : 'pointer',
-                  }}
-                />
-                <Chip
-                  label={t('volunteerGroup')}
-                  variant={
-                    assignmentType === 'volunteerGroup' ? 'filled' : 'outlined'
-                  }
-                  color={
-                    assignmentType === 'volunteerGroup' ? 'primary' : 'default'
-                  }
-                  onClick={() => {
-                    if (!isVolunteerGroupChipDisabled) {
-                      setAssignmentType('volunteerGroup');
-                      // Clear volunteer assignment when switching to volunteer group
-                      handleFormChange('volunteerId', '');
-                      setSelectedVolunteer(null);
-                    }
-                  }}
-                  clickable={!isVolunteerGroupChipDisabled}
-                  aria-disabled={isVolunteerGroupChipDisabled}
-                  sx={{
-                    opacity: isVolunteerGroupChipDisabled ? 0.6 : 1,
-                    cursor: isVolunteerGroupChipDisabled
-                      ? 'not-allowed'
-                      : 'pointer',
-                  }}
-                />
-              </Box>
-            </Box>
+            <AssignmentTypeSelector
+              assignmentType={assignmentType}
+              onTypeChange={setAssignmentType}
+              isVolunteerDisabled={isVolunteerChipDisabled}
+              isVolunteerGroupDisabled={isVolunteerGroupChipDisabled}
+              onClearVolunteer={handleClearVolunteer}
+              onClearVolunteerGroup={handleClearVolunteerGroup}
+            />
 
             {/* Volunteer Selection */}
             {assignmentType === 'volunteer' && (

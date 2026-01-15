@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/LoginPage/LoginPage.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/LoginPage/LoginPage.tsx#L53)
+Defined in: [src/screens/LoginPage/LoginPage.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/LoginPage/LoginPage.tsx#L54)
 
 ## Returns
 

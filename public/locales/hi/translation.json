@@ -7,6 +7,9 @@
   },
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
+  "customRecurrence": "कस्टम पुनरावृत्ति",
+  "invalidDetailsMessage": "कृपया दर्ज किए गए विवरणों की जाँच करें।",
+  "selectAtLeastOneDay": "कृपया कम से कम एक दिन चुनें।",
   "leaderboard": {
     "title": "लीडरबोर्ड",
     "searchByVolunteer": "स्वयंसेवक द्वारा खोजें",
@@ -1989,6 +1992,8 @@
     "earliest": "प्रारंभिक",
     "requestAccepted": "अनुरोध सफलतापूर्वक स्वीकृत",
     "requestRejected": "अनुरोध सफलतापूर्वक अस्वीकृत",
+    "acceptRequest": "अनुरोध स्वीकार करें",
+    "rejectRequest": "अनुरोध अस्वीकार करें",
     "details": "विवरण",
     "manageGroup": "समूह प्रबंधित करें",
     "mostVolunteers": "सबसे अधिक स्वयंसेवक",
@@ -2012,7 +2017,9 @@
     "deleteVolunteerGroup": "{{name}} स्वयंसेवक समूह हटाएं",
     "deleteVolunteerEntry": "{{name}} स्वयंसेवक प्रविष्टि हटाएं",
     "viewGroup": "समूह देखें",
-    "editGroup": "समूह संपादित करें"
+    "editGroup": "समूह संपादित करें",
+    "invalidNumber": "अमान्य संख्या",
+    "viewToggle": "दृश्य टॉगल"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",
