@@ -472,6 +472,7 @@ const orgFundCampaign = (): JSX.Element => {
         hide={() => setModalState(false)}
         refetchCampaign={refetchCampaign}
         fundId={fundId}
+        orgId={orgId}
         campaign={campaign}
         mode={campaignModalMode}
       />
