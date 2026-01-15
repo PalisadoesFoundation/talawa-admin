@@ -13,13 +13,12 @@ import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 
-// eslint-disable-next-line no-restricted-imports -- Test file needs direct access for mocking
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DatePicker';
 
 import AgendaItemsCreateModal from './AgendaItemsCreateModal';
-// eslint-disable-next-line no-restricted-imports -- Test file needs direct access for mocking
-import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import type { MockedFunction } from 'vitest';
 import { describe, test, expect, vi } from 'vitest';
@@ -30,11 +29,14 @@ let mockSetFormState: ReturnType<typeof vi.fn>;
 let mockCreateAgendaItemHandler: ReturnType<typeof vi.fn>;
 const mockT = (key: string): string => key;
 
+// Define mock toast object before vi.mock to use in assertions without importing
+const mockToast = {
+  success: vi.fn(),
+  error: vi.fn(),
+};
+
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+  toast: mockToast,
 }));
 vi.mock('utils/convertToBase64');
 let mockedConvertToBase64: MockedFunction<typeof convertToBase64>;
@@ -222,7 +224,7 @@ describe('AgendaItemsCreateModal', () => {
     fireEvent.click(linkBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
+      expect(mockToast.error).toHaveBeenCalledWith(
         'invalidUrl',
         expect.any(Object),
       );
@@ -265,7 +267,7 @@ describe('AgendaItemsCreateModal', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
+      expect(mockToast.error).toHaveBeenCalledWith(
         'fileSizeExceedsLimit',
         expect.any(Object),
       );
