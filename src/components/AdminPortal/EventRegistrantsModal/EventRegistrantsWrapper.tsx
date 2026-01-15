@@ -58,7 +58,7 @@ export const EventRegistrantsWrapper = ({
       <Button
         data-testid="filter-button"
         className={`border-1 mx-4 ${style.createButton}`}
-        aria-label={t('showAttendees')}
+        aria-label={t('registerMember')}
         onClick={(): void => {
           setShowModal(true); // Show the modal when button is clicked
         }}

@@ -93,10 +93,12 @@ const renderAddOnSpotAttendee = (): RenderResult => {
 describe('AddOnSpotAttendee Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mockOrgId = '123';
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
+    mockOrgId = '123';
   });
 
   it('renders the component with all form fields', async () => {
@@ -227,7 +229,6 @@ describe('AddOnSpotAttendee Component', () => {
         'Organization ID is missing.',
       );
     });
-    mockOrgId = '123'; // Reset for other tests
   });
 
   it('displays error when required fields are missing', async () => {
