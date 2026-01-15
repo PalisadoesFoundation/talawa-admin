@@ -72,7 +72,7 @@ vi.mock('shared-components/LoadingState/LoadingState', () => ({
 }));
 
 // Mock InfiniteScrollLoader
-vi.mock('components/InfiniteScrollLoader/InfiniteScrollLoader', () => ({
+vi.mock('shared-components/InfiniteScrollLoader/InfiniteScrollLoader', () => ({
   default: () => (
     <div data-testid="infinite-scroll-loader">Loading more...</div>
   ),
