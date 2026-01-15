@@ -57,7 +57,7 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
     }
 
     if (!userId) {
-      NotificationToast.error(t('userNotFound'));
+      NotificationToast.error(t('common.userNotFoundError'));
       return;
     }
 
@@ -91,7 +91,10 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
   };
 
   return (
-    <Dropdown title="Change Language" data-testid="language-dropdown-container">
+    <Dropdown
+      title={t('common.changeLanguage')}
+      data-testid="language-dropdown-container"
+    >
       <Dropdown.Toggle
         className={styles.changeLanguageBtn}
         data-testid="language-dropdown-btn"
@@ -101,12 +104,12 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
             key={`dropdown-btn-${index}`}
             data-testid={`dropdown-btn-${index}`}
           >
-            {currentLanguageCode === language.code ? (
+            {currentLanguageCode === language.code && (
               <span className={`${props?.btnTextStyle ?? ''}`}>
                 <span className={`fi fi-${language.country_code} me-2`}></span>
                 {language.name}
               </span>
-            ) : null}
+            )}
           </span>
         ))}
       </Dropdown.Toggle>

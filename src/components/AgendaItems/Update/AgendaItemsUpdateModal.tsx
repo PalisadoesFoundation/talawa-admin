@@ -297,7 +297,7 @@ const AgendaItemsUpdateModal: React.FC<
                     <source src={attachment} type="video/mp4" />
                   </video>
                 ) : (
-                  <img src={attachment} alt="Attachment preview" />
+                  <img src={attachment} alt={t('attachmentPreview')} />
                 )}
                 <button
                   className={styles.closeButtonFile}

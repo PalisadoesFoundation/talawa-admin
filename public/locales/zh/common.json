@@ -228,5 +228,7 @@
   "organizationEvent": "组织成员",
   "organizationEventDescription": "组织的所有成员可见",
   "inviteOnlyEvent": "仅限受邀者",
-  "inviteOnlyEventDescription": "仅受邀成员和活动管理员可见"
+  "inviteOnlyEventDescription": "仅受邀成员和活动管理员可见",
+  "noCategory": "无类别",
+  "changeLanguage": "更改语言"
 }

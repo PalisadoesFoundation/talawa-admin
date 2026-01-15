@@ -705,7 +705,8 @@
     "agendaItemUpdated": "एजेंडा आइटम सफलतापूर्वक अपडेट किया गया",
     "agendaItemDeleted": "एजेंडा आइटम सफलतापूर्वक हटा दिया गया",
     "deleteAgendaItem": "एजेंडा आइटम हटाएं",
-    "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?"
+    "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?",
+    "attachmentPreview": "अनुलग्नक पूर्वावलोकन"
   },
   "eventListCard": {
     "deleteEvent": "ईवेंट हटाएँ",
@@ -1811,7 +1812,10 @@
     "generatingPdf": "PDF जेनरेट हो रहा है...",
     "pdfGeneratedSuccessfully": "PDF सफलतापूर्वक जेनरेट किया गया!",
     "errorGeneratingPdf": "PDF जेनरेट करने में त्रुटि",
-    "unknownError": "अज्ञात त्रुटि"
+    "unknownError": "अज्ञात त्रुटि",
+    "checkedIn": "चेक-इन हुआ",
+    "downloadTag": "टैग डाउनलोड करें",
+    "checkInButton": "चेक इन करें"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
@@ -2108,7 +2112,9 @@
     "title": "उपयोगकर्ता पोर्टल",
     "talawa": "तलावा",
     "talawaBranding": "तालावा ब्रांडिंग",
-    "view": "देखें"
+    "view": "देखें",
+    "changeLanguage": "भाषा बदलें",
+    "userNotFoundError": "उपयोगकर्ता नहीं मिला"
   },
   "donation": {
     "amount_label": "राशि",

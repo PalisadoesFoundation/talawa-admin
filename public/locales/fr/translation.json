@@ -705,7 +705,8 @@
     "agendaItemUpdated": "Point de l'ordre du jour mis à jour avec succès",
     "agendaItemDeleted": "Point de l'ordre du jour supprimé avec succès",
     "deleteAgendaItem": "Supprimer le point de l'ordre du jour",
-    "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?"
+    "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?",
+    "attachmentPreview": "Aperçu de la pièce jointe"
   },
   "eventListCard": {
     "deleteEvent": "Supprimer l'événement",
@@ -1811,7 +1812,10 @@
     "generatingPdf": "Génération du PDF...",
     "pdfGeneratedSuccessfully": "PDF généré avec succès !",
     "errorGeneratingPdf": "Erreur lors de la génération du PDF",
-    "unknownError": "Erreur inconnue"
+    "unknownError": "Erreur inconnue",
+    "checkedIn": "Enregistré",
+    "downloadTag": "Télécharger l'étiquette",
+    "checkInButton": "S'enregistrer"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
@@ -2108,7 +2112,9 @@
     "title": "Portail Utilisateur",
     "talawa": "Talawa",
     "talawaBranding": "Image de marque Talawa",
-    "view": "Voir"
+    "view": "Voir",
+    "changeLanguage": "Changer de langue",
+    "userNotFoundError": "Utilisateur introuvable"
   },
   "donation": {
     "amount_label": "Montant",

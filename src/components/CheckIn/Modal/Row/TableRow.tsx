@@ -119,10 +119,10 @@ export const TableRow = ({
       {data.isCheckedIn ? (
         <div>
           <Button variant="contained" disabled className="m-2 p-2">
-            Checked In
+            {t('checkedIn')}
           </Button>
           <Button variant="contained" className="m-2 p-2" onClick={notify}>
-            Download Tag
+            {t('downloadTag')}
           </Button>
         </div>
       ) : (
@@ -134,7 +134,7 @@ export const TableRow = ({
           onClick={markCheckIn}
           className="m-2 p-2"
         >
-          Check In
+          {t('checkInButton')}
         </Button>
       )}
     </>

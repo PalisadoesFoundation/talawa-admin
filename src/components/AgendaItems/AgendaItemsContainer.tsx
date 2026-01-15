@@ -379,7 +379,7 @@ function AgendaItemsContainer({
                                   ))
                                 ) : (
                                   <span className={styles.categoryChip}>
-                                    No Category
+                                    {tCommon('noCategory')}
                                   </span>
                                 )}
                               </div>

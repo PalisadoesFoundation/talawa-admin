@@ -705,7 +705,8 @@
     "agendaItemUpdated": "议程项目已成功更新",
     "agendaItemDeleted": "议程项目已成功删除",
     "deleteAgendaItem": "删除议程项目",
-    "deleteAgendaItemMsg": "您要删除此议程项目吗？"
+    "deleteAgendaItemMsg": "您要删除此议程项目吗？",
+    "attachmentPreview": "附件预览"
   },
   "eventListCard": {
     "deleteEvent": "删除事件",
@@ -1811,7 +1812,10 @@
     "generatingPdf": "正在生成 PDF...",
     "pdfGeneratedSuccessfully": "PDF 生成成功！",
     "errorGeneratingPdf": "生成 PDF 时出错",
-    "unknownError": "未知错误"
+    "unknownError": "未知错误",
+    "checkedIn": "已签到",
+    "downloadTag": "下载标签",
+    "checkInButton": "签到"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "添加与会者时出错",
@@ -2108,7 +2112,9 @@
     "title": "用户门户",
     "talawa": "塔拉瓦",
     "talawaBranding": "Talawa 品牌形象",
-    "view": "查看"
+    "view": "查看",
+    "changeLanguage": "更改语言",
+    "userNotFoundError": "未找到用户"
   },
   "donation": {
     "amount_label": "金额",
