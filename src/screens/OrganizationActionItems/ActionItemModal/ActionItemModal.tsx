@@ -16,6 +16,7 @@ import ApplyToSelector from 'components/AdminPortal/ApplyToSelector/ApplyToSelec
 import type { ApplyToType } from 'types/AdminPortal/ApplyToSelector/interface';
 import AssignmentTypeSelector from 'components/AdminPortal/AssignmentTypeSelector/AssignmentTypeSelector';
 import type { AssignmentType } from 'types/AdminPortal/AssignmentTypeSelector/interface';
+import CategorySelector from 'components/AdminPortal/CategorySelector/CategorySelector';
 
 import type {
   IActionItemCategoryInfo,
@@ -473,27 +474,14 @@ const ItemModal: FC<IItemModalProps> = ({
           !actionItem.isInstanceException && (
             <ApplyToSelector applyTo={applyTo} onChange={setApplyTo} />
           )}
-        <Form.Group className="d-flex gap-3 mb-3">
-          <Autocomplete
-            className={`${styles.noOutline} w-100`}
-            data-testid="categorySelect"
-            data-cy="categorySelect"
-            options={actionItemCategories}
-            value={actionItemCategory}
-            isOptionEqualToValue={(option, value) => option.id === value.id}
-            filterSelectedOptions={true}
-            getOptionLabel={(item: IActionItemCategoryInfo): string =>
-              item.name
-            }
-            onChange={(_, newCategory): void => {
-              handleFormChange('categoryId', newCategory?.id ?? '');
-              setActionItemCategory(newCategory);
-            }}
-            renderInput={(params) => (
-              <TextField {...params} label={t('actionItemCategory')} required />
-            )}
-          />
-        </Form.Group>
+        <CategorySelector
+          categories={actionItemCategories}
+          selectedCategory={actionItemCategory}
+          onCategoryChange={(newCategory) => {
+            handleFormChange('categoryId', newCategory?.id ?? '');
+            setActionItemCategory(newCategory);
+          }}
+        />
 
         {!isCompleted && (
           <>
