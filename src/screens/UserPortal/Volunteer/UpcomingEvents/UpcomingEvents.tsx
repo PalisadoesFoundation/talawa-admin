@@ -294,16 +294,17 @@ const UpcomingEvents = (): JSX.Element => {
                 >
                   <div className="d-flex align-items-center gap-2">
                     <h3 data-testid="eventTitle">{event.title}</h3>
-                    {status.status !== 'none' && (() => {
-                      const statusBadgeTestId = 'event-status-' + index;
-                      return (
-                        <StatusBadge
-                          {...getStatusBadgeProps(status.status)}
-                          size="sm"
-                          dataTestId={statusBadgeTestId}
-                        />
-                      );
-                    })()}
+                    {status.status !== 'none' &&
+                      (() => {
+                        const statusBadgeTestId = 'event-status-' + index;
+                        return (
+                          <StatusBadge
+                            {...getStatusBadgeProps(status.status)}
+                            size="sm"
+                            dataTestId={statusBadgeTestId}
+                          />
+                        );
+                      })()}
                   </div>
                 </div>
               </AccordionSummary>
@@ -394,18 +395,20 @@ const UpcomingEvents = (): JSX.Element => {
                           <div className="d-flex flex-column gap-1">
                             <div className="d-flex align-items-center gap-2">
                               <span className="fw-semibold">{group.name}</span>
-                              {groupStatus.status !== 'none' && (() => {
-                                const statusBadgeTestId = 'group-status-' + group._id;
-                                return (
-                                  <StatusBadge
-                                    {...getStatusBadgeProps(
-                                      groupStatus.status,
-                                    )}
-                                    size="sm"
-                                    dataTestId={statusBadgeTestId}
-                                  />
-                                );
-                              })()}
+                              {groupStatus.status !== 'none' &&
+                                (() => {
+                                  const statusBadgeTestId =
+                                    'group-status-' + group._id;
+                                  return (
+                                    <StatusBadge
+                                      {...getStatusBadgeProps(
+                                        groupStatus.status,
+                                      )}
+                                      size="sm"
+                                      dataTestId={statusBadgeTestId}
+                                    />
+                                  );
+                                })()}
                             </div>
                             {group.description && (
                               <span className="text-muted">
@@ -454,8 +457,8 @@ const UpcomingEvents = (): JSX.Element => {
         eventDate={pendingVolunteerRequest?.eventDate || ''}
         isForGroup={!!pendingVolunteerRequest?.groupId}
         groupName={pendingVolunteerRequest?.groupName || ''}
-        onSelectSeries={() => { }}
-        onSelectInstance={() => { }}
+        onSelectSeries={() => {}}
+        onSelectInstance={() => {}}
       />
     </LoadingState>
   );
