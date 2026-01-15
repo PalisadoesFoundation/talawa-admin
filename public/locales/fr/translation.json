@@ -1992,6 +1992,8 @@
     "earliest": "Le Plus Ancien",
     "requestAccepted": "Demande acceptée avec succès",
     "requestRejected": "Demande rejetée avec succès",
+    "acceptRequest": "Accepter la Demande",
+    "rejectRequest": "Rejeter la Demande",
     "details": "Détails",
     "manageGroup": "Gérer le Groupe",
     "mostVolunteers": "Le plus de bénévoles",
@@ -2015,7 +2017,9 @@
     "deleteVolunteerGroup": "Supprimer le groupe de bénévoles {{name}}",
     "deleteVolunteerEntry": "Supprimer l'entrée bénévole {{name}}",
     "viewGroup": "Voir le groupe de bénévoles",
-    "editGroup": "Modifier le groupe de bénévoles"
+    "editGroup": "Modifier le groupe de bénévoles",
+    "invalidNumber": "Nombre invalide",
+    "viewToggle": "Basculer la vue"
   },
   "userVolunteer": {
     "title": "Volontariat",
