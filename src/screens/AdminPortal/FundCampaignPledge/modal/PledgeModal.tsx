@@ -1,31 +1,22 @@
 /**
- * @file PledgeModal.tsx
- * @description A React component for creating or editing a pledge within a modal dialog.
- *
- * @module PledgeModal
+ * Modal for creating or editing a pledge.
  *
  * @remarks
- * This component provides a form for managing pledges, allowing users to:
- * - Select participants (pledgers) for the pledge.
- * - Specify the pledge amount and currency.
- * - Set start and end dates for the pledge.
+ * Provides a form for selecting pledgers, amounts, currencies, and dates, supporting both create and edit flows.
  *
- * The modal supports two modes:
- * - `create`: For creating a new pledge.
- * - `edit`: For editing an existing pledge.
+ * @param isOpen - Indicates whether the modal is open.
+ * @param hide - Closes the modal.
+ * @param campaignId - ID of the campaign associated with the pledge.
+ * @param orgId - ID of the organization associated with the pledge.
+ * @param pledge - Pledge data to edit or `null` for a new pledge.
+ * @param refetchPledge - Refetches the list of pledges after creation or update.
+ * @param endDate - Campaign end date used to validate pledge dates.
+ * @param mode - Modal mode, either `create` or `edit`.
  *
- * @param {boolean} isOpen - Indicates whether the modal is open.
- * @param {() => void} hide - Function to close the modal.
- * @param {string} campaignId - The ID of the campaign associated with the pledge.
- * @param {string} orgId - The ID of the organization associated with the pledge.
- * @param {InterfacePledgeInfo | null} pledge - The pledge object to edit, or `null` for a new pledge.
- * @param {() => void} refetchPledge - Function to refetch the list of pledges after creation or update.
- * @param {Date} endDate - The campaign's end date to validate pledge dates.
- * @param {'create' | 'edit'} mode - The mode of the modal, either 'create' or 'edit'.
- *
- * @returns {JSX.Element} The rendered modal component.
+ * @returns Rendered modal component.
  *
  * @example
+ * ```tsx
  * <PledgeModal
  *   isOpen={true}
  *   hide={() => {}}
@@ -36,27 +27,17 @@
  *   endDate={new Date()}
  *   mode="create"
  * />
- *
- * @dependencies
- * - React
- * - Apollo Client for GraphQL queries and mutations.
- * - Material-UI and Bootstrap for UI components.
- * - Day.js for date manipulation.
- * - NotificationToast for notifications.
- *
- * @css
- * - Uses global styles from `app-fixed.module.css`.
- * - Reusable class `.addButton` for consistent button styling.
+ * ```
  */
 import type { ChangeEvent } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfaceCreatePledge,
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './PledgeModal.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
@@ -70,6 +51,7 @@ import {
   Select,
   TextField,
 } from '@mui/material';
+import { BaseModal } from 'shared-components/BaseModal';
 
 import { MEMBERS_LIST_PG } from 'GraphQl/Queries/Queries';
 
@@ -207,115 +189,123 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     }
   };
 
+  const modalTitle = mode === 'create' ? t('createPledge') : t('editPledge');
+
   return (
-    <Modal className={styles.pledgeModal} onHide={hide} show={isOpen}>
-      <Modal.Header>
-        <Modal.Title data-testid="createPledgeTitle">
-          {mode === 'create' ? t('createPledge') : t('editPledge')}
-        </Modal.Title>
-        <Button
-          variant="danger"
-          onClick={hide}
-          className={styles.modalCloseBtn}
-          data-testid="pledgeModalCloseBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-      </Modal.Header>
-      <Modal.Body>
-        <Form
-          data-testid="pledgeForm"
-          onSubmitCapture={
-            mode === 'edit' ? updatePledgeHandler : createPledgeHandler
-          }
-          className="p-3"
-        >
-          {/* A Multi-select dropdown enables admin to select more than one pledger for participating in a pledge */}
-          <Form.Group className="d-flex mb-3 w-100">
-            <Autocomplete
-              className={`${styles.noOutlinePledge} w-100`}
-              data-testid="pledgerSelect"
-              options={pledgers}
-              value={pledgeUsers[0] || null}
-              // isOptionEqualToValue={(option, value) => option?.id === value?.id}
-              filterSelectedOptions={true}
-              getOptionLabel={(member: InterfaceUserInfoPG): string =>
-                `${member.name || ''}`
-              }
-              onChange={(_, newPledger): void => {
-                setFormState({
-                  ...formState,
-                  pledgeUsers: newPledger
-                    ? [{ ...newPledger, id: newPledger.id }]
-                    : [],
-                });
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label={t('pledgers')}
-                  inputProps={{
-                    ...params.inputProps,
-                    'aria-label': t('pledgers'),
-                  }}
-                />
-              )}
-            />
-          </Form.Group>
-          <Form.Group className="d-flex gap-3 mx-auto  mb-3">
-            {/* Dropdown to select the currency in which amount is to be pledged */}
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">
-                {t('currency')}
-              </InputLabel>
-              <Select
-                value={formState.pledgeCurrency || ''}
-                label={t('currency')}
-                inputProps={{
-                  'aria-label': t('currency'),
-                }}
-                disabled
-                className="MuiSelect-disabled"
-              >
-                {currencyOptions.map((currency) => (
-                  <MenuItem key={currency.label} value={currency.value}>
-                    {currency.label} ({currencySymbols[currency.value]})
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            {/* Input field to enter amount to be pledged */}
-            <FormControl fullWidth>
-              <TextField
-                label={t('amount')}
-                variant="outlined"
-                type="number"
-                inputProps={{
-                  min: 1,
-                  'aria-label': 'Amount',
-                }}
-                error={formState.pledgeAmount < 1}
-                helperText={
-                  formState.pledgeAmount < 1 ? 'Amount must be at least 1' : ''
-                }
-                className={styles.noOutlinePledge}
-                value={formState.pledgeAmount}
-                onChange={handleAmountChange}
-              />
-            </FormControl>
-          </Form.Group>
-          {/* Button to submit the pledge form */}
+    <BaseModal
+      className={styles.pledgeModal}
+      onHide={hide}
+      show={isOpen}
+      dataTestId="pledge-modal"
+      showCloseButton={false}
+      headerContent={
+        <div className="d-flex align-items-center justify-content-between w-100">
+          <h5 data-testid="createPledgeTitle" className="mb-0">
+            {modalTitle}
+          </h5>
           <Button
-            type="submit"
-            className={styles.addButton}
-            data-testid="submitPledgeBtn"
-            disabled={!isAmountValid}
+            variant="danger"
+            onClick={hide}
+            className={styles.modalCloseBtn}
+            data-testid="pledgeModalCloseBtn"
           >
-            {t(mode === 'edit' ? 'updatePledge' : 'createPledge')}
+            <i className="fa fa-times"></i>
           </Button>
-        </Form>
-      </Modal.Body>
-    </Modal>
+        </div>
+      }
+    >
+      <Form
+        data-testid="pledgeForm"
+        onSubmitCapture={
+          mode === 'edit' ? updatePledgeHandler : createPledgeHandler
+        }
+        className="p-3"
+      >
+        {/* A Multi-select dropdown enables admin to select more than one pledger for participating in a pledge */}
+        <Form.Group className="d-flex mb-3 w-100">
+          <Autocomplete
+            className={`${styles.noOutlinePledge} w-100`}
+            data-testid="pledgerSelect"
+            options={pledgers}
+            value={pledgeUsers[0] || null}
+            // isOptionEqualToValue={(option, value) => option?.id === value?.id}
+            filterSelectedOptions={true}
+            getOptionLabel={(member: InterfaceUserInfoPG): string =>
+              `${member.name || ''}`
+            }
+            onChange={(_, newPledger): void => {
+              setFormState({
+                ...formState,
+                pledgeUsers: newPledger
+                  ? [{ ...newPledger, id: newPledger.id }]
+                  : [],
+              });
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={t('pledgers')}
+                inputProps={{
+                  ...params.inputProps,
+                  'aria-label': t('pledgers'),
+                }}
+              />
+            )}
+          />
+        </Form.Group>
+        <Form.Group className="d-flex gap-3 mx-auto  mb-3">
+          {/* Dropdown to select the currency in which amount is to be pledged */}
+          <FormControl fullWidth>
+            <InputLabel id="demo-simple-select-label">
+              {t('currency')}
+            </InputLabel>
+            <Select
+              value={formState.pledgeCurrency || ''}
+              label={t('currency')}
+              inputProps={{
+                'aria-label': t('currency'),
+              }}
+              disabled
+              className="MuiSelect-disabled"
+            >
+              {currencyOptions.map((currency) => (
+                <MenuItem key={currency.label} value={currency.value}>
+                  {currency.label} ({currencySymbols[currency.value]})
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          {/* Input field to enter amount to be pledged */}
+          <FormControl fullWidth>
+            <TextField
+              label={t('amount')}
+              variant="outlined"
+              type="number"
+              inputProps={{
+                min: 1,
+                'aria-label': 'Amount',
+              }}
+              error={formState.pledgeAmount < 1}
+              helperText={
+                formState.pledgeAmount < 1 ? 'Amount must be at least 1' : ''
+              }
+              className={styles.noOutlinePledge}
+              value={formState.pledgeAmount}
+              onChange={handleAmountChange}
+            />
+          </FormControl>
+        </Form.Group>
+        {/* Button to submit the pledge form */}
+        <Button
+          type="submit"
+          className={styles.addButton}
+          data-testid="submitPledgeBtn"
+          disabled={!isAmountValid}
+        >
+          {t(mode === 'edit' ? 'updatePledge' : 'createPledge')}
+        </Button>
+      </Form>
+    </BaseModal>
   );
 };
 export default PledgeModal;
