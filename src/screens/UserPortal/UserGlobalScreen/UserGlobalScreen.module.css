@@ -24,18 +24,6 @@
   animation: moveRight 0.5s ease-in-out;
 }
 
-.collapseSidebarButton:hover,
-.opendrawer:hover {
-  opacity: 1;
-  background-color: var(--color-gray-50);
-  box-shadow:
-    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
-      rgba(168, 199, 250, 1),
-    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
-      rgba(60, 64, 67, 0.15);
-  color: var(--color-black);
-}
-
 .opendrawer {
   --bs-btn-active-color: var(--color-gray-50);
   --bs-btn-active-bg: var(--color-gray-50);
@@ -46,7 +34,7 @@
   justify-content: center;
   top: 0;
   left: 0;
-  width: var(--space-9);
+  width: var(--space-7);
   height: 100vh;
   z-index: 9999;
   background-color: var(--color-gray-50);
@@ -54,15 +42,6 @@
   border-radius: var(--radius-none);
   margin-right: var(--space-6);
   color: var(--color-black);
-}
-
-.opendrawer:hover {
-  transition: background-color 0.5s ease;
-  background-color: var(--color-blue-600);
-}
-
-.opendrawer {
-  width: var(--space-7);
 }
 
 .collapseSidebarButton:active,
@@ -88,6 +67,7 @@
 .collapseSidebarButton:hover,
 .opendrawer:hover {
   opacity: 1;
+  transition: background-color 0.5s ease;
   background-color: var(--color-gray-50);
   box-shadow:
     0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)

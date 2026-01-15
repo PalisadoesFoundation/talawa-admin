@@ -35,7 +35,7 @@
 }
 
 .message {
-  margin-top: 25%;
+  margin-top: var(--space-20);
   display: flex;
   justify-content: center;
   align-items: center;

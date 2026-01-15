@@ -177,7 +177,7 @@ export default function Donate(): JSX.Element {
           </Button>
         </div>
 
-        <div className={styles.sectionContainer}>
+        <div className={styles.container}>
           <h5>{t('yourPreviousDonations')}</h5>
 
           {loading ? (

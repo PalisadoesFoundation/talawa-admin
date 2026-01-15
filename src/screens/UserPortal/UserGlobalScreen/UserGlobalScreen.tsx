@@ -16,12 +16,14 @@
  */
 import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import styles from './UserGlobalScreen.module.css';
 import { Button } from 'react-bootstrap';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 
 const UserGlobalScreen = (): JSX.Element => {
+  const { t } = useTranslation('translation');
   const [hideDrawer, setHideDrawer] = useState<boolean>(false);
 
   /**
@@ -79,7 +81,7 @@ const UserGlobalScreen = (): JSX.Element => {
       >
         <div className="d-flex justify-content-between align-items-center">
           <div className={styles.titleFlex}>
-            <h1>Global Features</h1>
+            <h1>{t('globalFeatures')}</h1>
           </div>
           <ProfileDropdown portal="user" />
         </div>

@@ -12,7 +12,6 @@
 }
 
 .addButton:disabled {
-  margin-bottom: var(--space-4);
   background-color: var(--color-gray-50);
   border-color: var(--color-blue-200);
 }
@@ -92,11 +91,6 @@
   transition: box-shadow 0.2s ease;
 }
 
-.cards:first-child:nth-last-child(even),
-.cards:first-child:nth-last-child(even) ~ .box {
-  grid-column: auto / span 1;
-}
-
 .box {
   width: auto;
   background-color: var(--color-white);
@@ -104,11 +98,6 @@
   padding: var(--space-6);
   border: var(--border-1) solid var(--color-gray-100);
   border-radius: var(--space-4);
-}
-
-.cardsEventListCard:first-child:nth-last-child(even),
-.cardsEventListCard:first-child:nth-last-child(even) ~ .box {
-  grid-column: auto / span 1;
 }
 
 .heading {
@@ -129,57 +118,20 @@
   padding-inline: var(--space-5);
 }
 
-.sectionContainer {
+/* Base container pattern */
+.container {
   padding-top: var(--space-11);
   flex-grow: 1;
   display: flex;
   flex-direction: column;
 }
 
-.sectionContent {
+.content {
   padding-top: var(--space-4);
   flex-grow: 1;
 }
 
-.cardsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-5);
-  --bs-gutter-x: 0;
-}
-
-.donationsContainer {
-  padding-top: var(--space-11);
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.contentDonate {
-  padding-top: var(--space-4);
-  flex-grow: 1;
-}
-
-.donationCardsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-5);
-  --bs-gutter-x: 0;
-}
-
-.transactionsContainer {
-  padding-top: var(--space-11);
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.contentTransactions {
-  padding-top: var(--space-4);
-  flex-grow: 1;
-}
-
-.transactionCardsContainer {
+.cardGrid {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-5);
