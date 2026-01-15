@@ -2,38 +2,23 @@
 
 ***
 
-# Function: ViewModal()
+# Variable: ViewModal
 
-> **ViewModal**\<`T`\>(`__namedParameters`): `Element`
+> `const` **ViewModal**: `React.FC`\<[`InterfaceViewModalProps`](../../../../types/shared-components/CRUDModalTemplate/interface/interfaces/InterfaceViewModalProps.md)\>
 
-Defined in: [src/shared-components/CRUDModalTemplate/ViewModal.tsx:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CRUDModalTemplate/ViewModal.tsx#L58)
+Defined in: [src/shared-components/CRUDModalTemplate/ViewModal.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CRUDModalTemplate/ViewModal.tsx#L57)
 
 ViewModal Component
 
 Specialized modal template for viewing entity details in read-only mode.
 No form submission, only displays data with optional custom actions.
+Parent component handles data fetching and passes formatted content as children.
 
 Features:
 - Read-only data display
 - Loading state for data fetching
 - Optional custom action buttons (e.g., Edit, Delete)
 - Clean, consistent layout for viewing entities
-
-## Type Parameters
-
-### T
-
-`T`
-
-## Parameters
-
-### \_\_namedParameters
-
-[`InterfaceViewModalProps`](../../../../types/shared-components/CRUDModalTemplate/interface/interfaces/InterfaceViewModalProps.md)\<`T`\>
-
-## Returns
-
-`Element`
 
 ## Examples
 
@@ -42,7 +27,6 @@ Features:
   open={showModal}
   title="Campaign Details"
   onClose={handleClose}
-  data={campaignData}
   loadingData={isLoading}
 >
   <div className="details-grid">
@@ -61,7 +45,6 @@ Features:
   open={showModal}
   title="User Profile"
   onClose={handleClose}
-  data={userData}
   customActions={
     <>
       <Button onClick={() => setEditMode(true)}>Edit</Button>

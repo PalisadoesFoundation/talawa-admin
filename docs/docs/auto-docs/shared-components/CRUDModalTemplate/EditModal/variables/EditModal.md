@@ -2,9 +2,9 @@
 
 ***
 
-# Function: EditModal()
+# Variable: EditModal
 
-> **EditModal**\<`T`\>(`__namedParameters`): `Element`
+> `const` **EditModal**: `React.FC`\<[`InterfaceEditModalProps`](../../../../types/shared-components/CRUDModalTemplate/interface/interfaces/InterfaceEditModalProps.md)\>
 
 Defined in: [src/shared-components/CRUDModalTemplate/EditModal.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CRUDModalTemplate/EditModal.tsx#L45)
 
@@ -19,22 +19,6 @@ Features:
 - Loading state for data fetching (loadingData prop)
 - Form validation support via submitDisabled prop
 - Prevents duplicate submissions during save
-
-## Type Parameters
-
-### T
-
-`T`
-
-## Parameters
-
-### \_\_namedParameters
-
-[`InterfaceEditModalProps`](../../../../types/shared-components/CRUDModalTemplate/interface/interfaces/InterfaceEditModalProps.md)\<`T`\>
-
-## Returns
-
-`Element`
 
 ## Example
 

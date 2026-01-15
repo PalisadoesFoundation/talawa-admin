@@ -2,23 +2,18 @@
 
 ***
 
-# Interface: InterfaceViewModalProps\<T\>
+# Interface: InterfaceViewModalProps
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:248](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L248)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:237](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L237)
 
 Props for ViewModal template
 
 Specialized template for read-only entity display.
+Parent component handles data fetching and passes formatted content as children.
 
 ## Extends
 
 - [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md)
-
-## Type Parameters
-
-### T
-
-`T` = `unknown`
 
 ## Properties
 
@@ -40,10 +35,10 @@ Whether to center the modal vertically on the page
 
 > **children**: `ReactNode`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:254](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L254)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:242](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L242)
 
 Content to display in the modal body
-Typically contains disabled form fields or formatted data display
+Parent should pass formatted data display as children
 
 ***
 
@@ -65,20 +60,10 @@ Additional CSS class name for the modal
 
 > `optional` **customActions**: `ReactNode`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:271](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L271)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:253](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L253)
 
 Optional custom action buttons to display in the footer
 Useful for actions like "Edit" or "Delete" from the view modal
-
-***
-
-### data
-
-> **data**: `T`
-
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:259](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L259)
-
-The entity data being viewed
 
 ***
 
@@ -130,7 +115,7 @@ When true, displays a loading spinner and disables action buttons
 
 > `optional` **loadingData**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:265](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L265)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:247](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L247)
 
 Whether data is currently being loaded
 

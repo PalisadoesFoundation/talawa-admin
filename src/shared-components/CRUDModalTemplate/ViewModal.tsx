@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
  *
  * Specialized modal template for viewing entity details in read-only mode.
  * No form submission, only displays data with optional custom actions.
+ * Parent component handles data fetching and passes formatted content as children.
  *
  * Features:
  * - Read-only data display
@@ -23,7 +24,6 @@ import { useTranslation } from 'react-i18next';
  *   open={showModal}
  *   title="Campaign Details"
  *   onClose={handleClose}
- *   data={campaignData}
  *   loadingData={isLoading}
  * >
  *   <div className="details-grid">
@@ -43,7 +43,6 @@ import { useTranslation } from 'react-i18next';
  *   open={showModal}
  *   title="User Profile"
  *   onClose={handleClose}
- *   data={userData}
  *   customActions={
  *     <>
  *       <Button onClick={() => setEditMode(true)}>Edit</Button>

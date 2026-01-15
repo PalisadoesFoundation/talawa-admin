@@ -165,8 +165,7 @@ export interface InterfaceCreateModalProps extends InterfaceCrudModalBaseProps {
  * Specialized template for editing existing entities.
  * Parent component handles data fetching and passes pre-populated form fields as children.
  */
-export interface InterfaceEditModalProps
-  extends InterfaceCrudModalBaseProps {
+export interface InterfaceEditModalProps extends InterfaceCrudModalBaseProps {
   /**
    * Form content to render inside the modal body
    * Parent should pass form fields pre-populated with entity data

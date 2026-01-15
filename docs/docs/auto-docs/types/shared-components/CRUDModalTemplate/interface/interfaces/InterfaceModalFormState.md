@@ -4,7 +4,7 @@
 
 # Interface: InterfaceModalFormState
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:279](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L279)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:261](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L261)
 
 Common form state for modals
 
@@ -16,7 +16,7 @@ Helper type for managing form state in modal components
 
 > `optional` **errors**: `Record`\<`string`, `string`\>
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:293](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L293)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:275](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L275)
 
 Form validation errors
 
@@ -26,7 +26,7 @@ Form validation errors
 
 > `optional` **isDirty**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:283](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L283)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:265](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L265)
 
 Whether the form has unsaved changes
 
@@ -36,6 +36,6 @@ Whether the form has unsaved changes
 
 > `optional` **isSubmitting**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:288](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L288)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:270](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L270)
 
 Whether the form is currently being submitted
