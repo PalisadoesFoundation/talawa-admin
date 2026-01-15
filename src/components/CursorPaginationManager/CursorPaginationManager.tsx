@@ -100,10 +100,10 @@ function extractNodes<TNode>(
  *       dataPath="users"
  *       itemsPerPage={10}
  *       renderItem={(user) => (
- *         <div key={user.id}>
- *           <h3>{user.name}</h3>
- *           <p>{user.email}</p>
- *         </div>
+ *         \<div key={user.id}\>
+ *           \<h3\>{user.name}\</h3\>
+ *           \<p\>{user.email}\</p\>
+ *         \</div\>
  *       )}
  *     />
  *   );
@@ -142,6 +142,7 @@ export function CursorPaginationManager<
     emptyStateComponent,
     onDataChange,
     refetchTrigger,
+    tableMode = false,
   } = props;
 
   const { t } = useTranslation('common');
@@ -330,7 +331,35 @@ export function CursorPaginationManager<
     );
   }
 
-  // Success state: render items and load more button
+  if (tableMode) {
+    return (
+      <>
+        {items.map((item, index) => {
+          const key = keyExtractor ? keyExtractor(item, index) : index;
+          return (
+            <React.Fragment key={key}>{renderItem(item, index)}</React.Fragment>
+          );
+        })}
+        {pageInfo?.hasNextPage && (
+          <tr>
+            <td colSpan={100} className={styles.loadMoreCell}>
+              <button
+                type="button"
+                onClick={handleLoadMore}
+                disabled={isLoadingMore}
+                className={styles.loadMoreButton}
+                aria-label={t('loadMoreItems')}
+                data-testid="load-more-button"
+              >
+                {isLoadingMore ? t('loading') : t('loadMore')}
+              </button>
+            </td>
+          </tr>
+        )}
+      </>
+    );
+  }
+
   return (
     <div data-testid="cursor-pagination-manager">
       <div className={styles.itemsContainer}>

@@ -59,3 +59,9 @@
   padding: 2rem;
   color: var(--bs-secondary, #6c757d);
 }
+
+.loadMoreCell {
+  text-align: center;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--pagination-border-top, #e5e7eb);
+}

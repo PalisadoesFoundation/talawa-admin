@@ -1,17 +1,6 @@
 /**
- * PeopleCard Component
- *
  * Displays information about a person within an organization,
  * including serial number, avatar, name, email, and role.
- *
- * @param id - Unique identifier of the person.
- * @param name - Name of the person.
- * @param image - URL of the person's profile image.
- * @param email - Email address of the person.
- * @param role - Role or designation of the person.
- * @param sno - Serial number in the list.
- *
- * @returns JSX.Element representing a people card.
  *
  * @remarks
  * - Uses `Avatar` when no image URL is provided.
@@ -34,17 +23,9 @@ import React from 'react';
 
 import UserPortalCard from 'components/UserPortal/UserPortalCard/UserPortalCard';
 import Avatar from 'shared-components/Avatar/Avatar';
+import type { InterfacePeopleCardProps } from 'types/UserPortal/PeopleCard/interface';
 
 import styles from './PeopleCard.module.css';
-
-export interface InterfacePeopleCardProps {
-  id: string;
-  name: string;
-  image: string;
-  email: string;
-  role: string;
-  sno: string;
-}
 
 const PeopleCard: React.FC<InterfacePeopleCardProps> = ({
   id,

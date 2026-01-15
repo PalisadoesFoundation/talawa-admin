@@ -1,15 +1,13 @@
 export class PeoplePage {
   private readonly _peopleTabButton = '[data-cy="leftDrawerButton-People"]';
-  private readonly _searchInput = '[placeholder="Enter Full Name"]';
-  private readonly _searchButton = '[data-testid="searchbtn"]';
-  private readonly _searchResult = '[data-field="name"]';
+  private readonly _searchInput = '[data-testid="searchbtn"]';
+  private readonly _searchButton = '[data-testid="searchBtn"]';
+  private readonly _tableRows = 'table tbody tr';
   private readonly _addMembersBtn = '[data-testid="addMembers"]';
   private readonly _existingUserToggle = '[data-testid="existingUser"]';
   private readonly _searchUserInput = '[data-testid="searchUser"]';
   private readonly _submitSearchBtn = '[data-testid="submitBtn"]';
   private readonly _addBtn = '[data-testid="addBtn"]';
-  private readonly _removeModalBtn = '[data-testid="removeMemberModalBtn"]';
-  private readonly _confirmRemoveBtn = '[data-testid="removeMemberBtn"]';
   private readonly _alert = '[role=alert]';
 
   visitPeoplePage(): void {
@@ -27,7 +25,7 @@ export class PeoplePage {
   }
 
   verifyMemberInList(name: string, timeout = 40000) {
-    cy.get(this._searchResult, { timeout })
+    cy.get(this._tableRows, { timeout })
       .should('be.visible')
       .and('contain.text', name);
     return this;
@@ -61,21 +59,35 @@ export class PeoplePage {
 
   deleteMember(name: string, timeout = 40000) {
     this.searchMemberByName(name, timeout);
-    this.verifyMemberInList(name, timeout);
 
-    // Wait for DataGrid to stabilize after search
-    cy.wait(1000);
+    // Wait for loading state to disappear if present
+    cy.get('body').then(($body: unknown) => {
+      const body = $body as { find: (selector: string) => { length: number } };
+      if (body.find('[data-testid="organization-people-loading"]').length > 0) {
+        cy.get('[data-testid="organization-people-loading"]', {
+          timeout,
+        }).should('not.exist');
+      }
+    });
 
-    // Scope search to DataGrid rows to avoid matching headers/other UI
-    cy.get('.MuiDataGrid-row', { timeout })
-      .contains(name)
-      .should('be.visible')
-      .parents('.MuiDataGrid-row')
-      .find(this._removeModalBtn)
+    // Find the row and click remove button
+    cy.contains(this._tableRows, name, { timeout })
+      .should('exist')
+      .parents('tr')
+      .find('button[data-testid^="removeMemberModalBtn-"]')
       .should('be.visible')
       .click();
 
-    cy.get(this._confirmRemoveBtn, { timeout }).should('be.visible').click();
+    // Click the confirm remove button in the modal footer
+    cy.get('[data-testid="remove-member-modal"]', { timeout })
+      .should('be.visible')
+      .find('[data-testid="modal-footer"]')
+      .within(() => {
+        cy.contains('button', /remove/i)
+          .should('be.visible')
+          .click();
+      });
+
     cy.get(this._alert, { timeout })
       .should('be.visible')
       .and('contain.text', 'The Member is removed');

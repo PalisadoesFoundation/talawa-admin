@@ -409,7 +409,11 @@
     "create": "बनाएं",
     "cancel": "रद्द करें",
     "createUser": "उपयोगकर्ता बनाएं",
-    "notFound": "कोई सदस्य नहीं मिले"
+    "notFound": "कोई सदस्य नहीं मिले",
+    "organizationPeopleTable": "संगठन सदस्य तालिका",
+    "removeMemberTitle": "सदस्य हटाएँ",
+    "organizationIdMissing": "संगठन आईडी गायब है!",
+    "removeMemberConfirmation": "क्या आप वाकई इस सदस्य को हटाना चाहते हैं?"
   },
   "organizationCard": {
     "join": "जॉइन करें",
@@ -1253,11 +1257,14 @@
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "sNo": "क्र.सं.",
     "avatar": "अवतार",
+    "avatar_alt": "{{name}} का अवतार",
     "name": "नाम",
     "email": "ईमेल",
     "role": "भूमिका",
     "loading": "लोड हो रहा है...",
-    "emailNotAvailable": "ईमेल उपलब्ध नहीं है"
+    "emailNotAvailable": "ईमेल उपलब्ध नहीं है",
+    "allMembers": "सभी सदस्य",
+    "peopleTable": "लोग तालिका"
   },
   "userLogin": {
     "login": "लॉग इन करें",

@@ -409,7 +409,11 @@
     "profile": "Perfil",
     "joined": "Unido",
     "notFound": "No se encontraron miembros",
-    "createUser": "Crear usuario"
+    "organizationPeopleTable": "Tabla de Personas de la Organización",
+    "createUser": "Crear usuario",
+    "removeMemberTitle": "Eliminar miembro",
+    "organizationIdMissing": "¡Falta el ID de la organización!",
+    "removeMemberConfirmation": "¿Está seguro de que desea eliminar a este miembro?"
   },
   "organizationCard": {
     "join": "Unirse",
@@ -1250,11 +1254,14 @@
     "nothingToShow": "Nada que mostrar aquí.",
     "sNo": "N.º",
     "avatar": "Avatar",
+    "avatar_alt": "Avatar de {{name}}",
     "name": "Nombre",
     "email": "Correo Electrónico",
     "role": "Rol",
     "loading": "Cargando...",
-    "emailNotAvailable": "Correo electrónico no disponible"
+    "emailNotAvailable": "Correo electrónico no disponible",
+    "allMembers": "Todos los miembros",
+    "peopleTable": "Tabla de Personas"
   },
   "userRegister": {
     "register": "Registro",

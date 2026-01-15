@@ -409,7 +409,11 @@
     "profile": "Profil",
     "joined": "Rejoint",
     "createUser": "Créer un utilisateur",
-    "notFound": "Aucun membre trouvé"
+    "notFound": "Aucun membre trouvé",
+    "organizationPeopleTable": "Table des Personnes de l'Organisation",
+    "removeMemberTitle": "Supprimer un membre",
+    "organizationIdMissing": "L'ID de l'organisation est manquant !",
+    "removeMemberConfirmation": "Êtes-vous sûr de vouloir supprimer ce membre ?"
   },
   "organizationCard": {
     "join": "Rejoindre",
@@ -1253,11 +1257,14 @@
     "nothingToShow": "Rien à montrer ici.",
     "sNo": "N°",
     "avatar": "Avatar",
+    "avatar_alt": "Avatar de {{name}}",
     "name": "Nom",
     "email": "E-mail",
     "role": "Rôle",
     "loading": "Chargement...",
-    "emailNotAvailable": "E-mail non disponible"
+    "emailNotAvailable": "E-mail non disponible",
+    "allMembers": "Tous les membres",
+    "peopleTable": "Table des personnes"
   },
   "userLogin": {
     "login": "Se connecter",

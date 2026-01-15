@@ -6,11 +6,18 @@
  * managing members within an organization.
  *
  * @remarks
- * - Uses Apollo Client's `useLazyQuery` for fetching data.
- * - Uses DataGridWrapper for client-side pagination and display.
- * - Supports filtering by roles (members, administrators, users).
- * - Includes local search functionality for filtering rows by name or email.
- * - Displays a modal for removing members.
+ * - Uses CursorPaginationManager for cursor-based pagination.
+ * - Implements server-side search and role filtering.
+ * - Supports tab-based filtering (members, administrators, users).
+ * - Displays members in a table format with "Load More" pagination.
+ * - Includes modal for removing members.
+ *
+ * @remarks
+ * Requires:
+ * - `react`, `react-router-dom` for routing and state management.
+ * - `CursorPaginationManager` for pagination.
+ * - `dayjs` for date formatting.
+ * - Custom components: `AdminSearchFilterBar`, `Avatar`, `AddMember`, `OrgPeopleListCard`.
  *
  * @example
  * ```tsx
@@ -18,47 +25,55 @@
  * ```
  *
  * @returns A JSX element rendering the organization people table.
+
+ * @remarks
+ * Component state includes:
+ * - `state` (number): Current tab state (0: members, 1: administrators, 2: users).
+ * - `searchTerm` (string): Search input for filtering rows.
+ * - `showRemoveModal` (boolean): Controls visibility of the remove member modal.
+ * - `selectedMemId` (string | undefined): ID of the member selected for removal.
+ * - `refetchTrigger` (number): Triggers data refetch when tab/search changes.
+
+ * @remarks
+ * Key methods:
+ * - `handleSortChange`: Updates the tab state based on sorting selection.
+ * - `toggleRemoveModal`: Toggles the visibility of the remove member modal.
+ * - `toggleRemoveMemberModal`: Sets the selected member ID and toggles the modal.
+
+ * @remarks
+ * Dependencies:
+ * - GraphQL Queries: `ORGANIZATIONS_MEMBER_CONNECTION_LIST`, `USER_LIST_FOR_TABLE`.
+ * - Styles: `style/app-fixed.module.css`.
  */
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
-import { useLazyQuery } from '@apollo/client';
-import {
-  DataGridWrapper,
-  GridCellParams,
-  GridColDef,
-} from 'shared-components/DataGridWrapper';
 import { Delete } from '@mui/icons-material';
-import { PAGE_SIZE } from 'types/ReportingTable/utils';
-
+import { useMutation } from '@apollo/client';
+import dayjs from 'dayjs';
 import styles from './OrganizationPeople.module.css';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
+import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { Button } from 'react-bootstrap';
-import OrgPeopleListCard from 'components/AdminPortal/OrgPeopleListCard/OrgPeopleListCard';
 import Avatar from 'shared-components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import CursorPaginationManager from 'components/CursorPaginationManager/CursorPaginationManager';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
-import { languages } from 'utils/languages';
+import type {
+  IUserNode,
+  InterfaceRemoveMemberData,
+  InterfaceRemoveMemberVariables,
+} from 'types/AdminPortal/OrganizationPeople/interface';
 
 /**
  * Maps numeric filter state to string option identifiers.
- *
- * @remarks
- * Converts internal numeric state values to their corresponding string filter options:
- * - 0 = 'members': Regular organization members
- * - 1 = 'admin': Organization administrators
- * - 2 = 'users': All users
- *
- * This mapping must stay in sync with OPTION_TO_STATE. Any changes to one require updating the other.
- *
- * @example
- * ```ts
- * const option = STATE_TO_OPTION[0]; // 'members'
- * ```
  */
 const STATE_TO_OPTION: Record<number, string> = {
   0: 'members',
@@ -68,19 +83,6 @@ const STATE_TO_OPTION: Record<number, string> = {
 
 /**
  * Maps string option identifiers to numeric filter state.
- *
- * @remarks
- * Converts string filter options to their corresponding internal numeric state values:
- * - 'members' = 0: Regular organization members
- * - 'admin' = 1: Organization administrators
- * - 'users' = 2: All users
- *
- * This mapping must stay in sync with STATE_TO_OPTION. Any changes to one require updating the other.
- *
- * @example
- * ```ts
- * const state = OPTION_TO_STATE['admin']; // 1
- * ```
  */
 const OPTION_TO_STATE: Record<string, number> = {
   members: 0,
@@ -88,38 +90,8 @@ const OPTION_TO_STATE: Record<string, number> = {
   users: 2,
 };
 
-interface IProcessedRow {
-  id: string;
-  name: string;
-  email: string;
-  image: string;
-  createdAt: string;
-  rowNumber: number;
-}
-
-interface IEdges {
-  cursor: string;
-  node: {
-    id: string;
-    name: string;
-    role: string;
-    avatarURL: string;
-    emailAddress: string;
-    createdAt: string;
-  };
-}
-
-interface IQueryVariable {
-  orgId?: string | undefined;
-  first?: number | null;
-  after?: string | null;
-  last?: number | null;
-  before?: string | null;
-  where?: { role: { equal: 'administrator' | 'regular' } };
-}
-
 function OrganizationPeople(): JSX.Element {
-  const { t, i18n } = useTranslation('translation', {
+  const { t } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
   const { t: tCommon } = useTranslation('common');
@@ -127,281 +99,128 @@ function OrganizationPeople(): JSX.Element {
   const role = location?.state;
   const { orgId: currentUrl } = useParams();
 
-  // State
-  const [state, setState] = useState(role?.role || 0);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showRemoveModal, setShowRemoveModal] = useState(false);
-  const [selectedMemId, setSelectedMemId] = useState<string>();
-
-  const [currentRows, setCurrentRows] = useState<IProcessedRow[]>([]);
-  const [data, setData] = useState<
-    | {
-        edges: IEdges[];
-        pageInfo: {
-          startCursor?: string;
-          endCursor?: string;
-          hasNextPage: boolean;
-          hasPreviousPage: boolean;
-        };
-      }
-    | undefined
-  >();
-
-  // Query hooks
-  const [fetchMembers, { loading: memberLoading, error: memberError }] =
-    useLazyQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
-      onCompleted: (data) => {
-        setData(data?.organization?.members);
-      },
-    });
-
-  const [fetchUsers, { loading: userLoading, error: userError }] = useLazyQuery(
-    USER_LIST_FOR_TABLE,
-    {
-      onCompleted: (data) => {
-        setData(data?.allUsers);
-      },
-    },
+  const [state, setState] = useState<number>(
+    typeof role?.role === 'number' ? role.role : 0,
   );
+  const [searchTerm, setSearchTerm] = useState('');
 
-  // Handle data changes
+  const [showRemoveModal, setShowRemoveModal] = useState(false);
+  const [selectedMemId, setSelectedMemId] = useState<string | null>(null);
+
+  const [refetchTrigger, setRefetchTrigger] = useState(0);
+
+  const [removeMember, { loading: isDeleting }] = useMutation<
+    InterfaceRemoveMemberData,
+    InterfaceRemoveMemberVariables
+  >(REMOVE_MEMBER_MUTATION_PG);
+
   useEffect(() => {
-    if (data) {
-      const { edges } = data;
-      const processedRows = edges.map(
-        (edge: IEdges, index: number): IProcessedRow => ({
-          id: edge.node.id,
-          name: edge.node.name,
-          email: edge.node.emailAddress,
-          image: edge.node.avatarURL,
-          createdAt: edge.node.createdAt || new Date().toISOString(),
-          rowNumber: index + 1,
-        }),
-      );
+    setRefetchTrigger((prev) => prev + 1);
+  }, [state, currentUrl]);
+  const handleCloseModal = () => {
+    setShowRemoveModal(false);
+    setSelectedMemId(null);
+  };
 
-      setCurrentRows(processedRows);
-    }
-  }, [data]);
-
-  // Handle tab changes (members, admins, users)
-  useEffect(() => {
-    const variables: IQueryVariable = {
-      first: PAGE_SIZE,
-      after: null,
-      last: null,
-      before: null,
-      orgId: currentUrl,
-    };
-
-    if (state === 0) {
-      // All members
-      fetchMembers({ variables });
-    } else if (state === 1) {
-      // Administrators only
-      fetchMembers({
-        variables: {
-          ...variables,
-          where: { role: { equal: 'administrator' } },
-        },
-      });
-    } else if (state === 2) {
-      // Users
-      fetchUsers({ variables });
-    }
-  }, [state, currentUrl, fetchMembers, fetchUsers]);
-
-  // Initial data fetch
-  useEffect(() => {
-    fetchMembers({
-      variables: {
-        orgId: currentUrl,
-        first: PAGE_SIZE,
-        after: null,
-        last: null,
-        before: null,
-      },
-    });
-  }, [currentUrl, fetchMembers]);
-
-  // Error handling
-  useEffect(() => {
-    if (memberError) {
-      errorHandler(t, memberError);
-    }
-    if (userError) {
-      errorHandler(t, userError);
-    }
-  }, [memberError, userError, t]);
-
-  // Local search implementation
-  const filteredRows = useMemo(() => {
-    if (!searchTerm) return currentRows;
-    const lowerSearchTerm = searchTerm.toLowerCase();
-    return currentRows.filter(
-      (row) =>
-        row.name.toLowerCase().includes(lowerSearchTerm) ||
-        row.email.toLowerCase().includes(lowerSearchTerm),
+  if (!currentUrl && state !== 2) {
+    return (
+      <div role="alert" aria-live="assertive">
+        {t('organizationIdMissing')}
+      </div>
     );
-  }, [currentRows, searchTerm]);
+  }
 
-  // Modal handlers
-  const toggleRemoveModal = () => setShowRemoveModal((prev) => !prev);
-
-  const toggleRemoveMemberModal = (id: string) => {
+  const handleOpenRemoveModal = (id: string) => {
     setSelectedMemId(id);
-    toggleRemoveModal();
+    setShowRemoveModal(true);
+  };
+
+  const handleDeleteUser = async () => {
+    if (!selectedMemId) return;
+
+    if (!currentUrl) {
+      NotificationToast.error(t('organizationIdMissing'));
+      return;
+    }
+
+    try {
+      const { data } = await removeMember({
+        variables: { memberId: selectedMemId, organizationId: currentUrl },
+      });
+
+      if (data?.deleteOrganizationMembership?.id) {
+        NotificationToast.success(
+          tCommon('removedSuccessfully', { item: tCommon('removeMember') }),
+        );
+        setRefetchTrigger((prev) => prev + 1);
+        handleCloseModal();
+      }
+    } catch (error: unknown) {
+      errorHandler(undefined, error);
+    }
   };
 
   const handleSortChange = (value: string): void => {
     setState(OPTION_TO_STATE[value] ?? 0);
   };
 
-  // Column definitions
-  const columns: GridColDef[] = [
-    {
-      field: 'sl_no',
-      headerName: tCommon('sl_no'),
-      flex: 1,
-      minWidth: 50,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div className={`${styles.flexCenter} ${styles.fullWidthHeight}`}>
-            {params.row.rowNumber}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'profile',
-      headerName: tCommon('profile'),
-      flex: 1,
-      minWidth: 50,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        const columnWidth = params.colDef.computedWidth || 150;
-        const imageSize = Math.min(columnWidth * 0.4, 40);
-        // Construct CSS value to avoid i18n linting errors
-        const avatarSizeValue = String(imageSize) + 'px';
-        return (
-          <div
-            className={`${styles.flexCenter} ${styles.flexColumn} ${styles.fullWidthHeight}`}
-          >
-            {params.row?.image ? (
-              <img
-                src={params.row.image}
-                alt={tCommon('avatar')}
-                className={styles.avatarImage}
-                style={
-                  { '--avatar-size': avatarSizeValue } as React.CSSProperties
-                }
-                crossOrigin="anonymous"
-              />
-            ) : (
-              <div
-                className={`${styles.flexCenter} ${styles.avatarPlaceholder} ${styles.avatarPlaceholderSize}`}
-                style={
-                  { '--avatar-size': avatarSizeValue } as React.CSSProperties
-                }
-                data-testid="avatar"
-              >
-                <Avatar name={params.row.name} />
-              </div>
-            )}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'name',
-      headerName: tCommon('name'),
-      flex: 2,
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Link
-            to={`/member/${currentUrl}/${params.row.id}`}
-            state={{ id: params.row.id }}
-            className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.memberNameFontSize}`}
-          >
-            {params.row.name}
-          </Link>
-        );
-      },
-    },
-    {
-      field: 'email',
-      headerName: tCommon('email'),
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      flex: 2,
-      sortable: false,
-    },
-    {
-      field: 'joined',
-      headerName: tCommon('joinedOn'),
-      flex: 2,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        const currentLang = languages.find(
-          (lang: { code: string; country_code: string }) =>
-            lang.code === i18n.language,
-        );
-        const locale = currentLang
-          ? `${currentLang.code}-${currentLang.country_code}`
-          : 'en-US';
-        return (
-          <div data-testid={`org-people-joined-${params.row.id}`}>
-            {t('joined')} :{' '}
-            {new Intl.DateTimeFormat(locale, {
-              year: 'numeric',
-              month: '2-digit',
-              day: '2-digit',
-              timeZone: 'UTC',
-            }).format(new Date(params.row.createdAt))}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'action',
-      headerName: tCommon('action'),
-      flex: 1,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => (
-        <Button
-          className={`${styles.removeButton}`}
-          variant="danger"
-          disabled={state === 2}
-          onClick={() => toggleRemoveMemberModal(params.row.id)}
-          aria-label={tCommon('removeMember')}
-          data-testid="removeMemberModalBtn"
-        >
-          <Delete />
-        </Button>
-      ),
-    },
-  ];
+  const handleSearch = (value: string) => {
+    setSearchTerm(value);
+    setRefetchTrigger((prev) => prev + 1);
+  };
+
+  const getQueryAndVariables = () => {
+    const baseVariables = {
+      orgId: currentUrl,
+    };
+
+    const searchFilter = searchTerm
+      ? { firstName: { contains: searchTerm } }
+      : undefined;
+
+    if (state === 0) {
+      return {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: {
+          ...baseVariables,
+          where: searchFilter,
+        },
+        dataPath: 'organization.members',
+      };
+    } else if (state === 1) {
+      return {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: {
+          ...baseVariables,
+          where: searchFilter
+            ? { ...searchFilter, role: { equal: 'administrator' } }
+            : { role: { equal: 'administrator' } },
+        },
+        dataPath: 'organization.members',
+      };
+    } else {
+      return {
+        query: USER_LIST_FOR_TABLE,
+        variables: {
+          where: searchFilter,
+        },
+        dataPath: 'allUsers',
+      };
+    }
+  };
+
+  const { query, variables, dataPath } = getQueryAndVariables();
+
+  const modalFooter = (
+    <>
+      <Button variant="secondary" onClick={handleCloseModal}>
+        {tCommon('cancel')}
+      </Button>
+      <Button variant="danger" onClick={handleDeleteUser} disabled={isDeleting}>
+        {tCommon('remove')}
+      </Button>
+    </>
+  );
 
   return (
     <>
@@ -409,7 +228,7 @@ function OrganizationPeople(): JSX.Element {
         hasDropdowns={true}
         searchPlaceholder={t('searchFullName')}
         searchValue={searchTerm}
-        onSearchChange={(value) => setSearchTerm(value)}
+        onSearchChange={handleSearch}
         searchInputTestId="searchbtn"
         searchButtonTestId="searchBtn"
         containerClassName={styles.calendar__header}
@@ -431,29 +250,154 @@ function OrganizationPeople(): JSX.Element {
         additionalButtons={<AddMember />}
       />
 
-      <DataGridWrapper<IProcessedRow>
-        rows={filteredRows}
-        columns={columns}
-        error={state === 2 ? userError?.message : memberError?.message}
-        loading={memberLoading || userLoading}
-        emptyStateProps={{
-          message: tCommon('notFound'),
-          description: tCommon('noDataDescription'),
-          dataTestId: 'organization-people-empty-state',
-        }}
-        paginationConfig={{
-          enabled: true,
-          defaultPageSize: PAGE_SIZE,
-          pageSizeOptions: [10, 25, 50, 100],
-        }}
-      />
+      <section className={styles.tableContainer}>
+        <table
+          className={styles.table}
+          aria-label={t('organizationPeopleTable')}
+        >
+          <thead>
+            <tr className={styles.tableHeaderRow}>
+              <th
+                className={`${styles.tableHeader} ${styles.tableCell}`}
+                scope="col"
+              >
+                {tCommon('sl_no')}
+              </th>
+              <th
+                className={`${styles.tableHeader} ${styles.tableCell}`}
+                scope="col"
+              >
+                {tCommon('profile')}
+              </th>
+              <th
+                className={`${styles.tableHeader} ${styles.tableCell}`}
+                scope="col"
+              >
+                {tCommon('name')}
+              </th>
+              <th
+                className={`${styles.tableHeader} ${styles.tableCell}`}
+                scope="col"
+              >
+                {tCommon('email')}
+              </th>
+              <th
+                className={`${styles.tableHeader} ${styles.tableCell}`}
+                scope="col"
+              >
+                {tCommon('joinedOn')}
+              </th>
+              <th
+                className={`${styles.tableHeader} ${styles.tableCell}`}
+                scope="col"
+              >
+                {tCommon('action')}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <CursorPaginationManager
+              query={query}
+              queryVariables={variables}
+              dataPath={dataPath}
+              itemsPerPage={10}
+              tableMode={true}
+              renderItem={(memberItem: IUserNode, memberIndex: number) => {
+                const rowNumber = memberIndex + 1;
+                return (
+                  <tr className={styles.rowBackground}>
+                    <td className={`${styles.tableCell} ${styles.centerAlign}`}>
+                      {rowNumber}
+                    </td>
+                    <td className={`${styles.tableCell} ${styles.centerAlign}`}>
+                      {memberItem.avatarURL ? (
+                        <img
+                          src={memberItem.avatarURL}
+                          alt={tCommon('avatar')}
+                          className={styles.avatarImage}
+                          crossOrigin="anonymous"
+                        />
+                      ) : (
+                        <div className={styles.avatarPlaceholder}>
+                          <Avatar name={memberItem.name} />
+                        </div>
+                      )}
+                    </td>
+                    <td className={`${styles.tableCell} ${styles.centerAlign}`}>
+                      {currentUrl ? (
+                        <Link
+                          to={`/member/${currentUrl}/${memberItem.id}`}
+                          className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.memberNameFontSize}`}
+                        >
+                          {memberItem.name}
+                        </Link>
+                      ) : (
+                        <span
+                          className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.memberNameFontSize}`}
+                        >
+                          {memberItem.name}
+                        </span>
+                      )}
+                    </td>
+                    <td className={`${styles.tableCell} ${styles.centerAlign}`}>
+                      {memberItem.emailAddress || '-'}
+                    </td>
+                    <td className={`${styles.tableCell} ${styles.centerAlign}`}>
+                      {memberItem.createdAt &&
+                      dayjs(memberItem.createdAt).isValid()
+                        ? dayjs(memberItem.createdAt).format('DD/MM/YYYY')
+                        : '-'}
+                    </td>
+                    <td className={`${styles.tableCell} ${styles.centerAlign}`}>
+                      <Button
+                        className={`${styles.removeButton}`}
+                        variant="danger"
+                        disabled={state === 2}
+                        onClick={() => handleOpenRemoveModal(memberItem.id)}
+                        aria-label={tCommon('removeMember')}
+                        data-testid={`removeMemberModalBtn-${memberItem.id}`}
+                      >
+                        <Delete />
+                      </Button>
+                    </td>
+                  </tr>
+                );
+              }}
+              keyExtractor={(item: IUserNode) => item.id}
+              refetchTrigger={refetchTrigger}
+              loadingComponent={
+                <tr data-testid="organization-people-loading">
+                  <td colSpan={6} className={styles.emptyStateCell}>
+                    {tCommon('loading')}
+                  </td>
+                </tr>
+              }
+              emptyStateComponent={
+                <tr>
+                  <td colSpan={6} className={styles.emptyStateCell}>
+                    <EmptyState
+                      icon="groups"
+                      message={tCommon('notFound')}
+                      dataTestId="organization-people-empty-state"
+                    />
+                  </td>
+                </tr>
+              }
+            />
+          </tbody>
+        </table>
+      </section>
 
-      {showRemoveModal && selectedMemId && (
-        <OrgPeopleListCard
-          id={selectedMemId}
-          toggleRemoveModal={toggleRemoveModal}
-        />
-      )}
+      <BaseModal
+        show={showRemoveModal}
+        onHide={handleCloseModal}
+        title={t('removeMemberTitle')}
+        footer={modalFooter}
+        centered
+        dataTestId="remove-member-modal"
+      >
+        <p className={styles.modalBodyText}>{t('removeMemberConfirmation')}</p>
+      </BaseModal>
     </>
   );
 }

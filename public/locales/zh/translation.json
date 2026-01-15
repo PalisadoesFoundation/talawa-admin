@@ -409,7 +409,11 @@
     "profile": "配置文件",
     "joined": "加入",
     "createUser": "创建用户",
-    "notFound": "未找到成员"
+    "notFound": "未找到成员",
+    "organizationPeopleTable": "组织人员表",
+    "removeMemberTitle": "移除成员",
+    "organizationIdMissing": "组织ID缺失！",
+    "removeMemberConfirmation": "您确定要移除此成员吗？"
   },
   "organizationCard": {
     "join": "加入",
@@ -922,7 +926,7 @@
     "cancel": "取消",
     "invalidDate": "Invalid Date",
     "messageTitleError": "帖子标题不能为空！",
-    "organizationIdMissing": "组织ID 缺失！",
+    "organizationIdMissing": "组织ID缺失！",
     "messageDescription": "帖子描述",
     "addVideo": "添加视频",
     "creatingMessage": "正在创建帖子...",
@@ -1267,11 +1271,14 @@
     "nothingToShow": "这里没有可显示的内容。",
     "sNo": "序号",
     "avatar": "头像",
+    "avatar_alt": "{{name}} 的头像",
     "name": "姓名",
     "email": "邮箱",
     "role": "角色",
     "loading": "加载中...",
-    "emailNotAvailable": "邮箱不可用"
+    "emailNotAvailable": "邮箱不可用",
+    "allMembers": "所有成员",
+    "peopleTable": "人员表"
   },
   "userRegister": {
     "enterFirstName": "输入您的名字",

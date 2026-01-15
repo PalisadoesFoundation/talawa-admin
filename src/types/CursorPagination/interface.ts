@@ -57,7 +57,7 @@ export interface InterfaceCursorPaginationManagerProps<
 
   /**
    * Number of items to fetch per page
-   * @default 10
+   * @defaultValue 10
    */
   itemsPerPage?: number;
 
@@ -75,12 +75,12 @@ export interface InterfaceCursorPaginationManagerProps<
    * // With keyExtractor for stable keys:
    * <CursorPaginationManager
    *   keyExtractor={(user) => user.id}
-   *   renderItem={(user) => <div>{user.name}</div>}
+   *   renderItem={(user) => \<div\>{user.name}\</div\>}
    * />
    *
    * // Without keyExtractor (uses index):
    * <CursorPaginationManager
-   *   renderItem={(user) => <div>{user.name}</div>}
+   *   renderItem={(user) => \<div\>{user.name}\</div\>}
    * />
    * ```
    */
@@ -124,4 +124,17 @@ export interface InterfaceCursorPaginationManagerProps<
    * Can be a number (counter) or any value that changes
    */
   refetchTrigger?: number;
+
+  /**
+   * When true, renders items without wrapper divs for table contexts
+   * Use this when renderItem returns `\<tr\>` elements to be placed inside `\<tbody\>`
+   *
+   * @remarks
+   * In tableMode, `renderItem`, `loadingComponent`, and `emptyStateComponent` should
+   * return table-safe
+   * nodes (e.g., `<tr>` or fragments containing `<tr>`), suitable as direct children
+   * of `<tbody>`.
+   * @defaultValue false
+   */
+  tableMode?: boolean;
 }

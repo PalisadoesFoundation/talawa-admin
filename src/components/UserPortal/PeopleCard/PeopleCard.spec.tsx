@@ -2,7 +2,8 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 
-import PeopleCard, { InterfacePeopleCardProps } from './PeopleCard';
+import PeopleCard from './PeopleCard';
+import type { InterfacePeopleCardProps } from 'types/UserPortal/PeopleCard/interface';
 
 const baseProps: InterfacePeopleCardProps = {
   id: '1',
