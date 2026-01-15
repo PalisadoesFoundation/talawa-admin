@@ -35,7 +35,7 @@ import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
 import type { IActionItemCategoryInfo } from 'types/shared-components/ActionItems/interface';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { Circle, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import {
   DataGrid,
   type GridCellParams,

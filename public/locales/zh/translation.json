@@ -1992,6 +1992,8 @@
     "earliest": "最早",
     "requestAccepted": "请求已成功接受",
     "requestRejected": "请求已成功拒绝",
+    "acceptRequest": "接受请求",
+    "rejectRequest": "拒绝请求",
     "details": "详情",
     "manageGroup": "管理小组",
     "mostVolunteers": "最多的志愿者",
@@ -2015,7 +2017,9 @@
     "deleteVolunteerGroup": "删除 {{name}} 志愿者小组",
     "deleteVolunteerEntry": "删除 {{name}} 志愿者条目",
     "viewGroup": "查看小组",
-    "editGroup": "编辑小组"
+    "editGroup": "编辑小组",
+    "invalidNumber": "无效数字",
+    "viewToggle": "切换视图"
   },
   "userVolunteer": {
     "title": "志愿服务",

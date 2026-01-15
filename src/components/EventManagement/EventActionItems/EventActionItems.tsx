@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
 
-import { Circle, WarningAmberRounded, Group } from '@mui/icons-material';
+import { WarningAmberRounded, Group } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
 import { useQuery } from '@apollo/client';
