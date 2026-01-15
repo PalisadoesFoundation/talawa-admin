@@ -30,6 +30,7 @@ import React, { useState } from 'react';
 import { EventRegistrantsModal } from './Modal/EventRegistrantsModal';
 import { Button } from 'react-bootstrap';
 import style from 'style/app-fixed.module.css';
+import { useTranslation } from 'react-i18next';
 
 type PropType = { eventId: string; orgId: string; onUpdate?: () => void };
 
@@ -40,6 +41,9 @@ export const EventRegistrantsWrapper = ({
 }: PropType): JSX.Element => {
   // State to control the visibility of the modal
   const [showModal, setShowModal] = useState(false);
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventRegistrantsModal',
+  });
   const handleClose = (): void => {
     setShowModal(false);
     // Call onUpdate after modal is closed
@@ -54,12 +58,12 @@ export const EventRegistrantsWrapper = ({
       <Button
         data-testid="filter-button"
         className={`border-1 mx-4 ${style.createButton}`}
-        aria-label="showAttendees"
+        aria-label={t('showAttendees')}
         onClick={(): void => {
           setShowModal(true); // Show the modal when button is clicked
         }}
       >
-        Register Member
+        {t('registerMember')}
       </Button>
 
       {/* Render the EventRegistrantsModal if showModal is true */}

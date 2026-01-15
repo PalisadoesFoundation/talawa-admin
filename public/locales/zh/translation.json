@@ -1454,23 +1454,6 @@
     "unregister": "取消注册",
     "cannotUnregisterCheckedInTooltip": "无法取消已签到用户的注册"
   },
-  "onSpotAttendee": {
-    "title": "现场参与者",
-    "enterFirstName": "输入名字",
-    "enterLastName": "输入姓氏",
-    "enterEmail": "输入电子邮件",
-    "enterPhoneNo": "输入电话号码",
-    "selectGender": "选择性别",
-    "invalidDetailsMessage": "请填写所有必填字段",
-    "orgIdMissing": "组织ID缺失。请重试。",
-    "attendeeAddedSuccess": "参与者添加成功！",
-    "addAttendee": "添加",
-    "phoneNumber": "电话号码",
-    "addingAttendee": "添加中...",
-    "male": "男性",
-    "female": "女性",
-    "other": "其他"
-  },
   "settings": {
     "noeventsAttended": "未参加任何活动",
     "eventAttended": "参加的活动",
@@ -1882,6 +1865,8 @@
     "errorAddingAttendee": "添加与会者时出错",
     "errorRemovingAttendee": "删除与会者时出错",
     "eventRegistrantsTitle": "活动注册者",
+    "registerMember": "注册会员",
+    "showAttendees": "显示参加者",
     "addingAttendee": "正在添加参与者...",
     "selectUserFirst": "请先选择要添加的用户！",
     "unknownUser": "未知用户",
@@ -1908,6 +1893,26 @@
       "noRecipientsError": "请提供至少一个收件人电子邮件",
       "invalidEmailsError": "无效的电子邮件：{{emails}}"
     }
+  },
+  "onSpotAttendee": {
+    "title": "现场参与者",
+    "enterFirstName": "输入名字",
+    "enterLastName": "输入姓氏",
+    "enterEmail": "输入电子邮件",
+    "enterPhoneNo": "输入电话号码",
+    "selectGender": "选择性别",
+    "invalidDetailsMessage": "请填写所有必填字段",
+    "orgIdMissing": "组织ID缺失。请重试。",
+    "attendeeAddedSuccess": "参与者添加成功！",
+    "addAttendee": "添加",
+    "phoneNumber": "电话号码",
+    "addingAttendee": "添加中...",
+    "male": "男性",
+    "female": "女性",
+    "other": "其他",
+    "placeholderFirstName": "John",
+    "placeholderLastName": "Doe",
+    "placeholderEmail": "abc@gmail.com"
   },
   "userCampaigns": {
     "title": "筹款活动",

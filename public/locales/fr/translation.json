@@ -1454,23 +1454,6 @@
     "unregister": "Désinscrire",
     "cannotUnregisterCheckedInTooltip": "Impossible de désinscrire un utilisateur déjà enregistré"
   },
-  "onSpotAttendee": {
-    "title": "Participant sur place",
-    "enterFirstName": "Entrez le prénom",
-    "enterLastName": "Entrez le nom de famille",
-    "enterEmail": "Entrez l'e-mail",
-    "enterPhoneNo": "Entrez le numéro de téléphone",
-    "selectGender": "Sélectionnez le sexe",
-    "invalidDetailsMessage": "Veuillez remplir tous les champs obligatoires",
-    "orgIdMissing": "L'ID de l'organisation est manquant. Veuillez réessayer.",
-    "attendeeAddedSuccess": "Participant ajouté avec succès!",
-    "addAttendee": "Ajouter",
-    "phoneNumber": "Numéro de téléphone",
-    "addingAttendee": "Ajout en cours...",
-    "male": "Homme",
-    "female": "Femme",
-    "other": "Autre"
-  },
   "settings": {
     "eventAttended": "Événements Assistés",
     "noeventsAttended": "Aucun événement assisté",
@@ -1882,6 +1865,8 @@
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
     "errorRemovingAttendee": "Erreur lors de la suppression du participant",
     "eventRegistrantsTitle": "Inscrits à l'événement",
+    "registerMember": "Inscrire un membre",
+    "showAttendees": "Afficher les participants",
     "addingAttendee": "Ajout du participant...",
     "selectUserFirst": "Veuillez d'abord choisir un utilisateur à ajouter !",
     "unknownUser": "Utilisateur inconnu",
@@ -1908,6 +1893,26 @@
       "noRecipientsError": "Veuillez fournir au moins un email de destinataire",
       "invalidEmailsError": "Email(s) invalide(s) : {{emails}}"
     }
+  },
+  "onSpotAttendee": {
+    "title": "Participant sur place",
+    "enterFirstName": "Entrez le prénom",
+    "enterLastName": "Entrez le nom de famille",
+    "enterEmail": "Entrez l'e-mail",
+    "enterPhoneNo": "Entrez le numéro de téléphone",
+    "selectGender": "Sélectionner le genre",
+    "invalidDetailsMessage": "Veuillez remplir tous les champs obligatoires",
+    "orgIdMissing": "L'ID de l'organisation est manquant. Veuillez réessayer.",
+    "attendeeAddedSuccess": "Participant ajouté avec succès !",
+    "addAttendee": "Ajouter un participant",
+    "phoneNumber": "N° de téléphone",
+    "addingAttendee": "Ajout en cours...",
+    "male": "Homme",
+    "female": "Femme",
+    "other": "Autre",
+    "placeholderFirstName": "John",
+    "placeholderLastName": "Doe",
+    "placeholderEmail": "abc@gmail.com"
   },
   "userCampaigns": {
     "title": "Campagnes de financement",

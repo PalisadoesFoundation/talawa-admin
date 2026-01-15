@@ -1056,23 +1056,6 @@
     "unregister": "Unregister",
     "cannotUnregisterCheckedInTooltip": "Cannot unregister checked-in user"
   },
-  "onSpotAttendee": {
-    "title": "On-spot Attendee",
-    "enterFirstName": "Enter First Name",
-    "enterLastName": "Enter Last Name",
-    "enterEmail": "Enter Email",
-    "enterPhoneNo": "Enter Phone Number",
-    "selectGender": "Select Gender",
-    "invalidDetailsMessage": "Please fill in all required fields",
-    "orgIdMissing": "Organization ID is missing. Please try again.",
-    "attendeeAddedSuccess": "Attendee added successfully!",
-    "addAttendee": "Add",
-    "phoneNumber": "Phone No.",
-    "addingAttendee": "Adding...",
-    "male": "Male",
-    "female": "Female",
-    "other": "Other"
-  },
   "forgotPassword": {
     "title": "Talawa Forgot Password",
     "registeredEmail": "Registered Email",
@@ -1865,6 +1848,8 @@
     "errorAddingAttendee": "Error adding attendee",
     "errorRemovingAttendee": "Error removing attendee",
     "eventRegistrantsTitle": "Event Registrants",
+    "registerMember": "Register Member",
+    "showAttendees": "Show Attendees",
     "addingAttendee": "Adding the attendee...",
     "selectUserFirst": "Please choose a user to add first!",
     "unknownUser": "Unknown User",
@@ -1891,6 +1876,26 @@
       "noRecipientsError": "Please provide at least one recipient email",
       "invalidEmailsError": "Invalid email(s): {{emails}}"
     }
+  },
+  "onSpotAttendee": {
+    "title": "On-spot Attendee",
+    "enterFirstName": "Enter First Name",
+    "enterLastName": "Enter Last Name",
+    "enterEmail": "Enter Email",
+    "enterPhoneNo": "Enter Phone Number",
+    "selectGender": "Select Gender",
+    "invalidDetailsMessage": "Please fill in all required details",
+    "orgIdMissing": "Organization ID is missing. Please try again.",
+    "attendeeAddedSuccess": "Attendee added successfully!",
+    "addAttendee": "Add Attendee",
+    "phoneNumber": "Phone No.",
+    "addingAttendee": "Adding...",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "placeholderFirstName": "John",
+    "placeholderLastName": "Doe",
+    "placeholderEmail": "abc@gmail.com"
   },
   "userCampaigns": {
     "title": "Fundraising Campaigns",

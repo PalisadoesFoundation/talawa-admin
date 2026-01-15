@@ -133,7 +133,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
-                placeholder="John"
+                placeholder={t('placeholderFirstName')}
               />
             </Form.Group>
             <Form.Group className="mb-1">
@@ -144,7 +144,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
-                placeholder="Doe"
+                placeholder={t('placeholderLastName')}
               />
             </Form.Group>
           </div>
@@ -168,7 +168,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="abc@gmail.com"
+              placeholder={t('placeholderEmail')}
             />
           </Form.Group>
 
