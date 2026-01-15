@@ -1434,7 +1434,22 @@
     "pageNumber": "Page {{page}}",
     "goToToday": "Aller à aujourd'hui",
     "genderDistribution": "Distribution par sexe",
-    "ageDistribution": "Distribution par âge"
+    "ageDistribution": "Distribution par âge",
+    "age": "Âge",
+    "age18to40": "18-40",
+    "attendanceCount": "Nombre de participants",
+    "close": "Fermer",
+    "demographics": "Démographie",
+    "demography": "Démographie",
+    "exportData": "Exporter les données",
+    "female": "Femme",
+    "gender": "Genre",
+    "male": "Homme",
+    "other": "Autre",
+    "over40": "Plus de 40 ans",
+    "today": "Aujourd'hui",
+    "trends": "Tendances",
+    "under18": "Moins de 18 ans"
   },
   "eventRegistrant": {
     "sort": "Trier",
@@ -1469,7 +1484,10 @@
     "addingAttendee": "Ajout en cours...",
     "male": "Homme",
     "female": "Femme",
-    "other": "Autre"
+    "other": "Autre",
+    "firstNamePlaceholder": "Jean",
+    "lastNamePlaceholder": "Dupont",
+    "emailPlaceholder": "exemple@gmail.com"
   },
   "settings": {
     "eventAttended": "Événements Assistés",
@@ -1902,7 +1920,13 @@
       "errorSendingInvites": "Erreur lors de l'envoi des invitations",
       "emailsLabel": "Emails et noms des destinataires",
       "emailsHelp": "Fournissez l'email et le nom facultatif pour chaque destinataire. Ajoutez plusieurs destinataires si nécessaire."
-    }
+    },
+    "selectUserWarning": "Veuillez d'abord choisir un utilisateur à ajouter !",
+    "addingAttendeeProgress": "Ajout du participant en cours..."
+  },
+  "eventRegistrantsWrapper": {
+    "buttonAriaLabel": "Afficher les participants",
+    "registerMemberButton": "Inscrire un membre"
   },
   "userCampaigns": {
     "title": "Campagnes de financement",
