@@ -791,7 +791,8 @@
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "done": "समाप्त",
     "invalidDate": "Invalid Date",
-    "createChat": "चैट बनाएं"
+    "createChat": "चैट बनाएं",
+    "eventManagementDashboard": "इवेंट मैनेजमेंट डैशबोर्ड"
   },
   "funds": {
     "title": "फंड",
@@ -1591,11 +1592,7 @@
     "tagCreationFailed": "टैग निर्माण विफल रहा"
   },
   "userEvents": {
-<<<<<<< HEAD
-    "title": "कार्यक्रम",
-=======
     "title": "ईवेंट",
->>>>>>> a6ae6c4b3a0 (fix(events): show proper event title label for members)
     "name": "ईवेंट",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "createEvent": "कार्यक्रम बनाएँ",

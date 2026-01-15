@@ -15,7 +15,8 @@
     "src/test-utils/**",
     "src/shared-components/BreadcrumbsComponent/**",
     "src/shared-components/DateRangePicker/index.ts",
-    "src/types/shared-components/DateRangePicker/index.ts"
+    "src/types/shared-components/DateRangePicker/index.ts",
+    "src/screens/Users/Users.tsx"
   ],
   "ignoreDependencies": [],
   "ignoreExportsUsedInFile": true

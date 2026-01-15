@@ -1858,7 +1858,6 @@ form label,
   border: 1px solid var(--createButton-border-active) !important;
 }
 
-<<<<<<< HEAD
 .cardItemAuthor {
   font-size: 12px;
   font-weight: bold;
@@ -1876,25 +1875,12 @@ form label,
 
 .testRedBackground {
   background-color: red;
-=======
+}
+
 .statsButton {
-<<<<<<< HEAD
-<<<<<<< HEAD
   width: auto !important;
   min-width: fit-content !important;
   white-space: nowrap !important;
->>>>>>> 687c3710d50 (fix: resolve failing checks)
-=======
-  display: inline-flex;
-  align-items: center;
-  white-space: nowrap;
-  width: max-content;
->>>>>>> b379b3c1ad1 (fix: failing checks)
-=======
-  width: auto !important;
-  min-width: fit-content !important;
-  white-space: nowrap !important;
->>>>>>> 340e60ffa4e (fix: failing checks)
 }
 
 /* Add more Global CSS Classes above this */
@@ -2874,6 +2860,7 @@ form label,
   align-items: center;
   color: grey;
 }
+
 .peopleTabEventHeader:hover {
   color: var(--groupsLabel-color);
 }
@@ -4451,10 +4438,13 @@ form label,
 }
 
 .peopleTabUserTagTableHeader {
-  background-color: #f9fafb; /* bg-gray-50 */
-  border-top-width: 1px; /* border-y */
+  background-color: #f9fafb;
+  /* bg-gray-50 */
+  border-top-width: 1px;
+  /* border-y */
   border-bottom-width: 1px;
-  border-color: #e5e7eb; /* border-gray-200 */
+  border-color: #e5e7eb;
+  /* border-gray-200 */
   border-style: solid;
 }
 
@@ -4517,6 +4507,7 @@ form label,
   align-items: baseline;
   justify-content: space-between;
 }
+
 .peopleTabUserEventDate {
   display: flex;
   align-items: baseline;
@@ -4529,6 +4520,7 @@ form label,
   display: flex;
   flex-direction: column;
 }
+
 .peoplePageUserEventCardBody {
   display: grid;
   gap: 1rem;
@@ -6275,7 +6267,8 @@ form {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-right: 6px; /* space between icon & text */
+  margin-right: 6px;
+  /* space between icon & text */
 }
 
 .dropdownItemButton {
@@ -10761,7 +10754,6 @@ form {
 
 /* ----------------------------------------------------- */
 
-<<<<<<< HEAD
 .whiteContainer {
   background-color: #ffffff;
   border-radius: 1rem;
@@ -11062,6 +11054,7 @@ form {
 .orgSelectorNoResults {
   padding: 0.75rem 1rem;
   color: var(--orgSelector-no-results-color);
+
   .tagActionsDivider {
     border-color: var(--grey-border-box-color);
     border-style: solid;
@@ -11228,7 +11221,8 @@ form {
 .actionItemCategoriesDataGrid :global(.MuiDataGrid-root),
 .actionItemCategoriesDataGrid :global(.MuiDataGrid-main) {
   border-radius: 0.5rem;
-=======
+}
+
 .volunteerAvatar {
   width: 30px;
   height: 30px;
@@ -11237,11 +11231,7 @@ form {
   display: flex;
   align-items: center;
   justify-content: center;
-<<<<<<< HEAD
->>>>>>> 93685b5836d (fix(events): enable user event dashboard access and correct Upcoming Events visibility)
-=======
   object-fit: cover;
   overflow: hidden;
   flex-shrink: 0;
->>>>>>> 687c3710d50 (fix: resolve failing checks)
 }

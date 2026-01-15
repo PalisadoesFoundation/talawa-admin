@@ -282,27 +282,8 @@ function Volunteers(): JSX.Element {
             {avatarURL ? (
               <img
                 src={avatarURL}
-<<<<<<< HEAD
-                alt={tCommon('volunteer')}
-=======
                 alt={name}
->>>>>>> 687c3710d50 (fix: resolve failing checks)
                 data-testid="volunteer_image"
-<<<<<<< HEAD
-                className={styles.tableImages}
-              />
-            ) : (
-              <div className={styles.avatarContainer}>
-                <Avatar
-                  key={id + '1'}
-                  dataTestId="volunteer_avatar"
-                  containerStyle={styles.imageContainer}
-                  avatarStyle={styles.tableImages}
-                  name={name}
-                  alt={name}
-                />
-              </div>
-=======
                 className={styles.volunteerAvatar}
               />
             ) : (
@@ -313,7 +294,6 @@ function Volunteers(): JSX.Element {
                 name={name}
                 alt={name}
               />
->>>>>>> 93685b5836d (fix(events): enable user event dashboard access and correct Upcoming Events visibility)
             )}
             {name}
           </div>
@@ -545,63 +525,7 @@ function Volunteers(): JSX.Element {
           </>
         )}
       </div>
-<<<<<<< HEAD
     </LoadingState>
-=======
-
-      {/* Table with Volunteers */}
-      <DataGrid
-        disableColumnMenu
-        disableColumnResize
-        columnBufferPx={7}
-        hideFooter={true}
-        getRowId={(row) => row.id}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noVolunteers')}
-            </Stack>
-          ),
-        }}
-        sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackgrounds}`}
-        autoHeight
-        rowHeight={100}
-        rows={volunteers}
-        columns={columns}
-        isRowSelectable={() => false}
-      />
-
-      <VolunteerCreateModal
-        isOpen={modalState[ModalState.ADD]}
-        hide={() => closeModal(ModalState.ADD)}
-        eventId={eventId}
-        orgId={orgId}
-        refetchVolunteers={refetchVolunteers}
-        isRecurring={isRecurring}
-        baseEvent={baseEvent}
-        recurringEventInstanceId={eventId}
-      />
-
-      {volunteer && (
-        <>
-          <VolunteerViewModal
-            isOpen={modalState[ModalState.VIEW]}
-            hide={() => closeModal(ModalState.VIEW)}
-            volunteer={volunteer}
-          />
-          <VolunteerDeleteModal
-            isOpen={modalState[ModalState.DELETE]}
-            hide={() => closeModal(ModalState.DELETE)}
-            volunteer={volunteer}
-            refetchVolunteers={refetchVolunteers}
-            isRecurring={isRecurring}
-            eventId={eventId}
-          />
-        </>
-      )}
-    </div>
->>>>>>> 93685b5836d (fix(events): enable user event dashboard access and correct Upcoming Events visibility)
   );
 }
 

@@ -119,14 +119,10 @@ function OrganizationDashboard(): JSX.Element {
     loading: orgEventsLoading,
     error: orgEventsError,
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
-<<<<<<< HEAD:src/screens/AdminPortal/OrganizationDashboard/OrganizationDashboard.tsx
-    variables: { id: orgId ?? '', first: 8, after: null },
+    variables: { id: orgId ?? '', first: 8, after: null, upcomingOnly: true },
     skip: !orgId,
     fetchPolicy: 'cache-and-network',
     notifyOnNetworkStatusChange: true,
-=======
-    variables: { id: orgId, first: 8, after: null, upcomingOnly: true },
->>>>>>> 93685b5836d (fix(events): enable user event dashboard access and correct Upcoming Events visibility):src/screens/OrganizationDashboard/OrganizationDashboard.tsx
   });
 
   const {

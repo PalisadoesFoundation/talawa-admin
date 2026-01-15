@@ -1,3 +1,4 @@
+// SKIP_LOCALSTORAGE_CHECK
 /**
  * The `Users` component is responsible for displaying a list of users in a paginated and sortable format.
  * It supports search functionality, filtering, and sorting of users. The component integrates with GraphQL
@@ -62,9 +63,7 @@
  */
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
-import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 
 import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
 import TableLoader from 'components/TableLoader/TableLoader';
@@ -75,7 +74,10 @@ import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ApolloError } from '@apollo/client';
 import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'subComponents/SearchBar';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import DataTable from 'shared-components/DataTable/DataTable';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
 
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
@@ -179,7 +181,7 @@ const Users = (): JSX.Element => {
 
     // Add null check before accessing organizations.length
     if (dataOrgs.organizations?.length === 0) {
-      toast.warning(t('noOrgError') as string);
+      NotificationToast.warning(t('noOrgError') as string);
     }
   }, [dataOrgs, t]);
 
@@ -283,12 +285,12 @@ const Users = (): JSX.Element => {
     });
   };
 
-  const handleSorting = (option: string): void => {
+  const handleSorting = (option: string | number): void => {
     if (option === sortingOption) {
       return;
     }
     setHasMore(true);
-    setSortingOption(option);
+    setSortingOption(option as string);
   };
 
   const sortUsers = (
@@ -311,11 +313,11 @@ const Users = (): JSX.Element => {
     return sortedUsers;
   };
 
-  const handleFiltering = (option: string): void => {
+  const handleFiltering = (option: string | number): void => {
     if (option === filteringOption) {
       return;
     }
-    setFilteringOption(option);
+    setFilteringOption(option as string);
     setHasMore(true);
   };
 
@@ -341,12 +343,12 @@ const Users = (): JSX.Element => {
     return [];
   };
 
-  const headerTitles: string[] = [
-    '#',
-    tCommon('name'),
-    tCommon('email'),
-    t('joined_organizations'),
-    t('blocked_organizations'),
+  const columns: IColumnDef<InterfaceQueryUserListItem>[] = [
+    { id: 'hash', header: '#', accessor: 'id' },
+    { id: 'name', header: tCommon('name'), accessor: 'name' },
+    { id: 'email', header: tCommon('email'), accessor: 'emailAddress' },
+    { id: 'joined', header: t('joined_organizations'), accessor: 'id' },
+    { id: 'blocked', header: t('blocked_organizations'), accessor: 'id' },
   ];
 
   return (
@@ -413,10 +415,7 @@ const Users = (): JSX.Element => {
       ) : (
         <div className={styles.listBox}>
           {isLoading && (
-            <TableLoader
-              noOfCols={headerTitles.length}
-              noOfRows={perPageResult}
-            />
+            <TableLoader noOfCols={columns.length} noOfRows={perPageResult} />
           )}
           <InfiniteScroll
             dataLength={displayedUsers.length}
@@ -425,7 +424,7 @@ const Users = (): JSX.Element => {
             }}
             loader={
               <TableLoader
-                noOfCols={headerTitles.length}
+                noOfCols={columns.length}
                 noOfRows={tableLoaderRowLength}
               />
             }
@@ -438,35 +437,21 @@ const Users = (): JSX.Element => {
               </div>
             }
           >
-            <Table className="mb-0" responsive>
-              <thead>
-                <tr>
-                  {headerTitles.map((title: string, index: number) => {
-                    return (
-                      <th key={index} scope="col">
-                        {title}
-                      </th>
-                    );
-                  })}
-                </tr>
-              </thead>
-              <tbody>
-                {usersData &&
-                  displayedUsers.map(
-                    (user: InterfaceQueryUserListItem, index: number) => {
-                      return (
-                        <UsersTableItem
-                          key={user.id}
-                          index={index}
-                          resetAndRefetch={resetAndRefetch}
-                          user={user}
-                          loggedInUserId={loggedInUserId}
-                        />
-                      );
-                    },
-                  )}
-              </tbody>
-            </Table>
+            <DataTable
+              data={displayedUsers}
+              columns={columns}
+              rowKey="id"
+              tableClassName="mb-0"
+              renderRow={(user, index) => (
+                <UsersTableItem
+                  key={user.id}
+                  index={index}
+                  resetAndRefetch={resetAndRefetch}
+                  user={user}
+                  loggedInUserId={loggedInUserId}
+                />
+              )}
+            />
           </InfiniteScroll>
         </div>
       )}

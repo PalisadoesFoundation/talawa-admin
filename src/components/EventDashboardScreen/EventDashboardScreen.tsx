@@ -148,16 +148,8 @@ const EventDashboardScreen = (): React.JSX.Element => {
         } `}
         data-testid="mainpageright"
       >
-<<<<<<< HEAD
-        <div className="d-flex justify-content-between align-items-center">
-          <div style={{ flex: 1 }}>
-            <h1>{t('title')}</h1>
-          </div>
-          <ProfileDropdown portal="admin" />
-=======
         <div className="d-flex justify-content-end align-items-center">
           <ProfileDropdown />
->>>>>>> 080afb52c05 (fix(events): enable user event dashboard access and correct Upcoming Events visibility)
         </div>
         <Outlet />
       </div>

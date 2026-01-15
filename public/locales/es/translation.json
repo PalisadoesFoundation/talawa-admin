@@ -774,7 +774,8 @@
     "occurrences": "ocurrencias",
     "done": "Hecho",
     "invalidDate": "Invalid Date",
-    "createChat": "Crear chat"
+    "createChat": "Crear chat",
+    "eventManagementDashboard": "Panel de Gestión de Eventos"
   },
   "funds": {
     "title": "Fondos",
@@ -880,11 +881,7 @@
     "donated": "Donado",
     "campaignNotActive": "La campaña no está actualmente activa"
   },
-<<<<<<< HEAD
   "createPostModal": {
-=======
-  "orgPost": {
->>>>>>> a6ae6c4b3a0 (fix(events): show proper event title label for members)
     "title": "Publicaciones de Talawa",
     "titleOfPost": "Título de tu publicación...",
     "closeCreatePost": "Cerrar Crear Publicación",

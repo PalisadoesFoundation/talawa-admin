@@ -203,26 +203,8 @@ function Requests(): JSX.Element {
             {avatarURL ? (
               <img
                 src={avatarURL}
-<<<<<<< HEAD
-                alt={`${name} ${tCommon('avatar')}`}
-=======
                 alt={name}
->>>>>>> 687c3710d50 (fix: resolve failing checks)
                 data-testid={`volunteer_image`}
-<<<<<<< HEAD
-                className={styles.tableImages}
-              />
-            ) : (
-              <div className={styles.avatarContainer}>
-                <Avatar
-                  key="volunteer_avatar"
-                  containerStyle={styles.imageContainer}
-                  avatarStyle={styles.tableImages}
-                  name={name}
-                  alt={name}
-                />
-              </div>
-=======
                 className={styles.volunteerAvatar}
               />
             ) : (
@@ -232,7 +214,6 @@ function Requests(): JSX.Element {
                 name={name}
                 alt={name}
               />
->>>>>>> 93685b5836d (fix(events): enable user event dashboard access and correct Upcoming Events visibility)
             )}
             {name}
           </div>

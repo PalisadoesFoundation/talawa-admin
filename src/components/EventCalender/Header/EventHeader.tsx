@@ -5,19 +5,21 @@
  * functionality for searching, sorting, and creating events. It is designed
  * to be used within the organization events page.
  *
- * @param {InterfaceEventHeaderProps} props - The props for the EventHeader component.
- * @param {ViewType} props.viewType - The current view type of the calendar (e.g., Month, Day, Year).
- * @param {(viewType: ViewType) => void} props.handleChangeView - Callback function to handle changes in the calendar view type.
- * @param {() => void} props.showInviteModal - Callback function to display the modal for creating a new event.
+ * @param props - The props for the EventHeader component.
  *
- * @returns {JSX.Element} The rendered EventHeader component.
+ * Props:
+ * - `viewType`: The current view type of the calendar (e.g., Month, Day, Year).
+ * - `handleChangeView`: Callback function to handle changes in the calendar view type.
+ * - `showInviteModal`: Callback function to display the modal for creating a new event.
+ *
+ * @returns The rendered EventHeader component.
  *
  * @remarks
- * - This component uses `SearchBar` for searching events by name.
- * - It includes two `SortingButton` components for selecting the calendar view type and event type.
- * - A `Button` is provided to trigger the creation of a new event, styled with an `AddIcon`.
+ * This component uses `SearchBar` for searching events by name.
+ * It includes a `SortingButton` component for selecting the calendar view type.
+ * A `Button` is provided to trigger the creation of a new event, styled with an `AddIcon`.
  *
- * @dependencies
+ * Dependencies:
  * - `react-bootstrap` for the `Button` component.
  * - `@mui/icons-material` for the `AddIcon`.
  * - `react-i18next` for translations.
@@ -86,20 +88,6 @@ function EventHeader({
             dataTestIdPrefix="selectViewType"
             className={styles.dropdown}
           />
-<<<<<<< HEAD
-          <SortingButton
-            title={t('eventType')}
-            sortingOptions={[
-              { label: 'Events', value: 'Events' },
-              { label: 'Workshops', value: 'Workshops' },
-            ]}
-            selectedOption={t('eventType')}
-            onSortChange={() => {}}
-            dataTestIdPrefix="eventType"
-            className={styles.dropdown}
-            buttonLabel={t('eventType')}
-          />
-
           <Button
             className={styles.dropdown}
             onClick={showInviteModal}
@@ -109,30 +97,6 @@ function EventHeader({
             <AddIcon className={styles.addButtonIcon} />
             <span>{tCommon('create')}</span>
           </Button>
-=======
-        </div>
-
-        <div className={styles.btnsBlock}>
-          <div className={styles.selectTypeEventHeader}>
-            <Button
-              className={styles.dropdown}
-              onClick={showInviteModal}
-              data-testid="createEventModalBtn"
-              data-cy="createEventModalBtn"
-            >
-              <div className="">
-                <AddIcon
-                  sx={{
-                    fontSize: '25px',
-                    marginBottom: '2px',
-                    marginRight: '2px',
-                  }}
-                />
-                <span>Create</span>
-              </div>
-            </Button>
-          </div>
->>>>>>> 20a4dd546db (fix(events): remove event type button)
         </div>
       </div>
     </div>
