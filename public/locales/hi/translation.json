@@ -2207,5 +2207,8 @@
   },
   "orgProfileField": {
     "editCustomField": "कस्टम फ़ील्ड संपादित करें"
+  },
+  "userGlobalScreen": {
+    "globalFeatures": "वैश्विक सुविधाएं"
   }
 }
