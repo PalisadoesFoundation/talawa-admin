@@ -37,7 +37,12 @@ const CategorySelector: FC<InterfaceCategorySelectorProps> = ({
           onCategoryChange(newCategory);
         }}
         renderInput={(params) => (
-          <TextField {...params} label={t('actionItemCategory')} required />
+          <TextField
+            {...params}
+            label={t('actionItemCategory')}
+            required
+            aria-required="true"
+          />
         )}
       />
     </Form.Group>
