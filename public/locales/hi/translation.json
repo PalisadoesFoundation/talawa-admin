@@ -1434,7 +1434,22 @@
     "pageNumber": "पृष्ठ {{page}}",
     "goToToday": "आज पर जाएं",
     "genderDistribution": "लिंग वितरण",
-    "ageDistribution": "आयु वितरण"
+    "ageDistribution": "आयु वितरण",
+    "age": "आयु",
+    "age18to40": "18-40",
+    "attendanceCount": "उपस्थिति गणना",
+    "close": "बंद करें",
+    "demographics": "जनसांख्यिकी",
+    "demography": "जनसांख्यिकी",
+    "exportData": "डेटा निर्यात करें",
+    "female": "महिला",
+    "gender": "लिंग",
+    "male": "पुरुष",
+    "other": "अन्य",
+    "over40": "40 से अधिक",
+    "today": "आज",
+    "trends": "रुझान",
+    "under18": "18 से कम"
   },
   "eventRegistrant": {
     "sort": "छांटें",
@@ -1469,7 +1484,10 @@
     "addingAttendee": "जोड़ा जा रहा है...",
     "male": "पुरुष",
     "female": "महिला",
-    "other": "अन्य"
+    "other": "अन्य",
+    "firstNamePlaceholder": "राज",
+    "lastNamePlaceholder": "कुमार",
+    "emailPlaceholder": "उदाहरण@gmail.com"
   },
   "settings": {
     "noeventsAttended": "कोई कार्यक्रम में उपस्थित नहीं",
@@ -1902,7 +1920,13 @@
       "errorSendingInvites": "निमंत्रण भेजने में त्रुटि",
       "emailsLabel": "प्राप्तकर्ता ईमेल और नाम",
       "emailsHelp": "प्रत्येक प्राप्तकर्ता के लिए ईमेल और वैकल्पिक नाम प्रदान करें। आवश्यकतानुसार कई प्राप्तकर्ता जोड़ें।"
-    }
+    },
+    "selectUserWarning": "कृपया पहले जोड़ने के लिए एक उपयोगकर्ता चुनें!",
+    "addingAttendeeProgress": "उपस्थित व्यक्ति को जोड़ा जा रहा है..."
+  },
+  "eventRegistrantsWrapper": {
+    "buttonAriaLabel": "उपस्थित लोगों को दिखाएं",
+    "registerMemberButton": "सदस्य पंजीकृत करें"
   },
   "userCampaigns": {
     "title": "धन उगाहने के अभियान",
