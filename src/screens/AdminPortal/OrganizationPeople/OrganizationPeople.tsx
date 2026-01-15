@@ -305,7 +305,10 @@ function OrganizationPeople(): JSX.Element {
               renderItem={(memberItem: IUserNode, memberIndex: number) => {
                 const rowNumber = memberIndex + 1;
                 return (
-                  <tr className={styles.rowBackground}>
+                  <tr
+                    className={styles.rowBackground}
+                    data-testid={`member-row-${memberItem.id}`}
+                  >
                     <td className={`${styles.tableCell} ${styles.centerAlign}`}>
                       {rowNumber}
                     </td>

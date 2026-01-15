@@ -1,3 +1,8 @@
+/**
+ * Page Object for the People management page in Admin Portal.
+ * Provides methods for searching, adding, and removing organization members.
+ */
+
 export class PeoplePage {
   private readonly _peopleTabButton = '[data-cy="leftDrawerButton-People"]';
   private readonly _searchInput = '[data-testid="searchbtn"]';
@@ -60,22 +65,14 @@ export class PeoplePage {
   deleteMember(name: string, timeout = 40000) {
     this.searchMemberByName(name, timeout);
 
-    // Wait for loading state to disappear if present
-    cy.get('body').then(($body: unknown) => {
-      const body = $body as { find: (selector: string) => { length: number } };
-      if (body.find('[data-testid="organization-people-loading"]').length > 0) {
-        cy.get('[data-testid="organization-people-loading"]', {
-          timeout,
-        }).should('not.exist');
-      }
-    });
+    // Wait for the row with the name to appear
+    cy.contains('[data-testid^="member-row-"]', name, { timeout }).should(
+      'be.visible',
+    );
 
-    // Find the row and click remove button
-    cy.contains(this._tableRows, name, { timeout })
-      .should('exist')
-      .parents('tr')
+    // Re-query and click the remove button (breaks chain to avoid detachment)
+    cy.contains('[data-testid^="member-row-"]', name)
       .find('button[data-testid^="removeMemberModalBtn-"]')
-      .should('be.visible')
       .click();
 
     // Click the confirm remove button in the modal footer
