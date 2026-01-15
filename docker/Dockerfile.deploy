@@ -9,12 +9,13 @@ FROM node:24-slim AS build
 
 ARG PORT=4321
 ENV PORT=${PORT}
+ENV NODE_ENV=production
 
 WORKDIR /usr/src/app
 COPY package*.json ./
 RUN corepack enable && corepack prepare pnpm@latest --activate && pnpm install
 COPY . .
 RUN pnpm run build
-ENV NODE_ENV=production
+
 EXPOSE ${PORT}
 CMD ["pnpm", "run", "serve"]
