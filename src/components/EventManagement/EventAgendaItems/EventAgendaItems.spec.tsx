@@ -7,7 +7,6 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import i18n from 'utils/i18nForTest';
-import { toast } from 'react-toastify';
 import {
   LocalizationProvider,
   AdapterDayjs,
@@ -26,11 +25,15 @@ import {
   MOCKS_ERROR_QUERY,
   MOCKS_MUTATION_ERROR,
 } from './EventAgendaItemsMocks';
+
+// Use vi.hoisted() to create mock that survives vi.mock hoisting
+const toast = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+}));
+
 vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+  toast,
 }));
 
 vi.mock('react-router', async () => ({
@@ -556,7 +559,10 @@ describe('Testing Agenda Items Components', () => {
     await userEvent.click(screen.getByTestId('createAgendaItemFormBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.agendaItemCreated);
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.agendaItemCreated,
+        expect.any(Object),
+      );
       expect(
         screen.queryByTestId('createAgendaItemModalCloseBtn'),
       ).not.toBeInTheDocument();
@@ -615,7 +621,10 @@ describe('Testing Agenda Items Components', () => {
     await userEvent.click(screen.getByTestId('createAgendaItemFormBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toBeCalledWith('Mock Graphql Error');
+      expect(toast.error).toHaveBeenCalledWith(
+        'Mock Graphql Error',
+        expect.any(Object),
+      );
     });
     expect(
       screen.getByTestId('createAgendaItemModalCloseBtn'),
@@ -665,6 +674,7 @@ describe('Testing Agenda Items Components', () => {
       expect(sequences).toContain(1);
       expect(toast.success).toHaveBeenCalledWith(
         translations.agendaItemCreated,
+        expect.any(Object),
       );
     });
   });
@@ -738,6 +748,7 @@ describe('Testing Agenda Items Components', () => {
         expect(sequences).toContain(1);
         expect(toast.success).toHaveBeenCalledWith(
           translations.agendaItemCreated,
+          expect.any(Object),
         );
       });
     } finally {
