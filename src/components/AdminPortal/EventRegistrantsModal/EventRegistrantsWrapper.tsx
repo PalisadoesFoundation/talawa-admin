@@ -34,7 +34,6 @@ import { useTranslation } from 'react-i18next';
 
 import type { InterfaceEventRegistrantsWrapperProps } from 'types/AdminPortal/EventRegistrantsModal/interface';
 
-
 export const EventRegistrantsWrapper = ({
   eventId,
   orgId,
