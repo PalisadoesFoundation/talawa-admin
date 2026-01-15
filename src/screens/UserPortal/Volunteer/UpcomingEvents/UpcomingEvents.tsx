@@ -348,7 +348,9 @@ const UpcomingEvents = (): JSX.Element => {
                         <div className="d-flex gap-3">
                           <span>
                             {t('volunteerGroups')}:{' '}
-                            {t('groupsAvailable', { count: event.volunteerGroups.length })}
+                            {t('groupsAvailable', {
+                              count: event.volunteerGroups.length,
+                            })}
                           </span>
                         </div>
                       )}
@@ -404,8 +406,9 @@ const UpcomingEvents = (): JSX.Element => {
                               </span>
                             )}
                             <span className="text-muted">
-                              {t('volunteersRequired')}: {group.volunteersRequired},{' '}
-                              {t('signedUp')}: {group.volunteers.length}
+                              {t('volunteersRequired')}:{' '}
+                              {group.volunteersRequired}, {t('signedUp')}:{' '}
+                              {group.volunteers.length}
                             </span>
                           </div>
                           <Button
@@ -444,8 +447,8 @@ const UpcomingEvents = (): JSX.Element => {
         eventDate={pendingVolunteerRequest?.eventDate || ''}
         isForGroup={!!pendingVolunteerRequest?.groupId}
         groupName={pendingVolunteerRequest?.groupName || ''}
-        onSelectSeries={() => { }}
-        onSelectInstance={() => { }}
+        onSelectSeries={() => {}}
+        onSelectInstance={() => {}}
       />
     </LoadingState>
   );
