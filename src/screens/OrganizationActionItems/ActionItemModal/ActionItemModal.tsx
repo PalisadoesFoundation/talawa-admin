@@ -17,6 +17,7 @@ import type { ApplyToType } from 'types/AdminPortal/ApplyToSelector/interface';
 import AssignmentTypeSelector from 'components/AdminPortal/AssignmentTypeSelector/AssignmentTypeSelector';
 import type { AssignmentType } from 'types/AdminPortal/AssignmentTypeSelector/interface';
 import CategorySelector from 'components/AdminPortal/CategorySelector/CategorySelector';
+import VolunteerSelectionFields from 'components/AdminPortal/VolunteerSelectionFields/VolunteerSelectionFields';
 
 import type {
   IActionItemCategoryInfo,
@@ -38,7 +39,7 @@ import {
   UPDATE_ACTION_ITEM_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
-import { Autocomplete, FormControl, TextField } from '@mui/material';
+import { FormControl, TextField } from '@mui/material';
 import {
   GET_EVENT_VOLUNTEERS,
   GET_EVENT_VOLUNTEER_GROUPS,
@@ -495,71 +496,26 @@ const ItemModal: FC<IItemModalProps> = ({
               onClearVolunteerGroup={handleClearVolunteerGroup}
             />
 
-            {/* Volunteer Selection */}
-            {assignmentType === 'volunteer' && (
-              <Form.Group className="mb-3 w-100">
-                <Autocomplete
-                  className={`${styles.noOutline} w-100`}
-                  data-testid="volunteerSelect"
-                  data-cy="volunteerSelect"
-                  options={volunteers}
-                  value={selectedVolunteer}
-                  isOptionEqualToValue={(option, value) =>
-                    option.id === value?.id
-                  }
-                  filterSelectedOptions={true}
-                  getOptionLabel={(
-                    volunteer: InterfaceEventVolunteerInfo,
-                  ): string => {
-                    return volunteer.user?.name || t('unknownVolunteer');
-                  }}
-                  onChange={(_, newVolunteer): void => {
-                    const volunteerId = newVolunteer?.id;
-                    handleFormChange('volunteerId', volunteerId);
-                    handleFormChange('volunteerGroupId', '');
-                    setSelectedVolunteer(newVolunteer);
-                    setSelectedVolunteerGroup(null);
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label={t('volunteer')} required />
-                  )}
-                />
-              </Form.Group>
-            )}
-
-            {/* Volunteer Group Selection */}
-            {assignmentType === 'volunteerGroup' && (
-              <Form.Group className="mb-3 w-100">
-                <Autocomplete
-                  className={`${styles.noOutline} w-100`}
-                  data-testid="volunteerGroupSelect"
-                  data-cy="volunteerGroupSelect"
-                  options={volunteerGroups}
-                  value={selectedVolunteerGroup}
-                  isOptionEqualToValue={(option, value) =>
-                    option.id === value?.id
-                  }
-                  filterSelectedOptions={true}
-                  getOptionLabel={(group: IEventVolunteerGroup): string => {
-                    return group.name;
-                  }}
-                  onChange={(_, newGroup): void => {
-                    const groupId = newGroup?.id;
-                    handleFormChange('volunteerGroupId', groupId);
-                    handleFormChange('volunteerId', '');
-                    setSelectedVolunteerGroup(newGroup);
-                    setSelectedVolunteer(null);
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={t('volunteerGroup')}
-                      required
-                    />
-                  )}
-                />
-              </Form.Group>
-            )}
+            {/* Volunteer/Volunteer Group Selection */}
+            <VolunteerSelectionFields
+              assignmentType={assignmentType}
+              volunteers={volunteers}
+              volunteerGroups={volunteerGroups}
+              selectedVolunteer={selectedVolunteer}
+              selectedVolunteerGroup={selectedVolunteerGroup}
+              onVolunteerChange={(newVolunteer) => {
+                handleFormChange('volunteerId', newVolunteer?.id);
+                handleFormChange('volunteerGroupId', '');
+                setSelectedVolunteer(newVolunteer);
+                setSelectedVolunteerGroup(null);
+              }}
+              onVolunteerGroupChange={(newGroup) => {
+                handleFormChange('volunteerGroupId', newGroup?.id);
+                handleFormChange('volunteerId', '');
+                setSelectedVolunteerGroup(newGroup);
+                setSelectedVolunteer(null);
+              }}
+            />
 
             <Form.Group className="d-flex gap-3 mx-auto mb-3">
               <DatePicker
