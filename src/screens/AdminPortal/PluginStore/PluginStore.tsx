@@ -136,10 +136,7 @@ export default function PluginStore() {
   );
 
   return (
-    <div
-      className={`${styles.pageContent} ${styles.pageContent}`}
-      data-testid="plugin-store-page"
-    >
+    <div className={styles.pageContent} data-testid="plugin-store-page">
       <SearchFilterBar
         searchPlaceholder={t('searchPlaceholder')}
         searchValue={searchTerm}

@@ -185,7 +185,7 @@ function Leaderboard(): JSX.Element {
         };
         return (
           <div
-            className={`${styles.volunteerCell}`}
+            className={styles.volunteerCell}
             onClick={handleNavigation}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {

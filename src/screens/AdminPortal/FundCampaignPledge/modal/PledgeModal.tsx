@@ -197,7 +197,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       onHide={hide}
       show={isOpen}
       dataTestId="pledge-modal"
-      showCloseButton={false}
+      showCloseButton={false} // Custom close button used to preserve existing test ID
       headerContent={
         <div className="d-flex align-items-center justify-content-between w-100">
           <h5 data-testid="createPledgeTitle" className="mb-0">
@@ -228,7 +228,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             data-testid="pledgerSelect"
             options={pledgers}
             value={pledgeUsers[0] || null}
-            // isOptionEqualToValue={(option, value) => option?.id === value?.id}
             filterSelectedOptions={true}
             getOptionLabel={(member: InterfaceUserInfoPG): string =>
               `${member.name || ''}`
@@ -283,11 +282,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               type="number"
               inputProps={{
                 min: 1,
-                'aria-label': 'Amount',
+                'aria-label': t('amount'),
               }}
               error={formState.pledgeAmount < 1}
               helperText={
-                formState.pledgeAmount < 1 ? 'Amount must be at least 1' : ''
+                formState.pledgeAmount < 1 ? t('amountMustBeAtLeastOne') : ''
               }
               className={styles.noOutlinePledge}
               value={formState.pledgeAmount}
