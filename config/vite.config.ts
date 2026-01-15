@@ -166,7 +166,7 @@ export default defineConfig(({ mode }) => {
         include: [
           'src/screens/**/*.{js,jsx,ts,tsx}',
           'src/components/**/*.{js,jsx,ts,tsx}',
-          'src/subComponents/**/*.{js,jsx,ts,tsx}',
+          'src/shared-components/**/*.{js,jsx,ts,tsx}',
         ],
         exclude: [
           'node_modules/**',

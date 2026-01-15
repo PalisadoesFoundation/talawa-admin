@@ -8,7 +8,13 @@
  */
 
 import React, { useMemo, useState, useEffect } from 'react';
-import { DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridRenderCellParams as MuiGridRenderCellParams,
+  GridValidRowModel,
+} from '@mui/x-data-grid';
+export type GridRenderCellParams<T extends GridValidRowModel> =
+  MuiGridRenderCellParams<T>;
 import { useTranslation } from 'react-i18next';
 import type { InterfaceDataGridWrapperProps } from '../../types/DataGridWrapper/interface';
 import styles from './DataGridWrapper.module.css';
@@ -16,7 +22,7 @@ import styles from './DataGridWrapper.module.css';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchFilterBar from '../SearchFilterBar/SearchFilterBar';
 
-import SortingButton from '../../subComponents/SortingButton';
+import SortingButton from '../SortingButton/SortingButton';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { DataGridLoadingOverlay } from './DataGridLoadingOverlay';
 import { DataGridErrorOverlay } from './DataGridErrorOverlay';

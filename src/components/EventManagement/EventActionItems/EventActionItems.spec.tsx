@@ -69,7 +69,7 @@ vi.mock('shared-components/Avatar/Avatar', () => ({
   ),
 }));
 
-vi.mock('subComponents/SortingButton', () => ({
+vi.mock('shared-components/SortingButton/SortingButton', () => ({
   default: ({
     onSortChange,
     dataTestIdPrefix,
