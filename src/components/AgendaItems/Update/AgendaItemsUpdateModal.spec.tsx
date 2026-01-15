@@ -302,11 +302,22 @@ describe('AgendaItemsUpdateModal', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalledWith({
-        ...mockFormState1,
-        attachments: [...mockFormState1.attachments, 'base64-file'],
-      });
+      expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
     });
+
+    // Test the function that was passed to setFormState
+    const setFormStateCall = mockSetFormState.mock.calls.find(
+      (call) => typeof call[0] === 'function',
+    );
+    expect(setFormStateCall).toBeDefined();
+
+    if (setFormStateCall) {
+      const result = setFormStateCall[0](mockFormState1);
+      expect(result.attachments).toEqual([
+        ...mockFormState1.attachments,
+        'base64-file',
+      ]);
+    }
   });
   test('renders autocomplete and selects categories correctly', async () => {
     render(
