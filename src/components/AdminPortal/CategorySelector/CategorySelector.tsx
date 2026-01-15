@@ -1,4 +1,4 @@
-import React from 'react';
+import type { FC } from 'react';
 import { Form } from 'react-bootstrap';
 import { Autocomplete, TextField } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -13,7 +13,7 @@ import styles from 'style/app-fixed.module.css';
  * @param props - Component props from InterfaceCategorySelectorProps
  * @returns Autocomplete dropdown for category selection
  */
-const CategorySelector: React.FC<InterfaceCategorySelectorProps> = ({
+const CategorySelector: FC<InterfaceCategorySelectorProps> = ({
   categories,
   selectedCategory,
   onCategoryChange,
