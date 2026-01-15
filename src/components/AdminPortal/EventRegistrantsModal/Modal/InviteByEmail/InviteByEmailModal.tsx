@@ -25,7 +25,7 @@ import type { ApolloError } from '@apollo/client/errors';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import styles from './InviteByEmail.module.css';
-import type { InterfaceInviteByEmailModalProps } from 'types/components/EventRegistrantsModal/InviteByEmail/interface';
+import type { InterfaceInviteByEmailModalProps } from 'types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface';
 
 const validateEmails = (emails: string[]): string[] => {
   const invalid: string[] = [];

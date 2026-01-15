@@ -43,7 +43,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
 import { useParams } from 'react-router';
-import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
+import { EventRegistrantsWrapper } from 'components/AdminPortal/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 import type { InterfaceUserAttendee } from 'types/shared-components/User/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -201,56 +201,55 @@ function EventRegistrants(): JSX.Element {
       __serial: number;
     }
   >[] = [
-    {
-      id: 'serial',
-      header: t('serialNumber'),
-      accessor: '__serial',
-    },
-    {
-      id: 'registrant',
-      header: t('registrant'),
-      accessor: 'name',
-    },
-    {
-      id: 'registeredAt',
-      header: t('registeredAt'),
-      accessor: 'createdAt',
-    },
-    {
-      id: 'createdAt',
-      header: t('createdAt'),
-      accessor: (row) =>
-        row.time && row.time !== 'N/A'
-          ? new Date(`1970-01-01T${row.time}`).toLocaleTimeString([], {
+      {
+        id: 'serial',
+        header: t('serialNumber'),
+        accessor: '__serial',
+      },
+      {
+        id: 'registrant',
+        header: t('registrant'),
+        accessor: 'name',
+      },
+      {
+        id: 'registeredAt',
+        header: t('registeredAt'),
+        accessor: 'createdAt',
+      },
+      {
+        id: 'createdAt',
+        header: t('createdAt'),
+        accessor: (row) =>
+          row.time && row.time !== 'N/A'
+            ? new Date(`1970-01-01T${row.time}`).toLocaleTimeString([], {
               hour: 'numeric',
               minute: '2-digit',
               hour12: true,
             })
-          : 'N/A',
-    },
-    {
-      id: 'options',
-      header: t('options'),
-      accessor: () => null,
-      render: (_val, row) => (
-        <button
-          type="button"
-          className={`btn btn-sm ${
-            row.isCheckedIn ? 'btn-secondary' : 'btn-outline-danger'
-          }`}
-          onClick={() => deleteRegistrant(row.user.id)}
-          disabled={row.isCheckedIn}
-          title={
-            row.isCheckedIn
-              ? t('cannotUnregisterCheckedInTooltip')
-              : t('unregister')
-          }
-        >
-          {row.isCheckedIn ? t('checkedIn') : t('unregister')}
-        </button>
-      ),
-    },
-  ];
+            : 'N/A',
+      },
+      {
+        id: 'options',
+        header: t('options'),
+        accessor: () => null,
+        render: (_val, row) => (
+          <button
+            type="button"
+            className={`btn btn-sm ${row.isCheckedIn ? 'btn-secondary' : 'btn-outline-danger'
+              }`}
+            onClick={() => deleteRegistrant(row.user.id)}
+            disabled={row.isCheckedIn}
+            title={
+              row.isCheckedIn
+                ? t('cannotUnregisterCheckedInTooltip')
+                : t('unregister')
+            }
+          >
+            {row.isCheckedIn ? t('checkedIn') : t('unregister')}
+          </button>
+        ),
+      },
+    ];
 
   return (
     <div>

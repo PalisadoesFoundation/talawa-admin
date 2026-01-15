@@ -53,7 +53,7 @@ import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
 import type { InterfaceUser } from 'types/shared-components/User/interface';
-import type { InterfaceEventRegistrantsModalProps } from 'types/components/EventRegistrantsModal/interface';
+import type { InterfaceEventRegistrantsModalProps } from 'types/AdminPortal/EventRegistrantsModal/interface';
 import styles from '../EventRegistrants.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { BaseModal } from 'shared-components/BaseModal';

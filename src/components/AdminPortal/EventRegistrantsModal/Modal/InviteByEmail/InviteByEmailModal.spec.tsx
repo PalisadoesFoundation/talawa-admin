@@ -152,11 +152,11 @@ describe('InviteByEmailModal', () => {
 
     expect(emailInputs).toHaveLength(2);
 
-    // Update first recipient (id mismatch for second during map)
+    // Update first recipient
     await user.type(emailInputs[0], 'user1@example.com');
     await user.type(nameInputs[0], 'User One');
 
-    // Update second recipient (id mismatch for first during map)
+    // Update second recipient
     await user.type(emailInputs[1], 'user2@example.com');
     await user.type(nameInputs[1], 'User Two');
 
