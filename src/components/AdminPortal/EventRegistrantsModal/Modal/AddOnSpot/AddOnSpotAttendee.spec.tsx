@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import { store } from 'state/store';
-import i18nForTest from '../../../../utils/i18nForTest';
+import i18nForTest from 'utils/i18nForTest';
 import { describe, expect, vi } from 'vitest';
 
 vi.mock('react-toastify', () => ({
