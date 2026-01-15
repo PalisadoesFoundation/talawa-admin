@@ -2,15 +2,30 @@
   outline: none;
 }
 
+.noOutline input:focus-visible {
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: var(--shadow-offset-sm);
+}
+
 .noOutline input:disabled {
   -webkit-text-fill-color: var(--color-gray-400) !important;
+}
+
+.noOutline input:disabled:focus-visible {
+  outline: var(--border-2) solid var(--color-gray-400);
+  outline-offset: var(--shadow-offset-sm);
 }
 
 .noOutline textarea:disabled {
   color: var(--color-gray-400) !important;
 }
 
-.noOutline:is(:hover, :focus, :active, :focus-visible, .show) {
+.noOutline:focus-within {
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: var(--shadow-offset-sm);
+}
+
+.noOutline:is(:hover, :active, .show) {
   outline: none;
 }
 
@@ -19,10 +34,15 @@
   color: var(--color-gray-700);
   background-color: var(--color-blue-200);
   border-color: var(--color-blue-200);
-  --bs-btn-focus-box-shadow: none;
 }
 
-.addButton:is(:hover, :active, :focus) {
+.addButton:focus-visible {
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: var(--shadow-offset-sm);
+  box-shadow: 0 0 0 var(--border-2) var(--color-blue-500);
+}
+
+.addButton:is(:hover, :active) {
   background-color: var(--color-blue-500);
   border-color: var(--color-gray-700);
 }
@@ -30,6 +50,12 @@
 .addButton:disabled {
   background-color: var(--color-gray-50);
   border-color: var(--color-blue-200);
+}
+
+.addButton:disabled:focus-visible {
+  outline: var(--border-2) solid var(--color-gray-400);
+  outline-offset: var(--shadow-offset-sm);
+  box-shadow: 0 0 0 var(--border-2) var(--color-gray-400);
 }
 
 .removeButton {
