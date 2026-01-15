@@ -348,7 +348,7 @@ const UpcomingEvents = (): JSX.Element => {
                         <div className="d-flex gap-3">
                           <span>
                             {t('volunteerGroups')}:{' '}
-                            {event.volunteerGroups.length} groups available
+                            {t('groupsAvailable', { count: event.volunteerGroups.length })}
                           </span>
                         </div>
                       )}
@@ -404,8 +404,8 @@ const UpcomingEvents = (): JSX.Element => {
                               </span>
                             )}
                             <span className="text-muted">
-                              Required: {group.volunteersRequired}, Signed up:{' '}
-                              {group.volunteers.length}
+                              {t('volunteersRequired')}: {group.volunteersRequired},{' '}
+                              {t('signedUp')}: {group.volunteers.length}
                             </span>
                           </div>
                           <Button
