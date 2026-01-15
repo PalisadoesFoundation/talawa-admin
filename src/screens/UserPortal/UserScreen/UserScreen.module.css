@@ -53,18 +53,11 @@
   gap: var(--space-4);
 }
 
-.titleContainer h3 {
+.titleContainer h1 {
   font-size: var(--font-size-28);
   font-weight: var(--font-weight-bold);
   color: var(--color-gray-500);
   margin-top: var(--space-2);
-}
-
-.titleContainer span {
-  font-size: var(--font-size-15);
-  margin-left: var(--space-3);
-  font-weight: var(--font-weight-lighter);
-  color: var(--color-gray-500);
 }
 
 .drawer {

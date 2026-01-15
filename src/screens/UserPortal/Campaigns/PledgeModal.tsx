@@ -265,7 +265,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       className={styles.pledgeModal}
       headerContent={
         <>
-          <p className={styles.titlemodal}>
+          <p className={styles.titleModal}>
             {t(mode === 'edit' ? 'editPledge' : 'createPledge')}
           </p>
           <Button
