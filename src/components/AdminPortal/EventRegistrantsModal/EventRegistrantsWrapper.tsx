@@ -4,13 +4,12 @@
  * open the modal and handles the modal's lifecycle, including invoking an
  * optional callback when the modal is closed.
  *
- * @component
- * @param {string} eventId - The unique identifier for the event.
- * @param {string} orgId - The unique identifier for the organization.
- * @param {() => void} [onUpdate] - Optional callback function to be executed
+ * @param eventId - The unique identifier for the event.
+ * @param orgId - The unique identifier for the organization.
+ * @param onUpdate - Optional callback function to be executed
  * after the modal is closed.
  *
- * @returns {JSX.Element} A button to open the modal and the modal itself
+ * @returns A button to open the modal and the modal itself
  * when visible.
  *
  * @example
