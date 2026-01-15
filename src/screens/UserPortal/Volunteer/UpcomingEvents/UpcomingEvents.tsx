@@ -295,7 +295,7 @@ const UpcomingEvents = (): JSX.Element => {
                   <div className="d-flex align-items-center gap-2">
                     <h3 data-testid="eventTitle">{event.title}</h3>
                     {status.status !== 'none' && (() => {
-                      const statusBadgeTestId = `event-status-${index}`;
+                      const statusBadgeTestId = 'event-status-' + index;
                       return (
                         <StatusBadge
                           {...getStatusBadgeProps(status.status)}
@@ -395,10 +395,12 @@ const UpcomingEvents = (): JSX.Element => {
                             <div className="d-flex align-items-center gap-2">
                               <span className="fw-semibold">{group.name}</span>
                               {groupStatus.status !== 'none' && (() => {
-                                const statusBadgeTestId = `group-status-${group._id}`;
+                                const statusBadgeTestId = 'group-status-' + group._id;
                                 return (
                                   <StatusBadge
-                                    {...getStatusBadgeProps(groupStatus.status)}
+                                    {...getStatusBadgeProps(
+                                      groupStatus.status,
+                                    )}
                                     size="sm"
                                     dataTestId={statusBadgeTestId}
                                   />
