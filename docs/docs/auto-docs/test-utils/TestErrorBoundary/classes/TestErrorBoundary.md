@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
 # Class: TestErrorBoundary
 
-Defined in: [src/test-utils/TestErrorBoundary.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/TestErrorBoundary.tsx#L22)
+Defined in: [src/test-utils/TestErrorBoundary.tsx:22](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/test-utils/TestErrorBoundary.tsx#L22)
 
 ## Extends
 
@@ -16,7 +16,7 @@ Defined in: [src/test-utils/TestErrorBoundary.tsx:22](https://github.com/Palisad
 
 > **new TestErrorBoundary**(`props`): `TestErrorBoundary`
 
-Defined in: [src/test-utils/TestErrorBoundary.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/TestErrorBoundary.tsx#L26)
+Defined in: [src/test-utils/TestErrorBoundary.tsx:26](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/test-utils/TestErrorBoundary.tsx#L26)
 
 #### Parameters
 
@@ -38,7 +38,7 @@ Defined in: [src/test-utils/TestErrorBoundary.tsx:26](https://github.com/Palisad
 
 > **render**(): `ReactNode`
 
-Defined in: [src/test-utils/TestErrorBoundary.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/TestErrorBoundary.tsx#L43)
+Defined in: [src/test-utils/TestErrorBoundary.tsx:43](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/test-utils/TestErrorBoundary.tsx#L43)
 
 #### Returns
 
@@ -54,7 +54,7 @@ Defined in: [src/test-utils/TestErrorBoundary.tsx:43](https://github.com/Palisad
 
 > `static` **getDerivedStateFromError**(`error`): `TestInterfaceErrorBoundaryState`
 
-Defined in: [src/test-utils/TestErrorBoundary.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/TestErrorBoundary.tsx#L34)
+Defined in: [src/test-utils/TestErrorBoundary.tsx:34](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/test-utils/TestErrorBoundary.tsx#L34)
 
 #### Parameters
 

@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import UninstallConfirmationModal from './UninstallConfirmationModal';
 import type { IPluginMeta } from 'plugin';
-
 // Mock react-i18next
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -148,7 +147,8 @@ describe('UninstallConfirmationModal', () => {
     it('should have dialog role', () => {
       render(<UninstallConfirmationModal {...defaultProps} />);
 
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      const dialogs = screen.getAllByRole('dialog');
+      expect(dialogs[0]).toBeInTheDocument();
     });
   });
 

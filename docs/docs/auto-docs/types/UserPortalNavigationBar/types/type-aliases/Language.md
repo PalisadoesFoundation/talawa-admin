@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **Language** = `object`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L68)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:68](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/UserPortalNavigationBar/types.ts#L68)
 
 Language configuration (from utils/languages)
 
@@ -16,7 +16,7 @@ Language configuration (from utils/languages)
 
 > **code**: `string`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L69)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:69](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/UserPortalNavigationBar/types.ts#L69)
 
 ***
 
@@ -24,7 +24,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:69](https://github.com/P
 
 > **country\_code**: `string`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L71)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:71](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/UserPortalNavigationBar/types.ts#L71)
 
 ***
 
@@ -32,4 +32,4 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:71](https://github.com/P
 
 > **name**: `string`
 
-Defined in: [src/types/UserPortalNavigationBar/types.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L70)
+Defined in: [src/types/UserPortalNavigationBar/types.ts:70](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/UserPortalNavigationBar/types.ts#L70)

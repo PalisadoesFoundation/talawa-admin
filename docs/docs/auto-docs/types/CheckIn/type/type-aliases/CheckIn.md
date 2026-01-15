@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **CheckIn** = `object`
 
-Defined in: [src/types/CheckIn/type.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L4)
+Defined in: [src/types/CheckIn/type.ts:4](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/CheckIn/type.ts#L4)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/CheckIn/type.ts:4](https://github.com/PalisadoesFoundatio
 
 > **\_id**: `string`
 
-Defined in: [src/types/CheckIn/type.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L5)
+Defined in: [src/types/CheckIn/type.ts:5](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/CheckIn/type.ts#L5)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/CheckIn/type.ts:5](https://github.com/PalisadoesFoundatio
 
 > `optional` **allotedRoom**: `string`
 
-Defined in: [src/types/CheckIn/type.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L6)
+Defined in: [src/types/CheckIn/type.ts:6](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/CheckIn/type.ts#L6)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/CheckIn/type.ts:6](https://github.com/PalisadoesFoundatio
 
 > `optional` **allotedSeat**: `string`
 
-Defined in: [src/types/CheckIn/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L7)
+Defined in: [src/types/CheckIn/type.ts:7](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/CheckIn/type.ts#L7)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/CheckIn/type.ts:7](https://github.com/PalisadoesFoundatio
 
 > **createdAt**: `Date`
 
-Defined in: [src/types/CheckIn/type.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L8)
+Defined in: [src/types/CheckIn/type.ts:8](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/CheckIn/type.ts#L8)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/CheckIn/type.ts:8](https://github.com/PalisadoesFoundatio
 
 > **event**: [`Event`](../../../Event/type/type-aliases/Event.md)
 
-Defined in: [src/types/CheckIn/type.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L9)
+Defined in: [src/types/CheckIn/type.ts:9](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/CheckIn/type.ts#L9)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/CheckIn/type.ts:9](https://github.com/PalisadoesFoundatio
 
 > **feedbackSubmitted**: `boolean`
 
-Defined in: [src/types/CheckIn/type.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L10)
+Defined in: [src/types/CheckIn/type.ts:10](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/CheckIn/type.ts#L10)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/CheckIn/type.ts:10](https://github.com/PalisadoesFoundati
 
 > **time**: `Date`
 
-Defined in: [src/types/CheckIn/type.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L11)
+Defined in: [src/types/CheckIn/type.ts:11](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/CheckIn/type.ts#L11)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/types/CheckIn/type.ts:11](https://github.com/PalisadoesFoundati
 
 > **updatedAt**: `Date`
 
-Defined in: [src/types/CheckIn/type.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L12)
+Defined in: [src/types/CheckIn/type.ts:12](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/CheckIn/type.ts#L12)
 
 ***
 
@@ -78,4 +78,4 @@ Defined in: [src/types/CheckIn/type.ts:12](https://github.com/PalisadoesFoundati
 
 > **user**: [`User`](../../../shared-components/User/type/type-aliases/User.md)
 
-Defined in: [src/types/CheckIn/type.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CheckIn/type.ts#L13)
+Defined in: [src/types/CheckIn/type.ts:13](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/CheckIn/type.ts#L13)

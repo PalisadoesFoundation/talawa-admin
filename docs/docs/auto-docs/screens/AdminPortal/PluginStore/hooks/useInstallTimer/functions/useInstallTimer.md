@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **useInstallTimer**(`loading`): `string`
 
-Defined in: [src/screens/AdminPortal/PluginStore/hooks/useInstallTimer.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/PluginStore/hooks/useInstallTimer.ts#L8)
+Defined in: [src/screens/AdminPortal/PluginStore/hooks/useInstallTimer.ts:8](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/screens/AdminPortal/PluginStore/hooks/useInstallTimer.ts#L8)
 
 useInstallTimer
 Tracks and formats elapsed time as mm:ss while `loading` is true.

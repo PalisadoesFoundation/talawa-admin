@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **getPluginManager**(`apolloClient?`): [`PluginManager`](../classes/PluginManager.md)
 
-Defined in: [src/plugin/manager.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L181)
+Defined in: [src/plugin/manager.ts:181](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/manager.ts#L181)
 
 ## Parameters
 

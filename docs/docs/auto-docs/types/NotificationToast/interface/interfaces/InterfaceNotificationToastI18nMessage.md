@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceNotificationToastI18nMessage
 
-Defined in: [src/types/NotificationToast/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/NotificationToast/interface.ts#L18)
+Defined in: [src/types/NotificationToast/interface.ts:18](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/NotificationToast/interface.ts#L18)
 
 i18n-backed toast message definition.
 
@@ -14,7 +14,7 @@ i18n-backed toast message definition.
 
 > **key**: `string`
 
-Defined in: [src/types/NotificationToast/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/NotificationToast/interface.ts#L25)
+Defined in: [src/types/NotificationToast/interface.ts:25](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/NotificationToast/interface.ts#L25)
 
 The i18next key to translate.
 
@@ -30,7 +30,7 @@ The i18next key to translate.
 
 > `optional` **namespace**: [`NotificationToastNamespace`](../type-aliases/NotificationToastNamespace.md)
 
-Defined in: [src/types/NotificationToast/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/NotificationToast/interface.ts#L32)
+Defined in: [src/types/NotificationToast/interface.ts:32](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/NotificationToast/interface.ts#L32)
 
 Optional i18next namespace to use for translation.
 
@@ -42,6 +42,6 @@ Defaults to `'common'` when omitted.
 
 > `optional` **values**: `Record`\<`string`, `unknown`\>
 
-Defined in: [src/types/NotificationToast/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/NotificationToast/interface.ts#L37)
+Defined in: [src/types/NotificationToast/interface.ts:37](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/NotificationToast/interface.ts#L37)
 
 Optional interpolation values for i18next.

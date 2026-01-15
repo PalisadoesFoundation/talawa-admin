@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Class: ErrorBoundaryWrapper
 
-Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L51)
+Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:51](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L51)
 
 ## Extends
 
@@ -16,7 +16,7 @@ Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx
 
 > **new ErrorBoundaryWrapper**(`props`): `ErrorBoundaryWrapper`
 
-Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L56)
+Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:56](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L56)
 
 #### Parameters
 
@@ -38,7 +38,7 @@ Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx
 
 > **componentDidCatch**(`error`, `errorInfo`): `void`
 
-Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L83)
+Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:83](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L83)
 
 Log error details after an error has been caught
 This lifecycle method is called during the commit phase (to log/ report)
@@ -67,7 +67,7 @@ This lifecycle method is called during the commit phase (to log/ report)
 
 > **handleReset**(): `void`
 
-Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L110)
+Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:110](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L110)
 
 Reset error boundary state to recover from error
 
@@ -81,7 +81,7 @@ Reset error boundary state to recover from error
 
 > **render**(): `ReactNode`
 
-Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L129)
+Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:129](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L129)
 
 #### Returns
 
@@ -97,7 +97,7 @@ Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx
 
 > `static` **getDerivedStateFromError**(`error`): `Partial`\<[`InterfaceErrorBoundaryWrapperState`](../../../../types/shared-components/ErrorBoundaryWrapper/interface/interfaces/InterfaceErrorBoundaryWrapperState.md)\>
 
-Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L69)
+Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:69](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L69)
 
 Update state when an error is caught
 This lifecycle method is called during the render phase (to change UI)

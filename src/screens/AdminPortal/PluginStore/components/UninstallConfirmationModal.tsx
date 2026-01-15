@@ -1,9 +1,6 @@
-﻿/**
- * Confirmation modal for plugin uninstallation
- */
-import React from 'react';
+﻿import React from 'react';
 import { Button } from 'react-bootstrap';
-import BaseModal from 'components/BaseModal/BaseModal';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { IPluginMeta } from 'plugin';
 
 interface InterfaceUninstallConfirmationModalProps {
@@ -12,7 +9,17 @@ interface InterfaceUninstallConfirmationModalProps {
   onConfirm: () => void;
   plugin: IPluginMeta | null;
 }
-
+/**
+ * UninstallConfirmationModal
+ *
+ * A confirmation modal displayed before uninstalling a plugin.
+ * It warns the user about the action and triggers the uninstall process.
+ *
+ * @param show - Boolean to control modal visibility
+ * @param onClose - Function to close the modal without taking action
+ * @param onConfirm - Function to proceed with uninstallation
+ * @param plugin - The plugin object being uninstalled
+ */
 export default function UninstallConfirmationModal({
   show,
   onClose,

@@ -1,14 +1,8 @@
-﻿/**
- * EditUserTagModal Component
- *
- * This component renders a modal for editing user tags. It provides a form
- * where users can input a new tag name and submit it for editing.
- */
-import type { TFunction } from 'i18next';
+﻿import type { TFunction } from 'i18next';
 import type { FormEvent } from 'react';
 import React from 'react';
 import { Button, Form } from 'react-bootstrap';
-import BaseModal from 'components/BaseModal/BaseModal';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import styles from 'style/app-fixed.module.css';
 
 export interface InterfaceEditUserTagModalProps {
@@ -20,7 +14,19 @@ export interface InterfaceEditUserTagModalProps {
   t: TFunction<'translation', 'manageTag'>;
   tCommon: TFunction<'common', undefined>;
 }
-
+/**
+ * EditUserTagModal
+ *
+ * A modal form that allows administrators to edit existing user tags.
+ *
+ * @param editUserTagModalIsOpen - Boolean to control modal visibility
+ * @param hideEditUserTagModal - Function to close the modal
+ * @param newTagName - The current value of the tag name being edited
+ * @param handleEditUserTag - Function to save the changes
+ * @param setNewTagName - Function to update the tag name state
+ * @param t - Translation function
+ * @param tCommon - Common translation function
+ */
 const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
   editUserTagModalIsOpen,
   hideEditUserTagModal,

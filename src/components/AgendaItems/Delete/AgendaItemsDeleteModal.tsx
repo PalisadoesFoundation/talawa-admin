@@ -1,15 +1,19 @@
-/**
- * AgendaItemsDeleteModal Component
- *
- * This component renders a modal dialog for confirming the deletion of an agenda item.
- * It provides a user-friendly interface to either confirm or cancel the deletion action.
- */
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import BaseModal from 'components/BaseModal/BaseModal';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceAgendaItemsDeleteModalProps } from 'types/Agenda/interface';
-
+/**
+ * AgendaItemsDeleteModal
+ *
+ * A modal component for confirming the deletion of an agenda item.
+ *
+ * @param agendaItemDeleteModalIsOpen - Boolean to control modal visibility
+ * @param toggleDeleteModal - Function to close the modal
+ * @param deleteAgendaItemHandler - Function to execute the deletion logic
+ * @param t - Translation function
+ * @param tCommon - Common translation function
+ */
 const AgendaItemsDeleteModal: React.FC<
   InterfaceAgendaItemsDeleteModalProps
 > = ({
@@ -27,7 +31,7 @@ const AgendaItemsDeleteModal: React.FC<
       size="sm"
       className={styles.agendaItemModal}
       headerClassName="bg-primary"
-      useDefaultHeaderStyle={false}
+      //useDefaultHeaderStyle={false}
       footer={
         <>
           <Button

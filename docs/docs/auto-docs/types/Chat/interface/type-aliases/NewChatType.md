@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **NewChatType** = `object`
 
-Defined in: [src/types/Chat/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L3)
+Defined in: [src/types/Chat/interface.ts:3](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L3)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Chat/interface.ts:3](https://github.com/PalisadoesFoundat
 
 > `optional` **avatarMimeType**: `string`
 
-Defined in: [src/types/Chat/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L7)
+Defined in: [src/types/Chat/interface.ts:7](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L7)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Chat/interface.ts:7](https://github.com/PalisadoesFoundat
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/Chat/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L8)
+Defined in: [src/types/Chat/interface.ts:8](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L8)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Chat/interface.ts:8](https://github.com/PalisadoesFoundat
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Chat/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L10)
+Defined in: [src/types/Chat/interface.ts:10](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L10)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Chat/interface.ts:10](https://github.com/PalisadoesFounda
 
 > `optional` **creator**: `object`
 
-Defined in: [src/types/Chat/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L42)
+Defined in: [src/types/Chat/interface.ts:42](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L42)
 
 #### avatarMimeType?
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Chat/interface.ts:42](https://github.com/PalisadoesFounda
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/Chat/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L6)
+Defined in: [src/types/Chat/interface.ts:6](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L6)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Chat/interface.ts:6](https://github.com/PalisadoesFoundat
 
 > `optional` **firstUnreadMessageId**: `string`
 
-Defined in: [src/types/Chat/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L15)
+Defined in: [src/types/Chat/interface.ts:15](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L15)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [src/types/Chat/interface.ts:15](https://github.com/PalisadoesFounda
 
 > `optional` **hasUnread**: `boolean`
 
-Defined in: [src/types/Chat/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L14)
+Defined in: [src/types/Chat/interface.ts:14](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L14)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [src/types/Chat/interface.ts:14](https://github.com/PalisadoesFounda
 
 > **id**: `string`
 
-Defined in: [src/types/Chat/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L4)
+Defined in: [src/types/Chat/interface.ts:4](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L4)
 
 ***
 
@@ -94,7 +94,7 @@ Defined in: [src/types/Chat/interface.ts:4](https://github.com/PalisadoesFoundat
 
 > **isGroup**: `boolean`
 
-Defined in: [src/types/Chat/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L9)
+Defined in: [src/types/Chat/interface.ts:9](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L9)
 
 ***
 
@@ -102,7 +102,7 @@ Defined in: [src/types/Chat/interface.ts:9](https://github.com/PalisadoesFoundat
 
 > `optional` **lastMessage**: `object`
 
-Defined in: [src/types/Chat/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L16)
+Defined in: [src/types/Chat/interface.ts:16](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L16)
 
 #### body
 
@@ -174,7 +174,7 @@ Defined in: [src/types/Chat/interface.ts:16](https://github.com/PalisadoesFounda
 
 > **members**: `object`
 
-Defined in: [src/types/Chat/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L54)
+Defined in: [src/types/Chat/interface.ts:54](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L54)
 
 #### edges
 
@@ -186,7 +186,7 @@ Defined in: [src/types/Chat/interface.ts:54](https://github.com/PalisadoesFounda
 
 > **messages**: `object`
 
-Defined in: [src/types/Chat/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L68)
+Defined in: [src/types/Chat/interface.ts:68](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L68)
 
 #### edges
 
@@ -198,7 +198,7 @@ Defined in: [src/types/Chat/interface.ts:68](https://github.com/PalisadoesFounda
 
 > **name**: `string`
 
-Defined in: [src/types/Chat/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L5)
+Defined in: [src/types/Chat/interface.ts:5](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L5)
 
 ***
 
@@ -206,7 +206,7 @@ Defined in: [src/types/Chat/interface.ts:5](https://github.com/PalisadoesFoundat
 
 > `optional` **organization**: `object`
 
-Defined in: [src/types/Chat/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L37)
+Defined in: [src/types/Chat/interface.ts:37](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L37)
 
 #### countryCode?
 
@@ -226,7 +226,7 @@ Defined in: [src/types/Chat/interface.ts:37](https://github.com/PalisadoesFounda
 
 > `optional` **unreadMessagesCount**: `number`
 
-Defined in: [src/types/Chat/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L13)
+Defined in: [src/types/Chat/interface.ts:13](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L13)
 
 ***
 
@@ -234,7 +234,7 @@ Defined in: [src/types/Chat/interface.ts:13](https://github.com/PalisadoesFounda
 
 > **updatedAt**: `string` \| `null`
 
-Defined in: [src/types/Chat/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L11)
+Defined in: [src/types/Chat/interface.ts:11](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L11)
 
 ***
 
@@ -242,7 +242,7 @@ Defined in: [src/types/Chat/interface.ts:11](https://github.com/PalisadoesFounda
 
 > `optional` **updater**: `object`
 
-Defined in: [src/types/Chat/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L48)
+Defined in: [src/types/Chat/interface.ts:48](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L48)
 
 #### avatarMimeType?
 

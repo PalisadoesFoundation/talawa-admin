@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **PostUpdateInput** = `object`
 
-Defined in: [src/types/Post/type.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L54)
+Defined in: [src/types/Post/type.ts:54](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/type.ts#L54)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Post/type.ts:54](https://github.com/PalisadoesFoundation/
 
 > `optional` **imageUrl**: `string`
 
-Defined in: [src/types/Post/type.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L55)
+Defined in: [src/types/Post/type.ts:55](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/type.ts#L55)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Post/type.ts:55](https://github.com/PalisadoesFoundation/
 
 > `optional` **text**: `string`
 
-Defined in: [src/types/Post/type.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L56)
+Defined in: [src/types/Post/type.ts:56](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/type.ts#L56)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Post/type.ts:56](https://github.com/PalisadoesFoundation/
 
 > `optional` **title**: `string`
 
-Defined in: [src/types/Post/type.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L57)
+Defined in: [src/types/Post/type.ts:57](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/type.ts#L57)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/types/Post/type.ts:57](https://github.com/PalisadoesFoundation/
 
 > `optional` **videoUrl**: `string`
 
-Defined in: [src/types/Post/type.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L58)
+Defined in: [src/types/Post/type.ts:58](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Post/type.ts#L58)

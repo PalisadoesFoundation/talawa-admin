@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **sanitizeInput**(`input`): `string`
 
-Defined in: [src/utils/SanitizeInput.tsx:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/SanitizeInput.tsx#L8)
+Defined in: [src/utils/SanitizeInput.tsx:8](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/SanitizeInput.tsx#L8)
 
 Sanitizes user input to prevent XSS attacks
 Uses multiple passes and stricter pattern matching

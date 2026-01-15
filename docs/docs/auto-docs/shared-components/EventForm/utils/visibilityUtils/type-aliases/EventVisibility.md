@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **EventVisibility** = `"PUBLIC"` \| `"ORGANIZATION"` \| `"INVITE_ONLY"`
 
-Defined in: [src/shared-components/EventForm/utils/visibilityUtils.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EventForm/utils/visibilityUtils.ts#L11)
+Defined in: [src/shared-components/EventForm/utils/visibilityUtils.ts:11](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/shared-components/EventForm/utils/visibilityUtils.ts#L11)
 
 Represents the visibility level of an event.
 - PUBLIC: Visible to everyone

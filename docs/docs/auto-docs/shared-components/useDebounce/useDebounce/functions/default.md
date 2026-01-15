@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**\<`T`\>(`callback`, `delay`): `object`
 
-Defined in: [src/shared-components/useDebounce/useDebounce.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/useDebounce/useDebounce.tsx#L21)
+Defined in: [src/shared-components/useDebounce/useDebounce.tsx:21](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/shared-components/useDebounce/useDebounce.tsx#L21)
 
 ## Type Parameters
 

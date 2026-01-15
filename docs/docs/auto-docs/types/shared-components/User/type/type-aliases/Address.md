@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **Address** = `object`
 
-Defined in: [src/types/shared-components/User/type.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L17)
+Defined in: [src/types/shared-components/User/type.ts:17](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/User/type.ts#L17)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/shared-components/User/type.ts:17](https://github.com/Pal
 
 > `optional` **city**: `string`
 
-Defined in: [src/types/shared-components/User/type.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L18)
+Defined in: [src/types/shared-components/User/type.ts:18](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/User/type.ts#L18)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/User/type.ts:18](https://github.com/Pal
 
 > `optional` **countryCode**: `string`
 
-Defined in: [src/types/shared-components/User/type.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L19)
+Defined in: [src/types/shared-components/User/type.ts:19](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/User/type.ts#L19)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/User/type.ts:19](https://github.com/Pal
 
 > `optional` **dependentLocality**: `string`
 
-Defined in: [src/types/shared-components/User/type.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L20)
+Defined in: [src/types/shared-components/User/type.ts:20](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/User/type.ts#L20)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/User/type.ts:20](https://github.com/Pal
 
 > `optional` **line1**: `string`
 
-Defined in: [src/types/shared-components/User/type.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L21)
+Defined in: [src/types/shared-components/User/type.ts:21](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/User/type.ts#L21)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/shared-components/User/type.ts:21](https://github.com/Pal
 
 > `optional` **line2**: `string`
 
-Defined in: [src/types/shared-components/User/type.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L22)
+Defined in: [src/types/shared-components/User/type.ts:22](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/User/type.ts#L22)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/shared-components/User/type.ts:22](https://github.com/Pal
 
 > `optional` **postalCode**: `string`
 
-Defined in: [src/types/shared-components/User/type.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L23)
+Defined in: [src/types/shared-components/User/type.ts:23](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/User/type.ts#L23)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/shared-components/User/type.ts:23](https://github.com/Pal
 
 > `optional` **sortingCode**: `string`
 
-Defined in: [src/types/shared-components/User/type.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L24)
+Defined in: [src/types/shared-components/User/type.ts:24](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/User/type.ts#L24)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: [src/types/shared-components/User/type.ts:24](https://github.com/Pal
 
 > `optional` **state**: `string`
 
-Defined in: [src/types/shared-components/User/type.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L25)
+Defined in: [src/types/shared-components/User/type.ts:25](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/User/type.ts#L25)

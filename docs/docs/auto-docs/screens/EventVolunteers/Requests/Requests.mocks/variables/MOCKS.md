@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **MOCKS**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id?`: `undefined`; `orderBy?`: `undefined`; `status?`: `undefined`; `where`: \{ `eventId`: `string`; `status`: `string`; `userName?`: `undefined`; \}; \}; \}; `result`: \{ `data`: \{ `getVolunteerMembership`: `object`[]; `updateVolunteerMembership?`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id?`: `undefined`; `orderBy`: `string`; `status?`: `undefined`; `where`: \{ `eventId`: `string`; `status`: `string`; `userName?`: `undefined`; \}; \}; \}; `result`: \{ `data`: \{ `getVolunteerMembership`: `object`[]; `updateVolunteerMembership?`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id?`: `undefined`; `orderBy?`: `undefined`; `status?`: `undefined`; `where`: \{ `eventId`: `string`; `status`: `string`; `userName`: `string`; \}; \}; \}; `result`: \{ `data`: \{ `getVolunteerMembership`: `object`[]; `updateVolunteerMembership?`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id`: `string`; `orderBy?`: `undefined`; `status`: `string`; `where?`: `undefined`; \}; \}; `result`: \{ `data`: \{ `getVolunteerMembership?`: `undefined`; `updateVolunteerMembership`: \{ `__typename`: `string`; `id`: `string`; \}; \}; \}; \})[]
 
-Defined in: [src/screens/EventVolunteers/Requests/Requests.mocks.ts:131](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Requests/Requests.mocks.ts#L131)
+Defined in: [src/screens/EventVolunteers/Requests/Requests.mocks.ts:131](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/screens/EventVolunteers/Requests/Requests.mocks.ts#L131)

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **createAddress**: `object`
 
-Defined in: [src/screens/AdminPortal/Users/Organization.mocks.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Users/Organization.mocks.ts#L57)
+Defined in: [src/screens/AdminPortal/Users/Organization.mocks.ts:57](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/screens/AdminPortal/Users/Organization.mocks.ts#L57)
 
 ## Type Declaration
 

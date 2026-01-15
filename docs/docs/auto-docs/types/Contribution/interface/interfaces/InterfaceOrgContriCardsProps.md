@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceOrgContriCardsProps
 
-Defined in: [src/types/Contribution/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L8)
+Defined in: [src/types/Contribution/interface.ts:8](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Contribution/interface.ts#L8)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Contribution/interface.ts:8](https://github.com/Palisadoe
 
 > **contriAmount**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L13)
+Defined in: [src/types/Contribution/interface.ts:13](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Contribution/interface.ts#L13)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Contribution/interface.ts:13](https://github.com/Palisado
 
 > **contriDate**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L12)
+Defined in: [src/types/Contribution/interface.ts:12](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Contribution/interface.ts#L12)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Contribution/interface.ts:12](https://github.com/Palisado
 
 > **contriTransactionId**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L14)
+Defined in: [src/types/Contribution/interface.ts:14](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Contribution/interface.ts#L14)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Contribution/interface.ts:14](https://github.com/Palisado
 
 > **id**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L10)
+Defined in: [src/types/Contribution/interface.ts:10](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Contribution/interface.ts#L10)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Contribution/interface.ts:10](https://github.com/Palisado
 
 > **key**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L9)
+Defined in: [src/types/Contribution/interface.ts:9](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Contribution/interface.ts#L9)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Contribution/interface.ts:9](https://github.com/Palisadoe
 
 > **userEmail**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L15)
+Defined in: [src/types/Contribution/interface.ts:15](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Contribution/interface.ts#L15)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/types/Contribution/interface.ts:15](https://github.com/Palisado
 
 > **userName**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Contribution/interface.ts#L11)
+Defined in: [src/types/Contribution/interface.ts:11](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Contribution/interface.ts#L11)

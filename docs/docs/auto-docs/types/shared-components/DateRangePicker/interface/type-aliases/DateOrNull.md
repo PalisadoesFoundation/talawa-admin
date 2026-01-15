@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **DateOrNull** = `Date` \| `null`
 
-Defined in: [src/types/shared-components/DateRangePicker/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L20)
+Defined in: [src/types/shared-components/DateRangePicker/interface.ts:20](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/DateRangePicker/interface.ts#L20)
 
 DateRangePicker shared types
 

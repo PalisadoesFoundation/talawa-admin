@@ -110,7 +110,8 @@ describe('AgendaItemsDeleteModal', () => {
     // Test Escape key
     // BaseModal/Bootstrap Modal usually closes on Escape by default unless configured otherwise.
     // If the modal is open, pressing Escape should trigger the hide handler.
-    fireEvent.keyDown(screen.getByRole('dialog'), {
+    const dialogs = screen.getAllByRole('dialog');
+    fireEvent.keyDown(dialogs[0], {
       key: 'Escape',
       code: 'Escape',
     });
@@ -158,7 +159,8 @@ describe('AgendaItemsDeleteModal', () => {
     const { rerender } = renderComponent(true);
 
     // Verify initial open state
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
+    const dialogs = screen.getAllByRole('dialog');
+    expect(dialogs[0]).toBeInTheDocument();
 
     // Rerender with closed state
     rerender(
@@ -188,8 +190,8 @@ describe('AgendaItemsDeleteModal', () => {
     renderComponent();
 
     // Verify modal has correct ARIA attributes
-    const dialog = screen.getByRole('dialog');
-    expect(dialog).toHaveAttribute('aria-modal', 'true');
+    const dialogs = screen.getAllByRole('dialog');
+    expect(dialogs[0]).toHaveAttribute('aria-modal', 'true');
 
     // Verify buttons have accessible names
     const buttons = screen.getAllByRole('button');

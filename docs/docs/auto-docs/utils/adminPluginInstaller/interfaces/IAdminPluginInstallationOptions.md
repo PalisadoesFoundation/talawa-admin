@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
 # Interface: IAdminPluginInstallationOptions
 
-Defined in: [src/utils/adminPluginInstaller.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L45)
+Defined in: [src/utils/adminPluginInstaller.ts:45](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/adminPluginInstaller.ts#L45)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:45](https://github.com/Palisadoes
 
 > `optional` **apolloClient**: `ApolloClient`\<`NormalizedCacheObject`\>
 
-Defined in: [src/utils/adminPluginInstaller.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L48)
+Defined in: [src/utils/adminPluginInstaller.ts:48](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/adminPluginInstaller.ts#L48)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:48](https://github.com/Palisadoes
 
 > `optional` **backup**: `boolean`
 
-Defined in: [src/utils/adminPluginInstaller.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L47)
+Defined in: [src/utils/adminPluginInstaller.ts:47](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/adminPluginInstaller.ts#L47)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/utils/adminPluginInstaller.ts:47](https://github.com/Palisadoes
 
 > **zipFile**: `File`
 
-Defined in: [src/utils/adminPluginInstaller.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L46)
+Defined in: [src/utils/adminPluginInstaller.ts:46](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/adminPluginInstaller.ts#L46)

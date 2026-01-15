@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceRecurrenceDropdownProps`](../../../../../types/shared-components/RecurrenceDropdown/interface/interfaces/InterfaceRecurrenceDropdownProps.md)\>
 
-Defined in: [src/shared-components/EventForm/RecurrenceDropdown/RecurrenceDropdown.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EventForm/RecurrenceDropdown/RecurrenceDropdown.tsx#L16)
+Defined in: [src/shared-components/EventForm/RecurrenceDropdown/RecurrenceDropdown.tsx:16](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/shared-components/EventForm/RecurrenceDropdown/RecurrenceDropdown.tsx#L16)
 
 Renders a dropdown for selecting recurrence patterns.
 

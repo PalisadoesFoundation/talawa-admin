@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceStatusBadgeProps
 
-Defined in: [src/types/shared-components/StatusBadge/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/StatusBadge/interface.ts#L39)
+Defined in: [src/types/shared-components/StatusBadge/interface.ts:39](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/StatusBadge/interface.ts#L39)
 
 Props interface for the StatusBadge component.
 
@@ -14,7 +14,7 @@ Props interface for the StatusBadge component.
 
 > `optional` **ariaLabel**: `string`
 
-Defined in: [src/types/shared-components/StatusBadge/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/StatusBadge/interface.ts#L49)
+Defined in: [src/types/shared-components/StatusBadge/interface.ts:49](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/StatusBadge/interface.ts#L49)
 
 Custom aria-label for accessibility (optional, overrides default)
 
@@ -24,7 +24,7 @@ Custom aria-label for accessibility (optional, overrides default)
 
 > `optional` **className**: `string`
 
-Defined in: [src/types/shared-components/StatusBadge/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/StatusBadge/interface.ts#L51)
+Defined in: [src/types/shared-components/StatusBadge/interface.ts:51](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/StatusBadge/interface.ts#L51)
 
 Additional CSS classes to apply
 
@@ -34,7 +34,7 @@ Additional CSS classes to apply
 
 > `optional` **dataTestId**: `string`
 
-Defined in: [src/types/shared-components/StatusBadge/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/StatusBadge/interface.ts#L53)
+Defined in: [src/types/shared-components/StatusBadge/interface.ts:53](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/StatusBadge/interface.ts#L53)
 
 Test ID for component testing (forwarded as data-testid)
 
@@ -44,7 +44,7 @@ Test ID for component testing (forwarded as data-testid)
 
 > `optional` **icon**: `ReactNode`
 
-Defined in: [src/types/shared-components/StatusBadge/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/StatusBadge/interface.ts#L47)
+Defined in: [src/types/shared-components/StatusBadge/interface.ts:47](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/StatusBadge/interface.ts#L47)
 
 Optional icon to display in the badge
 
@@ -54,7 +54,7 @@ Optional icon to display in the badge
 
 > `optional` **label**: `string`
 
-Defined in: [src/types/shared-components/StatusBadge/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/StatusBadge/interface.ts#L45)
+Defined in: [src/types/shared-components/StatusBadge/interface.ts:45](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/StatusBadge/interface.ts#L45)
 
 Custom label text (optional, overrides i18n)
 
@@ -64,7 +64,7 @@ Custom label text (optional, overrides i18n)
 
 > `optional` **size**: [`StatusSize`](../type-aliases/StatusSize.md)
 
-Defined in: [src/types/shared-components/StatusBadge/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/StatusBadge/interface.ts#L43)
+Defined in: [src/types/shared-components/StatusBadge/interface.ts:43](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/StatusBadge/interface.ts#L43)
 
 The size of the badge (optional, defaults to 'md')
 
@@ -74,6 +74,6 @@ The size of the badge (optional, defaults to 'md')
 
 > **variant**: [`StatusVariant`](../type-aliases/StatusVariant.md)
 
-Defined in: [src/types/shared-components/StatusBadge/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/StatusBadge/interface.ts#L41)
+Defined in: [src/types/shared-components/StatusBadge/interface.ts:41](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/StatusBadge/interface.ts#L41)
 
 The domain-specific status variant

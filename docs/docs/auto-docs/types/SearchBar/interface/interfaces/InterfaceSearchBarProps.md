@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceSearchBarProps
 
-Defined in: [src/types/SearchBar/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L33)
+Defined in: [src/types/SearchBar/interface.ts:33](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L33)
 
 Strongly typed props for the shared SearchBar component.
 
@@ -18,7 +18,7 @@ Strongly typed props for the shared SearchBar component.
 
 > `optional` **buttonAriaLabel**: `string`
 
-Defined in: [src/types/SearchBar/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L77)
+Defined in: [src/types/SearchBar/interface.ts:77](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L77)
 
 Accessible label for the search button.
 
@@ -28,7 +28,7 @@ Accessible label for the search button.
 
 > `optional` **buttonClassName**: `string`
 
-Defined in: [src/types/SearchBar/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L55)
+Defined in: [src/types/SearchBar/interface.ts:55](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L55)
 
 Additional class applied to the search button.
 
@@ -38,7 +38,7 @@ Additional class applied to the search button.
 
 > `optional` **buttonLabel**: `string`
 
-Defined in: [src/types/SearchBar/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L75)
+Defined in: [src/types/SearchBar/interface.ts:75](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L75)
 
 Optional label shown inside the search button.
 
@@ -48,7 +48,7 @@ Optional label shown inside the search button.
 
 > `optional` **buttonTestId**: `string`
 
-Defined in: [src/types/SearchBar/interface.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L59)
+Defined in: [src/types/SearchBar/interface.ts:59](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L59)
 
 Button test id override.
 
@@ -58,7 +58,7 @@ Button test id override.
 
 > `optional` **className**: `string`
 
-Defined in: [src/types/SearchBar/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L51)
+Defined in: [src/types/SearchBar/interface.ts:51](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L51)
 
 Additional class applied to the container.
 
@@ -72,7 +72,7 @@ Additional class applied to the container.
 
 > `optional` **clearButtonAriaLabel**: `string`
 
-Defined in: [src/types/SearchBar/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L79)
+Defined in: [src/types/SearchBar/interface.ts:79](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L79)
 
 Accessible label for the clear button.
 
@@ -82,7 +82,7 @@ Accessible label for the clear button.
 
 > `optional` **clearButtonTestId**: `string`
 
-Defined in: [src/types/SearchBar/interface.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L61)
+Defined in: [src/types/SearchBar/interface.ts:61](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L61)
 
 Clear button test id override.
 
@@ -92,7 +92,7 @@ Clear button test id override.
 
 > `optional` **defaultValue**: `string`
 
-Defined in: [src/types/SearchBar/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L43)
+Defined in: [src/types/SearchBar/interface.ts:43](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L43)
 
 Initial value when used in uncontrolled mode.
 
@@ -106,7 +106,7 @@ Initial value when used in uncontrolled mode.
 
 > `optional` **icon**: `ReactNode`
 
-Defined in: [src/types/SearchBar/interface.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L83)
+Defined in: [src/types/SearchBar/interface.ts:83](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L83)
 
 Optional custom icon rendered inside the input field.
 
@@ -116,7 +116,7 @@ Optional custom icon rendered inside the input field.
 
 > `optional` **inputClassName**: `string`
 
-Defined in: [src/types/SearchBar/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L53)
+Defined in: [src/types/SearchBar/interface.ts:53](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L53)
 
 Additional class applied to the input element.
 
@@ -126,7 +126,7 @@ Additional class applied to the input element.
 
 > `optional` **inputTestId**: `string`
 
-Defined in: [src/types/SearchBar/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L57)
+Defined in: [src/types/SearchBar/interface.ts:57](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L57)
 
 Input test id override.
 
@@ -136,7 +136,7 @@ Input test id override.
 
 > `optional` **isLoading**: `boolean`
 
-Defined in: [src/types/SearchBar/interface.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L81)
+Defined in: [src/types/SearchBar/interface.ts:81](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L81)
 
 Renders a loading spinner inside the button when true.
 
@@ -146,7 +146,7 @@ Renders a loading spinner inside the button when true.
 
 > `optional` **onChange**: (`value`, `event?`) => `void`
 
-Defined in: [src/types/SearchBar/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L47)
+Defined in: [src/types/SearchBar/interface.ts:47](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L47)
 
 Callback fired whenever the input value changes.
 
@@ -170,7 +170,7 @@ Callback fired whenever the input value changes.
 
 > `optional` **onClear**: () => `void`
 
-Defined in: [src/types/SearchBar/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L49)
+Defined in: [src/types/SearchBar/interface.ts:49](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L49)
 
 Callback fired after the clear button is pressed.
 
@@ -184,7 +184,7 @@ Callback fired after the clear button is pressed.
 
 > `optional` **onSearch**: (`value`, `metadata?`) => `void`
 
-Defined in: [src/types/SearchBar/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L45)
+Defined in: [src/types/SearchBar/interface.ts:45](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L45)
 
 Callback invoked when the user submits a search via button, Enter, or clear.
 
@@ -208,7 +208,7 @@ Callback invoked when the user submits a search via button, Enter, or clear.
 
 > `optional` **placeholder**: `string`
 
-Defined in: [src/types/SearchBar/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L39)
+Defined in: [src/types/SearchBar/interface.ts:39](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L39)
 
 Placeholder text for the search input.
 
@@ -222,7 +222,7 @@ Placeholder text for the search input.
 
 > `optional` **showClearButton**: `boolean`
 
-Defined in: [src/types/SearchBar/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L69)
+Defined in: [src/types/SearchBar/interface.ts:69](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L69)
 
 Toggle visibility of the inline clear button. Defaults to true.
 
@@ -232,7 +232,7 @@ Toggle visibility of the inline clear button. Defaults to true.
 
 > `optional` **showLeadingIcon**: `boolean`
 
-Defined in: [src/types/SearchBar/interface.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L71)
+Defined in: [src/types/SearchBar/interface.ts:71](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L71)
 
 Toggle the leading search icon visibility. Defaults to false.
 
@@ -242,7 +242,7 @@ Toggle the leading search icon visibility. Defaults to false.
 
 > `optional` **showSearchButton**: `boolean`
 
-Defined in: [src/types/SearchBar/interface.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L67)
+Defined in: [src/types/SearchBar/interface.ts:67](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L67)
 
 Toggle visibility of the trailing search button. Defaults to true.
 
@@ -252,7 +252,7 @@ Toggle visibility of the trailing search button. Defaults to true.
 
 > `optional` **showTrailingIcon**: `boolean`
 
-Defined in: [src/types/SearchBar/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L73)
+Defined in: [src/types/SearchBar/interface.ts:73](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L73)
 
 Toggle the trailing search icon visibility. Defaults to false.
 
@@ -262,7 +262,7 @@ Toggle the trailing search icon visibility. Defaults to false.
 
 > `optional` **size**: [`SearchBarSize`](../../type/type-aliases/SearchBarSize.md)
 
-Defined in: [src/types/SearchBar/interface.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L63)
+Defined in: [src/types/SearchBar/interface.ts:63](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L63)
 
 Visual size of the component.
 
@@ -272,7 +272,7 @@ Visual size of the component.
 
 > `optional` **value**: `string`
 
-Defined in: [src/types/SearchBar/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L41)
+Defined in: [src/types/SearchBar/interface.ts:41](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L41)
 
 Controlled input value.
 
@@ -286,6 +286,6 @@ Controlled input value.
 
 > `optional` **variant**: [`SearchBarVariant`](../../type/type-aliases/SearchBarVariant.md)
 
-Defined in: [src/types/SearchBar/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L65)
+Defined in: [src/types/SearchBar/interface.ts:65](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/SearchBar/interface.ts#L65)
 
 Visual variant of the component.

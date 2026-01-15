@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **EventAttendeeInput** = `object`
 
-Defined in: [src/types/Event/type.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L78)
+Defined in: [src/types/Event/type.ts:78](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L78)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Event/type.ts:78](https://github.com/PalisadoesFoundation
 
 > **eventId**: `string`
 
-Defined in: [src/types/Event/type.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L79)
+Defined in: [src/types/Event/type.ts:79](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L79)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/types/Event/type.ts:79](https://github.com/PalisadoesFoundation
 
 > **userId**: `string`
 
-Defined in: [src/types/Event/type.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L80)
+Defined in: [src/types/Event/type.ts:80](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Event/type.ts#L80)

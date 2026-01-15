@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_DRAG\_DROP\_ERROR**: `object`[]
 
-Defined in: [src/components/AgendaItems/AgendaItemsMocks.ts:287](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/AgendaItemsMocks.ts#L287)
+Defined in: [src/components/AgendaItems/AgendaItemsMocks.ts:287](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/components/AgendaItems/AgendaItemsMocks.ts#L287)
 
 ## Type Declaration
 

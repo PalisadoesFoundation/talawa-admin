@@ -1,9 +1,3 @@
-/**
- * VolunteerDeleteModal Component
- *
- * This component renders a modal for confirming the deletion of a volunteer.
- * It provides options to either confirm or cancel the deletion process.
- */
 import { Button, Form } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import React, { useState } from 'react';
@@ -26,7 +20,18 @@ export interface InterfaceDeleteVolunteerModal {
   isRecurring?: boolean;
   eventId?: string;
 }
-
+/**
+ * VolunteerDeleteModal
+ *
+ * A modal component used to confirm and handle the deletion of a specific volunteer.
+ *
+ * @param isOpen - Boolean to control modal visibility
+ * @param hide - Function to close the modal
+ * @param volunteer - The volunteer object to be deleted
+ * @param refetchVolunteers - Callback to refresh the list after deletion
+ * @param isRecurring - (Optional) Whether the event is recurring
+ * @param eventId - (Optional) The ID of the specific event instance
+ */
 const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
   isOpen,
   hide,
@@ -69,7 +74,7 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
       NotificationToast.error((error as Error).message);
     }
   };
-  const customHeader = (
+  const headerContent = (
     <>
       <p className={styles.titlemodal}> {t('removeVolunteer')}</p>
       <Button
@@ -90,7 +95,7 @@ const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
       onHide={hide}
       title={t('removeVolunteer')}
       className={styles.volunteerModal}
-      customHeader={customHeader}
+      headerContent={headerContent}
       centered={false}
       backdrop={true}
       footer={

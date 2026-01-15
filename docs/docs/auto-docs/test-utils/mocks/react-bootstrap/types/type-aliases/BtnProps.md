@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > **BtnProps** = `React.PropsWithChildren`\<`React.ButtonHTMLAttributes`\<`HTMLButtonElement`\> & `object`\>
 
-Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/mocks/react-bootstrap/types.ts#L6)
+Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:6](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/test-utils/mocks/react-bootstrap/types.ts#L6)

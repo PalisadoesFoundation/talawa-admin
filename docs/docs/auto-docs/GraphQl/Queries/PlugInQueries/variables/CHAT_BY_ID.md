@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **CHAT\_BY\_ID**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/PlugInQueries.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L54)
+Defined in: [src/GraphQl/Queries/PlugInQueries.ts:54](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/GraphQl/Queries/PlugInQueries.ts#L54)
 
 GraphQL query to retrieve a list of chats based on user ID.
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **ProfileAvatarDisplay**(`imageUrl`): `Element`
 
-Defined in: [src/shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay.tsx#L41)
+Defined in: [src/shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay.tsx:41](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay.tsx#L41)
 
 ProfileAvatarDisplay component renders a profile avatar based on the provided properties.
 It handles image loading errors and falls back to an initial-based avatar.

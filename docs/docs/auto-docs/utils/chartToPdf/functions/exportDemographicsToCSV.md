@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **exportDemographicsToCSV**(`selectedCategory`, `categoryLabels`, `categoryData`): `void`
 
-Defined in: [src/utils/chartToPdf.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/chartToPdf.ts#L80)
+Defined in: [src/utils/chartToPdf.ts:80](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/utils/chartToPdf.ts#L80)
 
 ## Parameters
 

@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
 # Interface: InterfaceGroupChatDetailsProps
 
-Defined in: [src/types/Chat/interface.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L100)
+Defined in: [src/types/Chat/interface.ts:100](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L100)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Chat/interface.ts:100](https://github.com/PalisadoesFound
 
 > **chat**: [`NewChatType`](../type-aliases/NewChatType.md)
 
-Defined in: [src/types/Chat/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L103)
+Defined in: [src/types/Chat/interface.ts:103](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L103)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Chat/interface.ts:103](https://github.com/PalisadoesFound
 
 > **chatRefetch**: (`variables?`) => `Promise`\<`ApolloQueryResult`\<\{ `chat`: [`NewChatType`](../type-aliases/NewChatType.md); \}\>\>
 
-Defined in: [src/types/Chat/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L104)
+Defined in: [src/types/Chat/interface.ts:104](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L104)
 
 #### Parameters
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Chat/interface.ts:104](https://github.com/PalisadoesFound
 
 > **groupChatDetailsModalisOpen**: `boolean`
 
-Defined in: [src/types/Chat/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L102)
+Defined in: [src/types/Chat/interface.ts:102](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L102)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Chat/interface.ts:102](https://github.com/PalisadoesFound
 
 > **toggleGroupChatDetailsModal**: () => `void`
 
-Defined in: [src/types/Chat/interface.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L101)
+Defined in: [src/types/Chat/interface.ts:101](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/Chat/interface.ts#L101)
 
 #### Returns
 

@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../README.md)
 
 ***
 
 # Interface: IPluginModalProps
 
-Defined in: [src/plugin/types.ts:167](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L167)
+Defined in: [src/plugin/types.ts:167](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L167)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:167](https://github.com/PalisadoesFoundation/ta
 
 > **getInstalledPlugin**: (`pluginName`) => [`IInstalledPlugin`](IInstalledPlugin.md)
 
-Defined in: [src/plugin/types.ts:174](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L174)
+Defined in: [src/plugin/types.ts:174](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L174)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [src/plugin/types.ts:174](https://github.com/PalisadoesFoundation/ta
 
 > **installPlugin**: (`plugin`) => `void`
 
-Defined in: [src/plugin/types.ts:175](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L175)
+Defined in: [src/plugin/types.ts:175](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L175)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Defined in: [src/plugin/types.ts:175](https://github.com/PalisadoesFoundation/ta
 
 > **isInstalled**: (`pluginName`) => `boolean`
 
-Defined in: [src/plugin/types.ts:173](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L173)
+Defined in: [src/plugin/types.ts:173](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L173)
 
 #### Parameters
 
@@ -66,7 +66,7 @@ Defined in: [src/plugin/types.ts:173](https://github.com/PalisadoesFoundation/ta
 
 > **loading**: `boolean`
 
-Defined in: [src/plugin/types.ts:172](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L172)
+Defined in: [src/plugin/types.ts:172](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L172)
 
 ***
 
@@ -74,7 +74,7 @@ Defined in: [src/plugin/types.ts:172](https://github.com/PalisadoesFoundation/ta
 
 > **meta**: [`IPluginMeta`](IPluginMeta.md)
 
-Defined in: [src/plugin/types.ts:171](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L171)
+Defined in: [src/plugin/types.ts:171](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L171)
 
 ***
 
@@ -82,7 +82,7 @@ Defined in: [src/plugin/types.ts:171](https://github.com/PalisadoesFoundation/ta
 
 > **onHide**: () => `void`
 
-Defined in: [src/plugin/types.ts:169](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L169)
+Defined in: [src/plugin/types.ts:169](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L169)
 
 #### Returns
 
@@ -94,7 +94,7 @@ Defined in: [src/plugin/types.ts:169](https://github.com/PalisadoesFoundation/ta
 
 > **pluginId**: `string`
 
-Defined in: [src/plugin/types.ts:170](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L170)
+Defined in: [src/plugin/types.ts:170](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L170)
 
 ***
 
@@ -102,7 +102,7 @@ Defined in: [src/plugin/types.ts:170](https://github.com/PalisadoesFoundation/ta
 
 > **show**: `boolean`
 
-Defined in: [src/plugin/types.ts:168](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L168)
+Defined in: [src/plugin/types.ts:168](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L168)
 
 ***
 
@@ -110,7 +110,7 @@ Defined in: [src/plugin/types.ts:168](https://github.com/PalisadoesFoundation/ta
 
 > **togglePluginStatus**: (`plugin`, `status`) => `void`
 
-Defined in: [src/plugin/types.ts:176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L176)
+Defined in: [src/plugin/types.ts:176](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L176)
 
 #### Parameters
 
@@ -132,7 +132,7 @@ Defined in: [src/plugin/types.ts:176](https://github.com/PalisadoesFoundation/ta
 
 > **uninstallPlugin**: (`plugin`) => `void`
 
-Defined in: [src/plugin/types.ts:180](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L180)
+Defined in: [src/plugin/types.ts:180](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/plugin/types.ts#L180)
 
 #### Parameters
 

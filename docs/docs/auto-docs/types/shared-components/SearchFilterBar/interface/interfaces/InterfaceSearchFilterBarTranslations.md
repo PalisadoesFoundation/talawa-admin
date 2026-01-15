@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: InterfaceSearchFilterBarTranslations
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:343](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L343)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:343](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/SearchFilterBar/interface.ts#L343)
 
 Optional translation overrides for SearchFilterBar component.
 Allows parent components to customize internal translations while
@@ -16,7 +16,7 @@ providing sensible defaults for accessibility and common UI elements.
 
 > `optional` **clearButtonAriaLabel**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:351](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L351)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:351](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/SearchFilterBar/interface.ts#L351)
 
 Clear button accessible label (screen readers)
 
@@ -26,7 +26,7 @@ Clear button accessible label (screen readers)
 
 > `optional` **clearSearchLabel**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:348](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L348)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:348](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/SearchFilterBar/interface.ts#L348)
 
 Clear search button text/label
 
@@ -36,7 +36,7 @@ Clear search button text/label
 
 > `optional` **dropdownAriaLabel**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:363](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L363)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:363](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/SearchFilterBar/interface.ts#L363)
 
 Dropdown toggle accessible label pattern
 
@@ -46,7 +46,7 @@ Dropdown toggle accessible label pattern
 
 > `optional` **filterAndSortOptionsLabel**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:372](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L372)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:372](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/SearchFilterBar/interface.ts#L372)
 
 Filter and sort options toolbar accessible label
 
@@ -56,7 +56,7 @@ Filter and sort options toolbar accessible label
 
 > `optional` **filterButtonAriaLabel**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:369](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L369)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:369](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/SearchFilterBar/interface.ts#L369)
 
 Filter button accessible label
 
@@ -66,7 +66,7 @@ Filter button accessible label
 
 > `optional` **loadingLabel**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:354](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L354)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:354](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/SearchFilterBar/interface.ts#L354)
 
 Loading state text
 
@@ -76,7 +76,7 @@ Loading state text
 
 > `optional` **noResultsLabel**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:357](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L357)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:357](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/SearchFilterBar/interface.ts#L357)
 
 No results found message
 
@@ -86,7 +86,7 @@ No results found message
 
 > `optional` **searchButtonAriaLabel**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:345](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L345)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:345](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/SearchFilterBar/interface.ts#L345)
 
 Search button accessible label (screen readers)
 
@@ -96,7 +96,7 @@ Search button accessible label (screen readers)
 
 > `optional` **searchInputAriaDescription**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:360](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L360)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:360](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/SearchFilterBar/interface.ts#L360)
 
 Search input accessible description
 
@@ -106,6 +106,6 @@ Search input accessible description
 
 > `optional` **sortButtonAriaLabel**: `string`
 
-Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:366](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L366)
+Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:366](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/types/shared-components/SearchFilterBar/interface.ts#L366)
 
 Sort button accessible label

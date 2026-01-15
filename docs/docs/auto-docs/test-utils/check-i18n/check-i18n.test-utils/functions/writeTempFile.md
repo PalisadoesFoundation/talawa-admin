@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **writeTempFile**(`dir`, `relPath`, `content`): `string`
 
-Defined in: [src/test-utils/check-i18n/check-i18n.test-utils.js:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/check-i18n/check-i18n.test-utils.js#L87)
+Defined in: [src/test-utils/check-i18n/check-i18n.test-utils.js:87](https://github.com/Anshikaaa06/talawa-admin/blob/9e54ad8a0be6c052a435c30f5a6bbbad9b905bb5/src/test-utils/check-i18n/check-i18n.test-utils.js#L87)
 
 ## Parameters
 
