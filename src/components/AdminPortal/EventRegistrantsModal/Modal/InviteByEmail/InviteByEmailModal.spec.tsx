@@ -368,4 +368,108 @@ describe('InviteByEmailModal', () => {
       expect(screen.getByTestId('invite-submit')).not.toBeDisabled();
     });
   });
+
+  describe('ExpiresInDays Field', () => {
+    it('should accept valid number input', () => {
+      renderComponent();
+      const expiresInput = screen.getByTestId(
+        'invite-expires',
+      ) as HTMLInputElement;
+
+      fireEvent.change(expiresInput, { target: { value: '14' } });
+
+      expect(expiresInput.value).toBe('14');
+    });
+
+    it('should reset to 7 when input is NaN', () => {
+      renderComponent();
+      const expiresInput = screen.getByTestId(
+        'invite-expires',
+      ) as HTMLInputElement;
+
+      fireEvent.change(expiresInput, { target: { value: 'abc' } });
+
+      expect(expiresInput.value).toBe('7');
+    });
+
+    it('should reset to 7 when input is less than 1', () => {
+      renderComponent();
+      const expiresInput = screen.getByTestId(
+        'invite-expires',
+      ) as HTMLInputElement;
+
+      fireEvent.change(expiresInput, { target: { value: '0' } });
+
+      expect(expiresInput.value).toBe('7');
+    });
+
+    it('should reset to 7 when input is negative', () => {
+      renderComponent();
+      const expiresInput = screen.getByTestId(
+        'invite-expires',
+      ) as HTMLInputElement;
+
+      fireEvent.change(expiresInput, { target: { value: '-5' } });
+
+      expect(expiresInput.value).toBe('7');
+    });
+  });
+
+  describe('Default Parameters', () => {
+    it('should use default isRecurring=false when not provided', async () => {
+      const propsWithoutIsRecurring = {
+        show: true,
+        handleClose: mockHandleClose,
+        eventId: 'test-event-1',
+        onInvitesSent: mockOnInvitesSent,
+      };
+
+      const successMock: MockedResponse = {
+        request: {
+          query: SEND_EVENT_INVITATIONS,
+          variables: {
+            input: {
+              eventId: 'test-event-1',
+              recurringEventInstanceId: null, // Should be null when isRecurring defaults to false
+              message: null,
+              expiresInDays: 7,
+              recipients: [{ email: 'test@example.com', name: '' }],
+            },
+          },
+        },
+        result: {
+          data: {
+            sendEventInvitations: {
+              id: '1',
+              eventId: 'test-event-1',
+              recurringEventInstanceId: null,
+              invitedBy: 'user1',
+              userId: 'user2',
+              inviteeEmail: 'test@example.com',
+              inviteeName: '',
+              invitationToken: 'token123',
+              status: 'PENDING',
+              expiresAt: dayjs().add(1, 'year').format('YYYY-MM-DD'),
+              respondedAt: null,
+              metadata: null,
+              createdAt: dayjs().format('YYYY-MM-DD'),
+              updatedAt: dayjs().format('YYYY-MM-DD'),
+            },
+          },
+        },
+      };
+
+      renderComponent(propsWithoutIsRecurring, [successMock]);
+      const user = userEvent.setup();
+
+      await user.type(screen.getByLabelText('Email'), 'test@example.com');
+      fireEvent.click(screen.getByTestId('invite-submit'));
+
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          'Invites sent successfully',
+        );
+      });
+    });
+  });
 });

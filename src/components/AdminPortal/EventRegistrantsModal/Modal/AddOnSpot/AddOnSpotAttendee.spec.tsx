@@ -305,4 +305,27 @@ describe('AddOnSpotAttendee Component', () => {
       expect(mockProps.handleClose).toHaveBeenCalled();
     });
   });
+
+  it('displays error when email format is invalid', async () => {
+    renderAddOnSpotAttendee();
+
+    await userEvent.type(screen.getByLabelText('First Name'), 'John');
+    await userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
+    await userEvent.type(screen.getByLabelText('Email'), 'invalid-email'); // Invalid email format
+    await userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
+    const genderSelect = screen.getByLabelText('Gender');
+    fireEvent.change(genderSelect, { target: { value: 'Male' } });
+
+    fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Invalid email format',
+      );
+    });
+
+    // Ensure form was not submitted
+    expect(mockProps.reloadMembers).not.toHaveBeenCalled();
+    expect(mockProps.handleClose).not.toHaveBeenCalled();
+  });
 });
