@@ -24,9 +24,7 @@ import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { UserPortalNavigationBar } from 'components/UserPortal/UserPortalNavigationBar/UserPortalNavigationBar';
 
 const UserGlobalScreen = (): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userGlobalScreen',
-  });
+  const { t } = useTranslation('translation');
   const [hideDrawer, setHideDrawer] = useState<boolean>(false);
 
   /**
