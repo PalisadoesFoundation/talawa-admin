@@ -153,6 +153,7 @@ export function CursorPaginationManager<
     null,
   );
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [isRefetching, setIsRefetching] = useState(false);
   const previousRefetchTrigger = useRef(refetchTrigger);
   const generationRef = useRef(0);
   const isMounted = useRef(true);
@@ -254,9 +255,9 @@ export function CursorPaginationManager<
   const handleRefetch = useCallback(async () => {
     // Increment generation to invalidate any pending fetchMore requests
     generationRef.current += 1;
-    setItems([]);
     setPageInfo(null);
     setIsLoadingMore(false);
+    setIsRefetching(true);
 
     try {
       await refetch({
@@ -266,6 +267,8 @@ export function CursorPaginationManager<
       } as PaginationVariables<TVariables>);
     } catch (err) {
       console.error('Error refetching data:', err);
+    } finally {
+      setIsRefetching(false);
     }
   }, [refetch, queryVariables, itemsPerPage]);
 
@@ -301,8 +304,8 @@ export function CursorPaginationManager<
     );
   }
 
-  // Loading state (initial load)
-  if (loading && !items.length) {
+  // Loading state (initial load or refetching)
+  if ((loading || isRefetching) && !items.length) {
     if (loadingComponent) {
       return <>{loadingComponent}</>;
     }
@@ -319,7 +322,7 @@ export function CursorPaginationManager<
   }
 
   // Empty state
-  if (!loading && !items.length) {
+  if (!loading && !isRefetching && !items.length) {
     if (emptyStateComponent) {
       return <>{emptyStateComponent}</>;
     }
