@@ -141,22 +141,29 @@ describe('InviteByEmailModal', () => {
     expect(screen.queryByText('Remove')).not.toBeInTheDocument();
   });
 
-  it('updates state when user types in the fields', async () => {
+  it('updates state correctly with multiple recipients', async () => {
     renderComponent();
     const user = userEvent.setup();
 
-    const emailInput = screen.getByLabelText('Email');
-    const nameInput = screen.getByLabelText('Name');
-    const expiresInput = screen.getByTestId('invite-expires');
+    // Add a second recipient
+    await user.click(screen.getByText('Add recipient'));
+    const emailInputs = screen.getAllByLabelText('Email');
+    const nameInputs = screen.getAllByLabelText('Name');
 
-    await user.type(emailInput, 'test@example.com');
-    await user.type(nameInput, 'Test User');
-    await user.clear(expiresInput);
-    await user.type(expiresInput, '10');
+    expect(emailInputs).toHaveLength(2);
 
-    expect(emailInput).toHaveValue('test@example.com');
-    expect(nameInput).toHaveValue('Test User');
-    expect(expiresInput).toHaveValue(10);
+    // Update first recipient (id mismatch for second during map)
+    await user.type(emailInputs[0], 'user1@example.com');
+    await user.type(nameInputs[0], 'User One');
+
+    // Update second recipient (id mismatch for first during map)
+    await user.type(emailInputs[1], 'user2@example.com');
+    await user.type(nameInputs[1], 'User Two');
+
+    expect(emailInputs[0]).toHaveValue('user1@example.com');
+    expect(nameInputs[0]).toHaveValue('User One');
+    expect(emailInputs[1]).toHaveValue('user2@example.com');
+    expect(nameInputs[1]).toHaveValue('User Two');
   });
 
   describe('Form Submission', () => {
