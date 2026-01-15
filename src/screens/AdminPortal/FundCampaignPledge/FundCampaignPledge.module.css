@@ -14,12 +14,6 @@
   font-size: var(--font-size-4xl);
   color: var(--color-red-500);
   margin-bottom: var(--space-5);
-
-  /* Add error icon for non-color indication */
-  &::before {
-    content: '⚠️';
-    margin-right: var(--space-3);
-  }
 }
 
 .overviewContainer {
