@@ -1,4 +1,3 @@
-import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
@@ -133,6 +132,8 @@ describe('CategorySelector', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Category Two')).toBeInTheDocument();
+      expect(screen.queryByText('Category One')).not.toBeInTheDocument();
+      expect(screen.queryByText('Category Three')).not.toBeInTheDocument();
     });
   });
 
