@@ -193,5 +193,144 @@ describe('CategorySelector', () => {
     await waitFor(() => {
       expect(screen.getByRole('listbox')).toBeInTheDocument();
     });
+
+    // Select option via Enter key
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Category One')).toBeInTheDocument();
+    });
+  });
+
+  it('allows keyboard selection with Enter key', async () => {
+    const onCategoryChange = vi.fn();
+    renderComponent(mockCategories, null, onCategoryChange);
+
+    const user = userEvent.setup();
+    const input = screen.getByRole('combobox');
+
+    await user.click(input);
+    await user.keyboard('{ArrowDown}{ArrowDown}{Enter}');
+
+    expect(onCategoryChange).toHaveBeenCalledWith(mockCategories[1]);
+  });
+
+  it('displays disabled category in dropdown', async () => {
+    renderComponent();
+
+    const user = userEvent.setup();
+    const input = screen.getByRole('combobox');
+    await user.click(input);
+
+    // Verify disabled category (Category Three with isDisabled: true) is rendered in dropdown
+    await waitFor(() => {
+      expect(screen.getByText('Category Three')).toBeInTheDocument();
+    });
+  });
+
+  it('allows selecting disabled category', async () => {
+    const onCategoryChange = vi.fn();
+    renderComponent(mockCategories, null, onCategoryChange);
+
+    const user = userEvent.setup();
+    const input = screen.getByRole('combobox');
+    await user.click(input);
+
+    await waitFor(() => {
+      expect(screen.getByText('Category Three')).toBeInTheDocument();
+    });
+
+    // Click the disabled category - component doesn't filter disabled categories
+    await user.click(screen.getByText('Category Three'));
+
+    expect(onCategoryChange).toHaveBeenCalledWith(mockCategories[2]);
+  });
+
+  it('closes dropdown with Escape key', async () => {
+    renderComponent();
+
+    const user = userEvent.setup();
+    const input = screen.getByRole('combobox');
+    await user.click(input);
+
+    // Verify dropdown is open
+    await waitFor(() => {
+      expect(screen.getByRole('listbox')).toBeInTheDocument();
+    });
+
+    // Press Escape to close
+    await user.keyboard('{Escape}');
+
+    await waitFor(() => {
+      expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    });
+  });
+
+  it('navigates options with ArrowUp and ArrowDown keys', async () => {
+    renderComponent();
+
+    const user = userEvent.setup();
+    const input = screen.getByRole('combobox');
+    await user.click(input);
+
+    await waitFor(() => {
+      expect(screen.getByRole('listbox')).toBeInTheDocument();
+    });
+
+    // Navigate down twice then up once
+    await user.keyboard('{ArrowDown}{ArrowDown}{ArrowUp}');
+
+    // Verify we can still select with Enter
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => {
+      expect(screen.getByDisplayValue('Category One')).toBeInTheDocument();
+    });
+  });
+
+  it('does not call onCategoryChange when dropdown is closed without selection', async () => {
+    const onCategoryChange = vi.fn();
+    renderComponent(mockCategories, null, onCategoryChange);
+
+    const user = userEvent.setup();
+    const input = screen.getByRole('combobox');
+    await user.click(input);
+
+    await waitFor(() => {
+      expect(screen.getByRole('listbox')).toBeInTheDocument();
+    });
+
+    // Close without selecting
+    await user.keyboard('{Escape}');
+
+    expect(onCategoryChange).not.toHaveBeenCalled();
+  });
+
+  it('maintains selected value when reopening dropdown', async () => {
+    const onCategoryChange = vi.fn();
+    renderComponent(mockCategories, mockCategories[0], onCategoryChange);
+
+    const user = userEvent.setup();
+    const input = screen.getByRole('combobox');
+
+    // Open dropdown
+    await user.click(input);
+    await waitFor(() => {
+      expect(screen.getByRole('listbox')).toBeInTheDocument();
+    });
+
+    // Close without changing
+    await user.keyboard('{Escape}');
+
+    // Value should still be displayed
+    expect(screen.getByDisplayValue('Category One')).toBeInTheDocument();
+  });
+
+  it('uses correct test id for integration testing', () => {
+    renderComponent();
+
+    const autocomplete = screen.getByTestId('categorySelect');
+    expect(autocomplete).toBeInTheDocument();
+    expect(autocomplete).toHaveAttribute('data-cy', 'categorySelect');
   });
 });
