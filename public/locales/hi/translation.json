@@ -1905,8 +1905,8 @@
       "errorSendingInvites": "निमंत्रण भेजने में त्रुटि",
       "emailsLabel": "प्राप्तकर्ता ईमेल और नाम",
       "emailsHelp": "प्रत्येक प्राप्तकर्ता के लिए ईमेल और वैकल्पिक नाम प्रदान करें। आवश्यकतानुसार कई प्राप्तकर्ता जोड़ें।",
-      "noRecipientsError": "Please provide at least one recipient email",
-      "invalidEmailsError": "Invalid email(s): {{emails}}"
+      "noRecipientsError": "कृपया कम से कम एक प्राप्तकर्ता ईमेल प्रदान करें",
+      "invalidEmailsError": "अमान्य ईमेल: {{emails}}"
     }
   },
   "userCampaigns": {

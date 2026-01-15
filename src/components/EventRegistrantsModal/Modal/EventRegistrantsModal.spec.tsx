@@ -111,7 +111,7 @@ const defaultProps = {
   show: true,
   eventId: 'event123',
   orgId: 'org123',
-  handleClose: () => {},
+  handleClose: () => { },
 };
 
 const makeAttendeesEmptyMock = (): ApolloMock => ({
@@ -334,7 +334,7 @@ describe('EventRegistrantsModal', () => {
     // Assert NotificationToast was called (it's mocked)
     await waitFor(() => {
       expect(NotificationToast.warning).toHaveBeenCalledWith(
-        'Please choose an user to add first!',
+        'Please choose a user to add first!',
       );
     });
   });

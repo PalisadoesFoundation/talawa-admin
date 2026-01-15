@@ -1888,8 +1888,8 @@
       "errorSendingInvites": "Error al enviar invitaciones",
       "emailsLabel": "Correos electrónicos y nombres de destinatarios",
       "emailsHelp": "Proporcione el correo electrónico y el nombre opcional para cada destinatario. Agregue varios destinatarios según sea necesario.",
-      "noRecipientsError": "Please provide at least one recipient email",
-      "invalidEmailsError": "Invalid email(s): {{emails}}"
+      "noRecipientsError": "Por favor proporcione al menos un correo electrónico de destinatario",
+      "invalidEmailsError": "Correo(s) electrónico(s) inválido(s): {{emails}}"
     }
   },
   "userCampaigns": {
