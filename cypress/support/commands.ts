@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 export {};
+
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
@@ -7,6 +8,7 @@ declare global {
        * @param role - The user role (e.g., 'superadmin', 'admin', 'user')
        */
       loginByApi(role: string): Chainable<Subject>;
+
       /**
        * @param expectedMessage The expected text (string or RegExp)
        */
@@ -24,6 +26,7 @@ Cypress.Commands.add('loginByApi', (role: string) => {
       if (!user) {
         throw new Error(`User role "${role}" not found in users fixture`);
       }
+
       const loginPath = role === 'user' ? '/' : '/admin';
       cy.visit(loginPath);
       cy.get('[data-cy="loginEmail"]').type(user.email);
@@ -42,5 +45,13 @@ Cypress.Commands.add('loginByApi', (role: string) => {
 Cypress.Commands.add('assertToast', (expectedMessage: string | RegExp) => {
   cy.get('[role=alert]', { timeout: 5000 })
     .should('be.visible')
-    .and('contain.text', expectedMessage);
+    .then(($el) => {
+      const text = $el.text();
+
+      if (expectedMessage instanceof RegExp) {
+        expect(text).to.match(expectedMessage);
+      } else {
+        expect(text).to.contain(expectedMessage);
+      }
+    });
 });
