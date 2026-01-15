@@ -271,6 +271,7 @@ describe('adminPluginInstaller', () => {
     });
 
     it('should handle database creation errors gracefully', async () => {
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
       const mockFile = new File([''], 'test.zip');
 
       const manifest = {
@@ -300,9 +301,12 @@ describe('adminPluginInstaller', () => {
       // Accept the actual error message thrown by the implementation
       expect(result.success).toBe(false);
       expect(result.error).toMatch(/Failed to create plugin in database/);
+
+      errorSpy.mockRestore();
     });
 
     it('should handle invalid admin plugin structure', async () => {
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
       const mockFile = new File([''], 'test.zip');
 
       const mockManifest = {
@@ -335,9 +339,12 @@ describe('adminPluginInstaller', () => {
 
       expect(result.success).toBe(false);
       expect(result.error).toMatch(/Invalid admin plugin structure/);
+
+      errorSpy.mockRestore();
     });
 
     it('should handle admin file service returning failure', async () => {
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
       const mockFile = new File([''], 'test.zip');
 
       const mockManifest = {
@@ -373,6 +380,8 @@ describe('adminPluginInstaller', () => {
 
       expect(result.success).toBe(false);
       expect(result.error).toMatch(/Failed to install admin plugin/);
+
+      errorSpy.mockRestore();
     });
 
     // API installation catch block
@@ -402,7 +411,7 @@ describe('adminPluginInstaller', () => {
       });
 
       // API upload fails (this triggers the uncovered catch block)
-      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
       mockApolloClient.mutate.mockRejectedValueOnce(new Error('upload failed'));
 
       const result = await installAdminPluginFromZip({
@@ -521,7 +530,7 @@ describe('adminPluginInstaller', () => {
     });
 
     it('should return empty array and log error when getInstalledPlugins throws', async () => {
-      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
       mockAdminPluginFileService.getInstalledPlugins.mockRejectedValue(
         new Error('fail'),
       );
@@ -547,7 +556,7 @@ describe('adminPluginInstaller', () => {
     });
 
     it('should return false when removal returns false', async () => {
-      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
       mockAdminPluginFileService.removePlugin.mockResolvedValue(false);
       const result = await removeAdminPlugin('TestPlugin');
       expect(result).toBe(false);
@@ -559,7 +568,7 @@ describe('adminPluginInstaller', () => {
     });
 
     it('should return false and log error if removePlugin throws', async () => {
-      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
       mockAdminPluginFileService.removePlugin.mockRejectedValue(
         new Error('fail'),
       );
@@ -592,7 +601,7 @@ describe('adminPluginInstaller', () => {
   // Edge & fallback error coverage
   describe('Edge and fallback error coverage', () => {
     it('should handle non-Error exception in getInstalledAdminPlugins', async () => {
-      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+      const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
       mockAdminPluginFileService.getInstalledPlugins.mockRejectedValue(
         'string error',
       );
