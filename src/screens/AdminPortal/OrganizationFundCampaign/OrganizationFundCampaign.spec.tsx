@@ -21,14 +21,8 @@ import {
 } from './OrganizationFundCampaignMocks';
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
-
 const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(),
-}));
-
-vi.mock('components/NotificationToast/NotificationToast', () => ({
-  error: vi.fn(),
-  success: vi.fn(),
 }));
 
 vi.mock('react-router', async () => {
