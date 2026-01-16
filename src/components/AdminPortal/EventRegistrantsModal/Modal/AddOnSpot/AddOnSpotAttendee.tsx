@@ -70,6 +70,10 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [addSignUp] = useMutation(SIGNUP_MUTATION);
   const validateForm = (): boolean => {
+    if (!orgId) {
+      NotificationToast.error(t('organizationIdMissing'));
+      return false;
+    }
     if (!formData.firstName || !formData.lastName || !formData.email) {
       NotificationToast.error(t('invalidDetailsMessage'));
       return false;
@@ -163,6 +167,8 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                 value={formData.firstName}
                 onChange={handleChange}
                 placeholder={t('placeholderFirstName')}
+                required
+                aria-required="true"
               />
             </Form.Group>
             <Form.Group className="mb-1">
@@ -174,6 +180,8 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                 value={formData.lastName}
                 onChange={handleChange}
                 placeholder={t('placeholderLastName')}
+                required
+                aria-required="true"
               />
             </Form.Group>
           </div>
@@ -198,6 +206,8 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
               value={formData.email}
               onChange={handleChange}
               placeholder={t('placeholderEmail')}
+              required
+              aria-required="true"
             />
           </Form.Group>
 
