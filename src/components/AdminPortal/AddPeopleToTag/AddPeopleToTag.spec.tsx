@@ -39,19 +39,6 @@ async function wait(): Promise<void> {
   });
 }
 
-<<<<<<< HEAD:src/components/AddPeopleToTag/AddPeopleToTag.spec.tsx
-const mockNotificationToast = vi.hoisted(() => ({
-  success: vi.fn(),
-  error: vi.fn(),
-  warning: vi.fn(),
-  info: vi.fn(),
-  dismiss: vi.fn(),
-}));
-
-vi.mock('components/NotificationToast/NotificationToast', () => ({
-  NotificationToast: mockNotificationToast,
-}));
-=======
 const toastMocks = vi.hoisted(() => {
   return {
     success: vi.fn(),
@@ -67,7 +54,6 @@ vi.mock('components/NotificationToast/NotificationToast', async () => {
     NotificationToast: toastMocks,
   };
 });
->>>>>>> upstream/develop:src/components/AdminPortal/AddPeopleToTag/AddPeopleToTag.spec.tsx
 
 const translations = {
   ...JSON.parse(
@@ -379,11 +365,7 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
-<<<<<<< HEAD:src/components/AddPeopleToTag/AddPeopleToTag.spec.tsx
-      expect(mockNotificationToast.error).toHaveBeenCalledWith(
-=======
       expect(NotificationToast.error).toHaveBeenCalledWith(
->>>>>>> upstream/develop:src/components/AdminPortal/AddPeopleToTag/AddPeopleToTag.spec.tsx
         translations.noOneSelected,
       );
     });
@@ -413,11 +395,7 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
-<<<<<<< HEAD:src/components/AddPeopleToTag/AddPeopleToTag.spec.tsx
-      expect(mockNotificationToast.success).toHaveBeenCalledWith(
-=======
       expect(NotificationToast.success).toHaveBeenCalledWith(
->>>>>>> upstream/develop:src/components/AdminPortal/AddPeopleToTag/AddPeopleToTag.spec.tsx
         translations.successfullyAssignedToPeople,
       );
     });
@@ -489,11 +467,7 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
-<<<<<<< HEAD:src/components/AddPeopleToTag/AddPeopleToTag.spec.tsx
-      expect(mockNotificationToast.error).toHaveBeenCalled();
-=======
       expect(NotificationToast.error).toHaveBeenCalled();
->>>>>>> upstream/develop:src/components/AdminPortal/AddPeopleToTag/AddPeopleToTag.spec.tsx
     });
   });
 });

@@ -6,34 +6,6 @@
  * and assign them to the tag. The component uses Apollo Client for GraphQL queries
  * and mutations, and Material-UI's DataGrid for displaying member data.
  *
-<<<<<<< HEAD:src/components/AddPeopleToTag/AddPeopleToTag.tsx
- * @param props - Component props containing:
- *   - `addPeopleToTagModalIsOpen`: Controls the visibility of the modal
- *   - `hideAddPeopleToTagModal`: Callback to close the modal
- *   - `refetchAssignedMembersData`: Callback to refetch the assigned members data
- *   - `t`: Translation function for component-specific strings
- *   - `tCommon`: Translation function for common strings
- *
- * @remarks
- * - Uses `useState` for managing selected members and search filters
- * - Integrates `useQuery` and `useMutation` from Apollo Client
- * - Features infinite scrolling for loading more members
- * - Includes search functionality for filtering members by name
- * - Displays selected members with the ability to remove them
- * - Handles errors and loading states with appropriate UI feedback
- * - Dependencies: React, Apollo Client, Material-UI, React-Bootstrap, NotificationToast, React-Infinite-Scroll
- *
- * @example
- * ```tsx
- * <AddPeopleToTag
- *   addPeopleToTagModalIsOpen={true}
- *   hideAddPeopleToTagModal={handleClose}
- *   refetchAssignedMembersData={refetch}
- *   t={t}
- *   tCommon={tCommon}
- * />
- * ```
-=======
  * Props:
  * - `addPeopleToTagModalIsOpen` (boolean): Controls the visibility of the modal.
  * - `hideAddPeopleToTagModal` (function): Callback to close the modal.
@@ -64,7 +36,6 @@
  * Usage:
  * This component is used in the context of managing tags and their associated members.
  * It is designed to be displayed as a modal and requires integration with GraphQL APIs.
->>>>>>> upstream/develop:src/components/AdminPortal/AddPeopleToTag/AddPeopleToTag.tsx
  */
 // translation-check-keyPrefix: manageTag
 import { useMutation, useQuery } from '@apollo/client';
@@ -81,10 +52,6 @@ import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useParams } from 'react-router';
 import styles from 'style/app-fixed.module.css';
 import { Stack } from '@mui/material';
-<<<<<<< HEAD:src/components/AddPeopleToTag/AddPeopleToTag.tsx
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-=======
->>>>>>> upstream/develop:src/components/AdminPortal/AddPeopleToTag/AddPeopleToTag.tsx
 import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { WarningAmberRounded } from '@mui/icons-material';
@@ -357,49 +324,12 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       <BaseModal
         show={addPeopleToTagModalIsOpen}
         onHide={hideAddPeopleToTagModal}
-<<<<<<< HEAD:src/components/AddPeopleToTag/AddPeopleToTag.tsx
-        backdrop="static"
-        centered
-        headerContent={
-          <p
-            className={`text-white ${styles.modalHeader}`}
-            data-testid="modalOrganizationHeader"
-          >
-            {t('addPeople')}
-          </p>
-        }
-        headerClassName={`bg-primary ${styles.modalHeader}`}
-        footer={
-          <>
-            <Button
-              onClick={hideAddPeopleToTagModal}
-              variant="outline-danger"
-              data-testid="closeAddPeopleToTagModal"
-              className={styles.removeButton}
-            >
-              {tCommon('cancel')}
-            </Button>
-            <Button
-              type="submit"
-              form="addPeopleToTagForm"
-              disabled={addPeopleToTagLoading}
-              data-testid="assignPeopleBtn"
-              className={styles.addButton}
-            >
-              {t('assign')}
-            </Button>
-          </>
-        }
-      >
-        <Form id="addPeopleToTagForm" onSubmitCapture={addPeopleToCurrentTag}>
-=======
         title={t('addPeople')}
         headerClassName={`bg-primary ${styles.modalHeader}`}
         footer={modalFooter}
         dataTestId="addPeopleToTagModal"
       >
         <Form onSubmit={addPeopleToCurrentTag} id="addPeopleToTagForm">
->>>>>>> upstream/develop:src/components/AdminPortal/AddPeopleToTag/AddPeopleToTag.tsx
           <div
             className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
           >
@@ -414,12 +344,8 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                   className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.memberBadge}`}
                 >
                   {member.firstName} {member.lastName}
-<<<<<<< HEAD:src/components/AddPeopleToTag/AddPeopleToTag.tsx
-                  <i
-=======
                   <button
                     type="button"
->>>>>>> upstream/develop:src/components/AdminPortal/AddPeopleToTag/AddPeopleToTag.tsx
                     className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary`}
                     onClick={() => removeMember(member._id)}
                     data-testid="clearSelectedMember"
