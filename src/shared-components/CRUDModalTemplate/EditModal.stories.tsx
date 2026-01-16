@@ -78,16 +78,25 @@ export const BasicUsage: Story = {
     children: (
       <>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.name}</label>
+          <label htmlFor="edit-basic-name-input" className="form-label">
+            {DEMO_LABELS.name}
+          </label>
           <input
+            id="edit-basic-name-input"
             type="text"
             className="form-control"
             defaultValue="Existing Item Name"
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.description}</label>
+          <label
+            htmlFor="edit-basic-description-textarea"
+            className="form-label"
+          >
+            {DEMO_LABELS.description}
+          </label>
           <textarea
+            id="edit-basic-description-textarea"
             className="form-control"
             rows={3}
             defaultValue="This is the existing description of the item."
@@ -118,8 +127,11 @@ export const LoadingData: Story = {
     children: (
       <>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.name}</label>
+          <label htmlFor="edit-loading-name-input" className="form-label">
+            {DEMO_LABELS.name}
+          </label>
           <input
+            id="edit-loading-name-input"
             type="text"
             className="form-control"
             placeholder={DEMO_LABELS.loading}
@@ -150,8 +162,11 @@ export const SubmittingState: Story = {
     children: (
       <>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.name}</label>
+          <label htmlFor="edit-submitting-name-input" className="form-label">
+            {DEMO_LABELS.name}
+          </label>
           <input
+            id="edit-submitting-name-input"
             type="text"
             className="form-control"
             defaultValue="Updated Item Name"
@@ -159,8 +174,14 @@ export const SubmittingState: Story = {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.description}</label>
+          <label
+            htmlFor="edit-submitting-description-textarea"
+            className="form-label"
+          >
+            {DEMO_LABELS.description}
+          </label>
           <textarea
+            id="edit-submitting-description-textarea"
             className="form-control"
             rows={3}
             defaultValue="Updated description"
@@ -192,8 +213,11 @@ export const SubmitDisabled: Story = {
     children: (
       <>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.name}</label>
+          <label htmlFor="edit-disabled-name-input" className="form-label">
+            {DEMO_LABELS.name}
+          </label>
           <input
+            id="edit-disabled-name-input"
             type="text"
             className="form-control"
             defaultValue="Existing Item Name"
@@ -224,32 +248,47 @@ export const ComplexForm: Story = {
     children: (
       <>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.eventName}</label>
+          <label htmlFor="edit-complex-event-name-input" className="form-label">
+            {DEMO_LABELS.eventName}
+          </label>
           <input
+            id="edit-complex-event-name-input"
             type="text"
             className="form-control"
             defaultValue="Annual Conference 2024"
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.eventDate}</label>
+          <label htmlFor="edit-complex-event-date-input" className="form-label">
+            {DEMO_LABELS.eventDate}
+          </label>
           <input
+            id="edit-complex-event-date-input"
             type="date"
             className="form-control"
             defaultValue="2024-06-15"
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.location}</label>
+          <label htmlFor="edit-complex-location-input" className="form-label">
+            {DEMO_LABELS.location}
+          </label>
           <input
+            id="edit-complex-location-input"
             type="text"
             className="form-control"
             defaultValue="Convention Center, Hall A"
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.category}</label>
-          <select className="form-select" defaultValue="workshop">
+          <label htmlFor="edit-complex-category-select" className="form-label">
+            {DEMO_LABELS.category}
+          </label>
+          <select
+            id="edit-complex-category-select"
+            className="form-select"
+            defaultValue="workshop"
+          >
             <option value="">{DEMO_LABELS.selectCategory}</option>
             <option value="meeting">{DEMO_LABELS.meeting}</option>
             <option value="workshop">{DEMO_LABELS.workshop}</option>
@@ -257,8 +296,14 @@ export const ComplexForm: Story = {
           </select>
         </div>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.description}</label>
+          <label
+            htmlFor="edit-complex-description-textarea"
+            className="form-label"
+          >
+            {DEMO_LABELS.description}
+          </label>
           <textarea
+            id="edit-complex-description-textarea"
             className="form-control"
             rows={3}
             defaultValue="Join us for our annual conference featuring workshops, keynote speakers, and networking opportunities."
@@ -268,10 +313,13 @@ export const ComplexForm: Story = {
           <input
             type="checkbox"
             className="form-check-input"
-            id="publicEvent"
+            id="edit-complex-public-event-checkbox"
             defaultChecked
           />
-          <label className="form-check-label" htmlFor="publicEvent">
+          <label
+            className="form-check-label"
+            htmlFor="edit-complex-public-event-checkbox"
+          >
             {DEMO_LABELS.makePublic}
           </label>
         </div>

@@ -75,16 +75,22 @@ export const BasicUsage: Story = {
     children: (
       <>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.name}</label>
+          <label htmlFor="basic-name-input" className="form-label">
+            {DEMO_LABELS.name}
+          </label>
           <input
+            id="basic-name-input"
             type="text"
             className="form-control"
             placeholder={DEMO_LABELS.enterName}
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.description}</label>
+          <label htmlFor="basic-description-textarea" className="form-label">
+            {DEMO_LABELS.description}
+          </label>
           <textarea
+            id="basic-description-textarea"
             className="form-control"
             rows={3}
             placeholder={DEMO_LABELS.enterDescription}
@@ -114,8 +120,11 @@ export const LoadingState: Story = {
     children: (
       <>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.name}</label>
+          <label htmlFor="loading-name-input" className="form-label">
+            {DEMO_LABELS.name}
+          </label>
           <input
+            id="loading-name-input"
             type="text"
             className="form-control"
             placeholder={DEMO_LABELS.enterName}
@@ -124,8 +133,11 @@ export const LoadingState: Story = {
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.description}</label>
+          <label htmlFor="loading-description-textarea" className="form-label">
+            {DEMO_LABELS.description}
+          </label>
           <textarea
+            id="loading-description-textarea"
             className="form-control"
             rows={3}
             value="This is a sample description"
@@ -156,8 +168,11 @@ export const SubmitDisabled: Story = {
     children: (
       <>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.name}</label>
+          <label htmlFor="disabled-name-input" className="form-label">
+            {DEMO_LABELS.name}
+          </label>
           <input
+            id="disabled-name-input"
             type="text"
             className="form-control"
             placeholder={DEMO_LABELS.enterName}
@@ -187,28 +202,42 @@ export const ComplexForm: Story = {
     children: (
       <>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.eventName}</label>
+          <label htmlFor="complex-event-name-input" className="form-label">
+            {DEMO_LABELS.eventName}
+          </label>
           <input
+            id="complex-event-name-input"
             type="text"
             className="form-control"
             placeholder={DEMO_LABELS.enterEventName}
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.eventDate}</label>
-          <input type="date" className="form-control" />
+          <label htmlFor="complex-event-date-input" className="form-label">
+            {DEMO_LABELS.eventDate}
+          </label>
+          <input
+            id="complex-event-date-input"
+            type="date"
+            className="form-control"
+          />
         </div>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.location}</label>
+          <label htmlFor="complex-location-input" className="form-label">
+            {DEMO_LABELS.location}
+          </label>
           <input
+            id="complex-location-input"
             type="text"
             className="form-control"
             placeholder={DEMO_LABELS.enterLocation}
           />
         </div>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.category}</label>
-          <select className="form-select">
+          <label htmlFor="complex-category-select" className="form-label">
+            {DEMO_LABELS.category}
+          </label>
+          <select id="complex-category-select" className="form-select">
             <option value="">{DEMO_LABELS.selectCategory}</option>
             <option value="meeting">{DEMO_LABELS.meeting}</option>
             <option value="workshop">{DEMO_LABELS.workshop}</option>
@@ -216,8 +245,11 @@ export const ComplexForm: Story = {
           </select>
         </div>
         <div className="mb-3">
-          <label className="form-label">{DEMO_LABELS.description}</label>
+          <label htmlFor="complex-description-textarea" className="form-label">
+            {DEMO_LABELS.description}
+          </label>
           <textarea
+            id="complex-description-textarea"
             className="form-control"
             rows={3}
             placeholder={DEMO_LABELS.enterDescription}

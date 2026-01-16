@@ -6,6 +6,6 @@
 
 > `const` **ComplexForm**: `Story`
 
-Defined in: [src/shared-components/CRUDModalTemplate/EditModal.stories.tsx:218](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CRUDModalTemplate/EditModal.stories.tsx#L218)
+Defined in: [src/shared-components/CRUDModalTemplate/EditModal.stories.tsx:242](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/CRUDModalTemplate/EditModal.stories.tsx#L242)
 
 EditModal with a complex form

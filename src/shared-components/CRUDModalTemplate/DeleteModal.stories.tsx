@@ -107,23 +107,38 @@ export const RecurringEvent: Story = {
       <div className="mt-3">
         <p className="mb-2">{DEMO_TEXT.recurringPrompt}</p>
         <div className="d-flex flex-column gap-2">
-          <label className="d-flex align-items-center gap-2">
+          <div className="d-flex align-items-center gap-2">
             <input
               type="radio"
               name="deleteOption"
+              id="delete-option-single"
               value="single"
               defaultChecked
             />
-            <span>{DEMO_TEXT.deleteOnlyThis}</span>
-          </label>
-          <label className="d-flex align-items-center gap-2">
-            <input type="radio" name="deleteOption" value="all" />
-            <span>{DEMO_TEXT.deleteAll}</span>
-          </label>
-          <label className="d-flex align-items-center gap-2">
-            <input type="radio" name="deleteOption" value="future" />
-            <span>{DEMO_TEXT.deleteFuture}</span>
-          </label>
+            <label htmlFor="delete-option-single">
+              {DEMO_TEXT.deleteOnlyThis}
+            </label>
+          </div>
+          <div className="d-flex align-items-center gap-2">
+            <input
+              type="radio"
+              name="deleteOption"
+              id="delete-option-all"
+              value="all"
+            />
+            <label htmlFor="delete-option-all">{DEMO_TEXT.deleteAll}</label>
+          </div>
+          <div className="d-flex align-items-center gap-2">
+            <input
+              type="radio"
+              name="deleteOption"
+              id="delete-option-future"
+              value="future"
+            />
+            <label htmlFor="delete-option-future">
+              {DEMO_TEXT.deleteFuture}
+            </label>
+          </div>
         </div>
       </div>
     ),
