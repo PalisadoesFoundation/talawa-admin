@@ -14,6 +14,7 @@ import { InterfaceAgendaItemsDeleteModalProps } from 'types/components/AdminPort
  * @param deleteAgendaItemHandler - Function to execute the deletion logic
  * @param t - Translation function
  * @param tCommon - Common translation function
+ * @returns {JSX.Element} The rendered modal component
  */
 const AgendaItemsDeleteModal: React.FC<
   InterfaceAgendaItemsDeleteModalProps

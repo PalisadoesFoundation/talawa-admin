@@ -14,6 +14,7 @@ import { InterfaceUninstallConfirmationModalProps } from 'types/AdminPortal/Plug
  * @param onClose - Function to close the modal without taking action
  * @param onConfirm - Function to proceed with uninstallation
  * @param plugin - The plugin object being uninstalled
+ * @returns {JSX.Element | null} The rendered modal component or null if no plugin
  */
 export default function UninstallConfirmationModal({
   show,
@@ -24,18 +25,19 @@ export default function UninstallConfirmationModal({
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
-  // ✅ CRITICAL FIX: Guard Clause
-  // If plugin is null, do not render anything.
-  // This fixes the "75% Branch Coverage" issue by creating a clear "No Render" branch.
+  // Guard Clause: If plugin is null, do not render anything.
   if (!plugin) {
     return null;
   }
 
-  // Wrapper to handle the "Rapid Click" bug and locking
+  /**
+   * Handles the confirmation action.
+   *
+   * Wraps the onConfirm prop to manage the loading state
+   * and prevent double-clicks (rapid click bug).
+   */
   const handleConfirm = async () => {
-    // Note: 'if (isLoading) return' was removed because the button is already 
-    // disabled via the disabled={isLoading} prop, making that check unreachable.
-    
+    // Note: 'if (isLoading) return' is handled by the disabled prop on the button.
     setIsLoading(true); // Lock the button
     try {
       await onConfirm();
@@ -64,7 +66,7 @@ export default function UninstallConfirmationModal({
           <Button
             variant="danger"
             onClick={handleConfirm}
-            disabled={isLoading} // 🔒 Disable button while loading
+            disabled={isLoading} // Disable button while loading
             data-testid="uninstall-remove-btn"
           >
             {isLoading ? t('deleting') : t('uninstallPlugin.removeBtn')}

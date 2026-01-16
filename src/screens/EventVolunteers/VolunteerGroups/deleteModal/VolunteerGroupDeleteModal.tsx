@@ -10,6 +10,7 @@
  * @param refetchGroups - Callback to refresh the list after deletion
  * @param isRecurring - (Optional) Whether the event is recurring
  * @param eventId - (Optional) The ID of the specific event instance
+ * @returns {JSX.Element} The rendered modal component
  */
 import { Button, Form } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';

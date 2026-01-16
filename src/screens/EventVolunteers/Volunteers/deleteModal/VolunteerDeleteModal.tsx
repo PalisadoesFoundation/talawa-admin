@@ -23,6 +23,7 @@ import { InterfaceDeleteVolunteerModalProps } from 'types/EventVolunteers/Volunt
  * @param refetchVolunteers - Callback to refresh the list after deletion
  * @param isRecurring - (Optional) Whether the event is recurring
  * @param eventId - (Optional) The ID of the specific event instance
+ * @returns {JSX.Element} The rendered modal component
  */
 const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModalProps> = ({
   isOpen,

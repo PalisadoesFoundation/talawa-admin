@@ -19,6 +19,7 @@ import { InterfaceEditUserTagModalProps } from 'types/AdminPortal/ManageTag/edit
  * @param setNewTagName - Function to update the tag name state
  * @param t - Translation function
  * @param tCommon - Common translation function
+ * @returns {JSX.Element} The rendered modal component
  */
 const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
   editUserTagModalIsOpen,

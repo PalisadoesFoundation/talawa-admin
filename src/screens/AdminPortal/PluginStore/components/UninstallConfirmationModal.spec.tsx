@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import UninstallConfirmationModal from './UninstallConfirmationModal';
@@ -111,7 +111,7 @@ describe('UninstallConfirmationModal', () => {
     expect(container).toBeEmptyDOMElement();
   });
 
-  // 7. Branch: Modal Closed (The potential missing 25%!)
+  // 7. Branch: Modal Closed
   it('should not render if show is false', () => {
     const { container } = render(<UninstallConfirmationModal {...defaultProps} show={false} />);
     expect(container).toBeEmptyDOMElement();
