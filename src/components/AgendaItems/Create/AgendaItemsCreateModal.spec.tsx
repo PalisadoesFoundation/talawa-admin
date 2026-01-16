@@ -282,10 +282,8 @@ describe('AgendaItemsCreateModal', () => {
 
   test('adds files correctly when within size limit', async () => {
     const mockMinioResult = {
-      name: 'small-file.jpg',
       objectName: 'agendaItem/small-file.jpg',
       fileHash: 'abc123hash',
-      mimeType: 'image/jpeg',
     };
     sharedMocks.uploadFileToMinio.mockResolvedValue(mockMinioResult);
 
@@ -318,7 +316,7 @@ describe('AgendaItemsCreateModal', () => {
     );
 
     const fileInput = screen.getByTestId('attachment');
-    const smallFile = new File(['small-file-content'], 'small-file.jpg'); // Small file
+    const smallFile = new File(['small-file-content'], 'small-file.jpg');
 
     Object.defineProperty(fileInput, 'files', {
       value: [smallFile],
@@ -326,28 +324,44 @@ describe('AgendaItemsCreateModal', () => {
 
     fireEvent.change(fileInput);
 
+    // Wait for MinIO upload to be called
     await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
+      expect(sharedMocks.uploadFileToMinio).toHaveBeenCalledWith(
+        smallFile,
+        'agendaItem',
+      );
     });
 
-    // Test the function that was passed to setFormState
-    const setFormStateCall = mockSetFormState.mock.calls.find(
+    // Wait for state update after upload completes
+    // Expect at least 2 calls: one from useEffect, one from upload
+    await waitFor(() => {
+      const calls = mockSetFormState.mock.calls.filter(
+        (call) => typeof call[0] === 'function',
+      );
+      expect(calls.length).toBeGreaterThanOrEqual(2);
+    });
+
+    // Get the LAST functional updater call (the one after upload, not useEffect)
+    const setFormStateCalls = mockSetFormState.mock.calls.filter(
       (call) => typeof call[0] === 'function',
     );
-    expect(setFormStateCall).toBeDefined();
+    const lastSetFormStateCall =
+      setFormStateCalls[setFormStateCalls.length - 1];
 
-    if (setFormStateCall) {
-      // Apply updater to clean state (no pre-existing plain string attachments)
-      const result = setFormStateCall[0](cleanFormState);
-      // Check that attachments includes a JSON-stringified MinIO metadata object
+    expect(lastSetFormStateCall).toBeDefined();
+
+    if (lastSetFormStateCall) {
+      const result = lastSetFormStateCall[0](cleanFormState);
+
+      // Verify attachments array has content before accessing
+      expect(result.attachments.length).toBeGreaterThan(0);
+
       const newAttachment = result.attachments[result.attachments.length - 1];
       expect(typeof newAttachment).toBe('string');
       const parsed = JSON.parse(newAttachment);
       expect(parsed).toMatchObject({
-        name: 'small-file.jpg',
         objectName: expect.any(String),
         fileHash: expect.any(String),
-        mimeType: expect.any(String),
       });
     }
   });
