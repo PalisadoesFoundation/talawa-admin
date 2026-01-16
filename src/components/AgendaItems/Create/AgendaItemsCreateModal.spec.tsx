@@ -19,8 +19,6 @@ import {
 } from 'shared-components/DatePicker';
 
 import AgendaItemsCreateModal from './AgendaItemsCreateModal';
-import convertToBase64 from 'utils/convertToBase64';
-import type { MockedFunction } from 'vitest';
 import { describe, test, expect, vi } from 'vitest';
 import { mockFormState1, mockAgendaItemCategories } from '../AgendaItemsMocks';
 
@@ -29,26 +27,31 @@ let mockSetFormState: ReturnType<typeof vi.fn>;
 let mockCreateAgendaItemHandler: ReturnType<typeof vi.fn>;
 const mockT = (key: string): string => key;
 
-// Use vi.hoisted() to create mock that survives vi.mock hoisting
-const mockToast = vi.hoisted(() => ({
-  success: vi.fn(),
-  error: vi.fn(),
+// Use vi.hoisted() to create mocks that survive vi.mock hoisting
+const sharedMocks = vi.hoisted(() => ({
+  toast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
+  uploadFileToMinio: vi.fn(),
 }));
 
 vi.mock('react-toastify', () => ({
-  toast: mockToast,
+  toast: sharedMocks.toast,
 }));
-vi.mock('utils/convertToBase64');
-let mockedConvertToBase64: MockedFunction<typeof convertToBase64>;
+
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({
+    uploadFileToMinio: sharedMocks.uploadFileToMinio,
+  }),
+}));
 
 describe('AgendaItemsCreateModal', () => {
   beforeEach(() => {
     mockHideCreateModal = vi.fn();
     mockSetFormState = vi.fn();
     mockCreateAgendaItemHandler = vi.fn();
-    mockedConvertToBase64 = convertToBase64 as MockedFunction<
-      typeof convertToBase64
-    >;
+    vi.clearAllMocks();
   });
 
   afterEach(() => {
@@ -224,7 +227,7 @@ describe('AgendaItemsCreateModal', () => {
     fireEvent.click(linkBtn);
 
     await waitFor(() => {
-      expect(mockToast.error).toHaveBeenCalledWith(
+      expect(sharedMocks.toast.error).toHaveBeenCalledWith(
         'invalidUrl',
         expect.any(Object),
       );
@@ -267,7 +270,7 @@ describe('AgendaItemsCreateModal', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(mockToast.error).toHaveBeenCalledWith(
+      expect(sharedMocks.toast.error).toHaveBeenCalledWith(
         'fileSizeExceedsLimit',
         expect.any(Object),
       );
@@ -275,7 +278,13 @@ describe('AgendaItemsCreateModal', () => {
   });
 
   test('adds files correctly when within size limit', async () => {
-    mockedConvertToBase64.mockResolvedValue('base64-file');
+    const mockMinioResult = {
+      name: 'small-file.jpg',
+      objectName: 'agendaItem/small-file.jpg',
+      fileHash: 'abc123hash',
+      mimeType: 'image/jpeg',
+    };
+    sharedMocks.uploadFileToMinio.mockResolvedValue(mockMinioResult);
 
     render(
       <MockedProvider>
@@ -309,11 +318,28 @@ describe('AgendaItemsCreateModal', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalledWith({
-        ...mockFormState1,
-        attachments: [...mockFormState1.attachments, 'base64-file'],
-      });
+      expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
     });
+
+    // Test the function that was passed to setFormState
+    const setFormStateCall = mockSetFormState.mock.calls.find(
+      (call) => typeof call[0] === 'function',
+    );
+    expect(setFormStateCall).toBeDefined();
+
+    if (setFormStateCall) {
+      const result = setFormStateCall[0](mockFormState1);
+      // Check that attachments includes a JSON-stringified MinIO metadata object
+      const newAttachment = result.attachments[result.attachments.length - 1];
+      expect(typeof newAttachment).toBe('string');
+      const parsed = JSON.parse(newAttachment);
+      expect(parsed).toMatchObject({
+        name: 'small-file.jpg',
+        objectName: expect.any(String),
+        fileHash: expect.any(String),
+        mimeType: expect.any(String),
+      });
+    }
   });
   test('renders autocomplete and selects categories correctly', async () => {
     render(

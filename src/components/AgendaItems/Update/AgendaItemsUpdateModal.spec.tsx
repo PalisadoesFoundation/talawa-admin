@@ -17,8 +17,6 @@ import {
   AdapterDayjs,
 } from 'shared-components/DatePicker';
 import AgendaItemsUpdateModal from './AgendaItemsUpdateModal';
-import convertToBase64 from 'utils/convertToBase64';
-import type { MockedFunction } from 'vitest';
 import { describe, test, expect, vi } from 'vitest';
 import { mockAgendaItemCategories, mockFormState1 } from '../AgendaItemsMocks';
 
@@ -33,23 +31,24 @@ const sharedMocks = vi.hoisted(() => ({
     error: vi.fn(),
   },
   navigate: vi.fn(),
+  uploadFileToMinio: vi.fn(),
 }));
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: sharedMocks.NotificationToast,
 }));
 
-vi.mock('utils/convertToBase64');
-let mockedConvertToBase64: MockedFunction<typeof convertToBase64>;
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({
+    uploadFileToMinio: sharedMocks.uploadFileToMinio,
+  }),
+}));
 
 describe('AgendaItemsUpdateModal', () => {
   beforeEach(() => {
     mockHideUpdateModal = vi.fn();
     mockSetFormState = vi.fn();
     mockUpdateAgendaItemHandler = vi.fn();
-    mockedConvertToBase64 = convertToBase64 as MockedFunction<
-      typeof convertToBase64
-    >;
     vi.clearAllMocks();
   });
 
@@ -268,7 +267,13 @@ describe('AgendaItemsUpdateModal', () => {
   });
 
   test('adds files correctly when within size limit', async () => {
-    mockedConvertToBase64.mockResolvedValue('base64-file');
+    const mockMinioResult = {
+      name: 'small-file.jpg',
+      objectName: 'agendaItem/small-file.jpg',
+      fileHash: 'abc123hash',
+      mimeType: 'image/jpeg',
+    };
+    sharedMocks.uploadFileToMinio.mockResolvedValue(mockMinioResult);
 
     render(
       <MockedProvider>
@@ -313,10 +318,16 @@ describe('AgendaItemsUpdateModal', () => {
 
     if (setFormStateCall) {
       const result = setFormStateCall[0](mockFormState1);
-      expect(result.attachments).toEqual([
-        ...mockFormState1.attachments,
-        'base64-file',
-      ]);
+      // Check that attachments includes a JSON-stringified MinIO metadata object
+      const newAttachment = result.attachments[result.attachments.length - 1];
+      expect(typeof newAttachment).toBe('string');
+      const parsed = JSON.parse(newAttachment);
+      expect(parsed).toMatchObject({
+        name: 'small-file.jpg',
+        objectName: expect.any(String),
+        fileHash: expect.any(String),
+        mimeType: expect.any(String),
+      });
     }
   });
   test('renders autocomplete and selects categories correctly', async () => {
