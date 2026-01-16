@@ -1,7 +1,6 @@
-// upcomingevents.tsx
 import React, { useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import styles from './UpcomingEvents.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
@@ -14,6 +13,7 @@ import {
   InterfaceMappedEvent,
   InterfaceVolunteerStatus,
 } from 'types/Volunteer/interface';
+import type { StatusVariant } from 'types/shared-components/StatusBadge/interface';
 import { IoLocationOutline } from 'react-icons/io5';
 import { IoIosHand } from 'react-icons/io';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -25,6 +25,30 @@ import { FaCheck } from 'react-icons/fa';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
+
+/**
+ * Maps membership status to StatusBadge variant.
+ *
+ * @param status - The membership status string (e.g., 'requested', 'invited', 'accepted', 'rejected')
+ * @returns Object containing the StatusBadge variant
+ */
+export const getStatusBadgeProps = (
+  status: string,
+): { variant: StatusVariant } => {
+  switch (status) {
+    case 'requested':
+    case 'invited':
+      return { variant: 'pending' };
+    case 'accepted':
+      return { variant: 'accepted' };
+    case 'rejected':
+      return { variant: 'rejected' };
+    default:
+      return { variant: 'pending' };
+  }
+};
+
 /**
  * Component for displaying upcoming volunteer events for an organization.
  * Allows users to volunteer for events and groups, and tracks their membership status.
@@ -220,10 +244,9 @@ const UpcomingEvents = (): JSX.Element => {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded
-            className={styles.errorIcon}
-            aria-hidden="true"
-          />
+          <span className={styles.errorIcon} aria-hidden="true">
+            <WarningAmberRounded />
+          </span>
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Events' })}
           </h6>
@@ -275,7 +298,16 @@ const UpcomingEvents = (): JSX.Element => {
                   className={styles.titleContainerVolunteer}
                   data-testid={`detailContainer${index + 1}`}
                 >
-                  <h3 data-testid="eventTitle">{event.title}</h3>
+                  <div className="d-flex align-items-center gap-2">
+                    <h3 data-testid="eventTitle">{event.title}</h3>
+                    {status.status !== 'none' && (
+                      <StatusBadge
+                        {...getStatusBadgeProps(status.status)}
+                        size="sm"
+                        dataTestId={'event-status-' + index}
+                      />
+                    )}
+                  </div>
                 </div>
               </AccordionSummary>
               <AccordionDetails className="d-flex gap-3 flex-column">
@@ -321,7 +353,9 @@ const UpcomingEvents = (): JSX.Element => {
                         <div className="d-flex gap-3">
                           <span>
                             {t('volunteerGroups')}:{' '}
-                            {event.volunteerGroups.length} groups available
+                            {t('groupsAvailable', {
+                              count: event.volunteerGroups.length,
+                            })}
                           </span>
                         </div>
                       )}
@@ -361,14 +395,24 @@ const UpcomingEvents = (): JSX.Element => {
                           className="d-flex justify-content-between align-items-center p-2 border rounded mb-2"
                         >
                           <div className="d-flex flex-column gap-1">
-                            <span className="fw-semibold">{group.name}</span>
+                            <div className="d-flex align-items-center gap-2">
+                              <span className="fw-semibold">{group.name}</span>
+                              {groupStatus.status !== 'none' && (
+                                <StatusBadge
+                                  {...getStatusBadgeProps(groupStatus.status)}
+                                  size="sm"
+                                  dataTestId={'group-status-' + group._id}
+                                />
+                              )}
+                            </div>
                             {group.description && (
                               <span className="text-muted">
                                 {group.description}
                               </span>
                             )}
                             <span className="text-muted">
-                              Required: {group.volunteersRequired}, Signed up:{' '}
+                              {t('volunteersRequired')}:{' '}
+                              {group.volunteersRequired}, {t('signedUp')}:{' '}
                               {group.volunteers.length}
                             </span>
                           </div>

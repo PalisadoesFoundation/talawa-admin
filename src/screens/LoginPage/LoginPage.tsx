@@ -49,8 +49,9 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
+import { FormFieldGroup } from '../../shared-components/FormFieldGroup/FormFieldGroup';
 
-const loginPage = (): JSX.Element => {
+const LoginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
@@ -85,6 +86,42 @@ const loginPage = (): JSX.Element => {
     email: '',
     password: '',
   });
+  const [touched, setTouched] = useState({
+    email: false,
+    password: false,
+  });
+  const [signTouched, setSignTouched] = useState({
+    signName: false,
+    signEmail: false,
+    signPassword: false,
+    cPassword: false,
+  });
+
+  // Validation logic
+  const emailError =
+    touched.email && !formState.email.trim() ? tCommon('required') : undefined;
+  const passwordError =
+    touched.password && !formState.password.trim()
+      ? tCommon('required')
+      : undefined;
+
+  // Signup validation logic
+  const signNameError =
+    signTouched.signName && !signformState.signName.trim()
+      ? tCommon('required')
+      : undefined;
+  const signEmailError =
+    signTouched.signEmail && !signformState.signEmail.trim()
+      ? tCommon('required')
+      : undefined;
+  const signPasswordError =
+    signTouched.signPassword && !signformState.signPassword.trim()
+      ? tCommon('required')
+      : undefined;
+  const cPasswordError =
+    signTouched.cPassword && !signformState.cPassword.trim()
+      ? tCommon('required')
+      : undefined;
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
@@ -127,6 +164,17 @@ const loginPage = (): JSX.Element => {
       setRole('user');
     }
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (showTab === 'REGISTER') {
+      setSignTouched({
+        signName: false,
+        signEmail: false,
+        signPassword: false,
+        cPassword: false,
+      });
+    }
+  }, [showTab]);
 
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
@@ -455,60 +503,78 @@ const loginPage = (): JSX.Element => {
                     {/* {role === 'admin' ? tCommon('login') : t('userLogin')} */}
                     {role === 'admin' ? t('adminLogin') : t('userLogin')}
                   </h1>
-                  <Form.Label>{tCommon('email')}</Form.Label>
-                  <div className="position-relative">
-                    <Form.Control
-                      type="email"
-                      disabled={loginLoading}
-                      placeholder={tCommon('enterEmail')}
+                  <FormFieldGroup
+                    name="email"
+                    label={tCommon('email')}
+                    required
+                    error={emailError}
+                    touched={touched.email}
+                  >
+                    <div className="position-relative">
+                      <Form.Control
+                        type="email"
+                        disabled={loginLoading}
+                        placeholder={tCommon('enterEmail')}
+                        required
+                        value={formState.email}
+                        onChange={(e): void => {
+                          setFormState({
+                            ...formState,
+                            email: e.target.value,
+                          });
+                        }}
+                        onBlur={() => setTouched({ ...touched, email: true })}
+                        autoComplete="username"
+                        data-testid="loginEmail"
+                        data-cy="loginEmail"
+                      />
+                      <Button tabIndex={-1} className={styles.email_button}>
+                        <EmailOutlinedIcon />
+                      </Button>
+                    </div>
+                  </FormFieldGroup>
+                  <div className="mt-3">
+                    <FormFieldGroup
+                      name="password"
+                      label={tCommon('password')}
                       required
-                      value={formState.email}
-                      onChange={(e): void => {
-                        setFormState({
-                          ...formState,
-                          email: e.target.value,
-                        });
-                      }}
-                      autoComplete="username"
-                      data-testid="loginEmail"
-                      data-cy="loginEmail"
-                    />
-                    <Button tabIndex={-1} className={styles.email_button}>
-                      <EmailOutlinedIcon />
-                    </Button>
-                  </div>
-                  <Form.Label className="mt-3">
-                    {tCommon('password')}
-                  </Form.Label>
-                  <div className="position-relative">
-                    <Form.Control
-                      type={showPassword ? 'text' : 'password'}
-                      className="input_box_second lh-1"
-                      placeholder={tCommon('enterPassword')}
-                      required
-                      value={formState.password}
-                      data-testid="password"
-                      onChange={(e): void => {
-                        setFormState({
-                          ...formState,
-                          password: e.target.value,
-                        });
-                      }}
-                      disabled={loginLoading}
-                      autoComplete="current-password"
-                      data-cy="loginPassword"
-                    />
-                    <Button
-                      onClick={togglePassword}
-                      data-testid="showLoginPassword"
-                      className={styles.email_button}
+                      error={passwordError}
+                      touched={touched.password}
                     >
-                      {showPassword ? (
-                        <i className="fas fa-eye"></i>
-                      ) : (
-                        <i className="fas fa-eye-slash"></i>
-                      )}
-                    </Button>
+                      <div className="position-relative">
+                        <Form.Control
+                          type={showPassword ? 'text' : 'password'}
+                          className="input_box_second lh-1"
+                          placeholder={tCommon('enterPassword')}
+                          required
+                          value={formState.password}
+                          data-testid="password"
+                          onChange={(e): void => {
+                            setFormState({
+                              ...formState,
+                              password: e.target.value,
+                            });
+                          }}
+                          onBlur={() =>
+                            setTouched({ ...touched, password: true })
+                          }
+                          disabled={loginLoading}
+                          autoComplete="current-password"
+                          data-cy="loginPassword"
+                        />
+                        <Button
+                          onClick={togglePassword}
+                          data-testid="showLoginPassword"
+                          className={styles.email_button}
+                        >
+                          {showPassword ? (
+                            <i className="fas fa-eye"></i>
+                          ) : (
+                            <i className="fas fa-eye-slash"></i>
+                          )}
+                        </Button>
+                      </div>
+                    </FormFieldGroup>
                   </div>
                   <div className="text-end mt-3">
                     <Link
@@ -584,22 +650,31 @@ const loginPage = (): JSX.Element => {
                   <Row>
                     {/* <Col sm={6}> */}
                     <div>
-                      <Form.Label>{tCommon('Name')}</Form.Label>
-                      <Form.Control
-                        disabled={signinLoading}
-                        type="text"
-                        id="signname"
-                        className="mb-3"
-                        placeholder={tCommon('Name')}
+                      <FormFieldGroup
+                        name="signName"
+                        label={tCommon('Name')}
                         required
-                        value={signformState.signName}
-                        onChange={(e): void => {
-                          setSignFormState({
-                            ...signformState,
-                            signName: e.target.value,
-                          });
-                        }}
-                      />
+                        error={signNameError}
+                        touched={signTouched.signName}
+                      >
+                        <Form.Control
+                          disabled={signinLoading}
+                          type="text"
+                          className="mb-3"
+                          placeholder={tCommon('Name')}
+                          required
+                          value={signformState.signName}
+                          onChange={(e): void => {
+                            setSignFormState({
+                              ...signformState,
+                              signName: e.target.value,
+                            });
+                          }}
+                          onBlur={() =>
+                            setSignTouched({ ...signTouched, signName: true })
+                          }
+                        />
+                      </FormFieldGroup>
                     </div>
                     {/* </Col> */}
                     {/* <Col sm={6}>
@@ -623,8 +698,13 @@ const loginPage = (): JSX.Element => {
                       </div>
                     </Col> */}
                   </Row>
-                  <div className="position-relative">
-                    <Form.Label>{tCommon('email')}</Form.Label>
+                  <FormFieldGroup
+                    name="signEmail"
+                    label={tCommon('email')}
+                    required
+                    error={signEmailError}
+                    touched={signTouched.signEmail}
+                  >
                     <div className="position-relative">
                       <Form.Control
                         disabled={signinLoading}
@@ -641,6 +721,9 @@ const loginPage = (): JSX.Element => {
                             signEmail: e.target.value.toLowerCase(),
                           });
                         }}
+                        onBlur={() =>
+                          setSignTouched({ ...signTouched, signEmail: true })
+                        }
                       />
                       <Button
                         tabIndex={-1}
@@ -649,41 +732,54 @@ const loginPage = (): JSX.Element => {
                         <EmailOutlinedIcon />
                       </Button>
                     </div>
-                  </div>
+                  </FormFieldGroup>
 
                   <div className="position-relative mb-3">
-                    <Form.Label>{tCommon('password')}</Form.Label>
-                    <div className="position-relative">
-                      <Form.Control
-                        disabled={signinLoading}
-                        type={showPassword ? 'text' : 'password'}
-                        data-testid="passwordField"
-                        placeholder={tCommon('password')}
-                        autoComplete="new-password"
-                        onFocus={(): void => setIsInputFocused(true)}
-                        onBlur={(): void => setIsInputFocused(false)}
-                        required
-                        value={signformState.signPassword}
-                        onChange={(e): void => {
-                          setSignFormState({
-                            ...signformState,
-                            signPassword: e.target.value,
-                          });
-                          handlePasswordCheck(e.target.value);
-                        }}
-                      />
-                      <Button
-                        onClick={togglePassword}
-                        data-testid="showPassword"
-                        className={`${styles.email_button}`}
-                      >
-                        {showPassword ? (
-                          <i className="fas fa-eye"></i>
-                        ) : (
-                          <i className="fas fa-eye-slash"></i>
-                        )}
-                      </Button>
-                    </div>
+                    <FormFieldGroup
+                      name="signPassword"
+                      label={tCommon('password')}
+                      required
+                      error={signPasswordError}
+                      touched={signTouched.signPassword}
+                    >
+                      <div className="position-relative">
+                        <Form.Control
+                          disabled={signinLoading}
+                          type={showPassword ? 'text' : 'password'}
+                          data-testid="passwordField"
+                          placeholder={tCommon('password')}
+                          autoComplete="new-password"
+                          onFocus={(): void => setIsInputFocused(true)}
+                          onBlur={(): void => {
+                            setIsInputFocused(false);
+                            setSignTouched({
+                              ...signTouched,
+                              signPassword: true,
+                            });
+                          }}
+                          required
+                          value={signformState.signPassword}
+                          onChange={(e): void => {
+                            setSignFormState({
+                              ...signformState,
+                              signPassword: e.target.value,
+                            });
+                            handlePasswordCheck(e.target.value);
+                          }}
+                        />
+                        <Button
+                          onClick={togglePassword}
+                          data-testid="showPassword"
+                          className={`${styles.email_button}`}
+                        >
+                          {showPassword ? (
+                            <i className="fas fa-eye"></i>
+                          ) : (
+                            <i className="fas fa-eye-slash"></i>
+                          )}
+                        </Button>
+                      </div>
+                    </FormFieldGroup>
                     <div className={styles.password_checks}>
                       {isInputFocused ? (
                         signformState.signPassword.length < 6 ? (
@@ -806,8 +902,13 @@ const loginPage = (): JSX.Element => {
                       )}
                     </div>
                   </div>
-                  <div className="position-relative">
-                    <Form.Label>{tCommon('confirmPassword')}</Form.Label>
+                  <FormFieldGroup
+                    name="cPassword"
+                    label={tCommon('confirmPassword')}
+                    required
+                    error={cPasswordError}
+                    touched={signTouched.cPassword}
+                  >
                     <div className="position-relative">
                       <Form.Control
                         disabled={signinLoading}
@@ -821,6 +922,9 @@ const loginPage = (): JSX.Element => {
                             cPassword: e.target.value,
                           });
                         }}
+                        onBlur={() =>
+                          setSignTouched({ ...signTouched, cPassword: true })
+                        }
                         data-testid="cpassword"
                         autoComplete="new-password"
                       />
@@ -836,17 +940,16 @@ const loginPage = (): JSX.Element => {
                         )}
                       </Button>
                     </div>
-                    {signformState.cPassword.length > 0 &&
-                      signformState.signPassword !==
-                        signformState.cPassword && (
-                        <div
-                          className="form-text text-danger"
-                          data-testid="passwordCheck"
-                        >
-                          {t('passwordMismatches')}
-                        </div>
-                      )}
-                  </div>
+                  </FormFieldGroup>
+                  {signformState.cPassword.length > 0 &&
+                    signformState.signPassword !== signformState.cPassword && (
+                      <div
+                        className="form-text text-danger"
+                        data-testid="passwordCheck"
+                      >
+                        {t('passwordMismatches')}
+                      </div>
+                    )}
                   <div className="position-relative  my-2">
                     <Form.Label>{t('selectOrg')}</Form.Label>
                     <div className="position-relative">
@@ -922,4 +1025,4 @@ const loginPage = (): JSX.Element => {
   );
 };
 
-export default loginPage;
+export default LoginPage;

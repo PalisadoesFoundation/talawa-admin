@@ -5,9 +5,8 @@
  * It consolidates functionality from UserNavbar and OrganizationNavbar,
  * supporting both user and organization modes with unified logic.
  *
- * @component
- * @param {InterfaceUserPortalNavbarProps} props - Component props
- * @returns {JSX.Element} The rendered UserPortalNavigationBar component
+ * @param props - Component props
+ * @returns The rendered UserPortalNavigationBar component
  */
 import { useState } from 'react';
 import { Container, Navbar, Nav, Offcanvas } from 'react-bootstrap';
@@ -33,7 +32,7 @@ import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import LanguageSelector from './LanguageSelector';
 import UserProfileDropdown from './UserDropdown';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 export const UserPortalNavigationBar = (
   props: InterfaceUserPortalNavbarProps,
@@ -129,7 +128,7 @@ export const UserPortalNavigationBar = (
       try {
         await logout();
       } catch {
-        toast.error(tCommon('logoutFailed'));
+        NotificationToast.error(tCommon('logoutFailed'));
       }
 
       clearAllItems();

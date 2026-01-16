@@ -1,7 +1,9 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -74,15 +76,6 @@ vi.mock('shared-components/BreadcrumbsComponent/BreadcrumbsComponent', () => ({
 }));
 
 const mockedUseParams = vi.mocked(useParams);
-
-vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
-  const actual = await vi.importActual(
-    '@mui/x-date-pickers/DesktopDateTimePicker',
-  );
-  return {
-    DateTimePicker: actual.DesktopDateTimePicker,
-  };
-});
 
 const link1 = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCK_ERROR, true);
@@ -189,9 +182,9 @@ describe('FundCampaigns Screen', () => {
     await waitFor(() =>
       expect(screen.getAllByText(translations.createCampaign)).toHaveLength(2),
     );
-    await userEvent.click(screen.getByTestId('campaignCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
-      expect(screen.queryByTestId('campaignCloseBtn')).toBeNull(),
+      expect(screen.queryByTestId('campaignModal')).toBeNull(),
     );
   });
 
@@ -214,9 +207,9 @@ describe('FundCampaigns Screen', () => {
         screen.getAllByText(translations.updateCampaign)[0],
       ).toBeInTheDocument(),
     );
-    await userEvent.click(screen.getByTestId('campaignCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
-      expect(screen.queryByTestId('campaignCloseBtn')).toBeNull(),
+      expect(screen.queryByTestId('campaignModal')).toBeNull(),
     );
   });
 
@@ -250,7 +243,7 @@ describe('FundCampaigns Screen', () => {
     const emptyState = await screen.findByTestId('campaigns-empty');
     expect(emptyState).toBeInTheDocument();
 
-    expect(emptyState).toHaveTextContent('No Campaigns Found');
+    expect(emptyState).toHaveTextContent(/No Campaigns Found/i);
   });
 
   it('Should display loading state', () => {

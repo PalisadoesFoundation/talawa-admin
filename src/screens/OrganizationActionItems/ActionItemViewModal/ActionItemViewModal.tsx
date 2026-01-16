@@ -6,17 +6,16 @@ import DatePicker from 'shared-components/DatePicker';
 import React from 'react';
 import dayjs from 'dayjs';
 import type { FC } from 'react';
-import { Form } from 'react-bootstrap';
 import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 import type { InterfaceUser } from 'types/shared-components/User/interface';
 import type { InterfaceEvent } from 'types/Event/interface';
-import styles from 'style/app-fixed.module.css';
+import styles from './ActionItemViewModal.module.css';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
-import { TaskAlt, HistoryToggleOff } from '@mui/icons-material';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 import { useQuery } from '@apollo/client';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
-import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import { MEMBERS_LIST_WITH_DETAILS } from 'GraphQl/Queries/Queries';
 import { BaseModal } from 'shared-components/BaseModal';
 
 export interface IViewModalProps {
@@ -33,7 +32,6 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
 
   const {
     categoryId,
-
     creatorId,
     completionAt,
     assignedAt,
@@ -46,7 +44,6 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
     organizationId,
   } = item;
 
-  // Query to get category details
   const { data: categoryData } = useQuery(GET_ACTION_ITEM_CATEGORY, {
     variables: {
       input: { id: categoryId },
@@ -54,14 +51,12 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
     skip: !categoryId,
   });
 
-  // Query to get organization members to resolve assignee and creator details
-  const { data: membersData } = useQuery(MEMBERS_LIST, {
+  const { data: membersData } = useQuery(MEMBERS_LIST_WITH_DETAILS, {
     variables: { organizationId: organizationId },
   });
 
   const members = membersData?.usersByOrganizationId || [];
 
-  // Get assigned person/group information
   const getAssignedInfo = () => {
     if (volunteer?.user) {
       return {
@@ -86,21 +81,17 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
   const assignedInfo = getAssignedInfo();
 
   const creator = creatorId
-    ? members.find(
-        (member: InterfaceUser) =>
-          member.id === creatorId || member.id === creatorId,
-      )
+    ? members.find((member: InterfaceUser) => member.id === creatorId)
     : item.creator;
 
   const category = categoryData?.actionItemCategory || item.category;
 
-  // Helper function to get display name from user object
   const getUserDisplayName = (
     user: InterfaceUser | null | undefined,
   ): string => {
     if (!user) return 'Unknown';
 
-    if (user.name) {
+    if (user.name && user.name.trim()) {
       return user.name;
     }
     return `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Unknown';
@@ -122,8 +113,9 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
       size="lg"
       showCloseButton
     >
-      <Form className="p-3">
-        <Form.Group className="d-flex mb-3 w-100">
+      <div className="p-3">
+        {' '}
+        <div className="d-flex mb-3 w-100">
           <FormControl fullWidth>
             <TextField
               label={t('category')}
@@ -133,9 +125,8 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
               disabled
             />
           </FormControl>
-        </Form.Group>
-
-        <Form.Group className="d-flex gap-3 mb-3">
+        </div>
+        <div className="d-flex gap-3 mb-3">
           <FormControl fullWidth>
             <TextField
               label={t('assignedTo')}
@@ -157,41 +148,23 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
               disabled
             />
           </FormControl>
-        </Form.Group>
+        </div>
+        <div className="d-flex gap-3 mx-auto mb-3 align-items-start w-100">
+          <FormControl fullWidth>
+            <span className="form-label mb-2">{t('status')}</span>
 
-        <Form.Group className="d-flex gap-3 mx-auto mb-3">
-          {/* Status of Action Item */}
-          <TextField
-            label={t('status')}
-            fullWidth
-            value={isCompleted ? tCommon('completed') : tCommon('pending')}
-            InputProps={{
-              startAdornment: (
-                <>
-                  {isCompleted ? (
-                    <TaskAlt color="success" className="me-2" />
-                  ) : (
-                    <HistoryToggleOff color="warning" className="me-2" />
-                  )}
-                </>
-              ),
-              style: {
-                color: isCompleted
-                  ? 'var(--bs-success)'
-                  : 'var(--pendingStatus-color)',
-              },
-            }}
-            inputProps={{
-              style: {
-                WebkitTextFillColor: isCompleted
-                  ? 'green'
-                  : 'var(--pendingStatus-color)',
-              },
-            }}
-            disabled
-          />
+            <div>
+              <StatusBadge
+                variant={isCompleted ? 'completed' : 'pending'}
+                size="md"
+                dataTestId="action-item-status-badge"
+                ariaLabel={
+                  isCompleted ? tCommon('completed') : tCommon('pending')
+                }
+              />
+            </div>
+          </FormControl>
 
-          {/* Event Information */}
           <TextField
             label={t('event')}
             variant="outlined"
@@ -199,10 +172,8 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
             value={getEventDisplayName(item.recurringEventInstance || event)}
             disabled
           />
-        </Form.Group>
-
-        <Form.Group className={`d-flex gap-3 mb-3`}>
-          {/* Date Calendar Component to display assigned date of Action Item */}
+        </div>
+        <div className={`d-flex gap-3 mb-3`}>
           <DatePicker
             data-testid="assignmentDatePicker"
             format="DD/MM/YYYY"
@@ -213,7 +184,6 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
             onChange={() => null}
           />
 
-          {/* Date Calendar Component to display completion Date of Action Item */}
           {isCompleted && completionAt && (
             <DatePicker
               format="DD/MM/YYYY"
@@ -224,9 +194,8 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
               onChange={() => null}
             />
           )}
-        </Form.Group>
-
-        <Form.Group className={`d-flex ${isCompleted && 'mb-3'}`}>
+        </div>
+        <div className={`d-flex ${isCompleted && 'mb-3'}`}>
           <FormControl fullWidth>
             <TextField
               label={t('preCompletionNotes')}
@@ -238,8 +207,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
               disabled
             />
           </FormControl>
-        </Form.Group>
-
+        </div>
         {isCompleted && (
           <FormControl fullWidth>
             <TextField
@@ -252,7 +220,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
             />
           </FormControl>
         )}
-      </Form>
+      </div>
     </BaseModal>
   );
 };

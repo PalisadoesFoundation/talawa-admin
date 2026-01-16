@@ -7,6 +7,9 @@
   },
   "ends": "Finaliza",
   "occurrences": "ocurrencias",
+  "customRecurrence": "Recurrencia personalizada",
+  "invalidDetailsMessage": "Por favor, verifique los detalles ingresados.",
+  "selectAtLeastOneDay": "Por favor, seleccione al menos un día.",
   "leaderboard": {
     "title": "Tabla de Clasificación",
     "searchByVolunteer": "Buscar por Voluntario",
@@ -665,7 +668,19 @@
     "pendingForSeries": "Pendiente para la serie",
     "completeForInstance": "Completo para esta instancia",
     "completeForSeries": "Completo para la serie",
-    "postCompletionNotesRequired": "Se requieren notas posteriores a la finalización"
+    "postCompletionNotesRequired": "Se requieren notas posteriores a la finalización",
+    "itemCategory": "Categoría del Elemento",
+    "assignedDate": "Fecha de Asignación",
+    "actions": "Acciones",
+    "noCategory": "Sin categoría",
+    "viewActionItem": "Ver Elemento de Acción",
+    "updateStatus": "Actualizar Estado",
+    "pending": "Pendiente",
+    "completed": "Completado",
+    "late": "Atrasado",
+    "searchByAssignee": "Buscar por Asignado",
+    "searchByCategory": "Buscar por Categoría",
+    "sortByAssignedDate": "Ordenar por Fecha de Asignación"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Detalles de la categoría de la agenda",
@@ -719,7 +734,9 @@
     "deleteAgendaItemMsg": "¿Desea eliminar este punto del orden del día?",
     "event": "Evento",
     "search": "Buscar",
-    "attachmentPreview": "Vista previa del adjunto"
+    "attachmentPreview": "Vista previa del adjunto",
+    "errorLoadingAgendaCategories": "Ocurrió un error al cargar los datos de las Categorías de la Agenda",
+    "errorLoadingAgendaItems": "Ocurrió un error al cargar los datos de los Puntos de la Agenda"
   },
   "eventListCard": {
     "location": "Lugar del evento",
@@ -771,7 +788,19 @@
     "occurrences": "ocurrencias",
     "done": "Hecho",
     "invalidDate": "Invalid Date",
-    "createChat": "Crear chat"
+    "createChat": "Crear chat",
+    "isRegisterable": "Es Registrable",
+    "creator": "Creador",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "viewDetails": "Ver Detalles",
+    "noEventsFound": "No se encontraron eventos",
+    "noEvent": "Sin Evento",
+    "averageFeedback": "Retroalimentación Promedio",
+    "noOfAttendees": "Número de Asistentes",
+    "noRegistrations": "Sin Registros",
+    "registrants": "Registrados",
+    "to": "A"
   },
   "funds": {
     "title": "Fondos",
@@ -831,7 +860,12 @@
     "highestGoal": "Meta más alta",
     "errorLoading": "Error al cargar los datos de la campaña",
     "percentageRaised": "% Recaudado",
-    "campaignProgress": "Progreso de la campaña: {{percentage}}%"
+    "campaignProgress": "Progreso de la campaña: {{percentage}}%",
+    "campaignNotFound": "Campaña no encontrada",
+    "dateRangeRequired": "Por favor, seleccione un rango de fechas válido",
+    "campaignNameRequired": "El nombre de la campaña es obligatorio",
+    "invalidDate": "Fecha seleccionada no válida",
+    "endDateBeforeStart": "La fecha de finalización no puede ser anterior a la fecha de inicio"
   },
   "pledges": {
     "title": "Compromisos de Campaña de Financiamiento",
@@ -849,6 +883,7 @@
     "updatePledge": "Actualizar Compromiso",
     "deletePledge": "Eliminar Compromiso",
     "amount": "Monto",
+    "amountMustBeAtLeastOne": "El monto debe ser al menos 1",
     "editPledge": "Editar Compromiso",
     "deletePledgeMsg": "¿Estás seguro de que quieres eliminar este compromiso?",
     "noPledges": "No se encontraron compromisos",
@@ -870,7 +905,8 @@
     "pledgeDate": "Fecha de Compromiso",
     "pledged": "Comprometido",
     "donated": "Donado",
-    "campaignNotActive": "La campaña no está actualmente activa"
+    "campaignNotActive": "La campaña no está actualmente activa",
+    "close": "Cerrar"
   },
   "createPostModal": {
     "title": "Publicaciones de Talawa",
@@ -1408,7 +1444,24 @@
     "pageNumber": "Página {{page}}",
     "goToToday": "Ir a hoy",
     "genderDistribution": "Distribución por género",
-    "ageDistribution": "Distribución por edad"
+    "ageDistribution": "Distribución por edad",
+    "trends": "Tendencias",
+    "demography": "Demografía",
+    "male": "Masculino",
+    "female": "Femenino",
+    "other": "Otro",
+    "under18": "Menor de 18",
+    "age18to40": "18 a 40",
+    "over40": "Mayor de 40",
+    "exportData": "Exportar Datos",
+    "demographics": "Datos Demográficos",
+    "today": "Hoy",
+    "attendanceCount": "Recuento de Asistencia",
+    "totalMembers": "Total de Miembros",
+    "membersAttended": "Miembros que Asistieron",
+    "age": "Edad",
+    "close": "Cerrar",
+    "gender": "Género"
   },
   "eventRegistrant": {
     "sort": "Ordenar",
@@ -1427,23 +1480,6 @@
     "checkedIn": "Registrado",
     "unregister": "Dar de baja",
     "cannotUnregisterCheckedInTooltip": "No se puede dar de baja a un usuario que ya se registró"
-  },
-  "onSpotAttendee": {
-    "title": "Asistente en el lugar",
-    "enterFirstName": "Ingrese el nombre",
-    "enterLastName": "Ingrese el apellido",
-    "enterEmail": "Ingrese el correo electrónico",
-    "enterPhoneNo": "Ingrese el número de teléfono",
-    "selectGender": "Seleccione el género",
-    "invalidDetailsMessage": "Por favor complete todos los campos requeridos",
-    "orgIdMissing": "Falta el ID de la organización. Por favor, inténtelo de nuevo.",
-    "attendeeAddedSuccess": "¡Asistente agregado exitosamente!",
-    "addAttendee": "Agregar",
-    "phoneNumber": "Número de teléfono",
-    "addingAttendee": "Agregando...",
-    "male": "Masculino",
-    "female": "Femenino",
-    "other": "Otro"
   },
   "settings": {
     "settings": "Ajustes",
@@ -1850,12 +1886,21 @@
     "checkedIn": "Registrado",
     "downloadTag": "Descargar etiqueta",
     "checkIn": "Registrar",
-    "eventCheckInManagement": "Gestión de registro de eventos"
+    "eventCheckInManagement": "Gestión de registro de eventos",
+    "checkInMembers": "Registrar miembros",
+    "unknownUser": "Usuario Desconocido",
+    "user": "Usuario",
+    "checkInStatus": "Estado de Registro"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",
     "errorRemovingAttendee": "Error al eliminar asistente",
-    "eventRegistrantsTitle": "Registrados al evento",
+    "eventRegistrantsTitle": "Registrantes del evento",
+    "registerMember": "Registrar miembro",
+    "showAttendees": "Mostrar asistentes",
+    "addingAttendee": "Agregando asistente...",
+    "selectUserFirst": "¡Por favor, elija un usuario para agregar primero!",
+    "unknownUser": "Usuario desconocido",
     "inviteByEmailButton": "Invitar por correo electrónico",
     "addRegistrantButton": "Agregar registrado",
     "noRegistrationsFound": "No se encontraron registros",
@@ -1875,8 +1920,34 @@
       "expiresInDaysLabel": "Expira en (días)",
       "errorSendingInvites": "Error al enviar invitaciones",
       "emailsLabel": "Correos electrónicos y nombres de destinatarios",
-      "emailsHelp": "Proporcione el correo electrónico y el nombre opcional para cada destinatario. Agregue varios destinatarios según sea necesario."
+      "emailsHelp": "Proporcione el correo electrónico y el nombre opcional para cada destinatario. Agregue varios destinatarios según sea necesario.",
+      "noRecipientsError": "Por favor proporcione al menos un correo electrónico de destinatario",
+      "invalidEmailsError": "Correo(s) electrónico(s) inválido(s): {{emails}}",
+      "invitesSentSuccessfully": "Invitaciones enviadas con éxito"
     }
+  },
+  "onSpotAttendee": {
+    "invalidEmailFormat": "Formato de correo electrónico no válido",
+    "organizationIdMissing": "Falta el ID de la organización.",
+    "title": "Asistente in situ",
+    "enterFirstName": "Ingrese el nombre",
+    "enterLastName": "Ingrese el apellido",
+    "enterEmail": "Ingrese el correo electrónico",
+    "enterPhoneNo": "Ingrese el número de teléfono",
+    "selectGender": "Seleccionar género",
+    "invalidDetailsMessage": "Por favor complete todos los detalles requeridos",
+    "orgIdMissing": "Falta el ID de la organización. Por favor, inténtelo de nuevo.",
+    "attendeeAddedSuccess": "¡Asistente agregado exitosamente!",
+    "addAttendee": "Agregar asistente",
+    "phoneNumber": "Nº de teléfono",
+    "phoneNumberPlaceholder": "1234567890",
+    "addingAttendee": "Agregando...",
+    "male": "Masculino",
+    "female": "Femenino",
+    "other": "Otro",
+    "placeholderFirstName": "Juan",
+    "placeholderLastName": "García",
+    "placeholderEmail": "abc@gmail.com"
   },
   "userCampaigns": {
     "title": "Campañas de recaudación de fondos",
@@ -1967,6 +2038,8 @@
     "earliest": "Más Antiguo",
     "requestAccepted": "Solicitud aceptada con éxito",
     "requestRejected": "Solicitud rechazada con éxito",
+    "acceptRequest": "Aceptar Solicitud",
+    "rejectRequest": "Rechazar Solicitud",
     "details": "Detalles",
     "manageGroup": "Gestionar Grupo",
     "mostVolunteers": "La mayoría de voluntarios",
@@ -1990,7 +2063,9 @@
     "deleteVolunteerGroup": "Eliminar grupo de voluntarios {{name}}",
     "deleteVolunteerEntry": "Eliminar entrada de voluntario {{name}}",
     "viewGroup": "Ver grupo",
-    "editGroup": "Editar grupo"
+    "editGroup": "Editar grupo",
+    "invalidNumber": "Número inválido",
+    "viewToggle": "Alternar vista"
   },
   "userVolunteer": {
     "title": "Voluntariado",
@@ -2048,7 +2123,11 @@
     "groupName": "Nombre del Grupo",
     "noOfMembers": "Número de Miembros",
     "options": "Opciones",
-    "notSpecified": "No Especificado"
+    "notSpecified": "No Especificado",
+    "invited": "Invitado",
+    "groupsAvailable": "{{count}} grupos disponibles",
+    "volunteersRequired": "Requerido",
+    "signedUp": "Registrado"
   },
   "pluginStore": {
     "title": "Tienda de Plugins",
@@ -2195,5 +2274,8 @@
   },
   "orgProfileField": {
     "editCustomField": "Editar campo personalizado"
+  },
+  "userGlobalScreen": {
+    "globalFeatures": "Características Globales"
   }
 }

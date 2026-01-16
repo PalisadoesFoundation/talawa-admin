@@ -11,7 +11,7 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
-import styles from 'style/app-fixed.module.css';
+import styles from './Donate.module.css';
 import DonationCard from 'components/UserPortal/DonationCard/DonationCard';
 import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
@@ -177,7 +177,7 @@ export default function Donate(): JSX.Element {
           </Button>
         </div>
 
-        <div className={styles.sectionContainer}>
+        <div className={styles.container}>
           <h5>{t('yourPreviousDonations')}</h5>
 
           {loading ? (
