@@ -1934,6 +1934,7 @@
     "attendeeAddedSuccess": "प्रतिभागी सफलतापूर्वक जोड़ा गया!",
     "addAttendee": "जोड़ें",
     "phoneNumber": "फ़ोन नंबर",
+    "phoneNumberPlaceholder": "1234567890",
     "addingAttendee": "जोड़ा जा रहा है...",
     "male": "पुरुष",
     "female": "महिला",
@@ -1942,7 +1943,6 @@
     "placeholderLastName": "शर्मा",
     "placeholderEmail": "abc@gmail.com"
   },
- 
   "userCampaigns": {
     "title": "धन उगाहने के अभियान",
     "searchByName": "नाम से खोजें...",

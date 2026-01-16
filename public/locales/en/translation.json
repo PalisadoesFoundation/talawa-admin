@@ -1911,6 +1911,7 @@
     "attendeeAddedSuccess": "Attendee added successfully!",
     "addAttendee": "Add Attendee",
     "phoneNumber": "Phone No.",
+    "phoneNumberPlaceholder": "1234567890",
     "addingAttendee": "Adding...",
     "male": "Male",
     "female": "Female",

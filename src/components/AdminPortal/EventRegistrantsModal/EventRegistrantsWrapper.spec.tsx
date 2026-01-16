@@ -19,11 +19,6 @@ import {
   LocalizationProvider,
   AdapterDayjs,
 } from 'shared-components/DatePicker';
-import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
-import {
-  LocalizationProvider,
-  AdapterDayjs,
-} from 'shared-components/DatePicker';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 
 const queryMock = [
@@ -124,9 +119,7 @@ describe('EventRegistrantsWrapper Component', () => {
     test('should render button with correct aria-label', () => {
       renderComponent(defaultProps);
 
-      const button = screen.getByLabelText(
-        'Register Member',
-      );
+      const button = screen.getByLabelText('Register Member');
       expect(button).toBeInTheDocument();
     });
 
@@ -140,9 +133,7 @@ describe('EventRegistrantsWrapper Component', () => {
     test('should not render modal initially', () => {
       renderComponent(defaultProps);
 
-      expect(
-        screen.queryByText('Event Registrants'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText('Event Registrants')).not.toBeInTheDocument();
     });
   });
 
@@ -154,25 +145,19 @@ describe('EventRegistrantsWrapper Component', () => {
       fireEvent.click(button);
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
     });
 
     test('should set showModal state to true when button is clicked', async () => {
       renderComponent(defaultProps);
 
-      expect(
-        screen.queryByText('Event Registrants'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText('Event Registrants')).not.toBeInTheDocument();
 
       fireEvent.click(screen.getByText('Register Member'));
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
     });
 
@@ -183,9 +168,7 @@ describe('EventRegistrantsWrapper Component', () => {
       fireEvent.click(screen.getByText('Register Member'));
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
     });
 
@@ -196,9 +179,7 @@ describe('EventRegistrantsWrapper Component', () => {
       fireEvent.click(screen.getByText('Register Member'));
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
     });
   });
@@ -210,18 +191,14 @@ describe('EventRegistrantsWrapper Component', () => {
       fireEvent.click(screen.getByText('Register Member'));
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
 
       const closeButton = screen.getByRole('button', { name: /close/i });
       fireEvent.click(closeButton);
 
       await waitFor(() => {
-        expect(
-          screen.queryByText('Event Registrants'),
-        ).not.toBeInTheDocument();
+        expect(screen.queryByText('Event Registrants')).not.toBeInTheDocument();
       });
     });
 
@@ -231,17 +208,13 @@ describe('EventRegistrantsWrapper Component', () => {
       fireEvent.click(screen.getByText('Register Member'));
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
 
       fireEvent.click(screen.getByRole('button', { name: /close/i }));
 
       await waitFor(() => {
-        expect(
-          screen.queryByText('Event Registrants'),
-        ).not.toBeInTheDocument();
+        expect(screen.queryByText('Event Registrants')).not.toBeInTheDocument();
       });
     });
   });
@@ -256,9 +229,7 @@ describe('EventRegistrantsWrapper Component', () => {
       fireEvent.click(screen.getByText('Register Member'));
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
 
       fireEvent.click(screen.getByRole('button', { name: /close/i }));
@@ -276,9 +247,7 @@ describe('EventRegistrantsWrapper Component', () => {
 
       fireEvent.click(screen.getByText('Register Member'));
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
 
       fireEvent.click(screen.getByRole('button', { name: /close/i }));
@@ -299,9 +268,7 @@ describe('EventRegistrantsWrapper Component', () => {
       fireEvent.click(screen.getByText('Register Member'));
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
 
       expect(onUpdateMock).not.toHaveBeenCalled();
@@ -313,9 +280,7 @@ describe('EventRegistrantsWrapper Component', () => {
       fireEvent.click(screen.getByText('Register Member'));
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
 
       expect(() => {
@@ -323,9 +288,7 @@ describe('EventRegistrantsWrapper Component', () => {
       }).not.toThrow();
 
       await waitFor(() => {
-        expect(
-          screen.queryByText('Event Registrants'),
-        ).not.toBeInTheDocument();
+        expect(screen.queryByText('Event Registrants')).not.toBeInTheDocument();
       });
     });
 
@@ -336,9 +299,7 @@ describe('EventRegistrantsWrapper Component', () => {
       fireEvent.click(screen.getByText('Register Member'));
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
 
       expect(() => {
@@ -354,39 +315,29 @@ describe('EventRegistrantsWrapper Component', () => {
       // First cycle
       fireEvent.click(screen.getByText('Register Member'));
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
 
       fireEvent.click(screen.getByRole('button', { name: /close/i }));
       await waitFor(() => {
-        expect(
-          screen.queryByText('Event Registrants'),
-        ).not.toBeInTheDocument();
+        expect(screen.queryByText('Event Registrants')).not.toBeInTheDocument();
       });
 
       // Second cycle
       fireEvent.click(screen.getByText('Register Member'));
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
 
       fireEvent.click(screen.getByRole('button', { name: /close/i }));
       await waitFor(() => {
-        expect(
-          screen.queryByText('Event Registrants'),
-        ).not.toBeInTheDocument();
+        expect(screen.queryByText('Event Registrants')).not.toBeInTheDocument();
       });
 
       // Third cycle
       fireEvent.click(screen.getByText('Register Member'));
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
     });
 
@@ -399,9 +350,7 @@ describe('EventRegistrantsWrapper Component', () => {
       // First cycle
       fireEvent.click(screen.getByText('Register Member'));
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
       fireEvent.click(screen.getByRole('button', { name: /close/i }));
       await waitFor(() => {
@@ -411,9 +360,7 @@ describe('EventRegistrantsWrapper Component', () => {
       // Second cycle
       fireEvent.click(screen.getByText('Register Member'));
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
       fireEvent.click(screen.getByRole('button', { name: /close/i }));
       await waitFor(() => {
@@ -423,9 +370,7 @@ describe('EventRegistrantsWrapper Component', () => {
       // Third cycle
       fireEvent.click(screen.getByText('Register Member'));
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
       fireEvent.click(screen.getByRole('button', { name: /close/i }));
       await waitFor(() => {
@@ -441,9 +386,7 @@ describe('EventRegistrantsWrapper Component', () => {
       fireEvent.click(screen.getByText('Register Member'));
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
     });
 
@@ -453,9 +396,7 @@ describe('EventRegistrantsWrapper Component', () => {
       fireEvent.click(screen.getByText('Register Member'));
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
 
       const closeButton = screen.getByRole('button', { name: /close/i });
@@ -474,9 +415,7 @@ describe('EventRegistrantsWrapper Component', () => {
       fireEvent.click(screen.getByText('Register Member'));
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
     });
   });
@@ -493,9 +432,7 @@ describe('EventRegistrantsWrapper Component', () => {
       fireEvent.click(button);
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
     });
 
@@ -506,9 +443,7 @@ describe('EventRegistrantsWrapper Component', () => {
       fireEvent.click(screen.getByText('Register Member'));
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
     });
 
@@ -519,9 +454,7 @@ describe('EventRegistrantsWrapper Component', () => {
       fireEvent.click(screen.getByText('Register Member'));
 
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
     });
 
@@ -533,26 +466,20 @@ describe('EventRegistrantsWrapper Component', () => {
       // Open modal
       fireEvent.click(button);
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
 
       // Close modal
       fireEvent.click(screen.getByRole('button', { name: /close/i }));
       await waitFor(() => {
-        expect(
-          screen.queryByText('Event Registrants'),
-        ).not.toBeInTheDocument();
+        expect(screen.queryByText('Event Registrants')).not.toBeInTheDocument();
       });
 
       // Button should still be clickable
       expect(button).toBeEnabled();
       fireEvent.click(button);
       await waitFor(() => {
-        expect(
-          screen.getByText('Event Registrants'),
-        ).toBeInTheDocument();
+        expect(screen.getByText('Event Registrants')).toBeInTheDocument();
       });
     });
   });
@@ -561,9 +488,7 @@ describe('EventRegistrantsWrapper Component', () => {
     test('should have accessible button with proper aria-label', () => {
       renderComponent(defaultProps);
 
-      const button = screen.getByLabelText(
-        'Register Member',
-      );
+      const button = screen.getByLabelText('Register Member');
       expect(button).toHaveAccessibleName();
     });
 

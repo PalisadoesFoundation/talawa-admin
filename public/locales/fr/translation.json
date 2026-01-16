@@ -1919,7 +1919,7 @@
   "eventRegistrantsWrapper": {
     "buttonAriaLabel": "Afficher les participants",
     "registerMemberButton": "Inscrire un membre"
-    },
+  },
   "onSpotAttendee": {
     "invalidEmailFormat": "Format d'email invalide",
     "organizationIdMissing": "L'identifiant de l'organisation est manquant.",
@@ -1934,6 +1934,7 @@
     "attendeeAddedSuccess": "Participant ajouté avec succès !",
     "addAttendee": "Ajouter un participant",
     "phoneNumber": "N° de téléphone",
+    "phoneNumberPlaceholder": "1234567890",
     "addingAttendee": "Ajout en cours...",
     "male": "Homme",
     "female": "Femme",

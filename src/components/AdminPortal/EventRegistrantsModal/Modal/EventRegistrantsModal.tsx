@@ -56,7 +56,6 @@ import styles from '../EventRegistrants.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { BaseModal } from 'shared-components/BaseModal';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
-import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 type ModalPropType = {
   show: boolean;
@@ -80,7 +79,6 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
     keyPrefix: 'eventRegistrantsModal',
   });
   const { t: tCommon } = useTranslation('common');
-  const { t: tErrors } = useTranslation('errors');
   const { t: tErrors } = useTranslation('errors');
 
   // First, get event details to determine if it's recurring or standalone
@@ -190,7 +188,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             noOptionsText={
               <div className="d-flex ">
                 <p className="me-2">{t('noRegistrationsFound')}</p>
-                 <button
+                <button
                   type="button"
                   className={`underline ${styles.underlineText}`}
                   onClick={() => {

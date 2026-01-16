@@ -1919,7 +1919,7 @@
   "eventRegistrantsWrapper": {
     "buttonAriaLabel": "顯示參與者",
     "registerMemberButton": "註冊成員"
-    },
+  },
   "onSpotAttendee": {
     "invalidEmailFormat": "无效的电子邮件格式",
     "organizationIdMissing": "缺少组织 ID。",
@@ -1934,6 +1934,7 @@
     "attendeeAddedSuccess": "参与者添加成功！",
     "addAttendee": "添加",
     "phoneNumber": "电话号码",
+    "phoneNumberPlaceholder": "1234567890",
     "addingAttendee": "添加中...",
     "male": "男性",
     "female": "女性",
