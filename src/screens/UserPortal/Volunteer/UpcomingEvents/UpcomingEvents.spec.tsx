@@ -471,6 +471,9 @@ describe('UpcomingEvents', () => {
         const btn = screen.getByTestId('eventVolunteerBtn-0');
         expect(btn).toHaveTextContent(/pending/i);
         expect(btn).toBeDisabled();
+        // Verify StatusBadge renders for the requested status
+        const statusBadge = screen.getByTestId('event-status-0');
+        expect(statusBadge).toBeInTheDocument();
       });
     });
 
