@@ -6,6 +6,7 @@ import type {
   HeaderRender,
 } from '../../types/shared-components/DataTable/interface';
 import { PaginationControls } from './Pagination';
+import { SearchBar } from './SearchBar';
 import { TableLoader } from './TableLoader';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
@@ -63,12 +64,112 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     onPageChange,
     totalItems,
     pageInfo,
+    // Search & Filter props
+    showSearch = false,
+    searchPlaceholder,
+    globalSearch,
+    onGlobalSearchChange,
+    initialGlobalSearch = '',
+    columnFilters,
+    onColumnFiltersChange,
+    serverSearch = false,
+    serverFilter = false,
   } = props;
 
   // Pagination state (controlled or uncontrolled)
   const [internalPage, setInternalPage] = React.useState(1);
   const isControlled = currentPage !== undefined && onPageChange !== undefined;
   const page = isControlled ? currentPage : internalPage;
+
+  // --- Filtering & Search Logic ---
+
+  // Controlled / uncontrolled global search
+  const controlledSearch = typeof globalSearch === 'string' && typeof onGlobalSearchChange === 'function';
+  const [uQuery, setUQuery] = React.useState(initialGlobalSearch);
+  const query = controlledSearch ? globalSearch! : uQuery;
+
+  // Controlled / uncontrolled column filters
+  const controlledFilters = !!columnFilters && typeof onColumnFiltersChange === 'function';
+  const [uFilters, setUFilters] = React.useState<Record<string, unknown>>({});
+  const filters = controlledFilters ? columnFilters! : uFilters;
+
+  function updateGlobalSearch(next: string) {
+    if (controlledSearch) onGlobalSearchChange!(next);
+    else setUQuery(next);
+    // Reset to first page on search change if using client pagination
+    if (paginationMode === 'client' && !isControlled) setInternalPage(1);
+  }
+
+  // Helper to get raw cell value
+  function getCellValue(row: T, accessor: IColumnDef<T>['accessor']) {
+    return typeof accessor === 'function'
+      ? accessor(row)
+      : row[accessor as keyof T];
+  }
+
+  // Helper for text search interactions
+  function toSearchableString(v: unknown): string {
+    if (v === null || v === undefined) return '';
+    if (v instanceof Date) return v.toISOString();
+    return String(v);
+  }
+
+  // Client-side filtering pipeline (skip when server flags are set)
+  const filteredRows: T[] = React.useMemo(() => {
+    let rows = data ?? [];
+    if (!rows.length) return rows;
+
+    // 1) Per-column filters
+    if (!serverFilter && filters && Object.keys(filters).length > 0) {
+      rows = rows.filter((row) => {
+        for (const [colId, filterValueRaw] of Object.entries(filters)) {
+          const col = columns.find((c) => c.id === colId);
+          if (!col) continue;
+          if (col.meta?.filterable === false) continue; // opt-out
+
+          const filterValue = filterValueRaw;
+          if (filterValue === '' || filterValue === undefined || filterValue === null) continue;
+
+          // Use custom filterFn if provided
+          if (typeof col.meta?.filterFn === 'function') {
+            if (!col.meta!.filterFn!(row, filterValue)) return false;
+            continue;
+          }
+
+          // Default text "contains" (case-insensitive) for strings, equals for others
+          const cell = getCellValue(row, col.accessor);
+          if (typeof filterValue === 'string') {
+            const hay = toSearchableString(cell).toLowerCase();
+            const needle = filterValue.toLowerCase();
+            if (!hay.includes(needle)) return false;
+          } else {
+            // shallow equality fallback
+            if (cell !== filterValue) return false;
+          }
+        }
+        return true;
+      });
+    }
+
+    // 2) Global search across searchable columns
+    const q = (query ?? '').trim().toLowerCase();
+    if (!serverSearch && q) {
+      const searchable = columns.filter((c) => c.meta?.searchable !== false);
+      rows = rows.filter((row) => {
+        return searchable.some((col) => {
+          if (typeof col.meta?.getSearchValue === 'function') {
+            return col.meta!.getSearchValue!(row).toLowerCase().includes(q);
+          }
+          const v = getCellValue(row, col.accessor);
+          return toSearchableString(v).toLowerCase().includes(q);
+        });
+      });
+    }
+
+    return rows;
+  }, [data, columns, filters, serverFilter, query, serverSearch]);
+
+  // --- End Filtering Logic ---
 
   // Track warning state for each console.warn to prevent spam independently
   const hasWarnedCurrentPageRef = React.useRef(false);
@@ -114,12 +215,15 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   const showPaginationControls =
     paginationMode === 'client' ||
     (paginationMode === 'server' && pageInfo !== undefined);
+
+  // NOTE: We use filteredRows here instead of data!
   const startIndex = shouldSliceClientSide ? (page - 1) * pageSize : 0;
-  const endIndex = shouldSliceClientSide ? startIndex + pageSize : data.length;
+  const endIndex = shouldSliceClientSide ? startIndex + pageSize : filteredRows.length;
   const paginatedData = shouldSliceClientSide
-    ? data.slice(startIndex, endIndex)
-    : data;
-  const total = totalItems ?? data.length;
+    ? filteredRows.slice(startIndex, endIndex)
+    : filteredRows;
+
+  const total = totalItems ?? filteredRows.length;
 
   const tableClassNames = tableClassName
     ? `${styles.dataTableBase} ${tableClassName}`
@@ -167,7 +271,8 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   }
 
   // 2) Table with skeleton rows when loading (initial load, no data)
-  if (loading && (!paginatedData || paginatedData.length === 0)) {
+  // Check if we have no data at all (ignore filters for initial load check)
+  if (loading && (!data || data.length === 0)) {
     return (
       <div className={styles.dataTableWrapper} data-testid="datatable-loading">
         <Table
@@ -212,16 +317,23 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     );
   }
 
-  // 3) Empty state
-  if (!paginatedData || paginatedData.length === 0) {
+  // 3) Empty state (if no rows after filter or empty dataset)
+  if (!loading && (!paginatedData || paginatedData.length === 0)) {
     return (
-      <div
-        className={styles.dataEmptyState}
-        role="status"
-        aria-live="polite"
-        data-testid="datatable-empty"
-      >
-        {emptyMessage}
+      <div className={styles.dataTableWrapper}>
+        {showSearch && (
+          <div className={styles.toolbar}>
+            <SearchBar value={query} onChange={updateGlobalSearch} placeholder={searchPlaceholder} />
+          </div>
+        )}
+        <div
+          className={styles.dataEmptyState}
+          role="status"
+          aria-live="polite"
+          data-testid="datatable-empty"
+        >
+          {emptyMessage}
+        </div>
       </div>
     );
   }
@@ -229,6 +341,12 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   // 4) Table content with optional loading overlay and partial loading
   return (
     <div className={styles.dataTableWrapper}>
+      {showSearch && (
+        <div className={styles.toolbar}>
+          <SearchBar value={query} onChange={updateGlobalSearch} placeholder={searchPlaceholder} />
+        </div>
+      )}
+
       {/* Loading overlay for refetch state */}
       {loading && loadingOverlay && (
         <TableLoader
@@ -262,38 +380,29 @@ export function DataTable<T>(props: IDataTableProps<T>) {
         <tbody>
           {renderRow
             ? paginatedData.map((row, idx) => (
-                <React.Fragment key={getKey(row, idx)}>
-                  {renderRow(row, idx)}
-                </React.Fragment>
-              ))
+              <React.Fragment key={getKey(row, idx)}>
+                {renderRow(row, idx)}
+              </React.Fragment>
+            ))
             : paginatedData.map((row, idx) => (
-                <tr
-                  key={getKey(row, idx)}
-                  data-testid={`datatable-row-${getKey(row, idx)}`}
-                >
-                  {columns.map((col) => {
-                    const val = getCellValue(row, col.accessor);
-                    return (
-                      <td key={col.id} data-testid={`datatable-cell-${col.id}`}>
-                        {col.render
-                          ? col.render(val, row)
-                          : renderCellValue(val)}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
+              <tr
+                key={getKey(row, idx)}
+                data-testid={`datatable-row-${getKey(row, idx)}`}
+              >
+                {columns.map((col) => {
+                  const val = getCellValue(row, col.accessor);
+                  return (
+                    <td key={col.id} data-testid={`datatable-cell-${col.id}`}>
+                      {col.render
+                        ? col.render(val, row)
+                        : renderCellValue(val)}
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
 
-          {/* Partial loading: append skeleton rows for fetchMore
-           *
-           * loadingMore behavior by pagination mode:
-           * - Client mode: Parent manages data array and sets loadingMore=true while fetching additional items
-           * - Server mode (Variant A with pageInfo/onLoadMore): Parent sets loadingMore=true after calling onLoadMore()
-           *   to indicate data is being fetched; resolves when parent appends new items to data array
-           * - Server mode (Variant B without pageInfo/onLoadMore): Parent manages all fetching externally
-           *   and sets loadingMore=true to show skeleton rows while loading
-           * - No pagination: Similar to server mode; parent manages loading state and appends items as they arrive
-           */}
+          {/* Partial loading: append skeleton rows for fetchMore */}
           {loadingMore &&
             Array.from({ length: skeletonRows }).map((_, rowIdx) => (
               <tr

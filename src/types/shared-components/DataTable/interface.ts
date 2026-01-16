@@ -44,9 +44,32 @@ export interface IColumnDef<T, TValue = unknown> {
 
   /** Optional metadata for future features */
   meta?: {
+    // Sorting
     sortable?: boolean;
+    sortFn?: (a: T, b: T) => number;
+
+    // Filtering / search
+    /**
+     * If true, this column participates in local filtering and/or global search.
+     * Defaults: filterable=true, searchable=true unless set false.
+     */
     filterable?: boolean;
+    searchable?: boolean;
+
+    /**
+     * Custom filter for this column. Return true to keep the row.
+     * value is columnFilters[col.id].
+     */
+    filterFn?: (row: T, value: unknown) => boolean;
+
+    /**
+     * Optional extractor for global search (if the default cell string is not ideal).
+     */
+    getSearchValue?: (row: T) => string;
+
     width?: string | number;
+    align?: 'left' | 'center' | 'right';
+    ariaLabel?: string;
   };
 }
 
@@ -84,9 +107,9 @@ export type PageInfo = IPageInfo;
 export type Edge<TNode> = { node: TNode | null } | null;
 export type Connection<TNode> =
   | {
-      edges?: Array<Edge<TNode>> | null;
-      pageInfo?: PageInfo | null;
-    }
+    edges?: Array<Edge<TNode>> | null;
+    pageInfo?: PageInfo | null;
+  }
   | null
   | undefined;
 
@@ -95,12 +118,12 @@ export type Connection<TNode> =
  */
 type ConnectionResolver<TNode, TData> = (data: TData) =>
   | {
-      edges?:
-        | Array<{ node: TNode | null | undefined } | null | undefined>
-        | null
-        | undefined;
-      pageInfo?: IPageInfo | null | undefined;
-    }
+    edges?:
+    | Array<{ node: TNode | null | undefined } | null | undefined>
+    | null
+    | undefined;
+    pageInfo?: IPageInfo | null | undefined;
+  }
   | null
   | undefined;
 
@@ -339,6 +362,25 @@ export interface IBaseDataTableProps<T, TValue = unknown> {
    * while a refetch is in flight. This avoids content jump during refresh.
    */
   loadingOverlay?: boolean;
+
+  // Filtering and Global Search
+  showSearch?: boolean;                   // render a SearchBar above the table
+  searchPlaceholder?: string;
+
+  // Global search (controlled)
+  globalSearch?: string;
+  onGlobalSearchChange?: (q: string) => void;
+
+  // Global search (uncontrolled initial)
+  initialGlobalSearch?: string;
+
+  // Per-column filters (controlled)
+  columnFilters?: Record<string, unknown>;
+  onColumnFiltersChange?: (filters: Record<string, unknown>) => void;
+
+  // Server-side modes (do not filter locally; only emit changes)
+  serverSearch?: boolean;
+  serverFilter?: boolean;
 }
 
 /**
@@ -386,25 +428,25 @@ type ClientPaginationProps = {
  */
 type ServerPaginationProps =
   | {
-      paginationMode: 'server';
-      pageSize?: never;
-      currentPage?: never;
-      onPageChange?: (page: number) => void;
-      totalItems?: number;
-      pageInfo: IPageInfo; // GraphQL-style page info
-      onLoadMore: () => void; // called to fetch next page
-      loadingMore?: boolean; // true while fetching more
-    }
+    paginationMode: 'server';
+    pageSize?: never;
+    currentPage?: never;
+    onPageChange?: (page: number) => void;
+    totalItems?: number;
+    pageInfo: IPageInfo; // GraphQL-style page info
+    onLoadMore: () => void; // called to fetch next page
+    loadingMore?: boolean; // true while fetching more
+  }
   | {
-      paginationMode: 'server';
-      pageSize?: never;
-      currentPage?: never;
-      onPageChange?: (page: number) => void;
-      totalItems?: number;
-      pageInfo?: undefined;
-      onLoadMore?: undefined;
-      loadingMore?: boolean;
-    };
+    paginationMode: 'server';
+    pageSize?: never;
+    currentPage?: never;
+    onPageChange?: (page: number) => void;
+    totalItems?: number;
+    pageInfo?: undefined;
+    onLoadMore?: undefined;
+    loadingMore?: boolean;
+  };
 
 /**
  * No-pagination props.

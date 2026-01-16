@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import { DataTable } from './DataTable';
 import { TableLoader } from './TableLoader';
@@ -11,6 +11,87 @@ describe('DataTable', () => {
   /* ------------------------------------------------------------------
    * Basic rendering
    * ------------------------------------------------------------------ */
+
+  it('filters rows via global search across searchable columns', () => {
+    const columns = [
+      { id: 'name', header: 'Name', accessor: 'name' as const, meta: { filterable: true, searchable: true } },
+      { id: 'email', header: 'Email', accessor: 'email' as const, meta: { filterable: true, searchable: true } },
+    ];
+    const data = [
+      { name: 'Ada Lovelace', email: 'ada@example.com' },
+      { name: 'Bob', email: 'bob@example.com' },
+    ];
+
+    render(<DataTable data={data} columns={columns} showSearch initialGlobalSearch="ada" />);
+
+    expect(screen.getByText('Ada Lovelace')).toBeInTheDocument();
+    expect(screen.queryByText('Bob')).toBeNull();
+  });
+
+  it('filters rows based on columnFilters prop', () => {
+    const columns = [
+      { id: 'name', header: 'Name', accessor: 'name' as const, meta: { filterable: true } },
+    ];
+    const data = [
+      { name: 'Ada' },
+      { name: 'Bob' },
+    ];
+
+    render(<DataTable data={data} columns={columns} columnFilters={{ name: 'Bob' }} onColumnFiltersChange={() => { }} />);
+
+    expect(screen.queryByText('Ada')).toBeNull();
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+  });
+
+  it('uses custom filterFn if provided', () => {
+    const columns = [
+      {
+        id: 'age',
+        header: 'Age',
+        accessor: 'age' as const,
+        meta: {
+          filterable: true,
+          // Custom filter: exact number match from string input
+          filterFn: (row: any, val: any) => row.age === Number(val),
+        },
+      },
+    ];
+    const data = [{ age: 10 }, { age: 20 }];
+
+    render(<DataTable data={data} columns={columns} columnFilters={{ age: '20' }} onColumnFiltersChange={() => { }} />);
+
+    expect(screen.queryByText('10')).toBeNull();
+    expect(screen.getByText('20')).toBeInTheDocument();
+  });
+
+  it('server modes do not filter locally', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ name: 'Ada' }, { name: 'Bob' }];
+    const onSearch = vi.fn();
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        showSearch
+        globalSearch=""
+        onGlobalSearchChange={onSearch}
+        columnFilters={{}}
+        onColumnFiltersChange={() => { }}
+        serverSearch
+        serverFilter // Should prevent local filtering even if we had filters
+      />
+    );
+
+    // Simulate search
+    const input = screen.getByRole('searchbox');
+    fireEvent.change(input, { target: { value: 'Ada' } });
+
+    expect(onSearch).toHaveBeenCalledWith('Ada');
+    // Both should still be present because serverSearch=true disables local filtering
+    expect(screen.getByText('Ada')).toBeInTheDocument();
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+  });
 
   it('renders headers and rows', () => {
     const columns = [
@@ -498,9 +579,9 @@ describe('DataTable', () => {
       header: string;
       accessor: keyof TestRow;
     }> = [
-      { id: 'a', header: 'A', accessor: 'a' },
-      { id: 'b', header: 'B', accessor: 'b' },
-    ];
+        { id: 'a', header: 'A', accessor: 'a' },
+        { id: 'b', header: 'B', accessor: 'b' },
+      ];
 
     render(<TableLoader columns={columns} rows={2} />);
 
