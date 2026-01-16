@@ -14,30 +14,136 @@ describe('DataTable', () => {
 
   it('filters rows via global search across searchable columns', () => {
     const columns = [
-      { id: 'name', header: 'Name', accessor: 'name' as const, meta: { filterable: true, searchable: true } },
-      { id: 'email', header: 'Email', accessor: 'email' as const, meta: { filterable: true, searchable: true } },
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { filterable: true, searchable: true },
+      },
+      {
+        id: 'email',
+        header: 'Email',
+        accessor: 'email' as const,
+        meta: { filterable: true, searchable: true },
+      },
     ];
     const data = [
       { name: 'Ada Lovelace', email: 'ada@example.com' },
       { name: 'Bob', email: 'bob@example.com' },
     ];
 
-    render(<DataTable data={data} columns={columns} showSearch initialGlobalSearch="ada" />);
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        showSearch
+        initialGlobalSearch="ada"
+      />,
+    );
 
     expect(screen.getByText('Ada Lovelace')).toBeInTheDocument();
     expect(screen.queryByText('Bob')).toBeNull();
   });
 
+  it('filters rows using meta.getSearchValue', () => {
+    const columns = [
+      {
+        id: 'user',
+        header: 'User',
+        accessor: 'user' as const,
+        meta: {
+          searchable: true,
+          getSearchValue: (row: { user: { name: string } }) => row.user.name,
+        },
+      },
+    ];
+    const data = [{ user: { name: 'Alice' } }, { user: { name: 'Bob' } }];
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        showSearch
+        initialGlobalSearch="Alice"
+      />,
+    );
+
+    expect(screen.getByText('{"name":"Alice"}')).toBeInTheDocument();
+    expect(screen.queryByText('{"name":"Bob"}')).toBeNull();
+  });
+
+  it('excludes columns from search when meta.searchable is false', () => {
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { searchable: true },
+      },
+      {
+        id: 'email',
+        header: 'Email',
+        accessor: 'email' as const,
+        meta: { searchable: false },
+      },
+    ];
+    const data = [{ name: 'Ada', email: 'secret@example.com' }];
+
+    // Search for email content, which should be ignored
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        showSearch
+        initialGlobalSearch="secret"
+      />,
+    );
+
+    expect(screen.queryByText('Ada')).toBeNull();
+  });
+
+  it('updates global search in uncontrolled mode', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ name: 'Ada' }, { name: 'Bob' }];
+
+    render(<DataTable data={data} columns={columns} showSearch />);
+
+    // Initially both visible
+    expect(screen.getByText('Ada')).toBeInTheDocument();
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+
+    // Type in search box
+    const input = screen.getByRole('searchbox');
+    fireEvent.change(input, { target: { value: 'Ada' } });
+
+    // Should filter
+    expect(screen.getByText('Ada')).toBeInTheDocument();
+    expect(screen.queryByText('Bob')).toBeNull();
+  });
+
   it('filters rows based on columnFilters prop', () => {
     const columns = [
-      { id: 'name', header: 'Name', accessor: 'name' as const, meta: { filterable: true } },
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: {
+          filterable: true,
+          filterFn: (row: { name: string }, val: unknown) =>
+            row.name === String(val),
+        },
+      },
     ];
-    const data = [
-      { name: 'Ada' },
-      { name: 'Bob' },
-    ];
+    const data = [{ name: 'Ada' }, { name: 'Bob' }];
 
-    render(<DataTable data={data} columns={columns} columnFilters={{ name: 'Bob' }} onColumnFiltersChange={() => { }} />);
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        columnFilters={{ name: 'Bob' }}
+        onColumnFiltersChange={() => {}}
+      />,
+    );
 
     expect(screen.queryByText('Ada')).toBeNull();
     expect(screen.getByText('Bob')).toBeInTheDocument();
@@ -52,13 +158,21 @@ describe('DataTable', () => {
         meta: {
           filterable: true,
           // Custom filter: exact number match from string input
-          filterFn: (row: any, val: any) => row.age === Number(val),
+          filterFn: (row: { age: number }, val: unknown) =>
+            row.age === Number(val),
         },
       },
     ];
     const data = [{ age: 10 }, { age: 20 }];
 
-    render(<DataTable data={data} columns={columns} columnFilters={{ age: '20' }} onColumnFiltersChange={() => { }} />);
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        columnFilters={{ age: '20' }}
+        onColumnFiltersChange={() => {}}
+      />,
+    );
 
     expect(screen.queryByText('10')).toBeNull();
     expect(screen.getByText('20')).toBeInTheDocument();
@@ -77,10 +191,10 @@ describe('DataTable', () => {
         globalSearch=""
         onGlobalSearchChange={onSearch}
         columnFilters={{}}
-        onColumnFiltersChange={() => { }}
+        onColumnFiltersChange={() => {}}
         serverSearch
         serverFilter // Should prevent local filtering even if we had filters
-      />
+      />,
     );
 
     // Simulate search
@@ -342,7 +456,7 @@ describe('DataTable', () => {
     );
 
     const emptyDiv = screen.getByTestId('datatable-empty');
-    expect(emptyDiv).toHaveAttribute('role', 'status');
+    expect(emptyDiv.tagName).toBe('OUTPUT');
     expect(emptyDiv).toHaveAttribute('aria-live', 'polite');
     expect(emptyDiv).toHaveTextContent('Nothing here!');
   });
@@ -579,9 +693,9 @@ describe('DataTable', () => {
       header: string;
       accessor: keyof TestRow;
     }> = [
-        { id: 'a', header: 'A', accessor: 'a' },
-        { id: 'b', header: 'B', accessor: 'b' },
-      ];
+      { id: 'a', header: 'A', accessor: 'a' },
+      { id: 'b', header: 'B', accessor: 'b' },
+    ];
 
     render(<TableLoader columns={columns} rows={2} />);
 

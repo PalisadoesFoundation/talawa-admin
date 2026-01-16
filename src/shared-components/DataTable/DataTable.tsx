@@ -84,12 +84,15 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   // --- Filtering & Search Logic ---
 
   // Controlled / uncontrolled global search
-  const controlledSearch = typeof globalSearch === 'string' && typeof onGlobalSearchChange === 'function';
+  const controlledSearch =
+    typeof globalSearch === 'string' &&
+    typeof onGlobalSearchChange === 'function';
   const [uQuery, setUQuery] = React.useState(initialGlobalSearch);
   const query = controlledSearch ? globalSearch! : uQuery;
 
   // Controlled / uncontrolled column filters
-  const controlledFilters = !!columnFilters && typeof onColumnFiltersChange === 'function';
+  const controlledFilters =
+    !!columnFilters && typeof onColumnFiltersChange === 'function';
   const [uFilters, setUFilters] = React.useState<Record<string, unknown>>({});
   const filters = controlledFilters ? columnFilters! : uFilters;
 
@@ -97,6 +100,21 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     if (controlledSearch) onGlobalSearchChange!(next);
     else setUQuery(next);
     // Reset to first page on search change if using client pagination
+    if (paginationMode === 'client' && !isControlled) setInternalPage(1);
+  }
+
+  function updateColumnFilters(colId: string, val: unknown) {
+    const next = { ...filters };
+    if (val === undefined || val === null || val === '') {
+      delete next[colId];
+    } else {
+      next[colId] = val;
+    }
+
+    if (controlledFilters) onColumnFiltersChange!(next);
+    else setUFilters(next);
+
+    // Reset to first page on filter change if using client pagination
     if (paginationMode === 'client' && !isControlled) setInternalPage(1);
   }
 
@@ -128,7 +146,12 @@ export function DataTable<T>(props: IDataTableProps<T>) {
           if (col.meta?.filterable === false) continue; // opt-out
 
           const filterValue = filterValueRaw;
-          if (filterValue === '' || filterValue === undefined || filterValue === null) continue;
+          if (
+            filterValue === '' ||
+            filterValue === undefined ||
+            filterValue === null
+          )
+            continue;
 
           // Use custom filterFn if provided
           if (typeof col.meta?.filterFn === 'function') {
@@ -218,7 +241,9 @@ export function DataTable<T>(props: IDataTableProps<T>) {
 
   // NOTE: We use filteredRows here instead of data!
   const startIndex = shouldSliceClientSide ? (page - 1) * pageSize : 0;
-  const endIndex = shouldSliceClientSide ? startIndex + pageSize : filteredRows.length;
+  const endIndex = shouldSliceClientSide
+    ? startIndex + pageSize
+    : filteredRows.length;
   const paginatedData = shouldSliceClientSide
     ? filteredRows.slice(startIndex, endIndex)
     : filteredRows;
@@ -323,17 +348,20 @@ export function DataTable<T>(props: IDataTableProps<T>) {
       <div className={styles.dataTableWrapper}>
         {showSearch && (
           <div className={styles.toolbar}>
-            <SearchBar value={query} onChange={updateGlobalSearch} placeholder={searchPlaceholder} />
+            <SearchBar
+              value={query}
+              onChange={updateGlobalSearch}
+              placeholder={searchPlaceholder ?? tCommon('search')}
+            />
           </div>
         )}
-        <div
+        <output
           className={styles.dataEmptyState}
-          role="status"
           aria-live="polite"
           data-testid="datatable-empty"
         >
           {emptyMessage}
-        </div>
+        </output>
       </div>
     );
   }
@@ -343,7 +371,11 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     <div className={styles.dataTableWrapper}>
       {showSearch && (
         <div className={styles.toolbar}>
-          <SearchBar value={query} onChange={updateGlobalSearch} placeholder={searchPlaceholder} />
+          <SearchBar
+            value={query}
+            onChange={updateGlobalSearch}
+            placeholder={searchPlaceholder ?? tCommon('search')}
+          />
         </div>
       )}
 
@@ -380,27 +412,27 @@ export function DataTable<T>(props: IDataTableProps<T>) {
         <tbody>
           {renderRow
             ? paginatedData.map((row, idx) => (
-              <React.Fragment key={getKey(row, idx)}>
-                {renderRow(row, idx)}
-              </React.Fragment>
-            ))
+                <React.Fragment key={getKey(row, idx)}>
+                  {renderRow(row, idx)}
+                </React.Fragment>
+              ))
             : paginatedData.map((row, idx) => (
-              <tr
-                key={getKey(row, idx)}
-                data-testid={`datatable-row-${getKey(row, idx)}`}
-              >
-                {columns.map((col) => {
-                  const val = getCellValue(row, col.accessor);
-                  return (
-                    <td key={col.id} data-testid={`datatable-cell-${col.id}`}>
-                      {col.render
-                        ? col.render(val, row)
-                        : renderCellValue(val)}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
+                <tr
+                  key={getKey(row, idx)}
+                  data-testid={`datatable-row-${getKey(row, idx)}`}
+                >
+                  {columns.map((col) => {
+                    const val = getCellValue(row, col.accessor);
+                    return (
+                      <td key={col.id} data-testid={`datatable-cell-${col.id}`}>
+                        {col.render
+                          ? col.render(val, row)
+                          : renderCellValue(val)}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
 
           {/* Partial loading: append skeleton rows for fetchMore */}
           {loadingMore &&

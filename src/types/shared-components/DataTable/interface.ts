@@ -107,9 +107,9 @@ export type PageInfo = IPageInfo;
 export type Edge<TNode> = { node: TNode | null } | null;
 export type Connection<TNode> =
   | {
-    edges?: Array<Edge<TNode>> | null;
-    pageInfo?: PageInfo | null;
-  }
+      edges?: Array<Edge<TNode>> | null;
+      pageInfo?: PageInfo | null;
+    }
   | null
   | undefined;
 
@@ -118,12 +118,12 @@ export type Connection<TNode> =
  */
 type ConnectionResolver<TNode, TData> = (data: TData) =>
   | {
-    edges?:
-    | Array<{ node: TNode | null | undefined } | null | undefined>
-    | null
-    | undefined;
-    pageInfo?: IPageInfo | null | undefined;
-  }
+      edges?:
+        | Array<{ node: TNode | null | undefined } | null | undefined>
+        | null
+        | undefined;
+      pageInfo?: IPageInfo | null | undefined;
+    }
   | null
   | undefined;
 
@@ -364,7 +364,7 @@ export interface IBaseDataTableProps<T, TValue = unknown> {
   loadingOverlay?: boolean;
 
   // Filtering and Global Search
-  showSearch?: boolean;                   // render a SearchBar above the table
+  showSearch?: boolean; // render a SearchBar above the table
   searchPlaceholder?: string;
 
   // Global search (controlled)
@@ -428,25 +428,25 @@ type ClientPaginationProps = {
  */
 type ServerPaginationProps =
   | {
-    paginationMode: 'server';
-    pageSize?: never;
-    currentPage?: never;
-    onPageChange?: (page: number) => void;
-    totalItems?: number;
-    pageInfo: IPageInfo; // GraphQL-style page info
-    onLoadMore: () => void; // called to fetch next page
-    loadingMore?: boolean; // true while fetching more
-  }
+      paginationMode: 'server';
+      pageSize?: never;
+      currentPage?: never;
+      onPageChange?: (page: number) => void;
+      totalItems?: number;
+      pageInfo: IPageInfo; // GraphQL-style page info
+      onLoadMore: () => void; // called to fetch next page
+      loadingMore?: boolean; // true while fetching more
+    }
   | {
-    paginationMode: 'server';
-    pageSize?: never;
-    currentPage?: never;
-    onPageChange?: (page: number) => void;
-    totalItems?: number;
-    pageInfo?: undefined;
-    onLoadMore?: undefined;
-    loadingMore?: boolean;
-  };
+      paginationMode: 'server';
+      pageSize?: never;
+      currentPage?: never;
+      onPageChange?: (page: number) => void;
+      totalItems?: number;
+      pageInfo?: undefined;
+      onLoadMore?: undefined;
+      loadingMore?: boolean;
+    };
 
 /**
  * No-pagination props.
@@ -519,4 +519,14 @@ export interface ITableLoaderProps<T> {
 
   /** Accessible label for the loading table, used for screen readers */
   ariaLabel?: string;
+}
+
+/**
+ * Props for the SearchBar component
+ */
+export interface ISearchBarProps {
+  value: string;
+  onChange: (q: string) => void;
+  placeholder?: string;
+  'aria-label'?: string;
 }
