@@ -289,6 +289,12 @@ describe('AgendaItemsCreateModal', () => {
     };
     sharedMocks.uploadFileToMinio.mockResolvedValue(mockMinioResult);
 
+    // Create clean form state without old-format attachments to avoid JSON parse errors
+    const cleanFormState = {
+      ...mockFormState1,
+      attachments: [], // Start fresh - no pre-existing plain string attachments
+    };
+
     render(
       <MockedProvider>
         <Provider store={store}>
@@ -298,7 +304,7 @@ describe('AgendaItemsCreateModal', () => {
                 <AgendaItemsCreateModal
                   agendaItemCreateModalIsOpen
                   hideCreateModal={mockHideCreateModal}
-                  formState={mockFormState1}
+                  formState={cleanFormState}
                   setFormState={mockSetFormState}
                   createAgendaItemHandler={mockCreateAgendaItemHandler}
                   t={mockT}
@@ -331,7 +337,8 @@ describe('AgendaItemsCreateModal', () => {
     expect(setFormStateCall).toBeDefined();
 
     if (setFormStateCall) {
-      const result = setFormStateCall[0](mockFormState1);
+      // Apply updater to clean state (no pre-existing plain string attachments)
+      const result = setFormStateCall[0](cleanFormState);
       // Check that attachments includes a JSON-stringified MinIO metadata object
       const newAttachment = result.attachments[result.attachments.length - 1];
       expect(typeof newAttachment).toBe('string');
