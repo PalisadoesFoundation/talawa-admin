@@ -6,7 +6,7 @@ import React, { useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { BaseModal } from 'shared-components/BaseModal';
 import { currencyOptions, currencySymbols } from 'utils/currency';
-import styles from 'style/app-fixed.module.css';
+import styles from './CampaignModal.module.css';
 
 import { errorHandler } from 'utils/errorHandler';
 import { useTranslation } from 'react-i18next';

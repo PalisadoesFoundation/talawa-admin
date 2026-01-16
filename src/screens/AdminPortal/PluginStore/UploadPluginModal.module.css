@@ -2,7 +2,7 @@
   position: relative;
   display: flex;
   min-height: var(--space-25);
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12px;
 }
 
@@ -12,7 +12,7 @@
 }
 
 .leftPanel {
-  border-right: var(--border-1) solid #e7e7e7;
+  border-right: var(--border-1) solid var(--color-gray-100);
 }
 
 .section {
@@ -26,23 +26,23 @@
 
 .sectionDescription {
   margin: var(--space-0);
-  color: #666;
+  color: var(--color-gray-600);
   font-size: var(--font-size-sm);
 }
 
 .dropzone {
-  border: var(--border-2) dashed #ddd;
+  border: var(--border-2) dashed var(--color-gray-100);
   border-radius: 12px;
   padding: var(--space-9);
   text-align: center;
-  background: #fafafa;
+  background: var(--color-gray-50);
   cursor: pointer;
   transition: all 0.2s;
 }
 
 .uploadIcon {
   font-size: var(--font-size-4xl);
-  color: #ccc;
+  color: var(--color-gray-200);
   margin-bottom: var(--space-5);
 }
 
@@ -54,7 +54,7 @@
 
 .dropzoneHint {
   font-size: var(--font-size-sm);
-  color: #666;
+  color: var(--color-gray-600);
 }
 
 .hiddenInput {
@@ -64,10 +64,10 @@
 .errorBox {
   margin-top: var(--space-5);
   padding: var(--space-4);
-  background: #fff3cd;
-  border: var(--border-1) solid #ffeaa7;
-  border-radius: 8px;
-  color: #856404;
+  background: var(--color-yellow-100);
+  border: var(--border-1) solid var(--color-yellow-500);
+  border-radius: var(--radius-md);
+  color: var(--color-yellow-600);
   font-size: var(--font-size-sm);
 }
 
@@ -108,7 +108,7 @@
 }
 
 .checkIcon {
-  color: #28a745;
+  color: var(--color-green-500);
   margin-right: var(--space-3);
 }
 
@@ -128,13 +128,13 @@
 
 .codeText {
   font-size: var(--font-size-sm);
-  color: #666;
+  color: var(--color-gray-600);
 }
 
 .codeBlock {
-  background: #f8f9fa;
+  background: var(--color-gray-50);
   padding: var(--space-5);
-  border-radius: 8px;
+  border-radius: var(--radius-md);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
   margin: var(--space-0);

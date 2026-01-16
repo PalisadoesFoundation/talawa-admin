@@ -41,7 +41,7 @@
  * - `timeFrame` (`TimeFrame`): The selected time frame for filtering rankings.
  *
  * styles
- * - Custom styles are applied using `styles` imported from `app-fixed.module.css`.
+ * - Custom styles are applied using `styles` imported from `./Leaderboard.module.css`.
  */
 import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
