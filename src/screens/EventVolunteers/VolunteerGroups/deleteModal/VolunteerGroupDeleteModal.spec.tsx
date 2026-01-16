@@ -15,7 +15,7 @@ import i18n from 'utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from '../modal/VolunteerGroups.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import type { InterfaceDeleteVolunteerGroupModal } from './VolunteerGroupDeleteModal';
+import { InterfaceDeleteVolunteerGroupModalProps } from 'types/EventVolunteers/VolunteerGroups/deleteModal/VolunteerGroupDeleteModal/interface';
 import VolunteerGroupDeleteModal from './VolunteerGroupDeleteModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
@@ -49,7 +49,7 @@ const t = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-const itemProps: InterfaceDeleteVolunteerGroupModal[] = [
+const itemProps: InterfaceDeleteVolunteerGroupModalProps[] = [
   {
     isOpen: true,
     hide: vi.fn(),
@@ -95,7 +95,7 @@ const itemProps: InterfaceDeleteVolunteerGroupModal[] = [
 
 const renderGroupDeleteModal = (
   link: ApolloLink,
-  props: InterfaceDeleteVolunteerGroupModal,
+  props: InterfaceDeleteVolunteerGroupModalProps,
 ): RenderResult => {
   return render(
     <MockedProvider link={link}>
@@ -218,7 +218,7 @@ describe('Testing Group Delete Modal', () => {
   it('Deletes group for specific instance when isRecurring and applyTo is instance', async () => {
     // Tests that selecting "this event only" for a recurring event calls
     // DELETE_VOLUNTEER_GROUP_FOR_INSTANCE instead of the default mutation
-    const recurringGroupProps: InterfaceDeleteVolunteerGroupModal = {
+    const recurringGroupProps: InterfaceDeleteVolunteerGroupModalProps = {
       isOpen: true,
       hide: vi.fn(),
       refetchGroups: vi.fn(),
@@ -321,7 +321,7 @@ describe('Testing Group Delete Modal', () => {
   ])(
     'Hides radio buttons for $description',
     async ({ isTemplate, isInstanceException }) => {
-      const props: InterfaceDeleteVolunteerGroupModal = {
+      const props: InterfaceDeleteVolunteerGroupModalProps = {
         isOpen: true,
         hide: vi.fn(),
         refetchGroups: vi.fn(),

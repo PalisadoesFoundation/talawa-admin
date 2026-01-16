@@ -10,7 +10,7 @@ import {
   DELETE_VOLUNTEER_FOR_INSTANCE,
 } from 'GraphQl/Mutations/EventVolunteerMutation';
 // 👇 Import the interface from the new file
-import { InterfaceDeleteVolunteerModal } from 'types/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal/interface';
+import { InterfaceDeleteVolunteerModalProps } from 'types/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal/interface';
 
 /**
  * VolunteerDeleteModal
@@ -24,7 +24,7 @@ import { InterfaceDeleteVolunteerModal } from 'types/EventVolunteers/Volunteers/
  * @param isRecurring - (Optional) Whether the event is recurring
  * @param eventId - (Optional) The ID of the specific event instance
  */
-const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModal> = ({
+const VolunteerDeleteModal: React.FC<InterfaceDeleteVolunteerModalProps> = ({
   isOpen,
   hide,
   volunteer,

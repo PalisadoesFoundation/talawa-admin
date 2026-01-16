@@ -23,10 +23,10 @@ import {
   DELETE_VOLUNTEER_GROUP_FOR_INSTANCE,
 } from 'GraphQl/Mutations/EventVolunteerMutation';
 // 👇 Import the interface from the new file
-import { InterfaceDeleteVolunteerGroupModal } from 'types/EventVolunteers/VolunteerGroups/deleteModal/VolunteerGroupDeleteModal/interface';
+import { InterfaceDeleteVolunteerGroupModalProps } from 'types/EventVolunteers/VolunteerGroups/deleteModal/VolunteerGroupDeleteModal/interface';
 
 const VolunteerGroupDeleteModal: React.FC<
-  InterfaceDeleteVolunteerGroupModal
+  InterfaceDeleteVolunteerGroupModalProps
 > = ({ isOpen, hide, group, refetchGroups, isRecurring = false, eventId }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
