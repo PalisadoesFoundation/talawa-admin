@@ -8,9 +8,10 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import { ToastContainer } from 'react-toastify';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import { checkInQueryMock } from '../CheckInMocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi } from 'vitest';
@@ -39,7 +40,6 @@ describe('Testing Check In Attendees Modal', () => {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
                 <CheckInModal {...props} />
               </I18nextProvider>
             </Provider>
@@ -130,7 +130,6 @@ describe('Testing Check In Attendees Modal', () => {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
                 <CheckInModal {...props} eventId="eventRecurring" />
               </I18nextProvider>
             </Provider>
@@ -200,7 +199,6 @@ describe('Testing Check In Attendees Modal', () => {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
                 <CheckInModal {...props} eventId="eventUnknown" />
               </I18nextProvider>
             </Provider>
@@ -247,7 +245,6 @@ describe('Testing Check In Attendees Modal', () => {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
                 <CheckInModal {...props} eventId="eventNull" />
               </I18nextProvider>
             </Provider>
@@ -302,7 +299,6 @@ describe('Testing Check In Attendees Modal', () => {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
                 <CheckInModal {...props} eventId="eventNoAttendees" />
               </I18nextProvider>
             </Provider>

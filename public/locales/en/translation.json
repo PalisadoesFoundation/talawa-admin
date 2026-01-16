@@ -1906,7 +1906,8 @@
     "checkedIn": "Checked In",
     "downloadTag": "Download Tag",
     "checkIn": "Check In",
-    "eventCheckInManagement": "Event Check In Management"
+    "eventCheckInManagement": "Event Check In Management",
+    "checkInMembers": "Check In Members"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",
