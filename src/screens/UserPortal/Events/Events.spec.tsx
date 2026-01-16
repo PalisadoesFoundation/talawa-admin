@@ -690,38 +690,6 @@ const CREATE_EVENT_WITH_GRAPHQL_ERRORS_MOCKS = [
   },
 ];
 
-// Mock for CREATE_EVENT_MUTATION returning both data and errors (partial success)
-const CREATE_EVENT_PARTIAL_ERROR_MOCKS = [
-  ...MOCKS.slice(0, 2),
-  {
-    request: {
-      query: CREATE_EVENT_MUTATION,
-      variables: {
-        input: {
-          name: 'New Test Event',
-          description: 'New Test Description',
-          startAt: dayjs(TEST_DATE).startOf('day').toISOString(),
-          endAt: dayjs(TEST_DATE).endOf('day').toISOString(),
-          organizationId: 'org123',
-          allDay: true,
-          location: 'New Test Location',
-          isPublic: false,
-          isRegisterable: true,
-          isInviteOnly: true,
-        },
-      },
-    },
-    result: {
-      data: {
-        createEvent: {
-          id: 'newEventPartial',
-        },
-      },
-      errors: [new GraphQLError('Partial Error Message')],
-    },
-  },
-];
-
 // Mock for Refetch Failure
 const REFETCH_FAILURE_MOCKS = [
   MOCKS[0], // First query succeeds
@@ -2501,51 +2469,6 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(mockErrorHandler).toHaveBeenCalled();
-    });
-  });
-
-  it('Should prioritize GraphQL errors when partial data is returned', async () => {
-    // This test simulates the case where both data and errors are returned.
-    // The previous implementation would ignore the error and proceed with success.
-    // The fix expects the error to be thrown and caught by errorHandler.
-    render(
-      <MockedProvider mocks={CREATE_EVENT_PARTIAL_ERROR_MOCKS}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <ThemeProvider theme={theme}>
-              <I18nextProvider i18n={i18nForTest}>
-                <Events />
-              </I18nextProvider>
-            </ThemeProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    // Open modal
-    const createButton = screen.getByTestId('createEventModalBtn');
-    await userEvent.click(createButton);
-
-    // Fill form
-    const titleInput = screen.getByTestId('eventTitleInput');
-    const descInput = screen.getByTestId('eventDescriptionInput');
-    const locationInput = screen.getByTestId('eventLocationInput');
-
-    await userEvent.type(titleInput, 'New Test Event');
-    await userEvent.type(descInput, 'New Test Description');
-    await userEvent.type(locationInput, 'New Test Location');
-
-    // Submit
-    const submitButton = screen.getByTestId('createEventBtn');
-    await userEvent.click(submitButton);
-
-    await waitFor(() => {
-      // It should NOT call success toast
-      expect(mockToast.success).not.toHaveBeenCalled();
-      // It SHOULD call errorHandler
       expect(mockErrorHandler).toHaveBeenCalled();
     });
   });

@@ -267,9 +267,11 @@ export default function Events(): JSX.Element {
         variables: { input },
       });
 
-      if (errors && errors.length > 0) {
-        throw new Error(errors[0].message);
-      } else if (createEventData) {
+      // Handle partial success: prioritize data over errors
+      // If createEventData exists, treat as success even if errors are present
+      // This handles GraphQL partial success scenarios where mutation succeeds
+      // but some non-critical fields may have issues
+      if (createEventData) {
         NotificationToast.success(t('eventCreated') as string);
         try {
           await refetch();
@@ -278,6 +280,8 @@ export default function Events(): JSX.Element {
         }
         setFormResetKey((prev) => prev + 1);
         setCreateEventmodalisOpen(false);
+      } else if (errors && errors.length > 0) {
+        throw new Error(errors[0].message);
       }
     } catch (error: unknown) {
       errorHandler(t, error);

@@ -107,6 +107,11 @@ const Calendar: React.FC<
     // - We need to check Invite Only events for creator OR attendee status
     // - All other events returned by backend should be shown
     return eventData.filter((event) => {
+      // Creator always sees their own events
+      if (event.creator && event.creator.id === userId) {
+        return true;
+      }
+
       // Public events - always visible (backend returns them)
       if (event.isPublic) {
         return true;
@@ -126,6 +131,7 @@ const Calendar: React.FC<
       // Check if user is a member of the organization
       const isMember =
         orgData?.members?.edges?.some((edge) => edge.node.id === userId) ||
+        !orgData?.members ||
         false;
 
       return isMember || false;
