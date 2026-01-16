@@ -6,7 +6,6 @@ import DatePicker from 'shared-components/DatePicker';
 import React from 'react';
 import dayjs from 'dayjs';
 import type { FC } from 'react';
-import { Form } from 'react-bootstrap';
 import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 import type { InterfaceUser } from 'types/shared-components/User/interface';
 import type { InterfaceEvent } from 'types/Event/interface';
@@ -114,8 +113,9 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
       size="lg"
       showCloseButton
     >
-      <Form className="p-3">
-        <Form.Group className="d-flex mb-3 w-100">
+      <div className="p-3">
+        {' '}
+        <div className="d-flex mb-3 w-100">
           <FormControl fullWidth>
             <TextField
               label={t('category')}
@@ -125,9 +125,8 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
               disabled
             />
           </FormControl>
-        </Form.Group>
-
-        <Form.Group className="d-flex gap-3 mb-3">
+        </div>
+        <div className="d-flex gap-3 mb-3">
           <FormControl fullWidth>
             <TextField
               label={t('assignedTo')}
@@ -149,13 +148,10 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
               disabled
             />
           </FormControl>
-        </Form.Group>
-
-        <Form.Group className="d-flex gap-3 mx-auto mb-3 align-items-start w-100">
+        </div>
+        <div className="d-flex gap-3 mx-auto mb-3 align-items-start w-100">
           <FormControl fullWidth>
-            <span id="action-item-status-label" className="form-label mb-2">
-              {t('status')}
-            </span>
+            <span className="form-label mb-2">{t('status')}</span>
 
             <div>
               <StatusBadge
@@ -176,9 +172,8 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
             value={getEventDisplayName(item.recurringEventInstance || event)}
             disabled
           />
-        </Form.Group>
-
-        <Form.Group className={`d-flex gap-3 mb-3`}>
+        </div>
+        <div className={`d-flex gap-3 mb-3`}>
           <DatePicker
             data-testid="assignmentDatePicker"
             format="DD/MM/YYYY"
@@ -199,9 +194,8 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
               onChange={() => null}
             />
           )}
-        </Form.Group>
-
-        <Form.Group className={`d-flex ${isCompleted && 'mb-3'}`}>
+        </div>
+        <div className={`d-flex ${isCompleted && 'mb-3'}`}>
           <FormControl fullWidth>
             <TextField
               label={t('preCompletionNotes')}
@@ -213,8 +207,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
               disabled
             />
           </FormControl>
-        </Form.Group>
-
+        </div>
         {isCompleted && (
           <FormControl fullWidth>
             <TextField
@@ -227,7 +220,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
             />
           </FormControl>
         )}
-      </Form>
+      </div>
     </BaseModal>
   );
 };
