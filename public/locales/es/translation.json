@@ -1906,7 +1906,8 @@
     "checkedIn": "Registrado",
     "downloadTag": "Descargar etiqueta",
     "checkIn": "Registrar",
-    "eventCheckInManagement": "Gestión de registro de eventos"
+    "eventCheckInManagement": "Gestión de registro de eventos",
+    "checkInMembers": "Registrar miembros"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",

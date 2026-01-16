@@ -1923,7 +1923,8 @@
     "checkedIn": "已簽到",
     "downloadTag": "下載標籤",
     "checkIn": "簽到",
-    "eventCheckInManagement": "活動簽到管理"
+    "eventCheckInManagement": "活動簽到管理",
+    "checkInMembers": " 簽到成員"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "添加与会者时出错",

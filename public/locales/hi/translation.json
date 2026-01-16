@@ -1923,7 +1923,8 @@
     "checkedIn": "चेक इन किया गया",
     "downloadTag": "टैग डाउनलोड करें",
     "checkIn": "चेक इन करें",
-    "eventCheckInManagement": "इवेंट चेक इन प्रबंधन"
+    "eventCheckInManagement": "इवेंट चेक इन प्रबंधन",
+    "checkInMembers": "सदस्यों को चेक इन करें"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
