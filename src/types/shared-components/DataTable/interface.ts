@@ -551,4 +551,10 @@ export interface ISearchBarProps {
    * @defaultValue 'Search'
    */
   'aria-label'?: string;
+
+  /**
+   * Accessible label for the clear button, announced by screen readers.
+   * @defaultValue 'Clear search'
+   */
+  'clear-aria-label'?: string;
 }

@@ -9,14 +9,19 @@ describe('SearchBar', () => {
 
   it('renders with placeholder', () => {
     render(
-      <SearchBar value="" onChange={() => {}} placeholder="Test Search" />,
+      <SearchBar
+        value=""
+        onChange={() => {}}
+        placeholder="Test Search"
+        clear-aria-label="Clear"
+      />,
     );
     expect(screen.getByPlaceholderText('Test Search')).toBeInTheDocument();
   });
 
   it('triggers onChange when typing', () => {
     const onChange = vi.fn();
-    render(<SearchBar value="" onChange={onChange} />);
+    render(<SearchBar value="" onChange={onChange} clear-aria-label="Clear" />);
     fireEvent.change(screen.getByRole('searchbox'), {
       target: { value: 'abc' },
     });
@@ -25,16 +30,34 @@ describe('SearchBar', () => {
 
   it('shows clear button only when value is present', () => {
     const onChange = vi.fn();
-    const { rerender } = render(<SearchBar value="" onChange={onChange} />);
+    const { rerender } = render(
+      <SearchBar
+        value=""
+        onChange={onChange}
+        clear-aria-label="Clear search"
+      />,
+    );
     expect(screen.queryByLabelText('Clear search')).toBeNull();
 
-    rerender(<SearchBar value="hello" onChange={onChange} />);
+    rerender(
+      <SearchBar
+        value="hello"
+        onChange={onChange}
+        clear-aria-label="Clear search"
+      />,
+    );
     expect(screen.getByLabelText('Clear search')).toBeInTheDocument();
   });
 
   it('clears input when clear button is clicked', () => {
     const onChange = vi.fn();
-    render(<SearchBar value="hello" onChange={onChange} />);
+    render(
+      <SearchBar
+        value="hello"
+        onChange={onChange}
+        clear-aria-label="Clear search"
+      />,
+    );
     fireEvent.click(screen.getByLabelText('Clear search'));
     expect(onChange).toHaveBeenCalledWith('');
   });

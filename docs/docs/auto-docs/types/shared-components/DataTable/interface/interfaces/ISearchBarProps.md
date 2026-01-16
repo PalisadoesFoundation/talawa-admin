@@ -29,6 +29,22 @@ Applied to the search input's aria-label attribute.
 
 ***
 
+### clear-aria-label?
+
+> `optional` **clear-aria-label**: `string`
+
+Defined in: [src/types/shared-components/DataTable/interface.ts:559](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L559)
+
+Accessible label for the clear button, announced by screen readers.
+
+#### Default Value
+
+```ts
+'Clear search'
+```
+
+***
+
 ### onChange()
 
 > **onChange**: (`query`) => `void`

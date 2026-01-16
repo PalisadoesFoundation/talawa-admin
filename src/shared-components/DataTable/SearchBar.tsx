@@ -13,8 +13,9 @@ export function SearchBar(props: ISearchBarProps) {
   const {
     value,
     onChange,
-    placeholder = 'Search…',
-    'aria-label': ariaLabel = 'Search',
+    placeholder,
+    'aria-label': ariaLabel,
+    'clear-aria-label': clearAriaLabel,
   } = props;
   return (
     <div className={styles.searchWrap}>
@@ -31,7 +32,7 @@ export function SearchBar(props: ISearchBarProps) {
           type="button"
           className={styles.searchClear}
           onClick={() => onChange('')}
-          aria-label="Clear search"
+          aria-label={clearAriaLabel}
         >
           ✕
         </button>

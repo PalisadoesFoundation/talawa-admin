@@ -363,6 +363,8 @@ export function DataTable<T>(props: IDataTableProps<T>) {
               value={query}
               onChange={updateGlobalSearch}
               placeholder={searchPlaceholder ?? tCommon('search')}
+              aria-label={tCommon('search')}
+              clear-aria-label={tCommon('clearSearch')}
             />
           </div>
         )}
@@ -386,6 +388,8 @@ export function DataTable<T>(props: IDataTableProps<T>) {
             value={query}
             onChange={updateGlobalSearch}
             placeholder={searchPlaceholder ?? tCommon('search')}
+            aria-label={tCommon('search')}
+            clear-aria-label={tCommon('clearSearch')}
           />
         </div>
       )}
