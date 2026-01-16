@@ -14,7 +14,7 @@ A controlled search input with optional clear button.
 
 ### props
 
-[`ISearchBarProps`](../../../../types/shared-components/DataTable/interface/interfaces/ISearchBarProps.md)
+[`InterfaceSearchBarProps`](../../../../types/shared-components/DataTable/interface/interfaces/InterfaceSearchBarProps.md)
 
 Component props containing value, onChange, placeholder, and aria-label
 

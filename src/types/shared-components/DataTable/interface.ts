@@ -526,7 +526,7 @@ export interface ITableLoaderProps<T> {
  *
  * Used to render a controlled search input field with an optional clear button.
  */
-export interface ISearchBarProps {
+export interface InterfaceSearchBarProps {
   /**
    * The current search query value.
    * This is a controlled value that should be managed by the parent component.

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './DataTable.module.css';
 
-import type { ISearchBarProps } from '../../types/shared-components/DataTable/interface';
+import type { InterfaceSearchBarProps } from '../../types/shared-components/DataTable/interface';
 
 /**
  * A controlled search input with optional clear button.
@@ -9,7 +9,7 @@ import type { ISearchBarProps } from '../../types/shared-components/DataTable/in
  * @param props - Component props containing value, onChange, placeholder, and aria-label
  * @returns A search input element with optional clear button
  */
-export function SearchBar(props: ISearchBarProps) {
+export function SearchBar(props: InterfaceSearchBarProps) {
   const {
     value,
     onChange,
@@ -17,6 +17,11 @@ export function SearchBar(props: ISearchBarProps) {
     'aria-label': ariaLabel,
     'clear-aria-label': clearAriaLabel,
   } = props;
+
+  // Safe fallbacks for accessibility
+  const inputAria = ariaLabel ?? placeholder ?? 'Search';
+  const clearAria = clearAriaLabel ?? 'Clear search';
+
   return (
     <div className={styles.searchWrap}>
       <input
@@ -24,7 +29,7 @@ export function SearchBar(props: ISearchBarProps) {
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        aria-label={ariaLabel}
+        aria-label={inputAria}
         className={styles.searchInput}
       />
       {value && (
@@ -32,7 +37,7 @@ export function SearchBar(props: ISearchBarProps) {
           type="button"
           className={styles.searchClear}
           onClick={() => onChange('')}
-          aria-label={clearAriaLabel}
+          aria-label={clearAria}
         >
           ✕
         </button>

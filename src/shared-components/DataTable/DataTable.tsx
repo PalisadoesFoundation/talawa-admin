@@ -99,36 +99,9 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     if (paginationMode === 'client' && !isControlled) setInternalPage(1);
   }
 
-  function updateColumnFilters(colId: string, val: unknown) {
-    const next = { ...filters };
-    if (val === undefined || val === null || val === '') {
-      delete next[colId];
-    } else {
-      next[colId] = val;
-    }
-
-    if (controlledFilters && onColumnFiltersChange) onColumnFiltersChange(next);
-    else setUFilters(next);
-
-    // Reset to first page on filter change if using client pagination
-    if (paginationMode === 'client' && !isControlled) setInternalPage(1);
-  }
-
-  /**
-   * Internal helper to update column filters state.
-   *
-   * Column filtering works in two modes:
-   * 1. **Controlled mode**: Pass `columnFilters` and `onColumnFiltersChange` props.
-   *    The parent manages state and receives filter updates via the callback.
-   * 2. **Uncontrolled mode**: Omit those props. Internal state tracks filters.
-   *
-   * The DataTable applies filters automatically in client mode. For server mode
-   * (serverFilter=true), filters are not applied locally; use `onColumnFiltersChange`
-   * to trigger server-side filtering via your query.
-   *
-   * @internal This function is used by per-column filter UI when implemented.
-   */
-  void updateColumnFilters;
+  // Note: Per-column filter UI can be added in the future.
+  // When implemented, add an updateColumnFilters function here to update
+  // the filters state and call onColumnFiltersChange callback.
 
   // Helper to get raw cell value
   function getCellValue(row: T, accessor: IColumnDef<T>['accessor']) {

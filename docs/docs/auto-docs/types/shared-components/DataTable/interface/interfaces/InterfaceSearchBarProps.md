@@ -2,7 +2,7 @@
 
 ***
 
-# Interface: ISearchBarProps
+# Interface: InterfaceSearchBarProps
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:529](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L529)
 

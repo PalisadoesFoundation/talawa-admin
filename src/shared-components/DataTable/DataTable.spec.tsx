@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, afterEach, vi } from 'vitest';
+import dayjs from 'dayjs';
 import { DataTable } from './DataTable';
 import { TableLoader } from './TableLoader';
 
@@ -176,6 +177,225 @@ describe('DataTable', () => {
 
     expect(screen.queryByText('10')).toBeNull();
     expect(screen.getByText('20')).toBeInTheDocument();
+  });
+
+  it('uses default text filter when no custom filterFn is provided', () => {
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { filterable: true }, // no custom filterFn
+      },
+    ];
+    const data = [{ name: 'Alice' }, { name: 'Bob' }];
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        columnFilters={{ name: 'Bob' }}
+        onColumnFiltersChange={() => {}}
+      />,
+    );
+
+    expect(screen.queryByText('Alice')).toBeNull();
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+  });
+
+  it('uses shallow equality for non-string filter values', () => {
+    const columns = [
+      {
+        id: 'id',
+        header: 'ID',
+        accessor: 'id' as const,
+        meta: { filterable: true },
+      },
+    ];
+    const data = [{ id: 1 }, { id: 2 }];
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        columnFilters={{ id: 2 }}
+        onColumnFiltersChange={() => {}}
+      />,
+    );
+
+    expect(screen.queryByText('1')).toBeNull();
+    expect(screen.getByText('2')).toBeInTheDocument();
+  });
+
+  it('skips empty filter values gracefully', () => {
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { filterable: true },
+      },
+    ];
+    const data = [{ name: 'Alice' }, { name: 'Bob' }];
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        columnFilters={{ name: '' }} // empty filter should be skipped
+        onColumnFiltersChange={() => {}}
+      />,
+    );
+
+    // Both should be visible since empty filter is skipped
+    expect(screen.getByText('Alice')).toBeInTheDocument();
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+  });
+
+  it('renders custom rows using renderRow prop', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ name: 'Ada' }];
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        renderRow={(row) => (
+          <tr key={row.name}>
+            <td data-testid="custom-row">Custom: {row.name}</td>
+          </tr>
+        )}
+      />,
+    );
+
+    expect(screen.getByTestId('custom-row')).toHaveTextContent('Custom: Ada');
+  });
+
+  it('skips filter for unknown column ids', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ name: 'Alice' }, { name: 'Bob' }];
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        columnFilters={{ unknownColumn: 'test' }} // filter for non-existent column
+        onColumnFiltersChange={() => {}}
+      />,
+    );
+
+    // Both should be visible since the filter column doesn't exist
+    expect(screen.getByText('Alice')).toBeInTheDocument();
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+  });
+
+  it('skips filter for columns with filterable: false', () => {
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: 'name' as const,
+        meta: { filterable: false },
+      },
+    ];
+    const data = [{ name: 'Alice' }, { name: 'Bob' }];
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        columnFilters={{ name: 'Alice' }}
+        onColumnFiltersChange={() => {}}
+      />,
+    );
+
+    // Both should be visible since filtering is disabled for this column
+    expect(screen.getByText('Alice')).toBeInTheDocument();
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+  });
+
+  it('applies custom tableClassName', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ name: 'Ada' }];
+
+    const { container } = render(
+      <DataTable data={data} columns={columns} tableClassName="custom-table" />,
+    );
+
+    expect(container.querySelector('table.custom-table')).toBeInTheDocument();
+  });
+
+  it('resets to page 1 when search changes in uncontrolled client pagination', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ name: 'Alice' }, { name: 'Bob' }, { name: 'Charlie' }];
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        paginationMode="client"
+        pageSize={10}
+        showSearch
+        initialGlobalSearch=""
+      />,
+    );
+
+    // Type in search - this exercises updateGlobalSearch with client pagination
+    const searchInput = screen.getByRole('searchbox');
+    fireEvent.change(searchInput, { target: { value: 'Bob' } });
+
+    // Should filter to just Bob
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+    expect(screen.queryByText('Alice')).toBeNull();
+  });
+
+  it('searches Date values correctly', () => {
+    const testDate = dayjs().subtract(30, 'days').toDate();
+    const olderDate = dayjs().subtract(60, 'days').toDate();
+    const columns = [
+      {
+        id: 'date',
+        header: 'Date',
+        accessor: 'date' as const,
+      },
+    ];
+    const data = [{ date: testDate }, { date: olderDate }];
+
+    // Get part of ISO string for search
+    const searchStr = testDate.toISOString().substring(0, 7);
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        showSearch
+        initialGlobalSearch={searchStr}
+      />,
+    );
+
+    // Should find the row with the matching date (rendered as JSON string)
+    expect(screen.getByText(`"${testDate.toISOString()}"`)).toBeInTheDocument();
+  });
+
+  it('handles null and undefined cell values in search', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [
+      { name: null as unknown as string },
+      { name: undefined as unknown as string },
+      { name: 'Valid' },
+    ];
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        showSearch
+        initialGlobalSearch="Valid"
+      />,
+    );
+
+    // Should find the valid row and not crash on null/undefined
+    expect(screen.getByText('Valid')).toBeInTheDocument();
   });
 
   it('server modes do not filter locally', () => {
