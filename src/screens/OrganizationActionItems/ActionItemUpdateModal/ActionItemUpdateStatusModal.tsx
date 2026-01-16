@@ -27,7 +27,7 @@
  *
  */
 import React, { type FC, type FormEvent, useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
 import styles from './ActionItemUpdateStatusModal.module.css';
@@ -45,6 +45,7 @@ import type {
   IMarkActionItemAsPendingInput,
 } from 'types/shared-components/ActionItems/interface';
 import { BaseModal } from 'shared-components/BaseModal';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
 export interface IItemUpdateStatusModalProps {
   isOpen: boolean;
@@ -229,7 +230,15 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
       title={t('actionItemStatus')}
       showCloseButton
     >
-      <Form onSubmitCapture={updateActionItemHandler} className="p-2">
+      <form onSubmitCapture={updateActionItemHandler} className="p-2">
+        <div className="mb-2 d-flex align-items-center gap-2">
+          <StatusBadge
+            variant={isCompleted ? 'completed' : 'pending'}
+            size="md"
+            dataTestId="update-status-badge"
+            ariaLabel={isCompleted ? tCommon('completed') : tCommon('pending')}
+          />
+        </div>
         {!isCompleted ? (
           <FormControl fullWidth className="mb-2">
             <TextField
@@ -312,7 +321,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
             )}
           </>
         )}
-      </Form>
+      </form>
     </BaseModal>
   );
 };
