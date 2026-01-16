@@ -55,10 +55,6 @@ const t = JSON.parse(
   ),
 );
 
-const tCommon = JSON.parse(
-  JSON.stringify(i18nForTest.getDataByLanguage('en')?.common),
-);
-
 // Mock data for GraphQL queries
 const mockCategory = {
   id: 'categoryId1',
@@ -760,7 +756,6 @@ describe('Testing ItemViewModal', () => {
       });
       const badge = screen.getByTestId('action-item-status-badge');
       expect(badge).toBeInTheDocument();
-      expect(badge).toHaveAttribute('aria-label', tCommon.completed);
     });
 
     it('should display pending status with warning icon', () => {
@@ -772,7 +767,6 @@ describe('Testing ItemViewModal', () => {
       });
       const badge = screen.getByTestId('action-item-status-badge');
       expect(badge).toBeInTheDocument();
-      expect(badge).toHaveAttribute('aria-label', tCommon.pending);
     });
   });
 

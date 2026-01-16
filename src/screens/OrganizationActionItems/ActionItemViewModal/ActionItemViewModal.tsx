@@ -165,7 +165,6 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
                 ariaLabel={
                   isCompleted ? tCommon('completed') : tCommon('pending')
                 }
-                aria-labelledby="action-item-status-label"
               />
             </div>
           </FormControl>
