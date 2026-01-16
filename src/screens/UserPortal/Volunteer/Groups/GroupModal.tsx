@@ -25,8 +25,8 @@
  *
  * Success or error messages are displayed using toast notifications based on the result of the mutation.
  */
-import type { ChangeEvent } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import type { FormEvent } from 'react';
+import { Button } from 'react-bootstrap';
 import type {
   InterfaceCreateVolunteerGroup,
   InterfaceVolunteerMembership,
@@ -160,7 +160,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
   }, [group]);
 
   const updateGroupHandler = useCallback(
-    async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+    async (e: FormEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
 
       if (volunteersRequiredError || nameError) {
@@ -258,9 +258,9 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
       </fieldset>
 
       {modalType === 'details' ? (
-        <Form
+        <form
           data-testid="pledgeForm"
-          onSubmitCapture={updateGroupHandler}
+          onSubmit={updateGroupHandler}
           className="p-3"
         >
           {/* Input field to enter the group name */}
@@ -287,7 +287,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             </FormControl>
           </FormFieldGroup>
           {/* Input field to enter the group description */}
-          <Form.Group className="mb-3">
+          <FormFieldGroup name="description" label={tCommon('description')}>
             <FormControl fullWidth>
               <TextField
                 multiline
@@ -301,7 +301,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                 }
               />
             </FormControl>
-          </Form.Group>
+          </FormFieldGroup>
 
           <FormFieldGroup
             name="volunteersRequired"
@@ -364,7 +364,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
           >
             {t('updateGroup')}
           </Button>
-        </Form>
+        </form>
       ) : (
         <div className="px-3">
           {requests.length === 0 ? (
