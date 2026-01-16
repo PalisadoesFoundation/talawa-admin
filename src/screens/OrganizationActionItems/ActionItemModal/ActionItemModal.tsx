@@ -5,7 +5,7 @@
  * It allows users to specify whether an action item should apply to an entire series of recurring events or just a single instance.
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import type { FormEvent, FC } from 'react';
 import styles from './ActionItemModal.module.css';
 import DatePicker from 'shared-components/DatePicker/DatePicker';
@@ -465,7 +465,7 @@ const ItemModal: FC<IItemModalProps> = ({
       title={editMode ? t('updateActionItem') : t('createActionItem')}
       dataTestId="actionItemModal"
     >
-      <Form onSubmit={getSubmitHandler()} className="p-2">
+      <form onSubmit={getSubmitHandler()} className="p-2">
         {isRecurring && !editMode && (
           <ApplyToSelector applyTo={applyTo} onChange={setApplyTo} />
         )}
@@ -497,7 +497,7 @@ const ItemModal: FC<IItemModalProps> = ({
 
             {/* Volunteer Selection */}
             {assignmentType === 'volunteer' && (
-              <Form.Group className="mb-3 w-100">
+              <div className="mb-3 w-100">
                 <Autocomplete
                   className={`${styles.noOutline} w-100`}
                   data-testid="volunteerSelect"
@@ -524,12 +524,12 @@ const ItemModal: FC<IItemModalProps> = ({
                     <TextField {...params} label={t('volunteer')} required />
                   )}
                 />
-              </Form.Group>
+              </div>
             )}
 
             {/* Volunteer Group Selection */}
             {assignmentType === 'volunteerGroup' && (
-              <Form.Group className="mb-3 w-100">
+              <div className="mb-3 w-100">
                 <Autocomplete
                   className={`${styles.noOutline} w-100`}
                   data-testid="volunteerGroupSelect"
@@ -558,10 +558,10 @@ const ItemModal: FC<IItemModalProps> = ({
                     />
                   )}
                 />
-              </Form.Group>
+              </div>
             )}
 
-            <Form.Group className="d-flex gap-3 mx-auto mb-3">
+            <div className="d-flex gap-3 mx-auto mb-3">
               <DatePicker
                 format="DD/MM/YYYY"
                 label={t('assignmentDate')}
@@ -575,7 +575,7 @@ const ItemModal: FC<IItemModalProps> = ({
                   }
                 }}
               />
-            </Form.Group>
+            </div>
 
             <FormControl fullWidth className="mb-2">
               <TextField
@@ -615,7 +615,7 @@ const ItemModal: FC<IItemModalProps> = ({
         >
           {editMode ? t('updateActionItem') : t('createActionItem')}
         </Button>
-      </Form>
+      </form>
     </BaseModal>
   );
 };
