@@ -685,7 +685,19 @@
     "pendingForSeries": "श्रृंखला के लिए लंबित",
     "completeForInstance": "इस उदाहरण के लिए पूर्ण",
     "completeForSeries": "श्रृंखला के लिए पूर्ण",
-    "postCompletionNotesRequired": "पूर्ण होने के बाद के नोट्स आवश्यक हैं"
+    "postCompletionNotesRequired": "पूर्ण होने के बाद के नोट्स आवश्यक हैं",
+    "itemCategory": "आइटम श्रेणी",
+    "assignedDate": "आवंटन तिथि",
+    "actions": "क्रियाएं",
+    "noCategory": "कोई श्रेणी नहीं",
+    "viewActionItem": "क्रिया वस्तु देखें",
+    "updateStatus": "स्थिति अपडेट करें",
+    "pending": "लंबित",
+    "completed": "पूर्ण",
+    "late": "देर",
+    "searchByAssignee": "प्राप्तकर्ता द्वारा खोजें",
+    "searchByCategory": "श्रेणी द्वारा खोजें",
+    "sortByAssignedDate": "आवंटन तिथि द्वारा क्रमबद्ध करें"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "एजेंडा श्रेणी विवरण",
@@ -739,7 +751,9 @@
     "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?",
     "event": "कार्यक्रम",
     "search": "खोज",
-    "attachmentPreview": "अटैचमेंट पूर्वावलोकन"
+    "attachmentPreview": "अटैचमेंट पूर्वावलोकन",
+    "errorLoadingAgendaCategories": "एजेंडा श्रेणी डेटा लोड करते समय त्रुटि हुई",
+    "errorLoadingAgendaItems": "एजेंडा आइटम डेटा लोड करते समय त्रुटि हुई"
   },
   "eventListCard": {
     "deleteEvent": "ईवेंट हटाएँ",
@@ -791,7 +805,19 @@
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "done": "समाप्त",
     "invalidDate": "Invalid Date",
-    "createChat": "चैट बनाएं"
+    "createChat": "चैट बनाएं",
+    "isRegisterable": "पंजीकरणीय है",
+    "creator": "निर्माता",
+    "edit": "संपादित करें",
+    "delete": "हटाएँ",
+    "viewDetails": "विवरण देखें",
+    "noEventsFound": "कोई ईवेंट नहीं मिला",
+    "noEvent": "कोई ईवेंट नहीं",
+    "averageFeedback": "औसत प्रतिक्रिया",
+    "noOfAttendees": "उपस्थित की संख्या",
+    "noRegistrations": "कोई पंजीकरण नहीं",
+    "registrants": "पंजीकृत",
+    "to": "को"
   },
   "funds": {
     "title": "फंड",
@@ -872,6 +898,7 @@
     "updatePledge": "प्रतिज्ञा अद्यतन करें",
     "deletePledge": "प्रतिज्ञा हटाएँ",
     "amount": "मात्रा",
+    "amountMustBeAtLeastOne": "राशि कम से कम 1 होनी चाहिए",
     "editPledge": "प्रतिज्ञा संपादित करें",
     "deletePledgeMsg": "क्या आप वाकई इस प्रतिज्ञा को हटाना चाहते हैं?",
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
@@ -895,7 +922,8 @@
     "pledgeDate": "प्रतिज्ञा तिथि",
     "pledged": "प्रतिबद्ध",
     "donated": "दान किया गया",
-    "campaignNotActive": "अभियान वर्तमान में सक्रिय नहीं है"
+    "campaignNotActive": "अभियान वर्तमान में सक्रिय नहीं है",
+    "close": "बंद करें"
   },
   "createPostModal": {
     "title": "पदों",
@@ -1433,7 +1461,24 @@
     "pageNumber": "पृष्ठ {{page}}",
     "goToToday": "आज पर जाएं",
     "genderDistribution": "लिंग वितरण",
-    "ageDistribution": "आयु वितरण"
+    "ageDistribution": "आयु वितरण",
+    "trends": "रुझान",
+    "demography": "जनसांख्यिकी",
+    "male": "पुरुष",
+    "female": "महिला",
+    "other": "अन्य",
+    "under18": "18 वर्ष से कम",
+    "age18to40": "18 से 40",
+    "over40": "40 से अधिक",
+    "exportData": "डेटा निर्यात करें",
+    "demographics": "जनसांख्यिकी डेटा",
+    "today": "आज",
+    "attendanceCount": "उपस्थिति गणना",
+    "totalMembers": "कुल सदस्य",
+    "membersAttended": "उपस्थित सदस्य",
+    "age": "आयु",
+    "close": "बंद करें",
+    "gender": "लिंग"
   },
   "eventRegistrant": {
     "sort": "छांटें",
@@ -1468,7 +1513,10 @@
     "addingAttendee": "जोड़ा जा रहा है...",
     "male": "पुरुष",
     "female": "महिला",
-    "other": "अन्य"
+    "other": "अन्य",
+    "firstNamePlaceholder": "राज",
+    "lastNamePlaceholder": "कुमार",
+    "emailPlaceholder": "उदाहरण@gmail.com"
   },
   "settings": {
     "noeventsAttended": "कोई कार्यक्रम में उपस्थित नहीं",
@@ -1875,7 +1923,8 @@
     "checkedIn": "चेक इन किया गया",
     "downloadTag": "टैग डाउनलोड करें",
     "checkIn": "चेक इन करें",
-    "eventCheckInManagement": "इवेंट चेक इन प्रबंधन"
+    "eventCheckInManagement": "इवेंट चेक इन प्रबंधन",
+    "checkInMembers": "सदस्यों को चेक इन करें"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
@@ -1901,7 +1950,13 @@
       "errorSendingInvites": "निमंत्रण भेजने में त्रुटि",
       "emailsLabel": "प्राप्तकर्ता ईमेल और नाम",
       "emailsHelp": "प्रत्येक प्राप्तकर्ता के लिए ईमेल और वैकल्पिक नाम प्रदान करें। आवश्यकतानुसार कई प्राप्तकर्ता जोड़ें।"
-    }
+    },
+    "selectUserWarning": "कृपया पहले जोड़ने के लिए एक उपयोगकर्ता चुनें!",
+    "addingAttendeeProgress": "उपस्थित व्यक्ति को जोड़ा जा रहा है..."
+  },
+  "eventRegistrantsWrapper": {
+    "buttonAriaLabel": "उपस्थित लोगों को दिखाएं",
+    "registerMemberButton": "सदस्य पंजीकृत करें"
   },
   "userCampaigns": {
     "title": "धन उगाहने के अभियान",
@@ -2088,7 +2143,11 @@
     "groupName": "समूह का नाम",
     "noOfMembers": "सदस्यों की संख्या",
     "options": "विकल्प",
-    "notSpecified": "निर्दिष्ट नहीं"
+    "notSpecified": "निर्दिष्ट नहीं",
+    "invited": "आमंत्रित",
+    "groupsAvailable": "{{count}} समूह उपलब्ध",
+    "volunteersRequired": "आवश्यक",
+    "signedUp": "पंजीकृत"
   },
   "pluginStore": {
     "title": "प्लगइन स्टोर",

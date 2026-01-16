@@ -1,9 +1,0 @@
-[Admin Docs](/)
-
-***
-
-# Variable: ERROR\_DELETION\_MOCKS
-
-> `const` **ERROR\_DELETION\_MOCKS**: `MockedResponse`[]
-
-Defined in: [src/components/EventManagement/EventRegistrant/Registrations.mocks.ts:266](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts#L266)
