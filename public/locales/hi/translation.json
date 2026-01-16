@@ -2019,7 +2019,18 @@
     "viewGroup": "समूह देखें",
     "editGroup": "समूह संपादित करें",
     "invalidNumber": "अमान्य संख्या",
-    "viewToggle": "दृश्य टॉगल"
+    "viewToggle": "दृश्य टॉगल",
+    "recurringVolunteerTitle": "{{eventName}} के लिए स्वयंसेवक बनें",
+    "recurringGroupTitle": "{{groupName}} में शामिल हों - {{eventName}}",
+    "recurringVolunteerDescription": "क्या आप पूरी श्रृंखला के लिए स्वयंसेवक बनना चाहेंगे या केवल इस बार के लिए?",
+    "recurringGroupDescription": "क्या आप पूरी श्रृंखला के लिए या केवल इस बार के लिए \"{{groupName}}\" में शामिल होना चाहेंगे?",
+    "volunteerForEntireSeries": "पूरी श्रृंखला के लिए स्वयंसेवक बनें",
+    "volunteerForSeriesDescription": "आप इस आवर्ती श्रृंखला के सभी कार्यक्रमों के लिए स्वयंसेवक बनेंगे",
+    "joinGroupForSeriesDescription": "आप आवर्ती श्रृंखला के सभी कार्यक्रमों के लिए इस समूह में शामिल होंगे",
+    "volunteerForThisInstanceOnly": "केवल इस बार के लिए स्वयंसेवक बनें",
+    "volunteerForInstanceDescription": "आप केवल {{date}} को होने वाले कार्यक्रम के लिए स्वयंसेवक बनेंगे",
+    "joinGroupForInstanceDescription": "आप केवल {{date}} को होने वाले कार्यक्रम के लिए इस समूह में शामिल होंगे",
+    "submitRequest": "अनुरोध सबमिट करें"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",

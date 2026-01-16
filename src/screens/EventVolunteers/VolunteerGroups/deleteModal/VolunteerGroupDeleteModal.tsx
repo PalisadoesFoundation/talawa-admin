@@ -5,12 +5,14 @@
  * `@param` props - Component props from InterfaceDeleteVolunteerGroupModal
  * `@returns` JSX.Element
  */
-import { Button, Form } from 'react-bootstrap';
-import styles from './VolunteerGroupDeleteModal.module.css';
+import { Form } from 'react-bootstrap';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import {
+  DeleteModal,
+  useMutationModal,
+} from 'shared-components/CRUDModalTemplate';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import {
@@ -32,7 +34,6 @@ const VolunteerGroupDeleteModal: React.FC<
   InterfaceDeleteVolunteerGroupModal
 > = ({ isOpen, hide, group, refetchGroups, isRecurring = false, eventId }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
-  const { t: tCommon } = useTranslation('common');
 
   const [applyTo, setApplyTo] = useState<'series' | 'instance'>('series');
   const [deleteVolunteerGroup] = useMutation(DELETE_VOLUNTEER_GROUP);
@@ -40,8 +41,9 @@ const VolunteerGroupDeleteModal: React.FC<
     DELETE_VOLUNTEER_GROUP_FOR_INSTANCE,
   );
 
-  const deleteHandler = async (): Promise<void> => {
-    try {
+  // Use useMutationModal for loading/error state management
+  const { isSubmitting, execute } = useMutationModal<void>(
+    async () => {
       // Template-First Approach: For recurring events, all volunteer groups are templates
       if (isRecurring && applyTo === 'instance' && group && eventId) {
         // Delete for specific instance only (create exception)
@@ -57,62 +59,60 @@ const VolunteerGroupDeleteModal: React.FC<
         // Delete for entire series or non-recurring event
         await deleteVolunteerGroup({ variables: { id: group?.id } });
       }
+    },
+    {
+      onSuccess: () => {
+        refetchGroups();
+        hide();
+        NotificationToast.success(t('volunteerGroupDeleted'));
+      },
+      onError: (error) => {
+        NotificationToast.error(error.message);
+      },
+    },
+  );
 
-      refetchGroups();
-      hide();
-      NotificationToast.success(t('volunteerGroupDeleted'));
-    } catch (error: unknown) {
-      NotificationToast.error((error as Error).message);
-    }
+  const deleteHandler = async (): Promise<void> => {
+    await execute();
   };
-  return (
-    <BaseModal
-      className={styles.volunteerModal}
-      onHide={hide}
-      show={isOpen}
-      headerContent={<p className={styles.titlemodal}> {t('deleteGroup')}</p>}
-      footer={
-        <>
-          <Button
-            variant="danger"
-            onClick={deleteHandler}
-            data-testid="deleteyesbtn"
-          >
-            {tCommon('yes')}
-          </Button>
-          <Button variant="secondary" onClick={hide} data-testid="deletenobtn">
-            {tCommon('no')}
-          </Button>
-        </>
-      }
-    >
-      <p> {t('deleteVolunteerGroupMsg')}</p>
 
-      {/* Radio buttons for recurring events - Template-First: All recurring event volunteer groups are templates */}
-      {group?.isTemplate && !group?.isInstanceException && (
-        <Form.Group className="mb-3">
-          <Form.Label>{t('applyTo')}</Form.Label>
-          <Form.Check
-            type="radio"
-            label={t('entireSeries')}
-            name="applyTo"
-            id="deleteApplyToSeries"
-            data-testid="deleteApplyToSeries"
-            checked={applyTo === 'series'}
-            onChange={() => setApplyTo('series')}
-          />
-          <Form.Check
-            type="radio"
-            label={t('thisEventOnly')}
-            name="applyTo"
-            id="deleteApplyToInstance"
-            data-testid="deleteApplyToInstance"
-            checked={applyTo === 'instance'}
-            onChange={() => setApplyTo('instance')}
-          />
-        </Form.Group>
-      )}
-    </BaseModal>
+  const recurringEventContent =
+    group?.isTemplate && !group?.isInstanceException ? (
+      <Form.Group className="mb-3">
+        <Form.Label>{t('applyTo')}</Form.Label>
+        <Form.Check
+          type="radio"
+          label={t('entireSeries')}
+          name="applyTo"
+          id="deleteApplyToSeries"
+          data-testid="deleteApplyToSeries"
+          checked={applyTo === 'series'}
+          onChange={() => setApplyTo('series')}
+        />
+        <Form.Check
+          type="radio"
+          label={t('thisEventOnly')}
+          name="applyTo"
+          id="deleteApplyToInstance"
+          data-testid="deleteApplyToInstance"
+          checked={applyTo === 'instance'}
+          onChange={() => setApplyTo('instance')}
+        />
+      </Form.Group>
+    ) : undefined;
+
+  return (
+    <DeleteModal
+      open={isOpen}
+      title={t('deleteGroup')}
+      onClose={hide}
+      onDelete={deleteHandler}
+      loading={isSubmitting}
+      data-testid="deleteVolunteerGroupModal"
+      recurringEventContent={recurringEventContent}
+    >
+      <p>{t('deleteVolunteerGroupMsg')}</p>
+    </DeleteModal>
   );
 };
 export default VolunteerGroupDeleteModal;

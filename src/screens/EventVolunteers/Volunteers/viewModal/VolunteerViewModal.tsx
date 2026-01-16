@@ -1,45 +1,12 @@
 /**
- * VolunteerViewModal Component
+ * Modal that displays detailed volunteer information in read-only mode.
  *
- * This component renders a modal to display detailed information about a volunteer.
- * It includes the volunteer's name, avatar, status, and hours volunteered.
- * The modal is styled using custom CSS classes and leverages
- * Material-UI and React-Bootstrap components for UI elements.
- *
- * @param isOpen - Determines whether the modal is visible.
- * @param hide - Function to close the modal.
- * @param volunteer - The volunteer's information.
- *
- * @returns JSX.Element - The rendered modal component.
- *
- * @remarks
- * - The modal displays the volunteer's name and avatar. If an avatar is not available,
- *   a fallback avatar is shown using the `Avatar` component.
- * - The volunteer's status is displayed with an icon indicating whether they have
- *   accepted or are pending.
- * - The number of hours volunteered by the volunteer is also displayed.
- *
- * dependencies
- * - `react-bootstrap` for modal and form components.
- * - `@mui/material` for Material-UI components like `TextField`.
- * - `react-i18next` for internationalization.
- * - `Avatar` component for rendering fallback avatars.
- *
- * @example
- * ```tsx
- * <VolunteerViewModal
- *   isOpen={true}
- *   hide={() => console.log('Modal closed')}
- *   volunteer={{
- *     user: { name: 'John Doe', avatarURL: '', id: '123' },
- *     hasAccepted: true,
- *     hoursVolunteered: 10,
- *   }}
- * />
- * ```
+ * component VolunteerViewModal
+ * `@param` props - Component props from InterfaceVolunteerViewModal
+ * `@returns` JSX.Element
  */
 import { Form } from 'react-bootstrap';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import styles from './VolunteerViewModal.module.css';
 import React from 'react';
@@ -109,14 +76,11 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
   const statusConfig = getStatusConfig(volunteerStatus);
 
   return (
-    <BaseModal
-      className={styles.volunteerViewModal}
-      onHide={hide}
-      show={isOpen}
-      headerContent={
-        <p className={styles.modalTitle}>{t('volunteerDetails')}</p>
-      }
-      dataTestId="volunteerViewModal"
+    <ViewModal
+      open={isOpen}
+      title={t('volunteerDetails')}
+      onClose={hide}
+      data-testid="volunteerViewModal"
     >
       <Form className={styles.modalForm}>
         {/* Volunteer Name & Avatar */}
@@ -230,7 +194,7 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
           </Form.Group>
         )}
       </Form>
-    </BaseModal>
+    </ViewModal>
   );
 };
 

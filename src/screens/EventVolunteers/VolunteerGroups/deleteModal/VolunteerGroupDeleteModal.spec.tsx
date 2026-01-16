@@ -123,9 +123,9 @@ describe('Testing Group Delete Modal', () => {
     renderGroupDeleteModal(link1, itemProps[0]);
     expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();
 
-    const yesBtn = screen.getByTestId('deleteyesbtn');
-    expect(yesBtn).toBeInTheDocument();
-    await userEvent.click(yesBtn);
+    const deleteBtn = screen.getByTestId('modal-delete-btn');
+    expect(deleteBtn).toBeInTheDocument();
+    await userEvent.click(deleteBtn);
 
     await waitFor(() => {
       expect(itemProps[0].refetchGroups).toHaveBeenCalled();
@@ -137,7 +137,7 @@ describe('Testing Group Delete Modal', () => {
   });
 
   test.each([
-    { testId: 'deletenobtn', description: 'no button' },
+    { testId: 'modal-cancel-btn', description: 'cancel button' },
     { testId: 'modalCloseBtn', description: 'close button' },
   ])('Close Delete Modal using $description', async ({ testId }) => {
     renderGroupDeleteModal(link1, itemProps[0]);
@@ -156,9 +156,9 @@ describe('Testing Group Delete Modal', () => {
     renderGroupDeleteModal(link2, itemProps[0]);
     expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();
 
-    const yesBtn = screen.getByTestId('deleteyesbtn');
-    expect(yesBtn).toBeInTheDocument();
-    await userEvent.click(yesBtn);
+    const deleteBtn = screen.getByTestId('modal-delete-btn');
+    expect(deleteBtn).toBeInTheDocument();
+    await userEvent.click(deleteBtn);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();
@@ -286,8 +286,8 @@ describe('Testing Group Delete Modal', () => {
     });
 
     // Click delete
-    const yesBtn = screen.getByTestId('deleteyesbtn');
-    await userEvent.click(yesBtn);
+    const deleteBtn = screen.getByTestId('modal-delete-btn');
+    await userEvent.click(deleteBtn);
 
     await waitFor(() => {
       expect(recurringGroupProps.refetchGroups).toHaveBeenCalled();

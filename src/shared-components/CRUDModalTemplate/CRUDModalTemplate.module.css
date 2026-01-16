@@ -74,6 +74,10 @@
   padding: 1rem;
 }
 
+.contentContainer {
+  padding: 1rem;
+}
+
 .footerButtons {
   display: flex;
   gap: 0.5rem;

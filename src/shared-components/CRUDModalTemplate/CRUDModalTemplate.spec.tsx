@@ -1,5 +1,12 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  renderHook,
+  act,
+} from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { Form } from 'react-bootstrap';
 import { I18nextProvider } from 'react-i18next';
@@ -11,6 +18,9 @@ import {
   EditModal,
   DeleteModal,
   ViewModal,
+  useModalState,
+  useFormModal,
+  useMutationModal,
 } from './index';
 
 /**
@@ -1088,5 +1098,295 @@ describe('ViewModal', () => {
 
     expect(screen.getByText('Close')).toBeInTheDocument();
     expect(screen.queryByText('Edit')).not.toBeInTheDocument();
+  });
+});
+
+describe('useModalState', () => {
+  it('should initialize with closed state by default', () => {
+    const { result } = renderHook(() => useModalState());
+
+    expect(result.current.isOpen).toBe(false);
+  });
+
+  it('should initialize with provided initial state', () => {
+    const { result } = renderHook(() => useModalState(true));
+
+    expect(result.current.isOpen).toBe(true);
+  });
+
+  it('should open modal when open is called', () => {
+    const { result } = renderHook(() => useModalState());
+
+    act(() => {
+      result.current.open();
+    });
+
+    expect(result.current.isOpen).toBe(true);
+  });
+
+  it('should close modal when close is called', () => {
+    const { result } = renderHook(() => useModalState(true));
+
+    act(() => {
+      result.current.close();
+    });
+
+    expect(result.current.isOpen).toBe(false);
+  });
+
+  it('should toggle modal state', () => {
+    const { result } = renderHook(() => useModalState());
+
+    act(() => {
+      result.current.toggle();
+    });
+    expect(result.current.isOpen).toBe(true);
+
+    act(() => {
+      result.current.toggle();
+    });
+    expect(result.current.isOpen).toBe(false);
+  });
+});
+
+describe('useFormModal', () => {
+  interface InterfaceTestData {
+    id: string;
+    name: string;
+  }
+
+  it('should initialize with null form data', () => {
+    const { result } = renderHook(() => useFormModal<InterfaceTestData>());
+
+    expect(result.current.isOpen).toBe(false);
+    expect(result.current.formData).toBeNull();
+    expect(result.current.isSubmitting).toBe(false);
+  });
+
+  it('should initialize with provided initial data', () => {
+    const initialData: InterfaceTestData = { id: '1', name: 'Test' };
+    const { result } = renderHook(() =>
+      useFormModal<InterfaceTestData>(initialData),
+    );
+
+    expect(result.current.formData).toEqual(initialData);
+  });
+
+  it('should open modal with data when openWithData is called', () => {
+    const { result } = renderHook(() => useFormModal<InterfaceTestData>());
+    const testData: InterfaceTestData = { id: '1', name: 'Test' };
+
+    act(() => {
+      result.current.openWithData(testData);
+    });
+
+    expect(result.current.isOpen).toBe(true);
+    expect(result.current.formData).toEqual(testData);
+  });
+
+  it('should reset all state when reset is called', () => {
+    const { result } = renderHook(() => useFormModal<InterfaceTestData>());
+    const testData: InterfaceTestData = { id: '1', name: 'Test' };
+
+    act(() => {
+      result.current.openWithData(testData);
+      result.current.setIsSubmitting(true);
+    });
+
+    expect(result.current.isOpen).toBe(true);
+    expect(result.current.formData).toEqual(testData);
+    expect(result.current.isSubmitting).toBe(true);
+
+    act(() => {
+      result.current.reset();
+    });
+
+    expect(result.current.isOpen).toBe(false);
+    expect(result.current.formData).toBeNull();
+    expect(result.current.isSubmitting).toBe(false);
+  });
+
+  it('should update submitting state', () => {
+    const { result } = renderHook(() => useFormModal<InterfaceTestData>());
+
+    act(() => {
+      result.current.setIsSubmitting(true);
+    });
+
+    expect(result.current.isSubmitting).toBe(true);
+
+    act(() => {
+      result.current.setIsSubmitting(false);
+    });
+
+    expect(result.current.isSubmitting).toBe(false);
+  });
+});
+
+describe('useMutationModal', () => {
+  interface InterfaceTestData {
+    id: string;
+    name: string;
+  }
+
+  interface InterfaceTestResult {
+    success: boolean;
+  }
+
+  it('should initialize with default state', () => {
+    const mockMutation = vi.fn();
+    const { result } = renderHook(() =>
+      useMutationModal<InterfaceTestData, InterfaceTestResult>(mockMutation),
+    );
+
+    expect(result.current.isOpen).toBe(false);
+    expect(result.current.formData).toBeNull();
+    expect(result.current.isSubmitting).toBe(false);
+    expect(result.current.error).toBeNull();
+  });
+
+  it('should execute mutation with form data', async () => {
+    const mockMutation = vi.fn().mockResolvedValue({ success: true });
+    const { result } = renderHook(() =>
+      useMutationModal<InterfaceTestData, InterfaceTestResult>(mockMutation),
+    );
+
+    const testData: InterfaceTestData = { id: '1', name: 'Test' };
+
+    act(() => {
+      result.current.openWithData(testData);
+    });
+
+    await act(async () => {
+      await result.current.execute();
+    });
+
+    expect(mockMutation).toHaveBeenCalledWith(testData);
+    expect(result.current.isSubmitting).toBe(false);
+  });
+
+  it('should execute mutation with provided data', async () => {
+    const mockMutation = vi.fn().mockResolvedValue({ success: true });
+    const { result } = renderHook(() =>
+      useMutationModal<InterfaceTestData, InterfaceTestResult>(mockMutation),
+    );
+
+    const testData: InterfaceTestData = { id: '1', name: 'Test' };
+
+    await act(async () => {
+      await result.current.execute(testData);
+    });
+
+    expect(mockMutation).toHaveBeenCalledWith(testData);
+  });
+
+  it('should call onSuccess callback when mutation succeeds', async () => {
+    const mockMutation = vi.fn().mockResolvedValue({ success: true });
+    const onSuccess = vi.fn();
+    const { result } = renderHook(() =>
+      useMutationModal<InterfaceTestData, InterfaceTestResult>(mockMutation, {
+        onSuccess,
+      }),
+    );
+
+    const testData: InterfaceTestData = { id: '1', name: 'Test' };
+
+    await act(async () => {
+      await result.current.execute(testData);
+    });
+
+    expect(onSuccess).toHaveBeenCalledWith({ success: true });
+  });
+
+  it('should handle mutation error and call onError callback', async () => {
+    const mockError = new Error('Mutation failed');
+    const mockMutation = vi.fn().mockRejectedValue(mockError);
+    const onError = vi.fn();
+    const { result } = renderHook(() =>
+      useMutationModal<InterfaceTestData, InterfaceTestResult>(mockMutation, {
+        onError,
+      }),
+    );
+
+    const testData: InterfaceTestData = { id: '1', name: 'Test' };
+
+    await act(async () => {
+      await result.current.execute(testData);
+    });
+
+    expect(result.current.error).toEqual(mockError);
+    expect(onError).toHaveBeenCalledWith(mockError);
+  });
+
+  it('should clear error when clearError is called', async () => {
+    const mockError = new Error('Mutation failed');
+    const mockMutation = vi.fn().mockRejectedValue(mockError);
+    const { result } = renderHook(() =>
+      useMutationModal<InterfaceTestData, InterfaceTestResult>(mockMutation),
+    );
+
+    const testData: InterfaceTestData = { id: '1', name: 'Test' };
+
+    await act(async () => {
+      await result.current.execute(testData);
+    });
+
+    expect(result.current.error).toEqual(mockError);
+
+    act(() => {
+      result.current.clearError();
+    });
+
+    expect(result.current.error).toBeNull();
+  });
+
+  it('should clear error when opening modal', () => {
+    const mockMutation = vi.fn();
+    const { result } = renderHook(() =>
+      useMutationModal<InterfaceTestData, InterfaceTestResult>(mockMutation),
+    );
+
+    act(() => {
+      result.current.open();
+    });
+
+    expect(result.current.error).toBeNull();
+  });
+
+  it('should return undefined when no data is available', async () => {
+    const mockMutation = vi.fn().mockResolvedValue({ success: true });
+    const { result } = renderHook(() =>
+      useMutationModal<InterfaceTestData, InterfaceTestResult>(mockMutation),
+    );
+
+    let returnValue: InterfaceTestResult | undefined;
+    await act(async () => {
+      returnValue = await result.current.execute();
+    });
+
+    expect(returnValue).toBeUndefined();
+    expect(mockMutation).not.toHaveBeenCalled();
+  });
+
+  it('should reset all state including error', () => {
+    const mockMutation = vi.fn();
+    const { result } = renderHook(() =>
+      useMutationModal<InterfaceTestData, InterfaceTestResult>(mockMutation),
+    );
+
+    const testData: InterfaceTestData = { id: '1', name: 'Test' };
+
+    act(() => {
+      result.current.openWithData(testData);
+    });
+
+    act(() => {
+      result.current.reset();
+    });
+
+    expect(result.current.isOpen).toBe(false);
+    expect(result.current.formData).toBeNull();
+    expect(result.current.isSubmitting).toBe(false);
+    expect(result.current.error).toBeNull();
   });
 });

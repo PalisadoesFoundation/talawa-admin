@@ -1,7 +1,10 @@
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DatePicker';
 import type { RenderResult } from '@testing-library/react';
 import {
   fireEvent,
@@ -14,7 +17,6 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18n from 'utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from './VolunteerGroups.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -169,7 +171,7 @@ const renderGroupModal = (
 describe('Testing VolunteerGroupModal', () => {
   it('GroupModal -> Create', async () => {
     renderGroupModal(successLink, modalProps[0]);
-    expect(screen.getAllByText(t.createGroup)).toHaveLength(2);
+    expect(screen.getByText(t.createGroup)).toBeInTheDocument();
 
     const nameInput = screen.getByLabelText(`${t.name} *`);
     expect(nameInput).toBeInTheDocument();
@@ -206,7 +208,7 @@ describe('Testing VolunteerGroupModal', () => {
     expect(volunteerOption).toBeInTheDocument();
     fireEvent.click(volunteerOption);
 
-    const submitBtn = screen.getByTestId('submitBtn');
+    const submitBtn = screen.getByTestId('modal-submit-btn');
     expect(submitBtn).toBeInTheDocument();
     await userEvent.click(submitBtn);
 
@@ -221,7 +223,7 @@ describe('Testing VolunteerGroupModal', () => {
 
   it('GroupModal -> Create -> Error', async () => {
     renderGroupModal(errorLink, modalProps[0]);
-    expect(screen.getAllByText(t.createGroup)).toHaveLength(2);
+    expect(screen.getByText(t.createGroup)).toBeInTheDocument();
 
     const nameInput = screen.getByLabelText(`${t.name} *`);
     expect(nameInput).toBeInTheDocument();
@@ -258,7 +260,7 @@ describe('Testing VolunteerGroupModal', () => {
     expect(volunteerOption).toBeInTheDocument();
     fireEvent.click(volunteerOption);
 
-    const submitBtn = screen.getByTestId('submitBtn');
+    const submitBtn = screen.getByTestId('modal-submit-btn');
     expect(submitBtn).toBeInTheDocument();
     await userEvent.click(submitBtn);
 
@@ -269,7 +271,7 @@ describe('Testing VolunteerGroupModal', () => {
 
   it('GroupModal -> Update', async () => {
     renderGroupModal(successLink, modalProps[1]);
-    expect(screen.getAllByText(t.updateGroup)).toHaveLength(2);
+    expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
 
     const nameInput = screen.getByLabelText(`${t.name} *`);
     expect(nameInput).toBeInTheDocument();
@@ -286,7 +288,7 @@ describe('Testing VolunteerGroupModal', () => {
     fireEvent.change(vrInput, { target: { value: '10' } });
     expect(vrInput).toHaveValue('10');
 
-    const submitBtn = screen.getByTestId('submitBtn');
+    const submitBtn = screen.getByTestId('modal-submit-btn');
     expect(submitBtn).toBeInTheDocument();
     await userEvent.click(submitBtn);
 
@@ -301,7 +303,7 @@ describe('Testing VolunteerGroupModal', () => {
 
   it('GroupModal -> Details -> Update -> Error', async () => {
     renderGroupModal(errorLink, modalProps[1]);
-    expect(screen.getAllByText(t.updateGroup)).toHaveLength(2);
+    expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
 
     const nameInput = screen.getByLabelText(`${t.name} *`);
     expect(nameInput).toBeInTheDocument();
@@ -318,7 +320,7 @@ describe('Testing VolunteerGroupModal', () => {
     fireEvent.change(vrInput, { target: { value: '10' } });
     expect(vrInput).toHaveValue('10');
 
-    const submitBtn = screen.getByTestId('submitBtn');
+    const submitBtn = screen.getByTestId('modal-submit-btn');
     expect(submitBtn).toBeInTheDocument();
     await userEvent.click(submitBtn);
 
@@ -329,7 +331,7 @@ describe('Testing VolunteerGroupModal', () => {
 
   it('Try adding different values for volunteersRequired', async () => {
     renderGroupModal(successLink, modalProps[2]);
-    expect(screen.getAllByText(t.updateGroup)).toHaveLength(2);
+    expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
 
     const vrInput = screen.getByLabelText(t.volunteersRequired);
     expect(vrInput).toBeInTheDocument();
@@ -359,9 +361,9 @@ describe('Testing VolunteerGroupModal', () => {
 
   it('GroupModal -> Update -> No values updated', async () => {
     renderGroupModal(successLink, modalProps[1]);
-    expect(screen.getAllByText(t.updateGroup)).toHaveLength(2);
+    expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
 
-    const submitBtn = screen.getByTestId('submitBtn');
+    const submitBtn = screen.getByTestId('modal-submit-btn');
     expect(submitBtn).toBeInTheDocument();
     await userEvent.click(submitBtn);
 
@@ -385,7 +387,7 @@ describe('Testing VolunteerGroupModal', () => {
 
     it('should create volunteer group for entire series when applyTo is "series"', async () => {
       renderGroupModal(successLink, recurringEventProps);
-      expect(screen.getAllByText(t.createGroup)).toHaveLength(2);
+      expect(screen.getByText(t.createGroup)).toBeInTheDocument();
 
       // Should show radio buttons for recurring events
       const seriesRadio = screen.getByRole('radio', { name: /entire series/i });
@@ -423,7 +425,7 @@ describe('Testing VolunteerGroupModal', () => {
       const volunteerOption = await screen.findByText('John Doe');
       fireEvent.click(volunteerOption);
 
-      const submitBtn = screen.getByTestId('submitBtn');
+      const submitBtn = screen.getByTestId('modal-submit-btn');
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
@@ -437,7 +439,7 @@ describe('Testing VolunteerGroupModal', () => {
 
     it('should create volunteer group for this instance only when applyTo is "instance"', async () => {
       renderGroupModal(successLink, recurringEventProps);
-      expect(screen.getAllByText(t.createGroup)).toHaveLength(2);
+      expect(screen.getByText(t.createGroup)).toBeInTheDocument();
 
       // Select "This Event Only" radio button
       const instanceRadio = screen.getByRole('radio', {
@@ -472,7 +474,7 @@ describe('Testing VolunteerGroupModal', () => {
       const volunteerOption = await screen.findByText('John Doe');
       fireEvent.click(volunteerOption);
 
-      const submitBtn = screen.getByTestId('submitBtn');
+      const submitBtn = screen.getByTestId('modal-submit-btn');
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
@@ -514,7 +516,7 @@ describe('Testing VolunteerGroupModal', () => {
       };
 
       renderGroupModal(successLink, editRecurringProps);
-      expect(screen.getAllByText(t.updateGroup)).toHaveLength(2);
+      expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
 
       // Should NOT show radio buttons in edit mode
       const seriesRadio = screen.queryByRole('radio', {
@@ -554,7 +556,7 @@ describe('Testing VolunteerGroupModal', () => {
       const volunteerOption = await screen.findByText('John Doe');
       fireEvent.click(volunteerOption);
 
-      const submitBtn = screen.getByTestId('submitBtn');
+      const submitBtn = screen.getByTestId('modal-submit-btn');
       await userEvent.click(submitBtn);
 
       // This test verifies that the logic in createGroupHandler is executed:

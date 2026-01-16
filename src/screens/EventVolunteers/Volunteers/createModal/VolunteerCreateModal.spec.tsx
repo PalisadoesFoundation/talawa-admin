@@ -1,7 +1,10 @@
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DatePicker';
 import type { RenderResult } from '@testing-library/react';
 import {
   fireEvent,
@@ -14,7 +17,6 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18n from 'utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from '../Volunteers.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -93,7 +95,7 @@ describe('Testing VolunteerCreateModal', () => {
 
   it('VolunteerCreateModal -> Create', async () => {
     renderCreateModal(link1, itemProps[0]);
-    expect(screen.getAllByText(t.addVolunteer)).toHaveLength(2);
+    expect(screen.getByText(t.addVolunteer)).toBeInTheDocument();
 
     // Select Volunteers
     const membersSelect = await screen.findByTestId('membersSelect');
@@ -105,7 +107,7 @@ describe('Testing VolunteerCreateModal', () => {
     expect(volunteerOption).toBeInTheDocument();
     fireEvent.click(volunteerOption);
 
-    const submitBtn = screen.getByTestId('submitBtn');
+    const submitBtn = screen.getByTestId('modal-submit-btn');
     expect(submitBtn).toBeInTheDocument();
     await userEvent.click(submitBtn);
 
@@ -118,7 +120,7 @@ describe('Testing VolunteerCreateModal', () => {
 
   it('VolunteerCreateModal -> Create -> Error', async () => {
     renderCreateModal(link2, itemProps[0]);
-    expect(screen.getAllByText(t.addVolunteer)).toHaveLength(2);
+    expect(screen.getByText(t.addVolunteer)).toBeInTheDocument();
 
     // Select Volunteers
     const membersSelect = await screen.findByTestId('membersSelect');
@@ -130,7 +132,7 @@ describe('Testing VolunteerCreateModal', () => {
     expect(volunteerOption).toBeInTheDocument();
     fireEvent.click(volunteerOption);
 
-    const submitBtn = screen.getByTestId('submitBtn');
+    const submitBtn = screen.getByTestId('modal-submit-btn');
     expect(submitBtn).toBeInTheDocument();
     await userEvent.click(submitBtn);
 
@@ -141,7 +143,7 @@ describe('Testing VolunteerCreateModal', () => {
 
   it('should handle isOptionEqualToValue for members Autocomplete', async () => {
     renderCreateModal(link1, itemProps[0]);
-    expect(screen.getAllByText(t.addVolunteer)).toHaveLength(2);
+    expect(screen.getByText(t.addVolunteer)).toBeInTheDocument();
 
     // Select a member
     const membersSelect = await screen.findByTestId('membersSelect');
@@ -177,7 +179,7 @@ describe('Testing VolunteerCreateModal', () => {
 
     it('should create volunteer for entire series when applyTo is "series"', async () => {
       renderCreateModal(link1, recurringEventProps);
-      expect(screen.getAllByText(t.addVolunteer)).toHaveLength(2);
+      expect(screen.getByText(t.addVolunteer)).toBeInTheDocument();
 
       // Should show radio buttons for recurring events
       const seriesRadio = screen.getByRole('radio', { name: /entire series/i });
@@ -196,7 +198,7 @@ describe('Testing VolunteerCreateModal', () => {
       const volunteerOption = await screen.findByText('John Doe');
       fireEvent.click(volunteerOption);
 
-      const submitBtn = screen.getByTestId('submitBtn');
+      const submitBtn = screen.getByTestId('modal-submit-btn');
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
@@ -210,7 +212,7 @@ describe('Testing VolunteerCreateModal', () => {
 
     it('should create volunteer for this instance only when applyTo is "instance"', async () => {
       renderCreateModal(link1, recurringEventProps);
-      expect(screen.getAllByText(t.addVolunteer)).toHaveLength(2);
+      expect(screen.getByText(t.addVolunteer)).toBeInTheDocument();
 
       // Select "This Event Only" radio button
       const instanceRadio = screen.getByRole('radio', {
@@ -226,7 +228,7 @@ describe('Testing VolunteerCreateModal', () => {
       const volunteerOption = await screen.findByText('John Doe');
       fireEvent.click(volunteerOption);
 
-      const submitBtn = screen.getByTestId('submitBtn');
+      const submitBtn = screen.getByTestId('modal-submit-btn');
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
@@ -248,7 +250,7 @@ describe('Testing VolunteerCreateModal', () => {
       const volunteerOption = await screen.findByText('John Doe');
       fireEvent.click(volunteerOption);
 
-      const submitBtn = screen.getByTestId('submitBtn');
+      const submitBtn = screen.getByTestId('modal-submit-btn');
       await userEvent.click(submitBtn);
 
       // This test verifies the eventId logic: baseEvent?.id || eventId
@@ -283,7 +285,7 @@ describe('Testing VolunteerCreateModal', () => {
       };
 
       renderCreateModal(link1, nonRecurringProps);
-      expect(screen.getAllByText(t.addVolunteer)).toHaveLength(2);
+      expect(screen.getByText(t.addVolunteer)).toBeInTheDocument();
 
       // Should NOT show radio buttons for non-recurring events
       const seriesRadio = screen.queryByRole('radio', {
@@ -314,7 +316,7 @@ describe('Testing VolunteerCreateModal', () => {
       const volunteerOption = await screen.findByText('John Doe');
       fireEvent.click(volunteerOption);
 
-      const submitBtn = screen.getByTestId('submitBtn');
+      const submitBtn = screen.getByTestId('modal-submit-btn');
       await userEvent.click(submitBtn);
 
       await waitFor(() => {

@@ -2002,7 +2002,18 @@
     "viewGroup": "Ver grupo",
     "editGroup": "Editar grupo",
     "invalidNumber": "Número inválido",
-    "viewToggle": "Alternar vista"
+    "viewToggle": "Alternar vista",
+    "recurringVolunteerTitle": "Ser voluntario para {{eventName}}",
+    "recurringGroupTitle": "Unirse a {{groupName}} - {{eventName}}",
+    "recurringVolunteerDescription": "¿Le gustaría ser voluntario para toda la serie o solo para esta instancia?",
+    "recurringGroupDescription": "¿Le gustaría unirse a \"{{groupName}}\" para toda la serie o solo para esta instancia?",
+    "volunteerForEntireSeries": "Ser voluntario para toda la serie",
+    "volunteerForSeriesDescription": "Usted será voluntario en todos los eventos de esta serie recurrente",
+    "joinGroupForSeriesDescription": "Se unirá a este grupo para todos los eventos de la serie recurrente",
+    "volunteerForThisInstanceOnly": "Ser voluntario solo para esta instancia",
+    "volunteerForInstanceDescription": "Solo será voluntario para el evento del {{date}}",
+    "joinGroupForInstanceDescription": "Se unirá a este grupo solo para el evento del {{date}}",
+    "submitRequest": "Enviar solicitud"
   },
   "userVolunteer": {
     "title": "Voluntariado",

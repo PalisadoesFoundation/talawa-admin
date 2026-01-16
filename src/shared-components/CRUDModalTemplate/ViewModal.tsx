@@ -99,7 +99,7 @@ export const ViewModal: React.FC<InterfaceViewModalProps> = ({
       data-testid={dataTestId}
       customFooter={customFooter}
     >
-      <div className={styles.formContainer}>{children}</div>
+      <div className={styles.contentContainer}>{children}</div>
     </CRUDModalTemplate>
   );
 };

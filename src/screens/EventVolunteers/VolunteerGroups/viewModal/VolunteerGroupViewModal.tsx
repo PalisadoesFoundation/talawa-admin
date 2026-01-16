@@ -35,7 +35,7 @@
  * ```
  */
 import { Form } from 'react-bootstrap';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import styles from './VolunteerGroupViewModal.module.css';
 import React from 'react';
@@ -71,14 +71,13 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
     group;
 
   return (
-    <BaseModal
-      className={styles.volunteerGroupViewModal}
-      onHide={hide}
-      show={isOpen}
-      headerContent={<p className={styles.titlemodal}>{t('groupDetails')}</p>}
-      dataTestId="volunteerGroupViewModal"
+    <ViewModal
+      open={isOpen}
+      title={t('groupDetails')}
+      onClose={hide}
+      data-testid="volunteerGroupViewModal"
     >
-      <Form className="p-3">
+      <Form>
         {/* Group name & Volunteers Required */}
         <Form.Group className="d-flex gap-3 mb-3">
           <FormControl fullWidth>
@@ -241,7 +240,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
           </Form.Group>
         )}
       </Form>
-    </BaseModal>
+    </ViewModal>
   );
 };
 export default VolunteerGroupViewModal;

@@ -2002,7 +2002,18 @@
     "viewGroup": "View group",
     "editGroup": "Edit group",
     "invalidNumber": "Invalid number",
-    "viewToggle": "Toggle view"
+    "viewToggle": "Toggle view",
+    "recurringVolunteerTitle": "Volunteer for {{eventName}}",
+    "recurringGroupTitle": "Join {{groupName}} - {{eventName}}",
+    "recurringVolunteerDescription": "Would you like to volunteer for the entire series or just this instance?",
+    "recurringGroupDescription": "Would you like to join \"{{groupName}}\" for the entire series or just this instance?",
+    "volunteerForEntireSeries": "Volunteer for Entire Series",
+    "volunteerForSeriesDescription": "You will be volunteering for all events in this recurring series",
+    "joinGroupForSeriesDescription": "You will join this group for all events in the recurring series",
+    "volunteerForThisInstanceOnly": "Volunteer for This Instance Only",
+    "volunteerForInstanceDescription": "You will only be volunteering for the event on {{date}}",
+    "joinGroupForInstanceDescription": "You will join this group only for the event on {{date}}",
+    "submitRequest": "Submit Request"
   },
   "userVolunteer": {
     "title": "Volunteership",

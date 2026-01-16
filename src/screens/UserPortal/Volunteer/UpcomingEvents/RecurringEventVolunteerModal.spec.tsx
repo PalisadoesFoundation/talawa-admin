@@ -1,4 +1,3 @@
-import React from 'react';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import dayjs from 'dayjs';
@@ -138,7 +137,7 @@ describe('RecurringEventVolunteerModal', () => {
     render(<RecurringEventVolunteerModal {...defaultProps} />);
 
     // Series is selected by default
-    const submitBtn = screen.getByTestId('submitVolunteerBtn');
+    const submitBtn = screen.getByTestId('modal-primary-btn');
     fireEvent.click(submitBtn);
 
     expect(defaultProps.onSelectSeries).toHaveBeenCalledTimes(1);
@@ -149,7 +148,7 @@ describe('RecurringEventVolunteerModal', () => {
     render(<RecurringEventVolunteerModal {...defaultProps} />);
 
     const instanceRadio = screen.getByTestId('volunteerForInstanceOption');
-    const submitBtn = screen.getByTestId('submitVolunteerBtn');
+    const submitBtn = screen.getByTestId('modal-primary-btn');
 
     // Change selection to instance
     fireEvent.click(instanceRadio);
@@ -162,7 +161,15 @@ describe('RecurringEventVolunteerModal', () => {
   test('cancel button calls onHide', () => {
     render(<RecurringEventVolunteerModal {...defaultProps} />);
 
-    fireEvent.click(screen.getByText('Cancel'));
+    fireEvent.click(screen.getByTestId('modal-secondary-btn'));
+
+    expect(defaultProps.onHide).toHaveBeenCalledTimes(1);
+  });
+
+  test('close button calls onHide', () => {
+    render(<RecurringEventVolunteerModal {...defaultProps} />);
+
+    fireEvent.click(screen.getByTestId('modalCloseBtn'));
 
     expect(defaultProps.onHide).toHaveBeenCalledTimes(1);
   });

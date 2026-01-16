@@ -1,5 +1,8 @@
-import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DatePicker';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
@@ -121,9 +124,11 @@ const renderVolunteerViewModal = (
     <MockedProvider>
       <Provider store={store}>
         <BrowserRouter>
-          <I18nextProvider i18n={i18n}>
-            <VolunteerViewModal {...props} />
-          </I18nextProvider>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <I18nextProvider i18n={i18n}>
+              <VolunteerViewModal {...props} />
+            </I18nextProvider>
+          </LocalizationProvider>
         </BrowserRouter>
       </Provider>
     </MockedProvider>,
@@ -136,7 +141,7 @@ describe('Testing VolunteerViewModal', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe('Basic Rendering', () => {
@@ -162,6 +167,17 @@ describe('Testing VolunteerViewModal', () => {
       renderVolunteerViewModal(props);
 
       const closeButton = screen.getByTestId('modalCloseBtn');
+      fireEvent.click(closeButton);
+
+      expect(hideMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call hide function when footer close button is clicked', () => {
+      const hideMock = vi.fn();
+      const props = { ...itemProps[0], hide: hideMock };
+      renderVolunteerViewModal(props);
+
+      const closeButton = screen.getByTestId('modal-close-btn');
       fireEvent.click(closeButton);
 
       expect(hideMock).toHaveBeenCalledTimes(1);

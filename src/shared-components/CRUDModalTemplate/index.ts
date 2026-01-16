@@ -28,6 +28,8 @@ export { EditModal } from './EditModal';
 export { DeleteModal } from './DeleteModal';
 export { ViewModal } from './ViewModal';
 
+export { useModalState, useFormModal, useMutationModal } from './hooks';
+
 export type {
   InterfaceCrudModalBaseProps,
   InterfaceCRUDModalTemplateProps,
@@ -37,5 +39,8 @@ export type {
   InterfaceViewModalProps,
   InterfaceModalFormState,
   InterfaceRecurringEventProps,
+  InterfaceUseModalStateReturn,
+  InterfaceUseFormModalReturn,
+  InterfaceUseMutationModalReturn,
   ModalSize,
 } from 'types/shared-components/CRUDModalTemplate/interface';
