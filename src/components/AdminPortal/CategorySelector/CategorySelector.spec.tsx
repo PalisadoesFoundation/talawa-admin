@@ -116,7 +116,7 @@ describe('CategorySelector', () => {
     renderComponent(mockCategories, mockCategories[0], onCategoryChange);
 
     const user = userEvent.setup();
-    const clearButton = screen.getByTitle('Clear');
+    const clearButton = screen.getByLabelText('Clear');
     await user.click(clearButton);
 
     expect(onCategoryChange).toHaveBeenCalledWith(null);

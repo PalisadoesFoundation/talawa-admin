@@ -1493,7 +1493,7 @@ describe('ItemModal - Specific Test Coverage', () => {
         isOpen: true,
         hide: vi.fn(),
         orgId: 'orgId',
-        eventId: undefined,
+        eventId: 'event123',
         actionItemsRefetch: vi.fn(),
         editMode: false,
         actionItem: null,
@@ -1505,15 +1505,18 @@ describe('ItemModal - Specific Test Coverage', () => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
+      // Wait for volunteers to load
+      await waitFor(() => {
+        expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
+      });
+
       // Select a category through CategorySelector
       const categorySelect = screen.getByTestId('categorySelect');
       const categoryInput = within(categorySelect).getByRole('combobox');
       await userEvent.click(categoryInput);
 
-      await waitFor(async () => {
-        const option = await screen.findByText('Category 1');
-        await userEvent.click(option);
-      });
+      const categoryOption = await screen.findByText('Category 1');
+      await userEvent.click(categoryOption);
 
       // Verify the category is displayed in the input (proves setActionItemCategory updated the state)
       await waitFor(() => {
@@ -1525,10 +1528,14 @@ describe('ItemModal - Specific Test Coverage', () => {
       const volunteerSelect = screen.getByTestId('volunteerSelect');
       const volunteerInput = within(volunteerSelect).getByRole('combobox');
       await userEvent.click(volunteerInput);
-      await waitFor(async () => {
-        const volunteerOption = await screen.findByText('John Doe');
-        await userEvent.click(volunteerOption);
+
+      // Wait for the listbox to appear
+      await waitFor(() => {
+        expect(screen.getByRole('listbox')).toBeInTheDocument();
       });
+
+      const volunteerOption = await screen.findByText('John Doe');
+      await userEvent.click(volunteerOption);
 
       // Submit the form
       const submitButton = screen.getByTestId('submitBtn');
