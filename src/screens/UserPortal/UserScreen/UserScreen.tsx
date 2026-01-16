@@ -35,7 +35,7 @@
  * <Route path="/user/:orgId/*" element={<UserScreen />} />
  * ```
  */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { Outlet, useLocation, useParams } from 'react-router';
 import { updateTargets } from 'state/action-creators';
@@ -108,17 +108,18 @@ const UserScreen = (): React.JSX.Element => {
     if (orgId) {
       dispatch(updateTargets(orgId));
     }
-  }, [orgId]);
+  }, [orgId, dispatch]);
 
   /**
    * Handles window resize events to toggle the sidebar visibility
-   * based on the screen width.
+   * based on the screen width. Wrapped in useCallback so it can be
+   * safely used in effect deps.
    */
-  const handleResize = (): void => {
+  const handleResize = useCallback((): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
     }
-  };
+  }, []);
 
   // Set up event listener for window resize and clean up on unmount
   useEffect(() => {
@@ -127,13 +128,15 @@ const UserScreen = (): React.JSX.Element => {
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [handleResize]);
 
   useEffect(() => {
     setItem('sidebar', hideDrawer.toString());
   }, [hideDrawer, setItem]);
 
   const currentPage = location.pathname;
+  const mainRightClass = `${styles.pageBody} ${!hideDrawer ? styles.expand : ''}`;
+
   return (
     <div className={styles.pageContainer}>
       <UserPortalNavigationBar
@@ -141,7 +144,7 @@ const UserScreen = (): React.JSX.Element => {
         organizationId={orgId}
         currentPage={currentPage}
       />
-      <div className={localStyles.flexContainer}>
+      <div className={styles.flexContainer}>
         <div className={styles.drawer}>
           {orgId ? (
             <UserSidebarOrg
@@ -157,12 +160,9 @@ const UserScreen = (): React.JSX.Element => {
             />
           )}
         </div>
-        <div
-          className={`${hideDrawer ? styles.expand : styles.contract} ${hideDrawer ? localStyles.contentContainer : ''} ${localStyles.mainContent}`}
-          data-testid="mainpageright"
-        >
+        <div className={mainRightClass} data-testid="mainpageright">
           <div className="d-flex justify-content-between align-items-center">
-            <div className={localStyles.titleContainer}>
+            <div className={styles.titleContainer}>
               <h1>{tScoped('title')}</h1>
             </div>
             {/* <ProfileDropdown /> */}
@@ -173,5 +173,4 @@ const UserScreen = (): React.JSX.Element => {
     </div>
   );
 };
-
 export default UserScreen;
