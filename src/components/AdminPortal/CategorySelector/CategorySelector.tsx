@@ -10,7 +10,9 @@ import styles from 'style/app-fixed.module.css';
  * A dropdown selector for choosing an action item category.
  * Uses MUI Autocomplete for searchable category selection.
  *
- * @param props - Component props from InterfaceCategorySelectorProps
+ * @param categories - List of available action item categories
+ * @param selectedCategory - Currently selected category
+ * @param onCategoryChange - Callback fired when category changes
  * @returns Autocomplete dropdown for category selection
  */
 const CategorySelector: FC<InterfaceCategorySelectorProps> = ({
@@ -30,7 +32,7 @@ const CategorySelector: FC<InterfaceCategorySelectorProps> = ({
         data-cy="categorySelect"
         options={categories}
         value={selectedCategory}
-        isOptionEqualToValue={(option, value) => option.id === value.id}
+        isOptionEqualToValue={(option, value) => option.id === value?.id}
         filterSelectedOptions={true}
         getOptionLabel={(item: IActionItemCategoryInfo): string => item.name}
         onChange={(_, newCategory): void => {
