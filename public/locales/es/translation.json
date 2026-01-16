@@ -1895,9 +1895,7 @@
       "noRecipientsError": "Por favor proporcione al menos un correo electrónico de destinatario",
       "invalidEmailsError": "Correo(s) electrónico(s) inválido(s): {{emails}}",
       "invitesSentSuccessfully": "Invitaciones enviadas con éxito"
-    },
-    "selectUserWarning": "¡Por favor, elija primero un usuario para agregar!",
-    "addingAttendeeProgress": "Agregando al asistente..."
+    }
   },
   "onSpotAttendee": {
     "invalidEmailFormat": "Formato de correo electrónico no válido",
@@ -1921,10 +1919,6 @@
     "placeholderFirstName": "Juan",
     "placeholderLastName": "García",
     "placeholderEmail": "abc@gmail.com"
-  },
-  "eventRegistrantsWrapper": {
-    "buttonAriaLabel": "Mostrar asistentes",
-    "registerMemberButton": "Registrar miembro"
   },
   "userCampaigns": {
     "title": "Campañas de recaudación de fondos",

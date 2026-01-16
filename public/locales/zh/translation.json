@@ -1912,13 +1912,7 @@
       "noRecipientsError": "请提供至少一个收件人电子邮件",
       "invalidEmailsError": "无效的电子邮件：{{emails}}",
       "invitesSentSuccessfully": "邀请已成功发送"
-    },
-    "selectUserWarning": "請先選擇要添加的用戶！",
-    "addingAttendeeProgress": "正在添加參與者..."
-  },
-  "eventRegistrantsWrapper": {
-    "buttonAriaLabel": "顯示參與者",
-    "registerMemberButton": "註冊成員"
+    }
   },
   "onSpotAttendee": {
     "invalidEmailFormat": "无效的电子邮件格式",

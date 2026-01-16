@@ -1912,13 +1912,7 @@
       "noRecipientsError": "Veuillez fournir au moins un email de destinataire",
       "invalidEmailsError": "Email(s) invalide(s) : {{emails}}",
       "invitesSentSuccessfully": "Invitations envoyées avec succès"
-    },
-    "selectUserWarning": "Veuillez d'abord choisir un utilisateur à ajouter !",
-    "addingAttendeeProgress": "Ajout du participant en cours..."
-  },
-  "eventRegistrantsWrapper": {
-    "buttonAriaLabel": "Afficher les participants",
-    "registerMemberButton": "Inscrire un membre"
+    }
   },
   "onSpotAttendee": {
     "invalidEmailFormat": "Format d'email invalide",
