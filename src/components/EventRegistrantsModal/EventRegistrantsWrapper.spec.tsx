@@ -14,9 +14,11 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import { ToastContainer } from 'react-toastify';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DatePicker';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 
 const queryMock = [
@@ -72,7 +74,7 @@ const renderComponent = (props: RenderComponentProps) => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
+              <NotificationToastContainer />
               <EventRegistrantsWrapper {...props} />
             </I18nextProvider>
           </Provider>
@@ -117,7 +119,7 @@ describe('EventRegistrantsWrapper Component', () => {
     test('should render button with correct aria-label', () => {
       renderComponent(defaultProps);
 
-      const button = screen.getByLabelText('showAttendees');
+      const button = screen.getByLabelText('Show Attendees');
       expect(button).toBeInTheDocument();
     });
 
@@ -486,7 +488,7 @@ describe('EventRegistrantsWrapper Component', () => {
     test('should have accessible button with proper aria-label', () => {
       renderComponent(defaultProps);
 
-      const button = screen.getByLabelText('showAttendees');
+      const button = screen.getByLabelText('Show Attendees');
       expect(button).toHaveAccessibleName();
     });
 

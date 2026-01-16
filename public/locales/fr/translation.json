@@ -668,7 +668,19 @@
     "completeForInstance": "Terminé pour cette instance",
     "completeForSeries": "Terminé pour la série",
     "postCompletionNotesRequired": "Notes post-achèvement requises",
-    "updateThisInstance": "Mettre à jour cette instance"
+    "updateThisInstance": "Mettre à jour cette instance",
+    "itemCategory": "Catégorie d'Article",
+    "assignedDate": "Date d'Attribution",
+    "actions": "Actions",
+    "noCategory": "Pas de catégorie",
+    "viewActionItem": "Afficher l'Article d'Action",
+    "updateStatus": "Mettre à Jour le Statut",
+    "pending": "En Attente",
+    "completed": "Terminé",
+    "late": "En Retard",
+    "searchByAssignee": "Rechercher par Attribué",
+    "searchByCategory": "Rechercher par Catégorie",
+    "sortByAssignedDate": "Trier par Date d'Attribution"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Détails de la catégorie d'ordre du jour",
@@ -722,7 +734,9 @@
     "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?",
     "event": "Événement",
     "search": "Rechercher",
-    "attachmentPreview": "Aperçu de la pièce jointe"
+    "attachmentPreview": "Aperçu de la pièce jointe",
+    "errorLoadingAgendaCategories": "Une erreur s'est produite lors du chargement des données des catégories de l'ordre du jour",
+    "errorLoadingAgendaItems": "Une erreur s'est produite lors du chargement des données des points de l'ordre du jour"
   },
   "eventListCard": {
     "deleteEvent": "Supprimer l'événement",
@@ -774,7 +788,19 @@
     "talawaApiUnavailable": "API Talawa non disponible",
     "done": "Terminé",
     "invalidDate": "Invalid Date",
-    "createChat": "Créer une discussion"
+    "createChat": "Créer une discussion",
+    "isRegisterable": "Peut S'enregistrer",
+    "creator": "Créateur",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "viewDetails": "Afficher les Détails",
+    "noEventsFound": "Aucun événement trouvé",
+    "noEvent": "Aucun Événement",
+    "averageFeedback": "Retour Moyen",
+    "noOfAttendees": "Nombre de Participants",
+    "noRegistrations": "Aucune Inscription",
+    "registrants": "Inscrits",
+    "to": "À"
   },
   "funds": {
     "title": "Fonds",
@@ -855,6 +881,7 @@
     "updatePledge": "Engagement de mise à jour",
     "deletePledge": "Supprimer l'engagement",
     "amount": "Montant",
+    "amountMustBeAtLeastOne": "Le montant doit être d'au moins 1",
     "editPledge": "Modifier l'engagement",
     "deletePledgeMsg": "Etes-vous sûr de vouloir supprimer cet engagement ?",
     "noPledges": "Aucun engagement trouvé",
@@ -878,7 +905,8 @@
     "pledgeDate": "Date d'Engagement",
     "pledged": "Promis",
     "donated": "Donné",
-    "campaignNotActive": "La campagne n'est pas actuellement active"
+    "campaignNotActive": "La campagne n'est pas actuellement active",
+    "close": "Fermer"
   },
   "createPostModal": {
     "title": "Des postes",
@@ -1433,7 +1461,24 @@
     "pageNumber": "Page {{page}}",
     "goToToday": "Aller à aujourd'hui",
     "genderDistribution": "Distribution par sexe",
-    "ageDistribution": "Distribution par âge"
+    "ageDistribution": "Distribution par âge",
+    "trends": "Tendances",
+    "demography": "Démographie",
+    "male": "Homme",
+    "female": "Femme",
+    "other": "Autre",
+    "under18": "Moins de 18 ans",
+    "age18to40": "18 à 40 ans",
+    "over40": "Plus de 40 ans",
+    "exportData": "Exporter les Données",
+    "demographics": "Données Démographiques",
+    "today": "Aujourd'hui",
+    "attendanceCount": "Nombre de Présences",
+    "totalMembers": "Nombre Total de Membres",
+    "membersAttended": "Membres Ayant Assisté",
+    "age": "Âge",
+    "close": "Fermer",
+    "gender": "Sexe"
   },
   "eventRegistrant": {
     "sort": "Trier",
@@ -1468,7 +1513,10 @@
     "addingAttendee": "Ajout en cours...",
     "male": "Homme",
     "female": "Femme",
-    "other": "Autre"
+    "other": "Autre",
+    "firstNamePlaceholder": "Jean",
+    "lastNamePlaceholder": "Dupont",
+    "emailPlaceholder": "exemple@gmail.com"
   },
   "settings": {
     "eventAttended": "Événements Assistés",
@@ -1901,7 +1949,13 @@
       "errorSendingInvites": "Erreur lors de l'envoi des invitations",
       "emailsLabel": "Emails et noms des destinataires",
       "emailsHelp": "Fournissez l'email et le nom facultatif pour chaque destinataire. Ajoutez plusieurs destinataires si nécessaire."
-    }
+    },
+    "selectUserWarning": "Veuillez d'abord choisir un utilisateur à ajouter !",
+    "addingAttendeeProgress": "Ajout du participant en cours..."
+  },
+  "eventRegistrantsWrapper": {
+    "buttonAriaLabel": "Afficher les participants",
+    "registerMemberButton": "Inscrire un membre"
   },
   "userCampaigns": {
     "title": "Campagnes de financement",
@@ -1992,6 +2046,8 @@
     "earliest": "Le Plus Ancien",
     "requestAccepted": "Demande acceptée avec succès",
     "requestRejected": "Demande rejetée avec succès",
+    "acceptRequest": "Accepter la Demande",
+    "rejectRequest": "Rejeter la Demande",
     "details": "Détails",
     "manageGroup": "Gérer le Groupe",
     "mostVolunteers": "Le plus de bénévoles",
@@ -2015,7 +2071,9 @@
     "deleteVolunteerGroup": "Supprimer le groupe de bénévoles {{name}}",
     "deleteVolunteerEntry": "Supprimer l'entrée bénévole {{name}}",
     "viewGroup": "Voir le groupe de bénévoles",
-    "editGroup": "Modifier le groupe de bénévoles"
+    "editGroup": "Modifier le groupe de bénévoles",
+    "invalidNumber": "Nombre invalide",
+    "viewToggle": "Basculer la vue"
   },
   "userVolunteer": {
     "title": "Volontariat",
@@ -2203,5 +2261,8 @@
   },
   "orgProfileField": {
     "editCustomField": "Modifier le champ personnalisé"
+  },
+  "userGlobalScreen": {
+    "globalFeatures": "Fonctionnalités Globales"
   }
 }

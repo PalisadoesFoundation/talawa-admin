@@ -256,6 +256,9 @@
   "or": "या",
   "eventNotFound": "ईवेंट आईडी {{id}} के साथ नहीं मिला",
   "required": "आवश्यक",
+  "deleteConfirmation": "क्या आप वाकई इस आइटम को हटाना चाहते हैं? यह कार्रवाई पूर्ववत नहीं की जा सकती।",
+  "deleteEntityConfirmation": "क्या आप वाकई {{entityName}} को हटाना चाहते हैं? यह कार्रवाई पूर्ववत नहीं की जा सकती।",
+  "update": "अपडेट करें",
   "imageNotFound": "छवि नहीं मिली",
   "changeLanguage": "भाषा बदलें",
   "selectField": "{{fieldName}} चुनें",
@@ -266,5 +269,16 @@
     "presetNext7Days": "अगले 7 दिन",
     "presetNext30Days": "अगले 30 दिन",
     "presetNextMonth": "अगले महीने"
-  }
+  },
+  "ascending": "आरोही",
+  "descending": "अवरोही",
+  "noRegistrations": "पंजीकरण संख्या",
+  "noOfAttendees": "उपस्थित लोगों की संख्या",
+  "averageFeedback": "औसत प्रतिक्रिया",
+  "registrants": "पंजीकृत",
+  "errorLoadingActionItems": "{{entity}} लोड करने में त्रुटि",
+  "cannotUnregisterCheckedIn": "पहले से चेक-इन किए गए उपयोगकर्ता को अपंजीकृत नहीं किया जा सकता",
+  "errorLoadingEventDetails": "ईवेंट विवरण लोड करने में त्रुटि। कृपया बाद में प्रयास करें।",
+  "eventDate": "ईवेंट तारीख",
+  "attendedEventsList": "उपस्थित इवेंट की सूची"
 }

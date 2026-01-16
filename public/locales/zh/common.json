@@ -256,6 +256,9 @@
   "or": "或",
   "eventNotFound": "未找到 ID 为 {{id}} 的活动",
   "required": "必填",
+  "deleteConfirmation": "您确定要删除此项吗？此操作无法撤消。",
+  "deleteEntityConfirmation": "您确定要删除 {{entityName}} 吗？此操作无法撤消。",
+  "update": "更新",
   "imageNotFound": "未找到图片",
   "changeLanguage": "更改語言",
   "selectField": "選擇{{fieldName}}",
@@ -266,5 +269,16 @@
     "presetNext7Days": "未来7天",
     "presetNext30Days": "未来30天",
     "presetNextMonth": "下个月"
-  }
+  },
+  "ascending": "升序",
+  "descending": "降序",
+  "noRegistrations": "注册数量",
+  "noOfAttendees": "参与者数量",
+  "averageFeedback": "平均反馈",
+  "registrants": "注册者",
+  "errorLoadingActionItems": "加载 {{entity}} 时出错",
+  "cannotUnregisterCheckedIn": "无法取消已签到的用户的注册",
+  "errorLoadingEventDetails": "加载事件详情时出错。请稍后重试。",
+  "eventDate": "活动日期",
+  "attendedEventsList": "已参加活动列表"
 }

@@ -44,7 +44,7 @@ import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from '../../../style/app-fixed.module.css';
+import styles from './Organizations.module.css';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import type { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';

@@ -35,18 +35,19 @@ import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
 import type { IActionItemCategoryInfo } from 'types/shared-components/ActionItems/interface';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { Circle, WarningAmberRounded } from '@mui/icons-material';
+import { WarningAmberRounded } from '@mui/icons-material';
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
 import dayjs from 'dayjs';
-import { Chip, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import CategoryModal from './Modal/ActionItemCategoryModal';
 import CategoryViewModal from './Modal/ActionItemCategoryViewModal';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
 /** Modal state management */
 enum ModalState {
@@ -241,12 +242,10 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <Chip
-            icon={<Circle className={styles.chipIcon} />}
-            label={params.row.isDisabled ? 'Disabled' : 'Active'}
-            variant="outlined"
-            color="primary"
-            className={`${styles.chip} ${params.row.isDisabled ? styles.pending : styles.active}`}
+          <StatusBadge
+            variant={params.row.isDisabled ? 'disabled' : 'active'}
+            size="sm"
+            dataTestId="statusChip"
           />
         );
       },

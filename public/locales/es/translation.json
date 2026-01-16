@@ -668,7 +668,19 @@
     "pendingForSeries": "Pendiente para la serie",
     "completeForInstance": "Completo para esta instancia",
     "completeForSeries": "Completo para la serie",
-    "postCompletionNotesRequired": "Se requieren notas posteriores a la finalización"
+    "postCompletionNotesRequired": "Se requieren notas posteriores a la finalización",
+    "itemCategory": "Categoría del Elemento",
+    "assignedDate": "Fecha de Asignación",
+    "actions": "Acciones",
+    "noCategory": "Sin categoría",
+    "viewActionItem": "Ver Elemento de Acción",
+    "updateStatus": "Actualizar Estado",
+    "pending": "Pendiente",
+    "completed": "Completado",
+    "late": "Atrasado",
+    "searchByAssignee": "Buscar por Asignado",
+    "searchByCategory": "Buscar por Categoría",
+    "sortByAssignedDate": "Ordenar por Fecha de Asignación"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Detalles de la categoría de la agenda",
@@ -722,7 +734,9 @@
     "deleteAgendaItemMsg": "¿Desea eliminar este punto del orden del día?",
     "event": "Evento",
     "search": "Buscar",
-    "attachmentPreview": "Vista previa del adjunto"
+    "attachmentPreview": "Vista previa del adjunto",
+    "errorLoadingAgendaCategories": "Ocurrió un error al cargar los datos de las Categorías de la Agenda",
+    "errorLoadingAgendaItems": "Ocurrió un error al cargar los datos de los Puntos de la Agenda"
   },
   "eventListCard": {
     "location": "Lugar del evento",
@@ -774,7 +788,19 @@
     "occurrences": "ocurrencias",
     "done": "Hecho",
     "invalidDate": "Invalid Date",
-    "createChat": "Crear chat"
+    "createChat": "Crear chat",
+    "isRegisterable": "Es Registrable",
+    "creator": "Creador",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "viewDetails": "Ver Detalles",
+    "noEventsFound": "No se encontraron eventos",
+    "noEvent": "Sin Evento",
+    "averageFeedback": "Retroalimentación Promedio",
+    "noOfAttendees": "Número de Asistentes",
+    "noRegistrations": "Sin Registros",
+    "registrants": "Registrados",
+    "to": "A"
   },
   "funds": {
     "title": "Fondos",
@@ -857,6 +883,7 @@
     "updatePledge": "Actualizar Compromiso",
     "deletePledge": "Eliminar Compromiso",
     "amount": "Monto",
+    "amountMustBeAtLeastOne": "El monto debe ser al menos 1",
     "editPledge": "Editar Compromiso",
     "deletePledgeMsg": "¿Estás seguro de que quieres eliminar este compromiso?",
     "noPledges": "No se encontraron compromisos",
@@ -878,7 +905,8 @@
     "pledgeDate": "Fecha de Compromiso",
     "pledged": "Comprometido",
     "donated": "Donado",
-    "campaignNotActive": "La campaña no está actualmente activa"
+    "campaignNotActive": "La campaña no está actualmente activa",
+    "close": "Cerrar"
   },
   "createPostModal": {
     "title": "Publicaciones de Talawa",
@@ -1416,7 +1444,24 @@
     "pageNumber": "Página {{page}}",
     "goToToday": "Ir a hoy",
     "genderDistribution": "Distribución por género",
-    "ageDistribution": "Distribución por edad"
+    "ageDistribution": "Distribución por edad",
+    "trends": "Tendencias",
+    "demography": "Demografía",
+    "male": "Masculino",
+    "female": "Femenino",
+    "other": "Otro",
+    "under18": "Menor de 18",
+    "age18to40": "18 a 40",
+    "over40": "Mayor de 40",
+    "exportData": "Exportar Datos",
+    "demographics": "Datos Demográficos",
+    "today": "Hoy",
+    "attendanceCount": "Recuento de Asistencia",
+    "totalMembers": "Total de Miembros",
+    "membersAttended": "Miembros que Asistieron",
+    "age": "Edad",
+    "close": "Cerrar",
+    "gender": "Género"
   },
   "eventRegistrant": {
     "sort": "Ordenar",
@@ -1451,7 +1496,10 @@
     "addingAttendee": "Agregando...",
     "male": "Masculino",
     "female": "Femenino",
-    "other": "Otro"
+    "other": "Otro",
+    "firstNamePlaceholder": "Juan",
+    "lastNamePlaceholder": "García",
+    "emailPlaceholder": "ejemplo@gmail.com"
   },
   "settings": {
     "settings": "Ajustes",
@@ -1884,8 +1932,15 @@
       "errorSendingInvites": "Error al enviar invitaciones",
       "emailsLabel": "Correos electrónicos y nombres de destinatarios",
       "emailsHelp": "Proporcione el correo electrónico y el nombre opcional para cada destinatario. Agregue varios destinatarios según sea necesario."
-    }
+    },
+    "selectUserWarning": "¡Por favor, elija primero un usuario para agregar!",
+    "addingAttendeeProgress": "Agregando al asistente..."
   },
+  "eventRegistrantsWrapper": {
+    "buttonAriaLabel": "Mostrar asistentes",
+    "registerMemberButton": "Registrar miembro"
+  },
+
   "userCampaigns": {
     "title": "Campañas de recaudación de fondos",
     "searchByName": "Buscar por nombre...",
@@ -1975,6 +2030,8 @@
     "earliest": "Más Antiguo",
     "requestAccepted": "Solicitud aceptada con éxito",
     "requestRejected": "Solicitud rechazada con éxito",
+    "acceptRequest": "Aceptar Solicitud",
+    "rejectRequest": "Rechazar Solicitud",
     "details": "Detalles",
     "manageGroup": "Gestionar Grupo",
     "mostVolunteers": "La mayoría de voluntarios",
@@ -1998,7 +2055,9 @@
     "deleteVolunteerGroup": "Eliminar grupo de voluntarios {{name}}",
     "deleteVolunteerEntry": "Eliminar entrada de voluntario {{name}}",
     "viewGroup": "Ver grupo",
-    "editGroup": "Editar grupo"
+    "editGroup": "Editar grupo",
+    "invalidNumber": "Número inválido",
+    "viewToggle": "Alternar vista"
   },
   "userVolunteer": {
     "title": "Voluntariado",
@@ -2203,5 +2262,8 @@
   },
   "orgProfileField": {
     "editCustomField": "Editar campo personalizado"
+  },
+  "userGlobalScreen": {
+    "globalFeatures": "Características Globales"
   }
 }

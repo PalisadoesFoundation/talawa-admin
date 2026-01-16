@@ -256,6 +256,9 @@
   "or": "o",
   "eventNotFound": "Evento con id {{id}} no encontrado",
   "required": "Obligatorio",
+  "deleteConfirmation": "¿Está seguro de que desea eliminar este elemento? Esta acción no se puede deshacer.",
+  "deleteEntityConfirmation": "¿Está seguro de que desea eliminar {{entityName}}? Esta acción no se puede deshacer.",
+  "update": "Actualizar",
   "imageNotFound": "Imagen no encontrada",
   "changeLanguage": "Cambiar idioma",
   "selectField": "Seleccionar {{fieldName}}",
@@ -266,5 +269,16 @@
     "presetNext7Days": "Próximos 7 Días",
     "presetNext30Days": "Próximos 30 Días",
     "presetNextMonth": "Próximo Mes"
-  }
+  },
+  "ascending": "Ascendente",
+  "descending": "Descendente",
+  "noRegistrations": "Número de Registros",
+  "noOfAttendees": "Número de Asistentes",
+  "averageFeedback": "Retroalimentación Promedio",
+  "registrants": "Registrados",
+  "errorLoadingActionItems": "Error al cargar {{entity}}",
+  "cannotUnregisterCheckedIn": "No se puede anular el registro de un usuario que ya ha registrado su asistencia",
+  "errorLoadingEventDetails": "Error al cargar los detalles del evento. Por favor, intente más tarde.",
+  "eventDate": "Fecha del Evento",
+  "attendedEventsList": "Lista de eventos asistidos"
 }

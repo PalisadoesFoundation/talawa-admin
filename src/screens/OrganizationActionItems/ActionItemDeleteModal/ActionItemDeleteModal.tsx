@@ -37,6 +37,7 @@ import type {
 } from 'types/shared-components/ActionItems/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 export interface IItemDeleteModalProps {
   isOpen: boolean;
@@ -75,7 +76,6 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
   const handleDelete = async (): Promise<void> => {
     try {
       if (actionItem.isTemplate && applyTo === 'instance') {
-        // Delete for specific instance only
         const input = {
           actionId: actionItem.id,
           eventId: eventId,
@@ -85,7 +85,6 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
           variables: { input },
         });
       } else {
-        // Delete for entire series or non-recurring event
         const input: IDeleteActionItemInput = {
           id: actionItem.id,
         };
@@ -127,8 +126,12 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
       <p>{t('deleteActionItemMsg')}</p>
 
       {actionItem.isTemplate && !actionItem.isInstanceException && (
-        <Form.Group className="mt-3">
-          <Form.Label>{t('applyTo')}</Form.Label>
+        <FormFieldGroup
+          name="applyTo"
+          label={t('applyTo')}
+          touched={false}
+          error={undefined}
+        >
           <Form.Check
             type="radio"
             label={t('entireSeries')}
@@ -147,7 +150,7 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
             checked={applyTo === 'instance'}
             onChange={() => setApplyTo('instance')}
           />
-        </Form.Group>
+        </FormFieldGroup>
       )}
     </BaseModal>
   );
