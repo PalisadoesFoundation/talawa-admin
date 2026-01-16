@@ -16,11 +16,12 @@ import { MOCKS, UPDATE_ERROR_MOCKS } from './Groups.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
-import type { InterfaceGroupModal } from './GroupModal';
+
 import GroupModal from './GroupModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
+import { InterfaceGroupModal } from 'types/UserPortal/GroupModal/interface';
 
 const sharedMocks = vi.hoisted(() => ({
   NotificationToast: {

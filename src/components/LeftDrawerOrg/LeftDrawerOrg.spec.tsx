@@ -50,7 +50,7 @@ let mockT: ReturnType<typeof vi.fn>;
 
 let mockTErrors: ReturnType<typeof vi.fn>;
 
-const mockTImplementation = (key: string) => {
+const mockTImplementation = (key: string, options?: { name?: string }) => {
   const translations: Record<string, string> = {
     talawaAdminPortal: 'Talawa Admin Portal',
     adminPortal: 'Admin Portal',
@@ -62,6 +62,12 @@ const mockTImplementation = (key: string) => {
     'Action Items': 'Action Items',
     Posts: 'Posts',
   };
+
+  // Handle parameterized translations
+  if (key === 'profileAvatar.altText' && options?.name) {
+    return `Profile picture of ${options.name}`;
+  }
+
   return translations[key] || key;
 };
 
@@ -383,7 +389,9 @@ describe('LeftDrawerOrg', () => {
         expect(screen.getByText('Test City')).toBeInTheDocument();
       });
 
-      const avatar = screen.getByAltText('profileAvatar.altText');
+      const avatar = screen.getByAltText(
+        'Profile picture of Test Organization',
+      );
       expect(avatar).toBeInTheDocument();
       expect(avatar).toHaveAttribute('src', 'https://example.com/avatar.jpg');
     });
