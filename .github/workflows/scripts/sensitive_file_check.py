@@ -1,13 +1,14 @@
+#!/usr/bin/env python3
 """Check if sensitive files have been modified."""
 
 import argparse
 import os
 import re
 import sys
-from typing import List
+from typing import List  # Can be removed if using Python 3.9+ built-in list
 
 
-def load_patterns(config_file: str) -> List[str]:
+def load_patterns(config_file: str) -> list[str]:
     """Load regex patterns from a configuration file.
 
     Args:
@@ -20,7 +21,7 @@ def load_patterns(config_file: str) -> List[str]:
         print(f"Error: Configuration file '{config_file}' not found.")
         sys.exit(1)
 
-    with open(config_file, "r") as f:
+    with open(config_file, encoding="utf-8") as f:
         # Read lines, strip whitespace, and ignore empty lines or comments
         patterns = [
             line.strip()
@@ -31,8 +32,8 @@ def load_patterns(config_file: str) -> List[str]:
 
 
 def check_files(
-    files: List[str], directories: List[str], patterns: List[str]
-) -> List[str]:
+    files: list[str], directories: list[str], patterns: list[str]
+) -> list[str]:
     """Check files against sensitive patterns.
 
     Args:
@@ -46,7 +47,13 @@ def check_files(
     sensitive_files = []
 
     # Compile patterns for efficiency
-    compiled_patterns = [re.compile(p) for p in patterns]
+    compiled_patterns = []
+    for p in patterns:
+        try:
+            compiled_patterns.append(re.compile(p))
+        except re.error as e:
+            print(f"::error::Invalid regex pattern '{p}': {e}")
+            sys.exit(1)
 
     # Process individual files
     for file_path in files:
@@ -67,7 +74,7 @@ def check_files(
                         sensitive_files.append(full_path)
                         break
 
-    return sorted(list(set(sensitive_files)))
+    return sorted(set(sensitive_files))
 
 
 def main():
@@ -101,6 +108,10 @@ def main():
     )
 
     args = parser.parse_args()
+
+    if not args.files and not args.directories:
+        print("::warning::No files or directories provided to check.")
+        sys.exit(0)
 
     patterns = load_patterns(args.config)
     sensitive_files = check_files(args.files, args.directories, patterns)

@@ -38,7 +38,7 @@ INSTALLATION.md$
 ISSUE_GUIDELINES.md$
 PR_GUIDELINES.md$
 README.md$
-index.html
+index.html$
 .*.pem$
 .*.key$
 .*.cert$
@@ -52,6 +52,6 @@ knip.deps.json$
 ^docs/docusaurus.config.ts$
 ^docs/sidebar..*
 CNAME$
-^./*md
-^./*txt
-^./*TXT
+\.md$
+\.txt$
+\.TXT$
