@@ -150,7 +150,6 @@ function AgendaItemsContainer({
         .map((att) => {
           try {
             return JSON.parse(att);
-            /* istanbul ignore next -- @preserve defensive code for malformed JSON */
           } catch {
             return null;
           }
