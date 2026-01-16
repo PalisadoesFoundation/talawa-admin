@@ -1,5 +1,5 @@
 import path from 'path';
-import { mkdir, copyFile } from 'fs/promises';
+import { mkdir, copyFile, access } from 'fs/promises';
 import { backupEnvFile } from './backupEnvFile';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -7,6 +7,7 @@ vi.mock('fs/promises', () => {
   const mocks = {
     mkdir: vi.fn(),
     copyFile: vi.fn(),
+    access: vi.fn(),
   };
   return {
     ...mocks,
@@ -16,53 +17,75 @@ vi.mock('fs/promises', () => {
 
 describe('backupEnvFile', () => {
   const mockCwd = '/test/path';
-  const originalCwd = process.cwd;
 
   beforeEach(() => {
     vi.clearAllMocks();
     vi.spyOn(process, 'cwd').mockReturnValue(mockCwd);
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'error').mockImplementation(() => {});
-    vi.useFakeTimers();
-    vi.setSystemTime(new Date('2026-01-15T12:00:00.000Z'));
   });
 
   afterEach(() => {
-    vi.useRealTimers();
-
     vi.restoreAllMocks();
   });
 
-  it('should create backup successfully', async () => {
+  it('should create backup and return backup path', async () => {
     vi.mocked(mkdir).mockResolvedValue(undefined);
     vi.mocked(copyFile).mockResolvedValue(undefined);
 
-    const mockDate = new Date('2026-01-15T12:00:00.000Z');
-    vi.useFakeTimers();
-    vi.setSystemTime(mockDate);
+    const mockEpochMs = 1234567890000;
+    const mockEpochSec = Math.floor(mockEpochMs / 1000);
+    const dateNowSpy = vi.spyOn(Date, 'now').mockReturnValue(mockEpochMs);
 
     const result = await backupEnvFile();
 
-    expect(mkdir).toHaveBeenCalledWith(path.join(mockCwd, '.backup'), {
-      recursive: true,
-    });
+    const expectedDir = path.join(mockCwd, '.backup');
+    const expectedFile = `.env.${mockEpochSec}`;
+    const expectedPath = path.join(expectedDir, expectedFile);
 
-    const expectedTimestamp = '2026-01-15T12-00-00-000Z';
-    const expectedPath = path.join(
-      mockCwd,
-      '.backup',
-      `.env-backup-${expectedTimestamp}`,
+    expect(mkdir).toHaveBeenCalledWith(expectedDir, { recursive: true });
+    expect(copyFile).toHaveBeenCalledWith(
+      path.join(mockCwd, '.env'),
+      expectedPath,
     );
-    expect(copyFile).toHaveBeenCalledWith('.env', expectedPath);
     expect(result).toBe(expectedPath);
-    vi.useRealTimers();
+    dateNowSpy.mockRestore();
   });
 
-  it.only('should throw error when directory creation fails', async () => {
+  it('should throw error when directory creation fails', async () => {
     const mockError = new Error('EACCES: permission denied');
     vi.mocked(mkdir).mockRejectedValue(mockError);
+    vi.mocked(access).mockRejectedValue(mockError);
 
     await expect(backupEnvFile()).rejects.toThrow('EACCES: permission denied');
+  });
+
+  it('should return null when .env file does not exist', async () => {
+    const enoentError = Object.assign(new Error('File not found'), {
+      code: 'ENOENT',
+    });
+
+    vi.mocked(mkdir).mockResolvedValue(undefined);
+    vi.mocked(access).mockRejectedValue(enoentError);
+
+    const result = await backupEnvFile();
+
+    expect(result).toBeNull();
+    expect(copyFile).not.toHaveBeenCalled();
+    expect(console.log).toHaveBeenCalledWith(
+      expect.stringContaining('No .env file found'),
+    );
+  });
+
+  it('should throw when access fails with non-ENOENT error', async () => {
+    const error = Object.assign(new Error('Permission denied'), {
+      code: 'EACCES',
+    });
+
+    vi.mocked(mkdir).mockResolvedValue(undefined);
+    vi.mocked(access).mockRejectedValue(error);
+
+    await expect(backupEnvFile()).rejects.toThrow('Failed to backup .env file');
   });
 
   it('should throw errors when the file copy fails', async () => {
@@ -71,18 +94,5 @@ describe('backupEnvFile', () => {
     );
 
     await expect(backupEnvFile()).rejects.toThrow('EACCES: permission denied');
-  });
-
-  it('should use the correct ISO format with hyphens instead of colons/dots', async () => {
-    vi.mocked(mkdir).mockResolvedValue(undefined);
-    vi.mocked(copyFile).mockResolvedValue(undefined);
-
-    const backupPath = await backupEnvFile();
-
-    // Verify timestamp replacement logic: 2026-01-15T12:00:00.000Z -> 2026-01-15T12-00-00-000Z
-    expect(copyFile).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.stringMatching(/2026-01-15T12-00-00-000Z$/),
-    );
   });
 });

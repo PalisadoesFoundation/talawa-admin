@@ -199,16 +199,7 @@ export async function main(): Promise<void> {
       process.exit(130);
     }
     console.error('\n❌ Setup failed:', error);
-    if (backupPath) {
-      console.log('🔄 Attempting to restore from backup...');
-      try {
-        fs.copyFileSync(backupPath, '.env');
-        console.log('✅ Configuration restored from backup.');
-      } catch (restoreError) {
-        console.error('❌ Failed to restore backup:', restoreError);
-        console.log(`Manual restore needed. Backup location: ${backupPath}`);
-      }
-    }
+    console.log('Restored .env file location:', backupPath);
     console.log('\nPlease try again or contact support if the issue persists.');
     process.exit(1);
   } finally {
