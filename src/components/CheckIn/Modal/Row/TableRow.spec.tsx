@@ -233,6 +233,45 @@ describe('Testing Table Row for CheckIn Table', () => {
     expect(await findByText('Checked in successfully')).toBeInTheDocument();
   });
 
+  test('Should handle non-Error rejection in PDF generation', async () => {
+    // Mock generate to throw a non-Error value
+    const { generate } = await import('@pdfme/generator');
+    vi.mocked(generate).mockRejectedValueOnce('string error');
+
+    const props = {
+      data: {
+        id: `123`,
+        name: `John Doe`,
+        userId: `user123`,
+        checkInTime: dayjs.utc().toISOString(),
+        checkOutTime: null,
+        isCheckedIn: true,
+        isCheckedOut: false,
+        eventId: `event123`,
+      },
+      refetch: vi.fn(),
+    };
+
+    const { findByText } = render(
+      <BrowserRouter>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <MockedProvider mocks={checkInMutationSuccess}>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <NotificationToastContainer />
+                <TableRow {...props} />
+              </I18nextProvider>
+            </Provider>
+          </MockedProvider>
+        </LocalizationProvider>
+      </BrowserRouter>,
+    );
+
+    fireEvent.click(await findByText('Download Tag'));
+
+    expect(await findByText('Error generating pdf')).toBeInTheDocument();
+  });
+
   test('Should call onCheckInUpdate callback after successful check-in', async () => {
     const mockOnCheckInUpdate = vi.fn();
     const props = {
