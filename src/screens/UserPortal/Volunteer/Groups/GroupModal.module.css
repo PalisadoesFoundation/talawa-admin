@@ -1,0 +1,150 @@
+.groupModal {
+  max-width: 80vw;
+  margin-top: 2vh;
+  margin-left: 13vw;
+}
+
+.groupModal .modal-dialog {
+  max-width: 80vw;
+  margin: 2vh auto;
+}
+
+.groupModal .modal-content {
+  border-radius: var(--radius-lg);
+}
+
+@media (max-width: 768px) {
+  .groupModal {
+    margin: 10vh auto;
+    max-width: 90%;
+  }
+
+  .groupModal .modal-dialog {
+    max-width: 90%;
+    margin: 10vh auto;
+  }
+}
+
+.titlemodal {
+  color: var(--color-gray-500);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-3xl);
+  width: 65%;
+  margin-bottom: var(--space-0);
+}
+
+.modalCloseBtn {
+  width: var(--space-9);
+  height: var(--space-9);
+  padding: var(--space-5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.toggleGroup {
+  width: 50%;
+  min-width: var(--space-21);
+  margin: var(--space-3) var(--space-0);
+}
+
+.toggleBtn {
+  padding: var(--space-0);
+  height: var(--space-8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-400);
+  border: var(--border-1) solid var(--color-gray-200);
+}
+
+#individualRadio,
+#requestsRadio,
+#groupsRadio {
+  color: var(--color-blue-500);
+}
+
+.toggleBtn:hover {
+  color: var(--color-gray-700);
+  border: var(--border-1) solid var(--color-gray-200);
+}
+
+.noOutline input {
+  outline: none;
+}
+
+.noOutline input:disabled {
+  -webkit-text-fill-color: var(--color-gray-600);
+}
+
+.noOutline textarea:disabled {
+  color: var(--color-gray-600);
+  opacity: 1;
+}
+
+.noOutline:is(:hover, :focus, :active, :focus-visible, .show) {
+  outline: none;
+}
+
+.noOutline :is(input, textarea):focus-visible {
+  outline: var(--border-1) solid var(--color-blue-500);
+  outline-offset: var(--space-1);
+}
+
+.regBtn {
+  margin-top: var(--space-5);
+  border: var(--border-1) solid var(--color-gray-200);
+  box-shadow: 0 var(--shadow-offset-sm) var(--shadow-blur-xs)
+    var(--color-gray-200);
+  padding: var(--space-4) var(--space-4);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-blue-700);
+  width: 100%;
+  font-size: var(--font-size-md);
+  color: var(--color-white);
+  outline: none;
+  font-weight: var(--font-weight-semibold);
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.regBtn:focus-visible {
+  outline: var(--border-1) solid var(--color-blue-300);
+  outline-offset: var(--space-1);
+}
+
+.modalTable {
+  max-height: var(--space-17);
+  overflow-y: auto;
+}
+
+.TableImage {
+  object-fit: cover;
+  margin-right: var(--space-2);
+  width: var(--space-10);
+  height: var(--space-10);
+  border-radius: var(--radius-full);
+}
+
+.avatarContainer {
+  width: var(--space-7);
+  height: var(--space-7);
+}
+
+.imageContainer {
+  width: var(--space-11);
+  height: var(--space-11);
+  border-radius: var(--radius-full);
+  margin-right: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.imageContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-full);
+}

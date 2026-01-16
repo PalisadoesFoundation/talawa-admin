@@ -16,6 +16,18 @@ dayjs.extend(utc);
 // Store the last Line chart options for tooltip callback testing
 let lastLineChartOptions: Record<string, unknown> | null = null;
 
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+      tCommon: (key: string) => key,
+      tErrors: (key: string) => key,
+    }),
+  };
+});
+
 // Mock chart.js to avoid canvas errors but capture options for testing
 vi.mock('react-chartjs-2', async () => ({
   ...(await vi.importActual('react-chartjs-2')),

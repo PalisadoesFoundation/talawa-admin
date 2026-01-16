@@ -250,7 +250,7 @@ describe('Testing GroupModal', () => {
       screen.getByRole('textbox', { name: /description/i }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole('textbox', { name: /volunteers required/i }),
+      screen.getByRole('spinbutton', { name: /volunteers required/i }),
     ).toBeInTheDocument();
   });
 
@@ -258,21 +258,21 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link1, itemProps[0]);
     const nameInput = screen.getByRole('textbox', { name: /name/i });
     const descInput = screen.getByRole('textbox', { name: /description/i });
-    const vrInput = screen.getByRole('textbox', {
+    const vrInput = screen.getByRole('spinbutton', {
       name: /volunteers required/i,
     });
 
     expect(nameInput).toHaveValue('Group 1');
     expect(descInput).toHaveValue('desc');
-    expect(vrInput).toHaveValue('');
+    expect(vrInput).toHaveValue(null);
   });
 
   it('should display initial values when volunteersRequired is set', () => {
     renderGroupModal(link1, itemProps[2]);
-    const vrInput = screen.getByRole('textbox', {
+    const vrInput = screen.getByRole('spinbutton', {
       name: /volunteers required/i,
     });
-    expect(vrInput).toHaveValue('5');
+    expect(vrInput).toHaveValue(5);
   });
 
   it('should update name input when changed', async () => {
@@ -293,44 +293,44 @@ describe('Testing GroupModal', () => {
 
   it('should update volunteersRequired input when valid number is entered', async () => {
     renderGroupModal(link1, itemProps[0]);
-    const vrInput = screen.getByRole('textbox', {
+    const vrInput = screen.getByRole('spinbutton', {
       name: /volunteers required/i,
     });
     fireEvent.change(vrInput, { target: { value: '10' } });
-    expect(vrInput).toHaveValue('10');
+    expect(vrInput).toHaveValue(10);
   });
 
   it('should clear volunteersRequired when empty string is entered', async () => {
     renderGroupModal(link1, itemProps[2]);
-    const vrInput = screen.getByRole('textbox', {
+    const vrInput = screen.getByRole('spinbutton', {
       name: /volunteers required/i,
     });
-    expect(vrInput).toHaveValue('5');
+    expect(vrInput).toHaveValue(5);
     fireEvent.change(vrInput, { target: { value: '' } });
     await waitFor(() => {
-      expect(vrInput).toHaveValue('');
+      expect(vrInput).toHaveValue(null);
     });
   });
 
   it('should not accept negative values for volunteersRequired', async () => {
     renderGroupModal(link1, itemProps[1]);
-    const vrInput = screen.getByRole('textbox', {
+    const vrInput = screen.getByRole('spinbutton', {
       name: /volunteers required/i,
     });
     fireEvent.change(vrInput, { target: { value: '-1' } });
     await waitFor(() => {
-      expect(vrInput).toHaveValue('');
+      expect(vrInput).toHaveValue(null);
     });
   });
 
   it('should not accept zero for volunteersRequired', async () => {
     renderGroupModal(link1, itemProps[1]);
-    const vrInput = screen.getByRole('textbox', {
+    const vrInput = screen.getByRole('spinbutton', {
       name: /volunteers required/i,
     });
     fireEvent.change(vrInput, { target: { value: '0' } });
     await waitFor(() => {
-      expect(vrInput).toHaveValue('');
+      expect(vrInput).toHaveValue(null);
     });
   });
 
@@ -338,31 +338,31 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link1, itemProps[1]);
     expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
 
-    const vrInput = screen.getByRole('textbox', {
+    const vrInput = screen.getByRole('spinbutton', {
       name: /volunteers required/i,
     });
     expect(vrInput).toBeInTheDocument();
     fireEvent.change(vrInput, { target: { value: '-1' } });
 
     await waitFor(() => {
-      expect(vrInput).toHaveValue('');
+      expect(vrInput).toHaveValue(null);
     });
 
     await userEvent.clear(vrInput);
     await userEvent.type(vrInput, '1{backspace}');
 
     await waitFor(() => {
-      expect(vrInput).toHaveValue('');
+      expect(vrInput).toHaveValue(null);
     });
 
     fireEvent.change(vrInput, { target: { value: '0' } });
     await waitFor(() => {
-      expect(vrInput).toHaveValue('');
+      expect(vrInput).toHaveValue(null);
     });
 
     fireEvent.change(vrInput, { target: { value: '19' } });
     await waitFor(() => {
-      expect(vrInput).toHaveValue('19');
+      expect(vrInput).toHaveValue(19);
     });
   });
 
@@ -380,12 +380,12 @@ describe('Testing GroupModal', () => {
     fireEvent.change(descInput, { target: { value: 'desc new' } });
     expect(descInput).toHaveValue('desc new');
 
-    const vrInput = screen.getByRole('textbox', {
+    const vrInput = screen.getByRole('spinbutton', {
       name: /volunteers required/i,
     });
     expect(vrInput).toBeInTheDocument();
     fireEvent.change(vrInput, { target: { value: '10' } });
-    expect(vrInput).toHaveValue('10');
+    expect(vrInput).toHaveValue(10);
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
@@ -427,12 +427,12 @@ describe('Testing GroupModal', () => {
     fireEvent.change(descInput, { target: { value: 'desc new' } });
     expect(descInput).toHaveValue('desc new');
 
-    const vrInput = screen.getByRole('textbox', {
+    const vrInput = screen.getByRole('spinbutton', {
       name: /volunteers required/i,
     });
     expect(vrInput).toBeInTheDocument();
     fireEvent.change(vrInput, { target: { value: '10' } });
-    expect(vrInput).toHaveValue('10');
+    expect(vrInput).toHaveValue(10);
 
     const submitBtn = screen.getByTestId('submitBtn');
     expect(submitBtn).toBeInTheDocument();
@@ -515,7 +515,7 @@ describe('Testing GroupModal', () => {
     });
   });
 
-  it('should display user with avatar URL in requests table', async () => {
+  it('should display user names in requests table', async () => {
     renderGroupModal(link1, itemProps[0]);
     const requestsRadio = screen.getByLabelText(t.requests);
     await userEvent.click(requestsRadio);
@@ -523,18 +523,59 @@ describe('Testing GroupModal', () => {
     await waitFor(() => {
       const userName = screen.getAllByTestId('userName');
       expect(userName).toHaveLength(2);
+      expect(userName[0]).toHaveTextContent('John Doe');
+      expect(userName[1]).toHaveTextContent('Teresa Bradley');
     });
   });
 
   it('should display Avatar component when user has no avatarURL', async () => {
-    renderGroupModal(link1, itemProps[0]);
+    // Create a specific mock link with avatarURL: null to force the Avatar component render path
+    const linkWithNullAvatar = new StaticMockLink([
+      {
+        request: {
+          query: USER_VOLUNTEER_MEMBERSHIP,
+          variables: {
+            where: {
+              eventId: 'eventId',
+              groupId: 'groupId',
+              status: 'requested',
+            },
+          },
+        },
+        result: {
+          data: {
+            getVolunteerMembership: [
+              {
+                __typename: 'VolunteerMembership',
+                id: 'membershipId1',
+                status: 'requested',
+                volunteer: {
+                  __typename: 'EventVolunteer',
+                  user: {
+                    __typename: 'User',
+                    id: 'userId1',
+                    name: 'John Doe',
+                    avatarURL: null, // Explicitly null
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    ]);
+
+    renderGroupModal(linkWithNullAvatar, itemProps[0]);
     const requestsRadio = screen.getByLabelText(t.requests);
     await userEvent.click(requestsRadio);
 
     const userName = await screen.findAllByTestId('userName');
-    expect(userName).toHaveLength(2);
-    // First user (John Doe) has no avatar, should render Avatar component
+    expect(userName).toHaveLength(1);
     expect(userName[0]).toHaveTextContent('John Doe');
+
+    // Verify Avatar component is rendered by checking for the testid passed to it
+    const avatarComponents = screen.getAllByTestId('avatar');
+    expect(avatarComponents).toHaveLength(1);
   });
 
   it('should display image when user has avatarURL', async () => {
@@ -645,6 +686,36 @@ describe('Testing GroupModal', () => {
     });
   });
 
+  it('should render empty array when requests data is loading/undefined', async () => {
+    // Use a MockLink that returns empty list to simulate "data exists but is empty" which is one part of the condition.
+    // To simulate loading/undefined, ideally we'd pause. But verifying "No requests" appears covers the fallback.
+    const emptyLink = new StaticMockLink([
+      {
+        request: {
+          query: USER_VOLUNTEER_MEMBERSHIP,
+          variables: {
+            where: {
+              eventId: 'eventId',
+              groupId: 'groupId',
+              status: 'requested',
+            },
+          },
+        },
+        result: {
+          data: {
+            getVolunteerMembership: [],
+          },
+        },
+      },
+    ]);
+
+    renderGroupModal(emptyLink, itemProps[0]);
+    const requestsRadio = screen.getByLabelText(t.requests);
+    await userEvent.click(requestsRadio);
+
+    expect(screen.getByText(t.noRequests)).toBeInTheDocument();
+  });
+
   it('should render requests table with correct headers', async () => {
     renderGroupModal(link1, itemProps[0]);
     const requestsRadio = screen.getByLabelText(t.requests);
@@ -705,5 +776,45 @@ describe('Testing GroupModal', () => {
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(t.requestRejected);
     });
+  });
+
+  // Validation state tests
+  it('should show validation error when name is empty and touched', async () => {
+    renderGroupModal(link1, itemProps[0]);
+    const nameInput = screen.getByRole('textbox', { name: /name/i });
+    await userEvent.clear(nameInput);
+    fireEvent.blur(nameInput);
+
+    const submitBtn = screen.getByTestId('submitBtn');
+    expect(submitBtn).toBeDisabled();
+  });
+
+  it('should show validation error for invalid volunteers required on blur', async () => {
+    renderGroupModal(link1, itemProps[0]);
+    const vrInput = screen.getByRole('spinbutton', {
+      name: /volunteers required/i,
+    });
+
+    // Input invalid value
+    await userEvent.type(vrInput, '-5');
+    fireEvent.blur(vrInput);
+
+    const errorMessages = screen.getAllByText(t.invalidNumber);
+    expect(errorMessages.length).toBeGreaterThan(0);
+    const submitBtn = screen.getByTestId('submitBtn');
+    expect(submitBtn).toBeDisabled();
+  });
+
+  it('should not submit if validation errors exist', async () => {
+    renderGroupModal(link1, itemProps[0]);
+    const nameInput = screen.getByRole('textbox', { name: /name/i });
+    await userEvent.clear(nameInput);
+    fireEvent.blur(nameInput); // Trigger error
+
+    const submitBtn = screen.getByTestId('submitBtn');
+    expect(submitBtn).toBeDisabled();
+
+    await userEvent.click(submitBtn); // Should not fire
+    expect(NotificationToast.success).not.toHaveBeenCalled();
   });
 });

@@ -29,7 +29,7 @@ import {
 
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import Avatar from 'shared-components/Avatar/Avatar';
-import styles from 'style/app-fixed.module.css';
+import styles from './VolunteerGroups.module.css';
 import { GET_EVENT_VOLUNTEER_GROUPS } from 'GraphQl/Queries/EventVolunteerQueries';
 import VolunteerGroupModal from './modal/VolunteerGroupModal';
 import VolunteerGroupDeleteModal from './deleteModal/VolunteerGroupDeleteModal';
@@ -184,14 +184,14 @@ function VolunteerGroups(): JSX.Element {
                 src={avatarURL}
                 alt={`${name} ${tCommon('avatar')}`}
                 data-testid={`image${id + 1}`}
-                className={styles.TableImages}
+                className={styles.tableImages}
               />
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
                   key={id + '1'}
                   containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImages}
+                  avatarStyle={styles.tableImages}
                   name={name}
                   alt={name}
                 />

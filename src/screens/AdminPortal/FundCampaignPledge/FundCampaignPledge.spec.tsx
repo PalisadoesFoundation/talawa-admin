@@ -26,8 +26,7 @@ import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
-import styles from 'style/app-fixed.module.css';
-
+import styles from './FundCampaignPledge.module.css';
 const mockParamsState = {
   orgId: 'orgId',
   fundCampaignId: 'fundCampaignId',

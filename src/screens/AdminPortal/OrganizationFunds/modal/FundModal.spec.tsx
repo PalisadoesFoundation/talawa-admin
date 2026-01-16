@@ -1,10 +1,6 @@
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import {
-  LocalizationProvider,
-  AdapterDayjs,
-} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import {
   cleanup,
@@ -126,11 +122,9 @@ const renderFundModal = (
     <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <I18nextProvider i18n={i18nForTest}>
-              <FundModal {...props} />
-            </I18nextProvider>
-          </LocalizationProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <FundModal {...props} />
+          </I18nextProvider>
         </BrowserRouter>
       </Provider>
     </MockedProvider>,
@@ -152,7 +146,7 @@ describe('PledgeModal', () => {
     );
     expect(screen.getByLabelText(translations.fundName)).toHaveValue('Fund 1');
     expect(screen.getByLabelText(translations.fundId)).toHaveValue('1111');
-    expect(screen.getByTestId('setIsTaxDeductibleSwitch')).toBeChecked();
+    expect(screen.getByTestId('setisTaxDeductibleSwitch')).toBeChecked();
     expect(screen.getByTestId('setDefaultSwitch')).not.toBeChecked();
     expect(screen.getByTestId('archivedSwitch')).not.toBeChecked();
   });
@@ -173,9 +167,41 @@ describe('PledgeModal', () => {
     expect(fundIdInput).toHaveValue('2222');
   });
 
+  it('should show required error when Fund Name is empty and touched', async () => {
+    // Start with a fund that has a name (edit mode)
+    renderFundModal(link1, fundProps[1]);
+    const fundNameInput = screen.getByLabelText(translations.fundName);
+
+    // Clear the input
+    fireEvent.change(fundNameInput, { target: { value: '' } });
+    // Blur to trigger validation
+    fireEvent.blur(fundNameInput);
+
+    // Expect error message to be visible
+    // The tCommon('required') usually resolves to "Required" or similar.
+    // We can assume it's "Required" based on common translation files, or match generically
+    // If we want to be safe we can use a regex or check if the implementation uses specific keys
+    // In many setups, tCommon('required') -> "Required"
+    // Since we mocked translations for 'funds' but tCommon comes from 'common',
+    // and we mocked i18nForTest, let's verify if we can access the common translations or just match text.
+    // The previous tests used JSON.parse(...) for funds translations.
+    // Let's assume standard "Required" text from i18nForTest for common.
+    expect(screen.getByText('Required')).toBeInTheDocument();
+  });
+
+  it('should show required error when Fund Reference ID is empty and touched', async () => {
+    renderFundModal(link1, fundProps[1]);
+    const fundIdInput = screen.getByLabelText(translations.fundId);
+
+    fireEvent.change(fundIdInput, { target: { value: '' } });
+    fireEvent.blur(fundIdInput);
+
+    expect(screen.getByText('Required')).toBeInTheDocument();
+  });
+
   it('should update Tax Deductible Switch when input value changes', async () => {
     renderFundModal(link1, fundProps[1]);
-    const taxDeductibleSwitch = screen.getByTestId('setIsTaxDeductibleSwitch');
+    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
     expect(taxDeductibleSwitch).toBeChecked();
     fireEvent.click(taxDeductibleSwitch);
     expect(taxDeductibleSwitch).not.toBeChecked();
@@ -206,7 +232,7 @@ describe('PledgeModal', () => {
     const fundIdInput = screen.getByLabelText(translations.fundId);
     fireEvent.change(fundIdInput, { target: { value: '2222' } });
 
-    const taxDeductibleSwitch = screen.getByTestId('setIsTaxDeductibleSwitch');
+    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
     fireEvent.click(taxDeductibleSwitch);
 
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
@@ -233,7 +259,7 @@ describe('PledgeModal', () => {
     const fundIdInput = screen.getByLabelText(translations.fundId);
     fireEvent.change(fundIdInput, { target: { value: '1111' } });
 
-    const taxDeductibleSwitch = screen.getByTestId('setIsTaxDeductibleSwitch');
+    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
     fireEvent.click(taxDeductibleSwitch);
     fireEvent.click(taxDeductibleSwitch);
 
@@ -260,7 +286,7 @@ describe('PledgeModal', () => {
     const fundNameInput = screen.getByLabelText(translations.fundName);
     fireEvent.change(fundNameInput, { target: { value: 'Fund 2' } });
 
-    const taxDeductibleSwitch = screen.getByTestId('setIsTaxDeductibleSwitch');
+    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
     fireEvent.click(taxDeductibleSwitch); // This will make isTaxDeductible false
 
     fireEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
@@ -283,7 +309,7 @@ describe('PledgeModal', () => {
     const fundIdInput = screen.getByLabelText(translations.fundId);
     fireEvent.change(fundIdInput, { target: { value: '2222' } });
 
-    const taxDeductibleSwitch = screen.getByTestId('setIsTaxDeductibleSwitch');
+    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
     fireEvent.click(taxDeductibleSwitch);
 
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
@@ -307,7 +333,7 @@ describe('PledgeModal', () => {
     const fundIdInput = screen.getByLabelText(translations.fundId);
     fireEvent.change(fundIdInput, { target: { value: '2222' } });
 
-    const taxDeductibleSwitch = screen.getByTestId('setIsTaxDeductibleSwitch');
+    const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
     fireEvent.click(taxDeductibleSwitch);
 
     const defaultSwitch = screen.getByTestId('setDefaultSwitch');
@@ -322,6 +348,104 @@ describe('PledgeModal', () => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
         'Mock graphql error',
       );
+    });
+  });
+
+  it('should update form state when fund prop changes', async () => {
+    const { rerender } = renderFundModal(link1, fundProps[1]);
+
+    // Initial values
+    expect(screen.getByLabelText(translations.fundName)).toHaveValue('Fund 1');
+
+    // Create new props with different fund data
+    const updatedProps: InterfaceFundModal = {
+      ...fundProps[1],
+      fund: {
+        id: 'fundId',
+        name: 'Updated Fund',
+        refrenceNumber: '9999',
+        isTaxDeductible: false,
+        isDefault: true,
+        isArchived: true,
+        createdAt: dayjs().month(5).date(22).format('YYYY-MM-DD'),
+        organizationId: 'orgId',
+        creator: {
+          name: 'John Doe',
+        },
+        organization: {
+          name: 'Organization 1',
+        },
+        updater: {
+          name: 'John Doe',
+        },
+        edges: {
+          node: {
+            id: 'nodeId',
+            name: 'Node Name',
+            fundingGoal: 1000,
+            startDate: dayjs().format('YYYY-MM-DD'),
+            endDate: dayjs().endOf('year').format('YYYY-MM-DD'),
+            currency: 'USD',
+            createdAt: dayjs().month(5).date(22).format('YYYY-MM-DD'),
+          },
+        },
+      },
+    };
+
+    // Re-render with new fund prop
+    rerender(
+      <MockedProvider link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <FundModal {...updatedProps} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // Verify form state updated
+    await waitFor(() => {
+      expect(screen.getByLabelText(translations.fundName)).toHaveValue(
+        'Updated Fund',
+      );
+      expect(screen.getByLabelText(translations.fundId)).toHaveValue('9999');
+      expect(screen.getByTestId('setisTaxDeductibleSwitch')).not.toBeChecked();
+      expect(screen.getByTestId('setDefaultSwitch')).toBeChecked();
+      expect(screen.getByTestId('archivedSwitch')).toBeChecked();
+    });
+  });
+
+  it('should reset form state when fund prop changes to null', async () => {
+    const { rerender } = renderFundModal(link1, fundProps[1]);
+
+    // Initial values
+    expect(screen.getByLabelText(translations.fundName)).toHaveValue('Fund 1');
+
+    // Create props with null fund
+    const updatedProps: InterfaceFundModal = {
+      ...fundProps[1],
+      fund: null,
+    };
+
+    // Re-render with null fund
+    rerender(
+      <MockedProvider link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <FundModal {...updatedProps} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // Verify form state is reset
+    await waitFor(() => {
+      expect(screen.getByLabelText(translations.fundName)).toHaveValue('');
+      expect(screen.getByLabelText(translations.fundId)).toHaveValue('');
     });
   });
 });

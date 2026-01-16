@@ -26,7 +26,7 @@ import {
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
 import Avatar from 'shared-components/Avatar/Avatar';
-import styles from '../../../style/app-fixed.module.css';
+import styles from './Requests.module.css';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';
@@ -148,14 +148,14 @@ function Requests(): JSX.Element {
                 src={avatarURL}
                 alt={`${name} ${tCommon('avatar')}`}
                 data-testid={`volunteer_image`}
-                className={styles.TableImages}
+                className={styles.tableImages}
               />
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
                   key="volunteer_avatar"
                   containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImages}
+                  avatarStyle={styles.tableImages}
                   name={name}
                   alt={name}
                 />
