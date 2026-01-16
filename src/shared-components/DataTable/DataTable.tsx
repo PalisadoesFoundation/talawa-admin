@@ -11,12 +11,6 @@ import { TableLoader } from './TableLoader';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 
-function getCellValue<T>(row: T, accessor: IColumnDef<T>['accessor']) {
-  return typeof accessor === 'function'
-    ? accessor(row)
-    : row[accessor as keyof T];
-}
-
 function renderHeader(header: HeaderRender) {
   return typeof header === 'function' ? header() : header;
 }
@@ -88,16 +82,18 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     typeof globalSearch === 'string' &&
     typeof onGlobalSearchChange === 'function';
   const [uQuery, setUQuery] = React.useState(initialGlobalSearch);
-  const query = controlledSearch ? globalSearch! : uQuery;
+  const query = controlledSearch ? (globalSearch as string) : uQuery;
 
   // Controlled / uncontrolled column filters
   const controlledFilters =
     !!columnFilters && typeof onColumnFiltersChange === 'function';
   const [uFilters, setUFilters] = React.useState<Record<string, unknown>>({});
-  const filters = controlledFilters ? columnFilters! : uFilters;
+  const filters = controlledFilters
+    ? (columnFilters as Record<string, unknown>)
+    : uFilters;
 
   function updateGlobalSearch(next: string) {
-    if (controlledSearch) onGlobalSearchChange!(next);
+    if (controlledSearch && onGlobalSearchChange) onGlobalSearchChange(next);
     else setUQuery(next);
     // Reset to first page on search change if using client pagination
     if (paginationMode === 'client' && !isControlled) setInternalPage(1);
@@ -111,12 +107,15 @@ export function DataTable<T>(props: IDataTableProps<T>) {
       next[colId] = val;
     }
 
-    if (controlledFilters) onColumnFiltersChange!(next);
+    if (controlledFilters && onColumnFiltersChange) onColumnFiltersChange(next);
     else setUFilters(next);
 
     // Reset to first page on filter change if using client pagination
     if (paginationMode === 'client' && !isControlled) setInternalPage(1);
   }
+
+  // Expose updateColumnFilters for per-column filter UI (not used in current version)
+  void updateColumnFilters;
 
   // Helper to get raw cell value
   function getCellValue(row: T, accessor: IColumnDef<T>['accessor']) {
@@ -153,9 +152,8 @@ export function DataTable<T>(props: IDataTableProps<T>) {
           )
             continue;
 
-          // Use custom filterFn if provided
           if (typeof col.meta?.filterFn === 'function') {
-            if (!col.meta!.filterFn!(row, filterValue)) return false;
+            if (!col.meta.filterFn(row, filterValue)) return false;
             continue;
           }
 
@@ -181,7 +179,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
       rows = rows.filter((row) => {
         return searchable.some((col) => {
           if (typeof col.meta?.getSearchValue === 'function') {
-            return col.meta!.getSearchValue!(row).toLowerCase().includes(q);
+            return col.meta.getSearchValue(row).toLowerCase().includes(q);
           }
           const v = getCellValue(row, col.accessor);
           return toSearchableString(v).toLowerCase().includes(q);

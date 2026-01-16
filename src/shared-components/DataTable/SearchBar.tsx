@@ -6,11 +6,7 @@ import type { ISearchBarProps } from '../../types/shared-components/DataTable/in
 /**
  * A controlled search input with optional clear button.
  *
- * @param props - Component props
- * @param props.value - Current search query value
- * @param props.onChange - Callback fired when input value changes
- * @param props.placeholder - Placeholder text (default: 'Search…')
- * @param props['aria-label'] - Accessible label for screen readers (default: 'Search')
+ * @param props - Component props containing value, onChange, placeholder, and aria-label
  * @returns A search input element with optional clear button
  */
 export function SearchBar(props: ISearchBarProps) {

@@ -6,7 +6,7 @@
 
 > **DataTable**\<`T`\>(`props`): `Element`
 
-Defined in: [src/shared-components/DataTable/DataTable.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTable.tsx#L43)
+Defined in: [src/shared-components/DataTable/DataTable.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/DataTable.tsx#L37)
 
 ## Type Parameters
 

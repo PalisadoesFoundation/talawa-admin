@@ -6,7 +6,7 @@
 
 > **SearchBar**(`props`): `Element`
 
-Defined in: [src/shared-components/DataTable/SearchBar.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/SearchBar.tsx#L16)
+Defined in: [src/shared-components/DataTable/SearchBar.tsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/SearchBar.tsx#L12)
 
 A controlled search input with optional clear button.
 
@@ -16,7 +16,7 @@ A controlled search input with optional clear button.
 
 [`ISearchBarProps`](../../../../types/shared-components/DataTable/interface/interfaces/ISearchBarProps.md)
 
-Component props
+Component props containing value, onChange, placeholder, and aria-label
 
 ## Returns
 
