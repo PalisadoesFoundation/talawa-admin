@@ -97,7 +97,9 @@ export const TableRow = ({
       const url = URL.createObjectURL(blob);
       window.open(url);
     } catch (error: unknown) {
-      throw error instanceof Error ? error : new Error(t('unknownError') as string);
+      throw error instanceof Error
+        ? error
+        : new Error(t('unknownError') as string);
     }
   };
 
