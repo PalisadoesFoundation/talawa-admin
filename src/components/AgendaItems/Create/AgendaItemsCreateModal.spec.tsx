@@ -280,6 +280,48 @@ describe('AgendaItemsCreateModal', () => {
     });
   });
 
+  test('shows error toast when file upload to MinIO fails', async () => {
+    // Mock uploadFileToMinio to reject with an error
+    sharedMocks.uploadFileToMinio.mockRejectedValue(new Error('Upload failed'));
+
+    render(
+      <MockedProvider>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsCreateModal
+                  agendaItemCreateModalIsOpen
+                  hideCreateModal={mockHideCreateModal}
+                  formState={mockFormState1}
+                  setFormState={mockSetFormState}
+                  createAgendaItemHandler={mockCreateAgendaItemHandler}
+                  t={mockT}
+                  agendaItemCategories={[]}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const fileInput = screen.getByTestId('attachment');
+    const smallFile = new File(['small-file-content'], 'small-file.jpg');
+
+    Object.defineProperty(fileInput, 'files', {
+      value: [smallFile],
+    });
+
+    fireEvent.change(fileInput);
+
+    await waitFor(() => {
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
+        'fileUploadError',
+      );
+    });
+  });
+
   test('adds files correctly when within size limit', async () => {
     const mockMinioResult = {
       objectName: 'agendaItem/small-file.jpg',
