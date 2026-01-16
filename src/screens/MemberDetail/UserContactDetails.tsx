@@ -15,7 +15,7 @@ import { UPDATE_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_USER_BY_ID } from 'GraphQl/Queries/Queries';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
-import { Card, Row, Col, Form } from 'react-bootstrap';
+import { Card, Row, Col } from 'react-bootstrap';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'shared-components/Avatar/Avatar';
 import DatePicker from 'shared-components/DatePicker';
@@ -35,6 +35,7 @@ import dayjs from 'dayjs';
 import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
 import { urlToFile } from 'utils/urlToFile';
 import { validatePassword } from 'utils/passwordValidator';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 type MemberDetailProps = { id?: string };
 const UserContactDetails: React.FC<MemberDetailProps> = ({
   id,
@@ -251,18 +252,20 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                     />
                   </div>
                 </div>
-                <Form.Control
-                  accept="image/*"
-                  id="postphoto"
-                  name="photo"
-                  type="file"
-                  className={styles.cardControl}
-                  data-testid="fileInput"
-                  multiple={false}
-                  ref={fileInputRef}
-                  onChange={handleFileUpload}
-                  style={{ display: 'none' }}
-                />
+                <FormFieldGroup name="photo" label={''}>
+                  <input
+                    accept="image/*"
+                    id="postphoto"
+                    name="photo"
+                    type="file"
+                    className={styles.cardControl}
+                    data-testid="fileInput"
+                    multiple={false}
+                    ref={fileInputRef}
+                    onChange={handleFileUpload}
+                    style={{ display: 'none' }}
+                  />
+                </FormFieldGroup>
               </Col>
               <Row className="g-3">
                 <Col md={6}>
@@ -558,33 +561,32 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                   />
                 </Col>
                 <Col md={12}>
-                  <Form.Label htmlFor="country" className="form-label">
-                    {tCommon('country')}
-                  </Form.Label>
-                  <Form.Select
-                    id="country"
-                    value={formState.countryCode}
-                    className={`${styles.inputColor}`}
-                    data-testid="inputCountry"
-                    onChange={(e) =>
-                      handleFieldChange('countryCode', e.target.value)
-                    }
-                  >
-                    <option value="" disabled>
-                      {tCommon('select')} {tCommon('country')}
-                    </option>
-                    {[...countryOptions]
-                      .sort((a, b) => a.label.localeCompare(b.label))
-                      .map((country) => (
-                        <option
-                          key={country.value.toUpperCase()}
-                          value={country.value.toLowerCase()}
-                          aria-label={`${tCommon('select')} ${String(country.label)} ${tCommon('asYourCountry')}`}
-                        >
-                          {String(country.label)}
-                        </option>
-                      ))}
-                  </Form.Select>
+                  <FormFieldGroup name="country" label={tCommon('country')}>
+                    <select
+                      id="country"
+                      className={`form-control ${styles.inputColor}`}
+                      value={formState.countryCode}
+                      data-testid="inputCountry"
+                      onChange={(e) =>
+                        handleFieldChange('countryCode', e.target.value)
+                      }
+                    >
+                      <option value="" disabled>
+                        {tCommon('select')} {tCommon('country')}
+                      </option>
+
+                      {[...countryOptions]
+                        .sort((a, b) => a.label.localeCompare(b.label))
+                        .map((country) => (
+                          <option
+                            key={country.value.toUpperCase()}
+                            value={country.value.toLowerCase()}
+                          >
+                            {String(country.label)}
+                          </option>
+                        ))}
+                    </select>
+                  </FormFieldGroup>
                 </Col>
               </Row>
             </Card.Body>
