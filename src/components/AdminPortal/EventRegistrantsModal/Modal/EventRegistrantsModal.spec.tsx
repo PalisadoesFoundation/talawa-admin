@@ -580,4 +580,74 @@ describe('EventRegistrantsModal', () => {
     const option = await screen.findByText('Unknown User');
     expect(option).toBeInTheDocument();
   });
+
+  test('opens AddOnSpot modal when Enter key is pressed on Add Onspot Registration link', async () => {
+    renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersEmptyMock(),
+    ]);
+
+    const input = await screen.findByPlaceholderText(
+      'Choose the user that you want to add',
+    );
+
+    fireEvent.change(input, { target: { value: 'NonexistentUser' } });
+    const addOnspotLink = await screen.findByText('Add Onspot Registration');
+
+    fireEvent.keyDown(addOnspotLink, {
+      key: 'Enter',
+      code: 'Enter',
+      charCode: 13,
+    });
+
+    expect(await screen.findByTestId('add-onspot-modal')).toBeInTheDocument();
+  });
+
+  test('opens AddOnSpot modal when Space key is pressed on Add Onspot Registration link', async () => {
+    renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersEmptyMock(),
+    ]);
+
+    const input = await screen.findByPlaceholderText(
+      'Choose the user that you want to add',
+    );
+
+    fireEvent.change(input, { target: { value: 'NonexistentUser' } });
+
+    const addOnspotLink = await screen.findByText('Add Onspot Registration');
+
+    fireEvent.keyDown(addOnspotLink, {
+      key: ' ',
+      code: 'Space',
+      charCode: 32,
+    });
+
+    expect(await screen.findByTestId('add-onspot-modal')).toBeInTheDocument();
+  });
+
+  test('dont open AddOnSpot modal when any key other than Enter and space is pressed on Add Onspot Registration link', async () => {
+    renderWithProviders([
+      makeEventDetailsNonRecurringMock(),
+      makeAttendeesEmptyMock(),
+      makeMembersEmptyMock(),
+    ]);
+
+    const input = await screen.findByPlaceholderText(
+      'Choose the user that you want to add',
+    );
+
+    fireEvent.change(input, { target: { value: 'NonexistentUser' } });
+    const addOnspotLink = await screen.findByText('Add Onspot Registration');
+
+    ['Escape', 'Tab', 'ArrowDown', 'a', 'Backspace'].forEach((key) => {
+      fireEvent.keyDown(addOnspotLink, {
+        key,
+        code: key === 'a' ? 'KeyA' : key,
+      });
+      expect(screen.queryByTestId('add-onspot-modal')).not.toBeInTheDocument();
+    });
+  });
 });

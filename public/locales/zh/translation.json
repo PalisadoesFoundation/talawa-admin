@@ -1435,7 +1435,22 @@
     "pageNumber": "第 {{page}} 页",
     "goToToday": "转到今天",
     "genderDistribution": "性别分布",
-    "ageDistribution": "年龄分布"
+    "ageDistribution": "年龄分布",
+    "age": "年齡",
+    "age18to40": "18-40",
+    "attendanceCount": "出席人數",
+    "close": "關閉",
+    "demographics": "人口統計",
+    "demography": "人口統計",
+    "exportData": "匯出資料",
+    "female": "女性",
+    "gender": "性別",
+    "male": "男性",
+    "other": "其他",
+    "over40": "40歲以上",
+    "today": "今天",
+    "trends": "趨勢",
+    "under18": "18歲以下"
   },
   "eventRegistrant": {
     "sort": "排序",
@@ -1897,8 +1912,14 @@
       "noRecipientsError": "请提供至少一个收件人电子邮件",
       "invalidEmailsError": "无效的电子邮件：{{emails}}",
       "invitesSentSuccessfully": "邀请已成功发送"
-    }
+    },
+    "selectUserWarning": "請先選擇要添加的用戶！",
+    "addingAttendeeProgress": "正在添加參與者..."
   },
+  "eventRegistrantsWrapper": {
+    "buttonAriaLabel": "顯示參與者",
+    "registerMemberButton": "註冊成員"
+    },
   "onSpotAttendee": {
     "invalidEmailFormat": "无效的电子邮件格式",
     "organizationIdMissing": "缺少组织 ID。",

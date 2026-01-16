@@ -7,8 +7,12 @@
  * @param eventId - The unique identifier for the event.
  * @param orgId - The unique identifier for the organization.
  * @param onUpdate - Optional callback function to be executed
+ * @param eventId - The unique identifier for the event.
+ * @param orgId - The unique identifier for the organization.
+ * @param onUpdate - Optional callback function to be executed
  * after the modal is closed.
  *
+ * @returns A button to open the modal and the modal itself when visible.
  * @returns A button to open the modal and the modal itself when visible.
  *
  * @example
@@ -29,6 +33,8 @@ import React, { useState } from 'react';
 import { EventRegistrantsModal } from './Modal/EventRegistrantsModal';
 import { Button } from 'react-bootstrap';
 import style from 'style/app-fixed.module.css';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { useTranslation } from 'react-i18next';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
 

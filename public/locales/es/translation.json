@@ -1418,7 +1418,22 @@
     "pageNumber": "Página {{page}}",
     "goToToday": "Ir a hoy",
     "genderDistribution": "Distribución por género",
-    "ageDistribution": "Distribución por edad"
+    "ageDistribution": "Distribución por edad",
+    "age": "Edad",
+    "age18to40": "18-40",
+    "attendanceCount": "Recuento de asistencia",
+    "close": "Cerrar",
+    "demographics": "Demografía",
+    "demography": "Demografía",
+    "exportData": "Exportar datos",
+    "female": "Mujer",
+    "gender": "Género",
+    "male": "Hombre",
+    "other": "Otro",
+    "over40": "Más de 40",
+    "today": "Hoy",
+    "trends": "Tendencias",
+    "under18": "Menor de 18"
   },
   "eventRegistrant": {
     "sort": "Ordenar",
@@ -1880,7 +1895,9 @@
       "noRecipientsError": "Por favor proporcione al menos un correo electrónico de destinatario",
       "invalidEmailsError": "Correo(s) electrónico(s) inválido(s): {{emails}}",
       "invitesSentSuccessfully": "Invitaciones enviadas con éxito"
-    }
+    },
+    "selectUserWarning": "¡Por favor, elija primero un usuario para agregar!",
+    "addingAttendeeProgress": "Agregando al asistente..."
   },
   "onSpotAttendee": {
     "invalidEmailFormat": "Formato de correo electrónico no válido",
@@ -1904,6 +1921,11 @@
     "placeholderLastName": "García",
     "placeholderEmail": "abc@gmail.com"
   },
+  "eventRegistrantsWrapper": {
+    "buttonAriaLabel": "Mostrar asistentes",
+    "registerMemberButton": "Registrar miembro"
+  },
+
   "userCampaigns": {
     "title": "Campañas de recaudación de fondos",
     "searchByName": "Buscar por nombre...",

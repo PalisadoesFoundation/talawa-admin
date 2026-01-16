@@ -19,6 +19,11 @@ import {
   LocalizationProvider,
   AdapterDayjs,
 } from 'shared-components/DatePicker';
+import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DatePicker';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 
 const queryMock = [

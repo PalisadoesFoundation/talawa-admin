@@ -1435,7 +1435,22 @@
     "pageNumber": "पृष्ठ {{page}}",
     "goToToday": "आज पर जाएं",
     "genderDistribution": "लिंग वितरण",
-    "ageDistribution": "आयु वितरण"
+    "ageDistribution": "आयु वितरण",
+    "age": "आयु",
+    "age18to40": "18-40",
+    "attendanceCount": "उपस्थिति गणना",
+    "close": "बंद करें",
+    "demographics": "जनसांख्यिकी",
+    "demography": "जनसांख्यिकी",
+    "exportData": "डेटा निर्यात करें",
+    "female": "महिला",
+    "gender": "लिंग",
+    "male": "पुरुष",
+    "other": "अन्य",
+    "over40": "40 से अधिक",
+    "today": "आज",
+    "trends": "रुझान",
+    "under18": "18 से कम"
   },
   "eventRegistrant": {
     "sort": "छांटें",
@@ -1897,7 +1912,13 @@
       "noRecipientsError": "कृपया कम से कम एक प्राप्तकर्ता ईमेल प्रदान करें",
       "invalidEmailsError": "अमान्य ईमेल: {{emails}}",
       "invitesSentSuccessfully": "आमंत्रण सफलतापूर्वक भेजे गए"
-    }
+    },
+    "selectUserWarning": "कृपया पहले जोड़ने के लिए एक उपयोगकर्ता चुनें!",
+    "addingAttendeeProgress": "उपस्थित व्यक्ति को जोड़ा जा रहा है..."
+  },
+  "eventRegistrantsWrapper": {
+    "buttonAriaLabel": "उपस्थित लोगों को दिखाएं",
+    "registerMemberButton": "सदस्य पंजीकृत करें"
   },
   "onSpotAttendee": {
     "invalidEmailFormat": "अमान्य ईमेल प्रारूप",
@@ -1921,6 +1942,7 @@
     "placeholderLastName": "शर्मा",
     "placeholderEmail": "abc@gmail.com"
   },
+ 
   "userCampaigns": {
     "title": "धन उगाहने के अभियान",
     "searchByName": "नाम से खोजें...",
