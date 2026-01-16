@@ -459,7 +459,7 @@ describe('InviteByEmailModal', () => {
         },
       };
 
-        render(
+      render(
         <MockedProvider mocks={[successMock]} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
             <InviteByEmailModal {...minimalProps} />
