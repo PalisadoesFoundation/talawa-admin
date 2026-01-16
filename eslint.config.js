@@ -338,6 +338,18 @@ export default [
     ],
     rules: restrictImportsExcept(['rb-modal']),
   },
+  /**
+   * Exemption: AgendaItems component files (temporary)
+   *
+   * AgendaItems components use Form from react-bootstrap.
+   * These files predate the FormFieldGroup restriction and require migration.
+   * TODO: Migrate to FormFieldGroup component in a future ticket.
+   * Allowed ID: rb-form.
+   */
+  {
+    files: ['src/components/AgendaItems/**/*.{ts,tsx}'],
+    rules: restrictImportsExcept(['rb-form']),
+  },
 
   /**
    * Exemption: NotificationToast component files

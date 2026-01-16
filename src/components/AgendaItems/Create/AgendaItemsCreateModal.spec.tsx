@@ -29,15 +29,15 @@ const mockT = (key: string): string => key;
 
 // Use vi.hoisted() to create mocks that survive vi.mock hoisting
 const sharedMocks = vi.hoisted(() => ({
-  toast: {
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
   },
   uploadFileToMinio: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: sharedMocks.toast,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: sharedMocks.NotificationToast,
 }));
 
 vi.mock('utils/MinioUpload', () => ({
@@ -227,7 +227,7 @@ describe('AgendaItemsCreateModal', () => {
     fireEvent.click(linkBtn);
 
     await waitFor(() => {
-      expect(sharedMocks.toast.error).toHaveBeenCalledWith(
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
         'invalidUrl',
         expect.any(Object),
       );
@@ -270,7 +270,7 @@ describe('AgendaItemsCreateModal', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(sharedMocks.toast.error).toHaveBeenCalledWith(
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
         'fileSizeExceedsLimit',
         expect.any(Object),
       );

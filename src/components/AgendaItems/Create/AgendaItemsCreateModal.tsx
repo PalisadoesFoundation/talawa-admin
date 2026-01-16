@@ -53,8 +53,15 @@ const AgendaItemsCreateModal: React.FC<
   agendaItemCategories,
 }) => {
   const [newUrl, setNewUrl] = useState('');
-  const [_previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const { uploadFileToMinio } = useMinioUpload();
+
+  // Cleanup object URLs on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      previewUrls.forEach((url) => URL.revokeObjectURL(url));
+    };
+  }, [previewUrls]);
 
   useEffect(() => {
     // Ensure URLs do not have empty or invalid entries
@@ -133,8 +140,14 @@ const AgendaItemsCreateModal: React.FC<
         try {
           const result = await uploadFileToMinio(file, 'agendaItem');
           if (result) {
+            // Add mimeType and name to the metadata before storing
+            const metadata = {
+              ...result,
+              mimeType: file.type,
+              name: file.name,
+            };
             // Store the file metadata as JSON string for the mutation
-            uploadedFiles.push(JSON.stringify(result));
+            uploadedFiles.push(JSON.stringify(metadata));
             // Create local preview URL
             newPreviewUrls.push(URL.createObjectURL(file));
           }
@@ -154,12 +167,22 @@ const AgendaItemsCreateModal: React.FC<
   /**
    * Handles removing an attachment from the form state.
    *
-   * @param attachment - Attachment to remove.
+   * @param index - Index of attachment to remove.
    */
-  const handleRemoveAttachment = (attachment: string): void => {
+  const handleRemoveAttachment = (index: number): void => {
+    // Revoke the object URL to prevent memory leaks
+    const urlToRevoke = previewUrls[index];
+    if (urlToRevoke) {
+      URL.revokeObjectURL(urlToRevoke);
+    }
+
+    // Remove from previewUrls
+    setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
+
+    // Remove from formState.attachments
     setFormState((prevState) => ({
       ...prevState,
-      attachments: prevState.attachments.filter((item) => item !== attachment),
+      attachments: prevState.attachments.filter((_, i) => i !== index),
     }));
   };
 
@@ -169,18 +192,7 @@ const AgendaItemsCreateModal: React.FC<
       show={agendaItemCreateModalIsOpen}
       onHide={hideCreateModal}
       headerContent={
-        <>
-          <p className={styles.titlemodalAgendaItems}>
-            {t('agendaItemDetails')}
-          </p>
-          <Button
-            variant="danger"
-            onClick={hideCreateModal}
-            data-testid="createAgendaItemModalCloseBtn"
-          >
-            <i className="fa fa-times"></i>
-          </Button>
-        </>
+        <p className={styles.titlemodalAgendaItems}>{t('agendaItemDetails')}</p>
       }
     >
       <Form onSubmit={createAgendaItemHandler}>
@@ -304,35 +316,47 @@ const AgendaItemsCreateModal: React.FC<
           />
           <Form.Text>{t('attachmentLimit')}</Form.Text>
         </Form.Group>
-        {formState.attachments && (
+        {previewUrls.length > 0 && (
           <div className={styles.previewFile} data-testid="mediaPreview">
-            {formState.attachments.map((attachment, index) => (
-              <div key={index} className={styles.attachmentPreview}>
-                {attachment.includes('video') ? (
-                  <video
-                    muted
-                    autoPlay={true}
-                    loop={true}
-                    playsInline
-                    crossOrigin="anonymous"
+            {previewUrls.map((previewUrl, index) => {
+              // Parse the corresponding attachment metadata to get mime type
+              const attachmentMeta = formState.attachments[index];
+              let isVideo = false;
+              try {
+                const meta = JSON.parse(attachmentMeta);
+                isVideo = meta.mimeType?.startsWith('video/');
+              } catch {
+                // If parsing fails, default to image
+              }
+              return (
+                <div key={index} className={styles.attachmentPreview}>
+                  {isVideo ? (
+                    <video
+                      muted
+                      autoPlay={true}
+                      loop={true}
+                      playsInline
+                      crossOrigin="anonymous"
+                    >
+                      <source src={previewUrl} type="video/mp4" />
+                    </video>
+                  ) : (
+                    <img src={previewUrl} alt={t('attachmentPreview')} />
+                  )}
+                  <button
+                    type="button"
+                    className={styles.closeButtonFile}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleRemoveAttachment(index);
+                    }}
+                    data-testid="deleteAttachment"
                   >
-                    <source src={attachment} type="video/mp4" />
-                  </video>
-                ) : (
-                  <img src={attachment} alt={t('attachmentPreview')} />
-                )}
-                <button
-                  className={styles.closeButtonFile}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleRemoveAttachment(attachment);
-                  }}
-                  data-testid="deleteAttachment"
-                >
-                  <i className="fa fa-times" />
-                </button>
-              </div>
-            ))}
+                    <i className="fa fa-times" />
+                  </button>
+                </div>
+              );
+            })}
           </div>
         )}
         <Button
