@@ -230,7 +230,7 @@ describe('AddOnSpotAttendee Component', () => {
     await waitFor(() => {
       // Expect specific error message key for missing orgId
       expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
-        expect.stringContaining('organizationIdMissing'),
+        expect.stringContaining('Organization ID is missing.'),
       );
     });
   });

@@ -417,7 +417,7 @@ describe('InviteByEmailModal', () => {
 
   describe('Default Parameters', () => {
     it('should use default isRecurring=false when not provided', async () => {
-      const propsWithoutIsRecurring = {
+      const minimalProps = {
         show: true,
         handleClose: mockHandleClose,
         eventId: 'test-event-1',
@@ -459,7 +459,13 @@ describe('InviteByEmailModal', () => {
         },
       };
 
-      renderComponent(propsWithoutIsRecurring, [successMock]);
+        render(
+        <MockedProvider mocks={[successMock]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <InviteByEmailModal {...minimalProps} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
       const user = userEvent.setup();
 
       await user.type(screen.getByLabelText('Email'), 'test@example.com');
