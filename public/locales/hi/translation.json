@@ -1904,6 +1904,7 @@
     "downloadTag": "टैग डाउनलोड करें",
     "checkIn": "चेक इन करें",
     "eventCheckInManagement": "इवेंट चेक इन प्रबंधन",
+    "checkInMembers": "सदस्यों को चेक इन करें",
     "unknownUser": "अज्ञात उपयोगकर्ता",
     "user": "उपयोगकर्ता",
     "checkInStatus": "चेक इन स्थिति"
@@ -2139,7 +2140,11 @@
     "groupName": "समूह का नाम",
     "noOfMembers": "सदस्यों की संख्या",
     "options": "विकल्प",
-    "notSpecified": "निर्दिष्ट नहीं"
+    "notSpecified": "निर्दिष्ट नहीं",
+    "invited": "आमंत्रित",
+    "groupsAvailable": "{{count}} समूह उपलब्ध",
+    "volunteersRequired": "आवश्यक",
+    "signedUp": "पंजीकृत"
   },
   "pluginStore": {
     "title": "प्लगइन स्टोर",

@@ -1904,6 +1904,7 @@
     "downloadTag": "下載標籤",
     "checkIn": "簽到",
     "eventCheckInManagement": "活動簽到管理",
+    "checkInMembers": " 簽到成員",
     "unknownUser": "未知用戶",
     "user": "用戶",
     "checkInStatus": "簽到狀態"
@@ -2139,7 +2140,11 @@
     "groupName": "小组名称",
     "noOfMembers": "成员数量",
     "options": "选项",
-    "notSpecified": "未指定"
+    "notSpecified": "未指定",
+    "invited": "已邀请",
+    "groupsAvailable": "{{count}} 个小组可用",
+    "volunteersRequired": "必需",
+    "signedUp": "已报名"
   },
   "pluginStore": {
     "title": "插件商店",

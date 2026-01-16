@@ -5,11 +5,11 @@
  * checking in members for a specific event. The modal is controlled
  * using a local state to toggle its visibility.
  *
- * @component
- * @param {string} eventId - The unique identifier of the event for which
+
+ * @param eventId - The unique identifier of the event for which
  * members are being checked in.
  *
- * @returns {JSX.Element} The rendered CheckInWrapper component.
+ * @returns The rendered CheckInWrapper component.
  *
  * @remarks
  * - The `CheckInModal` component is used to handle the modal functionality.
@@ -25,7 +25,8 @@
 import React, { useState } from 'react';
 import { CheckInModal } from './Modal/CheckInModal';
 import { Button } from 'react-bootstrap';
-import style from '../../../src/style/app-fixed.module.css';
+import style from 'style/app-fixed.module.css';
+import { useTranslation } from 'react-i18next';
 
 type PropType = {
   eventId: string;
@@ -36,6 +37,8 @@ export const CheckInWrapper = ({
   eventId,
   onCheckInUpdate,
 }: PropType): JSX.Element => {
+  const { t } = useTranslation('translation', { keyPrefix: 'checkIn' });
+  const { t: tCommon } = useTranslation('common');
   const [showModal, setShowModal] = useState(false);
 
   return (
@@ -43,7 +46,7 @@ export const CheckInWrapper = ({
       <Button
         data-testid="stats-modal"
         className={style.createButton}
-        aria-label="checkInMembers"
+        aria-label={t('checkInMembers')}
         onClick={(): void => {
           setShowModal(true);
         }}
@@ -52,9 +55,9 @@ export const CheckInWrapper = ({
           src="/images/svg/options-outline.svg"
           width={30.63}
           height={30.63}
-          alt="Sort"
+          alt={tCommon('sort')}
         />
-        Check In Members
+        {t('checkInMembers')}
       </Button>
       {showModal && (
         <CheckInModal

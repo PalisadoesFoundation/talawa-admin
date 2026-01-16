@@ -1887,6 +1887,7 @@
     "downloadTag": "Descargar etiqueta",
     "checkIn": "Registrar",
     "eventCheckInManagement": "Gestión de registro de eventos",
+    "checkInMembers": "Registrar miembros",
     "unknownUser": "Usuario Desconocido",
     "user": "Usuario",
     "checkInStatus": "Estado de Registro"
@@ -2122,7 +2123,11 @@
     "groupName": "Nombre del Grupo",
     "noOfMembers": "Número de Miembros",
     "options": "Opciones",
-    "notSpecified": "No Especificado"
+    "notSpecified": "No Especificado",
+    "invited": "Invitado",
+    "groupsAvailable": "{{count}} grupos disponibles",
+    "volunteersRequired": "Requerido",
+    "signedUp": "Registrado"
   },
   "pluginStore": {
     "title": "Tienda de Plugins",

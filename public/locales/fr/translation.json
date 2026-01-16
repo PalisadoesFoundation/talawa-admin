@@ -1904,6 +1904,7 @@
     "downloadTag": "Télécharger l'étiquette",
     "checkIn": "Enregistrer",
     "eventCheckInManagement": "Gestion des enregistrements d'événement",
+    "checkInMembers": "Enregistrer les membres",
     "unknownUser": "Utilisateur inconnu",
     "user": "Utilisateur",
     "checkInStatus": "Statut d'Enregistrement"
@@ -2139,7 +2140,11 @@
     "groupName": "Nom du Groupe",
     "noOfMembers": "Nombre de Membres",
     "options": "Options",
-    "notSpecified": "Non Spécifié"
+    "notSpecified": "Non Spécifié",
+    "invited": "Invité",
+    "groupsAvailable": "{{count}} groupes disponibles",
+    "volunteersRequired": "Requis",
+    "signedUp": "Inscrit"
   },
   "pluginStore": {
     "title": "Boutique de Plugins",

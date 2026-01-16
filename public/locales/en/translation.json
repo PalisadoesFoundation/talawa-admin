@@ -1889,7 +1889,8 @@
     "eventCheckInManagement": "Event Check In Management",
     "unknownUser": "Unknown User",
     "user": "User",
-    "checkInStatus": "Check In Status"
+    "checkInStatus": "Check In Status",
+    "checkInMembers": "Check In Members"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",
@@ -2107,6 +2108,10 @@
     "eventInvitationSubject": "Invitation to volunteer for event",
     "groupInvitationRecurringSubject": "Invitation to join volunteer group for recurring event series",
     "eventInvitationRecurringSubject": "Invitation to volunteer for recurring event series",
+    "invited": "Invited",
+    "groupsAvailable": "{{count}} groups available",
+    "volunteersRequired": "Required",
+    "signedUp": "Signed up",
     "assignee": "Assignee",
     "group": "Group",
     "event": "Event",
