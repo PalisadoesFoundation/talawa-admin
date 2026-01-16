@@ -1,6 +1,6 @@
 /**
  * Lightweight test mock of react-bootstrap's Dropdown component.
- * Exports a `Dropdown` component with `Toggle`, `Menu` and `Item` subcomponents.
+ * Exports a `Dropdown` component with `Toggle`, `Menu` and `Item` shared-components.
  * This file composes the individual component implementations from the
  * `components/` folder so ESLint's one-component-per-file rule is satisfied.
  */

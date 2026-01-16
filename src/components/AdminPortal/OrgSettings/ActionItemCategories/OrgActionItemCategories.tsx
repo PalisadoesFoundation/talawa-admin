@@ -46,7 +46,7 @@ import { Stack } from '@mui/material';
 import CategoryModal from './Modal/ActionItemCategoryModal';
 import CategoryViewModal from './Modal/ActionItemCategoryViewModal';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import SortingButton from 'subComponents/SortingButton';
+import SortingButton from 'shared-components/SortingButton/SortingButton';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
 /** Modal state management */
