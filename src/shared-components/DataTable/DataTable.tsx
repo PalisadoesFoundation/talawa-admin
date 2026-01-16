@@ -87,7 +87,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   // Controlled / uncontrolled column filters
   const controlledFilters =
     !!columnFilters && typeof onColumnFiltersChange === 'function';
-  const [uFilters, setUFilters] = React.useState<Record<string, unknown>>({});
+  const [uFilters, _setUFilters] = React.useState<Record<string, unknown>>({});
   const filters = controlledFilters
     ? (columnFilters as Record<string, unknown>)
     : uFilters;
