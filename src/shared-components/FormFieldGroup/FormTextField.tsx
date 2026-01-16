@@ -20,6 +20,7 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
   placeholder,
   value,
   onChange,
+  'data-testid': dataTestId,
 }) => {
   return (
     <FormFieldGroup
@@ -38,6 +39,7 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
           onChange(e.target.value);
         }}
         isInvalid={touched && !!error}
+        data-testid={dataTestId}
       />
     </FormFieldGroup>
   );

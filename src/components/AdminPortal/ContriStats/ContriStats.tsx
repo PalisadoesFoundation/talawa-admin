@@ -27,7 +27,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import styles from 'style/app-fixed.module.css';
-import type { InterfaceContriStatsProps } from 'types/Contribution/interface';
+import type { InterfaceContriStatsProps } from 'types/AdminPortal/Contribution/interface';
 
 function ContriStats({
   recentAmount,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import type { IFormFieldGroupProps } from '../../types/FormFieldGroup/interface';
+import type { InterfaceFormFieldGroupProps } from '../../types/FormFieldGroup/interface';
 
 /**
  * Renders a grouped form field with label, help text, error, and children elements.
@@ -10,7 +10,7 @@ import type { IFormFieldGroupProps } from '../../types/FormFieldGroup/interface'
  * @returns A form group React element.
  */
 export const FormFieldGroup: React.FC<
-  IFormFieldGroupProps & { children: React.ReactNode }
+  InterfaceFormFieldGroupProps & { children: React.ReactNode }
 > = ({ name, label, required, helpText, error, touched, children }) => {
   const { t: tCommon } = useTranslation('common');
   const showError = touched && !!error;
@@ -36,3 +36,6 @@ export const FormFieldGroup: React.FC<
     </Form.Group>
   );
 };
+
+export * from './FormTextField';
+export * from './FormSelectField';
