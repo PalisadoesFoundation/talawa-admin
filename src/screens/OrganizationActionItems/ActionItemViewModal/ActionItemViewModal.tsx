@@ -152,9 +152,11 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
         </Form.Group>
 
         <Form.Group className="d-flex gap-3 mx-auto mb-3 align-items-start w-100">
-          {/* Status using the shared StatusBadge component (replaces ad-hoc icon + color styles) */}
           <FormControl fullWidth>
-            <label className="form-label mb-2">{t('status')}</label>
+            <span id="action-item-status-label" className="form-label mb-2">
+              {t('status')}
+            </span>
+
             <div>
               <StatusBadge
                 variant={isCompleted ? 'completed' : 'pending'}
@@ -163,6 +165,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
                 ariaLabel={
                   isCompleted ? tCommon('completed') : tCommon('pending')
                 }
+                aria-labelledby="action-item-status-label"
               />
             </div>
           </FormControl>
