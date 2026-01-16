@@ -1923,7 +1923,8 @@
     "checkedIn": "Enregistré",
     "downloadTag": "Télécharger l'étiquette",
     "checkIn": "Enregistrer",
-    "eventCheckInManagement": "Gestion des enregistrements d'événement"
+    "eventCheckInManagement": "Gestion des enregistrements d'événement",
+    "checkInMembers": "Enregistrer les membres"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",

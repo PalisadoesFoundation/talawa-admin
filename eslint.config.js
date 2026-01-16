@@ -118,7 +118,7 @@ export default [
       'tsconfig.json',
       'fix-readme-links.js',
       'fix-repo-url.js',
-      'src/components/CheckIn/tagTemplate.ts',
+      'src/shared-components/CheckIn/tagTemplate.ts',
       'docs/**',
       '*.md',
       'docker/**',
