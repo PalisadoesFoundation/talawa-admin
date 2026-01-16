@@ -1,6 +1,6 @@
 import type { ActionItem } from '../AdminPortal/actionItem';
 import type { Organization } from 'types/AdminPortal/Organization/type';
-import type { CheckInStatus } from '../CheckIn/type';
+import type { CheckInStatus } from '../shared-components/CheckIn/type';
 
 export type User = {
   id: string;
