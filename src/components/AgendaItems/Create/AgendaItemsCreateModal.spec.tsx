@@ -229,7 +229,6 @@ describe('AgendaItemsCreateModal', () => {
     await waitFor(() => {
       expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
         'invalidUrl',
-        expect.any(Object),
       );
     });
   });
@@ -272,7 +271,6 @@ describe('AgendaItemsCreateModal', () => {
     await waitFor(() => {
       expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
         'fileSizeExceedsLimit',
-        expect.any(Object),
       );
     });
   });

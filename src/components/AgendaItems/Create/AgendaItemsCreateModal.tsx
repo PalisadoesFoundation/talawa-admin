@@ -57,10 +57,11 @@ const AgendaItemsCreateModal: React.FC<
   const { uploadFileToMinio } = useMinioUpload();
 
   useEffect(() => {
-    // Ensure URLs do not have empty or invalid entries
+    // Ensure URLs and attachments do not have empty or invalid entries
     setFormState((prevState) => ({
       ...prevState,
       urls: prevState.urls.filter((url) => url.trim() !== ''),
+      attachments: prevState.attachments.filter((att) => att.trim() !== ''),
     }));
   }, [setFormState]);
 
