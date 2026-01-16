@@ -1,6 +1,5 @@
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
 import {
   cleanup,
@@ -15,7 +14,10 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DatePicker';
 import { PLEDGE_MODAL_MOCKS, PLEDGE_MODAL_ERROR_MOCKS } from '../Pledges.mocks';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -562,6 +564,37 @@ describe('PledgeModal', () => {
         'value',
         String(invalidPledge.amount),
       );
+    });
+  });
+
+  it('should clear pledgeUsers when Autocomplete onChange is called with null', async () => {
+    renderPledgeModal(mockLink, pledgeProps[0]);
+
+    const pledgerSelect = screen.getByTestId('pledgerSelect');
+    const pledgerInput = within(pledgerSelect).getByRole('combobox');
+
+    await act(async () => {
+      fireEvent.mouseDown(pledgerInput);
+    });
+
+    await waitFor(() => {
+      const listbox = screen.getByRole('listbox');
+      const option = within(listbox).getByText('John Doe');
+      fireEvent.click(option);
+    });
+
+    await waitFor(() => {
+      expect(pledgerInput).toHaveValue('John Doe');
+    });
+
+    const clearButton = screen.getByLabelText('Clear');
+
+    await act(async () => {
+      fireEvent.click(clearButton);
+    });
+
+    await waitFor(() => {
+      expect(pledgerInput).toHaveValue('');
     });
   });
 });

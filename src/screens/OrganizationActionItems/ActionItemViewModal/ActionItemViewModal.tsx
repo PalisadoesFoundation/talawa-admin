@@ -10,7 +10,7 @@ import { Form } from 'react-bootstrap';
 import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 import type { InterfaceUser } from 'types/shared-components/User/interface';
 import type { InterfaceEvent } from 'types/Event/interface';
-import styles from 'style/app-fixed.module.css';
+import styles from './ActionItemViewModal.module.css';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
 import { TaskAlt, HistoryToggleOff } from '@mui/icons-material';

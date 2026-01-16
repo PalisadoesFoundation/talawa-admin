@@ -6,12 +6,12 @@
  * It validates the form inputs, submits the data to the server using a GraphQL
  * mutation, and handles success or error responses appropriately.
  *
- * @param props - The props for the component containing:
- *   - `show`: Determines whether the modal is visible
- *   - `handleClose`: Function to close the modal
- *   - `reloadMembers`: Function to reload the list of members
+ * @param props - The props for the component:
+ * - show - Determines whether the modal is visible.
+ * - handleClose - Function to close the modal.
+ * - reloadMembers - Function to reload the list of members.
  *
- * @returns The rendered AddOnSpotAttendee component
+ * @returns The rendered AddOnSpotAttendee component.
  *
  * @remarks
  * - Uses `react-bootstrap` for modal and form styling
@@ -33,9 +33,8 @@
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { BaseModal } from 'shared-components/BaseModal';
 import styles from 'style/app-fixed.module.css';
-import componentStyles from '../../EventRegistrants.module.css';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -46,6 +45,8 @@ import type {
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
+import modalStyles from '../../EventRegistrants.module.css';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   show,
@@ -60,6 +61,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
     gender: '',
   });
   const { t } = useTranslation('translation', { keyPrefix: 'onSpotAttendee' });
+  const { t: tErrors } = useTranslation('errors');
   const { t: tCommon } = useTranslation('common');
   const { orgId } = useParams<{ orgId: string }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -131,14 +133,19 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
     }
   };
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
       <BaseModal
         show={show}
         onHide={handleClose}
         backdrop="static"
-        centered
+        centered={true}
+        headerClassName={modalStyles.modalHeader}
         title={t('title')}
-        headerClassName={componentStyles.modalHeader}
       >
         <Form onSubmit={handleSubmit} data-testid="onspot-attendee-form">
           <div className="d-flex justify-content-between">
@@ -152,7 +159,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
-                placeholder="John"
+                placeholder={t('firstNamePlaceholder')}
               />
             </Form.Group>
             <Form.Group className="mb-1">
@@ -163,7 +170,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
-                placeholder="Doe"
+                placeholder={t('lastNamePlaceholder')}
               />
             </Form.Group>
           </div>
@@ -187,7 +194,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="abc@gmail.com"
+              placeholder={t('emailPlaceholder')}
             />
           </Form.Group>
 
@@ -219,7 +226,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
           </LoadingState>
         </Form>
       </BaseModal>
-    </>
+    </ErrorBoundaryWrapper>
   );
 };
 

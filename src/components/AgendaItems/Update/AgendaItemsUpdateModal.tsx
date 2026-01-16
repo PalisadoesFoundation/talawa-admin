@@ -7,12 +7,10 @@
  * validation for URLs and file size limits for attachments.
  *
  * @remarks
- * - The component uses `react-bootstrap` for modal and form elements
- * - `@mui/material` is used for the Autocomplete component
- * - File attachments are converted to base64 format before being added to the form state
- * - URLs are validated using a regular expression
- * - Dependencies: `react`, `react-bootstrap`, `@mui/material`, `react-icons`, `NotificationToast`
- * - Custom utility functions: `convertToBase64`
+ * - The component uses `react-bootstrap` for modal and form elements.
+ * - `@mui/material` is used for the Autocomplete component.
+ * - File attachments are converted to base64 format before being added to the form state.
+ * - URLs are validated using a regular expression.
  *
  * @remarks
  * Example usage:
@@ -36,7 +34,6 @@ import { FaLink, FaTrash } from 'react-icons/fa';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import convertToBase64 from 'utils/convertToBase64';
 import styles from '../../../style/app-fixed.module.css';
-// translation-check-keyPrefix: agendaItems
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import type { InterfaceAgendaItemsUpdateModalProps } from 'types/Agenda/interface';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
@@ -197,59 +194,93 @@ const AgendaItemsUpdateModal: React.FC<
             />
           </Form.Group>
 
-        <Row className="mb-3">
-          <Col>
-            <Form.Group className="mb-3" controlId="title">
-              <Form.Label>{t('title')}</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder={t('enterTitle')}
-                value={formState.title}
-                onChange={(e) =>
-                  setFormState({ ...formState, title: e.target.value })
-                }
-              />
-            </Form.Group>
-          </Col>
-          <Col>
-            <Form.Group controlId="duration">
-              <Form.Label>{t('duration')}</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder={t('enterDuration')}
-                value={formState.duration}
-                required
-                onChange={(e) =>
-                  setFormState({ ...formState, duration: e.target.value })
-                }
-              />
-            </Form.Group>
-          </Col>
-        </Row>
+          <Row className="mb-3">
+            <Col>
+              <Form.Group className="mb-3" controlId="title">
+                <Form.Label>{t('title')}</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder={t('enterTitle')}
+                  value={formState.title}
+                  onChange={(e) =>
+                    setFormState({ ...formState, title: e.target.value })
+                  }
+                />
+              </Form.Group>
+            </Col>
+            <Col>
+              <Form.Group controlId="duration">
+                <Form.Label>{t('duration')}</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder={t('enterDuration')}
+                  value={formState.duration}
+                  required
+                  onChange={(e) =>
+                    setFormState({ ...formState, duration: e.target.value })
+                  }
+                />
+              </Form.Group>
+            </Col>
+          </Row>
 
-        <Form.Group className="mb-3" controlId="description">
-          <Form.Label>{t('description')}</Form.Label>
-          <Form.Control
-            as="textarea"
-            rows={1}
-            placeholder={t('enterDescription')}
-            value={formState.description}
-            onChange={(e) =>
-              setFormState({ ...formState, description: e.target.value })
-            }
-          />
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-          <Form.Label>{t('url')}</Form.Label>
-          <div className="d-flex">
+          <Form.Group className="mb-3" controlId="description">
+            <Form.Label>{t('description')}</Form.Label>
             <Form.Control
-              type="text"
-              placeholder={t('enterUrl')}
-              id="basic-url"
-              data-testid="urlInput"
-              value={newUrl}
-              onChange={(e) => setNewUrl(e.target.value)}
+              as="textarea"
+              rows={1}
+              placeholder={t('enterDescription')}
+              value={formState.description}
+              onChange={(e) =>
+                setFormState({ ...formState, description: e.target.value })
+              }
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label>{t('url')}</Form.Label>
+            <div className="d-flex">
+              <Form.Control
+                type="text"
+                placeholder={t('enterUrl')}
+                id="basic-url"
+                data-testid="urlInput"
+                value={newUrl}
+                onChange={(e) => setNewUrl(e.target.value)}
+              />
+              <Button onClick={handleAddUrl} data-testid="linkBtn">
+                {t('link')}
+              </Button>
+            </div>
+
+            {formState.urls.map((url, index) => (
+              <li key={index} className={styles.urlListItem}>
+                <FaLink className={styles.urlIcon} />
+                <a href={url} target="_blank" rel="noopener noreferrer">
+                  {url.length > 50 ? url.substring(0, 50) + '...' : url}
+                </a>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  data-testid="deleteUrl"
+                  className={styles.deleteButtonAgendaItems}
+                  onClick={() => handleRemoveUrl(url)}
+                >
+                  <FaTrash />
+                </Button>
+              </li>
+            ))}
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>{t('attachments')}</Form.Label>
+            <Form.Control
+              accept="image/*, video/*"
+              data-testid="attachment"
+              name="attachment"
+              type="file"
+              id="attachment"
+              multiple={true}
+              onChange={handleFileChange}
             />
             <Form.Text>{t('attachmentLimit')}</Form.Text>
           </Form.Group>

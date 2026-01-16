@@ -12,15 +12,16 @@ import { store } from 'state/store';
 import i18nForTest from '../../../../utils/i18nForTest';
 import { describe, expect, vi } from 'vitest';
 
-const mockNotificationToast = vi.hoisted(() => ({
-  success: vi.fn(),
-  error: vi.fn(),
-  warning: vi.fn(),
-  info: vi.fn(),
+const sharedMocks = vi.hoisted(() => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+  },
+  navigate: vi.fn(),
 }));
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
-  NotificationToast: mockNotificationToast,
+  NotificationToast: sharedMocks.NotificationToast,
 }));
 
 const mockProps = {
@@ -153,8 +154,8 @@ describe('AddOnSpotAttendee Component', () => {
     fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
 
     await waitFor(() => {
-      expect(mockNotificationToast.success).not.toHaveBeenCalled(); // Ensure success toast is not shown
-      expect(mockNotificationToast.error).not.toHaveBeenCalled(); // Ensure no unexpected error toast
+      expect(sharedMocks.NotificationToast.success).not.toHaveBeenCalled(); // Ensure success toast is not shown
+      expect(sharedMocks.NotificationToast.error).not.toHaveBeenCalled(); // Ensure no unexpected error toast
       expect(mockProps.reloadMembers).not.toHaveBeenCalled(); // Reload should not be triggered
       expect(mockProps.handleClose).not.toHaveBeenCalled(); // Modal should not close
     });
@@ -186,7 +187,7 @@ describe('AddOnSpotAttendee Component', () => {
 
     // Wait for the error to be handled
     await waitFor(() => {
-      expect(mockNotificationToast.error).toHaveBeenCalledWith(
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
         expect.stringContaining('Failed to add attendee'),
       );
     });
@@ -204,7 +205,7 @@ describe('AddOnSpotAttendee Component', () => {
 
     fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
     await waitFor(() => {
-      expect(mockNotificationToast.success).toHaveBeenCalled();
+      expect(sharedMocks.NotificationToast.success).toHaveBeenCalled();
       expect(mockProps.reloadMembers).toHaveBeenCalled();
       expect(mockProps.handleClose).toHaveBeenCalled();
     });
@@ -222,7 +223,7 @@ describe('AddOnSpotAttendee Component', () => {
     fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
 
     await waitFor(() => {
-      expect(mockNotificationToast.error).toHaveBeenCalled();
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalled();
     });
   });
   it('displays error when required fields are missing', async () => {
@@ -231,7 +232,7 @@ describe('AddOnSpotAttendee Component', () => {
     fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
 
     await waitFor(() => {
-      expect(mockNotificationToast.error).toHaveBeenCalled();
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -253,7 +254,7 @@ describe('AddOnSpotAttendee Component', () => {
     fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
 
     await waitFor(() => {
-      expect(mockNotificationToast.error).toHaveBeenCalled();
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -291,7 +292,7 @@ describe('AddOnSpotAttendee Component', () => {
     await waitFor(() => {
       // Button should reappear (if modal is still open, which it is in this render context)
       expect(screen.getByRole('button', { name: /add/i })).toBeInTheDocument();
-      expect(mockNotificationToast.success).toHaveBeenCalledWith(
+      expect(sharedMocks.NotificationToast.success).toHaveBeenCalledWith(
         'Attendee added successfully!',
       );
       // Callbacks should be invoked

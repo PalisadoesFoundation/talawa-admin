@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx#L55)
+Defined in: [src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/ChangeLanguageDropdown/ChangeLanguageDropDown.tsx#L30)
 
 ## Parameters
 
