@@ -55,7 +55,7 @@ describe('Testing CheckIn Wrapper', () => {
     );
 
     // Open the modal
-    await user.click(screen.getByLabelText('checkInMembers'));
+    await user.click(screen.getByLabelText('Check In Members'));
 
     await waitFor(() =>
       expect(screen.getByText(/Event Check In/i)).toBeInTheDocument(),
