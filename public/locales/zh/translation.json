@@ -855,6 +855,7 @@
     "updatePledge": "更新承诺",
     "deletePledge": "删除承诺",
     "amount": "数量",
+    "amountMustBeAtLeastOne": "金额必须至少为 1",
     "editPledge": "编辑承诺",
     "deletePledgeMsg": "您确定要删除此承诺吗？",
     "noPledges": "未找到承诺",

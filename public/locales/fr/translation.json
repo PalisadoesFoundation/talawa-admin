@@ -855,6 +855,7 @@
     "updatePledge": "Engagement de mise à jour",
     "deletePledge": "Supprimer l'engagement",
     "amount": "Montant",
+    "amountMustBeAtLeastOne": "Le montant doit être d'au moins 1",
     "editPledge": "Modifier l'engagement",
     "deletePledgeMsg": "Etes-vous sûr de vouloir supprimer cet engagement ?",
     "noPledges": "Aucun engagement trouvé",

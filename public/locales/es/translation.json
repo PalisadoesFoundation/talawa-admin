@@ -857,6 +857,7 @@
     "updatePledge": "Actualizar Compromiso",
     "deletePledge": "Eliminar Compromiso",
     "amount": "Monto",
+    "amountMustBeAtLeastOne": "El monto debe ser al menos 1",
     "editPledge": "Editar Compromiso",
     "deletePledgeMsg": "¿Estás seguro de que quieres eliminar este compromiso?",
     "noPledges": "No se encontraron compromisos",

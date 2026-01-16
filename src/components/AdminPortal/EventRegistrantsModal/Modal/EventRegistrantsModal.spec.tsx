@@ -111,7 +111,7 @@ const defaultProps = {
   show: true,
   eventId: 'event123',
   orgId: 'org123',
-  handleClose: () => {},
+  handleClose: () => { },
 };
 
 const makeAttendeesEmptyMock = (): ApolloMock => ({
@@ -562,7 +562,7 @@ describe('EventRegistrantsModal', () => {
     // onInvitesSent callback is triggered implicitly
   });
 
-  test('getOptionLabel falls back to "Unknown User" when member name is empty', async () => {
+  test('getOptionLabel falls back to "unknownUser" translation when member name is empty', async () => {
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -575,8 +575,8 @@ describe('EventRegistrantsModal', () => {
     // Open autocomplete options
     fireEvent.keyDown(input, { key: 'ArrowDown' });
 
-    // This text only appears via getOptionLabel's "Unknown User" fallback
-    const option = await screen.findByText('Unknown User');
+    // This text appears via getOptionLabel's t('unknownUser') fallback
+    const option = await screen.findByText('eventRegistrantsModal.unknownUser');
     expect(option).toBeInTheDocument();
   });
 });

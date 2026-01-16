@@ -31,8 +31,7 @@
  * ```
  *
  * Dependencies:
- * - `shared-components/BaseModal` for modal component.
- * - `react-bootstrap` for button components.
+ * - `react-bootstrap` for modal and button components.
  * - `@apollo/client` for GraphQL queries and mutations.
  * - `@mui/material` for UI components like Avatar, Chip, and Autocomplete.
  * - `NotificationToast` for toast notifications.
@@ -53,14 +52,19 @@ import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
 import type { InterfaceUser } from 'types/shared-components/User/interface';
-import type { InterfaceEventRegistrantsModalProps } from 'types/AdminPortal/EventRegistrantsModal/interface';
 import styles from '../EventRegistrants.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { BaseModal } from 'shared-components/BaseModal';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
-export const EventRegistrantsModal = (
-  props: InterfaceEventRegistrantsModalProps,
-): JSX.Element => {
+type ModalPropType = {
+  show: boolean;
+  eventId: string;
+  orgId: string;
+  handleClose: () => void;
+};
+
+export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const { eventId, orgId, handleClose, show } = props;
   const [member, setMember] = useState<InterfaceUser | null>(null);
   const [open, setOpen] = useState(false);
@@ -75,6 +79,7 @@ export const EventRegistrantsModal = (
     keyPrefix: 'eventRegistrantsModal',
   });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   // First, get event details to determine if it's recurring or standalone
   const { data: eventData } = useQuery(EVENT_DETAILS, {
@@ -101,10 +106,10 @@ export const EventRegistrantsModal = (
   // Function to add a new registrant to the event
   const addRegistrant = (): void => {
     if (member == null) {
-      NotificationToast.warning(t('selectUserFirst'));
+      NotificationToast.warning(t('selectUserWarning'));
       return;
     }
-    NotificationToast.warning(t('addingAttendee'));
+    NotificationToast.warning(t('addingAttendeeProgress'));
     const addVariables = isRecurring
       ? { userId: member.id, recurringEventInstanceId: eventId }
       : { userId: member.id, eventId: eventId };
@@ -125,91 +130,98 @@ export const EventRegistrantsModal = (
   };
 
   return (
-    <section>
-      <AddOnSpotAttendee
-        show={open}
-        handleClose={() => setOpen(false)}
-        reloadMembers={() => {
-          attendeesRefetch();
-        }}
-      />
-      <InviteByEmailModal
-        show={inviteOpen}
-        handleClose={() => setInviteOpen(false)}
-        eventId={eventId}
-        isRecurring={isRecurring}
-        onInvitesSent={() => {
-          attendeesRefetch();
-        }}
-      />
-      <BaseModal
-        show={show}
-        onHide={handleClose}
-        title={t('eventRegistrantsTitle')}
-        headerClassName={styles.modalHeader}
-        dataTestId="invite-modal"
-        showCloseButton
-        footer={
-          <div>
-            <Button
-              className={styles.inviteButton}
-              data-testid="invite-by-email-btn"
-              onClick={() => setInviteOpen(true)}
-            >
-              {t('inviteByEmailButton')}
-            </Button>
-
-            <Button
-              className={styles.addButton}
-              data-testid="add-registrant-btn"
-              onClick={addRegistrant}
-            >
-              {t('addRegistrantButton')}
-            </Button>
-          </div>
-        }
-      >
-        <Autocomplete
-          id="addRegistrant"
-          onChange={(_, newMember): void => {
-            setMember(newMember);
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
+      <section>
+        <AddOnSpotAttendee
+          show={open}
+          handleClose={() => setOpen(false)}
+          reloadMembers={() => {
+            attendeesRefetch();
           }}
-          noOptionsText={
-            <div className="d-flex ">
-              <p className="me-2">{t('noRegistrationsFound')}</p>
-              <span
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    setOpen(true);
-                  }
-                }}
-                className={`underline ${styles.underlineText}`}
-                onClick={() => {
-                  setOpen(true);
-                }}
+        />
+        <InviteByEmailModal
+          show={inviteOpen}
+          handleClose={() => setInviteOpen(false)}
+          eventId={eventId}
+          isRecurring={isRecurring}
+          onInvitesSent={() => {
+            attendeesRefetch();
+          }}
+        />
+        <BaseModal
+          show={show}
+          onHide={handleClose}
+          title={t('eventRegistrantsTitle')}
+          headerClassName={styles.modalHeader}
+          dataTestId="invite-modal"
+          showCloseButton
+          footer={
+            <div>
+              <Button
+                className={styles.inviteButton}
+                data-testid="invite-by-email-btn"
+                onClick={() => setInviteOpen(true)}
               >
-                {t('addOnspotRegistrationLink')}
-              </span>
+                {t('inviteByEmailButton')}
+              </Button>
+
+              <Button
+                className={styles.addButton}
+                data-testid="add-registrant-btn"
+                onClick={addRegistrant}
+              >
+                {t('addRegistrantButton')}
+              </Button>
             </div>
           }
-          options={memberData?.usersByOrganizationId || []}
-          getOptionLabel={(member: InterfaceUser): string =>
-            member.name || t('unknownUser')
-          }
-          renderInput={(params): React.ReactNode => (
-            <TextField
-              {...params}
-              data-testid="autocomplete"
-              label={t('addRegistrantLabel') as string}
-              placeholder={t('addRegistrantPlaceholder') as string}
-            />
-          )}
-        />
-        <br />
-      </BaseModal>
-    </section>
+        >
+          <Autocomplete
+            id="addRegistrant"
+            onChange={(_, newMember): void => {
+              setMember(newMember);
+            }}
+            noOptionsText={
+              <div className="d-flex ">
+                <p className="me-2">{t('noRegistrationsFound')}</p>
+                <span
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setOpen(true);
+                    }
+                  }}
+                  className={`underline ${styles.underlineText}`}
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                >
+                  {t('addOnspotRegistrationLink')}
+                </span>
+              </div>
+            }
+            options={memberData?.usersByOrganizationId || []}
+            getOptionLabel={(member: InterfaceUser): string =>
+              member.name || t('unknownUser')
+            }
+            renderInput={(params): React.ReactNode => (
+              <TextField
+                {...params}
+                data-testid="autocomplete"
+                label={t('addRegistrantLabel') as string}
+                placeholder={t('addRegistrantPlaceholder') as string}
+              />
+            )}
+          />
+          <br />
+        </BaseModal>
+      </section>
+    </ErrorBoundaryWrapper>
   );
 };
