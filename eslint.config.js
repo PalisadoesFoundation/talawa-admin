@@ -39,7 +39,14 @@ const restrictedImports = [
     name: 'react-bootstrap',
     importNames: ['Modal'],
     message:
-      'Do not import Modal directly. Use the shared BaseModal component instead.',
+      'Do not import Modal directly. Use the shared BaseModal or the CRUDModalTemplate/* components instead.',
+  },
+  {
+    id: 'rb-form',
+    name: 'react-bootstrap',
+    importNames: ['Form'],
+    message:
+      'Do not import Form directly. Use the shared FormFieldGroup component instead.',
   },
   {
     id: 'mui-date-pickers',
@@ -65,6 +72,19 @@ const restrictedImports = [
     name: 'react-toastify',
     message:
       'Direct imports from react-toastify are not allowed. Please use the NotificationToast component from src/components/NotificationToast/ instead.',
+  },
+  {
+    id: 'dicebear-core',
+    name: '@dicebear/core',
+    message:
+      'Direct imports from @dicebear/core are not allowed. Use the shared createAvatar wrapper instead.',
+  },
+  {
+    id: 'mui-chip',
+    name: '@mui/material',
+    importNames: ['Chip'],
+    message:
+      'Do not import Chip from @mui/material. Use the shared StatusBadge component from src/shared-components/StatusBadge/ instead.',
   },
 ];
 
@@ -291,6 +311,20 @@ export default [
     rules: restrictImportsExcept(['rb-spinner']),
   },
   /**
+   * Exemption: FormFieldGroup component files
+   *
+   * FormFieldGroup files need direct react-bootstrap Form access for wrapper implementation.
+   * These files are the only ones allowed to import Form directly from react-bootstrap.
+   * Allowed ID: rb-form.
+   */
+  {
+    files: [
+      'src/shared-components/FormFieldGroup/**/*.{ts,tsx}',
+      'src/types/shared-components/FormFieldGroup/**/*.{ts,tsx}',
+    ],
+    rules: restrictImportsExcept(['rb-form']),
+  },
+  /**
    * Exemption: BaseModal component files
    *
    * BaseModal files need direct react-bootstrap Modal access for wrapper implementation.
@@ -304,6 +338,7 @@ export default [
     ],
     rules: restrictImportsExcept(['rb-modal']),
   },
+
   /**
    * Exemption: NotificationToast component files
    *
@@ -369,6 +404,36 @@ export default [
       '@graphql-eslint/no-unreachable-types': 'off',
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
     },
+  },
+  /**
+   * Exemption: Avatar and createAvatar component files
+   *
+   * Avatar and createAvatar files need direct `@dicebear/core` access for wrapper implementation.
+   * These files are the only ones allowed to import from `@dicebear/core`.
+   * Allowed ID: dicebear-core.
+   */
+  {
+    files: [
+      'src/shared-components/Avatar/**/*.{ts,tsx,d.ts}',
+      'src/shared-components/createAvatar/**/*.{ts,tsx}',
+      'src/types/shared-components/Avatar/**/*.{ts,tsx,d.ts}',
+      'src/types/shared-components/createAvatar/**/*.{ts,tsx}',
+    ],
+    rules: restrictImportsExcept(['dicebear-core']),
+  },
+  /**
+   * Exemption: StatusBadge component files
+   *
+   * StatusBadge files need direct Chip access from @mui/material for wrapper implementation.
+   * These files are the only ones allowed to import Chip directly from @mui/material.
+   * Allowed ID: mui-chip.
+   */
+  {
+    files: [
+      'src/shared-components/StatusBadge/**/*.{ts,tsx}',
+      'src/types/shared-components/StatusBadge/**/*.{ts,tsx}',
+    ],
+    rules: restrictImportsExcept(['mui-chip']),
   },
   // Cypress-specific configuration
   {

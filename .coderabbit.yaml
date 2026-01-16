@@ -20,10 +20,13 @@ issue_enrichment:
 reviews:
   profile: 'assertive'
   poem: false
-  request_changes_workflow: true
+  request_changes_workflow: false
   high_level_summary: true
   review_status: true
+  review_details: false
   collapse_walkthrough: false
+  auto_apply_labels: false
+  suggested_labels: false
   auto_review:
     enabled: true
     drafts: false

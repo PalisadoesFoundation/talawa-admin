@@ -39,7 +39,14 @@ import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import styles from './UserPortalNavigationBar.module.css';
 
 // Mock dependencies
-vi.mock('react-toastify', () => ({ toast: { error: vi.fn() } }));
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
+}));
 vi.mock('js-cookie', () => ({ default: { get: vi.fn(), set: vi.fn() } }));
 vi.mock('i18next', () => ({ default: { changeLanguage: vi.fn() } }));
 vi.mock('utils/useLocalstorage', () => ({ default: vi.fn() }));
@@ -1027,9 +1034,11 @@ describe('UserPortalNavigationBar', () => {
         clearAllItems,
       });
 
-      // Import toast to spy on it
-      const { toast } = await import('react-toastify');
-      const toastErrorSpy = vi.spyOn(toast, 'error');
+      // Import NotificationToast to spy on it
+      const { NotificationToast } = await import(
+        'components/NotificationToast/NotificationToast'
+      );
+      const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
       render(
         <MockedProvider mocks={[logoutErrorMock]}>

@@ -6,13 +6,13 @@ import type {
 import type { TFunction } from 'i18next';
 import dayjs from 'dayjs';
 import { Button } from 'react-bootstrap';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import { currencySymbols } from 'utils/currency';
 import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './PledgeColumns.module.css';
 
 /**
  * Props for the getPledgeColumns function.

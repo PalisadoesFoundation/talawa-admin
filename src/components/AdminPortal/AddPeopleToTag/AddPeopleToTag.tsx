@@ -52,22 +52,25 @@ import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useParams } from 'react-router';
 import styles from 'style/app-fixed.module.css';
 import { Stack } from '@mui/material';
-import { toast } from 'react-toastify';
 import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
-import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
+import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
 import type {
   InterfaceAddPeopleToTagProps,
   InterfaceMemberData,
   InterfaceTagUsersToAssignToQuery,
   InterfaceQueryUserTagsMembersToAssignTo,
-} from 'types/Tag/interface';
-import { TAGS_QUERY_DATA_CHUNK_SIZE, dataGridStyle } from 'types/Tag/utils';
+} from 'types/AdminPortal/Tag/interface';
+import {
+  TAGS_QUERY_DATA_CHUNK_SIZE,
+  dataGridStyle,
+} from 'types/AdminPortal/Tag/utils';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import componentStyles from './AddPeopleToTag.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   addPeopleToTagModalIsOpen,
@@ -186,7 +189,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     e.preventDefault();
 
     if (!assignToMembers.length) {
-      toast.error(t('noOneSelected'));
+      NotificationToast.error(t('noOneSelected'));
       return;
     }
 
@@ -199,7 +202,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       });
 
       if (data) {
-        toast.success(t('successfullyAssignedToPeople'));
+        NotificationToast.success(t('successfullyAssignedToPeople'));
         refetchAssignedMembersData();
         hideAddPeopleToTagModal();
         setAssignToMembers([]);
@@ -207,7 +210,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : tErrors('unknownError');
-      toast.error(errorMessage);
+      NotificationToast.error(errorMessage);
     }
   };
 

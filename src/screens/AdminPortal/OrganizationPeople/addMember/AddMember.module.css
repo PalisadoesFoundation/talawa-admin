@@ -1,0 +1,163 @@
+.modalContent :global(.modal-dialog) {
+  width: var(--space-26);
+  max-width: var(--space-26);
+}
+
+.input {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  padding-right: 0;
+  padding-inline-end: 0;
+}
+
+.input :global(.searchBarContainer) {
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+}
+
+.input :global(.searchBarInputWrapper) {
+  min-width: 0;
+}
+
+.input:active {
+  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
+    var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
+
+  background-color: var(--color-blue-200);
+  border-color: var(--color-gray-200);
+  color: var(--color-gray-700);
+}
+
+.input:focus-within {
+  box-shadow: var(--border-shadow-xs) var(--border-shadow-xs)
+    var(--border-shadow-xs) rgba(0, 0, 0, 0.3);
+
+  border-color: var(--color-gray-200);
+}
+
+.tableHeadCell {
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-700);
+}
+
+.tableBodyCell {
+  font-size: var(--font-size-sm);
+}
+
+.tableRow:last-child td,
+.tableRow:last-child th {
+  border: 0;
+}
+
+.TableImage {
+  object-fit: cover;
+  margin-right: var(--space-2);
+  width: var(--space-10);
+  height: var(--space-10);
+  border-radius: var(--radius-full);
+}
+
+.eventsAttended,
+.membername {
+  color: var(--color-blue-200);
+}
+
+.membername {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-blue-200);
+  text-decoration: none;
+}
+
+.membername:hover {
+  color: var(--color-blue-500);
+  text-decoration: underline;
+}
+
+.subtleBlueGrey {
+  color: var(--color-blue-200);
+}
+
+.subtleBlueGrey:hover {
+  color: var(--color-blue-500);
+}
+
+.addButton {
+  margin-bottom: var(--space-5);
+  color: var(--color-gray-700);
+  background-color: var(--color-blue-200);
+  border-color: var(--color-blue-200);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.addButton:is(:hover, :active, :focus) {
+  background-color: var(--color-blue-500);
+  border-color: var(--color-gray-700);
+}
+
+.addButton:disabled {
+  margin-bottom: var(--space-5);
+}
+
+.headers {
+  border: none;
+  background-color: var(--color-white);
+  padding: var(--space-5);
+  color: var(--color-black);
+}
+
+.headers :global(.modal-title) {
+  color: var(--color-gray-700);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xl);
+}
+
+.headers :global(button.close),
+.headers :global(.btn-close) {
+  color: var(--color-red-500);
+  opacity: 1;
+}
+
+.borderNone {
+  border: none;
+}
+
+.colorPrimary {
+  background: var(--color-blue-200);
+  color: var(--color-gray-700);
+  --bs-btn-active-bg: var(--color-blue-200);
+  cursor: pointer;
+}
+
+.colorPrimary:hover,
+.colorPrimary:focus,
+.colorPrimary:active {
+  background-color: var(--color-blue-200);
+  box-shadow:
+    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
+      rgba(168, 199, 250, 1),
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
+      rgba(60, 64, 67, 0.15);
+  color: var(--color-gray-700);
+}
+
+.colorWhite {
+  color: var(--color-gray-700);
+}
+
+.removeButton {
+  margin-bottom: var(--space-5);
+  background-color: var(--color-red-100);
+  color: var(--color-red-500);
+  margin-right: var(--space-5);
+  --bs-btn-border-color: var(--color-red-100);
+}
+
+.removeButton:is(:hover, :active, :focus) {
+  background-color: var(--color-red-500);
+  border-color: var(--color-red-500);
+  color: var(--color-white);
+}

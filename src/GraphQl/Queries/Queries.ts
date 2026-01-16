@@ -864,6 +864,22 @@ export const MEMBERS_LIST = gql`
   }
 `;
 
+export const MEMBERS_LIST_WITH_DETAILS = gql`
+  query GetMembersByOrganizationWithDetails($organizationId: ID!) {
+    usersByOrganizationId(organizationId: $organizationId) {
+      id
+      name
+      firstName
+      lastName
+      emailAddress
+      role
+      avatarURL
+      createdAt
+      updatedAt
+    }
+  }
+`;
+
 // Query to filter out all the members with the macthing query and a particular OrgId
 export const ORGANIZATIONS_MEMBER_CONNECTION_LIST = gql`
   query Organizations(

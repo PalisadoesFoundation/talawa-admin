@@ -100,6 +100,7 @@
   "successfullyUpdated": "सफलतापूर्वक अपडेट किया गया",
   "sessionWarning": "निष्क्रियता के कारण सत्र समाप्त होने वाला है।",
   "sessionLogOut": "निष्क्रियता के कारण सत्र समाप्त हो गया।",
+  "logoutFailed": "साइन आउट विफल रहा",
   "all": "सभी",
   "active": "सक्रिय",
   "disabled": "अक्षम",
@@ -160,7 +161,6 @@
   "mobilePhoneNumber": "मोबाइल फोन नंबर",
   "personalDetailsHeading": "प्रोफ़ाइल विवरण",
   "workPhoneNumber": "कार्य फोन नंबर",
-
   "showPassword": "पासवर्ड दिखाएं",
   "hidePassword": "पासवर्ड छुपाएं",
   "volunteer": "स्वयंसेवक",
@@ -255,5 +255,19 @@
   "peopleTabTagName": "लोग",
   "or": "या",
   "eventNotFound": "ईवेंट आईडी {{id}} के साथ नहीं मिला",
-  "required": "आवश्यक"
+  "required": "आवश्यक",
+  "deleteConfirmation": "क्या आप वाकई इस आइटम को हटाना चाहते हैं? यह कार्रवाई पूर्ववत नहीं की जा सकती।",
+  "deleteEntityConfirmation": "क्या आप वाकई {{entityName}} को हटाना चाहते हैं? यह कार्रवाई पूर्ववत नहीं की जा सकती।",
+  "update": "अपडेट करें",
+  "imageNotFound": "छवि नहीं मिली",
+  "changeLanguage": "भाषा बदलें",
+  "selectField": "{{fieldName}} चुनें",
+  "userEvents": {
+    "presetToday": "आज",
+    "presetThisWeek": "इस सप्ताह",
+    "presetThisMonth": "इस महीने",
+    "presetNext7Days": "अगले 7 दिन",
+    "presetNext30Days": "अगले 30 दिन",
+    "presetNextMonth": "अगले महीने"
+  }
 }

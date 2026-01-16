@@ -1,6 +1,15 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "कृपया फिर से लॉगिन करें; आपका सत्र समाप्त हो गया है।"
+  },
+  "securedRoute": {
+    "sessionExpired": "कृपया फिर से लॉगिन करें; आपका सत्र समाप्त हो गया है।"
+  },
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
+  "customRecurrence": "कस्टम पुनरावृत्ति",
+  "invalidDetailsMessage": "कृपया दर्ज किए गए विवरणों की जाँच करें।",
+  "selectAtLeastOneDay": "कृपया कम से कम एक दिन चुनें।",
   "leaderboard": {
     "title": "लीडरबोर्ड",
     "searchByVolunteer": "स्वयंसेवक द्वारा खोजें",
@@ -507,7 +516,9 @@
     "sortPeople": "लोगों को सॉर्ट करें",
     "tagActions": "टैग क्रियाएँ",
     "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
-    "noTagsFound": "कोई टैग नहीं मिला"
+    "noTagsFound": "कोई टैग नहीं मिला",
+    "addMember": "सदस्य जोड़ें",
+    "removeMember": "सदस्य हटाएँ"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
@@ -727,7 +738,8 @@
     "deleteAgendaItem": "एजेंडा आइटम हटाएं",
     "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?",
     "event": "कार्यक्रम",
-    "search": "खोज"
+    "search": "खोज",
+    "attachmentPreview": "अटैचमेंट पूर्वावलोकन"
   },
   "eventListCard": {
     "deleteEvent": "ईवेंट हटाएँ",
@@ -837,9 +849,14 @@
     "earliestEndDate": "सबसे पहली समाप्ति तिथि",
     "lowestGoal": "सबसे कम उद्देश्य",
     "highestGoal": "सबसे ऊंचा उद्देश्य",
-    "errorLoading": "अभियान डेटा लोड करते समय त्रुटि हुई",
+    "errorLoading": "कैंपेन डेटा लोड करते समय त्रुटि हुई",
     "percentageRaised": "% एकत्रित",
-    "campaignProgress": "अभियान प्रगति: {{percentage}}%"
+    "campaignProgress": "कैंपेन प्रगति: {{percentage}}%",
+    "campaignNotFound": "कैंपेन नहीं मिली",
+    "dateRangeRequired": "कृपया एक मान्य तिथि सीमा चुनें",
+    "campaignNameRequired": "कैंपेन का नाम आवश्यक है",
+    "invalidDate": "अमान्य तिथि चुनी गई है",
+    "endDateBeforeStart": "समाप्ति तिथि प्रारंभ तिथि से पहले नहीं हो सकती"
   },
   "pledges": {
     "title": "निधि अभियान प्रतिज्ञाएँ",
@@ -855,6 +872,7 @@
     "updatePledge": "प्रतिज्ञा अद्यतन करें",
     "deletePledge": "प्रतिज्ञा हटाएँ",
     "amount": "मात्रा",
+    "amountMustBeAtLeastOne": "राशि कम से कम 1 होनी चाहिए",
     "editPledge": "प्रतिज्ञा संपादित करें",
     "deletePledgeMsg": "क्या आप वाकई इस प्रतिज्ञा को हटाना चाहते हैं?",
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
@@ -878,7 +896,8 @@
     "pledgeDate": "प्रतिज्ञा तिथि",
     "pledged": "प्रतिबद्ध",
     "donated": "दान किया गया",
-    "campaignNotActive": "अभियान वर्तमान में सक्रिय नहीं है"
+    "campaignNotActive": "अभियान वर्तमान में सक्रिय नहीं है",
+    "close": "बंद करें"
   },
   "createPostModal": {
     "title": "पदों",
@@ -1416,7 +1435,22 @@
     "pageNumber": "पृष्ठ {{page}}",
     "goToToday": "आज पर जाएं",
     "genderDistribution": "लिंग वितरण",
-    "ageDistribution": "आयु वितरण"
+    "ageDistribution": "आयु वितरण",
+    "age": "आयु",
+    "age18to40": "18-40",
+    "attendanceCount": "उपस्थिति गणना",
+    "close": "बंद करें",
+    "demographics": "जनसांख्यिकी",
+    "demography": "जनसांख्यिकी",
+    "exportData": "डेटा निर्यात करें",
+    "female": "महिला",
+    "gender": "लिंग",
+    "male": "पुरुष",
+    "other": "अन्य",
+    "over40": "40 से अधिक",
+    "today": "आज",
+    "trends": "रुझान",
+    "under18": "18 से कम"
   },
   "eventRegistrant": {
     "sort": "छांटें",
@@ -1451,7 +1485,10 @@
     "addingAttendee": "जोड़ा जा रहा है...",
     "male": "पुरुष",
     "female": "महिला",
-    "other": "अन्य"
+    "other": "अन्य",
+    "firstNamePlaceholder": "राज",
+    "lastNamePlaceholder": "कुमार",
+    "emailPlaceholder": "उदाहरण@gmail.com"
   },
   "settings": {
     "noeventsAttended": "कोई कार्यक्रम में उपस्थित नहीं",
@@ -1618,7 +1655,8 @@
     "on": "पर",
     "after": "के बाद",
     "customRecurrence": "कस्टम पुनरावृत्ति",
-    "repeatsEvery": "हर बार दोहराता है"
+    "repeatsEvery": "हर बार दोहराता है",
+    "noEventAvailable": "कोई कार्यक्रम उपलब्ध नहीं!"
   },
   "userEventCard": {
     "starts": "प्रारंभ होगा",
@@ -1852,7 +1890,12 @@
   },
   "checkIn": {
     "errorCheckingIn": "चेक-इन में त्रुटि",
-    "checkedInSuccessfully": "सफलतापूर्वक चेक-इन किया गया"
+    "checkedInSuccessfully": "सफलतापूर्वक चेक-इन किया गया",
+    "searchAttendees": "उपस्थित लोगों को खोजें",
+    "checkedIn": "चेक इन किया गया",
+    "downloadTag": "टैग डाउनलोड करें",
+    "checkIn": "चेक इन करें",
+    "eventCheckInManagement": "इवेंट चेक इन प्रबंधन"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
@@ -1878,7 +1921,13 @@
       "errorSendingInvites": "निमंत्रण भेजने में त्रुटि",
       "emailsLabel": "प्राप्तकर्ता ईमेल और नाम",
       "emailsHelp": "प्रत्येक प्राप्तकर्ता के लिए ईमेल और वैकल्पिक नाम प्रदान करें। आवश्यकतानुसार कई प्राप्तकर्ता जोड़ें।"
-    }
+    },
+    "selectUserWarning": "कृपया पहले जोड़ने के लिए एक उपयोगकर्ता चुनें!",
+    "addingAttendeeProgress": "उपस्थित व्यक्ति को जोड़ा जा रहा है..."
+  },
+  "eventRegistrantsWrapper": {
+    "buttonAriaLabel": "उपस्थित लोगों को दिखाएं",
+    "registerMemberButton": "सदस्य पंजीकृत करें"
   },
   "userCampaigns": {
     "title": "धन उगाहने के अभियान",
@@ -1969,6 +2018,8 @@
     "earliest": "प्रारंभिक",
     "requestAccepted": "अनुरोध सफलतापूर्वक स्वीकृत",
     "requestRejected": "अनुरोध सफलतापूर्वक अस्वीकृत",
+    "acceptRequest": "अनुरोध स्वीकार करें",
+    "rejectRequest": "अनुरोध अस्वीकार करें",
     "details": "विवरण",
     "manageGroup": "समूह प्रबंधित करें",
     "mostVolunteers": "सबसे अधिक स्वयंसेवक",
@@ -1992,7 +2043,9 @@
     "deleteVolunteerGroup": "{{name}} स्वयंसेवक समूह हटाएं",
     "deleteVolunteerEntry": "{{name}} स्वयंसेवक प्रविष्टि हटाएं",
     "viewGroup": "समूह देखें",
-    "editGroup": "समूह संपादित करें"
+    "editGroup": "समूह संपादित करें",
+    "invalidNumber": "अमान्य संख्या",
+    "viewToggle": "दृश्य टॉगल"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",
@@ -2141,9 +2194,6 @@
   "contact": {
     "card_aria": "संपर्क कार्ड"
   },
-  "securedRoute": {
-    "sessionExpired": "कृपया फिर से लॉगिन करें क्योंकि सत्र समाप्त हो गया है"
-  },
   "common": {
     "signOut": "साइन आउट",
     "signingOut": "साइन आउट हो रहा है...",
@@ -2180,5 +2230,11 @@
     "sortPeople": "लोगों को क्रमबद्ध करें",
     "unassign": "हटाएँ",
     "tags": "टैग"
+  },
+  "orgProfileField": {
+    "editCustomField": "कस्टम फ़ील्ड संपादित करें"
+  },
+  "userGlobalScreen": {
+    "globalFeatures": "वैश्विक सुविधाएं"
   }
 }

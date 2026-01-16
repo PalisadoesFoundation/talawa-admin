@@ -1,0 +1,22 @@
+.container {
+  min-height: 100vh;
+}
+
+.message {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.errorIcon {
+  font-size: var(--font-size-4xl);
+  color: var(--color-red-500);
+  margin-bottom: var(--space-5);
+}
+
+.errorIcon::before {
+  content: '⚠️';
+  margin-right: var(--space-3);
+}

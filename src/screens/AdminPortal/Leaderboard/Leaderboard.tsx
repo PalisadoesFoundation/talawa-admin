@@ -53,11 +53,10 @@ import silver from 'assets/images/silver.png';
 import bronze from 'assets/images/bronze.png';
 
 import type { InterfaceVolunteerRank } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
-import leaderboardStyles from './Leaderboard.module.css';
+import styles from './Leaderboard.module.css';
 
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
@@ -186,7 +185,7 @@ function Leaderboard(): JSX.Element {
         };
         return (
           <div
-            className={`${leaderboardStyles.volunteerCell}`}
+            className={styles.volunteerCell}
             onClick={handleNavigation}
             onKeyDown={(e) => {
               if (e.key === 'Enter' || e.key === ' ') {
@@ -238,7 +237,7 @@ function Leaderboard(): JSX.Element {
 
   return (
     <LoadingState isLoading={loading} variant="spinner">
-      <div className={leaderboardStyles.leaderboardContainer}>
+      <div className={styles.leaderboardContainer}>
         <SearchFilterBar
           searchPlaceholder={t('searchByVolunteer')}
           searchValue={searchTerm}
@@ -250,7 +249,7 @@ function Leaderboard(): JSX.Element {
           dropdowns={leaderboardDropdowns}
         />
 
-        <div className={leaderboardStyles.dataGridStyle}>
+        <div className={styles.dataGridStyle}>
           <DataGrid
             hideFooter
             autoHeight

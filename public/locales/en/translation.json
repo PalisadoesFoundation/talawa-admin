@@ -1,6 +1,15 @@
 {
+  "securedRouteForUser": {
+    "sessionExpired": "Please log in again; your session has expired."
+  },
+  "securedRoute": {
+    "sessionExpired": "Please log in again; your session has expired."
+  },
   "ends": "Ends",
   "occurrences": "Occurrences",
+  "customRecurrence": "Custom Recurrence",
+  "invalidDetailsMessage": "Please check the details you entered.",
+  "selectAtLeastOneDay": "Please select at least one day.",
   "leaderboard": {
     "title": "Leaderboard",
     "searchByVolunteer": "Search By Volunteer",
@@ -490,7 +499,9 @@
     "tagActions": "Tag Actions",
     "loadAssignedUsersError": "Error occurred while loading assigned users",
     "sortPeople": "Sort People",
-    "noTagsFound": "No tags found"
+    "noTagsFound": "No tags found",
+    "addMember": "Add Member",
+    "removeMember": "Remove Member"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
@@ -710,7 +721,8 @@
     "deleteAgendaItem": "Delete Agenda Item",
     "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
     "event": "Event",
-    "search": "Search"
+    "search": "Search",
+    "attachmentPreview": "Attachment preview"
   },
   "eventListCard": {
     "deleteEvent": "Delete Event",
@@ -820,9 +832,14 @@
     "earliestEndDate": "Earliest End Date",
     "lowestGoal": "Lowest Goal",
     "highestGoal": "Highest Goal",
-    "errorLoading": "Error occured while loading campaigns data",
+    "errorLoading": "Error occurred while loading campaigns data",
     "percentageRaised": "% Raised",
-    "campaignProgress": "Campaign progress: {{percentage}}%"
+    "campaignProgress": "Campaign progress: {{percentage}}%",
+    "campaignNotFound": "Campaign not found",
+    "dateRangeRequired": "Please select a valid date range",
+    "campaignNameRequired": "Campaign name is required",
+    "invalidDate": "Invalid date selected",
+    "endDateBeforeStart": "End date cannot be before start date"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
@@ -838,6 +855,7 @@
     "updatePledge": "Update Pledge",
     "deletePledge": "Delete Pledge",
     "amount": "Amount",
+    "amountMustBeAtLeastOne": "Amount must be at least 1",
     "editPledge": "Edit Pledge",
     "deletePledgeMsg": "Are you sure you want to delete this pledge?",
     "noPledges": "No Pledges Found",
@@ -861,7 +879,8 @@
     "pledgeDate": "Pledge Date",
     "pledged": "Pledged",
     "donated": "Donated",
-    "campaignNotActive": "Campaign is not currently active"
+    "campaignNotActive": "Campaign is not currently active",
+    "close": "Close"
   },
   "createPostModal": {
     "title": "Posts",
@@ -1018,7 +1037,22 @@
     "pageNumber": "Page {{page}}",
     "goToToday": "Go to today",
     "genderDistribution": "Gender Distribution",
-    "ageDistribution": "Age Distribution"
+    "ageDistribution": "Age Distribution",
+    "age": "Age",
+    "age18to40": "18-40",
+    "attendanceCount": "Attendance Count",
+    "close": "Close",
+    "demographics": "Demographics",
+    "demography": "Demography",
+    "exportData": "Export Data",
+    "female": "Female",
+    "gender": "Gender",
+    "male": "Male",
+    "other": "Other",
+    "over40": "Over 40",
+    "today": "Today",
+    "trends": "Trends",
+    "under18": "Under 18"
   },
   "eventRegistrant": {
     "sort": "Sort",
@@ -1053,7 +1087,10 @@
     "addingAttendee": "Adding...",
     "male": "Male",
     "female": "Female",
-    "other": "Other"
+    "other": "Other",
+    "firstNamePlaceholder": "John",
+    "lastNamePlaceholder": "Doe",
+    "emailPlaceholder": "abc@gmail.com"
   },
   "forgotPassword": {
     "title": "Talawa Forgot Password",
@@ -1601,7 +1638,8 @@
     "on": "On",
     "after": "After",
     "customRecurrence": "Custom Recurrence",
-    "repeatsEvery": "Repeats Every"
+    "repeatsEvery": "Repeats Every",
+    "noEventAvailable": "No Event Available!"
   },
   "userEventCard": {
     "starts": "Starts",
@@ -1835,7 +1873,12 @@
   },
   "checkIn": {
     "errorCheckingIn": "Error checking in",
-    "checkedInSuccessfully": "Checked in successfully"
+    "checkedInSuccessfully": "Checked in successfully",
+    "searchAttendees": "Search Attendees",
+    "checkedIn": "Checked In",
+    "downloadTag": "Download Tag",
+    "checkIn": "Check In",
+    "eventCheckInManagement": "Event Check In Management"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",
@@ -1861,7 +1904,13 @@
       "errorSendingInvites": "Error sending invites",
       "emailsLabel": "Recipient emails and names",
       "emailsHelp": "Provide email and optional name for each recipient. Add multiple recipients as needed."
-    }
+    },
+    "selectUserWarning": "Please choose a user to add first!",
+    "addingAttendeeProgress": "Adding the attendee..."
+  },
+  "eventRegistrantsWrapper": {
+    "buttonAriaLabel": "Show Attendees",
+    "registerMemberButton": "Register Member"
   },
   "userCampaigns": {
     "title": "Fundraising Campaigns",
@@ -1952,6 +2001,8 @@
     "earliest": "Earliest",
     "requestAccepted": "Request accepted successfully",
     "requestRejected": "Request rejected successfully",
+    "acceptRequest": "Accept Request",
+    "rejectRequest": "Reject Request",
     "details": "Details",
     "manageGroup": "Manage Group",
     "mostVolunteers": "Most Volunteers",
@@ -1975,7 +2026,9 @@
     "deleteVolunteerGroup": "Delete {{name}} volunteer group",
     "deleteVolunteerEntry": "Delete {{name}} volunteer entry",
     "viewGroup": "View group",
-    "editGroup": "Edit group"
+    "editGroup": "Edit group",
+    "invalidNumber": "Invalid number",
+    "viewToggle": "Toggle view"
   },
   "userVolunteer": {
     "title": "Volunteership",
@@ -2141,9 +2194,6 @@
   "contact": {
     "card_aria": "Contact card"
   },
-  "securedRoute": {
-    "sessionExpired": "Kindly relogin as session has expired"
-  },
   "common": {
     "signOut": "Sign out",
     "signingOut": "Signing out...",
@@ -2180,5 +2230,11 @@
     "sortPeople": "Sort People",
     "unassign": "Unassign",
     "tags": "Tags"
+  },
+  "orgProfileField": {
+    "editCustomField": "Edit Custom Field"
+  },
+  "userGlobalScreen": {
+    "globalFeatures": "Global Features"
   }
 }

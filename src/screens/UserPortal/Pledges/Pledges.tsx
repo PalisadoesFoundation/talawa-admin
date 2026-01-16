@@ -5,7 +5,7 @@
  */
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button, ProgressBar } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import styles from './Pledges.module.css';
 import { useTranslation } from 'react-i18next';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -25,7 +25,7 @@ import {
   type GridCellParams,
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
-import Avatar from 'components/Avatar/Avatar';
+import Avatar from 'shared-components/Avatar/Avatar';
 import dayjs from 'dayjs';
 import { currencySymbols } from 'utils/currency';
 import PledgeDeleteModal from 'screens/AdminPortal/FundCampaignPledge/deleteModal/PledgeDeleteModal';

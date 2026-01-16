@@ -1,7 +1,56 @@
-/* PluginStore component styles */
-
 .pageContent {
   padding-right: var(--space-7);
+}
+
+.dropdown {
+  background-color: var(--color-gray-50);
+  min-width: var(--space-15);
+  border: var(--border-1) solid var(--color-gray-700);
+  color: var(--color-gray-700);
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown:is(
+  :hover,
+  :focus,
+  :active,
+  :focus-visible,
+  .show,
+  :disabled,
+  :checked
+) {
+  box-shadow:
+    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
+      rgba(168, 199, 250, 1),
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
+      rgba(60, 64, 67, 0.15);
+  border: var(--border-1) solid var(--color-gray-700);
+  color: var(--color-gray-700);
+}
+
+.dropdown:is(:focus, :focus-visible) {
+  outline: var(--border-2) solid var(--color-blue-200);
+}
+
+.createorgdropdown {
+  background-color: var(--color-gray-100);
+  border: var(--border-1) solid var(--color-gray-700);
+  height: var(--space-10);
+  margin-top: var(--space-4);
+  color: var(--color-gray-700);
+}
+
+.createorgdropdown:active,
+.createorgdropdown:hover {
+  background-color: var(--color-gray-100);
+  border-color: var(--color-gray-700);
+  color: var(--color-gray-700);
+  box-shadow:
+    0 var(--shadow-offset-xs) var(--shadow-blur-sm) var(--shadow-spread-none)
+      rgba(168, 199, 250, 1),
+    0 var(--shadow-offset-md) var(--shadow-blur-lg) var(--shadow-spread-sm)
+      rgba(60, 64, 67, 0.15);
 }
 
 .pluginListContainer {

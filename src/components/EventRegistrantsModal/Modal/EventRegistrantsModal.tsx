@@ -55,6 +55,7 @@ import type { InterfaceUser } from 'types/shared-components/User/interface';
 import styles from '../EventRegistrants.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { BaseModal } from 'shared-components/BaseModal';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 type ModalPropType = {
   show: boolean;
@@ -78,6 +79,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
     keyPrefix: 'eventRegistrantsModal',
   });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   // First, get event details to determine if it's recurring or standalone
   const { data: eventData } = useQuery(EVENT_DETAILS, {
@@ -104,10 +106,10 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   // Function to add a new registrant to the event
   const addRegistrant = (): void => {
     if (member == null) {
-      NotificationToast.warning('Please choose an user to add first!');
+      NotificationToast.warning(t('selectUserWarning'));
       return;
     }
-    NotificationToast.warning('Adding the attendee...');
+    NotificationToast.warning(t('addingAttendeeProgress'));
     const addVariables = isRecurring
       ? { userId: member.id, recurringEventInstanceId: eventId }
       : { userId: member.id, eventId: eventId };
@@ -128,90 +130,97 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   };
 
   return (
-    <section>
-      <AddOnSpotAttendee
-        show={open}
-        handleClose={() => setOpen(false)}
-        reloadMembers={() => {
-          attendeesRefetch();
-        }}
-      />
-      <InviteByEmailModal
-        show={inviteOpen}
-        handleClose={() => setInviteOpen(false)}
-        eventId={eventId}
-        isRecurring={isRecurring}
-        onInvitesSent={() => {
-          attendeesRefetch();
-        }}
-      />
-      <BaseModal
-        show={show}
-        onHide={handleClose}
-        title={t('eventRegistrantsTitle')}
-        dataTestId="invite-modal"
-        showCloseButton
-        footer={
-          <div>
-            <Button
-              className={styles.inviteButton}
-              data-testid="invite-by-email-btn"
-              onClick={() => setInviteOpen(true)}
-            >
-              {t('inviteByEmailButton')}
-            </Button>
-
-            <Button
-              className={styles.addButton}
-              data-testid="add-registrant-btn"
-              onClick={addRegistrant}
-            >
-              {t('addRegistrantButton')}
-            </Button>
-          </div>
-        }
-      >
-        <Autocomplete
-          id="addRegistrant"
-          onChange={(_, newMember): void => {
-            setMember(newMember);
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
+      <section>
+        <AddOnSpotAttendee
+          show={open}
+          handleClose={() => setOpen(false)}
+          reloadMembers={() => {
+            attendeesRefetch();
           }}
-          noOptionsText={
-            <div className="d-flex ">
-              <p className="me-2">{t('noRegistrationsFound')}</p>
-              <span
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    setOpen(true);
-                  }
-                }}
-                className={`underline ${styles.underlineText}`}
-                onClick={() => {
-                  setOpen(true);
-                }}
+        />
+        <InviteByEmailModal
+          show={inviteOpen}
+          handleClose={() => setInviteOpen(false)}
+          eventId={eventId}
+          isRecurring={isRecurring}
+          onInvitesSent={() => {
+            attendeesRefetch();
+          }}
+        />
+        <BaseModal
+          show={show}
+          onHide={handleClose}
+          title={t('eventRegistrantsTitle')}
+          dataTestId="invite-modal"
+          showCloseButton
+          footer={
+            <div>
+              <Button
+                className={styles.inviteButton}
+                data-testid="invite-by-email-btn"
+                onClick={() => setInviteOpen(true)}
               >
-                {t('addOnspotRegistrationLink')}
-              </span>
+                {t('inviteByEmailButton')}
+              </Button>
+
+              <Button
+                className={styles.addButton}
+                data-testid="add-registrant-btn"
+                onClick={addRegistrant}
+              >
+                {t('addRegistrantButton')}
+              </Button>
             </div>
           }
-          options={memberData?.usersByOrganizationId || []}
-          getOptionLabel={(member: InterfaceUser): string =>
-            member.name || 'Unknown User'
-          }
-          renderInput={(params): React.ReactNode => (
-            <TextField
-              {...params}
-              data-testid="autocomplete"
-              label={t('addRegistrantLabel') as string}
-              placeholder={t('addRegistrantPlaceholder') as string}
-            />
-          )}
-        />
-        <br />
-      </BaseModal>
-    </section>
+        >
+          <Autocomplete
+            id="addRegistrant"
+            onChange={(_, newMember): void => {
+              setMember(newMember);
+            }}
+            noOptionsText={
+              <div className="d-flex ">
+                <p className="me-2">{t('noRegistrationsFound')}</p>
+                <span
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      setOpen(true);
+                    }
+                  }}
+                  className={`underline ${styles.underlineText}`}
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                >
+                  {t('addOnspotRegistrationLink')}
+                </span>
+              </div>
+            }
+            options={memberData?.usersByOrganizationId || []}
+            getOptionLabel={(member: InterfaceUser): string =>
+              member.name || 'Unknown User'
+            }
+            renderInput={(params): React.ReactNode => (
+              <TextField
+                {...params}
+                data-testid="autocomplete"
+                label={t('addRegistrantLabel') as string}
+                placeholder={t('addRegistrantPlaceholder') as string}
+              />
+            )}
+          />
+          <br />
+        </BaseModal>
+      </section>
+    </ErrorBoundaryWrapper>
   );
 };

@@ -16,7 +16,7 @@ import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueri
 import type { RenderResult } from '@testing-library/react';
 import { InterfacePostEdge } from 'types/Post/interface';
 import i18nForTest from 'utils/i18nForTest';
-import { I18nextProvider } from 'components/test-utils/I18nextProviderMock';
+import { I18nextProvider } from 'test-utils/I18nextProviderMock';
 import dayjs from 'dayjs';
 
 // Hoisted mocks (must be before vi.mock calls)
@@ -72,7 +72,7 @@ vi.mock('shared-components/LoadingState/LoadingState', () => ({
 }));
 
 // Mock InfiniteScrollLoader
-vi.mock('components/InfiniteScrollLoader/InfiniteScrollLoader', () => ({
+vi.mock('shared-components/InfiniteScrollLoader/InfiniteScrollLoader', () => ({
   default: () => (
     <div data-testid="infinite-scroll-loader">Loading more...</div>
   ),

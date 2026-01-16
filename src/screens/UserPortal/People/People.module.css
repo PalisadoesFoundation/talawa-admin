@@ -1,0 +1,59 @@
+.mainContainer_people {
+  margin-top: var(--space-8);
+  width: 100%;
+  flex-grow: 3;
+  max-height: 90vh;
+  overflow: auto;
+  padding: 0 var(--space-5);
+}
+
+.calendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  width: 100%;
+  gap: var(--space-5);
+}
+
+/* 3. Mobile responsiveness: Only allow wrapping on actual small screens */
+@media (max-width: 768px) {
+  .calendar__header {
+    flex-wrap: wrap;
+  }
+}
+
+.people_content {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100% - var(--space-9));
+}
+
+.people_card_header {
+  background-color: var(--color-gray-100);
+  display: flex;
+  border: var(--border-1) solid var(--color-gray-200);
+  padding: var(--space-5) var(--space-7);
+  margin-top: var(--space-7);
+  border-top-left-radius: var(--radius-xl);
+  border-top-right-radius: var(--radius-xl);
+}
+
+.people_card_header_col_1 {
+  flex: 1;
+}
+
+.people_card_header_col_2 {
+  flex: 2;
+}
+
+.people_card_main_container {
+  display: flex;
+  flex-direction: column;
+  border: var(--border-1) solid var(--color-gray-100);
+  padding: var(--space-5) var(--space-7);
+  gap: var(--space-6);
+  border-bottom-left-radius: var(--radius-2xl);
+  border-bottom-right-radius: var(--radius-2xl);
+  background-color: var(--color-white);
+}
