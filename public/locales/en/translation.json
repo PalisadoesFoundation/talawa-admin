@@ -854,7 +854,17 @@
     "addingAttendee": "Adding...",
     "male": "Male",
     "female": "Female",
-    "other": "Other"
+    "other": "Other",
+    "hello": "Hello",
+    "email": "Email",
+    "password": "Password",
+    "copyPassword": "Copy Password",
+    "close": "Close",
+    "show": "Show",
+    "hide": "Hide",
+    "passwordCopied": "Password copied!",
+    "copyFailed": "Failed to copy password",
+    "passwordWarning": "Please save this password. Ask attendee to change it after login."
   },
   "forgotPassword": {
     "title": "Talawa Forgot Password",
@@ -1598,7 +1608,7 @@
   "commentCard": {
     "commentDeletedSuccessfully": "Comment deleted successfully",
     "commentUpdatedSuccessfully": "Comment updated successfully",
-    "pleaseSignInToLikeComments": "Please sign in to like comments.",
+    "pleaseSignInToLikeCoonSpotAttendeemments": "Please sign in to like comments.",
     "couldNotRemoveExistingLike": "Could not find an existing like to remove.",
     "alreadyLikedComment": "You have already liked this comment.",
     "noAssociatedVoteFound": "No associated vote found to remove.",
@@ -1607,4 +1617,5 @@
     "deleting": "Deleting…",
     "emptyCommentError": "Please enter a comment before submitting."
   }
+
 }

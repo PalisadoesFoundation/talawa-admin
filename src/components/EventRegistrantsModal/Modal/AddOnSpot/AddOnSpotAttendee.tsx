@@ -5,6 +5,9 @@
  * by collecting their details such as name, email, phone number, and gender.
  * It validates the form inputs, submits the data to the server using a GraphQL
  * mutation, and handles success or error responses appropriately.
+ * Security: Each attendee receives a unique, secure randomly generated password
+ * that meets all validation requirements (uppercase, lowercase, numbers, special characters).
+ *
  *
  * @component
  * @param {InterfaceAddOnSpotAttendeeProps} props - The props for the component.
@@ -48,6 +51,8 @@ import type {
 } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
+import { generateSecurePassword } from 'utils/generateSecurePassword';
+import AddOnSpotSuccessModal from 'components/EventRegistrantsModal/Modal/AddOnSpot/AddOnSpotSuccessModal';
 
 const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   show,
@@ -66,6 +71,13 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   const { orgId } = useParams<{ orgId: string }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [addSignUp] = useMutation(SIGNUP_MUTATION);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [generatedPassword, setGeneratedPassword] = useState('');
+  const [createdUser, setCreatedUser] = useState({
+    name: '',
+    email: '',
+  });
+
   const validateForm = (): boolean => {
     if (!formData.firstName || !formData.lastName || !formData.email) {
       toast.error(t('invalidDetailsMessage'));
@@ -111,20 +123,30 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
     setIsSubmitting(true);
 
     try {
+      const securePassword = generateSecurePassword();
       const response = await addSignUp({
         variables: {
           ID: orgId,
           name: `${formData.firstName} ${formData.lastName}`.trim(),
           email: formData.email,
-          password: '123456',
+          password: securePassword,
         },
       });
 
       if (response.data?.signUp) {
         toast.success(t('attendeeAddedSuccess'));
+
+        const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+
+        setGeneratedPassword(securePassword);
+        setCreatedUser({
+          name: fullName,
+          email: formData.email,
+        });
+        setShowSuccessModal(true);
+
         resetForm();
         reloadMembers();
-        handleClose();
       }
     } catch (error) {
       errorHandler(t, error as Error);
@@ -236,6 +258,16 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
           </Form>
         </Modal.Body>
       </Modal>
+      <AddOnSpotSuccessModal
+        show={showSuccessModal}
+        password={generatedPassword}
+        email={createdUser.email}
+        attendeeName={`${createdUser.name}`}
+        handleClose={() => {
+          setShowSuccessModal(false);
+          handleClose(); // close main modal AFTER success modal
+        }}
+      />
     </>
   );
 };

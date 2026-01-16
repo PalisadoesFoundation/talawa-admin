@@ -19,6 +19,10 @@ vi.mock('react-toastify', () => ({
     error: vi.fn(),
   },
 }));
+const TEST_PASSWORD = 'TestPass124!';
+vi.mock('../../../../utils/generateSecurePassword', () => ({
+  generateSecurePassword: vi.fn(() => TEST_PASSWORD),
+}));
 
 const mockProps = {
   show: true,
@@ -41,7 +45,7 @@ const MOCKS = [
         ID: '123',
         name: 'John Doe',
         email: 'john@example.com',
-        password: '123456',
+        password: TEST_PASSWORD,
       },
     },
     result: {
@@ -65,7 +69,7 @@ const ERROR_MOCKS = [
         ID: '123',
         name: 'John Doe',
         email: 'john@example.com',
-        password: '123456',
+        password: TEST_PASSWORD,
       },
     },
     error: new Error('Failed to add attendee'),
@@ -113,7 +117,7 @@ describe('AddOnSpotAttendee Component', () => {
             email: 'john@example.com',
             phoneNo: '1234567890',
             gender: 'Male',
-            password: '123456',
+            password: TEST_PASSWORD,
             orgId: '123',
           },
         },
@@ -191,13 +195,27 @@ describe('AddOnSpotAttendee Component', () => {
     await userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
     await userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
     await userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
-    const genderSelect = screen.getByLabelText('Gender');
-    fireEvent.change(genderSelect, { target: { value: 'Male' } });
+
+    fireEvent.change(screen.getByLabelText('Gender'), {
+      target: { value: 'Male' },
+    });
 
     fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
+
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalled();
       expect(mockProps.reloadMembers).toHaveBeenCalled();
+    });
+
+    const successTitle = await screen.findByText(
+      /attendee added successfully/i,
+    );
+    expect(successTitle).toBeInTheDocument();
+
+    expect(mockProps.handleClose).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getAllByRole('button', { name: /close/i })[1]);
+    await waitFor(() => {
       expect(mockProps.handleClose).toHaveBeenCalled();
     });
   });
