@@ -26,11 +26,9 @@ const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  error: vi.fn(),
+  success: vi.fn(),
 }));
 
 vi.mock('react-router', async () => {
