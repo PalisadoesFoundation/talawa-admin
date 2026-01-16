@@ -7,95 +7,210 @@ import re
 import sys
 from collections import namedtuple
 
-# Define namedtuples for storing results
-Violation = namedtuple("Violation", ["file_path", "css_file", "reason"])
-CorrectImport = namedtuple("CorrectImport", ["file_path", "css_file"])
-EmbeddedViolation = namedtuple("EmbeddedViolation", ["file_path", "css_codes"])
-CSSCheckResult = namedtuple(
-    "CSSCheckResult", ["violations", "correct_imports", "embedded_violations"]
+# Define namedtuple for storing detailed violations
+DetailedViolation = namedtuple(
+    "DetailedViolation",
+    [
+        "file_path",
+        "line_number",
+        "violation_type",
+        "code_snippet",
+        "description",
+    ],
 )
+CSSCheckResult = namedtuple("CSSCheckResult", ["violations"])
 
 
-def check_embedded_css(content: str) -> list:
-    """Check for embedded CSS in the content.
+def check_embedded_styles(
+    content: str, file_path: str
+) -> list[DetailedViolation]:
+    """Check for embedded CSS and style violations in the content.
 
     Args:
         content: The content of the file to check.
+        file_path: Path to the file being checked.
 
     Returns:
-        list: A list of embedded CSS violations found.
+        list: A list of DetailedViolation objects found.
     """
-    color_code_pattern = r"#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b"
     violations = []
+    lines = content.splitlines()
 
-    for line_number, line in enumerate(content.splitlines(), start=1):
-        matches = re.findall(color_code_pattern, line)
-        for match in matches:
-            violations.append((line_number, match))
+    # Pattern definitions
+    patterns = {
+        "hex_color": {
+            "regex": r"#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})\b",
+            "description": """Hex color code found.
+            Use CSS variables from stylesheet instead.""",
+        },
+        "rgb_color": {
+            "regex": (
+                r"\brgba?\s*\(\s*"
+                r"\d+\s*,\s*"
+                r"\d+\s*,\s*"
+                r"\d+\s*"
+                r"(?:,\s*[\d.]+\s*)?"
+                r"\)"
+            ),
+            "description": """RGB/RGBA color code found.
+            Use CSS variables from stylesheet instead.""",
+        },
+        "hsl_color": {
+            "regex": (
+                r"\bhsla?\s*\(\s*"
+                r"\d+\s*,\s*"
+                r"\d+%\s*,\s*"
+                r"\d+%\s*"
+                r"(?:,\s*[\d.]+\s*)?"
+                r"\)"
+            ),
+            "description": """HSL/HSLA color code found.
+            Use CSS variables from stylesheet instead.""",
+        },
+        "inline_style_object": {
+            "regex": r"style\s*=\s*\{\{",
+            "description": """Inline style object found.
+            Move styles to CSS file and use className instead.""",
+        },
+        "inline_style_string": {
+            "regex": r'style\s*=\s*["\']',
+            "description": """Inline style string found.
+            Move styles to CSS file and use className instead.""",
+        },
+        "camelcase_css_property": {
+            "regex": (
+                r"\b(?:"
+                r"backgroundColor|fontSize|fontFamily|fontWeight|lineHeight|"
+                r"marginTop|marginBottom|marginLeft|marginRight|"
+                r"paddingTop|paddingBottom|paddingLeft|paddingRight|"
+                r"borderRadius|boxShadow|textAlign|textDecoration|"
+                r"zIndex|maxWidth|minWidth|maxHeight|minHeight"
+                r")\s*[:=]"
+            ),
+            "description": """Camelcase CSS property found.
+            Move styles to CSS file and use className instead.""",
+        },
+        "pixel_value": {
+            "regex": (
+                r":\s*"
+                r"['\"]?"
+                r"\d+(?:px|em|rem|vh|vw|%)"
+                r"['\"]?"
+                r"(?=\s*[,}])"
+            ),
+            "description": """Direct size value assignment found.
+            Move styles to CSS file and use className instead.""",
+        },
+    }
+
+    in_block_comment = False
+
+    for line_number, line in enumerate(lines, start=1):
+        # Skip comments and import statements
+        stripped_line = line.strip()
+        if stripped_line.startswith(("import ", "import{", "import(")):
+            continue
+
+        result = ""
+        i = 0
+        while i < len(line):
+            if in_block_comment:
+                if line[i : i + 2] == "*/":
+                    in_block_comment = False
+                    i += 2
+                else:
+                    i += 1
+            else:
+                if line[i : i + 2] == "/*":
+                    in_block_comment = True
+                    i += 2
+                elif line[i : i + 2] == "//":
+                    break
+                else:
+                    result += line[i]
+                    i += 1
+        code_line = result
+
+        if not code_line.strip():
+            continue
+
+        # Check for URL references (skip these as they're not style violations)
+        if (
+            "url(" in code_line.lower()
+            or "href=" in code_line.lower()
+            or "src=" in code_line.lower()
+        ):
+            # Skip hex codes in URLs
+            continue
+
+        for violation_type, pattern_info in patterns.items():
+            matches = re.finditer(pattern_info["regex"], code_line)
+            for match in matches:
+                if violation_type == "camelcase_css_property":
+                    # Check if it's actually in a style context
+                    preceding_text = code_line[: match.start()].strip()
+                    if not any(
+                        keyword in preceding_text
+                        for keyword in ["style", "css", "Style", "CSS"]
+                    ):
+                        if "{" not in code_line[: match.start()]:
+                            continue
+                if violation_type == "pixel_value":
+                    # Look for style-related keywords nearby
+                    context_window = code_line[
+                        max(0, match.start() - 30) : min(
+                            len(code_line), match.end() + 30
+                        )
+                    ]
+                    if not any(
+                        keyword in context_window
+                        for keyword in [
+                            "style",
+                            "Style",
+                            "width",
+                            "height",
+                            "size",
+                            "margin",
+                            "padding",
+                        ]
+                    ):
+                        continue
+
+                violations.append(
+                    DetailedViolation(
+                        file_path=file_path,
+                        line_number=line_number,
+                        violation_type=violation_type,
+                        code_snippet=match.group(0),
+                        description=pattern_info["description"],
+                    )
+                )
 
     return violations
 
 
 def process_typescript_file(
-    file_path,
-    directory,
-    allowed_css_patterns,
-    violations,
-    correct_css_imports,
-    embedded_css_violations,
-):
-    """Process a TypeScript file for CSS violations and correct CSS imports.
+    file_path: str, all_violations: list[DetailedViolation]
+) -> None:
+    """Process a TypeScript file for CSS violations.
 
     Args:
         file_path: Path to the TypeScript file to process.
-        directory: Base directory being scanned.
-        allowed_css_patterns: List of allowed CSS file patterns.
-        violations: List to store CSS violations.
-        correct_css_imports: List to store correct CSS imports.
-        embedded_css_violations: List to store embedded CSS violations.
+        all_violations: List to store violations found.
 
     Returns:
-        None: This function modifies provided lists & does not return any value.
+        None: This function modifies the provided list.
     """
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             content = f.read()
-    except (IOError, UnicodeDecodeError) as e:
-        print(f"Error reading file {file_path}: {e}")
+    except (OSError, UnicodeDecodeError) as e:
+        print(f"Error reading file {file_path}: {e}", file=sys.stderr)
         return
 
-    # Check for CSS imports with an improved regex pattern
-    css_imports = re.findall(r'import\s+.*?["\'](.+?\.css)["\']', content)
-    found_correct_import = False
-    for css_file in css_imports:
-        base_path = os.path.dirname(file_path)
-        css_file_path = os.path.normpath(os.path.join(base_path, css_file))
-        if not os.path.exists(css_file_path):
-            src_dir = os.path.abspath(directory)
-            css_file_path = os.path.join(src_dir, css_file)
-
-        if not os.path.exists(css_file_path):
-            violations.append(Violation(file_path, css_file, "File not found"))
-        elif any(
-            css_file.endswith(pattern) for pattern in allowed_css_patterns
-        ):
-            correct_css_imports.append(CorrectImport(file_path, css_file))
-            found_correct_import = True
-        else:
-            violations.append(Violation(file_path, css_file, "Invalid import"))
-
-    # Fail if no correct import of app.module.css is found
-    if not found_correct_import:
-        violations.append(
-            Violation(file_path, "app.module.css", "Missing required import")
-        )
-
-    # Check for embedded CSS
-    embedded_css = check_embedded_css(content)
-    if embedded_css:
-        embedded_css_violations.append(
-            EmbeddedViolation(file_path, embedded_css)
-        )
+    # Check for embedded styles
+    violations = check_embedded_styles(content, file_path)
+    all_violations.extend(violations)
 
 
 def check_files(
@@ -103,28 +218,19 @@ def check_files(
     files: list,
     exclude_files: list,
     exclude_directories: list,
-    allowed_css_patterns: list,
 ) -> CSSCheckResult:
     """Scan directories and specific files for TS files and their violations.
-
-    This function checks TypeScript files in given directories for violations.
 
     Args:
         directories: List of directories to scan for TypeScript files.
         files: List of specific files to check.
         exclude_files: List of file paths to exclude from the scan.
         exclude_directories: List of directories to exclude from the scan.
-        allowed_css_patterns: List of allowed CSS patterns for validation.
 
     Returns:
-        CSSCheckResult: A result object containing:
-            - violations: List of CSS violations found.
-            - correct_css_imports: List of correct CSS imports.
-            - embedded_css_violations: List of embedded CSS violations.
+        CSSCheckResult: A result object containing violations found.
     """
-    violations = []
-    correct_css_imports = []
-    embedded_css_violations = []
+    all_violations = []
 
     exclude_files = set(os.path.abspath(file) for file in exclude_files)
     exclude_directories = set(
@@ -135,7 +241,9 @@ def check_files(
         directory = os.path.abspath(directory)
 
         for root, _, files_in_dir in os.walk(directory):
-            if any(
+            root_dirname = os.path.basename(root)
+
+            if root_dirname in {"__tests__", "test", "tests"} or any(
                 root.startswith(exclude_dir)
                 for exclude_dir in exclude_directories
             ):
@@ -147,33 +255,9 @@ def check_files(
                     continue
 
                 if file.endswith((".ts", ".tsx")) and not any(
-                    pattern in root
-                    for pattern in [
-                        "__tests__",
-                        ".test.",
-                        ".spec.",
-                        "test/",
-                        "tests/",
-                    ]
+                    pattern in file for pattern in [".test.", ".spec."]
                 ):
-                    process_typescript_file(
-                        file_path,
-                        directory,
-                        allowed_css_patterns,
-                        violations,
-                        correct_css_imports,
-                        embedded_css_violations,
-                    )
-
-                # Fail if CSS file exists in the same directory
-                if file.endswith(".css") and root == os.path.dirname(
-                    file_path
-                ):
-                    violations.append(
-                        Violation(
-                            file_path, file, "CSS file in same directory"
-                        )
-                    )
+                    process_typescript_file(file_path, all_violations)
 
     # Process individual files explicitly listed
     for file_path in files:
@@ -181,21 +265,12 @@ def check_files(
         if file_path not in exclude_files and file_path.endswith(
             (".ts", ".tsx")
         ):
-            process_typescript_file(
-                file_path,
-                os.path.dirname(file_path),
-                allowed_css_patterns,
-                violations,
-                correct_css_imports,
-                embedded_css_violations,
-            )
+            process_typescript_file(file_path, all_violations)
 
-    return CSSCheckResult(
-        violations, correct_css_imports, embedded_css_violations
-    )
+    return CSSCheckResult(violations=all_violations)
 
 
-def validate_directories_input(input_directories):
+def validate_directories_input(input_directories: list[str]) -> list[str]:
     """Validate that the --directories input is correctly formatted.
 
     Args:
@@ -221,21 +296,75 @@ def validate_directories_input(input_directories):
     return validated_dirs
 
 
-def main():
-    """Main function to run the CSS check.
+def format_violation_output(violations: list[DetailedViolation]) -> str:
+    """Format violations for human-readable output.
 
-    This function serves as the entry point to run the CSS check. It processes
-    directories and files, checks for CSS violations, and prints the results.
+    Args:
+        violations: List of violations to format.
+
+    Returns:
+        output: A formatted string containing all violations and a summary.
+    """
+    if not violations:
+        return ""
+
+    output_lines = ["=" * 80]
+    output_lines.append("EMBEDDED CSS VIOLATIONS FOUND")
+    output_lines.append("=" * 80)
+    output_lines.append("")
+
+    # Group violations by file
+    violations_by_file = {}
+    for violation in violations:
+        if violation.file_path not in violations_by_file:
+            violations_by_file[violation.file_path] = []
+        violations_by_file[violation.file_path].append(violation)
+
+    # Sort files for consistent output
+    for file_path in sorted(violations_by_file.keys()):
+        file_violations = violations_by_file[file_path]
+        output_lines.append(f"File: {file_path}")
+        output_lines.append("-" * 80)
+
+        # Sort violations by line number
+        for violation in sorted(file_violations, key=lambda v: v.line_number):
+            output_lines.append(
+                f"  Line {violation.line_number}: [{violation.violation_type}]"
+            )
+            output_lines.append(f"    Code: {violation.code_snippet}")
+            output_lines.append(f"    Issue: {violation.description}")
+            output_lines.append("")
+
+        output_lines.append("")
+
+    output_lines.append("=" * 80)
+    output_lines.append("SUMMARY")
+    output_lines.append("=" * 80)
+    output_lines.append(f"Total violations: {len(violations)}")
+    output_lines.append(f"Files affected: {len(violations_by_file)}")
+    output_lines.append("")
+    output_lines.append("Please address these violations by:")
+    output_lines.append("1. Moving all styles to CSS files")
+    output_lines.append("2. Using className instead of inline styles")
+    output_lines.append("3. Defining colors and sizes as CSS variables")
+    output_lines.append("4. Importing and using CSS modules properly")
+    output_lines.append("")
+
+    return "\n".join(output_lines)
+
+
+def main():
+    """Run the CSS check.
 
     Args:
         None
 
     Returns:
-        None: This function does not return any value. It prints the results
-        and exits with a code indicating success (0) or failure (1).
+        None
     """
     parser = argparse.ArgumentParser(
-        description="Check for CSS violations in TypeScript files."
+        description="""Check for embedded CSS and
+       style violations in TypeScript files."""
     )
     parser.add_argument(
         "--directories",
@@ -261,17 +390,6 @@ def main():
         default=[],
         help="Directories to exclude from analysis.",
     )
-    parser.add_argument(
-        "--allowed_css_patterns",
-        nargs="*",
-        default=["app.module.css"],
-        help="Allowed CSS file patterns.",
-    )
-    parser.add_argument(
-        "--show_success",
-        action="store_true",
-        help="Show successful CSS imports.",
-    )
     args = parser.parse_args()
 
     if not args.directories and not args.files:
@@ -286,7 +404,7 @@ def main():
             else []
         )
     except ValueError as e:
-        print(f"Error: {e}")
+        print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)
 
     result = check_files(
@@ -294,56 +412,14 @@ def main():
         files=args.files,
         exclude_files=args.exclude_files,
         exclude_directories=args.exclude_directories,
-        allowed_css_patterns=args.allowed_css_patterns,
     )
 
-    output = []
-    exit_code = 0
     if result.violations:
-        output.append("CSS Import Violations:")
-        for violation in result.violations:
-            output.append(
-                f"- {violation.file_path}: "
-                f"{violation.css_file} ({violation.reason})"
-            )
-        exit_code = 1
-
-    if result.embedded_violations:
-        output.append("\nEmbedded CSS Violations:")
-        for violation in result.embedded_violations:
-            for css_code in violation.css_codes:
-                output.append(
-                    f"- {violation.file_path}: "
-                    f"has embedded color code `{css_code}`. use CSS variable "
-                    f"in src/style/app.module.css."
-                )
-        exit_code = 1
-
-    if output:
-        print("\n".join(output))
-        print(
-            "Please address the above CSS violations:\n"
-            "1. For invalid CSS imports,\n"
-            "   ensure you're using the correct import syntax and file paths.\n"
-            "2. For embedded CSS,\n"
-            "   move the CSS to appropriate stylesheet\n"
-            "   files and import them correctly.\n"
-            "3. Make sure to use only the allowed CSS patterns\n"
-            "   as specified in the script arguments.\n"
-            "4. Check that all imported CSS files\n"
-            "   exist in the specified locations.\n"
-            "5. Ensure each TypeScript file has exactly\n"
-            "   one import of the allowed CSS file.\n"
-            "6. Remove any CSS files from the same\n"
-            "   directory as TypeScript files."
-        )
-
-    if args.show_success and result.correct_imports:
-        print("\nCorrect CSS Imports:")
-        for import_ in result.correct_imports:
-            print(f"- {import_.file_path}: {import_.css_file}")
-
-    sys.exit(exit_code)
+        print(format_violation_output(result.violations))
+        sys.exit(1)
+    else:
+        print("✓ No embedded CSS violations found.")
+        sys.exit(0)
 
 
 if __name__ == "__main__":

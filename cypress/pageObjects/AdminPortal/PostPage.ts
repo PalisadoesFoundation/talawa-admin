@@ -2,18 +2,15 @@ export class PostsPage {
   private readonly _postsTabButton = '[data-cy="leftDrawerButton-Posts"]';
   private readonly _createPostButton = '[data-cy="createPostModalBtn"]';
   private readonly _postTitleInput = '[data-cy="modalTitle"]';
-  private readonly _postDescriptionInput = '[data-cy="modalinfo"]';
-  private readonly _addMediaField = '[data-cy="addMediaField"]';
+  private readonly _postDescriptionInput =
+    '[data-cy="create-post-description"]';
   private readonly _pinPostCheckbox = '[data-cy="pinPost"]';
-  private readonly _createPostSubmit = '[data-cy="createPostBtn"]';
-  private readonly _postCardContainer = '[data-cy="postCardContainer"]';
-  private readonly _moreOptionsIcon = '[data-testid="MoreVertIcon"]';
-  private readonly _editOption = '[data-cy="edit-option"]';
-  private readonly _editCaptionInput = '[data-cy="editCaptionInput"]';
-  private readonly _editImageUploadInput = '[data-cy="image-upload-input"]';
-  private readonly _updatePostSubmit = '[data-cy="update-post-submit"]';
-  private readonly _deleteOption = '[data-testid="delete-option"]';
-  private readonly _deletePostBtn = '[data-testid="deletePostBtn"]';
+  private readonly _moreOptionsIcon =
+    '[data-testid="post-more-options-button"]';
+  private readonly _editOption = '[data-testid="edit-post-menu-item"]';
+  private readonly _createPostSubmit = '[data-testid="createPostBtn"]';
+  private readonly _deleteOption = '[data-testid="delete-post-button"]';
+  private readonly _sortButton = '[data-testid="sortpost-toggle"]';
 
   visitPostsPage() {
     cy.get(this._postsTabButton).should('be.visible').click();
@@ -21,37 +18,39 @@ export class PostsPage {
     return this;
   }
 
-  createPost(title: string, description: string, mediaPath: string) {
+  createPost(title: string, description: string) {
     cy.get(this._createPostButton).should('be.visible').click();
-    cy.get(this._postTitleInput).should('be.visible').type(title);
-    cy.get(this._postDescriptionInput).should('be.visible').type(description);
-    cy.get(this._addMediaField)
+    cy.get(this._postTitleInput).filter(':visible').type(title);
+    cy.get(this._postDescriptionInput).filter(':visible').type(description);
+    cy.get(this._pinPostCheckbox).filter(':visible').click();
+    cy.get(this._createPostSubmit)
+      .filter(':visible')
       .should('be.visible')
-      .selectFile(mediaPath, { force: true });
-    cy.get(this._pinPostCheckbox).should('be.visible').click();
-    cy.get(this._createPostSubmit).should('be.visible').click();
+      .click();
     cy.assertToast('Congratulations! You have Posted Something.');
     return this;
   }
 
-  editFirstPost(newTitle: string, mediaPath: string) {
-    cy.get(this._postCardContainer).first().click();
-    cy.get(this._moreOptionsIcon).should('be.visible').click();
+  sortPostsByNewest() {
+    cy.get(this._sortButton).should('be.visible').click();
+    cy.get('[data-testid="latest"]').should('be.visible').click();
+    return this;
+  }
+
+  editFirstPost(newTitle: string) {
+    this.sortPostsByNewest();
+    cy.get(this._moreOptionsIcon).first().should('be.visible').click();
     cy.get(this._editOption).should('be.visible').click();
-    cy.get(this._editCaptionInput).should('be.visible').clear().type(newTitle);
-    cy.get(this._editImageUploadInput)
-      .should('be.visible')
-      .selectFile(mediaPath, { force: true });
-    cy.get(this._updatePostSubmit).should('be.visible').click();
-    cy.assertToast('Post Updated successfully.');
+    cy.get(this._postTitleInput).filter(':visible').clear().type(newTitle);
+    cy.get(this._createPostSubmit).filter(':visible').click({ force: true });
+    cy.assertToast('Post updated successfully');
     return this;
   }
 
   deleteFirstPost() {
-    cy.get(this._postCardContainer).first().click();
-    cy.get(this._moreOptionsIcon).should('be.visible').click();
+    cy.get(this._moreOptionsIcon).first().should('be.visible').click();
     cy.get(this._deleteOption).should('be.visible').click();
-    cy.get(this._deletePostBtn).should('be.visible').click();
+    cy.assertToast('Post deleted successfully.');
     return this;
   }
 }

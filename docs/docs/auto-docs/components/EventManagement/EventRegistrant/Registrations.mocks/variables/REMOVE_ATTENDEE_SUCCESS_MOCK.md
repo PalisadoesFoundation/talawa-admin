@@ -1,9 +1,0 @@
-[Admin Docs](/)
-
-***
-
-# Variable: REMOVE\_ATTENDEE\_SUCCESS\_MOCK
-
-> `const` **REMOVE\_ATTENDEE\_SUCCESS\_MOCK**: `MockedResponse`
-
-Defined in: [src/components/EventManagement/EventRegistrant/Registrations.mocks.ts:208](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts#L208)

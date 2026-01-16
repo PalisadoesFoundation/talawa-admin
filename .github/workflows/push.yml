@@ -20,9 +20,18 @@ env:
   CODECOV_UNIQUE_NAME: CODECOV_UNIQUE_NAME-${{ github.run_id }}-${{ github.run_number }}
 
 jobs:
+  Merge-Conflict-Check:
+    runs-on: ubuntu-latest
+    name: Find merge conflicts
+    steps:
+      - uses: actions/checkout@v4
+      - name: Merge conflict finder
+        uses: olivernybroe/action-conflict-finder@v4.1
+
   Code-Coverage:
     if: ${{ github.actor != 'dependabot[bot]' }}
     name: Test and Calculate Code Coverage
+    needs: [Merge-Conflict-Check]
     runs-on: ubuntu-latest
     strategy:
       matrix:

@@ -23,3 +23,5 @@ __tests__
 # Build artifacts
 build
 out
+# Python
+venv

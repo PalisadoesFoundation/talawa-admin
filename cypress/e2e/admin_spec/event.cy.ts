@@ -11,25 +11,27 @@ describe('Admin Event Tab', () => {
     eventPage.visitEventPage();
   });
 
-  it('create an event with all fields', () => {
+  it('create, update, and delete an event', () => {
+    const eventName = `Test Event ${Date.now()}`;
+    const updatedEventName = `Updated ${eventName}`;
+
+    // Create event
     eventPage.createEvent(
-      'Testing Event Creation',
+      eventName,
       'This is a test event created during E2E testing.',
       'Test Location',
     );
-  });
 
-  it('update the created event', () => {
+    // Update the event
     eventPage.updateEvent(
-      'Testing Event Creation',
-      'Updated Event Name',
+      eventName,
+      updatedEventName,
       'This is a test event created during E2E testing. Updated.',
       'Updated Location',
     );
-  });
 
-  it('delete the created event', () => {
-    eventPage.deleteEvent('Updated Event Name');
+    // Delete the event
+    eventPage.deleteEvent(updatedEventName);
   });
 
   afterEach(() => {

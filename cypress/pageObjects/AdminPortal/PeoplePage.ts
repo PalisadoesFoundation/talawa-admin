@@ -48,18 +48,33 @@ export class PeoplePage {
     return this;
   }
 
-  confirmAddUser(timeout = 40000) {
+  confirmAddUser(name: string, timeout = 100000) {
     cy.get(this._addBtn, { timeout }).should('be.visible').click();
     cy.get(this._alert, { timeout })
       .should('be.visible')
       .and('contain.text', 'Member added Successfully');
+    cy.reload();
+    this.searchMemberByName(name, timeout);
+    this.verifyMemberInList(name, timeout);
     return this;
   }
 
   deleteMember(name: string, timeout = 40000) {
     this.searchMemberByName(name, timeout);
     this.verifyMemberInList(name, timeout);
-    cy.get(this._removeModalBtn, { timeout }).should('be.visible').click();
+
+    // Wait for DataGrid to stabilize after search
+    cy.wait(1000);
+
+    // Scope search to DataGrid rows to avoid matching headers/other UI
+    cy.get('.MuiDataGrid-row', { timeout })
+      .contains(name)
+      .should('be.visible')
+      .parents('.MuiDataGrid-row')
+      .find(this._removeModalBtn)
+      .should('be.visible')
+      .click();
+
     cy.get(this._confirmRemoveBtn, { timeout }).should('be.visible').click();
     cy.get(this._alert, { timeout })
       .should('be.visible')

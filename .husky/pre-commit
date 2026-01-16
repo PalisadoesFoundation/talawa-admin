@@ -1,12 +1,160 @@
-
+#!/usr/bin/env sh
 pnpm run generate-docs
 pnpm run format:fix
 # pnpm run lint:fix
 pnpm run lint-staged
 pnpm run typecheck
+
+STAGED_SRC=$(git diff --cached --name-only --diff-filter=ACMRT \
+  | grep -E '^(src|scripts)/.*\.(ts|tsx|js|jsx)$' \
+  | tr '\n' ' ')
+
+# MinIO compliance check (prevent unsupported upload patterns)
+if [ -n "$STAGED_SRC" ]; then
+  echo "Running MinIO compliance check (policy enforcement)..."
+  node .github/workflows/scripts/check-minio-compliance.cjs || exit 1
+fi
+
+if [ -n "$STAGED_SRC" ]; then
+  pnpm run check-i18n -- --staged $STAGED_SRC
+fi
+
 pnpm run update:toc
 pnpm run check:pom
-npx knip --include files,exports
+npx knip --include files,exports,nsExports,nsTypes
 npx knip --config knip.deps.json --include dependencies
+pnpm run check-mock-cleanup
+pnpm run check-localstorage
+
+VENV_BIN=$(./.github/workflows/scripts/venv.sh) || exit 1
+
+echo "Running Python CI parity checks..."
+
+# Standard Python Checks (black, pydocstyle, flake8)
+# Running on: .github
+echo "🔍 Running black (formatting)..."
+"$VENV_BIN" -m black --check .github || exit 1
+
+echo "🔍 Running pydocstyle (docstrings)..."
+"$VENV_BIN" -m pydocstyle .github || exit 1
+
+echo "🔍 Running flake8 (linting)..."
+"$VENV_BIN" -m flake8 .github || exit 1
+
+
+# Python CI Parity Checks
+"$VENV_BIN" .github/workflows/scripts/check_docstrings.py --directories .github
+"$VENV_BIN" .github/workflows/scripts/compare_translations.py --directory public/locales
+"$VENV_BIN" .github/workflows/scripts/countline.py --lines 600 --files ./.github/workflows/config/countline_excluded_file_list.txt
+
+# Check staged source files for various checks
+if [ -n "$STAGED_SRC" ]; then
+  echo "$STAGED_SRC" | xargs "$VENV_BIN" .github/workflows/scripts/translation_check.py --files
+  
+  # Disable Statements Check (centralized script with 24h cache)
+  SCRIPT_URL="https://raw.githubusercontent.com/PalisadoesFoundation/.github/main/.github/workflows/scripts/disable_statements_check.py"
+  SCRIPT_DIR=".github-central/.github/workflows/scripts"
+  SCRIPT_PATH="$SCRIPT_DIR/disable_statements_check.py"
+  CACHE_MAX_AGE_HOURS=24
+  
+  # Create directory for cached scripts
+  mkdir -p "$SCRIPT_DIR"
+  
+  # Check if cached script exists and is fresh (< 24 hours old)
+  NEEDS_DOWNLOAD=true
+  if [ -f "$SCRIPT_PATH" ]; then
+    # Get file modification time in seconds since epoch
+    if [ "$(uname)" = "Darwin" ]; then
+      # macOS
+      FILE_MOD_TIME=$(stat -f %m "$SCRIPT_PATH")
+    else
+      # Linux
+      FILE_MOD_TIME=$(stat -c %Y "$SCRIPT_PATH")
+    fi
+    
+    
+    # Fallback if stat failed (unsupported platform)
+    if [ -z "$FILE_MOD_TIME" ]; then
+      echo "⚠️  Could not determine cache age, forcing re-download"
+      NEEDS_DOWNLOAD=true
+    else
+      CURRENT_TIME=$(date +%s)
+      AGE_SECONDS=$((CURRENT_TIME - FILE_MOD_TIME))
+      AGE_HOURS=$((AGE_SECONDS / 3600))
+      
+      if [ "$AGE_HOURS" -lt "$CACHE_MAX_AGE_HOURS" ]; then
+        echo "✅ Using cached disable_statements_check.py (${AGE_HOURS}h old, cache valid for ${CACHE_MAX_AGE_HOURS}h)"
+        NEEDS_DOWNLOAD=false
+      else
+        echo "⏰ Cache is ${AGE_HOURS}h old (max: ${CACHE_MAX_AGE_HOURS}h), attempting fresh download..."
+      fi
+    fi
+  else
+    echo "📥 No cached script found, downloading disable_statements_check.py..."
+  fi
+  
+  # Download if needed (cache missing or stale)
+  if [ "$NEEDS_DOWNLOAD" = true ]; then
+    DOWNLOAD_SUCCESS=false
+    
+    # Try curl first
+    if command -v curl >/dev/null 2>&1; then
+      if curl -sSfL "$SCRIPT_URL" -o "$SCRIPT_PATH" 2>/dev/null; then
+        DOWNLOAD_SUCCESS=true
+        echo "✅ Script downloaded successfully"
+      fi
+    fi
+    
+    # Try wget as fallback
+    if [ "$DOWNLOAD_SUCCESS" = false ] && command -v wget >/dev/null 2>&1; then
+      if wget -q -O "$SCRIPT_PATH" "$SCRIPT_URL" 2>/dev/null; then
+        DOWNLOAD_SUCCESS=true
+        echo "✅ Script downloaded successfully"
+      fi
+    fi
+    
+    # Handle download failure with offline fallback
+    if [ "$DOWNLOAD_SUCCESS" = false ]; then
+      if [ -f "$SCRIPT_PATH" ]; then
+        # Stale cache exists, use it as fallback
+        echo "⚠️  Download failed (offline?), using stale cached version"
+        echo "   (Script will work, but may be outdated)"
+      elif ! command -v curl >/dev/null 2>&1 && ! command -v wget >/dev/null 2>&1; then
+        # No download tool available
+        echo "❌ Error: Neither curl nor wget is installed."
+        echo ""
+        echo "Please install curl or wget:"
+        echo "  - macOS: curl is pre-installed"
+        echo "  - Ubuntu/Debian: sudo apt install curl"
+        echo "  - Fedora/RHEL: sudo dnf install curl"
+        echo "  - Windows: curl is included in Windows 10+"
+        exit 1
+      else
+        # First-time setup while offline
+        echo "❌ Error: Cannot download script (offline?) and no cached version exists."
+        echo ""
+        echo "This is a first-time setup requiring internet access."
+        echo "Please connect to the internet and try again."
+        echo ""
+        echo "After first download, the script will work offline using the cache."
+        exit 1
+      fi
+    fi
+  fi
+  
+  echo "🔍 Running disable statements check..."
+  echo "$STAGED_SRC" | xargs "$VENV_BIN" "$SCRIPT_PATH" --files
+fi
+
+# 3. CSS Policy Check
+# Exclude src/utils/ (utility/helper functions) and src/types/ (type definitions)
+# as they cannot contain UI styling code
+CSS_STAGED=$(git diff --cached --name-only --diff-filter=ACMRT \
+  | grep -v '^src/utils/' \
+  | grep -v '^src/types/' || true)
+
+if [ -n "$CSS_STAGED" ]; then
+  echo "$CSS_STAGED" | xargs "$VENV_BIN" .github/workflows/scripts/css_check.py --files
+fi
 
 git add .
