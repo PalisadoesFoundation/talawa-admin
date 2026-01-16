@@ -1,3 +1,6 @@
+/**
+ * Props for FormFieldGroup component.
+ */
 export interface InterfaceFormFieldGroupProps {
   name: string;
   label: string;

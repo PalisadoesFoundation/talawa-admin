@@ -27,6 +27,7 @@ export const FormSelectField: React.FC<InterfaceFormSelectFieldProps> = ({
   value,
   onChange,
   children,
+  'data-testid': dataTestId,
 }) => {
   return (
     <FormFieldGroup
@@ -47,6 +48,7 @@ export const FormSelectField: React.FC<InterfaceFormSelectFieldProps> = ({
         isInvalid={touched && !!error}
         required={required}
         aria-required={required ? 'true' : undefined}
+        data-testid={dataTestId}
       >
         {children}
       </Form.Control>
