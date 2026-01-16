@@ -6,7 +6,7 @@
 
 > `const` **default**: `FC`\<[`InterfaceCategorySelectorProps`](../../../../../types/AdminPortal/CategorySelector/interface/interfaces/InterfaceCategorySelectorProps.md)\>
 
-Defined in: [src/components/AdminPortal/CategorySelector/CategorySelector.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/CategorySelector/CategorySelector.tsx#L18)
+Defined in: [src/components/AdminPortal/CategorySelector/CategorySelector.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/CategorySelector/CategorySelector.tsx#L17)
 
 A dropdown selector for choosing an action item category.
 Uses MUI Autocomplete for searchable category selection.
