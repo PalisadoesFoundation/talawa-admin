@@ -1,6 +1,6 @@
 node_modules
 # Contains the PDF file of the Tag as JSON string, thus does not need to be formatted
-src/components/CheckIn/tagTemplate.ts
+src/components/AdminPortal/CheckIn/tagTemplate.ts
 vitest.config.ts
 docs/pnpm-lock.yaml
 pnpm-lock.yaml

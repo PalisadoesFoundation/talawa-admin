@@ -2,11 +2,11 @@
 
 ***
 
-# Variable: checkInMutationSuccess
+# Variable: checkInMutationSuccessRecurring
 
-> `const` **checkInMutationSuccess**: `object`[]
+> `const` **checkInMutationSuccessRecurring**: `object`[]
 
-Defined in: [src/components/CheckIn/CheckInMocks.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/CheckInMocks.ts#L64)
+Defined in: [src/components/AdminPortal/CheckIn/CheckInMocks.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/CheckIn/CheckInMocks.ts#L104)
 
 ## Type Declaration
 
@@ -22,9 +22,9 @@ Defined in: [src/components/CheckIn/CheckInMocks.ts:64](https://github.com/Palis
 
 > **variables**: `object`
 
-#### request.variables.eventId
+#### request.variables.recurringEventInstanceId
 
-> **eventId**: `string` = `'event123'`
+> **recurringEventInstanceId**: `string` = `'recurring123'`
 
 #### request.variables.userId
 
