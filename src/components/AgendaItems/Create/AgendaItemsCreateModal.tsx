@@ -53,26 +53,8 @@ const AgendaItemsCreateModal: React.FC<
   agendaItemCategories,
 }) => {
   const [newUrl, setNewUrl] = useState('');
-  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [_previewUrls, setPreviewUrls] = useState<string[]>([]);
   const { uploadFileToMinio } = useMinioUpload();
-
-  /**
-   * Validates that a URL is a safe blob URL created by URL.createObjectURL.
-   * This ensures only browser-generated blob URLs are used in src attributes.
-   *
-   * @param url - URL string to validate.
-   * @returns True if the URL is a valid blob URL, false otherwise.
-   */
-  const isSafeBlobUrl = (url: string): boolean => {
-    return url.startsWith('blob:');
-  };
-
-  // Cleanup object URLs on unmount to prevent memory leaks
-  useEffect(() => {
-    return () => {
-      previewUrls.forEach((url) => URL.revokeObjectURL(url));
-    };
-  }, [previewUrls]);
 
   useEffect(() => {
     // Ensure URLs do not have empty or invalid entries
@@ -151,14 +133,8 @@ const AgendaItemsCreateModal: React.FC<
         try {
           const result = await uploadFileToMinio(file, 'agendaItem');
           if (result) {
-            // Add mimeType and name to the metadata before storing
-            const metadata = {
-              ...result,
-              mimeType: file.type,
-              name: file.name,
-            };
             // Store the file metadata as JSON string for the mutation
-            uploadedFiles.push(JSON.stringify(metadata));
+            uploadedFiles.push(JSON.stringify(result));
             // Create local preview URL
             newPreviewUrls.push(URL.createObjectURL(file));
           }
@@ -178,22 +154,12 @@ const AgendaItemsCreateModal: React.FC<
   /**
    * Handles removing an attachment from the form state.
    *
-   * @param index - Index of attachment to remove.
+   * @param attachment - Attachment to remove.
    */
-  const handleRemoveAttachment = (index: number): void => {
-    // Revoke the object URL to prevent memory leaks
-    const urlToRevoke = previewUrls[index];
-    if (urlToRevoke) {
-      URL.revokeObjectURL(urlToRevoke);
-    }
-
-    // Remove from previewUrls
-    setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
-
-    // Remove from formState.attachments
+  const handleRemoveAttachment = (attachment: string): void => {
     setFormState((prevState) => ({
       ...prevState,
-      attachments: prevState.attachments.filter((_, i) => i !== index),
+      attachments: prevState.attachments.filter((item) => item !== attachment),
     }));
   };
 
@@ -203,7 +169,18 @@ const AgendaItemsCreateModal: React.FC<
       show={agendaItemCreateModalIsOpen}
       onHide={hideCreateModal}
       headerContent={
-        <p className={styles.titlemodalAgendaItems}>{t('agendaItemDetails')}</p>
+        <>
+          <p className={styles.titlemodalAgendaItems}>
+            {t('agendaItemDetails')}
+          </p>
+          <Button
+            variant="danger"
+            onClick={hideCreateModal}
+            data-testid="createAgendaItemModalCloseBtn"
+          >
+            <i className="fa fa-times"></i>
+          </Button>
+        </>
       }
     >
       <Form onSubmit={createAgendaItemHandler}>
@@ -327,51 +304,35 @@ const AgendaItemsCreateModal: React.FC<
           />
           <Form.Text>{t('attachmentLimit')}</Form.Text>
         </Form.Group>
-        {previewUrls.length > 0 && (
+        {formState.attachments && (
           <div className={styles.previewFile} data-testid="mediaPreview">
-            {previewUrls.map((previewUrl, index) => {
-              // Parse the corresponding attachment metadata to get mime type
-              const attachmentMeta = formState.attachments[index];
-              let isVideo = false;
-              try {
-                const meta = JSON.parse(attachmentMeta);
-                isVideo = meta.mimeType?.startsWith('video/');
-              } catch {
-                // If parsing fails, default to image
-              }
-              return (
-                <div key={index} className={styles.attachmentPreview}>
-                  {isSafeBlobUrl(previewUrl) && (
-                    <>
-                      {isVideo ? (
-                        <video
-                          muted
-                          autoPlay={true}
-                          loop={true}
-                          playsInline
-                          crossOrigin="anonymous"
-                        >
-                          <source src={previewUrl} type="video/mp4" />
-                        </video>
-                      ) : (
-                        <img src={previewUrl} alt={t('attachmentPreview')} />
-                      )}
-                    </>
-                  )}
-                  <button
-                    type="button"
-                    className={styles.closeButtonFile}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleRemoveAttachment(index);
-                    }}
-                    data-testid="deleteAttachment"
+            {formState.attachments.map((attachment, index) => (
+              <div key={index} className={styles.attachmentPreview}>
+                {attachment.includes('video') ? (
+                  <video
+                    muted
+                    autoPlay={true}
+                    loop={true}
+                    playsInline
+                    crossOrigin="anonymous"
                   >
-                    <i className="fa fa-times" />
-                  </button>
-                </div>
-              );
-            })}
+                    <source src={attachment} type="video/mp4" />
+                  </video>
+                ) : (
+                  <img src={attachment} alt={t('attachmentPreview')} />
+                )}
+                <button
+                  className={styles.closeButtonFile}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleRemoveAttachment(attachment);
+                  }}
+                  data-testid="deleteAttachment"
+                >
+                  <i className="fa fa-times" />
+                </button>
+              </div>
+            ))}
           </div>
         )}
         <Button
