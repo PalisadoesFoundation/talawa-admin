@@ -1067,6 +1067,9 @@ describe('UpcomingEvents', () => {
         const btn = screen.getByTestId('groupVolunteerBtn-g1');
         expect(btn).toHaveTextContent(/joined/i);
         expect(btn).toBeDisabled();
+        // Verify StatusBadge renders for the accepted group status
+        const groupStatusBadge = screen.getByTestId('group-status-g1');
+        expect(groupStatusBadge).toBeInTheDocument();
       });
     });
   });
