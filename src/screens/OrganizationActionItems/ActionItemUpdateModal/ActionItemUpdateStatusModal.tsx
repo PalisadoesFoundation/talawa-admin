@@ -230,7 +230,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
       title={t('actionItemStatus')}
       showCloseButton
     >
-      <form onSubmitCapture={updateActionItemHandler} className="p-2">
+      <form onSubmit={updateActionItemHandler} className="p-2">
         <div className="mb-2 d-flex align-items-center gap-2">
           <StatusBadge
             variant={isCompleted ? 'completed' : 'pending'}
