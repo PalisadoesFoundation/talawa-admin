@@ -67,6 +67,7 @@ vi.mock(
       <nav
         data-testid="user-portal-navbar"
         data-mode={props.mode}
+        data-variant={props.variant}
         data-currentpage={props.currentPage || ''}
       >
         UserPortalNavigationBar
@@ -209,9 +210,15 @@ describe('UserGlobalScreen', () => {
 
       renderComponent();
 
-      // At exactly 820px - verify component renders successfully
+      // Trigger resize event to activate handleResize logic
+      window.dispatchEvent(new Event('resize'));
+
+      // At exactly 820px - sidebar should be hidden (hideDrawer = true)
       expect(screen.getByTestId('user-sidebar')).toBeInTheDocument();
-      expect(screen.getByTestId('mainpageright')).toBeInTheDocument();
+      const mainContent = screen.getByTestId('mainpageright');
+      expect(mainContent).toBeInTheDocument();
+      // When hideDrawer is true, mainContent should have 'expand' class
+      expect(mainContent.className).toContain('expand');
     });
 
     it('should handle window resize at 819px (just below breakpoint)', () => {
@@ -224,9 +231,15 @@ describe('UserGlobalScreen', () => {
 
       renderComponent();
 
-      // Component should render normally at 819px
+      // Trigger resize event to activate handleResize logic
+      window.dispatchEvent(new Event('resize'));
+
+      // At 819px (below 820) - sidebar should be hidden (hideDrawer = true)
       expect(screen.getByTestId('user-sidebar')).toBeInTheDocument();
-      expect(screen.getByTestId('mainpageright')).toBeInTheDocument();
+      const mainContent = screen.getByTestId('mainpageright');
+      expect(mainContent).toBeInTheDocument();
+      // When hideDrawer is true, mainContent should have 'expand' class
+      expect(mainContent.className).toContain('expand');
     });
 
     it('should handle window resize at 821px (just above breakpoint)', () => {
@@ -239,9 +252,15 @@ describe('UserGlobalScreen', () => {
 
       renderComponent();
 
-      // Component should render normally at 821px
+      // Trigger resize event to activate handleResize logic
+      window.dispatchEvent(new Event('resize'));
+
+      // At 821px (above 820) - sidebar should be visible (hideDrawer = false)
       expect(screen.getByTestId('user-sidebar')).toBeInTheDocument();
-      expect(screen.getByTestId('mainpageright')).toBeInTheDocument();
+      const mainContent = screen.getByTestId('mainpageright');
+      expect(mainContent).toBeInTheDocument();
+      // When hideDrawer is false, mainContent should have 'contract' class
+      expect(mainContent.className).toContain('contract');
     });
   });
 });
