@@ -1,4 +1,5 @@
-import { render, screen, fireEvent, cleanup } from '@testing-library/react';
+import { render, screen, cleanup } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, test, expect, vi, afterEach } from 'vitest';
 import { FormSelectField } from './FormSelectField';
 import React from 'react';
@@ -40,11 +41,11 @@ describe('FormSelectField Component', () => {
     expect(screen.getByText('Option 2')).toBeInTheDocument();
   });
 
-  test('calls onChange with new value when option is selected', () => {
+  test('calls onChange with new value when option is selected', async () => {
     render(<FormSelectField {...defaultProps} />);
 
     const select = screen.getByRole('combobox');
-    fireEvent.change(select, { target: { value: 'option1' } });
+    await userEvent.selectOptions(select, 'option1');
 
     expect(defaultProps.onChange).toHaveBeenCalledTimes(1);
     expect(defaultProps.onChange).toHaveBeenCalledWith('option1');
@@ -106,6 +107,22 @@ describe('FormSelectField Component', () => {
     expect(
       screen.getByText('Select one option from the list'),
     ).toBeInTheDocument();
+  });
+
+  test('hides help text when error is displayed', () => {
+    const props = {
+      ...defaultProps,
+      helpText: 'Select one option from the list',
+      touched: true,
+      error: 'This field is required',
+    };
+
+    render(<FormSelectField {...props} />);
+
+    expect(
+      screen.queryByText('Select one option from the list'),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText('This field is required')).toBeInTheDocument();
   });
 
   test('passes data-testid to select element', () => {

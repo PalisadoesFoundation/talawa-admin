@@ -4,7 +4,9 @@
 
 # Interface: IFormTextFieldProps
 
-Defined in: [src/types/FormFieldGroup/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L11)
+Defined in: [src/types/FormFieldGroup/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L14)
+
+Props for FormFieldGroup component.
 
 ## Extends
 
@@ -16,7 +18,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:11](https://github.com/Palisa
 
 > `optional` **data-testid**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L8)
+Defined in: [src/types/FormFieldGroup/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L11)
 
 #### Inherited from
 
@@ -28,7 +30,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:8](https://github.com/Palisad
 
 > `optional` **error**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L6)
+Defined in: [src/types/FormFieldGroup/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L9)
 
 #### Inherited from
 
@@ -40,7 +42,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:6](https://github.com/Palisad
 
 > `optional` **helpText**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L5)
+Defined in: [src/types/FormFieldGroup/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L8)
 
 #### Inherited from
 
@@ -52,7 +54,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:5](https://github.com/Palisad
 
 > **label**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L3)
+Defined in: [src/types/FormFieldGroup/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L6)
 
 #### Inherited from
 
@@ -64,7 +66,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:3](https://github.com/Palisad
 
 > **name**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L2)
+Defined in: [src/types/FormFieldGroup/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L5)
 
 #### Inherited from
 
@@ -76,7 +78,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:2](https://github.com/Palisad
 
 > **onChange**: (`v`) => `void`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L15)
+Defined in: [src/types/FormFieldGroup/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L18)
 
 #### Parameters
 
@@ -94,7 +96,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:15](https://github.com/Palisa
 
 > `optional` **placeholder**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L13)
+Defined in: [src/types/FormFieldGroup/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L16)
 
 ***
 
@@ -102,7 +104,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:13](https://github.com/Palisa
 
 > `optional` **required**: `boolean`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L4)
+Defined in: [src/types/FormFieldGroup/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L7)
 
 #### Inherited from
 
@@ -114,7 +116,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:4](https://github.com/Palisad
 
 > `optional` **touched**: `boolean`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L7)
+Defined in: [src/types/FormFieldGroup/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L10)
 
 #### Inherited from
 
@@ -126,7 +128,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:7](https://github.com/Palisad
 
 > `optional` **type**: `"number"` \| `"text"` \| `"email"` \| `"password"` \| `"tel"` \| `"url"`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L12)
+Defined in: [src/types/FormFieldGroup/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L15)
 
 ***
 
@@ -134,4 +136,4 @@ Defined in: [src/types/FormFieldGroup/interface.ts:12](https://github.com/Palisa
 
 > **value**: `string`
 
-Defined in: [src/types/FormFieldGroup/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L14)
+Defined in: [src/types/FormFieldGroup/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L17)
