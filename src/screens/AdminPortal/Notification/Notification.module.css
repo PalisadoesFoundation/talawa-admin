@@ -9,8 +9,8 @@
 .notificationItem {
   display: flex;
   align-items: center;
-  background: white;
-  border-bottom: var(--border-2) solid #ddd;
+  background: var(--color-white);
+  border-bottom: var(--border-2) solid var(--color-gray-100);
   margin: var(--space-3) var(--space-0);
   padding: var(--space-4) var(--space-5);
   max-width: var(--space-28); /* Limit width */
@@ -18,7 +18,7 @@
 }
 
 .unread {
-  background-color: #f0f8ff;
+  background-color: var(--color-gray-50);
 }
 
 .notificationLink {
@@ -35,7 +35,7 @@
 }
 
 .notificationBody {
-  color: #555;
+  color: var(--color-gray-700);
 }
 
 /* Update notificationItem styles */
@@ -43,8 +43,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: white;
-  border-bottom: var(--border-2) solid #ddd;
+  background: var(--color-white);
+  border-bottom: var(--border-2) solid var(--color-gray-100);
   margin: var(--space-3) var(--space-0);
   padding: var(--space-4) var(--space-5);
   max-width: var(--space-27); /* Limit width */
@@ -55,14 +55,14 @@
 .profileSection {
   width: var(--space-10);
   height: var(--space-10);
-  border-radius: 50%;
+  border-radius: var(--radius-full);
   margin-right: var(--space-5);
-  background: #e0e7ef;
+  background: var(--color-gray-50);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border: var(--border-1-5) solid #b0b8c1;
+  border: var(--border-1-5) solid var(--color-gray-100);
 }
 
 .notificationTitle {
@@ -74,7 +74,7 @@
 }
 
 .notificationBody {
-  color: #555;
+  color: var(--color-gray-700);
   font-size: var(--font-size-15);
   white-space: nowrap;
   overflow: hidden;
@@ -93,9 +93,9 @@
 .markButton {
   margin-left: var(--space-4);
   align-self: center; /* vertical center inside the item */
-  background-color: #a8c7fa !important;
-  border-color: #a8c7fa !important;
-  color: #1f2937 !important;
+  background-color: var(--color-blue-200) !important;
+  border-color: var(--color-blue-200) !important;
+  color: var(--color-gray-800) !important;
 }
 
 /* Pagination footer */
@@ -125,9 +125,9 @@
 }
 
 .paginationButton {
-  background-color: #a8c7fa; /* bluish base similar to site */
-  color: #1f2937; /* text dark */
-  border: var(--border-1) solid #a8c7fa;
+  background-color: var(--color-blue-200); /* bluish base similar to site */
+  color: var(--color-black); /* text dark */
+  border: var(--border-1) solid var(--color-blue-200);
   padding: var(--space-3) var(--space-4);
   border-radius: 6px;
   cursor: pointer;
@@ -137,7 +137,7 @@
 }
 
 .paginationButton:hover:not(:disabled) {
-  background-color: #6ea0f7; /* darker bluish on hover */
+  background-color: var(--color-blue-200); /* darker bluish on hover */
   transform: translateY(-1px);
 }
 
@@ -150,7 +150,7 @@
 .skeletonTitle {
   height: var(--space-5);
   width: 60%;
-  background: linear-gradient(90deg, #e6eefc, #f4f8ff);
+  background: linear-gradient(90deg, var(--color-gray-50), var(--color-white));
   border-radius: 6px;
   margin-bottom: var(--space-3);
 }
@@ -158,7 +158,7 @@
 .skeletonBody {
   height: var(--space-4);
   width: 90%;
-  background: linear-gradient(90deg, #eef6ff, #f9fbff);
+  background: linear-gradient(90deg, var(--color-gray-50), var(--color-white));
   border-radius: 6px;
 }
 
@@ -172,7 +172,7 @@
 }
 
 .userIconWrapper {
-  color: var(--bs-secondary, #8a99b3);
+  color: var(--bs-secondary, var(--color-blue-200));
   display: flex;
   align-items: center;
   justify-content: center;
