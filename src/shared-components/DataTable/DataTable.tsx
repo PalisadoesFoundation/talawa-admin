@@ -114,7 +114,20 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     if (paginationMode === 'client' && !isControlled) setInternalPage(1);
   }
 
-  // Expose updateColumnFilters for per-column filter UI (not used in current version)
+  /**
+   * Internal helper to update column filters state.
+   *
+   * Column filtering works in two modes:
+   * 1. **Controlled mode**: Pass `columnFilters` and `onColumnFiltersChange` props.
+   *    The parent manages state and receives filter updates via the callback.
+   * 2. **Uncontrolled mode**: Omit those props. Internal state tracks filters.
+   *
+   * The DataTable applies filters automatically in client mode. For server mode
+   * (serverFilter=true), filters are not applied locally; use `onColumnFiltersChange`
+   * to trigger server-side filtering via your query.
+   *
+   * @internal This function is used by per-column filter UI when implemented.
+   */
   void updateColumnFilters;
 
   // Helper to get raw cell value

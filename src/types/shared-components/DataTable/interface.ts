@@ -522,11 +522,33 @@ export interface ITableLoaderProps<T> {
 }
 
 /**
- * Props for the SearchBar component
+ * Props for the SearchBar component.
+ *
+ * Used to render a controlled search input field with an optional clear button.
  */
 export interface ISearchBarProps {
+  /**
+   * The current search query value.
+   * This is a controlled value that should be managed by the parent component.
+   */
   value: string;
-  onChange: (q: string) => void;
+
+  /**
+   * Callback fired when the input value changes or when the clear button is clicked.
+   * @param query - The new search query string (empty string when cleared)
+   */
+  onChange: (query: string) => void;
+
+  /**
+   * Placeholder text displayed when the input is empty.
+   * @defaultValue 'Search…'
+   */
   placeholder?: string;
+
+  /**
+   * Accessible label for screen readers.
+   * Applied to the search input's aria-label attribute.
+   * @defaultValue 'Search'
+   */
   'aria-label'?: string;
 }

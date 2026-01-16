@@ -4,9 +4,11 @@
 
 # Interface: ISearchBarProps
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:527](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L527)
+Defined in: [src/types/shared-components/DataTable/interface.ts:529](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L529)
 
-Props for the SearchBar component
+Props for the SearchBar component.
+
+Used to render a controlled search input field with an optional clear button.
 
 ## Properties
 
@@ -14,21 +16,34 @@ Props for the SearchBar component
 
 > `optional` **aria-label**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:531](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L531)
+Defined in: [src/types/shared-components/DataTable/interface.ts:553](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L553)
+
+Accessible label for screen readers.
+Applied to the search input's aria-label attribute.
+
+#### Default Value
+
+```ts
+'Search'
+```
 
 ***
 
 ### onChange()
 
-> **onChange**: (`q`) => `void`
+> **onChange**: (`query`) => `void`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:529](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L529)
+Defined in: [src/types/shared-components/DataTable/interface.ts:540](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L540)
+
+Callback fired when the input value changes or when the clear button is clicked.
 
 #### Parameters
 
-##### q
+##### query
 
 `string`
+
+The new search query string (empty string when cleared)
 
 #### Returns
 
@@ -40,7 +55,15 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:529](https://git
 
 > `optional` **placeholder**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:530](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L530)
+Defined in: [src/types/shared-components/DataTable/interface.ts:546](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L546)
+
+Placeholder text displayed when the input is empty.
+
+#### Default Value
+
+```ts
+'Search…'
+```
 
 ***
 
@@ -48,4 +71,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:530](https://git
 
 > **value**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:528](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L528)
+Defined in: [src/types/shared-components/DataTable/interface.ts:534](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L534)
+
+The current search query value.
+This is a controlled value that should be managed by the parent component.
