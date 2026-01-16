@@ -10,7 +10,7 @@ import { store } from 'state/store';
 import EventManagement from './EventManagement';
 import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { MOCKS_WITH_TIME } from 'components/EventManagement/Dashboard/EventDashboard.mocks';
+import { MOCKS_WITH_TIME } from 'components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, it } from 'vitest';
 import dayjs from 'dayjs';
