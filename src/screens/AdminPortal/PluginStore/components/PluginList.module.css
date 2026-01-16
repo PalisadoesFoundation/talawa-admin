@@ -7,10 +7,10 @@
 .pluginCard {
   display: flex;
   align-items: center;
-  background: #fff;
+  background: var(--color-white);
   border-radius: 12;
   box-shadow: 0 1px 4px rgba(60, 64, 67, 0.07);
-  border: var(--border-1) solid #e7e7e7;
+  border: var(--border-1) solid var(--color-gray-100);
   padding: var(--space-5) var(--space-7);
   min-height: var(--space-12);
   transition: box-shadow 0.2s;
@@ -21,7 +21,7 @@
   height: var(--space-10);
   border-radius: 8;
   object-fit: cover;
-  background: #f5f5f5;
+  background: var(--color-gray-50);
   margin-right: var(--space-7);
 }
 
@@ -41,7 +41,7 @@
 
 .pluginDescription {
   font-size: var(--font-size-sm);
-  color: #555;
+  color: var(--color-gray-700);
   margin-bottom: var(--space-1);
   white-space: nowrap;
   overflow: hidden;
@@ -50,7 +50,7 @@
 
 .pluginAuthor {
   font-size: var(--font-size-sm);
-  color: #888;
+  color: var(--color-gray-500);
 }
 
 .pluginActions {
