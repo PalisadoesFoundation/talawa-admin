@@ -29,7 +29,7 @@
 import React, { type FC, type FormEvent, useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { FormControl, TextField } from '@mui/material';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import styles from './ActionItemUpdateStatusModal.module.css';
 import { useMutation } from '@apollo/client';
 import {
@@ -240,19 +240,21 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
           />
         </div>
         {!isCompleted ? (
-          <FormControl fullWidth className="mb-2">
-            <TextField
-              label={t('postCompletionNotes')}
+          <FormFieldGroup
+            name="postCompletionNotes"
+            label={t('postCompletionNotes')}
+            required
+          >
+            <textarea
+              id="postCompletionNotes"
               data-cy="postCompletionNotes"
-              variant="outlined"
-              className={styles.noOutline}
+              className="form-control"
               value={postCompletionNotes}
               onChange={(e) => setPostCompletionNotes(e.target.value)}
-              multiline
-              maxRows={4}
+              rows={4}
               required
             />
-          </FormControl>
+          </FormFieldGroup>
         ) : (
           <p>{t('updateStatusMsg')}</p>
         )}
