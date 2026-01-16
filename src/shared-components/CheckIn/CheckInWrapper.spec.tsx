@@ -37,6 +37,10 @@ describe('Testing CheckIn Wrapper', () => {
     eventId: 'event123',
   };
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('The button to open and close the modal should work properly', async () => {
     const user = userEvent.setup();
     render(
@@ -76,10 +80,6 @@ describe('CheckInWrapper CSS Tests', () => {
   const props = {
     eventId: 'event123',
   };
-
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
 
   const renderComponent = (): ReturnType<typeof render> => {
     return render(

@@ -1894,7 +1894,7 @@
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",
-    "errorRemovingAttendee": "Error eliminando asistente",
+    "errorRemovingAttendee": "Error al eliminar asistente",
     "eventRegistrantsTitle": "Registrantes del evento",
     "registerMember": "Registrar miembro",
     "showAttendees": "Mostrar asistentes",
