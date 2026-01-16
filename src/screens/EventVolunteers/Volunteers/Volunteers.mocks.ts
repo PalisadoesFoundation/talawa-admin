@@ -120,6 +120,7 @@ export const MOCKS = [
     request: {
       query: GET_EVENT_VOLUNTEERS,
       variables: {
+        skip: false,
         input: { id: 'eventId' },
         where: {
           eventId: 'eventId',
@@ -137,6 +138,7 @@ export const MOCKS = [
     request: {
       query: GET_EVENT_VOLUNTEERS,
       variables: {
+        skip: false,
         input: { id: 'eventId' },
         where: { eventId: 'eventId', hasAccepted: false },
       },
@@ -151,6 +153,7 @@ export const MOCKS = [
     request: {
       query: GET_EVENT_VOLUNTEERS,
       variables: {
+        skip: false,
         input: { id: 'eventId' },
         where: { eventId: 'eventId', hasAccepted: true },
       },
@@ -274,6 +277,7 @@ export const MOCKS_ERROR = [
     request: {
       query: GET_EVENT_VOLUNTEERS,
       variables: {
+        skip: false,
         input: { id: 'eventId' },
         where: {
           eventId: 'eventId',
@@ -334,6 +338,7 @@ export const MOCKS_EMPTY = [
     request: {
       query: GET_EVENT_VOLUNTEERS,
       variables: {
+        skip: false,
         input: { id: 'eventId' },
         where: {
           eventId: 'eventId',

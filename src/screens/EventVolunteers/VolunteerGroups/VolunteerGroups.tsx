@@ -50,10 +50,6 @@ function VolunteerGroups(): JSX.Element {
   // Get the organization ID from URL parameters
   const { orgId, eventId } = useParams();
 
-  if (!orgId || !eventId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const [group, setGroup] = useState<InterfaceVolunteerGroupInfo | null>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
@@ -89,13 +85,11 @@ function VolunteerGroups(): JSX.Element {
   } = useQuery(GET_EVENT_VOLUNTEER_GROUPS, {
     variables: {
       input: {
-        id: eventId,
+        id: eventId ?? '',
       },
     },
+    skip: !eventId,
   });
-
-  const openModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: true }));
 
   const closeModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
@@ -106,9 +100,9 @@ function VolunteerGroups(): JSX.Element {
         setModalMode(group ? 'edit' : 'create');
       }
       setGroup(group);
-      openModal(modal);
+      setModalState((prevState) => ({ ...prevState, [modal]: true }));
     },
-    [openModal],
+    [],
   );
 
   // Effect to set recurring event info similar to Volunteers component
@@ -130,6 +124,9 @@ function VolunteerGroups(): JSX.Element {
     }));
   }, [eventData]);
 
+  if (!orgId || !eventId) {
+    return <Navigate to={'/'} replace />;
+  }
   if (groupsError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
@@ -138,7 +135,9 @@ function VolunteerGroups(): JSX.Element {
           aria-hidden="true"
         />
         <h6 className="fw-bold text-danger text-center">
-          {tErrors('errorLoading', { entity: 'Volunteer Groups' })}
+          {tErrors('errorLoading', {
+            entity: t('eventVolunteers.volunteerGroups'),
+          })}
         </h6>
       </div>
     );
@@ -183,7 +182,7 @@ function VolunteerGroups(): JSX.Element {
               <img
                 src={avatarURL}
                 alt={`${name} ${tCommon('avatar')}`}
-                data-testid={`image${id + 1}`}
+                data-testid={`image-${id}`}
                 className={styles.tableImages}
               />
             ) : (
@@ -262,7 +261,9 @@ function VolunteerGroups(): JSX.Element {
             variant="success"
             onClick={() => handleModalClick(null, ModalState.SAME)}
             data-testid="createGroupBtn"
-            aria-label={tCommon('createNew', { item: 'Volunteer Group' })}
+            aria-label={tCommon('createNew', {
+              item: t('eventVolunteers.volunteerGroup'),
+            })}
           >
             <i className="fa fa-plus me-2" aria-hidden="true" />
             {tCommon('create')}

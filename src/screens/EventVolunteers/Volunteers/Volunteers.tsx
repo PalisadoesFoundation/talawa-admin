@@ -73,10 +73,7 @@ function Volunteers(): JSX.Element {
   // Get the organization ID from URL parameters
   const { orgId, eventId } = useParams();
 
-  if (!orgId || !eventId) {
-    return <Navigate to={'/'} replace />;
-  }
-
+  const shouldSkip = !orgId || !eventId;
   const [volunteer, setVolunteer] =
     useState<InterfaceEventVolunteerInfo | null>(null);
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
@@ -130,6 +127,7 @@ function Volunteers(): JSX.Element {
     refetch: () => void;
   } = useQuery(GET_EVENT_VOLUNTEERS, {
     variables: {
+      skip: shouldSkip,
       input: {
         id: eventId,
       },
@@ -139,6 +137,9 @@ function Volunteers(): JSX.Element {
       },
     },
   });
+  if (shouldSkip) {
+    return <Navigate to={'/'} replace />;
+  }
 
   // Effect to set recurring event info similar to EventActionItems
   useEffect(() => {
@@ -172,6 +173,9 @@ function Volunteers(): JSX.Element {
     );
   }
 
+  if (!orgId || !eventId) {
+    return <Navigate to={'/'} replace />;
+  }
   const columns: GridColDef[] = [
     {
       field: 'volunteer',
@@ -324,14 +328,18 @@ function Volunteers(): JSX.Element {
             },
           ],
           filterFunction: (rows, filterValue) => {
-            if (filterValue === VolunteerStatus.All) return rows;
+            if (!filterValue || filterValue === VolunteerStatus.All)
+              return rows;
             return rows.filter((volunteer) => {
-              if (filterValue === VolunteerStatus.Pending) {
-                return volunteer.volunteerStatus === 'pending';
-              } else if (filterValue === VolunteerStatus.Rejected) {
-                return volunteer.volunteerStatus === 'rejected';
-              } else {
-                return volunteer.volunteerStatus === 'accepted';
+              switch (filterValue) {
+                case VolunteerStatus.Pending:
+                  return volunteer.volunteerStatus === 'pending';
+                case VolunteerStatus.Rejected:
+                  return volunteer.volunteerStatus === 'rejected';
+                case VolunteerStatus.Accepted:
+                  return volunteer.volunteerStatus === 'accepted';
+                default:
+                  return true;
               }
             });
           },
@@ -348,7 +356,7 @@ function Volunteers(): JSX.Element {
             onClick={() => handleOpenModal(null, ModalState.ADD)}
             data-testid="addVolunteerBtn"
           >
-            <i className="fa fa-plus me-2" />
+            <i className="fa fa-plus me-2" aria-hidden="true" />
             {t('eventVolunteers.add')}
           </Button>
         }

@@ -752,6 +752,7 @@ describe('Testing Volunteers Screen', () => {
         request: {
           query: GET_EVENT_VOLUNTEERS,
           variables: {
+            skip: false,
             input: { id: 'eventId' },
             where: {
               eventId: 'eventId',

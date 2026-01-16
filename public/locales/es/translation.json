@@ -1912,7 +1912,6 @@
     "buttonAriaLabel": "Mostrar asistentes",
     "registerMemberButton": "Registrar miembro"
   },
-
   "userCampaigns": {
     "title": "Campañas de recaudación de fondos",
     "searchByName": "Buscar por nombre...",
@@ -1961,6 +1960,7 @@
     "toggleGroupAriaLabel": "Selector de vista de voluntarios",
     "volunteers": "Voluntarios",
     "volunteer": "Voluntario",
+    "volunteerGroup": "Grupo de Voluntarios",
     "volunteerName": "Nombre del Voluntario",
     "volunteerGroups": "Grupos de Voluntarios",
     "individuals": "Individuos",

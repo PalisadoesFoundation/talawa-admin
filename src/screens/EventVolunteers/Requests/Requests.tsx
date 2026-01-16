@@ -93,7 +93,7 @@ function Requests(): JSX.Element {
     // Add a computed field for volunteer name to enable search
     return requestsData.getVolunteerMembership.map((request) => ({
       ...request,
-      volunteerName: request.volunteer.user.name,
+      volunteerName: request.volunteer?.user?.name ?? '',
     }));
   }, [requestsData]);
 
@@ -137,7 +137,9 @@ function Requests(): JSX.Element {
       headerAlign: 'center',
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        const { name, avatarURL } = params.row.volunteer.user;
+        const user = params.row.volunteer?.user;
+        const name = user?.name ?? '';
+        const avatarURL = user?.avatarURL;
         return (
           <div
             className="d-flex fw-bold align-items-center justify-content-center ms-2"
@@ -250,6 +252,7 @@ function Requests(): JSX.Element {
               className={`${styles.iconButton} me-2 rounded`}
               data-testid="acceptBtn"
               onClick={() => updateMembershipStatus(row.id, 'accepted')}
+              aria-label={tCommon('accept')}
             >
               <i className="fa fa-check" />
             </Button>
@@ -259,6 +262,7 @@ function Requests(): JSX.Element {
               className="rounded"
               data-testid="rejectBtn"
               onClick={() => updateMembershipStatus(row.id, 'rejected')}
+              aria-label={tCommon('reject')}
             >
               <FaXmark size={18} />
             </Button>

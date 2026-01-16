@@ -653,21 +653,13 @@ describe('Testing Campaign Pledge Screen', () => {
     await userEvent.clear(searchPledger);
     await userEvent.type(searchPledger, 'John');
 
-    // Wait for debounce (300ms default) to complete
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 350));
-    });
-
-    // Wait for search results to update - only Johns should be visible
     await waitFor(
       () => {
-        // Only users with "John" in their name should be visible
         expect(screen.getByText('John Doe')).toBeInTheDocument();
         expect(screen.getByText('John Doe3')).toBeInTheDocument();
-        // Jane Doe should be filtered out
         expect(screen.queryByText('Jane Doe')).not.toBeInTheDocument();
       },
-      { timeout: 2000 },
+      { timeout: 600 },
     );
   });
 
@@ -1457,20 +1449,12 @@ describe('Testing Campaign Pledge Screen', () => {
     await userEvent.clear(searchInput);
     await userEvent.type(searchInput, '  John Doe  ');
 
-    // Wait for debounce (300ms default) to complete
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 350));
-    });
-
-    // The onSearchChange callback should have been called with trimmed value and filtered results
     await waitFor(
       () => {
-        // Search uses trimmed value - John Doe should still be visible
         expect(screen.getByText('John Doe')).toBeInTheDocument();
-        // Jane Doe should be filtered out (proves search filters correctly with trimmed value)
         expect(screen.queryByText('Jane Doe')).not.toBeInTheDocument();
       },
-      { timeout: 3000 },
+      { timeout: 600 },
     );
 
     // Clear and type again to ensure the callback is covered
