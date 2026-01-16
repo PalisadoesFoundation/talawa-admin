@@ -82,9 +82,7 @@ describe('AgendaItemsCreateModal', () => {
 
     expect(screen.getByText('agendaItemDetails')).toBeInTheDocument();
     expect(screen.getByTestId('createAgendaItemFormBtn')).toBeInTheDocument();
-    expect(
-      screen.getByTestId('createAgendaItemModalCloseBtn'),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
   });
 
   test('tests the condition for formState', async () => {

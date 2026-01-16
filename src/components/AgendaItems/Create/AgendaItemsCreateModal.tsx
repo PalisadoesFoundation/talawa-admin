@@ -37,9 +37,10 @@
  * ```
  */
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Row, Col } from 'react-bootstrap';
+import { Button, Row, Col } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { Autocomplete, TextField } from '@mui/material';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -161,8 +162,8 @@ const AgendaItemsCreateModal: React.FC<
         <p className={styles.titlemodalAgendaItems}>{t('agendaItemDetails')}</p>
       }
     >
-      <Form onSubmit={createAgendaItemHandler}>
-        <Form.Group className="d-flex mb-3 w-100">
+      <form onSubmit={createAgendaItemHandler}>
+        <div className="d-flex mb-3 w-100">
           <Autocomplete
             multiple
             className={`${styles.noOutline} w-100`}
@@ -190,12 +191,13 @@ const AgendaItemsCreateModal: React.FC<
               <TextField {...params} label={t('category')} />
             )}
           />
-        </Form.Group>
+        </div>
         <Row className="mb-3">
           <Col>
-            <Form.Group className="mb-3" controlId="title">
-              <Form.Label>{t('title')}</Form.Label>
-              <Form.Control
+            <FormFieldGroup name="title" label={t('title')}>
+              <input
+                className="form-control"
+                id="title"
                 type="text"
                 placeholder={t('enterTitle')}
                 value={formState.title}
@@ -204,12 +206,13 @@ const AgendaItemsCreateModal: React.FC<
                   setFormState({ ...formState, title: e.target.value })
                 }
               />
-            </Form.Group>
+            </FormFieldGroup>
           </Col>
           <Col>
-            <Form.Group controlId="duration">
-              <Form.Label>{t('duration')}</Form.Label>
-              <Form.Control
+            <FormFieldGroup name="duration" label={t('duration')}>
+              <input
+                className="form-control"
+                id="duration"
                 type="text"
                 placeholder={t('enterDuration')}
                 value={formState.duration}
@@ -218,13 +221,13 @@ const AgendaItemsCreateModal: React.FC<
                   setFormState({ ...formState, duration: e.target.value })
                 }
               />
-            </Form.Group>
+            </FormFieldGroup>
           </Col>
         </Row>
-        <Form.Group className="mb-3" controlId="description">
-          <Form.Label>{t('description')}</Form.Label>
-          <Form.Control
-            as="textarea"
+        <FormFieldGroup name="description" label={t('description')}>
+          <textarea
+            className="form-control"
+            id="description"
             rows={1}
             placeholder={t('enterDescription')}
             value={formState.description}
@@ -233,12 +236,13 @@ const AgendaItemsCreateModal: React.FC<
               setFormState({ ...formState, description: e.target.value })
             }
           />
-        </Form.Group>
+        </FormFieldGroup>
 
-        <Form.Group className="mb-3">
-          <Form.Label>{t('url')}</Form.Label>
+        <div className="mb-3">
+          <label className="form-label">{t('url')}</label>
           <div className="d-flex">
-            <Form.Control
+            <input
+              className="form-control"
               type="text"
               placeholder={t('enterUrl')}
               id="basic-url"
@@ -268,10 +272,11 @@ const AgendaItemsCreateModal: React.FC<
               </Button>
             </li>
           ))}
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>{t('attachments')}</Form.Label>
-          <Form.Control
+        </div>
+        <div className="mb-3">
+          <label className="form-label">{t('attachments')}</label>
+          <input
+            className="form-control"
             accept="image/*, video/*"
             data-testid="attachment"
             name="attachment"
@@ -280,8 +285,8 @@ const AgendaItemsCreateModal: React.FC<
             multiple={true}
             onChange={handleFileChange}
           />
-          <Form.Text>{t('attachmentLimit')}</Form.Text>
-        </Form.Group>
+          <small className="form-text">{t('attachmentLimit')}</small>
+        </div>
         {formState.attachments && (
           <div className={styles.previewFile} data-testid="mediaPreview">
             {formState.attachments.map((attachment, index) => (
@@ -321,7 +326,7 @@ const AgendaItemsCreateModal: React.FC<
         >
           {t('createAgendaItem')}
         </Button>
-      </Form>
+      </form>
     </BaseModal>
   );
 };

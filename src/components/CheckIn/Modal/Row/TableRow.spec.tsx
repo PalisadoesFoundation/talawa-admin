@@ -192,7 +192,7 @@ describe('Testing Table Row for CheckIn Table', () => {
 
     fireEvent.click(await findByText('Download Tag'));
 
-    expect(await findByText('Error generating pdf!')).toBeInTheDocument();
+    expect(await findByText('Error generating pdf')).toBeInTheDocument();
   });
 
   test('Should check in user for recurring event successfully', async () => {

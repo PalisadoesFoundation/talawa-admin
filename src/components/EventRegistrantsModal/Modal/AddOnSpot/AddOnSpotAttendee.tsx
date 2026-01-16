@@ -32,7 +32,7 @@
  */
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { BaseModal } from 'shared-components/BaseModal';
 import styles from 'style/app-fixed.module.css';
 import { useParams } from 'react-router';
@@ -47,6 +47,7 @@ import { errorHandler } from 'utils/errorHandler';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import modalStyles from '../../EventRegistrants.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   show,
@@ -147,13 +148,11 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
         headerClassName={modalStyles.modalHeader}
         title={t('title')}
       >
-        <Form onSubmit={handleSubmit} data-testid="onspot-attendee-form">
+        <form onSubmit={handleSubmit} data-testid="onspot-attendee-form">
           <div className="d-flex justify-content-between">
-            <Form.Group className="mb-1">
-              <Form.Label htmlFor="firstName">
-                {tCommon('firstName')}
-              </Form.Label>
-              <Form.Control
+            <FormFieldGroup name="firstName" label={tCommon('firstName')}>
+              <input
+                className="form-control"
                 id="firstName"
                 type="text"
                 name="firstName"
@@ -161,10 +160,10 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                 onChange={handleChange}
                 placeholder={t('firstNamePlaceholder')}
               />
-            </Form.Group>
-            <Form.Group className="mb-1">
-              <Form.Label htmlFor="lastName">{tCommon('lastName')}</Form.Label>
-              <Form.Control
+            </FormFieldGroup>
+            <FormFieldGroup name="lastName" label={tCommon('lastName')}>
+              <input
+                className="form-control"
                 id="lastName"
                 type="text"
                 name="lastName"
@@ -172,11 +171,11 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                 onChange={handleChange}
                 placeholder={t('lastNamePlaceholder')}
               />
-            </Form.Group>
+            </FormFieldGroup>
           </div>
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="phoneNo">{t('phoneNumber')}</Form.Label>
-            <Form.Control
+          <FormFieldGroup name="phoneNo" label={t('phoneNumber')}>
+            <input
+              className="form-control"
               id="phoneNo"
               type="tel"
               name="phoneNo"
@@ -184,11 +183,11 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
               onChange={handleChange}
               placeholder="1234567890"
             />
-          </Form.Group>
+          </FormFieldGroup>
 
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="email">{tCommon('email')}</Form.Label>
-            <Form.Control
+          <FormFieldGroup name="email" label={tCommon('email')}>
+            <input
+              className="form-control"
               id="email"
               type="email"
               name="email"
@@ -196,13 +195,12 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
               onChange={handleChange}
               placeholder={t('emailPlaceholder')}
             />
-          </Form.Group>
+          </FormFieldGroup>
 
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="gender">{tCommon('gender')}</Form.Label>
-            <Form.Control
+          <FormFieldGroup name="gender" label={tCommon('gender')}>
+            <select
+              className="form-control"
               id="gender"
-              as="select"
               name="gender"
               value={formData.gender}
               onChange={handleChange}
@@ -211,8 +209,8 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
               <option value="Male">{t('male')}</option>
               <option value="Female">{t('female')}</option>
               <option value="Other">{t('other')}</option>
-            </Form.Control>
-          </Form.Group>
+            </select>
+          </FormFieldGroup>
           <br />
           <LoadingState isLoading={isSubmitting} variant="inline">
             <Button
@@ -224,7 +222,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
               {t('addAttendee')}
             </Button>
           </LoadingState>
-        </Form>
+        </form>
       </BaseModal>
     </ErrorBoundaryWrapper>
   );

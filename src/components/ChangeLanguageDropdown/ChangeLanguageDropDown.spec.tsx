@@ -33,7 +33,37 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 
 vi.mock('js-cookie', () => ({ default: { get: vi.fn(), set: vi.fn() } }));
 
-vi.mock('i18next', () => ({ default: { changeLanguage: vi.fn() } }));
+vi.mock('i18next', () => {
+  const mockT = vi.fn((key: string) => key);
+  const mockI18next = {
+    use: vi.fn().mockReturnThis(),
+    init: vi.fn().mockReturnThis(),
+    changeLanguage: vi.fn(),
+    t: mockT,
+    getFixedT: vi.fn(() => mockT),
+    language: 'en',
+    languages: ['en', 'es', 'fr', 'hi', 'zh'],
+    isInitialized: true,
+    hasLoadedNamespace: vi.fn(() => true),
+    loadNamespaces: vi.fn().mockResolvedValue(undefined),
+    on: vi.fn(),
+    off: vi.fn(),
+    getResourceBundle: vi.fn(() => ({})),
+    options: {
+      react: { useSuspense: false },
+    },
+    services: {
+      resourceStore: {
+        data: {},
+      },
+    },
+    store: {
+      on: vi.fn(),
+      off: vi.fn(),
+    },
+  };
+  return { default: mockI18next };
+});
 
 vi.mock('utils/useLocalstorage', () => ({ default: vi.fn() }));
 
