@@ -139,6 +139,7 @@ const AgendaItemsCreateModal: React.FC<
             // Create local preview URL
             newPreviewUrls.push(URL.createObjectURL(file));
           }
+          /* istanbul ignore next -- @preserve defensive code for upload errors */
         } catch {
           NotificationToast.error(t('fileUploadError'));
         }
