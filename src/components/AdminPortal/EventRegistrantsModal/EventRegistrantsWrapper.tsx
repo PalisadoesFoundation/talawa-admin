@@ -41,7 +41,7 @@ export const EventRegistrantsWrapper = ({
 }: PropType): JSX.Element => {
   const { t: tErrors } = useTranslation('errors');
   const { t } = useTranslation('translation', {
-    keyPrefix: 'eventRegistrantsWrapper',
+    keyPrefix: 'eventRegistrantsModal',
   });
   // State to control the visibility of the modal
   const [showModal, setShowModal] = useState(false);
@@ -64,12 +64,12 @@ export const EventRegistrantsWrapper = ({
       <Button
         data-testid="filter-button"
         className={`border-1 mx-4 ${style.createButton}`}
-        aria-label={t('buttonAriaLabel')}
+        aria-label={t('registerMember')}
         onClick={(): void => {
           setShowModal(true); // Show the modal when button is clicked
         }}
       >
-        {t('registerMemberButton')}
+        {t('registerMember')}
       </Button>
 
       {/* Render the EventRegistrantsModal if showModal is true */}

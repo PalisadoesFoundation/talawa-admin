@@ -106,10 +106,10 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   // Function to add a new registrant to the event
   const addRegistrant = (): void => {
     if (member == null) {
-      NotificationToast.warning(t('selectUserWarning'));
+      NotificationToast.warning(t('selectUserFirst'));
       return;
     }
-    NotificationToast.warning(t('addingAttendeeProgress'));
+    NotificationToast.warning(t('addingAttendee'));
     const addVariables = isRecurring
       ? { userId: member.id, recurringEventInstanceId: eventId }
       : { userId: member.id, eventId: eventId };
@@ -188,22 +188,15 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             noOptionsText={
               <div className="d-flex ">
                 <p className="me-2">{t('noRegistrationsFound')}</p>
-                <span
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      setOpen(true);
-                    }
-                  }}
+                 <button
+                  type="button"
                   className={`underline ${styles.underlineText}`}
                   onClick={() => {
                     setOpen(true);
                   }}
                 >
                   {t('addOnspotRegistrationLink')}
-                </span>
+                </button>
               </div>
             }
             options={memberData?.usersByOrganizationId || []}

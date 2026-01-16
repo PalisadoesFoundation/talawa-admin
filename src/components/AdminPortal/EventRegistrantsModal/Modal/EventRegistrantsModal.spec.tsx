@@ -576,7 +576,8 @@ describe('EventRegistrantsModal', () => {
     fireEvent.keyDown(input, { key: 'ArrowDown' });
 
     // This text appears via getOptionLabel's t('unknownUser') fallback
-    const option = await screen.findByText('eventRegistrantsModal.unknownUser');
+    // i18nForTest translates it to the English text
+    const option = await screen.findByText('Unknown User');
     expect(option).toBeInTheDocument();
   });
 });

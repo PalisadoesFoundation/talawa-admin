@@ -6,10 +6,9 @@
  * It validates the form inputs, submits the data to the server using a GraphQL
  * mutation, and handles success or error responses appropriately.
  *
- * @param props - The props for the component:
- * - show - Determines whether the modal is visible.
- * - handleClose - Function to close the modal.
- * - reloadMembers - Function to reload the list of members.
+ * @param show - Determines whether the modal is visible.
+ * @param handleClose - Function to close the modal.
+ * @param reloadMembers - Function to reload the list of members.
  *
  * @returns The rendered AddOnSpotAttendee component.
  *
