@@ -17,12 +17,6 @@ vi.mock('components/UserPortal/UserSidebar/UserSidebar', () => ({
   )),
 }));
 
-vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
-  default: vi.fn(() => (
-    <div data-testid="profile-dropdown">ProfileDropdown</div>
-  )),
-}));
-
 // Mock react-i18next
 vi.mock('react-i18next', async () => {
   const actual = await vi.importActual('react-i18next');
@@ -216,6 +210,36 @@ describe('UserGlobalScreen', () => {
       renderComponent();
 
       // At exactly 820px - verify component renders successfully
+      expect(screen.getByTestId('user-sidebar')).toBeInTheDocument();
+      expect(screen.getByTestId('mainpageright')).toBeInTheDocument();
+    });
+
+    it('should handle window resize at 819px (just below breakpoint)', () => {
+      // Set initial width to 819px (below threshold)
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 819,
+      });
+
+      renderComponent();
+
+      // Component should render normally at 819px
+      expect(screen.getByTestId('user-sidebar')).toBeInTheDocument();
+      expect(screen.getByTestId('mainpageright')).toBeInTheDocument();
+    });
+
+    it('should handle window resize at 821px (just above breakpoint)', () => {
+      // Set initial width to 821px (above threshold)
+      Object.defineProperty(window, 'innerWidth', {
+        writable: true,
+        configurable: true,
+        value: 821,
+      });
+
+      renderComponent();
+
+      // Component should render normally at 821px
       expect(screen.getByTestId('user-sidebar')).toBeInTheDocument();
       expect(screen.getByTestId('mainpageright')).toBeInTheDocument();
     });
