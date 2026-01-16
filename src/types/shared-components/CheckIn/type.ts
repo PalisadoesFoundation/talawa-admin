@@ -1,5 +1,5 @@
-import type { Event } from '../Event/type';
-import type { User } from '../shared-components/User/type';
+import type { Event } from '../../Event/type';
+import type { User } from '../../shared-components/User/type';
 
 export type CheckIn = {
   _id: string;

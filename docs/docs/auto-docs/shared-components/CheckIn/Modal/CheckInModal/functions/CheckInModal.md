@@ -12,7 +12,7 @@ Defined in: [src/shared-components/CheckIn/Modal/CheckInModal.tsx:36](https://gi
 
 ### \_\_namedParameters
 
-[`InterfaceModalProp`](../../../../../types/CheckIn/interface/interfaces/InterfaceModalProp.md)
+[`InterfaceModalProp`](../../../../../types/shared-components/CheckIn/interface/interfaces/InterfaceModalProp.md)
 
 ## Returns
 
