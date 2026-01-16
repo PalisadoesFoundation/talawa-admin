@@ -721,13 +721,10 @@
     "agendaItemDeleted": "议程项目已成功删除",
     "deleteAgendaItem": "删除议程项目",
     "deleteAgendaItemMsg": "您要删除此议程项目吗？",
-<<<<<<< HEAD
-    "attachmentPreview": "附件预览"
-=======
+    "attachmentPreview": "附件预览",
     "event": "活动",
     "search": "搜索",
     "attachmentPreview": "附件預覽"
->>>>>>> upstream/develop
   },
   "eventListCard": {
     "deleteEvent": "删除事件",
@@ -1468,19 +1465,16 @@
     "options": "选项",
     "addRegistrant": "添加注册者",
     "noRegistrantsFound": "未找到注册者",
-<<<<<<< HEAD
     "removingAttendee": "正在删除与会者...",
     "attendeeRemovedSuccessfully": "与会者已成功删除",
     "errorRemovingAttendee": "删除与会者时出错",
-    "cannotUnregisterCheckedIn": "无法取消已签到的用户的注册"
-=======
+    "cannotUnregisterCheckedIn": "无法取消已签到的用户的注册",
     "removingAttendee": "正在移除参与者...",
     "attendeeRemovedSuccessfully": "参与者移除成功！",
     "errorRemovingAttendee": "移除参与者时出错。请重试。",
     "checkedIn": "已签到",
     "unregister": "取消注册",
     "cannotUnregisterCheckedInTooltip": "无法取消已签到用户的注册"
->>>>>>> upstream/develop
   },
   "onSpotAttendee": {
     "title": "现场参与者",
@@ -1903,21 +1897,18 @@
   "checkIn": {
     "errorCheckingIn": "签到错误",
     "checkedInSuccessfully": "成功签到",
-<<<<<<< HEAD
     "generatingPdf": "正在生成 PDF...",
     "pdfGeneratedSuccessfully": "PDF 生成成功！",
     "errorGeneratingPdf": "生成 PDF 时出错",
     "unknownError": "未知错误",
     "checkedIn": "已签到",
     "downloadTag": "下载标签",
-    "checkInButton": "签到"
-=======
+    "checkInButton": "签到",
     "searchAttendees": "搜尋參與者",
     "checkedIn": "已簽到",
     "downloadTag": "下載標籤",
     "checkIn": "簽到",
     "eventCheckInManagement": "活動簽到管理"
->>>>>>> upstream/develop
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "添加与会者时出错",

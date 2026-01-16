@@ -721,11 +721,8 @@
     "agendaItemDeleted": "Point de l'ordre du jour supprimé avec succès",
     "deleteAgendaItem": "Supprimer le point de l'ordre du jour",
     "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?",
-<<<<<<< HEAD
-=======
     "event": "Événement",
     "search": "Rechercher",
->>>>>>> upstream/develop
     "attachmentPreview": "Aperçu de la pièce jointe"
   },
   "eventListCard": {
@@ -1469,15 +1466,11 @@
     "noRegistrantsFound": "Aucun inscrit trouvé.",
     "removingAttendee": "Suppression du participant...",
     "attendeeRemovedSuccessfully": "Participant supprimé avec succès",
-<<<<<<< HEAD
     "errorRemovingAttendee": "Erreur lors de la suppression du participant",
-    "cannotUnregisterCheckedIn": "Impossible d'annuler l'inscription d'un utilisateur qui s'est déjà enregistré"
-=======
-    "errorRemovingAttendee": "Erreur lors de la suppression du participant. Veuillez réessayer.",
+    "cannotUnregisterCheckedIn": "Impossible d'annuler l'inscription d'un utilisateur qui s'est déjà enregistré",
     "checkedIn": "Enregistré",
     "unregister": "Désinscrire",
     "cannotUnregisterCheckedInTooltip": "Impossible de désinscrire un utilisateur déjà enregistré"
->>>>>>> upstream/develop
   },
   "onSpotAttendee": {
     "title": "Participant sur place",
@@ -1900,21 +1893,18 @@
   "checkIn": {
     "errorCheckingIn": "Erreur lors de l'enregistrement",
     "checkedInSuccessfully": "Enregistrement réussi",
-<<<<<<< HEAD
     "generatingPdf": "Génération du PDF...",
     "pdfGeneratedSuccessfully": "PDF généré avec succès !",
     "errorGeneratingPdf": "Erreur lors de la génération du PDF",
     "unknownError": "Erreur inconnue",
     "checkedIn": "Enregistré",
     "downloadTag": "Télécharger l'étiquette",
-    "checkInButton": "S'enregistrer"
-=======
+    "checkInButton": "S'enregistrer",
     "searchAttendees": "Rechercher des participants",
     "checkedIn": "Enregistré",
     "downloadTag": "Télécharger l'étiquette",
     "checkIn": "Enregistrer",
     "eventCheckInManagement": "Gestion des enregistrements d'événement"
->>>>>>> upstream/develop
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",

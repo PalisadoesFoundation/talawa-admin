@@ -721,11 +721,8 @@
     "agendaItemDeleted": "Agenda Item deleted successfully",
     "deleteAgendaItem": "Delete Agenda Item",
     "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
-<<<<<<< HEAD
-=======
     "event": "Event",
     "search": "Search",
->>>>>>> upstream/develop
     "attachmentPreview": "Attachment preview"
   },
   "eventListCard": {
@@ -1072,13 +1069,10 @@
     "removingAttendee": "Removing the attendee...",
     "attendeeRemovedSuccessfully": "Attendee removed successfully",
     "errorRemovingAttendee": "Error removing attendee",
-<<<<<<< HEAD
-    "cannotUnregisterCheckedIn": "Cannot unregister a user who has already checked in"
-=======
+    "cannotUnregisterCheckedIn": "Cannot unregister a user who has already checked in",
     "checkedIn": "Checked In",
     "unregister": "Unregister",
     "cannotUnregisterCheckedInTooltip": "Cannot unregister checked-in user"
->>>>>>> upstream/develop
   },
   "onSpotAttendee": {
     "title": "On-spot Attendee",
@@ -1882,21 +1876,18 @@
   "checkIn": {
     "errorCheckingIn": "Error checking in",
     "checkedInSuccessfully": "Checked in successfully",
-<<<<<<< HEAD
     "generatingPdf": "Generating pdf...",
     "pdfGeneratedSuccessfully": "PDF generated successfully!",
     "errorGeneratingPdf": "Error generating pdf",
     "unknownError": "Unknown error",
     "checkedIn": "Checked In",
     "downloadTag": "Download Tag",
-    "checkInButton": "Check In"
-=======
+    "checkInButton": "Check In",
     "searchAttendees": "Search Attendees",
     "checkedIn": "Checked In",
     "downloadTag": "Download Tag",
     "checkIn": "Check In",
     "eventCheckInManagement": "Event Check In Management"
->>>>>>> upstream/develop
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",
