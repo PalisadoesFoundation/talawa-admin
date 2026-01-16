@@ -249,7 +249,16 @@ function EventAttendance(): JSX.Element {
           ),
       },
     ],
-    [t, currentUrl],
+    [t, currentUrl, tCommon],
+  );
+
+  const rowsWithIndex = useMemo(
+    () =>
+      filteredAttendees.map((attendee, index) => ({
+        ...attendee,
+        index: index + 1,
+      })),
+    [filteredAttendees],
   );
 
   return (
@@ -313,7 +322,7 @@ function EventAttendance(): JSX.Element {
         </div>
       </div>
       <DataGridWrapper
-        rows={filteredAttendees}
+        rows={rowsWithIndex}
         columns={columns}
         loading={loading}
         error={error ? error.message : undefined}

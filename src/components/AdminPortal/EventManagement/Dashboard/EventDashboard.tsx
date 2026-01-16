@@ -79,7 +79,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
   }
 
   if (!eventData || !eventData.event) {
-    return <div data-testid="no-event">{t('noEvent')}</div>;
+    return <div data-testid="no-event">{tEventList('noEvent')}</div>;
   }
 
   const formatTimeFromDateTime = (dateTime: string): string => {
@@ -142,7 +142,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
               <h1>
                 <b data-testid="registrations-count">N/A</b>
               </h1>
-              <span>{t('noRegistrations')}</span>
+              <span>{tEventList('noRegistrations')}</span>
             </div>
           </div>
           <div className={`${styles.ctacards}`} data-testid="attendees-card">
@@ -151,7 +151,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
               <h1>
                 <b data-testid="attendees-count">N/A</b>
               </h1>
-              <span>{t('noOfAttendees')}</span>
+              <span>{tEventList('noOfAttendees')}</span>
             </div>
           </div>
           <div className={`${styles.ctacards}`} data-testid="feedback-card">
@@ -160,7 +160,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
               <h1>
                 <b data-testid="feedback-rating">N/A</b>
               </h1>
-              <span>{t('averageFeedback')}</span>
+              <span>{tEventList('averageFeedback')}</span>
             </div>
           </div>
         </div>
@@ -181,12 +181,12 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                 {eventData.event.description}
               </p>
               <p className={styles.toporgloc} data-testid="event-location">
-                <b>{t('location')}:</b>
+                <b>{tEventList('location')}:</b>
                 <span>{eventData.event.location || 'N/A'}</span>
               </p>
               {/* Attendees not available; remove or adjust */}
               <p className={styles.toporgloc} data-testid="event-registrants">
-                <b>{t('registrants')}:</b> <span>N/A</span>
+                <b>{tEventList('registrants')}:</b> <span>N/A</span>
               </p>
             </div>
             <div className={styles.time} data-testid="event-time">

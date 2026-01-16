@@ -735,8 +735,8 @@
     "event": "Evento",
     "search": "Buscar",
     "attachmentPreview": "Vista previa del adjunto",
-    "errorLoadingAgendaCategories": "Error occurred while loading Agenda Categories Data",
-    "errorLoadingAgendaItems": "Error occurred while loading Agenda Items Data"
+    "errorLoadingAgendaCategories": "Ocurrió un error al cargar los datos de las Categorías de la Agenda",
+    "errorLoadingAgendaItems": "Ocurrió un error al cargar los datos de los Puntos de la Agenda"
   },
   "eventListCard": {
     "location": "Lugar del evento",
