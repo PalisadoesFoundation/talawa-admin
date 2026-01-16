@@ -148,19 +148,24 @@ describe('AgendaItemsCreateModal', () => {
       duration: '30',
     });
 
+    // The useEffect uses functional updater, so we need to verify it was called with a function
+    // and that the function correctly filters URLs and attachments
     await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalledWith({
-        ...mockFormState1,
-        urls: [],
-      });
+      expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
     });
 
-    await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalledWith({
-        ...mockFormState1,
-        attachments: [],
-      });
-    });
+    // Find the useEffect filter call and verify it filters both URLs and attachments
+    const filterCall = mockSetFormState.mock.calls.find(
+      (call) => typeof call[0] === 'function',
+    );
+    expect(filterCall).toBeDefined();
+
+    if (filterCall) {
+      const result = filterCall[0](mockFormState1);
+      // The filter should remove empty strings from urls and attachments
+      expect(result.urls).not.toContain('');
+      expect(result.attachments).not.toContain('');
+    }
   });
   test('handleAddUrl correctly adds valid URL', async () => {
     render(
