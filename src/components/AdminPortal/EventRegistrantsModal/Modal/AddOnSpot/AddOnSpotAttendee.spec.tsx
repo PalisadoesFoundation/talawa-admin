@@ -95,11 +95,11 @@ const renderAddOnSpotAttendee = (): RenderResult => {
 
 describe('AddOnSpotAttendee Component', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
     sharedMocks.useParams.mockReturnValue({ eventId: '123', orgId: '123' });
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

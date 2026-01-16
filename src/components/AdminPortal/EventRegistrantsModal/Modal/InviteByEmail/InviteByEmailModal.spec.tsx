@@ -325,26 +325,6 @@ describe('InviteByEmailModal', () => {
           },
         },
         error: new Error('An error occurred'),
-        result: {
-          data: {
-            sendEventInvitations: {
-              id: 'error-id',
-              eventId: 'test-event-1',
-              recurringEventInstanceId: null,
-              invitedBy: 'user1',
-              userId: 'user2',
-              inviteeEmail: 'test@example.com',
-              inviteeName: '',
-              invitationToken: 'token-error',
-              status: 'ERROR',
-              expiresAt: dayjs().add(1, 'year').format('YYYY-MM-DD'),
-              respondedAt: null,
-              metadata: null,
-              createdAt: dayjs().format('YYYY-MM-DD'),
-              updatedAt: dayjs().format('YYYY-MM-DD'),
-            },
-          },
-        },
       };
 
       renderComponent({}, [errorMock]);
