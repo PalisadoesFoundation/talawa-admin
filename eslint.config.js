@@ -42,6 +42,13 @@ const restrictedImports = [
       'Do not import Modal directly. Use the shared BaseModal or the CRUDModalTemplate/* components instead.',
   },
   {
+    id: 'rb-form',
+    name: 'react-bootstrap',
+    importNames: ['Form'],
+    message:
+      'Do not import Form directly. Use the shared FormFieldGroup component instead.',
+  },
+  {
     id: 'mui-date-pickers',
     name: '@mui/x-date-pickers',
     message:
@@ -304,6 +311,20 @@ export default [
     rules: restrictImportsExcept(['rb-spinner']),
   },
   /**
+   * Exemption: FormFieldGroup component files
+   *
+   * FormFieldGroup files need direct react-bootstrap Form access for wrapper implementation.
+   * These files are the only ones allowed to import Form directly from react-bootstrap.
+   * Allowed ID: rb-form.
+   */
+  {
+    files: [
+      'src/shared-components/FormFieldGroup/**/*.{ts,tsx}',
+      'src/types/shared-components/FormFieldGroup/**/*.{ts,tsx}',
+    ],
+    rules: restrictImportsExcept(['rb-form']),
+  },
+  /**
    * Exemption: BaseModal component files
    *
    * BaseModal files need direct react-bootstrap Modal access for wrapper implementation.
@@ -317,6 +338,7 @@ export default [
     ],
     rules: restrictImportsExcept(['rb-modal']),
   },
+
   /**
    * Exemption: NotificationToast component files
    *
