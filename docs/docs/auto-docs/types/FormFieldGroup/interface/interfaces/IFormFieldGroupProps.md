@@ -9,6 +9,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:1](https://github.com/Palisad
 ## Extended by
 
 - [`IFormTextFieldProps`](IFormTextFieldProps.md)
+- [`IFormSelectFieldProps`](IFormSelectFieldProps.md)
 
 ## Properties
 
