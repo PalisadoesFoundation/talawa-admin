@@ -220,7 +220,9 @@ const UpcomingEvents = (): JSX.Element => {
   /**
    * Maps membership status to StatusBadge variant
    */
-  const getStatusBadgeProps = (status: string): { variant: StatusVariant } => {
+  export const getStatusBadgeProps = (
+    status: string,
+  ): { variant: StatusVariant } => {
     switch (status) {
       case 'requested':
       case 'invited':
@@ -446,8 +448,8 @@ const UpcomingEvents = (): JSX.Element => {
         eventDate={pendingVolunteerRequest?.eventDate || ''}
         isForGroup={!!pendingVolunteerRequest?.groupId}
         groupName={pendingVolunteerRequest?.groupName || ''}
-        onSelectSeries={() => {}}
-        onSelectInstance={() => {}}
+        onSelectSeries={() => { }}
+        onSelectInstance={() => { }}
       />
     </LoadingState>
   );
