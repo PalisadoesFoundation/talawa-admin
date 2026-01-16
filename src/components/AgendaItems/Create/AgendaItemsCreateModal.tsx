@@ -56,6 +56,17 @@ const AgendaItemsCreateModal: React.FC<
   const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const { uploadFileToMinio } = useMinioUpload();
 
+  /**
+   * Validates that a URL is a safe blob URL created by URL.createObjectURL.
+   * This ensures only browser-generated blob URLs are used in src attributes.
+   *
+   * @param url - URL string to validate.
+   * @returns True if the URL is a valid blob URL, false otherwise.
+   */
+  const isSafeBlobUrl = (url: string): boolean => {
+    return url.startsWith('blob:');
+  };
+
   // Cleanup object URLs on unmount to prevent memory leaks
   useEffect(() => {
     return () => {
@@ -330,18 +341,22 @@ const AgendaItemsCreateModal: React.FC<
               }
               return (
                 <div key={index} className={styles.attachmentPreview}>
-                  {isVideo ? (
-                    <video
-                      muted
-                      autoPlay={true}
-                      loop={true}
-                      playsInline
-                      crossOrigin="anonymous"
-                    >
-                      <source src={previewUrl} type="video/mp4" />
-                    </video>
-                  ) : (
-                    <img src={previewUrl} alt={t('attachmentPreview')} />
+                  {isSafeBlobUrl(previewUrl) && (
+                    <>
+                      {isVideo ? (
+                        <video
+                          muted
+                          autoPlay={true}
+                          loop={true}
+                          playsInline
+                          crossOrigin="anonymous"
+                        >
+                          <source src={previewUrl} type="video/mp4" />
+                        </video>
+                      ) : (
+                        <img src={previewUrl} alt={t('attachmentPreview')} />
+                      )}
+                    </>
                   )}
                   <button
                     type="button"
