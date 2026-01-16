@@ -21,7 +21,7 @@ import type {
   InterfaceAttendeeCheckIn,
   InterfaceModalProp,
   InterfaceTableData,
-} from 'types/CheckIn/interface';
+} from 'types/shared-components/CheckIn/interface';
 import type {
   GridColDef,
   GridRowHeightReturnValue,
