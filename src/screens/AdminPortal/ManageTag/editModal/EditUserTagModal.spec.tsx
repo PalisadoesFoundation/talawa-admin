@@ -1,9 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import EditUserTagModal, {
-  InterfaceEditUserTagModalProps,
-} from './EditUserTagModal';
+import EditUserTagModal from './EditUserTagModal';
+import { InterfaceEditUserTagModalProps } from 'types/AdminPortal/ManageTag/editModal/EditUserTagModal/interface';
 
 import type { TFunction } from 'i18next';
 

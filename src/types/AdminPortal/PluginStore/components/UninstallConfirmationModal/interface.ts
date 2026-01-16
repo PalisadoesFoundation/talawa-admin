@@ -12,5 +12,5 @@ export interface InterfaceUninstallConfirmationModalProps {
   show: boolean;
   onClose: () => void;
   onConfirm: () => Promise<void>;
-  plugin: IPluginMeta;
+  plugin: IPluginMeta | null;
 }
