@@ -441,6 +441,22 @@ describe('Testing ItemUpdateStatusModal', () => {
         });
       });
     });
+
+    it('renders StatusBadge with completed variant when isCompleted is true', () => {
+      renderItemUpdateStatusModal(link1, itemProps[0]); // isCompleted = true
+
+      const badge = screen.getByTestId('update-status-badge');
+      expect(badge).toBeInTheDocument();
+      expect(badge).toHaveAttribute('aria-label', 'Completed');
+    });
+
+    it('renders StatusBadge with pending variant when isCompleted is false', () => {
+      renderItemUpdateStatusModal(link1, itemProps[1]); // isCompleted = false
+
+      const badge = screen.getByTestId('update-status-badge');
+      expect(badge).toBeInTheDocument();
+      expect(badge).toHaveAttribute('aria-label', 'Pending');
+    });
   });
 
   describe('Testing markActionAsPendingForInstanceHandler', () => {
