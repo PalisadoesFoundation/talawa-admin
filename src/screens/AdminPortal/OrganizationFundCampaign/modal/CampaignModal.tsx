@@ -3,7 +3,7 @@ import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { BaseModal } from 'shared-components/BaseModal';
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import styles from './CampaignModal.module.css';
@@ -264,7 +264,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         </div>
       }
     >
-      <Form
+      <form
         onSubmitCapture={
           mode === 'edit' ? updateCampaignHandler : createCampaignHandler
         }
@@ -302,7 +302,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
           </FormFieldGroup>
         </div>
 
-        <Form.Group className="d-flex gap-4 mx-auto mb-3">
+        <div className="d-flex gap-4 mx-auto mb-3">
           <DatePicker
             format="DD/MM/YYYY"
             label={tCommon('startDate')}
@@ -350,9 +350,9 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
             }}
             minDate={dayjs(campaignDateRange.startDate)}
           />
-        </Form.Group>
+        </div>
 
-        <Form.Group className="d-flex gap-4 mb-4">
+        <div className="d-flex gap-4 mb-4">
           <FormControl fullWidth>
             <InputLabel id="campaign-currency-label">
               {t('currency')}
@@ -395,7 +395,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
               }}
             />
           </FormControl>
-        </Form.Group>
+        </div>
 
         <Button
           type="submit"
@@ -405,7 +405,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
         >
           {t(mode === 'edit' ? 'updateCampaign' : 'createCampaign')}
         </Button>
-      </Form>
+      </form>
     </BaseModal>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { BaseModal } from 'shared-components/BaseModal';
 import type { InterfaceCreateFund, InterfaceFundInfo } from 'utils/interfaces';
 import styles from './FundModal.module.css';
@@ -189,13 +189,13 @@ const FundModal: React.FC<InterfaceFundModal> = ({
         </div>
       }
     >
-      <Form
+      <form
         onSubmitCapture={
           mode === 'create' ? createFundHandler : updateFundHandler
         }
         className="p-3"
       >
-        <Form.Group className="d-flex mb-3 w-100">
+        <div className="d-flex mb-3 w-100">
           <FormFieldGroup
             label={t('fundName')}
             name="fundName"
@@ -214,9 +214,9 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               onBlur={() => setTouched((prev) => ({ ...prev, fundName: true }))}
             />
           </FormFieldGroup>
-        </Form.Group>
+        </div>
 
-        <Form.Group className="d-flex mb-3 w-100">
+        <div className="d-flex mb-3 w-100">
           <FormFieldGroup
             label={t('fundId')}
             name="fundId"
@@ -235,7 +235,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               onBlur={() => setTouched((prev) => ({ ...prev, fundRef: true }))}
             />
           </FormFieldGroup>
-        </Form.Group>
+        </div>
 
         <div
           className={`d-flex mt-2 mb-3 flex-wrap ${
@@ -244,57 +244,63 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               : 'justify-content-start gap-3'
           }`}
         >
-          <Form.Group className="d-flex">
+          <div className="d-flex align-items-center">
             <label htmlFor="isTaxDeductibleSwitch">{t('taxDeductible')}</label>
-            <Form.Switch
-              type="checkbox"
-              id="isTaxDeductibleSwitch"
-              checked={formState.isTaxDeductible}
-              data-testid="setisTaxDeductibleSwitch"
-              className={`ms-2 ${styles.switch}`}
-              onChange={() =>
-                setFormState({
-                  ...formState,
-                  isTaxDeductible: !formState.isTaxDeductible,
-                })
-              }
-            />
-          </Form.Group>
-
-          <Form.Group className="d-flex">
-            <label htmlFor="isDefaultSwitch">{t('default')}</label>
-            <Form.Switch
-              type="checkbox"
-              id="isDefaultSwitch"
-              className={`ms-2 ${styles.switch}`}
-              data-testid="setDefaultSwitch"
-              checked={formState.isDefault}
-              onChange={() =>
-                setFormState({
-                  ...formState,
-                  isDefault: !formState.isDefault,
-                })
-              }
-            />
-          </Form.Group>
-
-          {mode === 'edit' && (
-            <Form.Group className="d-flex">
-              <label htmlFor="archivedSwitch">{t('archived')}</label>
-              <Form.Switch
+            <div className={`form-check form-switch ms-2 ${styles.switch}`}>
+              <input
                 type="checkbox"
-                id="archivedSwitch"
-                checked={formState.isArchived}
-                data-testid="archivedSwitch"
-                className={`ms-2 ${styles.switch}`}
+                id="isTaxDeductibleSwitch"
+                className="form-check-input"
+                checked={formState.isTaxDeductible}
+                data-testid="setisTaxDeductibleSwitch"
                 onChange={() =>
                   setFormState({
                     ...formState,
-                    isArchived: !formState.isArchived,
+                    isTaxDeductible: !formState.isTaxDeductible,
                   })
                 }
               />
-            </Form.Group>
+            </div>
+          </div>
+
+          <div className="d-flex align-items-center">
+            <label htmlFor="isDefaultSwitch">{t('default')}</label>
+            <div className={`form-check form-switch ms-2 ${styles.switch}`}>
+              <input
+                type="checkbox"
+                id="isDefaultSwitch"
+                className="form-check-input"
+                checked={formState.isDefault}
+                data-testid="setDefaultSwitch"
+                onChange={() =>
+                  setFormState({
+                    ...formState,
+                    isDefault: !formState.isDefault,
+                  })
+                }
+              />
+            </div>
+          </div>
+
+          {mode === 'edit' && (
+            <div className="d-flex align-items-center">
+              <label htmlFor="archivedSwitch">{t('archived')}</label>
+              <div className={`form-check form-switch ms-2 ${styles.switch}`}>
+                <input
+                  type="checkbox"
+                  id="archivedSwitch"
+                  className="form-check-input"
+                  checked={formState.isArchived}
+                  data-testid="archivedSwitch"
+                  onChange={() =>
+                    setFormState({
+                      ...formState,
+                      isArchived: !formState.isArchived,
+                    })
+                  }
+                />
+              </div>
+            </div>
           )}
         </div>
 
@@ -305,7 +311,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
         >
           {t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}
         </Button>
-      </Form>
+      </form>
     </BaseModal>
   );
 };
