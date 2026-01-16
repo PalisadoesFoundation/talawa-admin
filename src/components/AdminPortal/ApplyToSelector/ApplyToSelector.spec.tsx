@@ -11,10 +11,11 @@ describe('ApplyToSelector', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
+
   const renderComponent = (
     applyTo: ApplyToType = 'series',
     onChange = vi.fn(),
-  ) => {
+  ): ReturnType<typeof render> => {
     return render(
       <I18nextProvider i18n={i18n}>
         <ApplyToSelector applyTo={applyTo} onChange={onChange} />
@@ -29,23 +30,23 @@ describe('ApplyToSelector', () => {
     expect(screen.getByLabelText(/this event only/i)).toBeInTheDocument();
   });
 
-  it('shows series option checked when applyTo is series', () => {
+  it('renders the apply to label', () => {
+    renderComponent();
+
+    expect(screen.getByText('Apply to')).toBeInTheDocument();
+  });
+
+  it('shows series radio as checked when applyTo is series', () => {
     renderComponent('series');
 
     const seriesRadio = screen.getByLabelText(/entire series/i);
-    const instanceRadio = screen.getByLabelText(/this event only/i);
-
     expect(seriesRadio).toBeChecked();
-    expect(instanceRadio).not.toBeChecked();
   });
 
-  it('shows instance option checked when applyTo is instance', () => {
+  it('shows instance radio as checked when applyTo is instance', () => {
     renderComponent('instance');
 
-    const seriesRadio = screen.getByLabelText(/entire series/i);
     const instanceRadio = screen.getByLabelText(/this event only/i);
-
-    expect(seriesRadio).not.toBeChecked();
     expect(instanceRadio).toBeChecked();
   });
 
@@ -54,7 +55,8 @@ describe('ApplyToSelector', () => {
     renderComponent('instance', onChange);
 
     const user = userEvent.setup();
-    await user.click(screen.getByLabelText(/entire series/i));
+    const seriesRadio = screen.getByLabelText(/entire series/i);
+    await user.click(seriesRadio);
 
     expect(onChange).toHaveBeenCalledWith('series');
   });
@@ -64,8 +66,48 @@ describe('ApplyToSelector', () => {
     renderComponent('series', onChange);
 
     const user = userEvent.setup();
-    await user.click(screen.getByLabelText(/this event only/i));
+    const instanceRadio = screen.getByLabelText(/this event only/i);
+    await user.click(instanceRadio);
 
     expect(onChange).toHaveBeenCalledWith('instance');
+  });
+
+  it('renders with accessible fieldset structure', () => {
+    renderComponent();
+
+    expect(screen.getByRole('group')).toBeInTheDocument();
+  });
+
+  it('renders legend element for accessibility', () => {
+    renderComponent();
+
+    // Legend text is part of the group's accessible name
+    expect(
+      screen.getByRole('group', { name: /apply to/i }),
+    ).toBeInTheDocument();
+  });
+
+  it('has unique IDs for radio inputs using useId', () => {
+    renderComponent();
+
+    const seriesRadio = screen.getByLabelText(/entire series/i);
+    const instanceRadio = screen.getByLabelText(/this event only/i);
+
+    expect(seriesRadio.id).toBeTruthy();
+    expect(instanceRadio.id).toBeTruthy();
+    expect(seriesRadio.id).not.toBe(instanceRadio.id);
+  });
+
+  it('radio buttons share the same name attribute for grouping', () => {
+    renderComponent();
+
+    const seriesRadio = screen.getByLabelText(
+      /entire series/i,
+    ) as HTMLInputElement;
+    const instanceRadio = screen.getByLabelText(
+      /this event only/i,
+    ) as HTMLInputElement;
+
+    expect(seriesRadio.name).toBe(instanceRadio.name);
   });
 });

@@ -7,6 +7,9 @@
   },
   "ends": "结束",
   "occurrences": "次",
+  "customRecurrence": "自定义重复",
+  "invalidDetailsMessage": "请检查您输入的详细信息。",
+  "selectAtLeastOneDay": "请至少选择一天。",
   "leaderboard": {
     "title": "排行榜",
     "searchByVolunteer": "按志愿者搜索",
@@ -831,7 +834,12 @@
     "highestGoal": "最高目标",
     "errorLoading": "加载活动数据时出错",
     "percentageRaised": "% 已筹集",
-    "campaignProgress": "活动进度: {{percentage}}%"
+    "campaignProgress": "活动进度：{{percentage}}%",
+    "campaignNotFound": "未找到募捐活动",
+    "dateRangeRequired": "请选择有效的日期范围",
+    "campaignNameRequired": "活动名称是必填项",
+    "invalidDate": "选择的日期无效",
+    "endDateBeforeStart": "结束日期不能早于开始日期"
   },
   "pledges": {
     "title": "基金活动承诺",
@@ -847,6 +855,7 @@
     "updatePledge": "更新承诺",
     "deletePledge": "删除承诺",
     "amount": "数量",
+    "amountMustBeAtLeastOne": "金额必须至少为 1",
     "editPledge": "编辑承诺",
     "deletePledgeMsg": "您确定要删除此承诺吗？",
     "noPledges": "未找到承诺",
@@ -870,7 +879,8 @@
     "pledgeDate": "承诺日期",
     "pledged": "已承诺",
     "donated": "已捐赠",
-    "campaignNotActive": "活动当前未激活"
+    "campaignNotActive": "活动当前未激活",
+    "close": "关闭"
   },
   "createPostModal": {
     "title": "帖子",
@@ -1425,7 +1435,22 @@
     "pageNumber": "第 {{page}} 页",
     "goToToday": "转到今天",
     "genderDistribution": "性别分布",
-    "ageDistribution": "年龄分布"
+    "ageDistribution": "年龄分布",
+    "age": "年齡",
+    "age18to40": "18-40",
+    "attendanceCount": "出席人數",
+    "close": "關閉",
+    "demographics": "人口統計",
+    "demography": "人口統計",
+    "exportData": "匯出資料",
+    "female": "女性",
+    "gender": "性別",
+    "male": "男性",
+    "other": "其他",
+    "over40": "40歲以上",
+    "today": "今天",
+    "trends": "趨勢",
+    "under18": "18歲以下"
   },
   "eventRegistrant": {
     "sort": "排序",
@@ -1460,7 +1485,10 @@
     "addingAttendee": "添加中...",
     "male": "男性",
     "female": "女性",
-    "other": "其他"
+    "other": "其他",
+    "firstNamePlaceholder": "小明",
+    "lastNamePlaceholder": "王",
+    "emailPlaceholder": "範例@gmail.com"
   },
   "settings": {
     "noeventsAttended": "未参加任何活动",
@@ -1893,7 +1921,13 @@
       "errorSendingInvites": "发送邀请时出错",
       "emailsLabel": "收件人邮箱和姓名",
       "emailsHelp": "为每个收件人提供邮箱和可选姓名。根据需要添加多个收件人。"
-    }
+    },
+    "selectUserWarning": "請先選擇要添加的用戶！",
+    "addingAttendeeProgress": "正在添加參與者..."
+  },
+  "eventRegistrantsWrapper": {
+    "buttonAriaLabel": "顯示參與者",
+    "registerMemberButton": "註冊成員"
   },
   "userCampaigns": {
     "title": "筹款活动",
@@ -1984,6 +2018,8 @@
     "earliest": "最早",
     "requestAccepted": "请求已成功接受",
     "requestRejected": "请求已成功拒绝",
+    "acceptRequest": "接受请求",
+    "rejectRequest": "拒绝请求",
     "details": "详情",
     "manageGroup": "管理小组",
     "mostVolunteers": "最多的志愿者",
@@ -2007,7 +2043,9 @@
     "deleteVolunteerGroup": "删除 {{name}} 志愿者小组",
     "deleteVolunteerEntry": "删除 {{name}} 志愿者条目",
     "viewGroup": "查看小组",
-    "editGroup": "编辑小组"
+    "editGroup": "编辑小组",
+    "invalidNumber": "无效数字",
+    "viewToggle": "切换视图"
   },
   "userVolunteer": {
     "title": "志愿服务",
@@ -2195,5 +2233,8 @@
   },
   "orgProfileField": {
     "editCustomField": "編輯自定義字段"
+  },
+  "userGlobalScreen": {
+    "globalFeatures": "全球功能"
   }
 }

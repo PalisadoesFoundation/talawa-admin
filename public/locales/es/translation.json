@@ -7,6 +7,9 @@
   },
   "ends": "Finaliza",
   "occurrences": "ocurrencias",
+  "customRecurrence": "Recurrencia personalizada",
+  "invalidDetailsMessage": "Por favor, verifique los detalles ingresados.",
+  "selectAtLeastOneDay": "Por favor, seleccione al menos un día.",
   "leaderboard": {
     "title": "Tabla de Clasificación",
     "searchByVolunteer": "Buscar por Voluntario",
@@ -831,7 +834,12 @@
     "highestGoal": "Meta más alta",
     "errorLoading": "Error al cargar los datos de la campaña",
     "percentageRaised": "% Recaudado",
-    "campaignProgress": "Progreso de la campaña: {{percentage}}%"
+    "campaignProgress": "Progreso de la campaña: {{percentage}}%",
+    "campaignNotFound": "Campaña no encontrada",
+    "dateRangeRequired": "Por favor, seleccione un rango de fechas válido",
+    "campaignNameRequired": "El nombre de la campaña es obligatorio",
+    "invalidDate": "Fecha seleccionada no válida",
+    "endDateBeforeStart": "La fecha de finalización no puede ser anterior a la fecha de inicio"
   },
   "pledges": {
     "title": "Compromisos de Campaña de Financiamiento",
@@ -849,6 +857,7 @@
     "updatePledge": "Actualizar Compromiso",
     "deletePledge": "Eliminar Compromiso",
     "amount": "Monto",
+    "amountMustBeAtLeastOne": "El monto debe ser al menos 1",
     "editPledge": "Editar Compromiso",
     "deletePledgeMsg": "¿Estás seguro de que quieres eliminar este compromiso?",
     "noPledges": "No se encontraron compromisos",
@@ -870,7 +879,8 @@
     "pledgeDate": "Fecha de Compromiso",
     "pledged": "Comprometido",
     "donated": "Donado",
-    "campaignNotActive": "La campaña no está actualmente activa"
+    "campaignNotActive": "La campaña no está actualmente activa",
+    "close": "Cerrar"
   },
   "createPostModal": {
     "title": "Publicaciones de Talawa",
@@ -1408,7 +1418,22 @@
     "pageNumber": "Página {{page}}",
     "goToToday": "Ir a hoy",
     "genderDistribution": "Distribución por género",
-    "ageDistribution": "Distribución por edad"
+    "ageDistribution": "Distribución por edad",
+    "age": "Edad",
+    "age18to40": "18-40",
+    "attendanceCount": "Recuento de asistencia",
+    "close": "Cerrar",
+    "demographics": "Demografía",
+    "demography": "Demografía",
+    "exportData": "Exportar datos",
+    "female": "Mujer",
+    "gender": "Género",
+    "male": "Hombre",
+    "other": "Otro",
+    "over40": "Más de 40",
+    "today": "Hoy",
+    "trends": "Tendencias",
+    "under18": "Menor de 18"
   },
   "eventRegistrant": {
     "sort": "Ordenar",
@@ -1443,7 +1468,10 @@
     "addingAttendee": "Agregando...",
     "male": "Masculino",
     "female": "Femenino",
-    "other": "Otro"
+    "other": "Otro",
+    "firstNamePlaceholder": "Juan",
+    "lastNamePlaceholder": "García",
+    "emailPlaceholder": "ejemplo@gmail.com"
   },
   "settings": {
     "settings": "Ajustes",
@@ -1876,8 +1904,15 @@
       "errorSendingInvites": "Error al enviar invitaciones",
       "emailsLabel": "Correos electrónicos y nombres de destinatarios",
       "emailsHelp": "Proporcione el correo electrónico y el nombre opcional para cada destinatario. Agregue varios destinatarios según sea necesario."
-    }
+    },
+    "selectUserWarning": "¡Por favor, elija primero un usuario para agregar!",
+    "addingAttendeeProgress": "Agregando al asistente..."
   },
+  "eventRegistrantsWrapper": {
+    "buttonAriaLabel": "Mostrar asistentes",
+    "registerMemberButton": "Registrar miembro"
+  },
+
   "userCampaigns": {
     "title": "Campañas de recaudación de fondos",
     "searchByName": "Buscar por nombre...",
@@ -1967,6 +2002,8 @@
     "earliest": "Más Antiguo",
     "requestAccepted": "Solicitud aceptada con éxito",
     "requestRejected": "Solicitud rechazada con éxito",
+    "acceptRequest": "Aceptar Solicitud",
+    "rejectRequest": "Rechazar Solicitud",
     "details": "Detalles",
     "manageGroup": "Gestionar Grupo",
     "mostVolunteers": "La mayoría de voluntarios",
@@ -1990,7 +2027,9 @@
     "deleteVolunteerGroup": "Eliminar grupo de voluntarios {{name}}",
     "deleteVolunteerEntry": "Eliminar entrada de voluntario {{name}}",
     "viewGroup": "Ver grupo",
-    "editGroup": "Editar grupo"
+    "editGroup": "Editar grupo",
+    "invalidNumber": "Número inválido",
+    "viewToggle": "Alternar vista"
   },
   "userVolunteer": {
     "title": "Voluntariado",
@@ -2195,5 +2234,8 @@
   },
   "orgProfileField": {
     "editCustomField": "Editar campo personalizado"
+  },
+  "userGlobalScreen": {
+    "globalFeatures": "Características Globales"
   }
 }

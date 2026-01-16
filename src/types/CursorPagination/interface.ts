@@ -1,5 +1,5 @@
 import type { DocumentNode } from 'graphql';
-import type { DefaultConnectionPageInfo } from '../pagination';
+import type { DefaultConnectionPageInfo } from '../AdminPortal/pagination';
 
 /**
  * Helper type to combine pagination variables with custom query variables
@@ -57,7 +57,7 @@ export interface InterfaceCursorPaginationManagerProps<
 
   /**
    * Number of items to fetch per page
-   * @default 10
+   * default 10
    */
   itemsPerPage?: number;
 

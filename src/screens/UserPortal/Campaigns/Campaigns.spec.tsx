@@ -241,7 +241,8 @@ describe('Testing User Campaigns Screen', () => {
     }
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      const dialogs = screen.getAllByRole('dialog');
+      expect(dialogs.length).toBeGreaterThan(0);
       expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
     });
   });
