@@ -452,8 +452,8 @@ const UpcomingEvents = (): JSX.Element => {
         eventDate={pendingVolunteerRequest?.eventDate || ''}
         isForGroup={!!pendingVolunteerRequest?.groupId}
         groupName={pendingVolunteerRequest?.groupName || ''}
-        onSelectSeries={() => { }}
-        onSelectInstance={() => { }}
+        onSelectSeries={() => {}}
+        onSelectInstance={() => {}}
       />
     </LoadingState>
   );
