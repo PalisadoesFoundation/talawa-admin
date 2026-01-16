@@ -5,7 +5,6 @@ import { Button, Form } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import styles from './EditUserTagModal.module.css';
-// 👇 Import the interface from the new file
 import { InterfaceEditUserTagModalProps } from 'types/AdminPortal/ManageTag/editModal/EditUserTagModal/interface';
 
 /**

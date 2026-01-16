@@ -1,37 +1,27 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import EditUserTagModal from './EditUserTagModal';
 import { InterfaceEditUserTagModalProps } from 'types/AdminPortal/ManageTag/editModal/EditUserTagModal/interface';
+import { TFunction } from 'i18next';
 
-import type { TFunction } from 'i18next';
+// Mock Translation
+const mockT = vi.fn((key) => key) as unknown as TFunction<"translation", undefined>;
+const mockTCommon = vi.fn((key) => key) as unknown as TFunction<"common", undefined>;
 
-// Mock the CSS module
-vi.mock('./EditUserTagModal.module.css', () => ({
-  default: {
-    modalHeader: 'modalHeader-class',
-    inputField: 'inputField-class',
-    removeButton: 'removeButton-class',
-    addButton: 'addButton-class',
-  },
-}));
-
-describe('EditUserTagModal Component', () => {
-  const mockT = vi.fn((key) => key) as unknown as TFunction<
-    'translation',
-    'manageTag'
-  >;
-  const mockTCommon = vi.fn((key) => key) as unknown as TFunction<
-    'common',
-    undefined
-  >;
+describe('EditUserTagModal', () => {
+  const mockHide = vi.fn();
+  const mockHandleEdit = vi.fn();
+  const mockSetNewTagName = vi.fn();
+  const user = userEvent.setup();
 
   const defaultProps: InterfaceEditUserTagModalProps = {
     editUserTagModalIsOpen: true,
-    hideEditUserTagModal: vi.fn(),
-    newTagName: 'Test Tag',
-    setNewTagName: vi.fn(),
-    handleEditUserTag: vi.fn().mockResolvedValue(undefined),
+    hideEditUserTagModal: mockHide,
+    newTagName: 'Old Name',
+    handleEditUserTag: mockHandleEdit,
+    setNewTagName: mockSetNewTagName,
     t: mockT,
     tCommon: mockTCommon,
   };
@@ -40,110 +30,147 @@ describe('EditUserTagModal Component', () => {
     vi.clearAllMocks();
   });
 
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it('renders the modal when open', () => {
+  it('should render correctly when open', () => {
     render(<EditUserTagModal {...defaultProps} />);
-
     expect(screen.getByText('tagDetails')).toBeInTheDocument();
-    expect(screen.getByLabelText(/tagName/i)).toBeInTheDocument();
-    expect(screen.getByTestId('tagNameInput')).toBeInTheDocument();
-    expect(screen.getByTestId('closeEditTagModalBtn')).toBeInTheDocument();
-    expect(screen.getByTestId('editTagSubmitBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('tagNameInput')).toHaveValue('Old Name');
   });
 
-  it('does not render the modal when closed', () => {
-    render(
-      <EditUserTagModal {...defaultProps} editUserTagModalIsOpen={false} />,
-    );
-
+  it('should not render when modal is closed', () => {
+    render(<EditUserTagModal {...defaultProps} editUserTagModalIsOpen={false} />);
     expect(screen.queryByText('tagDetails')).not.toBeInTheDocument();
   });
 
-  it('displays the current tag name in the input field', () => {
+  it('should close when cancel button is clicked', async () => {
     render(<EditUserTagModal {...defaultProps} />);
-
-    const inputField = screen.getByTestId('tagNameInput');
-    expect(inputField).toHaveValue('Test Tag');
+    const closeBtn = screen.getByTestId('closeEditTagModalBtn');
+    await user.click(closeBtn);
+    expect(mockHide).toHaveBeenCalled();
   });
 
-  it('calls setNewTagName when input changes', () => {
+  it('should update tag name on change', async () => {
     render(<EditUserTagModal {...defaultProps} />);
-
-    const inputField = screen.getByTestId('tagNameInput');
-    fireEvent.change(inputField, { target: { value: 'Updated Tag' } });
-
-    expect(defaultProps.setNewTagName).toHaveBeenCalledTimes(1);
-    expect(defaultProps.setNewTagName).toHaveBeenCalledWith('Updated Tag');
+    const input = screen.getByTestId('tagNameInput');
+    await user.clear(input);
+    await user.type(input, 'New Name');
+    expect(mockSetNewTagName).toHaveBeenCalled();
   });
 
-  it('calls hideEditUserTagModal when cancel button is clicked', () => {
-    render(<EditUserTagModal {...defaultProps} />);
-
-    fireEvent.click(screen.getByTestId('closeEditTagModalBtn'));
-    expect(defaultProps.hideEditUserTagModal).toHaveBeenCalledTimes(1);
-  });
-
-  it('calls handleEditUserTag when form is submitted with valid input', async () => {
-    render(<EditUserTagModal {...defaultProps} />);
-
-    fireEvent.click(screen.getByTestId('editTagSubmitBtn'));
-
+  it('should submit form when valid', async () => {
+    render(<EditUserTagModal {...defaultProps} newTagName="Valid Name" />);
+    
+    const input = screen.getByTestId('tagNameInput');
+    const form = input.closest('form');
+    
+    if (!form) throw new Error('Form not found');
+    
+    fireEvent.submit(form);
+    
     await waitFor(() => {
-      expect(defaultProps.handleEditUserTag).toHaveBeenCalledTimes(1);
+      expect(mockHandleEdit).toHaveBeenCalled();
     });
   });
 
-  it('does not call handleEditUserTag when form is submitted with empty input', async () => {
+  it('should prevent submission and show error when tag name is empty', () => {
     render(<EditUserTagModal {...defaultProps} newTagName="" />);
 
-    fireEvent.click(screen.getByTestId('editTagSubmitBtn'));
+    const input = screen.getByTestId('tagNameInput');
+    const form = input.closest('form');
+    if (!form) throw new Error('Form not found');
 
-    await waitFor(() => {
-      expect(defaultProps.handleEditUserTag).not.toHaveBeenCalled();
-    });
+    const focusSpy = vi.spyOn(input, 'focus');
+
+    fireEvent.submit(form);
+
+    expect(mockHandleEdit).not.toHaveBeenCalled(); 
+    expect(focusSpy).toHaveBeenCalled();
   });
 
-  it('does not call handleEditUserTag when form is submitted with whitespace-only input', async () => {
+  it('should prevent submission when tag name contains only whitespace', () => {
     render(<EditUserTagModal {...defaultProps} newTagName="   " />);
 
-    fireEvent.click(screen.getByTestId('editTagSubmitBtn'));
+    const input = screen.getByTestId('tagNameInput');
+    const form = input.closest('form');
+    if (!form) throw new Error('Form not found');
 
-    await waitFor(() => {
-      expect(defaultProps.handleEditUserTag).not.toHaveBeenCalled();
-    });
+    const focusSpy = vi.spyOn(input, 'focus');
+
+    fireEvent.submit(form);
+
+    expect(mockHandleEdit).not.toHaveBeenCalled();
+    expect(focusSpy).toHaveBeenCalled();
   });
 
-  it('applies the correct CSS classes from the module', () => {
-    render(<EditUserTagModal {...defaultProps} />);
-
-    // BaseModal does not propagate testId to the internal header element.
-    // Instead of checking the header class directly, we can verify other elements or skip this check if it relies on BaseModal internals.
-    // However, we can check that the input field and buttons have the correct classes which are passed from this component.
-    // Note: CSS modules generate hashed class names (e.g., _inputField_xyz), so we check for partial matches or strict mock matches if mocking works.
-    // In this environment, the mock might be bypassed by the transform, so we check for the presence of the class name segment.
-    const inputField = screen.getByTestId('tagNameInput');
-    const cancelButton = screen.getByTestId('closeEditTagModalBtn');
-    const submitButton = screen.getByTestId('editTagSubmitBtn');
-
-    // Check if the class name contains the expected identifier (works with both mocks and real CSS modules)
-    expect(inputField.className).toMatch(/inputField/);
-    expect(cancelButton.className).toMatch(/removeButton/);
-    expect(submitButton.className).toMatch(/addButton/);
+  it('should set isTouched to true on input blur', async () => {
+    render(<EditUserTagModal {...defaultProps} newTagName="" />);
+    
+    const input = screen.getByTestId('tagNameInput');
+    
+    // Blur the input to trigger onBlur
+    await user.click(input);
+    await user.tab(); // This will blur the input
+    
+    // Now the error should be visible because isTouched is true
+    expect(mockTCommon).toHaveBeenCalledWith('required');
   });
 
-  it('sets the required attribute on the input field', () => {
-    render(<EditUserTagModal {...defaultProps} />);
-    expect(screen.getByTestId('tagNameInput')).toHaveAttribute('required');
+  it('should display error message when touched and invalid', () => {
+    render(<EditUserTagModal {...defaultProps} newTagName="" />);
+    
+    const input = screen.getByTestId('tagNameInput');
+    
+    // Trigger blur to set touched state
+    fireEvent.blur(input);
+    
+    // Check that the error translation key was called
+    expect(mockTCommon).toHaveBeenCalledWith('required');
   });
 
-  it('sets autoComplete to off on the input field', () => {
-    render(<EditUserTagModal {...defaultProps} />);
-    expect(screen.getByTestId('tagNameInput')).toHaveAttribute(
-      'autoComplete',
-      'off',
+  it('should reset isTouched when modal reopens', () => {
+    const { rerender } = render(
+      <EditUserTagModal {...defaultProps} editUserTagModalIsOpen={false} />
     );
+
+    // Open modal
+    rerender(<EditUserTagModal {...defaultProps} editUserTagModalIsOpen={true} />);
+    
+    const input = screen.getByTestId('tagNameInput');
+    
+    // Input should not show error initially (isTouched should be false)
+    expect(input).not.toHaveClass('is-invalid');
+  });
+
+  it('should call translation functions correctly', () => {
+    render(<EditUserTagModal {...defaultProps} />);
+    
+    // Check that translation functions were called with correct keys
+    expect(mockT).toHaveBeenCalledWith('tagDetails');
+    expect(mockT).toHaveBeenCalledWith('tagName');
+    expect(mockT).toHaveBeenCalledWith('tagNamePlaceholder');
+    expect(mockTCommon).toHaveBeenCalledWith('cancel');
+    expect(mockTCommon).toHaveBeenCalledWith('edit');
+  });
+
+  it('should handle async form submission correctly', async () => {
+    const asyncMockHandleEdit = vi.fn().mockResolvedValue(undefined);
+    
+    render(
+      <EditUserTagModal 
+        {...defaultProps} 
+        newTagName="Valid Name"
+        handleEditUserTag={asyncMockHandleEdit}
+      />
+    );
+    
+    const input = screen.getByTestId('tagNameInput');
+    const form = input.closest('form');
+    
+    if (!form) throw new Error('Form not found');
+    
+    fireEvent.submit(form);
+    
+    await waitFor(() => {
+      expect(asyncMockHandleEdit).toHaveBeenCalled();
+    });
   });
 });

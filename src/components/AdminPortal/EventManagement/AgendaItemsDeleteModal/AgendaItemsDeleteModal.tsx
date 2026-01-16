@@ -2,7 +2,8 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import styles from 'style/app-fixed.module.css';
-import type { InterfaceAgendaItemsDeleteModalProps } from 'types/Agenda/interface';
+import { InterfaceAgendaItemsDeleteModalProps } from 'types/components/AdminPortal/EventManagement/AgendaItemsDeleteModal/interface';
+
 /**
  * AgendaItemsDeleteModal
  *
@@ -31,7 +32,6 @@ const AgendaItemsDeleteModal: React.FC<
       size="sm"
       className={styles.agendaItemModal}
       headerClassName="bg-primary"
-      //useDefaultHeaderStyle={false}
       footer={
         <>
           <Button

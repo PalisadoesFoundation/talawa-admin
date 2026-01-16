@@ -48,7 +48,7 @@ import type {
 import styles from 'style/app-fixed.module.css';
 
 import AgendaItemsPreviewModal from 'components/AgendaItems/Preview/AgendaItemsPreviewModal';
-import AgendaItemsDeleteModal from 'components/AgendaItems/Delete/AgendaItemsDeleteModal';
+import AgendaItemsDeleteModal from 'components/AdminPortal/EventManagement/AgendaItemsDeleteModal/AgendaItemsDeleteModal';
 import AgendaItemsUpdateModal from 'components/AgendaItems/Update/AgendaItemsUpdateModal';
 
 function AgendaItemsContainer({
