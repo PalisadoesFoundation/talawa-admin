@@ -35,8 +35,6 @@ import { Button } from 'react-bootstrap';
 import style from 'style/app-fixed.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
-import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
-import { useTranslation } from 'react-i18next';
 
 type PropType = { eventId: string; orgId: string; onUpdate?: () => void };
 
