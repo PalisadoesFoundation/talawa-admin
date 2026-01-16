@@ -104,8 +104,10 @@ export const RecurringEvent: Story = {
     entityName: 'Weekly Team Meeting',
     showWarning: true,
     recurringEventContent: (
-      <div className="mt-3">
-        <p className="mb-2">{DEMO_TEXT.recurringPrompt}</p>
+      <fieldset className="mt-3 border-0 p-0">
+        <legend className="mb-2 fs-6 fw-normal">
+          {DEMO_TEXT.recurringPrompt}
+        </legend>
         <div className="d-flex flex-column gap-2">
           <div className="d-flex align-items-center gap-2">
             <input
@@ -140,7 +142,7 @@ export const RecurringEvent: Story = {
             </label>
           </div>
         </div>
-      </div>
+      </fieldset>
     ),
   },
   parameters: {

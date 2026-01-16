@@ -13,16 +13,15 @@ import type { InterfaceDeleteModalProps } from 'types/shared-components/CRUDModa
 // Mock useTranslation
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => {
+    t: (key: string, params?: { entityName?: string }) => {
       const translations: Record<string, string> = {
         delete: 'Delete',
         cancel: 'Cancel',
-        deleteConfirmationMessage:
-          'Are you sure you want to delete {{entityName}}?',
-        deleteWarning: 'This action cannot be undone.',
+        deleteConfirmation:
+          'Are you sure you want to delete this item? This action cannot be undone.',
       };
-      if (key === 'deleteConfirmationMessage') {
-        return 'Are you sure you want to delete {{entityName}}?';
+      if (key === 'deleteEntityConfirmation' && params?.entityName) {
+        return `Are you sure you want to delete ${params.entityName}? This action cannot be undone.`;
       }
       return translations[key] || key;
     },
@@ -62,9 +61,10 @@ describe('DeleteModal Stories', () => {
       // Verify modal title
       expect(screen.getByText('Delete Event')).toBeInTheDocument();
 
-      // Verify warning icon is shown
-      const warningIcon = document.querySelector('.fa-exclamation-triangle');
-      expect(warningIcon).toBeInTheDocument();
+      // Verify warning message is displayed (user-visible content)
+      expect(
+        screen.getByText(/This action cannot be undone\./),
+      ).toBeInTheDocument();
     });
 
     test('has correct warning configuration', () => {
@@ -113,9 +113,10 @@ describe('DeleteModal Stories', () => {
       // Verify modal title
       expect(screen.getByText('Delete User')).toBeInTheDocument();
 
-      // Verify warning icon is shown
-      const warningIcon = document.querySelector('.fa-exclamation-triangle');
-      expect(warningIcon).toBeInTheDocument();
+      // Verify warning message is displayed (user-visible content)
+      expect(
+        screen.getByText(/This action cannot be undone\./),
+      ).toBeInTheDocument();
     });
 
     test('has correct user deletion configuration', () => {
@@ -133,9 +134,10 @@ describe('DeleteModal Stories', () => {
       // Verify modal title
       expect(screen.getByText('Delete Organization')).toBeInTheDocument();
 
-      // Verify warning icon is shown
-      const warningIcon = document.querySelector('.fa-exclamation-triangle');
-      expect(warningIcon).toBeInTheDocument();
+      // Verify warning message is displayed (user-visible content)
+      expect(
+        screen.getByText(/This action cannot be undone\./),
+      ).toBeInTheDocument();
     });
 
     test('has correct organization deletion configuration', () => {
