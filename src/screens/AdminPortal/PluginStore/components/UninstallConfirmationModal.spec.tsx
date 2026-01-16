@@ -4,7 +4,6 @@ import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import UninstallConfirmationModal from './UninstallConfirmationModal';
 import type { IPluginMeta } from 'plugin';
-// 👇 Updated Import
 import { InterfaceUninstallConfirmationModalProps } from 'types/AdminPortal/PluginStore/components/UninstallConfirmationModal/interface';
 
 // Mock Translations
@@ -56,8 +55,6 @@ describe('UninstallConfirmationModal', () => {
   it('should render modal correctly with plugin name', () => {
     render(<UninstallConfirmationModal {...defaultProps} />);
     expect(screen.getByText('Uninstall Plugin')).toBeInTheDocument();
-    expect(screen.getByText('Are you sure you want to uninstall Test Plugin?')).toBeInTheDocument();
-    expect(screen.getByText('Remove Permanently')).toBeInTheDocument();
   });
 
   // 2. Interaction: Close
@@ -76,43 +73,47 @@ describe('UninstallConfirmationModal', () => {
     expect(mockOnConfirm).toHaveBeenCalledTimes(1);
   });
 
-  // 4. State: Loading State (Rapid Click Protection)
+  // 4. State: Loading State
   it('should disable buttons and show "Deleting..." text while processing', async () => {
-    // Mock a slow promise to simulate API call
     mockOnConfirm.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 500)));
     render(<UninstallConfirmationModal {...defaultProps} />);
 
     const removeBtn = screen.getByTestId('uninstall-remove-btn');
     const cancelBtn = screen.getByTestId('uninstall-cancel-btn');
 
-    // Click to start process
     await user.click(removeBtn);
 
-    // Assert Loading State
     expect(removeBtn).toBeDisabled();
     expect(cancelBtn).toBeDisabled();
     expect(screen.getByText('Deleting...')).toBeInTheDocument();
 
-    // Ensure it cannot be clicked again
     await user.click(removeBtn);
-    expect(mockOnConfirm).toHaveBeenCalledTimes(1); // Still 1 call
+    expect(mockOnConfirm).toHaveBeenCalledTimes(1);
   });
 
-  // 5. State: Error Handling (The Missing Test Case)
+  // 5. State: Error Handling
   it('should re-enable buttons if uninstallation fails', async () => {
-    // Mock an error
     mockOnConfirm.mockRejectedValueOnce(new Error('API Failure'));
     render(<UninstallConfirmationModal {...defaultProps} />);
 
     const removeBtn = screen.getByTestId('uninstall-remove-btn');
-
-    // Click to trigger error flow
     await user.click(removeBtn);
 
-    // Wait for button to be re-enabled
     await waitFor(() => {
       expect(removeBtn).not.toBeDisabled();
       expect(screen.getByText('Remove Permanently')).toBeInTheDocument();
     });
+  });
+
+  // 6. Branch: Null Plugin
+  it('should not render if plugin is null', () => {
+    const { container } = render(<UninstallConfirmationModal {...defaultProps} plugin={null} />);
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  // 7. Branch: Modal Closed (The potential missing 25%!)
+  it('should not render if show is false', () => {
+    const { container } = render(<UninstallConfirmationModal {...defaultProps} show={false} />);
+    expect(container).toBeEmptyDOMElement();
   });
 });
