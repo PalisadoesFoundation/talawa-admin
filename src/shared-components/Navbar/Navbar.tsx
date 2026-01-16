@@ -1,16 +1,22 @@
 /**
- * PageHeader Component
+ * PageHeader component.
  *
  * A flexible and reusable header component used across multiple screens.
- * It supports page title, search bar, sorting dropdowns, optional event type filter,
+ * Supports a page title, search bar, sorting dropdowns, optional event type filter,
  * and action buttons.
  *
- * @component
+ * @param title - Optional title displayed at the top of the page.
+ * @param search - Configuration object for the search bar.
+ * @param sorting - List of sorting dropdown configurations.
+ * @param showEventTypeFilter - Whether to display the event type filter dropdown.
+ * @param actions - Action buttons or elements rendered on the right side.
+ *
+ * @returns The rendered PageHeader component.
  *
  * @remarks
- * - Primarily used for pages that require filtering, sorting, or search.
- * - Uses `SearchBar` and `SortingButton` subcomponents for search and sorting functionality.
- * - Layout is responsive and adjusts based on provided props.
+ * - Used on pages that require filtering, sorting, or searching.
+ * - Uses shared SearchBar and SortingButton components.
+ * - Layout adapts responsively based on provided props.
  *
  * @example
  * ```tsx
@@ -35,34 +41,13 @@
  *   actions={<Button>Add User</Button>}
  * />
  * ```
- *
- * @param {string} [title] — Optional title displayed at the top of the page.
- * @param {{
- *   placeholder: string;
- *   onSearch: (value: string) => void;
- *   inputTestId?: string;
- *   buttonTestId?: string;
- * }} [search] — Search bar configuration.
- *
- * @param {Array<{
- *   title: string;
- *   options: { label: string; value: string | number }[];
- *   selected: string | number;
- *   onChange: (value: string | number) => void;
- *   testIdPrefix: string;
- * }>} [sorting] — List of sorting dropdown selectors.
- *
- * @param {boolean} [showEventTypeFilter=false] — Whether to show the event type dropdown.
- *
- * @param {React.ReactNode} [actions] — Action buttons/elements rendered on the right side.
- *
- * @returns {JSX.Element} The rendered PageHeader component.
  */
+
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import SortingButton from 'subComponents/SortingButton';
+import SortingButton from 'shared-components/SortingButton/SortingButton';
 
 interface InterfacePageHeaderProps {
   title?: string;

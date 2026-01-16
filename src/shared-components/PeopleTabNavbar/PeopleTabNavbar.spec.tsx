@@ -56,7 +56,7 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
   ),
 }));
 
-vi.mock('subComponents/SortingButton', () => ({
+vi.mock('shared-components/SortingButton/SortingButton', () => ({
   default: ({
     title,
     sortingOptions,

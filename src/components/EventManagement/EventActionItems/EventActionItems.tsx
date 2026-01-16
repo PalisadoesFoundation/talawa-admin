@@ -24,7 +24,8 @@
 
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { Navigate, useParams } from 'react-router';
 
 import { WarningAmberRounded, Group } from '@mui/icons-material';
@@ -48,7 +49,7 @@ import ItemModal from 'screens/OrganizationActionItems/ActionItemModal/ActionIte
 import ItemDeleteModal from 'screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal';
 import Avatar from 'shared-components/Avatar/Avatar';
 import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
-import SortingButton from 'subComponents/SortingButton';
+import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
@@ -391,8 +392,11 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return (
-          <div className="d-flex align-items-center justify-content-center mt-3">
-            <Form.Check
+          <FormFieldGroup
+            name={`statusCheckbox${params.row.id}`}
+            label={t('statusCheckboxLabel')}
+          >
+            <input
               type="checkbox"
               data-testid={`statusCheckbox${params.row.id}`}
               className={styles.checkboxButton}
@@ -404,7 +408,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
                   : t('markCompletion')
               }
             />
-          </div>
+          </FormFieldGroup>
         );
       },
     },

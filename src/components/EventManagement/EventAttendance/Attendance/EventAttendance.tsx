@@ -1,63 +1,42 @@
 /**
- * Component: EventAttendance
+ * EventAttendance component.
  *
- * This component is responsible for displaying and managing the attendance of members for a specific event.
- * It provides functionalities such as filtering, sorting, and searching attendees, as well as viewing attendance statistics.
+ * Displays and manages attendance for a specific event.
+ * Provides filtering, sorting, searching of attendees, and viewing attendance statistics.
  *
- * @component
- * @returns {JSX.Element} The rendered EventAttendance component.
+ * @returns The rendered EventAttendance component.
  *
  * @remarks
- * - Utilizes Apollo Client's `useLazyQuery` to fetch event attendees data.
- * - Supports filtering attendees by time periods (e.g., This Month, This Year, All).
- * - Allows sorting attendees by name in ascending or descending order.
- * - Includes a search functionality to filter attendees by name or email.
- * - Displays attendance statistics in a modal.
- *
- * @dependencies
- * - React and React hooks (`useState`, `useEffect`, `useMemo`).
- * - Apollo Client for GraphQL queries.
- * - React Router's `useParams` for accessing route parameters.
- * - Material-UI and React-Bootstrap for UI components.
- * - `react-i18next` for internationalization.
+ * - Uses Apollo Client lazy queries to fetch attendee data.
+ * - Supports filtering by time range such as month, year, or all time.
+ * - Allows sorting attendees alphabetically.
+ * - Includes search by attendee name or email.
+ * - Shows attendance statistics inside a modal.
  *
  * @example
  * ```tsx
  * <EventAttendance />
  * ```
- *
- *
- *
- * @todo
- * - Improve accessibility for tooltips and dropdowns.
- * - Optimize performance for large attendee lists.
  */
 import React, { useEffect, useMemo, useState } from 'react';
-import {
-  Paper,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Tooltip,
-} from '@mui/material';
-import { Button, Table } from 'react-bootstrap';
+import { Paper, TableContainer } from '@mui/material';
+import { Button } from 'react-bootstrap';
+import DataTable from 'shared-components/DataTable/DataTable';
+import type { IColumnDef } from 'types/shared-components/DataTable/interface';
+import SortingButton from 'shared-components/SortingButton/SortingButton';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
 import styles from 'style/app-fixed.module.css';
 import { useLazyQuery } from '@apollo/client';
 import { EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
-import { useParams, Link } from 'react-router';
+import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { AttendanceStatisticsModal } from '../Statistics/EventStatistics';
-import AttendedEventList from '../AttendanceList/AttendedEventList';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { FilterPeriod, type InterfaceMember } from 'types/Event/interface';
 
 function EventAttendance(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventAttendance' });
   const { eventId } = useParams<{ eventId: string }>();
-  const { orgId: currentUrl } = useParams();
+  const { orgId: _currentUrl } = useParams();
   const [filteredAttendees, setFilteredAttendees] = useState<InterfaceMember[]>(
     [],
   );
@@ -67,59 +46,58 @@ function EventAttendance(): JSX.Element {
   const [filteringBy, setFilteringBy] = useState<
     (typeof FilterPeriod)[keyof typeof FilterPeriod]
   >(FilterPeriod.All);
-
   const [show, setShow] = useState(false);
 
-  const sortAttendees = (attendees: InterfaceMember[]): InterfaceMember[] => {
-    return [...attendees].sort((a, b) => {
+  const [getEventAttendees, { data: memberData, loading, error }] =
+    useLazyQuery(EVENT_ATTENDEES, {
+      variables: { eventId },
+      fetchPolicy: 'cache-and-network',
+      nextFetchPolicy: 'cache-first',
+      errorPolicy: 'all',
+      notifyOnNetworkStatusChange: true,
+    });
+
+  const sortAttendees = (attendees: InterfaceMember[]) =>
+    [...attendees].sort((a, b) => {
       const comparison = (a.name || '')
         .toLowerCase()
         .localeCompare((b.name || '').toLowerCase());
       return sortOrder === 'ascending' ? comparison : -comparison;
     });
-  };
 
-  const filterAttendees = (attendees: InterfaceMember[]): InterfaceMember[] => {
+  const filterAttendees = (attendees: InterfaceMember[]) => {
     const now = new Date();
-    return filteringBy === 'All'
+    return filteringBy === FilterPeriod.All
       ? attendees
       : attendees.filter((attendee) => {
           const attendeeDate = new Date(attendee.createdAt);
           const isSameYear = attendeeDate.getFullYear() === now.getFullYear();
-          return filteringBy === 'This Month'
+          return filteringBy === FilterPeriod.ThisMonth
             ? isSameYear && attendeeDate.getMonth() === now.getMonth()
             : isSameYear;
         });
   };
 
-  const filterAndSortAttendees = (
-    attendees: InterfaceMember[],
-  ): InterfaceMember[] => {
-    return sortAttendees(filterAttendees(attendees));
-  };
-  const searchEventAttendees = (value: string): void => {
-    const searchValueLower = value.toLowerCase().trim();
+  const filterAndSortAttendees = (attendees: InterfaceMember[]) =>
+    sortAttendees(filterAttendees(attendees));
 
+  const searchEventAttendees = (value: string) => {
+    const searchValue = value.toLowerCase().trim();
     const filtered = (memberData?.event?.attendees ?? []).filter(
-      (attendee: InterfaceMember) => {
-        const name = attendee.name?.toLowerCase() || '';
-        const email = attendee.emailAddress?.toLowerCase() || '';
-        return (
-          name.includes(searchValueLower) || email.includes(searchValueLower)
-        );
-      },
+      (attendee: InterfaceMember) =>
+        (attendee.name?.toLowerCase() || '').includes(searchValue) ||
+        (attendee.emailAddress?.toLowerCase() || '').includes(searchValue),
     );
-
-    const finalFiltered = filterAndSortAttendees(filtered);
-    setFilteredAttendees(finalFiltered);
+    setFilteredAttendees(filterAndSortAttendees(filtered));
   };
-  const showModal = (): void => setShow(true);
-  const handleClose = (): void => setShow(false);
+
+  const showModal = () => setShow(true);
+  const handleClose = () => setShow(false);
 
   const statistics = useMemo(() => {
     const totalMembers = filteredAttendees.length;
     const membersAttended = filteredAttendees.filter(
-      (member) => member?.eventsAttended && member.eventsAttended.length > 0,
+      (member: InterfaceMember) => member.eventsAttended?.length ?? 0 > 0,
     ).length;
     const attendanceRate =
       totalMembers > 0
@@ -129,21 +107,9 @@ function EventAttendance(): JSX.Element {
     return { totalMembers, membersAttended, attendanceRate };
   }, [filteredAttendees]);
 
-  const [getEventAttendees, { data: memberData, loading, error }] =
-    useLazyQuery(EVENT_ATTENDEES, {
-      variables: { eventId: eventId },
-      fetchPolicy: 'cache-and-network',
-      nextFetchPolicy: 'cache-first',
-      errorPolicy: 'all',
-      notifyOnNetworkStatusChange: true,
-    });
-
   useEffect(() => {
     if (memberData?.event?.attendees) {
-      const updatedAttendees = filterAndSortAttendees(
-        memberData.event.attendees,
-      );
-      setFilteredAttendees(updatedAttendees);
+      setFilteredAttendees(filterAndSortAttendees(memberData.event.attendees));
     }
   }, [sortOrder, filteringBy, memberData]);
 
@@ -154,8 +120,49 @@ function EventAttendance(): JSX.Element {
   if (loading) return <p>{t('loading')}</p>;
   if (error) return <p>{error.message}</p>;
 
+  const columns: IColumnDef<InterfaceMember, unknown>[] = [
+    {
+      id: 'index',
+      header: '#',
+      accessor: (_member) => 0,
+      render: (_value, row) => (
+        <span>{filteredAttendees.indexOf(row) + 1}</span>
+      ),
+    },
+    {
+      id: 'name',
+      header: 'Member Name',
+      accessor: (member) => member.name ?? '',
+    },
+    {
+      id: 'status',
+      header: 'Status',
+      accessor: (member) =>
+        member.role === 'administrator' ? 'Admin' : 'Member',
+    },
+    {
+      id: 'eventsAttended',
+      header: 'Events Attended',
+      accessor: (member) => member.eventsAttended ?? [],
+      render: (value) => <span>{(value as { id: string }[]).length}</span>,
+    },
+    {
+      id: 'tasksAssigned',
+      header: 'Task Assigned',
+      accessor: (member) => member.tagsAssignedWith?.edges ?? [],
+      render: (value) =>
+        (value as { node: { name: string } }[]).length > 0 ? (
+          (value as { node: { name: string } }[]).map((edge, idx) => (
+            <div key={idx}>{edge.node.name}</div>
+          ))
+        ) : (
+          <div>{t('none')}</div>
+        ),
+    },
+  ];
+
   return (
-    <div className="">
+    <div>
       <AttendanceStatisticsModal
         show={show}
         statistics={statistics}
@@ -175,8 +182,8 @@ function EventAttendance(): JSX.Element {
           <div className={`${styles.input} me-3`}>
             <SearchBar
               placeholder={t('Search member')}
-              onChange={(value) => searchEventAttendees(value)}
-              onSearch={(value) => searchEventAttendees(value)}
+              onChange={searchEventAttendees}
+              onSearch={searchEventAttendees}
               onClear={() => searchEventAttendees('')}
               inputTestId="searchByName"
               buttonTestId="searchMembersBtn"
@@ -187,7 +194,7 @@ function EventAttendance(): JSX.Element {
             sortingOptions={[
               { label: FilterPeriod.ThisMonth, value: FilterPeriod.ThisMonth },
               { label: FilterPeriod.ThisYear, value: FilterPeriod.ThisYear },
-              { label: FilterPeriod.All, value: 'Filter: All' },
+              { label: FilterPeriod.All, value: FilterPeriod.All },
             ]}
             selectedOption={filteringBy}
             onSortChange={(value) =>
@@ -219,142 +226,7 @@ function EventAttendance(): JSX.Element {
         className="mt-3"
         sx={{ borderRadius: '16px' }}
       >
-        <Table aria-label={t('event_attendance_table')} role="grid">
-          <TableHead>
-            <TableRow className="" data-testid="table-header-row">
-              <TableCell
-                className={styles.customcell}
-                data-testid="header-index"
-                role="columnheader"
-                aria-sort="none"
-              >
-                #
-              </TableCell>
-              <TableCell
-                className={styles.customcell}
-                data-testid="header-member-name"
-              >
-                {t('Member Name')}
-              </TableCell>
-              <TableCell
-                className={styles.customcell}
-                data-testid="header-status"
-              >
-                {t('Status')}
-              </TableCell>
-              <TableCell
-                className={styles.customcell}
-                data-testid="header-events-attended"
-              >
-                {t('Events Attended')}
-              </TableCell>
-              <TableCell
-                className={styles.customcell}
-                data-testid="header-task-assigned"
-              >
-                {t('Task Assigned')}
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredAttendees.length === 0 ? (
-              <TableRow className={styles.noBorderRow}>
-                <TableCell colSpan={5} align="center">
-                  {t('noAttendees')}
-                </TableCell>
-              </TableRow>
-            ) : (
-              filteredAttendees.map(
-                (member: InterfaceMember, index: number) => (
-                  <TableRow
-                    key={index}
-                    data-testid={`attendee-row-${index}`}
-                    className="my-6"
-                  >
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      data-testid={`attendee-index-${index}`}
-                    >
-                      {index + 1}
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      data-testid={`attendee-name-${index}`}
-                    >
-                      <Link
-                        to={`/member/${currentUrl}`}
-                        state={{ id: member.id }}
-                        className={styles.membername}
-                      >
-                        {member.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell
-                      align="left"
-                      data-testid={`attendee-status-${index}`}
-                    >
-                      {member.role === 'administrator'
-                        ? t('Admin')
-                        : t('Member')}
-                    </TableCell>
-                    <Tooltip
-                      componentsProps={{
-                        tooltip: {
-                          sx: {
-                            backgroundColor: 'var(--bs-white)',
-                            fontSize: '2em',
-                            maxHeight: '170px',
-                            overflowY: 'scroll',
-                            scrollbarColor: 'white',
-                            border: 'var(--primary-border-solid)',
-                            borderRadius: '6px',
-                            boxShadow: '0 0 5px rgba(0,0,0,0.1)',
-                          },
-                        },
-                      }}
-                      title={member.eventsAttended?.map(
-                        (event: { id: string }, index: number) => (
-                          <AttendedEventList
-                            key={event.id}
-                            id={event.id}
-                            data-testid={`attendee-events-attended-${index}`}
-                          />
-                        ),
-                      )}
-                    >
-                      <TableCell
-                        align="left"
-                        data-testid={`attendee-events-attended-${index}`}
-                      >
-                        <span className={styles.eventsAttended}>
-                          {member.eventsAttended
-                            ? member.eventsAttended.length
-                            : '0'}
-                        </span>
-                      </TableCell>
-                    </Tooltip>
-                    <TableCell
-                      align="left"
-                      data-testid={`attendee-task-assigned-${index}`}
-                    >
-                      {member.tagsAssignedWith ? (
-                        member.tagsAssignedWith.edges.map(
-                          (
-                            edge: { node: { name: string } },
-                            tagIndex: number,
-                          ) => <div key={tagIndex}>{edge.node.name}</div>,
-                        )
-                      ) : (
-                        <div>None</div>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ),
-              )
-            )}
-          </TableBody>
-        </Table>
+        <DataTable columns={columns} data={filteredAttendees} />
       </TableContainer>
     </div>
   );
