@@ -1,5 +1,4 @@
 import type { FC } from 'react';
-import { Form } from 'react-bootstrap';
 import { Autocomplete, TextField } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceCategorySelectorProps } from 'types/AdminPortal/CategorySelector/interface';
@@ -25,7 +24,7 @@ const CategorySelector: FC<InterfaceCategorySelectorProps> = ({
   });
 
   return (
-    <Form.Group className="d-flex gap-3 mb-3">
+    <div className="d-flex gap-3 mb-3">
       <Autocomplete
         className={`${styles.noOutline} w-100`}
         data-testid="categorySelect"
@@ -47,7 +46,7 @@ const CategorySelector: FC<InterfaceCategorySelectorProps> = ({
           />
         )}
       />
-    </Form.Group>
+    </div>
   );
 };
 
