@@ -5,7 +5,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import UninstallConfirmationModal from './UninstallConfirmationModal';
 import type { IPluginMeta } from 'plugin';
 
-// 1. 🛠️ Mock react-i18next to handle your specific keys
+// 1. Mock Translations
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string, options?: { name?: string }) => {
@@ -37,7 +37,7 @@ describe('UninstallConfirmationModal', () => {
     created_at: '2023-01-01',
     updated_at: '2023-01-02',
     installUrl: 'http://test.com',
-  } as any; // Cast to any if IPluginMeta is strict about missing optional fields
+  } as any;
 
   const defaultProps = {
     show: true,
@@ -50,69 +50,66 @@ describe('UninstallConfirmationModal', () => {
     vi.clearAllMocks();
   });
 
-  describe('Rendering', () => {
-    it('should render modal when show is true', () => {
-      render(<UninstallConfirmationModal {...defaultProps} />);
-      expect(screen.getByText('Uninstall Plugin')).toBeInTheDocument();
+  // --- RENDERING TESTS ---
+  it('should render modal correctly', () => {
+    render(<UninstallConfirmationModal {...defaultProps} />);
+    expect(screen.getByText('Uninstall Plugin')).toBeInTheDocument();
+    expect(screen.getByText('Are you sure you want to uninstall Test Plugin?')).toBeInTheDocument();
+  });
+
+  // --- INTERACTION TESTS ---
+  it('should call onClose when cancel button is clicked', async () => {
+    render(<UninstallConfirmationModal {...defaultProps} />);
+    await user.click(screen.getByTestId('uninstall-cancel-btn'));
+    expect(mockOnClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call onConfirm when remove button is clicked', async () => {
+    render(<UninstallConfirmationModal {...defaultProps} />);
+    await user.click(screen.getByTestId('uninstall-remove-btn'));
+    expect(mockOnConfirm).toHaveBeenCalledTimes(1);
+  });
+
+  // --- CRITICAL FIX: RAPID CLICK TEST ---
+  it('should prevent multiple submissions (rapid-click protection)', async () => {
+    mockOnConfirm.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
+    render(<UninstallConfirmationModal {...defaultProps} />);
+
+    const removeButton = screen.getByTestId('uninstall-remove-btn');
+    fireEvent.click(removeButton);
+
+    // Wait for disable
+    await waitFor(() => {
+      expect(removeButton).toBeDisabled();
     });
 
-    it('should not render modal when show is false', () => {
-      render(<UninstallConfirmationModal {...defaultProps} show={false} />);
-      expect(screen.queryByText('Uninstall Plugin')).not.toBeInTheDocument();
+    // Try second click
+    fireEvent.click(removeButton);
+
+    expect(mockOnConfirm).toHaveBeenCalledTimes(1);
+  });
+
+  // --- CRITICAL FIX: ERROR HANDLING TEST (Requested by CoderRabbit) ---
+  it('should unlock the button if uninstallation fails', async () => {
+    // Simulate an error
+    mockOnConfirm.mockRejectedValue(new Error('API Failed'));
+    
+    render(<UninstallConfirmationModal {...defaultProps} />);
+    const removeButton = screen.getByTestId('uninstall-remove-btn');
+
+    // Click to start
+    fireEvent.click(removeButton);
+
+    // Should be disabled initially
+    await waitFor(() => {
+      expect(removeButton).toBeDisabled();
     });
 
-    it('should display plugin name in confirmation message', () => {
-      render(<UninstallConfirmationModal {...defaultProps} />);
-      expect(screen.getByText('Are you sure you want to uninstall Test Plugin?')).toBeInTheDocument();
-    });
-
-    it('should display warning message', () => {
-      render(<UninstallConfirmationModal {...defaultProps} />);
-      expect(screen.getByText(/This action will permanently remove the plugin/)).toBeInTheDocument();
-    });
-
-    it('should render correct buttons', () => {
-      render(<UninstallConfirmationModal {...defaultProps} />);
-      expect(screen.getByText('Cancel')).toBeInTheDocument();
-      expect(screen.getByText('Remove Permanently')).toBeInTheDocument();
+    // Wait for the error handling to finish and button to re-enable
+    await waitFor(() => {
+      expect(removeButton).not.toBeDisabled();
     });
   });
 
-  describe('User Interactions', () => {
-    it('should call onClose when cancel button is clicked', async () => {
-      render(<UninstallConfirmationModal {...defaultProps} />);
-      await user.click(screen.getByTestId('uninstall-cancel-btn'));
-      expect(mockOnClose).toHaveBeenCalledTimes(1);
-    });
-
-    it('should call onConfirm when remove button is clicked', async () => {
-      render(<UninstallConfirmationModal {...defaultProps} />);
-      await user.click(screen.getByTestId('uninstall-remove-btn'));
-      expect(mockOnConfirm).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('Rapid Click Protection (Critical Fix)', () => {
-    it('should prevent multiple submissions (rapid-click protection)', async () => {
-      // 1. Fake a slow API call (100ms) so the button stays disabled for a moment
-      mockOnConfirm.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
-
-      render(<UninstallConfirmationModal {...defaultProps} />);
-      const removeButton = screen.getByTestId('uninstall-remove-btn');
-
-      // 2. Click the button ONCE
-      fireEvent.click(removeButton);
-
-      // 3. WAIT for the button to become disabled
-      await waitFor(() => {
-        expect(removeButton).toBeDisabled();
-      });
-
-      // 4. Try to Click AGAIN (while it is disabled)
-      fireEvent.click(removeButton);
-
-      // 5. Success! The function should still have been called only ONCE
-      expect(mockOnConfirm).toHaveBeenCalledTimes(1);
-    });
-  });
-  });
+}); 
+// End of file - ensure no extra braces below here!

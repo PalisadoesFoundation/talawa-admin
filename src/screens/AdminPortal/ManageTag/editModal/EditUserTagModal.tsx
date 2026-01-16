@@ -5,16 +5,9 @@ import { Button, Form } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import styles from './EditUserTagModal.module.css';
+// 👇 Import the interface from the new file
+import { InterfaceEditUserTagModalProps } from 'types/AdminPortal/ManageTag/editModal/EditUserTagModal/interface';
 
-export interface InterfaceEditUserTagModalProps {
-  editUserTagModalIsOpen: boolean;
-  hideEditUserTagModal: () => void;
-  newTagName: string;
-  setNewTagName: (state: React.SetStateAction<string>) => void;
-  handleEditUserTag: (e: FormEvent<HTMLFormElement>) => Promise<void>;
-  t: TFunction<'translation', 'manageTag'>;
-  tCommon: TFunction<'common', undefined>;
-}
 /**
  * EditUserTagModal
  *

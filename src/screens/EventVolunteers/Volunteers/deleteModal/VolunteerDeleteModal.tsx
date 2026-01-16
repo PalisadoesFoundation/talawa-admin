@@ -4,22 +4,14 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   DELETE_VOLUNTEER,
   DELETE_VOLUNTEER_FOR_INSTANCE,
 } from 'GraphQl/Mutations/EventVolunteerMutation';
+// 👇 Import the interface from the new file
+import { InterfaceDeleteVolunteerModal } from 'types/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal/interface';
 
-export interface InterfaceDeleteVolunteerModal {
-  isOpen: boolean;
-  hide: () => void;
-  volunteer: InterfaceEventVolunteerInfo;
-  refetchVolunteers: () => void;
-  // New props for recurring events
-  isRecurring?: boolean;
-  eventId?: string;
-}
 /**
  * VolunteerDeleteModal
  *

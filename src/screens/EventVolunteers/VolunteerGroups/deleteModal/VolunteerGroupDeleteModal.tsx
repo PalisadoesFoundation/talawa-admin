@@ -18,21 +18,12 @@ import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import {
   DELETE_VOLUNTEER_GROUP,
   DELETE_VOLUNTEER_GROUP_FOR_INSTANCE,
 } from 'GraphQl/Mutations/EventVolunteerMutation';
-
-export interface InterfaceDeleteVolunteerGroupModal {
-  isOpen: boolean;
-  hide: () => void;
-  group: InterfaceVolunteerGroupInfo | null;
-  refetchGroups: () => void;
-  // New props for recurring events
-  isRecurring?: boolean;
-  eventId?: string;
-}
+// 👇 Import the interface from the new file
+import { InterfaceDeleteVolunteerGroupModal } from 'types/EventVolunteers/VolunteerGroups/deleteModal/VolunteerGroupDeleteModal/interface';
 
 const VolunteerGroupDeleteModal: React.FC<
   InterfaceDeleteVolunteerGroupModal
