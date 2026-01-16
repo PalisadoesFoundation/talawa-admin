@@ -194,6 +194,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
                   onClick={() => {
                     setOpen(true);
                   }}
+                  onMouseDown={(e) => e.preventDefault()}
                 >
                   {t('addOnspotRegistrationLink')}
                 </button>

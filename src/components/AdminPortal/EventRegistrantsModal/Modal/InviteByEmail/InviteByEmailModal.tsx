@@ -268,6 +268,7 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
             const value = parseInt(v, 10);
             setExpiresInDays(isNaN(value) || value < 1 ? 7 : value);
           }}
+          data-testid="invite-expires"
         />
       </form>
     </BaseModal>

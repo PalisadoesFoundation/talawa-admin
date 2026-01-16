@@ -105,11 +105,11 @@ describe('AddOnSpotAttendee Component', () => {
     renderAddOnSpotAttendee();
 
     expect(screen.getByText('On-spot Attendee')).toBeInTheDocument();
-    expect(screen.getByLabelText('First Name')).toBeInTheDocument();
-    expect(screen.getByLabelText('Last Name')).toBeInTheDocument();
-    expect(screen.getByLabelText('Email')).toBeInTheDocument();
-    expect(screen.getByLabelText('Phone No.')).toBeInTheDocument();
-    expect(screen.getByLabelText('Gender')).toBeInTheDocument();
+    expect(screen.getByLabelText(/First Name/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Last Name/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Email/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Phone No./i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Gender/i)).toBeInTheDocument();
   });
 
   it('handles case where signUp response is undefined', async () => {
@@ -144,11 +144,11 @@ describe('AddOnSpotAttendee Component', () => {
       </MockedProvider>,
     );
 
-    await userEvent.type(screen.getByLabelText('First Name'), 'John');
-    await userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
-    await userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
-    await userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
-    const genderSelect = screen.getByLabelText('Gender');
+    await userEvent.type(screen.getByLabelText(/First Name/i), 'John');
+    await userEvent.type(screen.getByLabelText(/Last Name/i), 'Doe');
+    await userEvent.type(screen.getByLabelText(/Email/i), 'john@example.com');
+    await userEvent.type(screen.getByLabelText(/Phone No./i), '1234567890');
+    const genderSelect = screen.getByLabelText(/Gender/i);
     fireEvent.change(genderSelect, { target: { value: 'Male' } });
 
     fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
@@ -175,11 +175,11 @@ describe('AddOnSpotAttendee Component', () => {
     );
 
     // Fill the form
-    await userEvent.type(screen.getByLabelText('First Name'), 'John');
-    await userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
-    await userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
-    await userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
-    const genderSelect = screen.getByLabelText('Gender');
+    await userEvent.type(screen.getByLabelText(/First Name/i), 'John');
+    await userEvent.type(screen.getByLabelText(/Last Name/i), 'Doe');
+    await userEvent.type(screen.getByLabelText(/Email/i), 'john@example.com');
+    await userEvent.type(screen.getByLabelText(/Phone No./i), '1234567890');
+    const genderSelect = screen.getByLabelText(/Gender/i);
     fireEvent.change(genderSelect, { target: { value: 'Male' } });
 
     // Submit the form
@@ -196,11 +196,11 @@ describe('AddOnSpotAttendee Component', () => {
   it('submits form successfully and calls necessary callbacks', async () => {
     renderAddOnSpotAttendee();
 
-    await userEvent.type(screen.getByLabelText('First Name'), 'John');
-    await userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
-    await userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
-    await userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
-    const genderSelect = screen.getByLabelText('Gender');
+    await userEvent.type(screen.getByLabelText(/First Name/i), 'John');
+    await userEvent.type(screen.getByLabelText(/Last Name/i), 'Doe');
+    await userEvent.type(screen.getByLabelText(/Email/i), 'john@example.com');
+    await userEvent.type(screen.getByLabelText(/Phone No./i), '1234567890');
+    const genderSelect = screen.getByLabelText(/Gender/i);
     fireEvent.change(genderSelect, { target: { value: 'Male' } });
 
     fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
@@ -249,8 +249,8 @@ describe('AddOnSpotAttendee Component', () => {
       </MockedProvider>,
     );
 
-    await userEvent.type(screen.getByLabelText('First Name'), 'John');
-    await userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
+    await userEvent.type(screen.getByLabelText(/First Name/i), 'John');
+    await userEvent.type(screen.getByLabelText(/Last Name/i), 'Doe');
     fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
 
     await waitFor(() => {
@@ -261,11 +261,11 @@ describe('AddOnSpotAttendee Component', () => {
   it('disables button and shows loading state during form submission', async () => {
     renderAddOnSpotAttendee();
 
-    await userEvent.type(screen.getByLabelText('First Name'), 'John');
-    await userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
-    await userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
-    await userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
-    const genderSelect = screen.getByLabelText('Gender');
+    await userEvent.type(screen.getByLabelText(/First Name/i), 'John');
+    await userEvent.type(screen.getByLabelText(/Last Name/i), 'Doe');
+    await userEvent.type(screen.getByLabelText(/Email/i), 'john@example.com');
+    await userEvent.type(screen.getByLabelText(/Phone No./i), '1234567890');
+    const genderSelect = screen.getByLabelText(/Gender/i);
     fireEvent.change(genderSelect, { target: { value: 'Male' } });
 
     // Verify initial state before submission

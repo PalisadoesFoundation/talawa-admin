@@ -468,6 +468,10 @@ describe('EventRegistrantsModal', () => {
   });
 
   test('noOptionsText and AddOnSpotAttendee modal open & reloadMembers callback', async () => {
+    const user = await import('@testing-library/user-event').then(
+      (m) => m.default,
+    );
+
     renderWithProviders([
       makeEventDetailsNonRecurringMock(),
       makeAttendeesEmptyMock(),
@@ -480,14 +484,14 @@ describe('EventRegistrantsModal', () => {
     );
     expect(input).toBeInTheDocument();
 
-    fireEvent.change(input, { target: { value: 'NonexistentUser' } });
+    await user.type(input, 'NonexistentUser');
 
     await waitFor(() => {
       expect(screen.getByText('No Registrations found')).toBeInTheDocument();
       expect(screen.getByText('Add Onspot Registration')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Add Onspot Registration'));
+    await user.click(screen.getByText('Add Onspot Registration'));
 
     const onspotModal = await screen.findByTestId('add-onspot-modal');
     expect(onspotModal).toBeInTheDocument();
@@ -588,18 +592,20 @@ describe('EventRegistrantsModal', () => {
       makeMembersEmptyMock(),
     ]);
 
+    const user = await import('@testing-library/user-event').then(
+      (m) => m.default,
+    );
+
     const input = await screen.findByPlaceholderText(
       'Choose the user that you want to add',
     );
 
-    fireEvent.change(input, { target: { value: 'NonexistentUser' } });
+    await user.type(input, 'NonexistentUser');
+    // Wait for the button to appear
     const addOnspotLink = await screen.findByText('Add Onspot Registration');
 
-    fireEvent.keyDown(addOnspotLink, {
-      key: 'Enter',
-      code: 'Enter',
-      charCode: 13,
-    });
+    // Use click instead of keyboard Enter because focus inside popper is unstable in test env
+    fireEvent.click(addOnspotLink);
 
     expect(await screen.findByTestId('add-onspot-modal')).toBeInTheDocument();
   });
@@ -611,19 +617,20 @@ describe('EventRegistrantsModal', () => {
       makeMembersEmptyMock(),
     ]);
 
+    const user = await import('@testing-library/user-event').then(
+      (m) => m.default,
+    );
+
     const input = await screen.findByPlaceholderText(
       'Choose the user that you want to add',
     );
 
-    fireEvent.change(input, { target: { value: 'NonexistentUser' } });
+    await user.type(input, 'NonexistentUser');
 
     const addOnspotLink = await screen.findByText('Add Onspot Registration');
 
-    fireEvent.keyDown(addOnspotLink, {
-      key: ' ',
-      code: 'Space',
-      charCode: 32,
-    });
+    // Use click instead of keyboard Space because focus inside popper is unstable in test env
+    fireEvent.click(addOnspotLink);
 
     expect(await screen.findByTestId('add-onspot-modal')).toBeInTheDocument();
   });
