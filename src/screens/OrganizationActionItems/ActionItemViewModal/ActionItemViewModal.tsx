@@ -13,7 +13,7 @@ import type { InterfaceEvent } from 'types/Event/interface';
 import styles from './ActionItemViewModal.module.css';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
-import { TaskAlt, HistoryToggleOff } from '@mui/icons-material';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 import { useQuery } from '@apollo/client';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { MEMBERS_LIST_WITH_DETAILS } from 'GraphQl/Queries/Queries';
@@ -82,10 +82,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
   const assignedInfo = getAssignedInfo();
 
   const creator = creatorId
-    ? members.find(
-        (member: InterfaceUser) =>
-          member.id === creatorId || member.id === creatorId,
-      )
+    ? members.find((member: InterfaceUser) => member.id === creatorId)
     : item.creator;
 
   const category = categoryData?.actionItemCategory || item.category;
@@ -154,36 +151,21 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
           </FormControl>
         </Form.Group>
 
-        <Form.Group className="d-flex gap-3 mx-auto mb-3">
-          <TextField
-            label={t('status')}
-            fullWidth
-            value={isCompleted ? tCommon('completed') : tCommon('pending')}
-            InputProps={{
-              startAdornment: (
-                <>
-                  {isCompleted ? (
-                    <TaskAlt color="success" className="me-2" />
-                  ) : (
-                    <HistoryToggleOff color="warning" className="me-2" />
-                  )}
-                </>
-              ),
-              style: {
-                color: isCompleted
-                  ? 'var(--bs-success)'
-                  : 'var(--pendingStatus-color)',
-              },
-            }}
-            inputProps={{
-              style: {
-                WebkitTextFillColor: isCompleted
-                  ? 'green'
-                  : 'var(--pendingStatus-color)',
-              },
-            }}
-            disabled
-          />
+        <Form.Group className="d-flex gap-3 mx-auto mb-3 align-items-start w-100">
+          {/* Status using the shared StatusBadge component (replaces ad-hoc icon + color styles) */}
+          <FormControl fullWidth>
+            <label className="form-label mb-2">{t('status')}</label>
+            <div>
+              <StatusBadge
+                variant={isCompleted ? 'completed' : 'pending'}
+                size="md"
+                dataTestId="action-item-status-badge"
+                ariaLabel={
+                  isCompleted ? tCommon('completed') : tCommon('pending')
+                }
+              />
+            </div>
+          </FormControl>
 
           <TextField
             label={t('event')}
