@@ -163,7 +163,7 @@ function EventAttendance(): JSX.Element {
         filterable: false,
         renderCell: (params) => (
           <Link
-            to={`/member/${currentUrl}`}
+            to={`/member/${currentUrl}/${params.row.id}`}
             state={{ id: params.row.id }}
             className={styles.membername}
           >

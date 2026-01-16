@@ -181,7 +181,9 @@ describe('Testing Event Dashboard Screen', () => {
     const { getByTestId, queryByTestId } = renderEventDashboard(mockNoEvent);
     await wait();
 
-    expect(getByTestId('no-event')).toHaveTextContent(i18nForTest.t('noEvent'));
+    expect(getByTestId('no-event')).toHaveTextContent(
+      i18nForTest.t('eventListCard.noEvent'),
+    );
     expect(queryByTestId('event-details')).not.toBeInTheDocument();
   });
 
@@ -190,7 +192,9 @@ describe('Testing Event Dashboard Screen', () => {
       renderEventDashboard(mockMissingData);
     await wait();
 
-    expect(getByTestId('no-event')).toHaveTextContent(i18nForTest.t('noEvent'));
+    expect(getByTestId('no-event')).toHaveTextContent(
+      i18nForTest.t('eventListCard.noEvent'),
+    );
     expect(queryByTestId('event-details')).not.toBeInTheDocument();
   });
 
