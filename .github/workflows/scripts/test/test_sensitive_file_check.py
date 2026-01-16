@@ -70,44 +70,44 @@ class TestSensitiveFileCheck(unittest.TestCase):
         secret_file = os.path.join(subdir, "secret_config.json")
         with open(secret_file, "w") as f:
             f.write("secret data")
-        
+
         patterns = [".*secret.*"]
         sensitive_files = check_files([], [self.test_dir], patterns)
-        
+
         # Normalize paths for comparison
-        sensitive_files = [f.replace(os.path.sep, "/") for f in sensitive_files]
+        sensitive_files = [
+            f.replace(os.path.sep, "/") for f in sensitive_files
+        ]
         expected_file = secret_file.replace(os.path.sep, "/")
-        
+
         self.assertIn(expected_file, sensitive_files)
 
-    @patch('argparse.ArgumentParser.parse_args')
+    @patch("argparse.ArgumentParser.parse_args")
     def test_main_no_sensitive_files(self, mock_args):
         """Test main function when no sensitive files are found."""
         mock_args.return_value = MagicMock(
-            config=self.config_file,
-            files=["normal_file.txt"],
-            directories=[]
+            config=self.config_file, files=["normal_file.txt"], directories=[]
         )
-        
+
         with self.assertRaises(SystemExit) as cm:
             main()
         self.assertEqual(cm.exception.code, 0)
 
-    @patch('argparse.ArgumentParser.parse_args')
+    @patch("argparse.ArgumentParser.parse_args")
     def test_main_sensitive_files_found(self, mock_args):
         """Test main function when sensitive files are found."""
         mock_args.return_value = MagicMock(
-            config=self.config_file,
-            files=["my_secret.txt"],
-            directories=[]
+            config=self.config_file, files=["my_secret.txt"], directories=[]
         )
-        
+
         # Capture stdout to verify error message
-        with patch('sys.stdout', new=StringIO()) as fake_out:
+        with patch("sys.stdout", new=StringIO()) as fake_out:
             with self.assertRaises(SystemExit) as cm:
                 main()
             self.assertEqual(cm.exception.code, 1)
-            self.assertIn("::error::Unauthorized changes detected", fake_out.getvalue())
+            self.assertIn(
+                "::error::Unauthorized changes detected", fake_out.getvalue()
+            )
 
 
 if __name__ == "__main__":
