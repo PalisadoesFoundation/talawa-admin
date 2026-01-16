@@ -1482,26 +1482,6 @@
     "unregister": "Dar de baja",
     "cannotUnregisterCheckedInTooltip": "No se puede dar de baja a un usuario que ya se registró"
   },
-  "onSpotAttendee": {
-    "title": "Asistente en el lugar",
-    "enterFirstName": "Ingrese el nombre",
-    "enterLastName": "Ingrese el apellido",
-    "enterEmail": "Ingrese el correo electrónico",
-    "enterPhoneNo": "Ingrese el número de teléfono",
-    "selectGender": "Seleccione el género",
-    "invalidDetailsMessage": "Por favor complete todos los campos requeridos",
-    "orgIdMissing": "Falta el ID de la organización. Por favor, inténtelo de nuevo.",
-    "attendeeAddedSuccess": "¡Asistente agregado exitosamente!",
-    "addAttendee": "Agregar",
-    "phoneNumber": "Número de teléfono",
-    "addingAttendee": "Agregando...",
-    "male": "Masculino",
-    "female": "Femenino",
-    "other": "Otro",
-    "firstNamePlaceholder": "Juan",
-    "lastNamePlaceholder": "García",
-    "emailPlaceholder": "ejemplo@gmail.com"
-  },
   "settings": {
     "settings": "Ajustes",
     "eventAttended": "Événements Assistés",
@@ -1907,12 +1887,21 @@
     "checkedIn": "Registrado",
     "downloadTag": "Descargar etiqueta",
     "checkIn": "Registrar",
-    "eventCheckInManagement": "Gestión de registro de eventos"
+    "eventCheckInManagement": "Gestión de registro de eventos",
+    "checkInMembers": "Registrar miembros",
+    "unknownUser": "Usuario Desconocido",
+    "user": "Usuario",
+    "checkInStatus": "Estado de Registro"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",
     "errorRemovingAttendee": "Error al eliminar asistente",
-    "eventRegistrantsTitle": "Registrados al evento",
+    "eventRegistrantsTitle": "Registrantes del evento",
+    "registerMember": "Registrar miembro",
+    "showAttendees": "Mostrar asistentes",
+    "addingAttendee": "Agregando asistente...",
+    "selectUserFirst": "¡Por favor, elija un usuario para agregar primero!",
+    "unknownUser": "Usuario desconocido",
     "inviteByEmailButton": "Invitar por correo electrónico",
     "addRegistrantButton": "Agregar registrado",
     "noRegistrationsFound": "No se encontraron registros",
@@ -1932,16 +1921,35 @@
       "expiresInDaysLabel": "Expira en (días)",
       "errorSendingInvites": "Error al enviar invitaciones",
       "emailsLabel": "Correos electrónicos y nombres de destinatarios",
-      "emailsHelp": "Proporcione el correo electrónico y el nombre opcional para cada destinatario. Agregue varios destinatarios según sea necesario."
-    },
-    "selectUserWarning": "¡Por favor, elija primero un usuario para agregar!",
-    "addingAttendeeProgress": "Agregando al asistente..."
+      "emailsHelp": "Proporcione el correo electrónico y el nombre opcional para cada destinatario. Agregue varios destinatarios según sea necesario.",
+      "noRecipientsError": "Por favor proporcione al menos un correo electrónico de destinatario",
+      "invalidEmailsError": "Correo(s) electrónico(s) inválido(s): {{emails}}",
+      "invitesSentSuccessfully": "Invitaciones enviadas con éxito"
+    }
   },
-  "eventRegistrantsWrapper": {
-    "buttonAriaLabel": "Mostrar asistentes",
-    "registerMemberButton": "Registrar miembro"
+  "onSpotAttendee": {
+    "invalidEmailFormat": "Formato de correo electrónico no válido",
+    "organizationIdMissing": "Falta el ID de la organización.",
+    "title": "Asistente in situ",
+    "enterFirstName": "Ingrese el nombre",
+    "enterLastName": "Ingrese el apellido",
+    "enterEmail": "Ingrese el correo electrónico",
+    "enterPhoneNo": "Ingrese el número de teléfono",
+    "selectGender": "Seleccionar género",
+    "invalidDetailsMessage": "Por favor complete todos los detalles requeridos",
+    "orgIdMissing": "Falta el ID de la organización. Por favor, inténtelo de nuevo.",
+    "attendeeAddedSuccess": "¡Asistente agregado exitosamente!",
+    "addAttendee": "Agregar asistente",
+    "phoneNumber": "Nº de teléfono",
+    "phoneNumberPlaceholder": "1234567890",
+    "addingAttendee": "Agregando...",
+    "male": "Masculino",
+    "female": "Femenino",
+    "other": "Otro",
+    "placeholderFirstName": "Juan",
+    "placeholderLastName": "García",
+    "placeholderEmail": "abc@gmail.com"
   },
-
   "userCampaigns": {
     "title": "Campañas de recaudación de fondos",
     "searchByName": "Buscar por nombre...",
@@ -2116,7 +2124,11 @@
     "groupName": "Nombre del Grupo",
     "noOfMembers": "Número de Miembros",
     "options": "Opciones",
-    "notSpecified": "No Especificado"
+    "notSpecified": "No Especificado",
+    "invited": "Invitado",
+    "groupsAvailable": "{{count}} grupos disponibles",
+    "volunteersRequired": "Requerido",
+    "signedUp": "Registrado"
   },
   "pluginStore": {
     "title": "Tienda de Plugins",
