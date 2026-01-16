@@ -26,6 +26,26 @@ import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
+
+/**
+ * Maps membership status to StatusBadge variant
+ */
+export const getStatusBadgeProps = (
+  status: string,
+): { variant: StatusVariant } => {
+  switch (status) {
+    case 'requested':
+    case 'invited':
+      return { variant: 'pending' };
+    case 'accepted':
+      return { variant: 'accepted' };
+    case 'rejected':
+      return { variant: 'rejected' };
+    default:
+      return { variant: 'pending' };
+  }
+};
+
 /**
  * Component for displaying upcoming volunteer events for an organization.
  * Allows users to volunteer for events and groups, and tracks their membership status.
@@ -214,25 +234,6 @@ const UpcomingEvents = (): JSX.Element => {
           disabled: false,
           icon: IoIosHand,
         };
-    }
-  };
-
-  /**
-   * Maps membership status to StatusBadge variant
-   */
-  export const getStatusBadgeProps = (
-    status: string,
-  ): { variant: StatusVariant } => {
-    switch (status) {
-      case 'requested':
-      case 'invited':
-        return { variant: 'pending' };
-      case 'accepted':
-        return { variant: 'accepted' };
-      case 'rejected':
-        return { variant: 'rejected' };
-      default:
-        return { variant: 'pending' };
     }
   };
 
