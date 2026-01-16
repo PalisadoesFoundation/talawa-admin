@@ -313,6 +313,60 @@ describe('AgendaItemsUpdateModal', () => {
     });
   });
 
+  test('handles case when uploadFileToMinio returns null', async () => {
+    // Mock uploadFileToMinio to return null (no result)
+    sharedMocks.uploadFileToMinio.mockResolvedValue(null);
+
+    const cleanFormState = {
+      ...mockFormState1,
+      attachments: [],
+    };
+
+    render(
+      <MockedProvider>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemCategories={[]}
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={cleanFormState}
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const fileInput = screen.getByTestId('attachment');
+    const smallFile = new File(['small-file-content'], 'small-file.jpg');
+
+    Object.defineProperty(fileInput, 'files', {
+      value: [smallFile],
+    });
+
+    fireEvent.change(fileInput);
+
+    // Wait for upload to be called
+    await waitFor(() => {
+      expect(sharedMocks.uploadFileToMinio).toHaveBeenCalledWith(
+        smallFile,
+        'agendaItem',
+      );
+    });
+
+    // Verify that no error toast was shown (upload didn't throw)
+    expect(sharedMocks.NotificationToast.error).not.toHaveBeenCalledWith(
+      'fileUploadError',
+    );
+  });
+
   test('adds files correctly when within size limit', async () => {
     const mockMinioResult = {
       objectName: 'agendaItem/small-file.jpg',
