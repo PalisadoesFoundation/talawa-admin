@@ -28,7 +28,10 @@ import EmptyState from 'shared-components/EmptyState/EmptyState';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
 /**
- * Maps membership status to StatusBadge variant
+ * Maps membership status to StatusBadge variant.
+ *
+ * @param status - The membership status string (e.g., 'requested', 'invited', 'accepted', 'rejected')
+ * @returns Object containing the StatusBadge variant
  */
 export const getStatusBadgeProps = (
   status: string,
@@ -449,8 +452,8 @@ const UpcomingEvents = (): JSX.Element => {
         eventDate={pendingVolunteerRequest?.eventDate || ''}
         isForGroup={!!pendingVolunteerRequest?.groupId}
         groupName={pendingVolunteerRequest?.groupName || ''}
-        onSelectSeries={() => {}}
-        onSelectInstance={() => {}}
+        onSelectSeries={() => { }}
+        onSelectInstance={() => { }}
       />
     </LoadingState>
   );
