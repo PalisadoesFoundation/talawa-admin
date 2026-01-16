@@ -855,6 +855,7 @@
     "updatePledge": "Update Pledge",
     "deletePledge": "Delete Pledge",
     "amount": "Amount",
+    "amountMustBeAtLeastOne": "Amount must be at least 1",
     "editPledge": "Edit Pledge",
     "deletePledgeMsg": "Are you sure you want to delete this pledge?",
     "noPledges": "No Pledges Found",
@@ -1036,7 +1037,22 @@
     "pageNumber": "Page {{page}}",
     "goToToday": "Go to today",
     "genderDistribution": "Gender Distribution",
-    "ageDistribution": "Age Distribution"
+    "ageDistribution": "Age Distribution",
+    "age": "Age",
+    "age18to40": "18-40",
+    "attendanceCount": "Attendance Count",
+    "close": "Close",
+    "demographics": "Demographics",
+    "demography": "Demography",
+    "exportData": "Export Data",
+    "female": "Female",
+    "gender": "Gender",
+    "male": "Male",
+    "other": "Other",
+    "over40": "Over 40",
+    "today": "Today",
+    "trends": "Trends",
+    "under18": "Under 18"
   },
   "eventRegistrant": {
     "sort": "Sort",
@@ -1071,7 +1087,10 @@
     "addingAttendee": "Adding...",
     "male": "Male",
     "female": "Female",
-    "other": "Other"
+    "other": "Other",
+    "firstNamePlaceholder": "John",
+    "lastNamePlaceholder": "Doe",
+    "emailPlaceholder": "abc@gmail.com"
   },
   "forgotPassword": {
     "title": "Talawa Forgot Password",
@@ -1885,7 +1904,13 @@
       "errorSendingInvites": "Error sending invites",
       "emailsLabel": "Recipient emails and names",
       "emailsHelp": "Provide email and optional name for each recipient. Add multiple recipients as needed."
-    }
+    },
+    "selectUserWarning": "Please choose a user to add first!",
+    "addingAttendeeProgress": "Adding the attendee..."
+  },
+  "eventRegistrantsWrapper": {
+    "buttonAriaLabel": "Show Attendees",
+    "registerMemberButton": "Register Member"
   },
   "userCampaigns": {
     "title": "Fundraising Campaigns",

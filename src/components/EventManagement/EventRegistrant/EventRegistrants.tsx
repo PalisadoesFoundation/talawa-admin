@@ -49,9 +49,11 @@ import type { InterfaceUserAttendee } from 'types/shared-components/User/interfa
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import DataTable from 'shared-components/DataTable/DataTable';
 import { IColumnDef } from 'types/shared-components/DataTable/interface';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 function EventRegistrants(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventRegistrant' });
+  const { t: tErrors } = useTranslation('errors');
   const { orgId, eventId } = useParams<{ orgId: string; eventId: string }>();
   const [registrants, setRegistrants] = useState<InterfaceUserAttendee[]>([]);
   const [checkedInUsers, setCheckedInUsers] = useState<string[]>([]);
@@ -253,33 +255,40 @@ function EventRegistrants(): JSX.Element {
   ];
 
   return (
-    <div>
-      <div className="d-flex justify-content-between align-items-center">
-        {eventId ? (
-          <CheckInWrapper
-            eventId={eventId.toString()}
-            onCheckInUpdate={refreshData}
-          />
-        ) : (
-          <CheckInWrapper eventId="" />
-        )}
-        {eventId && orgId && (
-          <EventRegistrantsWrapper
-            eventId={eventId.toString()}
-            orgId={orgId}
-            onUpdate={refreshData}
-          />
-        )}
-      </div>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
+      <div>
+        <div className="d-flex justify-content-between align-items-center">
+          {eventId ? (
+            <CheckInWrapper
+              eventId={eventId.toString()}
+              onCheckInUpdate={refreshData}
+            />
+          ) : (
+            <CheckInWrapper eventId="" />
+          )}
+          {eventId && orgId && (
+            <EventRegistrantsWrapper
+              eventId={eventId.toString()}
+              orgId={orgId}
+              onUpdate={refreshData}
+            />
+          )}
+        </div>
 
-      <DataTable
-        data={tableData}
-        columns={columns}
-        rowKey="id"
-        ariaLabel={t('eventRegistrantsTable')}
-        emptyMessage={t('noRegistrantsFound')}
-      />
-    </div>
+        <DataTable
+          data={tableData}
+          columns={columns}
+          rowKey="id"
+          ariaLabel={t('eventRegistrantsTable')}
+          emptyMessage={t('noRegistrantsFound')}
+        />
+      </div>
+    </ErrorBoundaryWrapper>
   );
 }
 export default EventRegistrants;

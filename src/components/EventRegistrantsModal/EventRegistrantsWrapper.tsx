@@ -4,14 +4,12 @@
  * open the modal and handles the modal's lifecycle, including invoking an
  * optional callback when the modal is closed.
  *
- * @component
- * @param {string} eventId - The unique identifier for the event.
- * @param {string} orgId - The unique identifier for the organization.
- * @param {() => void} [onUpdate] - Optional callback function to be executed
+ * @param eventId - The unique identifier for the event.
+ * @param orgId - The unique identifier for the organization.
+ * @param onUpdate - Optional callback function to be executed
  * after the modal is closed.
  *
- * @returns {JSX.Element} A button to open the modal and the modal itself
- * when visible.
+ * @returns A button to open the modal and the modal itself when visible.
  *
  * @example
  * ```tsx
@@ -31,6 +29,8 @@ import React, { useState } from 'react';
 import { EventRegistrantsModal } from './Modal/EventRegistrantsModal';
 import { Button } from 'react-bootstrap';
 import style from 'style/app-fixed.module.css';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { useTranslation } from 'react-i18next';
 
 type PropType = { eventId: string; orgId: string; onUpdate?: () => void };
 
@@ -39,6 +39,10 @@ export const EventRegistrantsWrapper = ({
   orgId,
   onUpdate,
 }: PropType): JSX.Element => {
+  const { t: tErrors } = useTranslation('errors');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventRegistrantsWrapper',
+  });
   // State to control the visibility of the modal
   const [showModal, setShowModal] = useState(false);
   const handleClose = (): void => {
@@ -50,17 +54,22 @@ export const EventRegistrantsWrapper = ({
   };
 
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
       {/* Button to open the event registrants modal */}
       <Button
         data-testid="filter-button"
         className={`border-1 mx-4 ${style.createButton}`}
-        aria-label="showAttendees"
+        aria-label={t('buttonAriaLabel')}
         onClick={(): void => {
           setShowModal(true); // Show the modal when button is clicked
         }}
       >
-        Register Member
+        {t('registerMemberButton')}
       </Button>
 
       {/* Render the EventRegistrantsModal if showModal is true */}
@@ -72,6 +81,6 @@ export const EventRegistrantsWrapper = ({
           orgId={orgId}
         />
       )}
-    </>
+    </ErrorBoundaryWrapper>
   );
 };
