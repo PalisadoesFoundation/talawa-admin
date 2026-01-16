@@ -471,5 +471,58 @@ describe('InviteByEmailModal', () => {
         );
       });
     });
+
+    it('should handle explicit isRecurring=false correctly', async () => {
+      const explicitFalseProps = {
+        isRecurring: false,
+      };
+
+      const successMock: MockedResponse = {
+        request: {
+          query: SEND_EVENT_INVITATIONS,
+          variables: {
+            input: {
+              eventId: 'test-event-1',
+              recurringEventInstanceId: null,
+              message: null,
+              expiresInDays: 7,
+              recipients: [{ email: 'explicit@example.com', name: '' }],
+            },
+          },
+        },
+        result: {
+          data: {
+            sendEventInvitations: {
+              id: '3',
+              eventId: 'test-event-1',
+              recurringEventInstanceId: null,
+              invitedBy: 'user1',
+              userId: 'user2',
+              inviteeEmail: 'explicit@example.com',
+              inviteeName: '',
+              invitationToken: 'token789',
+              status: 'PENDING',
+              expiresAt: dayjs().add(1, 'year').format('YYYY-MM-DD'),
+              respondedAt: null,
+              metadata: null,
+              createdAt: dayjs().format('YYYY-MM-DD'),
+              updatedAt: dayjs().format('YYYY-MM-DD'),
+            },
+          },
+        },
+      };
+
+      renderComponent(explicitFalseProps, [successMock]);
+      const user = userEvent.setup();
+
+      await user.type(screen.getByLabelText('Email'), 'explicit@example.com');
+      fireEvent.click(screen.getByTestId('invite-submit'));
+
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          'Invites sent successfully',
+        );
+      });
+    });
   });
 });

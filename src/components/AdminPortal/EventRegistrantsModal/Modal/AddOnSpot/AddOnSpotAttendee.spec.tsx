@@ -18,6 +18,7 @@ const sharedMocks = vi.hoisted(() => ({
     error: vi.fn(),
   },
   navigate: vi.fn(),
+  useParams: vi.fn(),
 }));
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
@@ -33,7 +34,7 @@ vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {
     ...actual,
-    useParams: () => ({ eventId: '123', orgId: '123' }),
+    useParams: sharedMocks.useParams,
   };
 });
 
@@ -95,6 +96,7 @@ const renderAddOnSpotAttendee = (): RenderResult => {
 describe('AddOnSpotAttendee Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    sharedMocks.useParams.mockReturnValue({ eventId: '123', orgId: '123' });
   });
 
   afterEach(() => {
@@ -212,6 +214,9 @@ describe('AddOnSpotAttendee Component', () => {
   });
 
   it('displays error when organization ID is missing', async () => {
+    // Force mock value
+    sharedMocks.useParams.mockReturnValue({ eventId: '123', orgId: undefined });
+
     render(
       <MockedProvider mocks={[]}>
         <BrowserRouter>
@@ -223,7 +228,10 @@ describe('AddOnSpotAttendee Component', () => {
     fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
 
     await waitFor(() => {
-      expect(sharedMocks.NotificationToast.error).toHaveBeenCalled();
+      // Expect specific error message key for missing orgId
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
+        expect.stringContaining('organizationIdMissing'),
+      );
     });
   });
   it('displays error when required fields are missing', async () => {
