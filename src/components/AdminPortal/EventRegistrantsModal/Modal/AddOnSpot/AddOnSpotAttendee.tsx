@@ -35,7 +35,12 @@
  */
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import {
+  FormFieldGroup,
+  FormTextField,
+  FormSelectField,
+} from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { BaseModal } from 'shared-components/BaseModal';
 import styles from 'style/app-fixed.module.css';
 import { useParams } from 'react-router';
@@ -91,21 +96,6 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
     });
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >,
-  ): void => {
-    const target = e.target as
-      | HTMLInputElement
-      | HTMLSelectElement
-      | HTMLTextAreaElement;
-    setFormData((prev) => ({
-      ...prev,
-      [target.name]: target.value,
-    }));
-  };
-
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -154,78 +144,59 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
         headerClassName={modalStyles.modalHeader}
         title={t('title')}
       >
-        <Form onSubmit={handleSubmit} data-testid="onspot-attendee-form">
+        <form onSubmit={handleSubmit} data-testid="onspot-attendee-form">
           <div className="d-flex justify-content-between">
-            <Form.Group className="mb-1">
-              <Form.Label htmlFor="firstName">
-                {tCommon('firstName')}
-              </Form.Label>
-              <Form.Control
-                id="firstName"
-                type="text"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                placeholder={t('placeholderFirstName')}
-                required
-                aria-required="true"
-              />
-            </Form.Group>
-            <Form.Group className="mb-1">
-              <Form.Label htmlFor="lastName">{tCommon('lastName')}</Form.Label>
-              <Form.Control
-                id="lastName"
-                type="text"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                placeholder={t('placeholderLastName')}
-                required
-                aria-required="true"
-              />
-            </Form.Group>
-          </div>
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="phoneNo">{t('phoneNumber')}</Form.Label>
-            <Form.Control
-              id="phoneNo"
-              type="tel"
-              name="phoneNo"
-              value={formData.phoneNo}
-              onChange={handleChange}
-              placeholder={t('phoneNumberPlaceholder')}
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="email">{tCommon('email')}</Form.Label>
-            <Form.Control
-              id="email"
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder={t('placeholderEmail')}
+            <FormTextField
+              name="firstName"
+              label={tCommon('firstName')}
+              value={formData.firstName}
+              onChange={(v) =>
+                setFormData((prev) => ({ ...prev, firstName: v }))
+              }
+              placeholder={t('placeholderFirstName')}
               required
-              aria-required="true"
             />
-          </Form.Group>
+            <FormTextField
+              name="lastName"
+              label={tCommon('lastName')}
+              value={formData.lastName}
+              onChange={(v) =>
+                setFormData((prev) => ({ ...prev, lastName: v }))
+              }
+              placeholder={t('placeholderLastName')}
+              required
+            />
+          </div>
+          <FormTextField
+            name="phoneNo"
+            label={t('phoneNumber')}
+            type="tel"
+            value={formData.phoneNo}
+            onChange={(v) => setFormData((prev) => ({ ...prev, phoneNo: v }))}
+            placeholder={t('phoneNumberPlaceholder')}
+          />
 
-          <Form.Group className="mb-3">
-            <Form.Label htmlFor="gender">{tCommon('gender')}</Form.Label>
-            <Form.Control
-              id="gender"
-              as="select"
-              name="gender"
-              value={formData.gender}
-              onChange={handleChange}
-            >
-              <option value="">{t('selectGender')}</option>
-              <option value="Male">{t('male')}</option>
-              <option value="Female">{t('female')}</option>
-              <option value="Other">{t('other')}</option>
-            </Form.Control>
-          </Form.Group>
+          <FormTextField
+            name="email"
+            label={tCommon('email')}
+            type="email"
+            value={formData.email}
+            onChange={(v) => setFormData((prev) => ({ ...prev, email: v }))}
+            placeholder={t('placeholderEmail')}
+            required
+          />
+
+          <FormSelectField
+            name="gender"
+            label={tCommon('gender')}
+            value={formData.gender}
+            onChange={(v) => setFormData((prev) => ({ ...prev, gender: v }))}
+          >
+            <option value="">{t('selectGender')}</option>
+            <option value="Male">{t('male')}</option>
+            <option value="Female">{t('female')}</option>
+            <option value="Other">{t('other')}</option>
+          </FormSelectField>
           <br />
           <LoadingState isLoading={isSubmitting} variant="inline">
             <Button
@@ -237,7 +208,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
               {t('addAttendee')}
             </Button>
           </LoadingState>
-        </Form>
+        </form>
       </BaseModal>
     </ErrorBoundaryWrapper>
   );

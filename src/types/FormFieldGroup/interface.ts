@@ -13,3 +13,9 @@ export interface IFormTextFieldProps extends IFormFieldGroupProps {
   value: string;
   onChange: (v: string) => void;
 }
+
+export interface IFormSelectFieldProps extends IFormFieldGroupProps {
+  value: string;
+  onChange: (v: string) => void;
+  children: React.ReactNode;
+}

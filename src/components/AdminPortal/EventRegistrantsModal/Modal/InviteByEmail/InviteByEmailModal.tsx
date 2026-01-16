@@ -15,7 +15,11 @@
  * Integrates with `react-toastify` for user notifications.
  */
 import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import {
+  FormFieldGroup,
+  FormTextField,
+} from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { BaseModal } from 'shared-components/BaseModal';
 import TextField from '@mui/material/TextField';
 import { useMutation } from '@apollo/client';
@@ -154,16 +158,17 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
         </>
       }
     >
-      <Form
+      <form
         onSubmit={onSubmit}
         data-testid="invite-by-email-form"
         id="invite-by-email-form"
       >
-        <Form.Group className="mb-3">
-          <Form.Label>
-            {t('emailsLabel', { defaultValue: 'Recipient emails and names' })}
-          </Form.Label>
-
+        <FormFieldGroup
+          name="recipients"
+          label={t('emailsLabel', {
+            defaultValue: 'Recipient emails and names',
+          })}
+        >
           {recipients.map((r) => (
             <div key={r.id} className="d-flex align-items-center mb-2">
               <TextField
@@ -235,12 +240,12 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
                 'Provide email and optional name for each recipient. Add multiple recipients as needed.',
             })}
           </small>
-        </Form.Group>
+        </FormFieldGroup>
 
-        <Form.Group className="mb-3">
-          <Form.Label>
-            {t('messageLabel', { defaultValue: 'Message (optional)' })}
-          </Form.Label>
+        <FormFieldGroup
+          name="message"
+          label={t('messageLabel', { defaultValue: 'Message (optional)' })}
+        >
           <TextField
             fullWidth
             multiline
@@ -252,24 +257,19 @@ const InviteByEmailModal: React.FC<InterfaceInviteByEmailModalProps> = ({
             onChange={(e) => setMessage(e.target.value)}
             inputProps={{ 'data-testid': 'invite-message' }}
           />
-        </Form.Group>
+        </FormFieldGroup>
 
-        <Form.Group className="mb-3">
-          <Form.Label>
-            {t('expiresInDaysLabel', { defaultValue: 'Expires in (days)' })}
-          </Form.Label>
-          <Form.Control
-            type="number"
-            min={1}
-            value={expiresInDays}
-            onChange={(e) => {
-              const value = parseInt(e.target.value, 10);
-              setExpiresInDays(isNaN(value) || value < 1 ? 7 : value);
-            }}
-            data-testid="invite-expires"
-          />
-        </Form.Group>
-      </Form>
+        <FormTextField
+          name="expiresInDays"
+          label={t('expiresInDaysLabel', { defaultValue: 'Expires in (days)' })}
+          type="number"
+          value={expiresInDays.toString()}
+          onChange={(v) => {
+            const value = parseInt(v, 10);
+            setExpiresInDays(isNaN(value) || value < 1 ? 7 : value);
+          }}
+        />
+      </form>
     </BaseModal>
   );
 };
