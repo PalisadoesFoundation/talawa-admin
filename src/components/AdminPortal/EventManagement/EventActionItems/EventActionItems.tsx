@@ -24,7 +24,7 @@
 
 import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
 
 import { WarningAmberRounded, Group } from '@mui/icons-material';
@@ -392,7 +392,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
       renderCell: (params: GridCellParams) => {
         return (
           <div className="d-flex align-items-center justify-content-center mt-3">
-            <Form.Check
+            <input
               type="checkbox"
               data-testid={`statusCheckbox${params.row.id}`}
               className={styles.checkboxButton}
