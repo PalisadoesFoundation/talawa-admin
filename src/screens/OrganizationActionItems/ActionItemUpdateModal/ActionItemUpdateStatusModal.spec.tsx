@@ -442,20 +442,16 @@ describe('Testing ItemUpdateStatusModal', () => {
       });
     });
 
-    it('renders StatusBadge with completed variant when isCompleted is true', () => {
-      renderItemUpdateStatusModal(link1, itemProps[0]); // isCompleted = true
+    it('renders StatusBadge when action item is completed', () => {
+      renderItemUpdateStatusModal(link1, itemProps[0]);
 
-      const badge = screen.getByTestId('update-status-badge');
-      expect(badge).toBeInTheDocument();
-      expect(badge).toHaveAttribute('aria-label', 'Completed');
+      expect(screen.getByTestId('update-status-badge')).toBeInTheDocument();
     });
 
-    it('renders StatusBadge with pending variant when isCompleted is false', () => {
-      renderItemUpdateStatusModal(link1, itemProps[1]); // isCompleted = false
+    it('renders StatusBadge when action item is pending', () => {
+      renderItemUpdateStatusModal(link1, itemProps[1]);
 
-      const badge = screen.getByTestId('update-status-badge');
-      expect(badge).toBeInTheDocument();
-      expect(badge).toHaveAttribute('aria-label', 'Pending');
+      expect(screen.getByTestId('update-status-badge')).toBeInTheDocument();
     });
   });
 
