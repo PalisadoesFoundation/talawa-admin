@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Dropdown from 'react-bootstrap/Dropdown';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import { useQuery, useMutation } from '@apollo/client';
 import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
@@ -23,6 +26,7 @@ import {
   InterfaceDonationCardProps,
 } from 'types/Donation/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 /**
  * Component for handling donations to an organization.
@@ -154,12 +158,14 @@ export default function Donate(): JSX.Element {
               </Dropdown.Menu>
             </Dropdown>
 
-            <Form.Control
+            <FormTextField
+              name="donationAmount"
               type="text"
-              data-testid="donationAmount"
+              label={t('amount')}
               placeholder={t('amount')}
               value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              onChange={setAmount}
+              data-testid="donationAmount"
             />
           </InputGroup>
 

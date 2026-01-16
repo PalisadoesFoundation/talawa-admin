@@ -4,6 +4,8 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+
+import i18nForTest from 'utils/i18nForTest';
 import LeaveOrganization from './LeaveOrganization';
 import {
   ORGANIZATIONS_LIST_BASIC,
@@ -20,6 +22,18 @@ const routerMocks = vi.hoisted(() => ({
 const mockNotificationToast = vi.hoisted(() => ({
   success: vi.fn(),
 }));
+
+vi.mock('react-i18next', async () => {
+  const original = await vi.importActual('react-i18next');
+  return {
+    ...original,
+    useTranslation: () => ({
+      t: (key: string, options?: Record<string, unknown>) =>
+        i18nForTest.t(key, options),
+      i18n: i18nForTest,
+    }),
+  };
+});
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: mockNotificationToast,
@@ -267,7 +281,7 @@ describe('LeaveOrganization Component', () => {
     fireEvent.click(leaveButton);
     await waitFor(() =>
       expect(
-        screen.getByText(/Are you sure you want to leave this organization?/i),
+        screen.getByText(/Are you sure you want to leave/i),
       ).toBeInTheDocument(),
     );
     await screen.findByText('Continue');
@@ -299,7 +313,7 @@ describe('LeaveOrganization Component', () => {
     fireEvent.click(leaveButton);
     await waitFor(() =>
       expect(
-        screen.getByText(/Are you sure you want to leave this organization?/i),
+        screen.getByText(/Are you sure you want to leave/i),
       ).toBeInTheDocument(),
     );
     const modal = await screen.findByRole('dialog');
@@ -335,7 +349,7 @@ describe('LeaveOrganization Component', () => {
     fireEvent.click(leaveButton);
     await waitFor(() =>
       expect(
-        screen.getByText(/Are you sure you want to leave this organization?/i),
+        screen.getByText(/Are you sure you want to leave/i),
       ).toBeInTheDocument(),
     );
     const modal = await screen.findByRole('dialog');
@@ -350,9 +364,11 @@ describe('LeaveOrganization Component', () => {
     });
     fireEvent.click(confirmButton);
     await waitFor(() => {
-      expect(screen.getByRole('alert')).toHaveTextContent(
-        'Verification failed: Email does not match.',
-      );
+      expect(
+        screen.getByText(
+          'The email you entered does not match your account email.',
+        ),
+      ).toBeInTheDocument();
     });
   });
 
@@ -370,7 +386,7 @@ describe('LeaveOrganization Component', () => {
     fireEvent.click(leaveButton);
     await waitFor(() =>
       expect(
-        screen.getByText(/Are you sure you want to leave this organization?/i),
+        screen.getByText(/Are you sure you want to leave/i),
       ).toBeInTheDocument(),
     );
     const modal = await screen.findByRole('dialog');
@@ -385,9 +401,11 @@ describe('LeaveOrganization Component', () => {
     });
     fireEvent.click(confirmButton);
     await waitFor(() => {
-      expect(screen.getByRole('alert')).toHaveTextContent(
-        'Verification failed: Email does not match.',
-      );
+      expect(
+        screen.getByText(
+          'The email you entered does not match your account email.',
+        ),
+      ).toBeInTheDocument();
     });
   });
 
@@ -405,7 +423,7 @@ describe('LeaveOrganization Component', () => {
     fireEvent.click(leaveButton);
     await waitFor(() =>
       expect(
-        screen.getByText(/Are you sure you want to leave this organization?/i),
+        screen.getByText(/Are you sure you want to leave/i),
       ).toBeInTheDocument(),
     );
     const modal = await screen.findByRole('dialog');
@@ -415,7 +433,7 @@ describe('LeaveOrganization Component', () => {
     const closeButton = screen.getByRole('button', { name: /Back/i });
     fireEvent.click(closeButton);
     expect(
-      screen.queryByText(/Are you sure you want to leave this organization?/i),
+      screen.queryByText(/Are you sure you want to leave/i),
     ).toBeInTheDocument();
   });
 

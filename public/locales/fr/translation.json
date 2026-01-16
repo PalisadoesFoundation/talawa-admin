@@ -2008,7 +2008,18 @@
     "searchPledges": "Rechercher des engagements"
   },
   "leaveOrganization": {
-    "title": "Quitter l'organisation"
+    "title": "Quitter l'organisation",
+    "leaveOrganization": "Quitter l'organisation",
+    "confirmLeaveOrganization": "Confirmer le départ de l'organisation",
+    "leaveOrganizationConfirmation": "Êtes-vous sûr de vouloir quitter {{orgName}} ? Vous perdrez l'accès au contenu réservé aux membres.",
+    "enterEmailToConfirm": "Entrez votre email pour confirmer :",
+    "enterYourEmail": "Entrez votre email",
+    "confirmEmailInput": "Confirmer la saisie de l'email",
+    "leftOrganizationSuccess": "Vous avez quitté l'organisation avec succès !",
+    "leftOrganizationError": "Échec du départ de l'organisation. Veuillez réessayer.",
+    "networkError": "Impossible de traiter votre demande. Veuillez vérifier votre connexion.",
+    "emailMismatchError": "L'email que vous avez entré ne correspond pas à celui de votre compte.",
+    "continue": "Continuer"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Sélecteur de vue des bénévoles",

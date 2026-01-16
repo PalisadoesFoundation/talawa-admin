@@ -1991,7 +1991,18 @@
     "searchPledges": "Buscar promesas"
   },
   "leaveOrganization": {
-    "title": "Dejar la organización"
+    "title": "Dejar la organización",
+    "leaveOrganization": "Dejar la organización",
+    "confirmLeaveOrganization": "Confirmar dejar la organización",
+    "leaveOrganizationConfirmation": "¿Estás seguro de que quieres dejar {{orgName}}? Perderás el acceso al contenido exclusivo para miembros.",
+    "enterEmailToConfirm": "Ingresa tu correo electrónico para confirmar:",
+    "enterYourEmail": "Ingresa tu correo electrónico",
+    "confirmEmailInput": "Confirmar entrada de correo electrónico",
+    "leftOrganizationSuccess": "¡Has dejado la organización con éxito!",
+    "leftOrganizationError": "No se pudo dejar la organización. Por favor, inténtalo de nuevo.",
+    "networkError": "No se puede procesar tu solicitud. Por favor, verifica tu conexión.",
+    "emailMismatchError": "El correo electrónico que ingresaste no coincide con el de tu cuenta.",
+    "continue": "Continuar"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Selector de vista de voluntarios",

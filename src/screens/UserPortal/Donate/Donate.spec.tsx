@@ -50,6 +50,63 @@ vi.mock('utils/useLocalstorage', () => ({
   })),
 }));
 
+// Child component mocks to ensure unit isolation
+vi.mock(
+  'components/UserPortal/OrganizationSidebar/OrganizationSidebar',
+  () => ({
+    default: () => <div data-testid="organization-sidebar" />,
+  }),
+);
+
+vi.mock('components/UserPortal/DonationCard/DonationCard', () => ({
+  default: () => <div data-testid="donation-card-content" />,
+}));
+
+interface InterfaceSearchFilterBarMockProps {
+  searchValue: string;
+  onSearchChange: (value: string) => void;
+  searchInputTestId?: string;
+}
+
+vi.mock('shared-components/SearchFilterBar/SearchFilterBar', () => ({
+  default: ({
+    searchValue,
+    onSearchChange,
+    searchInputTestId,
+  }: InterfaceSearchFilterBarMockProps) => (
+    <div>
+      <input
+        data-testid={searchInputTestId}
+        value={searchValue}
+        onChange={(e) => onSearchChange(e.target.value)}
+      />
+      <button data-testid="searchButton" type="button">
+        Search
+      </button>
+    </div>
+  ),
+}));
+
+interface InterfaceFormTextFieldMockProps {
+  value: string;
+  onChange: (value: string) => void;
+  [key: string]: unknown;
+}
+
+vi.mock('shared-components/FormFieldGroup/FormTextField', () => ({
+  FormTextField: ({
+    value,
+    onChange,
+    ...props
+  }: InterfaceFormTextFieldMockProps) => (
+    <input
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      {...props}
+    />
+  ),
+}));
+
 vi.mock('components/Pagination/PaginationList/PaginationList', () => ({
   default: ({
     rowsPerPage,
@@ -328,6 +385,7 @@ describe('Donate Component', () => {
     expect(screen.getByTestId('changeCurrencyBtn')).toBeInTheDocument();
     expect(screen.getByTestId('donationAmount')).toBeInTheDocument();
     expect(screen.getByTestId('donateBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('organization-sidebar')).toBeInTheDocument();
   });
 
   test('search input updates value when typed into', async () => {
@@ -530,10 +588,6 @@ describe('Donate Component', () => {
       const cards = screen.getAllByTestId('donationCard');
       expect(cards.length).toBe(5);
     });
-
-    // The donations are sliced based on page * rowsPerPage
-    // With 10 total donations and rowsPerPage=5, we should see donations 0-4 on page 0
-    // This verifies the slice logic: donations.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
   });
 
   test('handles edge case with donations length equal to rowsPerPage', async () => {

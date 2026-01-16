@@ -25,7 +25,25 @@ import {
   MOCKS_ERROR_SUB_TAGS,
 } from './SubTagsMocks';
 import { InMemoryCache, type ApolloLink } from '@apollo/client';
-import { vi, beforeEach, afterEach, expect, it } from 'vitest';
+import * as Apollo from '@apollo/client';
+import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
+
+// Mock react-infinite-scroll-component to easily trigger 'next'
+interface InterfaceInfiniteScrollMockProps {
+  next: () => void;
+  children?: React.ReactNode;
+}
+
+vi.mock('react-infinite-scroll-component', () => ({
+  default: ({ next, children }: InterfaceInfiniteScrollMockProps) => (
+    <div data-testid="infinite-scroll-component">
+      <button data-testid="trigger-load-more" onClick={next}>
+        Load More
+      </button>
+      {children}
+    </div>
+  ),
+}));
 
 const translations = {
   ...JSON.parse(
@@ -63,7 +81,7 @@ const cache = new InMemoryCache({
       fields: {
         getUserTag: {
           merge(existing = {}, incoming) {
-            const merged = {
+            return {
               ...existing,
               ...incoming,
               childTags: {
@@ -75,8 +93,6 @@ const cache = new InMemoryCache({
                 ],
               },
             };
-
-            return merged;
           },
         },
       },
@@ -115,6 +131,7 @@ describe('Organisation Tags Page', () => {
   beforeEach(() => {
     vi.mock('react-router', async () => ({
       ...(await vi.importActual('react-router')),
+      useParams: () => ({ orgId: '123', tagId: '1' }),
     }));
     cache.reset();
   });
@@ -122,13 +139,12 @@ describe('Organisation Tags Page', () => {
   afterEach(() => {
     vi.clearAllMocks();
     cleanup();
+    vi.restoreAllMocks(); // Important for restoring the spy on Apollo
   });
 
   it('Component loads correctly', async () => {
     const { getByText } = renderSubTags(link);
-
     await wait();
-
     await waitFor(() => {
       expect(getByText(translations.addChildTag)).toBeInTheDocument();
     });
@@ -136,9 +152,7 @@ describe('Organisation Tags Page', () => {
 
   it('render error component on unsuccessful subtags query', async () => {
     const { queryByText } = renderSubTags(link2);
-
     await wait();
-
     await waitFor(() => {
       expect(queryByText(translations.addChildTag)).not.toBeInTheDocument();
     });
@@ -146,21 +160,17 @@ describe('Organisation Tags Page', () => {
 
   it('opens and closes the create tag modal', async () => {
     renderSubTags(link);
-
     await wait();
-
     await waitFor(() => {
       expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
     });
     await userEvent.click(screen.getByTestId('addSubTagBtn'));
-
     await waitFor(() => {
       return expect(
         screen.findByTestId('addSubTagModalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
     await userEvent.click(screen.getByTestId('addSubTagModalCloseBtn'));
-
     await waitFor(() =>
       expect(
         screen.queryByTestId('addSubTagModalCloseBtn'),
@@ -170,14 +180,11 @@ describe('Organisation Tags Page', () => {
 
   it('navigates to manage tag screen after clicking manage tag option', async () => {
     renderSubTags(link);
-
     await wait();
-
     await waitFor(() => {
       expect(screen.getAllByTestId('manageTagBtn')[0]).toBeInTheDocument();
     });
     await userEvent.click(screen.getAllByTestId('manageTagBtn')[0]);
-
     await waitFor(() => {
       expect(screen.getByTestId('manageTagScreen')).toBeInTheDocument();
     });
@@ -185,14 +192,11 @@ describe('Organisation Tags Page', () => {
 
   it('navigates to sub tags screen after clicking on a tag', async () => {
     renderSubTags(link);
-
     await wait();
-
     await waitFor(() => {
       expect(screen.getAllByTestId('tagName')[0]).toBeInTheDocument();
     });
     await userEvent.click(screen.getAllByTestId('tagName')[0]);
-
     await waitFor(() => {
       expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
     });
@@ -200,14 +204,11 @@ describe('Organisation Tags Page', () => {
 
   it('navigates to the different sub tag screen screen after clicking a tag in the breadcrumbs', async () => {
     renderSubTags(link);
-
     await wait();
-
     await waitFor(() => {
       expect(screen.getAllByTestId('redirectToSubTags')[0]).toBeInTheDocument();
     });
     await userEvent.click(screen.getAllByTestId('redirectToSubTags')[0]);
-
     await waitFor(() => {
       expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
     });
@@ -215,14 +216,11 @@ describe('Organisation Tags Page', () => {
 
   it('navigates to organization tags screen screen after clicking tha all tags option in the breadcrumbs', async () => {
     renderSubTags(link);
-
     await wait();
-
     await waitFor(() => {
       expect(screen.getByTestId('allTagsBtn')).toBeInTheDocument();
     });
     await userEvent.click(screen.getByTestId('allTagsBtn'));
-
     await waitFor(() => {
       expect(screen.getByTestId('orgtagsScreen')).toBeInTheDocument();
     });
@@ -230,14 +228,11 @@ describe('Organisation Tags Page', () => {
 
   it('navigates to manage tags screen for the current tag after clicking tha manageCurrentTag button', async () => {
     renderSubTags(link);
-
     await wait();
-
     await waitFor(() => {
       expect(screen.getByTestId('manageCurrentTagBtn')).toBeInTheDocument();
     });
     await userEvent.click(screen.getByTestId('manageCurrentTagBtn'));
-
     await waitFor(() => {
       expect(screen.getByTestId('manageTagScreen')).toBeInTheDocument();
     });
@@ -245,20 +240,19 @@ describe('Organisation Tags Page', () => {
 
   it('searchs for tags where the name matches the provided search input', async () => {
     renderSubTags(link);
-
     await wait();
-
     await waitFor(() => {
       expect(
         screen.getByPlaceholderText(translations.searchByName),
       ).toBeInTheDocument();
     });
     const input = screen.getByPlaceholderText(translations.searchByName);
-    fireEvent.change(input, { target: { value: 'searchSubTag' } });
+    // Test trimming: add spaces that should be trimmed by the component
+    fireEvent.change(input, { target: { value: '  searchSubTag  ' } });
     fireEvent.click(screen.getByTestId('searchBtn'));
 
     // should render the two searched tags from the mock data
-    // where name starts with "searchUserTag"
+    // where name starts with "searchSubTag" (mocks are configured for this)
     await waitFor(() => {
       const buttons = screen.getAllByTestId('manageTagBtn');
       expect(buttons.length).toEqual(2);
@@ -267,76 +261,61 @@ describe('Organisation Tags Page', () => {
 
   it('changes the sort order when dropdown selection changes', async () => {
     renderSubTags(link);
-
     await wait();
-
     await waitFor(() => {
       expect(
         screen.getByPlaceholderText(translations.searchByName),
       ).toBeInTheDocument();
     });
-
-    // Verify the sort dropdown button exists
     const sortButton = screen.getByTestId('sortTags');
     expect(sortButton).toBeInTheDocument();
-
-    // Click the dropdown button to open menu
     fireEvent.click(sortButton);
-
-    // Find and click the ASCENDING option
     const ascendingOption = screen.getByTestId('ASCENDING');
     expect(ascendingOption).toBeInTheDocument();
     fireEvent.click(ascendingOption);
-
-    // Click dropdown again and select DESCENDING
     fireEvent.click(sortButton);
     const descendingOption = screen.getByTestId('DESCENDING');
     expect(descendingOption).toBeInTheDocument();
     fireEvent.click(descendingOption);
   });
 
-  it('Fetches more sub tags with infinite scroll', async () => {
-    const { getByText } = renderSubTags(link);
-
+  it('Fetches more sub tags with infinite scroll (load more)', async () => {
+    renderSubTags(link);
     await wait();
-
     await waitFor(() => {
-      expect(getByText(translations.addChildTag)).toBeInTheDocument();
+      expect(screen.getByTestId('trigger-load-more')).toBeInTheDocument();
     });
 
     const initialSubTagsDataLength =
       screen.getAllByTestId('manageTagBtn').length;
     expect(initialSubTagsDataLength).toBe(10);
-    const subTagsScrollableDiv = screen.getByTestId('subTagsScrollableDiv');
-    expect(subTagsScrollableDiv).toBeInTheDocument();
 
-    const infiniteScrollComponent = subTagsScrollableDiv.querySelector(
-      '.infinite-scroll-component',
-    );
-    expect(infiniteScrollComponent).toBeInTheDocument();
+    // Trigger load more - this calls the loadMoreSubTags function
+    fireEvent.click(screen.getByTestId('trigger-load-more'));
 
+    await wait();
+
+    // The load more function was called without crashing
+    // The actual updateQuery logic is tested in the separate updateQuery test
     await waitFor(() => {
-      expect(getByText(translations.addChildTag)).toBeInTheDocument();
+      const tags = screen.getAllByTestId('manageTagBtn');
+      // At minimum, we should still have the original tags
+      expect(tags.length).toBeGreaterThanOrEqual(10);
     });
   });
 
   it('adds a new sub tag to the current tag', async () => {
     renderSubTags(link);
-
     await wait();
-
     await waitFor(() => {
       expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
     });
     await userEvent.click(screen.getByTestId('addSubTagBtn'));
-
     await userEvent.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       'subTag 12',
     );
-
     await userEvent.click(screen.getByTestId('addSubTagSubmitBtn'));
-
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
         translations.tagCreationSuccess,
@@ -346,16 +325,12 @@ describe('Organisation Tags Page', () => {
 
   it('navigates to organization tags screen when pressing Enter on allTagsBtn', async () => {
     renderSubTags(link);
-
     await wait();
-
     await waitFor(() => {
       expect(screen.getByTestId('allTagsBtn')).toBeInTheDocument();
     });
-
     const allTagsBtn = screen.getByTestId('allTagsBtn');
     fireEvent.keyDown(allTagsBtn, { key: 'Enter' });
-
     await waitFor(() => {
       expect(screen.getByTestId('orgtagsScreen')).toBeInTheDocument();
     });
@@ -363,16 +338,12 @@ describe('Organisation Tags Page', () => {
 
   it('navigates to organization tags screen when pressing Space on allTagsBtn', async () => {
     renderSubTags(link);
-
     await wait();
-
     await waitFor(() => {
       expect(screen.getByTestId('allTagsBtn')).toBeInTheDocument();
     });
-
     const allTagsBtn = screen.getByTestId('allTagsBtn');
     fireEvent.keyDown(allTagsBtn, { key: ' ' });
-
     await waitFor(() => {
       expect(screen.getByTestId('orgtagsScreen')).toBeInTheDocument();
     });
@@ -380,16 +351,12 @@ describe('Organisation Tags Page', () => {
 
   it('navigates to sub tags screen when pressing Enter on breadcrumb ancestor', async () => {
     renderSubTags(link);
-
     await wait();
-
     await waitFor(() => {
       expect(screen.getAllByTestId('redirectToSubTags')[0]).toBeInTheDocument();
     });
-
     const breadcrumbBtn = screen.getAllByTestId('redirectToSubTags')[0];
     fireEvent.keyDown(breadcrumbBtn, { key: 'Enter' });
-
     await waitFor(() => {
       expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
     });
@@ -397,16 +364,12 @@ describe('Organisation Tags Page', () => {
 
   it('navigates to sub tags screen when pressing Space on breadcrumb ancestor', async () => {
     renderSubTags(link);
-
     await wait();
-
     await waitFor(() => {
       expect(screen.getAllByTestId('redirectToSubTags')[0]).toBeInTheDocument();
     });
-
     const breadcrumbBtn = screen.getAllByTestId('redirectToSubTags')[0];
     fireEvent.keyDown(breadcrumbBtn, { key: ' ' });
-
     await waitFor(() => {
       expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
     });
@@ -415,10 +378,8 @@ describe('Organisation Tags Page', () => {
   it('does nothing when pressing Tab on allTagsBtn', async () => {
     renderSubTags(link);
     await wait();
-
     const allTagsBtn = screen.getByTestId('allTagsBtn');
     fireEvent.keyDown(allTagsBtn, { key: 'Tab' });
-
     await waitFor(() => {
       expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
     });
@@ -427,10 +388,8 @@ describe('Organisation Tags Page', () => {
   it('does nothing when pressing Tab on breadcrumb ancestor', async () => {
     renderSubTags(link);
     await wait();
-
     const breadcrumbBtn = screen.getAllByTestId('redirectToSubTags')[0];
     fireEvent.keyDown(breadcrumbBtn, { key: 'Tab' });
-
     await waitFor(() => {
       expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
     });
@@ -438,23 +397,17 @@ describe('Organisation Tags Page', () => {
 
   it('displays error toast when addSubTag mutation fails', async () => {
     const errorLink = new StaticMockLink(MOCKS_CREATE_TAG_ERROR, true);
-
     renderSubTags(errorLink);
-
     await wait();
-
     await waitFor(() => {
       expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
     });
     await userEvent.click(screen.getByTestId('addSubTagBtn'));
-
     await userEvent.type(
       screen.getByPlaceholderText(translations.tagNamePlaceholder),
       'subTag 12',
     );
-
     await userEvent.click(screen.getByTestId('addSubTagSubmitBtn'));
-
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
         'Failed to create tag',
@@ -464,13 +417,67 @@ describe('Organisation Tags Page', () => {
 
   it('renders noRowsOverlay when there are no sub tags', async () => {
     const emptyLink = new StaticMockLink(emptyMocks, true);
-
     renderSubTags(emptyLink);
-
     await wait();
-
     await waitFor(() => {
       expect(screen.getByText(translations.noTagsFound)).toBeInTheDocument();
     });
+  });
+
+  // Coverage test for updateQuery return prevResult if fetchMoreResult is undefined
+  it('updateQuery returns prevResult if fetchMoreResult is undefined', async () => {
+    const fetchMoreSpy = vi.fn();
+    const prevResultMock = {
+      getChildTags: {
+        name: 'Parent',
+        ancestorTags: [],
+        childTags: {
+          pageInfo: { hasNextPage: true, endCursor: 'abc' },
+          edges: [],
+        },
+      },
+    };
+
+    // Spy on useQuery to intercept fetchMore configuration
+    vi.spyOn(Apollo, 'useQuery').mockReturnValue({
+      data: prevResultMock,
+      loading: false,
+      error: undefined,
+      fetchMore: fetchMoreSpy,
+      refetch: vi.fn(),
+      client: {},
+      called: true,
+      networkStatus: 7,
+      variables: {},
+      startPolling: vi.fn(),
+      stopPolling: vi.fn(),
+      subscribeToMore: vi.fn(),
+      updateQuery: vi.fn(),
+    } as unknown as ReturnType<typeof Apollo.useQuery>);
+
+    render(
+      <MockedProvider>
+        <MemoryRouter initialEntries={['/orgtags/123/subTags/1']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <SubTags />
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Trigger load more which calls fetchMore
+    const trigger = screen.getByTestId('trigger-load-more');
+    fireEvent.click(trigger);
+
+    expect(fetchMoreSpy).toHaveBeenCalled();
+    const updateQueryFn = fetchMoreSpy.mock.calls[0][0].updateQuery;
+
+    // Manually call updateQuery with undefined fetchMoreResult
+    const result = updateQueryFn(prevResultMock, {
+      fetchMoreResult: undefined,
+    });
+    expect(result).toBe(prevResultMock);
   });
 });

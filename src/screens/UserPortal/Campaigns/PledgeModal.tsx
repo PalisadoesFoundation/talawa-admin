@@ -1,5 +1,6 @@
 import type { ChangeEvent } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfacePledgeInfo,
@@ -23,6 +24,7 @@ import {
   TextField,
 } from '@mui/material';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 /**
  * Props for the `PledgeModal` component.
@@ -55,8 +57,8 @@ export interface InterfacePledgeModal {
  * @example
  * ```ts
  * areOptionsEqual(
- *   { id: '1' } as InterfaceUserInfoPG,
- *   { id: '1' } as InterfaceUserInfoPG,
+ * { id: '1' } as InterfaceUserInfoPG,
+ * { id: '1' } as InterfaceUserInfoPG,
  * );
  * // returns true
  * ```
@@ -76,8 +78,8 @@ export const areOptionsEqual = (
  * @example
  * ```ts
  * getMemberLabel({
- *   firstName: 'John',
- *   lastName: 'Doe',
+ * firstName: 'John',
+ * lastName: 'Doe',
  * } as InterfaceUserInfoPG);
  * // returns "John Doe"
  * ```
@@ -96,13 +98,13 @@ export const getMemberLabel = (member: InterfaceUserInfoPG): string =>
  * @example
  * ```tsx
  * <PledgeModal
- *   isOpen={true}
- *   hide={() => {}}
- *   campaignId="123"
- *   userId="456"
- *   pledge={null}
- *   refetchPledge={() => {}}
- *   mode="create"
+ * isOpen={true}
+ * hide={() => {}}
+ * campaignId="123"
+ * userId="456"
+ * pledge={null}
+ * refetchPledge={() => {}}
+ * mode="create"
  * />
  * ```
  */
@@ -338,19 +340,21 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             </Select>
           </FormControl>
           <FormControl fullWidth>
-            <TextField
+            <FormTextField
+              name="amount"
               label={t('amount')}
-              variant="outlined"
-              className={styles.noOutline}
-              value={pledgeAmount}
-              onChange={(e) => {
-                if (parseInt(e.target.value) > 0) {
+              type="number"
+              value={String(pledgeAmount)}
+              onChange={(value) => {
+                const numValue = parseInt(value);
+                if (!isNaN(numValue) && numValue > 0) {
                   setFormState({
                     ...formState,
-                    pledgeAmount: parseInt(e.target.value),
+                    pledgeAmount: numValue,
                   });
                 }
               }}
+              className={styles.noOutline}
             />
           </FormControl>
         </Form.Group>

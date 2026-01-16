@@ -1,44 +1,21 @@
 /**
- * @file LeaveOrganization.tsx
- * @description This component allows a user to leave an organization they are a member of.
+ * LeaveOrganization Component
+ *
+ * This component allows a user to leave an organization they are a member of.
  * It includes email verification for confirmation and handles the removal process via GraphQL mutations.
  *
- * @module LeaveOrganization
- */
-
-/**
- * @constant userEmail
- * @description Retrieves the user's email from localStorage. Returns an empty string if unavailable or an error occurs.
- */
-
-/**
- * @constant userId
- * @description Retrieves the user's ID from localStorage. Returns an empty string if unavailable or an error occurs.
- */
-
-/**
- * @function LeaveOrganization
- * @description React functional component that renders the UI for leaving an organization.
- * It includes a modal for confirmation, email verification, and handles the GraphQL mutation to remove the user.
- *
- * @returns {JSX.Element} The rendered LeaveOrganization component.
- *
- * @remarks
+ * Features:
  * - Uses Apollo Client's `useQuery` to fetch organization details.
  * - Uses Apollo Client's `useMutation` to remove the user from the organization.
  * - Displays a modal for user confirmation and email verification.
  * - Handles errors and loading states gracefully.
  *
- * @dependencies
- * - `useQuery` and `useMutation` from Apollo Client for GraphQL operations.
- * - `useParams` and `useNavigate` from React Router for route handling.
- * - `react-toastify` for toast notifications.
- * - `react-bootstrap` for UI components like Modal, Button, Spinner, and Alert.
- *
  * @example
  * ```tsx
  * <LeaveOrganization />
  * ```
+ *
+ * @returns The rendered LeaveOrganization component.
  */
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
@@ -47,7 +24,9 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { Button, Modal, Form, Alert } from 'react-bootstrap';
+import { Button, Alert } from 'react-bootstrap';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useParams, useNavigate } from 'react-router';
 import { getItem } from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -76,7 +55,7 @@ export { userEmail, userId };
 const LeaveOrganization = (): JSX.Element => {
   const navigate = useNavigate();
   const { orgId: organizationId } = useParams();
-  const { t: tCommon } = useTranslation('common');
+  const { t } = useTranslation(['translation', 'common']);
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -102,15 +81,15 @@ const LeaveOrganization = (): JSX.Element => {
     onCompleted: () => {
       // Use a toast notification or in-app message
       setShowModal(false);
-      NotificationToast.success('You have successfully left the organization!');
+      NotificationToast.success(t('leaveOrganization.leftOrganizationSuccess'));
       navigate(`/user/organizations`);
     },
     onError: (err) => {
       const isNetworkError = err.networkError !== null;
       setError(
         isNetworkError
-          ? 'Unable to process your request. Please check your connection.'
-          : 'Failed to leave organization. Please try again.',
+          ? t('leaveOrganization.networkError')
+          : t('leaveOrganization.leftOrganizationError'),
       );
       setLoading(false);
     },
@@ -137,7 +116,7 @@ const LeaveOrganization = (): JSX.Element => {
     if (email.trim().toLowerCase() === (userEmail as string).toLowerCase()) {
       handleLeaveOrganization();
     } else {
-      setError('Verification failed: Email does not match.');
+      setError(t('leaveOrganization.emailMismatchError'));
     }
   };
 
@@ -180,71 +159,30 @@ const LeaveOrganization = (): JSX.Element => {
       <p>{organization?.description}</p>
 
       <Button variant="danger" onClick={() => setShowModal(true)}>
-        Leave Organization
+        {t('leaveOrganization.leaveOrganization')}
       </Button>
 
-      <Modal
+      <BaseModal
         show={showModal}
-        data-testid="leave-organization-modal"
-        aria-labelledby="leave-organization-modal"
+        dataTestId="leave-organization-modal"
+        title={t('leaveOrganization.confirmLeaveOrganization')}
         onHide={() => {
           setShowModal(false);
           setVerificationStep(false);
           setEmail('');
           setError('');
         }}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="leave-organization-modal">
-            Leave Joined Organization
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {!verificationStep ? (
-            <>
-              <p>Are you sure you want to leave this organization?</p>
-              <p>
-                This action cannot be undone, and you may need to request access
-                again if you reconsider.
-              </p>
-            </>
-          ) : (
-            <Form>
-              <Form.Group>
-                <Form.Label htmlFor="confirm-email">
-                  Enter your email to confirm:
-                </Form.Label>
-                <Form.Control
-                  id="confirm-email"
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  required
-                  aria-describedby={error ? 'email-error' : undefined}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onKeyDown={handleKeyPress}
-                  aria-label="confirm-email-input"
-                />
-              </Form.Group>
-              {error && (
-                <Alert variant="danger" id="email-error" role="alert">
-                  {error}
-                </Alert>
-              )}
-            </Form>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          {!verificationStep ? (
+        footer={
+          !verificationStep ? (
             <>
               <Button variant="secondary" onClick={() => setShowModal(false)}>
-                Cancel
+                {t('common:cancel')}
               </Button>
               <Button
                 variant="danger"
                 onClick={() => setVerificationStep(true)}
               >
-                Continue
+                {t('leaveOrganization.continue')}
               </Button>
             </>
           ) : (
@@ -257,7 +195,7 @@ const LeaveOrganization = (): JSX.Element => {
                   setError('');
                 }}
               >
-                {tCommon('back')}
+                {t('common:back')}
               </Button>
               <LoadingState isLoading={loading} variant="inline">
                 <Button
@@ -266,13 +204,37 @@ const LeaveOrganization = (): JSX.Element => {
                   onClick={handleVerifyAndLeave}
                   aria-label="confirm-leave-button"
                 >
-                  {tCommon('confirm')}
+                  {t('common:confirm')}
                 </Button>
               </LoadingState>
             </>
-          )}
-        </Modal.Footer>
-      </Modal>
+          )
+        }
+      >
+        {!verificationStep ? (
+          <>
+            <p>
+              {t('leaveOrganization.leaveOrganizationConfirmation', {
+                orgName: organization?.name,
+              })}
+            </p>
+          </>
+        ) : (
+          <FormTextField
+            name="confirm-email"
+            label={t('leaveOrganization.enterEmailToConfirm')}
+            type="email"
+            placeholder={t('leaveOrganization.enterYourEmail')}
+            value={email}
+            onChange={(val) => setEmail(val)}
+            error={error}
+            touched={!!error}
+            required
+            aria-label={t('leaveOrganization.confirmEmailInput')}
+            onKeyDown={handleKeyPress}
+          />
+        )}
+      </BaseModal>
     </div>
   );
 };

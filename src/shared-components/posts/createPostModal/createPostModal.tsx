@@ -3,16 +3,9 @@
  *
  * This component renders a modal dialog that allows users to create a new post
  * within an organization. Users can add a title, optional body text, attach an
- * image or video, and optionally pin the post. The component handles file preview,
- * file hashing, GraphQL mutation submission, and UI state reset on success.
+ * image or video, and optionally pin the post.
  *
-/**
- * CreatePostModal Component
- *
- * This component renders a modal dialog that allows users to create a new post
- * within an organization. Users can add a title, optional body text, attach an
- * image or video, and optionally pin the post. The component handles file preview,
- * file hashing, GraphQL mutation submission, and UI state reset on success.
+ * [Image of CreatePostModal component UI wireframe showing header with user info, body with text inputs and preview area, and footer with media actions and post button]
  */
 
 import React, {
@@ -113,6 +106,11 @@ function CreatePostModal({
     }
   }
 
+  /**
+   * Handles file selection from the input.
+   * Validates the mime type and generates a preview URL.
+   * [Image of file selection process flow showing mime type validation, preview generation logic, and error handling]
+   */
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -155,6 +153,11 @@ function CreatePostModal({
     onHide();
   };
 
+  /**
+   * Submits the post data to the server.
+   * Handles both creation and editing of posts.
+   * [Image of create post sequence diagram showing validation, mutation execution, success handling, and error catching]
+   */
   const createPostHandler = async (
     e: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -319,6 +322,7 @@ function CreatePostModal({
                 ref={fileInputRef}
                 type="file"
                 accept="image/*, video/*"
+                id="addMedia"
                 data-testid="addMedia"
                 data-cy="addMediaField"
                 hidden

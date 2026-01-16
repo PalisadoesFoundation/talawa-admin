@@ -6,7 +6,7 @@
 
 > **getMemberLabel**(`member`): `string`
 
-Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L85)
+Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L87)
 
 Builds a display label for a member.
 Empty name parts are safely ignored.
@@ -29,8 +29,8 @@ Full name string constructed from available name parts
 
 ```ts
 getMemberLabel({
-  firstName: 'John',
-  lastName: 'Doe',
+firstName: 'John',
+lastName: 'Doe',
 } as InterfaceUserInfoPG);
 // returns "John Doe"
 ```

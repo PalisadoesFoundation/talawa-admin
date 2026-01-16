@@ -50,6 +50,7 @@ vi.mock('utils/useLocalstorage', () => ({
 // Mock errorHandler
 vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
+  error: vi.fn(),
 }));
 
 // Update the Avatar mock to ProfileAvatarDisplay mock
@@ -672,6 +673,31 @@ describe('CreatePostModal Integration Tests', () => {
       expect(backdrop).not.toHaveClass(styles.backdropShow);
       expect(modal).not.toHaveClass(styles.modalShow);
     });
+
+    it('cleans up preview URL when unmounted with a preview', async () => {
+      const { unmount } = renderComponent();
+
+      const titleInput = screen.getByPlaceholderText('Title of your post...');
+      const fileInput = screen.getByTestId('addMedia');
+      const mockFile = new File(['test-content'], 'test.jpg', {
+        type: 'image/jpeg',
+      });
+
+      // Type to ensure component state is active
+      await user.type(titleInput, 'Draft Post');
+      // Upload file to generate preview
+      await userEvent.upload(fileInput, mockFile);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
+      });
+
+      // Unmount the component
+      unmount();
+
+      // Check if revokeObjectURL was called
+      expect(global.URL.revokeObjectURL).toHaveBeenCalledWith('blob:mock-url');
+    });
   });
 
   describe('Edit Post Functionality', () => {
@@ -817,6 +843,131 @@ describe('CreatePostModal Integration Tests', () => {
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();
+      });
+    });
+
+    it('successfully updates post with file attachment in edit mode', async () => {
+      const mockFile = new File(['test-content'], 'test.jpg', {
+        type: 'image/jpeg',
+      });
+
+      // Use a matcher function for the mock since File objects are hard to compare
+      const updatePostWithFileMock = {
+        request: {
+          query: UPDATE_POST_MUTATION,
+        },
+        variableMatcher: (variables: Record<string, unknown>) => {
+          const input = variables.input as Record<string, unknown>;
+          return (
+            input.caption === 'Updated Title' &&
+            input.body === 'Updated Body' &&
+            input.id === 'post-123' &&
+            input.isPinned === false &&
+            input.attachment instanceof File
+          );
+        },
+        result: {
+          data: {
+            updatePost: {
+              id: 'post-123',
+              caption: 'Updated Title',
+              pinnedAt: null,
+              attachments: [{ name: 'test.jpg' }],
+            },
+          },
+        },
+      };
+
+      renderComponent(
+        {
+          type: 'edit',
+          id: 'post-123',
+          title: '',
+          body: '',
+        },
+        [updatePostWithFileMock],
+      );
+
+      const titleInput = screen.getByTestId('postTitleInput');
+      const bodyInput = screen.getByTestId('postBodyInput');
+      const fileInput = screen.getByTestId('addMedia');
+      const saveButton = screen.getByText('Save Changes');
+
+      await user.type(titleInput, 'Updated Title');
+      await user.type(bodyInput, 'Updated Body');
+      await userEvent.upload(fileInput, mockFile);
+
+      // Verify preview appears
+      await waitFor(() => {
+        expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
+      });
+
+      await user.click(saveButton);
+
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          'Post updated successfully.',
+        );
+        expect(defaultProps.refetch).toHaveBeenCalled();
+        expect(defaultProps.onHide).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('File Input Clearing on Success', () => {
+    it('clears file input DOM element after successful post creation', async () => {
+      const mockFile = new File(['test-content'], 'test.jpg', {
+        type: 'image/jpeg',
+      });
+
+      // Use a matcher function for the mock since File objects are hard to compare
+      const createPostWithFileMock = {
+        request: {
+          query: CREATE_POST_MUTATION,
+        },
+        variableMatcher: (variables: Record<string, unknown>) => {
+          const input = variables.input as Record<string, unknown>;
+          return (
+            input.caption === 'Post with File' &&
+            input.body === '' &&
+            input.organizationId === 'test-org-id' &&
+            input.isPinned === false &&
+            input.attachment instanceof File
+          );
+        },
+        result: {
+          data: {
+            createPost: {
+              __typename: 'Post',
+              id: 'new-post-id',
+              caption: 'Post with File',
+              pinnedAt: null,
+              attachmentURL: 'https://example.com/test.jpg',
+            },
+          },
+        },
+      };
+
+      renderComponent({}, [createPostWithFileMock]);
+
+      const titleInput = screen.getByTestId('postTitleInput');
+      const fileInput = screen.getByTestId('addMedia') as HTMLInputElement;
+      const postButton = screen.getByTestId('createPostBtn');
+
+      // Set id on file input for getElementById to work
+      fileInput.id = 'addMedia';
+
+      await user.type(titleInput, 'Post with File');
+      await userEvent.upload(fileInput, mockFile);
+
+      // Verify file was uploaded
+      expect(fileInput.files).toHaveLength(1);
+
+      await user.click(postButton);
+
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalled();
+        expect(defaultProps.refetch).toHaveBeenCalled();
       });
     });
   });

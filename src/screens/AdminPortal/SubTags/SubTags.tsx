@@ -6,37 +6,6 @@
  * view, search, sort, and add sub-tags, as well as navigate between tags
  * and their sub-tags.
  *
- * Features:
- * - Displays a list of sub-tags in a paginated and scrollable DataGrid.
- * - Allows searching sub-tags by name.
- * - Provides sorting options for sub-tags (e.g., Latest, Oldest).
- * - Enables navigation to manage or view sub-tags and their assigned users.
- * - Includes breadcrumbs for navigating the tag hierarchy.
- * - Allows adding new sub-tags via a modal form.
- *
- * Queries and Mutations:
- * - Fetches sub-tags using the `USER_TAG_SUB_TAGS` GraphQL query.
- * - Adds new sub-tags using the `CREATE_USER_TAG` GraphQL mutation.
- *
- * Props:
- * - None (uses React Router hooks for parameters and navigation).
- *
- * State:
- * - `addSubTagModalIsOpen`: Controls the visibility of the "Add Sub-Tag" modal.
- * - `tagName`: Stores the name of the new sub-tag being created.
- * - `tagSearchName`: Stores the search term for filtering sub-tags.
- * - `tagSortOrder`: Stores the sorting order for sub-tags (ascending/descending).
- *
- * Dependencies:
- * - React, React Router, Apollo Client, Material-UI, React-Bootstrap, NotificationToast.
- *
- * Error Handling:
- * - Displays an error message if the sub-tags query fails.
- *
- * Usage:
- * - This component is used in the context of managing organizational tags
- *   and their hierarchy within the Talawa Admin application.
- *
  * @returns The rendered SubTags component.
  */
 import { useMutation, useQuery } from '@apollo/client';
@@ -46,7 +15,8 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useNavigate, useParams, Link } from 'react-router';
 import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
-import { Form } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
@@ -472,19 +442,15 @@ function SubTags(): JSX.Element {
         </Modal.Header>
         <Form onSubmitCapture={addSubTag}>
           <Modal.Body>
-            <Form.Label htmlFor="tagName">{t('tagName')}</Form.Label>
-            <Form.Control
-              type="name"
-              id={'tagName'}
-              className={`mb-3 ${styles.inputField}`}
+            <FormTextField
+              name="tagName"
+              label={t('tagName')}
               placeholder={t('tagNamePlaceholder')}
+              value={tagName}
+              onChange={(val) => setTagName(val)}
+              required
               data-testid="modalTitle"
               autoComplete="off"
-              required
-              value={tagName}
-              onChange={(e): void => {
-                setTagName(e.target.value);
-              }}
             />
           </Modal.Body>
 
