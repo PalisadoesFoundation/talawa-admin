@@ -1,4 +1,3 @@
-/* eslint-disable react/no-multi-comp */
 import { render, screen, fireEvent } from '@testing-library/react';
 import { DataGridWrapper } from './index';
 import { vi } from 'vitest';
@@ -43,6 +42,7 @@ vi.mock('@mui/x-data-grid', () => ({
     loading,
     rows,
     columns,
+    sortModel,
   }: {
     onPaginationModelChange?: (model: {
       page: number;
@@ -56,15 +56,37 @@ vi.mock('@mui/x-data-grid', () => ({
     loading?: boolean;
     rows: GridRowsProp;
     columns: GridColDef[];
+    sortModel?: Array<{ field: string; sort: 'asc' | 'desc' }>;
   }) => {
-    React.useEffect(() => {
-      if (onPaginationModelChange) {
-        onPaginationModelChange({ page: 1, pageSize: 25 });
-      }
-    }, [onPaginationModelChange]);
+    // Sort rows if sortModel is provided
+    const sortedRows =
+      sortModel && sortModel.length > 0
+        ? [...rows].sort((a, b) => {
+            const { field, sort } = sortModel[0];
+            const aValue = a[field as keyof typeof a];
+            const bValue = b[field as keyof typeof b];
+
+            if (sort === 'asc') {
+              return String(aValue).localeCompare(String(bValue));
+            } else {
+              return String(bValue).localeCompare(String(aValue));
+            }
+          })
+        : rows;
 
     return (
       <div data-testid="data-grid">
+        <button
+          data-testid="trigger-pagination-change"
+          onClick={() => {
+            if (onPaginationModelChange) {
+              onPaginationModelChange({ page: 1, pageSize: 25 });
+            }
+          }}
+        >
+          Trigger Pagination
+        </button>
+
         <div role="grid">
           <div role="row">
             {columns.map((col: GridColDef) => (
@@ -74,7 +96,7 @@ vi.mock('@mui/x-data-grid', () => ({
             ))}
           </div>
           {!loading &&
-            rows.map((row: GridValidRowModel) => (
+            sortedRows.map((row: GridValidRowModel) => (
               <div
                 key={row.id}
                 role="row"
@@ -257,14 +279,6 @@ vi.mock('../SearchFilterBar/SearchFilterBar', () => ({
   },
 }));
 
-vi.mock('./DataGridErrorOverlay', () => ({
-  DataGridErrorOverlay: ({ message }: { message: string }) => (
-    <div data-testid="error-overlay">
-      <div data-testid="error-message">{message}</div>
-    </div>
-  ),
-}));
-
 vi.mock('shared-components/EmptyState/EmptyState', () => ({
   default: ({
     message,
@@ -370,14 +384,19 @@ describe('DataGridWrapper', () => {
   });
 
   // Sort functionality tests
-  test('handles sorting', () => {
+  test('configures and renders sorting options', () => {
     const sortConfig = {
       sortingOptions: [
         { label: 'Name Asc', value: 'name_asc' },
         { label: 'Name Desc', value: 'name_desc' },
       ],
     };
+
     render(<DataGridWrapper {...defaultProps} sortConfig={sortConfig} />);
+
+    // Verify sorting UI is rendered when sortConfig provided
+    expect(screen.getByText('Sort')).toBeInTheDocument();
+    // Verify the grid renders with sort configuration
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
@@ -397,13 +416,15 @@ describe('DataGridWrapper', () => {
   });
 
   // Pagination tests
-  test('handles pagination', () => {
+  test('configures and renders pagination controls', () => {
     render(
       <DataGridWrapper
         {...defaultProps}
         paginationConfig={{ enabled: true, defaultPageSize: 10 }}
       />,
     );
+    fireEvent.click(screen.getByTestId('trigger-pagination-change'));
+    // Verify pagination is configured (mock calls onPaginationModelChange)
     expect(screen.getByTestId('data-grid')).toBeInTheDocument();
   });
 
@@ -421,10 +442,10 @@ describe('DataGridWrapper', () => {
         error="Test error message"
       />,
     );
-    expect(screen.getByTestId('error-overlay')).toBeInTheDocument();
+
+    expect(screen.getByTestId('data-grid-error-overlay')).toBeInTheDocument();
     expect(screen.getByText('Test error message')).toBeInTheDocument();
   });
-
   test('renders empty state with props', () => {
     render(
       <DataGridWrapper
@@ -535,8 +556,6 @@ describe('DataGridWrapper', () => {
     clearTimeoutSpy.mockRestore();
   });
 
-  // Add these tests to the cleaned up file:
-
   test('warns for server-side search without onSearchChange callback', () => {
     const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
@@ -562,6 +581,7 @@ describe('DataGridWrapper', () => {
     const rowsWithNullish = [
       { id: 1, name: null, role: undefined },
       { id: 2, name: 'Bob', role: 'User' },
+      { id: 3, name: 'Charlie', role: null },
     ];
 
     vi.useFakeTimers();
@@ -574,10 +594,24 @@ describe('DataGridWrapper', () => {
       />,
     );
 
-    // This tests line 154: String(r[f as keyof T] ?? '')
     const input = screen.getByRole('searchbox');
+
+    // Test searching for 'Bob' (non-null value)
     fireEvent.change(input, { target: { value: 'Bob' } });
     vi.advanceTimersByTime(300);
+
+    // Test searching for 'User' (non-undefined value)
+    fireEvent.change(input, { target: { value: 'User' } });
+    vi.advanceTimersByTime(300);
+
+    // Test searching for empty string (should show all rows)
+    fireEvent.change(input, { target: { value: '' } });
+    vi.advanceTimersByTime(300);
+
+    // Test searching for non-existent value
+    fireEvent.change(input, { target: { value: 'Nonexistent' } });
+    vi.advanceTimersByTime(300);
+
     vi.useRealTimers();
   });
 
@@ -597,12 +631,10 @@ describe('DataGridWrapper', () => {
             { label: 'Name Z-A', value: 'name_desc' },
           ],
           selectedSort: 'name_asc',
-          // No onSortChange - tests line 244 else branch
         }}
       />,
     );
 
-    // Line 244: else { setSelectedSort(value); }
     expect(screen.getByTestId('search-filter-bar')).toBeInTheDocument();
   });
 
@@ -612,7 +644,7 @@ describe('DataGridWrapper', () => {
       <DataGridWrapper {...defaultProps} rows={[]} error="Test error" />,
     );
 
-    expect(screen.getByTestId('error-overlay')).toBeInTheDocument();
+    expect(screen.getByTestId('data-grid-error-overlay')).toBeInTheDocument();
 
     // Test emptyStateProps
     rerender(
@@ -674,44 +706,6 @@ describe('DataGridWrapper', () => {
     );
 
     expect(onSearchChange).toHaveBeenCalledWith('test-search-value', undefined);
-  });
-
-  test('client-side search filter executes with nullish coalescing', () => {
-    const rows = [
-      { id: 1, name: null, role: 'Admin' },
-      { id: 2, name: undefined, role: 'User' },
-      { id: 3, name: 'Charlie', role: null },
-    ];
-
-    vi.useFakeTimers();
-
-    render(
-      <DataGridWrapper
-        rows={rows}
-        columns={defaultProps.columns}
-        searchConfig={{
-          enabled: true,
-          fields: ['name', 'role'],
-          debounceMs: 100,
-        }}
-      />,
-    );
-
-    const input = screen.getByRole('searchbox');
-
-    // Search for something - triggers filter function
-    fireEvent.change(input, { target: { value: 'Admin' } });
-    vi.advanceTimersByTime(100);
-
-    // Search for empty string
-    fireEvent.change(input, { target: { value: '' } });
-    vi.advanceTimersByTime(100);
-
-    // Search for non-existent
-    fireEvent.change(input, { target: { value: 'Nonexistent' } });
-    vi.advanceTimersByTime(100);
-
-    vi.useRealTimers();
   });
 
   test('SearchFilterBar callbacks execute correctly', () => {
@@ -801,35 +795,6 @@ describe('DataGridWrapper', () => {
     expect(onSearchChange).toHaveBeenCalledWith('manual-enter-test', 'name');
   });
 
-  // Test that all noRowsOverlay conditions are covered
-  test('noRowsOverlay slot executes all code paths', () => {
-    // Test 1: Error state
-    const { rerender } = render(
-      <DataGridWrapper {...defaultProps} rows={[]} error="Error message" />,
-    );
-
-    // Test 2: emptyStateProps
-    rerender(
-      <DataGridWrapper
-        {...defaultProps}
-        rows={[]}
-        emptyStateProps={{ message: 'Custom from props' }}
-      />,
-    );
-
-    // Test 3: emptyStateMessage
-    rerender(
-      <DataGridWrapper
-        {...defaultProps}
-        rows={[]}
-        emptyStateMessage="Legacy message"
-      />,
-    );
-
-    // Default fallback
-    rerender(<DataGridWrapper {...defaultProps} rows={[]} />);
-  });
-
   // More comprehensive test for line 260
   test('noRowsOverlay uses tCommon when no custom messages provided', () => {
     const { rerender } = render(
@@ -884,17 +849,27 @@ describe('DataGridWrapper', () => {
     });
 
     vi.advanceTimersByTime(300);
+    // Verify search term was applied
+    expect(searchInput).toHaveValue('test search');
     vi.useRealTimers();
   });
 
   // Default sort initialization
   test('initializes selectedSort from defaultSortField and defaultSortOrder', () => {
+    // Create rows with names in mixed order
+    const testRows = [
+      { id: 1, name: 'Charlie', role: 'Guest', age: 35 },
+      { id: 2, name: 'Alice', role: 'Admin', age: 30 },
+      { id: 3, name: 'Bob', role: 'User', age: 25 },
+    ];
+
     render(
       <DataGridWrapper
         {...defaultProps}
+        rows={testRows}
         sortConfig={{
           defaultSortField: 'name',
-          defaultSortOrder: 'desc',
+          defaultSortOrder: 'desc', // Should sort Z to A
           sortingOptions: [
             { label: 'Name Asc', value: 'name_asc' },
             { label: 'Name Desc', value: 'name_desc' },
@@ -903,17 +878,37 @@ describe('DataGridWrapper', () => {
       />,
     );
 
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    // Get all data rows (skip header row which is index 0)
+    const rows = screen.getAllByRole('row');
+    const dataRows = rows.slice(1); // Skip header
+
+    // Check that rows are sorted descending by name: Charlie, Bob, Alice
+    // Get the name cells from each row
+    const nameCells = dataRows.map(
+      (row) =>
+        Array.from(row.querySelectorAll('[role="gridcell"]'))[0]?.textContent,
+    );
+
+    expect(nameCells).toEqual(['Charlie', 'Bob', 'Alice']);
   });
 
   // Also test with only defaultSortField
   test('handles defaultSortField without defaultSortOrder', () => {
+    // Create rows with roles in mixed order
+    const testRows = [
+      { id: 1, name: 'Charlie', role: 'Guest', age: 35 },
+      { id: 2, name: 'Alice', role: 'Admin', age: 30 },
+      { id: 3, name: 'Bob', role: 'User', age: 25 },
+      { id: 4, name: 'David', role: 'Admin', age: 28 },
+    ];
+
     render(
       <DataGridWrapper
         {...defaultProps}
+        rows={testRows}
         sortConfig={{
           defaultSortField: 'role',
-          // No defaultSortOrder
+          // No defaultSortOrder - should result in no sorting
           sortingOptions: [
             { label: 'Role Asc', value: 'role_asc' },
             { label: 'Role Desc', value: 'role_desc' },
@@ -922,8 +917,19 @@ describe('DataGridWrapper', () => {
       />,
     );
 
-    // Should still render without error
-    expect(screen.getByRole('grid')).toBeInTheDocument();
+    // Get all data rows (skip header row)
+    const rows = screen.getAllByRole('row');
+    const dataRows = rows.slice(1); // Skip header
+
+    // Check that rows are NOT sorted - they should be in original order
+    // Get the role cells from each row (second column)
+    const roleCells = dataRows.map(
+      (row) =>
+        Array.from(row.querySelectorAll('[role="gridcell"]'))[1]?.textContent,
+    );
+
+    // Should be in original order: Guest, Admin, User, Admin
+    expect(roleCells).toEqual(['Guest', 'Admin', 'User', 'Admin']);
   });
 
   // SearchBar onClear callback
