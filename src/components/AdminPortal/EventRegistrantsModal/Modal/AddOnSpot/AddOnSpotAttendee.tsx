@@ -1,24 +1,27 @@
 /**
  * Component for adding an attendee on the spot via a modal form.
  *
- * This component provides a modal interface to add attendees to an event
- * by collecting their details such as name, email, phone number, and gender.
- * It validates the form inputs, submits the data to the server using a GraphQL
- * mutation, and handles success or error responses appropriately.
+ * Provides a modal interface to add attendees by collecting:
+ * - First name
+ * - Last name
+ * - Email
+ * - Phone number
+ * - Gender
  *
- * @param show - Determines whether the modal is visible.
- * @param handleClose - Function to close the modal.
- * @param reloadMembers - Function to reload the list of members.
+ * It validates inputs, submits data using a GraphQL mutation,
+ * and shows success or error notifications accordingly.
  *
- * @returns The rendered AddOnSpotAttendee component.
+ * @param show - Controls modal visibility
+ * @param handleClose - Closes the modal
+ * @param reloadMembers - Reloads attendee list after success
+ *
+ * @returns Rendered AddOnSpotAttendee component
  *
  * @remarks
- * - Uses `react-bootstrap` for modal and form styling
- * - Utilizes `NotificationToast` for displaying success and error messages
- * - Integrates `react-i18next` for translations
- * - Includes form validation to ensure required fields are filled
- * - Dependencies: `@apollo/client` for GraphQL mutation, `react-bootstrap` for UI components,
- *   `NotificationToast` for notifications, `react-i18next` for translations
+ * - Uses shared BaseModal component
+ * - Uses NotificationToast for alerts
+ * - Uses i18next for translations
+ * - Includes client-side form validation
  *
  * @example
  * ```tsx
@@ -28,7 +31,14 @@
  *   reloadMembers={fetchMembers}
  * />
  * ```
- */
+ *
+ * @dependencies
+ * - @apollo/client
+ * - shared-components/BaseModal
+ * - NotificationToast
+ * - react-i18next
+*/
+
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
 import Button from 'shared-components/Button';
@@ -49,6 +59,8 @@ import { errorHandler } from 'utils/errorHandler';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { generateSecurePassword } from 'utils/generateSecurePassword';
+import AddOnSpotSuccessModal from './AddOnSpotSuccessModal';
 
 const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   show,
@@ -62,21 +74,33 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
     phoneNo: '',
     gender: '',
   });
+
   const { t } = useTranslation('translation', { keyPrefix: 'onSpotAttendee' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
   const { orgId } = useParams<{ orgId: string }>();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [addSignUp] = useMutation(SIGNUP_MUTATION);
+
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [generatedPassword, setGeneratedPassword] = useState('');
+  const [createdUser, setCreatedUser] = useState({
+    name: '',
+    email: '',
+  });
+
   const validateForm = (): boolean => {
     if (!orgId) {
       NotificationToast.error(t('organizationIdMissing'));
       return false;
     }
+
     if (!formData.firstName || !formData.lastName || !formData.email) {
       NotificationToast.error(t('invalidDetailsMessage'));
       return false;
     }
+
     return true;
   };
 
@@ -95,28 +119,35 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   ): Promise<void> => {
     e.preventDefault();
 
-    const isValid = validateForm();
-    if (!isValid) {
-      return;
-    }
+    if (!validateForm()) return;
 
     setIsSubmitting(true);
 
     try {
+      const securePassword = generateSecurePassword();
+
       const response = await addSignUp({
         variables: {
           ID: orgId,
           name: `${formData.firstName} ${formData.lastName}`.trim(),
           email: formData.email,
-          password: '123456',
+          password: securePassword,
         },
       });
 
       if (response.data?.signUp) {
         NotificationToast.success(t('attendeeAddedSuccess'));
+
+        setGeneratedPassword(securePassword);
+        setCreatedUser({
+          name: `${formData.firstName} ${formData.lastName}`.trim(),
+          email: formData.email,
+        });
+
+        setShowSuccessModal(true);
+
         resetForm();
         reloadMembers();
-        handleClose();
       }
     } catch (error) {
       errorHandler(t, error as Error);
@@ -124,6 +155,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
       setIsSubmitting(false);
     }
   };
+
   return (
     <ErrorBoundaryWrapper
       fallbackErrorMessage={tErrors('defaultErrorMessage')}
@@ -135,8 +167,8 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
         show={show}
         onHide={handleClose}
         backdrop="static"
-        centered={true}
-        headerClassName={styles.modalHeader}
+        centered
+        headerClassName={modalStyles.modalHeader}
         title={t('title')}
       >
         <form onSubmit={handleSubmit} data-testid="onspot-attendee-form">
@@ -151,6 +183,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
               placeholder={t('placeholderFirstName')}
               required
             />
+
             <FormTextField
               name="lastName"
               label={tCommon('lastName')}
@@ -162,6 +195,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
               required
             />
           </div>
+
           <FormTextField
             name="phoneNo"
             label={t('phoneNumber')}
@@ -192,7 +226,9 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
             <option value="Female">{t('female')}</option>
             <option value="Other">{t('other')}</option>
           </FormSelectField>
+
           <br />
+
           <LoadingState isLoading={isSubmitting} variant="inline">
             <Button
               variant="success"
@@ -205,6 +241,17 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
           </LoadingState>
         </form>
       </BaseModal>
+
+      <AddOnSpotSuccessModal
+        show={showSuccessModal}
+        password={generatedPassword}
+        email={createdUser.email}
+        attendeeName={createdUser.name}
+        handleClose={() => {
+          setShowSuccessModal(false);
+          handleClose();
+        }}
+      />
     </ErrorBoundaryWrapper>
   );
 };

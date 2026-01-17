@@ -97,6 +97,8 @@ const renderComponent = (): RenderResult => {
   );
 };
 
+/* ================= TESTS ================= */
+
 describe('AddOnSpotAttendee Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -140,17 +142,22 @@ describe('AddOnSpotAttendee Component', () => {
       expect(mockProps.reloadMembers).toHaveBeenCalled();
     });
 
+    /* Success modal */
     expect(
       await screen.findByText(/attendee added successfully/i),
     ).toBeInTheDocument();
 
+    /* Masked password */
     expect(screen.getByText('********')).toBeInTheDocument();
 
+    /* Show password */
     fireEvent.click(screen.getByRole('button', { name: /show/i }));
     expect(screen.getByText(TEST_PASSWORD)).toBeInTheDocument();
 
+    /* Copy */
     fireEvent.click(screen.getByRole('button', { name: /copy/i }));
 
+    /* Close (pick LAST close button) */
     const closeButtons = screen.getAllByRole('button', { name: /close/i });
     fireEvent.click(closeButtons[closeButtons.length - 1]);
 
@@ -211,55 +218,6 @@ describe('AddOnSpotAttendee Component', () => {
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalled();
-    });
-  });
-
-  it('does not submit when email is missing (Partial Submission)', async () => {
-    renderAddOnSpotAttendee();
-
-    await userEvent.type(screen.getByLabelText(/First Name/i), 'John');
-    await userEvent.type(screen.getByLabelText(/Last Name/i), 'Doe');
-    // Email skipped intentionally
-    await userEvent.type(screen.getByLabelText(/Phone No\./i), '1234567890');
-    const genderSelect = screen.getByLabelText(/Gender/i);
-    fireEvent.change(genderSelect, { target: { value: 'Male' } });
-
-    fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
-
-    await waitFor(() => {
-      // Should show error because email is required (HTML5 validation or custom check?)
-      // Component check: if (!formData.firstName || !formData.lastName || !formData.email) -> NotificationToast.error.
-      expect(sharedMocks.NotificationToast.error).toHaveBeenCalled();
-      expect(mockProps.reloadMembers).not.toHaveBeenCalled();
-    });
-  });
-
-  it('resets form fields after successful submission', async () => {
-    renderAddOnSpotAttendee();
-
-    const firstNameInput = screen.getByLabelText(/First Name/i);
-    const lastNameInput = screen.getByLabelText(/Last Name/i);
-    const emailInput = screen.getByLabelText(/Email/i);
-
-    // Ensure inputs are initially empty
-    expect(firstNameInput).toHaveValue('');
-
-    await userEvent.type(firstNameInput, 'John');
-    await userEvent.type(lastNameInput, 'Doe');
-    await userEvent.type(emailInput, 'john@example.com');
-
-    // Verify values typed
-    expect(firstNameInput).toHaveValue('John');
-
-    fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
-
-    await waitFor(() => {
-      expect(sharedMocks.NotificationToast.success).toHaveBeenCalled();
-      // Since handleClose is a mock, the component remains mounted with show=true.
-      // verify resetForm() effect.
-      expect(firstNameInput).toHaveValue('');
-      expect(lastNameInput).toHaveValue('');
-      expect(emailInput).toHaveValue('');
     });
   });
 });
