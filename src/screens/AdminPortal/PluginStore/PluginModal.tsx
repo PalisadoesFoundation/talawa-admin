@@ -20,6 +20,7 @@ import LoadingState from '../../../shared-components/LoadingState/LoadingState';
 import { useTranslation } from 'react-i18next';
 import { X } from '@mui/icons-material';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
 const TABS = ['details', 'features', 'changelog'] as const;
 type TabType = (typeof TABS)[number];
@@ -190,25 +191,33 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
           <div className={styles.pluginName}>{plugin?.name}</div>
           <div className={styles.pluginAuthor}>{plugin?.author}</div>
           {details && (
-            <>
-              <div className={styles.pluginVersion}>v{details.version}</div>
-            </>
+            <div className={styles.pluginVersion}>v{details.version}</div>
+          )}
+          {plugin && isInstalled(plugin.name) && (
+            <div className="mb-2 d-flex justify-content-center">
+              <StatusBadge
+                variant={
+                  getInstalledPlugin(plugin.name)?.status === 'active'
+                    ? 'active'
+                    : 'inactive'
+                }
+                size="md"
+                dataTestId="plugin-status-badge"
+                ariaLabel={
+                  getInstalledPlugin(plugin.name)?.status === 'active'
+                    ? tCommon('active')
+                    : tCommon('inactive')
+                }
+              />
+            </div>
           )}
           <div className={styles.actionButtons}>
             {plugin && isInstalled(plugin.name) && meta && (
               <>
                 <LoadingState isLoading={loading} variant="inline">
                   <Button
-                    variant={
-                      getInstalledPlugin(plugin.name)?.status === 'active'
-                        ? 'light'
-                        : 'primary'
-                    }
-                    className={`w-100 mb-2 d-flex align-items-center justify-content-center gap-2 ${
-                      getInstalledPlugin(plugin.name)?.status === 'active'
-                        ? styles.actionButtonLight
-                        : styles.actionButton
-                    }`}
+                    variant="light"
+                    className={`w-100 mb-2 d-flex align-items-center justify-content-center gap-2 ${styles.actionButton}`}
                     onClick={() =>
                       togglePluginStatus(
                         meta,
@@ -218,13 +227,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
                       )
                     }
                   >
-                    <FaPowerOff
-                      className={
-                        getInstalledPlugin(plugin.name)?.status === 'active'
-                          ? styles.iconPowerOffActive
-                          : styles.iconPowerOffInactive
-                      }
-                    />
+                    <FaPowerOff />
                     {getInstalledPlugin(plugin.name)?.status === 'active'
                       ? t('deactivate')
                       : t('activate')}
