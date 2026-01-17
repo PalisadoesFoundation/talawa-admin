@@ -34,7 +34,6 @@ export interface InterfaceRecurringEventVolunteerModalProps {
 
   /**
    * Whether this is for joining a volunteer group (vs individual volunteering)
-   * @default false
    */
   isForGroup?: boolean;
 
