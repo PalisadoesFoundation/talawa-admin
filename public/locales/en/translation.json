@@ -2284,5 +2284,32 @@
   },
   "userGlobalScreen": {
     "globalFeatures": "Global Features"
+  },
+  "recurringEventVolunteerModal": {
+    "joinGroupTitle": "Join {{groupName}} - {{eventName}}",
+    "volunteerTitle": "Volunteer for {{eventName}}",
+    "joinGroupQuestion": "Would you like to join \"{{groupName}}\" for the entire series or just this instance?",
+    "volunteerQuestion": "Would you like to volunteer for the entire series or just this instance?",
+    "volunteerForSeries": "Volunteer for Entire Series",
+    "joinGroupForSeries": "You will join this group for all events in the recurring series",
+    "volunteerForSeriesDesc": "You will be volunteering for all events in this recurring series",
+    "volunteerForInstance": "Volunteer for This Instance Only",
+    "joinGroupForInstance": "You will join this group only for the event on {{date}}",
+    "volunteerForInstanceDesc": "You will only be volunteering for the event on {{date}}",
+    "cancel": "Cancel",
+    "submitRequest": "Submit Request"
+  },
+  "eventsAttendedMemberModal": {
+    "title": "Events Attended List",
+    "showing": "Showing {{start}} - {{end}} of {{total}} Events",
+    "eventName": "Event Name",
+    "dateOfEvent": "Date of Event",
+    "recurringEvent": "Recurring Event",
+    "attendees": "Attendees",
+    "tableAriaLabel": "Events attended table",
+    "paginationAriaLabel": "Events pagination navigation",
+    "paginationGoToPage": "Go to page {{page}}",
+    "paginationGoToType": "Go to {{type}} page",
+    "noEventsAttended": "No events attended"
   }
 }

@@ -32,7 +32,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:414](htt
 
 #### request.variables.orderBy
 
-> **orderBy**: `any` = `null`
+> **orderBy**: `any` = `undefined`
 
 #### request.variables.where
 
