@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceAddOnSpotAttendeeProps`](../../../../../../utils/interfaces/interfaces/InterfaceAddOnSpotAttendeeProps.md)\>
 
-Defined in: src/components/EventRegistrantsModal/Modal/AddOnSpot/AddOnSpotAttendee.tsx:54
+Defined in: [src/components/EventRegistrantsModal/Modal/AddOnSpot/AddOnSpotAttendee.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventRegistrantsModal/Modal/AddOnSpot/AddOnSpotAttendee.tsx#L31)

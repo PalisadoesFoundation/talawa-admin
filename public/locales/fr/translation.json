@@ -414,9 +414,7 @@
     "profile": "Profil",
     "joined": "Rejoint",
     "createUser": "Créer un utilisateur",
-    "notFound": "Aucun membre trouvé",
-    "showPassword": "Afficher le mot de passe",
-    "hidePassword": "Masquer le mot de passe"
+    "notFound": "Aucun membre trouvé"
   },
   "organizationCard": {
     "join": "Rejoindre",
@@ -731,7 +729,6 @@
     "options": "Options",
     "createAgendaItem": "Créer un point à l'ordre du jour",
     "noAgendaItems": "Aucun point à l'ordre du jour",
-    "search": "Rechercher",
     "selectAgendaItemCategory": "Sélectionner une catégorie de point de l'ordre du jour",
     "update": "Mettre à jour",
     "delete": "Supprimer",
@@ -1422,12 +1419,11 @@
   },
   "posts": {
     "pinnedPosts": "Messages épinglés",
-    "errorLoadingPreviewPost": "Erreur lors du chargement de l'aperçu du message.",
     "title": "Publications",
     "latest": "Dernier",
     "oldest": "Le plus ancien",
     "none": "Aucun",
-    "closePostView": "Fermer la vue du message",
+    "closePinnedPost": "Fermer le message épinglé",
     "unknownUser": "Utilisateur inconnu",
     "searchPosts": "Rechercher des messages",
     "nothingToShow": "Rien à montrer ici.",
@@ -1516,8 +1512,7 @@
     "noRegistrantsFound": "Aucun inscrit trouvé.",
     "removingAttendee": "Suppression du participant...",
     "attendeeRemovedSuccessfully": "Participant supprimé avec succès",
-    "errorRemovingAttendee": "Erreur lors de la suppression du participant",
-    "cannotUnregisterCheckedIn": "Impossible d'annuler l'inscription d'un utilisateur qui s'est déjà enregistré",
+    "errorRemovingAttendee": "Erreur lors de la suppression du participant. Veuillez réessayer.",
     "checkedIn": "Enregistré",
     "unregister": "Désinscrire",
     "cannotUnregisterCheckedInTooltip": "Impossible de désinscrire un utilisateur déjà enregistré"
@@ -1923,13 +1918,6 @@
   "checkIn": {
     "errorCheckingIn": "Erreur lors de l'enregistrement",
     "checkedInSuccessfully": "Enregistrement réussi",
-    "generatingPdf": "Génération du PDF...",
-    "pdfGeneratedSuccessfully": "PDF généré avec succès !",
-    "errorGeneratingPdf": "Erreur lors de la génération du PDF",
-    "unknownError": "Erreur inconnue",
-    "checkedIn": "Enregistré",
-    "downloadTag": "Télécharger l'étiquette",
-    "checkInButton": "S'enregistrer",
     "searchAttendees": "Rechercher des participants",
     "checkedIn": "Enregistré",
     "downloadTag": "Télécharger l'étiquette",
@@ -2029,7 +2017,6 @@
     "fundingGoal": "Objectif de financement",
     "viewPledge": "Voir l'engagement",
     "campaignIndex": "#",
-    "campaignStatus": "Statut",
     "fundGoal": "Objectif de Financement",
     "percentRaised": "% Collecté",
     "createFirstCampaign": "Créez votre première campagne de financement pour la voir ici.",
@@ -2040,20 +2027,7 @@
     "searchPledges": "Rechercher des engagements"
   },
   "leaveOrganization": {
-    "title": "Quitter l'organisation",
-    "leaveOrganization": "Quitter l'organisation",
-    "confirmLeaveOrganization": "Confirmer le départ de l'organisation",
-    "leaveOrganizationConfirmation": "Êtes-vous sûr de vouloir quitter {{orgName}} ? Vous perdrez l'accès au contenu réservé aux membres.",
-    "enterEmailToConfirm": "Entrez votre email pour confirmer :",
-    "enterYourEmail": "Entrez votre email",
-    "confirmEmailInput": "Confirmer la saisie de l'email",
-    "leftOrganizationSuccess": "Vous avez quitté l'organisation avec succès !",
-    "leftOrganizationError": "Échec du départ de l'organisation. Veuillez réessayer.",
-    "networkError": "Impossible de traiter votre demande. Veuillez vérifier votre connexion.",
-    "emailMismatchError": "L'email que vous avez entré ne correspond pas à celui de votre compte.",
-    "continue": "Continuer",
-    "missingRequiredInfo": "Impossible de traiter la demande : Informations requises manquantes.",
-    "organizationNotFound": "Organisation non trouvée"
+    "title": "Quitter l'organisation"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Sélecteur de vue des bénévoles",
@@ -2294,9 +2268,7 @@
     "title": "Portail Utilisateur",
     "talawa": "Talawa",
     "talawaBranding": "Image de marque Talawa",
-    "view": "Voir",
-    "changeLanguage": "Changer de langue",
-    "userNotFoundError": "Utilisateur introuvable"
+    "view": "Voir"
   },
   "donation": {
     "amount_label": "Montant",
@@ -2352,12 +2324,60 @@
     "paginationGoToType": "Aller à la page {{type}}",
     "noEventsAttended": "Aucun événement assisté"
   },
-  "eventStats": {
-    "title": "Statistiques de l'événement",
-    "reviews": {
-      "title": "Avis",
-      "emptyState": "En attente que les gens parlent de l'événement...",
-      "filledByCount": "Rempli par {{count}} personnes."
-    }
+  "attendanceStatistics": {
+    "historical_statistics": "Historical Statistics",
+    "trends": "Trends",
+    "chartPageNavigation": "Chart Page Navigation",
+    "previousPage": "Previous Page",
+    "today": "Today",
+    "goToToday": "Go to Today",
+    "nextPage": "Next Page",
+    "attendanceCount": "Attendance Count",
+    "attendeeCount": "Attendee Count",
+    "gender": "Gender",
+    "age": "Age",
+    "genderDistribution": "Gender Distribution",
+    "ageDistribution": "Age Distribution",
+    "demography": "Demography",
+    "exportData": "Export Data",
+    "demographics": "Demographics",
+    "close": "Close",
+    "currentEvent": "Current Event",
+    "maleAttendees": "Male Attendees",
+    "femaleAttendees": "Female Attendees",
+    "otherAttendees": "Other Attendees",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "under18": "Under 18",
+    "age18to40": "18 to 40",
+    "over40": "Over 40"
+  },
+  "onSpotAttendee": {
+    "title": "Add On Spot Attendee",
+    "phoneNumber": "Phone Number",
+    "selectGender": "Select Gender",
+    "addAttendee": "Add Attendee",
+    "invalidDetailsMessage": "Please fill in all required details correctly.",
+    "attendeeAddedSuccess": "Attendee added successfully.",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "placeholder_firstName": "John",
+    "placeholder_lastName": "Doe",
+    "placeholder_email": "abc@gmail.com",
+    "placeholder_phone": "1234567890",
+    "invalidEmailFormat": "Invalid email format",
+    "organizationIdMissing": "Organization ID is missing.",
+    "enterFirstName": "Enter First Name",
+    "enterLastName": "Enter Last Name",
+    "enterEmail": "Enter Email",
+    "enterPhoneNo": "Enter Phone Number",
+    "phoneNumberPlaceholder": "1234567890",
+    "addingAttendee": "Adding...",
+    "orgIdMissing": "Organization ID is missing. Please try again.",
+    "placeholderFirstName": "John",
+    "placeholderLastName": "Doe",
+    "placeholderEmail": "abc@gmail.com"
   }
 }

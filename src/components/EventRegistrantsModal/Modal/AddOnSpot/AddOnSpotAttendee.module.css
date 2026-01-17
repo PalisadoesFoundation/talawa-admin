@@ -1,0 +1,7 @@
+.modalHeader {
+  composes: modalHeader from '../../EventRegistrants.module.css';
+}
+
+.addButton {
+  composes: addButton from 'style/app-fixed.module.css';
+}

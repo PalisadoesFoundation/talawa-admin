@@ -6,42 +6,18 @@
  * It validates the form inputs, submits the data to the server using a GraphQL
  * mutation, and handles success or error responses appropriately.
  *
- * @component
- * @param {InterfaceAddOnSpotAttendeeProps} props - The props for the component.
- * @param {boolean} props.show - Determines whether the modal is visible.
- * @param {() => void} props.handleClose - Function to close the modal.
- * @param {() => void} props.reloadMembers - Function to reload the list of members.
- *
- * @returns {JSX.Element} The rendered AddOnSpotAttendee component.
- *
  * @remarks
- * - Uses `react-bootstrap` for modal and form styling.
- * - Utilizes `react-toastify` for displaying success and error messages.
+ * - Uses `react-bootstrap` for UI constraints but avoids restricted imports.
+ * - Utilizes `NotificationToast` for notifications.
  * - Integrates `react-i18next` for translations.
  * - Includes form validation to ensure required fields are filled.
- *
- * @example
- * ```tsx
- * <AddOnSpotAttendee
- *   show={true}
- *   handleClose={() => setShow(false)}
- *   reloadMembers={fetchMembers}
- * />
- * ```
- *
- * @dependencies
- * - `@apollo/client` for GraphQL mutation.
- * - `react-bootstrap` for UI components.
- * - `react-toastify` for notifications.
- * - `react-i18next` for translations.
  */
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
-import { Modal, Form, Button } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import { Button } from 'react-bootstrap';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type {
   InterfaceAddOnSpotAttendeeProps,
   InterfaceFormData,
@@ -49,7 +25,8 @@ import type {
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import modalStyles from '../../EventRegistrants.module.css';
+import styles from './AddOnSpotAttendee.module.css';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 
 const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   show,
@@ -70,7 +47,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   const [addSignUp] = useMutation(SIGNUP_MUTATION);
   const validateForm = (): boolean => {
     if (!formData.firstName || !formData.lastName || !formData.email) {
-      toast.error(t('invalidDetailsMessage'));
+      NotificationToast.error(t('invalidDetailsMessage'));
       return false;
     }
     return true;
@@ -123,7 +100,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
       });
 
       if (response.data?.signUp) {
-        toast.success(t('attendeeAddedSuccess'));
+        NotificationToast.success(t('attendeeAddedSuccess'));
         resetForm();
         reloadMembers();
         handleClose();
@@ -134,96 +111,111 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
       setIsSubmitting(false);
     }
   };
+
   return (
-    <>
-      <Modal show={show} onHide={handleClose} backdrop="static" centered>
-        <Modal.Header closeButton className={modalStyles.modalHeader}>
-          <Modal.Title>{t('title')}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit} data-testid="onspot-attendee-form">
-            <div className="d-flex justify-content-between">
-              <Form.Group className="mb-1">
-                <Form.Label htmlFor="firstName">
-                  {tCommon('firstName')}
-                </Form.Label>
-                <Form.Control
-                  id="firstName"
-                  type="text"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  placeholder="John"
-                />
-              </Form.Group>
-              <Form.Group className="mb-1">
-                <Form.Label htmlFor="lastName">
-                  {tCommon('lastName')}
-                </Form.Label>
-                <Form.Control
-                  id="lastName"
-                  type="text"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  placeholder="Doe"
-                />
-              </Form.Group>
-            </div>
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="phoneNo">{t('phoneNumber')}</Form.Label>
-              <Form.Control
-                id="phoneNo"
-                type="tel"
-                name="phoneNo"
-                value={formData.phoneNo}
-                onChange={handleChange}
-                placeholder="1234567890"
-              />
-            </Form.Group>
+    <BaseModal
+      show={show}
+      onHide={handleClose}
+      backdrop="static"
+      centered
+      title={t('title')}
+      headerClassName={styles.modalHeader}
+    >
+      <form
+        onSubmit={handleSubmit}
+        data-testid="onspot-attendee-form"
+        className="form-group"
+      >
+        <div className="d-flex justify-content-between">
+          <div className="mb-1 w-48">
+            <label htmlFor="firstName" className="form-label">
+              {tCommon('firstName')}
+            </label>
+            <input
+              id="firstName"
+              type="text"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+              placeholder={t('placeholder_firstName')}
+              className="form-control"
+            />
+          </div>
+          <div className="mb-1 w-48">
+            <label htmlFor="lastName" className="form-label">
+              {tCommon('lastName')}
+            </label>
+            <input
+              id="lastName"
+              type="text"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+              placeholder={t('placeholder_lastName')}
+              className="form-control"
+            />
+          </div>
+        </div>
+        <div className="mb-3">
+          <label htmlFor="phoneNo" className="form-label">
+            {t('phoneNumber')}
+          </label>
+          <input
+            id="phoneNo"
+            type="tel"
+            name="phoneNo"
+            value={formData.phoneNo}
+            onChange={handleChange}
+            placeholder={t('placeholder_phone')}
+            className="form-control"
+          />
+        </div>
 
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="email">{tCommon('email')}</Form.Label>
-              <Form.Control
-                id="email"
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="abc@gmail.com"
-              />
-            </Form.Group>
+        <div className="mb-3">
+          <label htmlFor="email" className="form-label">
+            {tCommon('email')}
+          </label>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            placeholder={t('placeholder_email')}
+            className="form-control"
+          />
+        </div>
 
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="gender">{tCommon('gender')}</Form.Label>
-              <Form.Control
-                id="gender"
-                as="select"
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-              >
-                <option value="">{t('selectGender')}</option>
-                <option value="Male">{t('male')}</option>
-                <option value="Female">{t('female')}</option>
-                <option value="Other">{t('other')}</option>
-              </Form.Control>
-            </Form.Group>
-            <br />
-            <LoadingState isLoading={isSubmitting} variant="inline">
-              <Button
-                variant="success"
-                type="submit"
-                className={`border-1 mx-4 ${styles.addButton}`}
-                disabled={isSubmitting}
-              >
-                {t('addAttendee')}
-              </Button>
-            </LoadingState>
-          </Form>
-        </Modal.Body>
-      </Modal>
-    </>
+        <div className="mb-3">
+          <label htmlFor="gender" className="form-label">
+            {tCommon('gender')}
+          </label>
+          <select
+            id="gender"
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            className="form-select form-control"
+          >
+            <option value="">{t('selectGender')}</option>
+            <option value="Male">{t('male')}</option>
+            <option value="Female">{t('female')}</option>
+            <option value="Other">{t('other')}</option>
+          </select>
+        </div>
+        <br />
+        <LoadingState isLoading={isSubmitting} variant="inline">
+          <Button
+            variant="success"
+            type="submit"
+            className={`border-1 mx-4 ${styles.addButton}`}
+            disabled={isSubmitting}
+          >
+            {t('addAttendee')}
+          </Button>
+        </LoadingState>
+      </form>
+    </BaseModal>
   );
 };
 

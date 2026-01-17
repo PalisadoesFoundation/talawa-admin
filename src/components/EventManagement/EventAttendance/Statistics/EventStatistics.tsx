@@ -1,51 +1,11 @@
-/**
- * AttendanceStatisticsModal Component
- *
- * This component displays attendance statistics for events, including trends and demographic data.
- * It supports both recurring and non-recurring events, providing a detailed view of attendee data.
- *
- * Features:
- * - Displays attendance trends using a line chart for recurring events.
- * - Shows demographic distribution (Gender or Age) using a bar chart.
- * - Supports pagination for navigating through recurring events.
- * - Allows exporting data (Trends and Demographics) to CSV format.
- * - Highlights the current event in the trends chart.
- *
- * Props:
- * @param  show - Determines whether the modal is visible.
- * @param  handleClose - Callback to close the modal.
- * @param statistics - Contains overall statistics for non-recurring events.
- * @param  memberData - List of members with demographic details.
- * @param  t - Translation function for localized strings.
- *
- * Hooks:
- * - `useParams` to retrieve organization and event IDs from the URL.
- * - `useLazyQuery` to fetch event details and recurring event data using GraphQL queries.
- * - `useMemo` and `useCallback` for optimized calculations and event handlers.
- *
- * Charts:
- * - Line chart for attendance trends (recurring events).
- * - Bar chart for demographic distribution (Gender or Age).
- *
- * Export:
- * - Provides options to export trends and demographic data as CSV files.
- *
- * Accessibility:
- * - Includes navigation buttons for pagination with tooltips for better usability.
- *
- * Dependencies:
- * - React, React-Bootstrap, React-ChartJS-2, Apollo Client, and utility functions.
- */
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import {
-  Modal,
   Button,
   ButtonGroup,
   Tooltip,
   OverlayTrigger,
   Dropdown,
 } from 'react-bootstrap';
-import 'react-datepicker/dist/react-datepicker.css';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -68,7 +28,11 @@ import type {
   InterfaceAttendanceStatisticsModalProps,
   InterfaceEvent,
 } from 'types/Event/interface';
-import styles from 'style/app-fixed.module.css';
+import styles from './EventStatistics.module.css';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CHART_COLORS } from './EventStatisticsChartConfig';
+import { useTranslation } from 'react-i18next';
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -98,7 +62,10 @@ const calculateAge = (birthDate: Date): number => {
 
 export const AttendanceStatisticsModal: React.FC<
   InterfaceAttendanceStatisticsModalProps
-> = ({ show, handleClose, statistics, memberData, t }): React.JSX.Element => {
+> = ({ show, handleClose, statistics, memberData }): React.JSX.Element => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'attendanceStatistics',
+  });
   const [selectedCategory, setSelectedCategory] = useState('Gender');
   const { orgId, eventId } = useParams();
   const [currentPage, setCurrentPage] = useState(0);
@@ -233,29 +200,29 @@ export const AttendanceStatisticsModal: React.FC<
           label: t('attendeeCount'),
           data: attendeeCounts,
           fill: true,
-          borderColor: '#008000',
+          borderColor: CHART_COLORS.attendeeCount,
         },
         {
           label: t('maleAttendees'),
           data: maleCounts,
           fill: false,
-          borderColor: '#0000FF',
+          borderColor: CHART_COLORS.male,
         },
         {
           label: t('femaleAttendees'),
           data: femaleCounts,
           fill: false,
-          borderColor: '#FF1493',
+          borderColor: CHART_COLORS.female,
         },
         {
           label: t('otherAttendees'),
           data: otherCounts,
           fill: false,
-          borderColor: '#FFD700',
+          borderColor: CHART_COLORS.other,
         },
       ],
     }),
-    [eventLabels, attendeeCounts, maleCounts, femaleCounts, otherCounts],
+    [eventLabels, attendeeCounts, maleCounts, femaleCounts, otherCounts, t],
   );
 
   const handlePreviousPage = useCallback(() => {
@@ -389,21 +356,56 @@ export const AttendanceStatisticsModal: React.FC<
       }
     }
   }, [eventId, orgId, eventData, loadRecurringEvents]);
+
+  const footerContent = (
+    <>
+      <Dropdown data-testid="export-dropdown" onSelect={handleExport}>
+        <Dropdown.Toggle
+          className="p-2 m-2"
+          variant="info"
+          id="export-dropdown"
+        >
+          {t('exportData')}
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
+          {showTrends && (
+            <Dropdown.Item data-testid="trends-export" eventKey="trends">
+              {t('trends')}
+            </Dropdown.Item>
+          )}
+          <Dropdown.Item
+            data-testid="demographics-export"
+            eventKey="demographics"
+          >
+            {t('demographics')}
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+      <Button
+        className="p-2 m-2"
+        variant="secondary"
+        onClick={handleClose}
+        data-testid="close-button"
+      >
+        {t('close')}
+      </Button>
+    </>
+  );
+
   return (
-    <Modal
+    <BaseModal
       show={show}
       onHide={handleClose}
       className="attendance-modal"
       centered
       size={showTrends ? 'xl' : 'lg'}
-      data-testid="attendance-modal"
+      dataTestId="attendance-modal"
+      title={t('historical_statistics')}
+      headerClassName={styles.modalHeader}
+      headerTestId="modal-title"
+      footer={footerContent}
     >
-      <Modal.Header closeButton className={styles.modalHeader}>
-        <Modal.Title data-testid="modal-title">
-          {t('historical_statistics')}
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body
+      <div
         className="w-100 d-flex flex-column align-items-center position-relative"
         id="pdf-content"
       >
@@ -416,11 +418,7 @@ export const AttendanceStatisticsModal: React.FC<
         <div className="w-100 border border-success d-flex flex-row rounded">
           {showTrends ? (
             <div
-              className={
-                styles.borderRightGreen +
-                ' text-success position-relative pt-4 align-items-center justify-content-center w-50 border-right-1 border-success'
-              }
-              style={{ height: '400px' }}
+              className={`${styles.borderRightGreen} text-success position-relative pt-4 align-items-center justify-content-center w-50 border-right-1 border-success ${styles.chartContainer}`}
             >
               <Line
                 data={chartData}
@@ -541,22 +539,8 @@ export const AttendanceStatisticsModal: React.FC<
                         ? t('genderDistribution')
                         : t('ageDistribution'),
                     data: categoryData,
-                    backgroundColor: [
-                      'rgba(31, 119, 180, 0.2)', // Blue
-                      'rgba(255, 127, 14, 0.2)', // Orange
-                      'rgba(44, 160, 44, 0.2)', // Green
-                      'rgba(214, 39, 40, 0.2)', // Red
-                      'rgba(148, 103, 189, 0.2)', // Purple
-                      'rgba(140, 86, 75, 0.2)', // Brown
-                    ],
-                    borderColor: [
-                      'rgba(31, 119, 180, 1)',
-                      'rgba(255, 127, 14, 1)',
-                      'rgba(44, 160, 44, 1)',
-                      'rgba(214, 39, 40, 1)',
-                      'rgba(148, 103, 189, 1)',
-                      'rgba(140, 86, 75, 1)',
-                    ],
+                    backgroundColor: CHART_COLORS.barBackground,
+                    borderColor: CHART_COLORS.barBorder,
                     borderWidth: 2,
                   },
                 ],
@@ -569,39 +553,7 @@ export const AttendanceStatisticsModal: React.FC<
             </div>
           </div>
         </div>
-      </Modal.Body>
-      <Modal.Footer className="p-0 m-2">
-        <Dropdown data-testid="export-dropdown" onSelect={handleExport}>
-          <Dropdown.Toggle
-            className="p-2 m-2"
-            variant="info"
-            id="export-dropdown"
-          >
-            {t('exportData')}
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            {showTrends && (
-              <Dropdown.Item data-testid="trends-export" eventKey="trends">
-                {t('trends')}
-              </Dropdown.Item>
-            )}
-            <Dropdown.Item
-              data-testid="demographics-export"
-              eventKey="demographics"
-            >
-              {t('demographics')}
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-        <Button
-          className="p-2 m-2"
-          variant="secondary"
-          onClick={handleClose}
-          data-testid="close-button"
-        >
-          {t('close')}
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      </div>
+    </BaseModal>
   );
 };

@@ -1,0 +1,73 @@
+@import 'react-datepicker/dist/react-datepicker.css';
+
+.modalHeader {
+  /* Using standard padding from BaseModal or similar if needed, 
+     but preserving specific overrides if any. */
+}
+
+.paddingBottom30 {
+  padding-bottom: 30px;
+}
+
+.paddingBottom2Rem {
+  padding-bottom: 2rem;
+}
+
+.positionedTopRight {
+  top: 10px;
+  right: 10px;
+}
+
+.borderRightGreen {
+  border-right: 1px solid var(--success-green-color);
+}
+
+.topRightCorner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-color: var(--success-green-color) !important;
+  border-top: none;
+  border-right: none;
+  border-top-left-radius: 0.25rem;
+  /* rounded-bl-like */
+  border-bottom-left-radius: 0.25rem;
+  background-color: white;
+  z-index: 10;
+}
+
+.topLeftCorner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-color: var(--success-green-color) !important;
+  border-top: none;
+  border-left: none;
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+  background-color: white;
+  z-index: 10;
+}
+
+.bottomRightCorner {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border-color: var(--success-green-color) !important;
+  border-bottom: none;
+  border-right: none;
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+  background-color: white;
+  z-index: 10;
+}
+
+.chartContainer {
+  height: 400px;
+}
+
+.largeBoldText {
+  font-size: 4rem;
+  /* Assuming large text size based on usage */
+  font-weight: bold;
+}
