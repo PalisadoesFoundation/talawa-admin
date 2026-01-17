@@ -1,6 +1,11 @@
-import type { ChangeEvent } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useState,
+  type ChangeEvent,
+  type FormEvent,
+} from 'react';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfacePledgeInfo,
@@ -8,7 +13,6 @@ import type {
   InterfaceCreatePledge,
 } from 'utils/interfaces';
 import styles from './PledgeModal.module.css';
-import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
@@ -283,13 +287,20 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       }
       showCloseButton={false}
     >
-      <Form
+      <form
         data-testid="pledgeForm"
-        onSubmit={mode === 'edit' ? updatePledgeHandler : createPledgeHandler}
+        onSubmit={(e: FormEvent<HTMLFormElement>) => {
+          e.preventDefault();
+          if (mode === 'edit') {
+            updatePledgeHandler(e as unknown as ChangeEvent<HTMLFormElement>);
+          } else {
+            createPledgeHandler(e as unknown as ChangeEvent<HTMLFormElement>);
+          }
+        }}
         className="p-3"
       >
         {userData?.user?.role !== 'regular' && (
-          <Form.Group className="d-flex mb-3 w-100">
+          <div className="d-flex mb-3 w-100">
             <Autocomplete
               className={`${styles.noOutline} w-100`}
               data-testid="pledgerSelect"
@@ -313,9 +324,9 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 <TextField {...params} label={t('pledgers')} />
               )}
             />
-          </Form.Group>
+          </div>
         )}
-        <Form.Group className="d-flex gap-3 mb-4">
+        <div className="d-flex gap-3 mb-4">
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">
               {t('currency')}
@@ -346,6 +357,13 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               type="number"
               value={String(pledgeAmount)}
               onChange={(value) => {
+                if (value === '' || value.trim() === '') {
+                  setFormState({
+                    ...formState,
+                    pledgeAmount: 0,
+                  });
+                  return;
+                }
                 const numValue = parseInt(value);
                 if (!isNaN(numValue) && numValue > 0) {
                   setFormState({
@@ -357,7 +375,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               className={styles.noOutline}
             />
           </FormControl>
-        </Form.Group>
+        </div>
         <Button
           type="submit"
           className={styles.addButton}
@@ -365,7 +383,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         >
           {t(mode === 'edit' ? 'updatePledge' : 'createPledge')}
         </Button>
-      </Form>
+      </form>
     </BaseModal>
   );
 };

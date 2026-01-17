@@ -50,7 +50,6 @@ vi.mock('utils/useLocalstorage', () => ({
 // Mock errorHandler
 vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
-  error: vi.fn(),
 }));
 
 // Update the Avatar mock to ProfileAvatarDisplay mock
@@ -968,6 +967,8 @@ describe('CreatePostModal Integration Tests', () => {
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();
         expect(defaultProps.refetch).toHaveBeenCalled();
+        // Verify file input was cleared
+        expect(fileInput.files?.length).toBe(0);
       });
     });
   });

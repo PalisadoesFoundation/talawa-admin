@@ -409,7 +409,9 @@
     "profile": "Perfil",
     "joined": "Unido",
     "notFound": "No se encontraron miembros",
-    "createUser": "Crear usuario"
+    "createUser": "Crear usuario",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña"
   },
   "organizationCard": {
     "join": "Unirse",

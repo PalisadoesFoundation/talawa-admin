@@ -423,7 +423,9 @@
     "actions": "Actions",
     "profile": "Profile",
     "joined": "Joined",
-    "notFound": "No Members Found"
+    "notFound": "No Members Found",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
   },
   "organizationTags": {
     "title": "Organization Tags",

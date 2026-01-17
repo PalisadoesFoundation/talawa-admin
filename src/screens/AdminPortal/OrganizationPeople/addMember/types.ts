@@ -25,3 +25,8 @@ export interface IQueryVariable {
   before?: string | null;
   where?: { role: { equal: 'administrator' | 'regular' } };
 }
+
+export enum OrganizationMembershipRole {
+  ADMIN = 'administrator',
+  REGULAR = 'regular',
+}

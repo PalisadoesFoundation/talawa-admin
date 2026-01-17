@@ -409,7 +409,9 @@
     "profile": "配置文件",
     "joined": "加入",
     "createUser": "创建用户",
-    "notFound": "未找到成员"
+    "notFound": "未找到成员",
+    "showPassword": "显示密码",
+    "hidePassword": "隐藏密码"
   },
   "organizationCard": {
     "join": "加入",

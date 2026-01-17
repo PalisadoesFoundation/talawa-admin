@@ -409,7 +409,9 @@
     "create": "बनाएं",
     "cancel": "रद्द करें",
     "createUser": "उपयोगकर्ता बनाएं",
-    "notFound": "कोई सदस्य नहीं मिले"
+    "notFound": "कोई सदस्य नहीं मिले",
+    "showPassword": "पासवर्ड दिखाएं",
+    "hidePassword": "पासवर्ड छुपाएं"
   },
   "organizationCard": {
     "join": "जॉइन करें",

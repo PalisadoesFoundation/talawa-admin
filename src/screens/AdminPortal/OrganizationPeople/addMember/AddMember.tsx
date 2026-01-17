@@ -42,6 +42,7 @@ import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import styles from './AddMember.module.css';
 import type { IEdge, IQueryVariable, IUserDetails } from './types';
+import { OrganizationMembershipRole } from './types';
 
 function AddMember(): JSX.Element {
   const { t: translateOrgPeople } = useTranslation('translation', {
@@ -135,11 +136,6 @@ function AddMember(): JSX.Element {
     password: '',
     confirmPassword: '',
   });
-
-  enum OrganizationMembershipRole {
-    ADMIN = 'administrator',
-    REGULAR = 'regular',
-  }
 
   const handleCreateUser = async (): Promise<void> => {
     if (
@@ -480,7 +476,7 @@ function AddMember(): JSX.Element {
                 placeholder={translateAddMember('addMember.name')}
                 value={createUserVariables.name}
                 onChange={handleFirstName}
-                data-testid="firstNameInput"
+                data-testid="nameInput"
               />
             </div>
           </div>
@@ -509,18 +505,23 @@ function AddMember(): JSX.Element {
             onChange={handlePasswordChange}
             data-testid="passwordInput"
             endAdornment={
-              <div
+              <button
+                type="button"
                 className={`input-group-text ${styles.colorPrimary} ${styles.borderNone} ${styles.colorWhite}`}
                 onClick={togglePassword}
                 data-testid="showPassword"
-                aria-hidden="true"
+                aria-label={
+                  showPassword
+                    ? translateOrgPeople('hidePassword')
+                    : translateOrgPeople('showPassword')
+                }
               >
                 {showPassword ? (
                   <i className="fas fa-eye"></i>
                 ) : (
                   <i className="fas fa-eye-slash"></i>
                 )}
-              </div>
+              </button>
             }
           />
           <FormTextField
@@ -532,18 +533,23 @@ function AddMember(): JSX.Element {
             onChange={handleConfirmPasswordChange}
             data-testid="confirmPasswordInput"
             endAdornment={
-              <div
+              <button
+                type="button"
                 className={`input-group-text ${styles.colorPrimary} ${styles.borderNone} ${styles.colorWhite}`}
                 onClick={toggleConfirmPassword}
                 data-testid="showConfirmPassword"
-                aria-hidden="true"
+                aria-label={
+                  showConfirmPassword
+                    ? translateOrgPeople('hidePassword')
+                    : translateOrgPeople('showPassword')
+                }
               >
                 {showConfirmPassword ? (
                   <i className="fas fa-eye"></i>
                 ) : (
                   <i className="fas fa-eye-slash"></i>
                 )}
-              </div>
+              </button>
             }
           />
           <FormTextField

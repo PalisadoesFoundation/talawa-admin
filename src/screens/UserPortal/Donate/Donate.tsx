@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
 import { useQuery, useMutation } from '@apollo/client';
 import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
@@ -133,45 +131,42 @@ export default function Donate(): JSX.Element {
             {t('donateForThe')} {organizationDetails.name}
           </div>
 
-          <InputGroup className={styles.width100}>
-            <Dropdown>
-              <Dropdown.Toggle
-                className={`${styles.colorPrimary} ${styles.dropdown}`}
-                variant="success"
-                data-testid="modeChangeBtn"
-              >
-                <span data-testid="changeCurrencyBtn">
-                  {currencies[selectedCurrency]}
-                </span>
-              </Dropdown.Toggle>
+          <FormTextField
+            name="donationAmount"
+            type="text"
+            label={t('amount')}
+            placeholder={t('amount')}
+            value={amount}
+            onChange={setAmount}
+            data-testid="donationAmount"
+            startAdornment={
+              <Dropdown>
+                <Dropdown.Toggle
+                  className={`${styles.colorPrimary} ${styles.dropdown}`}
+                  variant="success"
+                  data-testid="modeChangeBtn"
+                >
+                  <span data-testid="changeCurrencyBtn">
+                    {currencies[selectedCurrency]}
+                  </span>
+                </Dropdown.Toggle>
 
-              <Dropdown.Menu>
-                {currencies.map((currency, index) => (
-                  <Dropdown.Item
-                    key={currency}
-                    data-testid={`currency${index}`}
-                    onClick={() => setSelectedCurrency(index)}
-                  >
-                    {currency}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
+                <Dropdown.Menu>
+                  {currencies.map((currency, index) => (
+                    <Dropdown.Item
+                      key={currency}
+                      data-testid={`currency${index}`}
+                      onClick={() => setSelectedCurrency(index)}
+                    >
+                      {currency}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            }
+          />
 
-            <FormTextField
-              name="donationAmount"
-              type="text"
-              label={t('amount')}
-              placeholder={t('amount')}
-              value={amount}
-              onChange={setAmount}
-              data-testid="donationAmount"
-            />
-          </InputGroup>
-
-          <Form.Text className="text-muted">
-            {t('donationAmountDescription')}
-          </Form.Text>
+          <small className="text-muted">{t('donationAmountDescription')}</small>
 
           <Button
             size="sm"

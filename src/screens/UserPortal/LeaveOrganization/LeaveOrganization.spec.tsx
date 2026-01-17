@@ -316,7 +316,7 @@ describe('LeaveOrganization Component', () => {
         screen.getByText(/Are you sure you want to leave/i),
       ).toBeInTheDocument(),
     );
-    const modal = await screen.findByRole('dialog');
+    const modal = await screen.findByTestId('leave-organization-modal');
     expect(modal).toBeInTheDocument();
     await screen.findByText('Continue');
     fireEvent.click(screen.getByText('Continue'));
@@ -352,7 +352,7 @@ describe('LeaveOrganization Component', () => {
         screen.getByText(/Are you sure you want to leave/i),
       ).toBeInTheDocument(),
     );
-    const modal = await screen.findByRole('dialog');
+    const modal = await screen.findByTestId('leave-organization-modal');
     expect(modal).toBeInTheDocument();
     await screen.findByText('Continue');
     fireEvent.click(screen.getByText('Continue'));
@@ -389,7 +389,7 @@ describe('LeaveOrganization Component', () => {
         screen.getByText(/Are you sure you want to leave/i),
       ).toBeInTheDocument(),
     );
-    const modal = await screen.findByRole('dialog');
+    const modal = await screen.findByTestId('leave-organization-modal');
     expect(modal).toBeInTheDocument();
     await screen.findByText('Continue');
     fireEvent.click(screen.getByText('Continue'));
@@ -426,7 +426,7 @@ describe('LeaveOrganization Component', () => {
         screen.getByText(/Are you sure you want to leave/i),
       ).toBeInTheDocument(),
     );
-    const modal = await screen.findByRole('dialog');
+    const modal = await screen.findByTestId('leave-organization-modal');
     expect(modal).toBeInTheDocument();
     await screen.findByText('Continue');
     fireEvent.click(screen.getByText('Continue'));

@@ -55,6 +55,7 @@ vi.mock('react-infinite-scroll-component', () => ({
   }: InterfaceInfiniteScrollMockProps) => (
     <div data-testid="infinite-scroll-mock">
       <button
+        type="button"
         data-testid="trigger-load-more"
         onClick={() => {
           next();

@@ -37,7 +37,7 @@ interface InterfaceInfiniteScrollMockProps {
 vi.mock('react-infinite-scroll-component', () => ({
   default: ({ next, children }: InterfaceInfiniteScrollMockProps) => (
     <div data-testid="infinite-scroll-component">
-      <button data-testid="trigger-load-more" onClick={next}>
+      <button type="button" data-testid="trigger-load-more" onClick={next}>
         Load More
       </button>
       {children}

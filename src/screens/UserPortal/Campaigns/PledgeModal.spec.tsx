@@ -419,9 +419,9 @@ describe('PledgeModal', () => {
         data: {
           user: {
             ...USER_DETAILS_MOCK.result.data.user,
-            name: null,
-            firstName: null,
-            lastName: null,
+            name: '',
+            firstName: '',
+            lastName: '',
           },
         },
       },
