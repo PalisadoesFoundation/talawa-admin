@@ -77,6 +77,7 @@ vi.mock('@mui/x-data-grid', () => ({
     return (
       <div data-testid="data-grid">
         <button
+          type="button"
           data-testid="trigger-pagination-change"
           onClick={() => {
             if (onPaginationModelChange) {
@@ -250,14 +251,6 @@ vi.mock('../SearchFilterBar/SearchFilterBar', () => ({
       }
     }, [dropdowns]);
 
-    // CRITICAL: Call onSearchSubmit for server-side
-    React.useEffect(() => {
-      if (onSearchSubmit) {
-        // Call with current search value or test value
-        onSearchSubmit(searchValue || 'test-search-value');
-      }
-    }, [onSearchSubmit, searchValue]);
-
     return (
       <div data-testid="search-filter-bar">
         <input
@@ -368,7 +361,15 @@ describe('DataGridWrapper', () => {
       />,
     );
 
-    expect(onSearchChange).toHaveBeenCalledWith('test-search-value', 'name');
+    // The mock no longer auto-calls, so we need to simulate user interaction
+    const searchInput = screen.getByTestId('searchInput');
+
+    // Simulate user typing and pressing Enter
+    fireEvent.change(searchInput, { target: { value: 'explicit-search' } });
+    fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter' });
+
+    // Now verify the callback was called with user input
+    expect(onSearchChange).toHaveBeenCalledWith('explicit-search', 'name');
   });
 
   test('shows warning for server-side search without callback', () => {
@@ -705,6 +706,11 @@ describe('DataGridWrapper', () => {
       />,
     );
 
+    // Simulate user typing and pressing Enter
+    const searchInput = screen.getByTestId('searchInput');
+    fireEvent.change(searchInput, { target: { value: 'test-search-value' } });
+    fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter' });
+
     expect(onSearchChange).toHaveBeenCalledWith('test-search-value', undefined);
   });
 
@@ -729,8 +735,12 @@ describe('DataGridWrapper', () => {
       />,
     );
 
-    expect(onSearchChange).toHaveBeenCalledWith('test-search-value', 'name');
+    // Simulate user typing and pressing Enter
+    const searchInput = screen.getByTestId('searchInput');
+    fireEvent.change(searchInput, { target: { value: 'test-search-value' } });
+    fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter' });
 
+    expect(onSearchChange).toHaveBeenCalledWith('test-search-value', 'name');
     expect(onSearchByChange).toHaveBeenCalledWith('name');
   });
 
@@ -932,35 +942,9 @@ describe('DataGridWrapper', () => {
     expect(roleCells).toEqual(['Guest', 'Admin', 'User', 'Admin']);
   });
 
-  // SearchBar onClear callback
-  test('SearchBar onClear callback resets search term', () => {
-    vi.useFakeTimers();
-
-    render(
-      <DataGridWrapper
-        {...defaultProps}
-        searchConfig={{ enabled: true, fields: ['name'] }}
-      />,
-    );
-
-    const searchInput = screen.getByRole('searchbox');
-
-    // Type something
-    fireEvent.change(searchInput, { target: { value: 'test' } });
-
-    // Find and click the clear button
-    const clearButton = screen.getByLabelText('Clear');
-    fireEvent.click(clearButton);
-
-    // Should clear the search input
-    expect(searchInput).toHaveValue('');
-
-    vi.advanceTimersByTime(300);
-    vi.useRealTimers();
-  });
-
   // Test clear functionality triggers setSearchTerm
-  test('clear button triggers setSearchTerm with empty string', () => {
+  test('clear button resets search term', () => {
+    vi.useFakeTimers();
     render(
       <DataGridWrapper
         {...defaultProps}
@@ -971,10 +955,13 @@ describe('DataGridWrapper', () => {
     const searchInput = screen.getByRole('searchbox');
     expect(searchInput).toHaveValue('');
     fireEvent.change(searchInput, { target: { value: 'Alice' } });
+    expect(searchInput).toHaveValue('Alice');
 
     const clearButton = screen.getByLabelText('Clear');
     fireEvent.click(clearButton);
 
     expect(searchInput).toHaveValue('');
+    vi.advanceTimersByTime(300);
+    vi.useRealTimers();
   });
 });
