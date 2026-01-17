@@ -13,9 +13,9 @@
   display: flex;
   flex-direction: row;
   border: var(--border-1) solid rgb(220, 220, 220);
-  border-radius: 16px;
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: var(--radius-xl);
+  background-color: var(--color-white);
+  box-shadow: 0 var(--shadow-offset-md) var(--shadow-blur-lg) rgba(0, 0, 0, 0.1);
 }
 
 .chatContainer {
@@ -24,9 +24,9 @@
   flex-direction: column;
   margin: var(--space-5);
   border: var(--border-1) solid rgb(220, 220, 220);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   overflow-y: auto;
-  background-color: #fafafa;
+  background-color: var(--color-gray-50);
   min-height: 0; /* Allow flex shrinking */
 }
 
@@ -41,13 +41,13 @@
   min-width: var(--space-21);
   max-width: var(--space-23);
   border-right: var(--border-1) solid rgb(220, 220, 220);
-  background-color: #f8f9fa;
+  background-color: var(--color-gray-50);
 }
 
 .addChatContainer {
   margin: var(--space-0) var(--space-6);
   padding: var(--space-6) var(--space-0) var(--space-4) var(--space-0);
-  border-bottom: var(--border-2) solid black;
+  border-bottom: var(--border-2) solid var(--color-black);
 }
 
 .contactCardContainer {
@@ -70,14 +70,14 @@
 }
 
 .accordion-button:not(.collapsed) {
-  color: #212529;
-  background-color: white;
+  color: var(--color-gray-900);
+  background-color: var(--color-white);
 }
 
 .chatType {
-  --bs-accordion-btn-bg: white;
-  --bs-accordion-active-bg: white;
-  --bs-accordion-active-color: black;
+  --bs-accordion-btn-bg: var(--color-white);
+  --bs-accordion-active-bg: var(--color-white);
+  --bs-accordion-active-color: var(--color-black);
   --bs-accordion-btn-focus-box-shadow: none;
   --bs-accordion-border-width: 0;
 }
@@ -87,7 +87,7 @@
 }
 
 .createChat {
-  background-color: white;
+  background-color: var(--color-white);
   border: none;
 }
 
@@ -103,9 +103,9 @@
   z-index: 9999;
   background-color: rgba(245, 245, 245);
   border: none;
-  border-radius: 0;
+  border-radius: var(--radius-none);
   margin-right: var(--space-6);
-  color: black;
+  color: var(--color-black);
 }
 
 .opendrawer:hover {
@@ -125,7 +125,7 @@
   --bs-btn-active-bg: none;
 }
 .customToggle svg {
-  color: black;
+  color: var(--color-black);
 }
 
 .customToggle::after {
@@ -138,16 +138,16 @@
   border: none;
 }
 .customToggle svg {
-  color: black;
+  color: var(--color-black);
 }
 
-@media (max-width: var(--breakpoint-1120)) {
+@media (max-width: 1120px) {
   .collapseSidebarButton {
     width: var(--space-18);
   }
 }
 
-@media (max-height: var(--breakpoint-650)) {
+@media (max-height: 650px) {
   .collapseSidebarButton {
     width: var(--space-18);
     height: var(--space-6);
@@ -158,7 +158,7 @@
 }
 
 /* For tablets */
-@media (max-width: var(--breakpoint-820)) {
+@media (max-width: 820px) {
   .contract,
   .expand {
     animation: none;
@@ -191,17 +191,16 @@
 }
 
 .filterButton {
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
   padding: var(--space-2) var(--space-4);
-  background-color: white;
-  color: #a5a5a5;
-  border: none;
-  border: var(--border-1) solid #a5a5a5;
+  background-color: var(--color-white);
+  color: var(--color-gray-400);
+  border: var(--border-1) solid var(--color-gray-400);
 }
 
 .selectedBtn,
 .filterButton:hover {
-  border: var(--border-1) solid #98e0b6;
-  background-color: #98e0b6;
-  color: rgb(255, 255, 255);
+  border: var(--border-1) solid var(--color-green-100);
+  background-color: var(--color-green-100);
+  color: var(--color-white);
 }

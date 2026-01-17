@@ -27,10 +27,10 @@
  *
  */
 import React, { type FC, type FormEvent, useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { FormControl, TextField } from '@mui/material';
-import styles from 'style/app-fixed.module.css';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import styles from './ActionItemUpdateStatusModal.module.css';
 import { useMutation } from '@apollo/client';
 import {
   UPDATE_ACTION_ITEM_MUTATION,
@@ -45,6 +45,7 @@ import type {
   IMarkActionItemAsPendingInput,
 } from 'types/shared-components/ActionItems/interface';
 import { BaseModal } from 'shared-components/BaseModal';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
 export interface IItemUpdateStatusModalProps {
   isOpen: boolean;
@@ -229,21 +230,31 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
       title={t('actionItemStatus')}
       showCloseButton
     >
-      <Form onSubmitCapture={updateActionItemHandler} className="p-2">
+      <form onSubmit={updateActionItemHandler} className="p-2">
+        <div className="mb-2 d-flex align-items-center gap-2">
+          <StatusBadge
+            variant={isCompleted ? 'completed' : 'pending'}
+            size="md"
+            dataTestId="update-status-badge"
+            ariaLabel={isCompleted ? tCommon('completed') : tCommon('pending')}
+          />
+        </div>
         {!isCompleted ? (
-          <FormControl fullWidth className="mb-2">
-            <TextField
-              label={t('postCompletionNotes')}
+          <FormFieldGroup
+            name="postCompletionNotes"
+            label={t('postCompletionNotes')}
+            required
+          >
+            <textarea
+              id="postCompletionNotes"
               data-cy="postCompletionNotes"
-              variant="outlined"
-              className={styles.noOutline}
+              className="form-control"
               value={postCompletionNotes}
               onChange={(e) => setPostCompletionNotes(e.target.value)}
-              multiline
-              maxRows={4}
+              rows={4}
               required
             />
-          </FormControl>
+          </FormFieldGroup>
         ) : (
           <p>{t('updateStatusMsg')}</p>
         )}
@@ -312,7 +323,7 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
             )}
           </>
         )}
-      </Form>
+      </form>
     </BaseModal>
   );
 };

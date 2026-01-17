@@ -642,6 +642,14 @@ const columns: Array<ColumnDef<User>> = [
             : true,
     },
   },
+  {
+    id: 'complex',
+    header: 'Complex',
+    accessor: 'complexData',
+    meta: {
+      getSearchValue: (row) => row.complexData?.label ?? '',
+    },
+  },
 ];
 
 <DataTable<User>

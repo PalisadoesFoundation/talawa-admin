@@ -441,6 +441,18 @@ describe('Testing ItemUpdateStatusModal', () => {
         });
       });
     });
+
+    it('renders StatusBadge when action item is completed', () => {
+      renderItemUpdateStatusModal(link1, itemProps[0]);
+
+      expect(screen.getByTestId('update-status-badge')).toBeInTheDocument();
+    });
+
+    it('renders StatusBadge when action item is pending', () => {
+      renderItemUpdateStatusModal(link1, itemProps[1]);
+
+      expect(screen.getByTestId('update-status-badge')).toBeInTheDocument();
+    });
   });
 
   describe('Testing markActionAsPendingForInstanceHandler', () => {

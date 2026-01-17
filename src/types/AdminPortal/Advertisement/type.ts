@@ -1,5 +1,5 @@
 import type { User } from '../../shared-components/User/type';
-import type { DefaultConnectionPageInfo } from 'types/pagination';
+import type { DefaultConnectionPageInfo } from 'types/AdminPortal/pagination';
 
 // enum of the type of advertisements
 export enum AdvertisementType {

@@ -14,7 +14,7 @@ import { MemoryRouter, Route, Routes } from 'react-router';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
-import UpcomingEvents from './UpcomingEvents';
+import UpcomingEvents, { getStatusBadgeProps } from './UpcomingEvents';
 import type { ApolloLink } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
@@ -126,6 +126,9 @@ describe('UpcomingEvents', () => {
         endDate: 'End Date',
         recurrence: 'Recurrence',
         volunteerGroups: 'Volunteer Groups',
+        groupsAvailable: '{{count}} groups available',
+        volunteersRequired: 'Required',
+        signedUp: 'Signed up',
         name: 'Name',
         join: 'Join',
         volunteer: 'Volunteer',
@@ -468,6 +471,9 @@ describe('UpcomingEvents', () => {
         const btn = screen.getByTestId('eventVolunteerBtn-0');
         expect(btn).toHaveTextContent(/pending/i);
         expect(btn).toBeDisabled();
+        // Verify StatusBadge renders for the requested status
+        const statusBadge = screen.getByTestId('event-status-0');
+        expect(statusBadge).toBeInTheDocument();
       });
     });
 
@@ -1061,6 +1067,9 @@ describe('UpcomingEvents', () => {
         const btn = screen.getByTestId('groupVolunteerBtn-g1');
         expect(btn).toHaveTextContent(/joined/i);
         expect(btn).toBeDisabled();
+        // Verify StatusBadge renders for the accepted group status
+        const groupStatusBadge = screen.getByTestId('group-status-g1');
+        expect(groupStatusBadge).toBeInTheDocument();
       });
     });
   });
@@ -1900,6 +1909,39 @@ describe('UpcomingEvents', () => {
         const eventTitles = screen.getAllByTestId('eventTitle');
         expect(eventTitles.length).toBeGreaterThan(0);
       });
+    });
+  });
+
+  describe('getStatusBadgeProps', () => {
+    it('should return pending variant for requested status', () => {
+      const result = getStatusBadgeProps('requested');
+      expect(result.variant).toBe('pending');
+    });
+
+    it('should return pending variant for invited status', () => {
+      const result = getStatusBadgeProps('invited');
+      expect(result.variant).toBe('pending');
+    });
+
+    it('should return accepted variant for accepted status', () => {
+      const result = getStatusBadgeProps('accepted');
+      expect(result.variant).toBe('accepted');
+    });
+
+    it('should return rejected variant for rejected status', () => {
+      const result = getStatusBadgeProps('rejected');
+      expect(result.variant).toBe('rejected');
+    });
+
+    // THIS TEST COVERS THE DEFAULT CASE (lines 232-233)
+    it('should return pending variant for unknown status (default case)', () => {
+      const result = getStatusBadgeProps('unknown-status');
+      expect(result.variant).toBe('pending');
+    });
+
+    it('should return pending variant for empty string (default case)', () => {
+      const result = getStatusBadgeProps('');
+      expect(result.variant).toBe('pending');
     });
   });
 });
