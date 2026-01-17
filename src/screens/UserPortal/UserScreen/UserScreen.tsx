@@ -4,9 +4,10 @@
  * the appropriate content based on the current route and organization ID.
  *
  * @remarks
- * - Redirects to the home page if `orgId` is not present in the URL.
  * - Dynamically updates the Redux store with targets based on the `orgId`.
  * - Adjusts the sidebar visibility based on the screen width.
+ * - Renders UserSidebarOrg when `orgId` is present, UserSidebar when absent.
+ * - Persists sidebar state in localStorage for user preference.
  *
  *
  * ### Internal Functions
@@ -23,16 +24,12 @@
  * - `react-bootstrap` for UI components.
  * - `react-i18next` for internationalization.
  *
- * @param props - The props for the UserSidebar component:
- * - `orgId`: The organization ID retrieved from the URL parameters.
- * - `hideDrawer`: State to manage the visibility of the sidebar.
- * - `targets`: List of user-specific routes fetched from the Redux store.
- *
  * @returns A JSX.Element representing the rendered UserScreen component.
  *
  * @example
  * ```tsx
  * <Route path="/user/:orgId/*" element={<UserScreen />} />
+ * <Route path="/user/*" element={<UserScreen />} />
  * ```
  */
 import React, { useEffect, useState, useCallback } from 'react';
@@ -119,9 +116,11 @@ const UserScreen = (): React.JSX.Element => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
     } else {
-      setHideDrawer(false);
+      // On large screens, restore the user's stored preference
+      const stored = getItem('sidebar');
+      setHideDrawer(stored === 'true');
     }
-  }, []);
+  }, [getItem]);
 
   // Set up event listener for window resize and clean up on unmount
   useEffect(() => {
