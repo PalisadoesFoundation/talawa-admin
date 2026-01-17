@@ -8,7 +8,7 @@ import {
   ORGANIZATION_DONATION_CONNECTION_LIST,
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -30,8 +30,8 @@ vi.mock('utils/errorHandler', () => ({
   errorHandler: mockErrorHandler,
 }));
 
-vi.mock('react-router', async () => ({
-  ...(await vi.importActual('react-router')),
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
   useParams: mockUseParams,
 }));
 
