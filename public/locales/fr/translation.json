@@ -712,6 +712,7 @@
     "attachmentLimit": "Ajouter un fichier image ou vidéo jusqu'à 10 Mo",
     "fileSizeExceedsLimit": "La taille du fichier dépasse la limite de 10 Mo",
     "fileUploadError": "Erreur lors du téléchargement du fichier. Veuillez réessayer.",
+    "deleteAttachment": "Supprimer la pièce jointe",
     "urls": "URL",
     "url": "Ajouter un lien vers l'URL",
     "enterUrl": "https://example.com",

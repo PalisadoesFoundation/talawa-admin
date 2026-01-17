@@ -712,6 +712,7 @@
     "attachmentLimit": "Add any image file or video file upto 10MB",
     "fileSizeExceedsLimit": "File size exceeds the limit which is 10MB",
     "fileUploadError": "Failed to upload file. Please try again.",
+    "deleteAttachment": "Delete attachment",
     "urls": "URLs",
     "url": "add link to URL",
     "enterUrl": "https://example.com",

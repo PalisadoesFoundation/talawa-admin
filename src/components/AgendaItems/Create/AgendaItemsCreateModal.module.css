@@ -60,6 +60,12 @@
   outline: none;
 }
 
+.noOutline input:focus-visible,
+.noOutline textarea:focus-visible {
+  outline: 2px solid var(--focus-ring, #1b6ef3);
+  outline-offset: 2px;
+}
+
 .noOutline input:disabled {
   -webkit-text-fill-color: var(--noOutline-input-disables) !important;
 }
@@ -69,7 +75,7 @@
   opacity: 1;
 }
 
-.noOutline:is(:hover, :focus, :active, :focus-visible, .show) {
+.noOutline:is(:hover, :focus, :active, .show) {
   outline: none !important;
   box-shadow: none !important;
   border: none !important;

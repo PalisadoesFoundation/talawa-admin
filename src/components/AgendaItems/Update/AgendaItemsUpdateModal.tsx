@@ -311,6 +311,8 @@ const AgendaItemsUpdateModal: React.FC<
                   <img src={attachment} alt={t('attachmentPreview')} />
                 )}
                 <button
+                  type="button"
+                  aria-label={t('deleteAttachment')}
                   className={styles.closeButtonFile}
                   onClick={(e) => {
                     e.preventDefault();

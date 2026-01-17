@@ -712,6 +712,7 @@
     "attachmentLimit": "Agregar cualquier archivo de imagen o video hasta 10MB",
     "fileSizeExceedsLimit": "El tamaño del archivo excede el límite de 10MB",
     "fileUploadError": "Error al cargar el archivo. Por favor, inténtelo de nuevo.",
+    "deleteAttachment": "Eliminar adjunto",
     "urls": "URLs",
     "url": "Agregar enlace a URL",
     "enterUrl": "https://example.com",

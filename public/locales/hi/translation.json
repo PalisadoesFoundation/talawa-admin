@@ -729,6 +729,7 @@
     "attachmentLimit": "10MB तक कोई भी छवि फ़ाइल या वीडियो फ़ाइल जोड़ें",
     "fileSizeExceedsLimit": "फ़ाइल का आकार सीमा 10MB से अधिक है",
     "fileUploadError": "फ़ाइल अपलोड करने में त्रुटि। कृपया पुनः प्रयास करें।",
+    "deleteAttachment": "अनुलग्नक हटाएं",
     "urls": "URL",
     "url": "URL में लिंक जोड़ें",
     "enterUrl": "https://example.com",
