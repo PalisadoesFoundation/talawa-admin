@@ -6,4 +6,4 @@
 
 > `const` **UPDATE\_SESSION\_TIMEOUT\_PG**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:590](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L590)
+Defined in: [src/GraphQl/Mutations/mutations.ts:589](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L589)
