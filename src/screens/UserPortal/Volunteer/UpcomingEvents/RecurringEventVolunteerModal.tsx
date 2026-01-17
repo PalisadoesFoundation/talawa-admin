@@ -60,8 +60,10 @@ const RecurringEventVolunteerModal: React.FC<
         dateStyle: 'medium',
       }).format(dateObj)
     : eventDate;
-  const title = isForGroup
-    ? t('joinGroupTitle', { groupName, eventName })
+  const hasGroup = isForGroup && Boolean(groupName);
+  const groupLabel = groupName ?? '';
+  const title = hasGroup
+    ? t('joinGroupTitle', { groupName: groupLabel, eventName })
     : t('volunteerTitle', { eventName });
 
   const footer = (
@@ -89,8 +91,8 @@ const RecurringEventVolunteerModal: React.FC<
       dataTestId="recurringEventModal"
     >
       <p id="volunteerScopePrompt" className="mb-4">
-        {isForGroup
-          ? t('joinGroupQuestion', { groupName })
+        {hasGroup
+          ? t('joinGroupQuestion', { groupName: groupLabel })
           : t('volunteerQuestion')}
       </p>
 
@@ -113,7 +115,7 @@ const RecurringEventVolunteerModal: React.FC<
             <div className={styles.radioContent}>
               <strong>{t('volunteerForSeries')}</strong>
               <div className="small text-muted">
-                {isForGroup
+                {hasGroup
                   ? t('joinGroupForSeries')
                   : t('volunteerForSeriesDesc')}
               </div>
@@ -135,7 +137,7 @@ const RecurringEventVolunteerModal: React.FC<
             <div className={styles.radioContent}>
               <strong>{t('volunteerForInstance')}</strong>
               <div className="small text-muted">
-                {isForGroup
+                {hasGroup
                   ? t('joinGroupForInstance', { date: formattedDate })
                   : t('volunteerForInstanceDesc', { date: formattedDate })}
               </div>
