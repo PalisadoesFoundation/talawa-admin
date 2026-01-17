@@ -38,6 +38,7 @@ import {
   USER_CREATED_ORGANIZATIONS,
   ORGANIZATION_FILTER_LIST,
   USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
+  CURRENT_USER,
 } from 'GraphQl/Queries/Queries';
 import { RESEND_VERIFICATION_EMAIL_MUTATION } from 'GraphQl/Mutations/mutations';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
@@ -130,18 +131,42 @@ export default function Organizations(): React.JSX.Element {
 
   // Email verification warning state
   const [showEmailWarning, setShowEmailWarning] = useState(false);
+
+  // Fetch current user status to sync verification state
+  const { data: currentUserData } = useQuery(CURRENT_USER, {
+    fetchPolicy: 'network-only', // Ensure fresh data
+  });
+
   const [resendVerificationEmail, { loading: resendLoading }] = useMutation(
     RESEND_VERIFICATION_EMAIL_MUTATION,
   );
 
-  // Check for email verification status on component mount
+  // Check for email verification status on component mount and sync with backend
   useEffect(() => {
-    const emailNotVerified = getItem('emailNotVerified');
-    const email = getItem('unverifiedEmail');
-    if (emailNotVerified === 'true' && typeof email === 'string') {
-      setShowEmailWarning(true);
+    // Priority: API data > LocalStorage
+    if (currentUserData?.currentUser) {
+      if (currentUserData.currentUser.isEmailAddressVerified) {
+        setShowEmailWarning(false);
+        // Clean up legacy flags
+        removeItem('emailNotVerified');
+        removeItem('unverifiedEmail');
+      } else {
+        setShowEmailWarning(true);
+        // Ensure flags are consistent
+        setItem('emailNotVerified', 'true');
+        if (currentUserData.currentUser.emailAddress) {
+          setItem('unverifiedEmail', currentUserData.currentUser.emailAddress);
+        }
+      }
+    } else {
+      // Fallback to local storage if API data not yet available
+      const emailNotVerified = getItem('emailNotVerified');
+      const email = getItem('unverifiedEmail');
+      if (emailNotVerified === 'true' && typeof email === 'string') {
+        setShowEmailWarning(true);
+      }
     }
-  }, [getItem]);
+  }, [currentUserData, getItem, removeItem, setItem]);
 
   const handleDismissWarning = (): void => {
     setShowEmailWarning(false);
@@ -320,11 +345,10 @@ export default function Organizations(): React.JSX.Element {
     <>
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
-        className={`${styles.organizationsContainer} ${
-          hideDrawer
+        className={`${styles.organizationsContainer} ${hideDrawer
             ? styles.organizationsContainerExpanded
             : styles.organizationsContainerContracted
-        } ${hideDrawer ? styles.expand : styles.contract}`}
+          } ${hideDrawer ? styles.expand : styles.contract}`}
         data-testid="organizations-container"
       >
         <div
@@ -412,9 +436,9 @@ export default function Organizations(): React.JSX.Element {
                     <div className="row" data-testid="organizations-list">
                       {(rowsPerPage > 0
                         ? organizations.slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage,
-                          )
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage,
+                        )
                         : organizations
                       ).map((organization: IOrganization, index) => {
                         const cardProps: IOrganizationCardProps = {

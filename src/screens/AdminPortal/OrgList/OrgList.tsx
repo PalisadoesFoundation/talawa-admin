@@ -73,7 +73,7 @@ import styles from 'style/app-fixed.module.css';
 import OrganizationModal from './modal/OrganizationModal';
 import style from './OrgList.module.css';
 
-const { getItem, removeItem } = useLocalStorage();
+const { getItem, setItem, removeItem } = useLocalStorage();
 
 interface InterfaceFormStateType {
   addressLine1: string;
@@ -99,6 +99,11 @@ function orgList(): JSX.Element {
   // Email verification warning state
   const [showEmailWarning, setShowEmailWarning] = useState(false);
 
+  // Fetch current user status to sync verification state
+  const { data: currentUserData } = useQuery(CURRENT_USER, {
+    fetchPolicy: 'network-only', // Ensure fresh data
+  });
+
   const [resendVerificationEmail, { loading: resendLoading }] = useMutation(
     RESEND_VERIFICATION_EMAIL_MUTATION,
   );
@@ -121,14 +126,32 @@ function orgList(): JSX.Element {
   const toggleDialogModal = (): void =>
     setdialogModalIsOpen(!dialogModalisOpen);
 
-  // Check for email verification status on component mount
+  // Check for email verification status on component mount and sync with backend
   useEffect(() => {
-    const emailNotVerified = getItem('emailNotVerified');
-    const email = getItem('unverifiedEmail');
-    if (emailNotVerified === 'true' && typeof email === 'string') {
-      setShowEmailWarning(true);
+    // Priority: API data > LocalStorage
+    if (currentUserData?.currentUser) {
+      if (currentUserData.currentUser.isEmailAddressVerified) {
+        setShowEmailWarning(false);
+        // Clean up legacy flags
+        removeItem('emailNotVerified');
+        removeItem('unverifiedEmail');
+      } else {
+        setShowEmailWarning(true);
+        // Ensure flags are consistent
+        setItem('emailNotVerified', 'true');
+        if (currentUserData.currentUser.emailAddress) {
+          setItem('unverifiedEmail', currentUserData.currentUser.emailAddress);
+        }
+      }
+    } else {
+      // Fallback to local storage if API data not yet available
+      const emailNotVerified = getItem('emailNotVerified');
+      const email = getItem('unverifiedEmail');
+      if (emailNotVerified === 'true' && typeof email === 'string') {
+        setShowEmailWarning(true);
+      }
     }
-  }, [getItem]);
+  }, [currentUserData, getItem, removeItem, setItem]);
 
   const handleDismissWarning = (): void => {
     setShowEmailWarning(false);
