@@ -1,0 +1,78 @@
+/**
+ * Component-scoped styles for EventActionItems
+ *
+ * Migrated from src/style/app-fixed.module.css
+ * Uses existing design tokens only.
+ * No new tokens introduced.
+ */
+.message {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.icon {
+  margin-right: 8px;
+}
+
+.tableHeader {
+  background-color: red;
+}
+
+.tableImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.infoButton {
+  background-color: var(--infoButton-bg) !important;
+  border-color: var(--infoButton-border);
+  color: var(--infoButton-color);
+  margin-right: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.actionItemDeleteButton {
+  background-color: var(--actionItemDeleteButton-bg) !important;
+  color: var(--actionItemDeleteButton-color) !important;
+}
+
+.checkboxButton input:checked {
+  background-color: var(--checkboxButton-checked-bg);
+  border-color: var(--checkboxButton-checked-color);
+}
+
+.btnsContainer {
+  display: flex;
+  margin: 2.5rem 0;
+  align-items: center;
+}
+
+.dropdown {
+  background-color: var(--dropdown-bg) !important;
+  min-width: 150px;
+  border: 1px solid var(--dropdown-border);
+  color: var(--dropdown-font-color) !important;
+  position: relative;
+  display: inline-block;
+}
+
+.createButton {
+  background-color: var(--createButton-bg) !important;
+  color: var(--createButton-color) !important;
+  border: 1px solid var(--createButton-border) !important;
+  margin: 5px 10px;
+  width: 10rem;
+  height: 3rem;
+}
+
+.rowBackground {
+  background-color: var(--rowBackground-bg);
+  color: var(--rowBackground-color);
+  max-height: 120px;
+  overflow-y: auto;
+}

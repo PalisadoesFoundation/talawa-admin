@@ -1,0 +1,26 @@
+/**
+ * Component-scoped styles for SortingButton
+ *
+ * Migrated from src/style/app-fixed.module.css
+ * Uses existing design tokens only.
+ * No new tokens introduced.
+ */
+.dropdown {
+  background-color: var(--dropdown-bg) !important;
+  min-width: 150px;
+  border: 1px solid var(--dropdown-border);
+  color: var(--dropdown-font-color) !important;
+  position: relative;
+  display: inline-block;
+}
+
+.iconRightMargin {
+  margin-right: 0.6rem;
+}
+
+.dropdownItem {
+  background-color: var(--dropdownItem-bg) !important;
+  color: var(--dropdownItem-color) !important;
+  border: none !important;
+  box-shadow: var(--dropdownItem-box-shadow);
+}

@@ -3,7 +3,7 @@ import { Dropdown } from 'react-bootstrap';
 import SortIcon from '@mui/icons-material/Sort';
 import FilterAltOutlined from '@mui/icons-material/FilterAltOutlined';
 import PropTypes from 'prop-types';
-import styles from '../../style/app-fixed.module.css';
+import styles from './SortingButton.module.css';
 import { useTranslation } from 'react-i18next';
 
 interface InterfaceSortingOption {

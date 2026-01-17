@@ -3,7 +3,7 @@ import { Dropdown } from 'react-bootstrap';
 import SortIcon from '@mui/icons-material/Sort';
 import FilterAltOutlined from '@mui/icons-material/FilterAltOutlined';
 import PropTypes from 'prop-types';
-import styles from '../../style/app-fixed.module.css';
+import styles from './SearchingButton.module.css';
 
 interface InterfaceSearchingButtonProps {
   /** The title attribute for the Dropdown */

@@ -35,7 +35,7 @@ import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
 
 import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
 
-import styles from 'style/app-fixed.module.css';
+import styles from './EventActionItems.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   DataGrid,
