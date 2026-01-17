@@ -140,6 +140,9 @@
     "loading": "Cargando...",
     "selectOrg": "Seleccione una organización"
   },
+  "userGlobalScreen": {
+    "title": "Pantalla Global del Usuario"
+  },
   "latestEvents": {
     "eventCardTitle": "Próximos Eventos",
     "eventCardSeeAll": "Ver Todos",

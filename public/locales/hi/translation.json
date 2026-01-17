@@ -140,6 +140,9 @@
     "OR": "या",
     "loading": "लोड हो रहा है"
   },
+  "userGlobalScreen": {
+    "title": "उपयोगकर्ता वैश्विक स्क्रीन"
+  },
   "latestEvents": {
     "eventCardTitle": "आगामी घटनाएँ",
     "eventCardSeeAll": "सभी देखें",

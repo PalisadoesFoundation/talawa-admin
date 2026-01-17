@@ -140,6 +140,9 @@
     "OR": "OU",
     "loading": "Chargement"
   },
+  "userGlobalScreen": {
+    "title": "Écran Global de l'Utilisateur"
+  },
   "latestEvents": {
     "eventCardTitle": "évènements à venir",
     "eventCardSeeAll": "Voir tout",

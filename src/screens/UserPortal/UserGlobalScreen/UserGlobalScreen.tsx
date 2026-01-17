@@ -63,10 +63,8 @@ const UserGlobalScreen = (): JSX.Element => {
           className={`${hideDrawer ? styles.expand : styles.contract} ${styles.mainContent}`}
           data-testid="mainpageright"
         >
-          <div className="d-flex justify-content-between align-items-center">
-            <div className={styles.titleWrapper}>
-              <h1>{t('userGlobalScreen.title')}</h1>
-            </div>
+          <div className={styles.titleWrapper}>
+            <h1>{t('userGlobalScreen.title')}</h1>
           </div>
           <Outlet />
         </div>

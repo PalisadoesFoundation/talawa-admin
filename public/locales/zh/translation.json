@@ -140,6 +140,9 @@
     "OR": "或",
     "loading": "加载中"
   },
+  "userGlobalScreen": {
+    "title": "用户全局屏幕"
+  },
   "latestEvents": {
     "eventCardTitle": "即将举行的活动",
     "eventCardSeeAll": "查看全部",

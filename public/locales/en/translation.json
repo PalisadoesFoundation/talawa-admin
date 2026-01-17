@@ -140,6 +140,9 @@
     "OR": "OR",
     "loading": "loading"
   },
+  "userGlobalScreen": {
+    "title": "User Global Screen"
+  },
   "latestEvents": {
     "eventCardTitle": "Upcoming Events",
     "eventCardSeeAll": "See All",
