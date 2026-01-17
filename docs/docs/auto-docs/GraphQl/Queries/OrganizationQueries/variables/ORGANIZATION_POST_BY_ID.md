@@ -10,6 +10,14 @@ Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:122](https://github.com/
 
 GraphQL query to retrieve a single post by its ID.
 
-`@param` postId - The ID of the post to retrieve.
-`@param` userId - The ID of the user to check vote status against.
-`@returns` The post with its metadata, attachments, vote information, and creator details.
+## Param
+
+The ID of the post to retrieve.
+
+## Param
+
+The ID of the user to check vote status against.
+
+## Returns
+
+The post with its metadata, attachments, vote information, and creator details.

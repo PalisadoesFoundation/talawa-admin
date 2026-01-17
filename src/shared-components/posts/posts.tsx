@@ -110,6 +110,7 @@ export default function PostsPage() {
     const params = new URLSearchParams(window.location.search);
     params.delete('previewPostID');
     const query = params.toString();
+    // i18n-ignore-next-line
     const newUrl = `${window.location.pathname}${query ? `?${query}` : ''}`;
     window.history.replaceState({}, '', newUrl);
   };

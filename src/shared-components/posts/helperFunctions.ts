@@ -1,6 +1,8 @@
 import { InterfacePost } from 'types/Post/interface';
 import { formatDate } from 'utils/dateFormatter';
+import type { InterfacePostCard } from 'utils/interfaces';
 
+// translation-check-keyPrefix: posts
 /**
  * Formats a post object to match the PostCard component's expected interface.
  *
@@ -24,7 +26,7 @@ export const formatPostForCard = (
   post: InterfacePost,
   t: (key: string) => string,
   refetch: () => Promise<unknown>,
-) => ({
+): Omit<InterfacePostCard, 'image' | 'video'> => ({
   id: post.id,
   creator: {
     id: post.creator?.id ?? 'unknown',
@@ -43,7 +45,6 @@ export const formatPostForCard = (
   mimeType: post.attachments?.[0]?.mimeType ?? null,
   attachmentURL: post.attachmentURL ?? null,
   title: post.caption ?? '',
-  text: post.caption ?? '',
   body: post.body,
   commentCount: post.commentsCount ?? 0,
   upVoteCount: post.upVotesCount ?? 0,

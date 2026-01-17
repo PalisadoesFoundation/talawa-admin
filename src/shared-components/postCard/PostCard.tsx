@@ -357,7 +357,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           data: {
             caption: props.title,
             postId: props.id,
-            text: props.text,
+
             creator: props.creator,
             upVoteCount: likeCount,
             downVoteCount: props.downVoteCount,

@@ -120,14 +120,6 @@ Defined in: [src/utils/interfaces.ts:2280](https://github.com/PalisadoesFoundati
 
 ***
 
-### text
-
-> **text**: `string`
-
-Defined in: [src/utils/interfaces.ts:2286](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2286)
-
-***
-
 ### title
 
 > **title**: `string`

@@ -4,9 +4,9 @@
 
 # Function: formatPostForCard()
 
-> **formatPostForCard**(`post`, `t`, `refetch`): `object`
+> **formatPostForCard**(`post`, `t`, `refetch`): `Omit`\<[`InterfacePostCard`](../../../../utils/interfaces/interfaces/InterfacePostCard.md), `"image"` \| `"video"`\>
 
-Defined in: [src/shared-components/posts/helperFunctions.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/posts/helperFunctions.ts#L23)
+Defined in: [src/shared-components/posts/helperFunctions.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/posts/helperFunctions.ts#L25)
 
 Formats a post object to match the PostCard component's expected interface.
 
@@ -36,89 +36,9 @@ Function to refetch posts data, typically from Apollo Client
 
 ## Returns
 
-`object`
+`Omit`\<[`InterfacePostCard`](../../../../utils/interfaces/interfaces/InterfacePostCard.md), `"image"` \| `"video"`\>
 
 An object formatted to match the InterfacePostCard interface
-
-### attachmentURL
-
-> **attachmentURL**: `string`
-
-### body
-
-> **body**: `string` = `post.body`
-
-### commentCount
-
-> **commentCount**: `number`
-
-### creator
-
-> **creator**: `object`
-
-#### creator.avatarURL
-
-> **avatarURL**: `string` = `post.creator.avatarURL`
-
-#### creator.id
-
-> **id**: `string`
-
-#### creator.name
-
-> **name**: `string`
-
-### downVoteCount
-
-> **downVoteCount**: `number`
-
-### fetchPosts()
-
-> **fetchPosts**: () => `Promise`\<`unknown`\> = `refetch`
-
-#### Returns
-
-`Promise`\<`unknown`\>
-
-### hasUserVoted
-
-> **hasUserVoted**: `object`
-
-#### hasUserVoted.hasVoted
-
-> **hasVoted**: `boolean`
-
-#### hasUserVoted.voteType
-
-> **voteType**: `"up_vote"` \| `"down_vote"`
-
-### id
-
-> **id**: `string` = `post.id`
-
-### mimeType
-
-> **mimeType**: `string`
-
-### pinnedAt
-
-> **pinnedAt**: `string`
-
-### postedAt
-
-> **postedAt**: `string`
-
-### text
-
-> **text**: `string`
-
-### title
-
-> **title**: `string`
-
-### upVoteCount
-
-> **upVoteCount**: `number`
 
 ## Example
 
