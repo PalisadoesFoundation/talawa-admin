@@ -27,6 +27,9 @@ vi.mock('react-i18next', () => ({
       };
       return translations[key] || key;
     },
+    i18n: {
+      language: 'en-US',
+    },
   }),
 }));
 
@@ -50,12 +53,10 @@ describe('RecurringEventVolunteerModal', () => {
 
   test('renders modal with individual volunteering title, description and option texts', () => {
     // Make date formatting deterministic for this test
-    const formattedDate = dayjs(defaultProps.eventDate)
-      .toDate()
-      .toLocaleDateString();
-    vi.spyOn(Date.prototype, 'toLocaleDateString').mockReturnValue(
-      formattedDate,
-    );
+    // Make date formatting deterministic for this test
+    const formattedDate = new Intl.DateTimeFormat('en-US', {
+      dateStyle: 'medium',
+    }).format(new Date(defaultProps.eventDate));
 
     render(<RecurringEventVolunteerModal {...defaultProps} />);
 
@@ -97,12 +98,9 @@ describe('RecurringEventVolunteerModal', () => {
 
   test('renders group volunteering title, description and option texts when isForGroup is true', () => {
     const groupName = 'Cleanup Crew';
-    const formattedDate = dayjs(defaultProps.eventDate)
-      .toDate()
-      .toLocaleDateString();
-    vi.spyOn(Date.prototype, 'toLocaleDateString').mockReturnValue(
-      formattedDate,
-    );
+    const formattedDate = new Intl.DateTimeFormat('en-US', {
+      dateStyle: 'medium',
+    }).format(new Date(defaultProps.eventDate));
 
     render(
       <RecurringEventVolunteerModal

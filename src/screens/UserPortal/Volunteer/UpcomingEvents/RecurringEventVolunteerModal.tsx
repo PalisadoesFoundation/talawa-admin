@@ -36,7 +36,7 @@ const RecurringEventVolunteerModal: React.FC<
   isForGroup = false,
   groupName,
 }) => {
-  const { t } = useTranslation('translation', {
+  const { t, i18n } = useTranslation('translation', {
     keyPrefix: 'recurringEventVolunteerModal',
   });
   const [selectedOption, setSelectedOption] = useState<'series' | 'instance'>(
@@ -54,7 +54,9 @@ const RecurringEventVolunteerModal: React.FC<
     }
   };
 
-  const formattedDate = new Date(eventDate).toLocaleDateString();
+  const formattedDate = new Intl.DateTimeFormat(i18n.language, {
+    dateStyle: 'medium',
+  }).format(new Date(eventDate));
   const title = isForGroup
     ? t('joinGroupTitle', { groupName, eventName })
     : t('volunteerTitle', { eventName });
@@ -83,13 +85,17 @@ const RecurringEventVolunteerModal: React.FC<
       centered
       dataTestId="recurringEventModal"
     >
-      <p className="mb-4">
+      <p id="volunteerScopePrompt" className="mb-4">
         {isForGroup
           ? t('joinGroupQuestion', { groupName })
           : t('volunteerQuestion')}
       </p>
 
-      <div className={styles.radioGroup}>
+      <div
+        className={styles.radioGroup}
+        role="radiogroup"
+        aria-labelledby="volunteerScopePrompt"
+      >
         <div className={`${styles.radioOption} mb-3`}>
           <label htmlFor="seriesOption" className={styles.radioLabel}>
             <input
