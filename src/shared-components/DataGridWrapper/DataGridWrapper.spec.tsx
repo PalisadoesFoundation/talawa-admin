@@ -252,6 +252,7 @@ vi.mock('../SearchFilterBar/SearchFilterBar', () => ({
         {/* ADD THESE TRIGGER BUTTONS */}
         {dropdowns?.map((dropdown) => (
           <button
+            type="button"
             key={dropdown.id}
             data-testid={`${dropdown.dataTestIdPrefix || dropdown.id}-trigger`}
             onClick={() => {
