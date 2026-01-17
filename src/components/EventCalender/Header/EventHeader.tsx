@@ -5,24 +5,23 @@
  * functionality for searching, sorting, and creating events. It is designed
  * to be used within the organization events page.
  *
- * @param {InterfaceEventHeaderProps} props - The props for the EventHeader component.
- * @param {ViewType} props.viewType - The current view type of the calendar (e.g., Month, Day, Year).
- * @param {(viewType: ViewType) => void} props.handleChangeView - Callback function to handle changes in the calendar view type.
- * @param {() => void} props.showInviteModal - Callback function to display the modal for creating a new event.
+ * @param props - The props for the EventHeader component.
+ * @param viewType - The current view type of the calendar (e.g., Month, Day, Year).
+ * @param handleChangeView - Callback function to handle changes in the calendar view type.
+ * @param showInviteModal - Callback function to display the modal for creating a new event.
  *
- * @returns {JSX.Element} The rendered EventHeader component.
+ * @returns - The rendered EventHeader component.
  *
  * @remarks
  * - This component uses `SearchBar` for searching events by name.
  * - It includes two `SortingButton` components for selecting the calendar view type and event type.
  * - A `Button` is provided to trigger the creation of a new event, styled with an `AddIcon`.
  *
- * @dependencies
  * - `react-bootstrap` for the `Button` component.
  * - `@mui/icons-material` for the `AddIcon`.
  * - `react-i18next` for translations.
  * - Custom styles from `style/app-fixed.module.css`.
- * - Subcomponents: `SortingButton` and `SearchBar`.
+ * - shared-components: `SortingButton` and `SearchBar`.
  *
  * @example
  * ```tsx
@@ -40,7 +39,7 @@ import AddIcon from '@mui/icons-material/Add';
 import styles from 'style/app-fixed.module.css';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { useTranslation } from 'react-i18next';
-import SortingButton from 'subComponents/SortingButton';
+import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import type { InterfaceEventHeaderProps } from 'types/Event/interface';
 

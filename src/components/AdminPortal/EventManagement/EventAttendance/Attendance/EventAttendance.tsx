@@ -41,7 +41,7 @@ import { useParams, Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { AttendanceStatisticsModal } from '../Statistics/EventStatistics';
 import AttendedEventList from '../AttendanceList/AttendedEventList';
-import SortingButton from 'subComponents/SortingButton';
+import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { FilterPeriod, type InterfaceMember } from 'types/Event/interface';
 import { DataGridWrapper, GridColDef } from 'shared-components/DataGridWrapper';

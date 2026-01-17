@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { debounce } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import SortingButton from 'subComponents/SortingButton';
+import SortingButton from 'shared-components/SortingButton/SortingButton';
 import type {
   InterfaceSearchFilterBarProps,
   InterfaceSearchFilterBarAdvanced,

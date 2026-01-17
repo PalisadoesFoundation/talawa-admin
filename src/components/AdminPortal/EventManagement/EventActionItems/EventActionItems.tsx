@@ -48,7 +48,7 @@ import ItemModal from 'screens/OrganizationActionItems/ActionItemModal/ActionIte
 import ItemDeleteModal from 'screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal';
 import Avatar from 'shared-components/Avatar/Avatar';
 import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
-import SortingButton from 'subComponents/SortingButton';
+import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
