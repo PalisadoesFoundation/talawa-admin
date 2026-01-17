@@ -74,6 +74,11 @@
   padding: var(--space-0) var(--space-3);
 }
 
+.editChatNameContainer input:focus-visible {
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: var(--space-1);
+}
+
 .editChatNameContainer h3 {
   margin: var(--space-0);
 }
