@@ -4,9 +4,25 @@
 
 # Interface: InterfacePostViewModalProps
 
-Defined in: [src/types/shared-components/PostViewModal/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PostViewModal/interface.ts#L6)
+Defined in: [src/types/shared-components/PostViewModal/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PostViewModal/interface.ts#L11)
 
 Props for PostViewModal component.
+
+## Param
+
+Controls the visibility of the modal.
+
+## Param
+
+Callback invoked when the modal should close.
+
+## Param
+
+The post data to display, or null if not loaded.
+
+## Param
+
+Function to refresh post data after mutations.
 
 ## Properties
 
@@ -14,7 +30,7 @@ Props for PostViewModal component.
 
 > **onHide**: () => `void`
 
-Defined in: [src/types/shared-components/PostViewModal/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PostViewModal/interface.ts#L8)
+Defined in: [src/types/shared-components/PostViewModal/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PostViewModal/interface.ts#L13)
 
 #### Returns
 
@@ -26,7 +42,7 @@ Defined in: [src/types/shared-components/PostViewModal/interface.ts:8](https://g
 
 > **post**: [`InterfacePost`](../../../../Post/interface/interfaces/InterfacePost.md)
 
-Defined in: [src/types/shared-components/PostViewModal/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PostViewModal/interface.ts#L9)
+Defined in: [src/types/shared-components/PostViewModal/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PostViewModal/interface.ts#L14)
 
 ***
 
@@ -34,7 +50,7 @@ Defined in: [src/types/shared-components/PostViewModal/interface.ts:9](https://g
 
 > **refetch**: () => `Promise`\<`unknown`\>
 
-Defined in: [src/types/shared-components/PostViewModal/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PostViewModal/interface.ts#L10)
+Defined in: [src/types/shared-components/PostViewModal/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PostViewModal/interface.ts#L15)
 
 #### Returns
 
@@ -46,4 +62,4 @@ Defined in: [src/types/shared-components/PostViewModal/interface.ts:10](https://
 
 > **show**: `boolean`
 
-Defined in: [src/types/shared-components/PostViewModal/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PostViewModal/interface.ts#L7)
+Defined in: [src/types/shared-components/PostViewModal/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PostViewModal/interface.ts#L12)
