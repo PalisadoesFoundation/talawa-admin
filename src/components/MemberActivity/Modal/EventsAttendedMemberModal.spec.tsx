@@ -17,13 +17,13 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string, params?: Record<string, unknown>) => {
       const translations: Record<string, string> = {
-        noeventsAttended: 'noeventsAttended',
-        title: 'Events Attended List',
-        showing: `Showing ${params?.start} - ${params?.end} of ${params?.total} Events`,
-        eventName: 'Event Name',
-        dateOfEvent: 'Date of Event',
-        recurringEvent: 'Recurring Event',
-        attendees: 'Attendees',
+        'memberDetail.noeventsAttended': 'noeventsAttended',
+        'eventsAttendedMemberModal.title': 'Events Attended List',
+        'eventsAttendedMemberModal.showing': `Showing ${params?.start} - ${params?.end} of ${params?.total} Events`,
+        'eventsAttendedMemberModal.eventName': 'Event Name',
+        'eventsAttendedMemberModal.dateOfEvent': 'Date of Event',
+        'eventsAttendedMemberModal.recurringEvent': 'Recurring Event',
+        'eventsAttendedMemberModal.attendees': 'Attendees',
       };
       return translations[key] || key;
     },

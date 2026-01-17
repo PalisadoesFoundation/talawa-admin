@@ -1,80 +1,42 @@
 /**
- * RecurringEventVolunteerModal Component
+ * RecurringEventVolunteerModal - Modal for choosing recurring event volunteer scope
  *
- * This modal component allows users to choose their volunteering scope for recurring events.
- * Users can select to volunteer for the entire event series or just a specific instance.
- * The modal adapts its messaging based on whether the user is volunteering individually
- * or joining a volunteer group.
- *
- * @component
- * @example
- * ```tsx
- * <RecurringEventVolunteerModal
- *   show={showModal}
- *   onHide={() => setShowModal(false)}
- *   eventName="Weekly Community Cleanup"
- *   eventDate=dayjs().date(15).format('YYYY-MM-DD')
- *   onSelectSeries={handleVolunteerSeries}
- *   onSelectInstance={handleVolunteerInstance}
- *   isForGroup={true}
- *   groupName="Cleanup Crew"
- * />
- * ```
- *
- * @functionality
- * - Displays options for volunteering scope (entire series vs single instance)
- * - Adapts UI text based on individual vs group volunteering
- * - Provides clear descriptions of what each option entails
- * - Handles user selection and triggers appropriate callback functions
- *
- * @ui
- * - Centered Bootstrap modal with radio button options
- * - Dynamic title based on volunteering type
- * - Informative descriptions for each option
- * - Submit and cancel buttons for user actions
+ * Allows users to choose whether to volunteer for an entire event series or just a specific instance.
+ * Adapts messaging based on individual volunteering vs joining a volunteer group.
  */
 import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
+import styles from './RecurringEventVolunteerModal.module.css';
 
 /**
- * @interface InterfaceRecurringEventVolunteerModalProps
- * @description Defines the props for the RecurringEventVolunteerModal component
- * @property {boolean} show - Controls the visibility of the modal
- * @property {() => void} onHide - Callback function to hide/close the modal
- * @property {string} eventName - The name of the recurring event
- * @property {string} eventDate - The date of the current event instance
- * @property {() => void} onSelectSeries - Callback when user chooses to volunteer for entire series
- * @property {() => void} onSelectInstance - Callback when user chooses to volunteer for this instance only
- * @property {boolean} [isForGroup] - Optional flag indicating if this is for joining a volunteer group
- * @property {string} [groupName] - Optional name of the volunteer group being joined
+ * Props for RecurringEventVolunteerModal component
  */
 interface InterfaceRecurringEventVolunteerModalProps {
+  /** Controls the visibility of the modal */
   show: boolean;
+  /** Callback function to hide/close the modal */
   onHide: () => void;
+  /** The name of the recurring event */
   eventName: string;
+  /** The date of the current event instance */
   eventDate: string;
+  /** Callback when user chooses to volunteer for entire series */
   onSelectSeries: () => void;
+  /** Callback when user chooses to volunteer for this instance only */
   onSelectInstance: () => void;
+  /** Optional flag indicating if this is for joining a volunteer group */
   isForGroup?: boolean;
+  /** Optional name of the volunteer group being joined */
   groupName?: string;
 }
 
 /**
- * RecurringEventVolunteerModal - A modal component for choosing recurring event volunteer scope
+ * RecurringEventVolunteerModal component
  *
- * @param props - The component props
- * @param props.show - Whether the modal should be displayed
- * @param props.onHide - Function to call when modal should be hidden
- * @param props.eventName - Name of the recurring event
- * @param props.eventDate - Date of the current event instance
- * @param props.onSelectSeries - Callback for volunteering for entire series
- * @param props.onSelectInstance - Callback for volunteering for single instance
- * @param props.isForGroup - Whether this is for joining a volunteer group
- * @param props.groupName - Name of the volunteer group if applicable
- *
- * @returns {React.FC} A React functional component rendering the volunteer scope selection modal
+ * @param props - Component props
+ * @returns Modal component for volunteer scope selection
  */
 const RecurringEventVolunteerModal: React.FC<
   InterfaceRecurringEventVolunteerModalProps
@@ -97,9 +59,6 @@ const RecurringEventVolunteerModal: React.FC<
 
   /**
    * Handles form submission by calling the appropriate callback based on user selection
-   *
-   * @function handleSubmit
-   * @returns {void}
    */
   const handleSubmit = () => {
     if (selectedOption === 'series') {
@@ -144,13 +103,19 @@ const RecurringEventVolunteerModal: React.FC<
           : t('volunteerQuestion')}
       </p>
 
-      <Form>
-        <Form.Check
-          type="radio"
-          name="volunteerScope"
-          id="seriesOption"
-          label={
-            <div>
+      <div className={styles.radioGroup}>
+        <div className={`${styles.radioOption} mb-3`}>
+          <label htmlFor="seriesOption" className={styles.radioLabel}>
+            <input
+              type="radio"
+              name="volunteerScope"
+              id="seriesOption"
+              checked={selectedOption === 'series'}
+              onChange={() => setSelectedOption('series')}
+              className={styles.radioInput}
+              data-testid="volunteerForSeriesOption"
+            />
+            <div className={styles.radioContent}>
               <strong>{t('volunteerForSeries')}</strong>
               <div className="small text-muted">
                 {isForGroup
@@ -158,19 +123,21 @@ const RecurringEventVolunteerModal: React.FC<
                   : t('volunteerForSeriesDesc')}
               </div>
             </div>
-          }
-          checked={selectedOption === 'series'}
-          onChange={() => setSelectedOption('series')}
-          className="mb-3"
-          data-testid="volunteerForSeriesOption"
-        />
+          </label>
+        </div>
 
-        <Form.Check
-          type="radio"
-          name="volunteerScope"
-          id="instanceOption"
-          label={
-            <div>
+        <div className={styles.radioOption}>
+          <label htmlFor="instanceOption" className={styles.radioLabel}>
+            <input
+              type="radio"
+              name="volunteerScope"
+              id="instanceOption"
+              checked={selectedOption === 'instance'}
+              onChange={() => setSelectedOption('instance')}
+              className={styles.radioInput}
+              data-testid="volunteerForInstanceOption"
+            />
+            <div className={styles.radioContent}>
               <strong>{t('volunteerForInstance')}</strong>
               <div className="small text-muted">
                 {isForGroup
@@ -178,12 +145,9 @@ const RecurringEventVolunteerModal: React.FC<
                   : t('volunteerForInstanceDesc', { date: formattedDate })}
               </div>
             </div>
-          }
-          checked={selectedOption === 'instance'}
-          onChange={() => setSelectedOption('instance')}
-          data-testid="volunteerForInstanceOption"
-        />
-      </Form>
+          </label>
+        </div>
+      </div>
     </BaseModal>
   );
 };

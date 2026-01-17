@@ -1,16 +1,7 @@
 /**
- * EventsAttendedMemberModal Component
+ * EventsAttendedMemberModal - Modal displaying paginated list of events attended by a member
  *
- * This component renders a modal displaying a paginated list of events attended by a member.
- * It uses Material-UI's Table and Pagination components for displaying and navigating through
- * the events. The modal is styled using Bootstrap and custom CSS classes.
- * @component
- * @param props - The props for the component.
- * @param props.eventsAttended - List of events attended by the member.
- * @param props.show - Controls the visibility of the modal.
- * @param props.setShow - Function to toggle the visibility of the modal.
- * @param props.eventsPerPage - Number of events to display per page.
- * @returns A modal component displaying the events attended by a member.
+ * Uses Material-UI Table and Pagination components for displaying and navigating through events.
  */
 import React, { useState, useMemo } from 'react';
 import {
@@ -32,12 +23,7 @@ import BaseModal from 'shared-components/BaseModal/BaseModal';
 const EventsAttendedMemberModal: React.FC<
   InterfaceEventsAttendedMemberModalProps
 > = ({ eventsAttended, setShow, show, eventsPerPage = 5 }) => {
-  const { t: tCommon } = useTranslation('translation', {
-    keyPrefix: 'memberDetail',
-  });
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'eventsAttendedMemberModal',
-  });
+  const { t } = useTranslation('translation');
   const [page, setPage] = useState<number>(1);
 
   const handleClose = (): void => {
@@ -66,17 +52,17 @@ const EventsAttendedMemberModal: React.FC<
     <BaseModal
       show={show}
       onHide={handleClose}
-      title={t('title')}
+      title={t('eventsAttendedMemberModal.title')}
       centered
       size="lg"
       dataTestId="eventsAttendedModal"
     >
       {eventsAttended.length === 0 ? (
-        <p>{tCommon('noeventsAttended')}</p>
+        <p>{t('memberDetail.noeventsAttended')}</p>
       ) : (
         <>
           <h5 className="text-end">
-            {t('showing', {
+            {t('eventsAttendedMemberModal.showing', {
               start: (page - 1) * eventsPerPage + 1,
               end: Math.min(page * eventsPerPage, eventsAttended.length),
               total: eventsAttended.length,
@@ -87,16 +73,16 @@ const EventsAttendedMemberModal: React.FC<
               <TableHead>
                 <TableRow data-testid="row">
                   <TableCell className={styles.customcell}>
-                    {t('eventName')}
+                    {t('eventsAttendedMemberModal.eventName')}
                   </TableCell>
                   <TableCell className={styles.customcell}>
-                    {t('dateOfEvent')}
+                    {t('eventsAttendedMemberModal.dateOfEvent')}
                   </TableCell>
                   <TableCell className={styles.customcell}>
-                    {t('recurringEvent')}
+                    {t('eventsAttendedMemberModal.recurringEvent')}
                   </TableCell>
                   <TableCell className={styles.customcell}>
-                    {t('attendees')}
+                    {t('eventsAttendedMemberModal.attendees')}
                   </TableCell>
                 </TableRow>
               </TableHead>
