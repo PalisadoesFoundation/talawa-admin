@@ -1,0 +1,39 @@
+.addButton {
+  margin-bottom: 10px;
+  color: var(--addButton-font);
+  background-color: var(--light-blue);
+  border-color: var(--addButton-bg);
+  --bs-btn-focus-box-shadow: none;
+}
+
+.addButton:is(:hover, :active, :focus) {
+  background-color: var(--addButton-bg-hover) !important;
+  border-color: var(--addButton-border-hover);
+}
+
+.addButton:disabled {
+  margin-bottom: 10px;
+  background-color: var(--disabled-btn);
+  border-color: var(--addButton-bg);
+}
+
+.removeButton {
+  margin-bottom: 10px;
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  margin-right: 10px;
+  --bs-btn-border-color: var(--removeButton-border);
+}
+
+.removeButton:is(:hover, :active, :focus) {
+  background-color: var(--removeButton-bg-hover) !important;
+  border-color: var(--removeButton-border-hover);
+  color: var(--removeButton-color-hover);
+}
+
+.modalHeader {
+  border: none;
+  background-color: var(--primary-bg-color) !important;
+  padding: 1rem;
+  color: #000000;
+}

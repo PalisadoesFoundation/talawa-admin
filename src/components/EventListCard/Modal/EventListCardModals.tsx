@@ -44,7 +44,7 @@ import EventListCardDeleteModal from 'shared-components/EventListCard/Modal/Dele
 import EventListCardPreviewModal from './Preview/EventListCardPreviewModal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import styles from 'style/app-fixed.module.css';
+import styles from './EventListCardModals.module.css';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 
 // Extend dayjs with utc plugin
