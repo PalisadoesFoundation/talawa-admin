@@ -339,8 +339,9 @@ describe('EventListCardDeleteModal', () => {
       const modal = screen.getByTestId(
         `deleteEventModal${mockRecurringEventProps.eventListCardProps.id}`,
       );
-      expect(modal).toBeInTheDocument();
-      expect(modal).toHaveClass('modal-lg');
+      const dialog = modal.querySelector('.modal-dialog');
+      if (!dialog) throw new Error('Modal dialog not found');
+      expect(dialog).toHaveClass('modal-lg');
     });
   });
 
@@ -373,8 +374,9 @@ describe('EventListCardDeleteModal', () => {
       const modal = screen.getByTestId(
         `deleteEventModal${mockStandaloneEventProps.eventListCardProps.id}`,
       );
-      expect(modal).toBeInTheDocument();
-      expect(modal).toHaveClass('modal-sm');
+      const dialog = modal.querySelector('.modal-dialog');
+      if (!dialog) throw new Error('Modal dialog not found');
+      expect(dialog).toHaveClass('modal-sm');
     });
   });
 

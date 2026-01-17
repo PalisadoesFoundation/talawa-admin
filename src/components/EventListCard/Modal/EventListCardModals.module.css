@@ -1,5 +1,5 @@
 .addButton {
-  margin-bottom: 10px;
+  margin-bottom: var(--space-3);
   color: var(--addButton-font);
   background-color: var(--light-blue);
   border-color: var(--addButton-bg);
@@ -12,16 +12,16 @@
 }
 
 .addButton:disabled {
-  margin-bottom: 10px;
+  margin-bottom: var(--space-3);
   background-color: var(--disabled-btn);
   border-color: var(--addButton-bg);
 }
 
 .removeButton {
-  margin-bottom: 10px;
+  margin-bottom: var(--space-3);
   background-color: var(--removeButton-bg);
   color: var(--removeButton-color);
-  margin-right: 10px;
+  margin-right: var(--space-3);
   --bs-btn-border-color: var(--removeButton-border);
 }
 
@@ -34,6 +34,6 @@
 .modalHeader {
   border: none;
   background-color: var(--primary-bg-color) !important;
-  padding: 1rem;
-  color: #000000;
+  padding: var(--space-5);
+  color: var(--color-black);
 }

@@ -77,9 +77,9 @@ const mockUseLocalStorage = useLocalStorage as Mock;
 const MockPreviewModal = EventListCardPreviewModal as Mock;
 const MockDeleteModal = EventListCardDeleteModal as Mock;
 
-const mockT = (key: string, options?: any) =>
+const mockT = (key: string, options?: Record<string, unknown>) =>
   i18nForTest.t(`eventListCard.${key}`, options) as string;
-const mockTCommon = (key: string, options?: any) =>
+const mockTCommon = (key: string, options?: Record<string, unknown>) =>
   i18nForTest.t(`common.${key}`, options) as string;
 
 type MockEventListCardProps = InterfaceEvent & {
@@ -471,7 +471,9 @@ describe('EventListCardModals', () => {
     await userEvent.click(closeButton);
 
     expect(
-      screen.queryByText(i18nForTest.t('eventListCard.updateRecurringEventMsg')),
+      screen.queryByText(
+        i18nForTest.t('eventListCard.updateRecurringEventMsg'),
+      ),
     ).not.toBeInTheDocument();
   });
 
@@ -1004,7 +1006,9 @@ describe('EventListCardModals', () => {
 
       // The 'single' option should be gone, and 'following' should be checked.
       expect(
-        screen.queryByLabelText(i18nForTest.t('eventListCard.updateThisInstance')),
+        screen.queryByLabelText(
+          i18nForTest.t('eventListCard.updateThisInstance'),
+        ),
       ).not.toBeInTheDocument();
       const followingRadio = screen.getByLabelText(
         i18nForTest.t('eventListCard.updateThisAndFollowing'),
