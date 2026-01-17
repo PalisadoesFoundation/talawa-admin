@@ -120,6 +120,9 @@ export interface IEventHeaderProps {
   showInviteModal: () => void;
 }
 
+/**
+ * Event list card data with an optional refetch callback.
+ */
 export interface IEventListCard extends IEvent {
   refetchEvents?: () => void;
 }
@@ -253,10 +256,10 @@ export interface ICreateEventInput {
   description?: string;
   location?: string;
   recurrence?:
-  | (Omit<InterfaceRecurrenceRule, 'endDate'> & {
-    endDate?: string;
-  })
-  | null;
+    | (Omit<InterfaceRecurrenceRule, 'endDate'> & {
+        endDate?: string;
+      })
+    | null;
 }
 
 // Legacy interface exports for backward compatibility

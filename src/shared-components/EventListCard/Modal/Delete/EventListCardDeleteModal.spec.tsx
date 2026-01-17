@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { vi, describe, it, expect, afterEach } from 'vitest';
 import EventListCardDeleteModal from './EventListCardDeleteModal';
 import dayjs from 'dayjs';
 import type { InterfaceDeleteEventModalProps } from 'types/shared-components/EventListCard/Modal/Delete/interface';
@@ -38,8 +38,7 @@ const mockStandaloneEventProps: InterfaceDeleteEventModalProps = {
     },
     eventDeleteModalIsOpen: true,
     toggleDeleteModal: vi.fn(),
-    t: (key: string) => key,
-    tCommon: (key: string) => key,
+
     deleteEventHandler: vi.fn(),
 };
 
@@ -73,19 +72,15 @@ const mockRecurringEventProps: InterfaceDeleteEventModalProps = {
     },
     eventDeleteModalIsOpen: true,
     toggleDeleteModal: vi.fn(),
-    t: (key: string) => key,
-    tCommon: (key: string) => key,
+
     deleteEventHandler: vi.fn(),
 };
 
 describe('EventListCardDeleteModal', () => {
     afterEach(() => {
+        vi.clearAllMocks();
         vi.restoreAllMocks();
     });
-    beforeEach(() => {
-        vi.clearAllMocks();
-    });
-
     describe('Standalone Event Tests', () => {
         it('should call deleteEventHandler without parameters for standalone events (Line 55 - else branch)', async () => {
             const user = userEvent.setup();

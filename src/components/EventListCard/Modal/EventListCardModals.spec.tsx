@@ -63,9 +63,12 @@ vi.mock('utils/errorHandler', () => ({
 vi.mock('./Preview/EventListCardPreviewModal', () => ({
   default: vi.fn(),
 }));
-vi.mock('shared-components/EventListCard/Modal/Delete/EventListCardDeleteModal', () => ({
-  default: vi.fn(),
-}));
+vi.mock(
+  'shared-components/EventListCard/Modal/Delete/EventListCardDeleteModal',
+  () => ({
+    default: vi.fn(),
+  }),
+);
 
 const mockUseMutation = useMutation as Mock;
 const mockUseNavigate = useNavigate as Mock;

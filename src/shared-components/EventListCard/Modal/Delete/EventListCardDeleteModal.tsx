@@ -1,38 +1,15 @@
+// translation-check-keyPrefix: eventListCard
 /**
  * EventListCardDeleteModal Component
  *
- * This component renders a modal for confirming the deletion of an event.
- * For standalone events, shows simple confirmation.
- * For recurring instances, shows three deletion options.
- *
- * @param  props - The props for the component.
- * @param eventListCardProps - The properties of the event to be deleted.
- * @param eventDeleteModalIsOpen - Determines if the modal is open.
- * @param toggleDeleteModal - Function to toggle the modal visibility.
- * @param t - Translation function for event-specific strings.
- * @param tCommon - Translation function for common strings.
- * @param deleteEventHandler - Function to handle the event deletion.
- *
- * @returns A modal component for confirming event deletion.
- *
- * @remarks
- * - The modal is styled using `app-fixed.module.css`.
- * - The modal is centered and has a static backdrop to prevent accidental closure.
- * - For recurring events, provides three deletion options: this instance, this and following, or all events.
- *
- * @example
- * ```tsx
- * <EventListCardDeleteModal
- *   eventListCardProps={event}
- *   eventDeleteModalIsOpen={isModalOpen}
- *   toggleDeleteModal={toggleModal}
- *   t={translate}
- *   tCommon={translateCommon}
- *   deleteEventHandler={handleDelete}
- * />
- * ```
+ * `@param` eventListCardProps - The properties of the event to be deleted.
+ * `@param` eventDeleteModalIsOpen - Determines if the modal is open.
+ * `@param` toggleDeleteModal - Function to toggle the modal visibility.
+ * `@param` deleteEventHandler - Function to handle the event deletion.
+ * `@returns` JSX.Element
  */
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import styles from 'style/app-fixed.module.css';
@@ -43,10 +20,10 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
     eventListCardProps,
     eventDeleteModalIsOpen,
     toggleDeleteModal,
-    t,
-    tCommon,
     deleteEventHandler,
 }) => {
+    const { t } = useTranslation('translation', { keyPrefix: 'eventListCard' });
+    const { t: tCommon } = useTranslation('common');
     const [deleteOption, setDeleteOption] = useState<
         'single' | 'following' | 'all'
     >('single');
