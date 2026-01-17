@@ -73,9 +73,16 @@ const VerifyEmail = (): JSX.Element => {
         } else {
           setVerificationState('error');
         }
-      } catch (error: unknown) {
+      } catch (error: any) {
         setVerificationState('error');
-        errorHandler(t, error);
+        if (
+          error.message?.toLowerCase().includes('authenticated') ||
+          error.graphQLErrors?.[0]?.extensions?.code === 'UNAUTHENTICATED'
+        ) {
+          NotificationToast.error(t('loginRequired'));
+        } else {
+          errorHandler(t, error);
+        }
       }
     };
 

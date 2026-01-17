@@ -1138,7 +1138,8 @@
     "resendSuccess": "Verification email sent! Please check your inbox.",
     "resendButton": "Resend Verification Email",
     "enterEmail": "Enter your email address",
-    "emailPlaceholder": "Email"
+    "emailPlaceholder": "Email",
+    "loginRequired": "You must be logged in to verify your email."
   },
   "pageNotFound": {
     "404": "404",
