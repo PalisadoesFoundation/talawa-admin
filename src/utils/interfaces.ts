@@ -2283,7 +2283,7 @@ export interface InterfacePostCard {
   attachmentURL?: string | null;
   title: string;
   body?: string;
-
+  text: string;
   commentCount: number;
   upVoteCount: number;
   downVoteCount: number;
