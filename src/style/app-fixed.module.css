@@ -987,14 +987,18 @@
   color: var(--searchButton-color);
   position: absolute;
   z-index: 10;
-  bottom: 0;
-  right: 30px;
+  bottom: 1px;
+  right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   transition:
     box-shadow 0.2s ease,
     transform 0.2s ease;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
 .searchButton:hover {
