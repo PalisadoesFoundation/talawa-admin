@@ -2292,5 +2292,32 @@
   },
   "userGlobalScreen": {
     "globalFeatures": "全球功能"
+  },
+  "recurringEventVolunteerModal": {
+    "joinGroupTitle": "加入 {{groupName}} - {{eventName}}",
+    "volunteerTitle": "为 {{eventName}} 做志愿者",
+    "joinGroupQuestion": "您想为整个系列加入\"{{groupName}}\"还是仅为此实例加入?",
+    "volunteerQuestion": "您想为整个系列做志愿者还是仅为此实例做志愿者?",
+    "volunteerForSeries": "为整个系列做志愿者",
+    "joinGroupForSeries": "您将加入此小组参加重复系列中的所有活动",
+    "volunteerForSeriesDesc": "您将为此重复系列中的所有活动做志愿者",
+    "volunteerForInstance": "仅为此实例做志愿者",
+    "joinGroupForInstance": "您将仅在 {{date}} 的活动中加入此小组",
+    "volunteerForInstanceDesc": "您将仅为 {{date}} 的活动做志愿者",
+    "cancel": "取消",
+    "submitRequest": "提交请求"
+  },
+  "eventsAttendedMemberModal": {
+    "title": "参加的活动列表",
+    "showing": "显示 {{start}} - {{end}} 共 {{total}} 个活动",
+    "eventName": "活动名称",
+    "dateOfEvent": "活动日期",
+    "recurringEvent": "重复活动",
+    "attendees": "参与者",
+    "tableAriaLabel": "参加的活动表",
+    "paginationAriaLabel": "活动分页导航",
+    "paginationGoToPage": "转到第 {{page}} 页",
+    "paginationGoToType": "转到{{type}}页",
+    "noEventsAttended": "未参加任何活动"
   }
 }

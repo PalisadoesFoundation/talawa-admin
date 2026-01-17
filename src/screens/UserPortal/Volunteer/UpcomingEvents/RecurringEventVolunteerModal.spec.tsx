@@ -4,6 +4,35 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import dayjs from 'dayjs';
 import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
 
+// Mock useTranslation
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string, params?: Record<string, unknown>) => {
+      const translations: Record<string, string> = {
+        joinGroupTitle: `Join ${params?.groupName} - ${params?.eventName}`,
+        volunteerTitle: `Volunteer for ${params?.eventName}`,
+        joinGroupQuestion: `Would you like to join "${params?.groupName}" for the entire series or just this instance?`,
+        volunteerQuestion:
+          'Would you like to volunteer for the entire series or just this instance?',
+        volunteerForSeries: 'Volunteer for Entire Series',
+        joinGroupForSeries:
+          'You will join this group for all events in the recurring series',
+        volunteerForSeriesDesc:
+          'You will be volunteering for all events in this recurring series',
+        volunteerForInstance: 'Volunteer for This Instance Only',
+        joinGroupForInstance: `You will join this group only for the event on ${params?.date}`,
+        volunteerForInstanceDesc: `You will only be volunteering for the event on ${params?.date}`,
+        cancel: 'Cancel',
+        submitRequest: 'Submit Request',
+      };
+      return translations[key] || key;
+    },
+    i18n: {
+      language: 'en-US',
+    },
+  }),
+}));
+
 const defaultProps = {
   show: true,
   onHide: vi.fn(),
@@ -24,12 +53,9 @@ describe('RecurringEventVolunteerModal', () => {
 
   test('renders modal with individual volunteering title, description and option texts', () => {
     // Make date formatting deterministic for this test
-    const formattedDate = dayjs(defaultProps.eventDate)
-      .toDate()
-      .toLocaleDateString();
-    vi.spyOn(Date.prototype, 'toLocaleDateString').mockReturnValue(
-      formattedDate,
-    );
+    const formattedDate = new Intl.DateTimeFormat('en-US', {
+      dateStyle: 'medium',
+    }).format(new Date(defaultProps.eventDate));
 
     render(<RecurringEventVolunteerModal {...defaultProps} />);
 
@@ -71,12 +97,9 @@ describe('RecurringEventVolunteerModal', () => {
 
   test('renders group volunteering title, description and option texts when isForGroup is true', () => {
     const groupName = 'Cleanup Crew';
-    const formattedDate = dayjs(defaultProps.eventDate)
-      .toDate()
-      .toLocaleDateString();
-    vi.spyOn(Date.prototype, 'toLocaleDateString').mockReturnValue(
-      formattedDate,
-    );
+    const formattedDate = new Intl.DateTimeFormat('en-US', {
+      dateStyle: 'medium',
+    }).format(new Date(defaultProps.eventDate));
 
     render(
       <RecurringEventVolunteerModal

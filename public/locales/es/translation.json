@@ -2292,5 +2292,32 @@
   },
   "userGlobalScreen": {
     "globalFeatures": "Características Globales"
+  },
+  "recurringEventVolunteerModal": {
+    "joinGroupTitle": "Unirse a {{groupName}} - {{eventName}}",
+    "volunteerTitle": "Voluntario para {{eventName}}",
+    "joinGroupQuestion": "¿Desea unirse a \"{{groupName}}\" para toda la serie o solo para esta instancia?",
+    "volunteerQuestion": "¿Desea ser voluntario para toda la serie o solo para esta instancia?",
+    "volunteerForSeries": "Voluntario para toda la serie",
+    "joinGroupForSeries": "Se unirá a este grupo para todos los eventos de la serie recurrente",
+    "volunteerForSeriesDesc": "Será voluntario para todos los eventos de esta serie recurrente",
+    "volunteerForInstance": "Voluntario solo para esta instancia",
+    "joinGroupForInstance": "Se unirá a este grupo solo para el evento del {{date}}",
+    "volunteerForInstanceDesc": "Solo será voluntario para el evento del {{date}}",
+    "cancel": "Cancelar",
+    "submitRequest": "Enviar solicitud"
+  },
+  "eventsAttendedMemberModal": {
+    "title": "Lista de eventos asistidos",
+    "showing": "Mostrando {{start}} - {{end}} de {{total}} eventos",
+    "eventName": "Nombre del evento",
+    "dateOfEvent": "Fecha del evento",
+    "recurringEvent": "Evento recurrente",
+    "attendees": "Asistentes",
+    "tableAriaLabel": "Tabla de eventos asistidos",
+    "paginationAriaLabel": "Navegación de paginación de eventos",
+    "paginationGoToPage": "Ir a la página {{page}}",
+    "paginationGoToType": "Ir a la página {{type}}",
+    "noEventsAttended": "No hay eventos asistidos"
   }
 }
