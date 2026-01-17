@@ -39,7 +39,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Row, Col } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import { Autocomplete, TextField } from '@mui/material';
+import { Autocomplete } from '@mui/material';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 import { FaLink, FaTrash } from 'react-icons/fa';
@@ -188,7 +188,15 @@ const AgendaItemsCreateModal: React.FC<
               });
             }}
             renderInput={(params) => (
-              <TextField {...params} label={t('category')} />
+              <FormFieldGroup name="category" label={t('category')}>
+                <div ref={params.InputProps.ref}>
+                  <input
+                    {...params.inputProps}
+                    className="form-control"
+                    placeholder={t('category')}
+                  />
+                </div>
+              </FormFieldGroup>
             )}
           />
         </div>
