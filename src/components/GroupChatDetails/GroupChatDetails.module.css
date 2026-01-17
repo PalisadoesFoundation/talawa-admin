@@ -131,14 +131,14 @@
 }
 
 .input:active {
-  box-shadow: var(--dorpdownItem-hover-shadow) !important;
+  box-shadow: var(--dropdownItem-box-shadow) !important;
   background-color: var(--create-button-bg-color);
   border-color: var(--input-shadow) !important;
   color: var(--input-text-color);
 }
 
 .input:focus {
-  box-shadow: var(--dorpdownItem-hover-shadow) !important;
+  box-shadow: var(--dropdownItem-box-shadow) !important;
   border-color: var(--input-shadow) !important;
 }
 
