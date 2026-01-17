@@ -345,6 +345,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                   </label>
                   <DynamicDropDown
                     formState={formState}
+                    data-testid="'employmentstatus-dropdown-btn"
                     setFormState={setFormState}
                     fieldOptions={employmentStatusEnum}
                     fieldName="employmentStatus"

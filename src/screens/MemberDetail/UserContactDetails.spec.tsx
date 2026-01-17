@@ -962,4 +962,191 @@ describe('MemberDetail', () => {
     fireEvent.change(postalCode, { target: { value: '12345' } });
     expect(postalCode).toHaveValue('12345');
   });
+
+  it('updates formState.employmentStatus when selecting a new employment status', async () => {
+    render(
+      <MockedProvider link={link1}>
+        <BrowserRouter>
+          <MemberDetail />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // wait for loading to finish
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    const employmentStatusDropdownBtn = await screen.findByTestId(
+      'employmentstatus-dropdown-btn',
+    );
+
+    // open dropdown
+    fireEvent.click(employmentStatusDropdownBtn);
+
+    // select option
+    const option = await screen.findByText(/Full-Time/i);
+    fireEvent.click(option);
+
+    // assert UI updated
+    expect(employmentStatusDropdownBtn).toHaveTextContent(/Full-Time/i);
+  });
+
+  it('updates formState.maritalStatus when selecting a new marital status', async () => {
+    render(
+      <MockedProvider link={link1}>
+        <BrowserRouter>
+          <MemberDetail />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // wait for loading to finish
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    const maritalStatusDropdownBtn = await screen.findByTestId(
+      'maritalstatus-dropdown-btn',
+    );
+
+    // open dropdown
+    fireEvent.click(maritalStatusDropdownBtn);
+
+    // select an option (must exist in maritalStatusEnum)
+    const option = await screen.findByText(/married/i);
+    fireEvent.click(option);
+
+    // assert UI updated → proves handleFieldChange ran
+    expect(maritalStatusDropdownBtn).toHaveTextContent(/married/i);
+  });
+
+  it('updates formState.educationGrade when selecting a new education grade', async () => {
+    render(
+      <MockedProvider link={link1}>
+        <BrowserRouter>
+          <MemberDetail />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // wait for loading to finish
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    const educationGradeDropdownBtn = await screen.findByTestId(
+      'educationgrade-dropdown-btn',
+    );
+
+    // open dropdown
+    fireEvent.click(educationGradeDropdownBtn);
+
+    // select an option (must exist in educationGradeEnum)
+    const option = await screen.findByText(/Pre-Kg/i);
+    fireEvent.click(option);
+
+    // assert UI updated → proves handleFieldChange ran
+    expect(educationGradeDropdownBtn).toHaveTextContent(/Pre-Kg/i);
+  });
+
+  it('updates formState.addressLine1 when typing in addressLine1 input', async () => {
+    render(
+      <MockedProvider link={link1}>
+        <BrowserRouter>
+          <MemberDetail />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // wait for loading to finish
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    const addressLine1Input = screen.getByTestId(
+      'inputAddressLine1',
+    ) as HTMLInputElement;
+
+    // simulate user typing
+    fireEvent.change(addressLine1Input, {
+      target: { value: '221B Baker Street' },
+    });
+
+    // assert input reflects updated state
+    expect(addressLine1Input).toHaveValue('221B Baker Street');
+  });
+
+  it('updates formState.city when typing in city input', async () => {
+    render(
+      <MockedProvider link={link1}>
+        <BrowserRouter>
+          <MemberDetail />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    const cityInput = screen.getByTestId('inputCity') as HTMLInputElement;
+
+    fireEvent.change(cityInput, {
+      target: { value: 'Bengaluru' },
+    });
+
+    expect(cityInput).toHaveValue('Bengaluru');
+  });
+
+  it('shows preview image when selectedAvatar is present', async () => {
+    render(
+      <MockedProvider link={link1}>
+        <BrowserRouter>
+          <MemberDetail />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    // mock URL.createObjectURL
+    const objectUrlSpy = vi
+      .spyOn(URL, 'createObjectURL')
+      .mockReturnValue('blob:mock-avatar');
+
+    const file = new File(['avatar'], 'avatar.png', { type: 'image/png' });
+
+    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
+
+    fireEvent.change(fileInput, {
+      target: { files: [file] },
+    });
+
+    const avatarImg = await screen.findByTestId('profile-picture');
+
+    expect(avatarImg).toHaveAttribute('src', 'blob:mock-avatar');
+
+    objectUrlSpy.mockRestore();
+  });
+
+  it('falls back to avatarURL when selectedAvatar is not present', async () => {
+    render(
+      <MockedProvider link={link1}>
+        <BrowserRouter>
+          <MemberDetail />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+    });
+
+    const avatarImg = await screen.findByTestId('profile-picture');
+
+    expect(avatarImg).toHaveAttribute('src', 'mocked-data-uri');
+  });
 });
