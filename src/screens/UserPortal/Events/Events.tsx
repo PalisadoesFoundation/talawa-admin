@@ -65,7 +65,7 @@ import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEve
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { IEventEdge, ICreateEventInput } from 'types/Event/interface';
-import styles from './Events.module.css';
+import styles from 'style/app-fixed.module.css';
 import EventForm, {
   formatRecurrenceForPayload,
 } from 'shared-components/EventForm/EventForm';
