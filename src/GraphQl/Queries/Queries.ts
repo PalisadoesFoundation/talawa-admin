@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import 'style/app-fixed.module.css';
 //Query List
 // Check Auth
 

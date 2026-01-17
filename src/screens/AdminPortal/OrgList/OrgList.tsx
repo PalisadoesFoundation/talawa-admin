@@ -1,50 +1,5 @@
-/**
- * The orgList component renders a list of organizations with search, sort, and
- * creation flows.
- *
- * @remarks
- * Features:
- * - Fetches organization data via GraphQL queries and mutations.
- * - Supports searching and sorting, with loading and error states.
- * - Provides modals for creating organizations and managing features.
- *
- * State:
- * - dialogModalisOpen: Controls the visibility of the plugin notification modal.
- * - dialogRedirectOrgId: Stores the ID of the organization to redirect after creation.
- * - isLoading: Indicates whether the organization data is loading.
- * - sortingState: Manages the sorting option and its label.
- * - searchByName: Stores the search query for filtering organizations.
- * - showModal: Controls the visibility of the organization creation modal.
- * - formState: Manages the state of the organization creation form.
- *
- * Methods:
- * - openDialogModal(redirectOrgId): Opens the plugin notification modal.
- * - closeDialogModal(): Closes the plugin notification modal.
- * - toggleDialogModal(): Toggles the plugin notification modal visibility.
- * - createOrg(e): Handles organization creation.
- * - handleChangeFilter(value): Filters organizations based on the search query.
- * - handleSortChange(value): Updates sorting state and refetches organizations.
- *
- * Error handling:
- * - Uses `errorHandler` for GraphQL and network errors.
- * - Clears local storage and redirects to the home page on critical errors.
- *
- * Dependencies:
- * - Apollo Client for GraphQL operations.
- * - react-i18next for localization.
- * - useLocalStorage for local storage data.
- * - NotificationToast and shared UI components.
- * - Material UI for buttons and icons.
- *
- * @returns The rendered organization list component.
- */
-import React, { type ChangeEvent, useEffect, useMemo, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
-import { Group, Search } from '@mui/icons-material';
-import { Link } from 'react-router';
-import { useTranslation } from 'react-i18next';
-import { Alert } from 'react-bootstrap';
-
+import React, { useEffect, useState, useMemo } from 'react';
+import { useQuery, useMutation } from '@apollo/client';
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
@@ -56,22 +11,26 @@ import {
 } from 'GraphQl/Queries/Queries';
 
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
-import Button from 'shared-components/Button';
-import EmptyState from 'shared-components/EmptyState/EmptyState';
-import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import type {
   InterfaceCurrentUserTypePG,
   InterfaceOrgInfoTypePG,
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from 'style/app-fixed.module.css';
+import styles from './OrgList.module.css';
+import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
-import style from './OrgList.module.css';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { Link } from 'react-router';
+import type { ChangeEvent } from 'react';
+import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
+import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import { Group, Search } from '@mui/icons-material';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import { Alert } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 
 const { getItem, setItem, removeItem } = useLocalStorage();
 
@@ -513,7 +472,7 @@ function orgList(): JSX.Element {
             })}
           </div>
           {/* pagination */}
-          <table className={style.table_fullWidth}>
+          <table className={styles.table_fullWidth}>
             <tbody>
               <tr>
                 <PaginationList

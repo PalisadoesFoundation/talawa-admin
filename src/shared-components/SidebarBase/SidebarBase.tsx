@@ -13,7 +13,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
 import { FaBars } from 'react-icons/fa';
-import styles from '../../style/app-fixed.module.css';
+import styles from './SidebarBase.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ISidebarBaseProps } from '../../types/SidebarBase/interface';
 
