@@ -1,22 +1,3 @@
-/**
- * LeaveOrganization Component
- *
- * This component allows a user to leave an organization they are a member of.
- * It includes email verification for confirmation and handles the removal process via GraphQL mutations.
- *
- * Features:
- * - Uses Apollo Client's `useQuery` to fetch organization details.
- * - Uses Apollo Client's `useMutation` to remove the user from the organization.
- * - Displays a modal for user confirmation and email verification.
- * - Handles errors and loading states gracefully.
- *
- * @example
- * ```tsx
- * <LeaveOrganization />
- * ```
- *
- * @returns The rendered LeaveOrganization component.
- */
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import {
@@ -52,6 +33,25 @@ const userId = (() => {
 
 export { userEmail, userId };
 
+/**
+ * LeaveOrganization Component
+ *
+ * This component allows a user to leave an organization they are a member of.
+ * It includes email verification for confirmation and handles the removal process via GraphQL mutations.
+ *
+ * Features:
+ * - Uses Apollo Client's `useQuery` to fetch organization details.
+ * - Uses Apollo Client's `useMutation` to remove the user from the organization.
+ * - Displays a modal for user confirmation and email verification.
+ * - Handles errors and loading states gracefully.
+ *
+ * @example
+ * ```tsx
+ * <LeaveOrganization />
+ * ```
+ *
+ * @returns The rendered LeaveOrganization component.
+ */
 const LeaveOrganization = (): JSX.Element => {
   const navigate = useNavigate();
   const { orgId: organizationId } = useParams();

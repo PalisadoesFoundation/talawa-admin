@@ -6,4 +6,4 @@
 
 > `const` **userEmail**: `unknown`
 
-Defined in: [src/screens/UserPortal/LeaveOrganization/LeaveOrganization.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/LeaveOrganization/LeaveOrganization.tsx#L36)
+Defined in: [src/screens/UserPortal/LeaveOrganization/LeaveOrganization.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/LeaveOrganization/LeaveOrganization.tsx#L17)
