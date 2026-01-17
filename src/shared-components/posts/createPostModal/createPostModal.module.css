@@ -36,7 +36,7 @@
   height: 592px;
   max-height: calc(100vh - 100px);
   max-width: calc(100vw - 30px);
-  background-color: #ffffff;
+  background-color: var(--color-white);
   border-radius: 8px;
   z-index: -1;
   box-shadow:
@@ -65,7 +65,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  padding: 16px 24px 12px 16px;
+  padding: var(--space-5) var(--space-7) var(--space-4) var(--space-5);
   border-bottom: none;
 }
 
@@ -82,14 +82,14 @@
 }
 
 .userName {
-  font-size: 16px;
-  font-weight: 600;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
   color: rgba(0, 0, 0, 0.9);
   line-height: 1.25;
 }
 
 .postVisibility {
-  font-size: 12px;
+  font-size: var(--font-size-xs);
   color: rgba(0, 0, 0, 0.6);
   line-height: 1.33;
   margin-top: 2px;
@@ -98,7 +98,7 @@
 .closeButton {
   background: none;
   border: none;
-  padding: 8px;
+  padding: var(--space-3);
   cursor: pointer;
   border-radius: 50%;
   display: flex;
@@ -130,10 +130,10 @@
   height: 70px;
   outline: none;
   resize: none;
-  font-size: 16px;
+  font-size: var(--font-size-md);
   color: rgba(0, 0, 0, 0.9);
   border: 1px solid rgba(0, 0, 0, 0.2);
-  padding: 8px;
+  padding: var(--space-3);
   padding-top: 20px;
   border-radius: 8px;
   background-color: transparent;
@@ -144,10 +144,10 @@
   height: 200px;
   outline: none;
   resize: none;
-  font-size: 16px;
+  font-size: var(--font-size-md);
   color: rgba(0, 0, 0, 0.9);
   border: 1px solid rgba(0, 0, 0, 0.2);
-  padding: 8px;
+  padding: var(--space-3);
   padding-top: 20px;
   border-radius: 8px;
   background-color: transparent;
@@ -175,7 +175,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 16px 16px 16px;
+  padding: var(--space-4) var(--space-5) var(--space-5) var(--space-5);
   border-top: 1px solid rgba(0, 0, 0, 0.08);
   flex-shrink: 0;
 }
@@ -188,7 +188,7 @@
 .mediaButton {
   background: none;
   border: none;
-  padding: 8px;
+  padding: var(--space-3);
   cursor: pointer;
   border-radius: 50%;
   display: flex;
@@ -214,24 +214,24 @@
 }
 
 .postButton {
-  background-color: #0a66c2;
-  color: #ffffff;
+  background-color: var(--color-blue-600);
+  color: var(--color-white);
   border: none;
   border-radius: 16px;
-  padding: 6px 16px;
-  font-size: 16px;
-  font-weight: 600;
+  padding: var(--space-2) var(--space-5);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
   cursor: pointer;
   transition: background-color 0.2s ease;
   min-width: 60px;
 }
 
 .postButton:hover:not(:disabled) {
-  background-color: #004182;
+  background-color: var(--color-blue-700);
 }
 
 .postButton:active:not(:disabled) {
-  background-color: #00294d;
+  background-color: var(--color-blue-800);
 }
 
 .postButtonDisabled {
