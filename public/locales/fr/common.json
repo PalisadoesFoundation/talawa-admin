@@ -272,5 +272,16 @@
     "presetNext7Days": "7 Prochains Jours",
     "presetNext30Days": "30 Prochains Jours",
     "presetNextMonth": "Mois Prochain"
-  }
+  },
+  "ascending": "Croissant",
+  "descending": "Décroissant",
+  "noRegistrations": "Nombre d'Inscriptions",
+  "noOfAttendees": "Nombre de Participants",
+  "averageFeedback": "Retours Moyens",
+  "registrants": "Inscrits",
+  "errorLoadingActionItems": "Erreur lors du chargement de {{entity}}",
+  "cannotUnregisterCheckedIn": "Impossible de désinscrire un utilisateur déjà enregistré",
+  "errorLoadingEventDetails": "Erreur lors du chargement des détails de l'événement. Veuillez réessayer plus tard.",
+  "eventDate": "Date de l'Événement",
+  "attendedEventsList": "Liste des événements suivis"
 }

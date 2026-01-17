@@ -5,7 +5,7 @@ import type {
   InterfaceConnectionData,
   PaginationVariables,
 } from 'types/CursorPagination/interface';
-import type { DefaultConnectionPageInfo } from 'types/pagination';
+import type { DefaultConnectionPageInfo } from 'types/AdminPortal/pagination';
 import styles from './CursorPaginationManager.module.css';
 import { useTranslation } from 'react-i18next';
 import LoadingState from 'shared-components/LoadingState/LoadingState';

@@ -7,7 +7,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import type { FormEvent, FC } from 'react';
-import styles from 'style/app-fixed.module.css';
+import styles from './ActionItemModal.module.css';
 import DatePicker from 'shared-components/DatePicker/DatePicker';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';

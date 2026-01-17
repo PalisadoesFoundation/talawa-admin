@@ -25,7 +25,7 @@
  * - GraphQL queries:
  *   - `GraphQl/Queries/Queries`
  * - Styles:
- *   - `style/app-fixed.module.css`
+ *   - `./People.module.css`
  * - Types:
  *   - `types/User/interface`
  *
