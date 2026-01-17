@@ -60,6 +60,25 @@ const calculateAge = (birthDate: Date): number => {
   return age;
 };
 
+/**
+ * Modal component for displaying attendance statistics with charts and demographics data.
+ *
+ * @remarks
+ * This component displays comprehensive attendance statistics including:
+ * - Gender distribution charts (pie/bar)
+ * - Age distribution charts
+ * - Historical trends across multiple events
+ * - Demographic breakdowns by category
+ * - CSV export functionality for data analysis
+ *
+ * Uses Chart.js for data visualization and supports pagination through recurring events.
+ *
+ * @param show - Controls modal visibility
+ * @param handleClose - Callback function to close the modal
+ * @param statistics - Current event attendance statistics data
+ * @param memberData - Array of member data for demographic analysis
+ * @returns JSX element rendering the statistics modal
+ */
 export const AttendanceStatisticsModal: React.FC<
   InterfaceAttendanceStatisticsModalProps
 > = ({ show, handleClose, statistics, memberData }): React.JSX.Element => {

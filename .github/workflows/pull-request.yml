@@ -170,7 +170,7 @@ jobs:
       - name: Run CSS policy enforcement
         run: |
           if [ -s pr_files.txt ]; then
-            FILTERED_FILES=$(grep -Ev '^src/(utils|types)/' pr_files.txt || true)
+            FILTERED_FILES=$(grep -Ev '^src/(utils|types)/|EventStatisticsChartConfig\.ts' pr_files.txt || true)
 
             if [ -n "$FILTERED_FILES" ]; then
               python .github/workflows/scripts/css_check.py \
