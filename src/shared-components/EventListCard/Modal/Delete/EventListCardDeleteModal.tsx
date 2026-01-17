@@ -12,7 +12,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import styles from 'style/app-fixed.module.css';
+import styles from './EventListCardDeleteModal.module.css';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { InterfaceDeleteEventModalProps } from 'types/shared-components/EventListCard/Modal/Delete/interface';
 
@@ -93,7 +93,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
           <Form>
             <Form.Check
               type="radio"
-              id={`delete-single-${eventListCardProps.id}`}
+              id={`delete-single-${eventListCardProps.id}`} // c
               name={deleteOptionName}
               value="single"
               checked={deleteOption === 'single'}

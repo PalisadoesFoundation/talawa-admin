@@ -434,7 +434,6 @@ function EventListCardModals({
       />
 
       {/* update modal */}
-      {/* update modal */}
       <BaseModal
         size="lg"
         show={eventUpdateModalIsOpen}

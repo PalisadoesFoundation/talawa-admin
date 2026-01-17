@@ -77,7 +77,10 @@ const mockUseLocalStorage = useLocalStorage as Mock;
 const MockPreviewModal = EventListCardPreviewModal as Mock;
 const MockDeleteModal = EventListCardDeleteModal as Mock;
 
-const mockT = (key: string) => key;
+const mockT = (key: string, options?: any) =>
+  i18nForTest.t(`eventListCard.${key}`, options) as string;
+const mockTCommon = (key: string, options?: any) =>
+  i18nForTest.t(`common.${key}`, options) as string;
 
 type MockEventListCardProps = InterfaceEvent & {
   refetchEvents: Mock;
@@ -214,7 +217,7 @@ describe('EventListCardModals', () => {
       eventModalIsOpen: true,
       hideViewModal: vi.fn(),
       t: mockT,
-      tCommon: mockT,
+      tCommon: mockTCommon,
       ...props,
     };
     return render(
@@ -276,7 +279,9 @@ describe('EventListCardModals', () => {
         },
       },
     });
-    expect(NotificationToast.success).toHaveBeenCalledWith('eventUpdated');
+    expect(NotificationToast.success).toHaveBeenCalledWith(
+      i18nForTest.t('eventListCard.eventUpdated'),
+    );
     expect(mockEventListCardProps.refetchEvents).toHaveBeenCalled();
   });
 
@@ -395,7 +400,9 @@ describe('EventListCardModals', () => {
     });
 
     expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
-    expect(NotificationToast.info).toHaveBeenCalledWith('noChangesToUpdate');
+    expect(NotificationToast.info).toHaveBeenCalledWith(
+      i18nForTest.t('eventListCard.noChangesToUpdate'),
+    );
   });
 
   test('handles event registration', async () => {
@@ -410,7 +417,9 @@ describe('EventListCardModals', () => {
       variables: { id: 'event1' },
     });
     expect(NotificationToast.success).toHaveBeenCalledWith(
-      'registeredSuccessfully',
+      i18nForTest.t('eventListCard.registeredSuccessfully', {
+        eventName: 'Test Event',
+      }),
     );
   });
 
@@ -453,14 +462,16 @@ describe('EventListCardModals', () => {
       await previewProps.handleEventUpdate();
     });
 
-    expect(screen.getByText('updateRecurringEventMsg')).toBeInTheDocument();
+    expect(
+      screen.getByText(i18nForTest.t('eventListCard.updateRecurringEventMsg')),
+    ).toBeInTheDocument();
 
     // Click cancel to close
     const closeButton = screen.getByTestId('eventUpdateModalCloseBtn');
     await userEvent.click(closeButton);
 
     expect(
-      screen.queryByText('updateRecurringEventMsg'),
+      screen.queryByText(i18nForTest.t('eventListCard.updateRecurringEventMsg')),
     ).not.toBeInTheDocument();
   });
 
@@ -512,7 +523,9 @@ describe('EventListCardModals', () => {
     });
 
     // Select the 'following' option
-    const followingRadio = screen.getByLabelText('updateThisAndFollowing');
+    const followingRadio = screen.getByLabelText(
+      i18nForTest.t('eventListCard.updateThisAndFollowing'),
+    );
     await userEvent.click(followingRadio);
 
     const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
@@ -547,7 +560,9 @@ describe('EventListCardModals', () => {
     });
 
     // Select the 'entire series' option
-    const entireSeriesRadio = screen.getByLabelText('updateEntireSeries');
+    const entireSeriesRadio = screen.getByLabelText(
+      i18nForTest.t('eventListCard.updateEntireSeries'),
+    );
     await userEvent.click(entireSeriesRadio);
 
     const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
@@ -581,7 +596,9 @@ describe('EventListCardModals', () => {
       await previewProps.handleEventUpdate();
     });
 
-    const entireSeriesRadio = screen.getByLabelText('updateEntireSeries');
+    const entireSeriesRadio = screen.getByLabelText(
+      i18nForTest.t('eventListCard.updateEntireSeries'),
+    );
     await userEvent.click(entireSeriesRadio);
 
     const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
@@ -614,7 +631,9 @@ describe('EventListCardModals', () => {
       await previewProps.handleEventUpdate();
     });
 
-    const entireSeriesRadio = screen.getByLabelText('updateEntireSeries');
+    const entireSeriesRadio = screen.getByLabelText(
+      i18nForTest.t('eventListCard.updateEntireSeries'),
+    );
     await userEvent.click(entireSeriesRadio);
 
     const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
@@ -769,7 +788,9 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        i18nForTest.t('eventListCard.invalidDate'),
+      );
     });
 
     test('shows error when end date is invalid and allDay is true', async () => {
@@ -783,7 +804,9 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        i18nForTest.t('eventListCard.invalidDate'),
+      );
     });
 
     test('shows error when start date is invalid and allDay is false', async () => {
@@ -797,7 +820,9 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        i18nForTest.t('eventListCard.invalidDate'),
+      );
     });
 
     test('shows error when end date is invalid and allDay is false', async () => {
@@ -811,7 +836,9 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        i18nForTest.t('eventListCard.invalidDate'),
+      );
     });
 
     test('handles invalid eventStartDate in hasOnlyNameOrDescriptionChanged', async () => {
@@ -829,7 +856,9 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        i18nForTest.t('eventListCard.invalidDate'),
+      );
     });
 
     test('handles invalid startDate in hasOnlyNameOrDescriptionChanged', async () => {
@@ -975,9 +1004,11 @@ describe('EventListCardModals', () => {
 
       // The 'single' option should be gone, and 'following' should be checked.
       expect(
-        screen.queryByLabelText('updateThisInstance'),
+        screen.queryByLabelText(i18nForTest.t('eventListCard.updateThisInstance')),
       ).not.toBeInTheDocument();
-      const followingRadio = screen.getByLabelText('updateThisAndFollowing');
+      const followingRadio = screen.getByLabelText(
+        i18nForTest.t('eventListCard.updateThisAndFollowing'),
+      );
       expect(followingRadio).toBeChecked();
     });
   });
@@ -1034,7 +1065,9 @@ describe('EventListCardModals', () => {
         });
 
         // Select 'this and following events' to trigger the logic that uses frequency
-        const followingRadio = screen.getByLabelText('updateThisAndFollowing');
+        const followingRadio = screen.getByLabelText(
+          i18nForTest.t('eventListCard.updateThisAndFollowing'),
+        );
         await userEvent.click(followingRadio);
 
         const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
