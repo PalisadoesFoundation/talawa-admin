@@ -216,8 +216,8 @@
     "core-js": "^3.40.0",
     "sync-fetch": "npm:@ardatan/sync-fetch@0.0.1",
     "rc-color-picker": {
-      "react": "^19.1.0",
-      "react-dom": "^19.1.0"
+      "react": "^19.2.3",
+      "react-dom": "^19.2.3"
     },
     "virtualizedtableforantd4": {
       "react": "^19.2.3",
