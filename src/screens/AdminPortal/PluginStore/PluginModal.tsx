@@ -102,6 +102,8 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
 
   // Use details if loaded, else fallback to meta
   const plugin = details || meta;
+  const installedPlugin = plugin ? getInstalledPlugin(plugin.name) : undefined;
+  const isPluginActive = installedPlugin?.status === 'active';
 
   // Get features from details (loaded from info.json) or extract from readme as fallback
   const features =
@@ -196,18 +198,10 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
           {plugin && isInstalled(plugin.name) && (
             <div className="mb-2 d-flex justify-content-center">
               <StatusBadge
-                variant={
-                  getInstalledPlugin(plugin.name)?.status === 'active'
-                    ? 'active'
-                    : 'inactive'
-                }
+                variant={isPluginActive ? 'active' : 'inactive'}
                 size="md"
                 dataTestId="plugin-status-badge"
-                ariaLabel={
-                  getInstalledPlugin(plugin.name)?.status === 'active'
-                    ? tCommon('active')
-                    : tCommon('inactive')
-                }
+                ariaLabel={isPluginActive ? 'inactive' : 'active'}
               />
             </div>
           )}
@@ -229,9 +223,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
                     }
                   >
                     <FaPowerOff />
-                    {getInstalledPlugin(plugin.name)?.status === 'active'
-                      ? t('deactivate')
-                      : t('activate')}
+                    {isPluginActive ? t('deactivate') : t('activate')}
                   </Button>
                 </LoadingState>
                 <LoadingState isLoading={loading} variant="inline">
