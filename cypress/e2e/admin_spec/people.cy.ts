@@ -29,7 +29,13 @@ describe('Admin People Tab', () => {
   });
 
   it('delete a member from the organization', () => {
-    peoplePage.deleteMember('Praise Norris');
+    const member = 'Praise Norris';
+    // First add the member
+    peoplePage.clickAddExistingMember();
+    peoplePage.searchAndSelectUser(member);
+    peoplePage.confirmAddUser(member);
+    // Then delete the member
+    peoplePage.deleteMember(member);
   });
 
   afterEach(() => {
