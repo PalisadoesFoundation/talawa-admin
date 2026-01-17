@@ -64,6 +64,8 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
     }
   };
 
+  const testid = `deleteEventModal${eventListCardProps.id}`;
+
   const footerContent = (
     <>
       <Button
@@ -105,7 +107,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
       headerClassName={styles.modalHeader}
       footer={footerContent}
       showCloseButton={true}
-      dataTestId={`deleteEventModal${eventListCardProps.id}`}
+      dataTestId={testid}
     >
       {isRecurringInstance ? (
         <div>
