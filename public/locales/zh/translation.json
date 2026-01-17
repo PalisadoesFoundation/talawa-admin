@@ -2021,7 +2021,9 @@
     "leftOrganizationError": "离开组织失败。请重试。",
     "networkError": "无法处理您的请求。请检查您的连接。",
     "emailMismatchError": "您输入的电子邮件与您的帐户电子邮件不匹配。",
-    "continue": "继续"
+    "continue": "继续",
+    "missingRequiredInfo": "无法处理请求：缺少必需信息。",
+    "organizationNotFound": "未找到组织"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "志愿者视图选择器",

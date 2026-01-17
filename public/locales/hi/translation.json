@@ -2021,7 +2021,9 @@
     "leftOrganizationError": "संगठन छोड़ने में विफल। कृपया पुन: प्रयास करें।",
     "networkError": "आपके अनुरोध को संसाधित करने में असमर्थ। कृपया अपना कनेक्शन जांचें।",
     "emailMismatchError": "आपके द्वारा दर्ज किया गया ईमेल आपके खाते के ईमेल से मेल नहीं खाता है।",
-    "continue": "जारी रखें"
+    "continue": "जारी रखें",
+    "missingRequiredInfo": "अनुरोध संसाधित करने में असमर्थ: आवश्यक जानकारी अनुपलब्ध।",
+    "organizationNotFound": "संगठन नहीं मिला"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "स्वयंसेवक दृश्य चयनकर्ता",

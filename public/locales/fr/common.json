@@ -3,6 +3,7 @@
   "lastName": "Nom de famille",
   "searchByName": "Rechercher par nom",
   "loading": "Chargement...",
+  "error": "Erreur",
   "endOfResults": "Fin des résultats",
   "noResultsFoundFor": "Aucun résultat trouvé pour {{query}}",
   "tryAdjustingFilters": "Essayez d'ajuster vos filtres ou votre terme de recherche.",

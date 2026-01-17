@@ -2021,7 +2021,9 @@
     "leftOrganizationError": "Échec du départ de l'organisation. Veuillez réessayer.",
     "networkError": "Impossible de traiter votre demande. Veuillez vérifier votre connexion.",
     "emailMismatchError": "L'email que vous avez entré ne correspond pas à celui de votre compte.",
-    "continue": "Continuer"
+    "continue": "Continuer",
+    "missingRequiredInfo": "Impossible de traiter la demande : Informations requises manquantes.",
+    "organizationNotFound": "Organisation non trouvée"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Sélecteur de vue des bénévoles",

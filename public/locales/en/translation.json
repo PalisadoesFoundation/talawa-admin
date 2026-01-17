@@ -2004,7 +2004,9 @@
     "leftOrganizationError": "Failed to leave organization. Please try again.",
     "networkError": "Unable to process your request. Please check your connection.",
     "emailMismatchError": "The email you entered does not match your account email.",
-    "continue": "Continue"
+    "continue": "Continue",
+    "missingRequiredInfo": "Unable to process request: Missing required information.",
+    "organizationNotFound": "Organization not found"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Volunteer view selector",

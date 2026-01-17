@@ -100,7 +100,7 @@ const LeaveOrganization = (): JSX.Element => {
    */
   const handleLeaveOrganization = (): void => {
     if (!organizationId || !userId) {
-      setError('Unable to process request: Missing required information.');
+      setError(t('leaveOrganization.missingRequiredInfo'));
       setLoading(false);
       return;
     }
@@ -144,10 +144,14 @@ const LeaveOrganization = (): JSX.Element => {
     );
   }
   if (orgError)
-    return <Alert variant="danger">Error: {orgError.message}</Alert>;
+    return (
+      <Alert variant="danger">
+        {t('common:error')}: {orgError.message}
+      </Alert>
+    );
 
   if (!orgData?.organizations?.length) {
-    return <p>Organization not found</p>;
+    return <p>{t('leaveOrganization.organizationNotFound')}</p>;
   }
 
   const organization = orgData?.organizations[0];
