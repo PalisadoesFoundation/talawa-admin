@@ -175,3 +175,24 @@
   padding: 16px 0;
   font-size: 0.875rem;
 }
+
+.userImageUserPost {
+  display: flex;
+  width: 50px;
+  height: 50px;
+  margin-left: 1rem;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
+  position: relative;
+  border: 2px solid var(--userImageUserPost-border);
+}
+
+.userImageUserPost img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  transform: scale(1.5);
+}

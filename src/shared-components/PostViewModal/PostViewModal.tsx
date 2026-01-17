@@ -44,7 +44,7 @@ import { Close } from '@mui/icons-material';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import PostCard from 'shared-components/postCard/PostCard';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from './PostViewModal.module.css';
 import type { InterfacePostViewModalProps } from 'types/shared-components/PostViewModal/interface';
 import { formatPostForCard } from 'shared-components/posts/helperFunctions';
 
@@ -65,10 +65,9 @@ const PostViewModal: React.FC<InterfacePostViewModalProps> = ({
       dataTestId="pinned-post-modal"
       size="lg"
       backdrop="static"
-      className={styles.pinnedPostModal}
       showCloseButton={false}
     >
-      <div className={styles.pinnedPostModalBody}>
+      <div>
         <Button
           variant="light"
           onClick={onHide}
@@ -76,7 +75,7 @@ const PostViewModal: React.FC<InterfacePostViewModalProps> = ({
           aria-label={t('closePostView')}
           className={`position-absolute top-0 end-0 m-2 btn-close-custom ${styles.closeButton}`}
         >
-          <Close className={styles.closeButtonIcon} aria-hidden="true" />
+          <Close aria-hidden="true" />
         </Button>
         {/* Render the post */}
         <PostCard {...formatPostForCard(post, t, refetch)} />

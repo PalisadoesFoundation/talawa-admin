@@ -52,7 +52,6 @@ import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutation
 import { GET_POST_COMMENTS } from '../../GraphQl/Queries/Queries';
 import { errorHandler } from '../../utils/errorHandler';
 import CommentCard from '../../components/UserPortal/CommentCard/CommentCard';
-import styles from '../../style/app-fixed.module.css';
 import { PluginInjector } from '../../plugin';
 import useLocalStorage from '../../utils/useLocalstorage';
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
@@ -208,7 +207,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             fallbackName={props.creator.name}
             size="small"
             dataTestId="user-avatar"
-            className={styles.userImageUserPost}
+            className={postCardStyles.userImageUserPost}
             imageUrl={props.creator.avatarURL || UserDefault}
             enableEnlarge
           />

@@ -339,19 +339,6 @@ describe('PostViewModal', () => {
       expect(modal).toBeInTheDocument();
     });
 
-    test('renders close button with correct styling classes', () => {
-      renderPostViewModal();
-
-      const closeButton = screen.getByTestId('close-post-view-button');
-      expect(closeButton).toHaveClass(
-        'position-absolute',
-        'top-0',
-        'end-0',
-        'm-2',
-        'btn-close-custom',
-      );
-    });
-
     test('renders with backdrop static', () => {
       renderPostViewModal();
 

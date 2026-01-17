@@ -62,7 +62,7 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import PinnedPostsLayout from 'shared-components/pinnedPosts/pinnedPostsLayout';
 import PostCard from 'shared-components/postCard/PostCard';
-import styles from 'style/app-fixed.module.css';
+import styles from './posts.module.css';
 import { Box, Typography } from '@mui/material';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
@@ -343,7 +343,7 @@ export default function PostsPage() {
 
   return (
     <>
-      <Row className={`${styles.head} ${styles.postContainer}`}>
+      <Row>
         <div className={styles.mainpagerightOrgPost}>
           <PageHeader
             search={{
@@ -374,7 +374,7 @@ export default function PostsPage() {
                 data-cy="createPostModalBtn"
                 className={`${styles.createButton} mb-2`}
               >
-                <Add className={styles.addPost} />
+                <Add />
                 {t('createPost')}
               </Button>
             }
@@ -407,7 +407,7 @@ export default function PostsPage() {
 
               {/* Search Results Message */}
               {isFiltering && filteredPosts.length === 0 && searchTerm && (
-                <Box sx={{ py: 4 }} className={styles.noPostsFound}>
+                <Box sx={{ py: 4 }}>
                   <Typography color="text.secondary">
                     {t('noPostsFoundMatching', { term: searchTerm })}
                   </Typography>
@@ -434,7 +434,7 @@ export default function PostsPage() {
                   loader={<InfiniteScrollLoader />}
                   endMessage={
                     postsToDisplay.length > 0 && (
-                      <Box sx={{ py: 2 }} className={styles.noPostsFound}>
+                      <Box sx={{ py: 2 }}>
                         <Typography color="text.secondary">
                           {t('noMorePosts')}
                         </Typography>
@@ -442,7 +442,6 @@ export default function PostsPage() {
                     )
                   }
                   scrollThreshold={0.8}
-                  className={styles.postInfiniteScroll}
                 >
                   <Box
                     sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
@@ -461,7 +460,7 @@ export default function PostsPage() {
               {postsToDisplay.length === 0 &&
                 !orgPostListLoading &&
                 !isFiltering && (
-                  <Box sx={{ py: 4 }} className={styles.noPostsFound}>
+                  <Box sx={{ py: 4 }}>
                     <Typography color="text.secondary">
                       {t('noPosts')}
                     </Typography>
@@ -472,7 +471,7 @@ export default function PostsPage() {
         </div>
       </Row>
       {userId && (
-        <div className={styles.createPostModalContainer}>
+        <div>
           <CreatePostModal
             show={postModalIsOpen}
             onHide={hideCreatePostModal}
