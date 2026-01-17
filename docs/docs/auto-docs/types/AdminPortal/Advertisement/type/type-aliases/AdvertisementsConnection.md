@@ -20,7 +20,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:41](https://github.com/
 
 ### pageInfo?
 
-> `optional` **pageInfo**: [`DefaultConnectionPageInfo`](../../../../pagination/type-aliases/DefaultConnectionPageInfo.md)
+> `optional` **pageInfo**: [`DefaultConnectionPageInfo`](../../../pagination/type-aliases/DefaultConnectionPageInfo.md)
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L42)
 

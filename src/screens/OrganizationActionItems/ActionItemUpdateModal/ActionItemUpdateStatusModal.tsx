@@ -30,7 +30,7 @@ import React, { type FC, type FormEvent, useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
-import styles from 'style/app-fixed.module.css';
+import styles from './ActionItemUpdateStatusModal.module.css';
 import { useMutation } from '@apollo/client';
 import {
   UPDATE_ACTION_ITEM_MUTATION,
