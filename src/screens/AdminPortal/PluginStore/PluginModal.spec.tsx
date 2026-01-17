@@ -2704,4 +2704,46 @@ describe('PluginModal', () => {
       });
     });
   });
+
+  describe('StatusBadge Integration', () => {
+    it('should not render StatusBadge when plugin is not installed', () => {
+      render(<PluginModal {...defaultProps} />);
+
+      expect(
+        screen.queryByTestId('plugin-status-badge'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('should render StatusBadge when plugin is installed and active', () => {
+      const props = {
+        ...defaultProps,
+        isInstalled: vi.fn(() => true),
+        getInstalledPlugin: vi.fn(() => ({
+          ...mockDetails,
+          status: 'active' as const,
+        })),
+      };
+
+      render(<PluginModal {...props} />);
+
+      expect(screen.getByTestId('plugin-status-badge')).toBeInTheDocument();
+      expect(screen.getByText(/active/i)).toBeInTheDocument();
+    });
+
+    it('should render StatusBadge when plugin is installed and inactive', () => {
+      const props = {
+        ...defaultProps,
+        isInstalled: vi.fn(() => true),
+        getInstalledPlugin: vi.fn(() => ({
+          ...mockDetails,
+          status: 'inactive' as const,
+        })),
+      };
+
+      render(<PluginModal {...props} />);
+
+      expect(screen.getByTestId('plugin-status-badge')).toBeInTheDocument();
+      expect(screen.getByText(/inactive/i)).toBeInTheDocument();
+    });
+  });
 });
