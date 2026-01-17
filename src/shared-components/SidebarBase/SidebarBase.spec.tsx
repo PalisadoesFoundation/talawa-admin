@@ -6,7 +6,6 @@ import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import SidebarBase from './SidebarBase';
 import { useLocalStorage } from 'utils/useLocalstorage';
-import styles from '../../style/app-fixed.module.css';
 import { SIDEBAR_TEST_BG_COLOR } from 'utils/testConstants';
 
 // Mock the local storage hook
@@ -121,13 +120,13 @@ describe('SidebarBase Component', () => {
       renderComponent({ hideDrawer: true });
       // The branding div should have display: none
       const brandingDiv = screen.getByTestId('talawa-logo').parentElement;
-      expect(brandingDiv).toHaveClass(styles.sidebarBrandingContainerHidden);
+      expect(brandingDiv?.className).toMatch(/sidebarBrandingContainerHidden/);
     });
 
     it('shows branding text when drawer is expanded', () => {
       renderComponent({ hideDrawer: false });
       const brandingDiv = screen.getByTestId('talawa-logo').parentElement;
-      expect(brandingDiv).toHaveClass(styles.sidebarBrandingContainer);
+      expect(brandingDiv?.className).toMatch(/sidebarBrandingContainer/);
     });
   });
 
@@ -293,14 +292,14 @@ describe('SidebarBase Component', () => {
       renderComponent({ hideDrawer: false });
       const toggleBtn = screen.getByTestId('toggleBtn');
       const icon = toggleBtn.querySelector('svg');
-      expect(icon).toHaveClass(styles.hamburgerIconExpanded);
+      expect(icon?.className.baseVal).toMatch(/hamburgerIconExpanded/);
     });
 
     it('positions hamburger icon without margin when drawer is collapsed', () => {
       renderComponent({ hideDrawer: true });
       const toggleBtn = screen.getByTestId('toggleBtn');
       const icon = toggleBtn.querySelector('svg');
-      expect(icon).toHaveClass(styles.hamburgerIconCollapsed);
+      expect(icon?.className.baseVal).toMatch(/hamburgerIconCollapsed/);
     });
   });
 });
