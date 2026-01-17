@@ -11,7 +11,42 @@ import type { IDrawerExtension } from 'plugin/types';
 import LeftDrawerOrg from './LeftDrawerOrg';
 import type { ILeftDrawerProps } from './LeftDrawerOrg';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
-import sidebarStyles from 'shared-components/SidebarBase/SidebarBase.module.css';
+// Mock CSS modules
+vi.mock('shared-components/SidebarBase/SidebarBase.module.css', () => ({
+  default: {
+    leftDrawer: 'leftDrawer',
+    collapsedDrawer: 'collapsedDrawer',
+    expandedDrawer: 'expandedDrawer',
+  },
+}));
+
+vi.mock('style/app-fixed.module.css', () => ({
+  default: {
+    leftDrawer: 'leftDrawer',
+    hideElemByDefault: 'hideElemByDefault',
+    collapsedDrawer: 'collapsedDrawer',
+    expandedDrawer: 'expandedDrawer',
+    brandingContainer: 'brandingContainer',
+    talawaLogo: 'talawaLogo',
+    talawaText: 'talawaText',
+    organizationContainer: 'organizationContainer',
+    profileContainer: 'profileContainer',
+    bgDanger: 'bgDanger',
+    imageContainer: 'imageContainer',
+    ProfileRightConatiner: 'ProfileRightConatiner',
+    profileText: 'profileText',
+    primaryText: 'primaryText',
+    secondaryText: 'secondaryText',
+    ArrowIcon: 'ArrowIcon',
+    titleHeader: 'titleHeader',
+    optionList: 'optionList',
+    leftDrawerActiveButton: 'leftDrawerActiveButton',
+    leftDrawerInactiveButton: 'leftDrawerInactiveButton',
+    iconWrapper: 'iconWrapper',
+    avatarContainer: 'avatarContainer',
+    userSidebarOrgFooter: 'userSidebarOrgFooter',
+  },
+}));
 
 // Type definitions for better type safety
 interface IMockedResponse {
@@ -163,35 +198,6 @@ vi.mock('assets/svgs/plugins.svg?react', () => ({
       PluginLogo
     </div>
   )),
-}));
-
-// Mock CSS modules
-vi.mock('../../style/app-fixed.module.css', () => ({
-  default: {
-    leftDrawer: 'leftDrawer',
-    hideElemByDefault: 'hideElemByDefault',
-    collapsedDrawer: 'collapsedDrawer',
-    expandedDrawer: 'expandedDrawer',
-    brandingContainer: 'brandingContainer',
-    talawaLogo: 'talawaLogo',
-    talawaText: 'talawaText',
-    organizationContainer: 'organizationContainer',
-    profileContainer: 'profileContainer',
-    bgDanger: 'bgDanger',
-    imageContainer: 'imageContainer',
-    ProfileRightConatiner: 'ProfileRightConatiner',
-    profileText: 'profileText',
-    primaryText: 'primaryText',
-    secondaryText: 'secondaryText',
-    ArrowIcon: 'ArrowIcon',
-    titleHeader: 'titleHeader',
-    optionList: 'optionList',
-    leftDrawerActiveButton: 'leftDrawerActiveButton',
-    leftDrawerInactiveButton: 'leftDrawerInactiveButton',
-    iconWrapper: 'iconWrapper',
-    avatarContainer: 'avatarContainer',
-    userSidebarOrgFooter: 'userSidebarOrgFooter',
-  },
 }));
 
 const mockOrganizationData = {
@@ -362,20 +368,14 @@ describe('LeftDrawerOrg', () => {
       renderComponent({ hideDrawer: true });
 
       const container = screen.getByTestId('leftDrawerContainer');
-      expect(container).toHaveClass(
-        sidebarStyles.leftDrawer,
-        sidebarStyles.collapsedDrawer,
-      );
+      expect(container).toHaveClass('leftDrawer', 'collapsedDrawer');
     });
 
     it('should apply correct CSS classes when hideDrawer is false', () => {
       renderComponent({ hideDrawer: false });
 
       const container = screen.getByTestId('leftDrawerContainer');
-      expect(container).toHaveClass(
-        sidebarStyles.leftDrawer,
-        sidebarStyles.expandedDrawer,
-      );
+      expect(container).toHaveClass('leftDrawer', 'expandedDrawer');
     });
   });
 

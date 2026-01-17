@@ -10,7 +10,29 @@ import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import sidebarStyles from 'shared-components/SidebarBase/SidebarBase.module.css';
+// Mock CSS modules
+vi.mock('shared-components/SidebarBase/SidebarBase.module.css', () => ({
+  default: {
+    leftDrawer: 'leftDrawer',
+    collapsedDrawer: 'collapsedDrawer',
+    expandedDrawer: 'expandedDrawer',
+  },
+}));
+
+vi.mock('style/app-fixed.module.css', () => ({
+  default: {
+    leftDrawer: 'leftDrawer',
+    hideElemByDefault: 'hideElemByDefault',
+    collapsedDrawer: 'collapsedDrawer',
+    expandedDrawer: 'expandedDrawer',
+    talawaLogo: 'talawaLogo',
+    talawaText: 'talawaText',
+    titleHeader: 'titleHeader',
+    leftbarcompheight: 'leftbarcompheight',
+    optionList: 'optionList',
+    iconWrapper: 'iconWrapper',
+  },
+}));
 
 dayjs.extend(utc);
 
@@ -127,22 +149,6 @@ vi.mock('assets/svgs/plugins.svg?react', () => ({
       PluginLogo
     </div>
   )),
-}));
-
-// Mock CSS modules
-vi.mock('../../../style/app-fixed.module.css', () => ({
-  default: {
-    leftDrawer: 'leftDrawer',
-    hideElemByDefault: 'hideElemByDefault',
-    collapsedDrawer: 'collapsedDrawer',
-    expandedDrawer: 'expandedDrawer',
-    talawaLogo: 'talawaLogo',
-    talawaText: 'talawaText',
-    titleHeader: 'titleHeader',
-    leftbarcompheight: 'leftbarcompheight',
-    optionList: 'optionList',
-    iconWrapper: 'iconWrapper',
-  },
 }));
 
 describe('UserSidebar', () => {
@@ -269,20 +275,14 @@ describe('UserSidebar', () => {
       renderComponent({ hideDrawer: true });
 
       const container = screen.getByTestId('leftDrawerContainer');
-      expect(container).toHaveClass(
-        sidebarStyles.leftDrawer,
-        sidebarStyles.collapsedDrawer,
-      );
+      expect(container).toHaveClass('leftDrawer', 'collapsedDrawer');
     });
 
     it('should apply correct CSS classes when hideDrawer is false', () => {
       renderComponent({ hideDrawer: false });
 
       const container = screen.getByTestId('leftDrawerContainer');
-      expect(container).toHaveClass(
-        sidebarStyles.leftDrawer,
-        sidebarStyles.expandedDrawer,
-      );
+      expect(container).toHaveClass('leftDrawer', 'expandedDrawer');
     });
   });
 
@@ -560,7 +560,7 @@ describe('UserSidebar', () => {
       renderComponent();
 
       const container = screen.getByTestId('leftDrawerContainer');
-      expect(container).toHaveClass(sidebarStyles.leftDrawer);
+      expect(container).toHaveClass('leftDrawer');
 
       // Verify the option list exists (navigation items container)
       expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
