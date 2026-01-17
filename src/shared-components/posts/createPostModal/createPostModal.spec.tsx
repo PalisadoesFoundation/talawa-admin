@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { InMemoryCache } from '@apollo/client';
 import {
   CREATE_POST_MUTATION,
   UPDATE_POST_MUTATION,
@@ -12,7 +13,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from '../../../utils/i18nForTest';
 import { errorHandler } from 'utils/errorHandler';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import styles from './createPostModal.spec.module.css';
+
 import dayjs from 'dayjs';
 
 // Capture originals before mocking
@@ -260,7 +261,7 @@ describe('CreatePostModal Integration Tests', () => {
   ) => {
     return render(
       <I18nextProvider i18n={i18nForTest}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={mocks} cache={new InMemoryCache()}>
           <CreatePostModal {...defaultProps} {...props} />
         </MockedProvider>
       </I18nextProvider>,
@@ -345,7 +346,7 @@ describe('CreatePostModal Integration Tests', () => {
 
       const postButton = screen.getByTestId('createPostBtn');
       expect(postButton).toBeDisabled();
-      expect(postButton).toHaveClass(styles.postButtonDisabled);
+      expect(postButton.className).toMatch(/postButtonDisabled/);
     });
 
     it('enables post button when title has content', async () => {
@@ -356,7 +357,7 @@ describe('CreatePostModal Integration Tests', () => {
 
       const postButton = screen.getByTestId('createPostBtn');
       expect(postButton).not.toBeDisabled();
-      expect(postButton).not.toHaveClass(styles.postButtonDisabled);
+      expect(postButton.className).not.toMatch(/postButtonDisabled/);
     });
 
     it('disables post button when title contains only whitespace', async () => {
@@ -669,8 +670,8 @@ describe('CreatePostModal Integration Tests', () => {
       const modal = screen.getByTestId('create-post-modal');
 
       // Should not have the show classes when show is false
-      expect(backdrop).not.toHaveClass(styles.backdropShow);
-      expect(modal).not.toHaveClass(styles.modalShow);
+      expect(backdrop.className).not.toMatch(/backdropShow/);
+      expect(modal.className).not.toMatch(/modalShow/);
     });
 
     it('cleans up preview URL when unmounted with a preview', async () => {
