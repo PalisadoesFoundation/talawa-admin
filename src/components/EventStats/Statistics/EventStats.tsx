@@ -35,8 +35,7 @@ import { BaseModal } from 'shared-components/BaseModal';
 import { FeedbackStats } from './Feedback/Feedback';
 import { ReviewStats } from './Review/Review';
 import { AverageRating } from './AverageRating/AverageRating';
-import styles from 'style/app-fixed.module.css';
-import eventStatsStyles from '../css/EventStats.module.css';
+import styles from './EventStats.module.css';
 import { useQuery } from '@apollo/client';
 import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
@@ -82,7 +81,7 @@ export const EventStats = ({
         backdrop="static"
         centered
         size="lg"
-        bodyClassName={eventStatsStyles.stackEvents}
+        bodyClassName={styles.stackEvents}
         headerClassName="bg-primary"
         title={t('title')}
       >
