@@ -102,6 +102,7 @@ vi.mock('@mui/x-data-grid', () => ({
                 key={row.id}
                 role="row"
                 data-testid={`row-${row.id}`}
+                tabIndex={0}
                 onClick={() =>
                   onRowClick && onRowClick({ row: row as TestRow })
                 }
@@ -132,13 +133,14 @@ vi.mock('@mui/x-data-grid', () => ({
                         key={col.field}
                         role="gridcell"
                         data-testid={`action-cell-${row.id}`}
+                        tabIndex={0}
                       >
                         {renderedCell}
                       </div>
                     );
                   }
                   return (
-                    <div key={col.field} role="gridcell">
+                    <div key={col.field} role="gridcell" tabIndex={0}>
                       {row[col.field as keyof GridValidRowModel] as string}
                     </div>
                   );
@@ -231,26 +233,6 @@ vi.mock('../SearchFilterBar/SearchFilterBar', () => ({
       dataTestIdPrefix?: string;
     }>;
   }) => {
-    // Call dropdown callbacks
-    React.useEffect(() => {
-      if (dropdowns) {
-        dropdowns.forEach(
-          (dropdown: {
-            id: string;
-            type: string;
-            options?: Array<{ value: string | number; label: string }>;
-            selectedOption?: string | number;
-            onOptionChange?: (value: string | number) => void;
-            dataTestIdPrefix?: string;
-          }) => {
-            if (dropdown.onOptionChange && dropdown.selectedOption) {
-              dropdown.onOptionChange(dropdown.selectedOption);
-            }
-          },
-        );
-      }
-    }, [dropdowns]);
-
     return (
       <div data-testid="search-filter-bar">
         <input
@@ -266,7 +248,21 @@ vi.mock('../SearchFilterBar/SearchFilterBar', () => ({
           role="searchbox"
           data-testid={searchInputTestId}
         />
-        {/* ... rest of mock ... */}
+
+        {/* ADD THESE TRIGGER BUTTONS */}
+        {dropdowns?.map((dropdown) => (
+          <button
+            key={dropdown.id}
+            data-testid={`${dropdown.dataTestIdPrefix || dropdown.id}-trigger`}
+            onClick={() => {
+              if (dropdown.onOptionChange && dropdown.selectedOption) {
+                dropdown.onOptionChange(dropdown.selectedOption);
+              }
+            }}
+          >
+            Trigger {dropdown.id}
+          </button>
+        ))}
       </div>
     );
   },
@@ -533,6 +529,10 @@ describe('DataGridWrapper', () => {
       />,
     );
 
+    // Click the triggers
+    fireEvent.click(screen.getByTestId('searchBy-trigger'));
+    fireEvent.click(screen.getByTestId('sort-trigger'));
+
     expect(onSearchByChange).toHaveBeenCalledWith('name');
     expect(onSortChange).toHaveBeenCalledWith('name_asc');
   });
@@ -597,21 +597,25 @@ describe('DataGridWrapper', () => {
 
     const input = screen.getByRole('searchbox');
 
-    // Test searching for 'Bob' (non-null value)
+    // Test 1: Searching for 'Bob' (non-null value)
     fireEvent.change(input, { target: { value: 'Bob' } });
     vi.advanceTimersByTime(300);
+    expect(input).toHaveValue('Bob');
 
-    // Test searching for 'User' (non-undefined value)
+    // Test 2: Searching for 'User' (non-undefined value)
     fireEvent.change(input, { target: { value: 'User' } });
     vi.advanceTimersByTime(300);
+    expect(input).toHaveValue('User');
 
-    // Test searching for empty string (should show all rows)
+    // Test 3: Searching for empty string (should show all rows)
     fireEvent.change(input, { target: { value: '' } });
     vi.advanceTimersByTime(300);
+    expect(input).toHaveValue('');
 
-    // Test searching for non-existent value
+    // Test 4: Searching for non-existent value
     fireEvent.change(input, { target: { value: 'Nonexistent' } });
     vi.advanceTimersByTime(300);
+    expect(input).toHaveValue('Nonexistent');
 
     vi.useRealTimers();
   });
@@ -632,9 +636,13 @@ describe('DataGridWrapper', () => {
             { label: 'Name Z-A', value: 'name_desc' },
           ],
           selectedSort: 'name_asc',
+          // No onSortChange - tests line 244 else branch
         }}
       />,
     );
+
+    // Click the sort trigger button
+    fireEvent.click(screen.getByTestId('sort-trigger'));
 
     expect(screen.getByTestId('search-filter-bar')).toBeInTheDocument();
   });
@@ -739,6 +747,9 @@ describe('DataGridWrapper', () => {
     const searchInput = screen.getByTestId('searchInput');
     fireEvent.change(searchInput, { target: { value: 'test-search-value' } });
     fireEvent.keyDown(searchInput, { key: 'Enter', code: 'Enter' });
+
+    // ADD THIS LINE: Click the searchBy trigger button
+    fireEvent.click(screen.getByTestId('searchBy-trigger'));
 
     expect(onSearchChange).toHaveBeenCalledWith('test-search-value', 'name');
     expect(onSearchByChange).toHaveBeenCalledWith('name');
@@ -963,5 +974,31 @@ describe('DataGridWrapper', () => {
     expect(searchInput).toHaveValue('');
     vi.advanceTimersByTime(300);
     vi.useRealTimers();
+  });
+
+  test('does not call onSearchByChange when not provided', () => {
+    // No onSearchByChange in searchConfig
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        searchConfig={{
+          enabled: true,
+          serverSide: true,
+          searchByOptions: [
+            { label: 'Name', value: 'name' },
+            { label: 'Role', value: 'role' },
+          ],
+          selectedSearchBy: 'name',
+          onSearchChange: vi.fn(),
+          // No onSearchByChange - tests the false branch of line 226
+        }}
+      />,
+    );
+
+    // Click the searchBy trigger button
+    fireEvent.click(screen.getByTestId('searchBy-trigger'));
+
+    // Should not crash or throw errors
+    expect(screen.getByTestId('search-filter-bar')).toBeInTheDocument();
   });
 });
