@@ -14,8 +14,15 @@ import type { InterfaceRecurringEventVolunteerModalProps } from 'types/UserPorta
 /**
  * RecurringEventVolunteerModal component
  *
- * @param props - Component props
- * @returns Modal component for volunteer scope selection
+ * @param show - Whether the modal is visible.
+ * @param onHide - Callback to close the modal.
+ * @param eventName - Name of the event.
+ * @param eventDate - Date of the current event instance.
+ * @param onSelectSeries - Handler for entire-series selection.
+ * @param onSelectInstance - Handler for single-instance selection.
+ * @param isForGroup - Whether joining a volunteer group.
+ * @param groupName - Name of the volunteer group (if applicable).
+ * @returns JSX.Element
  */
 const RecurringEventVolunteerModal: React.FC<
   InterfaceRecurringEventVolunteerModalProps
