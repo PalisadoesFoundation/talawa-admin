@@ -33,8 +33,10 @@
  * ```
  */
 import React, { useState } from 'react';
-import { Button, Modal, Form } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import styles from 'style/app-fixed.module.css';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { InterfaceDeleteEventModalProps } from 'types/Event/interface';
 
 const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
@@ -62,85 +64,89 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
     }
   };
 
+  const footerContent = (
+    <>
+      <Button
+        type="button"
+        className={`btn btn-danger ${styles.removeButton}`}
+        data-dismiss="modal"
+        onClick={toggleDeleteModal}
+        data-testid="eventDeleteModalCloseBtn"
+      >
+        {tCommon('no')}
+      </Button>
+      <Button
+        type="button"
+        className={`btn ${styles.addButton}`}
+        onClick={handleDelete}
+        data-testid="deleteEventBtn"
+      >
+        {tCommon('yes')}
+      </Button>
+    </>
+  );
+
   return (
-    <Modal
+    <BaseModal
       size={isRecurringInstance ? 'lg' : 'sm'}
-      id={`deleteEventModal${eventListCardProps.id}`}
       show={eventDeleteModalIsOpen}
       onHide={toggleDeleteModal}
       backdrop="static"
       keyboard={false}
       centered
-    >
-      <Modal.Header closeButton className={`${styles.modalHeader}`}>
-        <Modal.Title
+      title={
+        <span
           className="text-white"
           id={`deleteEventModalLabel${eventListCardProps.id}`}
         >
           {t('deleteEvent')}
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {isRecurringInstance ? (
-          <div>
-            <p>{t('deleteRecurringEventMsg')}</p>
-            <Form>
-              <Form.Check
-                type="radio"
-                id="delete-single"
-                name="deleteOption"
-                value="single"
-                checked={deleteOption === 'single'}
-                onChange={() => setDeleteOption('single')}
-                label={t('deleteThisInstance')}
-                className="mb-2"
-              />
-              <Form.Check
-                type="radio"
-                id="delete-following"
-                name="deleteOption"
-                value="following"
-                checked={deleteOption === 'following'}
-                onChange={() => setDeleteOption('following')}
-                label={t('deleteThisAndFollowing')}
-                className="mb-2"
-              />
-              <Form.Check
-                type="radio"
-                id="delete-all"
-                name="deleteOption"
-                value="all"
-                checked={deleteOption === 'all'}
-                onChange={() => setDeleteOption('all')}
-                label={t('deleteAllEvents')}
-                className="mb-2"
-              />
-            </Form>
-          </div>
-        ) : (
-          <p>{t('deleteEventMsg')}</p>
-        )}
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          type="button"
-          className={`btn btn-danger ${styles.removeButton}`}
-          data-dismiss="modal"
-          onClick={toggleDeleteModal}
-          data-testid="eventDeleteModalCloseBtn"
-        >
-          {tCommon('no')}
-        </Button>
-        <Button
-          type="button"
-          className={`btn ${styles.addButton}`}
-          onClick={handleDelete}
-          data-testid="deleteEventBtn"
-        >
-          {tCommon('yes')}
-        </Button>
-      </Modal.Footer>
-    </Modal>
+        </span>
+      }
+      headerClassName={styles.modalHeader}
+      footer={footerContent}
+      showCloseButton={true}
+      dataTestId={`deleteEventModal${eventListCardProps.id}`}
+    >
+      {isRecurringInstance ? (
+        <div>
+          <p>{t('deleteRecurringEventMsg')}</p>
+          <Form>
+            <Form.Check
+              type="radio"
+              id="delete-single"
+              name="deleteOption"
+              value="single"
+              checked={deleteOption === 'single'}
+              onChange={() => setDeleteOption('single')}
+              label={t('deleteThisInstance')}
+              className="mb-2"
+            />
+            <Form.Check
+              type="radio"
+              id="delete-following"
+              name="deleteOption"
+              value="following"
+              checked={deleteOption === 'following'}
+              onChange={() => setDeleteOption('following')}
+              label={t('deleteThisAndFollowing')}
+              className="mb-2"
+            />
+            <Form.Check
+              type="radio"
+              id="delete-all"
+              name="deleteOption"
+              value="all"
+              checked={deleteOption === 'all'}
+              onChange={() => setDeleteOption('all')}
+              label={t('deleteAllEvents')}
+              className="mb-2"
+            />
+          </Form>
+        </div>
+      ) : (
+        <p>{t('deleteEventMsg')}</p>
+      )}
+    </BaseModal>
   );
 };
 

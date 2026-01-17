@@ -303,8 +303,11 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Modal should have larger size for recurring events
-      const modal = document.querySelector('.modal-lg');
+      const modal = screen.getByTestId(
+        `deleteEventModal${mockRecurringEventProps.eventListCardProps.id}`,
+      );
       expect(modal).toBeInTheDocument();
+      expect(modal).toHaveClass('modal-lg');
     });
   });
 
@@ -334,8 +337,11 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Modal should have small size for standalone events
-      const modal = document.querySelector('.modal-sm');
+      const modal = screen.getByTestId(
+        `deleteEventModal${mockStandaloneEventProps.eventListCardProps.id}`,
+      );
       expect(modal).toBeInTheDocument();
+      expect(modal).toHaveClass('modal-sm');
     });
   });
 
