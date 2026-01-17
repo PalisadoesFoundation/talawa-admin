@@ -44,7 +44,7 @@ import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup'
 
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import styles from '../../../style/app-fixed.module.css';
+import styles from './AgendaItemsCreateModal.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import convertToBase64 from 'utils/convertToBase64';
 import type { InterfaceAgendaItemsCreateModalProps } from 'types/Agenda/interface';

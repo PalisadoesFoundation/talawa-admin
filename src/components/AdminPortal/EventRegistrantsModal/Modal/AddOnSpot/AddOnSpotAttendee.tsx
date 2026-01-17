@@ -37,7 +37,7 @@ import {
   FormSelectField,
 } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { BaseModal } from 'shared-components/BaseModal';
-import styles from 'style/app-fixed.module.css';
+import styles from './AddOnSpotAttendee.module.css';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -48,7 +48,6 @@ import type {
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import modalStyles from '../../EventRegistrants.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
@@ -136,7 +135,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
         onHide={handleClose}
         backdrop="static"
         centered={true}
-        headerClassName={modalStyles.modalHeader}
+        headerClassName={styles.modalHeader}
         title={t('title')}
       >
         <form onSubmit={handleSubmit} data-testid="onspot-attendee-form">
