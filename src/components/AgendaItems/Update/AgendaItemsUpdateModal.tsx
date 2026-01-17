@@ -36,7 +36,7 @@ import { FaLink, FaTrash } from 'react-icons/fa';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useMinioUpload } from 'utils/MinioUpload';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import styles from '../../../style/app-fixed.module.css';
+import styles from './AgendaItemsUpdateModal.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import type { InterfaceAgendaItemsUpdateModalProps } from 'types/Agenda/interface';
 const AgendaItemsUpdateModal: React.FC<

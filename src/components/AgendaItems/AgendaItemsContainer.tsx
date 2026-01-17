@@ -45,7 +45,7 @@ import type {
   InterfaceAgendaItemInfo,
   InterfaceAgendaItemCategoryInfo,
 } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './AgendaItemsContainer.module.css';
 
 import AgendaItemsPreviewModal from 'components/AgendaItems/Preview/AgendaItemsPreviewModal';
 import AgendaItemsDeleteModal from 'components/AgendaItems/Delete/AgendaItemsDeleteModal';
