@@ -922,8 +922,7 @@
     "pledgeDate": "प्रतिज्ञा तिथि",
     "pledged": "प्रतिबद्ध",
     "donated": "दान किया गया",
-    "campaignNotActive": "अभियान वर्तमान में सक्रिय नहीं है",
-    "close": "बंद करें"
+    "campaignNotActive": "अभियान वर्तमान में सक्रिय नहीं है"
   },
   "createPostModal": {
     "title": "पदों",
