@@ -19,14 +19,7 @@ import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import {
-  Autocomplete,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from '@mui/material';
+import { Autocomplete, InputLabel, MenuItem, Select } from '@mui/material';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
@@ -321,21 +314,27 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 });
               }}
               renderInput={(params) => (
-                <TextField {...params} label={t('pledgers')} />
+                <div ref={params.InputProps.ref}>
+                  <input
+                    {...params.inputProps}
+                    type="text"
+                    placeholder={t('pledgers')}
+                    className={`form-control ${styles.noOutline}`}
+                  />
+                </div>
               )}
             />
           </div>
         )}
         <div className="d-flex gap-3 mb-4">
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">
-              {t('currency')}
-            </InputLabel>
+          <div className="flex-grow-1">
+            <InputLabel id="currency-select-label">{t('currency')}</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
+              labelId="currency-select-label"
               value={pledgeCurrency}
               label={t('currency')}
               data-testid="currencySelect"
+              fullWidth
               onChange={(e) => {
                 setFormState({
                   ...formState,
@@ -349,8 +348,8 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 </MenuItem>
               ))}
             </Select>
-          </FormControl>
-          <FormControl fullWidth>
+          </div>
+          <div className="flex-grow-1">
             <FormTextField
               name="amount"
               label={t('amount')}
@@ -374,7 +373,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               }}
               className={styles.noOutline}
             />
-          </FormControl>
+          </div>
         </div>
         <Button
           type="submit"
