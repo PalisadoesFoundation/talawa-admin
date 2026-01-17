@@ -70,6 +70,8 @@ const VerifyEmail = (): JSX.Element => {
         if (data?.verifyEmail?.success) {
           setVerificationState('success');
           NotificationToast.success(t('success'));
+          localStorage.removeItem('emailNotVerified');
+          localStorage.removeItem('unverifiedEmail');
         } else {
           setVerificationState('error');
         }
