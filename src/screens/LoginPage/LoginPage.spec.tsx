@@ -1166,7 +1166,7 @@ describe('Testing redirect if already logged in', () => {
       </MockedProvider>,
     );
     await wait();
-    expect(routerMocks.navigate).toHaveBeenCalledWith('/orglist');
+    expect(routerMocks.navigate).toHaveBeenCalledWith('/user/organizations');
   });
 });
 
