@@ -38,7 +38,7 @@ import i18n from 'utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from '../modal/VolunteerGroups.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { InterfaceDeleteVolunteerGroupModalProps } from 'types/EventVolunteers/VolunteerGroups/deleteModal/VolunteerGroupDeleteModal/interface';
+import { InterfaceVolunteerGroupDeleteModalProps } from 'types/EventVolunteers/VolunteerGroups/deleteModal/VolunteerGroupDeleteModal/interface';
 import VolunteerGroupDeleteModal from './VolunteerGroupDeleteModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
@@ -72,7 +72,7 @@ const t = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-const itemProps: InterfaceDeleteVolunteerGroupModalProps[] = [
+const itemProps: InterfaceVolunteerGroupDeleteModalProps[] = [
   {
     isOpen: true,
     hide: vi.fn(),
@@ -118,7 +118,7 @@ const itemProps: InterfaceDeleteVolunteerGroupModalProps[] = [
 
 const renderGroupDeleteModal = (
   link: ApolloLink,
-  props: InterfaceDeleteVolunteerGroupModalProps,
+  props: InterfaceVolunteerGroupDeleteModalProps,
 ): RenderResult => {
   return render(
     <MockedProvider link={link}>
@@ -241,7 +241,7 @@ describe('Testing Group Delete Modal', () => {
   it('Deletes group for specific instance when isRecurring and applyTo is instance', async () => {
     // Tests that selecting "this event only" for a recurring event calls
     // DELETE_VOLUNTEER_GROUP_FOR_INSTANCE instead of the default mutation
-    const recurringGroupProps: InterfaceDeleteVolunteerGroupModalProps = {
+    const recurringGroupProps: InterfaceVolunteerGroupDeleteModalProps = {
       isOpen: true,
       hide: vi.fn(),
       refetchGroups: vi.fn(),
@@ -344,7 +344,7 @@ describe('Testing Group Delete Modal', () => {
   ])(
     'Hides radio buttons for $description',
     async ({ isTemplate, isInstanceException }) => {
-      const props: InterfaceDeleteVolunteerGroupModalProps = {
+      const props: InterfaceVolunteerGroupDeleteModalProps = {
         isOpen: true,
         hide: vi.fn(),
         refetchGroups: vi.fn(),

@@ -20,7 +20,7 @@ import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
  * Defines the properties required to control visibility, handle deletion logic,
  * and manage the specific volunteer group data.
  */
-export interface InterfaceDeleteVolunteerGroupModalProps {
+export interface InterfaceVolunteerGroupDeleteModalProps {
   /** Controls the visibility of the modal */
   isOpen: boolean;
 
