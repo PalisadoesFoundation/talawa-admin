@@ -250,6 +250,7 @@
   "organizationEventDescription": "组织的所有成员可见",
   "inviteOnlyEvent": "仅限受邀者",
   "inviteOnlyEventDescription": "仅受邀成员和活动管理员可见",
+  "noCategory": "无类别",
   "to": "至",
   "sortingIcon": "排序图标",
   "peopleTabTagName": "人员",
@@ -260,8 +261,8 @@
   "deleteEntityConfirmation": "您确定要删除 {{entityName}} 吗？此操作无法撤消。",
   "update": "更新",
   "imageNotFound": "未找到图片",
-  "changeLanguage": "更改語言",
-  "selectField": "選擇{{fieldName}}",
+  "changeLanguage": "更改语言",
+  "selectField": "选择{{fieldName}}",
   "userEvents": {
     "presetToday": "今天",
     "presetThisWeek": "本周",

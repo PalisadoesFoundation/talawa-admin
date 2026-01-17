@@ -250,6 +250,7 @@
   "organizationEventDescription": "Visible para todos los miembros de la organización",
   "inviteOnlyEvent": "Solo por invitación",
   "inviteOnlyEventDescription": "Visible solo para miembros invitados y administradores de eventos",
+  "noCategory": "Sin categoría",
   "to": "A",
   "sortingIcon": "icono de ordenación",
   "peopleTabTagName": "Personas",
