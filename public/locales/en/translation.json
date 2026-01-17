@@ -731,6 +731,7 @@
     "options": "Options",
     "createAgendaItem": "Create Agenda Item",
     "noAgendaItems": "No Agenda Items",
+    "search": "Search",
     "selectAgendaItemCategory": "Select an agenda item category",
     "update": "Update",
     "delete": "Delete",
@@ -1103,6 +1104,7 @@
     "removingAttendee": "Removing the attendee...",
     "attendeeRemovedSuccessfully": "Attendee removed successfully",
     "errorRemovingAttendee": "Error removing attendee",
+    "cannotUnregisterCheckedIn": "Cannot unregister a user who has already checked in",
     "checkedIn": "Checked In",
     "unregister": "Unregister",
     "cannotUnregisterCheckedInTooltip": "Cannot unregister checked-in user"
@@ -1450,12 +1452,13 @@
   },
   "posts": {
     "pinnedPosts": "Pinned Posts",
+    "errorLoadingPreviewPost": "Error loading preview post",
     "title": "Posts",
     "latest": "Latest",
     "oldest": "Oldest",
     "none": "None",
     "unknownUser": "Unknown User",
-    "closePinnedPost": "Close Pinned Post",
+    "closePostView": "Close Post View",
     "searchPosts": "Search posts",
     "nothingToShow": "Nothing to show here.",
     "noMorePosts": "No more posts to load.",
@@ -1889,6 +1892,13 @@
   "checkIn": {
     "errorCheckingIn": "Error checking in",
     "checkedInSuccessfully": "Checked in successfully",
+    "generatingPdf": "Generating pdf...",
+    "pdfGeneratedSuccessfully": "PDF generated successfully!",
+    "errorGeneratingPdf": "Error generating pdf",
+    "unknownError": "Unknown error",
+    "checkedIn": "Checked In",
+    "downloadTag": "Download Tag",
+    "checkInButton": "Check In",
     "searchAttendees": "Search Attendees",
     "checkedIn": "Checked In",
     "downloadTag": "Download Tag",
@@ -2261,7 +2271,9 @@
     "title": "User Portal",
     "talawa": "Talawa",
     "talawaBranding": "Talawa Branding",
-    "view": "View"
+    "view": "View",
+    "changeLanguage": "Change Language",
+    "userNotFoundError": "User not found"
   },
   "donation": {
     "amount_label": "Amount",

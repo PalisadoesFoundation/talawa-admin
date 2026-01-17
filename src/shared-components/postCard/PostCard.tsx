@@ -15,7 +15,6 @@ import { useTranslation } from 'react-i18next';
 import {
   IconButton,
   Button,
-  FormControl,
   Input,
   InputAdornment,
   Box,
@@ -53,7 +52,6 @@ import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutation
 import { GET_POST_COMMENTS } from '../../GraphQl/Queries/Queries';
 import { errorHandler } from '../../utils/errorHandler';
 import CommentCard from '../../components/UserPortal/CommentCard/CommentCard';
-import styles from '../../style/app-fixed.module.css';
 import { PluginInjector } from '../../plugin';
 import useLocalStorage from '../../utils/useLocalstorage';
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
@@ -181,6 +179,22 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
     }
   };
 
+  const copyToClipboard = async (): Promise<void> => {
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set('previewPostID', props.id);
+
+      const finalUrl = url.toString();
+      await navigator.clipboard.writeText(finalUrl);
+      NotificationToast.success(tCommon('linkCopied'));
+    } catch {
+      NotificationToast.error(tCommon('copyToClipboardError'));
+    } finally {
+      // Close the menu
+      setDropdownAnchor(null);
+    }
+  };
+
   return (
     <Box
       className={`${postCardStyles.postContainer} ${postCardStyles.postContainerBackground}`}
@@ -193,7 +207,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             fallbackName={props.creator.name}
             size="small"
             dataTestId="user-avatar"
-            className={styles.userImageUserPost}
+            className={postCardStyles.userImageUserPost}
             imageUrl={props.creator.avatarURL || UserDefault}
             enableEnlarge
           />
@@ -267,6 +281,19 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               </MenuItem>
             )}
 
+            <MenuItem
+              onClick={copyToClipboard}
+              data-testid="share-post-menu-item"
+            >
+              <ListItemIcon>
+                <Share fontSize="small" />
+              </ListItemIcon>
+              <ListItemText
+                primary={tCommon('share')}
+                data-testid="share-post-button"
+              />
+            </MenuItem>
+
             {(isAdmin || isPostCreator) && (
               <MenuItem
                 onClick={handleDeletePost}
@@ -329,7 +356,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           data: {
             caption: props.title,
             postId: props.id,
-            text: props.text,
+
             creator: props.creator,
             upVoteCount: likeCount,
             downVoteCount: props.downVoteCount,
@@ -373,7 +400,12 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           >
             <ChatBubbleOutline fontSize="small" />
           </IconButton>
-          <IconButton size="small" aria-label={t('postCard.share')}>
+          <IconButton
+            size="small"
+            aria-label={t('postCard.share')}
+            onClick={copyToClipboard}
+            data-testid="share-post-quick-button"
+          >
             <Share fontSize="small" />
           </IconButton>
         </Box>
@@ -462,7 +494,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
 
       {/* Add Comment */}
       <div className={postCardStyles.commentFormContainer}>
-        <FormControl fullWidth className={postCardStyles.commentForm}>
+        <Box className={postCardStyles.commentForm}>
           <Input
             placeholder={t('postCard.addComment')}
             value={commentInput}
@@ -493,7 +525,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               py: 0.5,
             }}
           />
-        </FormControl>
+        </Box>
       </div>
 
       {/* Edit Post Modal */}

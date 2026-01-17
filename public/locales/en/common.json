@@ -252,6 +252,7 @@
   "organizationEventDescription": "Visible to all members of the organization",
   "inviteOnlyEvent": "Invite Only",
   "inviteOnlyEventDescription": "Visible only to invited members and event admins",
+  "noCategory": "No Category",
   "sortingIcon": "sorting-icon",
   "or": "or",
   "eventNotFound": "Event with id {{id}} not found",
@@ -280,5 +281,8 @@
   "cannotUnregisterCheckedIn": "Cannot unregister a user who has already checked in",
   "errorLoadingEventDetails": "Error loading event details. Please try again later.",
   "eventDate": "Event Date",
-  "attendedEventsList": "Attended events list"
+  "attendedEventsList": "Attended events list",
+  "linkCopied": "Link copied to clipboard",
+  "copyToClipboardError": "Error copying link to clipboard",
+  "share": "Share"
 }
