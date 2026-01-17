@@ -73,29 +73,24 @@ const MOCKS = [
   {
     request: {
       query: RESEND_VERIFICATION_EMAIL_MUTATION,
-      variables: {
-        email: 'test@example.com',
-      },
     },
     result: {
       data: {
-        resendVerificationEmail: {
+        sendVerificationEmail: {
           success: true,
           message: 'Verification email sent',
         },
       },
     },
   },
-  {
-    request: {
-      query: RESEND_VERIFICATION_EMAIL_MUTATION,
-      variables: {
-        email: 'notexists@example.com',
-      },
-    },
-    error: new Error('User not found'),
-  },
 ];
+
+const resendErrorMock = {
+  request: {
+    query: RESEND_VERIFICATION_EMAIL_MUTATION,
+  },
+  error: new Error('User not found'),
+};
 
 const link = new StaticMockLink(MOCKS, true);
 
@@ -117,31 +112,30 @@ afterEach(() => {
 
 describe('Testing VerifyEmail screen', () => {
   it('Component should be rendered properly with loading state', async () => {
-    const loadingMocks = [
-      {
-        request: {
-          query: VERIFY_EMAIL_MUTATION,
-          variables: {
-            token: 'valid-token',
-          },
+    const mockObj = {
+      request: {
+        query: VERIFY_EMAIL_MUTATION,
+        variables: {
+          token: 'valid-token',
         },
-        result: {
-          data: {
-            verifyEmail: {
-              success: true,
-              message: 'Email verified successfully',
-              user: {
-                id: '123',
-                name: 'Test User',
-                emailAddress: 'test@example.com',
-                isEmailAddressVerified: true,
-              },
+      },
+      result: {
+        data: {
+          verifyEmail: {
+            success: true,
+            message: 'Email verified successfully',
+            user: {
+              id: '123',
+              name: 'Test User',
+              emailAddress: 'test@example.com',
+              isEmailAddressVerified: true,
             },
           },
         },
-        delay: 100, // Add delay to see loading state
       },
-    ];
+      delay: 100, // Add delay to see loading state
+    };
+    const loadingMocks = [mockObj, mockObj];
 
     render(
       <MockedProvider mocks={loadingMocks}>
@@ -305,7 +299,7 @@ describe('Testing VerifyEmail screen', () => {
 
   it('Should handle resend email error', async () => {
     render(
-      <MockedProvider link={link}>
+      <MockedProvider mocks={[resendErrorMock]}>
         <MemoryRouter initialEntries={['/auth/verify-email']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
