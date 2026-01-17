@@ -5,7 +5,6 @@
  * within an organization. Users can add a title, optional body text, attach an
  * image or video, and optionally pin the post.
  *
- * [Image of CreatePostModal component UI wireframe showing header with user info, body with text inputs and preview area, and footer with media actions and post button]
  */
 
 import React, {
@@ -108,8 +107,7 @@ function CreatePostModal({
 
   /**
    * Handles file selection from the input.
-   * Validates the mime type and generates a preview URL.
-   * [Image of file selection process flow showing mime type validation, preview generation logic, and error handling]
+   * Validates the mime type against allowed types and generates a blob URL for previewing the selected image or video.
    */
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -155,8 +153,7 @@ function CreatePostModal({
 
   /**
    * Submits the post data to the server.
-   * Handles both creation and editing of posts.
-   * [Image of create post sequence diagram showing validation, mutation execution, success handling, and error catching]
+   * Validates required fields, executes the create or update mutation, handles success, and catches errors.
    */
   const createPostHandler = async (
     e: FormEvent<HTMLFormElement>,

@@ -1,11 +1,5 @@
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-  type ChangeEvent,
-  type FormEvent,
-} from 'react';
-import Button from 'react-bootstrap/Button';
+import React, { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { Button } from 'react-bootstrap';
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfacePledgeInfo,
@@ -188,7 +182,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
    */
 
   const updatePledgeHandler = useCallback(
-    async (e: ChangeEvent<HTMLFormElement>) => {
+    async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const updatedFields: { amount?: number } = {};
       if (pledgeAmount !== pledge?.amount) {
@@ -216,7 +210,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
    * @returns A promise that resolves when the pledge is successfully created.
    */
   const createPledgeHandler = useCallback(
-    async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+    async (e: FormEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
       if (pledgeUsers.length === 0 || !pledgeUsers[0]) {
         NotificationToast.error(t('selectPledger'));
@@ -285,9 +279,9 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         onSubmit={(e: FormEvent<HTMLFormElement>) => {
           e.preventDefault();
           if (mode === 'edit') {
-            updatePledgeHandler(e as unknown as ChangeEvent<HTMLFormElement>);
+            updatePledgeHandler(e);
           } else {
-            createPledgeHandler(e as unknown as ChangeEvent<HTMLFormElement>);
+            createPledgeHandler(e);
           }
         }}
         className="p-3"
@@ -314,13 +308,15 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 });
               }}
               renderInput={(params) => (
-                <div ref={params.InputProps.ref}>
+                <div ref={params.InputProps.ref} className="position-relative">
                   <input
                     {...params.inputProps}
                     type="text"
                     placeholder={t('pledgers')}
+                    aria-label={t('pledgers')}
                     className={`form-control ${styles.noOutline}`}
                   />
+                  {params.InputProps.endAdornment}
                 </div>
               )}
             />

@@ -138,17 +138,16 @@ export default function Donate(): JSX.Element {
             placeholder={t('amount')}
             value={amount}
             onChange={setAmount}
+            required
             data-testid="donationAmount"
             startAdornment={
               <Dropdown>
                 <Dropdown.Toggle
+                  data-testid="changeCurrencyBtn"
                   className={`${styles.colorPrimary} ${styles.dropdown}`}
                   variant="success"
-                  data-testid="modeChangeBtn"
                 >
-                  <span data-testid="changeCurrencyBtn">
-                    {currencies[selectedCurrency]}
-                  </span>
+                  <span>{currencies[selectedCurrency]}</span>
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>

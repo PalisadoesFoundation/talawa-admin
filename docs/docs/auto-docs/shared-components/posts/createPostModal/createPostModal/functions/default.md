@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/shared-components/posts/createPostModal/createPostModal.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/posts/createPostModal/createPostModal.tsx#L34)
+Defined in: [src/shared-components/posts/createPostModal/createPostModal.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/posts/createPostModal/createPostModal.tsx#L33)
 
 ## Parameters
 

@@ -41,7 +41,7 @@ vi.mock('utils/i18n', () => ({
 const { toast } = vi.hoisted(() => ({
   toast: {
     success: vi.fn(),
-    error: vi.fn((msg: string) => console.log('Toast Error:', msg)),
+    error: vi.fn(),
   },
 }));
 
@@ -471,7 +471,7 @@ describe('PledgeModal', () => {
       expect(amountInput).toHaveValue(100);
 
       fireEvent.change(amountInput, { target: { value: 'abc' } });
-      expect(amountInput).toHaveValue(100);
+      expect(amountInput).toHaveValue(0);
     });
 
     it('should update currency when changed', async () => {

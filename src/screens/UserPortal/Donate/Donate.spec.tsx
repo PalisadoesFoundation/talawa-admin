@@ -90,6 +90,8 @@ vi.mock('shared-components/SearchFilterBar/SearchFilterBar', () => ({
 interface InterfaceFormTextFieldMockProps {
   value: string;
   onChange: (value: string) => void;
+  startAdornment?: React.ReactNode;
+  endAdornment?: React.ReactNode;
   [key: string]: unknown;
 }
 
@@ -97,13 +99,19 @@ vi.mock('shared-components/FormFieldGroup/FormTextField', () => ({
   FormTextField: ({
     value,
     onChange,
+    startAdornment,
+    endAdornment,
     ...props
   }: InterfaceFormTextFieldMockProps) => (
-    <input
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      {...props}
-    />
+    <div>
+      {startAdornment}
+      <input
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        {...props}
+      />
+      {endAdornment}
+    </div>
   ),
 }));
 
