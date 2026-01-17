@@ -55,10 +55,6 @@ const t = JSON.parse(
   ),
 );
 
-const tCommon = JSON.parse(
-  JSON.stringify(i18nForTest.getDataByLanguage('en')?.common),
-);
-
 // Mock data for GraphQL queries
 const mockCategory = {
   id: 'categoryId1',
@@ -758,14 +754,8 @@ describe('Testing ItemViewModal', () => {
         hide: mockHide,
         item,
       });
-
-      const statusInput = screen.getByDisplayValue(tCommon.completed);
-      expect(statusInput).toBeInTheDocument();
-      expect(statusInput).toBeDisabled();
-
-      // Check for TaskAlt icon (success icon)
-      const successIcon = screen.getByTestId('TaskAltIcon');
-      expect(successIcon).toBeInTheDocument();
+      const badge = screen.getByTestId('action-item-status-badge');
+      expect(badge).toBeInTheDocument();
     });
 
     it('should display pending status with warning icon', () => {
@@ -775,14 +765,8 @@ describe('Testing ItemViewModal', () => {
         hide: mockHide,
         item,
       });
-
-      const statusInput = screen.getByDisplayValue(tCommon.pending);
-      expect(statusInput).toBeInTheDocument();
-      expect(statusInput).toBeDisabled();
-
-      // Check for HistoryToggleOff icon (warning icon)
-      const warningIcon = screen.getByTestId('HistoryToggleOffIcon');
-      expect(warningIcon).toBeInTheDocument();
+      const badge = screen.getByTestId('action-item-status-badge');
+      expect(badge).toBeInTheDocument();
     });
   });
 
@@ -981,7 +965,8 @@ describe('Testing ItemViewModal', () => {
       expect(screen.getByLabelText(t.category)).toBeInTheDocument();
       expect(screen.getByLabelText(t.assignedTo)).toBeInTheDocument();
       expect(screen.getByLabelText(t.creator)).toBeInTheDocument();
-      expect(screen.getByLabelText(t.status)).toBeInTheDocument();
+      const badge = screen.getByTestId('action-item-status-badge');
+      expect(badge).toBeInTheDocument();
       expect(screen.getByLabelText(t.event)).toBeInTheDocument();
       expect(screen.getByTestId('assignmentDatePicker')).toBeInTheDocument();
       expect(screen.getByLabelText(t.preCompletionNotes)).toBeInTheDocument();

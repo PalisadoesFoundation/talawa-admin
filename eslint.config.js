@@ -80,11 +80,22 @@ const restrictedImports = [
       'Direct imports from @dicebear/core are not allowed. Use the shared createAvatar wrapper instead.',
   },
   {
-    id: 'mui-chip',
     name: '@mui/material',
     importNames: ['Chip'],
     message:
       'Do not import Chip from @mui/material. Use the shared StatusBadge component from src/shared-components/StatusBadge/ instead.',
+  },
+  {
+    name: '@mui/material',
+    importNames: ['TextField'],
+    message:
+      'Do not import TextField from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
+  },
+  {
+    name: '@mui/material',
+    importNames: ['FormControl'],
+    message:
+      'Do not import FormControl from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
   },
 ];
 
@@ -118,7 +129,7 @@ export default [
       'tsconfig.json',
       'fix-readme-links.js',
       'fix-repo-url.js',
-      'src/components/CheckIn/tagTemplate.ts',
+      'src/shared-components/CheckIn/tagTemplate.ts',
       'docs/**',
       '*.md',
       'docker/**',
@@ -420,20 +431,6 @@ export default [
       'src/types/shared-components/createAvatar/**/*.{ts,tsx}',
     ],
     rules: restrictImportsExcept(['dicebear-core']),
-  },
-  /**
-   * Exemption: StatusBadge component files
-   *
-   * StatusBadge files need direct Chip access from @mui/material for wrapper implementation.
-   * These files are the only ones allowed to import Chip directly from @mui/material.
-   * Allowed ID: mui-chip.
-   */
-  {
-    files: [
-      'src/shared-components/StatusBadge/**/*.{ts,tsx}',
-      'src/types/shared-components/StatusBadge/**/*.{ts,tsx}',
-    ],
-    rules: restrictImportsExcept(['mui-chip']),
   },
   // Cypress-specific configuration
   {
