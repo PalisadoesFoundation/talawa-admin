@@ -69,25 +69,30 @@ export default function People(): React.JSX.Element {
 
   const handleSearch = (newFilter: string): void => {
     setSearchTerm(newFilter);
-    setRefetchTrigger((prev) => prev + 1);
+    // No refetch needed - filtering is client-side
   };
 
   useEffect(() => {
     setRefetchTrigger((prev) => prev + 1);
   }, [mode, organizationId]);
 
-  const whereFilter = useMemo(() => {
-    const searchFilter = searchTerm
-      ? { firstName: { contains: searchTerm } }
-      : undefined;
-    const roleFilter =
-      mode === 1 ? { role: { equal: 'administrator' } } : undefined;
+  // Client-side filter function for name/email search
+  const clientFilterFunction = useMemo(() => {
+    if (!searchTerm) return undefined;
 
-    if (searchFilter && roleFilter) {
-      return { ...searchFilter, ...roleFilter };
-    }
-    return searchFilter || roleFilter || undefined;
-  }, [searchTerm, mode]);
+    return (member: IMemberNode): boolean => {
+      const lowerSearch = searchTerm.toLowerCase();
+      return !!(
+        member.name?.toLowerCase().includes(lowerSearch) ||
+        member.emailAddress?.toLowerCase().includes(lowerSearch)
+      );
+    };
+  }, [searchTerm]);
+
+  // Only role filter for server-side (no name filtering in schema)
+  const whereFilter = useMemo(() => {
+    return mode === 1 ? { role: { equal: 'administrator' } } : undefined;
+  }, [mode]);
 
   if (!organizationId) {
     return (
@@ -162,6 +167,7 @@ export default function People(): React.JSX.Element {
               }}
               dataPath="organization.members"
               itemsPerPage={10}
+              clientSideFilter={clientFilterFunction}
               renderItem={(node: IMemberNode, index: number) => {
                 const isAdmin = node.role === 'administrator';
                 const userType = isAdmin ? tCommon('admin') : tCommon('member');

@@ -264,6 +264,7 @@
   "imageNotFound": "छवि नहीं मिली",
   "changeLanguage": "भाषा बदलें",
   "selectField": "{{fieldName}} चुनें",
+  "errorLoadingData": "डेटा लोड करने में त्रुटि",
   "userEvents": {
     "presetToday": "आज",
     "presetThisWeek": "इस सप्ताह",

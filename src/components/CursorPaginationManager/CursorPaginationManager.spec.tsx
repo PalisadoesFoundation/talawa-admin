@@ -905,7 +905,7 @@ describe('CursorPaginationManager', () => {
 
       await waitFor(() => {
         expect(consoleSpy).toHaveBeenCalledWith(
-          'Error loading more items:',
+          'Error loading data',
           expect.any(Error),
         );
       });
@@ -1507,6 +1507,203 @@ describe('CursorPaginationManager', () => {
       // Should only have refetched data
       expect(screen.getByText('Refetched User 1')).toBeInTheDocument();
       expect(screen.queryByText('User 2')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Client-side filtering', () => {
+    it('applies client-side filter when provided', async () => {
+      const mocks = [
+        {
+          request: {
+            query: MOCK_QUERY,
+            variables: { first: 10, after: null },
+          },
+          result: {
+            data: {
+              users: {
+                edges: [
+                  {
+                    cursor: 'cursor1',
+                    node: { id: '1', name: 'Alice', email: 'alice@test.com' },
+                  },
+                  {
+                    cursor: 'cursor2',
+                    node: { id: '2', name: 'Bob', email: 'bob@test.com' },
+                  },
+                  {
+                    cursor: 'cursor3',
+                    node: {
+                      id: '3',
+                      name: 'Charlie',
+                      email: 'charlie@test.com',
+                    },
+                  },
+                ],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: 'cursor1',
+                  endCursor: 'cursor3',
+                },
+              },
+            },
+          },
+        },
+      ];
+
+      // Filter to only show names starting with 'A' or 'C'
+      const filterFn = (user: User): boolean => {
+        return user.name.startsWith('A') || user.name.startsWith('C');
+      };
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              clientSideFilter={filterFn}
+              renderItem={(user: User) => <div>{user.name}</div>}
+              keyExtractor={(user: User) => user.id}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Wait for data to load and filter to be applied
+      await waitFor(() => {
+        expect(screen.getByText('Alice')).toBeInTheDocument();
+        expect(screen.getByText('Charlie')).toBeInTheDocument();
+      });
+
+      // Bob should be filtered out
+      expect(screen.queryByText('Bob')).not.toBeInTheDocument();
+    });
+
+    it('shows all items when no filter is provided', async () => {
+      const mocks = [createSuccessMock()];
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              renderItem={(user: User) => <div>{user.name}</div>}
+              keyExtractor={(user: User) => user.id}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // All items should be visible without filter
+      await waitFor(() => {
+        expect(screen.getByText('User 1')).toBeInTheDocument();
+        expect(screen.getByText('User 2')).toBeInTheDocument();
+      });
+    });
+
+    it('applies filter to "Load More" data', async () => {
+      const initialMock = {
+        request: {
+          query: MOCK_QUERY,
+          variables: { first: 2, after: null },
+        },
+        result: {
+          data: {
+            users: {
+              edges: [
+                {
+                  cursor: 'cursor1',
+                  node: { id: '1', name: 'Alice', email: 'alice@test.com' },
+                },
+                {
+                  cursor: 'cursor2',
+                  node: { id: '2', name: 'Bob', email: 'bob@test.com' },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: true,
+                hasPreviousPage: false,
+                startCursor: 'cursor1',
+                endCursor: 'cursor2',
+              },
+            },
+          },
+        },
+      };
+
+      const loadMoreMock = {
+        request: {
+          query: MOCK_QUERY,
+          variables: { first: 2, after: 'cursor2' },
+        },
+        result: {
+          data: {
+            users: {
+              edges: [
+                {
+                  cursor: 'cursor3',
+                  node: { id: '3', name: 'Charlie', email: 'charlie@test.com' },
+                },
+                {
+                  cursor: 'cursor4',
+                  node: { id: '4', name: 'Dennis', email: 'dennis@test.com' },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: true,
+                startCursor: 'cursor3',
+                endCursor: 'cursor4',
+              },
+            },
+          },
+        },
+      };
+
+      // Filter to only show names with 'a' in them (case insensitive)
+      const filterFn = (user: User): boolean => {
+        return user.name.toLowerCase().includes('a');
+      };
+
+      render(
+        <MockedProvider mocks={[initialMock, loadMoreMock]} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={2}
+              clientSideFilter={filterFn}
+              renderItem={(user: User) => <div>{user.name}</div>}
+              keyExtractor={(user: User) => user.id}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Initial data: Alice should show, Bob should be filtered out
+      await waitFor(() => {
+        expect(screen.getByText('Alice')).toBeInTheDocument();
+      });
+      expect(screen.queryByText('Bob')).not.toBeInTheDocument();
+
+      // Click Load More
+      const loadMoreButton = await screen.findByRole('button', {
+        name: /load more/i,
+      });
+      await userEvent.click(loadMoreButton);
+
+      // After loading more: Charlie has 'a', Dennis doesn't
+      await waitFor(() => {
+        expect(screen.getByText('Charlie')).toBeInTheDocument();
+      });
+      expect(screen.queryByText('Dennis')).not.toBeInTheDocument();
+
+      // Alice should still be visible
+      expect(screen.getByText('Alice')).toBeInTheDocument();
     });
   });
 });

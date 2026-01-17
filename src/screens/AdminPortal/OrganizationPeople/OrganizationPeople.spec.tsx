@@ -267,43 +267,14 @@ describe('OrganizationPeople', () => {
   });
 
   test('handles search functionality correctly', async () => {
-    const initialMock = createMemberConnectionMock({
-      orgId: 'orgid',
-      first: 10,
-      after: null,
-    });
-
-    const searchMock = createMemberConnectionMock(
-      {
+    const mocks = [
+      createMemberConnectionMock({
         orgId: 'orgid',
         first: 10,
         after: null,
-        where: { firstName: { contains: 'Jane' } },
-      },
-      {
-        edges: [
-          {
-            node: {
-              id: 'member2',
-              name: 'Jane Smith',
-              emailAddress: 'jane@example.com',
-              avatarURL: null,
-              createdAt: dayjs().subtract(2, 'day').toISOString(),
-              role: 'member',
-            },
-            cursor: 'cursor2',
-          },
-        ],
-        pageInfo: {
-          hasNextPage: false,
-          hasPreviousPage: false,
-          startCursor: 'cursor2',
-          endCursor: 'cursor2',
-        },
-      },
-    );
+      }),
+    ];
 
-    const mocks = [initialMock, searchMock];
     const link = new StaticMockLink(mocks, true);
 
     render(
@@ -328,24 +299,16 @@ describe('OrganizationPeople', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    // Search for "Jane"
+    // Search for "Jane" - filtering is now client-side (instant)
     const searchInput = screen.getByTestId('searchbtn');
     await userEvent.clear(searchInput);
     await userEvent.type(searchInput, 'Jane');
 
-    // Wait for debounce (300ms default) plus some buffer
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 400));
+    // Client-side filtering should filter immediately
+    await waitFor(() => {
+      expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
     });
-
-    // Wait for search results
-    await waitFor(
-      () => {
-        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-        expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
-      },
-      { timeout: 3000 },
-    );
   });
 
   test('handles tab switching between members, admins, and users', async () => {

@@ -264,6 +264,7 @@
   "imageNotFound": "未找到图片",
   "changeLanguage": "更改語言",
   "selectField": "選擇{{fieldName}}",
+  "errorLoadingData": "加载数据时出错",
   "userEvents": {
     "presetToday": "今天",
     "presetThisWeek": "本周",

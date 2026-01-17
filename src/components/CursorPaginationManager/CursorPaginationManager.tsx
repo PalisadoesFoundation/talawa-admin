@@ -143,6 +143,7 @@ export function CursorPaginationManager<
     onDataChange,
     refetchTrigger,
     tableMode = false,
+    clientSideFilter,
   } = props;
 
   const { t } = useTranslation('common');
@@ -186,14 +187,20 @@ export function CursorPaginationManager<
 
     if (connectionData) {
       const newNodes = extractNodes(connectionData.edges);
-      setItems(newNodes);
+
+      // Apply client-side filter if provided
+      const filteredNodes = clientSideFilter
+        ? newNodes.filter(clientSideFilter)
+        : newNodes;
+
+      setItems(filteredNodes);
       setPageInfo(connectionData.pageInfo || null);
 
       if (onDataChange) {
-        onDataChange(newNodes);
+        onDataChange(filteredNodes);
       }
     }
-  }, [data, dataPath, onDataChange]);
+  }, [data, dataPath, onDataChange, clientSideFilter]);
 
   // Load more handler
   const handleLoadMore = useCallback(async () => {
@@ -222,8 +229,14 @@ export function CursorPaginationManager<
 
       if (connectionData) {
         const newNodes = extractNodes(connectionData.edges);
+
+        // Apply client-side filter if provided
+        const filteredNewNodes = clientSideFilter
+          ? newNodes.filter(clientSideFilter)
+          : newNodes;
+
         setItems((prevItems) => {
-          const updatedItems = [...prevItems, ...newNodes];
+          const updatedItems = [...prevItems, ...filteredNewNodes];
           if (onDataChange) {
             onDataChange(updatedItems);
           }
@@ -235,7 +248,7 @@ export function CursorPaginationManager<
         setIsLoadingMore(false);
       }
     } catch (err) {
-      console.error('Error loading more items:', err);
+      console.error(t('errorLoadingData'), err);
       if (currentGeneration === generationRef.current && isMounted.current) {
         setIsLoadingMore(false);
       }
@@ -249,6 +262,7 @@ export function CursorPaginationManager<
     itemsPerPage,
     dataPath,
     onDataChange,
+    clientSideFilter,
   ]);
 
   // Refetch handler
@@ -266,7 +280,7 @@ export function CursorPaginationManager<
         after: null,
       } as PaginationVariables<TVariables>);
     } catch (err) {
-      console.error('Error refetching data:', err);
+      console.error(t('errorLoadingData'), err);
     } finally {
       setIsRefetching(false);
     }

@@ -137,4 +137,27 @@ export interface InterfaceCursorPaginationManagerProps<
    * @defaultValue false
    */
   tableMode?: boolean;
+
+  /**
+   * Optional client-side filter function to filter fetched items.
+   *
+   * @remarks
+   * Applied after data is fetched from the server. Useful when server-side filtering
+   * is not available or when combining server-side and client-side filtering.
+   * The filter is applied to both initial data and additional pages loaded via "Load More".
+   *
+   * @param item - The item to evaluate
+   * @returns true if item should be included, false otherwise
+   *
+   * @example
+   * ```tsx
+   * <CursorPaginationManager
+   *   clientSideFilter={(member) =>
+   *     member.name.toLowerCase().includes(searchTerm.toLowerCase())
+   *   }
+   *   ...
+   * />
+   * ```
+   */
+  clientSideFilter?: (item: TNode) => boolean;
 }

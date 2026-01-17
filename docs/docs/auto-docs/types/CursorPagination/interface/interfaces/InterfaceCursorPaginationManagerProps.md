@@ -24,6 +24,47 @@ The GraphQL query variables type (defaults to `Record<string, unknown>`)
 
 ## Properties
 
+### clientSideFilter()?
+
+> `optional` **clientSideFilter**: (`item`) => `boolean`
+
+Defined in: [src/types/CursorPagination/interface.ts:162](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L162)
+
+Optional client-side filter function to filter fetched items.
+
+#### Parameters
+
+##### item
+
+`TNode`
+
+The item to evaluate
+
+#### Returns
+
+`boolean`
+
+true if item should be included, false otherwise
+
+#### Remarks
+
+Applied after data is fetched from the server. Useful when server-side filtering
+is not available or when combining server-side and client-side filtering.
+The filter is applied to both initial data and additional pages loaded via "Load More".
+
+#### Example
+
+```tsx
+<CursorPaginationManager
+  clientSideFilter={(member) =>
+    member.name.toLowerCase().includes(searchTerm.toLowerCase())
+  }
+  ...
+/>
+```
+
+***
+
 ### dataPath
 
 > **dataPath**: `string`

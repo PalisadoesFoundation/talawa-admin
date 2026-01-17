@@ -264,6 +264,7 @@
   "imageNotFound": "Image non trouvée",
   "changeLanguage": "Changer de langue",
   "selectField": "Sélectionner {{fieldName}}",
+  "errorLoadingData": "Erreur lors du chargement des données",
   "userEvents": {
     "presetToday": "Aujourd'hui",
     "presetThisWeek": "Cette Semaine",

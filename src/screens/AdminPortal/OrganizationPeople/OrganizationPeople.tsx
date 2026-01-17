@@ -45,7 +45,7 @@
  * - GraphQL Queries: `ORGANIZATIONS_MEMBER_CONNECTION_LIST`, `USER_LIST_FOR_TABLE`.
  * - Styles: `style/app-fixed.module.css`.
  */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
 import { Delete } from '@mui/icons-material';
@@ -166,43 +166,56 @@ function OrganizationPeople(): JSX.Element {
 
   const handleSearch = (value: string) => {
     setSearchTerm(value);
-    setRefetchTrigger((prev) => prev + 1);
+    // Note: No refetch trigger for Members/Admin tabs - filtering is client-side
+    // Only Users tab uses server-side search, which is handled by getQueryAndVariables
+    if (state === 2) {
+      setRefetchTrigger((prev) => prev + 1);
+    }
   };
+
+  // Client-side filter function for Members and Admin tabs
+  const clientFilterFunction = useMemo(() => {
+    // Only apply client-side filtering for Members (0) and Admin (1) tabs
+    // Users tab (2) uses server-side filtering
+    if (!searchTerm || state === 2) return undefined;
+
+    return (member: IUserNode): boolean => {
+      const lowerSearch = searchTerm.toLowerCase();
+      return !!(
+        member.name?.toLowerCase().includes(lowerSearch) ||
+        member.emailAddress?.toLowerCase().includes(lowerSearch)
+      );
+    };
+  }, [searchTerm, state]);
 
   const getQueryAndVariables = () => {
     const baseVariables = {
       orgId: currentUrl,
     };
 
-    const searchFilter = searchTerm
-      ? { firstName: { contains: searchTerm } }
-      : undefined;
-
     if (state === 0) {
+      // Members - no server-side name filtering (not supported by schema)
       return {
         query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-        variables: {
-          ...baseVariables,
-          where: searchFilter,
-        },
+        variables: baseVariables,
         dataPath: 'organization.members',
       };
     } else if (state === 1) {
+      // Admins - only role filter (no name filtering)
       return {
         query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
         variables: {
           ...baseVariables,
-          where: searchFilter
-            ? { ...searchFilter, role: { equal: 'administrator' } }
-            : { role: { equal: 'administrator' } },
+          where: { role: { equal: 'administrator' } },
         },
         dataPath: 'organization.members',
       };
     } else {
+      // Users - server-side name search works for this query!
       return {
         query: USER_LIST_FOR_TABLE,
         variables: {
-          where: searchFilter,
+          where: searchTerm ? { name: searchTerm } : undefined,
         },
         dataPath: 'allUsers',
       };
@@ -302,6 +315,7 @@ function OrganizationPeople(): JSX.Element {
               dataPath={dataPath}
               itemsPerPage={10}
               tableMode={true}
+              clientSideFilter={clientFilterFunction}
               renderItem={(memberItem: IUserNode, memberIndex: number) => {
                 const rowNumber = memberIndex + 1;
                 return (
