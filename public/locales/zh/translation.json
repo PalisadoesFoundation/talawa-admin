@@ -2298,6 +2298,8 @@
     "eventName": "活动名称",
     "dateOfEvent": "活动日期",
     "recurringEvent": "重复活动",
-    "attendees": "参与者"
+    "attendees": "参与者",
+    "tableAriaLabel": "参加的活动表",
+    "paginationAriaLabel": "活动分页导航"
   }
 }

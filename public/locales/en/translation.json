@@ -2298,6 +2298,8 @@
     "eventName": "Event Name",
     "dateOfEvent": "Date of Event",
     "recurringEvent": "Recurring Event",
-    "attendees": "Attendees"
+    "attendees": "Attendees",
+    "tableAriaLabel": "Events attended table",
+    "paginationAriaLabel": "Events pagination navigation"
   }
 }

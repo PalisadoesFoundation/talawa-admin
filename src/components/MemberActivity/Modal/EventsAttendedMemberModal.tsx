@@ -20,6 +20,15 @@ import { CustomTableCell } from './CustomCell/customTableCell';
 import type { InterfaceEventsAttendedMemberModalProps } from 'types/Event/interface';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 
+/**
+ * EventsAttendedMemberModal component displays a paginated list of events attended by a member.
+ *
+ * @param eventsAttended - Array of events attended by the member
+ * @param setShow - Function to control modal visibility
+ * @param show - Boolean controlling whether the modal is visible
+ * @param eventsPerPage - Number of events to display per page (default: 5)
+ * @returns JSX.Element
+ */
 const EventsAttendedMemberModal: React.FC<
   InterfaceEventsAttendedMemberModalProps
 > = ({ eventsAttended, setShow, show, eventsPerPage = 5 }) => {
@@ -69,7 +78,7 @@ const EventsAttendedMemberModal: React.FC<
             })}
           </h5>
           <TableContainer component={Paper} className="mt-3">
-            <Table aria-label="customized table">
+            <Table aria-label={t('eventsAttendedMemberModal.tableAriaLabel')}>
               <TableHead>
                 <TableRow data-testid="row">
                   <TableCell className={styles.customcell}>
@@ -102,7 +111,7 @@ const EventsAttendedMemberModal: React.FC<
               page={page}
               onChange={handleChangePage}
               color="primary"
-              aria-label="Events navigation"
+              aria-label={t('eventsAttendedMemberModal.paginationAriaLabel')}
               getItemAriaLabel={(type, page) => {
                 if (type === 'page') return `Go to page ${page}`;
                 return `Go to ${type} page`;

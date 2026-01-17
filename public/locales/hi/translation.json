@@ -2298,6 +2298,8 @@
     "eventName": "घटना का नाम",
     "dateOfEvent": "घटना की तारीख",
     "recurringEvent": "आवर्ती घटना",
-    "attendees": "उपस्थित लोग"
+    "attendees": "उपस्थित लोग",
+    "tableAriaLabel": "उपस्थित घटनाओं की तालिका",
+    "paginationAriaLabel": "घटनाओं का पेजिनेशन नेविगेशन"
   }
 }

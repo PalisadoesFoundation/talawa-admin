@@ -2298,6 +2298,8 @@
     "eventName": "Nom de l'événement",
     "dateOfEvent": "Date de l'événement",
     "recurringEvent": "Événement récurrent",
-    "attendees": "Participants"
+    "attendees": "Participants",
+    "tableAriaLabel": "Tableau des événements auxquels vous avez assisté",
+    "paginationAriaLabel": "Navigation de pagination des événements"
   }
 }
