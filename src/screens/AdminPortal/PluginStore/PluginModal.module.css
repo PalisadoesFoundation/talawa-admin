@@ -396,19 +396,6 @@
 }
 
 /* Icon styles */
-.iconPowerOff {
-  font-size: var(--font-size-sm);
-}
-
-.iconPowerOffActive {
-  composes: iconPowerOff;
-  color: var(--color-gray-600);
-}
-
-.iconPowerOffInactive {
-  composes: iconPowerOff;
-  color: var(--color-white);
-}
 
 .iconTrash {
   font-size: var(--font-size-sm);
