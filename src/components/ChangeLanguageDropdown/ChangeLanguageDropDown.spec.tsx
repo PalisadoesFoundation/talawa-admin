@@ -9,6 +9,7 @@ import {
 } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
+import { I18nextProvider } from 'react-i18next';
 import React from 'react';
 import cookies from 'js-cookie';
 import i18next from 'i18next';
@@ -17,6 +18,7 @@ import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
 import useLocalStorage from 'utils/useLocalstorage';
 import { urlToFile } from 'utils/urlToFile';
+import i18nForTest from 'utils/i18nForTest';
 
 // Mock dependencies
 const sharedMocks = vi.hoisted(() => ({
@@ -31,7 +33,37 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 
 vi.mock('js-cookie', () => ({ default: { get: vi.fn(), set: vi.fn() } }));
 
-vi.mock('i18next', () => ({ default: { changeLanguage: vi.fn() } }));
+vi.mock('i18next', () => {
+  const mockT = vi.fn((key: string) => key);
+  const mockI18next = {
+    use: vi.fn().mockReturnThis(),
+    init: vi.fn().mockReturnThis(),
+    changeLanguage: vi.fn(),
+    t: mockT,
+    getFixedT: vi.fn(() => mockT),
+    language: 'en',
+    languages: ['en', 'es', 'fr', 'hi', 'zh'],
+    isInitialized: true,
+    hasLoadedNamespace: vi.fn(() => true),
+    loadNamespaces: vi.fn().mockResolvedValue(undefined),
+    on: vi.fn(),
+    off: vi.fn(),
+    getResourceBundle: vi.fn(() => ({})),
+    options: {
+      react: { useSuspense: false },
+    },
+    services: {
+      resourceStore: {
+        data: {},
+      },
+    },
+    store: {
+      on: vi.fn(),
+      off: vi.fn(),
+    },
+  };
+  return { default: mockI18next };
+});
 
 vi.mock('utils/useLocalstorage', () => ({ default: vi.fn() }));
 
@@ -82,7 +114,9 @@ describe('ChangeLanguageDropDown', () => {
   it('renders with default language (English)', () => {
     render(
       <MockedProvider mocks={mocks}>
-        <ChangeLanguageDropDown />
+        <I18nextProvider i18n={i18nForTest}>
+          <ChangeLanguageDropDown />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -100,7 +134,9 @@ describe('ChangeLanguageDropDown', () => {
 
     render(
       <MockedProvider mocks={mocks}>
-        <ChangeLanguageDropDown />
+        <I18nextProvider i18n={i18nForTest}>
+          <ChangeLanguageDropDown />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -120,7 +156,9 @@ describe('ChangeLanguageDropDown', () => {
   it('successfully changes language', async () => {
     render(
       <MockedProvider mocks={mocks}>
-        <ChangeLanguageDropDown />
+        <I18nextProvider i18n={i18nForTest}>
+          <ChangeLanguageDropDown />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -139,7 +177,9 @@ describe('ChangeLanguageDropDown', () => {
   it('renders all available languages in the dropdown', async () => {
     render(
       <MockedProvider mocks={mocks}>
-        <ChangeLanguageDropDown />
+        <I18nextProvider i18n={i18nForTest}>
+          <ChangeLanguageDropDown />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
