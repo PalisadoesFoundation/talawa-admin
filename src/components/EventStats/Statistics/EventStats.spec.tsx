@@ -45,8 +45,8 @@ describe('Testing Event Stats', () => {
       </MockedProvider>,
     );
 
-    await waitFor(() =>
-      expect(queryByText('Event Statistics')).toBeInTheDocument(),
-    );
+    await waitFor(() => {
+      expect(queryByText('Feedback Analysis')).toBeInTheDocument();
+    });
   });
 });

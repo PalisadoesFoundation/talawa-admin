@@ -23,7 +23,5 @@
   "resetButtonAriaLabel": "Réessayer",
   "fileTooLarge": "Fichier trop volumineux : {{fileName}}",
   "invalidFileType": "Type de fichier invalide : {{fileName}}",
-  "emptyFile": "Fichier vide sélectionné",
-  "noRecipients": "Veuillez fournir au moins une adresse e-mail de destinataire",
-  "invalidEmails": "E-mail(s) invalide(s) : {{emails}}"
+  "emptyFile": "Fichier vide sélectionné"
 }

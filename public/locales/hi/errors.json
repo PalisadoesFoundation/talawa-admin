@@ -23,7 +23,5 @@
   "resetButtonAriaLabel": "फिर से प्रयास करें",
   "fileTooLarge": "फ़ाइल बहुत बड़ी है: {{fileName}}",
   "invalidFileType": "अमान्य फ़ाइल प्रकार: {{fileName}}",
-  "emptyFile": "खाली फ़ाइल चुनी गई",
-  "noRecipients": "कृपया कम से कम एक प्राप्तकर्ता ईमेल प्रदान करें",
-  "invalidEmails": "अमान्य ईमेल: {{emails}}"
+  "emptyFile": "खाली फ़ाइल चुनी गई"
 }

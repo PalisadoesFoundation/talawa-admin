@@ -23,7 +23,5 @@
   "resetButtonAriaLabel": "再試一次",
   "fileTooLarge": "文件过大：{{fileName}}",
   "invalidFileType": "无效的文件类型：{{fileName}}",
-  "emptyFile": "选择了空文件",
-  "noRecipients": "请至少提供一个收件人电子邮件",
-  "invalidEmails": "无效的电子邮件：{{emails}}"
+  "emptyFile": "选择了空文件"
 }

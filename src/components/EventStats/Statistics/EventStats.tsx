@@ -26,7 +26,7 @@
  * ```
  *
  * Uses:-
- * - `react-bootstrap` for modal UI.
+ * - `BaseModal` from shared-components for modal UI.
  * - `@apollo/client` for GraphQL query handling.
  * - Custom CSS modules for styling.
  */

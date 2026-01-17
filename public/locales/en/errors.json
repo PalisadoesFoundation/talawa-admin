@@ -23,7 +23,5 @@
   "resetButtonAriaLabel": "Try again",
   "fileTooLarge": "File too large: {{fileName}}",
   "invalidFileType": "Invalid file type: {{fileName}}",
-  "emptyFile": "Empty file selected",
-  "noRecipients": "Please provide at least one recipient email",
-  "invalidEmails": "Invalid email(s): {{emails}}"
+  "emptyFile": "Empty file selected"
 }

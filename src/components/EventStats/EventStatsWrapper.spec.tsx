@@ -68,7 +68,7 @@ describe('Testing Event Stats Wrapper', () => {
   });
 
   it('Should render button with correct attributes, classes and icon wrapper', () => {
-    const { getByText, getByLabelText, container } = render(
+    const { getByText, getByLabelText } = render(
       <MockedProvider mocks={mockData}>
         <BrowserRouter>
           <EventStatsWrapper {...props} />
@@ -85,7 +85,7 @@ describe('Testing Event Stats Wrapper', () => {
     expect(button).toHaveClass('btn-light', 'text-secondary');
     expect(button.tagName).toBe('BUTTON');
 
-    const iconWrapper = container.querySelector('[class*="iconWrapper"]');
+    const iconWrapper = document.querySelector('[class*="iconWrapper"]');
     expect(iconWrapper).toBeInTheDocument();
   });
 
@@ -99,7 +99,6 @@ describe('Testing Event Stats Wrapper', () => {
     );
 
     // Initially EventStats should not be visible (show=false)
-    // Note: Modal is rendered in a portal, so use document.querySelector instead of container
     expect(document.querySelector('.modal-title')).toBeNull();
 
     // Open modal to verify eventId prop is passed
@@ -139,7 +138,7 @@ describe('Testing Event Stats Wrapper', () => {
   });
 
   it('Should maintain state consistency through multiple open/close cycles', async () => {
-    const { getAllByText, queryByRole, getByText, container } = render(
+    const { getAllByText, queryByRole, getByText } = render(
       <MockedProvider mocks={mockData}>
         <BrowserRouter>
           <EventStatsWrapper {...props} />
@@ -161,7 +160,7 @@ describe('Testing Event Stats Wrapper', () => {
     fireEvent.click(closeButton);
 
     await waitFor(() =>
-      expect(container.querySelector('.modal-title')).not.toBeInTheDocument(),
+      expect(document.querySelector('.modal-title')).not.toBeInTheDocument(),
     );
 
     // Cycle 2: Open and close again
@@ -176,7 +175,7 @@ describe('Testing Event Stats Wrapper', () => {
     fireEvent.click(closeButton);
 
     await waitFor(() =>
-      expect(container.querySelector('.modal-title')).not.toBeInTheDocument(),
+      expect(document.querySelector('.modal-title')).not.toBeInTheDocument(),
     );
 
     // Cycle 3: One more cycle to ensure consistency
@@ -228,7 +227,7 @@ describe('Testing Event Stats Wrapper', () => {
   });
 
   it('Should render with correct component structure', () => {
-    const { container, getByLabelText } = render(
+    const { getByLabelText } = render(
       <MockedProvider mocks={mockData}>
         <BrowserRouter>
           <EventStatsWrapper {...props} />
@@ -243,7 +242,7 @@ describe('Testing Event Stats Wrapper', () => {
     // Verify button parent structure
     expect(button.parentElement).toBeInTheDocument();
 
-    const iconWrapper = container.querySelector('[class*="iconWrapper"]');
+    const iconWrapper = document.querySelector('[class*="iconWrapper"]');
     expect(iconWrapper).toBeInTheDocument();
   });
 
