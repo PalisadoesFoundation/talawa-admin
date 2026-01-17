@@ -120,19 +120,8 @@ export interface IEventHeaderProps {
   showInviteModal: () => void;
 }
 
-interface IEventListCard extends IEvent {
+export interface IEventListCard extends IEvent {
   refetchEvents?: () => void;
-}
-
-export interface IDeleteEventModalProps {
-  eventListCardProps: IEventListCard;
-  eventDeleteModalIsOpen: boolean;
-  toggleDeleteModal: () => void;
-  t: (key: string) => string;
-  tCommon: (key: string) => string;
-  deleteEventHandler: (
-    deleteOption?: 'single' | 'following' | 'all',
-  ) => Promise<void>;
 }
 
 export interface IPreviewEventModalProps {
@@ -264,10 +253,10 @@ export interface ICreateEventInput {
   description?: string;
   location?: string;
   recurrence?:
-    | (Omit<InterfaceRecurrenceRule, 'endDate'> & {
-        endDate?: string;
-      })
-    | null;
+  | (Omit<InterfaceRecurrenceRule, 'endDate'> & {
+    endDate?: string;
+  })
+  | null;
 }
 
 // Legacy interface exports for backward compatibility
@@ -277,7 +266,6 @@ export type InterfaceIOrgList = IOrgList;
 export type InterfaceStatsModal = IStatsModal;
 export type InterfaceCalendarProps = ICalendarProps;
 export type InterfaceEventHeaderProps = IEventHeaderProps;
-export type InterfaceDeleteEventModalProps = IDeleteEventModalProps;
 export type InterfacePreviewEventModalProps = IPreviewEventModalProps;
 export type InterfaceEventEdge = IEventEdge;
 export type InterfaceUpdateEventModalProps = IUpdateEventModalProps;

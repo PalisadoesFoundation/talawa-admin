@@ -18,7 +18,7 @@ dayjs.extend(utc);
 
 import EventListCardModals from './EventListCardModals';
 import EventListCardPreviewModal from './Preview/EventListCardPreviewModal';
-import EventListCardDeleteModal from './Delete/EventListCardDeleteModal';
+import EventListCardDeleteModal from 'shared-components/EventListCard/Modal/Delete/EventListCardDeleteModal';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import { Frequency, WeekDays } from 'utils/recurrenceUtils/recurrenceTypes';
@@ -63,7 +63,7 @@ vi.mock('utils/errorHandler', () => ({
 vi.mock('./Preview/EventListCardPreviewModal', () => ({
   default: vi.fn(),
 }));
-vi.mock('./Delete/EventListCardDeleteModal', () => ({
+vi.mock('shared-components/EventListCard/Modal/Delete/EventListCardDeleteModal', () => ({
   default: vi.fn(),
 }));
 
