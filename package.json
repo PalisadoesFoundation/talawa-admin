@@ -45,11 +45,11 @@
     "jszip": "^3.10.1",
     "lodash": "^4.17.21",
     "prop-types": "^15.8.1",
-    "react": "^19.1.0",
+    "react": "^19.2.3",
     "react-bootstrap": "^2.10.10",
     "react-chartjs-2": "^5.2.0",
     "react-datepicker": "^7.5.0",
-    "react-dom": "^19.1.0",
+    "react-dom": "^19.2.3",
     "react-google-recaptcha": "^3.1.0",
     "react-i18next": "^16.3.5",
     "react-icons": "^5.2.1",
@@ -132,8 +132,8 @@
     "@types/lodash": "^4.17.21",
     "@types/node": "^24.3.0",
     "@types/prop-types": "^15.7.15",
-    "@types/react": "^19.1.1",
-    "@types/react-dom": "^19.1.1",
+    "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.3",
     "@types/react-google-recaptcha": "^2.1.9",
     "@typescript-eslint/eslint-plugin": "^8.51.0",
     "@typescript-eslint/parser": "^8.51.0",
@@ -210,8 +210,8 @@
     "node": ">=24.x"
   },
   "overrides": {
-    "@types/react": "^19.1.1",
-    "@types/react-dom": "^19.1.1",
+    "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.3",
     "whatwg-url": "^14.0.0",
     "core-js": "^3.40.0",
     "sync-fetch": "npm:@ardatan/sync-fetch@0.0.1",
@@ -220,8 +220,8 @@
       "react-dom": "^19.1.0"
     },
     "virtualizedtableforantd4": {
-      "react": "^19.1.0",
-      "react-dom": "^19.1.0"
+      "react": "^19.2.3",
+      "react-dom": "^19.2.3"
     },
     "gulp-header": "^2.0.9",
     "rimraf": "^6.1.2",
