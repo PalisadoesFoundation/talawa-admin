@@ -1100,26 +1100,6 @@
     "unregister": "Unregister",
     "cannotUnregisterCheckedInTooltip": "Cannot unregister checked-in user"
   },
-  "onSpotAttendee": {
-    "title": "On-spot Attendee",
-    "enterFirstName": "Enter First Name",
-    "enterLastName": "Enter Last Name",
-    "enterEmail": "Enter Email",
-    "enterPhoneNo": "Enter Phone Number",
-    "selectGender": "Select Gender",
-    "invalidDetailsMessage": "Please fill in all required fields",
-    "orgIdMissing": "Organization ID is missing. Please try again.",
-    "attendeeAddedSuccess": "Attendee added successfully!",
-    "addAttendee": "Add",
-    "phoneNumber": "Phone No.",
-    "addingAttendee": "Adding...",
-    "male": "Male",
-    "female": "Female",
-    "other": "Other",
-    "firstNamePlaceholder": "John",
-    "lastNamePlaceholder": "Doe",
-    "emailPlaceholder": "abc@gmail.com"
-  },
   "forgotPassword": {
     "title": "Talawa Forgot Password",
     "registeredEmail": "Registered Email",
@@ -1906,12 +1886,21 @@
     "checkedIn": "Checked In",
     "downloadTag": "Download Tag",
     "checkIn": "Check In",
-    "eventCheckInManagement": "Event Check In Management"
+    "eventCheckInManagement": "Event Check In Management",
+    "unknownUser": "Unknown User",
+    "user": "User",
+    "checkInStatus": "Check In Status",
+    "checkInMembers": "Check In Members"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",
     "errorRemovingAttendee": "Error removing attendee",
     "eventRegistrantsTitle": "Event Registrants",
+    "registerMember": "Register Member",
+    "showAttendees": "Show Attendees",
+    "addingAttendee": "Adding the attendee...",
+    "selectUserFirst": "Please choose a user to add first!",
+    "unknownUser": "Unknown User",
     "inviteByEmailButton": "Invite by Email",
     "addRegistrantButton": "Add Registrant",
     "noRegistrationsFound": "No Registrations found",
@@ -1931,14 +1920,34 @@
       "expiresInDaysLabel": "Expires in (days)",
       "errorSendingInvites": "Error sending invites",
       "emailsLabel": "Recipient emails and names",
-      "emailsHelp": "Provide email and optional name for each recipient. Add multiple recipients as needed."
-    },
-    "selectUserWarning": "Please choose a user to add first!",
-    "addingAttendeeProgress": "Adding the attendee..."
+      "emailsHelp": "Provide email and optional name for each recipient. Add multiple recipients as needed.",
+      "noRecipientsError": "Please provide at least one recipient email",
+      "invalidEmailsError": "Invalid email(s): {{emails}}",
+      "invitesSentSuccessfully": "Invites sent successfully"
+    }
   },
-  "eventRegistrantsWrapper": {
-    "buttonAriaLabel": "Show Attendees",
-    "registerMemberButton": "Register Member"
+  "onSpotAttendee": {
+    "invalidEmailFormat": "Invalid email format",
+    "organizationIdMissing": "Organization ID is missing.",
+    "title": "On-spot Attendee",
+    "enterFirstName": "Enter First Name",
+    "enterLastName": "Enter Last Name",
+    "enterEmail": "Enter Email",
+    "enterPhoneNo": "Enter Phone Number",
+    "selectGender": "Select Gender",
+    "invalidDetailsMessage": "Please fill in all required details",
+    "orgIdMissing": "Organization ID is missing. Please try again.",
+    "attendeeAddedSuccess": "Attendee added successfully!",
+    "addAttendee": "Add Attendee",
+    "phoneNumber": "Phone No.",
+    "phoneNumberPlaceholder": "1234567890",
+    "addingAttendee": "Adding...",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "placeholderFirstName": "John",
+    "placeholderLastName": "Doe",
+    "placeholderEmail": "abc@gmail.com"
   },
   "userCampaigns": {
     "title": "Fundraising Campaigns",
@@ -2099,6 +2108,10 @@
     "eventInvitationSubject": "Invitation to volunteer for event",
     "groupInvitationRecurringSubject": "Invitation to join volunteer group for recurring event series",
     "eventInvitationRecurringSubject": "Invitation to volunteer for recurring event series",
+    "invited": "Invited",
+    "groupsAvailable": "{{count}} groups available",
+    "volunteersRequired": "Required",
+    "signedUp": "Signed up",
     "assignee": "Assignee",
     "group": "Group",
     "event": "Event",

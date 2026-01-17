@@ -1498,26 +1498,6 @@
     "unregister": "Désinscrire",
     "cannotUnregisterCheckedInTooltip": "Impossible de désinscrire un utilisateur déjà enregistré"
   },
-  "onSpotAttendee": {
-    "title": "Participant sur place",
-    "enterFirstName": "Entrez le prénom",
-    "enterLastName": "Entrez le nom de famille",
-    "enterEmail": "Entrez l'e-mail",
-    "enterPhoneNo": "Entrez le numéro de téléphone",
-    "selectGender": "Sélectionnez le sexe",
-    "invalidDetailsMessage": "Veuillez remplir tous les champs obligatoires",
-    "orgIdMissing": "L'ID de l'organisation est manquant. Veuillez réessayer.",
-    "attendeeAddedSuccess": "Participant ajouté avec succès!",
-    "addAttendee": "Ajouter",
-    "phoneNumber": "Numéro de téléphone",
-    "addingAttendee": "Ajout en cours...",
-    "male": "Homme",
-    "female": "Femme",
-    "other": "Autre",
-    "firstNamePlaceholder": "Jean",
-    "lastNamePlaceholder": "Dupont",
-    "emailPlaceholder": "exemple@gmail.com"
-  },
   "settings": {
     "eventAttended": "Événements Assistés",
     "noeventsAttended": "Aucun événement assisté",
@@ -1923,12 +1903,21 @@
     "checkedIn": "Enregistré",
     "downloadTag": "Télécharger l'étiquette",
     "checkIn": "Enregistrer",
-    "eventCheckInManagement": "Gestion des enregistrements d'événement"
+    "eventCheckInManagement": "Gestion des enregistrements d'événement",
+    "checkInMembers": "Enregistrer les membres",
+    "unknownUser": "Utilisateur inconnu",
+    "user": "Utilisateur",
+    "checkInStatus": "Statut d'Enregistrement"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
     "errorRemovingAttendee": "Erreur lors de la suppression du participant",
     "eventRegistrantsTitle": "Inscrits à l'événement",
+    "registerMember": "Inscrire un membre",
+    "showAttendees": "Afficher les participants",
+    "addingAttendee": "Ajout du participant...",
+    "selectUserFirst": "Veuillez d'abord choisir un utilisateur à ajouter !",
+    "unknownUser": "Utilisateur inconnu",
     "inviteByEmailButton": "Inviter par email",
     "addRegistrantButton": "Ajouter un inscrit",
     "noRegistrationsFound": "Aucune inscription trouvée.",
@@ -1948,14 +1937,34 @@
       "expiresInDaysLabel": "Expire dans (jours)",
       "errorSendingInvites": "Erreur lors de l'envoi des invitations",
       "emailsLabel": "Emails et noms des destinataires",
-      "emailsHelp": "Fournissez l'email et le nom facultatif pour chaque destinataire. Ajoutez plusieurs destinataires si nécessaire."
-    },
-    "selectUserWarning": "Veuillez d'abord choisir un utilisateur à ajouter !",
-    "addingAttendeeProgress": "Ajout du participant en cours..."
+      "emailsHelp": "Fournissez l'email et le nom facultatif pour chaque destinataire. Ajoutez plusieurs destinataires si nécessaire.",
+      "noRecipientsError": "Veuillez fournir au moins un email de destinataire",
+      "invalidEmailsError": "Email(s) invalide(s) : {{emails}}",
+      "invitesSentSuccessfully": "Invitations envoyées avec succès"
+    }
   },
-  "eventRegistrantsWrapper": {
-    "buttonAriaLabel": "Afficher les participants",
-    "registerMemberButton": "Inscrire un membre"
+  "onSpotAttendee": {
+    "invalidEmailFormat": "Format d'email invalide",
+    "organizationIdMissing": "L'identifiant de l'organisation est manquant.",
+    "title": "Participant sur place",
+    "enterFirstName": "Entrez le prénom",
+    "enterLastName": "Entrez le nom de famille",
+    "enterEmail": "Entrez l'e-mail",
+    "enterPhoneNo": "Entrez le numéro de téléphone",
+    "selectGender": "Sélectionner le genre",
+    "invalidDetailsMessage": "Veuillez remplir tous les champs obligatoires",
+    "orgIdMissing": "L'ID de l'organisation est manquant. Veuillez réessayer.",
+    "attendeeAddedSuccess": "Participant ajouté avec succès !",
+    "addAttendee": "Ajouter un participant",
+    "phoneNumber": "N° de téléphone",
+    "phoneNumberPlaceholder": "1234567890",
+    "addingAttendee": "Ajout en cours...",
+    "male": "Homme",
+    "female": "Femme",
+    "other": "Autre",
+    "placeholderFirstName": "Jean",
+    "placeholderLastName": "Dupont",
+    "placeholderEmail": "abc@gmail.com"
   },
   "userCampaigns": {
     "title": "Campagnes de financement",
@@ -2131,7 +2140,11 @@
     "groupName": "Nom du Groupe",
     "noOfMembers": "Nombre de Membres",
     "options": "Options",
-    "notSpecified": "Non Spécifié"
+    "notSpecified": "Non Spécifié",
+    "invited": "Invité",
+    "groupsAvailable": "{{count}} groupes disponibles",
+    "volunteersRequired": "Requis",
+    "signedUp": "Inscrit"
   },
   "pluginStore": {
     "title": "Boutique de Plugins",
