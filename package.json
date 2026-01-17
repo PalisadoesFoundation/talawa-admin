@@ -27,7 +27,7 @@
     "@pdfme/generator": "^5.2.3",
     "@pdfme/schemas": "^5.1.6",
     "@reduxjs/toolkit": "^2.3.0",
-    "@remix-run/router": "^1.23.0",
+    "@remix-run/router": "^1.23.2",
     "@wry/equality": "^0.5.7",
     "apollo-upload-client": "^18.0.1",
     "bootstrap": "^5.3.3",
