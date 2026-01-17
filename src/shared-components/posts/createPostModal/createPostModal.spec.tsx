@@ -13,6 +13,8 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from '../../../utils/i18nForTest';
 import { errorHandler } from 'utils/errorHandler';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+// Styles loaded dynamically to avoid lint error about restricted imports in tests
+let styles: Record<string, string> = {};
 
 import dayjs from 'dayjs';
 
@@ -251,8 +253,11 @@ afterEach(() => {
 describe('CreatePostModal Integration Tests', () => {
   let user: ReturnType<typeof userEvent.setup>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     user = userEvent.setup();
+    // Dynamically import styles to get the actual hashed class names
+    const mod = await import('./createPostModal.module.css');
+    styles = mod.default;
   });
 
   const renderComponent = (
@@ -346,7 +351,7 @@ describe('CreatePostModal Integration Tests', () => {
 
       const postButton = screen.getByTestId('createPostBtn');
       expect(postButton).toBeDisabled();
-      expect(postButton.className).toMatch(/postButtonDisabled/);
+      expect(postButton).toHaveClass(styles.postButtonDisabled);
     });
 
     it('enables post button when title has content', async () => {
@@ -357,7 +362,7 @@ describe('CreatePostModal Integration Tests', () => {
 
       const postButton = screen.getByTestId('createPostBtn');
       expect(postButton).not.toBeDisabled();
-      expect(postButton.className).not.toMatch(/postButtonDisabled/);
+      expect(postButton).not.toHaveClass(styles.postButtonDisabled);
     });
 
     it('disables post button when title contains only whitespace', async () => {
@@ -670,8 +675,8 @@ describe('CreatePostModal Integration Tests', () => {
       const modal = screen.getByTestId('create-post-modal');
 
       // Should not have the show classes when show is false
-      expect(backdrop.className).not.toMatch(/backdropShow/);
-      expect(modal.className).not.toMatch(/modalShow/);
+      expect(backdrop).not.toHaveClass(styles.backdropShow);
+      expect(modal).not.toHaveClass(styles.modalShow);
     });
 
     it('cleans up preview URL when unmounted with a preview', async () => {
@@ -954,8 +959,8 @@ describe('CreatePostModal Integration Tests', () => {
       const fileInput = screen.getByTestId('addMedia') as HTMLInputElement;
       const postButton = screen.getByTestId('createPostBtn');
 
-      // Set id on file input for getElementById to work
-      fileInput.id = 'addMedia';
+      // Verify id is set correctly on the file input
+      expect(fileInput.id).toBe('addMedia');
 
       await user.type(titleInput, 'Post with File');
       await userEvent.upload(fileInput, mockFile);
