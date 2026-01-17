@@ -178,11 +178,16 @@ const LoginPage = (): JSX.Element => {
 
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
-    if (isLoggedIn == 'TRUE') {
-      navigate(getItem('userId') !== null ? '/user/organizations' : '/orglist');
+    if (isLoggedIn === 'TRUE') {
+      const storedRole = getItem('role');
+      const target =
+        storedRole === 'administrator' || storedRole === 'superuser'
+          ? '/orglist'
+          : '/user/organizations';
+      navigate(target);
       extendSession();
     }
-  }, []);
+  }, [navigate]);
 
   const togglePassword = (): void => setShowPassword(!showPassword);
   const toggleConfirmPassword = (): void =>
@@ -291,7 +296,7 @@ const LoginPage = (): JSX.Element => {
             SignupRecaptchaRef.current?.reset();
             // If signup was successful, set session state and resume pending invite
             // Note: Tokens are now set via HTTP-Only cookies by the server (XSS protection)
-            if (signUpData.signUp && signUpData.signUp.authenticationToken) {
+            if (signUpData.signUp) {
               setItem('IsLoggedIn', 'TRUE');
               // Use form data for name/email since SIGNUP_MUTATION only returns user.id
               setItem('name', signName);
@@ -308,6 +313,8 @@ const LoginPage = (): JSX.Element => {
                 window.location.href = `/event/invitation/${pendingInvitationToken}`;
                 return;
               }
+              startSession();
+              navigate('/user/organizations');
             }
           }
         } catch (error) {
