@@ -201,7 +201,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
                 variant={isPluginActive ? 'active' : 'inactive'}
                 size="md"
                 dataTestId="plugin-status-badge"
-                ariaLabel={isPluginActive ? 'inactive' : 'active'}
+                ariaLabel={isPluginActive ? 'active' : 'inactive'}
               />
             </div>
           )}
@@ -216,9 +216,7 @@ const PluginModal = (props: IPluginModalProps): JSX.Element => {
                     onClick={() =>
                       togglePluginStatus(
                         meta,
-                        getInstalledPlugin(plugin.name)?.status === 'active'
-                          ? 'inactive'
-                          : 'active',
+                        isPluginActive ? 'inactive' : 'active',
                       )
                     }
                   >
