@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -132,11 +133,12 @@ describe('PostViewModal', () => {
   });
 
   describe('Close functionality', () => {
-    test('calls onHide when close button is clicked', () => {
+    test('calls onHide when close button is clicked', async () => {
       renderPostViewModal();
 
       const closeButton = screen.getByTestId('close-post-view-button');
-      fireEvent.click(closeButton);
+      const user = userEvent.setup();
+      await user.click(closeButton);
 
       expect(mockOnHide).toHaveBeenCalledTimes(1);
     });

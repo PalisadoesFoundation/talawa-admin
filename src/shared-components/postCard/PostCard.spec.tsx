@@ -1737,7 +1737,11 @@ describe('PostCard', () => {
   });
 
   describe('Share functionality', () => {
+    let originalClipboard: typeof navigator.clipboard;
+    let originalLocation: Location;
     beforeEach(() => {
+      originalClipboard = navigator.clipboard;
+      originalLocation = window.location;
       // Mock the clipboard API
       Object.defineProperty(navigator, 'clipboard', {
         value: {
@@ -1756,6 +1760,14 @@ describe('PostCard', () => {
       });
     });
     afterEach(() => {
+      Object.defineProperty(navigator, 'clipboard', {
+        value: originalClipboard,
+        writable: true,
+      });
+      Object.defineProperty(window, 'location', {
+        value: originalLocation,
+        writable: true,
+      });
       vi.clearAllMocks();
     });
 

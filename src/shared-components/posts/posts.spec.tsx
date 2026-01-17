@@ -203,6 +203,30 @@ vi.mock('shared-components/posts/createPostModal/createPostModal', () => ({
     ) : null,
 }));
 
+// Mock PostViewModal
+vi.mock('shared-components/PostViewModal/PostViewModal', () => ({
+  default: ({
+    show,
+    onHide,
+  }: {
+    show: boolean;
+    onHide: () => void;
+    post: unknown;
+    refetch: () => void;
+  }) =>
+    show ? (
+      <div data-testid="pinned-post-modal">
+        <button
+          type="button"
+          data-testid="close-post-view-button"
+          onClick={onHide}
+        >
+          Close
+        </button>
+      </div>
+    ) : null,
+}));
+
 // Mock InfiniteScroll
 vi.mock('react-infinite-scroll-component', () => ({
   default: ({
@@ -648,6 +672,120 @@ describe('PostsPage Component', () => {
         expect(
           screen.queryByTestId('pinned-post-modal'),
         ).not.toBeInTheDocument();
+      });
+    });
+
+    it('handles URL update when closing modal with other query parameters present', async () => {
+      // Mock window.location and history
+      const originalLocation = window.location;
+      const originalHistory = window.history;
+      const mockReplaceState = vi.fn();
+
+      Object.defineProperty(window, 'location', {
+        value: {
+          ...originalLocation,
+          pathname: '/test/path',
+          search: '?previewPostID=post-123&otherParam=value&sortBy=date',
+        },
+        writable: true,
+      });
+
+      Object.defineProperty(window, 'history', {
+        value: {
+          ...originalHistory,
+          replaceState: mockReplaceState,
+        },
+        writable: true,
+      });
+
+      renderComponent([orgPostListMock, orgPinnedPostListMock]);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('pinned-posts-layout')).toBeInTheDocument();
+      });
+
+      // Open modal
+      const pinnedPostButton = screen.getByTestId('pinned-post-post-2');
+      await act(async () => {
+        fireEvent.click(pinnedPostButton);
+      });
+
+      // Close the modal
+      const closeButton = screen.getByTestId('close-post-view-button');
+      await act(async () => {
+        fireEvent.click(closeButton);
+      });
+
+      // Verify URL was updated with remaining query parameters
+      expect(mockReplaceState).toHaveBeenCalledWith(
+        {},
+        '',
+        '/test/path?otherParam=value&sortBy=date',
+      );
+
+      // Restore original objects
+      Object.defineProperty(window, 'location', {
+        value: originalLocation,
+        writable: true,
+      });
+      Object.defineProperty(window, 'history', {
+        value: originalHistory,
+        writable: true,
+      });
+    });
+
+    it('handles URL update when closing modal with only previewPostID parameter', async () => {
+      // Mock window.location and history
+      const originalLocation = window.location;
+      const originalHistory = window.history;
+      const mockReplaceState = vi.fn();
+
+      Object.defineProperty(window, 'location', {
+        value: {
+          ...originalLocation,
+          pathname: '/test/path',
+          search: '?previewPostID=post-123',
+        },
+        writable: true,
+      });
+
+      Object.defineProperty(window, 'history', {
+        value: {
+          ...originalHistory,
+          replaceState: mockReplaceState,
+        },
+        writable: true,
+      });
+
+      renderComponent([orgPostListMock, orgPinnedPostListMock]);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('pinned-posts-layout')).toBeInTheDocument();
+      });
+
+      // Open modal
+      const pinnedPostButton = screen.getByTestId('pinned-post-post-2');
+      await act(async () => {
+        fireEvent.click(pinnedPostButton);
+      });
+
+      // Close the modal
+      const closeButton = screen.getByTestId('close-post-view-button');
+      await act(async () => {
+        fireEvent.click(closeButton);
+      });
+
+      // Verify URL was updated without query parameters (empty query string)
+      expect(mockReplaceState).toHaveBeenCalledWith({}, '', '/test/path');
+
+      // Restore original objects
+      Object.defineProperty(window, 'location', {
+        value: originalLocation,
+        writable: true,
+      });
+      Object.defineProperty(window, 'history', {
+        value: originalHistory,
+        writable: true,
       });
     });
   });

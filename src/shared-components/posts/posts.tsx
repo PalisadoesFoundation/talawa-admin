@@ -66,9 +66,9 @@ import styles from 'style/app-fixed.module.css';
 import { Box, Typography } from '@mui/material';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
-import { formatDate } from 'utils/dateFormatter';
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
 import PostViewModal from 'shared-components/PostViewModal/PostViewModal';
+import { formatPostForCard } from './helperFunctions';
 
 export default function PostsPage() {
   const { t } = useTranslation('translation', { keyPrefix: 'posts' });
@@ -109,7 +109,8 @@ export default function PostsPage() {
     // Remove previewPostID from url
     const params = new URLSearchParams(window.location.search);
     params.delete('previewPostID');
-    const newUrl = window.location.pathname + params.toString();
+    const query = params.toString();
+    const newUrl = `${window.location.pathname}${query ? `?${query}` : ''}`;
     window.history.replaceState({}, '', newUrl);
   };
 
@@ -296,33 +297,6 @@ export default function PostsPage() {
     }
   };
 
-  const formatPostForCard = (post: InterfacePost) => ({
-    id: post.id,
-    creator: {
-      id: post.creator?.id ?? 'unknown',
-      name: post.creator?.name ?? t('unknownUser'),
-      avatarURL: post.creator?.avatarURL,
-    },
-    hasUserVoted: post.hasUserVoted ?? { hasVoted: false, voteType: null },
-    postedAt: (() => {
-      try {
-        return formatDate(post.createdAt);
-      } catch {
-        return '';
-      }
-    })(),
-    pinnedAt: post.pinnedAt ?? null,
-    mimeType: post.attachments?.[0]?.mimeType ?? null,
-    attachmentURL: post.attachmentURL ?? null,
-    title: post.caption ?? '',
-    text: post.caption ?? '',
-    body: post.body,
-    commentCount: post.commentsCount ?? 0,
-    upVoteCount: post.upVotesCount ?? 0,
-    downVoteCount: post.downVotesCount ?? 0,
-    fetchPosts: refetch,
-  });
-
   // Derive postsToDisplay from allPosts with sorting and filtering
   const postsToDisplay = useMemo(() => {
     let posts = isFiltering ? filteredPosts : allPosts;
@@ -444,7 +418,10 @@ export default function PostsPage() {
                 // Display filtered posts without infinite scroll
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                   {postsToDisplay.map((post) => (
-                    <PostCard key={post.id} {...formatPostForCard(post)} />
+                    <PostCard
+                      key={post.id}
+                      {...formatPostForCard(post, t, refetch)}
+                    />
                   ))}
                 </Box>
               ) : (
@@ -470,7 +447,10 @@ export default function PostsPage() {
                     sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
                   >
                     {postsToDisplay.map((post) => (
-                      <PostCard key={post.id} {...formatPostForCard(post)} />
+                      <PostCard
+                        key={post.id}
+                        {...formatPostForCard(post, t, refetch)}
+                      />
                     ))}
                   </Box>
                 </InfiniteScroll>

@@ -6,4 +6,10 @@
 
 > `const` **ORGANIZATION\_POST\_BY\_ID**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L116)
+Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L122)
+
+GraphQL query to retrieve a single post by its ID.
+
+`@param` postId - The ID of the post to retrieve.
+`@param` userId - The ID of the user to check vote status against.
+`@returns` The post with its metadata, attachments, vote information, and creator details.

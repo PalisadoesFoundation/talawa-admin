@@ -44,16 +44,9 @@ import { Close } from '@mui/icons-material';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import PostCard from 'shared-components/postCard/PostCard';
 import { useTranslation } from 'react-i18next';
-import { InterfacePost } from 'types/Post/interface';
-import { formatDate } from 'utils/dateFormatter';
 import styles from 'style/app-fixed.module.css';
-
-interface InterfacePostViewModalProps {
-  show: boolean;
-  onHide: () => void;
-  post: InterfacePost | null;
-  refetch: () => Promise<unknown>;
-}
+import { InterfacePostViewModalProps } from 'types/shared-components/posts/interface';
+import { formatPostForCard } from 'shared-components/posts/helperFunctions';
 
 const PostViewModal: React.FC<InterfacePostViewModalProps> = ({
   show,
@@ -64,33 +57,6 @@ const PostViewModal: React.FC<InterfacePostViewModalProps> = ({
   const { t } = useTranslation('translation', { keyPrefix: 'posts' });
 
   if (!post) return null;
-
-  const formatPostForCard = (post: InterfacePost) => ({
-    id: post.id,
-    creator: {
-      id: post.creator?.id ?? 'unknown',
-      name: post.creator?.name ?? t('unknownUser'),
-      avatarURL: post.creator?.avatarURL,
-    },
-    hasUserVoted: post.hasUserVoted ?? { hasVoted: false, voteType: null },
-    postedAt: (() => {
-      try {
-        return formatDate(post.createdAt);
-      } catch {
-        return '';
-      }
-    })(),
-    pinnedAt: post.pinnedAt ?? null,
-    mimeType: post.attachments?.[0]?.mimeType ?? null,
-    attachmentURL: post.attachmentURL ?? null,
-    title: post.caption ?? '',
-    text: post.caption ?? '',
-    body: post.body,
-    commentCount: post.commentsCount ?? 0,
-    upVoteCount: post.upVotesCount ?? 0,
-    downVoteCount: post.downVotesCount ?? 0,
-    fetchPosts: refetch,
-  });
 
   return (
     <BaseModal
@@ -113,7 +79,7 @@ const PostViewModal: React.FC<InterfacePostViewModalProps> = ({
           <Close className={styles.closeButtonIcon} aria-hidden="true" />
         </Button>
         {/* Render the post */}
-        <PostCard {...formatPostForCard(post)} />
+        <PostCard {...formatPostForCard(post, t, refetch)} />
       </div>
     </BaseModal>
   );

@@ -401,7 +401,12 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           >
             <ChatBubbleOutline fontSize="small" />
           </IconButton>
-          <IconButton size="small" aria-label={t('postCard.share')}>
+          <IconButton
+            size="small"
+            aria-label={t('postCard.share')}
+            onClick={copyToClipboard}
+            data-testid="share-post-quick-button"
+          >
             <Share fontSize="small" />
           </IconButton>
         </Box>

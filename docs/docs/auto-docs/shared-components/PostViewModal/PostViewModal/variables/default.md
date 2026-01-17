@@ -4,6 +4,6 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<`InterfacePostViewModalProps`\>
+> `const` **default**: `React.FC`\<[`InterfacePostViewModalProps`](../../../../types/shared-components/posts/interface/interfaces/InterfacePostViewModalProps.md)\>
 
-Defined in: [src/shared-components/PostViewModal/PostViewModal.tsx:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/PostViewModal/PostViewModal.tsx#L58)
+Defined in: [src/shared-components/PostViewModal/PostViewModal.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/PostViewModal/PostViewModal.tsx#L51)
