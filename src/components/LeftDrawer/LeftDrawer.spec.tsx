@@ -8,6 +8,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
 import styles from 'style/app-fixed.module.css';
+import sidebarStyles from 'shared-components/SidebarBase/SidebarBase.module.css';
 import { usePluginDrawerItems } from 'plugin';
 
 // Mock the local storage hook
@@ -304,7 +305,7 @@ describe('LeftDrawer Component', () => {
       fireEvent.click(organizationsButton);
       const leftDrawerContainer = screen.getByTestId('leftDrawerContainer');
 
-      expect(leftDrawerContainer).toHaveClass(styles.expandedDrawer);
+      expect(leftDrawerContainer).toHaveClass(sidebarStyles.expandedDrawer);
     });
 
     it('hides drawer on mobile view for all navigation buttons', () => {

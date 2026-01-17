@@ -25,6 +25,11 @@ export default defineConfig({
   esbuild: {
     sourcemap: false, // Disable sourcemaps for faster tests
   },
+  css: {
+    modules: {
+      generateScopedName: '[local]',
+    },
+  },
   test: {
     include: [
       'src/**/*.{spec,test}.{js,jsx,ts,tsx}',
@@ -38,7 +43,6 @@ export default defineConfig({
     ],
     globals: true,
     environment: 'jsdom',
-    css: false,
     setupFiles: 'vitest.setup.ts',
     // Inline specific dependencies to avoid vitest issues
       server: {

@@ -11,6 +11,7 @@ import type { IDrawerExtension } from 'plugin/types';
 import LeftDrawerOrg from './LeftDrawerOrg';
 import type { ILeftDrawerProps } from './LeftDrawerOrg';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
+import sidebarStyles from 'shared-components/SidebarBase/SidebarBase.module.css';
 
 // Type definitions for better type safety
 interface IMockedResponse {
@@ -361,14 +362,20 @@ describe('LeftDrawerOrg', () => {
       renderComponent({ hideDrawer: true });
 
       const container = screen.getByTestId('leftDrawerContainer');
-      expect(container).toHaveClass('leftDrawer', 'collapsedDrawer');
+      expect(container).toHaveClass(
+        sidebarStyles.leftDrawer,
+        sidebarStyles.collapsedDrawer,
+      );
     });
 
     it('should apply correct CSS classes when hideDrawer is false', () => {
       renderComponent({ hideDrawer: false });
 
       const container = screen.getByTestId('leftDrawerContainer');
-      expect(container).toHaveClass('leftDrawer', 'expandedDrawer');
+      expect(container).toHaveClass(
+        sidebarStyles.leftDrawer,
+        sidebarStyles.expandedDrawer,
+      );
     });
   });
 

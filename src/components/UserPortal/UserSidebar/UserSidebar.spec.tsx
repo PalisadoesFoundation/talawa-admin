@@ -10,6 +10,7 @@ import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import sidebarStyles from 'shared-components/SidebarBase/SidebarBase.module.css';
 
 dayjs.extend(utc);
 
@@ -268,14 +269,20 @@ describe('UserSidebar', () => {
       renderComponent({ hideDrawer: true });
 
       const container = screen.getByTestId('leftDrawerContainer');
-      expect(container).toHaveClass('leftDrawer', 'collapsedDrawer');
+      expect(container).toHaveClass(
+        sidebarStyles.leftDrawer,
+        sidebarStyles.collapsedDrawer,
+      );
     });
 
     it('should apply correct CSS classes when hideDrawer is false', () => {
       renderComponent({ hideDrawer: false });
 
       const container = screen.getByTestId('leftDrawerContainer');
-      expect(container).toHaveClass('leftDrawer', 'expandedDrawer');
+      expect(container).toHaveClass(
+        sidebarStyles.leftDrawer,
+        sidebarStyles.expandedDrawer,
+      );
     });
   });
 
@@ -553,7 +560,7 @@ describe('UserSidebar', () => {
       renderComponent();
 
       const container = screen.getByTestId('leftDrawerContainer');
-      expect(container).toHaveClass('leftDrawer');
+      expect(container).toHaveClass(sidebarStyles.leftDrawer);
 
       // Verify the option list exists (navigation items container)
       expect(screen.getByTestId('orgsBtn')).toBeInTheDocument();
