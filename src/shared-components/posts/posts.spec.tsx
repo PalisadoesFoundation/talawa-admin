@@ -12,7 +12,10 @@ import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import PostsPage from './posts';
 import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
-import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
+import {
+  ORGANIZATION_PINNED_POST_LIST,
+  ORGANIZATION_POST_BY_ID,
+} from 'GraphQl/Queries/OrganizationQueries';
 import type { RenderResult } from '@testing-library/react';
 import { InterfacePostEdge } from 'types/Post/interface';
 import i18nForTest from 'utils/i18nForTest';
@@ -489,12 +492,27 @@ const pinnedPostsErrorMock: MockedResponse = {
   error: new Error('Pinned posts load error'),
 };
 
+// Error mock for preview post
+const previewPostErrorMock: MockedResponse = {
+  request: {
+    query: ORGANIZATION_POST_BY_ID,
+    variables: {
+      postId: 'preview-post-123',
+      userId: 'user-123',
+    },
+  },
+  error: new Error('Preview post load error'),
+};
+
 // Helper render function
-const renderComponent = (mocks: MockedResponse[]): RenderResult =>
+const renderComponent = (
+  mocks: MockedResponse[],
+  path = '/orgpost/123',
+): RenderResult =>
   render(
     <I18nextProvider i18n={i18nForTest}>
       <MockedProvider mocks={mocks}>
-        <MemoryRouter initialEntries={['/orgpost/123']}>
+        <MemoryRouter initialEntries={[path]}>
           <Routes>
             <Route path="/orgpost/:orgId" element={<PostsPage />} />
           </Routes>
@@ -534,6 +552,72 @@ describe('PostsPage Component', () => {
         );
       });
     });
+
+    it('shows error toast when preview post query fails', async () => {
+      const searchParams = new URLSearchParams({
+        previewPostID: 'preview-post-123',
+      });
+
+      renderComponent(
+        [orgPostListMock, emptyPinnedPostsMock, previewPostErrorMock],
+        `/orgpost/123?${searchParams.toString()}`,
+      );
+
+      await waitFor(() => {
+        expect(mockNotificationToast.error).toHaveBeenCalledWith(
+          'Error loading preview post',
+        );
+      });
+    });
+
+    it('includes preview post loading state in main loading condition', async () => {
+      const previewPostLoadingMock: MockedResponse = {
+        request: {
+          query: ORGANIZATION_POST_BY_ID,
+          variables: {
+            postId: 'preview-post-123',
+            userId: 'user-123',
+          },
+        },
+        delay: 100, // Simulate loading delay
+        result: {
+          data: {
+            post: {
+              id: 'preview-post-123',
+              caption: 'Preview Post',
+              createdAt: FIXED_TIMESTAMP,
+              creator: {
+                id: 'user-1',
+                name: 'John Doe',
+                avatarURL: null,
+              },
+              attachments: [],
+              commentsCount: 0,
+              upVotesCount: 0,
+              downVotesCount: 0,
+              hasUserVoted: { hasVoted: false, voteType: null },
+            },
+          },
+        },
+      };
+
+      const searchParams = new URLSearchParams({
+        previewPostID: 'preview-post-123',
+      });
+
+      renderComponent(
+        [orgPostListMock, emptyPinnedPostsMock, previewPostLoadingMock],
+        `/orgpost/123?${searchParams.toString()}`,
+      );
+
+      // Should show loading state initially
+      expect(screen.getByTestId('loader')).toBeInTheDocument();
+
+      // Wait for loading to complete
+      await waitFor(() => {
+        expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+      });
+    });
   });
 
   describe('Pinned Posts', () => {
@@ -555,7 +639,7 @@ describe('PostsPage Component', () => {
       });
 
       // Close modal
-      const closeButton = screen.getByTestId('close-pinned-post-button');
+      const closeButton = screen.getByTestId('close-post-view-button');
       await act(async () => {
         fireEvent.click(closeButton);
       });

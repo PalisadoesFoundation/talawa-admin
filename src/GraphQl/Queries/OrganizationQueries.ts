@@ -112,6 +112,35 @@ export const ORGANIZATION_POST_LIST_WITH_VOTES = gql`
   }
 `;
 
+//query to get single post by id
+export const ORGANIZATION_POST_BY_ID = gql`
+  query OrganizationPostByID($postId: String!, $userId: ID!) {
+    post(input: { id: $postId }) {
+      id
+      caption
+      body
+      commentsCount
+      attachments {
+        mimeType
+      }
+      attachmentURL
+      pinnedAt
+      downVotesCount
+      upVotesCount
+      hasUserVoted(userId: $userId) {
+        hasVoted
+        voteType
+      }
+      creator {
+        id
+        name
+        avatarURL
+      }
+      createdAt
+    }
+  }
+`;
+
 // GraphQL query to retrieve all the Organizations user is Part of with filter by name
 export const USER_JOINED_ORGANIZATIONS_PG = gql`
   query UserJoinedOrganizations($id: String!, $filter: String, $first: Int) {

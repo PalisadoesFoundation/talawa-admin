@@ -91,6 +91,7 @@
 
 .commentForm {
   padding: 8px 16px 16px;
+  width: 100%;
 }
 
 .commentForm :global(.MuiInput-root) {

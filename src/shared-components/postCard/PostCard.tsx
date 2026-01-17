@@ -15,7 +15,6 @@ import { useTranslation } from 'react-i18next';
 import {
   IconButton,
   Button,
-  FormControl,
   Input,
   InputAdornment,
   Box,
@@ -181,6 +180,22 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
     }
   };
 
+  const copyToClipboard = async (): Promise<void> => {
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set('previewPostID', props.id);
+
+      const finalUrl = url.toString();
+      await navigator.clipboard.writeText(finalUrl);
+      NotificationToast.success(tCommon('linkCopied'));
+    } catch {
+      NotificationToast.error(tCommon('copyToClipboardError'));
+    } finally {
+      // Close the menu
+      setDropdownAnchor(null);
+    }
+  };
+
   return (
     <Box
       className={`${postCardStyles.postContainer} ${postCardStyles.postContainerBackground}`}
@@ -266,6 +281,19 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                 />
               </MenuItem>
             )}
+
+            <MenuItem
+              onClick={copyToClipboard}
+              data-testid="share-post-menu-item"
+            >
+              <ListItemIcon>
+                <Share fontSize="small" />
+              </ListItemIcon>
+              <ListItemText
+                primary={tCommon('share')}
+                data-testid="share-post-button"
+              />
+            </MenuItem>
 
             {(isAdmin || isPostCreator) && (
               <MenuItem
@@ -462,7 +490,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
 
       {/* Add Comment */}
       <div className={postCardStyles.commentFormContainer}>
-        <FormControl fullWidth className={postCardStyles.commentForm}>
+        <Box className={postCardStyles.commentForm}>
           <Input
             placeholder={t('postCard.addComment')}
             value={commentInput}
@@ -493,7 +521,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               py: 0.5,
             }}
           />
-        </FormControl>
+        </Box>
       </div>
 
       {/* Edit Post Modal */}

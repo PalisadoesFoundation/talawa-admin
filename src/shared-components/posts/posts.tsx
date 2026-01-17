@@ -40,10 +40,13 @@
  */
 
 import { useQuery } from '@apollo/client';
-import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
+import {
+  ORGANIZATION_PINNED_POST_LIST,
+  ORGANIZATION_POST_BY_ID,
+} from 'GraphQl/Queries/OrganizationQueries';
 import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useSearchParams } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   InterfaceOrganizationPostListData,
@@ -54,7 +57,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
-import { Add, Close } from '@mui/icons-material';
+import { Add } from '@mui/icons-material';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import PinnedPostsLayout from 'shared-components/pinnedPosts/pinnedPostsLayout';
@@ -63,9 +66,9 @@ import styles from 'style/app-fixed.module.css';
 import { Box, Typography } from '@mui/material';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'shared-components/InfiniteScrollLoader/InfiniteScrollLoader';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { formatDate } from 'utils/dateFormatter';
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
+import PostViewModal from 'shared-components/PostViewModal/PostViewModal';
 
 export default function PostsPage() {
   const { t } = useTranslation('translation', { keyPrefix: 'posts' });
@@ -78,13 +81,14 @@ export default function PostsPage() {
   const [after, setAfter] = useState<string | null>(null);
   const first = 6;
   const [postModalIsOpen, setPostModalIsOpen] = useState(false);
-  const [selectedPinnedPost, setSelectedPinnedPost] =
+  const [selectedViewPost, setSelectedViewPost] =
     useState<InterfacePost | null>(null);
   const [hasMore, setHasMore] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const { getItem } = useLocalStorage();
   const userId = getItem<string>('userId') ?? getItem<string>('id') ?? null;
-  const [showPinnedPostModal, setShowPinnedPostModal] = useState(false);
+  const [showPostViewModal, setShowPostViewModal] = useState(false);
+  const [searchParams] = useSearchParams();
 
   const showCreatePostModal = (): void => {
     setPostModalIsOpen(true);
@@ -95,13 +99,18 @@ export default function PostsPage() {
   };
 
   const handleStoryClick = (post: InterfacePost) => {
-    setSelectedPinnedPost(post);
-    setShowPinnedPostModal(true);
+    setSelectedViewPost(post);
+    setShowPostViewModal(true);
   };
 
-  const handleClosePinnedModal = () => {
-    setShowPinnedPostModal(false);
-    setSelectedPinnedPost(null);
+  const handleClosePostViewModal = () => {
+    setShowPostViewModal(false);
+    setSelectedViewPost(null);
+    // Remove previewPostID from url
+    const params = new URLSearchParams(window.location.search);
+    params.delete('previewPostID');
+    const newUrl = window.location.pathname + params.toString();
+    window.history.replaceState({}, '', newUrl);
   };
 
   const {
@@ -142,6 +151,18 @@ export default function PostsPage() {
     },
   );
 
+  const {
+    data: previewPostData,
+    loading: previewPostLoading,
+    error: previewPostError,
+  } = useQuery<{ post: InterfacePost }>(ORGANIZATION_POST_BY_ID, {
+    skip: !searchParams.get('previewPostID') || !userId,
+    variables: {
+      postId: searchParams.get('previewPostID') as string,
+      userId: userId,
+    },
+  });
+
   // Initialize posts from query data
   useEffect(() => {
     if (orgPostListData?.organization?.posts?.edges) {
@@ -167,6 +188,20 @@ export default function PostsPage() {
     if (orgPinnedPostListError)
       NotificationToast.error(t('pinnedPostsLoadError'));
   }, [orgPinnedPostListError, t]);
+
+  useEffect(() => {
+    if (previewPostError) {
+      NotificationToast.error(t('errorLoadingPreviewPost'));
+    }
+  }, [previewPostError, t]);
+
+  useEffect(() => {
+    const previewPostID = searchParams.get('previewPostID');
+    if (previewPostID && previewPostData?.post) {
+      setSelectedViewPost(previewPostData.post);
+      setShowPostViewModal(true);
+    }
+  }, [searchParams, previewPostData]);
 
   // Infinite scroll - load more posts
   const loadMorePosts = useCallback((): void => {
@@ -315,10 +350,12 @@ export default function PostsPage() {
     return posts;
   }, [allPosts, filteredPosts, isFiltering, sortingOption]);
 
-  if (orgPostListLoading || orgPinnedPostListLoading) {
+  if (orgPostListLoading || orgPinnedPostListLoading || previewPostLoading) {
     return (
       <LoadingState
-        isLoading={orgPostListLoading || orgPinnedPostListLoading}
+        isLoading={
+          orgPostListLoading || orgPinnedPostListLoading || previewPostLoading
+        }
         variant="spinner"
       >
         <div />
@@ -466,31 +503,12 @@ export default function PostsPage() {
       )}
 
       {/* Pinned Post Modal */}
-      {selectedPinnedPost && (
-        <BaseModal
-          show={showPinnedPostModal}
-          onHide={handleClosePinnedModal}
-          dataTestId="pinned-post-modal"
-          size="lg"
-          backdrop="static"
-          className={styles.pinnedPostModal}
-          showCloseButton={false}
-        >
-          <div className={styles.pinnedPostModalBody}>
-            <Button
-              variant="light"
-              onClick={handleClosePinnedModal}
-              data-testid="close-pinned-post-button"
-              aria-label={t('closePinnedPost')}
-              className={`position-absolute top-0 end-0 m-2 btn-close-custom ${styles.closeButton}`}
-            >
-              <Close className={styles.closeButtonIcon} aria-hidden="true" />
-            </Button>
-            {/* Render the pinned post */}
-            <PostCard {...formatPostForCard(selectedPinnedPost)} />
-          </div>
-        </BaseModal>
-      )}
+      <PostViewModal
+        show={showPostViewModal}
+        onHide={handleClosePostViewModal}
+        post={selectedViewPost}
+        refetch={refetch}
+      />
     </>
   );
 }
