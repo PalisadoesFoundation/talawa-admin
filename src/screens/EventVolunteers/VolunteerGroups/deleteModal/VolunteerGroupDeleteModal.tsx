@@ -5,7 +5,6 @@
  * `@param` props - Component props from InterfaceDeleteVolunteerGroupModal
  * `@returns` JSX.Element
  */
-import { Form } from 'react-bootstrap';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
@@ -19,6 +18,7 @@ import {
   DELETE_VOLUNTEER_GROUP,
   DELETE_VOLUNTEER_GROUP_FOR_INSTANCE,
 } from 'GraphQl/Mutations/EventVolunteerMutation';
+import styles from './VolunteerGroupDeleteModal.module.css';
 
 export interface InterfaceDeleteVolunteerGroupModal {
   isOpen: boolean;
@@ -42,7 +42,7 @@ const VolunteerGroupDeleteModal: React.FC<
   );
 
   // Use useMutationModal for loading/error state management
-  const { isSubmitting, execute } = useMutationModal<void>(
+  const { isSubmitting, execute } = useMutationModal<Record<string, never>>(
     async () => {
       // Template-First Approach: For recurring events, all volunteer groups are templates
       if (isRecurring && applyTo === 'instance' && group && eventId) {
@@ -69,36 +69,53 @@ const VolunteerGroupDeleteModal: React.FC<
       onError: (error) => {
         NotificationToast.error(error.message);
       },
+      allowEmptyData: true,
     },
   );
 
   const deleteHandler = async (): Promise<void> => {
-    await execute();
+    await execute({});
   };
 
   const recurringEventContent =
     group?.isTemplate && !group?.isInstanceException ? (
-      <Form.Group className="mb-3">
-        <Form.Label>{t('applyTo')}</Form.Label>
-        <Form.Check
-          type="radio"
-          label={t('entireSeries')}
-          name="applyTo"
-          id="deleteApplyToSeries"
-          data-testid="deleteApplyToSeries"
-          checked={applyTo === 'series'}
-          onChange={() => setApplyTo('series')}
-        />
-        <Form.Check
-          type="radio"
-          label={t('thisEventOnly')}
-          name="applyTo"
-          id="deleteApplyToInstance"
-          data-testid="deleteApplyToInstance"
-          checked={applyTo === 'instance'}
-          onChange={() => setApplyTo('instance')}
-        />
-      </Form.Group>
+      <fieldset className={styles.radioFieldset}>
+        <legend className={styles.radioLegend}>{t('applyTo')}</legend>
+        <div className={styles.radioGroup}>
+          <div className={styles.radioOption}>
+            <input
+              type="radio"
+              name="applyTo"
+              id="deleteApplyToSeries"
+              data-testid="deleteApplyToSeries"
+              value="series"
+              checked={applyTo === 'series'}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setApplyTo('series');
+                }
+              }}
+            />
+            <label htmlFor="deleteApplyToSeries">{t('entireSeries')}</label>
+          </div>
+          <div className={styles.radioOption}>
+            <input
+              type="radio"
+              name="applyTo"
+              id="deleteApplyToInstance"
+              data-testid="deleteApplyToInstance"
+              value="instance"
+              checked={applyTo === 'instance'}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setApplyTo('instance');
+                }
+              }}
+            />
+            <label htmlFor="deleteApplyToInstance">{t('thisEventOnly')}</label>
+          </div>
+        </div>
+      </fieldset>
     ) : undefined;
 
   return (

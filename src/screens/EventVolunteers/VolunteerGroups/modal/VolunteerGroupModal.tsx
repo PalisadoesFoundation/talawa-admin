@@ -1,4 +1,3 @@
-import { Form } from 'react-bootstrap';
 import type {
   InterfaceCreateVolunteerGroup,
   InterfaceUserInfoPG,
@@ -99,124 +98,150 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
   const { name, description, leader, volunteerUsers, volunteersRequired } =
     formState;
 
-  const { isSubmitting: isUpdating, execute: executeUpdate } =
-    useMutationModal<void>(
-      async () => {
-        const updatedFields: {
-          [key: string]: number | string | undefined | null;
-        } = {};
+  const { isSubmitting: isUpdating, execute: executeUpdate } = useMutationModal<
+    Record<string, never>
+  >(
+    async () => {
+      const updatedFields: {
+        [key: string]: number | string | undefined | null;
+      } = {};
 
-        if (name !== group?.name) {
-          updatedFields.name = name;
-        }
-        if (description !== group?.description) {
-          updatedFields.description = description;
-        }
-        if (volunteersRequired !== group?.volunteersRequired) {
-          updatedFields.volunteersRequired = volunteersRequired;
-        }
+      if (name !== group?.name) {
+        updatedFields.name = name;
+      }
+      if (description !== group?.description) {
+        updatedFields.description = description;
+      }
+      if (volunteersRequired !== group?.volunteersRequired) {
+        updatedFields.volunteersRequired = volunteersRequired;
+      }
 
-        await updateVolunteerGroup({
-          variables: {
-            id: group?.id,
-            data: { ...updatedFields, eventId },
-          },
+      await updateVolunteerGroup({
+        variables: {
+          id: group?.id,
+          data: { ...updatedFields, eventId },
+        },
+      });
+    },
+    {
+      onSuccess: () => {
+        NotificationToast.success(t('volunteerGroupUpdated'));
+        refetchGroups();
+        hide();
+      },
+      onError: (error) => {
+        errorHandler(t, error);
+      },
+    },
+  );
+
+  const { isSubmitting: isCreating, execute: executeCreate } = useMutationModal<
+    Record<string, never>
+  >(
+    async () => {
+      if (isRecurring && !baseEvent) {
+        NotificationToast.error(
+          t('baseEventRequired') ||
+            'Base event is required for recurring events',
+        );
+        throw new Error('Base event is required for recurring events');
+      }
+
+      const mutationData: InterfaceCreateVolunteerGroupData = {
+        eventId: isRecurring && baseEvent ? baseEvent.id : eventId,
+        leaderId: leader?.id,
+        name,
+        description,
+        volunteersRequired,
+        volunteerUserIds: volunteerUsers.map((user) => user.id),
+      };
+
+      if (isRecurring) {
+        if (applyTo === 'series') {
+          mutationData.scope = 'ENTIRE_SERIES';
+        } else {
+          mutationData.scope = 'THIS_INSTANCE_ONLY';
+          mutationData.recurringEventInstanceId = eventId;
+        }
+      }
+
+      await createVolunteerGroup({
+        variables: {
+          data: mutationData,
+        },
+      });
+    },
+    {
+      onSuccess: () => {
+        NotificationToast.success(t('volunteerGroupCreated'));
+        refetchGroups();
+        setFormState({
+          name: '',
+          description: '',
+          leader: null,
+          volunteerUsers: [],
+          volunteersRequired: null,
         });
+        setApplyTo('series');
+        hide();
       },
-      {
-        onSuccess: () => {
-          NotificationToast.success(t('volunteerGroupUpdated'));
-          refetchGroups();
-          hide();
-        },
-        onError: (error) => {
-          errorHandler(t, error);
-        },
+      onError: (error) => {
+        errorHandler(t, error);
       },
-    );
-
-  const { isSubmitting: isCreating, execute: executeCreate } =
-    useMutationModal<void>(
-      async () => {
-        const mutationData: InterfaceCreateVolunteerGroupData = {
-          eventId: isRecurring ? baseEvent?.id : eventId,
-          leaderId: leader?.id,
-          name,
-          description,
-          volunteersRequired,
-          volunteerUserIds: volunteerUsers.map((user) => user.id),
-        };
-
-        if (isRecurring) {
-          if (applyTo === 'series') {
-            mutationData.scope = 'ENTIRE_SERIES';
-          } else {
-            mutationData.scope = 'THIS_INSTANCE_ONLY';
-            mutationData.recurringEventInstanceId = eventId;
-          }
-        }
-
-        await createVolunteerGroup({
-          variables: {
-            data: mutationData,
-          },
-        });
-      },
-      {
-        onSuccess: () => {
-          NotificationToast.success(t('volunteerGroupCreated'));
-          refetchGroups();
-          setFormState({
-            name: '',
-            description: '',
-            leader: null,
-            volunteerUsers: [],
-            volunteersRequired: null,
-          });
-          setApplyTo('series'); // Reset to default
-          hide();
-        },
-        onError: (error) => {
-          errorHandler(t, error);
-        },
-      },
-    );
+    },
+  );
 
   const updateGroupHandler = async (): Promise<void> => {
-    await executeUpdate();
+    await executeUpdate({});
   };
 
   const createGroupHandler = async (): Promise<void> => {
-    await executeCreate();
+    await executeCreate({});
   };
+
+  const isSubmitDisabled = isCreating || (isRecurring && !baseEvent);
 
   const formContent = (
     <>
-      {/* Radio buttons for recurring events - only show in create mode */}
       {isRecurring && mode === 'create' ? (
-        <Form.Group className="mb-3">
-          <Form.Label>{t('applyTo')}</Form.Label>
-          <Form.Check
-            type="radio"
-            label={t('entireSeries')}
-            name="applyTo"
-            id="applyToSeries"
-            checked={applyTo === 'series'}
-            onChange={() => setApplyTo('series')}
-          />
-          <Form.Check
-            type="radio"
-            label={t('thisEventOnly')}
-            name="applyTo"
-            id="applyToInstance"
-            checked={applyTo === 'instance'}
-            onChange={() => setApplyTo('instance')}
-          />
-        </Form.Group>
+        <fieldset className={`mb-3 ${styles.radioFieldset}`}>
+          <legend className={styles.radioLegend}>{t('applyTo')}</legend>
+          <div className={styles.radioGroup}>
+            <div className={styles.radioOption}>
+              <input
+                type="radio"
+                name="applyTo"
+                id="applyToSeries"
+                value="series"
+                checked={applyTo === 'series'}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setApplyTo('series');
+                  }
+                }}
+              />
+              <label htmlFor="applyToSeries">{t('entireSeries')}</label>
+            </div>
+            <div className={styles.radioOption}>
+              <input
+                type="radio"
+                name="applyTo"
+                id="applyToInstance"
+                value="instance"
+                checked={applyTo === 'instance'}
+                onChange={(e) => {
+                  if (e.target.checked) {
+                    setApplyTo('instance');
+                  }
+                }}
+              />
+              <label htmlFor="applyToInstance">{t('thisEventOnly')}</label>
+            </div>
+          </div>
+        </fieldset>
       ) : null}
 
-      {/* Input field to enter the group name */}
-      <Form.Group className="mb-3">
+      <div className="mb-3">
         <FormControl fullWidth>
           <TextField
             required
@@ -229,9 +254,9 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             }
           />
         </FormControl>
-      </Form.Group>
-      {/* Input field to enter the group description */}
-      <Form.Group className="mb-3">
+      </div>
+
+      <div className="mb-3">
         <FormControl fullWidth>
           <TextField
             multiline
@@ -245,9 +270,9 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             }
           />
         </FormControl>
-      </Form.Group>
-      {/* A dropdown to select leader for volunteer group */}
-      <Form.Group className="d-flex mb-3 w-100">
+      </div>
+
+      <div className="d-flex mb-3 w-100">
         <Autocomplete
           className={`${styles.noOutline} w-100`}
           limitTags={2}
@@ -279,10 +304,9 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             <TextField {...params} label={`${t('leader')} *`} />
           )}
         />
-      </Form.Group>
+      </div>
 
-      {/* A Multi-select dropdown to select more than one volunteer */}
-      <Form.Group className="d-flex mb-3 w-100">
+      <div className="d-flex mb-3 w-100">
         <Autocomplete
           multiple
           className={`${styles.noOutline} w-100`}
@@ -304,30 +328,37 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             <TextField {...params} label={`${t('volunteers')} *`} />
           )}
         />
-      </Form.Group>
-      <Form.Group className="mb-3">
+      </div>
+
+      <div className="mb-3">
         <FormControl fullWidth>
           <TextField
             label={t('volunteersRequired')}
             variant="outlined"
             className={styles.noOutline}
-            value={volunteersRequired ?? ''}
+            value={
+              volunteersRequired !== null ? String(volunteersRequired) : ''
+            }
             onChange={(e) => {
-              if (parseInt(e.target.value) > 0) {
-                setFormState({
-                  ...formState,
-                  volunteersRequired: parseInt(e.target.value),
-                });
-              } else if (e.target.value === '') {
+              const value = e.target.value;
+              if (value === '') {
                 setFormState({
                   ...formState,
                   volunteersRequired: null,
                 });
+              } else {
+                const parsed = parseInt(value);
+                if (!isNaN(parsed) && parsed > 0) {
+                  setFormState({
+                    ...formState,
+                    volunteersRequired: parsed,
+                  });
+                }
               }
             }}
           />
         </FormControl>
-      </Form.Group>
+      </div>
     </>
   );
 
@@ -353,6 +384,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
       onClose={hide}
       onSubmit={createGroupHandler}
       loading={isCreating}
+      submitDisabled={isSubmitDisabled}
       data-testid="volunteerGroupModal"
     >
       {formContent}

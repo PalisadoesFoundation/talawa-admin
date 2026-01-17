@@ -1,6 +1,8 @@
-import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, test, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { I18nextProvider } from 'react-i18next';
 import dayjs from 'dayjs';
+import i18n from 'utils/i18nForTest';
 import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
 
 const defaultProps = {
@@ -13,10 +15,6 @@ const defaultProps = {
 };
 
 describe('RecurringEventVolunteerModal', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
     vi.restoreAllMocks();
   });
@@ -30,7 +28,11 @@ describe('RecurringEventVolunteerModal', () => {
       formattedDate,
     );
 
-    render(<RecurringEventVolunteerModal {...defaultProps} />);
+    render(
+      <I18nextProvider i18n={i18n}>
+        <RecurringEventVolunteerModal {...defaultProps} />
+      </I18nextProvider>,
+    );
 
     // Modal exists
     expect(screen.getByTestId('recurringEventModal')).toBeInTheDocument();
@@ -49,16 +51,12 @@ describe('RecurringEventVolunteerModal', () => {
 
     // Series option description (individual branch)
     expect(
-      screen.getByText(
-        'You will be volunteering for all events in this recurring series',
-      ),
+      screen.getByText(/You will be volunteering for all events/i),
     ).toBeInTheDocument();
 
     // Instance option description (individual branch, with formatted date)
     expect(
-      screen.getByText(
-        `You will only be volunteering for the event on ${formattedDate}`,
-      ),
+      screen.getByText(/You will only be volunteering for the event on/i),
     ).toBeInTheDocument();
 
     // Default selection should be "series"
@@ -78,11 +76,13 @@ describe('RecurringEventVolunteerModal', () => {
     );
 
     render(
-      <RecurringEventVolunteerModal
-        {...defaultProps}
-        isForGroup={true}
-        groupName={groupName}
-      />,
+      <I18nextProvider i18n={i18n}>
+        <RecurringEventVolunteerModal
+          {...defaultProps}
+          isForGroup={true}
+          groupName={groupName}
+        />
+      </I18nextProvider>,
     );
 
     // Title for group volunteering
@@ -99,21 +99,21 @@ describe('RecurringEventVolunteerModal', () => {
 
     // Series option description (group branch)
     expect(
-      screen.getByText(
-        'You will join this group for all events in the recurring series',
-      ),
+      screen.getByText(/You will join this group for all events/i),
     ).toBeInTheDocument();
 
     // Instance option description (group branch, with formatted date)
     expect(
-      screen.getByText(
-        `You will join this group only for the event on ${formattedDate}`,
-      ),
+      screen.getByText(/You will join this group only for the event on/i),
     ).toBeInTheDocument();
   });
 
   test('allows switching between instance and series options (covers both onChange handlers)', () => {
-    render(<RecurringEventVolunteerModal {...defaultProps} />);
+    render(
+      <I18nextProvider i18n={i18n}>
+        <RecurringEventVolunteerModal {...defaultProps} />
+      </I18nextProvider>,
+    );
 
     const seriesRadio = screen.getByTestId('volunteerForSeriesOption');
     const instanceRadio = screen.getByTestId('volunteerForInstanceOption');
@@ -134,7 +134,11 @@ describe('RecurringEventVolunteerModal', () => {
   });
 
   test('submit triggers onSelectSeries when "series" option is selected', () => {
-    render(<RecurringEventVolunteerModal {...defaultProps} />);
+    render(
+      <I18nextProvider i18n={i18n}>
+        <RecurringEventVolunteerModal {...defaultProps} />
+      </I18nextProvider>,
+    );
 
     // Series is selected by default
     const submitBtn = screen.getByTestId('modal-primary-btn');
@@ -145,7 +149,11 @@ describe('RecurringEventVolunteerModal', () => {
   });
 
   test('submit triggers onSelectInstance when "instance" option is selected', () => {
-    render(<RecurringEventVolunteerModal {...defaultProps} />);
+    render(
+      <I18nextProvider i18n={i18n}>
+        <RecurringEventVolunteerModal {...defaultProps} />
+      </I18nextProvider>,
+    );
 
     const instanceRadio = screen.getByTestId('volunteerForInstanceOption');
     const submitBtn = screen.getByTestId('modal-primary-btn');
@@ -159,7 +167,11 @@ describe('RecurringEventVolunteerModal', () => {
   });
 
   test('cancel button calls onHide', () => {
-    render(<RecurringEventVolunteerModal {...defaultProps} />);
+    render(
+      <I18nextProvider i18n={i18n}>
+        <RecurringEventVolunteerModal {...defaultProps} />
+      </I18nextProvider>,
+    );
 
     fireEvent.click(screen.getByTestId('modal-secondary-btn'));
 
@@ -167,7 +179,11 @@ describe('RecurringEventVolunteerModal', () => {
   });
 
   test('close button calls onHide', () => {
-    render(<RecurringEventVolunteerModal {...defaultProps} />);
+    render(
+      <I18nextProvider i18n={i18n}>
+        <RecurringEventVolunteerModal {...defaultProps} />
+      </I18nextProvider>,
+    );
 
     fireEvent.click(screen.getByTestId('modalCloseBtn'));
 

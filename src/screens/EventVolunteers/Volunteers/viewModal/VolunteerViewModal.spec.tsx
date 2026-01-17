@@ -12,7 +12,7 @@ import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
 import type { InterfaceVolunteerViewModal } from './VolunteerViewModal';
 import VolunteerViewModal from './VolunteerViewModal';
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { vi, describe, it, expect, afterEach } from 'vitest';
 import dayjs from 'dayjs';
 
 const t = {
@@ -136,10 +136,6 @@ const renderVolunteerViewModal = (
 };
 
 describe('Testing VolunteerViewModal', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
     vi.restoreAllMocks();
   });

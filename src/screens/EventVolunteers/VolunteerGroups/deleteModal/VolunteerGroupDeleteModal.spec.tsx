@@ -121,9 +121,12 @@ describe('Testing Group Delete Modal', () => {
 
   it('Delete Group', async () => {
     renderGroupDeleteModal(link1, itemProps[0]);
-    expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();
 
-    const deleteBtn = screen.getByTestId('modal-delete-btn');
+    await waitFor(() => {
+      expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();
+    });
+
+    const deleteBtn = await screen.findByTestId('modal-delete-btn');
     expect(deleteBtn).toBeInTheDocument();
     await userEvent.click(deleteBtn);
 
@@ -154,9 +157,12 @@ describe('Testing Group Delete Modal', () => {
 
   it('Delete Group -> Error', async () => {
     renderGroupDeleteModal(link2, itemProps[0]);
-    expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();
 
-    const deleteBtn = screen.getByTestId('modal-delete-btn');
+    await waitFor(() => {
+      expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();
+    });
+
+    const deleteBtn = await screen.findByTestId('modal-delete-btn');
     expect(deleteBtn).toBeInTheDocument();
     await userEvent.click(deleteBtn);
 
@@ -275,10 +281,12 @@ describe('Testing Group Delete Modal', () => {
     const linkForInstance = new StaticMockLink(MOCK_DELETE_FOR_INSTANCE);
     renderGroupDeleteModal(linkForInstance, recurringGroupProps);
 
-    expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(t.deleteGroup)).toBeInTheDocument();
+    });
 
     // Select "this event only"
-    const instanceRadio = screen.getByTestId('deleteApplyToInstance');
+    const instanceRadio = await screen.findByTestId('deleteApplyToInstance');
     await userEvent.click(instanceRadio);
 
     await waitFor(() => {
@@ -286,7 +294,7 @@ describe('Testing Group Delete Modal', () => {
     });
 
     // Click delete
-    const deleteBtn = screen.getByTestId('modal-delete-btn');
+    const deleteBtn = await screen.findByTestId('modal-delete-btn');
     await userEvent.click(deleteBtn);
 
     await waitFor(() => {

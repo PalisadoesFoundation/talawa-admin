@@ -2,10 +2,9 @@
  * Modal that displays detailed volunteer information in read-only mode.
  *
  * component VolunteerViewModal
- * `@param` props - Component props from InterfaceVolunteerViewModal
- * `@returns` JSX.Element
+ * @param props - Component props from InterfaceVolunteerViewModal
+ * @returns JSX.Element
  */
-import { Form } from 'react-bootstrap';
 import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import styles from './VolunteerViewModal.module.css';
@@ -82,9 +81,9 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
       onClose={hide}
       data-testid="volunteerViewModal"
     >
-      <Form className={styles.modalForm}>
+      <div className={styles.modalForm}>
         {/* Volunteer Name & Avatar */}
-        <Form.Group className={styles.formGroup}>
+        <div className={styles.formGroup}>
           <FormControl fullWidth>
             <TextField
               label={t('volunteer')}
@@ -121,9 +120,9 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
               }}
             />
           </FormControl>
-        </Form.Group>
+        </div>
         {/* Status and hours volunteered */}
-        <Form.Group className={styles.statusGroup}>
+        <div className={styles.statusGroup}>
           <TextField
             label={t('status')}
             fullWidth
@@ -144,13 +143,11 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
             value={hoursVolunteered ?? '-'}
             disabled
           />
-        </Form.Group>
+        </div>
         {/* Table for Associated Volunteer Groups */}
         {groups && groups.length > 0 && (
-          <Form.Group>
-            <Form.Label className={styles.groupsLabel}>
-              {t('volunteerGroups')}
-            </Form.Label>
+          <div>
+            <label className={styles.groupsLabel}>{t('volunteerGroups')}</label>
 
             <TableContainer
               component={Paper}
@@ -191,9 +188,9 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
                 </TableBody>
               </Table>
             </TableContainer>
-          </Form.Group>
+          </div>
         )}
-      </Form>
+      </div>
     </ViewModal>
   );
 };

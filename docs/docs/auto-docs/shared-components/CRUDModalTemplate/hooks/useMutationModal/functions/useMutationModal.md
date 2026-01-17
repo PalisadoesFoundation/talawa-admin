@@ -35,6 +35,10 @@ Async function to execute (e.g., GraphQL mutation)
 
 Optional callbacks for success and error handling
 
+#### allowEmptyData?
+
+`boolean`
+
 #### onError?
 
 (`error`) => `void`

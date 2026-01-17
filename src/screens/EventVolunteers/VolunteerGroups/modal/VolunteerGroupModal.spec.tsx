@@ -666,5 +666,48 @@ describe('Testing VolunteerGroupModal', () => {
       // Form data should still be there
       expect(nameInput).toHaveValue('Test Group');
     });
+
+    it('should disable submit button when baseEvent is null in recurring mode', async () => {
+      const propsWithNullBaseEvent: InterfaceVolunteerGroupModal = {
+        ...recurringEventProps,
+        baseEvent: null,
+      };
+
+      renderGroupModal(successLink, propsWithNullBaseEvent);
+      expect(screen.getByText(t.createGroup)).toBeInTheDocument();
+
+      const submitBtn = screen.getByTestId('modal-submit-btn');
+      expect(submitBtn).toBeDisabled();
+    });
+
+    it('should show validation error when trying to submit with null baseEvent', async () => {
+      const propsWithNullBaseEvent: InterfaceVolunteerGroupModal = {
+        ...recurringEventProps,
+        baseEvent: null,
+      };
+
+      renderGroupModal(successLink, propsWithNullBaseEvent);
+
+      const nameInput = screen.getByLabelText(`${t.name} *`);
+      fireEvent.change(nameInput, { target: { value: 'Test Group' } });
+
+      const descInput = screen.getByLabelText(t.description);
+      fireEvent.change(descInput, { target: { value: 'desc' } });
+
+      const memberSelect = await screen.findByTestId('leaderSelect');
+      const memberInputField = within(memberSelect).getByRole('combobox');
+      fireEvent.mouseDown(memberInputField);
+      const memberOption = await screen.findByText('Harve Lance');
+      fireEvent.click(memberOption);
+
+      const volunteerSelect = await screen.findByTestId('volunteerSelect');
+      const volunteerInputField = within(volunteerSelect).getByRole('combobox');
+      fireEvent.mouseDown(volunteerInputField);
+      const volunteerOption = await screen.findByText('John Doe');
+      fireEvent.click(volunteerOption);
+
+      const submitBtn = screen.getByTestId('modal-submit-btn');
+      expect(submitBtn).toBeDisabled();
+    });
   });
 });

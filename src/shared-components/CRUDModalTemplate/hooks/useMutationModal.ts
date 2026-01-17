@@ -59,6 +59,7 @@ export function useMutationModal<TData, TResult = unknown>(
   options?: {
     onSuccess?: (result: TResult) => void;
     onError?: (error: Error) => void;
+    allowEmptyData?: boolean;
   },
 ): InterfaceUseMutationModalReturn<TData, TResult> {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -99,7 +100,7 @@ export function useMutationModal<TData, TResult = unknown>(
   const execute = useCallback(
     async (data?: TData): Promise<TResult | undefined> => {
       const dataToSubmit = data ?? formData;
-      if (!dataToSubmit) {
+      if (dataToSubmit == null && !options?.allowEmptyData) {
         return undefined;
       }
 
@@ -107,7 +108,7 @@ export function useMutationModal<TData, TResult = unknown>(
       setError(null);
 
       try {
-        const result = await mutationFn(dataToSubmit);
+        const result = await mutationFn(dataToSubmit as TData);
         options?.onSuccess?.(result);
         return result;
       } catch (err) {

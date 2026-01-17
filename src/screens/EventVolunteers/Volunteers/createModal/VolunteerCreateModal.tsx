@@ -24,7 +24,6 @@
  * />
  * ```
  */
-import { Form } from 'react-bootstrap';
 import type { InterfaceUserInfo } from 'utils/interfaces';
 import styles from './VolunteerCreateModal.module.css';
 import React, { useState, useMemo } from 'react';
@@ -106,6 +105,13 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
 
   // Function to add a volunteer for an event
   const addVolunteerHandler = async (): Promise<void> => {
+    if (!userId) {
+      NotificationToast.error(
+        t('selectVolunteer') || 'Please select a volunteer',
+      );
+      return;
+    }
+
     // Template-First Hierarchy: Use scope-based approach
     const mutationData: InterfaceAddVolunteerData = {
       userId,
@@ -128,6 +134,8 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
     await execute(mutationData);
   };
 
+  const isSubmitDisabled = isSubmitting || !userId;
+
   return (
     <CreateModal
       open={isOpen}
@@ -135,33 +143,42 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
       onClose={hide}
       onSubmit={addVolunteerHandler}
       loading={isSubmitting}
+      submitDisabled={isSubmitDisabled}
       data-testid="volunteerCreateModal"
     >
       {/* Radio buttons for recurring events */}
       {isRecurring ? (
-        <Form.Group className="mb-3">
-          <Form.Label>{t('applyTo')}</Form.Label>
-          <Form.Check
-            type="radio"
-            label={t('entireSeries')}
-            name="applyTo"
-            id="applyToSeries"
-            checked={applyTo === 'series'}
-            onChange={() => setApplyTo('series')}
-          />
-          <Form.Check
-            type="radio"
-            label={t('thisEventOnly')}
-            name="applyTo"
-            id="applyToInstance"
-            checked={applyTo === 'instance'}
-            onChange={() => setApplyTo('instance')}
-          />
-        </Form.Group>
+        <fieldset className={styles.radioFieldset}>
+          <legend className={styles.radioLegend}>{t('applyTo')}</legend>
+          <div className={styles.radioGroup}>
+            <div className={styles.radioOption}>
+              <input
+                type="radio"
+                name="applyTo"
+                id="applyToSeries"
+                value="series"
+                checked={applyTo === 'series'}
+                onChange={() => setApplyTo('series')}
+              />
+              <label htmlFor="applyToSeries">{t('entireSeries')}</label>
+            </div>
+            <div className={styles.radioOption}>
+              <input
+                type="radio"
+                name="applyTo"
+                id="applyToInstance"
+                value="instance"
+                checked={applyTo === 'instance'}
+                onChange={() => setApplyTo('instance')}
+              />
+              <label htmlFor="applyToInstance">{t('thisEventOnly')}</label>
+            </div>
+          </div>
+        </fieldset>
       ) : null}
 
       {/* A Multi-select dropdown enables admin to invite a member as volunteer  */}
-      <Form.Group className="d-flex mb-3 w-100">
+      <div className="d-flex mb-3 w-100">
         <Autocomplete
           className={`${styles.noOutline} w-100`}
           limitTags={2}
@@ -177,7 +194,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
             <TextField {...params} label={tCommon('members')} />
           )}
         />
-      </Form.Group>
+      </div>
     </CreateModal>
   );
 };

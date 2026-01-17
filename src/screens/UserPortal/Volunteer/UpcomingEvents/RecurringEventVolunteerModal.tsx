@@ -2,35 +2,14 @@
  * Modal for choosing recurring event volunteer scope.
  *
  * component RecurringEventVolunteerModal
- * `@param` props - Component props from InterfaceRecurringEventVolunteerModalProps
- * `@returns` JSX.Element
+ * @param props - Component props from InterfaceRecurringEventVolunteerModalProps.
+ * @returns JSX.Element.
  */
 import React, { useState } from 'react';
-import { Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
-
-/**
- * Props for the RecurringEventVolunteerModal component
- */
-interface InterfaceRecurringEventVolunteerModalProps {
-  /** Controls the visibility of the modal */
-  show: boolean;
-  /** Callback function to hide/close the modal */
-  onHide: () => void;
-  /** The name of the recurring event */
-  eventName: string;
-  /** The date of the current event instance */
-  eventDate: string;
-  /** Callback when user chooses to volunteer for entire series */
-  onSelectSeries: () => void;
-  /** Callback when user chooses to volunteer for this instance only */
-  onSelectInstance: () => void;
-  /** Optional flag indicating if this is for joining a volunteer group */
-  isForGroup?: boolean;
-  /** Optional name of the volunteer group being joined */
-  groupName?: string;
-}
+import type { InterfaceRecurringEventVolunteerModalProps } from 'types/Volunteer/RecurringEventVolunteerModal/interface';
+import styles from './RecurringEventVolunteerModal.module.css';
 
 const RecurringEventVolunteerModal: React.FC<
   InterfaceRecurringEventVolunteerModalProps
@@ -92,38 +71,43 @@ const RecurringEventVolunteerModal: React.FC<
     >
       <p className="mb-4">{description}</p>
 
-      <Form>
-        <Form.Check
-          type="radio"
-          name="volunteerScope"
-          id="seriesOption"
-          label={
-            <div>
+      <fieldset className={styles.radioFieldset}>
+        <div className={styles.radioGroup}>
+          <div className={styles.radioOption}>
+            <input
+              type="radio"
+              name="volunteerScope"
+              id="seriesOption"
+              value="series"
+              checked={selectedOption === 'series'}
+              onChange={() => setSelectedOption('series')}
+              data-testid="volunteerForSeriesOption"
+            />
+            <label htmlFor="seriesOption" className={styles.radioLabel}>
               <strong>{seriesLabel}</strong>
-              <div className="small text-muted">{seriesDescription}</div>
-            </div>
-          }
-          checked={selectedOption === 'series'}
-          onChange={() => setSelectedOption('series')}
-          className="mb-3"
-          data-testid="volunteerForSeriesOption"
-        />
+              <div className={styles.radioDescription}>{seriesDescription}</div>
+            </label>
+          </div>
 
-        <Form.Check
-          type="radio"
-          name="volunteerScope"
-          id="instanceOption"
-          label={
-            <div>
+          <div className={styles.radioOption}>
+            <input
+              type="radio"
+              name="volunteerScope"
+              id="instanceOption"
+              value="instance"
+              checked={selectedOption === 'instance'}
+              onChange={() => setSelectedOption('instance')}
+              data-testid="volunteerForInstanceOption"
+            />
+            <label htmlFor="instanceOption" className={styles.radioLabel}>
               <strong>{instanceLabel}</strong>
-              <div className="small text-muted">{instanceDescription}</div>
-            </div>
-          }
-          checked={selectedOption === 'instance'}
-          onChange={() => setSelectedOption('instance')}
-          data-testid="volunteerForInstanceOption"
-        />
-      </Form>
+              <div className={styles.radioDescription}>
+                {instanceDescription}
+              </div>
+            </label>
+          </div>
+        </div>
+      </fieldset>
     </CRUDModalTemplate>
   );
 };

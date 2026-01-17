@@ -34,7 +34,6 @@
  * />
  * ```
  */
-import { Form } from 'react-bootstrap';
 import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import styles from './VolunteerGroupViewModal.module.css';
@@ -77,9 +76,9 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
       onClose={hide}
       data-testid="volunteerGroupViewModal"
     >
-      <Form>
+      <div>
         {/* Group name & Volunteers Required */}
-        <Form.Group className="d-flex gap-3 mb-3">
+        <div className={styles.formGroup}>
           <FormControl fullWidth>
             <TextField
               label={tCommon('name')}
@@ -100,10 +99,10 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
               />
             </FormControl>
           )}
-        </Form.Group>
+        </div>
         {/* Input field to enter the group description */}
         {description && (
-          <Form.Group className="mb-3">
+          <div className="mb-3">
             <FormControl fullWidth>
               <TextField
                 multiline
@@ -115,9 +114,9 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                 disabled
               />
             </FormControl>
-          </Form.Group>
+          </div>
         )}
-        <Form.Group className="mb-3 d-flex gap-3">
+        <div className={styles.formGroup}>
           <FormControl fullWidth>
             <TextField
               label={t('leader')}
@@ -191,15 +190,11 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
               }}
             />
           </FormControl>
-        </Form.Group>
+        </div>
         {/* Table for Associated Volunteers */}
         {volunteers && volunteers.length > 0 && (
-          <Form.Group>
-            <Form.Label
-              className={`fw-lighter ms-2 mb-0 ${styles.volunteersLabel}`}
-            >
-              {t('volunteers')}
-            </Form.Label>
+          <div>
+            <label className={styles.volunteersLabel}>{t('volunteers')}</label>
 
             <TableContainer
               component={Paper}
@@ -237,9 +232,9 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
                 </TableBody>
               </Table>
             </TableContainer>
-          </Form.Group>
+          </div>
         )}
-      </Form>
+      </div>
     </ViewModal>
   );
 };
