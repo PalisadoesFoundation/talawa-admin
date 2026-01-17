@@ -870,4 +870,49 @@ describe('AgendaItemsUpdateModal', () => {
     const urlLink = screen.getByText('https://example.com');
     expect(urlLink).toBeInTheDocument();
   });
+
+  test('removes attachment when delete button is clicked', async () => {
+    const formStateWithAttachment = {
+      ...mockFormState1,
+      attachments: ['http://localhost/video/test-attachment.mp4'],
+    };
+
+    render(
+      <MockedProvider>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsUpdateModal
+                  agendaItemCategories={[]}
+                  agendaItemUpdateModalIsOpen
+                  hideUpdateModal={mockHideUpdateModal}
+                  formState={formStateWithAttachment}
+                  setFormState={mockSetFormState}
+                  updateAgendaItemHandler={mockUpdateAgendaItemHandler}
+                  t={mockT}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // Check that attachment preview is visible
+    await waitFor(() => {
+      expect(screen.getByTestId('deleteAttachment')).toBeInTheDocument();
+    });
+
+    // Click the delete button
+    fireEvent.click(screen.getByTestId('deleteAttachment'));
+
+    // Verify setFormState was called with functional updater that filters attachments
+    await waitFor(() => {
+      const functionalCall = mockSetFormState.mock.calls.find(
+        (call) => typeof call[0] === 'function',
+      );
+      expect(functionalCall).toBeDefined();
+    });
+  });
 });

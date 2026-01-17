@@ -493,4 +493,143 @@ describe('AgendaItemsCreateModal', () => {
     fireEvent.click(options[0]);
     fireEvent.click(options[1]);
   });
+
+  test('revokes object URLs on component unmount', async () => {
+    const revokeObjectURLSpy = vi.spyOn(URL, 'revokeObjectURL');
+    const createObjectURLSpy = vi
+      .spyOn(URL, 'createObjectURL')
+      .mockReturnValue('blob:http://localhost/test-url');
+
+    const mockMinioResult = {
+      objectName: 'agendaItem/test.jpg',
+      fileHash: 'hash123',
+    };
+    sharedMocks.uploadFileToMinio.mockResolvedValue(mockMinioResult);
+
+    const cleanFormState = {
+      ...mockFormState1,
+      attachments: [],
+    };
+
+    const { unmount } = render(
+      <MockedProvider>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsCreateModal
+                  agendaItemCreateModalIsOpen
+                  hideCreateModal={mockHideCreateModal}
+                  formState={cleanFormState}
+                  setFormState={mockSetFormState}
+                  createAgendaItemHandler={mockCreateAgendaItemHandler}
+                  t={mockT}
+                  agendaItemCategories={[]}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const fileInput = screen.getByTestId('attachment');
+    const testFile = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
+
+    Object.defineProperty(fileInput, 'files', {
+      value: [testFile],
+    });
+
+    fireEvent.change(fileInput);
+
+    await waitFor(() => {
+      expect(sharedMocks.uploadFileToMinio).toHaveBeenCalled();
+    });
+
+    await waitFor(() => {
+      expect(createObjectURLSpy).toHaveBeenCalled();
+    });
+
+    // Unmount the component
+    unmount();
+
+    // Verify cleanup effect runs - revokeObjectURL should be called
+    expect(revokeObjectURLSpy).toHaveBeenCalledWith(
+      'blob:http://localhost/test-url',
+    );
+
+    createObjectURLSpy.mockRestore();
+    revokeObjectURLSpy.mockRestore();
+  });
+
+  test('handles delete attachment button correctly', async () => {
+    const revokeObjectURLSpy = vi.spyOn(URL, 'revokeObjectURL');
+    const createObjectURLSpy = vi
+      .spyOn(URL, 'createObjectURL')
+      .mockReturnValue('blob:http://localhost/preview-url');
+
+    const mockMinioResult = {
+      objectName: 'agendaItem/test.jpg',
+      fileHash: 'hash123',
+    };
+    sharedMocks.uploadFileToMinio.mockResolvedValue(mockMinioResult);
+
+    const cleanFormState = {
+      ...mockFormState1,
+      attachments: [],
+    };
+
+    render(
+      <MockedProvider>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsCreateModal
+                  agendaItemCreateModalIsOpen
+                  hideCreateModal={mockHideCreateModal}
+                  formState={cleanFormState}
+                  setFormState={mockSetFormState}
+                  createAgendaItemHandler={mockCreateAgendaItemHandler}
+                  t={mockT}
+                  agendaItemCategories={[]}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const fileInput = screen.getByTestId('attachment');
+    const testFile = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
+
+    Object.defineProperty(fileInput, 'files', {
+      value: [testFile],
+    });
+
+    fireEvent.change(fileInput);
+
+    await waitFor(() => {
+      expect(sharedMocks.uploadFileToMinio).toHaveBeenCalled();
+    });
+
+    // Wait for the delete button to appear
+    await waitFor(() => {
+      expect(screen.getByTestId('deleteAttachment')).toBeInTheDocument();
+    });
+
+    // Click the delete button
+    fireEvent.click(screen.getByTestId('deleteAttachment'));
+
+    // Verify revokeObjectURL is called when removing attachment
+    await waitFor(() => {
+      expect(revokeObjectURLSpy).toHaveBeenCalledWith(
+        'blob:http://localhost/preview-url',
+      );
+    });
+
+    createObjectURLSpy.mockRestore();
+    revokeObjectURLSpy.mockRestore();
+  });
 });
