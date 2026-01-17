@@ -167,19 +167,10 @@ const AgendaItemsUpdateModal: React.FC<
       className={styles.AgendaItemModal}
       show={agendaItemUpdateModalIsOpen}
       onHide={hideUpdateModal}
-      headerContent={
-        <>
-          <p className={styles.titlemodalAgendaItems}>
-            {t('updateAgendaItem')}
-          </p>
-          <Button
-            onClick={hideUpdateModal}
-            data-testid="updateAgendaItemModalCloseBtn"
-          >
-            <i className="fa fa-times" />
-          </Button>
-        </>
-      }
+      title={t('updateAgendaItem')}
+      headerClassName={styles.modalHeader}
+      showCloseButton={true}
+      dataTestId="updateAgendaItemModal"
     >
       <Form onSubmit={updateAgendaItemHandler}>
         <Form.Group className="d-flex mb-3 w-100">

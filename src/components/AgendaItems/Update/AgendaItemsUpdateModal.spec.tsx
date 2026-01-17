@@ -81,9 +81,7 @@ describe('AgendaItemsUpdateModal', () => {
 
     expect(screen.getByText('updateAgendaItem')).toBeInTheDocument();
     expect(screen.getByTestId('updateAgendaItemBtn')).toBeInTheDocument();
-    expect(
-      screen.getByTestId('updateAgendaItemModalCloseBtn'),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
   });
 
   test('tests the condition for formState.title and formState.description', async () => {

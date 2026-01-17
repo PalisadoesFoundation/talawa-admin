@@ -169,20 +169,11 @@ const AgendaItemsCreateModal: React.FC<
       className={styles.AgendaItemsModal}
       show={agendaItemCreateModalIsOpen}
       onHide={hideCreateModal}
-      headerContent={
-        <>
-          <p className={styles.titlemodalAgendaItems}>
-            {t('agendaItemDetails')}
-          </p>
-          <Button
-            variant="danger"
-            onClick={hideCreateModal}
-            data-testid="createAgendaItemModalCloseBtn"
-          >
-            <i className="fa fa-times"></i>
-          </Button>
-        </>
-      }
+      title={t('agendaItemDetails')}
+      headerClassName={styles.modalHeader}
+      showCloseButton={true}
+      closeButtonVariant="danger"
+      dataTestId="createAgendaItemModal"
     >
       <Form onSubmit={createAgendaItemHandler}>
         <Form.Group className="d-flex mb-3 w-100">
