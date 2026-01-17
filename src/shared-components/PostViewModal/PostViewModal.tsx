@@ -62,7 +62,7 @@ const PostViewModal: React.FC<InterfacePostViewModalProps> = ({
     <BaseModal
       show={show}
       onHide={onHide}
-      dataTestId="pinned-post-modal"
+      dataTestId="post-view-modal"
       size="lg"
       backdrop="static"
       showCloseButton={false}

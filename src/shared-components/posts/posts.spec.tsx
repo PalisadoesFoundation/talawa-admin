@@ -215,7 +215,7 @@ vi.mock('shared-components/PostViewModal/PostViewModal', () => ({
     refetch: () => void;
   }) =>
     show ? (
-      <div data-testid="pinned-post-modal">
+      <div data-testid="post-view-modal">
         <button
           type="button"
           data-testid="close-post-view-button"
@@ -659,7 +659,7 @@ describe('PostsPage Component', () => {
       });
 
       await waitFor(() => {
-        expect(screen.getByTestId('pinned-post-modal')).toBeInTheDocument();
+        expect(screen.getByTestId('post-view-modal')).toBeInTheDocument();
       });
 
       // Close modal
@@ -669,9 +669,7 @@ describe('PostsPage Component', () => {
       });
 
       await waitFor(() => {
-        expect(
-          screen.queryByTestId('pinned-post-modal'),
-        ).not.toBeInTheDocument();
+        expect(screen.queryByTestId('post-view-modal')).not.toBeInTheDocument();
       });
     });
 

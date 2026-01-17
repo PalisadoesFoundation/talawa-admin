@@ -126,7 +126,7 @@ describe('PostViewModal', () => {
     test('renders modal with valid post data', () => {
       renderPostViewModal();
 
-      expect(screen.getByTestId('pinned-post-modal')).toBeInTheDocument();
+      expect(screen.getByTestId('post-view-modal')).toBeInTheDocument();
       expect(screen.getByTestId('mocked-post-card')).toBeInTheDocument();
       expect(screen.getByTestId('close-post-view-button')).toBeInTheDocument();
     });
@@ -135,7 +135,7 @@ describe('PostViewModal', () => {
       renderPostViewModal({ show: false });
 
       // When show is false, the modal should not render the content
-      expect(screen.queryByTestId('pinned-post-modal')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('post-view-modal')).not.toBeInTheDocument();
     });
   });
 
@@ -335,7 +335,7 @@ describe('PostViewModal', () => {
     test('renders with correct modal props', () => {
       renderPostViewModal();
 
-      const modal = screen.getByTestId('pinned-post-modal');
+      const modal = screen.getByTestId('post-view-modal');
       expect(modal).toBeInTheDocument();
     });
 
@@ -343,7 +343,7 @@ describe('PostViewModal', () => {
       renderPostViewModal();
 
       // Modal should be rendered (backdrop behavior is handled by Bootstrap)
-      expect(screen.getByTestId('pinned-post-modal')).toBeInTheDocument();
+      expect(screen.getByTestId('post-view-modal')).toBeInTheDocument();
     });
   });
 });
