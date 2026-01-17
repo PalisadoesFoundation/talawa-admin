@@ -454,9 +454,9 @@ function orgList(): JSX.Element {
       {/* Text Infos for list */}
 
       {!isLoading &&
-        (!sortedOrganizations || sortedOrganizations.length === 0) &&
-        searchByName.length === 0 &&
-        (!userData || adminFor.length === 0) ? (
+      (!sortedOrganizations || sortedOrganizations.length === 0) &&
+      searchByName.length === 0 &&
+      (!userData || adminFor.length === 0) ? (
         <EmptyState
           icon={<Group />}
           message={t('noOrgErrorTitle')}
@@ -500,9 +500,9 @@ function orgList(): JSX.Element {
           <div className={`${styles.listBoxOrgList}`}>
             {(rowsPerPage > 0
               ? sortedOrganizations.slice(
-                page * rowsPerPage,
-                page * rowsPerPage + rowsPerPage,
-              )
+                  page * rowsPerPage,
+                  page * rowsPerPage + rowsPerPage,
+                )
               : sortedOrganizations
             )?.map((item: InterfaceOrgInfoTypePG) => {
               return (

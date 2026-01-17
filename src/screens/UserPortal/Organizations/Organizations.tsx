@@ -345,10 +345,11 @@ export default function Organizations(): React.JSX.Element {
     <>
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
-        className={`${styles.organizationsContainer} ${hideDrawer
+        className={`${styles.organizationsContainer} ${
+          hideDrawer
             ? styles.organizationsContainerExpanded
             : styles.organizationsContainerContracted
-          } ${hideDrawer ? styles.expand : styles.contract}`}
+        } ${hideDrawer ? styles.expand : styles.contract}`}
         data-testid="organizations-container"
       >
         <div
@@ -436,9 +437,9 @@ export default function Organizations(): React.JSX.Element {
                     <div className="row" data-testid="organizations-list">
                       {(rowsPerPage > 0
                         ? organizations.slice(
-                          page * rowsPerPage,
-                          page * rowsPerPage + rowsPerPage,
-                        )
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage,
+                          )
                         : organizations
                       ).map((organization: IOrganization, index) => {
                         const cardProps: IOrganizationCardProps = {

@@ -1077,7 +1077,8 @@
     "resendSuccess": "Email de vérification envoyé! Veuillez vérifier votre boîte de réception.",
     "resendButton": "Renvoyer l'email de vérification",
     "enterEmail": "Entrez votre adresse email",
-    "emailPlaceholder": "Email"
+    "emailPlaceholder": "Email",
+    "loginRequired": "You must be logged in to verify your email."
   },
   "pageNotFound": {
     "404": "404",

@@ -17,7 +17,7 @@ import Check from '@mui/icons-material/Check';
 import Clear from '@mui/icons-material/Clear';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
-import { Form } from 'react-bootstrap';
+
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -527,7 +527,8 @@ const LoginPage = (): JSX.Element => {
                     touched={touched.email}
                   >
                     <div className="position-relative">
-                      <Form.Control
+                      <input
+                        className="form-control"
                         type="email"
                         disabled={loginLoading}
                         placeholder={tCommon('enterEmail')}
@@ -558,9 +559,9 @@ const LoginPage = (): JSX.Element => {
                       touched={touched.password}
                     >
                       <div className="position-relative">
-                        <Form.Control
+                        <input
+                          className="form-control input_box_second lh-1"
                           type={showPassword ? 'text' : 'password'}
-                          className="input_box_second lh-1"
                           placeholder={tCommon('enterPassword')}
                           required
                           value={formState.password}
@@ -656,7 +657,7 @@ const LoginPage = (): JSX.Element => {
                   showTab === 'REGISTER' ? styles.active_tab : 'd-none'
                 }`}
               >
-                <Form onSubmit={signupLink}>
+                <form onSubmit={signupLink}>
                   <h1
                     className="fs-2 fw-bold text-dark mb-3"
                     data-testid="register-text"
@@ -673,10 +674,10 @@ const LoginPage = (): JSX.Element => {
                         error={signNameError}
                         touched={signTouched.signName}
                       >
-                        <Form.Control
+                        <input
+                          className="form-control mb-3"
                           disabled={signinLoading}
                           type="text"
-                          className="mb-3"
                           placeholder={tCommon('Name')}
                           required
                           value={signformState.signName}
@@ -695,8 +696,8 @@ const LoginPage = (): JSX.Element => {
                     {/* </Col> */}
                     {/* <Col sm={6}>
                       <div>
-                        <Form.Label>{tCommon('lastName')}</Form.Label>
-                        <Form.Control
+                        <label className="form-label">{tCommon('lastName')}</label>
+                        <input className="form-control"
                           disabled={signinLoading}
                           type="text"
                           id="signlastname"
@@ -722,11 +723,11 @@ const LoginPage = (): JSX.Element => {
                     touched={signTouched.signEmail}
                   >
                     <div className="position-relative">
-                      <Form.Control
+                      <input
+                        className="form-control mb-3"
                         disabled={signinLoading}
                         type="email"
                         data-testid="signInEmail"
-                        className="mb-3"
                         placeholder={tCommon('email')}
                         autoComplete="username"
                         required
@@ -759,7 +760,8 @@ const LoginPage = (): JSX.Element => {
                       touched={signTouched.signPassword}
                     >
                       <div className="position-relative">
-                        <Form.Control
+                        <input
+                          className="form-control"
                           disabled={signinLoading}
                           type={showPassword ? 'text' : 'password'}
                           data-testid="passwordField"
@@ -926,7 +928,8 @@ const LoginPage = (): JSX.Element => {
                     touched={signTouched.cPassword}
                   >
                     <div className="position-relative">
-                      <Form.Control
+                      <input
+                        className="form-control"
                         disabled={signinLoading}
                         type={showConfirmPassword ? 'text' : 'password'}
                         placeholder={tCommon('confirmPassword')}
@@ -967,7 +970,7 @@ const LoginPage = (): JSX.Element => {
                       </div>
                     )}
                   <div className="position-relative  my-2">
-                    <Form.Label>{t('selectOrg')}</Form.Label>
+                    <label className="form-label">{t('selectOrg')}</label>
                     <div className="position-relative">
                       <Autocomplete
                         disablePortal
@@ -1031,7 +1034,7 @@ const LoginPage = (): JSX.Element => {
                       {t('backToLogin')}
                     </Link>
                   </Button>
-                </Form>
+                </form>
               </div>
             </div>
           </Col>

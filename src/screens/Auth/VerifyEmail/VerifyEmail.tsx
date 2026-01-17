@@ -26,17 +26,21 @@ import CheckCircleOutline from '@mui/icons-material/CheckCircleOutline';
 import ErrorOutline from '@mui/icons-material/ErrorOutline';
 import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-// eslint-disable-next-line no-restricted-imports
-import { Form, Button } from 'react-bootstrap';
+
+import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
+// Import useLocalStorage
+import useLocalStorage from 'utils/useLocalstorage';
 import styles from './VerifyEmail.module.css';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 type VerificationState = 'loading' | 'success' | 'error';
 
 const VerifyEmail = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'verifyEmail' });
   const { t: tCommon } = useTranslation('common');
+  const { removeItem } = useLocalStorage();
 
   document.title = t('title');
 
@@ -71,14 +75,17 @@ const VerifyEmail = (): JSX.Element => {
         if (data?.verifyEmail?.success) {
           setVerificationState('success');
           NotificationToast.success(t('success'));
-          localStorage.removeItem('emailNotVerified');
-          localStorage.removeItem('unverifiedEmail');
+          removeItem('emailNotVerified');
+          removeItem('unverifiedEmail');
         } else {
           setVerificationState('error');
         }
       } catch (error: unknown) {
         setVerificationState('error');
-        const err = error as { message?: string; graphQLErrors?: any[] };
+        const err = error as {
+          message?: string;
+          graphQLErrors?: { extensions?: { code?: string } }[];
+        };
         if (
           err.message?.toLowerCase().includes('authenticated') ||
           err.graphQLErrors?.[0]?.extensions?.code === 'UNAUTHENTICATED' ||
@@ -92,7 +99,7 @@ const VerifyEmail = (): JSX.Element => {
     };
 
     verifyEmailToken();
-  }, [token, verifyEmail, t]);
+  }, [token, verifyEmail, t, removeItem]);
 
   /**
    * Handles resending verification email
@@ -189,16 +196,14 @@ const VerifyEmail = (): JSX.Element => {
                       {t('resendButton')}
                     </Button>
                   ) : (
-                    <Form onSubmit={handleResendEmail} className="mt-4 w-100">
-                      <Form.Label htmlFor="resendEmail">
-                        {t('enterEmail')}
-                      </Form.Label>
-                      <Form.Control
-                        type="email"
-                        id="resendEmail"
-                        placeholder={t('emailPlaceholder')}
+                    <form onSubmit={handleResendEmail} className="mt-4 w-100">
+                      <FormTextField
+                        name="resendEmail"
+                        label={t('enterEmail')}
                         value={resendEmail}
-                        onChange={(e) => setResendEmail(e.target.value)}
+                        onChange={setResendEmail}
+                        placeholder={t('emailPlaceholder') || 'you@example.com'}
+                        type="email"
                         required
                         data-testid="resendEmailInput"
                       />
@@ -209,7 +214,7 @@ const VerifyEmail = (): JSX.Element => {
                       >
                         {t('resendButton')}
                       </Button>
-                    </Form>
+                    </form>
                   )}
 
                   <div className="d-flex justify-content-center mt-4">

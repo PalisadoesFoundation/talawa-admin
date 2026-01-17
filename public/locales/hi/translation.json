@@ -1095,7 +1095,8 @@
     "resendSuccess": "सत्यापन ईमेल भेजा गया! कृपया अपना इनबॉक्स जांचें।",
     "resendButton": "सत्यापन ईमेल पुनः भेजें",
     "enterEmail": "अपना ईमेल पता दर्ज करें",
-    "emailPlaceholder": "ईमेल"
+    "emailPlaceholder": "ईमेल",
+    "loginRequired": "You must be logged in to verify your email."
   },
   "pageNotFound": {
     "404": "404",

@@ -1105,7 +1105,8 @@
     "resendSuccess": "¡Correo de verificación enviado! Por favor, revise su bandeja de entrada.",
     "resendButton": "Reenviar correo de verificación",
     "enterEmail": "Ingrese su dirección de correo electrónico",
-    "emailPlaceholder": "Correo electrónico"
+    "emailPlaceholder": "Correo electrónico",
+    "loginRequired": "You must be logged in to verify your email."
   },
   "orgSettings": {
     "title": "Configuración",
