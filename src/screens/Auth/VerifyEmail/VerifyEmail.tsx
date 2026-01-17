@@ -96,11 +96,9 @@ const VerifyEmail = (): JSX.Element => {
     }
 
     try {
-      const { data } = await resendVerification({
-        variables: { email: resendEmail },
-      });
+      const { data } = await resendVerification();
 
-      if (data?.resendVerificationEmail?.success) {
+      if (data?.sendVerificationEmail?.success) {
         NotificationToast.success(t('resendSuccess'));
         setShowResendForm(false);
         setResendEmail('');

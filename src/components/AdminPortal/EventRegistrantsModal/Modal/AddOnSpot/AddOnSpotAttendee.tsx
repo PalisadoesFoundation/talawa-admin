@@ -10,7 +10,7 @@
  * @param handleClose - Function to close the modal.
  * @param reloadMembers - Function to reload the list of members.
  *
- * @returns The rendered AddOnSpotAttendee component.
+ * @returns {JSX.Element} The rendered AddOnSpotAttendee component.
  *
  * @remarks
  * - Uses `react-bootstrap` for modal and form styling
@@ -40,7 +40,7 @@ import { BaseModal } from 'shared-components/BaseModal';
 import styles from './AddOnSpotAttendee.module.css';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { toast } from 'react-toastify';
 import type {
   InterfaceAddOnSpotAttendeeProps,
   InterfaceFormData,
@@ -48,6 +48,7 @@ import type {
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
@@ -63,8 +64,8 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
     gender: '',
   });
   const { t } = useTranslation('translation', { keyPrefix: 'onSpotAttendee' });
-  const { t: tErrors } = useTranslation('errors');
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
   const { orgId } = useParams<{ orgId: string }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [addSignUp] = useMutation(SIGNUP_MUTATION);
@@ -74,7 +75,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
       return false;
     }
     if (!formData.firstName || !formData.lastName || !formData.email) {
-      NotificationToast.error(t('invalidDetailsMessage'));
+      toast.error(t('invalidDetailsMessage'));
       return false;
     }
     return true;
@@ -95,7 +96,8 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   ): Promise<void> => {
     e.preventDefault();
 
-    if (!validateForm()) {
+    const isValid = validateForm();
+    if (!isValid) {
       return;
     }
 
@@ -112,7 +114,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
       });
 
       if (response.data?.signUp) {
-        NotificationToast.success(t('attendeeAddedSuccess'));
+        toast.success(t('attendeeAddedSuccess'));
         resetForm();
         reloadMembers();
         handleClose();

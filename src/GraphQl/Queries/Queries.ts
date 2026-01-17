@@ -1198,6 +1198,7 @@ export const SIGNIN_QUERY = gql`
         role
         countryCode
         avatarURL
+        isEmailAddressVerified
       }
       authenticationToken
       refreshToken

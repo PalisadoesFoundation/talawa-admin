@@ -6,4 +6,4 @@
 
 > `const` **GENERATE\_OTP\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:477](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L477)
+Defined in: [src/GraphQl/Mutations/mutations.ts:471](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L471)

@@ -31,10 +31,7 @@ import {
   RECAPTCHA_SITE_KEY,
   BACKEND_URL,
 } from 'Constant/constant';
-import {
-  SIGNUP_MUTATION,
-  RESEND_VERIFICATION_EMAIL_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_LIST_NO_MEMBERS,
   SIGNIN_QUERY,
@@ -128,8 +125,6 @@ const LoginPage = (): JSX.Element => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
-  const [emailNotVerified, setEmailNotVerified] = useState<boolean>(false);
-  const [unverifiedEmail, setUnverifiedEmail] = useState<string>('');
   const [showAlert, setShowAlert] = useState<PasswordValidation>({
     lowercaseChar: true,
     uppercaseChar: true,
@@ -199,9 +194,6 @@ const LoginPage = (): JSX.Element => {
   }, [data]);
   const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
-  const [resendVerificationEmail, { loading: resendLoading }] = useMutation(
-    RESEND_VERIFICATION_EMAIL_MUTATION,
-  );
   const { data: orgData } = useQuery(ORGANIZATION_LIST_NO_MEMBERS);
   const { startSession, extendSession } = useSession();
   useEffect(() => {
@@ -244,24 +236,6 @@ const LoginPage = (): JSX.Element => {
 
   const handleCaptcha = (token: string | null): void => {
     setRecaptchaToken(token);
-  };
-
-  const handleResendVerification = async (): Promise<void> => {
-    if (!unverifiedEmail) {
-      return;
-    }
-
-    try {
-      const { data } = await resendVerificationEmail({
-        variables: { email: unverifiedEmail },
-      });
-
-      if (data?.resendVerificationEmail?.success) {
-        NotificationToast.success(t('emailResent') as string);
-      }
-    } catch (error) {
-      errorHandler(t, error);
-    }
   };
 
   const signupLink = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
@@ -420,10 +394,14 @@ const LoginPage = (): JSX.Element => {
           setItem('userId', loggedInUserId);
         }
 
-        // Check if email is not verified and show warning
+        // Check if email is not verified and store in localStorage for post-login warning
         if (!user.isEmailAddressVerified) {
-          setEmailNotVerified(true);
-          setUnverifiedEmail(user.emailAddress);
+          setItem('emailNotVerified', 'true');
+          setItem('unverifiedEmail', user.emailAddress);
+        } else {
+          // Clear the flags if email is verified
+          removeItem('emailNotVerified');
+          removeItem('unverifiedEmail');
         }
 
         // If there is a pending invitation token from the public invite flow, resume it
@@ -531,28 +509,6 @@ const LoginPage = (): JSX.Element => {
                     {/* {role === 'admin' ? tCommon('login') : t('userLogin')} */}
                     {role === 'admin' ? t('adminLogin') : t('userLogin')}
                   </h1>
-                  {emailNotVerified && (
-                    <div
-                      className="alert alert-warning d-flex align-items-center justify-content-between mb-3"
-                      role="alert"
-                      data-testid="email-not-verified-warning"
-                    >
-                      <div>
-                        <i className="fas fa-exclamation-triangle me-2"></i>
-                        {t('emailNotVerified')}
-                      </div>
-                      <Button
-                        variant="link"
-                        size="sm"
-                        onClick={handleResendVerification}
-                        disabled={resendLoading}
-                        className="p-0 ms-2"
-                        data-testid="resend-verification-btn"
-                      >
-                        {t('resendVerification')}
-                      </Button>
-                    </div>
-                  )}
                   <FormFieldGroup
                     name="email"
                     label={tCommon('email')}

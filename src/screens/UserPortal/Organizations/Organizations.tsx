@@ -32,13 +32,14 @@
  *
  */
 
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {
   USER_CREATED_ORGANIZATIONS,
   ORGANIZATION_FILTER_LIST,
   USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
 } from 'GraphQl/Queries/Queries';
+import { RESEND_VERIFICATION_EMAIL_MUTATION } from 'GraphQl/Mutations/mutations';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import React, { useEffect, useState } from 'react';
@@ -48,6 +49,9 @@ import styles from './Organizations.module.css';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import type { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
+import { Alert, Button } from 'react-bootstrap';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { errorHandler } from 'utils/errorHandler';
 
 type IOrganizationCardProps = InterfaceOrganizationCardProps;
 
@@ -117,8 +121,45 @@ export default function Organizations(): React.JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
   });
+  const { t: tLogin } = useTranslation('translation', {
+    keyPrefix: 'loginPage',
+  });
+  const { t: tCommon } = useTranslation('common');
 
-  const { getItem, setItem } = useLocalStorage();
+  const { getItem, setItem, removeItem } = useLocalStorage();
+
+  // Email verification warning state
+  const [showEmailWarning, setShowEmailWarning] = useState(false);
+  const [resendVerificationEmail, { loading: resendLoading }] = useMutation(
+    RESEND_VERIFICATION_EMAIL_MUTATION,
+  );
+
+  // Check for email verification status on component mount
+  useEffect(() => {
+    const emailNotVerified = getItem('emailNotVerified');
+    const email = getItem('unverifiedEmail');
+    if (emailNotVerified === 'true' && typeof email === 'string') {
+      setShowEmailWarning(true);
+    }
+  }, [getItem]);
+
+  const handleDismissWarning = (): void => {
+    setShowEmailWarning(false);
+    removeItem('emailNotVerified');
+    removeItem('unverifiedEmail');
+  };
+
+  const handleResendVerification = async (): Promise<void> => {
+    try {
+      const { data } = await resendVerificationEmail();
+      if (data?.sendVerificationEmail?.success) {
+        NotificationToast.success(tLogin('emailResent') as string);
+      }
+    } catch (error) {
+      errorHandler(tCommon, error);
+    }
+  };
+
   const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
     const stored = getItem('sidebar');
     return stored === 'true';
@@ -294,6 +335,34 @@ export default function Organizations(): React.JSX.Element {
               <h1>{t('selectOrganization')}</h1>
             </div>
           </div>
+
+          {/* Email Verification Warning Banner */}
+          {showEmailWarning && (
+            <Alert
+              variant="warning"
+              dismissible
+              onClose={handleDismissWarning}
+              className="mb-3"
+              data-testid="email-verification-warning"
+            >
+              <div className="d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>{tLogin('emailNotVerified')}</strong>
+                </div>
+                <Button
+                  variant="outline-warning"
+                  size="sm"
+                  onClick={handleResendVerification}
+                  disabled={resendLoading}
+                  data-testid="resend-verification-btn"
+                >
+                  {resendLoading
+                    ? tCommon('loading')
+                    : tLogin('resendVerification')}
+                </Button>
+              </div>
+            </Alert>
+          )}
 
           {/* Refactored Header Structure */}
           <div className={styles.calendar__header}>

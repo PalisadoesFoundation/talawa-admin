@@ -43,14 +43,18 @@ import { useMutation, useQuery } from '@apollo/client';
 import { Group, Search } from '@mui/icons-material';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { Alert } from 'react-bootstrap';
+
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
+  RESEND_VERIFICATION_EMAIL_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import {
   CURRENT_USER,
   ORGANIZATION_FILTER_LIST,
 } from 'GraphQl/Queries/Queries';
+
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
@@ -65,10 +69,11 @@ import type {
   InterfaceOrgInfoTypePG,
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
+import styles from 'style/app-fixed.module.css';
 import OrganizationModal from './modal/OrganizationModal';
-import styles from './OrgList.module.css';
+import style from './OrgList.module.css';
 
-const { getItem } = useLocalStorage();
+const { getItem, removeItem } = useLocalStorage();
 
 interface InterfaceFormStateType {
   addressLine1: string;
@@ -85,8 +90,18 @@ interface InterfaceFormStateType {
 function orgList(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const { t: tCommon } = useTranslation('common');
+  const { t: tLogin } = useTranslation('translation', {
+    keyPrefix: 'loginPage',
+  });
   const [dialogModalisOpen, setdialogModalIsOpen] = useState(false);
   const [dialogRedirectOrgId, setDialogRedirectOrgId] = useState('<ORG_ID>');
+
+  // Email verification warning state
+  const [showEmailWarning, setShowEmailWarning] = useState(false);
+
+  const [resendVerificationEmail, { loading: resendLoading }] = useMutation(
+    RESEND_VERIFICATION_EMAIL_MUTATION,
+  );
 
   function openDialogModal(redirectOrgId: string): void {
     setDialogRedirectOrgId(redirectOrgId);
@@ -105,6 +120,33 @@ function orgList(): JSX.Element {
 
   const toggleDialogModal = (): void =>
     setdialogModalIsOpen(!dialogModalisOpen);
+
+  // Check for email verification status on component mount
+  useEffect(() => {
+    const emailNotVerified = getItem('emailNotVerified');
+    const email = getItem('unverifiedEmail');
+    if (emailNotVerified === 'true' && typeof email === 'string') {
+      setShowEmailWarning(true);
+    }
+  }, [getItem]);
+
+  const handleDismissWarning = (): void => {
+    setShowEmailWarning(false);
+    removeItem('emailNotVerified');
+    removeItem('unverifiedEmail');
+  };
+
+  const handleResendVerification = async (): Promise<void> => {
+    try {
+      const { data } = await resendVerificationEmail();
+
+      if (data?.sendVerificationEmail?.success) {
+        NotificationToast.success(tLogin('emailResent'));
+      }
+    } catch (error: unknown) {
+      errorHandler(tLogin, error);
+    }
+  };
 
   useEffect(() => {
     document.title = t('title');
@@ -249,6 +291,7 @@ function orgList(): JSX.Element {
         },
       });
 
+      //     toggleModal;
       if (data) {
         NotificationToast.success(t('congratulationOrgCreated'));
         refetchOrgs();
@@ -272,7 +315,7 @@ function orgList(): JSX.Element {
   };
 
   /**
-   * Note: The explicit refetchOrgs call with a filter argument is intentional.
+   * Note: The explicit refetchOrgs(\{ filter: val \}) call is intentional.
    * While Apollo Client auto-refetches when filterName changes, the explicit
    * call ensures immediate network request execution and avoids timing issues
    * from React's batched state updates. This pattern is used consistently
@@ -315,6 +358,34 @@ function orgList(): JSX.Element {
 
   return (
     <div className={styles.orgListContainer}>
+      {/* Email Verification Warning Banner */}
+      {showEmailWarning && (
+        <Alert
+          variant="warning"
+          dismissible
+          onClose={handleDismissWarning}
+          className="mb-3"
+          data-testid="email-verification-warning"
+        >
+          <div className="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>{tLogin('emailNotVerified')}</strong>
+            </div>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={handleResendVerification}
+              disabled={resendLoading}
+              data-testid="resend-verification-btn"
+            >
+              {resendLoading
+                ? tCommon('loading')
+                : tLogin('resendVerification')}
+            </Button>
+          </div>
+        </Alert>
+      )}
+
       {/* Buttons Container */}
       <div className={styles.calendar__header}>
         <SearchFilterBar
@@ -360,9 +431,9 @@ function orgList(): JSX.Element {
       {/* Text Infos for list */}
 
       {!isLoading &&
-      (!sortedOrganizations || sortedOrganizations.length === 0) &&
-      searchByName.length === 0 &&
-      (!userData || adminFor.length === 0) ? (
+        (!sortedOrganizations || sortedOrganizations.length === 0) &&
+        searchByName.length === 0 &&
+        (!userData || adminFor.length === 0) ? (
         <EmptyState
           icon={<Group />}
           message={t('noOrgErrorTitle')}
@@ -406,9 +477,9 @@ function orgList(): JSX.Element {
           <div className={`${styles.listBoxOrgList}`}>
             {(rowsPerPage > 0
               ? sortedOrganizations.slice(
-                  page * rowsPerPage,
-                  page * rowsPerPage + rowsPerPage,
-                )
+                page * rowsPerPage,
+                page * rowsPerPage + rowsPerPage,
+              )
               : sortedOrganizations
             )?.map((item: InterfaceOrgInfoTypePG) => {
               return (
@@ -419,7 +490,7 @@ function orgList(): JSX.Element {
             })}
           </div>
           {/* pagination */}
-          <table className={styles.table_fullWidth}>
+          <table className={style.table_fullWidth}>
             <tbody>
               <tr>
                 <PaginationList
@@ -435,6 +506,19 @@ function orgList(): JSX.Element {
         </>
       )}
       {/* Create Organization Modal */}
+      {/**
+       * Renders the `OrganizationModal` component.
+       *
+       * @param showModal - A boolean indicating whether the modal should be displayed.
+       * @param toggleModal - A function to toggle the visibility of the modal.
+       * @param formState - The state of the form in the organization modal.
+       * @param setFormState - A function to update the state of the form in the organization modal.
+       * @param createOrg - A function to handle the submission of the organization creation form.
+       * @param t - A translation function for localization.
+       * @param userData - Information about the current user.
+       * @returns JSX element representing the `OrganizationModal`.
+       */}
+
       <OrganizationModal
         showModal={showModal}
         toggleModal={toggleModal}
@@ -451,15 +535,15 @@ function orgList(): JSX.Element {
         onHide={toggleDialogModal}
         title={t('manageFeatures')}
         headerClassName={styles.modalHeader}
-        dataTestId="pluginNotificationHeader"
-        centered={false}
-        backdrop={true}
+        headerTestId="pluginNotificationHeader"
+        dataTestId="pluginNotificationModal"
       >
         <section id={styles.grid_wrapper}>
           <div>
             <h4 className={styles.titlemodaldialog}>
               {t('manageFeaturesInfo')}
             </h4>
+
             <div className={styles.pluginStoreBtnContainer}>
               <Link
                 className={pluginBtnClass}
