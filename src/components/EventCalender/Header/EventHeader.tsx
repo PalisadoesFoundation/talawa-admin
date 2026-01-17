@@ -5,12 +5,11 @@
  * functionality for searching, sorting, and creating events. It is designed
  * to be used within the organization events page.
  *
- * @param props - The props for the EventHeader component.
  * @param viewType - The current view type of the calendar (e.g., Month, Day, Year).
  * @param handleChangeView - Callback function to handle changes in the calendar view type.
  * @param showInviteModal - Callback function to display the modal for creating a new event.
  *
- * @returns - The rendered EventHeader component.
+ * @returns The rendered EventHeader component.
  *
  * @remarks
  * - This component uses `SearchBar` for searching events by name.
