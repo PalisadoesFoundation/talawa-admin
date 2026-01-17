@@ -110,6 +110,7 @@ describe('PostViewModal', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    lastPostCardProps = null;
   });
 
   afterEach(() => {
