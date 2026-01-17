@@ -905,7 +905,8 @@
     "pledgeDate": "Pledge Date",
     "pledged": "Pledged",
     "donated": "Donated",
-    "campaignNotActive": "Campaign is not currently active"
+    "campaignNotActive": "Campaign is not currently active",
+    "close": "Close"
   },
   "createPostModal": {
     "title": "Posts",
