@@ -789,8 +789,10 @@ describe('Testing GroupModal', () => {
     await userEvent.clear(nameInput);
     fireEvent.blur(nameInput);
 
-    const submitBtn = screen.getByTestId('submitBtn');
-    expect(submitBtn).toBeDisabled();
+    await waitFor(() => {
+      const submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+    });
   });
 
   it('should show validation error for invalid volunteers required on blur', async () => {
@@ -803,10 +805,15 @@ describe('Testing GroupModal', () => {
     await userEvent.type(vrInput, '-5');
     fireEvent.blur(vrInput);
 
-    const errorMessages = screen.getAllByText(t.invalidNumber);
-    expect(errorMessages.length).toBeGreaterThan(0);
-    const submitBtn = screen.getByTestId('submitBtn');
-    expect(submitBtn).toBeDisabled();
+    await waitFor(() => {
+      const errorMessages = screen.queryAllByText(t.invalidNumber);
+      expect(errorMessages.length).toBeGreaterThan(0);
+    });
+
+    await waitFor(() => {
+      const submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+    });
   });
 
   it('should not submit if validation errors exist', async () => {
@@ -815,9 +822,12 @@ describe('Testing GroupModal', () => {
     await userEvent.clear(nameInput);
     fireEvent.blur(nameInput); // Trigger error
 
-    const submitBtn = screen.getByTestId('submitBtn');
-    expect(submitBtn).toBeDisabled();
+    await waitFor(() => {
+      const submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+    });
 
+    const submitBtn = screen.getByTestId('submitBtn');
     await userEvent.click(submitBtn); // Should not fire
     expect(NotificationToast.success).not.toHaveBeenCalled();
   });

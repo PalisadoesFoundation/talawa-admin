@@ -27,6 +27,7 @@
  */
 import type { FormEvent } from 'react';
 import { Button } from 'react-bootstrap';
+import FormControl from 'react-bootstrap/FormControl';
 import type {
   InterfaceCreateVolunteerGroup,
   InterfaceVolunteerMembership,
@@ -37,7 +38,6 @@ import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
-  FormControl,
   Paper,
   Stack,
   Table,
@@ -46,8 +46,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
-  FormHelperText,
 } from '@mui/material';
 import {
   UPDATE_VOLUNTEER_GROUP,
@@ -271,36 +269,30 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             touched={touched.name}
             error={nameError}
           >
-            <FormControl fullWidth>
-              <TextField
-                required
-                label={tCommon('name')}
-                variant="outlined"
-                className={styles.noOutline}
-                value={name}
-                data-testid="nameInput"
-                onChange={(e) =>
-                  setFormState({ ...formState, name: e.target.value })
-                }
-                onBlur={() => setTouched({ ...touched, name: true })}
-              />
-            </FormControl>
+            <FormControl
+              required
+              type="text"
+              className={styles.noOutline}
+              value={name}
+              data-testid="nameInput"
+              onChange={(e) =>
+                setFormState({ ...formState, name: e.target.value })
+              }
+              onBlur={() => setTouched({ ...touched, name: true })}
+              isInvalid={touched.name && !!nameError}
+            />
           </FormFieldGroup>
           {/* Input field to enter the group description */}
           <FormFieldGroup name="description" label={tCommon('description')}>
-            <FormControl fullWidth>
-              <TextField
-                multiline
-                rows={3}
-                label={tCommon('description')}
-                variant="outlined"
-                className={styles.noOutline}
-                value={description}
-                onChange={(e) =>
-                  setFormState({ ...formState, description: e.target.value })
-                }
-              />
-            </FormControl>
+            <FormControl
+              as="textarea"
+              rows={3}
+              className={styles.noOutline}
+              value={description ?? ''}
+              onChange={(e) =>
+                setFormState({ ...formState, description: e.target.value })
+              }
+            />
           </FormFieldGroup>
 
           <FormFieldGroup
@@ -309,50 +301,41 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             touched={touched.volunteersRequired}
             error={volunteersRequiredError ? t('invalidNumber') : undefined}
           >
-            <FormControl fullWidth error={volunteersRequiredError}>
-              <TextField
-                label={t('volunteersRequired')}
-                variant="outlined"
-                type="number"
-                className={styles.noOutline}
-                slotProps={{
-                  htmlInput: { min: 1 },
-                }}
-                value={volunteersRequired ?? ''}
-                error={volunteersRequiredError}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  if (val === '') {
+            <FormControl
+              type="number"
+              className={styles.noOutline}
+              min={1}
+              value={volunteersRequired ?? ''}
+              isInvalid={volunteersRequiredError}
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === '') {
+                  setFormState({
+                    ...formState,
+                    volunteersRequired: null,
+                  });
+                  setVolunteersRequiredError(false);
+                } else {
+                  const parsed = parseInt(val, 10);
+                  if (Number.isNaN(parsed) || parsed < 1) {
+                    setVolunteersRequiredError(true);
                     setFormState({
                       ...formState,
                       volunteersRequired: null,
                     });
-                    setVolunteersRequiredError(false);
                   } else {
-                    const parsed = parseInt(val, 10);
-                    if (Number.isNaN(parsed) || parsed < 1) {
-                      setVolunteersRequiredError(true);
-                      setFormState({
-                        ...formState,
-                        volunteersRequired: null,
-                      });
-                    } else {
-                      setVolunteersRequiredError(false);
-                      setFormState({
-                        ...formState,
-                        volunteersRequired: parsed,
-                      });
-                    }
+                    setVolunteersRequiredError(false);
+                    setFormState({
+                      ...formState,
+                      volunteersRequired: parsed,
+                    });
                   }
-                }}
-                onBlur={() =>
-                  setTouched({ ...touched, volunteersRequired: true })
                 }
-              />
-              {volunteersRequiredError && (
-                <FormHelperText>{t('invalidNumber')}</FormHelperText>
-              )}
-            </FormControl>
+              }}
+              onBlur={() =>
+                setTouched({ ...touched, volunteersRequired: true })
+              }
+            />
           </FormFieldGroup>
 
           {/* Button to submit the pledge form */}
