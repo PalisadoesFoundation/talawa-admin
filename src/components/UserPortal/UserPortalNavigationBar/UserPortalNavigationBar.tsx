@@ -174,7 +174,7 @@ export const UserPortalNavigationBar = (
     if (!navigationLinks || navigationLinks.length === 0) return null;
 
     return (
-      <Nav className="me-auto grow pe-3 pt-1" variant="dark">
+      <Nav className="me-auto flex-grow-1 pe-3 pt-1" variant="dark">
         {navigationLinks.map((link: NavigationLink) => {
           const linkLabel = link.translationKey
             ? t(link.translationKey.split(':').pop() || link.translationKey)

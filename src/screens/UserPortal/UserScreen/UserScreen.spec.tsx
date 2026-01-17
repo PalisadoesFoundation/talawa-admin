@@ -335,7 +335,7 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     );
     const navbar = screen.getByTestId('user-portal-navbar');
     expect(navbar).toBeInTheDocument();
-    expect(navbar).toHaveAttribute('data-mode', 'organization'); // still organization mode
+    expect(navbar).toHaveAttribute('data-mode', 'user');
     expect(navbar).toHaveAttribute('data-orgid', '');
     expect(navbar).toHaveAttribute('data-currentpage', '/user/settings');
   });

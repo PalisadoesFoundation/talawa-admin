@@ -140,7 +140,7 @@ const UserScreen = (): React.JSX.Element => {
   return (
     <div className={styles.pageContainer}>
       <UserPortalNavigationBar
-        mode="organization"
+        mode={orgId ? 'organization' : 'user'}
         organizationId={orgId}
         currentPage={currentPage}
       />
@@ -165,7 +165,6 @@ const UserScreen = (): React.JSX.Element => {
             <div className={styles.titleContainer}>
               <h1>{tScoped('title')}</h1>
             </div>
-            {/* <ProfileDropdown /> */}
           </div>
           <Outlet />
         </div>
