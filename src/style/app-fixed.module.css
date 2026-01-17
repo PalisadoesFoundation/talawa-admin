@@ -4640,11 +4640,13 @@ form label,
 .expand {
   margin-left: 100px;
   padding-left: 4rem;
+  padding-right: 4rem; 
   animation: moveLeft 0.9s ease-in-out;
 }
 
 .contract {
   padding-left: calc(300px + 2rem + 1.5rem);
+  padding-right: 4rem; 
   animation: moveRight 0.5s ease-in-out;
 }
 
