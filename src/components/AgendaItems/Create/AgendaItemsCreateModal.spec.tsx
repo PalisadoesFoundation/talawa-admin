@@ -632,4 +632,66 @@ describe('AgendaItemsCreateModal', () => {
     createObjectURLSpy.mockRestore();
     revokeObjectURLSpy.mockRestore();
   });
+
+  test('renders video preview for video file uploads', async () => {
+    const createObjectURLSpy = vi
+      .spyOn(URL, 'createObjectURL')
+      .mockReturnValue('blob:http://localhost/video-preview');
+
+    const mockMinioResult = {
+      objectName: 'agendaItem/test.mp4',
+      fileHash: 'videohash123',
+    };
+    sharedMocks.uploadFileToMinio.mockResolvedValue(mockMinioResult);
+
+    const cleanFormState = {
+      ...mockFormState1,
+      attachments: [],
+    };
+
+    render(
+      <MockedProvider>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsCreateModal
+                  agendaItemCreateModalIsOpen
+                  hideCreateModal={mockHideCreateModal}
+                  formState={cleanFormState}
+                  setFormState={mockSetFormState}
+                  createAgendaItemHandler={mockCreateAgendaItemHandler}
+                  t={mockT}
+                  agendaItemCategories={[]}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const fileInput = screen.getByTestId('attachment');
+    // Use video MIME type to trigger video preview rendering (lines 320-321)
+    const videoFile = new File(['video content'], 'test.mp4', {
+      type: 'video/mp4',
+    });
+
+    Object.defineProperty(fileInput, 'files', {
+      value: [videoFile],
+    });
+
+    fireEvent.change(fileInput);
+
+    await waitFor(() => {
+      expect(sharedMocks.uploadFileToMinio).toHaveBeenCalled();
+    });
+
+    // Wait for video element to appear (covers lines 320-321)
+    await waitFor(() => {
+      expect(screen.getByTestId('mediaPreview')).toBeInTheDocument();
+    });
+
+    createObjectURLSpy.mockRestore();
+  });
 });
