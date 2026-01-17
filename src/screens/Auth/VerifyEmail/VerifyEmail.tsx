@@ -26,6 +26,7 @@ import CheckCircleOutline from '@mui/icons-material/CheckCircleOutline';
 import ErrorOutline from '@mui/icons-material/ErrorOutline';
 import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
+// eslint-disable-next-line no-restricted-imports
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
@@ -75,11 +76,13 @@ const VerifyEmail = (): JSX.Element => {
         } else {
           setVerificationState('error');
         }
-      } catch (error: any) {
+      } catch (error: unknown) {
         setVerificationState('error');
+        const err = error as { message?: string; graphQLErrors?: any[] };
         if (
-          error.message?.toLowerCase().includes('authenticated') ||
-          error.graphQLErrors?.[0]?.extensions?.code === 'UNAUTHENTICATED'
+          err.message?.toLowerCase().includes('authenticated') ||
+          err.graphQLErrors?.[0]?.extensions?.code === 'UNAUTHENTICATED' ||
+          err.message?.toLowerCase().includes('invalid arguments')
         ) {
           NotificationToast.error(t('loginRequired'));
         } else {
