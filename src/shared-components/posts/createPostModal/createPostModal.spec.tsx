@@ -820,7 +820,10 @@ describe('CreatePostModal Integration Tests', () => {
               pinnedAt: null,
               attachments: [
                 {
+                  fileHash: 'mock-hash-123',
+                  mimeType: 'image/jpeg',
                   name: 'test.jpg',
+                  objectName: 'uploads/test.jpg',
                 },
               ],
             },
@@ -877,7 +880,14 @@ describe('CreatePostModal Integration Tests', () => {
               id: 'post-123',
               caption: 'Updated Title',
               pinnedAt: null,
-              attachments: [{ name: 'test.jpg' }],
+              attachments: [
+                {
+                  fileHash: 'mock-hash-123',
+                  mimeType: 'image/jpeg',
+                  name: 'test.jpg',
+                  objectName: 'uploads/test.jpg',
+                },
+              ],
             },
           },
         },
