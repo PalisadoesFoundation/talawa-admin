@@ -27,7 +27,8 @@
  *
  */
 import React, { type FC, type FormEvent, useEffect, useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Modal, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
 import styles from 'style/app-fixed.module.css';

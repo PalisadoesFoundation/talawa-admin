@@ -31,7 +31,8 @@
  * Talawa Admin project to confirm post deletions within the organization post card.
  */
 import React, { type FC } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 

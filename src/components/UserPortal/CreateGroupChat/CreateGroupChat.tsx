@@ -46,7 +46,8 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { Paper, TableBody } from '@mui/material';
-import { Button, Form, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, Modal } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';

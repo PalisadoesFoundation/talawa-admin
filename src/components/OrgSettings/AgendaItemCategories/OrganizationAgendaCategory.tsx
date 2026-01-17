@@ -30,7 +30,7 @@
 import React, { useState } from 'react';
 import type { ChangeEvent, FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 
 import { WarningAmberRounded } from '@mui/icons-material';
 import { toast } from 'react-toastify';

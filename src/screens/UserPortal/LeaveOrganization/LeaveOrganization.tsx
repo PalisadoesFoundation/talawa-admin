@@ -47,7 +47,8 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Modal, Form, Spinner, Alert } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router';
 import { getItem } from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';

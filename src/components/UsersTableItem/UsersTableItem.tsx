@@ -13,13 +13,21 @@ import {
 import Avatar from 'components/Avatar/Avatar';
 import dayjs from 'dayjs';
 import React, { useState } from 'react';
-import { Button, Form, Modal, Row, Table } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, Modal, Row, Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
+
+type UserWithAppProfile = InterfaceQueryUserListItem & {
+  appUserProfile?: {
+    isSuperAdmin?: boolean;
+    adminFor?: Array<{ _id: string }>;
+  };
+};
 
 type Props = {
   user: InterfaceQueryUserListItem;
@@ -133,7 +141,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
   }
 
   // If there is a super admin notion, adapt this logic to your API.
-  const isSuperAdmin = (user as any)?.appUserProfile?.isSuperAdmin ?? false;
+  const isSuperAdmin =
+    (user as UserWithAppProfile)?.appUserProfile?.isSuperAdmin ?? false;
 
   return (
     <>
@@ -216,12 +225,15 @@ const UsersTableItem = (props: Props): JSX.Element => {
                   {joinedOrgs.map((org) => {
                     // Adjust organization/admin mapping as per your data model
                     let isAdmin = false;
-                    if ((user as any)?.appUserProfile?.adminFor) {
-                      (user as any).appUserProfile.adminFor.map((item: any) => {
-                        if (item._id === org.id) {
-                          isAdmin = true;
-                        }
-                      });
+                    const userWithProfile = user as UserWithAppProfile;
+                    if (userWithProfile?.appUserProfile?.adminFor) {
+                      userWithProfile.appUserProfile.adminFor.forEach(
+                        (item) => {
+                          if (item._id === org.id) {
+                            isAdmin = true;
+                          }
+                        },
+                      );
                     }
                     return (
                       <tr key={`org-joined-${org.id}`}>

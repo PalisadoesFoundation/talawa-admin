@@ -31,7 +31,8 @@
  * ```
  */
 import React from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceAgendaItemsDeleteModalProps } from 'types/Agenda/interface';
 const AgendaItemsDeleteModal: React.FC<

@@ -30,7 +30,8 @@
  * />
  */
 import React from 'react';
-import { Modal, Form, Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Modal, Form } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 
 interface InterfaceFormStateType {

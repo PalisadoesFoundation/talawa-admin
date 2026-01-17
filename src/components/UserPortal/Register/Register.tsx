@@ -23,7 +23,8 @@
  */
 import type { ChangeEvent, SetStateAction } from 'react';
 import React from 'react';
-import { Button, Form, InputGroup } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, InputGroup } from 'react-bootstrap';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 import { LockOutlined } from '@mui/icons-material';

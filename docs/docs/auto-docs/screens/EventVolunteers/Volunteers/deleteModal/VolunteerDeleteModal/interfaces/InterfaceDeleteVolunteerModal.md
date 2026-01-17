@@ -4,7 +4,7 @@
 
 # Interface: InterfaceDeleteVolunteerModal
 
-Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx#L48)
+Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx#L49)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteM
 
 > `optional` **eventId**: `string`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx#L55)
+Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx#L56)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteM
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx#L50)
+Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx#L51)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteM
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx#L49)
+Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx#L50)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteM
 
 > `optional` **isRecurring**: `boolean`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx#L54)
+Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx#L55)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteM
 
 > **refetchVolunteers**: () => `void`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx#L52)
+Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx#L53)
 
 #### Returns
 
@@ -60,4 +60,4 @@ Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteM
 
 > **volunteer**: [`InterfaceEventVolunteerInfo`](../../../../../../utils/interfaces/interfaces/InterfaceEventVolunteerInfo.md)
 
-Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx#L51)
+Defined in: [src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/deleteModal/VolunteerDeleteModal.tsx#L52)

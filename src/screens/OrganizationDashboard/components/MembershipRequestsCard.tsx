@@ -34,7 +34,8 @@
  */
 
 import React from 'react';
-import { Button, Card, Col, Row } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Card, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';

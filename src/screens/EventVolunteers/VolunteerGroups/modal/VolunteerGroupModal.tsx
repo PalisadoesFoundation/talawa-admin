@@ -38,7 +38,8 @@
  * - GraphQL Mutations: CREATE_VOLUNTEER_GROUP, UPDATE_VOLUNTEER_GROUP
  */
 import type { ChangeEvent } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, Modal } from 'react-bootstrap';
 import type {
   InterfaceCreateVolunteerGroup,
   InterfaceUserInfoPG,

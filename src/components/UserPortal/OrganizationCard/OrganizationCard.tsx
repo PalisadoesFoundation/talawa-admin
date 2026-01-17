@@ -44,7 +44,7 @@
  */
 import { useEffect, useState } from 'react';
 import styles from 'style/app-fixed.module.css';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { Tooltip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';

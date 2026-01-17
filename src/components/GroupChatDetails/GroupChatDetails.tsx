@@ -44,7 +44,8 @@
  */
 import { Paper, TableBody } from '@mui/material';
 import React, { useRef, useState, useEffect } from 'react';
-import { Button, Form, ListGroup, Modal, Dropdown } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, ListGroup, Modal, Dropdown } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useMutation, useQuery } from '@apollo/client';
 import {

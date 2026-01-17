@@ -40,7 +40,8 @@
  * @returns A React functional component rendering the user details form.
  */
 import React from 'react';
-import { Form, Row, Col, Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, Row, Col } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import dayjs from 'dayjs';
 import {

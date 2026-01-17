@@ -29,7 +29,7 @@
  */
 import React, { useState } from 'react';
 import { EventRegistrantsModal } from './Modal/EventRegistrantsModal';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import style from 'style/app-fixed.module.css';
 
 type PropType = { eventId: string; orgId: string; onUpdate?: () => void };

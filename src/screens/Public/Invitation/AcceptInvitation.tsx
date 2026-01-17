@@ -9,7 +9,8 @@ import {
   VERIFY_EVENT_INVITATION,
   ACCEPT_EVENT_INVITATION,
 } from 'GraphQl/Mutations/mutations';
-import { Button, Spinner } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Spinner } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';

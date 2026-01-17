@@ -39,7 +39,8 @@
  * - `react-i18next` for translations.
  */
 import React, { useState, useEffect } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery } from '@apollo/client';
 import {

@@ -77,6 +77,19 @@ export default [
       'react/no-multi-comp': ['error', { ignoreStateless: false }],
       'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
       'import/no-duplicates': 'error',
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'react-bootstrap',
+              importNames: ['Button'],
+              message:
+                "Direct Button imports from 'react-bootstrap' are not allowed. Use 'import Button from react-bootstrap/Button' instead.",
+            },
+          ],
+        },
+      ],
       'no-undef': 'off',
       '@typescript-eslint/ban-ts-comment': 'error',
       '@typescript-eslint/no-unused-vars': 'error',

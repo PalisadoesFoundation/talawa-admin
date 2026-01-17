@@ -30,7 +30,8 @@
  */
 import React, { useState } from 'react';
 import type { FormEvent, JSX } from 'react';
-import { Button, Col, Row } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';

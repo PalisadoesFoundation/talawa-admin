@@ -42,7 +42,8 @@
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs, { type Dayjs } from 'dayjs';
 import type { ChangeEvent } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, Modal } from 'react-bootstrap';
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfaceCreatePledge,

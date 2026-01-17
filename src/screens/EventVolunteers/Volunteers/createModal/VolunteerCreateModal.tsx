@@ -31,7 +31,8 @@
  * ```
  */
 import type { ChangeEvent } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, Modal } from 'react-bootstrap';
 import type { InterfaceUserInfo } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useState, useMemo } from 'react';

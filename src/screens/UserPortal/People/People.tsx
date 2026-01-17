@@ -47,7 +47,8 @@
  */
 import React, { useEffect, useState } from 'react';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
-import { Dropdown, Form, Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Dropdown, Form } from 'react-bootstrap';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';

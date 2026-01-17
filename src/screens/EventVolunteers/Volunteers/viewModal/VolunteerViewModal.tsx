@@ -40,7 +40,8 @@
  * />
  * ```
  */
-import { Button, Form, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, Modal } from 'react-bootstrap';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import React from 'react';

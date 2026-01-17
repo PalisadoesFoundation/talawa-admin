@@ -33,7 +33,8 @@
  * - `DELETE_VOLUNTEER` GraphQL mutation for deleting a volunteer.
  * - `styles` for custom modal styling.
  */
-import { Button, Form, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';

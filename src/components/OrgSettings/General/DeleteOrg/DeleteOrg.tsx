@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Card, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Card, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';

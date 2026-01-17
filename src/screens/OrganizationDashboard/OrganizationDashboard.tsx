@@ -26,7 +26,8 @@
  */
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState, JSX } from 'react';
-import { Button, Card } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Card } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';

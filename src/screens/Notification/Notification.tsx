@@ -14,7 +14,8 @@ import {
 } from 'GraphQl/Queries/NotificationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { Link } from 'react-router-dom';
-import { ListGroup, Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { ListGroup } from 'react-bootstrap';
 import styles from './Notification.module.css';
 import { FaUserCircle } from 'react-icons/fa';
 

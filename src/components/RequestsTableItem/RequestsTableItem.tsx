@@ -33,7 +33,7 @@ import {
   REJECT_ORGANIZATION_REQUEST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';

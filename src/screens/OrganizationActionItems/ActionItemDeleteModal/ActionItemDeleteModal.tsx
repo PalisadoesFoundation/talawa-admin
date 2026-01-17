@@ -30,7 +30,8 @@
  *
  */
 import React, { useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Modal, Form } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
@@ -58,7 +59,6 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
   actionItem,
   actionItemsRefetch,
   eventId,
-  isRecurring,
 }) => {
   const { t: tCommon } = useTranslation('translation');
   const { t } = useTranslation('translation', {

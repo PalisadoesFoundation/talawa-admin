@@ -33,7 +33,8 @@
  * ```
  */
 import React, { useState } from 'react';
-import { Button, Modal, Form } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Modal, Form } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceDeleteEventModalProps } from 'types/Event/interface';
 

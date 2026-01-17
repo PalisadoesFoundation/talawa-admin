@@ -5,7 +5,7 @@ import Loader from 'components/Loader/Loader';
 import { Popover } from '@base-ui-components/react/popover';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
 import { currencySymbols } from 'utils/currency';
@@ -66,7 +66,6 @@ const fundCampaignPledge = (): JSX.Element => {
     [key in ModalState]: boolean;
   }>({ [ModalState.SAME]: false, [ModalState.DELETE]: false });
 
-  const [anchor, setAnchor] = useState<null | HTMLElement>(null);
   const [extraUsers, setExtraUsers] = useState<InterfaceUserInfoPG[]>([]);
   const [progressIndicator, setProgressIndicator] = useState<
     'raised' | 'pledged'

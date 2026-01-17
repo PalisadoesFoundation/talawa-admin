@@ -3,7 +3,8 @@
  * Allows entering multiple recipient emails/names and an optional message, then sends invites.
  */
 import React, { useState } from 'react';
-import { Modal, Button, Form, Spinner } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Modal, Form, Spinner } from 'react-bootstrap';
 import TextField from '@mui/material/TextField';
 import { useMutation } from '@apollo/client';
 import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';

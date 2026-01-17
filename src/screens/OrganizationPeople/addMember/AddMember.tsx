@@ -62,7 +62,8 @@ import {
 import Loader from 'components/Loader/Loader';
 import type { ChangeEvent } from 'react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, InputGroup, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { toast } from 'react-toastify';

@@ -38,15 +38,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from 'style/app-fixed.module.css';
-import {
-  Button,
-  Card,
-  Col,
-  Row,
-  Spinner,
-  Modal,
-  Carousel,
-} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Card, Col, Row, Spinner, Modal, Carousel } from 'react-bootstrap';
 import { DELETE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';

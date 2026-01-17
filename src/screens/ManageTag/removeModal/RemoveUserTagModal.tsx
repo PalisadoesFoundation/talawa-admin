@@ -32,7 +32,8 @@
  */
 import type { TFunction } from 'i18next';
 import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 
 export interface InterfaceRemoveUserTagModalProps {

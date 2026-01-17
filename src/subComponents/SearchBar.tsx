@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form } from 'react-bootstrap';
 import { Search } from '@mui/icons-material';
 import styles from './../style/app-fixed.module.css';
 

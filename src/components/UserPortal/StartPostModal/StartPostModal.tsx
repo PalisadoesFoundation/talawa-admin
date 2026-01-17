@@ -29,7 +29,8 @@
  */
 import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
-import { Button, Form, Image, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, Image, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';

@@ -31,7 +31,8 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import type { ChangeEvent } from 'react';
 import SendIcon from '@mui/icons-material/Send';
-import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Dropdown, Form, InputGroup } from 'react-bootstrap';
 import styles from './ChatRoom.module.css';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import { useTranslation } from 'react-i18next';

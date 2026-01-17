@@ -24,7 +24,7 @@
  */
 import React, { useState } from 'react';
 import { CheckInModal } from './Modal/CheckInModal';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import style from '../../../src/style/app-fixed.module.css';
 
 type PropType = {

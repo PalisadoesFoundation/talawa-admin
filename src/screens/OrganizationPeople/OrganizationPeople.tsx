@@ -67,7 +67,8 @@ import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
-import { Row, Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Row } from 'react-bootstrap';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import SearchBar from 'subComponents/SearchBar';
 import SortingButton from 'subComponents/SortingButton';

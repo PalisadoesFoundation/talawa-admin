@@ -5,7 +5,8 @@
  * It allows users to specify whether an action item should apply to an entire series of recurring events or just a single instance.
  */
 import React, { useEffect, useMemo, useState } from 'react';
-import { Modal, Form, Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Modal, Form } from 'react-bootstrap';
 import type { FormEvent, FC } from 'react';
 import styles from 'style/app-fixed.module.css';
 import { DatePicker } from '@mui/x-date-pickers';

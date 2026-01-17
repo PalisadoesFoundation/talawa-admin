@@ -36,7 +36,8 @@
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Card, Form } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Card, Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 

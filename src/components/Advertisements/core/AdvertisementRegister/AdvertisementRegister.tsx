@@ -44,7 +44,8 @@
  */
 import React, { useState, useEffect } from 'react';
 import styles from 'style/app-fixed.module.css';
-import { Button, Form, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, Modal } from 'react-bootstrap';
 import {
   ADD_ADVERTISEMENT_MUTATION,
   UPDATE_ADVERTISEMENT_MUTATION,

@@ -17,7 +17,8 @@
  */
 import React, { useState } from 'react';
 import type { ApolloError } from '@apollo/client';
-import { Modal, Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Modal } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import NotFound from 'components/NotFound/NotFound';
 import OrgPostCard from 'components/OrgPostCard/OrgPostCard';

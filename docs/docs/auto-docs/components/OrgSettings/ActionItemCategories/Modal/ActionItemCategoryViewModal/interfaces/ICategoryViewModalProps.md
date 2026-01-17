@@ -4,7 +4,7 @@
 
 # Interface: ICategoryViewModalProps
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryViewModal.tsx:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryViewModal.tsx#L13)
+Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryViewModal.tsx:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryViewModal.tsx#L14)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCat
 
 > **category**: [`IActionItemCategoryInfo`](../../../../../../types/ActionItems/interface/interfaces/IActionItemCategoryInfo.md)
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryViewModal.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryViewModal.tsx#L16)
+Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryViewModal.tsx:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryViewModal.tsx#L17)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCat
 
 > **hide**: () => `void`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryViewModal.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryViewModal.tsx#L15)
+Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryViewModal.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryViewModal.tsx#L16)
 
 #### Returns
 
@@ -32,4 +32,4 @@ Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCat
 
 > **isOpen**: `boolean`
 
-Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryViewModal.tsx:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryViewModal.tsx#L14)
+Defined in: [src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryViewModal.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/ActionItemCategories/Modal/ActionItemCategoryViewModal.tsx#L15)

@@ -31,7 +31,7 @@
  */
 import React, { useState } from 'react';
 import { EventStats } from './Statistics/EventStats';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import IconComponent from 'components/IconComponent/IconComponent';
 import styles from 'style/app-fixed.module.css';
 

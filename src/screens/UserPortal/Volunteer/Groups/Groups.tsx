@@ -44,7 +44,7 @@
  */
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { Navigate, useParams } from 'react-router';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { useQuery } from '@apollo/client';

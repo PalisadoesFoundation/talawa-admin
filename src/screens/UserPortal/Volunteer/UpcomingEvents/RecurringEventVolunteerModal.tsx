@@ -34,7 +34,8 @@
  * - Submit and cancel buttons for user actions
  */
 import React, { useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Modal, Form } from 'react-bootstrap';
 
 /**
  * @interface InterfaceRecurringEventVolunteerModalProps

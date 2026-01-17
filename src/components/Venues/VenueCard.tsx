@@ -30,7 +30,8 @@
  *
  */
 import React from 'react';
-import { Card, Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Card } from 'react-bootstrap';
 import defaultImg from 'assets/images/defaultImg.png';
 import PeopleIcon from 'assets/svgs/people.svg?react';
 import styles from '../../style/app-fixed.module.css';

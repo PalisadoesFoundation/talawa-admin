@@ -6,7 +6,7 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useMemo, useState } from 'react';

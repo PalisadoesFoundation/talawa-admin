@@ -27,7 +27,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet } from 'react-router';
 import styles from 'style/app-fixed.module.css';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import ProfileDropdown from 'components/ProfileDropdown/ProfileDropdown';
 

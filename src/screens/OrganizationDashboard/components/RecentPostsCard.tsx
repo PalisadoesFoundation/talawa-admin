@@ -12,7 +12,8 @@
  */
 
 import React from 'react';
-import { Button, Card, Col } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Card, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
 import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/CardItemLoading';

@@ -36,7 +36,8 @@
  */
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card, Button, Form } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Card, Form } from 'react-bootstrap';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { useMutation, useQuery } from '@apollo/client';

@@ -37,7 +37,8 @@
  */
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
-import { Modal, Form, Button, Spinner } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Modal, Form, Spinner } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';

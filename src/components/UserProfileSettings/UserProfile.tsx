@@ -38,7 +38,8 @@
  */
 import Avatar from 'components/Avatar/Avatar';
 import React from 'react';
-import { Button, Card } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Card } from 'react-bootstrap';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';

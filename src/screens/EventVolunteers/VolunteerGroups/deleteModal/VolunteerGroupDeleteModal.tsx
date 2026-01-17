@@ -31,7 +31,8 @@
  *
  * @see {@link DELETE_VOLUNTEER_GROUP} for the GraphQL mutation used.
  */
-import { Button, Form, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';

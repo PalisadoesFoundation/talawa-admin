@@ -38,7 +38,8 @@
  * ```
  */
 import React, { useState, useEffect } from 'react';
-import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Modal, Form, Row, Col } from 'react-bootstrap';
 import { Autocomplete, TextField } from '@mui/material';
 
 import { FaLink, FaTrash } from 'react-icons/fa';

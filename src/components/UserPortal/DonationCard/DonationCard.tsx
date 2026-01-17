@@ -29,7 +29,7 @@
 import React from 'react';
 import styles from '../../../style/app-fixed.module.css';
 import { type InterfaceDonationCardProps } from 'types/Donation/interface';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 
 function donationCard(props: InterfaceDonationCardProps): JSX.Element {
   // Create a date object from the donation date string

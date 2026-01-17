@@ -37,7 +37,8 @@
  * - `settings.deleteUserMessage`: Message displayed to the user before deletion.
  */
 import React from 'react';
-import { Button, Card } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 

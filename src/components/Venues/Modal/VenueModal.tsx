@@ -33,7 +33,8 @@
  * ```
  */
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, Modal } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';

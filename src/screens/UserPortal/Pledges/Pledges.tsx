@@ -36,7 +36,8 @@
  * For more details on the reusable classes, refer to the global CSS file.
  */
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, ProgressBar } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { ProgressBar } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { WarningAmberRounded } from '@mui/icons-material';

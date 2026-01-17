@@ -32,7 +32,8 @@
  * @returns A modal for previewing and managing event details.
  */
 import React from 'react';
-import { Button, Form, Modal, Dropdown } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, Modal, Dropdown } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';

@@ -31,7 +31,7 @@
  * - The `data-testid` attribute is used for testing purposes.
  */
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import styles from 'style/app-fixed.module.css';
 
 interface InterfaceSidebarToggleProps {

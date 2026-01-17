@@ -45,7 +45,7 @@ import React from 'react';
 import styles from './EventCard.module.css';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import dayjs from 'dayjs';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';

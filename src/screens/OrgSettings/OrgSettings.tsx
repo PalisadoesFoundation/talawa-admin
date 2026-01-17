@@ -38,7 +38,8 @@
  * @see {@link OrganizationAgendaCategory} for the Agenda Item Categories tab content.
  */
 import React, { useState } from 'react';
-import { Button, Row, Col } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import OrgActionItemCategories from 'components/OrgSettings/ActionItemCategories/OrgActionItemCategories';

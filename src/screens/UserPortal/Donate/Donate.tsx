@@ -46,7 +46,8 @@
  */
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useQuery, useMutation } from '@apollo/client';
 import SendIcon from '@mui/icons-material/Send';

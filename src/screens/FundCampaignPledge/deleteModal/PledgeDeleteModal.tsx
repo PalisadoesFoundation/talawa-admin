@@ -29,7 +29,8 @@
  * />
  * ```
  */
-import { Button, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Modal } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';

@@ -43,7 +43,8 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { Close, MoreVert, PushPin } from '@mui/icons-material';
 import React, { useState, useRef } from 'react';
-import { Form, Button, Card, Modal, Dropdown } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, Card, Modal, Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import AboutImg from 'assets/images/defaultImg.png';

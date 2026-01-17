@@ -31,7 +31,8 @@
  */
 import { Paper, TableBody } from '@mui/material';
 import React, { useState } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, Modal } from 'react-bootstrap';
 import type {
   ApolloCache,
   ApolloQueryResult,

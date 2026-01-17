@@ -26,7 +26,8 @@
  * Success or error messages are displayed using toast notifications based on the result of the mutation.
  */
 import type { ChangeEvent } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, Modal } from 'react-bootstrap';
 import type {
   InterfaceCreateVolunteerGroup,
   InterfaceVolunteerGroupInfo,

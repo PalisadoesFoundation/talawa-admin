@@ -27,7 +27,8 @@
  * @returns {JSX.Element} A modal displaying the agenda item details.
  */
 import React from 'react';
-import { Modal, Form, Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Modal, Form } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { FaLink } from 'react-icons/fa';
 import type { InterfaceAgendaItemsPreviewModalProps } from 'types/Agenda/interface';

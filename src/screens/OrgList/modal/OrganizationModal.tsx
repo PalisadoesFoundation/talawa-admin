@@ -38,7 +38,8 @@
  * ```
  */
 import React from 'react';
-import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Modal, Form, Row, Col } from 'react-bootstrap';
 import { useMinioUpload } from 'utils/MinioUpload';
 import type { ChangeEvent } from 'react';
 import styles from 'style/app-fixed.module.css';

@@ -3,7 +3,8 @@
  * Modal to display detailed view of an action item category
  */
 import type { FC } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import { Form, Modal } from 'react-bootstrap';
 import type { IActionItemCategoryInfo } from 'types/ActionItems/interface';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
