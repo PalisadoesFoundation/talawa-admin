@@ -12,7 +12,10 @@ import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import PostsPage from './posts';
 import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
-import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
+import {
+  ORGANIZATION_PINNED_POST_LIST,
+  ORGANIZATION_POST_BY_ID,
+} from 'GraphQl/Queries/OrganizationQueries';
 import type { RenderResult } from '@testing-library/react';
 import { InterfacePostEdge } from 'types/Post/interface';
 import i18nForTest from 'utils/i18nForTest';
@@ -194,6 +197,30 @@ vi.mock('shared-components/posts/createPostModal/createPostModal', () => ({
     show ? (
       <div data-testid="create-post-modal">
         <button type="button" data-testid="close-create-modal" onClick={onHide}>
+          Close
+        </button>
+      </div>
+    ) : null,
+}));
+
+// Mock PostViewModal
+vi.mock('shared-components/PostViewModal/PostViewModal', () => ({
+  default: ({
+    show,
+    onHide,
+  }: {
+    show: boolean;
+    onHide: () => void;
+    post: unknown;
+    refetch: () => void;
+  }) =>
+    show ? (
+      <div data-testid="post-view-modal">
+        <button
+          type="button"
+          data-testid="close-post-view-button"
+          onClick={onHide}
+        >
           Close
         </button>
       </div>
@@ -489,12 +516,27 @@ const pinnedPostsErrorMock: MockedResponse = {
   error: new Error('Pinned posts load error'),
 };
 
+// Error mock for preview post
+const previewPostErrorMock: MockedResponse = {
+  request: {
+    query: ORGANIZATION_POST_BY_ID,
+    variables: {
+      postId: 'preview-post-123',
+      userId: 'user-123',
+    },
+  },
+  error: new Error('Preview post load error'),
+};
+
 // Helper render function
-const renderComponent = (mocks: MockedResponse[]): RenderResult =>
+const renderComponent = (
+  mocks: MockedResponse[],
+  path = '/orgpost/123',
+): RenderResult =>
   render(
     <I18nextProvider i18n={i18nForTest}>
       <MockedProvider mocks={mocks}>
-        <MemoryRouter initialEntries={['/orgpost/123']}>
+        <MemoryRouter initialEntries={[path]}>
           <Routes>
             <Route path="/orgpost/:orgId" element={<PostsPage />} />
           </Routes>
@@ -534,6 +576,72 @@ describe('PostsPage Component', () => {
         );
       });
     });
+
+    it('shows error toast when preview post query fails', async () => {
+      const searchParams = new URLSearchParams({
+        previewPostID: 'preview-post-123',
+      });
+
+      renderComponent(
+        [orgPostListMock, emptyPinnedPostsMock, previewPostErrorMock],
+        `/orgpost/123?${searchParams.toString()}`,
+      );
+
+      await waitFor(() => {
+        expect(mockNotificationToast.error).toHaveBeenCalledWith(
+          'Error loading preview post',
+        );
+      });
+    });
+
+    it('includes preview post loading state in main loading condition', async () => {
+      const previewPostLoadingMock: MockedResponse = {
+        request: {
+          query: ORGANIZATION_POST_BY_ID,
+          variables: {
+            postId: 'preview-post-123',
+            userId: 'user-123',
+          },
+        },
+        delay: 100, // Simulate loading delay
+        result: {
+          data: {
+            post: {
+              id: 'preview-post-123',
+              caption: 'Preview Post',
+              createdAt: FIXED_TIMESTAMP,
+              creator: {
+                id: 'user-1',
+                name: 'John Doe',
+                avatarURL: null,
+              },
+              attachments: [],
+              commentsCount: 0,
+              upVotesCount: 0,
+              downVotesCount: 0,
+              hasUserVoted: { hasVoted: false, voteType: null },
+            },
+          },
+        },
+      };
+
+      const searchParams = new URLSearchParams({
+        previewPostID: 'preview-post-123',
+      });
+
+      renderComponent(
+        [orgPostListMock, emptyPinnedPostsMock, previewPostLoadingMock],
+        `/orgpost/123?${searchParams.toString()}`,
+      );
+
+      // Should show loading state initially
+      expect(screen.getByTestId('loader')).toBeInTheDocument();
+
+      // Wait for loading to complete
+      await waitFor(() => {
+        expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+      });
+    });
   });
 
   describe('Pinned Posts', () => {
@@ -551,20 +659,135 @@ describe('PostsPage Component', () => {
       });
 
       await waitFor(() => {
-        expect(screen.getByTestId('pinned-post-modal')).toBeInTheDocument();
+        expect(screen.getByTestId('post-view-modal')).toBeInTheDocument();
       });
 
       // Close modal
-      const closeButton = screen.getByTestId('close-pinned-post-button');
+      const closeButton = screen.getByTestId('close-post-view-button');
       await act(async () => {
         fireEvent.click(closeButton);
       });
 
       await waitFor(() => {
-        expect(
-          screen.queryByTestId('pinned-post-modal'),
-        ).not.toBeInTheDocument();
+        expect(screen.queryByTestId('post-view-modal')).not.toBeInTheDocument();
       });
+    });
+
+    it('handles URL update when closing modal with other query parameters present', async () => {
+      // Mock window.location and history
+      const originalLocation = window.location;
+      const originalHistory = window.history;
+      const mockReplaceState = vi.fn();
+
+      try {
+        Object.defineProperty(window, 'location', {
+          value: {
+            ...originalLocation,
+            pathname: '/test/path',
+            search: '?previewPostID=post-123&otherParam=value&sortBy=date',
+          },
+          writable: true,
+        });
+
+        Object.defineProperty(window, 'history', {
+          value: {
+            ...originalHistory,
+            replaceState: mockReplaceState,
+          },
+          writable: true,
+        });
+
+        renderComponent([orgPostListMock, orgPinnedPostListMock]);
+
+        await waitFor(() => {
+          expect(screen.getByTestId('pinned-posts-layout')).toBeInTheDocument();
+        });
+
+        // Open modal
+        const pinnedPostButton = screen.getByTestId('pinned-post-post-2');
+        await act(async () => {
+          fireEvent.click(pinnedPostButton);
+        });
+
+        // Close the modal
+        const closeButton = screen.getByTestId('close-post-view-button');
+        await act(async () => {
+          fireEvent.click(closeButton);
+        });
+
+        // Verify URL was updated with remaining query parameters
+        expect(mockReplaceState).toHaveBeenCalledWith(
+          {},
+          '',
+          '/test/path?otherParam=value&sortBy=date',
+        );
+      } finally {
+        // Restore original objects
+        Object.defineProperty(window, 'location', {
+          value: originalLocation,
+          writable: true,
+        });
+        Object.defineProperty(window, 'history', {
+          value: originalHistory,
+          writable: true,
+        });
+      }
+    });
+
+    it('handles URL update when closing modal with only previewPostID parameter', async () => {
+      // Mock window.location and history
+      const originalLocation = window.location;
+      const originalHistory = window.history;
+      const mockReplaceState = vi.fn();
+      try {
+        Object.defineProperty(window, 'location', {
+          value: {
+            ...originalLocation,
+            pathname: '/test/path',
+            search: '?previewPostID=post-123',
+          },
+          writable: true,
+        });
+
+        Object.defineProperty(window, 'history', {
+          value: {
+            ...originalHistory,
+            replaceState: mockReplaceState,
+          },
+          writable: true,
+        });
+
+        renderComponent([orgPostListMock, orgPinnedPostListMock]);
+
+        await waitFor(() => {
+          expect(screen.getByTestId('pinned-posts-layout')).toBeInTheDocument();
+        });
+
+        // Open modal
+        const pinnedPostButton = screen.getByTestId('pinned-post-post-2');
+        await act(async () => {
+          fireEvent.click(pinnedPostButton);
+        });
+
+        // Close the modal
+        const closeButton = screen.getByTestId('close-post-view-button');
+        await act(async () => {
+          fireEvent.click(closeButton);
+        });
+
+        // Verify URL was updated without query parameters (empty query string)
+        expect(mockReplaceState).toHaveBeenCalledWith({}, '', '/test/path');
+      } finally {
+        // Restore original objects
+        Object.defineProperty(window, 'location', {
+          value: originalLocation,
+          writable: true,
+        });
+        Object.defineProperty(window, 'history', {
+          value: originalHistory,
+          writable: true,
+        });
+      }
     });
   });
 

@@ -112,6 +112,41 @@ export const ORGANIZATION_POST_LIST_WITH_VOTES = gql`
   }
 `;
 
+/**
+ * GraphQL query to retrieve a single post by its ID.
+ *
+ * @param postId - The ID of the post to retrieve.
+ * @param userId - The ID of the user to check vote status against.
+ * @returns The post with its metadata, attachments, vote information, and creator details.
+ */
+export const ORGANIZATION_POST_BY_ID = gql`
+  query OrganizationPostByID($postId: String!, $userId: ID!) {
+    post(input: { id: $postId }) {
+      id
+      caption
+      body
+      commentsCount
+      attachments {
+        mimeType
+      }
+      attachmentURL
+      pinnedAt
+      downVotesCount
+      upVotesCount
+      hasUserVoted(userId: $userId) {
+        hasVoted
+        voteType
+      }
+      creator {
+        id
+        name
+        avatarURL
+      }
+      createdAt
+    }
+  }
+`;
+
 // GraphQL query to retrieve all the Organizations user is Part of with filter by name
 export const USER_JOINED_ORGANIZATIONS_PG = gql`
   query UserJoinedOrganizations($id: String!, $filter: String, $first: Int) {
