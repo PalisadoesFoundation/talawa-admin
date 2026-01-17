@@ -668,7 +668,19 @@
     "completeForInstance": "Terminé pour cette instance",
     "completeForSeries": "Terminé pour la série",
     "postCompletionNotesRequired": "Notes post-achèvement requises",
-    "updateThisInstance": "Mettre à jour cette instance"
+    "updateThisInstance": "Mettre à jour cette instance",
+    "itemCategory": "Catégorie d'Article",
+    "assignedDate": "Date d'Attribution",
+    "actions": "Actions",
+    "noCategory": "Pas de catégorie",
+    "viewActionItem": "Afficher l'Article d'Action",
+    "updateStatus": "Mettre à Jour le Statut",
+    "pending": "En Attente",
+    "completed": "Terminé",
+    "late": "En Retard",
+    "searchByAssignee": "Rechercher par Attribué",
+    "searchByCategory": "Rechercher par Catégorie",
+    "sortByAssignedDate": "Trier par Date d'Attribution"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Détails de la catégorie d'ordre du jour",
@@ -722,7 +734,9 @@
     "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?",
     "event": "Événement",
     "search": "Rechercher",
-    "attachmentPreview": "Aperçu de la pièce jointe"
+    "attachmentPreview": "Aperçu de la pièce jointe",
+    "errorLoadingAgendaCategories": "Une erreur s'est produite lors du chargement des données des catégories de l'ordre du jour",
+    "errorLoadingAgendaItems": "Une erreur s'est produite lors du chargement des données des points de l'ordre du jour"
   },
   "eventListCard": {
     "deleteEvent": "Supprimer l'événement",
@@ -774,7 +788,19 @@
     "talawaApiUnavailable": "API Talawa non disponible",
     "done": "Terminé",
     "invalidDate": "Invalid Date",
-    "createChat": "Créer une discussion"
+    "createChat": "Créer une discussion",
+    "isRegisterable": "Peut S'enregistrer",
+    "creator": "Créateur",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "viewDetails": "Afficher les Détails",
+    "noEventsFound": "Aucun événement trouvé",
+    "noEvent": "Aucun Événement",
+    "averageFeedback": "Retour Moyen",
+    "noOfAttendees": "Nombre de Participants",
+    "noRegistrations": "Aucune Inscription",
+    "registrants": "Inscrits",
+    "to": "À"
   },
   "funds": {
     "title": "Fonds",
@@ -1436,21 +1462,23 @@
     "goToToday": "Aller à aujourd'hui",
     "genderDistribution": "Distribution par sexe",
     "ageDistribution": "Distribution par âge",
-    "age": "Âge",
-    "age18to40": "18-40",
-    "attendanceCount": "Nombre de participants",
-    "close": "Fermer",
-    "demographics": "Démographie",
-    "demography": "Démographie",
-    "exportData": "Exporter les données",
-    "female": "Femme",
-    "gender": "Genre",
-    "male": "Homme",
-    "other": "Autre",
-    "over40": "Plus de 40 ans",
-    "today": "Aujourd'hui",
     "trends": "Tendances",
-    "under18": "Moins de 18 ans"
+    "demography": "Démographie",
+    "male": "Homme",
+    "female": "Femme",
+    "other": "Autre",
+    "under18": "Moins de 18 ans",
+    "age18to40": "18 à 40 ans",
+    "over40": "Plus de 40 ans",
+    "exportData": "Exporter les Données",
+    "demographics": "Données Démographiques",
+    "today": "Aujourd'hui",
+    "attendanceCount": "Nombre de Présences",
+    "totalMembers": "Nombre Total de Membres",
+    "membersAttended": "Membres Ayant Assisté",
+    "age": "Âge",
+    "close": "Fermer",
+    "gender": "Sexe"
   },
   "eventRegistrant": {
     "sort": "Trier",
@@ -1469,26 +1497,6 @@
     "checkedIn": "Enregistré",
     "unregister": "Désinscrire",
     "cannotUnregisterCheckedInTooltip": "Impossible de désinscrire un utilisateur déjà enregistré"
-  },
-  "onSpotAttendee": {
-    "title": "Participant sur place",
-    "enterFirstName": "Entrez le prénom",
-    "enterLastName": "Entrez le nom de famille",
-    "enterEmail": "Entrez l'e-mail",
-    "enterPhoneNo": "Entrez le numéro de téléphone",
-    "selectGender": "Sélectionnez le sexe",
-    "invalidDetailsMessage": "Veuillez remplir tous les champs obligatoires",
-    "orgIdMissing": "L'ID de l'organisation est manquant. Veuillez réessayer.",
-    "attendeeAddedSuccess": "Participant ajouté avec succès!",
-    "addAttendee": "Ajouter",
-    "phoneNumber": "Numéro de téléphone",
-    "addingAttendee": "Ajout en cours...",
-    "male": "Homme",
-    "female": "Femme",
-    "other": "Autre",
-    "firstNamePlaceholder": "Jean",
-    "lastNamePlaceholder": "Dupont",
-    "emailPlaceholder": "exemple@gmail.com"
   },
   "settings": {
     "eventAttended": "Événements Assistés",
@@ -1895,12 +1903,21 @@
     "checkedIn": "Enregistré",
     "downloadTag": "Télécharger l'étiquette",
     "checkIn": "Enregistrer",
-    "eventCheckInManagement": "Gestion des enregistrements d'événement"
+    "eventCheckInManagement": "Gestion des enregistrements d'événement",
+    "checkInMembers": "Enregistrer les membres",
+    "unknownUser": "Utilisateur inconnu",
+    "user": "Utilisateur",
+    "checkInStatus": "Statut d'Enregistrement"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
     "errorRemovingAttendee": "Erreur lors de la suppression du participant",
     "eventRegistrantsTitle": "Inscrits à l'événement",
+    "registerMember": "Inscrire un membre",
+    "showAttendees": "Afficher les participants",
+    "addingAttendee": "Ajout du participant...",
+    "selectUserFirst": "Veuillez d'abord choisir un utilisateur à ajouter !",
+    "unknownUser": "Utilisateur inconnu",
     "inviteByEmailButton": "Inviter par email",
     "addRegistrantButton": "Ajouter un inscrit",
     "noRegistrationsFound": "Aucune inscription trouvée.",
@@ -1920,14 +1937,34 @@
       "expiresInDaysLabel": "Expire dans (jours)",
       "errorSendingInvites": "Erreur lors de l'envoi des invitations",
       "emailsLabel": "Emails et noms des destinataires",
-      "emailsHelp": "Fournissez l'email et le nom facultatif pour chaque destinataire. Ajoutez plusieurs destinataires si nécessaire."
-    },
-    "selectUserWarning": "Veuillez d'abord choisir un utilisateur à ajouter !",
-    "addingAttendeeProgress": "Ajout du participant en cours..."
+      "emailsHelp": "Fournissez l'email et le nom facultatif pour chaque destinataire. Ajoutez plusieurs destinataires si nécessaire.",
+      "noRecipientsError": "Veuillez fournir au moins un email de destinataire",
+      "invalidEmailsError": "Email(s) invalide(s) : {{emails}}",
+      "invitesSentSuccessfully": "Invitations envoyées avec succès"
+    }
   },
-  "eventRegistrantsWrapper": {
-    "buttonAriaLabel": "Afficher les participants",
-    "registerMemberButton": "Inscrire un membre"
+  "onSpotAttendee": {
+    "invalidEmailFormat": "Format d'email invalide",
+    "organizationIdMissing": "L'identifiant de l'organisation est manquant.",
+    "title": "Participant sur place",
+    "enterFirstName": "Entrez le prénom",
+    "enterLastName": "Entrez le nom de famille",
+    "enterEmail": "Entrez l'e-mail",
+    "enterPhoneNo": "Entrez le numéro de téléphone",
+    "selectGender": "Sélectionner le genre",
+    "invalidDetailsMessage": "Veuillez remplir tous les champs obligatoires",
+    "orgIdMissing": "L'ID de l'organisation est manquant. Veuillez réessayer.",
+    "attendeeAddedSuccess": "Participant ajouté avec succès !",
+    "addAttendee": "Ajouter un participant",
+    "phoneNumber": "N° de téléphone",
+    "phoneNumberPlaceholder": "1234567890",
+    "addingAttendee": "Ajout en cours...",
+    "male": "Homme",
+    "female": "Femme",
+    "other": "Autre",
+    "placeholderFirstName": "Jean",
+    "placeholderLastName": "Dupont",
+    "placeholderEmail": "abc@gmail.com"
   },
   "userCampaigns": {
     "title": "Campagnes de financement",
@@ -2103,7 +2140,11 @@
     "groupName": "Nom du Groupe",
     "noOfMembers": "Nombre de Membres",
     "options": "Options",
-    "notSpecified": "Non Spécifié"
+    "notSpecified": "Non Spécifié",
+    "invited": "Invité",
+    "groupsAvailable": "{{count}} groupes disponibles",
+    "volunteersRequired": "Requis",
+    "signedUp": "Inscrit"
   },
   "pluginStore": {
     "title": "Boutique de Plugins",

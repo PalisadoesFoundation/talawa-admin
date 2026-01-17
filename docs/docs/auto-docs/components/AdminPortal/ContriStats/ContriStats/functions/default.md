@@ -12,7 +12,7 @@ Defined in: [src/components/AdminPortal/ContriStats/ContriStats.tsx:32](https://
 
 ### \_\_namedParameters
 
-[`InterfaceContriStatsProps`](../../../../../types/Contribution/interface/interfaces/InterfaceContriStatsProps.md)
+[`InterfaceContriStatsProps`](../../../../../types/AdminPortal/Contribution/interface/interfaces/InterfaceContriStatsProps.md)
 
 ## Returns
 
