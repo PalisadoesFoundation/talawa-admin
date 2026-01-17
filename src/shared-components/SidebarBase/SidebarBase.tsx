@@ -1,14 +1,3 @@
-/**
- * SidebarBase Component
- *
- * This is the foundational component for all sidebars in both Admin and User portals.
- * It provides common functionality including toggle behavior, branding, and layout structure.
- *
- * @param props - The props for the component
- *
- * @returns The rendered SidebarBase component
- */
-
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import TalawaLogo from 'assets/svgs/talawa.svg?react';
@@ -16,6 +5,16 @@ import { FaBars } from 'react-icons/fa';
 import styles from './SidebarBase.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ISidebarBaseProps } from '../../types/SidebarBase/interface';
+
+/**
+ * SidebarBase Component
+ *
+ * This is the foundational component for all sidebars in both Admin and User portals.
+ * It provides common functionality including toggle behavior, branding, and layout structure.
+ *
+ * @param props - The props for the component
+ * @returns The rendered SidebarBase component
+ */
 
 const SidebarBase = ({
   hideDrawer,

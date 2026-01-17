@@ -88,6 +88,7 @@
     "emailNotVerified": "您的电子邮件尚未验证。请检查您的收件箱以获取验证链接。",
     "resendVerification": "重新发送验证电子邮件",
     "emailResent": "验证电子邮件已成功发送!",
+    "resendFailed": "无法重新发送验证邮件。请再试一次。",
     "signupSuccessVerifyEmail": "注册成功!请检查您的电子邮件以验证您的账户。"
   },
   "adminProfile": {
@@ -1096,7 +1097,7 @@
     "resendButton": "重新发送验证电子邮件",
     "enterEmail": "输入您的电子邮件地址",
     "emailPlaceholder": "电子邮件",
-    "loginRequired": "You must be logged in to verify your email."
+    "loginRequired": "您必须登录才能验证您的电子邮件。"
   },
   "pageNotFound": {
     "404": "404",

@@ -42,7 +42,7 @@
 import { useMutation } from '@apollo/client';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 import {
@@ -53,7 +53,7 @@ import KeyLogo from 'assets/svgs/key.svg?react';
 
 import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { Form } from 'react-bootstrap';
+import { Form } from 'react-router';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
@@ -93,7 +93,7 @@ const ForgotPassword = (): JSX.Element => {
   const isLoggedIn = getItem('IsLoggedIn');
   useEffect(() => {
     if (isLoggedIn == 'TRUE') {
-      window.location.replace('/orglist');
+      window.location.replace('/admin/orglist');
     }
     return () => {
       removeItem('otpToken');
@@ -189,11 +189,11 @@ const ForgotPassword = (): JSX.Element => {
               {showEnterEmail ? (
                 <div className="mt-4">
                   <Form onSubmit={getOTP}>
-                    <Form.Label htmlFor="registeredEmail">
+                    <label className="form-label" htmlFor="registeredEmail">
                       {t('registeredEmail')}:
-                    </Form.Label>
+                    </label>
                     <div className="position-relative">
-                      <Form.Control
+                      <input
                         type="email"
                         className="form-control"
                         id="registeredEmail"
@@ -218,8 +218,10 @@ const ForgotPassword = (): JSX.Element => {
               ) : (
                 <div className="mt-4">
                   <Form onSubmit={submitForgotPassword}>
-                    <Form.Label htmlFor="userOtp">{t('enterOtp')}:</Form.Label>
-                    <Form.Control
+                    <label className="form-label" htmlFor="userOtp">
+                      {t('enterOtp')}:
+                    </label>
+                    <input
                       type="number"
                       className="form-control"
                       id="userOtp"
@@ -234,10 +236,10 @@ const ForgotPassword = (): JSX.Element => {
                         })
                       }
                     />
-                    <Form.Label htmlFor="newPassword">
+                    <label className="form-label" htmlFor="newPassword">
                       {t('enterNewPassword')}:
-                    </Form.Label>
-                    <Form.Control
+                    </label>
+                    <input
                       type="password"
                       className="form-control"
                       id="newPassword"
@@ -253,10 +255,10 @@ const ForgotPassword = (): JSX.Element => {
                         })
                       }
                     />
-                    <Form.Label htmlFor="confirmNewPassword">
+                    <label className="form-label" htmlFor="confirmNewPassword">
                       {t('cofirmNewPassword')}:
-                    </Form.Label>
-                    <Form.Control
+                    </label>
+                    <input
                       type="password"
                       className="form-control"
                       id="confirmNewPassword"

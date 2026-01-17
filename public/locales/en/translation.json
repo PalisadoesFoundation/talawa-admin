@@ -88,6 +88,7 @@
     "emailNotVerified": "Your email is not verified. Please check your inbox for the verification link.",
     "resendVerification": "Resend Verification Email",
     "emailResent": "Verification email sent successfully!",
+    "resendFailed": "Failed to resend verification email. Please try again.",
     "signupSuccessVerifyEmail": "Registration successful! Please check your email to verify your account."
   },
   "adminProfile": {

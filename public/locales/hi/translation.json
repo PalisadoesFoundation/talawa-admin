@@ -88,6 +88,7 @@
     "emailNotVerified": "आपका ईमेल सत्यापित नहीं है। कृपया सत्यापन लिंक के लिए अपना इनबॉक्स जांचें।",
     "resendVerification": "सत्यापन ईमेल पुनः भेजें",
     "emailResent": "सत्यापन ईमेल सफलतापूर्वक भेजा गया!",
+    "resendFailed": "सत्यापन ईमेल पुनः भेजने में विफल। कृपया पुन: प्रयास करें।",
     "signupSuccessVerifyEmail": "पंजीकरण सफल! कृपया अपने खाते की पुष्टि करने के लिए अपना ईमेल जांचें।"
   },
   "adminProfile": {
@@ -1096,7 +1097,7 @@
     "resendButton": "सत्यापन ईमेल पुनः भेजें",
     "enterEmail": "अपना ईमेल पता दर्ज करें",
     "emailPlaceholder": "ईमेल",
-    "loginRequired": "You must be logged in to verify your email."
+    "loginRequired": "ईमेल सत्यापित करने के लिए आपका लॉग इन होना आवश्यक है।"
   },
   "pageNotFound": {
     "404": "404",

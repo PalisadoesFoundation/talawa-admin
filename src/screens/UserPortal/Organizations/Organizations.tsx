@@ -131,6 +131,7 @@ export default function Organizations(): React.JSX.Element {
 
   // Email verification warning state
   const [showEmailWarning, setShowEmailWarning] = useState(false);
+  const [hasDismissed, setHasDismissed] = useState(false);
 
   // Fetch current user status to sync verification state
   const { data: currentUserData } = useQuery(CURRENT_USER, {
@@ -143,6 +144,8 @@ export default function Organizations(): React.JSX.Element {
 
   // Check for email verification status on component mount and sync with backend
   useEffect(() => {
+    if (hasDismissed) return;
+
     // Priority: API data > LocalStorage
     if (currentUserData?.currentUser) {
       if (currentUserData.currentUser.isEmailAddressVerified) {
@@ -166,10 +169,11 @@ export default function Organizations(): React.JSX.Element {
         setShowEmailWarning(true);
       }
     }
-  }, [currentUserData, getItem, removeItem, setItem]);
+  }, [currentUserData, getItem, removeItem, setItem, hasDismissed]);
 
   const handleDismissWarning = (): void => {
     setShowEmailWarning(false);
+    setHasDismissed(true);
     removeItem('emailNotVerified');
     removeItem('unverifiedEmail');
   };
@@ -178,7 +182,9 @@ export default function Organizations(): React.JSX.Element {
     try {
       const { data } = await resendVerificationEmail();
       if (data?.sendVerificationEmail?.success) {
-        NotificationToast.success(tLogin('emailResent') as string);
+        NotificationToast.success(tLogin('emailResent'));
+      } else {
+        NotificationToast.info(tLogin('resendFailed'));
       }
     } catch (error) {
       errorHandler(tCommon, error);
@@ -346,9 +352,7 @@ export default function Organizations(): React.JSX.Element {
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
         className={`${styles.organizationsContainer} ${
-          hideDrawer
-            ? styles.organizationsContainerExpanded
-            : styles.organizationsContainerContracted
+          hideDrawer ? styles.marginLeft80 : styles.marginLeft260
         } ${hideDrawer ? styles.expand : styles.contract}`}
         data-testid="organizations-container"
       >

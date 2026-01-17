@@ -33,24 +33,32 @@ import { errorHandler } from 'utils/errorHandler';
 // Import useLocalStorage
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './VerifyEmail.module.css';
-import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 type VerificationState = 'loading' | 'success' | 'error';
 
+/**
+ * VerifyEmail Component
+ *
+ * This component handles the email verification process.
+ * It reads the verification token from the URL, calls the verification mutation,
+ * and handles success, error, and loading states.
+ *
+ * @returns \{JSX.Element\} The rendered VerifyEmail component.
+ */
 const VerifyEmail = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'verifyEmail' });
   const { t: tCommon } = useTranslation('common');
   const { removeItem } = useLocalStorage();
 
-  document.title = t('title');
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
 
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
 
   const [verificationState, setVerificationState] =
     useState<VerificationState>('loading');
-  const [resendEmail, setResendEmail] = useState('');
-  const [showResendForm, setShowResendForm] = useState(false);
 
   const [verifyEmail, { loading: verifyLoading }] = useMutation(
     VERIFY_EMAIL_MUTATION,
@@ -91,7 +99,7 @@ const VerifyEmail = (): JSX.Element => {
           err.graphQLErrors?.[0]?.extensions?.code === 'UNAUTHENTICATED' ||
           err.message?.toLowerCase().includes('invalid arguments')
         ) {
-          NotificationToast.error(t('loginRequired'));
+          NotificationToast.error(t('verifyEmail.loginRequired'));
         } else {
           errorHandler(t, error);
         }
@@ -104,23 +112,12 @@ const VerifyEmail = (): JSX.Element => {
   /**
    * Handles resending verification email
    */
-  const handleResendEmail = async (
-    e: React.FormEvent<HTMLFormElement>,
-  ): Promise<void> => {
-    e.preventDefault();
-
-    if (!resendEmail.trim()) {
-      NotificationToast.warning(tCommon('required'));
-      return;
-    }
-
+  const handleResendEmail = async (): Promise<void> => {
     try {
       const { data } = await resendVerification();
 
       if (data?.sendVerificationEmail?.success) {
         NotificationToast.success(t('resendSuccess'));
-        setShowResendForm(false);
-        setResendEmail('');
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -186,36 +183,15 @@ const VerifyEmail = (): JSX.Element => {
                     {t('invalidToken')}
                   </p>
 
-                  {!showResendForm ? (
-                    <Button
-                      variant="outline-primary"
-                      className="mt-4 w-100"
-                      onClick={() => setShowResendForm(true)}
-                      data-testid="showResendFormBtn"
-                    >
-                      {t('resendButton')}
-                    </Button>
-                  ) : (
-                    <form onSubmit={handleResendEmail} className="mt-4 w-100">
-                      <FormTextField
-                        name="resendEmail"
-                        label={t('enterEmail')}
-                        value={resendEmail}
-                        onChange={setResendEmail}
-                        placeholder={t('emailPlaceholder') || 'you@example.com'}
-                        type="email"
-                        required
-                        data-testid="resendEmailInput"
-                      />
-                      <Button
-                        type="submit"
-                        className={`mt-3 w-100 ${styles.actionBtn}`}
-                        data-testid="resendEmailBtn"
-                      >
-                        {t('resendButton')}
-                      </Button>
-                    </form>
-                  )}
+                  <Button
+                    variant="outline-primary"
+                    className="mt-4 w-100"
+                    onClick={handleResendEmail}
+                    disabled={resendLoading}
+                    data-testid="resendVerificationBtn"
+                  >
+                    {resendLoading ? tCommon('loading') : t('resendButton')}
+                  </Button>
 
                   <div className="d-flex justify-content-center mt-4">
                     <Link

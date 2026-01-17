@@ -87,6 +87,7 @@
     "emailNotVerified": "Su correo electrónico no está verificado. Por favor, revise su bandeja de entrada para el enlace de verificación.",
     "resendVerification": "Reenviar correo de verificación",
     "emailResent": "¡Correo de verificación enviado exitosamente!",
+    "resendFailed": "No se pudo reenviar el correo de verificación. Por favor, inténtelo de nuevo.",
     "signupSuccessVerifyEmail": "¡Registro exitoso! Por favor, revise su correo para verificar su cuenta.",
     "backToLogin": "Volver al inicio de sesión"
   },
@@ -1106,7 +1107,7 @@
     "resendButton": "Reenviar correo de verificación",
     "enterEmail": "Ingrese su dirección de correo electrónico",
     "emailPlaceholder": "Correo electrónico",
-    "loginRequired": "You must be logged in to verify your email."
+    "loginRequired": "Debe iniciar sesión para verificar su correo electrónico."
   },
   "orgSettings": {
     "title": "Configuración",

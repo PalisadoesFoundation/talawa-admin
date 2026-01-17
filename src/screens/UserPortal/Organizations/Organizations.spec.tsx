@@ -14,8 +14,10 @@ import {
   GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
   ORGANIZATION_FILTER_LIST,
   USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
+  CURRENT_USER,
 } from 'GraphQl/Queries/Queries';
 import { USER_CREATED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries';
+import { RESEND_VERIFICATION_EMAIL_MUTATION } from 'GraphQl/Mutations/mutations';
 import Organizations from './Organizations';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
@@ -122,6 +124,28 @@ vi.mock('components/UserPortal/UserSidebar/UserSidebar', () => ({
   )),
 }));
 
+const toastMocks = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+  info: vi.fn(),
+  warning: vi.fn(),
+  warn: vi.fn(),
+}));
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: toastMocks.success,
+    error: toastMocks.error,
+    info: toastMocks.info,
+    warning: toastMocks.warning,
+    warn: toastMocks.warn,
+  },
+}));
+
+vi.mock('utils/errorHandler', () => ({
+  errorHandler: vi.fn(),
+}));
+
 const TEST_USER_ID = '01958985-600e-7cde-94a2-b3fc1ce66cf3';
 const baseOrgFields = {
   addressLine1: 'asdfg',
@@ -152,6 +176,99 @@ const makeCreatedOrg = (overrides: Record<string, unknown> = {}) => ({
   }),
 });
 
+const baseUserFields = {
+  addressLine1: 'Address 1',
+  addressLine2: 'Address 2',
+  avatarMimeType: 'image/png',
+  avatarURL: '',
+  birthDate: '2000-01-01',
+  city: 'City',
+  countryCode: 'US',
+  createdAt: '1234567890',
+  description: 'Description',
+  educationGrade: 'Grade',
+  emailAddress: 'test@example.com',
+  employmentStatus: 'Employed',
+  homePhoneNumber: '1234567890',
+  id: TEST_USER_ID,
+  isEmailAddressVerified: false,
+  maritalStatus: 'Single',
+  mobilePhoneNumber: '1234567890',
+  name: 'Test User',
+  natalSex: 'Male',
+  naturalLanguageCode: 'en',
+  postalCode: '12345',
+  role: 'user',
+  state: 'State',
+  updatedAt: '1234567890',
+  workPhoneNumber: '1234567890',
+  eventsAttended: [],
+};
+
+const CURRENT_USER_VERIFIED_MOCK = {
+  request: {
+    query: CURRENT_USER,
+    variables: {},
+  },
+  result: {
+    data: {
+      currentUser: {
+        __typename: 'User',
+        ...baseUserFields,
+        isEmailAddressVerified: true,
+      },
+    },
+  },
+};
+
+const CURRENT_USER_UNVERIFIED_MOCK = {
+  request: {
+    query: CURRENT_USER,
+    variables: {},
+  },
+  result: {
+    data: {
+      currentUser: {
+        __typename: 'User',
+        ...baseUserFields,
+        isEmailAddressVerified: false,
+      },
+    },
+  },
+};
+
+const RESEND_SUCCESS_MOCK = {
+  request: {
+    query: RESEND_VERIFICATION_EMAIL_MUTATION,
+    variables: {},
+  },
+  result: {
+    data: {
+      sendVerificationEmail: {
+        __typename: 'ResendVerificationEmailPayload',
+        success: true,
+        message: 'Success',
+      },
+    },
+  },
+};
+
+const RESEND_FAILURE_MOCK = {
+  request: {
+    query: RESEND_VERIFICATION_EMAIL_MUTATION,
+    variables: {},
+  },
+  result: {
+    data: {
+      sendVerificationEmail: {
+        __typename: 'ResendVerificationEmailPayload',
+        success: false,
+        message: 'Failure',
+      },
+    },
+  },
+};
+
 const COMMUNITY_TIMEOUT_MOCK = {
   request: {
     query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
@@ -165,8 +282,34 @@ const COMMUNITY_TIMEOUT_MOCK = {
   },
 };
 
+const ORGANIZATION_FILTER_LIST_MOCK = {
+  request: {
+    query: ORGANIZATION_FILTER_LIST,
+    variables: {
+      filter: '',
+    },
+  },
+  result: {
+    data: {
+      organizations: [
+        makeOrg({
+          id: '6401ff65ce8e8406b8f07af2',
+          name: 'anyOrganization1',
+          isMember: true,
+        }),
+        makeOrg({
+          id: '6401ff65ce8e8406b8f07af3',
+          name: 'anyOrganization2',
+          isMember: true,
+        }),
+      ],
+    },
+  },
+};
+
 const MOCKS = [
   COMMUNITY_TIMEOUT_MOCK,
+  CURRENT_USER_VERIFIED_MOCK,
   {
     request: {
       query: USER_CREATED_ORGANIZATIONS,
@@ -189,30 +332,7 @@ const MOCKS = [
       },
     },
   },
-  {
-    request: {
-      query: ORGANIZATION_FILTER_LIST,
-      variables: {
-        filter: '',
-      },
-    },
-    result: {
-      data: {
-        organizations: [
-          makeOrg({
-            id: '6401ff65ce8e8406b8f07af2',
-            name: 'anyOrganization1',
-            isMember: true,
-          }),
-          makeOrg({
-            id: '6401ff65ce8e8406b8f07af3',
-            name: 'anyOrganization2',
-            isMember: true,
-          }),
-        ],
-      },
-    },
-  },
+  ORGANIZATION_FILTER_LIST_MOCK,
   {
     request: {
       query: USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
@@ -1180,5 +1300,168 @@ test('should reset page when changing rows per page', async () => {
   // Page should reset to 0
   await waitFor(() => {
     expect(screen.getByTestId('current-page').textContent).toBe('0');
+  });
+});
+
+describe('Email Verification Warning', () => {
+  const emailLink = new StaticMockLink(
+    [
+      COMMUNITY_TIMEOUT_MOCK,
+      CURRENT_USER_UNVERIFIED_MOCK,
+      RESEND_SUCCESS_MOCK,
+      RESEND_FAILURE_MOCK,
+      ORGANIZATION_FILTER_LIST_MOCK,
+    ],
+    true,
+  );
+
+  test('should display email verification warning when user is not verified', async () => {
+    render(
+      <MockedProvider link={emailLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('email-verification-warning'),
+      ).toBeInTheDocument();
+    });
+    expect(
+      screen.getByText(
+        'Your email is not verified. Please check your inbox for the verification link.',
+      ),
+    ).toBeInTheDocument();
+  });
+
+  test('should hide email verification warning when user is verified', async () => {
+    const verifiedLink = new StaticMockLink(
+      [
+        COMMUNITY_TIMEOUT_MOCK,
+        CURRENT_USER_VERIFIED_MOCK,
+        ORGANIZATION_FILTER_LIST_MOCK,
+      ],
+      true,
+    );
+
+    render(
+      <MockedProvider link={verifiedLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('organizations-list')).toBeInTheDocument();
+    });
+    expect(
+      screen.queryByTestId('email-verification-warning'),
+    ).not.toBeInTheDocument();
+  });
+
+  test('should handle resend verification success', async () => {
+    render(
+      <MockedProvider link={emailLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('email-verification-warning'),
+      ).toBeInTheDocument();
+    });
+
+    const resendBtn = screen.getByTestId('resend-verification-btn');
+    await userEvent.click(resendBtn);
+
+    await waitFor(() => {
+      expect(toastMocks.success).toHaveBeenCalledWith(
+        'Verification email sent successfully!',
+      );
+    });
+  });
+
+  test('should handle resend verification failure', async () => {
+    const failureEmailLink = new StaticMockLink(
+      [
+        COMMUNITY_TIMEOUT_MOCK,
+        CURRENT_USER_UNVERIFIED_MOCK,
+        RESEND_FAILURE_MOCK,
+        ORGANIZATION_FILTER_LIST_MOCK,
+      ],
+      true,
+    );
+
+    render(
+      <MockedProvider link={failureEmailLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('email-verification-warning'),
+      ).toBeInTheDocument();
+    });
+
+    const resendBtn = screen.getByTestId('resend-verification-btn');
+    await userEvent.click(resendBtn);
+
+    await waitFor(() => {
+      expect(toastMocks.info).toHaveBeenCalledWith(
+        'Failed to resend verification email. Please try again.',
+      );
+    });
+  });
+
+  test('should dismiss email verification warning', async () => {
+    render(
+      <MockedProvider link={emailLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('email-verification-warning'),
+      ).toBeInTheDocument();
+    });
+
+    const dismissBtn = screen.getByLabelText(/close/i);
+    await userEvent.click(dismissBtn);
+
+    expect(
+      screen.queryByTestId('email-verification-warning'),
+    ).not.toBeInTheDocument();
   });
 });

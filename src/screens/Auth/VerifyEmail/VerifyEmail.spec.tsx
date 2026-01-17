@@ -1,6 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -35,6 +35,7 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
     success: toastMocks.success,
     error: toastMocks.error,
     warning: toastMocks.warning,
+    warn: toastMocks.warn,
   },
 }));
 
@@ -93,14 +94,6 @@ const resendErrorMock = {
 };
 
 const link = new StaticMockLink(MOCKS, true);
-
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -186,6 +179,33 @@ describe('Testing VerifyEmail screen', () => {
     expect(toastMocks.success).toHaveBeenCalled();
   });
 
+  it('Should navigate to login when Go to Login button is clicked', async () => {
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/auth/verify-email?token=valid-token']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <VerifyEmail />
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('success-state')).toBeInTheDocument();
+    });
+
+    const goToLoginBtn = screen.getByTestId('goToLoginBtn');
+    // Ensure the link points to the root (login page)
+    const linkElement = goToLoginBtn.closest('a');
+    expect(linkElement).toHaveAttribute('href', '/');
+
+    await userEvent.click(goToLoginBtn);
+    // Since we are using MemoryRouter, we verify it doesn't crash and the state is correct.
+    // In a real scenario, we might check if the component for '/' is rendered.
+  });
+
   it('Should show error state when token is missing', async () => {
     render(
       <MockedProvider link={link}>
@@ -207,7 +227,7 @@ describe('Testing VerifyEmail screen', () => {
     );
 
     expect(screen.getByTestId('error-icon')).toBeInTheDocument();
-    expect(screen.getByTestId('showResendFormBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('resendVerificationBtn')).toBeInTheDocument();
   });
 
   it('Should show error state when verification fails', async () => {
@@ -235,31 +255,6 @@ describe('Testing VerifyEmail screen', () => {
     expect(screen.getByTestId('error-icon')).toBeInTheDocument();
   });
 
-  it('Should display resend form when resend button is clicked', async () => {
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/auth/verify-email']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <VerifyEmail />
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByTestId('error-state')).toBeInTheDocument();
-    });
-
-    const resendBtn = screen.getByTestId('showResendFormBtn');
-    await userEvent.click(resendBtn);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('resendEmailInput')).toBeInTheDocument();
-    });
-  });
-
   it('Should successfully resend verification email', async () => {
     render(
       <MockedProvider link={link}>
@@ -277,19 +272,7 @@ describe('Testing VerifyEmail screen', () => {
       expect(screen.getByTestId('error-state')).toBeInTheDocument();
     });
 
-    // Click resend button to show form
-    const showFormBtn = screen.getByTestId('showResendFormBtn');
-    await userEvent.click(showFormBtn);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('resendEmailInput')).toBeInTheDocument();
-    });
-
-    // Enter email and submit
-    const emailInput = screen.getByTestId('resendEmailInput');
-    await userEvent.type(emailInput, 'test@example.com');
-
-    const resendBtn = screen.getByTestId('resendEmailBtn');
+    const resendBtn = screen.getByTestId('resendVerificationBtn');
     await userEvent.click(resendBtn);
 
     await waitFor(() => {
@@ -314,56 +297,12 @@ describe('Testing VerifyEmail screen', () => {
       expect(screen.getByTestId('error-state')).toBeInTheDocument();
     });
 
-    // Click resend button to show form
-    const showFormBtn = screen.getByTestId('showResendFormBtn');
-    await userEvent.click(showFormBtn);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('resendEmailInput')).toBeInTheDocument();
-    });
-
-    // Enter non-existent email
-    const emailInput = screen.getByTestId('resendEmailInput');
-    await userEvent.type(emailInput, 'notexists@example.com');
-
-    const resendBtn = screen.getByTestId('resendEmailBtn');
+    const resendBtn = screen.getByTestId('resendVerificationBtn');
     await userEvent.click(resendBtn);
 
     await waitFor(() => {
       expect(toastMocks.error).toHaveBeenCalled();
     });
-  });
-
-  it('Should show validation warning when resending without email', async () => {
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/auth/verify-email']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18n}>
-              <VerifyEmail />
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByTestId('error-state')).toBeInTheDocument();
-    });
-
-    const showFormBtn = screen.getByTestId('showResendFormBtn');
-    await userEvent.click(showFormBtn);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('resendEmailInput')).toBeInTheDocument();
-    });
-
-    // Try to submit without entering email
-    const resendBtn = screen.getByTestId('resendEmailBtn');
-    await userEvent.click(resendBtn);
-
-    // Form validation should prevent submission
-    await wait();
   });
 
   it('Should have back to login link in error state', async () => {
@@ -396,7 +335,15 @@ describe('Testing VerifyEmail screen', () => {
             query: VERIFY_EMAIL_MUTATION,
             variables: { token: 'slow-token' },
           },
-          result: { data: null },
+          result: {
+            data: {
+              verifyEmail: {
+                success: true,
+                message: 'Verifying...',
+                user: null,
+              },
+            },
+          },
           delay: 100,
         },
       ];

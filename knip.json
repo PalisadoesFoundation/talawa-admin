@@ -16,7 +16,9 @@
     "src/shared-components/BreadcrumbsComponent/**",
     "src/shared-components/DateRangePicker/index.ts",
     "src/types/shared-components/DateRangePicker/index.ts",
-    "src/plugin/available/plugin_map/**"
+    "src/plugin/available/plugin_map/**",
+    "src/components/EventManagement/EventAttendance/Statistics/EventStatistics.tsx",
+    "src/components/EventRegistrantsModal/Modal/AddOnSpot/AddOnSpotAttendee.tsx"
   ],
   "ignoreDependencies": [],
   "ignoreExportsUsedInFile": true

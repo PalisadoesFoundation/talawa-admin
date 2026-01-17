@@ -87,8 +87,9 @@
     "accountLockedWithTimer": "Votre compte a été temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s).",
     "emailNotVerified": "Votre email n'est pas vérifié. Veuillez consulter votre boîte de réception pour le lien de vérification.",
     "resendVerification": "Renvoyer l'email de vérification",
-    "emailResent": "Email de vérification envoyé avec succès!",
-    "signupSuccessVerifyEmail": "Inscription réussie! Veuillez vérifier votre email pour vérifier votre compte."
+    "emailResent": "E-mail de vérification envoyé avec succès !",
+    "resendFailed": "Échec du renvoi de l'e-mail de vérification. Veuillez réessayer.",
+    "signupSuccessVerifyEmail": "Inscription réussie ! Veuillez vérifier votre e-mail pour vérifier votre compte."
   },
   "adminProfile": {
     "title": "Profil Administrateur",
@@ -1077,8 +1078,8 @@
     "resendSuccess": "Email de vérification envoyé! Veuillez vérifier votre boîte de réception.",
     "resendButton": "Renvoyer l'email de vérification",
     "enterEmail": "Entrez votre adresse email",
-    "emailPlaceholder": "Email",
-    "loginRequired": "You must be logged in to verify your email."
+    "emailPlaceholder": "E-mail",
+    "loginRequired": "Vous devez être connecté pour vérifier votre adresse e-mail."
   },
   "pageNotFound": {
     "404": "404",

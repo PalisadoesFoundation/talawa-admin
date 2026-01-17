@@ -29,10 +29,8 @@ import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCar
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { Group, Search } from '@mui/icons-material';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
-import { Alert } from 'react-bootstrap';
+import { Alert, Button as RBButton } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-
-const { getItem, setItem, removeItem } = useLocalStorage();
 
 interface InterfaceFormStateType {
   addressLine1: string;
@@ -46,7 +44,14 @@ interface InterfaceFormStateType {
   state: string;
 }
 
-function orgList(): JSX.Element {
+/**
+ * OrgList component displays a list of organizations and allows administrators to create new ones.
+ * It also handles the email verification warning banner.
+ *
+ * @returns \{JSX.Element\} The rendered OrgList component.
+ */
+function OrgList(): JSX.Element {
+  const { getItem, setItem, removeItem } = useLocalStorage();
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const { t: tCommon } = useTranslation('common');
   const { t: tLogin } = useTranslation('translation', {
@@ -110,7 +115,7 @@ function orgList(): JSX.Element {
         setShowEmailWarning(true);
       }
     }
-  }, [currentUserData, getItem, removeItem, setItem]);
+  }, [currentUserData]);
 
   const handleDismissWarning = (): void => {
     setShowEmailWarning(false);
@@ -124,6 +129,8 @@ function orgList(): JSX.Element {
 
       if (data?.sendVerificationEmail?.success) {
         NotificationToast.success(tLogin('emailResent'));
+      } else {
+        NotificationToast.info(tLogin('resendFailed'));
       }
     } catch (error: unknown) {
       errorHandler(tLogin, error);
@@ -273,7 +280,6 @@ function orgList(): JSX.Element {
         },
       });
 
-      //     toggleModal;
       if (data) {
         NotificationToast.success(t('congratulationOrgCreated'));
         refetchOrgs();
@@ -353,9 +359,9 @@ function orgList(): JSX.Element {
             <div>
               <strong>{tLogin('emailNotVerified')}</strong>
             </div>
-            <Button
-              variant="outlined"
-              size="small"
+            <RBButton
+              variant="outline-primary"
+              size="sm"
               onClick={handleResendVerification}
               disabled={resendLoading}
               data-testid="resend-verification-btn"
@@ -363,7 +369,7 @@ function orgList(): JSX.Element {
               {resendLoading
                 ? tCommon('loading')
                 : tLogin('resendVerification')}
-            </Button>
+            </RBButton>
           </div>
         </Alert>
       )}
@@ -550,4 +556,4 @@ function orgList(): JSX.Element {
     </div>
   );
 }
-export default orgList;
+export default OrgList;
