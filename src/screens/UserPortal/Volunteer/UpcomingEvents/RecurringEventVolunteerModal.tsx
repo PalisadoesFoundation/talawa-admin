@@ -54,9 +54,12 @@ const RecurringEventVolunteerModal: React.FC<
     }
   };
 
-  const formattedDate = new Intl.DateTimeFormat(i18n.language, {
-    dateStyle: 'medium',
-  }).format(new Date(eventDate));
+  const dateObj = new Date(eventDate);
+  const formattedDate = !isNaN(dateObj.getTime())
+    ? new Intl.DateTimeFormat(i18n.language, {
+        dateStyle: 'medium',
+      }).format(dateObj)
+    : eventDate;
   const title = isForGroup
     ? t('joinGroupTitle', { groupName, eventName })
     : t('volunteerTitle', { eventName });
