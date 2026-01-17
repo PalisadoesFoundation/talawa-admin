@@ -118,6 +118,8 @@ const UserScreen = (): React.JSX.Element => {
   const handleResize = useCallback((): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
+    } else {
+      setHideDrawer(false);
     }
   }, []);
 
