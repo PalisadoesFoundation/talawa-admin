@@ -905,7 +905,8 @@
     "pledgeDate": "Date d'Engagement",
     "pledged": "Promis",
     "donated": "Donné",
-    "campaignNotActive": "La campagne n'est pas actuellement active"
+    "campaignNotActive": "La campagne n'est pas actuellement active",
+    "close": "Fermer"
   },
   "createPostModal": {
     "title": "Des postes",
