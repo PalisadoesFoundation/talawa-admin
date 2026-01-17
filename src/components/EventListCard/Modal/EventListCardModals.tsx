@@ -61,7 +61,7 @@ interface IEventListCardModalProps {
   t: (key: string, options?: Record<string, unknown>) => string;
   tCommon: (key: string) => string;
 }
-
+const DEFAULT_TIME = '08:00:00';
 function EventListCardModals({
   eventListCardProps,
   eventModalIsOpen,
@@ -184,7 +184,6 @@ function EventListCardModals({
   const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
     useState(false);
 
-  const DEFAULT_TIME = '08:00:00';
   const [formState, setFormState] = useState({
     name: eventListCardProps.name,
     eventdescrip: eventListCardProps.description,
