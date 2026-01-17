@@ -230,7 +230,6 @@ const LeaveOrganization = (): JSX.Element => {
             error={error}
             touched={!!error}
             required
-            aria-label={t('leaveOrganization.confirmEmailInput')}
             onKeyDown={handleKeyPress}
           />
         )}
