@@ -212,6 +212,7 @@ function App(): React.ReactElement {
           <Route path="/register" element={<LoginPage />} />
           <Route path="/admin" element={<LoginPage />} />
           <Route path="/auth/verify-email" element={<VerifyEmail />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
           <Route element={<SecuredRoute />}>
             <Route element={<SuperAdminScreen />}>
               <Route path="/orglist" element={<OrgList />} />
