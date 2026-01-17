@@ -24,6 +24,6 @@
   "fileTooLarge": "文件过大：{{fileName}}",
   "invalidFileType": "无效的文件类型：{{fileName}}",
   "emptyFile": "选择了空文件",
-  "noRecipients": "請至少提供一個收件人電子郵件",
-  "invalidEmails": "無效的電子郵件：{{emails}}"
+  "noRecipients": "请至少提供一个收件人电子邮件",
+  "invalidEmails": "无效的电子邮件：{{emails}}"
 }

@@ -5,9 +5,9 @@
  * and displays various statistics such as feedback, reviews, and average ratings.
  *
  * @param props - The properties passed to the component.
- * - show - Determines whether the modal is visible.
- * - eventId - The unique identifier of the event for which statistics are displayed.
- * - handleClose - Callback function to close the modal.
+ * @param show - Determines whether the modal is visible.
+ * @param eventId - The unique identifier of the event for which statistics are displayed.
+ * @param handleClose - Callback function to close the modal.
  *
  * @returns A modal containing event statistics.
  *

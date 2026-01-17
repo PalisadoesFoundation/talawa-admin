@@ -6,7 +6,8 @@
  * layout. Each review includes a rating and the review text.
  *
  * @param props - The props object containing event statistics data.
- * - data - The event data passed to the component.
+ * @param data - The event data passed to the component.
+ * @remarks
  * - data.event - The event object containing feedback details.
  * - data.event.feedback - An array of feedback objects for the event.
  *
@@ -62,7 +63,7 @@ export const ReviewStats = ({ data }: InterfaceStatsModal): JSX.Element => {
           <Card.Title>
             <h3>{t('title')}</h3>
           </Card.Title>
-          <h5>Filled by {reviews.length} people.</h5>
+          <h5>{t('filledByCount', { count: reviews.length })}</h5>
           {reviews.length ? (
             reviews.map((review) => (
               <div className="card user-review m-1" key={review._id}>

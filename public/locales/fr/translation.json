@@ -2309,7 +2309,8 @@
     "title": "Statistiques de l'événement",
     "reviews": {
       "title": "Avis",
-      "emptyState": "En attente que les gens parlent de l'événement..."
+      "emptyState": "En attente que les gens parlent de l'événement...",
+      "filledByCount": "Rempli par {{count}} personnes."
     }
   }
 }

@@ -2309,7 +2309,8 @@
     "title": "Event Statistics",
     "reviews": {
       "title": "Reviews",
-      "emptyState": "Waiting for people to talk about the event..."
+      "emptyState": "Waiting for people to talk about the event...",
+      "filledByCount": "Filled by {{count}} people."
     }
   }
 }

@@ -2309,7 +2309,8 @@
     "title": "Estadísticas del evento",
     "reviews": {
       "title": "Reseñas",
-      "emptyState": "Esperando a que la gente hable sobre el evento..."
+      "emptyState": "Esperando a que la gente hable sobre el evento...",
+      "filledByCount": "Completado por {{count}} personas."
     }
   }
 }
