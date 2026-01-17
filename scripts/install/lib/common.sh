@@ -26,6 +26,10 @@
 #   - No side effects on sourcing (only definitions)
 #   - Shell-agnostic (works with bash)
 #
+# Opt-in Functions:
+#   enable_strict_mode - Enables 'set -euo pipefail' for strict error handling
+#   setup_traps        - Installs trap handlers for cleanup on exit/signals
+#
 # Exit Codes:
 #   E_SUCCESS=0      - Successful execution
 #   E_GENERAL=1      - General/unspecified error
@@ -34,8 +38,6 @@
 #   E_NETWORK=4      - Network-related error
 #   E_USER_ABORT=5   - User cancelled operation
 #
-
-set -euo pipefail
 
 # =============================================================================
 # Source Guard - Prevents multiple sourcing
@@ -52,6 +54,20 @@ readonly E_MISSING_DEP=2   # Missing dependency or required file
 readonly E_PERMISSION=3    # Permission denied
 readonly E_NETWORK=4       # Network-related error
 readonly E_USER_ABORT=5    # User cancelled operation
+
+# =============================================================================
+# Opt-in Shell Configuration
+# =============================================================================
+
+# Enable strict mode for safer script execution
+# Sets: -e (exit on error), -u (error on undefined vars), -o pipefail
+# Call this function explicitly when you need strict error handling
+# Arguments: None
+# Example:
+#   enable_strict_mode  # Now script exits on any error
+enable_strict_mode() {
+    set -euo pipefail
+}
 
 # =============================================================================
 # Symbols (Plain text, no colors)
@@ -122,13 +138,19 @@ die() {
 }
 
 # Cleanup function - override in your script for custom cleanup
-# This is called on EXIT, INT, and TERM signals
+# This is called on EXIT, INT, and TERM signals when setup_traps is called
 cleanup() {
     :
 }
 
 # Set up trap handlers for cleanup
-trap cleanup EXIT INT TERM
+# Call this function explicitly when you need trap handling
+# Arguments: None
+# Example:
+#   setup_traps  # Now cleanup() will be called on EXIT, INT, TERM
+setup_traps() {
+    trap cleanup EXIT INT TERM
+}
 
 # =============================================================================
 # Input Validation and Prompts
@@ -252,12 +274,15 @@ validate_url() {
     [[ "$url" =~ ^https?://[^[:space:]]+$ ]]
 }
 
-# Get the directory containing the current script
+# Get the directory containing the calling script
+# Note: Uses BASH_SOURCE[1] (caller) with fallback to BASH_SOURCE[0] (this file)
+#       so that scripts sourcing common.sh get their own directory, not common.sh's
 # Returns:
-#   Prints absolute path to script directory
+#   Prints absolute path to the calling script's directory
 get_script_dir() {
     local dir
-    dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)" || die "Failed to determine script directory" "$E_GENERAL"
+    local script_path="${BASH_SOURCE[1]:-${BASH_SOURCE[0]}}"
+    dir="$(cd "$(dirname "$script_path")" && pwd)" || die "Failed to determine script directory" "$E_GENERAL"
     printf "%s" "$dir"
 }
 
