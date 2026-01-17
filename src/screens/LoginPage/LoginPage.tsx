@@ -301,6 +301,9 @@ const LoginPage = (): JSX.Element => {
               // Use form data for name/email since SIGNUP_MUTATION only returns user.id
               setItem('name', signName);
               setItem('email', signEmail);
+              // Newly signed up users are unverified by default
+              setItem('emailNotVerified', 'true');
+              setItem('unverifiedEmail', signEmail);
               // Persist userId from API response
               if (signUpData.signUp.user?.id) {
                 setItem('userId', signUpData.signUp.user.id);
