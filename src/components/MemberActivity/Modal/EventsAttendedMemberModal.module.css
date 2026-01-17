@@ -1,0 +1,8 @@
+/**
+ * EventsAttendedMemberModal styles
+ */
+
+.customcell {
+  background-color: var(--color-gray-100);
+  color: var(--color-black);
+}

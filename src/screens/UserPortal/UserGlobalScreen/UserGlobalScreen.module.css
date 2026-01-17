@@ -5,6 +5,20 @@
   padding: var(--space-5) var(--space-7) 0 var(--space-22);
 }
 
+.flexContainer {
+  display: flex;
+  flex: 1;
+}
+
+.mainContent {
+  flex: 1;
+  padding: var(--space-5);
+}
+
+.titleWrapper {
+  margin-bottom: var(--space-5);
+}
+
 .drawer {
   position: relative;
 }

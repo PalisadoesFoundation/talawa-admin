@@ -17,8 +17,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
-import localStyles from './UserGlobalScreen.module.css';
+import styles from './UserGlobalScreen.module.css';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { UserPortalNavigationBar } from 'components/UserPortal/UserPortalNavigationBar/UserPortalNavigationBar';
 
@@ -50,22 +49,22 @@ const UserGlobalScreen = (): JSX.Element => {
   const location = useLocation();
   const currentPage = location.pathname;
   return (
-    <div className={localStyles.pageContainer}>
+    <div className={styles.pageContainer}>
       <UserPortalNavigationBar
         mode="user"
         variant="dark"
         currentPage={currentPage}
       />
-      <div className={localStyles.flexContainer}>
+      <div className={styles.flexContainer}>
         <div className={styles.drawer}>
           <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
         </div>
         <div
-          className={`${hideDrawer ? styles.expand : styles.contract} ${localStyles.mainContent}`}
+          className={`${hideDrawer ? styles.expand : styles.contract} ${styles.mainContent}`}
           data-testid="mainpageright"
         >
           <div className="d-flex justify-content-between align-items-center">
-            <div className={localStyles.titleWrapper}>
+            <div className={styles.titleWrapper}>
               <h1>{t('userGlobalScreen.title')}</h1>
             </div>
           </div>

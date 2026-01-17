@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/UserPortal/UserGlobalScreen/UserGlobalScreen.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/UserGlobalScreen/UserGlobalScreen.tsx#L25)
+Defined in: [src/screens/UserPortal/UserGlobalScreen/UserGlobalScreen.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/UserGlobalScreen/UserGlobalScreen.tsx#L24)
 
 ## Returns
 
