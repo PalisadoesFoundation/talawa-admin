@@ -97,19 +97,17 @@ const EventsAttendedMemberModal: React.FC<
             </Table>
           </TableContainer>
           <div className="d-flex justify-content-center mt-3">
-            <div className="d-flex justify-content-center mt-3">
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={handleChangePage}
-                color="primary"
-                aria-label="Events navigation"
-                getItemAriaLabel={(type, page) => {
-                  if (type === 'page') return `Go to page ${page}`;
-                  return `Go to ${type} page`;
-                }}
-              />
-            </div>
+            <Pagination
+              count={totalPages}
+              page={page}
+              onChange={handleChangePage}
+              color="primary"
+              aria-label="Events navigation"
+              getItemAriaLabel={(type, page) => {
+                if (type === 'page') return `Go to page ${page}`;
+                return `Go to ${type} page`;
+              }}
+            />
           </div>
         </>
       )}
