@@ -2282,5 +2282,32 @@
   },
   "userGlobalScreen": {
     "globalFeatures": "वैश्विक सुविधाएं"
+  },
+  "recurringEventVolunteerModal": {
+    "joinGroupTitle": "{{groupName}} में शामिल हों - {{eventName}}",
+    "volunteerTitle": "{{eventName}} के लिए स्वयंसेवक",
+    "joinGroupQuestion": "क्या आप पूरी श्रृंखला के लिए \"{{groupName}}\" में शामिल होना चाहते हैं या केवल इस उदाहरण के लिए?",
+    "volunteerQuestion": "क्या आप पूरी श्रृंखला के लिए स्वयंसेवा करना चाहते हैं या केवल इस उदाहरण के लिए?",
+    "volunteerForSeries": "पूरी श्रृंखला के लिए स्वयंसेवक",
+    "joinGroupForSeries": "आप इस समूह में आवर्ती श्रृंखला की सभी घटनाओं के लिए शामिल होंगे",
+    "volunteerForSeriesDesc": "आप इस आवर्ती श्रृंखला की सभी घटनाओं के लिए स्वयंसेवा करेंगे",
+    "volunteerForInstance": "केवल इस उदाहरण के लिए स्वयंसेवक",
+    "joinGroupForInstance": "आप केवल {{date}} को होने वाली घटना के लिए इस समूह में शामिल होंगे",
+    "volunteerForInstanceDesc": "आप केवल {{date}} को होने वाली घटना के लिए स्वयंसेवा करेंगे",
+    "cancel": "रद्द करें",
+    "submitRequest": "अनुरोध सबमिट करें"
+  },
+  "eventsAttendedMemberModal": {
+    "title": "उपस्थित घटनाओं की सूची",
+    "showing": "{{start}} - {{end}} में से {{total}} घटनाएँ दिखाई जा रही हैं",
+    "eventName": "घटना का नाम",
+    "dateOfEvent": "घटना की तारीख",
+    "recurringEvent": "आवर्ती घटना",
+    "attendees": "उपस्थित लोग",
+    "tableAriaLabel": "उपस्थित घटनाओं की तालिका",
+    "paginationAriaLabel": "घटनाओं का पेजिनेशन नेविगेशन",
+    "paginationGoToPage": "पृष्ठ {{page}} पर जाएं",
+    "paginationGoToType": "{{type}} पृष्ठ पर जाएं",
+    "noEventsAttended": "कोई घटना में उपस्थित नहीं हुए"
   }
 }

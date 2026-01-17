@@ -2282,5 +2282,32 @@
   },
   "userGlobalScreen": {
     "globalFeatures": "Fonctionnalités Globales"
+  },
+  "recurringEventVolunteerModal": {
+    "joinGroupTitle": "Rejoindre {{groupName}} - {{eventName}}",
+    "volunteerTitle": "Bénévole pour {{eventName}}",
+    "joinGroupQuestion": "Souhaitez-vous rejoindre \"{{groupName}}\" pour toute la série ou uniquement pour cette instance?",
+    "volunteerQuestion": "Souhaitez-vous faire du bénévolat pour toute la série ou uniquement pour cette instance?",
+    "volunteerForSeries": "Bénévole pour toute la série",
+    "joinGroupForSeries": "Vous rejoindrez ce groupe pour tous les événements de la série récurrente",
+    "volunteerForSeriesDesc": "Vous ferez du bénévolat pour tous les événements de cette série récurrente",
+    "volunteerForInstance": "Bénévole pour cette instance uniquement",
+    "joinGroupForInstance": "Vous rejoindrez ce groupe uniquement pour l'événement du {{date}}",
+    "volunteerForInstanceDesc": "Vous ne ferez du bénévolat que pour l'événement du {{date}}",
+    "cancel": "Annuler",
+    "submitRequest": "Soumettre la demande"
+  },
+  "eventsAttendedMemberModal": {
+    "title": "Liste des événements auxquels vous avez assisté",
+    "showing": "Affichage de {{start}} - {{end}} sur {{total}} événements",
+    "eventName": "Nom de l'événement",
+    "dateOfEvent": "Date de l'événement",
+    "recurringEvent": "Événement récurrent",
+    "attendees": "Participants",
+    "tableAriaLabel": "Tableau des événements auxquels vous avez assisté",
+    "paginationAriaLabel": "Navigation de pagination des événements",
+    "paginationGoToPage": "Aller à la page {{page}}",
+    "paginationGoToType": "Aller à la page {{type}}",
+    "noEventsAttended": "Aucun événement assisté"
   }
 }
