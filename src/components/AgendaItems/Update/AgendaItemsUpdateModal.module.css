@@ -135,7 +135,6 @@
 }
 
 .greenregbtnAgendaItems {
-  margin: 1rem 0 0;
   margin-top: 15px;
   border: 1px solid var(--regBtnAgendaItems-border);
   box-shadow: 0 2px 2px var(--regBtnAgendaItems-box-shadow);

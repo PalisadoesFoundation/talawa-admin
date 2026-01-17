@@ -53,7 +53,9 @@ const AgendaItemsCreateModal: React.FC<
   agendaItemCategories,
 }) => {
   const [newUrl, setNewUrl] = useState('');
-  const [_previewUrls, setPreviewUrls] = useState<string[]>([]);
+  const [previewUrls, setPreviewUrls] = useState<
+    { url: string; mimeType: string }[]
+  >([]);
   const { uploadFileToMinio } = useMinioUpload();
 
   useEffect(() => {
@@ -64,6 +66,13 @@ const AgendaItemsCreateModal: React.FC<
       attachments: prevState.attachments.filter((att) => att.trim() !== ''),
     }));
   }, [setFormState]);
+
+  // Cleanup effect to revoke object URLs when component unmounts or previewUrls change
+  useEffect(() => {
+    return () => {
+      previewUrls.forEach((preview) => URL.revokeObjectURL(preview.url));
+    };
+  }, [previewUrls]);
 
   /**
    * Validates if a given URL is in a correct format.
@@ -128,7 +137,7 @@ const AgendaItemsCreateModal: React.FC<
 
       // Upload files to MinIO and store file metadata
       const uploadedFiles: string[] = [];
-      const newPreviewUrls: string[] = [];
+      const newPreviewUrls: { url: string; mimeType: string }[] = [];
 
       for (const file of files) {
         try {
@@ -136,8 +145,11 @@ const AgendaItemsCreateModal: React.FC<
           if (result) {
             // Store the file metadata as JSON string for the mutation
             uploadedFiles.push(JSON.stringify(result));
-            // Create local preview URL
-            newPreviewUrls.push(URL.createObjectURL(file));
+            // Create local preview URL with MIME type for proper rendering
+            newPreviewUrls.push({
+              url: URL.createObjectURL(file),
+              mimeType: file.type,
+            });
           }
         } catch {
           NotificationToast.error(t('fileUploadError'));
@@ -153,14 +165,19 @@ const AgendaItemsCreateModal: React.FC<
   };
 
   /**
-   * Handles removing an attachment from the form state.
+   * Handles removing an attachment from the form state and preview URLs.
    *
-   * @param attachment - Attachment to remove.
+   * @param index - Index of the attachment to remove.
    */
-  const handleRemoveAttachment = (attachment: string): void => {
+  const handleRemoveAttachment = (index: number): void => {
+    // Revoke the object URL to prevent memory leak
+    if (previewUrls[index]) {
+      URL.revokeObjectURL(previewUrls[index].url);
+    }
+    setPreviewUrls((prev) => prev.filter((_, i) => i !== index));
     setFormState((prevState) => ({
       ...prevState,
-      attachments: prevState.attachments.filter((item) => item !== attachment),
+      attachments: prevState.attachments.filter((_, i) => i !== index),
     }));
   };
 
@@ -296,11 +313,11 @@ const AgendaItemsCreateModal: React.FC<
           />
           <Form.Text>{t('attachmentLimit')}</Form.Text>
         </Form.Group>
-        {formState.attachments && (
+        {previewUrls.length > 0 && (
           <div className={styles.previewFile} data-testid="mediaPreview">
-            {formState.attachments.map((attachment, index) => (
+            {previewUrls.map((preview, index) => (
               <div key={index} className={styles.attachmentPreview}>
-                {attachment.includes('video') ? (
+                {preview.mimeType.startsWith('video/') ? (
                   <video
                     muted
                     autoPlay={true}
@@ -308,16 +325,16 @@ const AgendaItemsCreateModal: React.FC<
                     playsInline
                     crossOrigin="anonymous"
                   >
-                    <source src={attachment} type="video/mp4" />
+                    <source src={preview.url} type={preview.mimeType} />
                   </video>
                 ) : (
-                  <img src={attachment} alt={t('attachmentPreview')} />
+                  <img src={preview.url} alt={t('attachmentPreview')} />
                 )}
                 <button
                   className={styles.closeButtonFile}
                   onClick={(e) => {
                     e.preventDefault();
-                    handleRemoveAttachment(attachment);
+                    handleRemoveAttachment(index);
                   }}
                   data-testid="deleteAttachment"
                 >

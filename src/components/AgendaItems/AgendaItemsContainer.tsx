@@ -15,7 +15,7 @@
  *
  * @remarks
  * Uses `@hello-pangea/dnd` for drag-and-drop functionality.
- * Integrates with `react-toastify` for user notifications.
+ * Integrates with `NotificationToast` for user notifications.
  * Includes modals for previewing, updating, and deleting agenda items.
  *
  * @example

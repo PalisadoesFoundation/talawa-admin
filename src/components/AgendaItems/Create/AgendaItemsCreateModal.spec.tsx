@@ -130,7 +130,6 @@ describe('AgendaItemsCreateModal', () => {
     });
 
     fireEvent.click(screen.getByTestId('deleteUrl'));
-    fireEvent.click(screen.getByTestId('deleteAttachment'));
 
     expect(mockSetFormState).toHaveBeenCalledWith({
       ...mockFormState1,
