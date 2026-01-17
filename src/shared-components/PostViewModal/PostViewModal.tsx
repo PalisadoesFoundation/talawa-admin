@@ -45,7 +45,7 @@ import BaseModal from 'shared-components/BaseModal/BaseModal';
 import PostCard from 'shared-components/postCard/PostCard';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
-import { InterfacePostViewModalProps } from 'types/shared-components/PostViewModal/interface';
+import type { InterfacePostViewModalProps } from 'types/shared-components/PostViewModal/interface';
 import { formatPostForCard } from 'shared-components/posts/helperFunctions';
 
 const PostViewModal: React.FC<InterfacePostViewModalProps> = ({

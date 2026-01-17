@@ -741,54 +741,55 @@ describe('PostsPage Component', () => {
       const originalLocation = window.location;
       const originalHistory = window.history;
       const mockReplaceState = vi.fn();
+      try {
+        Object.defineProperty(window, 'location', {
+          value: {
+            ...originalLocation,
+            pathname: '/test/path',
+            search: '?previewPostID=post-123',
+          },
+          writable: true,
+        });
 
-      Object.defineProperty(window, 'location', {
-        value: {
-          ...originalLocation,
-          pathname: '/test/path',
-          search: '?previewPostID=post-123',
-        },
-        writable: true,
-      });
+        Object.defineProperty(window, 'history', {
+          value: {
+            ...originalHistory,
+            replaceState: mockReplaceState,
+          },
+          writable: true,
+        });
 
-      Object.defineProperty(window, 'history', {
-        value: {
-          ...originalHistory,
-          replaceState: mockReplaceState,
-        },
-        writable: true,
-      });
+        renderComponent([orgPostListMock, orgPinnedPostListMock]);
 
-      renderComponent([orgPostListMock, orgPinnedPostListMock]);
+        await waitFor(() => {
+          expect(screen.getByTestId('pinned-posts-layout')).toBeInTheDocument();
+        });
 
-      await waitFor(() => {
-        expect(screen.getByTestId('pinned-posts-layout')).toBeInTheDocument();
-      });
+        // Open modal
+        const pinnedPostButton = screen.getByTestId('pinned-post-post-2');
+        await act(async () => {
+          fireEvent.click(pinnedPostButton);
+        });
 
-      // Open modal
-      const pinnedPostButton = screen.getByTestId('pinned-post-post-2');
-      await act(async () => {
-        fireEvent.click(pinnedPostButton);
-      });
+        // Close the modal
+        const closeButton = screen.getByTestId('close-post-view-button');
+        await act(async () => {
+          fireEvent.click(closeButton);
+        });
 
-      // Close the modal
-      const closeButton = screen.getByTestId('close-post-view-button');
-      await act(async () => {
-        fireEvent.click(closeButton);
-      });
-
-      // Verify URL was updated without query parameters (empty query string)
-      expect(mockReplaceState).toHaveBeenCalledWith({}, '', '/test/path');
-
-      // Restore original objects
-      Object.defineProperty(window, 'location', {
-        value: originalLocation,
-        writable: true,
-      });
-      Object.defineProperty(window, 'history', {
-        value: originalHistory,
-        writable: true,
-      });
+        // Verify URL was updated without query parameters (empty query string)
+        expect(mockReplaceState).toHaveBeenCalledWith({}, '', '/test/path');
+      } finally {
+        // Restore original objects
+        Object.defineProperty(window, 'location', {
+          value: originalLocation,
+          writable: true,
+        });
+        Object.defineProperty(window, 'history', {
+          value: originalHistory,
+          writable: true,
+        });
+      }
     });
   });
 

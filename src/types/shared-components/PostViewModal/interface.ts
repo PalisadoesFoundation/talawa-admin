@@ -1,4 +1,4 @@
-import { InterfacePost } from 'types/Post/interface';
+import type { InterfacePost } from 'types/Post/interface';
 
 /**
  * Props for PostViewModal component.
