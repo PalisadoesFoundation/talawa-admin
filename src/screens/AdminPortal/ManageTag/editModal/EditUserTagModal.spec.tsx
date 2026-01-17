@@ -1,3 +1,12 @@
+/**
+ * Test Suite for EditUserTagModal
+ *
+ * This file contains unit tests to verify:
+ * 1. Rendering of the modal with correct initial values.
+ * 2. User interactions, including changing the tag name and clicking cancel.
+ * 3. Form submission logic and proper event handler invocation.
+ * 4. Validation logic (e.g., focusing input on empty submission).
+ */
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -174,3 +183,4 @@ describe('EditUserTagModal', () => {
     });
   });
 });
+

@@ -1,3 +1,11 @@
+/**
+ * Test Suite for AgendaItemsDeleteModal
+ *
+ * This file contains unit tests to verify:
+ * 1. Rendering of the delete confirmation dialog.
+ * 2. Execution of the 'deleteAgendaItemHandler' when confirmed.
+ * 3. Toggling the modal visibility using 'toggleDeleteModal'.
+ */
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
@@ -40,3 +48,4 @@ describe('AgendaItemsDeleteModal', () => {
     expect(mockDeleteAgendaItemHandler).toHaveBeenCalled();
   });
 });
+

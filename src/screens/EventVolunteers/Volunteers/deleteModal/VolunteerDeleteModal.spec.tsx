@@ -1,3 +1,11 @@
+/**
+ * Test Suite for VolunteerDeleteModal
+ *
+ * This file contains unit tests to verify:
+ * 1. Rendering of the modal structure.
+ * 2. Invocation of the 'deleteVolunteer' function upon confirmation.
+ * 3. Closing the modal when the cancel button or backdrop is clicked.
+ */
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -278,4 +286,5 @@ describe('Testing Volunteer Delete Modal', () => {
     });
   });
 });
+
 

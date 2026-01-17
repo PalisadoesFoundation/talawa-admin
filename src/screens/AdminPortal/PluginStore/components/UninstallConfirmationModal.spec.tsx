@@ -1,3 +1,12 @@
+/**
+ * Test Suite for UninstallConfirmationModal
+ *
+ * This file contains unit tests to verify:
+ * 1. Rendering of the confirmation message and buttons.
+ * 2. Conditional rendering based on the 'show' and 'plugin' props.
+ * 3. Handling of the 'Confirm' and 'Cancel' actions.
+ * 4. Loading state behavior (disabling buttons while processing).
+ */
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -117,3 +126,4 @@ describe('UninstallConfirmationModal', () => {
     expect(container).toBeEmptyDOMElement();
   });
 });
+

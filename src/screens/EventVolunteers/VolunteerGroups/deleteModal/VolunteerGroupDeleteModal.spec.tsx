@@ -1,3 +1,11 @@
+/**
+ * Test Suite for VolunteerGroupDeleteModal
+ *
+ * This file contains unit tests to verify:
+ * 1. Rendering of the modal for deleting a volunteer group.
+ * 2. Handling of the deletion confirmation action.
+ * 3. Proper closure of the modal via the 'hide' prop.
+ */
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
@@ -361,4 +369,5 @@ describe('Testing Group Delete Modal', () => {
     },
   );
 });
+
 
