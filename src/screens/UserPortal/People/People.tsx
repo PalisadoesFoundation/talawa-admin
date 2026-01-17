@@ -50,7 +50,7 @@ import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
-import styles from 'style/app-fixed.module.css';
+import styles from './People.module.css';
 import { useTranslation } from 'react-i18next';
 
 import { useParams } from 'react-router';
@@ -232,9 +232,7 @@ export default function People(): React.JSX.Element {
         <div className={styles.people_content}>
           <div className={styles.people_card_header}>
             {/* Nested span groups sNo and avatar in a flex container for horizontal alignment */}
-            <span
-              className={`${styles.display_flex} ${styles.people_card_header_col_1}`}
-            >
+            <span className={`d-flex ${styles.people_card_header_col_1}`}>
               <span className={styles.people_card_header_col_1}>
                 {t('sNo')}
               </span>
