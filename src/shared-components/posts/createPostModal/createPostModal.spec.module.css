@@ -1,0 +1,24 @@
+/**
+ * Test-only styles for createPostModal.spec.tsx
+ * These classes are used for assertions in tests
+ */
+
+.postButtonDisabled {
+  background-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.3);
+  cursor: not-allowed;
+}
+
+.backdropShow {
+  opacity: 1;
+  visibility: visible;
+  display: flex;
+  z-index: 1040;
+}
+
+.modalShow {
+  opacity: 1;
+  visibility: visible;
+  display: flex;
+  z-index: 1050;
+}

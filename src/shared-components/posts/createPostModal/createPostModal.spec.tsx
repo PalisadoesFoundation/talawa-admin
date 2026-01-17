@@ -12,7 +12,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from '../../../utils/i18nForTest';
 import { errorHandler } from 'utils/errorHandler';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import styles from './createPostModal.module.css';
+import styles from './createPostModal.spec.module.css';
 import dayjs from 'dayjs';
 
 // Capture originals before mocking
