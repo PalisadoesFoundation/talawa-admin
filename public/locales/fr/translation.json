@@ -1400,11 +1400,12 @@
   },
   "posts": {
     "pinnedPosts": "Messages épinglés",
+    "errorLoadingPreviewPost": "Erreur lors du chargement de l'aperçu du message.",
     "title": "Publications",
     "latest": "Dernier",
     "oldest": "Le plus ancien",
     "none": "Aucun",
-    "closePinnedPost": "Fermer le message épinglé",
+    "closePostView": "Fermer la vue du message",
     "unknownUser": "Utilisateur inconnu",
     "searchPosts": "Rechercher des messages",
     "nothingToShow": "Rien à montrer ici.",

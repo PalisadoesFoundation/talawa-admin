@@ -280,5 +280,8 @@
   "cannotUnregisterCheckedIn": "Impossible de désinscrire un utilisateur déjà enregistré",
   "errorLoadingEventDetails": "Erreur lors du chargement des détails de l'événement. Veuillez réessayer plus tard.",
   "eventDate": "Date de l'Événement",
-  "attendedEventsList": "Liste des événements suivis"
+  "attendedEventsList": "Liste des événements suivis",
+  "linkCopied": "Lien copié dans le presse-papiers",
+  "copyToClipboardError": "Erreur lors de la copie du lien dans le presse-papiers",
+  "share": "Partager"
 }
