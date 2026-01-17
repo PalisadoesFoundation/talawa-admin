@@ -280,5 +280,8 @@
   "cannotUnregisterCheckedIn": "Cannot unregister a user who has already checked in",
   "errorLoadingEventDetails": "Error loading event details. Please try again later.",
   "eventDate": "Event Date",
-  "attendedEventsList": "Attended events list"
+  "attendedEventsList": "Attended events list",
+  "linkCopied": "Link copied to clipboard",
+  "copyToClipboardError": "Error copying link to clipboard",
+  "share": "Share"
 }

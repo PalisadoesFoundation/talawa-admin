@@ -280,5 +280,8 @@
   "cannotUnregisterCheckedIn": "पहले से चेक-इन किए गए उपयोगकर्ता को अपंजीकृत नहीं किया जा सकता",
   "errorLoadingEventDetails": "ईवेंट विवरण लोड करने में त्रुटि। कृपया बाद में प्रयास करें।",
   "eventDate": "ईवेंट तारीख",
-  "attendedEventsList": "उपस्थित इवेंट की सूची"
+  "attendedEventsList": "उपस्थित इवेंट की सूची",
+  "linkCopied": "लिंक क्लिपबोर्ड पर कॉपी किया गया",
+  "copyToClipboardError": "लिंक क्लिपबोर्ड पर कॉपी करने में त्रुटि",
+  "share": "शेयर करें"
 }
