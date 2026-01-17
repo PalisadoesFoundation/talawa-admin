@@ -106,10 +106,6 @@ function Volunteers(): JSX.Element {
   // Get the organization ID from URL parameters
   const { orgId, eventId } = useParams();
 
-  if (!orgId || !eventId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const [volunteer, setVolunteer] =
     useState<InterfaceEventVolunteerInfo | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -226,6 +222,9 @@ function Volunteers(): JSX.Element {
     }
   }, [eventData, status, searchTerm]);
 
+  if (!orgId || !eventId) {
+    return <Navigate to={'/'} replace />;
+  }
   if (volunteersError) {
     return (
       <div className={styles.message} data-testid="errorMsg">

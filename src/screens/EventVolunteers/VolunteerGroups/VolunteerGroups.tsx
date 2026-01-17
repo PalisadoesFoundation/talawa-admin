@@ -61,17 +61,13 @@ enum ModalState {
  *
  * @returns JSX.Element
  */
-function volunteerGroups(): JSX.Element {
+function VolunteerGroups(): JSX.Element {
   const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
   // Get the organization ID from URL parameters
   const { orgId, eventId } = useParams();
-
-  if (!orgId || !eventId) {
-    return <Navigate to={'/'} replace />;
-  }
 
   const [group, setGroup] = useState<InterfaceVolunteerGroupInfo | null>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
@@ -176,6 +172,9 @@ function volunteerGroups(): JSX.Element {
     return finalGroups;
   }, [eventData, searchTerm, searchBy, sortBy]);
 
+  if (!orgId || !eventId) {
+    return <Navigate to={'/'} replace />;
+  }
   if (groupsError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
@@ -437,4 +436,4 @@ function volunteerGroups(): JSX.Element {
   );
 }
 
-export default volunteerGroups;
+export default VolunteerGroups;

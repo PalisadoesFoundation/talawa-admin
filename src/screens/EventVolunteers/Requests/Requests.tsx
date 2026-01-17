@@ -67,10 +67,6 @@ function Requests(): JSX.Element {
   // Get the organization ID from URL parameters
   const { orgId, eventId } = useParams();
 
-  if (!orgId || !eventId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [sortBy, setSortBy] = useState<string>('');
   const [filterBy, setFilterBy] = useState<'all' | 'individual' | 'group'>(
@@ -79,6 +75,9 @@ function Requests(): JSX.Element {
 
   const [updateMembership] = useMutation(UPDATE_VOLUNTEER_MEMBERSHIP);
 
+  if (!orgId || !eventId) {
+    return <Navigate to={'/'} replace />;
+  }
   const updateMembershipStatus = async (
     id: string,
     status: 'accepted' | 'rejected',
@@ -117,9 +116,7 @@ function Requests(): JSX.Element {
         userName: searchTerm || undefined,
       },
       orderBy: sortBy
-        ? (`${sortBy.split('_')[0]}_${sortBy.split('_')[1]}` as
-            | 'createdAt_ASC'
-            | 'createdAt_DESC')
+        ? (sortBy as 'createdAt_ASC' | 'createdAt_DESC')
         : undefined,
     },
   });
