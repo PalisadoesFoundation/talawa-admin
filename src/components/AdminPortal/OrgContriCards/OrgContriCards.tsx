@@ -32,7 +32,7 @@ import Col from 'react-bootstrap/Col';
 import { useTranslation } from 'react-i18next';
 
 import styles from 'style/app-fixed.module.css';
-import type { InterfaceOrgContriCardsProps } from 'types/Contribution/interface';
+import type { InterfaceOrgContriCardsProps } from 'types/AdminPortal/Contribution/interface';
 
 function orgContriCards(props: InterfaceOrgContriCardsProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgContriCards' });

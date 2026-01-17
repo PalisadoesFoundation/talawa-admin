@@ -52,7 +52,7 @@ Defined in: [src/types/Event/type.ts:21](https://github.com/PalisadoesFoundation
 
 ### attendeesCheckInStatus
 
-> **attendeesCheckInStatus**: [`CheckInStatus`](../../../CheckIn/type/type-aliases/CheckInStatus.md)[]
+> **attendeesCheckInStatus**: [`CheckInStatus`](../../../shared-components/CheckIn/type/type-aliases/CheckInStatus.md)[]
 
 Defined in: [src/types/Event/type.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L22)
 
