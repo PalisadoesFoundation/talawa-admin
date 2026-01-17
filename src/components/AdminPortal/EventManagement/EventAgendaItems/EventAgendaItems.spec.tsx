@@ -519,15 +519,13 @@ describe('Testing Agenda Items Components', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('createAgendaItemModalCloseBtn'),
+        screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('createAgendaItemModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('createAgendaItemModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
 
@@ -542,9 +540,7 @@ describe('Testing Agenda Items Components', () => {
     await userEvent.click(screen.getByTestId('createAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(
-        screen.getByTestId('createAgendaItemModalCloseBtn'),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
     });
 
     await userEvent.type(
@@ -569,15 +565,11 @@ describe('Testing Agenda Items Components', () => {
       expect(NotificationToast.success).toBeCalledWith(
         translations.agendaItemCreated,
       );
-      expect(
-        screen.queryByTestId('createAgendaItemModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
     await userEvent.click(screen.getByTestId('createAgendaItemBtn'));
     await waitFor(() => {
-      expect(
-        screen.getByTestId('createAgendaItemModalCloseBtn'),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
     });
     expect(screen.getByPlaceholderText(translations.enterTitle)).toHaveValue(
       '',
@@ -588,11 +580,9 @@ describe('Testing Agenda Items Components', () => {
     expect(screen.getByPlaceholderText(translations.enterDuration)).toHaveValue(
       '',
     );
-    await userEvent.click(screen.getByTestId('createAgendaItemModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('createAgendaItemModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
 
@@ -604,9 +594,7 @@ describe('Testing Agenda Items Components', () => {
     await userEvent.click(screen.getByTestId('createAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(
-        screen.getByTestId('createAgendaItemModalCloseBtn'),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
     });
 
     await userEvent.type(
@@ -629,14 +617,10 @@ describe('Testing Agenda Items Components', () => {
     await waitFor(() => {
       expect(NotificationToast.error).toBeCalledWith('Mock Graphql Error');
     });
-    expect(
-      screen.getByTestId('createAgendaItemModalCloseBtn'),
-    ).toBeInTheDocument();
-    await userEvent.click(screen.getByTestId('createAgendaItemModalCloseBtn'));
+    expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('createAgendaItemModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
 
@@ -654,9 +638,7 @@ describe('Testing Agenda Items Components', () => {
     await userEvent.click(screen.getByTestId('createAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(
-        screen.getByTestId('createAgendaItemModalCloseBtn'),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
     });
     await userEvent.type(
       screen.getByPlaceholderText(translations.enterTitle),
@@ -727,9 +709,7 @@ describe('Testing Agenda Items Components', () => {
       await userEvent.click(screen.getByTestId('createAgendaItemBtn'));
 
       await waitFor(() => {
-        expect(
-          screen.getByTestId('createAgendaItemModalCloseBtn'),
-        ).toBeInTheDocument();
+        expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
       });
       await userEvent.type(
         screen.getByPlaceholderText(translations.enterTitle),
@@ -771,9 +751,7 @@ describe('Testing Agenda Items Components', () => {
     await userEvent.click(screen.getByTestId('createAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(
-        screen.getByTestId('createAgendaItemModalCloseBtn'),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
     });
     await userEvent.type(
       screen.getByPlaceholderText(translations.enterTitle),
@@ -818,9 +796,7 @@ describe('Testing Agenda Items Components', () => {
       await userEvent.click(screen.getByTestId('createAgendaItemBtn'));
 
       await waitFor(() => {
-        expect(
-          screen.getByTestId('createAgendaItemModalCloseBtn'),
-        ).toBeInTheDocument();
+        expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
       });
       await userEvent.type(
         screen.getByPlaceholderText(translations.enterTitle),
@@ -840,9 +816,7 @@ describe('Testing Agenda Items Components', () => {
       await waitFor(() => {
         expect(NotificationToast.success).not.toHaveBeenCalled();
         expect(NotificationToast.error).not.toHaveBeenCalled();
-        expect(
-          screen.getByTestId('createAgendaItemModalCloseBtn'),
-        ).toBeInTheDocument();
+        expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
       });
     } finally {
       useMutationSpy.mockRestore();

@@ -209,15 +209,13 @@ describe('Testing Agenda Items components', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('updateAgendaItemModalCloseBtn'),
+        screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('updateAgendaItemModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() =>
-      expect(
-        screen.queryByTestId('updateAgendaItemModalCloseBtn'),
-      ).not.toBeInTheDocument(),
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument(),
     );
   });
 
@@ -322,15 +320,13 @@ describe('Testing Agenda Items components', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('updateAgendaItemModalCloseBtn'),
+        screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('updateAgendaItemModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() =>
-      expect(
-        screen.queryByTestId('updateAgendaItemModalCloseBtn'),
-      ).not.toBeInTheDocument(),
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument(),
     );
   });
 
