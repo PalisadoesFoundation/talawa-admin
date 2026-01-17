@@ -171,8 +171,8 @@ confirm() {
     while true; do
         read -r -p "$prompt [y/N]: " reply
         reply="${reply:-$default}"
-        # Convert to lowercase (bash 4.0+)
-        reply="${reply,,}"
+        # Convert to lowercase (POSIX-compatible)
+        reply="$(printf '%s' "$reply" | tr '[:upper:]' '[:lower:]')"
 
         case "$reply" in
             y|yes)
