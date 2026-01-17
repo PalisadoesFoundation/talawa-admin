@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<`InterfaceSearchingButtonProps`\>
 
-Defined in: [src/subComponents/SearchingButton.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/subComponents/SearchingButton.tsx#L29)
+Defined in: [src/shared-components/SearchingButton/SearchingButton.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/SearchingButton/SearchingButton.tsx#L29)
 
 SearchingButton component that only displays a text.
 
