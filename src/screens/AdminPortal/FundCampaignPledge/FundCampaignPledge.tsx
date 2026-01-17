@@ -15,8 +15,7 @@ import PledgeModal from './modal/PledgeModal';
 import { Popover } from '@mui/material';
 import Avatar from 'shared-components/Avatar/Avatar';
 import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/BreadcrumbsComponent';
-import { DataGrid } from 'shared-components/DataGridWrapper';
-import EmptyState from 'shared-components/EmptyState/EmptyState';
+import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
 import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
@@ -388,34 +387,7 @@ const fundCampaignPledge = (): JSX.Element => {
             }
           />
         </div>
-        <DataGrid
-          disableColumnMenu
-          columnBufferPx={7}
-          hideFooter={true}
-          getRowId={(row) => row.id}
-          slots={{
-            noRowsOverlay: () => (
-              <EmptyState
-                icon="volunteer_activism"
-                message={t('pledges.noPledges')}
-                dataTestId="fund-campaign-pledge-empty-state"
-              />
-            ),
-          }}
-          className={`${styles.dataGridNoHover} ${styles.dataGridRounded}`}
-          sx={{
-            '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-              outline: '2px solid var(--primary-theme-color)',
-              outlineOffset: '-2px',
-            },
-            '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-              outline: '2px solid var(--primary-theme-color)',
-              outlineOffset: '-2px',
-            },
-          }}
-          getRowClassName={() => `${styles.rowBackgroundPledge}`}
-          autoHeight
-          rowHeight={65}
+        <DataGridWrapper
           rows={pledges.map((pledge) => ({
             id: pledge.id,
             users: pledge.users,
@@ -425,7 +397,15 @@ const fundCampaignPledge = (): JSX.Element => {
             currency: pledge.currency,
           }))}
           columns={columns}
-          isRowSelectable={() => false}
+          loading={pledgeLoading}
+          emptyStateProps={{
+            icon: 'volunteer_activism',
+            message: t('pledges.noPledges'),
+            dataTestId: 'fund-campaign-pledge-empty-state',
+          }}
+          paginationConfig={{
+            enabled: false,
+          }}
         />
         <PledgeModal
           isOpen={modalState[ModalState.SAME]}
