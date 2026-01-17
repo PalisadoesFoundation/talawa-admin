@@ -91,6 +91,7 @@ describe('UserGlobalScreen', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
     // Restore original window.innerWidth
     Object.defineProperty(window, 'innerWidth', {

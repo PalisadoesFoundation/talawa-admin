@@ -1,14 +1,13 @@
-/* eslint-disable tsdoc/syntax */
 /**
  * Main layout for user routes that do not require an orgId.
  * Manages sidebar visibility and displays nested content via the router outlet.
  *
- * @returns JSX.Element The rendered UserGlobalScreen component.
+ * @returns {JSX.Element} The rendered UserGlobalScreen component.
  *
  * @remarks
  * - Uses UserSidebar instead of UserSidebarOrg because no orgId is needed.
  * - Hides the sidebar on narrow screens and shows it on wider screens.
- * - Provides a profile dropdown alongside the page title area.
+ * - Renders the page title area without a profile dropdown.
  *
  * @example
  * ```tsx
@@ -69,7 +68,6 @@ const UserGlobalScreen = (): JSX.Element => {
             <div className={localStyles.titleWrapper}>
               <h1>{t('userGlobalScreen.title')}</h1>
             </div>
-            {/* <ProfileDropdown portal="user" /> */}
           </div>
           <Outlet />
         </div>
