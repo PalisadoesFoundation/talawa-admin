@@ -1504,26 +1504,6 @@
     "unregister": "取消注册",
     "cannotUnregisterCheckedInTooltip": "无法取消已签到用户的注册"
   },
-  "onSpotAttendee": {
-    "title": "现场参与者",
-    "enterFirstName": "输入名字",
-    "enterLastName": "输入姓氏",
-    "enterEmail": "输入电子邮件",
-    "enterPhoneNo": "输入电话号码",
-    "selectGender": "选择性别",
-    "invalidDetailsMessage": "请填写所有必填字段",
-    "orgIdMissing": "组织ID缺失。请重试。",
-    "attendeeAddedSuccess": "参与者添加成功！",
-    "addAttendee": "添加",
-    "phoneNumber": "电话号码",
-    "addingAttendee": "添加中...",
-    "male": "男性",
-    "female": "女性",
-    "other": "其他",
-    "firstNamePlaceholder": "小明",
-    "lastNamePlaceholder": "王",
-    "emailPlaceholder": "範例@gmail.com"
-  },
   "settings": {
     "noeventsAttended": "未参加任何活动",
     "eventAttended": "参加的活动",
@@ -1936,12 +1916,21 @@
     "checkedIn": "已簽到",
     "downloadTag": "下載標籤",
     "checkIn": "簽到",
-    "eventCheckInManagement": "活動簽到管理"
+    "eventCheckInManagement": "活動簽到管理",
+    "checkInMembers": "签到成员",
+    "unknownUser": "未知用户",
+    "user": "用户",
+    "checkInStatus": "签到状态"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "添加与会者时出错",
     "errorRemovingAttendee": "删除与会者时出错",
     "eventRegistrantsTitle": "活动注册者",
+    "registerMember": "注册会员",
+    "showAttendees": "显示参加者",
+    "addingAttendee": "正在添加参与者...",
+    "selectUserFirst": "请先选择要添加的用户！",
+    "unknownUser": "未知用户",
     "inviteByEmailButton": "通过电子邮件邀请",
     "addRegistrantButton": "添加注册者",
     "noRegistrationsFound": "未找到注册",
@@ -1961,14 +1950,34 @@
       "expiresInDaysLabel": "有效期（天）",
       "errorSendingInvites": "发送邀请时出错",
       "emailsLabel": "收件人邮箱和姓名",
-      "emailsHelp": "为每个收件人提供邮箱和可选姓名。根据需要添加多个收件人。"
-    },
-    "selectUserWarning": "請先選擇要添加的用戶！",
-    "addingAttendeeProgress": "正在添加參與者..."
+      "emailsHelp": "为每个收件人提供邮箱和可选姓名。根据需要添加多个收件人。",
+      "noRecipientsError": "请提供至少一个收件人电子邮件",
+      "invalidEmailsError": "无效的电子邮件：{{emails}}",
+      "invitesSentSuccessfully": "邀请已成功发送"
+    }
   },
-  "eventRegistrantsWrapper": {
-    "buttonAriaLabel": "顯示參與者",
-    "registerMemberButton": "註冊成員"
+  "onSpotAttendee": {
+    "invalidEmailFormat": "无效的电子邮件格式",
+    "organizationIdMissing": "缺少组织 ID。",
+    "title": "现场参与者",
+    "enterFirstName": "输入名字",
+    "enterLastName": "输入姓氏",
+    "enterEmail": "输入电子邮件",
+    "enterPhoneNo": "输入电话号码",
+    "selectGender": "选择性别",
+    "invalidDetailsMessage": "请填写所有必填字段",
+    "orgIdMissing": "组织ID缺失。请重试。",
+    "attendeeAddedSuccess": "参与者添加成功！",
+    "addAttendee": "添加",
+    "phoneNumber": "电话号码",
+    "phoneNumberPlaceholder": "1234567890",
+    "addingAttendee": "添加中...",
+    "male": "男性",
+    "female": "女性",
+    "other": "其他",
+    "placeholderFirstName": "小明",
+    "placeholderLastName": "张",
+    "placeholderEmail": "abc@gmail.com"
   },
   "userCampaigns": {
     "title": "筹款活动",
@@ -2144,7 +2153,11 @@
     "groupName": "小组名称",
     "noOfMembers": "成员数量",
     "options": "选项",
-    "notSpecified": "未指定"
+    "notSpecified": "未指定",
+    "invited": "已邀请",
+    "groupsAvailable": "{{count}} 个小组可用",
+    "volunteersRequired": "必需",
+    "signedUp": "已报名"
   },
   "pluginStore": {
     "title": "插件商店",
@@ -2279,5 +2292,32 @@
   },
   "userGlobalScreen": {
     "globalFeatures": "全球功能"
+  },
+  "recurringEventVolunteerModal": {
+    "joinGroupTitle": "加入 {{groupName}} - {{eventName}}",
+    "volunteerTitle": "为 {{eventName}} 做志愿者",
+    "joinGroupQuestion": "您想为整个系列加入\"{{groupName}}\"还是仅为此实例加入?",
+    "volunteerQuestion": "您想为整个系列做志愿者还是仅为此实例做志愿者?",
+    "volunteerForSeries": "为整个系列做志愿者",
+    "joinGroupForSeries": "您将加入此小组参加重复系列中的所有活动",
+    "volunteerForSeriesDesc": "您将为此重复系列中的所有活动做志愿者",
+    "volunteerForInstance": "仅为此实例做志愿者",
+    "joinGroupForInstance": "您将仅在 {{date}} 的活动中加入此小组",
+    "volunteerForInstanceDesc": "您将仅为 {{date}} 的活动做志愿者",
+    "cancel": "取消",
+    "submitRequest": "提交请求"
+  },
+  "eventsAttendedMemberModal": {
+    "title": "参加的活动列表",
+    "showing": "显示 {{start}} - {{end}} 共 {{total}} 个活动",
+    "eventName": "活动名称",
+    "dateOfEvent": "活动日期",
+    "recurringEvent": "重复活动",
+    "attendees": "参与者",
+    "tableAriaLabel": "参加的活动表",
+    "paginationAriaLabel": "活动分页导航",
+    "paginationGoToPage": "转到第 {{page}} 页",
+    "paginationGoToType": "转到{{type}}页",
+    "noEventsAttended": "未参加任何活动"
   }
 }

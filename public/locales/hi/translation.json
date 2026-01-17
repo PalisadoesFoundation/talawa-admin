@@ -1504,26 +1504,6 @@
     "unregister": "पंजीकरण रद्द करें",
     "cannotUnregisterCheckedInTooltip": "पहले से चेक इन किए गए उपयोगकर्ता का पंजीकरण रद्द नहीं किया जा सकता"
   },
-  "onSpotAttendee": {
-    "title": "ऑन-स्पॉट प्रतिभागी",
-    "enterFirstName": "प्रथम नाम दर्ज करें",
-    "enterLastName": "अंतिम नाम दर्ज करें",
-    "enterEmail": "ईमेल दर्ज करें",
-    "enterPhoneNo": "फ़ोन नंबर दर्ज करें",
-    "selectGender": "लिंग चुनें",
-    "invalidDetailsMessage": "कृपया सभी आवश्यक फ़ील्ड भरें",
-    "orgIdMissing": "संगठन आईडी गायब है। कृपया पुनः प्रयास करें।",
-    "attendeeAddedSuccess": "प्रतिभागी सफलतापूर्वक जोड़ा गया!",
-    "addAttendee": "जोड़ें",
-    "phoneNumber": "फ़ोन नंबर",
-    "addingAttendee": "जोड़ा जा रहा है...",
-    "male": "पुरुष",
-    "female": "महिला",
-    "other": "अन्य",
-    "firstNamePlaceholder": "राज",
-    "lastNamePlaceholder": "कुमार",
-    "emailPlaceholder": "उदाहरण@gmail.com"
-  },
   "settings": {
     "noeventsAttended": "कोई कार्यक्रम में उपस्थित नहीं",
     "eventAttended": "भाग लिए गए कार्यक्रम",
@@ -1936,12 +1916,21 @@
     "checkedIn": "चेक इन किया गया",
     "downloadTag": "टैग डाउनलोड करें",
     "checkIn": "चेक इन करें",
-    "eventCheckInManagement": "इवेंट चेक इन प्रबंधन"
+    "eventCheckInManagement": "इवेंट चेक इन प्रबंधन",
+    "checkInMembers": "सदस्यों को चेक इन करें",
+    "unknownUser": "अज्ञात उपयोगकर्ता",
+    "user": "उपयोगकर्ता",
+    "checkInStatus": "चेक इन स्थिति"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
     "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
     "eventRegistrantsTitle": "कार्यक्रम पंजीकृत व्यक्ति",
+    "registerMember": "सदस्य पंजीकृत करें",
+    "showAttendees": "प्रतिभागियों को दिखाएं",
+    "addingAttendee": "प्रतिभागी को जोड़ा जा रहा है...",
+    "selectUserFirst": "कृपया पहले जोड़ने के लिए एक उपयोगकर्ता चुनें!",
+    "unknownUser": "अज्ञात उपयोगकर्ता",
     "inviteByEmailButton": "ईमेल द्वारा आमंत्रित करें",
     "addRegistrantButton": "पंजीकृत व्यक्ति जोड़ें",
     "noRegistrationsFound": "कोई पंजीकरण नहीं मिला",
@@ -1961,14 +1950,34 @@
       "expiresInDaysLabel": "समाप्ति (दिनों में)",
       "errorSendingInvites": "निमंत्रण भेजने में त्रुटि",
       "emailsLabel": "प्राप्तकर्ता ईमेल और नाम",
-      "emailsHelp": "प्रत्येक प्राप्तकर्ता के लिए ईमेल और वैकल्पिक नाम प्रदान करें। आवश्यकतानुसार कई प्राप्तकर्ता जोड़ें।"
-    },
-    "selectUserWarning": "कृपया पहले जोड़ने के लिए एक उपयोगकर्ता चुनें!",
-    "addingAttendeeProgress": "उपस्थित व्यक्ति को जोड़ा जा रहा है..."
+      "emailsHelp": "प्रत्येक प्राप्तकर्ता के लिए ईमेल और वैकल्पिक नाम प्रदान करें। आवश्यकतानुसार कई प्राप्तकर्ता जोड़ें।",
+      "noRecipientsError": "कृपया कम से कम एक प्राप्तकर्ता ईमेल प्रदान करें",
+      "invalidEmailsError": "अमान्य ईमेल: {{emails}}",
+      "invitesSentSuccessfully": "आमंत्रण सफलतापूर्वक भेजे गए"
+    }
   },
-  "eventRegistrantsWrapper": {
-    "buttonAriaLabel": "उपस्थित लोगों को दिखाएं",
-    "registerMemberButton": "सदस्य पंजीकृत करें"
+  "onSpotAttendee": {
+    "invalidEmailFormat": "अमान्य ईमेल प्रारूप",
+    "organizationIdMissing": "संगठन आईडी अनुपलब्ध है।",
+    "title": "ऑन-स्पॉट प्रतिभागी",
+    "enterFirstName": "प्रथम नाम दर्ज करें",
+    "enterLastName": "अंतिम नाम दर्ज करें",
+    "enterEmail": "ईमेल दर्ज करें",
+    "enterPhoneNo": "फ़ोन नंबर दर्ज करें",
+    "selectGender": "लिंग चुनें",
+    "invalidDetailsMessage": "कृपया सभी आवश्यक फ़ील्ड भरें",
+    "orgIdMissing": "संगठन आईडी गायब है। कृपया पुनः प्रयास करें।",
+    "attendeeAddedSuccess": "प्रतिभागी सफलतापूर्वक जोड़ा गया!",
+    "addAttendee": "जोड़ें",
+    "phoneNumber": "फ़ोन नंबर",
+    "phoneNumberPlaceholder": "1234567890",
+    "addingAttendee": "जोड़ा जा रहा है...",
+    "male": "पुरुष",
+    "female": "महिला",
+    "other": "अन्य",
+    "placeholderFirstName": "राम",
+    "placeholderLastName": "शर्मा",
+    "placeholderEmail": "abc@gmail.com"
   },
   "userCampaigns": {
     "title": "धन उगाहने के अभियान",
@@ -2144,7 +2153,11 @@
     "groupName": "समूह का नाम",
     "noOfMembers": "सदस्यों की संख्या",
     "options": "विकल्प",
-    "notSpecified": "निर्दिष्ट नहीं"
+    "notSpecified": "निर्दिष्ट नहीं",
+    "invited": "आमंत्रित",
+    "groupsAvailable": "{{count}} समूह उपलब्ध",
+    "volunteersRequired": "आवश्यक",
+    "signedUp": "पंजीकृत"
   },
   "pluginStore": {
     "title": "प्लगइन स्टोर",
@@ -2279,5 +2292,32 @@
   },
   "userGlobalScreen": {
     "globalFeatures": "वैश्विक सुविधाएं"
+  },
+  "recurringEventVolunteerModal": {
+    "joinGroupTitle": "{{groupName}} में शामिल हों - {{eventName}}",
+    "volunteerTitle": "{{eventName}} के लिए स्वयंसेवक",
+    "joinGroupQuestion": "क्या आप पूरी श्रृंखला के लिए \"{{groupName}}\" में शामिल होना चाहते हैं या केवल इस उदाहरण के लिए?",
+    "volunteerQuestion": "क्या आप पूरी श्रृंखला के लिए स्वयंसेवा करना चाहते हैं या केवल इस उदाहरण के लिए?",
+    "volunteerForSeries": "पूरी श्रृंखला के लिए स्वयंसेवक",
+    "joinGroupForSeries": "आप इस समूह में आवर्ती श्रृंखला की सभी घटनाओं के लिए शामिल होंगे",
+    "volunteerForSeriesDesc": "आप इस आवर्ती श्रृंखला की सभी घटनाओं के लिए स्वयंसेवा करेंगे",
+    "volunteerForInstance": "केवल इस उदाहरण के लिए स्वयंसेवक",
+    "joinGroupForInstance": "आप केवल {{date}} को होने वाली घटना के लिए इस समूह में शामिल होंगे",
+    "volunteerForInstanceDesc": "आप केवल {{date}} को होने वाली घटना के लिए स्वयंसेवा करेंगे",
+    "cancel": "रद्द करें",
+    "submitRequest": "अनुरोध सबमिट करें"
+  },
+  "eventsAttendedMemberModal": {
+    "title": "उपस्थित घटनाओं की सूची",
+    "showing": "{{start}} - {{end}} में से {{total}} घटनाएँ दिखाई जा रही हैं",
+    "eventName": "घटना का नाम",
+    "dateOfEvent": "घटना की तारीख",
+    "recurringEvent": "आवर्ती घटना",
+    "attendees": "उपस्थित लोग",
+    "tableAriaLabel": "उपस्थित घटनाओं की तालिका",
+    "paginationAriaLabel": "घटनाओं का पेजिनेशन नेविगेशन",
+    "paginationGoToPage": "पृष्ठ {{page}} पर जाएं",
+    "paginationGoToType": "{{type}} पृष्ठ पर जाएं",
+    "noEventsAttended": "कोई घटना में उपस्थित नहीं हुए"
   }
 }
