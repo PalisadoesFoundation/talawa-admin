@@ -1,4 +1,4 @@
-import { InterfacePost } from 'types/Post/interface';
+import type { InterfacePost } from 'types/Post/interface';
 import { formatDate } from 'utils/dateFormatter';
 import type { InterfacePostCard } from 'utils/interfaces';
 

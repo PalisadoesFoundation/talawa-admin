@@ -22,6 +22,7 @@ vi.mock('utils/dateFormatter', () => ({
   }),
 }));
 
+let lastPostCardProps: { fetchPosts?: () => Promise<unknown> } | null = null;
 // Mock PostCard component to avoid complex dependencies
 vi.mock('shared-components/postCard/PostCard', () => ({
   __esModule: true,
@@ -29,16 +30,21 @@ vi.mock('shared-components/postCard/PostCard', () => ({
     id,
     title,
     creator,
+    fetchPosts,
   }: {
     id: string;
     title: string;
     creator: { name: string };
+    fetchPosts?: () => Promise<unknown>;
   }) => (
-    <div data-testid="mocked-post-card">
-      <div data-testid="post-id">{id}</div>
-      <div data-testid="post-title">{title}</div>
-      <div data-testid="post-creator">{creator.name}</div>
-    </div>
+    (lastPostCardProps = { fetchPosts }),
+    (
+      <div data-testid="mocked-post-card">
+        <div data-testid="post-id">{id}</div>
+        <div data-testid="post-title">{title}</div>
+        <div data-testid="post-creator">{creator.name}</div>
+      </div>
+    )
   ),
 }));
 
@@ -297,14 +303,14 @@ describe('PostViewModal', () => {
     test('passes refetch function to PostCard', () => {
       renderPostViewModal();
 
-      expect(screen.getByTestId('mocked-post-card')).toBeInTheDocument();
+      expect(lastPostCardProps?.fetchPosts).toBe(mockRefetch);
     });
 
     test('handles different refetch function', () => {
       const customRefetch = vi.fn().mockResolvedValue({ data: 'custom' });
       renderPostViewModal({ refetch: customRefetch });
 
-      expect(screen.getByTestId('mocked-post-card')).toBeInTheDocument();
+      expect(lastPostCardProps?.fetchPosts).toBe(customRefetch);
     });
   });
 
