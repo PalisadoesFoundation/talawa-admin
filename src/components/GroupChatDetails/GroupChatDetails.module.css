@@ -49,10 +49,14 @@
   background-color: var(--editImgBtn-bg);
   border: var(--border-1) solid var(--editImgBtn-border);
   color: var(--editImgBtn-color);
-  outline: none;
   position: relative;
   top: calc(var(--space-9) * -1);
   left: var(--space-9);
+}
+
+.editImgBtn:focus-visible {
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: var(--space-1);
 }
 
 .editChatNameContainer {
