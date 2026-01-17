@@ -82,7 +82,9 @@
 
 .memberList {
   max-height: var(--space-23);
-  overflow: scroll;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge legacy */
 }
 
 .memberList::-webkit-scrollbar {

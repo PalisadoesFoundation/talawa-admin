@@ -77,12 +77,12 @@ export const EventStats = ({
     >
       <BaseModal
         show={show}
-        onHide={handleClose} // Close the modal when clicking outside or the close button
+        onHide={handleClose}
         backdrop="static"
         centered
         size="lg"
         bodyClassName={styles.stackEvents}
-        headerClassName="bg-primary"
+        headerClassName={styles.headerPrimary}
         title={t('title')}
       >
         {/* Render feedback statistics */}

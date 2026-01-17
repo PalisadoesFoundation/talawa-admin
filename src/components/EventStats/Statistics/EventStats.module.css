@@ -6,8 +6,7 @@
 }
 
 .loader {
-  margin: var(--space-11) auto;
-  margin-top: 35vh !important;
+  margin: 35vh auto var(--space-11) auto;
   font-size: var(--space-3);
   position: relative;
   text-indent: -9999em;
@@ -56,19 +55,7 @@
   column-gap: var(--space-1);
 }
 
-@media screen and (min-width: var(--breakpoint-820)) {
-  .stackEvents {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding: var(--space-0) var(--space-8);
-    margin: var(--space-0) var(--space-9);
-    gap: var(--space-3);
-    column-gap: var(--space-2);
-  }
-}
-
-@media screen and (min-width: var(--breakpoint-md)) and (max-width: calc(var(--breakpoint-820) - 1px)) {
+@media screen and (min-width: 768px) {
   .stackEvents {
     flex-direction: row;
     justify-content: space-between;
@@ -78,4 +65,14 @@
     gap: var(--space-3);
     column-gap: var(--space-2);
   }
+}
+
+@media screen and (min-width: 820px) {
+  .stackEvents {
+    margin: var(--space-0) var(--space-9);
+  }
+}
+
+.headerPrimary {
+  background-color: var(--primary);
 }
