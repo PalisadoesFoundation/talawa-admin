@@ -2302,6 +2302,8 @@
     "tableAriaLabel": "Tableau des événements auxquels vous avez assisté",
     "paginationAriaLabel": "Navigation de pagination des événements",
     "paginationGoToPage": "Aller à la page {{page}}",
-    "paginationGoToType": "Aller à la page {{type}}"
+    "paginationGoToType": "Aller à la page {{type}}",
+    "noEventsAttended": "Aucun événement assisté"
   }
 }
+

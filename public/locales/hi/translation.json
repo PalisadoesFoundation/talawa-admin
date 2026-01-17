@@ -2302,6 +2302,8 @@
     "tableAriaLabel": "उपस्थित घटनाओं की तालिका",
     "paginationAriaLabel": "घटनाओं का पेजिनेशन नेविगेशन",
     "paginationGoToPage": "पृष्ठ {{page}} पर जाएं",
-    "paginationGoToType": "{{type}} पृष्ठ पर जाएं"
+    "paginationGoToType": "{{type}} पृष्ठ पर जाएं",
+    "noEventsAttended": "कोई घटना में उपस्थित नहीं हुए"
   }
 }
+

@@ -67,7 +67,7 @@ const EventsAttendedMemberModal: React.FC<
       dataTestId="eventsAttendedModal"
     >
       {eventsAttended.length === 0 ? (
-        <p>{t('memberDetail.noeventsAttended')}</p>
+        <p>{t('eventsAttendedMemberModal.noEventsAttended')}</p>
       ) : (
         <>
           <h5 className="text-end">

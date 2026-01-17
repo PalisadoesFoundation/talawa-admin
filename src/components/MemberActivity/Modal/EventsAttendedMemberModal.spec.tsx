@@ -17,7 +17,7 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string, params?: Record<string, unknown>) => {
       const translations: Record<string, string> = {
-        'memberDetail.noeventsAttended': 'noeventsAttended',
+        'eventsAttendedMemberModal.noEventsAttended': 'No events attended',
         'eventsAttendedMemberModal.title': 'Events Attended List',
         'eventsAttendedMemberModal.showing': `Showing ${params?.start} - ${params?.end} of ${params?.total} Events`,
         'eventsAttendedMemberModal.eventName': 'Event Name',
@@ -101,7 +101,7 @@ describe('EventsAttendedMemberModal', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByText('noeventsAttended')).toBeInTheDocument();
+    expect(screen.getByText('No events attended')).toBeInTheDocument();
   });
 
   test('renders correct number of events per page', () => {

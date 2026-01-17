@@ -2302,6 +2302,8 @@
     "tableAriaLabel": "参加的活动表",
     "paginationAriaLabel": "活动分页导航",
     "paginationGoToPage": "转到第 {{page}} 页",
-    "paginationGoToType": "转到{{type}}页"
+    "paginationGoToType": "转到{{type}}页",
+    "noEventsAttended": "未参加任何活动"
   }
 }
+

@@ -2302,6 +2302,8 @@
     "tableAriaLabel": "Events attended table",
     "paginationAriaLabel": "Events pagination navigation",
     "paginationGoToPage": "Go to page {{page}}",
-    "paginationGoToType": "Go to {{type}} page"
+    "paginationGoToType": "Go to {{type}} page",
+    "noEventsAttended": "No events attended"
   }
 }
+
