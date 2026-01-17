@@ -23,7 +23,8 @@ const parseArgs = (argv) => {
     console.error(
       'No files provided. Usage: pnpm exec tsx scripts/check-css-imports.js --files <file ...>',
     );
-    process.exit(1);
+    process.exitCode = 1;
+    return [];
   }
 
   return [...new Set(rawFiles.map((file) => path.resolve(file)))];
@@ -79,6 +80,10 @@ const validateFile = (filePath, content) => {
 
 const main = () => {
   const files = parseArgs(process.argv.slice(2));
+  if (!files.length) {
+    return;
+  }
+
   const violations = [];
 
   for (const inputFile of files) {
@@ -122,7 +127,7 @@ const main = () => {
     );
   }
 
-  process.exit(1);
+  process.exitCode = 1;
 };
 
 main();
