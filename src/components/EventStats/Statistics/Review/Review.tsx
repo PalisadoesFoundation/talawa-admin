@@ -35,11 +35,11 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Rating from '@mui/material/Rating';
+import styles from './Review.module.css';
 import type { Feedback } from 'types/Event/type';
 import type { InterfaceStatsModal } from 'types/Event/interface';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
-import styles from './Review.module.css';
 
 export const ReviewStats = ({ data }: InterfaceStatsModal): JSX.Element => {
   const { t: tErrors } = useTranslation('errors');

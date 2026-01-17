@@ -1,6 +1,6 @@
 .reviewCard {
-  width: 300px;
-  max-height: 350px;
+  width: var(--space-20);
+  max-height: var(--space-22);
   overflow: auto;
-  margin-bottom: 5px;
+  margin-bottom: var(--space-2);
 }
