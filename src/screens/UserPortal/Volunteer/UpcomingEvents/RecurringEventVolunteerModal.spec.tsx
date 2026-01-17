@@ -53,7 +53,6 @@ describe('RecurringEventVolunteerModal', () => {
 
   test('renders modal with individual volunteering title, description and option texts', () => {
     // Make date formatting deterministic for this test
-    // Make date formatting deterministic for this test
     const formattedDate = new Intl.DateTimeFormat('en-US', {
       dateStyle: 'medium',
     }).format(new Date(defaultProps.eventDate));
