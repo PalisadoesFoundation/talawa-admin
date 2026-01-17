@@ -147,6 +147,7 @@ describe('UserGlobalScreen', () => {
       const navbar = screen.getByTestId('user-portal-navbar');
       expect(navbar).toBeInTheDocument();
       expect(navbar).toHaveAttribute('data-mode', 'user');
+      expect(navbar).toHaveAttribute('data-variant', 'dark'); // Default variant for user mode
       expect(navbar).toHaveAttribute('data-currentpage', '/'); // MemoryRouter default location
     });
   });

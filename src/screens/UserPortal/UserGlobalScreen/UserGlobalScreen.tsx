@@ -52,7 +52,11 @@ const UserGlobalScreen = (): JSX.Element => {
   const currentPage = location.pathname;
   return (
     <div className={localStyles.pageContainer}>
-      <UserPortalNavigationBar mode="user" currentPage={currentPage} />
+      <UserPortalNavigationBar
+        mode="user"
+        variant="dark"
+        currentPage={currentPage}
+      />
       <div className={localStyles.flexContainer}>
         <div className={styles.drawer}>
           <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
