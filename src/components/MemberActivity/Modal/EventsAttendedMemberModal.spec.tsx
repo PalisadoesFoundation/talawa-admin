@@ -17,18 +17,17 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string, params?: Record<string, unknown>) => {
       const translations: Record<string, string> = {
-        'eventsAttendedMemberModal.noEventsAttended': 'No events attended',
-        'eventsAttendedMemberModal.title': 'Events Attended List',
-        'eventsAttendedMemberModal.showing': `Showing ${params?.start} - ${params?.end} of ${params?.total} Events`,
-        'eventsAttendedMemberModal.eventName': 'Event Name',
-        'eventsAttendedMemberModal.dateOfEvent': 'Date of Event',
-        'eventsAttendedMemberModal.recurringEvent': 'Recurring Event',
-        'eventsAttendedMemberModal.attendees': 'Attendees',
-        'eventsAttendedMemberModal.tableAriaLabel': 'Events attended table',
-        'eventsAttendedMemberModal.paginationAriaLabel':
-          'Events pagination navigation',
-        'eventsAttendedMemberModal.paginationGoToPage': `Go to page ${params?.page}`,
-        'eventsAttendedMemberModal.paginationGoToType': `Go to ${params?.type} page`,
+        noEventsAttended: 'No events attended',
+        title: 'Events Attended List',
+        showing: `Showing ${params?.start} - ${params?.end} of ${params?.total} Events`,
+        eventName: 'Event Name',
+        dateOfEvent: 'Date of Event',
+        recurringEvent: 'Recurring Event',
+        attendees: 'Attendees',
+        tableAriaLabel: 'Events attended table',
+        paginationAriaLabel: 'Events pagination navigation',
+        paginationGoToPage: `Go to page ${params?.page}`,
+        paginationGoToType: `Go to ${params?.type} page`,
       };
       return translations[key] || key;
     },

@@ -17,7 +17,10 @@ import {
 import { useTranslation } from 'react-i18next';
 import styles from '../../../style/app-fixed.module.css';
 import { CustomTableCell } from './CustomCell/customTableCell';
-import type { InterfaceEventsAttendedMemberModalProps } from 'types/Event/interface';
+import type {
+  InterfaceEventsAttendedMemberModalProps,
+  IEvent,
+} from 'types/Event/interface';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 
 /**
@@ -32,7 +35,9 @@ import BaseModal from 'shared-components/BaseModal/BaseModal';
 const EventsAttendedMemberModal: React.FC<
   InterfaceEventsAttendedMemberModalProps
 > = ({ eventsAttended, setShow, show, eventsPerPage = 5 }) => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventsAttendedMemberModal',
+  });
   const [page, setPage] = useState<number>(1);
 
   const handleClose = (): void => {
@@ -61,47 +66,48 @@ const EventsAttendedMemberModal: React.FC<
     <BaseModal
       show={show}
       onHide={handleClose}
-      title={t('eventsAttendedMemberModal.title')}
+      title={t('title')}
       centered
       size="lg"
       dataTestId="eventsAttendedModal"
     >
       {eventsAttended.length === 0 ? (
-        <p>{t('eventsAttendedMemberModal.noEventsAttended')}</p>
+        <p>{t('noEventsAttended')}</p>
       ) : (
         <>
           <h5 className="text-end">
-            {t('eventsAttendedMemberModal.showing', {
+            {t('showing', {
               start: (page - 1) * eventsPerPage + 1,
               end: Math.min(page * eventsPerPage, eventsAttended.length),
               total: eventsAttended.length,
             })}
           </h5>
           <TableContainer component={Paper} className="mt-3">
-            <Table aria-label={t('eventsAttendedMemberModal.tableAriaLabel')}>
+            <Table aria-label={t('tableAriaLabel')}>
               <TableHead>
                 <TableRow data-testid="row">
                   <TableCell className={styles.customcell}>
-                    {t('eventsAttendedMemberModal.eventName')}
+                    {t('eventName')}
                   </TableCell>
                   <TableCell className={styles.customcell}>
-                    {t('eventsAttendedMemberModal.dateOfEvent')}
+                    {t('dateOfEvent')}
                   </TableCell>
                   <TableCell className={styles.customcell}>
-                    {t('eventsAttendedMemberModal.recurringEvent')}
+                    {t('recurringEvent')}
                   </TableCell>
                   <TableCell className={styles.customcell}>
-                    {t('eventsAttendedMemberModal.attendees')}
+                    {t('attendees')}
                   </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {paginatedEvents.map((event) => (
-                  <CustomTableCell
-                    key={event.id ?? ''}
-                    eventId={event.id ?? ''}
-                  />
-                ))}
+                {paginatedEvents
+                  .filter(
+                    (event): event is IEvent & { id: string } => !!event.id,
+                  )
+                  .map((event) => (
+                    <CustomTableCell key={event.id} eventId={event.id} />
+                  ))}
               </TableBody>
             </Table>
           </TableContainer>
@@ -111,14 +117,14 @@ const EventsAttendedMemberModal: React.FC<
               page={page}
               onChange={handleChangePage}
               color="primary"
-              aria-label={t('eventsAttendedMemberModal.paginationAriaLabel')}
+              aria-label={t('paginationAriaLabel')}
               getItemAriaLabel={(type, page) => {
                 if (type === 'page') {
-                  return t('eventsAttendedMemberModal.paginationGoToPage', {
+                  return t('paginationGoToPage', {
                     page,
                   });
                 }
-                return t('eventsAttendedMemberModal.paginationGoToType', {
+                return t('paginationGoToType', {
                   type,
                 });
               }}
