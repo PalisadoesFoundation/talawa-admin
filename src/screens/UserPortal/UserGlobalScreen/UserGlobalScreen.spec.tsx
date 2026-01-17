@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -161,12 +162,13 @@ describe('UserGlobalScreen', () => {
       expect(sidebar.textContent).toContain('false');
     });
 
-    it('should allow UserSidebar to toggle drawer state', () => {
+    it('should allow UserSidebar to toggle drawer state', async () => {
+      const user = userEvent.setup();
       renderComponent();
 
       // Click the mock sidebar toggle button
       const sidebarToggle = screen.getByText('Mock Sidebar Toggle');
-      fireEvent.click(sidebarToggle);
+      await user.click(sidebarToggle);
 
       // State should change to true
       const sidebar = screen.getByTestId('user-sidebar');
