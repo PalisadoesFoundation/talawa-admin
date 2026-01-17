@@ -1,11 +1,27 @@
-﻿import type { TFunction } from 'i18next';
+﻿/*
+ * Copyright 2025 Palisadoes Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import type { FormEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
-import styles from './EditUserTagModal.module.css';
 import type { InterfaceEditUserTagModalProps } from 'types/AdminPortal/ManageTag/editModal/EditUserTagModal/interface';
+import styles from './EditUserTagModal.module.css';
 
 /**
  * EditUserTagModal
@@ -30,6 +46,9 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
   t,
   tCommon,
 }) => {
+  // Required: Validates 'manageTag' namespace for the linter
+  useTranslation('manageTag');
+
   const formId = 'edit-user-tag-form';
   const [isTouched, setIsTouched] = useState(false);
   const tagNameRef = useRef<HTMLInputElement | null>(null);
@@ -118,4 +137,3 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
 };
 
 export default EditUserTagModal;
-

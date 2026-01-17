@@ -1,3 +1,18 @@
+/*
+ * Copyright 2025 Palisadoes Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /**
  * Test Suite for UninstallConfirmationModal
  *
@@ -22,10 +37,11 @@ vi.mock('react-i18next', () => ({
       const translations: Record<string, string> = {
         'uninstallPlugin.title': 'Uninstall Plugin',
         'uninstallPlugin.message': `Are you sure you want to uninstall ${options?.name}?`,
-        'uninstallPlugin.warning': 'This action will permanently remove the plugin and all its data. This action cannot be undone.',
-        'cancel': 'Cancel',
+        'uninstallPlugin.warning':
+          'This action will permanently remove the plugin and all its data. This action cannot be undone.',
+        cancel: 'Cancel',
         'uninstallPlugin.removeBtn': 'Remove Permanently',
-        'deleting': 'Deleting...',
+        deleting: 'Deleting...',
       };
       return translations[key] || key;
     },
@@ -84,7 +100,9 @@ describe('UninstallConfirmationModal', () => {
 
   // 4. State: Loading State
   it('should disable buttons and show "Deleting..." text while processing', async () => {
-    mockOnConfirm.mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 500)));
+    mockOnConfirm.mockImplementation(
+      () => new Promise((resolve) => setTimeout(resolve, 500)),
+    );
     render(<UninstallConfirmationModal {...defaultProps} />);
 
     const removeBtn = screen.getByTestId('uninstall-remove-btn');
@@ -116,14 +134,17 @@ describe('UninstallConfirmationModal', () => {
 
   // 6. Branch: Null Plugin
   it('should not render if plugin is null', () => {
-    const { container } = render(<UninstallConfirmationModal {...defaultProps} plugin={null} />);
+    const { container } = render(
+      <UninstallConfirmationModal {...defaultProps} plugin={null} />,
+    );
     expect(container).toBeEmptyDOMElement();
   });
 
   // 7. Branch: Modal Closed
   it('should not render if show is false', () => {
-    const { container } = render(<UninstallConfirmationModal {...defaultProps} show={false} />);
+    const { container } = render(
+      <UninstallConfirmationModal {...defaultProps} show={false} />,
+    );
     expect(container).toBeEmptyDOMElement();
   });
 });
-

@@ -1,3 +1,18 @@
+/*
+ * Copyright 2025 Palisadoes Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /**
  * Test Suite for EditUserTagModal
  *
@@ -16,8 +31,14 @@ import { InterfaceEditUserTagModalProps } from 'types/AdminPortal/ManageTag/edit
 import { TFunction } from 'i18next';
 
 // Mock Translation
-const mockT = vi.fn((key) => key) as unknown as TFunction<"translation", undefined>;
-const mockTCommon = vi.fn((key) => key) as unknown as TFunction<"common", undefined>;
+const mockT = vi.fn((key) => key) as unknown as TFunction<
+  'translation',
+  undefined
+>;
+const mockTCommon = vi.fn((key) => key) as unknown as TFunction<
+  'common',
+  undefined
+>;
 
 describe('EditUserTagModal', () => {
   const mockHide = vi.fn();
@@ -46,7 +67,9 @@ describe('EditUserTagModal', () => {
   });
 
   it('should not render when modal is closed', () => {
-    render(<EditUserTagModal {...defaultProps} editUserTagModalIsOpen={false} />);
+    render(
+      <EditUserTagModal {...defaultProps} editUserTagModalIsOpen={false} />,
+    );
     expect(screen.queryByText('tagDetails')).not.toBeInTheDocument();
   });
 
@@ -67,14 +90,14 @@ describe('EditUserTagModal', () => {
 
   it('should submit form when valid', async () => {
     render(<EditUserTagModal {...defaultProps} newTagName="Valid Name" />);
-    
+
     const input = screen.getByTestId('tagNameInput');
     const form = input.closest('form');
-    
+
     if (!form) throw new Error('Form not found');
-    
+
     fireEvent.submit(form);
-    
+
     await waitFor(() => {
       expect(mockHandleEdit).toHaveBeenCalled();
     });
@@ -91,7 +114,7 @@ describe('EditUserTagModal', () => {
 
     fireEvent.submit(form);
 
-    expect(mockHandleEdit).not.toHaveBeenCalled(); 
+    expect(mockHandleEdit).not.toHaveBeenCalled();
     expect(focusSpy).toHaveBeenCalled();
   });
 
@@ -112,46 +135,48 @@ describe('EditUserTagModal', () => {
 
   it('should set isTouched to true on input blur', async () => {
     render(<EditUserTagModal {...defaultProps} newTagName="" />);
-    
+
     const input = screen.getByTestId('tagNameInput');
-    
+
     // Blur the input to trigger onBlur
     await user.click(input);
     await user.tab(); // This will blur the input
-    
+
     // Now the error should be visible because isTouched is true
     expect(mockTCommon).toHaveBeenCalledWith('required');
   });
 
   it('should display error message when touched and invalid', () => {
     render(<EditUserTagModal {...defaultProps} newTagName="" />);
-    
+
     const input = screen.getByTestId('tagNameInput');
-    
+
     // Trigger blur to set touched state
     fireEvent.blur(input);
-    
+
     // Check that the error translation key was called
     expect(mockTCommon).toHaveBeenCalledWith('required');
   });
 
   it('should reset isTouched when modal reopens', () => {
     const { rerender } = render(
-      <EditUserTagModal {...defaultProps} editUserTagModalIsOpen={false} />
+      <EditUserTagModal {...defaultProps} editUserTagModalIsOpen={false} />,
     );
 
     // Open modal
-    rerender(<EditUserTagModal {...defaultProps} editUserTagModalIsOpen={true} />);
-    
+    rerender(
+      <EditUserTagModal {...defaultProps} editUserTagModalIsOpen={true} />,
+    );
+
     const input = screen.getByTestId('tagNameInput');
-    
+
     // Input should not show error initially (isTouched should be false)
     expect(input).not.toHaveClass('is-invalid');
   });
 
   it('should call translation functions correctly', () => {
     render(<EditUserTagModal {...defaultProps} />);
-    
+
     // Check that translation functions were called with correct keys
     expect(mockT).toHaveBeenCalledWith('tagDetails');
     expect(mockT).toHaveBeenCalledWith('tagName');
@@ -162,25 +187,24 @@ describe('EditUserTagModal', () => {
 
   it('should handle async form submission correctly', async () => {
     const asyncMockHandleEdit = vi.fn().mockResolvedValue(undefined);
-    
+
     render(
-      <EditUserTagModal 
-        {...defaultProps} 
+      <EditUserTagModal
+        {...defaultProps}
         newTagName="Valid Name"
         handleEditUserTag={asyncMockHandleEdit}
-      />
+      />,
     );
-    
+
     const input = screen.getByTestId('tagNameInput');
     const form = input.closest('form');
-    
+
     if (!form) throw new Error('Form not found');
-    
+
     fireEvent.submit(form);
-    
+
     await waitFor(() => {
       expect(asyncMockHandleEdit).toHaveBeenCalled();
     });
   });
 });
-
