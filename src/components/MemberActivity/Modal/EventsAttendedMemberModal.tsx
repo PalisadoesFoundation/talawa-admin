@@ -113,8 +113,14 @@ const EventsAttendedMemberModal: React.FC<
               color="primary"
               aria-label={t('eventsAttendedMemberModal.paginationAriaLabel')}
               getItemAriaLabel={(type, page) => {
-                if (type === 'page') return `Go to page ${page}`;
-                return `Go to ${type} page`;
+                if (type === 'page') {
+                  return t('eventsAttendedMemberModal.paginationGoToPage', {
+                    page,
+                  });
+                }
+                return t('eventsAttendedMemberModal.paginationGoToType', {
+                  type,
+                });
               }}
             />
           </div>

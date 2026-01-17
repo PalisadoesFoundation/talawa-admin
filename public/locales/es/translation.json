@@ -2300,6 +2300,8 @@
     "recurringEvent": "Evento recurrente",
     "attendees": "Asistentes",
     "tableAriaLabel": "Tabla de eventos asistidos",
-    "paginationAriaLabel": "Navegación de paginación de eventos"
+    "paginationAriaLabel": "Navegación de paginación de eventos",
+    "paginationGoToPage": "Ir a la página {{page}}",
+    "paginationGoToType": "Ir a la página {{type}}"
   }
 }

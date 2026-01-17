@@ -24,6 +24,11 @@ vi.mock('react-i18next', () => ({
         'eventsAttendedMemberModal.dateOfEvent': 'Date of Event',
         'eventsAttendedMemberModal.recurringEvent': 'Recurring Event',
         'eventsAttendedMemberModal.attendees': 'Attendees',
+        'eventsAttendedMemberModal.tableAriaLabel': 'Events attended table',
+        'eventsAttendedMemberModal.paginationAriaLabel':
+          'Events pagination navigation',
+        'eventsAttendedMemberModal.paginationGoToPage': `Go to page ${params?.page}`,
+        'eventsAttendedMemberModal.paginationGoToType': `Go to ${params?.type} page`,
       };
       return translations[key] || key;
     },

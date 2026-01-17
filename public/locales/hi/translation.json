@@ -2300,6 +2300,8 @@
     "recurringEvent": "आवर्ती घटना",
     "attendees": "उपस्थित लोग",
     "tableAriaLabel": "उपस्थित घटनाओं की तालिका",
-    "paginationAriaLabel": "घटनाओं का पेजिनेशन नेविगेशन"
+    "paginationAriaLabel": "घटनाओं का पेजिनेशन नेविगेशन",
+    "paginationGoToPage": "पृष्ठ {{page}} पर जाएं",
+    "paginationGoToType": "{{type}} पृष्ठ पर जाएं"
   }
 }

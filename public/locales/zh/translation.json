@@ -2300,6 +2300,8 @@
     "recurringEvent": "重复活动",
     "attendees": "参与者",
     "tableAriaLabel": "参加的活动表",
-    "paginationAriaLabel": "活动分页导航"
+    "paginationAriaLabel": "活动分页导航",
+    "paginationGoToPage": "转到第 {{page}} 页",
+    "paginationGoToType": "转到{{type}}页"
   }
 }
