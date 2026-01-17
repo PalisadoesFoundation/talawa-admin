@@ -2,7 +2,7 @@
  * Main layout for user routes that do not require an orgId.
  * Manages sidebar visibility and displays nested content via the router outlet.
  *
- * @returns {JSX.Element} The rendered UserGlobalScreen component.
+ * @returns \{JSX.Element\} The rendered UserGlobalScreen component.
  *
  * @remarks
  * - Uses UserSidebar instead of UserSidebarOrg because no orgId is needed.
