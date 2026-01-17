@@ -21,21 +21,21 @@ describe('Admin People Tab', () => {
       .verifyMemberInList('administrator');
   });
 
-  it('add an existing member to the organization', () => {
+  it('add and remove a member to maintain test isolation', () => {
     const member = 'Praise Norris';
-    peoplePage.clickAddExistingMember();
-    peoplePage.searchAndSelectUser(member);
-    peoplePage.confirmAddUser(member);
-  });
 
-  it('delete a member from the organization', () => {
-    const member = 'Praise Norris';
-    // First add the member
+    // Add member and verify it was added successfully
     peoplePage.clickAddExistingMember();
     peoplePage.searchAndSelectUser(member);
-    peoplePage.confirmAddUser(member);
-    // Then delete the member
-    peoplePage.deleteMember(member);
+    peoplePage.confirmAddUser(member); // Already includes verification
+
+    // Explicit sync point before deletion
+    cy.then(() => {
+      // Delete member and verify it was removed
+      peoplePage.deleteMember(member); // Already includes success toast check
+      peoplePage.resetSearch();
+      peoplePage.verifyMemberNotInList(member);
+    });
   });
 
   afterEach(() => {

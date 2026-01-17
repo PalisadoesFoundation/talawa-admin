@@ -36,6 +36,13 @@ export class PeoplePage {
     return this;
   }
 
+  verifyMemberNotInList(name: string, timeout = 40000) {
+    cy.get(this._tableRows, { timeout })
+      .should('be.visible')
+      .and('not.contain.text', name);
+    return this;
+  }
+
   clickAddExistingMember(timeout = 40000) {
     cy.get(this._addMembersBtn, { timeout }).should('be.visible').click();
     cy.get(this._existingUserToggle, { timeout })
