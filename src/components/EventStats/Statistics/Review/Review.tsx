@@ -5,12 +5,12 @@
  * data to include only those entries that have a review and renders them in a card
  * layout. Each review includes a rating and the review text.
  *
- * @param {InterfaceStatsModal} props - The props object containing event statistics data.
- * @param {Object} props.data - The event data passed to the component.
- * @param {Object} props.data.event - The event object containing feedback details.
- * @param {Feedback[]} props.data.event.feedback - An array of feedback objects for the event.
+ * @param props - The props object containing event statistics data.
+ * - data - The event data passed to the component.
+ * - data.event - The event object containing feedback details.
+ * - data.event.feedback - An array of feedback objects for the event.
  *
- * @returns {JSX.Element} A JSX element rendering the reviews in a scrollable card.
+ * @returns A JSX element rendering the reviews in a scrollable card.
  *
  * @remarks
  * - If no reviews are available, a placeholder message is displayed.
@@ -36,26 +36,31 @@ import Card from 'react-bootstrap/Card';
 import Rating from '@mui/material/Rating';
 import type { Feedback } from 'types/Event/type';
 import type { InterfaceStatsModal } from 'types/Event/interface';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { useTranslation } from 'react-i18next';
+import styles from './Review.module.css';
 
 export const ReviewStats = ({ data }: InterfaceStatsModal): JSX.Element => {
+  const { t: tErrors } = useTranslation('errors');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventStats.reviews',
+  });
   // Filter out feedback that has a review
   const reviews = data.event.feedback.filter(
     (feedback: Feedback) => feedback.review != null,
   );
 
   return (
-    <>
-      <Card
-        style={{
-          width: '300px',
-          maxHeight: '350px',
-          overflow: 'auto',
-          marginBottom: '5px',
-        }}
-      >
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
+      <Card className={styles.reviewCard}>
         <Card.Body>
           <Card.Title>
-            <h3>Reviews</h3>
+            <h3>{t('title')}</h3>
           </Card.Title>
           <h5>Filled by {reviews.length} people.</h5>
           {reviews.length ? (
@@ -68,10 +73,10 @@ export const ReviewStats = ({ data }: InterfaceStatsModal): JSX.Element => {
               </div>
             ))
           ) : (
-            <>Waiting for people to talk about the event...</>
+            <>{t('emptyState')}</>
           )}
         </Card.Body>
       </Card>
-    </>
+    </ErrorBoundaryWrapper>
   );
 };

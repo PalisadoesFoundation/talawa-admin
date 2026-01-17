@@ -14,6 +14,18 @@ vi.mock('@mui/x-charts/PieChart', async () => ({
   pieArcLabelClasses: { root: 'label-root-class', faded: 'label-faded-class' },
 }));
 
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+      tCommon: (key: string) => key,
+      tErrors: (key: string) => key,
+    }),
+  };
+});
+
 describe('Testing Event Stats', () => {
   afterEach(() => {
     vi.restoreAllMocks();

@@ -2304,5 +2304,12 @@
     "paginationGoToPage": "Ir a la página {{page}}",
     "paginationGoToType": "Ir a la página {{type}}",
     "noEventsAttended": "No hay eventos asistidos"
+  },
+  "eventStats": {
+    "title": "Estadísticas del evento",
+    "reviews": {
+      "title": "Reseñas",
+      "emptyState": "Esperando a que la gente hable sobre el evento..."
+    }
   }
 }

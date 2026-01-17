@@ -75,6 +75,7 @@ import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 export default function groupChatDetails({
   toggleGroupChatDetailsModal,
@@ -84,6 +85,7 @@ export default function groupChatDetails({
 }: InterfaceGroupChatDetailsProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   //storage
 
@@ -253,7 +255,12 @@ export default function groupChatDetails({
   };
 
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
       <BaseModal
         show={groupChatDetailsModalisOpen}
         onHide={toggleGroupChatDetailsModal}
@@ -602,6 +609,6 @@ export default function groupChatDetails({
           </TableContainer>
         </LoadingState>
       </BaseModal>
-    </>
+    </ErrorBoundaryWrapper>
   );
 }

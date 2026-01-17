@@ -4,13 +4,12 @@
  * This component fetches event feedback data using the `useQuery` hook
  * and displays various statistics such as feedback, reviews, and average ratings.
  *
- * @component
- * @param {ModalPropType} props - The properties passed to the component.
- * @param {boolean} props.show - Determines whether the modal is visible.
- * @param {string} props.eventId - The unique identifier of the event for which statistics are displayed.
- * @param {() => void} props.handleClose - Callback function to close the modal.
+ * @param props - The properties passed to the component.
+ * - show - Determines whether the modal is visible.
+ * - eventId - The unique identifier of the event for which statistics are displayed.
+ * - handleClose - Callback function to close the modal.
  *
- * @returns {JSX.Element} A modal containing event statistics.
+ * @returns A modal containing event statistics.
  *
  * @remarks
  * - The component uses the `EVENT_FEEDBACKS` GraphQL query to fetch event feedback data.
@@ -26,13 +25,13 @@
  * />
  * ```
  *
- * @dependencies
+ * Uses:-
  * - `react-bootstrap` for modal UI.
  * - `@apollo/client` for GraphQL query handling.
  * - Custom CSS modules for styling.
  */
 import React from 'react';
-import { Modal } from 'react-bootstrap';
+import { BaseModal } from 'shared-components/BaseModal';
 import { FeedbackStats } from './Feedback/Feedback';
 import { ReviewStats } from './Review/Review';
 import { AverageRating } from './AverageRating/AverageRating';
@@ -40,6 +39,8 @@ import styles from 'style/app-fixed.module.css';
 import eventStatsStyles from '../css/EventStats.module.css';
 import { useQuery } from '@apollo/client';
 import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { useTranslation } from 'react-i18next';
 
 type ModalPropType = {
   show: boolean;
@@ -52,6 +53,8 @@ export const EventStats = ({
   handleClose,
   eventId,
 }: ModalPropType): JSX.Element => {
+  const { t: tErrors } = useTranslation('errors');
+  const { t } = useTranslation('translation', { keyPrefix: 'eventStats' });
   // Query to fetch event feedback data
   const { data, loading } = useQuery(EVENT_FEEDBACKS, {
     variables: { id: eventId },
@@ -67,27 +70,30 @@ export const EventStats = ({
   }
 
   return (
-    <>
-      <Modal
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
+      <BaseModal
         show={show}
         onHide={handleClose} // Close the modal when clicking outside or the close button
         backdrop="static"
         centered
         size="lg"
+        bodyClassName={eventStatsStyles.stackEvents}
+        headerClassName="bg-primary"
+        title={t('title')}
       >
-        <Modal.Header closeButton className="bg-primary">
-          <Modal.Title className="text-white">Event Statistics</Modal.Title>
-        </Modal.Header>
-        <Modal.Body className={eventStatsStyles.stackEvents}>
-          {/* Render feedback statistics */}
-          <FeedbackStats data={data} />
-          <div>
-            {/* Render review statistics and average rating */}
-            <ReviewStats data={data} />
-            <AverageRating data={data} />
-          </div>
-        </Modal.Body>
-      </Modal>
-    </>
+        {/* Render feedback statistics */}
+        <FeedbackStats data={data} />
+        <div>
+          {/* Render review statistics and average rating */}
+          <ReviewStats data={data} />
+          <AverageRating data={data} />
+        </div>
+      </BaseModal>
+    </ErrorBoundaryWrapper>
   );
 };
