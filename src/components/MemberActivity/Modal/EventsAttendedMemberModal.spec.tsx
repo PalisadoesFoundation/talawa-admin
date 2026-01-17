@@ -15,7 +15,18 @@ dayjs.extend(utc);
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => key,
+    t: (key: string, params?: Record<string, unknown>) => {
+      const translations: Record<string, string> = {
+        noeventsAttended: 'noeventsAttended',
+        title: 'Events Attended List',
+        showing: `Showing ${params?.start} - ${params?.end} of ${params?.total} Events`,
+        eventName: 'Event Name',
+        dateOfEvent: 'Date of Event',
+        recurringEvent: 'Recurring Event',
+        attendees: 'Attendees',
+      };
+      return translations[key] || key;
+    },
     i18n: { changeLanguage: () => Promise.resolve() },
   }),
 }));
@@ -126,7 +137,7 @@ describe('EventsAttendedMemberModal', () => {
       </MockedProvider>,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+    fireEvent.click(screen.getByTestId('modalCloseBtn'));
     expect(mockSetShow).toHaveBeenCalledWith(false);
     expect(mockSetShow).toHaveBeenCalledTimes(1);
   });

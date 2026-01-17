@@ -34,7 +34,9 @@
  * - Submit and cancel buttons for user actions
  */
 import React, { useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 
 /**
  * @interface InterfaceRecurringEventVolunteerModalProps
@@ -86,6 +88,9 @@ const RecurringEventVolunteerModal: React.FC<
   isForGroup = false,
   groupName,
 }) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'recurringEventVolunteerModal',
+  });
   const [selectedOption, setSelectedOption] = useState<'series' | 'instance'>(
     'series',
   );
@@ -104,81 +109,82 @@ const RecurringEventVolunteerModal: React.FC<
     }
   };
 
+  const formattedDate = new Date(eventDate).toLocaleDateString();
+  const title = isForGroup
+    ? t('joinGroupTitle', { groupName, eventName })
+    : t('volunteerTitle', { eventName });
+
+  const footer = (
+    <>
+      <Button variant="secondary" onClick={onHide}>
+        {t('cancel')}
+      </Button>
+      <Button
+        variant="primary"
+        onClick={handleSubmit}
+        data-testid="submitVolunteerBtn"
+      >
+        {t('submitRequest')}
+      </Button>
+    </>
+  );
+
   return (
-    <Modal
+    <BaseModal
       show={show}
       onHide={onHide}
+      title={title}
+      footer={footer}
       centered
-      data-testid="recurringEventModal"
+      dataTestId="recurringEventModal"
     >
-      <Modal.Header closeButton>
-        <Modal.Title>
-          {isForGroup
-            ? `Join ${groupName} - ${eventName}`
-            : `Volunteer for ${eventName}`}
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <p className="mb-4">
-          {isForGroup
-            ? `Would you like to join "${groupName}" for the entire series or just this instance?`
-            : 'Would you like to volunteer for the entire series or just this instance?'}
-        </p>
+      <p className="mb-4">
+        {isForGroup
+          ? t('joinGroupQuestion', { groupName })
+          : t('volunteerQuestion')}
+      </p>
 
-        <Form>
-          <Form.Check
-            type="radio"
-            name="volunteerScope"
-            id="seriesOption"
-            label={
-              <div>
-                <strong>Volunteer for Entire Series</strong>
-                <div className="small text-muted">
-                  {isForGroup
-                    ? 'You will join this group for all events in the recurring series'
-                    : 'You will be volunteering for all events in this recurring series'}
-                </div>
+      <Form>
+        <Form.Check
+          type="radio"
+          name="volunteerScope"
+          id="seriesOption"
+          label={
+            <div>
+              <strong>{t('volunteerForSeries')}</strong>
+              <div className="small text-muted">
+                {isForGroup
+                  ? t('joinGroupForSeries')
+                  : t('volunteerForSeriesDesc')}
               </div>
-            }
-            checked={selectedOption === 'series'}
-            onChange={() => setSelectedOption('series')}
-            className="mb-3"
-            data-testid="volunteerForSeriesOption"
-          />
+            </div>
+          }
+          checked={selectedOption === 'series'}
+          onChange={() => setSelectedOption('series')}
+          className="mb-3"
+          data-testid="volunteerForSeriesOption"
+        />
 
-          <Form.Check
-            type="radio"
-            name="volunteerScope"
-            id="instanceOption"
-            label={
-              <div>
-                <strong>Volunteer for This Instance Only</strong>
-                <div className="small text-muted">
-                  {isForGroup
-                    ? `You will join this group only for the event on ${new Date(eventDate).toLocaleDateString()}`
-                    : `You will only be volunteering for the event on ${new Date(eventDate).toLocaleDateString()}`}
-                </div>
+        <Form.Check
+          type="radio"
+          name="volunteerScope"
+          id="instanceOption"
+          label={
+            <div>
+              <strong>{t('volunteerForInstance')}</strong>
+              <div className="small text-muted">
+                {isForGroup
+                  ? t('joinGroupForInstance', { date: formattedDate })
+                  : t('volunteerForInstanceDesc', { date: formattedDate })}
               </div>
-            }
-            checked={selectedOption === 'instance'}
-            onChange={() => setSelectedOption('instance')}
-            data-testid="volunteerForInstanceOption"
-          />
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={onHide}>
-          Cancel
-        </Button>
-        <Button
-          variant="primary"
-          onClick={handleSubmit}
-          data-testid="submitVolunteerBtn"
-        >
-          Submit Request
-        </Button>
-      </Modal.Footer>
-    </Modal>
+            </div>
+          }
+          checked={selectedOption === 'instance'}
+          onChange={() => setSelectedOption('instance')}
+          data-testid="volunteerForInstanceOption"
+        />
+      </Form>
+    </BaseModal>
   );
 };
 

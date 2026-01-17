@@ -4,6 +4,32 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import dayjs from 'dayjs';
 import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
 
+// Mock useTranslation
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string, params?: Record<string, unknown>) => {
+      const translations: Record<string, string> = {
+        joinGroupTitle: `Join ${params?.groupName} - ${params?.eventName}`,
+        volunteerTitle: `Volunteer for ${params?.eventName}`,
+        joinGroupQuestion: `Would you like to join "${params?.groupName}" for the entire series or just this instance?`,
+        volunteerQuestion:
+          'Would you like to volunteer for the entire series or just this instance?',
+        volunteerForSeries: 'Volunteer for Entire Series',
+        joinGroupForSeries:
+          'You will join this group for all events in the recurring series',
+        volunteerForSeriesDesc:
+          'You will be volunteering for all events in this recurring series',
+        volunteerForInstance: 'Volunteer for This Instance Only',
+        joinGroupForInstance: `You will join this group only for the event on ${params?.date}`,
+        volunteerForInstanceDesc: `You will only be volunteering for the event on ${params?.date}`,
+        cancel: 'Cancel',
+        submitRequest: 'Submit Request',
+      };
+      return translations[key] || key;
+    },
+  }),
+}));
+
 const defaultProps = {
   show: true,
   onHide: vi.fn(),
