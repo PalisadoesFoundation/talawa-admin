@@ -21,7 +21,7 @@
  * - `@mui/icons-material` for the `AddIcon`.
  * - `react-i18next` for translations.
  * - Custom styles from `style/app-fixed.module.css`.
- * - SubComponents: `SortingButton` and `SearchBar`.
+ * - shared-components: `SortingButton` and `SearchBar`.
  *
  * @example
  * ```tsx
