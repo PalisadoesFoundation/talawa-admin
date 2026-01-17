@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import styles from 'style/app-fixed.module.css';
-import { InterfaceAgendaItemsDeleteModalProps } from 'types/components/AdminPortal/EventManagement/AgendaItemsDeleteModal/interface';
+import type { InterfaceAgendaItemsDeleteModalProps } from 'types/components/AdminPortal/EventManagement/AgendaItemsDeleteModal/interface';
 
 /**
  * AgendaItemsDeleteModal
@@ -14,7 +14,7 @@ import { InterfaceAgendaItemsDeleteModalProps } from 'types/components/AdminPort
  * @param deleteAgendaItemHandler - Function to execute the deletion logic
  * @param t - Translation function
  * @param tCommon - Common translation function
- * @returns {JSX.Element} The rendered modal component
+ * @returns  The rendered modal component
  */
 const AgendaItemsDeleteModal: React.FC<
   InterfaceAgendaItemsDeleteModalProps
@@ -59,3 +59,4 @@ const AgendaItemsDeleteModal: React.FC<
 };
 
 export default AgendaItemsDeleteModal;
+

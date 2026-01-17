@@ -10,7 +10,7 @@
  * @param refetchGroups - Callback to refresh the list after deletion
  * @param isRecurring - (Optional) Whether the event is recurring
  * @param eventId - (Optional) The ID of the specific event instance
- * @returns {JSX.Element} The rendered modal component
+ * @returns The rendered modal component
  */
 import { Button, Form } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
@@ -23,8 +23,8 @@ import {
   DELETE_VOLUNTEER_GROUP,
   DELETE_VOLUNTEER_GROUP_FOR_INSTANCE,
 } from 'GraphQl/Mutations/EventVolunteerMutation';
-// 👇 Import the interface from the new file
-import { InterfaceDeleteVolunteerGroupModalProps } from 'types/EventVolunteers/VolunteerGroups/deleteModal/VolunteerGroupDeleteModal/interface';
+//  Import the interface from the new file
+import type { InterfaceDeleteVolunteerGroupModalProps } from 'types/EventVolunteers/VolunteerGroups/deleteModal/VolunteerGroupDeleteModal/interface';
 
 const VolunteerGroupDeleteModal: React.FC<
   InterfaceDeleteVolunteerGroupModalProps
@@ -132,3 +132,4 @@ const VolunteerGroupDeleteModal: React.FC<
 };
 
 export default VolunteerGroupDeleteModal;
+

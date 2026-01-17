@@ -5,7 +5,7 @@ import { Button, Form } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import styles from './EditUserTagModal.module.css';
-import { InterfaceEditUserTagModalProps } from 'types/AdminPortal/ManageTag/editModal/EditUserTagModal/interface';
+import type { InterfaceEditUserTagModalProps } from 'types/AdminPortal/ManageTag/editModal/EditUserTagModal/interface';
 
 /**
  * EditUserTagModal
@@ -19,7 +19,7 @@ import { InterfaceEditUserTagModalProps } from 'types/AdminPortal/ManageTag/edit
  * @param setNewTagName - Function to update the tag name state
  * @param t - Translation function
  * @param tCommon - Common translation function
- * @returns {JSX.Element} The rendered modal component
+ * @returns  The rendered modal component
  */
 const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
   editUserTagModalIsOpen,
@@ -118,3 +118,4 @@ const EditUserTagModal: React.FC<InterfaceEditUserTagModalProps> = ({
 };
 
 export default EditUserTagModal;
+

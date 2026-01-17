@@ -2,7 +2,7 @@
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import { InterfaceUninstallConfirmationModalProps } from 'types/AdminPortal/PluginStore/components/UninstallConfirmationModal/interface';
+import type { InterfaceUninstallConfirmationModalProps } from 'types/AdminPortal/PluginStore/components/UninstallConfirmationModal/interface';
 
 /**
  * UninstallConfirmationModal
@@ -14,7 +14,7 @@ import { InterfaceUninstallConfirmationModalProps } from 'types/AdminPortal/Plug
  * @param onClose - Function to close the modal without taking action
  * @param onConfirm - Function to proceed with uninstallation
  * @param plugin - The plugin object being uninstalled
- * @returns {JSX.Element | null} The rendered modal component or null if no plugin
+ * @returns  The rendered modal component or null if no plugin is selected.
  */
 export default function UninstallConfirmationModal({
   show,
