@@ -10,9 +10,9 @@ Represents an organization option in the selector.
 
 ## Properties
 
-### \_id
+### id
 
-> **\_id**: `string`
+> **id**: `string`
 
 Defined in: [src/types/Auth/OrgSelector/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/OrgSelector/interface.ts#L6)
 

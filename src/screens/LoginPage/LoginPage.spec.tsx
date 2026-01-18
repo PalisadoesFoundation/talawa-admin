@@ -38,7 +38,7 @@ const MOCKS = [
     request: { query: GET_COMMUNITY_DATA_PG },
     result: {
       data: {
-        getCommunityData: {
+        community: {
           __typename: 'Community',
           name: 'Test Community',
         },
@@ -49,10 +49,10 @@ const MOCKS = [
     request: { query: ORGANIZATION_LIST_NO_MEMBERS },
     result: {
       data: {
-        organizationsList: [
+        organizations: [
           {
             __typename: 'Organization',
-            _id: '6437904485008f171cf29924',
+            id: '6437904485008f171cf29924',
             name: 'Unity Foundation',
           },
         ],
@@ -192,10 +192,39 @@ describe('LoginPage Orchestrator', () => {
     expect(screen.getByRole('textbox', { name: /email/i })).toBeInTheDocument();
   });
 
-  it('should render community data when available', () => {
-    renderLoginPage();
+  it('should render community data when available', async () => {
+    const COMMUNITY_DATA_MOCK = [
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: {
+          data: {
+            community: {
+              name: 'Test Community',
+              logoURL: 'http://example.com/logo.png',
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: { data: { organizations: [] } },
+      },
+    ];
 
-    // Community data rendering is handled by the component
-    expect(screen.getByTestId('login-tab')).toBeInTheDocument();
+    render(
+      <MockedProvider mocks={COMMUNITY_DATA_MOCK}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Test Community')).toBeInTheDocument();
+    });
   });
 });

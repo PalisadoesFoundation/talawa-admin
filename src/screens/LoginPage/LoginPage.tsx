@@ -42,7 +42,7 @@ const LoginPage = (): JSX.Element => {
 
   const [tab, setTab] = useState<'LOGIN' | 'REGISTER'>('LOGIN');
   const [organizations, setOrganizations] = useState<
-    { _id: string; name: string }[]
+    { id: string; name: string }[]
   >([]);
   const isAdmin =
     typeof window !== 'undefined' &&
@@ -65,8 +65,8 @@ const LoginPage = (): JSX.Element => {
   } = useQuery(GET_COMMUNITY_DATA_PG);
 
   useEffect(() => {
-    if (orgData?.organizationsList) {
-      setOrganizations(orgData.organizationsList);
+    if (orgData?.organizations) {
+      setOrganizations(orgData.organizations);
     }
   }, [orgData]);
 
@@ -182,9 +182,9 @@ const LoginPage = (): JSX.Element => {
               ) : communityLoading ? (
                 <div>{t('loading')}</div>
               ) : (
-                communityData?.getCommunityData && (
+                communityData?.community && (
                   <div className={styles.communityContainer}>
-                    <p>{communityData.getCommunityData.name}</p>
+                    <p>{communityData.community.name}</p>
                   </div>
                 )
               )}

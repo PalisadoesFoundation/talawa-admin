@@ -3,7 +3,7 @@
  */
 export interface InterfaceOrgOption {
   /** Unique identifier for the organization */
-  _id: string;
+  id: string;
 
   /** Display name of the organization */
   name: string;

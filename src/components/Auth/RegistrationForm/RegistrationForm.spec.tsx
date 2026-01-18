@@ -8,8 +8,8 @@ import i18nForTest from '../../../utils/i18nForTest';
 vi.mock('../../../hooks/auth/useRegistration');
 
 const mockOrganizations = [
-  { _id: '1', name: 'Test Organization 1' },
-  { _id: '2', name: 'Test Organization 2' },
+  { id: '1', name: 'Test Organization 1' },
+  { id: '2', name: 'Test Organization 2' },
 ];
 
 describe('RegistrationForm', () => {

@@ -61,7 +61,7 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
   }, [options, searchTerm]);
 
   // Get selected organization name
-  const selectedOrg = options.find((org) => org._id === value);
+  const selectedOrg = options.find((org) => org.id === value);
   const displayValue = selectedOrg?.name || '';
 
   // Handle click outside to close dropdown
@@ -118,7 +118,7 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
       case 'Enter':
         e.preventDefault();
         if (highlightedIndex >= 0 && filteredOptions[highlightedIndex]) {
-          handleOptionClick(filteredOptions[highlightedIndex]._id);
+          handleOptionClick(filteredOptions[highlightedIndex].id);
         }
         break;
       case 'Escape':
@@ -131,7 +131,7 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
 
   const activeDescendantId =
     isOpen && highlightedIndex >= 0 && filteredOptions[highlightedIndex]
-      ? `org-option-${filteredOptions[highlightedIndex]._id}`
+      ? `org-option-${filteredOptions[highlightedIndex].id}`
       : undefined;
 
   return (
@@ -183,25 +183,25 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
             ) : (
               filteredOptions.map((org, index) => (
                 <div
-                  key={org._id}
-                  id={`org-option-${org._id}`}
+                  key={org.id}
+                  id={`org-option-${org.id}`}
                   role="option"
-                  aria-selected={org._id === value}
+                  aria-selected={org.id === value}
                   tabIndex={-1}
                   className={`${styles.orgSelectorOption} ${
                     index === highlightedIndex
                       ? styles.orgSelectorOptionHighlighted
                       : ''
-                  } ${org._id === value ? styles.orgSelectorOptionSelected : ''}`}
-                  onClick={() => handleOptionClick(org._id)}
+                  } ${org.id === value ? styles.orgSelectorOptionSelected : ''}`}
+                  onClick={() => handleOptionClick(org.id)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
-                      handleOptionClick(org._id);
+                      handleOptionClick(org.id);
                     }
                   }}
                   onMouseEnter={() => setHighlightedIndex(index)}
-                  data-testid={`org-option-${org._id}`}
+                  data-testid={`org-option-${org.id}`}
                 >
                   {org.name}
                 </div>

@@ -9,9 +9,9 @@ import styles from '../../../style/app-fixed.module.css';
 
 describe('OrgSelector', () => {
   const mockOrganizations: InterfaceOrgOption[] = [
-    { _id: 'org1', name: 'Organization One' },
-    { _id: 'org2', name: 'Organization Two' },
-    { _id: 'org3', name: 'Organization Three' },
+    { id: 'org1', name: 'Organization One' },
+    { id: 'org2', name: 'Organization Two' },
+    { id: 'org3', name: 'Organization Three' },
   ];
 
   const defaultProps = {
@@ -502,7 +502,7 @@ describe('OrgSelector', () => {
     });
 
     test('handles single organization option', async () => {
-      const singleOrg = [{ _id: 'org1', name: 'Only Organization' }];
+      const singleOrg = [{ id: 'org1', name: 'Only Organization' }];
       renderWithI18n(<OrgSelector {...defaultProps} options={singleOrg} />);
 
       const input = screen.getByRole('combobox');
@@ -515,8 +515,8 @@ describe('OrgSelector', () => {
 
     test('handles organizations with special characters in names', async () => {
       const specialOrgs = [
-        { _id: 'org1', name: "O'Reilly & Associates" },
-        { _id: 'org2', name: 'Org <Test>' },
+        { id: 'org1', name: "O'Reilly & Associates" },
+        { id: 'org2', name: 'Org <Test>' },
       ];
       renderWithI18n(<OrgSelector {...defaultProps} options={specialOrgs} />);
 
