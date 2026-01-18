@@ -277,12 +277,16 @@ describe('PledgeModal', () => {
     });
   });
 
-  it('should update pledgeAmount when input value changes', () => {
-    renderPledgeModal(link1, pledgeProps[1]);
+  it('should update pledgeAmount when input value changes', async () => {
+    await act(async () => {
+      renderPledgeModal(link1, pledgeProps[1]);
+    });
     const amountInput = screen.getByLabelText('Amount');
     expect(amountInput).toHaveAttribute('value', '100');
 
-    fireEvent.change(amountInput, { target: { value: '200' } });
+    await act(async () => {
+      fireEvent.change(amountInput, { target: { value: '200' } });
+    });
     expect(amountInput).toHaveAttribute('value', '200');
   });
 

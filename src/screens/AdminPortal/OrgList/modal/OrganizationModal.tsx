@@ -25,21 +25,25 @@
  * @example
  * ```tsx
  * <OrganizationModal
- *   showModal={true}
- *   toggleModal={handleToggleModal}
- *   formState={formState}
- *   setFormState={setFormState}
- *   createOrg={handleCreateOrg}
- *   t={translate}
- *   tCommon={translateCommon}
- *   userData={currentUser}
+ * showModal={true}
+ * toggleModal={handleToggleModal}
+ * formState={formState}
+ * setFormState={setFormState}
+ * createOrg={handleCreateOrg}
+ * t={translate}
+ * tCommon={translateCommon}
+ * userData={currentUser}
  * />
  * ```
  *
  * @returns The rendered organization modal.
  */
 import React, { type ChangeEvent } from 'react';
-import { Button, Col, Form, Row } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useMinioUpload } from 'utils/MinioUpload';
@@ -97,40 +101,34 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
       dataTestId="modalOrganizationHeader"
     >
       <Form onSubmitCapture={createOrg}>
-        <Form.Label htmlFor="orgname">{tCommon('name')}</Form.Label>
-        <Form.Control
-          type="description"
-          id="orgname"
-          className={`mb-3 ${styles.inputField}`}
+        <FormTextField
+          name="orgname"
+          label={tCommon('name')}
           placeholder={t('enterName')}
+          value={formState.name}
+          onChange={(val) => {
+            if (val.length <= 50) {
+              setFormState({ ...formState, name: val });
+            }
+          }}
+          required
           data-testid="modalOrganizationName"
           autoComplete="off"
-          required
-          value={formState.name}
-          onChange={(e): void => {
-            const inputText = e.target.value;
-            if (inputText.length <= 50) {
-              setFormState({ ...formState, name: e.target.value });
-            }
-          }}
         />
 
-        <Form.Label htmlFor="description">{tCommon('description')}</Form.Label>
-        <Form.Control
-          type="description"
-          id="description"
-          className={`mb-3 ${styles.inputField}`}
+        <FormTextField
+          name="description"
+          label={tCommon('description')}
           placeholder={tCommon('description')}
-          data-testid="modalOrganizationDescription"
-          autoComplete="off"
-          required
           value={formState.description}
-          onChange={(e): void => {
-            const descriptionText = e.target.value;
-            if (descriptionText.length <= 200) {
-              setFormState({ ...formState, description: e.target.value });
+          onChange={(val) => {
+            if (val.length <= 200) {
+              setFormState({ ...formState, description: val });
             }
           }}
+          required
+          data-testid="modalOrganizationDescription"
+          autoComplete="off"
         />
         <Form.Label>{tCommon('address')}</Form.Label>
         <Row className="mb-1">
@@ -162,91 +160,85 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             </Form.Control>
           </Col>
           <Col sm={6} className="mb-1">
-            <Form.Control
+            <FormTextField
+              name="state"
+              label={tCommon('state')}
               placeholder={tCommon('state')}
+              value={formState.state}
+              onChange={(val) => {
+                if (val.length <= 50) {
+                  setFormState({ ...formState, state: val });
+                }
+              }}
+              required
               data-testid="modalOrganizationState"
               autoComplete="off"
-              required
-              value={formState.state}
-              onChange={(e): void => {
-                const inputText = e.target.value;
-                if (inputText.length <= 50) {
-                  setFormState({ ...formState, state: e.target.value });
-                }
-              }}
-              className={`mb-3 ${styles.inputField}`}
             />
           </Col>
         </Row>
         <Row className="mb-1">
           <Col sm={6} className="mb-1">
-            <Form.Control
+            <FormTextField
+              name="city"
+              label={tCommon('city')}
               placeholder={tCommon('city')}
+              value={formState.city}
+              onChange={(val) => {
+                if (val.length <= 50) {
+                  setFormState({ ...formState, city: val });
+                }
+              }}
+              required
               data-testid="modalOrganizationCity"
               autoComplete="off"
-              required
-              value={formState.city}
-              onChange={(e): void => {
-                const inputText = e.target.value;
-                if (inputText.length <= 50) {
-                  setFormState({ ...formState, city: e.target.value });
-                }
-              }}
-              className={`mb-3 ${styles.inputField}`}
             />
           </Col>
           <Col sm={6} className="mb-1">
-            <Form.Control
+            <FormTextField
+              name="postalCode"
+              label={tCommon('postalCode')}
               placeholder={tCommon('postalCode')}
-              data-testid="modalOrganizationPostalCode"
-              autoComplete="off"
               value={formState.postalCode}
-              onChange={(e): void => {
-                const inputText = e.target.value;
-                if (inputText.length <= 50) {
-                  setFormState({ ...formState, postalCode: e.target.value });
+              onChange={(val) => {
+                if (val.length <= 50) {
+                  setFormState({ ...formState, postalCode: val });
                 }
               }}
-              className={`mb-3 ${styles.inputField}`}
+              data-testid="modalOrganizationPostalCode"
+              autoComplete="off"
             />
           </Col>
         </Row>
         <Row className="mb-1">
           <Col sm={6} className="mb-1">
-            <Form.Control
+            <FormTextField
+              name="addressLine1"
+              label={tCommon('addressLine1')}
               placeholder={tCommon('addressLine1')}
-              data-testid="modalOrganizationAddressLine1"
-              autoComplete="off"
-              required
               value={formState.addressLine1}
-              onChange={(e): void => {
-                const inputText = e.target.value;
-                if (inputText.length <= 50) {
-                  setFormState({
-                    ...formState,
-                    addressLine1: e.target.value,
-                  });
+              onChange={(val) => {
+                if (val.length <= 50) {
+                  setFormState({ ...formState, addressLine1: val });
                 }
               }}
-              className={`mb-3 ${styles.inputField}`}
+              required
+              data-testid="modalOrganizationAddressLine1"
+              autoComplete="off"
             />
           </Col>
           <Col sm={6} className="mb-1">
-            <Form.Control
+            <FormTextField
+              name="addressLine2"
+              label={tCommon('addressLine2')}
               placeholder={tCommon('addressLine2')}
-              data-testid="modalOrganizationAddressLine2"
-              autoComplete="off"
               value={formState.addressLine2}
-              onChange={(e): void => {
-                const inputText = e.target.value;
-                if (inputText.length <= 50) {
-                  setFormState({
-                    ...formState,
-                    addressLine2: e.target.value,
-                  });
+              onChange={(val) => {
+                if (val.length <= 50) {
+                  setFormState({ ...formState, addressLine2: val });
                 }
               }}
-              className={`mb-3 ${styles.inputField}`}
+              data-testid="modalOrganizationAddressLine2"
+              autoComplete="off"
             />
           </Col>
         </Row>
