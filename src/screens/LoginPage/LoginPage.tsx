@@ -49,24 +49,23 @@ const LoginPage = (): JSX.Element => {
     window.location.pathname.startsWith('/admin');
 
   // Fetch organizations for registration
-  const {
-    data: orgData,
-    loading: _orgLoading,
-    error: _orgError,
-  } = useQuery(ORGANIZATION_LIST_NO_MEMBERS, {
+  const { data: orgData } = useQuery(ORGANIZATION_LIST_NO_MEMBERS, {
     skip: tab !== 'REGISTER',
   });
 
   // Fetch community data
-  const {
-    data: communityData,
-    loading: communityLoading,
-    error: communityError,
-  } = useQuery(GET_COMMUNITY_DATA_PG);
+  const { data: communityData } = useQuery(GET_COMMUNITY_DATA_PG);
 
   useEffect(() => {
     if (orgData?.organizations) {
-      setOrganizations(orgData.organizations);
+      // Map id to _id for OrgSelector compatibility
+      const mappedOrgs = orgData.organizations.map(
+        (org: { id: string; name: string }) => ({
+          _id: org.id,
+          name: org.name,
+        }),
+      );
+      setOrganizations(mappedOrgs);
     }
   }, [orgData]);
 
@@ -140,6 +139,7 @@ const LoginPage = (): JSX.Element => {
                   type="button"
                   role="tab"
                   aria-selected={tab === 'LOGIN'}
+                  aria-controls="login-panel"
                   className={`${styles.tab} ${tab === 'LOGIN' ? styles.activeTab : ''}`}
                   onClick={() => setTab('LOGIN')}
                   data-testid="login-tab"
@@ -150,6 +150,7 @@ const LoginPage = (): JSX.Element => {
                   type="button"
                   role="tab"
                   aria-selected={tab === 'REGISTER'}
+                  aria-controls="register-panel"
                   className={`${styles.tab} ${tab === 'REGISTER' ? styles.activeTab : ''}`}
                   onClick={() => setTab('REGISTER')}
                   data-testid="register-tab"
@@ -159,7 +160,12 @@ const LoginPage = (): JSX.Element => {
               </div>
 
               {/* Form Content */}
-              <div className={styles.formContainer}>
+              <div
+                className={styles.formContainer}
+                role="tabpanel"
+                id={tab === 'LOGIN' ? 'login-panel' : 'register-panel'}
+                aria-labelledby={tab === 'LOGIN' ? 'login-tab' : 'register-tab'}
+              >
                 {tab === 'LOGIN' ? (
                   <LoginForm
                     isAdmin={isAdmin}
@@ -177,16 +183,10 @@ const LoginPage = (): JSX.Element => {
               </div>
 
               {/* Community Data Display */}
-              {communityError ? (
-                <div>{t('Something_went_wrong')}</div>
-              ) : communityLoading ? (
-                <div>{t('loading')}</div>
-              ) : (
-                communityData?.community && (
-                  <div className={styles.communityContainer}>
-                    <p>{communityData.community.name}</p>
-                  </div>
-                )
+              {communityData?.community && (
+                <div className={styles.communityContainer}>
+                  <p>{communityData.community.name}</p>
+                </div>
               )}
             </div>
           </Col>

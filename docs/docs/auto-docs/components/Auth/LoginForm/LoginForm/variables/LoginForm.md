@@ -21,7 +21,7 @@ and user login modes via the isAdmin prop.
 ```tsx
 <LoginForm
   isAdmin={false}
-  onSuccess={(token) => console.log('Logged in:', token)}
+  onSuccess={(signInData) => console.log('Logged in:', signInData)}
   onError={(error) => console.error('Login failed:', error)}
 />
 ```

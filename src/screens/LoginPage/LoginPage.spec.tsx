@@ -137,15 +137,26 @@ describe('LoginPage Orchestrator', () => {
   });
 
   it('should detect admin mode from URL path', () => {
+    // Store original location
+    const originalLocation = window.location;
+
     // Mock window.location
     Object.defineProperty(window, 'location', {
       value: { pathname: '/admin/login' },
       writable: true,
+      configurable: true,
     });
 
     renderLoginPage();
 
     expect(screen.getByTestId('login-form')).toBeInTheDocument();
+
+    // Restore original location
+    Object.defineProperty(window, 'location', {
+      value: originalLocation,
+      writable: true,
+      configurable: true,
+    });
   });
 
   it('should render social media links', () => {

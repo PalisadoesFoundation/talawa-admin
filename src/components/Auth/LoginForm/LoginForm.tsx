@@ -22,7 +22,7 @@ import type {
  * ```tsx
  * <LoginForm
  *   isAdmin={false}
- *   onSuccess={(token) => console.log('Logged in:', token)}
+ *   onSuccess={(signInData) => console.log('Logged in:', signInData)}
  *   onError={(error) => console.error('Login failed:', error)}
  * />
  * ```
