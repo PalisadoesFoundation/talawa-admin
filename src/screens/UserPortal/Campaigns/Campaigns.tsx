@@ -10,7 +10,8 @@ import styles from './Campaigns.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import { Campaign, WarningAmberRounded } from '@mui/icons-material';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography } from '@mui/material';
+import Button from 'shared-components/Button/Button';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
 /**
@@ -302,9 +303,8 @@ const Campaigns = (): JSX.Element => {
 
         return (
           <Button
-            size="small"
-            variant={isEnded ? 'outlined' : 'contained'}
-            color={isEnded ? 'inherit' : 'success'}
+            size="sm"
+            variant={isEnded ? 'outline-secondary' : 'outline-success'}
             data-testid="addPledgeBtn"
             disabled={isEnded}
             onClick={(e) => {
@@ -359,8 +359,7 @@ const Campaigns = (): JSX.Element => {
       />
 
       <Button
-        variant="contained"
-        color="success"
+        variant="success"
         data-testid="myPledgesBtn"
         onClick={() => navigate(`/user/pledges/${orgId}`, { replace: true })}
       >
