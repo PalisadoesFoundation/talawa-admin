@@ -1,0 +1,74 @@
+@import '../../../../style/tokens/index.css';
+
+/* CSS for EventDashboard */
+
+.ctacards {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-300);
+  padding: var(--space-4);
+  border-radius: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1;
+}
+
+.ctacards span {
+  color: var(--color-gray-500);
+  font-size: 0.875rem;
+}
+
+.eventContainer {
+  margin-top: var(--space-4);
+}
+
+.eventDetailsBox {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-gray-300);
+  padding: var(--space-5);
+  border-radius: var(--space-2);
+  position: relative;
+}
+
+.titlename {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-gray-700);
+  margin-bottom: var(--space-3);
+}
+
+.description {
+  color: var(--color-gray-600);
+  margin-bottom: var(--space-3);
+}
+
+.toporgloc {
+  color: var(--color-gray-600);
+  margin-bottom: var(--space-2);
+}
+
+.time {
+  border: 1px solid var(--color-gray-300);
+  background-color: var(--color-white);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  padding: var(--space-4);
+  border-radius: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.startTime,
+.endTime {
+  font-weight: 600;
+  color: var(--color-gray-700);
+}
+
+.startDate,
+.endDate {
+  color: var(--color-gray-600);
+}
+
+.to {
+  text-align: center;
+  color: var(--color-gray-500);
+  margin: var(--space-2) 0;
+}
