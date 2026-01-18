@@ -140,9 +140,6 @@
     "OR": "OU",
     "loading": "Chargement"
   },
-  "userGlobalScreen": {
-    "title": "Paramètres Globaux"
-  },
   "latestEvents": {
     "eventCardTitle": "évènements à venir",
     "eventCardSeeAll": "Voir tout",
@@ -1351,9 +1348,6 @@
     "logout": "Déconnexion",
     "close": "Fermer",
     "talawaBranding": "Image de marque Talawa"
-  },
-  "userGlobalScreen": {
-    "title": "Fonctionnalités Globales"
   },
   "userOrganizations": {
     "allOrganizations": "Toutes les organisations",

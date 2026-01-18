@@ -140,9 +140,6 @@
     "OR": "या",
     "loading": "लोड हो रहा है"
   },
-  "userGlobalScreen": {
-    "title": "वैश्विक सेटिंग्स"
-  },
   "latestEvents": {
     "eventCardTitle": "आगामी घटनाएँ",
     "eventCardSeeAll": "सभी देखें",
@@ -1350,9 +1347,6 @@
     "logout": "लॉग आउट करें",
     "close": "बंद करें",
     "talawaBranding": "तालावा ब्रांडिंग"
-  },
-  "userGlobalScreen": {
-    "title": "वैश्विक सुविधाएं"
   },
   "userOrganizations": {
     "allOrganizations": "सभी संगठन",
