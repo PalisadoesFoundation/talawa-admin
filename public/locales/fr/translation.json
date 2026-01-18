@@ -414,7 +414,9 @@
     "profile": "Profil",
     "joined": "Rejoint",
     "createUser": "Créer un utilisateur",
-    "notFound": "Aucun membre trouvé"
+    "notFound": "Aucun membre trouvé",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe"
   },
   "organizationCard": {
     "join": "Rejoindre",
@@ -729,6 +731,7 @@
     "options": "Options",
     "createAgendaItem": "Créer un point à l'ordre du jour",
     "noAgendaItems": "Aucun point à l'ordre du jour",
+    "search": "Rechercher",
     "selectAgendaItemCategory": "Sélectionner une catégorie de point de l'ordre du jour",
     "update": "Mettre à jour",
     "delete": "Supprimer",
@@ -1419,11 +1422,12 @@
   },
   "posts": {
     "pinnedPosts": "Messages épinglés",
+    "errorLoadingPreviewPost": "Erreur lors du chargement de l'aperçu du message.",
     "title": "Publications",
     "latest": "Dernier",
     "oldest": "Le plus ancien",
     "none": "Aucun",
-    "closePinnedPost": "Fermer le message épinglé",
+    "closePostView": "Fermer la vue du message",
     "unknownUser": "Utilisateur inconnu",
     "searchPosts": "Rechercher des messages",
     "nothingToShow": "Rien à montrer ici.",
@@ -1512,7 +1516,8 @@
     "noRegistrantsFound": "Aucun inscrit trouvé.",
     "removingAttendee": "Suppression du participant...",
     "attendeeRemovedSuccessfully": "Participant supprimé avec succès",
-    "errorRemovingAttendee": "Erreur lors de la suppression du participant. Veuillez réessayer.",
+    "errorRemovingAttendee": "Erreur lors de la suppression du participant",
+    "cannotUnregisterCheckedIn": "Impossible d'annuler l'inscription d'un utilisateur qui s'est déjà enregistré",
     "checkedIn": "Enregistré",
     "unregister": "Désinscrire",
     "cannotUnregisterCheckedInTooltip": "Impossible de désinscrire un utilisateur déjà enregistré"
@@ -1918,6 +1923,13 @@
   "checkIn": {
     "errorCheckingIn": "Erreur lors de l'enregistrement",
     "checkedInSuccessfully": "Enregistrement réussi",
+    "generatingPdf": "Génération du PDF...",
+    "pdfGeneratedSuccessfully": "PDF généré avec succès !",
+    "errorGeneratingPdf": "Erreur lors de la génération du PDF",
+    "unknownError": "Erreur inconnue",
+    "checkedIn": "Enregistré",
+    "downloadTag": "Télécharger l'étiquette",
+    "checkInButton": "S'enregistrer",
     "searchAttendees": "Rechercher des participants",
     "checkedIn": "Enregistré",
     "downloadTag": "Télécharger l'étiquette",
@@ -2027,7 +2039,20 @@
     "searchPledges": "Rechercher des engagements"
   },
   "leaveOrganization": {
-    "title": "Quitter l'organisation"
+    "title": "Quitter l'organisation",
+    "leaveOrganization": "Quitter l'organisation",
+    "confirmLeaveOrganization": "Confirmer le départ de l'organisation",
+    "leaveOrganizationConfirmation": "Êtes-vous sûr de vouloir quitter {{orgName}} ? Vous perdrez l'accès au contenu réservé aux membres.",
+    "enterEmailToConfirm": "Entrez votre email pour confirmer :",
+    "enterYourEmail": "Entrez votre email",
+    "confirmEmailInput": "Confirmer la saisie de l'email",
+    "leftOrganizationSuccess": "Vous avez quitté l'organisation avec succès !",
+    "leftOrganizationError": "Échec du départ de l'organisation. Veuillez réessayer.",
+    "networkError": "Impossible de traiter votre demande. Veuillez vérifier votre connexion.",
+    "emailMismatchError": "L'email que vous avez entré ne correspond pas à celui de votre compte.",
+    "continue": "Continuer",
+    "missingRequiredInfo": "Impossible de traiter la demande : Informations requises manquantes.",
+    "organizationNotFound": "Organisation non trouvée"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Sélecteur de vue des bénévoles",
@@ -2268,7 +2293,9 @@
     "title": "Portail Utilisateur",
     "talawa": "Talawa",
     "talawaBranding": "Image de marque Talawa",
-    "view": "Voir"
+    "view": "Voir",
+    "changeLanguage": "Changer de langue",
+    "userNotFoundError": "Utilisateur introuvable"
   },
   "donation": {
     "amount_label": "Montant",
@@ -2379,5 +2406,13 @@
     "placeholderFirstName": "John",
     "placeholderLastName": "Doe",
     "placeholderEmail": "abc@gmail.com"
+  },
+  "eventStats": {
+    "title": "Statistiques de l'événement",
+    "reviews": {
+      "title": "Avis",
+      "emptyState": "En attente que les gens parlent de l'événement...",
+      "filledByCount": "Rempli par {{count}} personnes."
+    }
   }
 }

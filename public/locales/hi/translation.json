@@ -414,7 +414,9 @@
     "create": "बनाएं",
     "cancel": "रद्द करें",
     "createUser": "उपयोगकर्ता बनाएं",
-    "notFound": "कोई सदस्य नहीं मिले"
+    "notFound": "कोई सदस्य नहीं मिले",
+    "showPassword": "पासवर्ड दिखाएं",
+    "hidePassword": "पासवर्ड छुपाएं"
   },
   "organizationCard": {
     "join": "जॉइन करें",
@@ -746,6 +748,7 @@
     "options": "विकल्प",
     "createAgendaItem": "एजेंडा आइटम बनाएं",
     "noAgendaItems": "कोई एजेंडा आइटम नहीं",
+    "search": "खोजें",
     "selectAgendaItemCategory": "एजेंडा आइटम श्रेणी चुनें",
     "update": "अपडेट करें",
     "delete": "हटाएं",
@@ -754,6 +757,7 @@
     "agendaItemDeleted": "एजेंडा आइटम सफलतापूर्वक हटा दिया गया",
     "deleteAgendaItem": "एजेंडा आइटम हटाएं",
     "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?",
+    "attachmentPreview": "अनुलग्नक पूर्वावलोकन",
     "event": "कार्यक्रम",
     "search": "खोज",
     "attachmentPreview": "अटैचमेंट पूर्वावलोकन",
@@ -1419,12 +1423,13 @@
   },
   "posts": {
     "pinnedPosts": "पिन किए गए पोस्ट",
+    "errorLoadingPreviewPost": "पूर्वावलोकन पोस्ट लोड करने में त्रुटि हुई। कृपया बाद में पुनः प्रयास करें।",
     "title": "पोस्ट",
     "latest": "नवीनतम",
     "oldest": "सबसे पुराना",
     "none": "कोई नहीं",
     "unknownUser": "अज्ञात उपयोगकर्ता",
-    "closePinnedPost": "पिन किए गए पोस्ट बंद करें",
+    "closePostView": "पोस्ट दृश्य बंद करें",
     "searchPosts": "पोस्ट खोजें",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "noMorePosts": "और कोई पोस्ट नहीं है",
@@ -1510,6 +1515,10 @@
     "options": "विकल्प",
     "addRegistrant": "पंजीकृत व्यक्ति जोड़ें",
     "noRegistrantsFound": "कोई पंजीकृत व्यक्ति नहीं मिला",
+    "removingAttendee": "उपस्थित होने वाले को हटाया जा रहा है...",
+    "attendeeRemovedSuccessfully": "उपस्थित होने वाला सफलतापूर्वक हटा दिया गया",
+    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
+    "cannotUnregisterCheckedIn": "किसी उपयोगकर्ता का पंजीकरण रद्द नहीं किया जा सकता जो पहले से ही चेक-इन कर चुका है",
     "removingAttendee": "प्रतिभागी को हटाया जा रहा है...",
     "attendeeRemovedSuccessfully": "प्रतिभागी सफलतापूर्वक हटा दिया गया",
     "errorRemovingAttendee": "प्रतिभागी को हटाने में त्रुटि हुई। कृपया पुनः प्रयास करें।",
@@ -1918,6 +1927,13 @@
   "checkIn": {
     "errorCheckingIn": "चेक-इन में त्रुटि",
     "checkedInSuccessfully": "सफलतापूर्वक चेक-इन किया गया",
+    "generatingPdf": "PDF जेनरेट हो रहा है...",
+    "pdfGeneratedSuccessfully": "PDF सफलतापूर्वक जेनरेट किया गया!",
+    "errorGeneratingPdf": "PDF जेनरेट करने में त्रुटि",
+    "unknownError": "अज्ञात त्रुटि",
+    "checkedIn": "चेक-इन हुआ",
+    "downloadTag": "टैग डाउनलोड करें",
+    "checkInButton": "चेक इन करें",
     "searchAttendees": "उपस्थित लोगों को खोजें",
     "checkedIn": "चेक इन किया गया",
     "downloadTag": "टैग डाउनलोड करें",
@@ -2027,7 +2043,20 @@
     "searchPledges": "प्रतिज्ञाएँ खोजें"
   },
   "leaveOrganization": {
-    "title": "संगठन छोड़ें"
+    "title": "संगठन छोड़ें",
+    "leaveOrganization": "संगठन छोड़ें",
+    "confirmLeaveOrganization": "संगठन छोड़ने की पुष्टि करें",
+    "leaveOrganizationConfirmation": "क्या आप वाकई {{orgName}} छोड़ना चाहते हैं? आप केवल सदस्यों के लिए सामग्री तक पहुंच खो देंगे।",
+    "enterEmailToConfirm": "पुष्टि करने के लिए अपना ईमेल दर्ज करें:",
+    "enterYourEmail": "अपना ईमेल दर्ज करें",
+    "confirmEmailInput": "ईमेल इनपुट की पुष्टि करें",
+    "leftOrganizationSuccess": "आपने सफलतापूर्वक संगठन छोड़ दिया है!",
+    "leftOrganizationError": "संगठन छोड़ने में विफल। कृपया पुन: प्रयास करें।",
+    "networkError": "आपके अनुरोध को संसाधित करने में असमर्थ। कृपया अपना कनेक्शन जांचें।",
+    "emailMismatchError": "आपके द्वारा दर्ज किया गया ईमेल आपके खाते के ईमेल से मेल नहीं खाता है।",
+    "continue": "जारी रखें",
+    "missingRequiredInfo": "अनुरोध संसाधित करने में असमर्थ: आवश्यक जानकारी अनुपलब्ध।",
+    "organizationNotFound": "संगठन नहीं मिला"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "स्वयंसेवक दृश्य चयनकर्ता",
@@ -2268,7 +2297,9 @@
     "title": "उपयोगकर्ता पोर्टल",
     "talawa": "तलावा",
     "talawaBranding": "तालावा ब्रांडिंग",
-    "view": "देखें"
+    "view": "देखें",
+    "changeLanguage": "भाषा बदलें",
+    "userNotFoundError": "उपयोगकर्ता नहीं मिला"
   },
   "donation": {
     "amount_label": "राशि",
@@ -2379,5 +2410,13 @@
     "placeholderFirstName": "John",
     "placeholderLastName": "Doe",
     "placeholderEmail": "abc@gmail.com"
+  },
+  "eventStats": {
+    "title": "इवेंट आंकड़े",
+    "reviews": {
+      "title": "समीक्षाएं",
+      "emptyState": "लोगों के इवेंट के बारे में बात करने की प्रतीक्षा है...",
+      "filledByCount": "{{count}} लोगों द्वारा भरा गया।"
+    }
   }
 }
