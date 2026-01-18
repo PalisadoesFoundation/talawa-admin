@@ -46,8 +46,7 @@ import { Paper, TableBody } from '@mui/material';
 import React, { useRef, useState, useEffect } from 'react';
 import { Button, ListGroup, Dropdown } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import styles from 'style/app-fixed.module.css';
-import groupChatStyles from './GroupChatDetails.module.css';
+import styles from './GroupChatDetails.module.css';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   UPDATE_CHAT,
@@ -75,6 +74,7 @@ import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 export default function groupChatDetails({
   toggleGroupChatDetailsModal,
@@ -84,6 +84,7 @@ export default function groupChatDetails({
 }: InterfaceGroupChatDetailsProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   //storage
 
@@ -253,7 +254,12 @@ export default function groupChatDetails({
   };
 
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
       <BaseModal
         show={groupChatDetailsModalisOpen}
         onHide={toggleGroupChatDetailsModal}
@@ -295,7 +301,7 @@ export default function groupChatDetails({
           type="file"
           accept="image/*"
           ref={fileInputRef}
-          className={groupChatStyles.hiddenInput}
+          className={styles.hiddenInput}
           onChange={handleImageChange}
           data-testid="fileInput"
         />
@@ -412,7 +418,7 @@ export default function groupChatDetails({
                       />
                       <span className="ms-2">{user.name}</span>
                       <span
-                        className={`badge bg-success text-dark ms-2 ${groupChatStyles.roleBadge}`}
+                        className={`badge bg-success text-dark ms-2 ${styles.roleBadge}`}
                       >
                         {role}
                       </span>
@@ -422,7 +428,7 @@ export default function groupChatDetails({
                         <Dropdown.Toggle
                           variant="link"
                           id={`dropdown-${user.id}`}
-                          className={`btn-sm ${groupChatStyles.dropdownToggle}`}
+                          className={`btn-sm ${styles.dropdownToggle}`}
                         >
                           <BsThreeDotsVertical />
                         </Dropdown.Toggle>
@@ -443,7 +449,7 @@ export default function groupChatDetails({
                           </Dropdown.Item>
                           {canRemove && (
                             <Dropdown.Item
-                              className={groupChatStyles.removeItem}
+                              className={styles.removeItem}
                               onClick={() => {
                                 if (
                                   window.confirm(
@@ -503,19 +509,11 @@ export default function groupChatDetails({
             <Table aria-label={t('customizedTable')}>
               <TableHead>
                 <TableRow>
-                  <TableCell className={groupChatStyles.tableHeader}>
-                    #
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={groupChatStyles.tableHeader}
-                  >
+                  <TableCell className={styles.tableHeader}>#</TableCell>
+                  <TableCell align="center" className={styles.tableHeader}>
                     {t('user')}
                   </TableCell>
-                  <TableCell
-                    align="center"
-                    className={groupChatStyles.tableHeader}
-                  >
+                  <TableCell align="center" className={styles.tableHeader}>
                     {t('chatAction')}
                   </TableCell>
                 </TableRow>
@@ -558,13 +556,13 @@ export default function groupChatDetails({
                           <TableCell
                             component="th"
                             scope="row"
-                            className={groupChatStyles.tableBody}
+                            className={styles.tableBody}
                           >
                             {index + 1}
                           </TableCell>
                           <TableCell
                             align="center"
-                            className={groupChatStyles.tableBody}
+                            className={styles.tableBody}
                           >
                             {userDetails.name}
                             <br />
@@ -573,7 +571,7 @@ export default function groupChatDetails({
                           </TableCell>
                           <TableCell
                             align="center"
-                            className={groupChatStyles.tableBody}
+                            className={styles.tableBody}
                           >
                             <Button
                               onClick={async () => {
@@ -602,6 +600,6 @@ export default function groupChatDetails({
           </TableContainer>
         </LoadingState>
       </BaseModal>
-    </>
+    </ErrorBoundaryWrapper>
   );
 }
