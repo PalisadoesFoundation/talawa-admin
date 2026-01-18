@@ -9,8 +9,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-// eslint-disable-next-line no-restricted-imports -- Autocomplete requires TextField for renderInput
-import { Autocomplete, TextField } from '@mui/material';
+import { Autocomplete } from '@mui/material';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
@@ -104,6 +103,10 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
     Record<string, never>
   >(
     async () => {
+      if (!group?.id) {
+        throw new Error('Group ID is required for update');
+      }
+
       const updatedFields: {
         [key: string]: number | string | undefined | null;
       } = {};
@@ -120,7 +123,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
 
       await updateVolunteerGroup({
         variables: {
-          id: group?.id,
+          id: group.id,
           data: { ...updatedFields, eventId },
         },
       });
@@ -142,10 +145,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
   >(
     async () => {
       if (isRecurring && !baseEvent) {
-        NotificationToast.error(
-          t('baseEventRequired') ||
-            'Base event is required for recurring events',
-        );
+        NotificationToast.error(t('baseEventRequired'));
         throw new Error('Base event is required for recurring events');
       }
 
@@ -194,6 +194,10 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
   );
 
   const updateGroupHandler = async (): Promise<void> => {
+    if (!group?.id) {
+      NotificationToast.error(tCommon('errorOccured'));
+      return;
+    }
     await executeUpdate({});
   };
 
@@ -201,7 +205,10 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
     await executeCreate({});
   };
 
-  const isSubmitDisabled = isCreating || (isRecurring && !baseEvent);
+  const isSubmitDisabled =
+    mode === 'edit'
+      ? isUpdating || !group?.id
+      : isCreating || (isRecurring && !baseEvent);
 
   const formContent = (
     <>
@@ -289,7 +296,17 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             }
           }}
           renderInput={(params) => (
-            <TextField {...params} label={`${t('leader')} *`} />
+            <div ref={params.InputProps.ref} className="position-relative">
+              <label htmlFor="leader-input" className="form-label">
+                {t('leader')} <span aria-label={tCommon('required')}>*</span>
+              </label>
+              <input
+                {...params.inputProps}
+                id="leader-input"
+                className="form-control"
+                placeholder={`${t('leader')} *`}
+              />
+            </div>
           )}
         />
       </div>
@@ -313,7 +330,18 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             });
           }}
           renderInput={(params) => (
-            <TextField {...params} label={`${t('volunteers')} *`} />
+            <div ref={params.InputProps.ref} className="position-relative">
+              <label htmlFor="volunteers-input" className="form-label">
+                {t('volunteers')}
+                <span aria-label={tCommon('required')}>*</span>
+              </label>
+              <input
+                {...params.inputProps}
+                id="volunteers-input"
+                className="form-control"
+                placeholder={`${t('volunteers')} *`}
+              />
+            </div>
           )}
         />
       </div>
@@ -352,6 +380,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         onClose={hide}
         onSubmit={updateGroupHandler}
         loading={isUpdating}
+        submitDisabled={isSubmitDisabled}
         data-testid="volunteerGroupModal"
       >
         {formContent}

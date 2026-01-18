@@ -8,10 +8,9 @@ import {
   act,
 } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { Form } from 'react-bootstrap';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import globalStyles from 'style/app-fixed.module.css';
+import { FormTextField } from '../FormFieldGroup/FormTextField';
 import {
   CRUDModalTemplate,
   CreateModal,
@@ -242,7 +241,7 @@ describe('CRUDModalTemplate', () => {
       );
 
       const primaryBtn = screen.getByTestId('modal-primary-btn');
-      expect(primaryBtn).toHaveClass(globalStyles.addButton);
+      expect(primaryBtn.className).toContain('addButton');
     });
 
     it('should apply danger className when primaryVariant is danger', () => {
@@ -259,7 +258,7 @@ describe('CRUDModalTemplate', () => {
       );
 
       const primaryBtn = screen.getByTestId('modal-primary-btn');
-      expect(primaryBtn).toHaveClass(globalStyles.removeButton);
+      expect(primaryBtn.className).toContain('removeButton');
     });
 
     it('should not apply special className when primaryVariant is success', () => {
@@ -276,8 +275,8 @@ describe('CRUDModalTemplate', () => {
       );
 
       const primaryBtn = screen.getByTestId('modal-primary-btn');
-      expect(primaryBtn).not.toHaveClass(globalStyles.addButton);
-      expect(primaryBtn).not.toHaveClass(globalStyles.removeButton);
+      expect(primaryBtn.className).not.toContain('addButton');
+      expect(primaryBtn.className).not.toContain('removeButton');
     });
   });
 
@@ -438,10 +437,13 @@ describe('CreateModal', () => {
           onClose={mockOnClose}
           onSubmit={mockOnSubmit}
         >
-          <Form.Group>
-            <Form.Label>Name</Form.Label>
-            <Form.Control type="text" placeholder="Enter name" />
-          </Form.Group>
+          <FormTextField
+            name="name"
+            label="Name"
+            value=""
+            onChange={vi.fn()}
+            placeholder="Enter name"
+          />
         </CreateModal>,
       );
 
@@ -457,9 +459,7 @@ describe('CreateModal', () => {
           onClose={mockOnClose}
           onSubmit={mockOnSubmit}
         >
-          <Form.Group>
-            <Form.Control type="text" />
-          </Form.Group>
+          <FormTextField name="test" label="Test" value="" onChange={vi.fn()} />
         </CreateModal>,
       );
 
@@ -477,7 +477,7 @@ describe('CreateModal', () => {
           onClose={mockOnClose}
           onSubmit={mockOnSubmit}
         >
-          <Form.Control type="text" />
+          <FormTextField name="test" label="Test" value="" onChange={vi.fn()} />
         </CreateModal>,
       );
 
@@ -496,7 +496,7 @@ describe('CreateModal', () => {
           onSubmit={mockOnSubmit}
           submitDisabled={true}
         >
-          <Form.Control type="text" />
+          <FormTextField name="test" label="Test" value="" onChange={vi.fn()} />
         </CreateModal>,
       );
 
@@ -512,7 +512,7 @@ describe('CreateModal', () => {
           onClose={mockOnClose}
           onSubmit={mockOnSubmit}
         >
-          <Form.Control type="text" />
+          <FormTextField name="test" label="Test" value="" onChange={vi.fn()} />
         </CreateModal>,
       );
 
@@ -530,7 +530,13 @@ describe('CreateModal', () => {
           onClose={mockOnClose}
           onSubmit={mockOnSubmit}
         >
-          <Form.Control type="text" data-testid="input-field" />
+          <FormTextField
+            name="test"
+            label="Test"
+            value=""
+            onChange={vi.fn()}
+            data-testid="input-field"
+          />
         </CreateModal>,
       );
 
@@ -550,7 +556,13 @@ describe('CreateModal', () => {
           onClose={mockOnClose}
           onSubmit={mockOnSubmit}
         >
-          <Form.Control type="text" data-testid="input-field" />
+          <FormTextField
+            name="test"
+            label="Test"
+            value=""
+            onChange={vi.fn()}
+            data-testid="input-field"
+          />
         </CreateModal>,
       );
 
@@ -572,7 +584,13 @@ describe('CreateModal', () => {
           onClose={mockOnClose}
           onSubmit={mockOnSubmit}
         >
-          <Form.Control type="text" data-testid="first-input" />
+          <FormTextField
+            name="test"
+            label="Test"
+            value=""
+            onChange={vi.fn()}
+            data-testid="first-input"
+          />
         </CreateModal>,
       );
 
@@ -584,7 +602,13 @@ describe('CreateModal', () => {
             onClose={mockOnClose}
             onSubmit={mockOnSubmit}
           >
-            <Form.Control type="text" data-testid="first-input" />
+            <FormTextField
+              name="test"
+              label="Test"
+              value=""
+              onChange={vi.fn()}
+              data-testid="first-input"
+            />
           </CreateModal>
         </I18nextProvider>,
       );
@@ -607,9 +631,21 @@ describe('CreateModal', () => {
           onSubmit={mockOnSubmit}
         >
           <>
-            <Form.Control type="hidden" />
-            <Form.Control type="text" disabled />
-            <Form.Control type="text" data-testid="visible-input" />
+            <input type="hidden" />
+            <FormTextField
+              name="disabled"
+              label="Disabled"
+              value=""
+              onChange={vi.fn()}
+              disabled
+            />
+            <FormTextField
+              name="visible"
+              label="Visible"
+              value=""
+              onChange={vi.fn()}
+              data-testid="visible-input"
+            />
           </>
         </CreateModal>,
       );
@@ -623,9 +659,21 @@ describe('CreateModal', () => {
             onSubmit={mockOnSubmit}
           >
             <>
-              <Form.Control type="hidden" />
-              <Form.Control type="text" disabled />
-              <Form.Control type="text" data-testid="visible-input" />
+              <input type="hidden" />
+              <FormTextField
+                name="disabled"
+                label="Disabled"
+                value=""
+                onChange={vi.fn()}
+                disabled
+              />
+              <FormTextField
+                name="visible"
+                label="Visible"
+                value=""
+                onChange={vi.fn()}
+                data-testid="visible-input"
+              />
             </>
           </CreateModal>
         </I18nextProvider>,
@@ -681,7 +729,13 @@ describe('CreateModal', () => {
           onClose={mockOnClose}
           onSubmit={mockOnSubmit}
         >
-          <Form.Control type="text" data-testid="input-field" />
+          <FormTextField
+            name="test"
+            label="Test"
+            value=""
+            onChange={vi.fn()}
+            data-testid="input-field"
+          />
         </CreateModal>,
       );
 
@@ -699,7 +753,7 @@ describe('CreateModal', () => {
           onClose={mockOnClose}
           onSubmit={mockOnSubmit}
         >
-          <Form.Control type="text" />
+          <FormTextField name="test" label="Test" value="" onChange={vi.fn()} />
         </CreateModal>,
       );
 
@@ -727,7 +781,7 @@ describe('EditModal', () => {
         onSubmit={mockOnSubmit}
         loadingData={true}
       >
-        <Form.Control type="text" />
+        <FormTextField name="test" label="Test" value="" onChange={vi.fn()} />
       </EditModal>,
     );
 
@@ -743,10 +797,12 @@ describe('EditModal', () => {
         onSubmit={mockOnSubmit}
         loadingData={false}
       >
-        <Form.Group>
-          <Form.Label>Edit Name</Form.Label>
-          <Form.Control type="text" defaultValue="Existing Name" />
-        </Form.Group>
+        <FormTextField
+          name="name"
+          label="Edit Name"
+          value="Existing Name"
+          onChange={vi.fn()}
+        />
       </EditModal>,
     );
 
@@ -762,7 +818,7 @@ describe('EditModal', () => {
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
       >
-        <Form.Control type="text" />
+        <FormTextField name="test" label="Test" value="" onChange={vi.fn()} />
       </EditModal>,
     );
 
@@ -778,7 +834,13 @@ describe('EditModal', () => {
         onSubmit={mockOnSubmit}
         loadingData={true}
       >
-        <Form.Control type="text" data-testid="input-field" />
+        <FormTextField
+          name="test"
+          label="Test"
+          value=""
+          onChange={vi.fn()}
+          data-testid="input-field"
+        />
       </EditModal>,
     );
 
@@ -796,7 +858,7 @@ describe('EditModal', () => {
         loading={true}
         loadingData={true}
       >
-        <Form.Control type="text" />
+        <FormTextField name="test" label="Test" value="" onChange={vi.fn()} />
       </EditModal>,
     );
 
@@ -812,7 +874,13 @@ describe('EditModal', () => {
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
       >
-        <Form.Control type="text" data-testid="input-field" />
+        <FormTextField
+          name="test"
+          label="Test"
+          value=""
+          onChange={vi.fn()}
+          data-testid="input-field"
+        />
       </EditModal>,
     );
 
@@ -830,7 +898,13 @@ describe('EditModal', () => {
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
       >
-        <Form.Control type="text" data-testid="input-field" />
+        <FormTextField
+          name="test"
+          label="Test"
+          value=""
+          onChange={vi.fn()}
+          data-testid="input-field"
+        />
       </EditModal>,
     );
 
@@ -848,7 +922,13 @@ describe('EditModal', () => {
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
       >
-        <Form.Control type="text" data-testid="input-field" />
+        <FormTextField
+          name="test"
+          label="Test"
+          value=""
+          onChange={vi.fn()}
+          data-testid="input-field"
+        />
       </EditModal>,
     );
 

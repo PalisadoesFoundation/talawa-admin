@@ -73,9 +73,9 @@ export function useFormModal<T>(
 
   const reset = useCallback((): void => {
     setIsOpen(false);
-    setFormData(null);
+    setFormData(initialData);
     setIsSubmitting(false);
-  }, []);
+  }, [initialData]);
 
   return {
     isOpen,

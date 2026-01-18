@@ -101,3 +101,27 @@
   outline: 2px solid #1778f2;
   outline-offset: 2px;
 }
+
+/* Button style for add/create actions (primary variant) */
+.addButton {
+  background-color: var(--addButton-bg, #a8c7fa);
+  border: 1px solid var(--addButton-border, #eaebef);
+  color: var(--addButton-font, #555555);
+}
+
+.addButton:hover {
+  background-color: var(--addButton-bg-hover, #1778f2);
+  border-color: var(--addButton-border-hover, #555555);
+}
+
+/* Button style for remove/delete actions (danger variant) */
+.removeButton {
+  background-color: #dc3545;
+  border-color: #dc3545;
+  color: #fff;
+}
+
+.removeButton:hover {
+  background-color: #c82333;
+  border-color: #bd2130;
+}

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import type { InterfaceUseMutationModalReturn } from 'types/shared-components/CRUDModalTemplate/interface';
 
 /**
@@ -67,6 +67,16 @@ export function useMutationModal<TData, TResult = unknown>(
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [error, setError] = useState<Error | null>(null);
 
+  const onSuccessRef = useRef(options?.onSuccess);
+  const onErrorRef = useRef(options?.onError);
+  const allowEmptyDataRef = useRef(options?.allowEmptyData);
+
+  useEffect(() => {
+    onSuccessRef.current = options?.onSuccess;
+    onErrorRef.current = options?.onError;
+    allowEmptyDataRef.current = options?.allowEmptyData;
+  }, [options?.onSuccess, options?.onError, options?.allowEmptyData]);
+
   const open = useCallback((): void => {
     setIsOpen(true);
     setError(null);
@@ -100,7 +110,7 @@ export function useMutationModal<TData, TResult = unknown>(
   const execute = useCallback(
     async (data?: TData): Promise<TResult | undefined> => {
       const dataToSubmit = data ?? formData;
-      if (dataToSubmit == null && !options?.allowEmptyData) {
+      if (dataToSubmit == null && !allowEmptyDataRef.current) {
         return undefined;
       }
 
@@ -109,18 +119,18 @@ export function useMutationModal<TData, TResult = unknown>(
 
       try {
         const result = await mutationFn(dataToSubmit as TData);
-        options?.onSuccess?.(result);
+        onSuccessRef.current?.(result);
         return result;
       } catch (err) {
         const error = err instanceof Error ? err : new Error(String(err));
         setError(error);
-        options?.onError?.(error);
+        onErrorRef.current?.(error);
         return undefined;
       } finally {
         setIsSubmitting(false);
       }
     },
-    [formData, mutationFn, options],
+    [formData, mutationFn],
   );
 
   return {

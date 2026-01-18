@@ -16,7 +16,7 @@ const defaultProps = {
 
 describe('RecurringEventVolunteerModal', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders modal with individual volunteering title, description and option texts', () => {

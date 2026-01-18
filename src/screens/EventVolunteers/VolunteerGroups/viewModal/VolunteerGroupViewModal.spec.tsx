@@ -116,12 +116,8 @@ const renderGroupViewModal = (
 };
 
 describe('Testing VolunteerGroupViewModal', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('Render VolunteerGroupViewModal (variation 1)', async () => {

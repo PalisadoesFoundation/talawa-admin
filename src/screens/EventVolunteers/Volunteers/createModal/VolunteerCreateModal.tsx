@@ -30,11 +30,7 @@ import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import {
-  Autocomplete,
-  // eslint-disable-next-line no-restricted-imports -- Autocomplete requires TextField for renderInput
-  TextField,
-} from '@mui/material';
+import { Autocomplete } from '@mui/material';
 import {
   CreateModal,
   useMutationModal,
@@ -110,9 +106,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
   // Function to add a volunteer for an event
   const addVolunteerHandler = async (): Promise<void> => {
     if (!userId) {
-      NotificationToast.error(
-        t('selectVolunteer') || 'Please select a volunteer',
-      );
+      NotificationToast.error(t('selectVolunteer'));
       return;
     }
 
@@ -195,7 +189,17 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
             setUserId(newVolunteer?.id ?? '');
           }}
           renderInput={(params) => (
-            <TextField {...params} label={tCommon('members')} />
+            <div ref={params.InputProps.ref} className="position-relative">
+              <label htmlFor="members-input" className="form-label">
+                {tCommon('members')}
+              </label>
+              <input
+                {...params.inputProps}
+                id="members-input"
+                className="form-control"
+                placeholder={tCommon('members')}
+              />
+            </div>
           )}
         />
       </div>

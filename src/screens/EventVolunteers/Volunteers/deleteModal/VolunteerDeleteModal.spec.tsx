@@ -123,7 +123,6 @@ const renderVolunteerDeleteModal = (
 describe('Testing Volunteer Delete Modal', () => {
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   it('Delete Volunteer', async () => {

@@ -111,12 +111,8 @@ const renderGroupDeleteModal = (
 };
 
 describe('Testing Group Delete Modal', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('Delete Group', async () => {

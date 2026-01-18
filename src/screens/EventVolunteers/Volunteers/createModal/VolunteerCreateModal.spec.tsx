@@ -85,10 +85,6 @@ const renderCreateModal = (
 };
 
 describe('Testing VolunteerCreateModal', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
     vi.clearAllMocks();
   });

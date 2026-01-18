@@ -736,7 +736,6 @@
     "deleteAgendaItem": "Delete Agenda Item",
     "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
     "event": "Event",
-    "search": "Search",
     "attachmentPreview": "Attachment preview",
     "errorLoadingAgendaCategories": "Error occurred while loading Agenda Categories Data",
     "errorLoadingAgendaItems": "Error occurred while loading Agenda Items Data"
@@ -1895,8 +1894,6 @@
     "downloadTag": "Download Tag",
     "checkInButton": "Check In",
     "searchAttendees": "Search Attendees",
-    "checkedIn": "Checked In",
-    "downloadTag": "Download Tag",
     "checkIn": "Check In",
     "eventCheckInManagement": "Event Check In Management",
     "unknownUser": "Unknown User",
@@ -2101,7 +2098,10 @@
     "volunteerForThisInstanceOnly": "Volunteer for This Instance Only",
     "volunteerForInstanceDescription": "You will only be volunteering for the event on {{date}}",
     "joinGroupForInstanceDescription": "You will join this group only for the event on {{date}}",
-    "submitRequest": "Submit Request"
+    "submitRequest": "Submit Request",
+    "baseEventRequired": "Base Event Required",
+    "selectVolunteer": "Select Volunteer",
+    "volunteerScope": "Volunteer Scope"
   },
   "userVolunteer": {
     "title": "Volunteership",

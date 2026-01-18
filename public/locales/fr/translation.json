@@ -736,7 +736,6 @@
     "deleteAgendaItem": "Supprimer le point de l'ordre du jour",
     "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?",
     "event": "Événement",
-    "search": "Rechercher",
     "attachmentPreview": "Aperçu de la pièce jointe",
     "errorLoadingAgendaCategories": "Une erreur s'est produite lors du chargement des données des catégories de l'ordre du jour",
     "errorLoadingAgendaItems": "Une erreur s'est produite lors du chargement des données des points de l'ordre du jour"
@@ -1908,8 +1907,6 @@
     "pdfGeneratedSuccessfully": "PDF généré avec succès !",
     "errorGeneratingPdf": "Erreur lors de la génération du PDF",
     "unknownError": "Erreur inconnue",
-    "checkedIn": "Enregistré",
-    "downloadTag": "Télécharger l'étiquette",
     "checkInButton": "S'enregistrer",
     "searchAttendees": "Rechercher des participants",
     "checkedIn": "Enregistré",
@@ -2118,7 +2115,10 @@
     "volunteerForThisInstanceOnly": "Être bénévole pour cette occurrence uniquement",
     "volunteerForInstanceDescription": "Vous serez bénévole uniquement pour l'événement du {{date}}",
     "joinGroupForInstanceDescription": "Vous rejoindrez ce groupe uniquement pour l'événement du {{date}}",
-    "submitRequest": "Envoyer la demande"
+    "submitRequest": "Envoyer la demande",
+    "baseEventRequired": "Événement de base requis",
+    "selectVolunteer": "Sélectionner un bénévole",
+    "volunteerScope": "Portée du bénévole"
   },
   "userVolunteer": {
     "title": "Volontariat",

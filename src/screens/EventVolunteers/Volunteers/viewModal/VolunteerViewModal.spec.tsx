@@ -137,7 +137,7 @@ const renderVolunteerViewModal = (
 
 describe('Testing VolunteerViewModal', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Basic Rendering', () => {
