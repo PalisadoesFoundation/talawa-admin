@@ -5,16 +5,12 @@
  * to interact with it by opening a modal for more information. It uses translations
  * for localization and handles navigation based on the presence of an organization ID.
  *
- * @param props - The properties passed to the component.
- * @param title - The title of the event. Defaults to "Dogs Care" if not provided.
- * @param description - The description of the event.
- * @param date - The date of the event.
- * @param location - The location of the event.
- * @param refetchEvents - Optional callback function to refetch events.
+ * @param props - EventListCard props containing event details.
  *
  * @returns A JSX element representing the event card and its associated modal.
  *
  * @remarks
+ * - Falls back to t('defaultTitle') when the event name is missing.
  * - If the `orgId` parameter is missing from the URL, the user is redirected to the home page.
  * - Clicking on the card opens a modal with more details about the event.
  *

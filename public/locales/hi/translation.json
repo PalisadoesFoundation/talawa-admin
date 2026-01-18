@@ -758,6 +758,7 @@
     "deleteAgendaItem": "एजेंडा आइटम हटाएं",
     "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?",
     "event": "कार्यक्रम",
+    "attachmentPreview": "अनुलग्नक पूर्वावलोकन",
     "errorLoadingAgendaCategories": "एजेंडा श्रेणी डेटा लोड करते समय त्रुटि हुई",
     "errorLoadingAgendaItems": "एजेंडा आइटम डेटा लोड करते समय त्रुटि हुई"
   },

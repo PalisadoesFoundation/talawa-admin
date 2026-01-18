@@ -208,7 +208,9 @@ const EventDashboard = ({
               </p>
               <p className={styles.toporgloc} data-testid="event-location">
                 <b>{tEventList('location')}:</b>
-                <span>{eventData.event.location || 'N/A'}</span>
+                <span>
+                  {eventData.event.location || tEventList('notAvailable')}
+                </span>
               </p>
               {/* Attendees not available; remove or adjust */}
               <p className={styles.toporgloc} data-testid="event-registrants">

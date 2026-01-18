@@ -741,6 +741,7 @@
     "deleteAgendaItem": "Eliminar punto del orden del día",
     "deleteAgendaItemMsg": "¿Desea eliminar este punto del orden del día?",
     "event": "Evento",
+    "attachmentPreview": "Vista previa del archivo adjunto",
     "errorLoadingAgendaCategories": "Ocurrió un error al cargar los datos de las Categorías de la Agenda",
     "errorLoadingAgendaItems": "Ocurrió un error al cargar los datos de los Puntos de la Agenda"
   },
@@ -2361,3 +2362,4 @@
     "goToLogin": "Go to Login"
   }
 }
+
