@@ -24,7 +24,12 @@ interface InterfaceCurrentUserType {
     isEmailAddressVerified: boolean;
   };
 }
-import useLocalStorage from 'utils/useLocalstorage';
+import {
+  getItem as getItemStatic,
+  setItem as setItemStatic,
+  removeItem as removeItemStatic,
+  PREFIX,
+} from 'utils/useLocalstorage';
 import styles from './OrgList.module.css';
 import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
@@ -36,7 +41,8 @@ import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCar
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { Group, Search } from '@mui/icons-material';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
-import { Alert, Button as RBButton } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
+import RBButton from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 
 interface InterfaceFormStateType {
@@ -58,7 +64,17 @@ interface InterfaceFormStateType {
  * @returns The rendered OrgList component.
  */
 function OrgList(): JSX.Element {
-  const { getItem, setItem, removeItem } = useLocalStorage();
+  const { getItem, setItem, removeItem } = useMemo(
+    () => ({
+      getItem: function <T>(key: string) {
+        return getItemStatic<T>(PREFIX, key);
+      },
+      setItem: (key: string, value: unknown) =>
+        setItemStatic(PREFIX, key, value),
+      removeItem: (key: string) => removeItemStatic(PREFIX, key),
+    }),
+    [],
+  );
   const { t } = useTranslation('translation', { keyPrefix: 'orgList' });
   const { t: tCommon } = useTranslation('common');
   const { t: tLogin } = useTranslation('translation', {
@@ -308,7 +324,7 @@ function OrgList(): JSX.Element {
   };
 
   /**
-   * Note: The explicit refetchOrgs(\{ filter: val \}) call is intentional.
+   * Note: The explicit refetchOrgs(\{filter: val \}) call is intentional.
    * While Apollo Client auto-refetches when filterName changes, the explicit
    * call ensures immediate network request execution and avoids timing issues
    * from React's batched state updates. This pattern is used consistently

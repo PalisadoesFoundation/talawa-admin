@@ -27,7 +27,7 @@ import ErrorOutline from '@mui/icons-material/ErrorOutline';
 import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';

@@ -31,7 +31,7 @@
  */
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import {
   FormTextField,
   FormSelectField,

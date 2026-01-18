@@ -50,7 +50,8 @@ import styles from './Organizations.module.css';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import type { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
-import { Alert, Button } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 

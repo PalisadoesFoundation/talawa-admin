@@ -24,7 +24,11 @@ import {
   ORGANIZATION_FILTER_LIST,
 } from 'GraphQl/Queries/Queries';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
-import useLocalStorage from 'utils/useLocalstorage';
+import useLocalStorage, {
+  setItem as setItemStatic,
+  removeItem as removeItemStatic,
+  PREFIX,
+} from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -62,9 +66,8 @@ let setItem: LSApi['setItem'];
 let removeItem: LSApi['removeItem'];
 
 beforeEach(() => {
-  const ls = useLocalStorage();
-  setItem = ls.setItem;
-  removeItem = ls.removeItem;
+  setItem = (key: string, value: unknown) => setItemStatic(PREFIX, key, value);
+  removeItem = (key: string) => removeItemStatic(PREFIX, key);
 
   // Seed guard keys for every test
   setItem('IsLoggedIn', 'TRUE');
@@ -2522,7 +2525,10 @@ describe('Email Verification Actions Tests', () => {
     fireEvent.click(resendBtn);
 
     await waitFor(() => {
-      expect(mockToast.success).toHaveBeenCalledWith('emailResent');
+      expect(mockToast.success).toHaveBeenCalledWith(
+        'Verification email sent successfully!',
+        expect.anything(),
+      );
     });
   });
 
@@ -2543,7 +2549,10 @@ describe('Email Verification Actions Tests', () => {
     await waitFor(() => {
       // The component uses tLogin('resendFailed') or data message
       // Mock returns 'Failed to resend email'
-      expect(mockToast.error).toHaveBeenCalledWith('Failed to resend email');
+      expect(mockToast.error).toHaveBeenCalledWith(
+        'Failed to resend email',
+        expect.anything(),
+      );
     });
   });
 });

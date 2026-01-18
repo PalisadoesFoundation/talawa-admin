@@ -18,7 +18,7 @@ import Clear from '@mui/icons-material/Clear';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 
-import Button from 'react-bootstrap/Button';
+import Button from 'shared-components/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';

@@ -39,13 +39,13 @@
 // translation-check-keyPrefix: eventAttendance
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import {
-  Modal,
-  Button,
   ButtonGroup,
   Tooltip,
   OverlayTrigger,
   Dropdown,
 } from 'react-bootstrap';
+import Button from 'shared-components/Button';
+import { BaseModal } from 'shared-components/BaseModal';
 import 'react-datepicker/dist/react-datepicker.css';
 import {
   Chart as ChartJS,
@@ -70,6 +70,9 @@ import type {
   InterfaceEvent,
 } from 'types/Event/interface';
 import styles from 'style/app-fixed.module.css';
+import componentStyles from './EventStatistics.module.css';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { useTranslation } from 'react-i18next';
 
 ChartJS.register(
   CategoryScale,
@@ -98,9 +101,11 @@ const calculateAge = (birthDate: Date): number => {
   return age;
 };
 
+// translation-check-keyPrefix: eventAttendance
 export const AttendanceStatisticsModal: React.FC<
   InterfaceAttendanceStatisticsModalProps
 > = ({ show, handleClose, statistics, memberData, t }): React.JSX.Element => {
+  const { t: tErrors } = useTranslation('errors');
   const [selectedCategory, setSelectedCategory] = useState('Gender');
   const { orgId, eventId } = useParams();
   const [currentPage, setCurrentPage] = useState(0);
@@ -235,25 +240,25 @@ export const AttendanceStatisticsModal: React.FC<
           label: t('attendeeCount'),
           data: attendeeCounts,
           fill: true,
-          borderColor: '#008000',
+          borderColor: 'var(--color-green-500)',
         },
         {
           label: t('maleAttendees'),
           data: maleCounts,
           fill: false,
-          borderColor: '#0000FF',
+          borderColor: 'var(--color-blue-500)',
         },
         {
           label: t('femaleAttendees'),
           data: femaleCounts,
           fill: false,
-          borderColor: '#FF1493',
+          borderColor: 'var(--color-red-500)',
         },
         {
           label: t('otherAttendees'),
           data: otherCounts,
           fill: false,
-          borderColor: '#FFD700',
+          borderColor: 'var(--color-yellow-500)',
         },
       ],
     }),
@@ -287,31 +292,31 @@ export const AttendanceStatisticsModal: React.FC<
     () =>
       selectedCategory === 'Gender'
         ? [
-          memberData.filter((member) => member.natalSex === 'male').length,
-          memberData.filter((member) => member.natalSex === 'female').length,
-          memberData.filter(
-            (member) =>
-              member.natalSex === 'intersex' ||
-              member.natalSex === null ||
-              member.natalSex === '',
-          ).length,
-        ]
+            memberData.filter((member) => member.natalSex === 'male').length,
+            memberData.filter((member) => member.natalSex === 'female').length,
+            memberData.filter(
+              (member) =>
+                member.natalSex === 'intersex' ||
+                member.natalSex === null ||
+                member.natalSex === '',
+            ).length,
+          ]
         : [
-          memberData.filter((member) => {
-            const age = calculateAge(member.birthDate);
-            return age < MIN_ADULT_AGE;
-          }).length,
-          memberData.filter((member) => {
-            const memberAge = calculateAge(member.birthDate);
-            const isAtLeastAdult = memberAge >= MIN_ADULT_AGE;
-            const isAtMostYoungAdult = memberAge <= MAX_YOUNG_ADULT_AGE;
-            return isAtLeastAdult && isAtMostYoungAdult;
-          }).length,
-          memberData.filter((member) => {
-            const age = calculateAge(member.birthDate);
-            return age > MAX_YOUNG_ADULT_AGE;
-          }).length,
-        ],
+            memberData.filter((member) => {
+              const age = calculateAge(member.birthDate);
+              return age < MIN_ADULT_AGE;
+            }).length,
+            memberData.filter((member) => {
+              const memberAge = calculateAge(member.birthDate);
+              const isAtLeastAdult = memberAge >= MIN_ADULT_AGE;
+              const isAtMostYoungAdult = memberAge <= MAX_YOUNG_ADULT_AGE;
+              return isAtLeastAdult && isAtMostYoungAdult;
+            }).length,
+            memberData.filter((member) => {
+              const age = calculateAge(member.birthDate);
+              return age > MAX_YOUNG_ADULT_AGE;
+            }).length,
+          ],
     [selectedCategory, memberData],
   );
 
@@ -391,23 +396,60 @@ export const AttendanceStatisticsModal: React.FC<
       }
     }
   }, [eventId, orgId, eventData, loadRecurringEvents]);
+
+  const modalFooter = (
+    <>
+      <Dropdown data-testid="export-dropdown" onSelect={handleExport}>
+        <Dropdown.Toggle
+          className="p-2 m-2"
+          variant="info"
+          id="export-dropdown"
+        >
+          {t('exportData')}
+        </Dropdown.Toggle>
+        <Dropdown.Menu>
+          {showTrends && (
+            <Dropdown.Item data-testid="trends-export" eventKey="trends">
+              {t('trends')}
+            </Dropdown.Item>
+          )}
+          <Dropdown.Item
+            data-testid="demographics-export"
+            eventKey="demographics"
+          >
+            {t('demographics')}
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+      <Button
+        className="p-2 m-2"
+        variant="secondary"
+        onClick={handleClose}
+        data-testid="close-button"
+      >
+        {t('close')}
+      </Button>
+    </>
+  );
   return (
-    <Modal
-      show={show}
-      onHide={handleClose}
-      className="attendance-modal"
-      centered
-      size={showTrends ? 'xl' : 'lg'}
-      data-testid="attendance-modal"
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
     >
-      <Modal.Header closeButton className={styles.modalHeader}>
-        <Modal.Title data-testid="modal-title">
-          {t('historical_statistics')}
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body
-        className="w-100 d-flex flex-column align-items-center position-relative"
-        id="pdf-content"
+      <BaseModal
+        show={show}
+        onHide={handleClose}
+        className="attendance-modal"
+        centered={true}
+        size={showTrends ? 'xl' : 'lg'}
+        dataTestId="attendance-modal"
+        footerClassName="p-0 m-2"
+        footer={modalFooter}
+        headerClassName={styles.modalHeader}
+        title={t('historical_statistics')}
+        bodyClassName="w-100 d-flex flex-column align-items-center position-relative"
       >
         <div
           className={
@@ -418,11 +460,7 @@ export const AttendanceStatisticsModal: React.FC<
         <div className="w-100 border border-success d-flex flex-row rounded">
           {showTrends ? (
             <div
-              className={
-                styles.borderRightGreen +
-                ' text-success position-relative pt-4 align-items-center justify-content-center w-50 border-right-1 border-success'
-              }
-              style={{ height: '400px' }}
+              className={`${styles.borderRightGreen} ${componentStyles.chartContainer} text-success position-relative pt-4 align-items-center justify-content-center w-50 border-right-1 border-success`}
             >
               <Line
                 data={chartData}
@@ -544,20 +582,20 @@ export const AttendanceStatisticsModal: React.FC<
                         : t('ageDistribution'),
                     data: categoryData,
                     backgroundColor: [
-                      'rgba(31, 119, 180, 0.2)', // Blue
-                      'rgba(255, 127, 14, 0.2)', // Orange
-                      'rgba(44, 160, 44, 0.2)', // Green
-                      'rgba(214, 39, 40, 0.2)', // Red
-                      'rgba(148, 103, 189, 0.2)', // Purple
-                      'rgba(140, 86, 75, 0.2)', // Brown
+                      'var(--color-blue-200)',
+                      'var(--color-yellow-500)',
+                      'var(--color-green-500)',
+                      'var(--color-red-500)',
+                      'var(--color-purple-500)',
+                      'var(--color-brown-500)',
                     ],
                     borderColor: [
-                      'rgba(31, 119, 180, 1)',
-                      'rgba(255, 127, 14, 1)',
-                      'rgba(44, 160, 44, 1)',
-                      'rgba(214, 39, 40, 1)',
-                      'rgba(148, 103, 189, 1)',
-                      'rgba(140, 86, 75, 1)',
+                      'var(--color-blue-500)',
+                      'var(--color-yellow-500)',
+                      'var(--color-green-500)',
+                      'var(--color-red-500)',
+                      'var(--color-purple-500)',
+                      'var(--color-brown-500)',
                     ],
                     borderWidth: 2,
                   },
@@ -571,39 +609,7 @@ export const AttendanceStatisticsModal: React.FC<
             </div>
           </div>
         </div>
-      </Modal.Body>
-      <Modal.Footer className="p-0 m-2">
-        <Dropdown data-testid="export-dropdown" onSelect={handleExport}>
-          <Dropdown.Toggle
-            className="p-2 m-2"
-            variant="info"
-            id="export-dropdown"
-          >
-            {t('exportData')}
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            {showTrends && (
-              <Dropdown.Item data-testid="trends-export" eventKey="trends">
-                {t('trends')}
-              </Dropdown.Item>
-            )}
-            <Dropdown.Item
-              data-testid="demographics-export"
-              eventKey="demographics"
-            >
-              {t('demographics')}
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
-        <Button
-          className="p-2 m-2"
-          variant="secondary"
-          onClick={handleClose}
-          data-testid="close-button"
-        >
-          {t('close')}
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      </BaseModal>
+    </ErrorBoundaryWrapper>
   );
 };

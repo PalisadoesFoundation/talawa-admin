@@ -53,8 +53,8 @@ import KeyLogo from 'assets/svgs/key.svg?react';
 
 import ArrowRightAlt from '@mui/icons-material/ArrowRightAlt';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { Form } from 'react-router';
-import Button from 'react-bootstrap/Button';
+
+import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './ForgotPassword.module.css';
@@ -188,7 +188,7 @@ const ForgotPassword = (): JSX.Element => {
               </h3>
               {showEnterEmail ? (
                 <div className="mt-4">
-                  <Form onSubmit={getOTP}>
+                  <form onSubmit={getOTP}>
                     <label className="form-label" htmlFor="registeredEmail">
                       {t('registeredEmail')}:
                     </label>
@@ -213,11 +213,11 @@ const ForgotPassword = (): JSX.Element => {
                     >
                       {t('getOtp')}
                     </Button>
-                  </Form>
+                  </form>
                 </div>
               ) : (
                 <div className="mt-4">
-                  <Form onSubmit={submitForgotPassword}>
+                  <form onSubmit={submitForgotPassword}>
                     <label className="form-label" htmlFor="userOtp">
                       {t('enterOtp')}:
                     </label>
@@ -277,7 +277,7 @@ const ForgotPassword = (): JSX.Element => {
                     <Button type="submit" className="mt-2 w-100">
                       {t('changePassword')}
                     </Button>
-                  </Form>
+                  </form>
                 </div>
               )}
               <div className="d-flex justify-content-between items-center mt-4">
