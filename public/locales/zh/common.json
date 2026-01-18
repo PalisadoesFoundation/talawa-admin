@@ -3,6 +3,7 @@
   "lastName": "姓",
   "searchByName": "按名称搜索",
   "loading": "加载中...",
+  "error": "错误",
   "endOfResults": "结果结束",
   "noResultsFoundFor": "没有找到 {{query}} 的结果",
   "tryAdjustingFilters": "尝试调整筛选条件或搜索词",
@@ -250,6 +251,7 @@
   "organizationEventDescription": "组织的所有成员可见",
   "inviteOnlyEvent": "仅限受邀者",
   "inviteOnlyEventDescription": "仅受邀成员和活动管理员可见",
+  "noCategory": "无类别",
   "to": "至",
   "removeMember": "删除成员",
   "retry": "重试",
@@ -283,5 +285,8 @@
   "cannotUnregisterCheckedIn": "无法取消已签到的用户的注册",
   "errorLoadingEventDetails": "加载事件详情时出错。请稍后重试。",
   "eventDate": "活动日期",
-  "attendedEventsList": "已参加活动列表"
+  "attendedEventsList": "已参加活动列表",
+  "linkCopied": "链接已复制到剪贴板",
+  "copyToClipboardError": "复制链接到剪贴板时出错",
+  "share": "分享"
 }

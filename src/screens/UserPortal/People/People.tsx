@@ -47,7 +47,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
-import styles from 'style/app-fixed.module.css';
+import styles from './People.module.css';
 import { useTranslation } from 'react-i18next';
 
 import { useParams } from 'react-router';

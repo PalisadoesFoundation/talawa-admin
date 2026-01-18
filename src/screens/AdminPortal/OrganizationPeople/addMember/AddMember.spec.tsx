@@ -24,9 +24,42 @@ const sharedMocks = vi.hoisted(() => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 
+import React from 'react';
+
 // Mock NotificationToast
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: sharedMocks.toast,
+}));
+
+// Mock FormTextField to render children and props correctly
+interface InterfaceMockFormTextFieldProps {
+  value: string;
+  onChange: (value: string) => void;
+  endAdornment?: React.ReactNode;
+  name?: string;
+  [key: string]: unknown;
+}
+
+vi.mock('shared-components/FormFieldGroup/FormTextField', () => ({
+  FormTextField: vi.fn(
+    ({
+      value,
+      onChange,
+      endAdornment,
+      ...props
+    }: InterfaceMockFormTextFieldProps) =>
+      React.createElement(
+        'div',
+        { 'data-testid': `field-${props.name}` },
+        React.createElement('input', {
+          value,
+          onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+            onChange(e.target.value),
+          ...props,
+        }),
+        endAdornment,
+      ),
+  ),
 }));
 
 // Mock MUI TablePagination to expose onPageChange
@@ -34,60 +67,77 @@ vi.mock('@mui/material', async (importOriginal) => {
   const actual = await importOriginal<typeof import('@mui/material')>();
   return {
     ...actual,
-    TablePagination: ({
-      backIconButtonProps,
-      nextIconButtonProps,
-      onPageChange,
-      page,
-      labelDisplayedRows,
-    }: {
-      backIconButtonProps?: { disabled?: boolean };
-      nextIconButtonProps?: { disabled?: boolean };
-      onPageChange: (
-        event: React.MouseEvent<HTMLButtonElement> | null,
-        newPage: number,
-      ) => void;
-      page: number;
-      labelDisplayedRows?: ({ page }: { page: number }) => React.ReactNode;
-    }) => (
-      <div data-testid="mock-table-pagination">
-        <button
-          type="button"
-          aria-label="Previous Page"
-          disabled={backIconButtonProps?.disabled}
-          onClick={(e) => onPageChange(e, page - 1)}
-        >
-          Previous Page
-        </button>
-        <button
-          type="button"
-          aria-label="Next Page"
-          disabled={nextIconButtonProps?.disabled}
-          onClick={(e) => onPageChange(e, page + 1)}
-        >
-          Next Page
-        </button>
-        <span data-testid="page-info">
-          {labelDisplayedRows
-            ? labelDisplayedRows({ page })
-            : `Page ${page + 1}`}
-        </span>
-        {/* Force buttons to bypass disabled checks for coverage */}
-        <button
-          type="button"
-          data-testid="force-next"
-          onClick={(e) => onPageChange(e, page + 1)}
-        >
-          Force Next
-        </button>
-        <button
-          type="button"
-          data-testid="force-prev"
-          onClick={(e) => onPageChange(e, page - 1)}
-        >
-          Force Prev
-        </button>
-      </div>
+
+    TablePagination: vi.fn(
+      ({
+        backIconButtonProps,
+        nextIconButtonProps,
+        onPageChange,
+        page,
+        labelDisplayedRows,
+      }: {
+        backIconButtonProps?: { disabled?: boolean };
+        nextIconButtonProps?: { disabled?: boolean };
+        onPageChange: (
+          event: React.MouseEvent<HTMLButtonElement> | null,
+          newPage: number,
+        ) => void;
+        page: number;
+        labelDisplayedRows?: ({ page }: { page: number }) => React.ReactNode;
+      }) =>
+        React.createElement(
+          'div',
+          { 'data-testid': 'mock-table-pagination' },
+          React.createElement(
+            'button',
+            {
+              type: 'button',
+              'aria-label': 'Previous Page',
+              disabled: backIconButtonProps?.disabled,
+              onClick: (e: React.MouseEvent<HTMLButtonElement>) =>
+                onPageChange(e, page - 1),
+            },
+            'Previous Page',
+          ),
+          React.createElement(
+            'button',
+            {
+              type: 'button',
+              'aria-label': 'Next Page',
+              disabled: nextIconButtonProps?.disabled,
+              onClick: (e: React.MouseEvent<HTMLButtonElement>) =>
+                onPageChange(e, page + 1),
+            },
+            'Next Page',
+          ),
+          React.createElement(
+            'span',
+            { 'data-testid': 'page-info' },
+            labelDisplayedRows
+              ? labelDisplayedRows({ page })
+              : `Page ${page + 1}`,
+          ),
+          React.createElement(
+            'button',
+            {
+              type: 'button',
+              'data-testid': 'force-next',
+              onClick: (e: React.MouseEvent<HTMLButtonElement>) =>
+                onPageChange(e, page + 1),
+            },
+            'Force Next',
+          ),
+          React.createElement(
+            'button',
+            {
+              type: 'button',
+              'data-testid': 'force-prev',
+              onClick: (e: React.MouseEvent<HTMLButtonElement>) =>
+                onPageChange(e, page - 1),
+            },
+            'Force Prev',
+          ),
+        ),
     ),
   };
 });
@@ -386,7 +436,6 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
-    // Check if the SortingButton is rendered
     expect(await screen.findByTestId('addMembers')).toBeInTheDocument();
   });
 
@@ -406,15 +455,12 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
-    // Click the add member button
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
 
-    // Select existing user option
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    // Wait for rows to appear first
     const userRows = await screen.findAllByTestId(
       'user',
       {},
@@ -422,17 +468,14 @@ describe('AddMember Screen', () => {
     );
     expect(userRows.length).toBe(2);
 
-    // Now check for content within those rows
     await waitFor(
       () => {
-        // Check if any element contains the text "John Doe" - this is more flexible
         expect(
           screen.getByText((content) => {
             return content.includes('John Doe');
           }),
         ).toBeInTheDocument();
 
-        // Also check for Jane Smith in the same way
         expect(
           screen.getByText((content) => {
             return content.includes('Jane Smith');
@@ -490,15 +533,12 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
-    // Open the add member modal
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
 
-    // Select existing user option - using the correct text based on your working test
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    // Wait for the modal to be visible and for initial data to load
     const modal = await screen.findByTestId(
       'addExistingUserModal',
       {},
@@ -506,16 +546,13 @@ describe('AddMember Screen', () => {
     );
     expect(modal).toBeInTheDocument();
 
-    // Wait for initial user list to be loaded
     await screen.findAllByTestId('user', {}, { timeout: 3000 });
 
-    // Enter search term and submit
     const searchInput = screen.getByTestId('searchUser');
     fireEvent.change(searchInput, { target: { value: 'John' } });
     const submitButton = screen.getByTestId('submitBtn');
     fireEvent.click(submitButton);
 
-    // Verify filtered results - use findByText for the post-search content
     const johnDoeElement = await screen.findByText(
       (content) => content.includes('John Doe'),
       {},
@@ -537,23 +574,18 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
-    // Open the add member modal
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
 
-    // Select existing user option
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    // Wait for the modal to be visible
     await screen.findByTestId('addExistingUserModal');
 
-    // Enter search term
     const searchInput = screen.getByTestId('searchUser');
     fireEvent.change(searchInput, { target: { value: 'John' } });
     expect(searchInput).toHaveValue('John');
 
-    // Click clear button
     const clearButton = await screen.findByLabelText('Clear');
     fireEvent.click(clearButton);
 
@@ -580,15 +612,12 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
-    // Open the add member modal
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
 
-    // Select existing user option
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    // Wait for modal and user rows to load
     const userRows = await screen.findAllByTestId(
       'user',
       {},
@@ -596,23 +625,19 @@ describe('AddMember Screen', () => {
     );
     expect(userRows.length).toBe(2);
 
-    // Verify John Doe is present
     expect(
       screen.getByText((content) => content.includes('John Doe')),
     ).toBeInTheDocument();
 
-    // Click add button for first user
     const addButtons = await screen.findAllByTestId('addBtn');
     fireEvent.click(addButtons[0]);
 
-    // Verify success toast was shown
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
         'Member added Successfully',
       );
     });
 
-    // Click the close button
     await userEvent.click(screen.getByRole('button', { name: /close/i }));
   });
 
@@ -641,15 +666,12 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
-    // Open the add member modal
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
 
-    // Select existing user option
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    // Wait for modal and user rows to load
     const userRows = await screen.findAllByTestId(
       'user',
       {},
@@ -657,16 +679,13 @@ describe('AddMember Screen', () => {
     );
     expect(userRows.length).toBe(2);
 
-    // Verify John Doe is present
     expect(
       screen.getByText((content) => content.includes('John Doe')),
     ).toBeInTheDocument();
 
-    // Click add button for first user
     const addButtons = await screen.findAllByTestId('addBtn');
     fireEvent.click(addButtons[0]);
 
-    // Verify error toast was shown
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();
     });
@@ -720,7 +739,6 @@ describe('AddMember Screen', () => {
       page1Mock,
       page2Mock,
       page1RevisitedMock,
-      // Add additional mock for potential edge case queries
       createUserListMock({
         first: 10,
         after: 'cursor2',
@@ -736,15 +754,12 @@ describe('AddMember Screen', () => {
       initialEntry: `/orgpeople/${orgId}`,
     });
 
-    // Open the add member modal
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
 
-    // Select existing user option
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    // Wait for page 1 users to load
     const userRows1 = await screen.findAllByTestId(
       'user',
       {},
@@ -752,7 +767,6 @@ describe('AddMember Screen', () => {
     );
     expect(userRows1.length).toBe(2);
 
-    // Check for specific users on page 1
     expect(
       screen.getByText((content) => content.includes('John Doe')),
     ).toBeInTheDocument();
@@ -760,11 +774,9 @@ describe('AddMember Screen', () => {
       screen.getByText((content) => content.includes('Jane Smith')),
     ).toBeInTheDocument();
 
-    // Navigate to next page
     const nextPageButton = screen.getByLabelText('Next Page');
     fireEvent.click(nextPageButton);
 
-    // Wait for page 2 to load
     const userRows2 = await screen.findAllByTestId(
       'user',
       {},
@@ -774,20 +786,16 @@ describe('AddMember Screen', () => {
     expect(
       screen.getByText((content) => content.includes('Bob Johnson')),
     ).toBeInTheDocument();
-    // expect(bobElement).toBeInTheDocument();
 
-    // Verify John Doe is no longer visible
     await waitFor(() => {
       expect(
         screen.queryByText((content) => content.includes('John Doe')),
       ).not.toBeInTheDocument();
     });
 
-    // Navigate back to first page
     const prevPageButton = screen.getByLabelText('Previous Page');
     fireEvent.click(prevPageButton);
 
-    // Wait for page 1 to reload
     const johnDoe = await screen.findByText(
       (content) => content.includes('John Doe'),
       {},
@@ -795,7 +803,6 @@ describe('AddMember Screen', () => {
     );
     expect(johnDoe).toBeInTheDocument();
 
-    // Verify Bob is no longer visible
     await waitFor(() => {
       expect(
         screen.queryByText((content) => content.includes('Bob Johnson')),
@@ -809,18 +816,15 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
-    // Click the add member button
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
 
-    // Select new user option - using the correct text from your component
     const newUserOption = screen.getByText('New User');
     fireEvent.click(newUserOption);
 
-    // Check if new user modal is opened
     await waitFor(() => {
       expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
-      expect(screen.getByTestId('firstNameInput')).toBeInTheDocument();
+      expect(screen.getByTestId('nameInput')).toBeInTheDocument();
       expect(screen.getByTestId('emailInput')).toBeInTheDocument();
       expect(screen.getByTestId('passwordInput')).toBeInTheDocument();
       expect(screen.getByTestId('confirmPasswordInput')).toBeInTheDocument();
@@ -834,33 +838,26 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
-    // Open the create user modal
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
 
-    // Select new user option
     const newUserOption = screen.getByText('New User');
     fireEvent.click(newUserOption);
 
-    // Check initial password field type
     const passwordInput = screen.getByTestId('passwordInput');
     expect(passwordInput).toHaveAttribute('type', 'password');
 
-    // Toggle password visibility
     const showPasswordToggle = screen.getByTestId('showPassword');
     fireEvent.click(showPasswordToggle);
 
-    // Check that password is now visible
     expect(passwordInput).toHaveAttribute('type', 'text');
 
-    // Toggle confirm password visibility
     const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
     expect(confirmPasswordInput).toHaveAttribute('type', 'password');
 
     const showConfirmPasswordToggle = screen.getByTestId('showConfirmPassword');
     fireEvent.click(showConfirmPasswordToggle);
 
-    // Check that confirm password is now visible
     expect(confirmPasswordInput).toHaveAttribute('type', 'text');
   });
 
@@ -877,7 +874,6 @@ describe('AddMember Screen', () => {
 
     const addMemberMock = createAddMemberMutationMock({
       memberId: 'newUser1',
-      // organizationId: orgId,
       role: 'regular',
     });
 
@@ -885,16 +881,13 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
-    // Open the create user modal
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
 
-    // Select new user option
     const newUserOption = screen.getByText('New User');
     fireEvent.click(newUserOption);
 
-    // Fill in the form
-    const nameInput = screen.getByTestId('firstNameInput');
+    const nameInput = screen.getByTestId('nameInput');
     const emailInput = screen.getByTestId('emailInput');
     const passwordInput = screen.getByTestId('passwordInput');
     const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
@@ -906,11 +899,9 @@ describe('AddMember Screen', () => {
       target: { value: 'password123' },
     });
 
-    // Submit the form
     const createButton = screen.getByTestId('createBtn');
     fireEvent.click(createButton);
 
-    // Check for success message
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
         'Member added Successfully',
@@ -937,7 +928,6 @@ describe('AddMember Screen', () => {
 
     const addMemberMock = createAddMemberMutationMock({
       memberId: 'newUser1',
-      // organizationId: orgId,
       role: 'regular',
     });
 
@@ -945,16 +935,13 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
-    // Open the create user modal
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
 
-    // Select new user option
     const newUserOption = screen.getByText('New User');
     fireEvent.click(newUserOption);
 
-    // Fill in the form
-    const nameInput = screen.getByTestId('firstNameInput');
+    const nameInput = screen.getByTestId('nameInput');
     const emailInput = screen.getByTestId('emailInput');
     const passwordInput = screen.getByTestId('passwordInput');
     const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
@@ -966,11 +953,9 @@ describe('AddMember Screen', () => {
       target: { value: 'password123' },
     });
 
-    // Submit the form
     const createButton = screen.getByTestId('createBtn');
     fireEvent.click(createButton);
 
-    // Verify error toast was shown
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();
     });
@@ -988,7 +973,6 @@ describe('AddMember Screen', () => {
 
     const addMemberMock = createAddMemberMutationMock({
       memberId: 'newUser1',
-      // organizationId: orgId,
       role: 'regular',
     });
 
@@ -996,16 +980,13 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
-    // Open the create user modal
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
 
-    // Select new user option
     const newUserOption = screen.getByText('New User');
     fireEvent.click(newUserOption);
 
-    // Fill in the form
-    const nameInput = screen.getByTestId('firstNameInput');
+    const nameInput = screen.getByTestId('nameInput');
     const emailInput = screen.getByTestId('emailInput');
     const passwordInput = screen.getByTestId('passwordInput');
     const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
@@ -1017,11 +998,9 @@ describe('AddMember Screen', () => {
       target: { value: 'password124' },
     });
 
-    // Submit the form
     const createButton = screen.getByTestId('createBtn');
     fireEvent.click(createButton);
 
-    // Verify error toast was shown
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();
     });
@@ -1039,7 +1018,6 @@ describe('AddMember Screen', () => {
 
     const addMemberMock = createAddMemberMutationMock({
       memberId: 'newUser1',
-      // organizationId: orgId,
       role: 'regular',
     });
 
@@ -1047,16 +1025,13 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
-    // Open the create user modal
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
 
-    // Select new user option
     const newUserOption = screen.getByText('New User');
     fireEvent.click(newUserOption);
 
-    // Fill in the form
-    const nameInput = screen.getByTestId('firstNameInput');
+    const nameInput = screen.getByTestId('nameInput');
     const emailInput = screen.getByTestId('emailInput');
     const passwordInput = screen.getByTestId('passwordInput');
     const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
@@ -1068,11 +1043,9 @@ describe('AddMember Screen', () => {
       target: { value: 'password123' },
     });
 
-    // Submit the form
     const createButton = screen.getByTestId('createBtn');
     fireEvent.click(createButton);
 
-    // Verify error toast was shown
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();
     });
@@ -1105,7 +1078,7 @@ describe('AddMember Screen', () => {
           hasNextPage: true,
           hasPreviousPage: false,
           startCursor: 'cursor1',
-          endCursor: null, // Force null
+          endCursor: null,
         },
       },
     );
@@ -1118,30 +1091,23 @@ describe('AddMember Screen', () => {
       initialEntry: `/orgpeople/${orgId}`,
     });
 
-    // Open the add member modal
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
 
-    // Select existing user option
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    // Wait for users to load
     await screen.findAllByTestId('user');
 
-    // Try to navigate to next page - it should return early because endCursor was missing
     const nextPageButton = screen.getByLabelText('Next Page');
-    // Even if it's not disabled (due to hasNextPage: true), it should return early
     fireEvent.click(nextPageButton);
 
-    // page should still be 0 (Page 1)
     expect(screen.getByText('Page 1')).toBeInTheDocument();
   });
 
   test('missing startCursor condition', async () => {
     const orgId = 'org123';
 
-    // First page and Second page setup
     const page1Mock = createUserListMock({
       first: 10,
       after: null,
@@ -1166,7 +1132,7 @@ describe('AddMember Screen', () => {
         pageInfo: {
           hasNextPage: false,
           hasPreviousPage: true,
-          startCursor: null, // Force null
+          startCursor: null,
           endCursor: 'cursor3',
         },
       },
@@ -1184,25 +1150,20 @@ describe('AddMember Screen', () => {
       initialEntry: `/orgpeople/${orgId}`,
     });
 
-    // Open modal
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    // Go to next page
     const nextPageButton = await screen.findByLabelText('Next Page');
     await waitFor(() => expect(nextPageButton).not.toBeDisabled());
     fireEvent.click(nextPageButton);
 
-    // Wait for page 2
     await screen.findByText(/Bob Johnson/);
     expect(screen.getByText('Page 2')).toBeInTheDocument();
 
-    // Try to go back - it should return early because startCursor was missing
     const prevPageButton = screen.getByLabelText('Previous Page');
     fireEvent.click(prevPageButton);
-    // page should still be 1 (Page 2)
     expect(screen.getByText('Page 2')).toBeInTheDocument();
   });
 
@@ -1226,7 +1187,6 @@ describe('AddMember Screen', () => {
     const mocks = [createOrganizationsMock(orgId), userListMock];
     renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
-    // Open modal
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
     const existingUserOption = screen.getByText('Existing User');
@@ -1234,15 +1194,12 @@ describe('AddMember Screen', () => {
 
     await screen.findAllByTestId('user');
 
-    // Manually trigger click using our special "force" buttons to bypass disabled state
-    // This allows us to hit the guard clauses in lines 263-264
     const forceNext = screen.getByTestId('force-next');
     const forcePrev = screen.getByTestId('force-prev');
 
     fireEvent.click(forceNext);
     fireEvent.click(forcePrev);
 
-    // Page should still be 1 (index 0) because of the guard clauses
     expect(screen.getByTestId('page-info')).toHaveTextContent('Page 1');
   });
 
@@ -1252,133 +1209,18 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
-    // Click invalid sort option
     const invalidSort = await screen.findByText('Invalid Sort');
     fireEvent.click(invalidSort);
 
-    // Verify nothing happened (modals shouldn't match)
     expect(
       screen.queryByTestId('addExistingUserModal'),
     ).not.toBeInTheDocument();
     expect(screen.queryByTestId('addNewUserModal')).not.toBeInTheDocument();
   });
 
-  test('handles error when adding member to organization fails', async () => {
-    const orgId = 'org123';
-
-    // 1. Mock the user list query (SUCCESS)
-    const userListMock = createUserListMock({
-      first: 10,
-      after: null,
-      last: null,
-      before: null,
-    });
-
-    // 2. Mock the add member mutation (ERROR)
-    const addMemberErrorMock = {
-      request: {
-        query: CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
-        variables: {
-          memberId: 'user1', // Corresponds to the first user in defaultData of createUserListMock
-          organizationId: orgId,
-          role: 'regular',
-        },
-      },
-      error: new Error('Failed to add member'),
-    };
-
-    const mocks = [
-      createOrganizationsMock(orgId),
-      userListMock,
-      addMemberErrorMock,
-    ];
-
-    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
-
-    // Open the add member modal
-    const addMembersButton = await screen.findByTestId('addMembers');
-    fireEvent.click(addMembersButton);
-
-    // Select existing user option
-    const existingUserOption = screen.getByText('Existing User');
-    fireEvent.click(existingUserOption);
-
-    // Wait for users to load
-    await waitFor(async () => {
-      const users = await screen.findAllByTestId('user');
-      expect(users.length).toBeGreaterThan(0);
-    });
-
-    // Click add button for the first user (user1)
-    const addButtons = await screen.findAllByTestId('addBtn');
-    fireEvent.click(addButtons[0]);
-
-    // Wait for error toast to be called
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalled();
-    });
-  });
-  test('handles error when creating new user fails', async () => {
-    const orgId = 'org123';
-
-    // Create a mock that returns an error for CREATE_MEMBER_PG
-    const createMemberErrorMock = {
-      request: {
-        query: CREATE_MEMBER_PG,
-        variables: {
-          name: 'Test User',
-          email: 'test@example.com',
-          password: 'password123',
-          role: 'regular',
-          isEmailAddressVerified: true,
-        },
-      },
-      error: new Error('Failed to create member'),
-    };
-
-    const mocks = [createOrganizationsMock(orgId), createMemberErrorMock];
-
-    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
-
-    // Open create new user modal
-    const addMembersButton = await screen.findByTestId('addMembers');
-    fireEvent.click(addMembersButton);
-
-    const newUserOption = screen.getByText('New User');
-    fireEvent.click(newUserOption);
-
-    // Wait for modal to open
-    await waitFor(() => {
-      expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
-    });
-
-    // Fill in user details
-    const nameInput = screen.getByTestId('firstNameInput');
-    const emailInput = screen.getByTestId('emailInput');
-    const passwordInput = screen.getByTestId('passwordInput');
-    const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
-
-    fireEvent.change(nameInput, { target: { value: 'Test User' } });
-    fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-    fireEvent.change(passwordInput, { target: { value: 'password123' } });
-    fireEvent.change(confirmPasswordInput, {
-      target: { value: 'password123' },
-    });
-
-    // Click create button
-    const createButton = screen.getByTestId('createBtn');
-    fireEvent.click(createButton);
-
-    // Wait for error toast to be called
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalled();
-    });
-  });
-
   test('shows "No users found" when the user list is empty', async () => {
     const orgId = 'org123';
 
-    // Exact variables as they would be sent by the component
     const emptyUserListMock = {
       request: {
         query: USER_LIST_FOR_TABLE,
@@ -1404,15 +1246,12 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({ link, initialEntry: `/orgpeople/${orgId}` });
 
-    // Open the add member modal
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
 
-    // Select existing user option
     const existingUserOption = await screen.findByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    // Wait for the loader to disappear and "No users found" message to appear
     await waitFor(() => {
       expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
     });
@@ -1435,15 +1274,12 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({ link, initialEntry: `/orgpeople/${orgId}` });
 
-    // Open the add member modal
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
 
-    // Select existing user option
     const existingUserOption = await screen.findByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    // Wait for "Error loading users" message
     expect(
       await screen.findByText(/Error occurred while loading Users/i),
     ).toBeInTheDocument();
@@ -1475,25 +1311,20 @@ describe('AddMember Screen', () => {
 
     renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
-    // open modal
     const addMembersButton = await screen.findByTestId('addMembers');
     fireEvent.click(addMembersButton);
 
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    // Wait for initial results
     await screen.findAllByTestId('user');
 
-    // 🔍 search action
     const searchInput = screen.getByTestId('searchUser');
     fireEvent.change(searchInput, { target: { value: 'Alex' } });
 
     const submitButton = screen.getByTestId('submitBtn');
     fireEvent.click(submitButton);
 
-    // → If setUserName, resetPagination & fetchUsers were called,
-    //    the list refreshes to show only the search result.
     const users = await screen.findAllByTestId('user');
     expect(users.length).toBe(2);
   });

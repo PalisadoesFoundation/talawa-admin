@@ -427,7 +427,9 @@
     "organizationPeopleTable": "Organization People Table",
     "removeMemberTitle": "Remove Member",
     "removeMemberConfirmation": "Are you sure you want to remove this member?",
-    "organizationIdMissing": "Organization ID is missing!"
+    "organizationIdMissing": "Organization ID is missing!",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
   },
   "organizationTags": {
     "title": "Organization Tags",
@@ -728,6 +730,7 @@
     "options": "Options",
     "createAgendaItem": "Create Agenda Item",
     "noAgendaItems": "No Agenda Items",
+    "search": "Search",
     "selectAgendaItemCategory": "Select an agenda item category",
     "update": "Update",
     "delete": "Delete",
@@ -737,7 +740,6 @@
     "deleteAgendaItem": "Delete Agenda Item",
     "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
     "event": "Event",
-    "search": "Search",
     "attachmentPreview": "Attachment preview",
     "errorLoadingAgendaCategories": "Error occurred while loading Agenda Categories Data",
     "errorLoadingAgendaItems": "Error occurred while loading Agenda Items Data"
@@ -1100,6 +1102,7 @@
     "removingAttendee": "Removing the attendee...",
     "attendeeRemovedSuccessfully": "Attendee removed successfully",
     "errorRemovingAttendee": "Error removing attendee",
+    "cannotUnregisterCheckedIn": "Cannot unregister a user who has already checked in",
     "checkedIn": "Checked In",
     "unregister": "Unregister",
     "cannotUnregisterCheckedInTooltip": "Cannot unregister checked-in user"
@@ -1450,12 +1453,13 @@
   },
   "posts": {
     "pinnedPosts": "Pinned Posts",
+    "errorLoadingPreviewPost": "Error loading preview post",
     "title": "Posts",
     "latest": "Latest",
     "oldest": "Oldest",
     "none": "None",
     "unknownUser": "Unknown User",
-    "closePinnedPost": "Close Pinned Post",
+    "closePostView": "Close Post View",
     "searchPosts": "Search posts",
     "nothingToShow": "Nothing to show here.",
     "noMorePosts": "No more posts to load.",
@@ -1889,9 +1893,14 @@
   "checkIn": {
     "errorCheckingIn": "Error checking in",
     "checkedInSuccessfully": "Checked in successfully",
-    "searchAttendees": "Search Attendees",
+    "generatingPdf": "Generating pdf...",
+    "pdfGeneratedSuccessfully": "PDF generated successfully!",
+    "errorGeneratingPdf": "Error generating pdf",
+    "unknownError": "Unknown error",
     "checkedIn": "Checked In",
     "downloadTag": "Download Tag",
+    "checkInButton": "Check In",
+    "searchAttendees": "Search Attendees",
     "checkIn": "Check In",
     "eventCheckInManagement": "Event Check In Management",
     "unknownUser": "Unknown User",
@@ -1998,7 +2007,20 @@
     "searchPledges": "Search Pledges"
   },
   "leaveOrganization": {
-    "title": "Leave Organization"
+    "title": "Leave Organization",
+    "leaveOrganization": "Leave Organization",
+    "confirmLeaveOrganization": "Confirm Leaving Organization",
+    "leaveOrganizationConfirmation": "Are you sure you want to leave {{orgName}}? You will lose access to member-only content.",
+    "enterEmailToConfirm": "Enter your email to confirm:",
+    "enterYourEmail": "Enter your email",
+    "confirmEmailInput": "Confirm email input",
+    "leftOrganizationSuccess": "You have successfully left the organization!",
+    "leftOrganizationError": "Failed to leave organization. Please try again.",
+    "networkError": "Unable to process your request. Please check your connection.",
+    "emailMismatchError": "The email you entered does not match your account email.",
+    "continue": "Continue",
+    "missingRequiredInfo": "Unable to process request: Missing required information.",
+    "organizationNotFound": "Organization not found"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Volunteer view selector",
@@ -2256,7 +2278,9 @@
     "title": "User Portal",
     "talawa": "Talawa",
     "talawaBranding": "Talawa Branding",
-    "view": "View"
+    "view": "View",
+    "changeLanguage": "Change Language",
+    "userNotFoundError": "User not found"
   },
   "donation": {
     "amount_label": "Amount",
@@ -2311,5 +2335,13 @@
     "paginationGoToPage": "Go to page {{page}}",
     "paginationGoToType": "Go to {{type}} page",
     "noEventsAttended": "No events attended"
+  },
+  "eventStats": {
+    "title": "Event Statistics",
+    "reviews": {
+      "title": "Reviews",
+      "emptyState": "Waiting for people to talk about the event...",
+      "filledByCount": "Filled by {{count}} people."
+    }
   }
 }

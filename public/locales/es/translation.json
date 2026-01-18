@@ -413,7 +413,9 @@
     "createUser": "Crear usuario",
     "removeMemberTitle": "Eliminar miembro",
     "organizationIdMissing": "¡Falta el ID de la organización!",
-    "removeMemberConfirmation": "¿Está seguro de que desea eliminar a este miembro?"
+    "removeMemberConfirmation": "¿Está seguro de que desea eliminar a este miembro?",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña"
   },
   "organizationCard": {
     "join": "Unirse",
@@ -728,6 +730,7 @@
     "options": "Opciones",
     "createAgendaItem": "Crear punto del orden del día",
     "noAgendaItems": "No hay puntos del orden del día",
+    "search": "Buscar",
     "selectAgendaItemCategory": "Seleccionar una categoría de punto del orden del día",
     "update": "Actualizar",
     "delete": "Eliminar",
@@ -736,9 +739,8 @@
     "agendaItemDeleted": "Punto del orden del día eliminado exitosamente",
     "deleteAgendaItem": "Eliminar punto del orden del día",
     "deleteAgendaItemMsg": "¿Desea eliminar este punto del orden del día?",
+    "attachmentPreview": "Vista previa del archivo adjunto",
     "event": "Evento",
-    "search": "Buscar",
-    "attachmentPreview": "Vista previa del adjunto",
     "errorLoadingAgendaCategories": "Ocurrió un error al cargar los datos de las Categorías de la Agenda",
     "errorLoadingAgendaItems": "Ocurrió un error al cargar los datos de los Puntos de la Agenda"
   },
@@ -1390,12 +1392,13 @@
   },
   "posts": {
     "pinnedPosts": "Publicaciones fijadas",
+    "errorLoadingPreviewPost": "Error al cargar la vista previa de la publicación.",
     "title": "Publicaciones",
     "latest": "El Más Reciente",
     "oldest": "El Más Antiguo",
     "none": "Ninguno",
     "unknownUser": "Usuario desconocido",
-    "closePinnedPost": "Cerrar publicación fijada",
+    "closePostView": "Cerrar vista de publicación",
     "searchPosts": "Buscar publicaciones",
     "nothingToShow": "Nada que mostrar aquí.",
     "noPosts": "No hay publicaciones para mostrar.",
@@ -1481,9 +1484,10 @@
     "options": "Opciones",
     "addRegistrant": "Agregar registrado",
     "noRegistrantsFound": "No se encontraron registrados",
-    "removingAttendee": "Eliminando asistente...",
+    "removingAttendee": "Eliminando el asistente...",
     "attendeeRemovedSuccessfully": "Asistente eliminado con éxito",
-    "errorRemovingAttendee": "Error al eliminar asistente. Por favor, inténtelo de nuevo.",
+    "errorRemovingAttendee": "Error al eliminar asistente",
+    "cannotUnregisterCheckedIn": "No se puede anular el registro de un usuario que ya se ha registrado",
     "checkedIn": "Registrado",
     "unregister": "Dar de baja",
     "cannotUnregisterCheckedInTooltip": "No se puede dar de baja a un usuario que ya se registró"
@@ -1889,9 +1893,14 @@
   "checkIn": {
     "errorCheckingIn": "Error al registrarse",
     "checkedInSuccessfully": "Registrado con éxito",
-    "searchAttendees": "Buscar asistentes",
+    "generatingPdf": "Generando PDF...",
+    "pdfGeneratedSuccessfully": "¡PDF generado con éxito!",
+    "errorGeneratingPdf": "Error al generar PDF",
+    "unknownError": "Error desconocido",
     "checkedIn": "Registrado",
     "downloadTag": "Descargar etiqueta",
+    "checkInButton": "Registrarse",
+    "searchAttendees": "Buscar asistentes",
     "checkIn": "Registrar",
     "eventCheckInManagement": "Gestión de registro de eventos",
     "checkInMembers": "Registrar miembros",
@@ -1998,7 +2007,20 @@
     "searchPledges": "Buscar promesas"
   },
   "leaveOrganization": {
-    "title": "Dejar la organización"
+    "title": "Dejar la organización",
+    "leaveOrganization": "Dejar la organización",
+    "confirmLeaveOrganization": "Confirmar dejar la organización",
+    "leaveOrganizationConfirmation": "¿Estás seguro de que quieres dejar {{orgName}}? Perderás el acceso al contenido exclusivo para miembros.",
+    "enterEmailToConfirm": "Ingresa tu correo electrónico para confirmar:",
+    "enterYourEmail": "Ingresa tu correo electrónico",
+    "confirmEmailInput": "Confirmar entrada de correo electrónico",
+    "leftOrganizationSuccess": "¡Has dejado la organización con éxito!",
+    "leftOrganizationError": "No se pudo dejar la organización. Por favor, inténtalo de nuevo.",
+    "networkError": "No se puede procesar tu solicitud. Por favor, verifica tu conexión.",
+    "emailMismatchError": "El correo electrónico que ingresaste no coincide con el de tu cuenta.",
+    "continue": "Continuar",
+    "missingRequiredInfo": "No se puede procesar la solicitud: Falta información requerida.",
+    "organizationNotFound": "Organización no encontrada"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Selector de vista de voluntarios",
@@ -2256,7 +2278,9 @@
     "title": "Portal de Usuario",
     "talawa": "Talawa",
     "talawaBranding": "Marca Talawa",
-    "view": "Ver"
+    "view": "Ver",
+    "changeLanguage": "Cambiar idioma",
+    "userNotFoundError": "Usuario no encontrado"
   },
   "donation": {
     "amount_label": "Cantidad",
@@ -2311,5 +2335,13 @@
     "paginationGoToPage": "Ir a la página {{page}}",
     "paginationGoToType": "Ir a la página {{type}}",
     "noEventsAttended": "No hay eventos asistidos"
+  },
+  "eventStats": {
+    "title": "Estadísticas del evento",
+    "reviews": {
+      "title": "Reseñas",
+      "emptyState": "Esperando a que la gente hable sobre el evento...",
+      "filledByCount": "Completado por {{count}} personas."
+    }
   }
 }

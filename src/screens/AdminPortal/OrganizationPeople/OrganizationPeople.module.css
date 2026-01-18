@@ -96,3 +96,50 @@
 .memberNameFontSize {
   font-size: var(--font-size-md);
 }
+
+.tableContainer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: var(--space-7);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  border: var(--border-1) solid var(--color-gray-200);
+  border-radius: var(--radius-xl);
+  background-color: var(--color-white);
+}
+
+.tableHeaderRow {
+  background-color: var(--color-gray-100);
+}
+
+.tableCell {
+  padding: var(--space-5) var(--space-6);
+  border-bottom: var(--border-1) solid var(--color-gray-200);
+}
+
+.rowBackground {
+  background-color: var(--color-white);
+}
+
+.rowBackground:hover {
+  background-color: var(--color-gray-50);
+}
+
+.centerAlign {
+  text-align: center;
+}
+
+.emptyStateCell {
+  padding: var(--space-8);
+  text-align: center;
+  color: var(--color-gray-500);
+}
+
+.modalBodyText {
+  font-size: var(--font-size-md);
+  color: var(--color-gray-700);
+}
