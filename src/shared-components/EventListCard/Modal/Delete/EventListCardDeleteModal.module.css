@@ -18,7 +18,6 @@
 }
 
 .addButton:disabled {
-  margin-bottom: var(--space-3);
   background-color: var(--color-blue-100);
   border-color: var(--color-blue-200);
 }
