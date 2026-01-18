@@ -286,5 +286,6 @@
   "linkCopied": "链接已复制到剪贴板",
   "copyToClipboardError": "复制链接到剪贴板时出错",
   "share": "分享",
-  "userNotFound": "未找到用户"
+  "userNotFound": "未找到用户",
+  "avatarProcessingError": "处理头像时出错，请检查您的图片。"
 }
