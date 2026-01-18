@@ -160,7 +160,9 @@ function AdvertisementEntry({
   const now = new Date();
 
   let statusVariant: 'active' | 'inactive' | 'pending';
-
+  // Default to 'active' when dates are missing;
+  // 'pending' requires a future startAt,
+  // 'inactive' requires a past endAt.
   if (advertisement.startAt && new Date(advertisement.startAt) > now) {
     statusVariant = 'pending';
   } else if (advertisement.endAt && new Date(advertisement.endAt) < now) {
