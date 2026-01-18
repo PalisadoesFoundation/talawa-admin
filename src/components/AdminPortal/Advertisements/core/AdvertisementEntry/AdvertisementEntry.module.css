@@ -1,5 +1,5 @@
 .noDescription {
-  color: gray;
+  color: var(--bs-gray-500);
 }
 
 .cardOtherSettings {
@@ -126,13 +126,18 @@
   object-position: center;
 }
 
+:root {
+  --ad-muted-text: #6c757d;
+  --ad-surface-bg: #f8f9fa;
+}
+
 .noMediaPlaceholder {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6c757d;
+  color: var(--ad-muted-text);
   font-style: italic;
-  background-color: var(--dropdownmenu-li-hover);
+  background-color: var(--ad-surface-bg);
 }
 
 .carouselContainer {
