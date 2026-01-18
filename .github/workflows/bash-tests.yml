@@ -38,10 +38,20 @@ jobs:
       - name: Checkout the Repository
         uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - name: Install bats-core
         run: |
           # Install bats-core using pnpm (per repo policy)
-          sudo pnpm add -g bats
+          sudo $(which pnpm) add -g bats
 
       - name: Install kcov for coverage
         run: |
