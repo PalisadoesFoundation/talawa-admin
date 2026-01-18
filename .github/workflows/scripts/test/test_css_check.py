@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 """Comprehensive unit tests for css_check.py with 100% code coverage."""
-
 import unittest
 import tempfile
 import os

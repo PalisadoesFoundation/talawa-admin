@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 """Check TypeScript files for CSS violations and embedded CSS."""
-
 import argparse
 import os
 import re
@@ -363,8 +362,10 @@ def main():
     Returns:
         None
     """
-    parser = argparse.ArgumentParser(description="""Check for embedded CSS and
-       style violations in TypeScript files.""")
+    parser = argparse.ArgumentParser(
+        description="""Check for embedded CSS and
+       style violations in TypeScript files."""
+    )
     parser.add_argument(
         "--directories",
         nargs="+",

@@ -23,7 +23,6 @@ Note:
     your pull requests.
 
 """
-
 # Standard imports
 import os
 import sys
@@ -316,18 +315,24 @@ def main():
             errors_found = True
             file_count += 1
             if file_count == 1:
-                print("""
-LINE COUNT ERROR: Files with excessive lines of code have been found\n""")
+                print(
+                    """
+LINE COUNT ERROR: Files with excessive lines of code have been found\n"""
+                )
 
             print("  Line count: {:>5} File: {}".format(line_count, filepath))
 
     # Evaluate and exit
     if bool(errors_found) is True:
-        print("""
+        print(
+            """
 The {} files listed above have more than {} lines of code.
 
 Please fix this. It is a pre-requisite for pull request approval.
-""".format(file_count, args.lines))
+""".format(
+                file_count, args.lines
+            )
+        )
         sys.exit(1)
     else:
         sys.exit(0)
