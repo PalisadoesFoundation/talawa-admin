@@ -1,0 +1,227 @@
+/**
+ * OrganizationCard Component Styles
+ * Styles for displaying organization cards with avatar, details, and action buttons
+ */
+
+.orgCard .innerContainer {
+  display: flex;
+  height: 100%;
+}
+
+.orgCard {
+  background-color: var(--orgCard-bg);
+  margin: 0.5rem;
+  height: calc(170px + 2rem);
+  padding: 1rem;
+  border-radius: 8px;
+  outline: 1px solid var(--orgCard-outline);
+  position: relative;
+  margin-right: 2rem;
+}
+
+.orgCard .innerContainer .orgImgContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  width: 125px;
+  height: 120px;
+  object-fit: contain;
+  background-color: var(--orgImgContainer-bg);
+}
+
+.orgCard .innerContainer .content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-left: 1rem;
+  width: 70%;
+  margin-top: 0.7rem;
+}
+
+.orgName {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 1rem;
+}
+
+.orgdesc {
+  font-size: 0.9rem;
+  color: var(--orgdesc-color);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  max-width: 20rem;
+}
+
+.address {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  align-items: center;
+}
+
+.address h6 {
+  font-size: 0.9rem;
+  color: var(--address-h6-color);
+}
+
+.buttonContainer {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 10px;
+}
+
+.manageBtn,
+.withdrawBtn,
+.outlineBtn {
+  min-width: 8rem;
+  height: 2.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.manageBtn {
+  display: flex;
+  justify-content: space-around;
+}
+
+.withdrawBtn {
+  display: flex;
+  justify-content: space-around;
+  width: 8rem;
+}
+
+.outlineBtn {
+  background-color: var(--outlineBtn-bg);
+  color: var(--outlineBtn-color);
+  border-color: var(--outlineBtn-border);
+  padding: 10px 10px;
+  width: 8rem;
+}
+
+.outlineBtn:is(:hover, :active) {
+  background-color: var(--outlineBtn-hover-bg) !important;
+  color: var(--outlineBtn-color-hover) !important;
+  border-color: var(--outlineBtn-hover-border);
+}
+
+.outlineBtn:disabled {
+  background-color: var(--outlineBtn-bg-disabled);
+  color: var(--outlineBtn-color-disabled);
+  border-color: var(--outlineBtn-border-disabled);
+}
+
+.statusChip {
+  display: inline-block;
+  margin-top: 0.25rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.member {
+  background-color: #e6f4ea;
+  color: #137333;
+}
+
+.pendingMembership {
+  background-color: #fff4e5;
+  color: #b26a00;
+}
+
+.notMember {
+  background-color: #f1f3f4;
+  color: #5f6368;
+}
+
+.buttonWidth8rem {
+  width: 8rem;
+}
+
+@media (max-width: 550px) {
+  .orgCard {
+    width: 100%;
+  }
+
+  .orgCard {
+    height: unset;
+    margin: 0.5rem 0;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .orgCard .innerContainer .orgImgContainer {
+    margin-bottom: 0.8rem;
+  }
+
+  .orgCard .innerContainer {
+    flex-direction: column;
+  }
+
+  .orgCard .innerContainer .orgImgContainer img {
+    height: auto;
+    width: 100%;
+  }
+
+  .orgCard .innerContainer .content {
+    margin-left: 0;
+  }
+
+  .orgCard button {
+    bottom: 0;
+    right: 0;
+    position: relative;
+    margin-left: auto;
+    display: block;
+  }
+
+  .joinBtn,
+  .joinedBtn,
+  .withdrawBtn {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+  }
+}
+
+@media (max-width: 580px) {
+  .orgCard {
+    height: unset;
+    margin: 0.5rem 0;
+    padding: 1.25rem 1.5rem;
+  }
+
+  .orgCard .innerContainer {
+    flex-direction: column;
+  }
+
+  .orgCard .innerContainer .orgImgContainer img {
+    height: auto;
+    width: 100%;
+  }
+
+  .orgCard button {
+    bottom: 0;
+    right: 0;
+    position: relative;
+    margin-left: auto;
+    display: block;
+  }
+
+  .manageBtn {
+    display: flex;
+    justify-content: space-around;
+  }
+}

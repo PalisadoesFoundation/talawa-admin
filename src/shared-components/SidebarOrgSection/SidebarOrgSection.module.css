@@ -1,0 +1,71 @@
+/**
+ * SidebarOrgSection Component Styles
+ * Styles for displaying organization information in the sidebar
+ */
+
+.profileContainer {
+  border: none;
+  width: 100%;
+  height: 52px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  background-color: var(--leftDrawer-profileContainer-bg);
+}
+
+.profileContainer:focus {
+  outline: none;
+}
+
+.imageContainer {
+  width: 68px;
+  margin-right: 8px;
+  margin-bottom: 10px;
+}
+
+.profileContainer img {
+  height: 52px;
+  width: 52px;
+  border-radius: 50%;
+}
+
+.ProfileRightConatiner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+.profileText {
+  flex: 1;
+  text-align: start;
+  overflow: hidden;
+}
+
+.primaryText {
+  font-size: 1.1rem;
+  font-weight: 600;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-wrap: break-word;
+  white-space: normal;
+}
+
+.secondaryText {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: var(--leftDrawer-secondaryText-color);
+  display: block;
+  text-transform: capitalize;
+}
+
+.ArrowIcon {
+  font-size: 24px;
+}
+
+.bgDanger {
+  background-color: #dc3545 !important;
+}

@@ -24,7 +24,7 @@ import { WarningAmberOutlined } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
-import styles from '../../style/app-fixed.module.css';
+import styles from './SidebarOrgSection.module.css';
 import type { ISidebarOrgSectionProps } from '../../types/SidebarOrgSection/interface';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
