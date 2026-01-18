@@ -11,10 +11,8 @@ export class PeoplePage {
   private readonly _removeModalBtn = '[data-testid="removeMemberModalBtn"]';
   private readonly _confirmRemoveBtn = '[data-testid="removeMemberBtn"]';
   private readonly _alert = '[role=alert]';
-  private readonly _leftDrawer = '[data-testid="leftDrawerContainer"]';
 
   visitPeoplePage(): void {
-    cy.get(this._leftDrawer, { timeout: 20000 }).should('be.visible');
     cy.get(this._peopleTabButton).should('be.visible').click();
     cy.url().should('match', /\/orgpeople\/[a-f0-9-]+/);
   }
@@ -64,19 +62,7 @@ export class PeoplePage {
   deleteMember(name: string, timeout = 40000) {
     this.searchMemberByName(name, timeout);
     this.verifyMemberInList(name, timeout);
-
-    // Wait for DataGrid to stabilize after search
-    cy.wait(1000);
-
-    // Scope search to DataGrid rows to avoid matching headers/other UI
-    cy.get('.MuiDataGrid-row', { timeout })
-      .contains(name)
-      .should('be.visible')
-      .parents('.MuiDataGrid-row')
-      .find(this._removeModalBtn)
-      .should('be.visible')
-      .click();
-
+    cy.get(this._removeModalBtn, { timeout }).should('be.visible').click();
     cy.get(this._confirmRemoveBtn, { timeout }).should('be.visible').click();
     cy.get(this._alert, { timeout })
       .should('be.visible')

@@ -59,7 +59,6 @@ export class ActionItemPage {
     this.selectFirstEvent();
     // After selecting event, click "Show Event Dashboard" button
     this.clickShowEventDashboard();
-
     // Now click the action items tab within the event dashboard
     this.navigateToEventActionItemsTab();
     return this;

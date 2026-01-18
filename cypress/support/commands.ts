@@ -28,7 +28,7 @@ declare global {
        */
       loginByApi(role: string): Chainable<Subject>;
       /**
-       * @param expectedMessage The expected text (string or RegExp)
+       * @param expectedMessage - The expected text (string or RegExp)
        */
       assertToast(expectedMessage: string | RegExp): Chainable<void>;
     }
@@ -56,18 +56,6 @@ Cypress.Commands.add('loginByApi', (role: string) => {
       cy.visit(loginPath);
       cy.get('[data-cy="loginEmail"]').type(user.email);
       cy.get('[data-cy="loginPassword"]').type(user.password);
-      if (Cypress.env('RECAPTCHA_SITE_KEY')) {
-        cy.get('iframe')
-          .first()
-          .then((recaptchaIframe) => {
-            const body = recaptchaIframe.contents();
-            cy.wrap(body)
-              .find('.recaptcha-checkbox-border')
-              .should('be.visible')
-              .click();
-          });
-        cy.wait(1000); // wait for 1 second to simulate recaptcha completion
-      }
       cy.get('[data-cy="loginBtn"]').click();
 
       // Wait for and check the signIn response

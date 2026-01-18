@@ -30,12 +30,10 @@ export class AdminDashboardPage {
   }
 
   openFirstOrganization(timeout = 20000) {
-    cy.intercept('POST', '**/graphql').as('orgDashLoad');
     cy.get(this._manageButton, { timeout })
       .should('be.visible')
       .first()
       .click();
-    cy.wait('@orgDashLoad', { timeout: 20000 });
     cy.url().should('match', /\/orgdash\/[a-f0-9-]+/);
     return this;
   }

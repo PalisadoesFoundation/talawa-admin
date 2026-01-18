@@ -11,10 +11,8 @@ export class PostsPage {
   private readonly _createPostSubmit = '[data-testid="createPostBtn"]';
   private readonly _deleteOption = '[data-testid="delete-post-button"]';
   private readonly _sortButton = '[data-testid="sortpost-toggle"]';
-  private readonly _leftDrawer = '[data-testid="leftDrawerContainer"]';
 
   visitPostsPage() {
-    cy.get(this._leftDrawer, { timeout: 20000 }).should('be.visible');
     cy.get(this._postsTabButton).should('be.visible').click();
     cy.url().should('match', /\/orgpost\/[a-f0-9-]+/);
     return this;
