@@ -1,4 +1,4 @@
-  /**
+/**
  * EventListCard component.
  *
  * This component represents a card that displays event details and allows users

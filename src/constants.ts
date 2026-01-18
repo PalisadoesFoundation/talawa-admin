@@ -51,3 +51,9 @@ export const socialMediaLinks = [
     logo: RedditLogo,
   },
 ];
+
+/**
+ * Default time value for event scheduling
+ * Format: HH:mm:ss (24-hour format)
+ */
+export const DEFAULT_TIME = '08:00:00';
