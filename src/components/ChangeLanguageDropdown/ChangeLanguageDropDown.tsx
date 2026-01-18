@@ -16,7 +16,7 @@ import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import i18next from 'i18next';
 import { languages } from 'utils/languages';
-import styles from 'style/app-fixed.module.css';
+import styles from './ChangeLanguageDropDown.module.css';
 import cookies from 'js-cookie';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
@@ -46,7 +46,7 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
     }
 
     if (!userId) {
-      NotificationToast.error(tCommon('noUsersFound'));
+      NotificationToast.error(tCommon('userNotFound'));
       return;
     }
 
