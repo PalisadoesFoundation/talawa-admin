@@ -319,15 +319,15 @@ def main():
                 print("""
 LINE COUNT ERROR: Files with excessive lines of code have been found\n""")
 
-            print("  Line count: {:>5} File: {}".format(line_count, filepath))
+            print(f"  Line count: {line_count:>5} File: {filepath}")
 
     # Evaluate and exit
     if bool(errors_found) is True:
-        print("""
-The {} files listed above have more than {} lines of code.
+        print(f"""
+The {file_count} files listed above have more than {args.lines} lines of code.
 
 Please fix this. It is a pre-requisite for pull request approval.
-""".format(file_count, args.lines))
+""")
         sys.exit(1)
     else:
         sys.exit(0)

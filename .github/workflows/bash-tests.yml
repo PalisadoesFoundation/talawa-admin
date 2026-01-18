@@ -45,11 +45,15 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
+        with:
+          version: 10.4.1
 
       - name: Install bats-core
         run: |
           # Install bats-core using pnpm (per repo policy)
           sudo $(which pnpm) add -g bats
+        env:
+          PNPM_HOME: /usr/local/bin
 
       - name: Install kcov for coverage
         run: |
