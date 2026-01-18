@@ -141,7 +141,7 @@
     "loading": "loading"
   },
   "userGlobalScreen": {
-    "title": "User Portal"
+    "title": "Global Settings"
   },
   "latestEvents": {
     "eventCardTitle": "Upcoming Events",
@@ -2323,7 +2323,8 @@
     "editCustomField": "Edit Custom Field"
   },
   "userGlobalScreen": {
-    "globalFeatures": "Global Features"
+    "globalFeatures": "Global Features",
+    "title": "Global Settings"
   },
   "recurringEventVolunteerModal": {
     "joinGroupTitle": "Join {{groupName}} - {{eventName}}",

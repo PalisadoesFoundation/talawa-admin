@@ -136,7 +136,7 @@ const UserScreen = (): React.JSX.Element => {
   }, [hideDrawer, setItem]);
 
   const currentPage = location.pathname;
-  const mainRightClass = `${styles.pageBody} ${!hideDrawer ? styles.expand : ''}`;
+  const mainRightClass = `${styles.pageBody} ${hideDrawer ? styles.expand : styles.contract}`;
 
   return (
     <div className={styles.pageContainer}>

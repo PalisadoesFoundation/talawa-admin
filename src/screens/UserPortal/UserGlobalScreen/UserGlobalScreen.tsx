@@ -2,7 +2,7 @@
  * Main layout for user routes that do not require an orgId.
  * Manages sidebar visibility and displays nested content via the router outlet.
  *
- * @returns \{JSX.Element\} The rendered UserGlobalScreen component.
+ * @returns The rendered UserGlobalScreen component.
  *
  * @remarks
  * - Uses UserSidebar instead of UserSidebarOrg because no orgId is needed.
@@ -22,7 +22,9 @@ import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { UserPortalNavigationBar } from 'components/UserPortal/UserPortalNavigationBar/UserPortalNavigationBar';
 
 const UserGlobalScreen = (): JSX.Element => {
-  const { t } = useTranslation('translation');
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userGlobalScreen',
+  });
   const [hideDrawer, setHideDrawer] = useState<boolean>(false);
 
   /**
@@ -64,7 +66,7 @@ const UserGlobalScreen = (): JSX.Element => {
           data-testid="mainpageright"
         >
           <div className={styles.titleWrapper}>
-            <h1>{t('userGlobalScreen.title')}</h1>
+            <h1>{t('title')}</h1>
           </div>
           <Outlet />
         </div>
