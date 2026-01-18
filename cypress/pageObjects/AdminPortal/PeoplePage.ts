@@ -11,8 +11,10 @@ export class PeoplePage {
   private readonly _removeModalBtn = '[data-testid="removeMemberModalBtn"]';
   private readonly _confirmRemoveBtn = '[data-testid="removeMemberBtn"]';
   private readonly _alert = '[role=alert]';
+  private readonly _leftDrawer = '[data-testid="leftDrawerContainer"]';
 
   visitPeoplePage(): void {
+    cy.get(this._leftDrawer, { timeout: 20000 }).should('be.visible');
     cy.get(this._peopleTabButton).should('be.visible').click();
     cy.url().should('match', /\/orgpeople\/[a-f0-9-]+/);
   }

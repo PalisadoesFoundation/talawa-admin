@@ -176,3 +176,11 @@
     right: 0;
   }
 }
+
+.flexContainerColumn {
+  flex: 1;
+}
+
+.titleMargin {
+  margin-top: 0.75rem;
+}

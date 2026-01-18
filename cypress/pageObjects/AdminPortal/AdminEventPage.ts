@@ -7,7 +7,10 @@ export class AdminEventPage {
   private readonly _createEventBtn = '[data-cy="createEventBtn"]';
   private readonly _eventCard = '[data-testid="card"]';
 
+  private readonly _leftDrawer = '[data-testid="leftDrawerContainer"]';
+
   visitEventPage(): void {
+    cy.get(this._leftDrawer, { timeout: 20000 }).should('be.visible');
     cy.get(this._eventsTabButton).should('be.visible').click();
     cy.url().should('match', /\/orgevents\/[a-f0-9-]+/);
   }

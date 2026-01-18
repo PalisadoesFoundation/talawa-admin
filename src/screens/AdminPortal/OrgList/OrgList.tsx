@@ -214,7 +214,7 @@ function OrgList(): JSX.Element {
     refetch: refetchOrgs,
   } = useQuery(ORGANIZATION_FILTER_LIST, {
     variables: { filter: filterName },
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-and-network',
     errorPolicy: 'all',
     notifyOnNetworkStatusChange: true,
   });
