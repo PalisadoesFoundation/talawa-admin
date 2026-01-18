@@ -409,7 +409,9 @@
     "profile": "配置文件",
     "joined": "加入",
     "createUser": "创建用户",
-    "notFound": "未找到成员"
+    "notFound": "未找到成员",
+    "showPassword": "显示密码",
+    "hidePassword": "隐藏密码"
   },
   "organizationCard": {
     "join": "加入",
@@ -2022,7 +2024,20 @@
     "searchPledges": "搜索承诺"
   },
   "leaveOrganization": {
-    "title": "离开组织"
+    "title": "离开组织",
+    "leaveOrganization": "离开组织",
+    "confirmLeaveOrganization": "确认离开组织",
+    "leaveOrganizationConfirmation": "您确定要离开 {{orgName}} 吗？您将失去对仅限会员内容的访问权限。",
+    "enterEmailToConfirm": "输入您的电子邮件以确认：",
+    "enterYourEmail": "输入您的电子邮件",
+    "confirmEmailInput": "确认电子邮件输入",
+    "leftOrganizationSuccess": "您已成功离开该组织！",
+    "leftOrganizationError": "离开组织失败。请重试。",
+    "networkError": "无法处理您的请求。请检查您的连接。",
+    "emailMismatchError": "您输入的电子邮件与您的帐户电子邮件不匹配。",
+    "continue": "继续",
+    "missingRequiredInfo": "无法处理请求：缺少必需信息。",
+    "organizationNotFound": "未找到组织"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "志愿者视图选择器",

@@ -409,7 +409,9 @@
     "create": "बनाएं",
     "cancel": "रद्द करें",
     "createUser": "उपयोगकर्ता बनाएं",
-    "notFound": "कोई सदस्य नहीं मिले"
+    "notFound": "कोई सदस्य नहीं मिले",
+    "showPassword": "पासवर्ड दिखाएं",
+    "hidePassword": "पासवर्ड छुपाएं"
   },
   "organizationCard": {
     "join": "जॉइन करें",
@@ -2022,7 +2024,20 @@
     "searchPledges": "प्रतिज्ञाएँ खोजें"
   },
   "leaveOrganization": {
-    "title": "संगठन छोड़ें"
+    "title": "संगठन छोड़ें",
+    "leaveOrganization": "संगठन छोड़ें",
+    "confirmLeaveOrganization": "संगठन छोड़ने की पुष्टि करें",
+    "leaveOrganizationConfirmation": "क्या आप वाकई {{orgName}} छोड़ना चाहते हैं? आप केवल सदस्यों के लिए सामग्री तक पहुंच खो देंगे।",
+    "enterEmailToConfirm": "पुष्टि करने के लिए अपना ईमेल दर्ज करें:",
+    "enterYourEmail": "अपना ईमेल दर्ज करें",
+    "confirmEmailInput": "ईमेल इनपुट की पुष्टि करें",
+    "leftOrganizationSuccess": "आपने सफलतापूर्वक संगठन छोड़ दिया है!",
+    "leftOrganizationError": "संगठन छोड़ने में विफल। कृपया पुन: प्रयास करें।",
+    "networkError": "आपके अनुरोध को संसाधित करने में असमर्थ। कृपया अपना कनेक्शन जांचें।",
+    "emailMismatchError": "आपके द्वारा दर्ज किया गया ईमेल आपके खाते के ईमेल से मेल नहीं खाता है।",
+    "continue": "जारी रखें",
+    "missingRequiredInfo": "अनुरोध संसाधित करने में असमर्थ: आवश्यक जानकारी अनुपलब्ध।",
+    "organizationNotFound": "संगठन नहीं मिला"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "स्वयंसेवक दृश्य चयनकर्ता",

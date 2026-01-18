@@ -3,6 +3,7 @@
   "lastName": "Last Name",
   "searchByName": "Search By Name",
   "loading": "Loading...",
+  "error": "Error",
   "endOfResults": "End of results",
   "noResultsFoundFor": "No se encontraron resultados para {{query}}",
   "tryAdjustingFilters": "Intenta ajustar tus filtros o término de búsqueda.",

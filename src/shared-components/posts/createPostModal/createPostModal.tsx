@@ -3,16 +3,8 @@
  *
  * This component renders a modal dialog that allows users to create a new post
  * within an organization. Users can add a title, optional body text, attach an
- * image or video, and optionally pin the post. The component handles file preview,
- * file hashing, GraphQL mutation submission, and UI state reset on success.
+ * image or video, and optionally pin the post.
  *
-/**
- * CreatePostModal Component
- *
- * This component renders a modal dialog that allows users to create a new post
- * within an organization. Users can add a title, optional body text, attach an
- * image or video, and optionally pin the post. The component handles file preview,
- * file hashing, GraphQL mutation submission, and UI state reset on success.
  */
 
 import React, {
@@ -113,6 +105,10 @@ function CreatePostModal({
     }
   }
 
+  /**
+   * Handles file selection from the input.
+   * Validates the mime type against allowed types and generates a blob URL for previewing the selected image or video.
+   */
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -155,6 +151,10 @@ function CreatePostModal({
     onHide();
   };
 
+  /**
+   * Submits the post data to the server.
+   * Validates required fields, executes the create or update mutation, handles success, and catches errors.
+   */
   const createPostHandler = async (
     e: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -319,6 +319,7 @@ function CreatePostModal({
                 ref={fileInputRef}
                 type="file"
                 accept="image/*, video/*"
+                id="addMedia"
                 data-testid="addMedia"
                 data-cy="addMediaField"
                 hidden
