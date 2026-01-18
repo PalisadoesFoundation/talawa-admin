@@ -2555,4 +2555,55 @@ describe('Email Verification Actions Tests', () => {
       );
     });
   });
+
+  test('handleResendVerification error (catch block)', async () => {
+    setItem('id', '123');
+    setItem('role', 'administrator');
+
+    const errorMock = {
+      request: {
+        query: RESEND_VERIFICATION_EMAIL_MUTATION,
+      },
+      error: new Error('Network error'),
+    };
+
+    renderWithMocks([
+      unverifiedUserMock,
+      errorMock,
+      ...createOrgMock(mockOrgData.singleOrg),
+    ]);
+    await wait();
+
+    const resendBtn = screen.getByTestId('resend-verification-btn');
+    fireEvent.click(resendBtn);
+
+    await waitFor(() => {
+      // errorHandler should be called
+      expect(mockToast.error).toHaveBeenCalled();
+    });
+  });
+
+  test('Shows email warning based on localStorage fallback', async () => {
+    setItem('emailNotVerified', 'true');
+    setItem('unverifiedEmail', 'test@example.com');
+    // Ensure API data is not returned to trigger fallback
+    const loadingUserMock = {
+      request: { query: CURRENT_USER },
+      result: { data: { user: null } },
+      delay: 500,
+    };
+
+    renderWithMocks([
+      loadingUserMock,
+      // Need valid org list response to avoid unrelated errors
+      ...createOrgMock(mockOrgData.singleOrg),
+    ]);
+
+    // Should verify warning shows up
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('email-verification-warning'),
+      ).toBeInTheDocument();
+    });
+  });
 });

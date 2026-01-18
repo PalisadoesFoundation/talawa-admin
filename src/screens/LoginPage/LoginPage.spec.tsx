@@ -2490,4 +2490,26 @@ describe('Cookie-based authentication verification', () => {
       'unverifiedEmail',
     );
   });
+
+  it('Redirects to /orglist if user is already logged in as administrator', async () => {
+    mockUseLocalStorage.getItem.mockImplementation((key) => {
+      if (key === 'IsLoggedIn') return 'TRUE';
+      if (key === 'role') return 'administrator';
+      return null;
+    });
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(routerMocks.navigate).toHaveBeenCalledWith('/orglist');
+  });
 });

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -365,6 +365,40 @@ describe('Testing VerifyEmail screen', () => {
       await waitFor(() => {
         expect(screen.getByTestId('spinner')).toBeInTheDocument();
       });
+    });
+  });
+
+  it('Should show error state when verification success is false', async () => {
+    const successFalseMock = {
+      request: {
+        query: VERIFY_EMAIL_MUTATION,
+        variables: { token: 'fail-token' },
+      },
+      result: {
+        data: {
+          verifyEmail: {
+            success: false,
+            message: 'Verification failed',
+            user: null,
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[successFalseMock]}>
+        <MemoryRouter initialEntries={['/auth/verify-email?token=fail-token']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <VerifyEmail />
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('error-state')).toBeInTheDocument();
     });
   });
 });
