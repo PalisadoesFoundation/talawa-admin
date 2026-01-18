@@ -11,7 +11,6 @@ import importlib.util
 from pathlib import Path
 from unittest.mock import patch
 
-
 SCRIPT_DIR = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location(
     "translation_check",

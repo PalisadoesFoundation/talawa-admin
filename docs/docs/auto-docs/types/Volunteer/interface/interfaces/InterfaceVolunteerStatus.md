@@ -26,7 +26,7 @@ The text to display on the button.
 
 ### buttonVariant
 
-> **buttonVariant**: `"outline-success"` \| `"outline-warning"` \| `"outline-danger"` \| `"outline-secondary"`
+> **buttonVariant**: `"outline-secondary"` \| `"outline-success"` \| `"outline-danger"` \| `"outline-warning"`
 
 Defined in: [src/types/Volunteer/interface.ts:167](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Volunteer/interface.ts#L167)
 
