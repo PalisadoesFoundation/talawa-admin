@@ -18,7 +18,7 @@
 }
 
 .tableHeader {
-  background-color: red;
+  background-color: var(--tableHeader-bg);
 }
 
 .tableImage {

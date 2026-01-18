@@ -52,3 +52,9 @@
   border-radius: 10px;
   margin: 8px;
 }
+
+.pageHeaderTitle {
+  /* Add appropriate styles for the page header title */
+  margin: 0;
+  font-weight: 600;
+}

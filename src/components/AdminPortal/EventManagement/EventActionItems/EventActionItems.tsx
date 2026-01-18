@@ -34,6 +34,7 @@ import { useQuery } from '@apollo/client';
 import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
 
 import type { IActionItemInfo } from 'types/shared-components/ActionItems/interface';
+import { InterfaceEventActionItemsProps } from 'types/AdminPortal/EventActionItems/interface';
 
 import styles from './EventActionItems.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -63,11 +64,6 @@ enum ModalState {
   DELETE = 'delete',
   VIEW = 'view',
   STATUS = 'status',
-}
-
-interface InterfaceEventActionItemsProps {
-  eventId: string;
-  orgActionItemsRefetch?: () => void;
 }
 
 const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({

@@ -1,19 +1,10 @@
 /**
- * Component-scoped styles for EventAttendance
- *
- * Migrated from src/style/app-fixed.module.css
- * Uses existing design tokens only.
- * No new tokens introduced.
- */
-.membername:hover {
-  color: var(--membername-color-hover);
-  text-decoration: underline;
-}
-
-.membername {
-  color: var(--eventsAttended-membername-color);
-}
-
+* Component-scoped styles for EventAttendance
+*
+* Migrated from src/style/app-fixed.module.css
+* Uses existing design tokens only.
+* No new tokens introduced.
+*/
 .membername {
   font-size: 16px;
   font-weight: bold;
@@ -26,25 +17,7 @@
   text-decoration: underline;
 }
 
-.membername:hover {
-  color: var(--membername-color-hover);
-  text-decoration: underline;
-}
-
-.membername {
-  font-size: 16px;
-  font-weight: bold;
-  color: var(--membername-color);
-  text-decoration: none;
-}
-
-.membername:hover {
-  color: var(--membername-color-hover);
-  text-decoration: underline;
-}
-
-.eventsAttended,
-.membername {
+.eventsAttended {
   color: var(--eventsAttended-membername-color);
 }
 
@@ -64,6 +37,7 @@
   padding-inline-end: 30px;
   width: 425px;
 }
+
 .dropdown {
   background-color: var(--dropdown-bg) !important;
   min-width: 150px;

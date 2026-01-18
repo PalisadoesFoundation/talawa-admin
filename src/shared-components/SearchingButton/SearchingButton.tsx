@@ -2,23 +2,8 @@ import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import SortIcon from '@mui/icons-material/Sort';
 import FilterAltOutlined from '@mui/icons-material/FilterAltOutlined';
-import PropTypes from 'prop-types';
 import styles from './SearchingButton.module.css';
-
-interface InterfaceSearchingButtonProps {
-  /** The title attribute for the Dropdown */
-  title?: string;
-  /** The text to display in the button */
-  text?: string;
-  /** The prefix for data-testid attributes for testing */
-  dataTestIdPrefix: string;
-  /** The data-testid attribute for the Dropdown */
-  dropdownTestId?: string;
-  /** Custom class name for the Dropdown */
-  className?: string;
-  /** Type to determine the icon to display: 'sort' or 'filter' */
-  type?: 'sort' | 'filter';
-}
+import { InterfaceSearchingButtonProps } from 'types/shared-components/SearchingButton/interface';
 
 /**
  * SearchingButton component that only displays a text.
@@ -48,14 +33,6 @@ const SearchingButton: React.FC<InterfaceSearchingButtonProps> = ({
       </Dropdown.Toggle>
     </Dropdown>
   );
-};
-
-SearchingButton.propTypes = {
-  title: PropTypes.string,
-  text: PropTypes.string, // Now optional with a default value
-  dataTestIdPrefix: PropTypes.string.isRequired,
-  dropdownTestId: PropTypes.string,
-  type: PropTypes.oneOf(['sort', 'filter']), // Type to determine the icon
 };
 
 export default SearchingButton;
