@@ -609,7 +609,11 @@
     "done": "पूर्ण",
     "createChat": "चैट बनाएं",
     "viewType": "दृश्य प्रकार",
-    "search": "खोज"
+    "search": "खोज",
+    "selectDay": "दिन चुनें",
+    "selectMonth": "महीना चुनें",
+    "selectYear": "वर्ष चुनें",
+    "workshops": "कार्यशाला"
   },
   "organizationActionItems": {
     "actionItemCategory": "क्रिया वस्तु श्रेणी",
@@ -1816,7 +1820,12 @@
     "deleteCategoryMsg": "क्या आप वाकई इस कार्रवाई आइटम श्रेणी को हटाना चाहते हैं?",
     "noDescriptionProvided": "कोई विवरण प्रदान नहीं किया गया",
     "createButton": "बटन बनाएं",
-    "editButton": "संपादित बटन"
+    "editButton": "संपादित बटन",
+    "action": "क्रिया",
+    "category": "श्रेणी",
+    "actionItemCategories": "कार्य आइटम श्रेणियाँ",
+    "createdOn": "निर्माण तिथि",
+    "serialNumber": "अनुक्रमांक"
   },
   "organizationVenues": {
     "title": "स्थानों",

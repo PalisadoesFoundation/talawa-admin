@@ -78,10 +78,6 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
 
   const { orgId } = useParams();
 
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const [actionItem, setActionItem] = useState<IActionItemInfo | null>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -102,12 +98,20 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     [ModalState.STATUS]: false,
   });
 
-  const openModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: true }));
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
-  const closeModal = (modal: ModalState): void =>
-    setModalState((prevState) => ({ ...prevState, [modal]: false }));
-
+  const openModal = useCallback(
+    (modal: ModalState): void =>
+      setModalState((prevState) => ({ ...prevState, [modal]: true })),
+    [],
+  );
+  const closeModal = useCallback(
+    (modal: ModalState): void =>
+      setModalState((prevState) => ({ ...prevState, [modal]: false })),
+    [],
+  );
   const handleModalClick = useCallback(
     (actionItem: IActionItemInfo | null, modal: ModalState): void => {
       if (modal === ModalState.SAME) {

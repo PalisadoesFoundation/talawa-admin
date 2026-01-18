@@ -114,8 +114,17 @@ describe('Button', () => {
     let button = screen.getByRole('button', { name: /Star/ });
     let icons = button.querySelectorAll('[data-testid="icon"]');
     expect(icons).toHaveLength(1);
-    expect(icons[0].previousSibling).toBeNull(); // start icon appears first
-
+    // Verify icon appears before label text
+    const contentSpan = button.querySelector('[class*="content"]');
+    const children = Array.from(contentSpan?.children || []);
+    const iconIndex = children.findIndex((el) =>
+      el.querySelector('[data-testid="icon"]'),
+    );
+    const labelIndex = children.findIndex(
+      (el) =>
+        el.classList.contains('label') || el.textContent?.includes('Star'),
+    );
+    expect(iconIndex).toBeLessThan(labelIndex);
     rerender(
       <Button icon={icon} iconPosition="end">
         Star

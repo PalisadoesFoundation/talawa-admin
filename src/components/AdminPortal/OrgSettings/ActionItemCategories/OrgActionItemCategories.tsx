@@ -117,12 +117,13 @@ const OrgActionItemCategories: FC<InterfaceOrgActionItemCategoriesProps> = ({
   });
 
   /** Modal state handlers */
-  const openModal = (modal: ModalState): void =>
+  const openModal = useCallback((modal: ModalState): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
+  }, []);
 
-  const closeModal = (modal: ModalState): void =>
+  const closeModal = useCallback((modal: ModalState): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
-
+  }, []);
   /** Open category modal in create/edit mode */
   const handleOpenModal = useCallback(
     (

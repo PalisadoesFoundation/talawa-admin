@@ -592,7 +592,11 @@
     "done": "Hecho",
     "createChat": "Crear chat",
     "viewType": "Tipo de Vista",
-    "search": "Buscar usuarios"
+    "search": "Buscar usuarios",
+    "selectDay": "Seleccionar día",
+    "selectMonth": "Seleccionar mes",
+    "selectYear": "Seleccionar año",
+    "workshops": "Talleres"
   },
   "organizationActionItems": {
     "actionItemCategory": "Categoría de Acción",
@@ -1799,7 +1803,12 @@
     "categoryDeleted": "Categoría de elemento de acción eliminada con éxito",
     "deleteCategory": "Eliminar categoría",
     "deleteCategoryMsg": "¿Está seguro de que desea eliminar esta categoría de elemento de acción?",
-    "noDescriptionProvided": "No se ha proporcionado descripción"
+    "noDescriptionProvided": "No se ha proporcionado descripción",
+    "action": "Acción",
+    "actionItemCategories": "Categorías de elementos de acción",
+    "category": "Categoría",
+    "createdOn": "Creado el",
+    "serialNumber": "N.º"
   },
   "organizationVenues": {
     "title": "Lugares",

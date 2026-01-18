@@ -592,7 +592,11 @@
     "done": "Fait",
     "createChat": "Créer une discussion",
     "viewType": "Type de Vue",
-    "search": "rechercher"
+    "search": "rechercher",
+    "selectDay": "Sélectionner le jour",
+    "selectMonth": "Sélectionner le mois",
+    "selectYear": "Sélectionner l'année",
+    "workshops": "Ateliers"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie de l'Action",
@@ -1816,7 +1820,12 @@
     "deleteCategoryMsg": "Êtes-vous sûr de vouloir supprimer cette catégorie d'élément d'action ?",
     "noDescriptionProvided": "Aucune description fournie",
     "createButton": "Créer",
-    "editButton": "Modifier"
+    "editButton": "Modifier",
+    "actionItemCategories": "Catégories d'éléments d'action",
+    "category": "Catégorie",
+    "createdOn": "Créé le",
+    "serialNumber": "N°",
+    "action": "Action"
   },
   "organizationVenues": {
     "title": "Lieux",
