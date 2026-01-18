@@ -59,6 +59,7 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
           avatarFile = await urlToFile(userImage);
         }
       } catch (error) {
+        NotificationToast.error(tCommon('avatarProcessingError'));
         console.error('Error processing avatar:', error);
       }
     }
