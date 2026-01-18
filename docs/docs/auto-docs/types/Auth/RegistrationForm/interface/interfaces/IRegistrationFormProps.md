@@ -4,7 +4,7 @@
 
 # Interface: IRegistrationFormProps
 
-Defined in: [src/types/Auth/RegistrationForm/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L17)
+Defined in: [src/types/Auth/RegistrationForm/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L29)
 
 Props for the RegistrationForm component
 
@@ -14,7 +14,7 @@ Props for the RegistrationForm component
 
 > `optional` **enableRecaptcha**: `boolean`
 
-Defined in: [src/types/Auth/RegistrationForm/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L21)
+Defined in: [src/types/Auth/RegistrationForm/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L33)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Auth/RegistrationForm/interface.ts:21](https://github.com
 
 > `optional` **onError**: (`e`) => `void`
 
-Defined in: [src/types/Auth/RegistrationForm/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L20)
+Defined in: [src/types/Auth/RegistrationForm/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L32)
 
 #### Parameters
 
@@ -38,9 +38,15 @@ Defined in: [src/types/Auth/RegistrationForm/interface.ts:20](https://github.com
 
 ### onSuccess()?
 
-> `optional` **onSuccess**: () => `void`
+> `optional` **onSuccess**: (`signUpData`) => `void`
 
-Defined in: [src/types/Auth/RegistrationForm/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L19)
+Defined in: [src/types/Auth/RegistrationForm/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L31)
+
+#### Parameters
+
+##### signUpData
+
+[`InterfaceSignUpData`](InterfaceSignUpData.md)
 
 #### Returns
 
@@ -52,4 +58,4 @@ Defined in: [src/types/Auth/RegistrationForm/interface.ts:19](https://github.com
 
 > **organizations**: [`InterfaceOrgOption`](../../../OrgSelector/interface/interfaces/InterfaceOrgOption.md)[]
 
-Defined in: [src/types/Auth/RegistrationForm/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L18)
+Defined in: [src/types/Auth/RegistrationForm/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L30)

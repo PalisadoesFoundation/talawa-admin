@@ -1,11 +1,12 @@
 import { useState } from 'react';
+import type { InterfaceSignUpData } from '../../types/Auth/RegistrationForm/interface';
 
 /**
  * Props for the useRegistration hook
  */
 interface IUseRegistrationProps {
   /** Callback function called on successful registration */
-  onSuccess?: () => void;
+  onSuccess?: (signUpData: InterfaceSignUpData) => void;
   /** Callback function called on registration error */
   onError?: (error: Error) => void;
 }
@@ -33,8 +34,19 @@ export const useRegistration = ({
         throw new Error('Missing required registration data');
       }
       await new Promise((resolve) => setTimeout(resolve, 100));
+
+      // Mock signup data structure
+      const mockSignUpData: InterfaceSignUpData = {
+        signUp: {
+          user: {
+            id: 'mock-user-id',
+          },
+          authenticationToken: 'mock-auth-token',
+        },
+      };
+
       if (onSuccess) {
-        onSuccess();
+        onSuccess(mockSignUpData);
       }
     } catch (error) {
       if (onError) {

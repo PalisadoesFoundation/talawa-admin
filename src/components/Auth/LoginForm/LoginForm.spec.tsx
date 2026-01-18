@@ -227,7 +227,20 @@ describe('LoginForm', () => {
       fireEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(onSuccess).toHaveBeenCalledWith('test-auth-token');
+        expect(onSuccess).toHaveBeenCalledWith({
+          signIn: {
+            user: {
+              id: '1',
+              name: 'Test User',
+              emailAddress: 'test@example.com',
+              role: 'user',
+              countryCode: 'US',
+              avatarURL: null,
+            },
+            authenticationToken: 'test-auth-token',
+            refreshToken: 'test-refresh-token',
+          },
+        });
       });
       expect(onSuccess).toHaveBeenCalledTimes(1);
     });
@@ -250,7 +263,20 @@ describe('LoginForm', () => {
       fireEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(onSuccess).toHaveBeenCalledWith('admin-auth-token');
+        expect(onSuccess).toHaveBeenCalledWith({
+          signIn: {
+            user: {
+              id: '2',
+              name: 'Admin User',
+              emailAddress: 'admin@example.com',
+              role: 'administrator',
+              countryCode: 'US',
+              avatarURL: null,
+            },
+            authenticationToken: 'admin-auth-token',
+            refreshToken: 'admin-refresh-token',
+          },
+        });
       });
       expect(onSuccess).toHaveBeenCalledTimes(1);
     });

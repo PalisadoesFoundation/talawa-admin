@@ -9,6 +9,23 @@ export interface InterfaceLoginFormData {
 }
 
 /**
+ * Sign-in response data structure from GraphQL
+ */
+export interface InterfaceSignInData {
+  signIn: {
+    user: {
+      countryCode: string | null;
+      role: string;
+      name: string;
+      emailAddress: string;
+      id: string;
+      avatarURL: string | null;
+    };
+    authenticationToken: string;
+  };
+}
+
+/**
  * Props for the LoginForm component.
  *
  * @remarks
@@ -18,8 +35,8 @@ export interface InterfaceLoginFormData {
 export interface InterfaceLoginFormProps {
   /** Whether this is an admin login form (affects heading text) */
   isAdmin?: boolean;
-  /** Callback fired on successful login with authentication token */
-  onSuccess?: (token: string) => void;
+  /** Callback fired on successful login with complete user data */
+  onSuccess?: (signInData: InterfaceSignInData) => void;
   /** Callback fired when login fails with error details */
   onError?: (error: Error) => void;
   /** Test ID for testing purposes */

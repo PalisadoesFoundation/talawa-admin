@@ -12,11 +12,23 @@ export interface IRegistrationFormData {
 }
 
 /**
+ * Sign-up response data structure from GraphQL
+ */
+export interface InterfaceSignUpData {
+  signUp: {
+    user: {
+      id: string;
+    };
+    authenticationToken: string;
+  };
+}
+
+/**
  * Props for the RegistrationForm component
  */
 export interface IRegistrationFormProps {
   organizations: InterfaceOrgOption[];
-  onSuccess?: () => void;
+  onSuccess?: (signUpData: InterfaceSignUpData) => void;
   onError?: (e: Error) => void;
   enableRecaptcha?: boolean;
 }

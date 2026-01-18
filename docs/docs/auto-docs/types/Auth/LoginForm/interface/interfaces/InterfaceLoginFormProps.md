@@ -4,7 +4,7 @@
 
 # Interface: InterfaceLoginFormProps
 
-Defined in: [src/types/Auth/LoginForm/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L18)
+Defined in: [src/types/Auth/LoginForm/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L35)
 
 Props for the LoginForm component.
 
@@ -19,7 +19,7 @@ login form with callback support for success/error handling.
 
 > `optional` **isAdmin**: `boolean`
 
-Defined in: [src/types/Auth/LoginForm/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L20)
+Defined in: [src/types/Auth/LoginForm/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L37)
 
 Whether this is an admin login form (affects heading text)
 
@@ -29,7 +29,7 @@ Whether this is an admin login form (affects heading text)
 
 > `optional` **onError**: (`error`) => `void`
 
-Defined in: [src/types/Auth/LoginForm/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L24)
+Defined in: [src/types/Auth/LoginForm/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L41)
 
 Callback fired when login fails with error details
 
@@ -47,17 +47,17 @@ Callback fired when login fails with error details
 
 ### onSuccess()?
 
-> `optional` **onSuccess**: (`token`) => `void`
+> `optional` **onSuccess**: (`signInData`) => `void`
 
-Defined in: [src/types/Auth/LoginForm/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L22)
+Defined in: [src/types/Auth/LoginForm/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L39)
 
-Callback fired on successful login with authentication token
+Callback fired on successful login with complete user data
 
 #### Parameters
 
-##### token
+##### signInData
 
-`string`
+[`InterfaceSignInData`](InterfaceSignInData.md)
 
 #### Returns
 
@@ -69,6 +69,6 @@ Callback fired on successful login with authentication token
 
 > `optional` **testId**: `string`
 
-Defined in: [src/types/Auth/LoginForm/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L26)
+Defined in: [src/types/Auth/LoginForm/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L43)
 
 Test ID for testing purposes
