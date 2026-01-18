@@ -302,8 +302,9 @@ const Campaigns = (): JSX.Element => {
 
         return (
           <Button
-            size="sm"
-            variant={isEnded ? 'outline-secondary' : 'outline-success'}
+            size="small"
+            variant={isEnded ? 'outlined' : 'contained'}
+            color={isEnded ? 'inherit' : 'success'}
             data-testid="addPledgeBtn"
             disabled={isEnded}
             onClick={(e) => {
