@@ -1,6 +1,5 @@
 import React, { lazy, Suspense, useEffect, useMemo } from 'react';
 import { Route, Routes } from 'react-router';
-import { Navigate } from 'react-router-dom';
 import { useQuery, useApolloClient } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
@@ -212,19 +211,12 @@ function App(): React.ReactElement {
           <Route path="/admin" element={<LoginPage />} />
           <Route element={<SecuredRoute />}>
             <Route element={<SuperAdminScreen />}>
-              <Route path="/admin/orglist" element={<OrgList />} />
-              <Route
-                path="/orglist"
-                element={<Navigate replace to="/admin/orglist" />}
-              />
-              <Route path="/admin/notification" element={<Notification />} />
+              <Route path="/orglist" element={<OrgList />} />
+              <Route path="/notification" element={<Notification />} />
               <Route path="/admin/profile" element={<MemberDetail />} />
-              <Route path="/admin/users" element={<Users />} />
-              <Route
-                path="/admin/communityProfile"
-                element={<CommunityProfile />}
-              />
-              <Route path="/admin/pluginstore" element={<PluginStore />} />
+              <Route path="/users" element={<Users />} />
+              <Route path="/communityProfile" element={<CommunityProfile />} />
+              <Route path="/pluginstore" element={<PluginStore />} />
               {/* Admin global plugin routes (e.g., settings) */}
               {adminGlobalPluginRoutes.map((route) => (
                 <Route
@@ -240,76 +232,58 @@ function App(): React.ReactElement {
               ))}
             </Route>
             <Route element={<OrganizationScreen />}>
-              <Route path="/admin/requests/:orgId" element={<Requests />} />
+              <Route path="/requests/:orgId" element={<Requests />} />
               <Route
-                path="/admin/orgdash/:orgId"
+                path="/orgdash/:orgId"
                 element={<OrganizationDashboard />}
               />
               <Route
-                path="/admin/orgpeople/:orgId"
+                path="/orgpeople/:orgId"
                 element={<OrganizationPeople />}
               />
+              <Route path="/orgtags/:orgId" element={<OrganizationTags />} />
               <Route
-                path="/admin/orgtags/:orgId"
-                element={<OrganizationTags />}
-              />
-              <Route
-                path="/admin/orgtags/:orgId/manageTag/:tagId"
+                path="orgtags/:orgId/manageTag/:tagId"
                 element={<ManageTag />}
               />
               <Route
-                path="/admin/orgtags/:orgId/subTags/:tagId"
+                path="orgtags/:orgId/subTags/:tagId"
                 element={<SubTags />}
               />
+              <Route path="/member/:orgId/:userId" element={<MemberDetail />} />
               <Route
-                path="/admin/member/:orgId/:userId"
-                element={<MemberDetail />}
-              />
-              <Route
-                path="/admin/orgevents/:orgId"
+                path="/orgevents/:orgId"
                 element={<OrganizationEvents />}
               />
               <Route
-                path="/admin/event/:orgId/:eventId"
+                path="/event/:orgId/:eventId"
                 element={<EventManagement />}
               />
 
+              <Route path="/orgfunds/:orgId" element={<OrganizationFunds />} />
               <Route
-                path="/admin/orgfunds/:orgId"
-                element={<OrganizationFunds />}
-              />
-              <Route
-                path="/admin/orgtransactions/:orgId"
+                path="/orgtransactions/:orgId"
                 element={<OrganizationTransactions />}
               />
               <Route
-                path="/admin/orgfundcampaign/:orgId/:fundId"
+                path="/orgfundcampaign/:orgId/:fundId"
                 element={<OrganizationFundCampaign />}
               />
               <Route
-                path="/admin/fundCampaignPledge/:orgId/:fundCampaignId"
+                path="/fundCampaignPledge/:orgId/:fundCampaignId"
                 element={<FundCampaignPledge />}
               />
+              <Route path="/orgcontribution" element={<OrgContribution />} />
+              <Route path="/orgpost/:orgId" element={<PostsPage />} />
+              <Route path="/orgsetting/:orgId" element={<OrgSettings />} />
+              <Route path="/orgads/:orgId" element={<Advertisements />} />
+              <Route path="/blockuser/:orgId" element={<BlockUser />} />
               <Route
-                path="/admin/orgcontribution"
-                element={<OrgContribution />}
-              />
-              <Route path="/admin/orgpost/:orgId" element={<PostsPage />} />
-              <Route
-                path="/admin/orgsetting/:orgId"
-                element={<OrgSettings />}
-              />
-              <Route path="/admin/orgads/:orgId" element={<Advertisements />} />
-              <Route path="/admin/blockuser/:orgId" element={<BlockUser />} />
-              <Route
-                path="/admin/orgvenues/:orgId"
+                path="/orgvenues/:orgId"
                 element={<OrganizationVenues />}
               />
-              <Route
-                path="/admin/leaderboard/:orgId"
-                element={<Leaderboard />}
-              />
-              <Route path="/admin/orgchat/:orgId" element={<Chat />} />
+              <Route path="/leaderboard/:orgId" element={<Leaderboard />} />
+              <Route path="/orgchat/:orgId" element={<Chat />} />
               {/* Admin org plugin routes */}
               {adminOrgPluginRoutes.map((route) => (
                 <Route
