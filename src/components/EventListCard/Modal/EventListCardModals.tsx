@@ -459,14 +459,7 @@ function EventListCardModals({
         backdrop="static"
         keyboard={false}
         centered
-        title={
-          <span
-            className="text-white"
-            id={`updateEventModalLabel${eventListCardProps.id}`}
-          >
-            {t('updateEvent')}
-          </span>
-        }
+        title={<span className="text-white">{t('updateEvent')}</span>}
         headerClassName={styles.modalHeader}
         showCloseButton={true}
         footer={
@@ -474,7 +467,6 @@ function EventListCardModals({
             <Button
               type="button"
               className={`btn btn-secondary ${styles.removeButton}`}
-              data-dismiss="modal"
               onClick={toggleUpdateModal}
               data-testid="eventUpdateModalCloseBtn"
             >
