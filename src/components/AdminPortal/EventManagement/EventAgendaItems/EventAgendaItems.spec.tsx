@@ -25,23 +25,18 @@ import {
   MOCKS_ERROR_QUERY,
   MOCKS_MUTATION_ERROR,
 } from './EventAgendaItemsMocks';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-const toastMocks = vi.hoisted(() => {
-  return {
-    success: vi.fn(),
-    error: vi.fn(),
-    warning: vi.fn(),
-    info: vi.fn(),
-    dismiss: vi.fn(),
-  };
-});
+const mockNotificationToast = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
+  dismiss: vi.fn(),
+}));
 
-vi.mock('components/NotificationToast/NotificationToast', async () => {
-  return {
-    NotificationToast: toastMocks,
-  };
-});
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockNotificationToast,
+}));
 
 vi.mock('react-router', async () => ({
   ...(await vi.importActual('react-router')),
@@ -562,7 +557,7 @@ describe('Testing Agenda Items Components', () => {
     await userEvent.click(screen.getByTestId('createAgendaItemFormBtn'));
 
     await waitFor(() => {
-      expect(NotificationToast.success).toBeCalledWith(
+      expect(mockNotificationToast.success).toHaveBeenCalledWith(
         translations.agendaItemCreated,
       );
       expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
@@ -615,7 +610,9 @@ describe('Testing Agenda Items Components', () => {
     await userEvent.click(screen.getByTestId('createAgendaItemFormBtn'));
 
     await waitFor(() => {
-      expect(NotificationToast.error).toBeCalledWith('Mock Graphql Error');
+      expect(mockNotificationToast.error).toHaveBeenCalledWith(
+        'Mock Graphql Error',
+      );
     });
     expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
     await userEvent.click(screen.getByTestId('modalCloseBtn'));
@@ -657,7 +654,7 @@ describe('Testing Agenda Items Components', () => {
 
     await waitFor(() => {
       expect(sequences).toContain(1);
-      expect(NotificationToast.success).toHaveBeenCalledWith(
+      expect(mockNotificationToast.success).toHaveBeenCalledWith(
         translations.agendaItemCreated,
       );
     });
@@ -728,7 +725,7 @@ describe('Testing Agenda Items Components', () => {
 
       await waitFor(() => {
         expect(sequences).toContain(1);
-        expect(NotificationToast.success).toHaveBeenCalledWith(
+        expect(mockNotificationToast.success).toHaveBeenCalledWith(
           translations.agendaItemCreated,
         );
       });

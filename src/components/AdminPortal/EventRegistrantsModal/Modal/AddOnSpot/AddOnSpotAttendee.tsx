@@ -13,10 +13,12 @@
  * @returns The rendered AddOnSpotAttendee component.
  *
  * @remarks
- * - Uses `react-bootstrap` for modal and form styling.
- * - Utilizes `react-toastify` for displaying success and error messages.
- * - Integrates `react-i18next` for translations.
- * - Includes form validation to ensure required fields are filled.
+ * - Uses `react-bootstrap` for modal and form styling
+ * - Utilizes `NotificationToast` for displaying success and error messages
+ * - Integrates `react-i18next` for translations
+ * - Includes form validation to ensure required fields are filled
+ * - Dependencies: `@apollo/client` for GraphQL mutation, `react-bootstrap` for UI components,
+ *   `NotificationToast` for notifications, `react-i18next` for translations
  *
  * @example
  * ```tsx
@@ -26,12 +28,6 @@
  *   reloadMembers={fetchMembers}
  * />
  * ```
- *
- * Uses:-
- * - `@apollo/client` for GraphQL mutation.
- * - `react-bootstrap` for UI components.
- * - `react-toastify` for notifications.
- * - `react-i18next` for translations.
  */
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
@@ -41,7 +37,7 @@ import {
   FormSelectField,
 } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { BaseModal } from 'shared-components/BaseModal';
-import styles from 'style/app-fixed.module.css';
+import styles from './AddOnSpotAttendee.module.css';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -52,7 +48,6 @@ import type {
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import modalStyles from '../../EventRegistrants.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
@@ -140,7 +135,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
         onHide={handleClose}
         backdrop="static"
         centered={true}
-        headerClassName={modalStyles.modalHeader}
+        headerClassName={styles.modalHeader}
         title={t('title')}
       >
         <form onSubmit={handleSubmit} data-testid="onspot-attendee-form">

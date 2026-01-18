@@ -41,6 +41,7 @@ import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import { useMinioUpload } from 'utils/MinioUpload';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { InterfaceAgendaItemsCreateModalProps } from 'types/Agenda/interface';
+// translation-check-keyPrefix: agendaItems
 const AgendaItemsCreateModal: React.FC<
   InterfaceAgendaItemsCreateModalProps
 > = ({

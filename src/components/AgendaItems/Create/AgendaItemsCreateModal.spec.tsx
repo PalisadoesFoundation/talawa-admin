@@ -58,6 +58,59 @@ describe('AgendaItemsCreateModal', () => {
     vi.restoreAllMocks();
   });
 
+  test('filters out empty URLs and attachments on mount', async () => {
+    // URLs use trim() !== '', attachments use att !== ''
+    const mockFormStateWithEmptyEntries = {
+      title: 'Test Title',
+      description: 'Test Description',
+      duration: '20',
+      attachments: ['valid-attachment', ''],
+      urls: ['https://valid.com', '', '   '],
+      agendaItemCategoryIds: [],
+    };
+
+    render(
+      <MockedProvider>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsCreateModal
+                  agendaItemCreateModalIsOpen
+                  hideCreateModal={mockHideCreateModal}
+                  formState={mockFormStateWithEmptyEntries}
+                  setFormState={mockSetFormState}
+                  createAgendaItemHandler={mockCreateAgendaItemHandler}
+                  t={mockT}
+                  agendaItemCategories={[]}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // The useEffect should filter out empty entries
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
+    });
+
+    // Verify the filter function was called with the correct logic
+    const setFormStateCalls = mockSetFormState.mock.calls;
+    const filterCall = setFormStateCalls.find(
+      (call) => typeof call[0] === 'function',
+    );
+    if (filterCall) {
+      const filterFn = filterCall[0];
+      const result = filterFn(mockFormStateWithEmptyEntries);
+      // URLs filter uses trim(), so whitespace-only strings are filtered
+      expect(result.urls).toEqual(['https://valid.com']);
+      // Attachments filter only checks !== '', so only empty strings are filtered
+      expect(result.attachments).toEqual(['valid-attachment']);
+    }
+  });
+
   test('renders modal correctly', () => {
     render(
       <MockedProvider>
