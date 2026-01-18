@@ -32,6 +32,7 @@ import { Button } from 'react-bootstrap';
 import styles from './OrgActionItemCategories.module.css';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
+import type { InterfaceOrgActionItemCategoriesProps } from 'types/AdminPortal/OrgActionItemCategories/interface';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
 import type { IActionItemCategoryInfo } from 'types/shared-components/ActionItems/interface';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -62,16 +63,13 @@ enum CategoryStatus {
   Disabled = 'disabled',
 }
 
-/** Component props interface */
-interface IActionItemCategoryProps {
-  orgId: string;
-}
-
 /**
  * Represents the component for managing organization action item categories.
  * This component allows creating, updating, enabling, and disabling action item categories.
  */
-const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
+const OrgActionItemCategories: FC<InterfaceOrgActionItemCategoriesProps> = ({
+  orgId,
+}) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'orgActionItemCategories',
   });
@@ -188,7 +186,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
           fontSize="large"
         />
         <h6 className="fw-bold text-danger text-center">
-          {tErrors('errorLoading', { entity: 'Action Item Categories' })}
+          {tErrors('errorLoading', { entity: t('actionItemCategories') })}
           <br />
           {`${catError.message}`}
         </h6>
@@ -200,7 +198,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
   const columns: GridColDef[] = [
     {
       field: 'serialNumber',
-      headerName: 'Sr. No.',
+      headerName: t('serialNumber'),
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -213,7 +211,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
     },
     {
       field: 'name',
-      headerName: 'Category',
+      headerName: t('category'),
       flex: 2,
       align: 'center',
       minWidth: 100,
@@ -233,7 +231,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
     },
     {
       field: 'isDisabled',
-      headerName: 'Status',
+      headerName: t('status'),
       flex: 1,
       align: 'center',
       minWidth: 100,
@@ -252,7 +250,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
     },
     {
       field: 'createdAt',
-      headerName: 'Created On',
+      headerName: t('createdOn'),
       align: 'center',
       minWidth: 100,
       headerAlign: 'center',
@@ -269,7 +267,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('action'),
       flex: 1.5,
       align: 'center',
       minWidth: 100,

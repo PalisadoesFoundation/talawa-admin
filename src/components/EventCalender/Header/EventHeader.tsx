@@ -19,8 +19,8 @@
  * - `react-bootstrap` for the `Button` component.
  * - `@mui/icons-material` for the `AddIcon`.
  * - `react-i18next` for translations.
- * - Custom styles from `style/app-fixed.module.css`.
- * - shared-components: `SortingButton` and `SearchBar`.
+ * - Custom styles from `./EventHeader.module.css`.
+ * - Shared components: `SortingButton` and `SearchBar`.
  *
  * @example
  * ```tsx
@@ -75,9 +75,9 @@ function EventHeader({
           <SortingButton
             title={t('viewType')}
             sortingOptions={[
-              { label: 'Select Month', value: ViewType.MONTH },
-              { label: 'Select Day', value: ViewType.DAY },
-              { label: 'Select Year', value: ViewType.YEAR },
+              { label: t('selectMonth'), value: ViewType.MONTH },
+              { label: t('selectDay'), value: ViewType.DAY },
+              { label: t('selectYear'), value: ViewType.YEAR },
             ]}
             selectedOption={viewType}
             onSortChange={(value) => handleChangeView(value as ViewType)}
@@ -87,8 +87,8 @@ function EventHeader({
           <SortingButton
             title={t('eventType')}
             sortingOptions={[
-              { label: 'Events', value: 'Events' },
-              { label: 'Workshops', value: 'Workshops' },
+              { label: t('events'), value: 'Events' },
+              { label: t('workshops'), value: 'Workshops' },
             ]}
             selectedOption={t('eventType')}
             onSortChange={() => {}}

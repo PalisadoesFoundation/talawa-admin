@@ -101,7 +101,7 @@ describe('PageHeader Component', () => {
     fireEvent.click(eventTypeButton);
 
     // 3. Check if the "Workshops" option appears
-    const workshopsOption = screen.getByText('Workshops');
+    const workshopsOption = screen.getByText(/workshops/i);
     expect(workshopsOption).toBeInTheDocument();
 
     // 4. Click the option (to ensure no errors occur)

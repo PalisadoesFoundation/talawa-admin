@@ -319,25 +319,6 @@ function Volunteers(): JSX.Element {
         );
       },
     },
-    // {
-    //   field: 'actionItem',
-    //   headerName: 'Actions Completed',
-    //   align: 'center',
-    //   headerAlign: 'center',
-    //   sortable: false,
-    //   headerClassName: `${styles.tableHeader}`,
-    //   flex: 1,
-    //   renderCell: (params: GridCellParams) => {
-    //     return (
-    //       <div
-    //         className="d-flex justify-content-center fw-bold"
-    //         data-testid="actionNos"
-    //       >
-    //         {params.row.assignments.length}
-    //       </div>
-    //     );
-    //   },
-    // },
     {
       field: 'options',
       headerName: t('eventVolunteers.optionsHeader'),
