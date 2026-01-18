@@ -2321,7 +2321,8 @@
     "editCustomField": "Modifier le champ personnalisé"
   },
   "userGlobalScreen": {
-    "globalFeatures": "Fonctionnalités Globales"
+    "globalFeatures": "Fonctionnalités Globales",
+    "title": "Fonctionnalités Globales"
   },
   "recurringEventVolunteerModal": {
     "joinGroupTitle": "Rejoindre {{groupName}} - {{eventName}}",

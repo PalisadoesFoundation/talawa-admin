@@ -2320,7 +2320,8 @@
     "editCustomField": "編輯自定義字段"
   },
   "userGlobalScreen": {
-    "globalFeatures": "全球功能"
+    "globalFeatures": "全球功能",
+    "title": "全球功能"
   },
   "recurringEventVolunteerModal": {
     "joinGroupTitle": "加入 {{groupName}} - {{eventName}}",

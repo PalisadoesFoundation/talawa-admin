@@ -140,9 +140,6 @@
     "loading": "Cargando...",
     "selectOrg": "Seleccione una organización"
   },
-  "userGlobalScreen": {
-    "title": "Configuraciones Globales"
-  },
   "latestEvents": {
     "eventCardTitle": "Próximos Eventos",
     "eventCardSeeAll": "Ver Todos",
@@ -1334,9 +1331,6 @@
     "close": "Cerrar",
     "talawaBranding": "Marca Talawa"
   },
-  "userGlobalScreen": {
-    "title": "Funciones Globales"
-  },
   "userOrganizations": {
     "allOrganizations": "Todas las organizaciones",
     "joinedOrganizations": "Organizaciones unidas",
@@ -2320,7 +2314,8 @@
     "editCustomField": "Editar campo personalizado"
   },
   "userGlobalScreen": {
-    "globalFeatures": "Características Globales"
+    "globalFeatures": "Características Globales",
+    "title": "Configuraciones Globales"
   },
   "recurringEventVolunteerModal": {
     "joinGroupTitle": "Unirse a {{groupName}} - {{eventName}}",
