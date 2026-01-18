@@ -59,7 +59,7 @@ vi.mock(
 );
 
 vi.mock('components/UserPortal/DonationCard/DonationCard', () => ({
-  default: () => <div data-testid="donationCard" />,
+  default: () => <div data-testid="donation-card-mock" />,
 }));
 
 interface InterfaceSearchFilterBarMockProps {
