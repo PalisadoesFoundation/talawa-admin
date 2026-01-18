@@ -287,7 +287,6 @@ function AdvertisementEntry({
                   variant={statusVariant}
                   size="sm"
                   dataTestId="advertisement-status"
-                  aria-label={`status-${statusVariant}`}
                 />
 
                 <Card.Text

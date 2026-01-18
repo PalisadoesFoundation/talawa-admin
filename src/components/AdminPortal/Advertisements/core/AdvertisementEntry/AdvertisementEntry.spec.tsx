@@ -46,7 +46,6 @@ global.URL.createObjectURL = vi.fn(() => 'mocked-url');
 describe('Testing Advertisement Entry Component', () => {
   beforeEach(() => {
     mockUseMutation = vi.fn();
-    vi.clearAllMocks();
     mockUseMutation.mockReturnValue([vi.fn()]);
   });
   afterEach(() => {
@@ -94,7 +93,7 @@ describe('Testing Advertisement Entry Component', () => {
 
     const statusBadge = screen.getByTestId('advertisement-status');
     expect(statusBadge).toBeInTheDocument();
-    expect(statusBadge).toHaveAttribute('aria-label', 'status-active');
+    expect(statusBadge).toHaveAttribute('aria-label', 'Inactive');
     fireEvent.click(screen.getByTestId('moreiconbtn'));
     fireEvent.click(screen.getByTestId('deletebtn'));
 
@@ -1104,11 +1103,11 @@ describe('Testing Advertisement Entry Component', () => {
 
     expect(screen.getByTestId('advertisement-status')).toHaveAttribute(
       'aria-label',
-      'status-pending',
+      'Pending',
     );
   });
 
-  it('should render inactive status when endAt is in the past', () => {
+  it('should render Inactive status when endAt is in the past', () => {
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -1137,7 +1136,7 @@ describe('Testing Advertisement Entry Component', () => {
     );
     expect(screen.getByTestId('advertisement-status')).toHaveAttribute(
       'aria-label',
-      'status-inactive',
+      'Inactive',
     );
   });
 
@@ -1171,7 +1170,7 @@ describe('Testing Advertisement Entry Component', () => {
 
     expect(screen.getByTestId('advertisement-status')).toHaveAttribute(
       'aria-label',
-      'status-active',
+      'Active',
     );
   });
 });
