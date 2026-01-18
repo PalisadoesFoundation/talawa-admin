@@ -41,6 +41,17 @@ const MOCKS = [
         community: {
           __typename: 'Community',
           name: 'Test Community',
+          logoURL: null,
+          socialURLs: {
+            facebook: '',
+            twitter: '',
+            linkedin: '',
+            github: '',
+            youtube: '',
+            slack: '',
+            instagram: '',
+            reddit: '',
+          },
         },
       },
     },
@@ -77,10 +88,6 @@ const renderLoginPage = (mocks = MOCKS) => {
 
 describe('LoginPage Orchestrator', () => {
   afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  beforeEach(() => {
     vi.clearAllMocks();
   });
 
@@ -162,17 +169,18 @@ describe('LoginPage Orchestrator', () => {
   it('should render social media links', () => {
     renderLoginPage();
 
-    // Check for social media links by looking for external links
-    const socialLinks = screen.getAllByRole('link');
-    expect(socialLinks.length).toBeGreaterThan(0);
+    // Check for specific social media links with aria-labels
+    expect(screen.getByLabelText('Facebook')).toBeInTheDocument();
+    expect(screen.getByLabelText('X (Twitter)')).toBeInTheDocument();
+    expect(screen.getByLabelText('LinkedIn')).toBeInTheDocument();
   });
 
   it('should render language dropdown', () => {
     renderLoginPage();
 
-    // Check for any dropdown or language-related element
-    const buttons = screen.getAllByRole('button');
-    expect(buttons.length).toBeGreaterThan(0);
+    // Check for language dropdown button by test id
+    const languageButton = screen.getByTestId('language-dropdown-btn');
+    expect(languageButton).toBeInTheDocument();
   });
 
   it('should handle login success and start session', () => {
@@ -192,7 +200,7 @@ describe('LoginPage Orchestrator', () => {
     expect(mockStartSession).toBeDefined();
   });
 
-  it('should handle registration success', () => {
+  it('should render registration form when tab is active', () => {
     renderLoginPage();
 
     // Switch to registration tab

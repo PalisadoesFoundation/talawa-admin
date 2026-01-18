@@ -49,12 +49,17 @@ const LoginPage = (): JSX.Element => {
     window.location.pathname.startsWith('/admin');
 
   // Fetch organizations for registration
-  const { data: orgData } = useQuery(ORGANIZATION_LIST_NO_MEMBERS, {
-    skip: tab !== 'REGISTER',
-  });
+  const { data: orgData, error: orgError } = useQuery(
+    ORGANIZATION_LIST_NO_MEMBERS,
+    {
+      skip: tab !== 'REGISTER',
+    },
+  );
 
   // Fetch community data
-  const { data: communityData } = useQuery(GET_COMMUNITY_DATA_PG);
+  const { data: communityData, error: communityError } = useQuery(
+    GET_COMMUNITY_DATA_PG,
+  );
 
   useEffect(() => {
     if (orgData?.organizations) {
@@ -116,6 +121,16 @@ const LoginPage = (): JSX.Element => {
   const handleAuthError = (error: Error): void => {
     console.error('Authentication error:', error);
   };
+
+  // Handle GraphQL errors
+  useEffect(() => {
+    if (orgError) {
+      console.error('Organization data error:', orgError);
+    }
+    if (communityError) {
+      console.error('Community data error:', communityError);
+    }
+  }, [orgError, communityError]);
 
   return (
     <>
