@@ -178,7 +178,7 @@ const LoginPage = (): JSX.Element => {
 
               {/* Community Data Display */}
               {communityError ? (
-                <div>{t('errorLoadingCommunityData')}</div>
+                <div>{t('errorOccurred')}</div>
               ) : communityLoading ? (
                 <div>{t('loading')}</div>
               ) : (
