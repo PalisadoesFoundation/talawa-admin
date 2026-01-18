@@ -11168,6 +11168,14 @@ form {
   font-size: 2rem;
 }
 
+.errorIconLarge {
+  font-size: 2.5rem;
+}
+
+.roundedTableContainer {
+  border-radius: 16px;
+}
+
 .manageTagDivider {
   border-color: var(--grey-border-box-color);
   border-width: 2px;

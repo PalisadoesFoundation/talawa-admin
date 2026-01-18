@@ -1,0 +1,5 @@
+.closeButton {
+  color: var(--closeButton-color);
+  border: none;
+  background-color: var(--closeButton-bg);
+}
