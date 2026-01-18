@@ -8,7 +8,12 @@ import { InterfaceSearchingButtonProps } from 'types/shared-components/Searching
 /**
  * SearchingButton component that only displays a text.
  *
- * @param props - The properties for the SearchingButton component.
+ * @param title - Tooltip title for the dropdown.
+ * @param text - Display text shown in the button (defaults to 'Select an option').
+ * @param dataTestIdPrefix - Test ID prefix for the toggle button.
+ * @param dropdownTestId - Test ID for the dropdown container.
+ * @param className - Optional CSS class for styling.
+ * @param type - Icon type: 'sort' (SortIcon) or 'filter' (FilterAltOutlined).
  * @returns The rendered SearchingButton component.
  */
 const SearchingButton: React.FC<InterfaceSearchingButtonProps> = ({

@@ -4,35 +4,8 @@
  * Exists to satisfy CSS import policy.
  * No production styles should be added here.
  */
-.eventsAttended,
-.membername {
+.eventsAttended {
   color: var(--eventsAttended-membername-color);
-}
-
-.membername:hover {
-  color: var(--membername-color-hover);
-  text-decoration: underline;
-}
-
-.membername {
-  color: var(--eventsAttended-membername-color);
-}
-
-.membername {
-  font-size: 16px;
-  font-weight: bold;
-  color: var(--membername-color);
-  text-decoration: none;
-}
-
-.membername:hover {
-  color: var(--membername-color-hover);
-  text-decoration: underline;
-}
-
-.membername:hover {
-  color: var(--membername-color-hover);
-  text-decoration: underline;
 }
 
 .membername {

@@ -58,6 +58,7 @@ describe('EventAttendance CSS Tests', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
