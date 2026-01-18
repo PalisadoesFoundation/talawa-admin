@@ -165,7 +165,50 @@ const MOCKS4 = [
 
 const link = new StaticMockLink(MOCKS, true);
 const link3 = new StaticMockLink(MOCKS3, true);
+
 const link4 = new StaticMockLink(MOCKS4, true);
+
+const MOCKS_VERIFIED_EMAIL = [
+  {
+    request: {
+      query: SIGNIN_QUERY,
+      variables: {
+        email: 'verified@gmail.com',
+        password: 'password123',
+      },
+    },
+    result: {
+      data: {
+        signIn: {
+          user: {
+            id: '2',
+            role: 'administrator',
+            name: 'Verified User',
+            emailAddress: 'verified@gmail.com',
+            countryCode: 'US',
+            avatarURL: null,
+            isEmailAddressVerified: true,
+          },
+          authenticationToken: 'auth-token',
+          refreshToken: 'refresh-token',
+        },
+      },
+    },
+  },
+  {
+    request: { query: GET_COMMUNITY_DATA_PG },
+    result: { data: { community: null } },
+  },
+  {
+    request: { query: GET_COMMUNITY_DATA_PG },
+    result: { data: { community: null } },
+  },
+  {
+    request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+    result: { data: { organizations: [] } },
+  },
+];
+const linkVerifiedEmail = new StaticMockLink(MOCKS_VERIFIED_EMAIL, true);
 
 const { toastMocks, routerMocks, resetReCAPTCHA } = vi.hoisted(() => {
   const warning = vi.fn();
@@ -2409,6 +2452,42 @@ describe('Cookie-based authentication verification', () => {
 
     expect(link.operation?.variables?.recaptchaToken).toBe(
       'fake-recaptcha-token',
+    );
+  });
+
+  it('Testing login functionality with verified email clears storage flags', async () => {
+    const formData = { email: 'verified@gmail.com', password: 'password123' };
+
+    render(
+      <MockedProvider link={linkVerifiedEmail}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      formData.password,
+    );
+
+    await userEvent.click(screen.getByTestId('loginBtn'));
+
+    await wait();
+
+    // Verify that removeItem was called for the email verification flags
+    expect(mockUseLocalStorage.removeItem).toHaveBeenCalledWith(
+      'emailNotVerified',
+    );
+    expect(mockUseLocalStorage.removeItem).toHaveBeenCalledWith(
+      'unverifiedEmail',
     );
   });
 });

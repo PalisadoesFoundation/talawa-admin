@@ -48,7 +48,6 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { countryOptions } from 'utils/formEnumFields';
-import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
 import styles from './OrganizationModal.module.css';
 
 interface InterfaceFormStateType {
@@ -74,7 +73,6 @@ export interface InterfaceOrganizationModalProps {
   createOrg: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
   tCommon: (key: string) => string;
-  userData: InterfaceCurrentUserTypePG | undefined;
 }
 
 /**

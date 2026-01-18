@@ -487,13 +487,11 @@ const mockConfigurations = {
       result: {
         data: {
           user: {
-            user: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'john.doe@akatsuki.com',
-              image: null,
-            },
+            id: '123',
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.doe@akatsuki.com',
+            image: null,
           },
         },
       },
@@ -590,7 +588,8 @@ async function wait(ms = 100): Promise<void> {
 }
 
 beforeEach(() => {
-  vi.spyOn(Storage.prototype, 'setItem');
+  vi.spyOn(window.localStorage, 'setItem');
+  vi.spyOn(window.localStorage, 'removeItem');
 });
 
 afterEach(() => {
@@ -1546,7 +1545,7 @@ describe('Advanced Component Functionality Tests', () => {
         },
         result: {
           data: {
-            currentUser: {
+            user: {
               __typename: 'User',
               id: '123',
               email: 'test@example.com',
@@ -1619,12 +1618,11 @@ describe('Advanced Component Functionality Tests', () => {
         result: {
           data: {
             user: {
-              user: {
-                firstName: 'Test',
-                lastName: 'User',
-                email: 'test@test.com',
-                image: null,
-              },
+              id: '123',
+              firstName: 'Test',
+              lastName: 'User',
+              email: 'test@test.com',
+              image: null,
             },
             currentUser: {
               id: '123',
@@ -1720,12 +1718,11 @@ describe('Advanced Component Functionality Tests', () => {
         result: {
           data: {
             user: {
-              user: {
-                firstName: 'Test',
-                lastName: 'User',
-                email: 'test@test.com',
-                image: null,
-              },
+              id: '123',
+              firstName: 'Test',
+              lastName: 'User',
+              email: 'test@test.com',
+              image: null,
             },
             currentUser: {
               id: '123',
@@ -2315,5 +2312,67 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Verify component renders without authorization header
     expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+  });
+
+  test('Email verification warning should be shown if email is not verified', async () => {
+    setupUser('superAdmin');
+
+    const emailVerificationMock = {
+      request: {
+        query: CURRENT_USER,
+      },
+      result: {
+        data: {
+          user: {
+            id: '123',
+            name: 'John',
+            isEmailAddressVerified: false,
+            role: 'administrator',
+            emailAddress: 'test@example.com',
+          },
+        },
+      },
+    };
+
+    // Filter out existing CURRENT_USER mock from MOCKS if any, or just place this first
+    // MOCKS usually contains organization list mocks. CURRENT_USER mocks are in scrollMocks.
+    // But renderWithMocks takes priority.
+    renderWithMocks([emailVerificationMock, ...MOCKS]);
+    await wait();
+
+    // Verify setItem was called for 'emailNotVerified'
+    expect(localStorage.setItem).toHaveBeenCalledWith(
+      'Talawa-admin_emailNotVerified',
+      '"true"',
+    );
+  });
+
+  test('Email verification warning should NOT be shown if email is verified', async () => {
+    setupUser('superAdmin');
+
+    const emailVerificationVerifiedMock = {
+      request: {
+        query: CURRENT_USER,
+      },
+      result: {
+        data: {
+          user: {
+            id: '123',
+            name: 'John',
+            isEmailAddressVerified: true,
+            role: 'administrator',
+            emailAddress: 'test@example.com',
+          },
+        },
+      },
+    };
+
+    renderWithMocks([emailVerificationVerifiedMock, ...MOCKS]);
+    await wait();
+
+    // Verify removeItem was called for 'emailNotVerified'
+    expect(localStorage.removeItem).toHaveBeenCalledWith(
+      'Talawa-admin_emailNotVerified',
+    );
   });
 });

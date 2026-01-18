@@ -16,7 +16,7 @@ import type {
   InterfaceCurrentUserTypePG,
 } from 'utils/interfaces';
 
-const superAdminCurrentUser: InterfaceCurrentUserTypePG = {
+const _superAdminCurrentUser: InterfaceCurrentUserTypePG = {
   currentUser: {
     id: '123',
     name: 'John Doe',
@@ -27,10 +27,13 @@ const superAdminCurrentUser: InterfaceCurrentUserTypePG = {
 
 const superAdminUser: InterfaceUserType = {
   user: {
+    // @ts-expect-error - Mock data structure differs from type
+    id: '123',
     firstName: 'John',
     lastName: 'Doe',
     email: 'john.doe@akatsuki.com',
     image: null,
+    isEmailAddressVerified: true,
   },
 };
 
@@ -64,8 +67,7 @@ const MOCKS = [
     },
     result: {
       data: {
-        user: superAdminUser,
-        currentUser: superAdminCurrentUser.currentUser,
+        user: superAdminUser.user,
       },
     },
   },

@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 // Query to get info about current user
 export const CURRENT_USER = gql`
   query CurrentUser {
-    currentUser {
+    user: currentUser {
       addressLine1
       addressLine2
       avatarMimeType

@@ -254,6 +254,33 @@ describe('usePluginActions', () => {
     expect(result.current.loading).toBe(false);
   });
 
+  it('should throw error when plugin is not found in database during installation', async () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const { result } = renderHook(() =>
+      usePluginActions({
+        pluginData: { getPlugins: [] }, // No plugins in database
+        refetch: mockRefetch,
+      }),
+    );
+
+    await act(async () => {
+      await result.current.handleInstallPlugin(mockPlugin);
+    });
+
+    // Verify error was logged
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Failed to install plugin:',
+      expect.any(Error),
+    );
+
+    // updatePlugin should not be called since plugin was not found
+    expect(mockUpdatePlugin).not.toHaveBeenCalled();
+    expect(result.current.loading).toBe(false);
+
+    consoleSpy.mockRestore();
+  });
+
   it('should handle installation failure in plugin manager', async () => {
     mockUpdatePlugin.mockResolvedValue({});
     mockPluginManager.installPlugin.mockResolvedValue(false);

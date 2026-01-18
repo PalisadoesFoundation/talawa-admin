@@ -13,10 +13,17 @@ import {
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import type {
-  InterfaceCurrentUserTypePG,
-  InterfaceOrgInfoTypePG,
-} from 'utils/interfaces';
+import type { InterfaceOrgInfoTypePG } from 'utils/interfaces';
+
+interface InterfaceCurrentUserType {
+  user: {
+    id: string;
+    name: string;
+    role: string;
+    emailAddress: string;
+    isEmailAddressVerified: boolean;
+  };
+}
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './OrgList.module.css';
 import { Button } from '@mui/material';
@@ -93,8 +100,8 @@ function OrgList(): JSX.Element {
   // Check for email verification status on component mount and sync with backend
   useEffect(() => {
     // Priority: API data > LocalStorage
-    if (currentUserData?.currentUser) {
-      if (currentUserData.currentUser.isEmailAddressVerified) {
+    if (currentUserData?.user) {
+      if (currentUserData.user.isEmailAddressVerified) {
         setShowEmailWarning(false);
         // Clean up legacy flags
         removeItem('emailNotVerified');
@@ -103,8 +110,8 @@ function OrgList(): JSX.Element {
         setShowEmailWarning(true);
         // Ensure flags are consistent
         setItem('emailNotVerified', 'true');
-        if (currentUserData.currentUser.emailAddress) {
-          setItem('unverifiedEmail', currentUserData.currentUser.emailAddress);
+        if (currentUserData.user.emailAddress) {
+          setItem('unverifiedEmail', currentUserData.user.emailAddress);
         }
       }
     } else {
@@ -179,7 +186,7 @@ function OrgList(): JSX.Element {
   const {
     data: userData,
   }: {
-    data: InterfaceCurrentUserTypePG | undefined;
+    data: InterfaceCurrentUserType | undefined;
     loading: boolean;
     error?: Error | undefined;
   } = useQuery(CURRENT_USER, {
@@ -274,7 +281,7 @@ function OrgList(): JSX.Element {
 
       await createMembership({
         variables: {
-          memberId: userData?.currentUser.id,
+          memberId: userData?.user.id,
           organizationId: data?.createOrganization.id,
           role: 'administrator',
         },
@@ -515,7 +522,6 @@ function OrgList(): JSX.Element {
         createOrg={createOrg}
         t={t}
         tCommon={tCommon}
-        userData={userData}
       />
       {/* Plugin Notification Modal after Org is Created */}
       <BaseModal
