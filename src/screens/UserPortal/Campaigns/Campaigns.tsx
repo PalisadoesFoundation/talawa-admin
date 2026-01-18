@@ -17,7 +17,7 @@ import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 /**
  * Extended interface for campaigns with computed status
  */
-type CampaignWithStatus = InterfaceUserCampaign & {
+export type CampaignWithStatus = InterfaceUserCampaign & {
   status: 'active' | 'inactive' | 'pending';
   [key: string]: unknown;
 };
