@@ -210,6 +210,7 @@ Some shared components are wrappers around third-party UI libraries. To enforce 
 - `@mui/x-data-grid` and `@mui/x-data-grid-pro` -> use `DataGridWrapper`
 - `react-bootstrap` `Spinner` -> use `LoadingState`
 - `react-bootstrap` `Modal` -> use `BaseModal`
+- `react-bootstrap` `Button` -> use the shared `Button` wrapper
 - `@mui/x-date-pickers` -> use `DateRangePicker`, `DatePicker`, or `TimePicker`
 - `react-toastify` -> use `NotificationToast`
 
@@ -262,6 +263,9 @@ Allowed IDs by folder:
 - BaseModal: `rb-modal`
   - `src/shared-components/BaseModal/**`
   - `src/types/shared-components/BaseModal/**`
+- Button wrapper: `rb-button`, `rb-button-path`
+  - `src/shared-components/Button/**`
+  - `src/types/shared-components/Button/**`
 - Date pickers: `mui-date-pickers`
   - `src/shared-components/DateRangePicker/**`
   - `src/types/shared-components/DateRangePicker/**`
@@ -325,6 +329,13 @@ Example:
 1. Images: meaningful alt; fallback to initials when URL is empty/invalid.
 1. Modals: role="dialog", aria-modal, labelled by title; focus trap; Escape to close.
 1. Buttons/links: accessible names; keyboard operable.
+
+## Shared Button wrapper
+
+- Path: `src/shared-components/Button/Button.tsx` (barrel at `src/shared-components/Button/index.ts`).
+- Import: `import { Button } from 'shared-components/Button';`.
+- Features: wraps `react-bootstrap/Button`, supports common variants (primary/secondary/success/ danger/warning/info/dark/light/outline-*; aliases `outlined`/`outline` map to `outline-primary`), sizes `sm`/`md`/`lg`/`xl`, full-width layout, loading state (`isLoading`, `loadingText`), optional icons with `iconPosition`, and forwards all other bootstrap button props.
+- Lint: direct imports from `react-bootstrap` or `react-bootstrap/Button` are restricted; use the shared Button wrapper instead (the wrapper folder is exempted to build it).
 
 ## Understanding Components Reuse
 
