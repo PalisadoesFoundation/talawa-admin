@@ -23,7 +23,7 @@ import UserScreen from './UserScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import '@testing-library/dom';
-import styles from './UserScreen.module.css';
+import './UserScreen.spec.module.css';
 let mockID: string | undefined = '123';
 let mockLocation: string | undefined = '/user/organization/123';
 
@@ -273,7 +273,9 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     );
 
     const titleElement = screen.getByRole('heading', { level: 1 });
-    expect(titleElement.parentElement).toHaveClass(styles.titleContainer);
+    expect(titleElement.parentElement?.className).toMatch(
+      /_titleContainer_\w+/,
+    );
   });
 
   it('renders default title "User Portal" for unknown routes', () => {
