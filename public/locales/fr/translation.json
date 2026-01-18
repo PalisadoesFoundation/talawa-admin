@@ -807,7 +807,12 @@
     "noOfAttendees": "Nombre de Participants",
     "noRegistrations": "Aucune Inscription",
     "registrants": "Inscrits",
-    "to": "À"
+    "to": "À",
+    "defaultTitle": "Événement",
+    "eventLoadError": "Erreur lors du chargement des détails de l'événement",
+    "notAvailable": "N/D",
+    "attendeesIcon": "Icône des participants",
+    "feedbackIcon": "Icône de retour"
   },
   "funds": {
     "title": "Fonds",

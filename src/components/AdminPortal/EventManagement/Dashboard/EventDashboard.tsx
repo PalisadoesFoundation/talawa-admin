@@ -35,12 +35,14 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { Edit } from '@mui/icons-material';
 import EventListCardModals from 'shared-components/EventListCard/Modal/EventListCardModals/EventListCardModals';
 import type { InterfaceEvent } from 'types/Event/interface';
+import type { InterfaceEventDashboardProps } from 'types/AdminPortal/EventManagement/Dashboard/interface';
 import { UserRole } from 'types/Event/interface';
 import { formatDate } from 'utils/dateFormatter';
 import useLocalStorage from 'utils/useLocalstorage';
 
-const EventDashboard = (props: { eventId: string }): JSX.Element => {
-  const { eventId } = props;
+const EventDashboard = ({
+  eventId,
+}: InterfaceEventDashboardProps): JSX.Element => {
   const { t } = useTranslation(['translation', 'common']);
   const tEventList = (key: string): string => t(`eventListCard.${key}`);
 
@@ -55,12 +57,13 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const userRole =
     storedRole === 'administrator' ? UserRole.ADMINISTRATOR : UserRole.REGULAR;
 
-  const { data: eventData, loading: eventInfoLoading } = useQuery(
-    EVENT_DETAILS,
-    {
-      variables: { eventId },
-    },
-  );
+  const {
+    data: eventData,
+    loading: eventInfoLoading,
+    error,
+  } = useQuery(EVENT_DETAILS, {
+    variables: { eventId },
+  });
 
   const showViewModal = (): void => {
     setEventModalIsOpen(true);
@@ -76,6 +79,10 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
         <div />
       </LoadingState>
     );
+  }
+
+  if (error) {
+    return <div data-testid="event-error">{tEventList('eventLoadError')}</div>;
   }
 
   if (!eventData || !eventData.event) {
@@ -137,28 +144,46 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
             className={`${styles.ctacards}`}
             data-testid="registrations-card"
           >
-            <img src="/images/svg/attendees.svg" alt="userImage" className="" />
+            <img
+              src="/images/svg/attendees.svg"
+              alt={tEventList('attendeesIcon')}
+              className=""
+            />
             <div>
               <h1>
-                <b data-testid="registrations-count">N/A</b>
+                <b data-testid="registrations-count">
+                  {tEventList('notAvailable')}
+                </b>
               </h1>
               <span>{tEventList('noRegistrations')}</span>
             </div>
           </div>
           <div className={`${styles.ctacards}`} data-testid="attendees-card">
-            <img src="/images/svg/attendees.svg" alt="userImage" className="" />
+            <img
+              src="/images/svg/attendees.svg"
+              alt={tEventList('attendeesIcon')}
+              className=""
+            />
             <div>
               <h1>
-                <b data-testid="attendees-count">N/A</b>
+                <b data-testid="attendees-count">
+                  {tEventList('notAvailable')}
+                </b>
               </h1>
               <span>{tEventList('noOfAttendees')}</span>
             </div>
           </div>
           <div className={`${styles.ctacards}`} data-testid="feedback-card">
-            <img src="/images/svg/feedback.svg" alt="userImage" className="" />
+            <img
+              src="/images/svg/feedback.svg"
+              alt={tEventList('feedbackIcon')}
+              className=""
+            />
             <div>
               <h1>
-                <b data-testid="feedback-rating">N/A</b>
+                <b data-testid="feedback-rating">
+                  {tEventList('notAvailable')}
+                </b>
               </h1>
               <span>{tEventList('averageFeedback')}</span>
             </div>
@@ -171,6 +196,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                 className="btn btn-light rounded-circle position-absolute end-0 me-3 p-1 mt-2"
                 onClick={showViewModal}
                 data-testid="edit-event-button"
+                aria-label={tEventList('editEvent')}
               >
                 <Edit fontSize="medium" />
               </button>
@@ -186,7 +212,8 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
               </p>
               {/* Attendees not available; remove or adjust */}
               <p className={styles.toporgloc} data-testid="event-registrants">
-                <b>{tEventList('registrants')}:</b> <span>N/A</span>
+                <b>{tEventList('registrants')}:</b>{' '}
+                <span>{tEventList('notAvailable')}</span>
               </p>
             </div>
             <div className={styles.time} data-testid="event-time">

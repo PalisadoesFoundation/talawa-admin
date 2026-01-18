@@ -757,7 +757,6 @@
     "agendaItemDeleted": "एजेंडा आइटम सफलतापूर्वक हटा दिया गया",
     "deleteAgendaItem": "एजेंडा आइटम हटाएं",
     "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?",
-    "attachmentPreview": "अटैचमेंट पूर्वावलोकन",
     "event": "कार्यक्रम",
     "errorLoadingAgendaCategories": "एजेंडा श्रेणी डेटा लोड करते समय त्रुटि हुई",
     "errorLoadingAgendaItems": "एजेंडा आइटम डेटा लोड करते समय त्रुटि हुई"
@@ -824,7 +823,12 @@
     "noOfAttendees": "उपस्थित की संख्या",
     "noRegistrations": "कोई पंजीकरण नहीं",
     "registrants": "पंजीकृत",
-    "to": "को"
+    "to": "को",
+    "defaultTitle": "कार्यक्रम",
+    "eventLoadError": "ईवेंट विवरण लोड करने में त्रुटि",
+    "notAvailable": "उपलब्ध नहीं",
+    "attendeesIcon": "उपस्थित लोगों का आइकन",
+    "feedbackIcon": "प्रतिक्रिया आइकन"
   },
   "funds": {
     "title": "फंड",
@@ -1499,9 +1503,9 @@
     "options": "विकल्प",
     "addRegistrant": "पंजीकृत व्यक्ति जोड़ें",
     "noRegistrantsFound": "कोई पंजीकृत व्यक्ति नहीं मिला",
-    "removingAttendee": "प्रतिभागी को हटाया जा रहा है...",
-    "attendeeRemovedSuccessfully": "प्रतिभागी सफलतापूर्वक हटा दिया गया",
-    "errorRemovingAttendee": "प्रतिभागी को हटाने में त्रुटि हुई। कृपया पुनः प्रयास करें।",
+    "removingAttendee": "उपस्थित होने वाले को हटाया जा रहा है...",
+    "attendeeRemovedSuccessfully": "उपस्थित होने वाला सफलतापूर्वक हटा दिया गया",
+    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
     "cannotUnregisterCheckedIn": "किसी उपयोगकर्ता का पंजीकरण रद्द नहीं किया जा सकता जो पहले से ही चेक-इन कर चुका है",
     "checkedIn": "चेक इन किया गया",
     "unregister": "पंजीकरण रद्द करें",

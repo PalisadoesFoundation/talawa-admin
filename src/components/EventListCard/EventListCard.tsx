@@ -35,15 +35,10 @@ import { useTranslation } from 'react-i18next';
 import styles from './EventListCard.module.css';
 import { Navigate, useParams } from 'react-router';
 import EventListCardModals from 'shared-components/EventListCard/Modal/EventListCardModals/EventListCardModals';
-import type { InterfaceEvent } from 'types/Event/interface';
-/**
- * Props for the EventListCard component.
- */
-interface IEventListCard extends InterfaceEvent {
-  refetchEvents?: () => void;
-}
+import type { InterfaceEventListCardProps } from 'types/components/EventListCard/interface';
 
-function eventListCard(props: IEventListCard): JSX.Element {
+function EventListCard(props: InterfaceEventListCardProps): JSX.Element {
+  const { name } = props;
   const { t } = useTranslation('translation', {
     keyPrefix: 'eventListCard',
   });
@@ -81,7 +76,7 @@ function eventListCard(props: IEventListCard): JSX.Element {
       >
         <div className={styles.dispflexEventListCard}>
           <h2 className={styles.eventtitle}>
-            {props.name ? <>{props.name}</> : <>Dogs Care</>}
+            {name ? <>{name}</> : <>{t('defaultTitle')}</>}
           </h2>
         </div>
       </div>
@@ -97,4 +92,4 @@ function eventListCard(props: IEventListCard): JSX.Element {
   );
 }
 
-export default eventListCard;
+export default EventListCard;

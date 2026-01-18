@@ -1,31 +1,31 @@
-@import '../../../style/tokens/index.css';
+@import '../../style/tokens/index.css';
 
 /* CSS for EventListCard */
 
 .cardsEventListCard {
-  background-color: var(--color-blue-300);
-  border: 1px solid var(--color-gray-200);
-  box-shadow: 0 2px 4px var(--color-gray-200);
-  padding: var(--space-4);
-  border-radius: var(--space-2);
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
+    background-color: var(--color-blue-300);
+    border: 1px solid var(--color-gray-200);
+    box-shadow: 0 2px 4px var(--color-gray-200);
+    padding: var(--space-4);
+    border-radius: var(--space-2);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
 }
 
 .cardsEventListCard:hover {
-  background-color: var(--color-blue-400);
-  box-shadow: 0 4px 8px var(--color-gray-300);
+    background-color: var(--color-blue-400);
+    box-shadow: 0 4px 8px var(--color-gray-300);
 }
 
 .dispflexEventListCard {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .eventtitle {
-  color: var(--color-gray-700);
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin: 0;
+    color: var(--color-gray-700);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
 }

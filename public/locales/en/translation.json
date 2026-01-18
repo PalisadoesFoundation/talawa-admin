@@ -741,7 +741,6 @@
     "deleteAgendaItem": "Delete Agenda Item",
     "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
     "event": "Event",
-    "search": "Search",
     "attachmentPreview": "Attachment preview",
     "errorLoadingAgendaCategories": "Error occurred while loading Agenda Categories Data",
     "errorLoadingAgendaItems": "Error occurred while loading Agenda Items Data"
@@ -808,7 +807,12 @@
     "noOfAttendees": "No. of Attendees",
     "noRegistrations": "No Registrations",
     "registrants": "Registrants",
-    "to": "To"
+    "to": "To",
+    "defaultTitle": "Event",
+    "eventLoadError": "Error loading event details",
+    "notAvailable": "N/A",
+    "attendeesIcon": "Attendees icon",
+    "feedbackIcon": "Feedback icon"
   },
   "funds": {
     "title": "Funds",
@@ -1900,8 +1904,6 @@
     "downloadTag": "Download Tag",
     "checkInButton": "Check In",
     "searchAttendees": "Search Attendees",
-    "checkedIn": "Checked In",
-    "downloadTag": "Download Tag",
     "checkIn": "Check In",
     "eventCheckInManagement": "Event Check In Management",
     "unknownUser": "Unknown User",
