@@ -167,9 +167,17 @@ confirm() {
     local prompt="${1:-Continue?}"
     local default="${2:-n}"
     local reply
+    local indicator
+
+    # Set indicator based on default value (uppercase = default)
+    if [ "$default" = "y" ] || [ "$default" = "Y" ]; then
+        indicator="[Y/n]"
+    else
+        indicator="[y/N]"
+    fi
 
     while true; do
-        read -r -p "$prompt [y/N]: " reply
+        read -r -p "$prompt $indicator: " reply
         reply="${reply:-$default}"
         # Convert to lowercase (POSIX-compatible)
         reply="$(printf '%s' "$reply" | tr '[:upper:]' '[:lower:]')"

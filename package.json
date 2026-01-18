@@ -96,7 +96,9 @@
     "cy:run": "cross-env CYPRESS_COVERAGE=true pnpm run start-server cypress:run",
     "check-mock-cleanup": "bash scripts/githooks/check-mock-cleanup.sh",
     "check:pom": "node scripts/githooks/check_pom.js",
-    "check-i18n": "node scripts/check-i18n.js"
+    "check-i18n": "node scripts/check-i18n.js",
+    "test:bash": "bats tests/scripts/install/common.bats",
+    "test:bash:tap": "bats tests/scripts/install/common.bats --tap"
   },
   "eslintConfig": {
     "extends": [
