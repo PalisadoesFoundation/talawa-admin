@@ -37,7 +37,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './AdvertisementEntry.module.css';
-import { Button, Card, Col, Row, Carousel } from 'react-bootstrap';
+import { Card, Col, Row, Carousel } from 'react-bootstrap';
+import Button from 'shared-components/Button/Button';
 import { DELETE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
@@ -286,6 +287,7 @@ function AdvertisementEntry({
                   variant={statusVariant}
                   size="sm"
                   dataTestId="advertisement-status"
+                  aria-label={`status-${statusVariant}`}
                 />
 
                 <Card.Text

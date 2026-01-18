@@ -94,7 +94,7 @@ describe('Testing Advertisement Entry Component', () => {
 
     const statusBadge = screen.getByTestId('advertisement-status');
     expect(statusBadge).toBeInTheDocument();
-    expect(statusBadge).toHaveTextContent(/active/i);
+    expect(statusBadge).toHaveAttribute('aria-label', 'status-active');
     fireEvent.click(screen.getByTestId('moreiconbtn'));
     fireEvent.click(screen.getByTestId('deletebtn'));
 
@@ -1102,8 +1102,9 @@ describe('Testing Advertisement Entry Component', () => {
       </ApolloProvider>,
     );
 
-    expect(screen.getByTestId('advertisement-status')).toHaveTextContent(
-      /pending/i,
+    expect(screen.getByTestId('advertisement-status')).toHaveAttribute(
+      'aria-label',
+      'status-pending',
     );
   });
 
@@ -1134,9 +1135,9 @@ describe('Testing Advertisement Entry Component', () => {
         </Provider>
       </ApolloProvider>,
     );
-
-    expect(screen.getByTestId('advertisement-status')).toHaveTextContent(
-      /inactive/i,
+    expect(screen.getByTestId('advertisement-status')).toHaveAttribute(
+      'aria-label',
+      'status-inactive',
     );
   });
 
@@ -1168,8 +1169,9 @@ describe('Testing Advertisement Entry Component', () => {
       </ApolloProvider>,
     );
 
-    expect(screen.getByTestId('advertisement-status')).toHaveTextContent(
-      /active/i,
+    expect(screen.getByTestId('advertisement-status')).toHaveAttribute(
+      'aria-label',
+      'status-active',
     );
   });
 });

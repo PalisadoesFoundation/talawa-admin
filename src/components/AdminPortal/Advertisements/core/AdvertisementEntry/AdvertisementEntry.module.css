@@ -78,16 +78,6 @@
   color: var(--entryaction-color);
 }
 
-.entryaction .spinner-grow {
-  height: 1rem;
-  width: 1rem;
-  margin-right: 8px;
-}
-
-.entryaction {
-  display: flex !important;
-}
-
 .entryaction i {
   margin-right: 8px;
   margin-top: 4px;
