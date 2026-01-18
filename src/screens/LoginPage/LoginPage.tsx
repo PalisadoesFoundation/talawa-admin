@@ -66,7 +66,14 @@ const LoginPage = (): JSX.Element => {
 
   useEffect(() => {
     if (orgData?.organizations) {
-      setOrganizations(orgData.organizations);
+      // Transform _id to id for compatibility with OrgSelector
+      const transformedOrgs = orgData.organizations.map(
+        (org: { _id?: string; id?: string; name: string }) => ({
+          id: org._id || org.id,
+          name: org.name,
+        }),
+      );
+      setOrganizations(transformedOrgs);
     }
   }, [orgData]);
 
