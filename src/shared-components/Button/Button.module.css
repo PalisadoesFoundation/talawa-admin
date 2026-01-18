@@ -4,6 +4,12 @@
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}
+
 .button {
   display: inline-flex;
   align-items: center;

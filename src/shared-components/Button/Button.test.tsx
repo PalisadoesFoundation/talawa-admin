@@ -102,9 +102,9 @@ describe('Button', () => {
         Docs
       </Button>,
     );
-    const buttonLink = screen.getByRole('button', { name: /Docs/ });
-    expect(buttonLink).toHaveAttribute('href', 'https://example.com');
-    expect(buttonLink).toHaveAttribute('target', '_blank');
+    const link = screen.getByRole('link', { name: /Docs/ });
+    expect(link).toHaveAttribute('href', 'https://example.com');
+    expect(link).toHaveAttribute('target', '_blank');
   });
 
   it('renders icons in the correct position', () => {
@@ -135,6 +135,15 @@ describe('Button', () => {
       </Button>,
     );
     const button = screen.getByRole('button', { name: 'Loading...' });
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute('aria-busy', 'true');
+    expect(screen.getByTestId('button-spinner')).toBeInTheDocument();
+  });
+
+  it('shows loading state and falls back to children when loadingText is absent', () => {
+    render(<Button isLoading>Save</Button>);
+
+    const button = screen.getByRole('button', { name: 'Save' });
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute('aria-busy', 'true');
     expect(screen.getByTestId('button-spinner')).toBeInTheDocument();
