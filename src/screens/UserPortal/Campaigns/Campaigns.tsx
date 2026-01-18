@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import { Campaign, WarningAmberRounded } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 import { type GridCellParams } from 'shared-components/DataGridWrapper';
 import useLocalStorage from 'utils/useLocalstorage';
 import PledgeModal from './PledgeModal';
@@ -173,6 +174,34 @@ const Campaigns = (): JSX.Element => {
       renderCell: (params: GridCellParams) => (
         <div data-testid="campaignName">{params.row.name}</div>
       ),
+    },
+    {
+      field: 'status',
+      headerName: t('campaignStatus'),
+      flex: 1,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        const campaign = params.row as InterfaceUserCampaign;
+        const today = new Date();
+        const startDate = new Date(campaign.startDate);
+        const endDate = new Date(campaign.endDate);
+
+        let statusVariant: 'active' | 'inactive' | 'pending';
+        if (endDate < today) {
+          statusVariant = 'inactive'; // Ended campaigns
+        } else if (startDate <= today && today <= endDate) {
+          statusVariant = 'active'; // Active campaigns
+        } else {
+          statusVariant = 'pending'; // Upcoming campaigns
+        }
+
+        return (
+          <StatusBadge variant={statusVariant} dataTestId="campaignStatus" />
+        );
+      },
     },
     {
       field: 'startDate',
