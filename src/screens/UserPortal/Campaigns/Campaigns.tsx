@@ -6,12 +6,11 @@
  * The component uses ReportingTable for consistent table display.
  */
 import React, { useCallback, useMemo, useState } from 'react';
-import { Button } from 'react-bootstrap';
 import styles from './Campaigns.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import { Campaign, WarningAmberRounded } from '@mui/icons-material';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
 /**
@@ -359,7 +358,8 @@ const Campaigns = (): JSX.Element => {
       />
 
       <Button
-        variant="success"
+        variant="contained"
+        color="success"
         data-testid="myPledgesBtn"
         onClick={() => navigate(`/user/pledges/${orgId}`, { replace: true })}
       >
