@@ -43,8 +43,9 @@ import { errorHandler } from 'utils/errorHandler';
 import EventListCardDeleteModal from './Delete/EventListCardDeleteModal';
 import EventListCardPreviewModal from './Preview/EventListCardPreviewModal';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import { Button, Form } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import { Button } from 'react-bootstrap';
+import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
+import styles from './EventListCardModals.module.css';
 
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
@@ -493,10 +494,10 @@ function EventListCardModals({
       >
         <div>
           <p>{t('updateRecurringEventMsg')}</p>
-          <Form>
+          <div>
             {/* Only show "update this instance" option if recurrence rule hasn't changed */}
             {availableUpdateOptions.single && (
-              <Form.Check
+              <FormCheckField
                 type="radio"
                 id="update-single"
                 name="updateOption"
@@ -508,7 +509,7 @@ function EventListCardModals({
               />
             )}
             {availableUpdateOptions.following && (
-              <Form.Check
+              <FormCheckField
                 type="radio"
                 id="update-following"
                 name="updateOption"
@@ -521,7 +522,7 @@ function EventListCardModals({
             )}
             {/* Show "update entire series" option only when only name/description changed */}
             {availableUpdateOptions.entireSeries && (
-              <Form.Check
+              <FormCheckField
                 type="radio"
                 id="update-entire-series"
                 name="updateOption"
@@ -532,7 +533,7 @@ function EventListCardModals({
                 className="mb-2"
               />
             )}
-          </Form>
+          </div>
         </div>
       </BaseModal>
     </>
