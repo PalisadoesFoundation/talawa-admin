@@ -507,6 +507,48 @@ describe('EventListCardModals', () => {
     });
   });
 
+  test('handles switching update option back to single instance', async () => {
+    renderComponent({
+      eventListCardProps: buildRecurringEventProps(),
+    });
+
+    const previewProps = MockPreviewModal.mock.calls[0][0];
+    act(() => {
+      previewProps.setFormState({
+        ...previewProps.formState,
+        name: 'Updated Instance Switch',
+      });
+    });
+
+    await act(async () => {
+      await previewProps.handleEventUpdate();
+    });
+
+    // First select 'following' to change it from valid default
+    const followingRadio = screen.getByLabelText(
+      i18nForTest.t('eventListCard.updateThisAndFollowing'),
+    );
+    await userEvent.click(followingRadio);
+
+    // Now switch back to 'single' to trigger the onChange we want to test
+    const singleRadio = screen.getByLabelText(
+      i18nForTest.t('eventListCard.updateThisInstance'),
+    );
+    await userEvent.click(singleRadio);
+
+    const confirmButton = screen.getByTestId('confirmUpdateEventBtn');
+    await userEvent.click(confirmButton);
+
+    expect(mockUpdateSingleRecurringEvent).toHaveBeenCalledWith({
+      variables: {
+        input: {
+          id: 'event1',
+          name: 'Updated Instance Switch',
+        },
+      },
+    });
+  });
+
   test('handles update of this and following recurring events', async () => {
     renderComponent({
       eventListCardProps: buildRecurringEventProps(),

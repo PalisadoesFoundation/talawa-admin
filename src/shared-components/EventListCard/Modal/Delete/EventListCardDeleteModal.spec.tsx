@@ -92,7 +92,7 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Click the delete button (Yes button)
-      const deleteButton = screen.getByTestId('deleteEventBtn');
+      const deleteButton = screen.getByTestId('modal-primary-btn');
       await user.click(deleteButton);
 
       // Verify deleteEventHandler was called without parameters (Line 55 - else branch)
@@ -132,7 +132,7 @@ describe('EventListCardDeleteModal', () => {
       );
 
       // Click the delete button (Yes button) - should use default "single" option
-      const deleteButton = screen.getByTestId('deleteEventBtn');
+      const deleteButton = screen.getByTestId('modal-primary-btn');
       await user.click(deleteButton);
 
       // Verify deleteEventHandler was called with "single" parameter (Line 55 - if branch)
@@ -163,7 +163,7 @@ describe('EventListCardDeleteModal', () => {
       expect(singleRadio).toBeChecked();
 
       // Click delete button
-      const deleteButton = screen.getByTestId('deleteEventBtn');
+      const deleteButton = screen.getByTestId('modal-primary-btn');
       await user.click(deleteButton);
 
       // Verify deleteEventHandler was called with "single"
@@ -205,7 +205,7 @@ describe('EventListCardDeleteModal', () => {
       ).not.toBeChecked();
 
       // Click delete button to verify the correct option is passed
-      const deleteButton = screen.getByTestId('deleteEventBtn');
+      const deleteButton = screen.getByTestId('modal-primary-btn');
       await user.click(deleteButton);
 
       // Verify deleteEventHandler was called with "single"
@@ -239,7 +239,7 @@ describe('EventListCardDeleteModal', () => {
       ).not.toBeChecked();
 
       // Click delete button
-      const deleteButton = screen.getByTestId('deleteEventBtn');
+      const deleteButton = screen.getByTestId('modal-primary-btn');
       await user.click(deleteButton);
 
       // Verify deleteEventHandler was called with "following"
@@ -273,7 +273,7 @@ describe('EventListCardDeleteModal', () => {
       ).not.toBeChecked();
 
       // Click delete button
-      const deleteButton = screen.getByTestId('deleteEventBtn');
+      const deleteButton = screen.getByTestId('modal-primary-btn');
       await user.click(deleteButton);
 
       // Verify deleteEventHandler was called with "all"
@@ -354,7 +354,7 @@ describe('EventListCardDeleteModal', () => {
         </I18nextProvider>,
       );
 
-      const cancelButton = screen.getByTestId('eventDeleteModalCloseBtn');
+      const cancelButton = screen.getByTestId('modal-secondary-btn');
       await user.click(cancelButton);
 
       expect(mockStandaloneEventProps.toggleDeleteModal).toHaveBeenCalledTimes(
@@ -409,7 +409,7 @@ describe('EventListCardDeleteModal', () => {
       ).not.toBeInTheDocument();
 
       // Click delete button
-      const deleteButton = screen.getByTestId('deleteEventBtn');
+      const deleteButton = screen.getByTestId('modal-primary-btn');
       await user.click(deleteButton);
 
       // Should call deleteEventHandler without parameters

@@ -10,10 +10,8 @@
  */
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import styles from './EventListCardDeleteModal.module.css';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import type { InterfaceDeleteEventModalProps } from 'types/shared-components/EventListCard/Modal/Delete/interface';
 
 const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
@@ -44,48 +42,18 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
   const testid = `deleteEventModal${eventListCardProps.id}`;
   const deleteOptionName = 'deleteOption-' + eventListCardProps.id;
 
-  const footerContent = (
-    <>
-      <Button
-        type="button"
-        className={`btn btn-danger ${styles.removeButton}`}
-        data-dismiss="modal"
-        onClick={toggleDeleteModal}
-        data-testid="eventDeleteModalCloseBtn"
-      >
-        {tCommon('no')}
-      </Button>
-      <Button
-        type="button"
-        className={`btn ${styles.addButton}`}
-        onClick={handleDelete}
-        data-testid="deleteEventBtn"
-      >
-        {tCommon('yes')}
-      </Button>
-    </>
-  );
-
   return (
-    <BaseModal
+    <CRUDModalTemplate
+      title={t('deleteEvent')}
+      open={eventDeleteModalIsOpen}
+      onClose={toggleDeleteModal}
+      onPrimary={handleDelete}
+      primaryText={tCommon('yes')}
+      secondaryText={tCommon('no')}
+      primaryVariant="danger"
       size={isRecurringInstance ? 'lg' : 'sm'}
-      show={eventDeleteModalIsOpen}
-      onHide={toggleDeleteModal}
-      backdrop="static"
-      keyboard={false}
       centered
-      title={
-        <span
-          className="text-white"
-          id={`deleteEventModalLabel${eventListCardProps.id}`}
-        >
-          {t('deleteEvent')}
-        </span>
-      }
-      headerClassName={styles.modalHeader}
-      footer={footerContent}
-      showCloseButton={true}
-      dataTestId={testid}
+      data-testid={testid}
     >
       {isRecurringInstance ? (
         <div>
@@ -126,7 +94,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
       ) : (
         <p>{t('deleteEventMsg')}</p>
       )}
-    </BaseModal>
+    </CRUDModalTemplate>
   );
 };
 
