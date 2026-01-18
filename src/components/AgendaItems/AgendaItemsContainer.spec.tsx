@@ -35,7 +35,6 @@ const callOnDragEnd = (result: DropResult): void => {
     capturedOnDragEnd(result);
   }
 };
-
 // Mock @hello-pangea/dnd to capture onDragEnd callback
 vi.mock('@hello-pangea/dnd', () => ({
   DragDropContext: ({

@@ -747,4 +747,77 @@ describe('AgendaItemsCreateModal', () => {
 
     createObjectURLSpy.mockRestore();
   });
+
+  test('handleRemoveAttachment filters attachment by index (line 182)', async () => {
+    const createObjectURLSpy = vi
+      .spyOn(URL, 'createObjectURL')
+      .mockReturnValue('blob:http://localhost/preview');
+    const revokeObjectURLSpy = vi.spyOn(URL, 'revokeObjectURL');
+
+    sharedMocks.uploadFileToMinio.mockResolvedValue({
+      objectName: 'agendaItem/test.jpg',
+      fileHash: 'hash123',
+    });
+
+    const cleanFormState = {
+      ...mockFormState1,
+      attachments: [],
+    };
+
+    render(
+      <MockedProvider>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsCreateModal
+                  agendaItemCreateModalIsOpen
+                  hideCreateModal={mockHideCreateModal}
+                  formState={cleanFormState}
+                  setFormState={mockSetFormState}
+                  createAgendaItemHandler={mockCreateAgendaItemHandler}
+                  t={mockT}
+                  agendaItemCategories={[]}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const fileInput = screen.getByTestId('attachment');
+    const testFile = new File(['test'], 'test.jpg', { type: 'image/jpeg' });
+
+    Object.defineProperty(fileInput, 'files', { value: [testFile] });
+    fireEvent.change(fileInput);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('deleteAttachment')).toBeInTheDocument();
+    });
+
+    // Clear mocks to ignore initial useEffect calls
+    mockSetFormState.mockClear();
+
+    // Click delete to trigger handleRemoveAttachment which filters by index
+    fireEvent.click(screen.getByTestId('deleteAttachment'));
+
+    // Verify setFormState was called with a function that filters attachments
+    await waitFor(() => {
+      const filterCall = mockSetFormState.mock.calls.find(
+        (call) => typeof call[0] === 'function',
+      );
+      expect(filterCall).toBeDefined();
+      if (filterCall) {
+        // Simulate the filter logic with multiple attachments
+        const prevState = { ...cleanFormState, attachments: ['a', 'b', 'c'] };
+        const result = filterCall[0](prevState);
+        // Index 0 should be removed, leaving ['b', 'c']
+        expect(result.attachments).toEqual(['b', 'c']);
+      }
+    });
+
+    createObjectURLSpy.mockRestore();
+    revokeObjectURLSpy.mockRestore();
+  });
 });

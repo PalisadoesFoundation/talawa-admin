@@ -904,6 +904,9 @@ describe('AgendaItemsUpdateModal', () => {
       expect(screen.getByTestId('deleteAttachment')).toBeInTheDocument();
     });
 
+    // Clear mocks to ignore initial useEffect calls
+    mockSetFormState.mockClear();
+
     // Click the delete button
     fireEvent.click(screen.getByTestId('deleteAttachment'));
 
@@ -913,6 +916,19 @@ describe('AgendaItemsUpdateModal', () => {
         (call) => typeof call[0] === 'function',
       );
       expect(functionalCall).toBeDefined();
+      if (functionalCall) {
+        // Simulate the functional update with multiple attachments
+        const prevState = {
+          ...formStateWithAttachment,
+          attachments: [
+            'http://localhost/video/test-attachment.mp4',
+            'http://localhost/other.jpg',
+          ],
+        };
+        const result = functionalCall[0](prevState);
+        // Should remove the specific attachment that was clicked
+        expect(result.attachments).toEqual(['http://localhost/other.jpg']);
+      }
     });
   });
 });
