@@ -45,8 +45,6 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - name: Install bats-core
         run: |
@@ -70,7 +68,7 @@ jobs:
 
           # Build kcov from source for latest version
           cd /tmp
-          git clone --depth 1 https://github.com/SimonKagstrom/kcov.git
+          git clone --depth 1 --branch v43 https://github.com/SimonKagstrom/kcov.git
           cd kcov
           mkdir build
           cd build
@@ -112,7 +110,7 @@ jobs:
 
             echo ""
             echo "Coverage Summary:"
-            echo "  File: scripts/install/lib/common.sh (Lines 1-361)"
+            echo "  File: scripts/install/lib/common.sh"
             echo "  Lines Covered: $LINES_COVERED / $TOTAL_LINES"
             echo "  Coverage: ${PERCENT}%"
             echo ""
