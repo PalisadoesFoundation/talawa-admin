@@ -12,7 +12,7 @@
 ##############################################################################
 
 # Code Formatting
-black
+black==25.1.0
 
 # Docstring Checking
 pydocstyle
