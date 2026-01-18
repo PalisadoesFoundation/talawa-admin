@@ -73,7 +73,7 @@ Optional metadata for future features
 
 #### align?
 
-> `optional` **align**: `"left"` \| `"right"` \| `"center"`
+> `optional` **align**: `"center"` \| `"left"` \| `"right"`
 
 #### ariaLabel?
 
