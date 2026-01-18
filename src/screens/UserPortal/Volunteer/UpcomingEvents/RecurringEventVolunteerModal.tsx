@@ -8,7 +8,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
-import type { InterfaceRecurringEventVolunteerModalProps } from 'types/Volunteer/RecurringEventVolunteerModal/interface';
+import type { InterfaceRecurringEventVolunteerModalProps } from 'types/UserPortal/RecurringEventVolunteerModal/interface';
 import styles from './RecurringEventVolunteerModal.module.css';
 
 const RecurringEventVolunteerModal: React.FC<
@@ -72,6 +72,7 @@ const RecurringEventVolunteerModal: React.FC<
       <p className="mb-4">{description}</p>
 
       <fieldset className={styles.radioFieldset}>
+        <legend className={styles.radioLegend}>{t('volunteerScope')}</legend>
         <div className={styles.radioGroup}>
           <div className={styles.radioOption}>
             <input

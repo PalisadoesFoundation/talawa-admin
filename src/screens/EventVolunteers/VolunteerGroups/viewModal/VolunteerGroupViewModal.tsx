@@ -40,7 +40,6 @@ import styles from './VolunteerGroupViewModal.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  FormControl,
   Paper,
   Table,
   TableBody,
@@ -48,9 +47,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
 } from '@mui/material';
 import Avatar from 'shared-components/Avatar/Avatar';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 export interface InterfaceVolunteerGroupViewModal {
   isOpen: boolean;
@@ -79,122 +78,105 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
       <div>
         {/* Group name & Volunteers Required */}
         <div className={styles.formGroup}>
-          <FormControl fullWidth>
-            <TextField
-              label={tCommon('name')}
-              variant="outlined"
-              className={styles.noOutline}
-              value={name}
-              disabled
-            />
-          </FormControl>
+          <FormTextField
+            name="name"
+            label={tCommon('name')}
+            value={name}
+            onChange={() => {}}
+            disabled
+            data-testid="groupName"
+          />
           {volunteersRequired !== null && volunteersRequired !== undefined && (
-            <FormControl fullWidth>
-              <TextField
-                label={tCommon('volunteersRequired')}
-                variant="outlined"
-                className={styles.noOutline}
-                value={volunteersRequired}
-                disabled
-              />
-            </FormControl>
+            <FormTextField
+              name="volunteersRequired"
+              label={tCommon('volunteersRequired')}
+              value={String(volunteersRequired)}
+              onChange={() => {}}
+              disabled
+              data-testid="volunteersRequired"
+            />
           )}
         </div>
         {/* Input field to enter the group description */}
         {description && (
           <div className="mb-3">
-            <FormControl fullWidth>
-              <TextField
-                multiline
-                rows={2}
-                label={tCommon('description')}
-                variant="outlined"
-                className={styles.noOutline}
-                value={description}
-                disabled
-              />
-            </FormControl>
+            <FormTextField
+              name="description"
+              label={tCommon('description')}
+              value={description}
+              onChange={() => {}}
+              disabled
+              data-testid="groupDescription"
+            />
           </div>
         )}
         <div className={styles.formGroup}>
-          <FormControl fullWidth>
-            <TextField
-              label={t('leader')}
-              variant="outlined"
-              className={styles.noOutline}
-              value={leader.name}
-              disabled
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <>
-                      {leader.avatarURL ? (
-                        <img
-                          src={leader.avatarURL}
-                          alt={leader.name}
-                          data-testid="leader_image"
-                          className={styles.tableImages}
-                        />
-                      ) : (
-                        <div className={styles.avatarContainer}>
-                          <Avatar
-                            key={`${leader.id}-avatar`}
-                            containerStyle={styles.imageContainer}
-                            avatarStyle={styles.tableImages}
-                            dataTestId="leader_avatar"
-                            name={leader.name}
-                            alt={leader.name}
-                          />
-                        </div>
-                      )}
-                    </>
-                  ),
-                },
-              }}
-            />
-          </FormControl>
+          <FormTextField
+            name="leader"
+            label={t('leader')}
+            value={leader.name}
+            onChange={() => {}}
+            disabled
+            startAdornment={
+              leader.avatarURL ? (
+                <img
+                  src={leader.avatarURL}
+                  alt={leader.name}
+                  data-testid="leader_image"
+                  className={styles.tableImages}
+                />
+              ) : (
+                <div className={styles.avatarContainer}>
+                  <Avatar
+                    key={`${leader.id}-avatar`}
+                    containerStyle={styles.imageContainer}
+                    avatarStyle={styles.tableImages}
+                    dataTestId="leader_avatar"
+                    name={leader.name}
+                    alt={leader.name}
+                  />
+                </div>
+              )
+            }
+            data-testid="groupLeader"
+          />
 
-          <FormControl fullWidth>
-            <TextField
-              label={t('creator')}
-              variant="outlined"
-              className={styles.noOutline}
-              value={creator.name}
-              disabled
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <>
-                      {creator.avatarURL ? (
-                        <img
-                          src={creator.avatarURL}
-                          alt={creator.name}
-                          data-testid="creator_image"
-                          className={styles.tableImages}
-                        />
-                      ) : (
-                        <div className={styles.avatarContainer}>
-                          <Avatar
-                            key={`${creator.id}-avatar`}
-                            containerStyle={styles.imageContainer}
-                            avatarStyle={styles.tableImages}
-                            dataTestId="creator_avatar"
-                            name={creator.name}
-                            alt={creator.name}
-                          />
-                        </div>
-                      )}
-                    </>
-                  ),
-                },
-              }}
-            />
-          </FormControl>
+          <FormTextField
+            name="creator"
+            label={t('creator')}
+            value={creator.name}
+            onChange={() => {}}
+            disabled
+            startAdornment={
+              creator.avatarURL ? (
+                <img
+                  src={creator.avatarURL}
+                  alt={creator.name}
+                  data-testid="creator_image"
+                  className={styles.tableImages}
+                />
+              ) : (
+                <div className={styles.avatarContainer}>
+                  <Avatar
+                    key={`${creator.id}-avatar`}
+                    containerStyle={styles.imageContainer}
+                    avatarStyle={styles.tableImages}
+                    dataTestId="creator_avatar"
+                    name={creator.name}
+                    alt={creator.name}
+                  />
+                </div>
+              )
+            }
+            data-testid="groupCreator"
+          />
         </div>
         {/* Table for Associated Volunteers */}
         {volunteers && volunteers.length > 0 && (
-          <div>
-            <label className={styles.volunteersLabel}>{t('volunteers')}</label>
+          <div role="region" aria-labelledby="volunteers-heading">
+            <h3 id="volunteers-heading" className={styles.volunteersLabel}>
+              {t('volunteers')}
+            </h3>
 
             <TableContainer
               component={Paper}

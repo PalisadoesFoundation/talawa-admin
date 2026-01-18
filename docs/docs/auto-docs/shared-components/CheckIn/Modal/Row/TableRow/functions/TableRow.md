@@ -14,7 +14,7 @@ Defined in: [src/shared-components/CheckIn/Modal/Row/TableRow.tsx:41](https://gi
 
 #### data
 
-[`InterfaceTableCheckIn`](../../../../../../types/CheckIn/interface/interfaces/InterfaceTableCheckIn.md)
+[`InterfaceTableCheckIn`](../../../../../../types/shared-components/CheckIn/interface/interfaces/InterfaceTableCheckIn.md)
 
 #### onCheckInUpdate?
 

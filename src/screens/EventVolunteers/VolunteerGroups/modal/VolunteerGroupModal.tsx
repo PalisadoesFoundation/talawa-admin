@@ -9,7 +9,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { Autocomplete, FormControl, TextField } from '@mui/material';
+// eslint-disable-next-line no-restricted-imports -- Autocomplete requires TextField for renderInput
+import { Autocomplete, TextField } from '@mui/material';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import {
@@ -241,36 +243,22 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         </fieldset>
       ) : null}
 
-      <div className="mb-3">
-        <FormControl fullWidth>
-          <TextField
-            required
-            label={tCommon('name')}
-            variant="outlined"
-            className={styles.noOutline}
-            value={name}
-            onChange={(e) =>
-              setFormState({ ...formState, name: e.target.value })
-            }
-          />
-        </FormControl>
-      </div>
+      <FormTextField
+        name="name"
+        label={tCommon('name')}
+        required
+        value={name}
+        onChange={(value) => setFormState({ ...formState, name: value })}
+        data-testid="groupNameInput"
+      />
 
-      <div className="mb-3">
-        <FormControl fullWidth>
-          <TextField
-            multiline
-            rows={3}
-            label={tCommon('description')}
-            variant="outlined"
-            className={styles.noOutline}
-            value={description}
-            onChange={(e) =>
-              setFormState({ ...formState, description: e.target.value })
-            }
-          />
-        </FormControl>
-      </div>
+      <FormTextField
+        name="description"
+        label={tCommon('description')}
+        value={description ?? ''}
+        onChange={(value) => setFormState({ ...formState, description: value })}
+        data-testid="groupDescriptionInput"
+      />
 
       <div className="d-flex mb-3 w-100">
         <Autocomplete
@@ -330,35 +318,29 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         />
       </div>
 
-      <div className="mb-3">
-        <FormControl fullWidth>
-          <TextField
-            label={t('volunteersRequired')}
-            variant="outlined"
-            className={styles.noOutline}
-            value={
-              volunteersRequired !== null ? String(volunteersRequired) : ''
+      <FormTextField
+        name="volunteersRequired"
+        label={t('volunteersRequired')}
+        type="number"
+        value={volunteersRequired !== null ? String(volunteersRequired) : ''}
+        onChange={(value) => {
+          if (value === '') {
+            setFormState({
+              ...formState,
+              volunteersRequired: null,
+            });
+          } else {
+            const parsed = parseInt(value);
+            if (!isNaN(parsed) && parsed > 0) {
+              setFormState({
+                ...formState,
+                volunteersRequired: parsed,
+              });
             }
-            onChange={(e) => {
-              const value = e.target.value;
-              if (value === '') {
-                setFormState({
-                  ...formState,
-                  volunteersRequired: null,
-                });
-              } else {
-                const parsed = parseInt(value);
-                if (!isNaN(parsed) && parsed > 0) {
-                  setFormState({
-                    ...formState,
-                    volunteersRequired: parsed,
-                  });
-                }
-              }
-            }}
-          />
-        </FormControl>
-      </div>
+          }
+        }}
+        data-testid="volunteersRequiredInput"
+      />
     </>
   );
 

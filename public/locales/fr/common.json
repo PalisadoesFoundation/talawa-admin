@@ -3,6 +3,7 @@
   "lastName": "Nom de famille",
   "searchByName": "Rechercher par nom",
   "loading": "Chargement...",
+  "error": "Erreur",
   "endOfResults": "Fin des résultats",
   "noResultsFoundFor": "Aucun résultat trouvé pour {{query}}",
   "tryAdjustingFilters": "Essayez d'ajuster vos filtres ou votre terme de recherche.",
@@ -251,6 +252,7 @@
   "organizationEventDescription": "Visible par tous les membres de l'organisation",
   "inviteOnlyEvent": "Sur invitation uniquement",
   "inviteOnlyEventDescription": "Visible uniquement par les membres invités et les administrateurs de l'événement",
+  "noCategory": "Aucune catégorie",
   "sortingIcon": "icône de tri",
   "peopleTabTagName": "Personnes",
   "or": "ou",
@@ -280,5 +282,8 @@
   "cannotUnregisterCheckedIn": "Impossible de désinscrire un utilisateur déjà enregistré",
   "errorLoadingEventDetails": "Erreur lors du chargement des détails de l'événement. Veuillez réessayer plus tard.",
   "eventDate": "Date de l'Événement",
-  "attendedEventsList": "Liste des événements suivis"
+  "attendedEventsList": "Liste des événements suivis",
+  "linkCopied": "Lien copié dans le presse-papiers",
+  "copyToClipboardError": "Erreur lors de la copie du lien dans le presse-papiers",
+  "share": "Partager"
 }

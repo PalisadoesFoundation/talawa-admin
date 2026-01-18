@@ -27,6 +27,9 @@ const sharedMocks = vi.hoisted(() => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
   },
   navigate: vi.fn(),
 }));

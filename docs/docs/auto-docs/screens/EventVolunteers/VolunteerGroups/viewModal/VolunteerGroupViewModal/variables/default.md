@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceVolunteerGroupViewModal`](../interfaces/InterfaceVolunteerGroupViewModal.md)\>
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx#L61)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx#L60)

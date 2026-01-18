@@ -11,7 +11,6 @@ import styles from './VolunteerViewModal.module.css';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  FormControl,
   Paper,
   Table,
   TableBody,
@@ -19,9 +18,9 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
 } from '@mui/material';
 import Avatar from 'shared-components/Avatar/Avatar';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import { HistoryToggleOff, TaskAlt, Cancel } from '@mui/icons-material';
 
 export interface InterfaceVolunteerViewModal {
@@ -84,75 +83,71 @@ const VolunteerViewModal: React.FC<InterfaceVolunteerViewModal> = ({
       <div className={styles.modalForm}>
         {/* Volunteer Name & Avatar */}
         <div className={styles.formGroup}>
-          <FormControl fullWidth>
-            <TextField
-              label={t('volunteer')}
-              variant="outlined"
-              className={styles.noOutline}
-              value={user.name}
-              disabled
-              slotProps={{
-                input: {
-                  startAdornment: (
-                    <>
-                      {user.avatarURL ? (
-                        <img
-                          src={user.avatarURL}
-                          alt={t('volunteer')}
-                          data-testid="volunteer_image"
-                          className={styles.tableImage}
-                        />
-                      ) : (
-                        <div className={styles.avatarContainer}>
-                          <Avatar
-                            key={`${user.id}-avatar`}
-                            containerStyle={styles.imageContainer}
-                            avatarStyle={styles.tableImage}
-                            dataTestId="volunteer_avatar"
-                            name={user.name}
-                            alt={user.name}
-                          />
-                        </div>
-                      )}
-                    </>
-                  ),
-                },
-              }}
-            />
-          </FormControl>
+          <FormTextField
+            name="volunteer"
+            label={t('volunteer')}
+            value={user.name}
+            onChange={() => {}}
+            disabled
+            startAdornment={
+              user.avatarURL ? (
+                <img
+                  src={user.avatarURL}
+                  alt={t('volunteer')}
+                  data-testid="volunteer_image"
+                  className={styles.tableImage}
+                />
+              ) : (
+                <div className={styles.avatarContainer}>
+                  <Avatar
+                    key={`${user.id}-avatar`}
+                    containerStyle={styles.imageContainer}
+                    avatarStyle={styles.tableImage}
+                    dataTestId="volunteer_avatar"
+                    name={user.name}
+                    alt={user.name}
+                  />
+                </div>
+              )
+            }
+            data-testid="volunteerName"
+          />
         </div>
         {/* Status and hours volunteered */}
         <div className={styles.statusGroup}>
-          <TextField
+          <FormTextField
+            name="status"
             label={t('status')}
-            fullWidth
             value={statusConfig.label}
-            slotProps={{
-              input: {
-                startAdornment: statusConfig.icon,
-                className: statusConfig.className,
-              },
-            }}
+            onChange={() => {}}
             disabled
+            startAdornment={statusConfig.icon}
+            className={statusConfig.className}
+            data-testid="volunteerStatus"
           />
 
-          <TextField
+          <FormTextField
+            name="hoursVolunteered"
             label={t('hoursVolunteered')}
-            variant="outlined"
-            className={`${styles.noOutline} ${styles.hoursField}`}
-            value={hoursVolunteered ?? '-'}
+            value={hoursVolunteered !== null ? String(hoursVolunteered) : '-'}
+            onChange={() => {}}
             disabled
+            className={styles.hoursField}
+            data-testid="hoursVolunteered"
           />
         </div>
         {/* Table for Associated Volunteer Groups */}
         {groups && groups.length > 0 && (
           <div>
-            <label className={styles.groupsLabel}>{t('volunteerGroups')}</label>
+            <span id="volunteer-groups-label" className={styles.groupsLabel}>
+              {t('volunteerGroups')}
+            </span>
 
             <TableContainer
               component={Paper}
               variant="outlined"
               className={styles.modalTable}
+              aria-labelledby="volunteer-groups-label"
             >
               <Table aria-label={t('groupTable')}>
                 <TableHead>

@@ -409,7 +409,9 @@
     "profile": "Profil",
     "joined": "Rejoint",
     "createUser": "Créer un utilisateur",
-    "notFound": "Aucun membre trouvé"
+    "notFound": "Aucun membre trouvé",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe"
   },
   "organizationCard": {
     "join": "Rejoindre",
@@ -724,6 +726,7 @@
     "options": "Options",
     "createAgendaItem": "Créer un point à l'ordre du jour",
     "noAgendaItems": "Aucun point à l'ordre du jour",
+    "search": "Rechercher",
     "selectAgendaItemCategory": "Sélectionner une catégorie de point de l'ordre du jour",
     "update": "Mettre à jour",
     "delete": "Supprimer",
@@ -1400,11 +1403,12 @@
   },
   "posts": {
     "pinnedPosts": "Messages épinglés",
+    "errorLoadingPreviewPost": "Erreur lors du chargement de l'aperçu du message.",
     "title": "Publications",
     "latest": "Dernier",
     "oldest": "Le plus ancien",
     "none": "Aucun",
-    "closePinnedPost": "Fermer le message épinglé",
+    "closePostView": "Fermer la vue du message",
     "unknownUser": "Utilisateur inconnu",
     "searchPosts": "Rechercher des messages",
     "nothingToShow": "Rien à montrer ici.",
@@ -1493,30 +1497,11 @@
     "noRegistrantsFound": "Aucun inscrit trouvé.",
     "removingAttendee": "Suppression du participant...",
     "attendeeRemovedSuccessfully": "Participant supprimé avec succès",
-    "errorRemovingAttendee": "Erreur lors de la suppression du participant. Veuillez réessayer.",
+    "errorRemovingAttendee": "Erreur lors de la suppression du participant",
+    "cannotUnregisterCheckedIn": "Impossible d'annuler l'inscription d'un utilisateur qui s'est déjà enregistré",
     "checkedIn": "Enregistré",
     "unregister": "Désinscrire",
     "cannotUnregisterCheckedInTooltip": "Impossible de désinscrire un utilisateur déjà enregistré"
-  },
-  "onSpotAttendee": {
-    "title": "Participant sur place",
-    "enterFirstName": "Entrez le prénom",
-    "enterLastName": "Entrez le nom de famille",
-    "enterEmail": "Entrez l'e-mail",
-    "enterPhoneNo": "Entrez le numéro de téléphone",
-    "selectGender": "Sélectionnez le sexe",
-    "invalidDetailsMessage": "Veuillez remplir tous les champs obligatoires",
-    "orgIdMissing": "L'ID de l'organisation est manquant. Veuillez réessayer.",
-    "attendeeAddedSuccess": "Participant ajouté avec succès!",
-    "addAttendee": "Ajouter",
-    "phoneNumber": "Numéro de téléphone",
-    "addingAttendee": "Ajout en cours...",
-    "male": "Homme",
-    "female": "Femme",
-    "other": "Autre",
-    "firstNamePlaceholder": "Jean",
-    "lastNamePlaceholder": "Dupont",
-    "emailPlaceholder": "exemple@gmail.com"
   },
   "settings": {
     "eventAttended": "Événements Assistés",
@@ -1919,17 +1904,32 @@
   "checkIn": {
     "errorCheckingIn": "Erreur lors de l'enregistrement",
     "checkedInSuccessfully": "Enregistrement réussi",
+    "generatingPdf": "Génération du PDF...",
+    "pdfGeneratedSuccessfully": "PDF généré avec succès !",
+    "errorGeneratingPdf": "Erreur lors de la génération du PDF",
+    "unknownError": "Erreur inconnue",
+    "checkedIn": "Enregistré",
+    "downloadTag": "Télécharger l'étiquette",
+    "checkInButton": "S'enregistrer",
     "searchAttendees": "Rechercher des participants",
     "checkedIn": "Enregistré",
     "downloadTag": "Télécharger l'étiquette",
     "checkIn": "Enregistrer",
     "eventCheckInManagement": "Gestion des enregistrements d'événement",
-    "checkInMembers": "Enregistrer les membres"
+    "checkInMembers": "Enregistrer les membres",
+    "unknownUser": "Utilisateur inconnu",
+    "user": "Utilisateur",
+    "checkInStatus": "Statut d'Enregistrement"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
     "errorRemovingAttendee": "Erreur lors de la suppression du participant",
     "eventRegistrantsTitle": "Inscrits à l'événement",
+    "registerMember": "Inscrire un membre",
+    "showAttendees": "Afficher les participants",
+    "addingAttendee": "Ajout du participant...",
+    "selectUserFirst": "Veuillez d'abord choisir un utilisateur à ajouter !",
+    "unknownUser": "Utilisateur inconnu",
     "inviteByEmailButton": "Inviter par email",
     "addRegistrantButton": "Ajouter un inscrit",
     "noRegistrationsFound": "Aucune inscription trouvée.",
@@ -1949,14 +1949,34 @@
       "expiresInDaysLabel": "Expire dans (jours)",
       "errorSendingInvites": "Erreur lors de l'envoi des invitations",
       "emailsLabel": "Emails et noms des destinataires",
-      "emailsHelp": "Fournissez l'email et le nom facultatif pour chaque destinataire. Ajoutez plusieurs destinataires si nécessaire."
-    },
-    "selectUserWarning": "Veuillez d'abord choisir un utilisateur à ajouter !",
-    "addingAttendeeProgress": "Ajout du participant en cours..."
+      "emailsHelp": "Fournissez l'email et le nom facultatif pour chaque destinataire. Ajoutez plusieurs destinataires si nécessaire.",
+      "noRecipientsError": "Veuillez fournir au moins un email de destinataire",
+      "invalidEmailsError": "Email(s) invalide(s) : {{emails}}",
+      "invitesSentSuccessfully": "Invitations envoyées avec succès"
+    }
   },
-  "eventRegistrantsWrapper": {
-    "buttonAriaLabel": "Afficher les participants",
-    "registerMemberButton": "Inscrire un membre"
+  "onSpotAttendee": {
+    "invalidEmailFormat": "Format d'email invalide",
+    "organizationIdMissing": "L'identifiant de l'organisation est manquant.",
+    "title": "Participant sur place",
+    "enterFirstName": "Entrez le prénom",
+    "enterLastName": "Entrez le nom de famille",
+    "enterEmail": "Entrez l'e-mail",
+    "enterPhoneNo": "Entrez le numéro de téléphone",
+    "selectGender": "Sélectionner le genre",
+    "invalidDetailsMessage": "Veuillez remplir tous les champs obligatoires",
+    "orgIdMissing": "L'ID de l'organisation est manquant. Veuillez réessayer.",
+    "attendeeAddedSuccess": "Participant ajouté avec succès !",
+    "addAttendee": "Ajouter un participant",
+    "phoneNumber": "N° de téléphone",
+    "phoneNumberPlaceholder": "1234567890",
+    "addingAttendee": "Ajout en cours...",
+    "male": "Homme",
+    "female": "Femme",
+    "other": "Autre",
+    "placeholderFirstName": "Jean",
+    "placeholderLastName": "Dupont",
+    "placeholderEmail": "abc@gmail.com"
   },
   "userCampaigns": {
     "title": "Campagnes de financement",
@@ -2000,7 +2020,20 @@
     "searchPledges": "Rechercher des engagements"
   },
   "leaveOrganization": {
-    "title": "Quitter l'organisation"
+    "title": "Quitter l'organisation",
+    "leaveOrganization": "Quitter l'organisation",
+    "confirmLeaveOrganization": "Confirmer le départ de l'organisation",
+    "leaveOrganizationConfirmation": "Êtes-vous sûr de vouloir quitter {{orgName}} ? Vous perdrez l'accès au contenu réservé aux membres.",
+    "enterEmailToConfirm": "Entrez votre email pour confirmer :",
+    "enterYourEmail": "Entrez votre email",
+    "confirmEmailInput": "Confirmer la saisie de l'email",
+    "leftOrganizationSuccess": "Vous avez quitté l'organisation avec succès !",
+    "leftOrganizationError": "Échec du départ de l'organisation. Veuillez réessayer.",
+    "networkError": "Impossible de traiter votre demande. Veuillez vérifier votre connexion.",
+    "emailMismatchError": "L'email que vous avez entré ne correspond pas à celui de votre compte.",
+    "continue": "Continuer",
+    "missingRequiredInfo": "Impossible de traiter la demande : Informations requises manquantes.",
+    "organizationNotFound": "Organisation non trouvée"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Sélecteur de vue des bénévoles",
@@ -2252,7 +2285,9 @@
     "title": "Portail Utilisateur",
     "talawa": "Talawa",
     "talawaBranding": "Image de marque Talawa",
-    "view": "Voir"
+    "view": "Voir",
+    "changeLanguage": "Changer de langue",
+    "userNotFoundError": "Utilisateur introuvable"
   },
   "donation": {
     "amount_label": "Montant",
@@ -2280,5 +2315,40 @@
   },
   "userGlobalScreen": {
     "globalFeatures": "Fonctionnalités Globales"
+  },
+  "recurringEventVolunteerModal": {
+    "joinGroupTitle": "Rejoindre {{groupName}} - {{eventName}}",
+    "volunteerTitle": "Bénévole pour {{eventName}}",
+    "joinGroupQuestion": "Souhaitez-vous rejoindre \"{{groupName}}\" pour toute la série ou uniquement pour cette instance?",
+    "volunteerQuestion": "Souhaitez-vous faire du bénévolat pour toute la série ou uniquement pour cette instance?",
+    "volunteerForSeries": "Bénévole pour toute la série",
+    "joinGroupForSeries": "Vous rejoindrez ce groupe pour tous les événements de la série récurrente",
+    "volunteerForSeriesDesc": "Vous ferez du bénévolat pour tous les événements de cette série récurrente",
+    "volunteerForInstance": "Bénévole pour cette instance uniquement",
+    "joinGroupForInstance": "Vous rejoindrez ce groupe uniquement pour l'événement du {{date}}",
+    "volunteerForInstanceDesc": "Vous ne ferez du bénévolat que pour l'événement du {{date}}",
+    "cancel": "Annuler",
+    "submitRequest": "Soumettre la demande"
+  },
+  "eventsAttendedMemberModal": {
+    "title": "Liste des événements auxquels vous avez assisté",
+    "showing": "Affichage de {{start}} - {{end}} sur {{total}} événements",
+    "eventName": "Nom de l'événement",
+    "dateOfEvent": "Date de l'événement",
+    "recurringEvent": "Événement récurrent",
+    "attendees": "Participants",
+    "tableAriaLabel": "Tableau des événements auxquels vous avez assisté",
+    "paginationAriaLabel": "Navigation de pagination des événements",
+    "paginationGoToPage": "Aller à la page {{page}}",
+    "paginationGoToType": "Aller à la page {{type}}",
+    "noEventsAttended": "Aucun événement assisté"
+  },
+  "eventStats": {
+    "title": "Statistiques de l'événement",
+    "reviews": {
+      "title": "Avis",
+      "emptyState": "En attente que les gens parlent de l'événement...",
+      "filledByCount": "Rempli par {{count}} personnes."
+    }
   }
 }

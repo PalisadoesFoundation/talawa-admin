@@ -1,6 +1,6 @@
 import { EVENT_CHECKINS, EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { MARK_CHECKIN } from 'GraphQl/Mutations/mutations';
-import type { InterfaceAttendeeQueryResponse } from 'types/CheckIn/interface';
+import type { InterfaceAttendeeQueryResponse } from 'types/shared-components/CheckIn/interface';
 import dayjs from 'dayjs';
 
 const checkInQueryData: InterfaceAttendeeQueryResponse = {

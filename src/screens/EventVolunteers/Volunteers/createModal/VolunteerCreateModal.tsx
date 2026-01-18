@@ -30,7 +30,11 @@ import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { Autocomplete, TextField } from '@mui/material';
+import {
+  Autocomplete,
+  // eslint-disable-next-line no-restricted-imports -- Autocomplete requires TextField for renderInput
+  TextField,
+} from '@mui/material';
 import {
   CreateModal,
   useMutationModal,

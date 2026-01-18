@@ -53,7 +53,6 @@ const t = {
 let modalProps: InterfaceVolunteerGroupModal[];
 
 beforeEach(() => {
-  vi.clearAllMocks();
   successLink = new StaticMockLink(MOCKS);
   errorLink = new StaticMockLink(MOCKS_ERROR);
 
@@ -147,6 +146,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.restoreAllMocks();
+  vi.clearAllMocks();
 });
 
 const renderGroupModal = (
@@ -173,20 +173,20 @@ describe('Testing VolunteerGroupModal', () => {
     renderGroupModal(successLink, modalProps[0]);
     expect(screen.getByText(t.createGroup)).toBeInTheDocument();
 
-    const nameInput = screen.getByLabelText(`${t.name} *`);
+    const nameInput = screen.getByTestId('groupNameInput');
     expect(nameInput).toBeInTheDocument();
     fireEvent.change(nameInput, { target: { value: 'Group 1' } });
     expect(nameInput).toHaveValue('Group 1');
 
-    const descInput = screen.getByLabelText(t.description);
+    const descInput = screen.getByTestId('groupDescriptionInput');
     expect(descInput).toBeInTheDocument();
     fireEvent.change(descInput, { target: { value: 'desc' } });
     expect(descInput).toHaveValue('desc');
 
-    const vrInput = screen.getByLabelText(t.volunteersRequired);
+    const vrInput = screen.getByTestId('volunteersRequiredInput');
     expect(vrInput).toBeInTheDocument();
     fireEvent.change(vrInput, { target: { value: '10' } });
-    expect(vrInput).toHaveValue('10');
+    expect(vrInput).toHaveValue(10);
 
     // Select Leader
     const memberSelect = await screen.findByTestId('leaderSelect');
@@ -225,20 +225,20 @@ describe('Testing VolunteerGroupModal', () => {
     renderGroupModal(errorLink, modalProps[0]);
     expect(screen.getByText(t.createGroup)).toBeInTheDocument();
 
-    const nameInput = screen.getByLabelText(`${t.name} *`);
+    const nameInput = screen.getByTestId('groupNameInput');
     expect(nameInput).toBeInTheDocument();
     fireEvent.change(nameInput, { target: { value: 'Group 1' } });
     expect(nameInput).toHaveValue('Group 1');
 
-    const descInput = screen.getByLabelText(t.description);
+    const descInput = screen.getByTestId('groupDescriptionInput');
     expect(descInput).toBeInTheDocument();
     fireEvent.change(descInput, { target: { value: 'desc' } });
     expect(descInput).toHaveValue('desc');
 
-    const vrInput = screen.getByLabelText(t.volunteersRequired);
+    const vrInput = screen.getByTestId('volunteersRequiredInput');
     expect(vrInput).toBeInTheDocument();
     fireEvent.change(vrInput, { target: { value: '10' } });
-    expect(vrInput).toHaveValue('10');
+    expect(vrInput).toHaveValue(10);
 
     // Select Leader
     const memberSelect = await screen.findByTestId('leaderSelect');
@@ -273,20 +273,20 @@ describe('Testing VolunteerGroupModal', () => {
     renderGroupModal(successLink, modalProps[1]);
     expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
 
-    const nameInput = screen.getByLabelText(`${t.name} *`);
+    const nameInput = screen.getByTestId('groupNameInput');
     expect(nameInput).toBeInTheDocument();
     fireEvent.change(nameInput, { target: { value: 'Group 2' } });
     expect(nameInput).toHaveValue('Group 2');
 
-    const descInput = screen.getByLabelText(t.description);
+    const descInput = screen.getByTestId('groupDescriptionInput');
     expect(descInput).toBeInTheDocument();
     fireEvent.change(descInput, { target: { value: 'desc new' } });
     expect(descInput).toHaveValue('desc new');
 
-    const vrInput = screen.getByLabelText(t.volunteersRequired);
+    const vrInput = screen.getByTestId('volunteersRequiredInput');
     expect(vrInput).toBeInTheDocument();
     fireEvent.change(vrInput, { target: { value: '10' } });
-    expect(vrInput).toHaveValue('10');
+    expect(vrInput).toHaveValue(10);
 
     const submitBtn = screen.getByTestId('modal-submit-btn');
     expect(submitBtn).toBeInTheDocument();
@@ -305,20 +305,20 @@ describe('Testing VolunteerGroupModal', () => {
     renderGroupModal(errorLink, modalProps[1]);
     expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
 
-    const nameInput = screen.getByLabelText(`${t.name} *`);
+    const nameInput = screen.getByTestId('groupNameInput');
     expect(nameInput).toBeInTheDocument();
     fireEvent.change(nameInput, { target: { value: 'Group 2' } });
     expect(nameInput).toHaveValue('Group 2');
 
-    const descInput = screen.getByLabelText(t.description);
+    const descInput = screen.getByTestId('groupDescriptionInput');
     expect(descInput).toBeInTheDocument();
     fireEvent.change(descInput, { target: { value: 'desc new' } });
     expect(descInput).toHaveValue('desc new');
 
-    const vrInput = screen.getByLabelText(t.volunteersRequired);
+    const vrInput = screen.getByTestId('volunteersRequiredInput');
     expect(vrInput).toBeInTheDocument();
     fireEvent.change(vrInput, { target: { value: '10' } });
-    expect(vrInput).toHaveValue('10');
+    expect(vrInput).toHaveValue(10);
 
     const submitBtn = screen.getByTestId('modal-submit-btn');
     expect(submitBtn).toBeInTheDocument();
@@ -333,29 +333,29 @@ describe('Testing VolunteerGroupModal', () => {
     renderGroupModal(successLink, modalProps[2]);
     expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
 
-    const vrInput = screen.getByLabelText(t.volunteersRequired);
+    const vrInput = screen.getByTestId('volunteersRequiredInput');
     expect(vrInput).toBeInTheDocument();
-    fireEvent.change(vrInput, { target: { value: '-1' } });
+    fireEvent.change(vrInput, { target: { value: -1 } });
 
     await waitFor(() => {
-      expect(vrInput).toHaveValue('');
+      expect(vrInput).toHaveValue(null);
     });
 
     await userEvent.clear(vrInput);
     await userEvent.type(vrInput, '1{backspace}');
 
     await waitFor(() => {
-      expect(vrInput).toHaveValue('');
+      expect(vrInput).toHaveValue(null);
     });
 
-    fireEvent.change(vrInput, { target: { value: '0' } });
+    fireEvent.change(vrInput, { target: { value: 0 } });
     await waitFor(() => {
-      expect(vrInput).toHaveValue('');
+      expect(vrInput).toHaveValue(null);
     });
 
-    fireEvent.change(vrInput, { target: { value: '19' } });
+    fireEvent.change(vrInput, { target: { value: 19 } });
     await waitFor(() => {
-      expect(vrInput).toHaveValue('19');
+      expect(vrInput).toHaveValue(19);
     });
   });
 
@@ -400,16 +400,16 @@ describe('Testing VolunteerGroupModal', () => {
       expect(seriesRadio).toBeChecked(); // Default should be 'series'
 
       // Fill form
-      const nameInput = screen.getByLabelText(`${t.name} *`);
+      const nameInput = screen.getByTestId('groupNameInput');
       fireEvent.change(nameInput, {
         target: { value: 'Recurring Group Series' },
       });
 
-      const descInput = screen.getByLabelText(t.description);
+      const descInput = screen.getByTestId('groupDescriptionInput');
       fireEvent.change(descInput, { target: { value: 'desc' } });
 
-      const vrInput = screen.getByLabelText(t.volunteersRequired);
-      fireEvent.change(vrInput, { target: { value: '10' } });
+      const vrInput = screen.getByTestId('volunteersRequiredInput');
+      fireEvent.change(vrInput, { target: { value: 10 } });
 
       // Select Leader
       const memberSelect = await screen.findByTestId('leaderSelect');
@@ -449,16 +449,16 @@ describe('Testing VolunteerGroupModal', () => {
       expect(instanceRadio).toBeChecked();
 
       // Fill form
-      const nameInput = screen.getByLabelText(`${t.name} *`);
+      const nameInput = screen.getByTestId('groupNameInput');
       fireEvent.change(nameInput, {
         target: { value: 'Recurring Group Instance' },
       });
 
-      const descInput = screen.getByLabelText(t.description);
+      const descInput = screen.getByTestId('groupDescriptionInput');
       fireEvent.change(descInput, { target: { value: 'desc' } });
 
-      const vrInput = screen.getByLabelText(t.volunteersRequired);
-      fireEvent.change(vrInput, { target: { value: '10' } });
+      const vrInput = screen.getByTestId('volunteersRequiredInput');
+      fireEvent.change(vrInput, { target: { value: 10 } });
 
       // Select Leader
       const memberSelect = await screen.findByTestId('leaderSelect');
@@ -534,14 +534,14 @@ describe('Testing VolunteerGroupModal', () => {
       renderGroupModal(successLink, recurringEventProps);
 
       // Fill minimal form to test the mutation logic
-      const nameInput = screen.getByLabelText(`${t.name} *`);
+      const nameInput = screen.getByTestId('groupNameInput');
       fireEvent.change(nameInput, { target: { value: 'Test Group' } });
 
-      const descInput = screen.getByLabelText(t.description);
+      const descInput = screen.getByTestId('groupDescriptionInput');
       fireEvent.change(descInput, { target: { value: 'desc' } });
 
-      const vrInput = screen.getByLabelText(t.volunteersRequired);
-      fireEvent.change(vrInput, { target: { value: '10' } });
+      const vrInput = screen.getByTestId('volunteersRequiredInput');
+      fireEvent.change(vrInput, { target: { value: 10 } });
 
       // Select Leader (required)
       const memberSelect = await screen.findByTestId('leaderSelect');
@@ -651,7 +651,7 @@ describe('Testing VolunteerGroupModal', () => {
       expect(instanceRadio).toBeChecked();
 
       // Fill some form fields
-      const nameInput = screen.getByLabelText(`${t.name} *`);
+      const nameInput = screen.getByTestId('groupNameInput');
       fireEvent.change(nameInput, { target: { value: 'Test Group' } });
 
       // Radio button state should be preserved
@@ -688,10 +688,10 @@ describe('Testing VolunteerGroupModal', () => {
 
       renderGroupModal(successLink, propsWithNullBaseEvent);
 
-      const nameInput = screen.getByLabelText(`${t.name} *`);
+      const nameInput = screen.getByTestId('groupNameInput');
       fireEvent.change(nameInput, { target: { value: 'Test Group' } });
 
-      const descInput = screen.getByLabelText(t.description);
+      const descInput = screen.getByTestId('groupDescriptionInput');
       fireEvent.change(descInput, { target: { value: 'desc' } });
 
       const memberSelect = await screen.findByTestId('leaderSelect');
