@@ -530,6 +530,72 @@ source_common() {
     [ "$(cat "$temp_file")" = "test content" ]
 }
 
+@test "create_temp_file sanitizes path traversal prefix '..'" {
+    source_common
+    temp_file="$(create_temp_file "..")"
+    CREATED_TEMP_FILES+=("$temp_file")
+    # Should be under /tmp with default prefix (since ".." becomes empty -> "talawa")
+    [[ "$temp_file" == /tmp/talawa-* ]]
+    [ -f "$temp_file" ]
+}
+
+@test "create_temp_file sanitizes prefix '../etc'" {
+    source_common
+    temp_file="$(create_temp_file "../etc")"
+    CREATED_TEMP_FILES+=("$temp_file")
+    # Path traversal removed, only "etc" remains
+    [[ "$temp_file" == /tmp/etc-* ]]
+    [ -f "$temp_file" ]
+}
+
+@test "create_temp_file sanitizes prefix '../../bad'" {
+    source_common
+    temp_file="$(create_temp_file "../../bad")"
+    CREATED_TEMP_FILES+=("$temp_file")
+    # Path traversal removed, only "bad" remains
+    [[ "$temp_file" == /tmp/bad-* ]]
+    [ -f "$temp_file" ]
+}
+
+@test "create_temp_file sanitizes prefix '/'" {
+    source_common
+    temp_file="$(create_temp_file "/")"
+    CREATED_TEMP_FILES+=("$temp_file")
+    # "/" becomes empty -> default "talawa"
+    [[ "$temp_file" == /tmp/talawa-* ]]
+    [ -f "$temp_file" ]
+}
+
+@test "create_temp_file sanitizes prefix with spaces" {
+    source_common
+    temp_file="$(create_temp_file "my prefix")"
+    CREATED_TEMP_FILES+=("$temp_file")
+    # Spaces removed, becomes "myprefix"
+    [[ "$temp_file" == /tmp/myprefix-* ]]
+    [ -f "$temp_file" ]
+}
+
+@test "create_temp_file sanitizes prefix with special chars" {
+    source_common
+    temp_file="$(create_temp_file 'test$`;&|')"
+    CREATED_TEMP_FILES+=("$temp_file")
+    # Special chars removed, only "test" remains
+    [[ "$temp_file" == /tmp/test-* ]]
+    [ -f "$temp_file" ]
+}
+
+@test "create_temp_file never creates files outside /tmp" {
+    source_common
+    # Try various malicious prefixes
+    for prefix in "/" ".." "../.." "../../etc" "/etc/passwd" "\\..\\"; do
+        temp_file="$(create_temp_file "$prefix")"
+        CREATED_TEMP_FILES+=("$temp_file")
+        # Must always be under /tmp
+        [[ "$temp_file" == /tmp/* ]]
+        [ -f "$temp_file" ]
+    done
+}
+
 # =============================================================================
 # Test: create_temp_dir Function
 # =============================================================================
@@ -569,6 +635,72 @@ source_common() {
     CREATED_TEMP_DIRS+=("$temp_dir")
     touch "$temp_dir/test_file"
     [ -f "$temp_dir/test_file" ]
+}
+
+@test "create_temp_dir sanitizes path traversal prefix '..'" {
+    source_common
+    temp_dir="$(create_temp_dir "..")"
+    CREATED_TEMP_DIRS+=("$temp_dir")
+    # Should be under /tmp with default prefix (since ".." becomes empty -> "talawa")
+    [[ "$temp_dir" == /tmp/talawa-* ]]
+    [ -d "$temp_dir" ]
+}
+
+@test "create_temp_dir sanitizes prefix '../etc'" {
+    source_common
+    temp_dir="$(create_temp_dir "../etc")"
+    CREATED_TEMP_DIRS+=("$temp_dir")
+    # Path traversal removed, only "etc" remains
+    [[ "$temp_dir" == /tmp/etc-* ]]
+    [ -d "$temp_dir" ]
+}
+
+@test "create_temp_dir sanitizes prefix '../../bad'" {
+    source_common
+    temp_dir="$(create_temp_dir "../../bad")"
+    CREATED_TEMP_DIRS+=("$temp_dir")
+    # Path traversal removed, only "bad" remains
+    [[ "$temp_dir" == /tmp/bad-* ]]
+    [ -d "$temp_dir" ]
+}
+
+@test "create_temp_dir sanitizes prefix '/'" {
+    source_common
+    temp_dir="$(create_temp_dir "/")"
+    CREATED_TEMP_DIRS+=("$temp_dir")
+    # "/" becomes empty -> default "talawa"
+    [[ "$temp_dir" == /tmp/talawa-* ]]
+    [ -d "$temp_dir" ]
+}
+
+@test "create_temp_dir sanitizes prefix with spaces" {
+    source_common
+    temp_dir="$(create_temp_dir "my dir")"
+    CREATED_TEMP_DIRS+=("$temp_dir")
+    # Spaces removed, becomes "mydir"
+    [[ "$temp_dir" == /tmp/mydir-* ]]
+    [ -d "$temp_dir" ]
+}
+
+@test "create_temp_dir sanitizes prefix with special chars" {
+    source_common
+    temp_dir="$(create_temp_dir 'test$`;&|')"
+    CREATED_TEMP_DIRS+=("$temp_dir")
+    # Special chars removed, only "test" remains
+    [[ "$temp_dir" == /tmp/test-* ]]
+    [ -d "$temp_dir" ]
+}
+
+@test "create_temp_dir never creates directories outside /tmp" {
+    source_common
+    # Try various malicious prefixes
+    for prefix in "/" ".." "../.." "../../etc" "/etc/passwd" "\\..\\"; do
+        temp_dir="$(create_temp_dir "$prefix")"
+        CREATED_TEMP_DIRS+=("$temp_dir")
+        # Must always be under /tmp
+        [[ "$temp_dir" == /tmp/* ]]
+        [ -d "$temp_dir" ]
+    done
 }
 
 # =============================================================================

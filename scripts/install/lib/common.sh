@@ -232,6 +232,34 @@ sanitize_input() {
     printf "%s" "$input" | sed 's/[;&|`$(){}]//g'
 }
 
+# Sanitize a prefix for use with mktemp
+# Strips path separators, traversal components, and unsafe characters
+# Arguments:
+#   $1 - User-supplied prefix
+# Returns:
+#   Prints sanitized prefix (defaults to "talawa" if empty after sanitization)
+_sanitize_prefix() {
+    local input="${1:-}"
+    local sanitized
+
+    # Remove path separators and traversal components
+    # First, remove any .. or . path components
+    sanitized="${input//..}"
+    sanitized="${sanitized//.\/}"
+    # Remove all forward and back slashes
+    sanitized="${sanitized//\/}"
+    sanitized="${sanitized//\\}"
+    # Keep only safe characters: alphanumeric, underscore, hyphen
+    sanitized="$(printf "%s" "$sanitized" | tr -cd 'A-Za-z0-9_-')"
+
+    # If empty after sanitization, use default
+    if [ -z "$sanitized" ]; then
+        sanitized="talawa"
+    fi
+
+    printf "%s" "$sanitized"
+}
+
 # Create a secure temporary file
 # Arguments:
 #   $1 - Prefix for temp file (optional, default: "talawa")
@@ -239,9 +267,11 @@ sanitize_input() {
 #   Prints path to created temp file
 create_temp_file() {
     local prefix="${1:-talawa}"
+    local sanitized_prefix
     local temp_file
 
-    temp_file="$(mktemp "/tmp/${prefix}-XXXXXX")" || die "Failed to create temporary file" "$E_PERMISSION"
+    sanitized_prefix="$(_sanitize_prefix "$prefix")"
+    temp_file="$(mktemp "/tmp/${sanitized_prefix}-XXXXXX")" || die "Failed to create temporary file" "$E_PERMISSION"
     printf "%s" "$temp_file"
 }
 
@@ -252,9 +282,11 @@ create_temp_file() {
 #   Prints path to created temp directory
 create_temp_dir() {
     local prefix="${1:-talawa}"
+    local sanitized_prefix
     local temp_dir
 
-    temp_dir="$(mktemp -d "/tmp/${prefix}-XXXXXX")" || die "Failed to create temporary directory" "$E_PERMISSION"
+    sanitized_prefix="$(_sanitize_prefix "$prefix")"
+    temp_dir="$(mktemp -d "/tmp/${sanitized_prefix}-XXXXXX")" || die "Failed to create temporary directory" "$E_PERMISSION"
     printf "%s" "$temp_dir"
 }
 
