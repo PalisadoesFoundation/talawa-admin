@@ -2,11 +2,11 @@
 /**
  * EventListCardDeleteModal Component
  *
- * `@param` eventListCardProps - The properties of the event to be deleted.
- * `@param` eventDeleteModalIsOpen - Determines if the modal is open.
- * `@param` toggleDeleteModal - Function to toggle the modal visibility.
- * `@param` deleteEventHandler - Function to handle the event deletion.
- * `@returns` JSX.Element
+ * @param eventListCardProps - The properties of the event to be deleted.
+ * @param eventDeleteModalIsOpen - Determines if the modal is open.
+ * @param toggleDeleteModal - Function to toggle the modal visibility.
+ * @param deleteEventHandler - Function to handle the event deletion.
+ * @returns JSX.Element
  */
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
