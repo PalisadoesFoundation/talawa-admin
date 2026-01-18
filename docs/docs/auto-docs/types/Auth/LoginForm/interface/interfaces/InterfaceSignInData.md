@@ -20,6 +20,10 @@ Defined in: [src/types/Auth/LoginForm/interface.ts:15](https://github.com/Palisa
 
 > **authenticationToken**: `string`
 
+#### refreshToken
+
+> **refreshToken**: `string`
+
 #### user
 
 > **user**: `object`

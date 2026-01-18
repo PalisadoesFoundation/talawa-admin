@@ -4,7 +4,7 @@
 
 # Interface: InterfaceLoginFormProps
 
-Defined in: [src/types/Auth/LoginForm/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L35)
+Defined in: [src/types/Auth/LoginForm/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L36)
 
 Props for the LoginForm component.
 
@@ -19,7 +19,7 @@ login form with callback support for success/error handling.
 
 > `optional` **isAdmin**: `boolean`
 
-Defined in: [src/types/Auth/LoginForm/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L37)
+Defined in: [src/types/Auth/LoginForm/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L38)
 
 Whether this is an admin login form (affects heading text)
 
@@ -29,7 +29,7 @@ Whether this is an admin login form (affects heading text)
 
 > `optional` **onError**: (`error`) => `void`
 
-Defined in: [src/types/Auth/LoginForm/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L41)
+Defined in: [src/types/Auth/LoginForm/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L42)
 
 Callback fired when login fails with error details
 
@@ -49,7 +49,7 @@ Callback fired when login fails with error details
 
 > `optional` **onSuccess**: (`signInData`) => `void`
 
-Defined in: [src/types/Auth/LoginForm/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L39)
+Defined in: [src/types/Auth/LoginForm/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L40)
 
 Callback fired on successful login with complete user data
 
@@ -69,6 +69,6 @@ Callback fired on successful login with complete user data
 
 > `optional` **testId**: `string`
 
-Defined in: [src/types/Auth/LoginForm/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L43)
+Defined in: [src/types/Auth/LoginForm/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/LoginForm/interface.ts#L44)
 
 Test ID for testing purposes

@@ -27,6 +27,8 @@ import type { InterfaceSignUpData } from '../../types/Auth/RegistrationForm/inte
  * @remarks
  * Lightweight orchestrator that switches between LoginForm and RegistrationForm
  * components, handling session management and redirects.
+ *
+ * @returns React element containing the login/registration interface
  */
 const LoginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -47,12 +49,20 @@ const LoginPage = (): JSX.Element => {
     window.location.pathname.startsWith('/admin');
 
   // Fetch organizations for registration
-  const { data: orgData } = useQuery(ORGANIZATION_LIST_NO_MEMBERS, {
+  const {
+    data: orgData,
+    loading: _orgLoading,
+    error: _orgError,
+  } = useQuery(ORGANIZATION_LIST_NO_MEMBERS, {
     skip: tab !== 'REGISTER',
   });
 
   // Fetch community data
-  const { data: communityData } = useQuery(GET_COMMUNITY_DATA_PG);
+  const {
+    data: communityData,
+    loading: communityLoading,
+    error: communityError,
+  } = useQuery(GET_COMMUNITY_DATA_PG);
 
   useEffect(() => {
     if (orgData?.organizationsList) {
@@ -127,6 +137,7 @@ const LoginPage = (): JSX.Element => {
               {/* Tab Navigation */}
               <div className={styles.tabContainer} role="tablist">
                 <button
+                  type="button"
                   role="tab"
                   aria-selected={tab === 'LOGIN'}
                   className={`${styles.tab} ${tab === 'LOGIN' ? styles.activeTab : ''}`}
@@ -136,6 +147,7 @@ const LoginPage = (): JSX.Element => {
                   {tCommon('login')}
                 </button>
                 <button
+                  type="button"
                   role="tab"
                   aria-selected={tab === 'REGISTER'}
                   className={`${styles.tab} ${tab === 'REGISTER' ? styles.activeTab : ''}`}
@@ -165,10 +177,16 @@ const LoginPage = (): JSX.Element => {
               </div>
 
               {/* Community Data Display */}
-              {communityData?.getCommunityData && (
-                <div className={styles.communityContainer}>
-                  <p>{communityData.getCommunityData.name}</p>
-                </div>
+              {communityError ? (
+                <div>{t('errorLoadingCommunityData')}</div>
+              ) : communityLoading ? (
+                <div>{t('loading')}</div>
+              ) : (
+                communityData?.getCommunityData && (
+                  <div className={styles.communityContainer}>
+                    <p>{communityData.getCommunityData.name}</p>
+                  </div>
+                )
               )}
             </div>
           </Col>

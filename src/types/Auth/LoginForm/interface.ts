@@ -22,6 +22,7 @@ export interface InterfaceSignInData {
       avatarURL: string | null;
     };
     authenticationToken: string;
+    refreshToken: string;
   };
 }
 
