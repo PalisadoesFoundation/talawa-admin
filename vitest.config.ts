@@ -41,23 +41,17 @@ export default defineConfig({
     css: false,
     setupFiles: 'vitest.setup.ts',
     // Inline specific dependencies to avoid vitest issues
-      server: {
-        deps: {
-          inline: ["@mui/x-charts", "@mui/x-data-grid", "@mui/x-date-pickers"]
-        }
-      },
+    server: {
+      deps: {
+        inline: ["@mui/x-charts", "@mui/x-data-grid", "@mui/x-date-pickers"]
+      }
+    },
     testTimeout: 30000,
     hookTimeout: 10000,
     teardownTimeout: 10000,
-    pool: 'threads',
-    poolOptions: {
-      threads: {
-        singleThread: false,
-        minThreads: 1,
-        maxThreads: isCI ? ciThreads : localThreads,
-        isolate: true,
-      },
-    },
+    // Vitest 4.0 - pool options moved to top-level
+    isolate: true,
+    maxWorkers: isCI ? ciThreads : localThreads,
     maxConcurrency: isCI ? ciThreads : localThreads,
     fileParallelism: true,
     sequence: {
@@ -65,9 +59,13 @@ export default defineConfig({
       concurrent: false,
     },
     coverage: {
-      enabled: true,
+      // Vitest 4.0 - coverage.enabled removed, use --coverage CLI flag
       provider: 'istanbul',
       reportsDirectory: './coverage/vitest',
+      // Vitest 4.0 - coverage.all removed, must specify include pattern
+      include: [
+        'src/**/*.{js,jsx,ts,tsx}',
+      ],
       exclude: [
         'node_modules',
         'dist',
