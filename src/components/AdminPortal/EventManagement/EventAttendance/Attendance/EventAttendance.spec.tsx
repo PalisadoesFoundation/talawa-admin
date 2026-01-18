@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
-import { render, screen, cleanup, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
@@ -59,7 +59,6 @@ describe('EventAttendance CSS Tests', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
-    cleanup();
   });
 
   it('should apply correct styles to member name links', async () => {
