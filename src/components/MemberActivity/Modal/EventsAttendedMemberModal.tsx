@@ -1,38 +1,7 @@
 /**
- * EventsAttendedMemberModal Component
+ * EventsAttendedMemberModal - Modal displaying paginated list of events attended by a member
  *
- * This component renders a modal displaying a paginated list of events attended by a member.
- * It uses Material-UI's Table and Pagination components for displaying and navigating through
- * the events. The modal is styled using Bootstrap and custom CSS classes.
- *
- * @component
- * @param {InterfaceEventsAttendedMemberModalProps} props - The props for the component.
- * @param {Array} props.eventsAttended - List of events attended by the member.
- * @param {boolean} props.show - Controls the visibility of the modal.
- * @param {Function} props.setShow - Function to toggle the visibility of the modal.
- * @param {number} [props.eventsPerPage=5] - Number of events to display per page.
- *
- * @returns {React.FC} A modal component displaying the events attended by a member.
- *
- * @example
- * <EventsAttendedMemberModal
- *   eventsAttended={events}
- *   show={isModalVisible}
- *   setShow={setModalVisibility}
- *   eventsPerPage={10}
- * />
- *
- * @remarks
- * - The component uses `useMemo` for memoizing the paginated events and total pages.
- * - The `CustomTableCell` component is used to render individual event details.
- * - The `Pagination` component allows navigation between pages.
- *
- * @dependencies
- * - React
- * - Material-UI (Table, Pagination)
- * - React-Bootstrap (Modal)
- * - i18next (for translations)
- * - Custom styles from `style/app-fixed.module.css`
+ * Uses Material-UI Table and Pagination components for displaying and navigating through events.
  */
 import React, { useState, useMemo } from 'react';
 import {
@@ -45,16 +14,30 @@ import {
   Paper,
   Pagination,
 } from '@mui/material';
-import { Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from '../../../style/app-fixed.module.css';
 import { CustomTableCell } from './CustomCell/customTableCell';
-import type { InterfaceEventsAttendedMemberModalProps } from 'types/Event/interface';
+import type {
+  InterfaceEventsAttendedMemberModalProps,
+  IEvent,
+} from 'types/Event/interface';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 
+/**
+ * EventsAttendedMemberModal component displays a paginated list of events attended by a member.
+ *
+ * @param eventsAttended - Array of events attended by the member
+ * @param setShow - Function to control modal visibility
+ * @param show - Boolean controlling whether the modal is visible
+ * @param eventsPerPage - Number of events to display per page (default: 5)
+ * @returns JSX.Element
+ */
 const EventsAttendedMemberModal: React.FC<
   InterfaceEventsAttendedMemberModalProps
 > = ({ eventsAttended, setShow, show, eventsPerPage = 5 }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventsAttendedMemberModal',
+  });
   const [page, setPage] = useState<number>(1);
 
   const handleClose = (): void => {
@@ -80,67 +63,76 @@ const EventsAttendedMemberModal: React.FC<
   );
 
   return (
-    <Modal show={show} onHide={handleClose} centered size="lg">
-      <Modal.Header closeButton>
-        <Modal.Title>Events Attended List</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        {eventsAttended.length === 0 ? (
-          <p>{t('noeventsAttended')}</p>
-        ) : (
-          <>
-            <h5 className="text-end">
-              Showing {(page - 1) * eventsPerPage + 1} -{' '}
-              {Math.min(page * eventsPerPage, eventsAttended.length)} of{' '}
-              {eventsAttended.length} Events
-            </h5>
-            <TableContainer component={Paper} className="mt-3">
-              <Table aria-label="customized table">
-                <TableHead>
-                  <TableRow data-testid="row">
-                    <TableCell className={styles.customcell}>
-                      Event Name
-                    </TableCell>
-                    <TableCell className={styles.customcell}>
-                      Date of Event
-                    </TableCell>
-                    <TableCell className={styles.customcell}>
-                      Recurring Event
-                    </TableCell>
-                    <TableCell className={styles.customcell}>
-                      Attendees
-                    </TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {paginatedEvents.map((event) => (
-                    <CustomTableCell
-                      key={event.id ?? ''}
-                      eventId={event.id ?? ''}
-                    />
+    <BaseModal
+      show={show}
+      onHide={handleClose}
+      title={t('title')}
+      centered
+      size="lg"
+      dataTestId="eventsAttendedModal"
+    >
+      {eventsAttended.length === 0 ? (
+        <p>{t('noEventsAttended')}</p>
+      ) : (
+        <>
+          <h5 className="text-end">
+            {t('showing', {
+              start: (page - 1) * eventsPerPage + 1,
+              end: Math.min(page * eventsPerPage, eventsAttended.length),
+              total: eventsAttended.length,
+            })}
+          </h5>
+          <TableContainer component={Paper} className="mt-3">
+            <Table aria-label={t('tableAriaLabel')}>
+              <TableHead>
+                <TableRow data-testid="row">
+                  <TableCell className={styles.customcell}>
+                    {t('eventName')}
+                  </TableCell>
+                  <TableCell className={styles.customcell}>
+                    {t('dateOfEvent')}
+                  </TableCell>
+                  <TableCell className={styles.customcell}>
+                    {t('recurringEvent')}
+                  </TableCell>
+                  <TableCell className={styles.customcell}>
+                    {t('attendees')}
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {paginatedEvents
+                  .filter(
+                    (event): event is IEvent & { id: string } => !!event.id,
+                  )
+                  .map((event) => (
+                    <CustomTableCell key={event.id} eventId={event.id} />
                   ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <div className="d-flex justify-content-center mt-3">
-              <div className="d-flex justify-content-center mt-3">
-                <Pagination
-                  count={totalPages}
-                  page={page}
-                  onChange={handleChangePage}
-                  color="primary"
-                  aria-label="Events navigation"
-                  getItemAriaLabel={(type, page) => {
-                    if (type === 'page') return `Go to page ${page}`;
-                    return `Go to ${type} page`;
-                  }}
-                />
-              </div>
-            </div>
-          </>
-        )}
-      </Modal.Body>
-    </Modal>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <div className="d-flex justify-content-center mt-3">
+            <Pagination
+              count={totalPages}
+              page={page}
+              onChange={handleChangePage}
+              color="primary"
+              aria-label={t('paginationAriaLabel')}
+              getItemAriaLabel={(type, page) => {
+                if (type === 'page') {
+                  return t('paginationGoToPage', {
+                    page,
+                  });
+                }
+                return t('paginationGoToType', {
+                  type,
+                });
+              }}
+            />
+          </div>
+        </>
+      )}
+    </BaseModal>
   );
 };
 

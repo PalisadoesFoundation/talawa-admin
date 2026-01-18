@@ -409,7 +409,9 @@
     "profile": "配置文件",
     "joined": "加入",
     "createUser": "创建用户",
-    "notFound": "未找到成员"
+    "notFound": "未找到成员",
+    "showPassword": "显示密码",
+    "hidePassword": "隐藏密码"
   },
   "organizationCard": {
     "join": "加入",
@@ -724,6 +726,7 @@
     "options": "选项",
     "createAgendaItem": "创建议程项目",
     "noAgendaItems": "没有议程项目",
+    "search": "搜索",
     "selectAgendaItemCategory": "选择议程项目类别",
     "update": "更新",
     "delete": "删除",
@@ -732,6 +735,7 @@
     "agendaItemDeleted": "议程项目已成功删除",
     "deleteAgendaItem": "删除议程项目",
     "deleteAgendaItemMsg": "您要删除此议程项目吗？",
+    "attachmentPreview": "附件预览",
     "event": "活动",
     "search": "搜索",
     "attachmentPreview": "附件預覽",
@@ -1400,12 +1404,13 @@
   },
   "posts": {
     "pinnedPosts": "置顶帖子",
+    "errorLoadingPreviewPost": "加载预览帖子时出错。请重试。",
     "title": "帖子",
     "latest": "最新",
     "oldest": "最旧的",
     "none": "无",
     "unknownUser": "未知用户",
-    "closePinnedPost": "关闭置顶帖子",
+    "closePostView": "关闭帖子视图",
     "searchPosts": "搜索帖子",
     "nothingToShow": "这里没有可显示的内容。",
     "noMorePosts": "没有更多帖子了",
@@ -1491,6 +1496,10 @@
     "options": "选项",
     "addRegistrant": "添加注册者",
     "noRegistrantsFound": "未找到注册者",
+    "removingAttendee": "正在删除与会者...",
+    "attendeeRemovedSuccessfully": "与会者已成功删除",
+    "errorRemovingAttendee": "删除与会者时出错",
+    "cannotUnregisterCheckedIn": "无法取消已签到的用户的注册",
     "removingAttendee": "正在移除参与者...",
     "attendeeRemovedSuccessfully": "参与者移除成功！",
     "errorRemovingAttendee": "移除参与者时出错。请重试。",
@@ -1899,6 +1908,13 @@
   "checkIn": {
     "errorCheckingIn": "签到错误",
     "checkedInSuccessfully": "成功签到",
+    "generatingPdf": "正在生成 PDF...",
+    "pdfGeneratedSuccessfully": "PDF 生成成功！",
+    "errorGeneratingPdf": "生成 PDF 时出错",
+    "unknownError": "未知错误",
+    "checkedIn": "已签到",
+    "downloadTag": "下载标签",
+    "checkInButton": "签到",
     "searchAttendees": "搜尋參與者",
     "checkedIn": "已簽到",
     "downloadTag": "下載標籤",
@@ -2008,7 +2024,20 @@
     "searchPledges": "搜索承诺"
   },
   "leaveOrganization": {
-    "title": "离开组织"
+    "title": "离开组织",
+    "leaveOrganization": "离开组织",
+    "confirmLeaveOrganization": "确认离开组织",
+    "leaveOrganizationConfirmation": "您确定要离开 {{orgName}} 吗？您将失去对仅限会员内容的访问权限。",
+    "enterEmailToConfirm": "输入您的电子邮件以确认：",
+    "enterYourEmail": "输入您的电子邮件",
+    "confirmEmailInput": "确认电子邮件输入",
+    "leftOrganizationSuccess": "您已成功离开该组织！",
+    "leftOrganizationError": "离开组织失败。请重试。",
+    "networkError": "无法处理您的请求。请检查您的连接。",
+    "emailMismatchError": "您输入的电子邮件与您的帐户电子邮件不匹配。",
+    "continue": "继续",
+    "missingRequiredInfo": "无法处理请求：缺少必需信息。",
+    "organizationNotFound": "未找到组织"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "志愿者视图选择器",
@@ -2249,7 +2278,9 @@
     "title": "用户门户",
     "talawa": "塔拉瓦",
     "talawaBranding": "Talawa 品牌形象",
-    "view": "查看"
+    "view": "查看",
+    "changeLanguage": "更改语言",
+    "userNotFoundError": "未找到用户"
   },
   "donation": {
     "amount_label": "金额",
@@ -2277,5 +2308,40 @@
   },
   "userGlobalScreen": {
     "globalFeatures": "全球功能"
+  },
+  "recurringEventVolunteerModal": {
+    "joinGroupTitle": "加入 {{groupName}} - {{eventName}}",
+    "volunteerTitle": "为 {{eventName}} 做志愿者",
+    "joinGroupQuestion": "您想为整个系列加入\"{{groupName}}\"还是仅为此实例加入?",
+    "volunteerQuestion": "您想为整个系列做志愿者还是仅为此实例做志愿者?",
+    "volunteerForSeries": "为整个系列做志愿者",
+    "joinGroupForSeries": "您将加入此小组参加重复系列中的所有活动",
+    "volunteerForSeriesDesc": "您将为此重复系列中的所有活动做志愿者",
+    "volunteerForInstance": "仅为此实例做志愿者",
+    "joinGroupForInstance": "您将仅在 {{date}} 的活动中加入此小组",
+    "volunteerForInstanceDesc": "您将仅为 {{date}} 的活动做志愿者",
+    "cancel": "取消",
+    "submitRequest": "提交请求"
+  },
+  "eventsAttendedMemberModal": {
+    "title": "参加的活动列表",
+    "showing": "显示 {{start}} - {{end}} 共 {{total}} 个活动",
+    "eventName": "活动名称",
+    "dateOfEvent": "活动日期",
+    "recurringEvent": "重复活动",
+    "attendees": "参与者",
+    "tableAriaLabel": "参加的活动表",
+    "paginationAriaLabel": "活动分页导航",
+    "paginationGoToPage": "转到第 {{page}} 页",
+    "paginationGoToType": "转到{{type}}页",
+    "noEventsAttended": "未参加任何活动"
+  },
+  "eventStats": {
+    "title": "活動統計",
+    "reviews": {
+      "title": "評論",
+      "emptyState": "等待人們談論活動...",
+      "filledByCount": "已由 {{count}} 人填寫。"
+    }
   }
 }
