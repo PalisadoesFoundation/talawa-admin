@@ -59,7 +59,7 @@ const validateFile = (filePath, content) => {
   const fileName = path.basename(filePath);
   const baseName = fileName
     .replace(TS_EXTENSION_REGEX, '')
-    .replace(/(\.spec|\.test)$/, '');
+    .replace(/(\\.spec|\\.test)$/, '');
   // i18n-ignore-next-line: technical file path pattern, not user-facing text
   const expectedPath = `./${baseName}.module.css`;
 
