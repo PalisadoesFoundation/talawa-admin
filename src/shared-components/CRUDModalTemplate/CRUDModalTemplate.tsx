@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
-import { Button, Alert } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type { InterfaceCRUDModalTemplateProps } from 'types/shared-components/CRUDModalTemplate/interface';
