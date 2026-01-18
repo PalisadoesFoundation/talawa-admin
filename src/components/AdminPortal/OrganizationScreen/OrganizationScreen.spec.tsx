@@ -18,10 +18,10 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
 // Create mocks for the router hooks
-let mockUseParams: ReturnType<typeof vi.fn>;
-let mockUseMatch: ReturnType<typeof vi.fn>;
-let mockNavigate: ReturnType<typeof vi.fn>;
-let mockUseLocation: ReturnType<typeof vi.fn>;
+let mockUseParams: ReturnType<typeof vi.fn> & (() => void) & (() => void);
+let mockUseMatch: ReturnType<typeof vi.fn> & (() => void) & (() => void);
+let mockNavigate: ReturnType<typeof vi.fn> & (() => void) & (() => void);
+let mockUseLocation: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
 const toastMocks = vi.hoisted(() => {
   return {

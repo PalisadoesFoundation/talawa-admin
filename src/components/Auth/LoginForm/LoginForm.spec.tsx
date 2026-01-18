@@ -306,7 +306,7 @@ describe('LoginForm', () => {
     test('does not throw when onError is not provided', async () => {
       render(
         <MockedProvider mocks={[mockSignInError]}>
-          <LoginForm onSuccess={vi.fn()} />
+          <LoginForm onSuccess={vi.fn() as () => void} />
         </MockedProvider>,
       );
 
@@ -396,7 +396,7 @@ describe('LoginForm', () => {
     test('does not throw when onSuccess is not provided', async () => {
       render(
         <MockedProvider mocks={[mockSignInSuccess]}>
-          <LoginForm onError={vi.fn()} />
+          <LoginForm onError={vi.fn() as () => void} />
         </MockedProvider>,
       );
 

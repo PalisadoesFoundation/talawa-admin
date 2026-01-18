@@ -24,8 +24,8 @@ import { vi } from 'vitest'; // Use Vitest's mocking utility
  */
 
 // Mock functions
-let mockToggleDeleteModal: ReturnType<typeof vi.fn>;
-let mockDeleteAgendaCategoryHandler: ReturnType<typeof vi.fn>;
+let mockToggleDeleteModal: ReturnType<typeof vi.fn> & (() => void) & (() => void);
+let mockDeleteAgendaCategoryHandler: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 const mockT = (key: string): string => key;
 
 const renderComponent = (isOpen: boolean): ReturnType<typeof render> => {

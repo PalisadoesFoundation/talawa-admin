@@ -270,7 +270,7 @@ describe('Apollo Client Configuration', () => {
 
   describe('Token Refresh Error Link', () => {
     let mockLocalStorageData: Record<string, string>;
-    let mockClear: ReturnType<typeof vi.fn>;
+    let mockClear: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
     beforeEach(() => {
       mockLocalStorageData = {

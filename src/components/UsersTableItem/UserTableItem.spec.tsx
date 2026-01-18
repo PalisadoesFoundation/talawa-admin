@@ -45,7 +45,7 @@ Object.defineProperty(window, 'location', {
   writable: true,
 });
 
-let mockNavigatePush: ReturnType<typeof vi.fn>;
+let mockNavigatePush: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
 vi.mock('react-router', async () => {
   const actual = (await vi.importActual('react-router')) as typeof RouterTypes;
@@ -64,7 +64,7 @@ afterEach(() => {
 });
 
 describe('Testing User Table Item', () => {
-  let resetAndRefetchMock: ReturnType<typeof vi.fn>;
+  let resetAndRefetchMock: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
   beforeEach(() => {
     resetAndRefetchMock = vi.fn();

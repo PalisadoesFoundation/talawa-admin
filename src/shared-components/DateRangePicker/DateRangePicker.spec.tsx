@@ -69,7 +69,7 @@ vi.mock('shared-components/DatePicker', () => ({
 
 describe('DateRangePicker', () => {
   const dataTestId = 'date-range-picker-test';
-  let onChangeMock: ReturnType<typeof vi.fn>;
+  let onChangeMock: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
   beforeEach(() => {
     onChangeMock = vi.fn();

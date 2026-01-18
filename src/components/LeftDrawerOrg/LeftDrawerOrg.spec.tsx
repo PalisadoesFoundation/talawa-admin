@@ -44,9 +44,9 @@ interface IMockedResponse {
 }
 
 // Mock the dependencies
-let mockT: ReturnType<typeof vi.fn>;
+let mockT: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
-let mockTErrors: ReturnType<typeof vi.fn>;
+let mockTErrors: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
 const mockTImplementation = (key: string) => {
   const translations: Record<string, string> = {
@@ -133,8 +133,8 @@ vi.mock('components/SignOut/SignOut', () => ({
   )),
 }));
 
-let mockGetItem: ReturnType<typeof vi.fn>;
-let mockSetItem: ReturnType<typeof vi.fn>;
+let mockGetItem: ReturnType<typeof vi.fn> & (() => void) & (() => void);
+let mockSetItem: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
 vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(() => ({

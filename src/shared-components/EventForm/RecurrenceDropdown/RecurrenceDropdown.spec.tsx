@@ -35,8 +35,8 @@ describe('RecurrenceDropdown', () => {
         recurrenceOptions={mockOptions}
         currentLabel="Does not repeat"
         isOpen={false}
-        onToggle={vi.fn()}
-        onSelect={vi.fn()}
+        onToggle={vi.fn() as () => void}
+        onSelect={vi.fn() as () => void}
         t={mockT}
       />,
     );
@@ -51,8 +51,8 @@ describe('RecurrenceDropdown', () => {
         recurrenceOptions={mockOptions}
         currentLabel="Does not repeat"
         isOpen={true}
-        onToggle={vi.fn()}
-        onSelect={vi.fn()}
+        onToggle={vi.fn() as () => void}
+        onSelect={vi.fn() as () => void}
         t={mockT}
       />,
     );
@@ -71,7 +71,7 @@ describe('RecurrenceDropdown', () => {
         currentLabel="Does not repeat"
         isOpen={false}
         onToggle={onToggle}
-        onSelect={vi.fn()}
+        onSelect={vi.fn() as () => void}
         t={mockT}
       />,
     );
@@ -88,7 +88,7 @@ describe('RecurrenceDropdown', () => {
         recurrenceOptions={mockOptions}
         currentLabel="Does not repeat"
         isOpen={true}
-        onToggle={vi.fn()}
+        onToggle={vi.fn() as () => void}
         onSelect={onSelect}
         t={mockT}
       />,
@@ -106,8 +106,8 @@ describe('RecurrenceDropdown', () => {
         recurrenceOptions={mockOptions}
         currentLabel="Does not repeat"
         isOpen={false}
-        onToggle={vi.fn()}
-        onSelect={vi.fn()}
+        onToggle={vi.fn() as () => void}
+        onSelect={vi.fn() as () => void}
         t={mockT}
       />,
     );

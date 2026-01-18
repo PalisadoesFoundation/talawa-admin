@@ -602,7 +602,7 @@ describe('BaseModal', () => {
         <>
           <BaseModal
             show={true}
-            onHide={vi.fn()}
+            onHide={vi.fn() as () => void}
             title="Modal 1"
             dataTestId="modal-1"
           >
@@ -610,7 +610,7 @@ describe('BaseModal', () => {
           </BaseModal>
           <BaseModal
             show={true}
-            onHide={vi.fn()}
+            onHide={vi.fn() as () => void}
             title="Modal 2"
             dataTestId="modal-2"
           >

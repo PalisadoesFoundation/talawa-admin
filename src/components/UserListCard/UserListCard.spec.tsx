@@ -62,7 +62,7 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Testing User List Card', () => {
-  let reloadMock: ReturnType<typeof vi.fn>;
+  let reloadMock: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
   beforeEach(() => {
     reloadMock = vi.fn();

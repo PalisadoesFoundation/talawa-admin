@@ -24,9 +24,9 @@ import type { MockedFunction } from 'vitest';
 import { describe, test, expect, vi } from 'vitest';
 import { mockFormState1, mockAgendaItemCategories } from '../AgendaItemsMocks';
 
-let mockHideCreateModal: ReturnType<typeof vi.fn>;
-let mockSetFormState: ReturnType<typeof vi.fn>;
-let mockCreateAgendaItemHandler: ReturnType<typeof vi.fn>;
+let mockHideCreateModal: ReturnType<typeof vi.fn> & (() => void) & (() => void);
+let mockSetFormState: ReturnType<typeof vi.fn> & (() => void) & (() => void);
+let mockCreateAgendaItemHandler: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 const mockT = (key: string): string => key;
 
 const mockNotificationToast = vi.hoisted(() => ({

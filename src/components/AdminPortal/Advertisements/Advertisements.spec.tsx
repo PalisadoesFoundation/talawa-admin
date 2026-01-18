@@ -69,7 +69,7 @@ const today = new Date();
 const tomorrow = today;
 tomorrow.setDate(today.getDate() + 1);
 
-let mockUseMutation: ReturnType<typeof vi.fn>;
+let mockUseMutation: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 vi.mock('@apollo/client', async () => {
   const actual = await vi.importActual('@apollo/client');
   return {

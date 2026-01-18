@@ -32,9 +32,9 @@ const mockFormState = {
   description: 'Test Description',
   createdBy: 'Test User',
 };
-let mockHideUpdateModal: ReturnType<typeof vi.fn>;
-let mockSetFormState: ReturnType<typeof vi.fn>;
-let mockUpdateAgendaCategoryHandler: ReturnType<typeof vi.fn>;
+let mockHideUpdateModal: ReturnType<typeof vi.fn> & (() => void) & (() => void);
+let mockSetFormState: ReturnType<typeof vi.fn> & (() => void) & (() => void);
+let mockUpdateAgendaCategoryHandler: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 const mockT = (key: string): string => key;
 
 describe('AgendaCategoryUpdateModal', () => {

@@ -46,7 +46,7 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
   },
 }));
 
-let mockUseMutation: ReturnType<typeof vi.fn>;
+let mockUseMutation: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 vi.mock('@apollo/client', async () => {
   const actual = await vi.importActual('@apollo/client');
   return {
@@ -129,8 +129,8 @@ describe('Testing Advertisement Register Component', () => {
                   typeEdit="banner"
                   nameEdit="Ad1"
                   idEdit="1"
-                  setAfterActive={vi.fn()}
-                  setAfterCompleted={vi.fn()}
+                  setAfterActive={vi.fn() as () => void}
+                  setAfterCompleted={vi.fn() as () => void}
                 />
               </I18nextProvider>
             </router.BrowserRouter>
@@ -171,8 +171,8 @@ describe('Testing Advertisement Register Component', () => {
           <router.BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </router.BrowserRouter>
@@ -246,8 +246,8 @@ describe('Testing Advertisement Register Component', () => {
                 nameEdit="Advert1"
                 idEdit="1"
                 formStatus="edit"
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </router.BrowserRouter>
@@ -272,8 +272,8 @@ describe('Testing Advertisement Register Component', () => {
                 typeEdit="banner"
                 nameEdit="Advert1"
                 idEdit="1"
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </router.BrowserRouter>
@@ -306,8 +306,8 @@ describe('Testing Advertisement Register Component', () => {
                   typeEdit="banner"
                   nameEdit="Advert1"
                   idEdit="1"
-                  setAfterActive={vi.fn()}
-                  setAfterCompleted={vi.fn()}
+                  setAfterActive={vi.fn() as () => void}
+                  setAfterCompleted={vi.fn() as () => void}
                 />
               }
             </I18nextProvider>
@@ -371,8 +371,8 @@ describe('Testing Advertisement Register Component', () => {
                 typeEdit="banner"
                 nameEdit="Advert1"
                 idEdit="1"
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </router.BrowserRouter>
@@ -407,8 +407,8 @@ describe('Testing Advertisement Register Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <MockedProvider mocks={createAdvertisement}>
                 <AdvertisementRegister
-                  setAfterActive={vi.fn()}
-                  setAfterCompleted={vi.fn()}
+                  setAfterActive={vi.fn() as () => void}
+                  setAfterCompleted={vi.fn() as () => void}
                 />
               </MockedProvider>
             </I18nextProvider>
@@ -667,8 +667,8 @@ describe('Testing Advertisement Register Component', () => {
                   typeEdit="banner"
                   nameEdit="Ad1"
                   idEdit="1"
-                  setAfterActive={vi.fn()}
-                  setAfterCompleted={vi.fn()}
+                  setAfterActive={vi.fn() as () => void}
+                  setAfterCompleted={vi.fn() as () => void}
                   formStatus="edit"
                 />
               </MockedProvider>
@@ -730,8 +730,8 @@ describe('Testing Advertisement Register Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <MockedProvider>
                 <AdvertisementRegister
-                  setAfterActive={vi.fn()}
-                  setAfterCompleted={vi.fn()}
+                  setAfterActive={vi.fn() as () => void}
+                  setAfterCompleted={vi.fn() as () => void}
                 />
               </MockedProvider>
             </I18nextProvider>
@@ -780,8 +780,8 @@ describe('Testing Advertisement Register Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <MockedProvider>
                 <AdvertisementRegister
-                  setAfterActive={vi.fn()}
-                  setAfterCompleted={vi.fn()}
+                  setAfterActive={vi.fn() as () => void}
+                  setAfterCompleted={vi.fn() as () => void}
                 />
               </MockedProvider>
             </I18nextProvider>
@@ -831,8 +831,8 @@ describe('Testing Advertisement Register Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 formStatus="register"
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </router.BrowserRouter>
@@ -865,8 +865,8 @@ describe('Testing Advertisement Register Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 formStatus="register"
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </router.BrowserRouter>
@@ -904,8 +904,8 @@ describe('Testing Advertisement Register Component', () => {
                 typeEdit="banner"
                 nameEdit="Ad1"
                 idEdit="1"
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </router.BrowserRouter>
@@ -950,8 +950,8 @@ describe('Testing Advertisement Register Component', () => {
                 typeEdit="banner"
                 nameEdit="Ad1"
                 idEdit="1"
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </router.BrowserRouter>
@@ -996,8 +996,8 @@ describe('Testing Advertisement Register Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 formStatus="register"
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </router.BrowserRouter>
@@ -1044,8 +1044,8 @@ describe('Testing Advertisement Register Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 formStatus="register"
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </router.BrowserRouter>
@@ -1088,8 +1088,8 @@ describe('Testing Advertisement Register Component', () => {
                 typeEdit="banner"
                 nameEdit="Ad1"
                 idEdit="1"
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </router.BrowserRouter>
@@ -1143,8 +1143,8 @@ describe('Testing Advertisement Register Component', () => {
                 typeEdit="banner"
                 nameEdit="Ad1"
                 idEdit="1"
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </router.BrowserRouter>
@@ -1194,8 +1194,8 @@ describe('Testing Advertisement Register Component', () => {
                 typeEdit="banner"
                 nameEdit="Original Name"
                 idEdit="1"
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </router.BrowserRouter>
@@ -1240,8 +1240,8 @@ describe('Testing Advertisement Register Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 formStatus="register"
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </router.BrowserRouter>
@@ -1274,8 +1274,8 @@ describe('Testing Advertisement Register Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <MockedProvider>
                 <AdvertisementRegister
-                  setAfterActive={vi.fn()}
-                  setAfterCompleted={vi.fn()}
+                  setAfterActive={vi.fn() as () => void}
+                  setAfterCompleted={vi.fn() as () => void}
                 />
               </MockedProvider>
             </I18nextProvider>
@@ -1302,8 +1302,8 @@ describe('Testing Advertisement Register Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 formStatus="register"
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </router.BrowserRouter>
@@ -1434,8 +1434,8 @@ describe('Testing Advertisement Register Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementRegister
                 formStatus="register"
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </router.BrowserRouter>
@@ -1528,8 +1528,8 @@ describe('Testing Advertisement Register Component', () => {
                 typeEdit="banner"
                 nameEdit="Ad1"
                 idEdit="1"
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </router.BrowserRouter>
@@ -1566,8 +1566,8 @@ describe('Testing Advertisement Register Component', () => {
                 typeEdit=""
                 startAtEdit={new Date()}
                 endAtEdit={new Date()}
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </router.BrowserRouter>

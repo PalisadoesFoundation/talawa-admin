@@ -259,7 +259,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -275,7 +275,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={false}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -305,7 +305,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -364,7 +364,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -386,7 +386,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -424,7 +424,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -443,7 +443,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -474,7 +474,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={onEventCreated}
         currentUrl="org1"
       />,
@@ -515,7 +515,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -563,7 +563,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -591,7 +591,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={onEventCreated}
         currentUrl="org1"
       />,
@@ -627,7 +627,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -650,7 +650,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -670,7 +670,7 @@ describe('CreateEventModal', () => {
     const { rerender } = render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -691,7 +691,7 @@ describe('CreateEventModal', () => {
     rerender(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -708,7 +708,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -722,7 +722,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -745,7 +745,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -770,7 +770,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -800,7 +800,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -829,7 +829,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -876,7 +876,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -921,7 +921,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -939,7 +939,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -958,7 +958,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -1009,7 +1009,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -1045,7 +1045,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -1085,7 +1085,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -1104,7 +1104,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -1132,7 +1132,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -1164,7 +1164,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -1199,7 +1199,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -1231,7 +1231,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -1254,7 +1254,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={onEventCreated}
         currentUrl="org1"
       />,
@@ -1298,7 +1298,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -1324,7 +1324,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={onEventCreated}
         currentUrl="org1"
       />,
@@ -1382,7 +1382,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -1400,7 +1400,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -1439,7 +1439,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -1477,7 +1477,7 @@ describe('CreateEventModal', () => {
     render(
       <CreateEventModal
         isOpen={true}
-        onClose={vi.fn()}
+        onClose={vi.fn() as () => void}
         onEventCreated={vi.fn()}
         currentUrl="org1"
       />,
@@ -1531,7 +1531,7 @@ describe('CreateEventModal', () => {
       render(
         <CreateEventModal
           isOpen={true}
-          onClose={vi.fn()}
+          onClose={vi.fn() as () => void}
           onEventCreated={vi.fn()}
           currentUrl="org1"
         />,
@@ -1554,7 +1554,7 @@ describe('CreateEventModal', () => {
       render(
         <CreateEventModal
           isOpen={true}
-          onClose={vi.fn()}
+          onClose={vi.fn() as () => void}
           onEventCreated={vi.fn()}
           currentUrl="org1"
         />,
@@ -1574,7 +1574,7 @@ describe('CreateEventModal', () => {
       render(
         <CreateEventModal
           isOpen={true}
-          onClose={vi.fn()}
+          onClose={vi.fn() as () => void}
           onEventCreated={vi.fn()}
           currentUrl="org1"
         />,
@@ -1603,7 +1603,7 @@ describe('CreateEventModal', () => {
       render(
         <CreateEventModal
           isOpen={true}
-          onClose={vi.fn()}
+          onClose={vi.fn() as () => void}
           onEventCreated={vi.fn()}
           currentUrl="org1"
         />,

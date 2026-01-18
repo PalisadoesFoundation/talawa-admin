@@ -112,7 +112,7 @@ describe('Testing Member Request Card', () => {
     // Optimized: Reuse defaultProps reference
     const testProps = defaultProps;
 
-    let mockReload: ReturnType<typeof vi.fn>;
+    let mockReload: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
     // Performance: Minimal setup in beforeEach
     beforeEach(() => {

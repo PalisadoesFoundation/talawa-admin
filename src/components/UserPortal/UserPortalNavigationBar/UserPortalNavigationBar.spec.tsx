@@ -71,7 +71,7 @@ vi.mock('components/NotificationIcon/NotificationIcon', () => ({
 const MockPermIdentityIcon = getMockIcon('permIdentity');
 const MockHomeIcon = getMockIcon('home');
 
-let mockNavigate: ReturnType<typeof vi.fn>;
+let mockNavigate: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 vi.mock('react-router-dom', async () => {
   const actual = await vi.importActual('react-router-dom');
   return {

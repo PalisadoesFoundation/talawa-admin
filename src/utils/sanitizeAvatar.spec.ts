@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { sanitizeAvatars } from './sanitizeAvatar';
 
 describe('sanitizeAvatars', () => {
-  let mockCreateObjectURL: ReturnType<typeof vi.fn>;
+  let mockCreateObjectURL: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
   beforeEach(() => {
     vi.clearAllMocks();

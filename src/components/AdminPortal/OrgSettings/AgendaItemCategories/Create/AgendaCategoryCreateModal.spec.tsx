@@ -30,16 +30,24 @@ const mockFormState = {
   description: 'Test Description',
   createdBy: 'Test User',
 };
-let mockHideCreateModal: ReturnType<typeof vi.fn>;
-let mockSetFormState: ReturnType<typeof vi.fn>;
-let mockCreateAgendaCategoryHandler: ReturnType<typeof vi.fn>;
+let mockHideCreateModal: () => void;
+let mockSetFormState: (
+  state: React.SetStateAction<typeof mockFormState>,
+) => void;
+let mockCreateAgendaCategoryHandler: (
+  e: React.ChangeEvent<HTMLFormElement>,
+) => Promise<void>;
 const mockT = (key: string): string => key;
 
 describe('AgendaCategoryCreateModal', () => {
   beforeEach(() => {
-    mockHideCreateModal = vi.fn();
-    mockSetFormState = vi.fn();
-    mockCreateAgendaCategoryHandler = vi.fn();
+    mockHideCreateModal = vi.fn() as () => void;
+    mockSetFormState = vi.fn() as (
+      state: React.SetStateAction<typeof mockFormState>,
+    ) => void;
+    mockCreateAgendaCategoryHandler = vi.fn() as (
+      e: React.ChangeEvent<HTMLFormElement>,
+    ) => Promise<void>;
   });
   afterEach(() => {
     vi.restoreAllMocks();

@@ -103,8 +103,8 @@ const itemProps: InterfaceDeleteVolunteerModal[] = [
 ];
 
 let recurringItemProps: InterfaceDeleteVolunteerModal;
-let recurringItemPropsHide: ReturnType<typeof vi.fn>;
-let recurringItemPropsRefetch: ReturnType<typeof vi.fn>;
+let recurringItemPropsHide: ReturnType<typeof vi.fn> & (() => void) & (() => void);
+let recurringItemPropsRefetch: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
 beforeEach(() => {
   vi.clearAllMocks();

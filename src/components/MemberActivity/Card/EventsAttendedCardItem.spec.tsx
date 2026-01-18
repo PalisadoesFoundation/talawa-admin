@@ -23,7 +23,7 @@ vi.mock('react-router', async () => {
   };
 });
 
-let mockGetItem: ReturnType<typeof vi.fn>;
+let mockGetItem: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 vi.mock('utils/useLocalstorage', () => ({
   default: () => ({
     getItem: mockGetItem,

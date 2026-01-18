@@ -24,7 +24,7 @@ const mockTag: InterfaceTagData = {
 };
 
 const mockCheckedTags: Set<string> = new Set<string>();
-let mockToggleTagSelection: ReturnType<typeof vi.fn>;
+let mockToggleTagSelection: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 const mockT: TFunction<'translation', 'manageTag'> = ((key: string) =>
   key) as TFunction<'translation', 'manageTag'>;
 

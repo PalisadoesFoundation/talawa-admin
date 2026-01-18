@@ -27,7 +27,7 @@ class MockFile {
 }
 
 describe('calculateFileHash', () => {
-  let mockDigest: ReturnType<typeof vi.fn>;
+  let mockDigest: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
   beforeEach(() => {
     mockDigest = vi.fn();

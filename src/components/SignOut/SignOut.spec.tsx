@@ -44,7 +44,7 @@ vi.mock('utils/useLocalstorage', () => ({
   })),
 }));
 
-let mockNavigate: ReturnType<typeof vi.fn>;
+let mockNavigate: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
   return {

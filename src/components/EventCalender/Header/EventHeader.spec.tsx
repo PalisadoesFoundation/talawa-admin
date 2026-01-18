@@ -8,8 +8,8 @@ import { vi } from 'vitest';
 
 describe('EventHeader Component', () => {
   const viewType = ViewType.MONTH;
-  let handleChangeView: ReturnType<typeof vi.fn>;
-  let showInviteModal: ReturnType<typeof vi.fn>;
+  let handleChangeView: ReturnType<typeof vi.fn> & (() => void) & (() => void);
+  let showInviteModal: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
   beforeEach(() => {
     handleChangeView = vi.fn();

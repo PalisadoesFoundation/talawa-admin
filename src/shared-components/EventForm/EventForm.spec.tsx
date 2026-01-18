@@ -232,7 +232,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={baseValues}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -268,7 +268,7 @@ describe('EventForm', () => {
         <EventForm
           initialValues={todayValues}
           onSubmit={handleSubmit}
-          onCancel={vi.fn()}
+          onCancel={vi.fn() as () => void}
           submitLabel="Create"
           t={t}
           tCommon={tCommon}
@@ -328,7 +328,7 @@ describe('EventForm', () => {
         <EventForm
           initialValues={todayValues}
           onSubmit={handleSubmit}
-          onCancel={vi.fn()}
+          onCancel={vi.fn() as () => void}
           submitLabel="Create"
           t={t}
           tCommon={tCommon}
@@ -370,7 +370,7 @@ describe('EventForm', () => {
         <EventForm
           initialValues={futureValues}
           onSubmit={handleSubmit}
-          onCancel={vi.fn()}
+          onCancel={vi.fn() as () => void}
           submitLabel="Create"
           t={t}
           tCommon={tCommon}
@@ -417,7 +417,7 @@ describe('EventForm', () => {
         <EventForm
           initialValues={multiDayValues}
           onSubmit={handleSubmit}
-          onCancel={vi.fn()}
+          onCancel={vi.fn() as () => void}
           submitLabel="Create"
           t={t}
           tCommon={tCommon}
@@ -463,7 +463,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, recurrenceRule: rule }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -494,7 +494,7 @@ describe('EventForm', () => {
           endTime: '10:00:00',
         }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -564,7 +564,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, name: '   ' }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -584,7 +584,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, description: '   ' }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -604,7 +604,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, location: '   ' }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -629,7 +629,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, recurrenceRule: invalidRule }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -658,7 +658,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, recurrenceRule: rule }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -702,7 +702,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, recurrenceRule: rule }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -733,7 +733,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={baseValues}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -763,7 +763,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={baseValues}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -792,7 +792,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, allDay: false }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -819,7 +819,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, allDay: false }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -846,7 +846,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, allDay: false }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -881,8 +881,8 @@ describe('EventForm', () => {
       render(
         <EventForm
           initialValues={newEventValues}
-          onSubmit={vi.fn()}
-          onCancel={vi.fn()}
+          onSubmit={vi.fn() as () => void}
+          onCancel={vi.fn() as () => void}
           submitLabel="Create"
           t={t}
           tCommon={tCommon}
@@ -900,8 +900,8 @@ describe('EventForm', () => {
       render(
         <EventForm
           initialValues={{ ...baseValues, isPublic: true, isInviteOnly: false }}
-          onSubmit={vi.fn()}
-          onCancel={vi.fn()}
+          onSubmit={vi.fn() as () => void}
+          onCancel={vi.fn() as () => void}
           submitLabel="Update"
           t={t}
           tCommon={tCommon}
@@ -915,8 +915,8 @@ describe('EventForm', () => {
       render(
         <EventForm
           initialValues={{ ...baseValues, isPublic: false, isInviteOnly: true }}
-          onSubmit={vi.fn()}
-          onCancel={vi.fn()}
+          onSubmit={vi.fn() as () => void}
+          onCancel={vi.fn() as () => void}
           submitLabel="Update"
           t={t}
           tCommon={tCommon}
@@ -934,8 +934,8 @@ describe('EventForm', () => {
             isPublic: false,
             isInviteOnly: false,
           }}
-          onSubmit={vi.fn()}
-          onCancel={vi.fn()}
+          onSubmit={vi.fn() as () => void}
+          onCancel={vi.fn() as () => void}
           submitLabel="Update"
           t={t}
           tCommon={tCommon}
@@ -953,8 +953,8 @@ describe('EventForm', () => {
             isPublic: false, // Start as Invite Only
             isInviteOnly: true,
           }}
-          onSubmit={vi.fn()}
-          onCancel={vi.fn()}
+          onSubmit={vi.fn() as () => void}
+          onCancel={vi.fn() as () => void}
           submitLabel="Update"
           t={t}
           tCommon={tCommon}
@@ -972,8 +972,8 @@ describe('EventForm', () => {
             isPublic: false,
             isInviteOnly: false,
           }}
-          onSubmit={vi.fn()}
-          onCancel={vi.fn()}
+          onSubmit={vi.fn() as () => void}
+          onCancel={vi.fn() as () => void}
           submitLabel="Update"
           t={t}
           tCommon={tCommon}
@@ -993,7 +993,7 @@ describe('EventForm', () => {
             isInviteOnly: false, // Starts as ORGANIZATION
           }}
           onSubmit={handleSubmit}
-          onCancel={vi.fn()}
+          onCancel={vi.fn() as () => void}
           submitLabel="Create"
           t={t}
           tCommon={tCommon}
@@ -1052,7 +1052,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, isRegisterable: false }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1081,7 +1081,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, createChat: false }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1110,7 +1110,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={baseValues}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1150,7 +1150,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, recurrenceRule: rule }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1196,7 +1196,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, recurrenceRule: rule }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1242,7 +1242,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, recurrenceRule: rule }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1286,7 +1286,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, recurrenceRule: rule }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1324,8 +1324,8 @@ describe('EventForm', () => {
     render(
       <EventForm
         initialValues={{ ...baseValues, recurrenceRule: rule }}
-        onSubmit={vi.fn()}
-        onCancel={vi.fn()}
+        onSubmit={vi.fn() as () => void}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1365,8 +1365,8 @@ describe('EventForm', () => {
     render(
       <EventForm
         initialValues={{ ...baseValues, recurrenceRule: rule }}
-        onSubmit={vi.fn()}
-        onCancel={vi.fn()}
+        onSubmit={vi.fn() as () => void}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1404,7 +1404,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={baseValues}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1432,8 +1432,8 @@ describe('EventForm', () => {
     render(
       <EventForm
         initialValues={baseValues}
-        onSubmit={vi.fn()}
-        onCancel={vi.fn()}
+        onSubmit={vi.fn() as () => void}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1448,8 +1448,8 @@ describe('EventForm', () => {
     render(
       <EventForm
         initialValues={baseValues}
-        onSubmit={vi.fn()}
-        onCancel={vi.fn()}
+        onSubmit={vi.fn() as () => void}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1464,8 +1464,8 @@ describe('EventForm', () => {
     render(
       <EventForm
         initialValues={baseValues}
-        onSubmit={vi.fn()}
-        onCancel={vi.fn()}
+        onSubmit={vi.fn() as () => void}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1489,8 +1489,8 @@ describe('EventForm', () => {
     const { rerender } = render(
       <EventForm
         initialValues={baseValues}
-        onSubmit={vi.fn()}
-        onCancel={vi.fn()}
+        onSubmit={vi.fn() as () => void}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1506,8 +1506,8 @@ describe('EventForm', () => {
     rerender(
       <EventForm
         initialValues={newValues}
-        onSubmit={vi.fn()}
-        onCancel={vi.fn()}
+        onSubmit={vi.fn() as () => void}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1523,7 +1523,7 @@ describe('EventForm', () => {
     render(
       <EventForm
         initialValues={baseValues}
-        onSubmit={vi.fn()}
+        onSubmit={vi.fn() as () => void}
         onCancel={handleCancel}
         submitLabel="Create"
         t={t}
@@ -1540,8 +1540,8 @@ describe('EventForm', () => {
     render(
       <EventForm
         initialValues={baseValues}
-        onSubmit={vi.fn()}
-        onCancel={vi.fn()}
+        onSubmit={vi.fn() as () => void}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1567,8 +1567,8 @@ describe('EventForm', () => {
           startDate: invalidDate,
           recurrenceRule: rule,
         }}
-        onSubmit={vi.fn()}
-        onCancel={vi.fn()}
+        onSubmit={vi.fn() as () => void}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1588,8 +1588,8 @@ describe('EventForm', () => {
     render(
       <EventForm
         initialValues={{ ...baseValues, recurrenceRule: rule }}
-        onSubmit={vi.fn()}
-        onCancel={vi.fn()}
+        onSubmit={vi.fn() as () => void}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1608,7 +1608,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={baseValues}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1630,7 +1630,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={baseValues}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1673,7 +1673,7 @@ describe('EventForm', () => {
           endTime: '10:00:00',
         }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1704,7 +1704,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={baseValues}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1733,7 +1733,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, allDay: false }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1762,7 +1762,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, recurrenceRule: rule }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1804,7 +1804,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, recurrenceRule: rule }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1846,7 +1846,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, recurrenceRule: rule }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1888,7 +1888,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, recurrenceRule: rule }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1925,8 +1925,8 @@ describe('EventForm', () => {
     render(
       <EventForm
         initialValues={baseValues}
-        onSubmit={vi.fn()}
-        onCancel={vi.fn()}
+        onSubmit={vi.fn() as () => void}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1944,8 +1944,8 @@ describe('EventForm', () => {
     render(
       <EventForm
         initialValues={baseValues}
-        onSubmit={vi.fn()}
-        onCancel={vi.fn()}
+        onSubmit={vi.fn() as () => void}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1968,7 +1968,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, recurrenceRule: rule }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -1993,8 +1993,8 @@ describe('EventForm', () => {
     render(
       <EventForm
         initialValues={baseValues}
-        onSubmit={vi.fn()}
-        onCancel={vi.fn()}
+        onSubmit={vi.fn() as () => void}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -2015,8 +2015,8 @@ describe('EventForm', () => {
     render(
       <EventForm
         initialValues={baseValues}
-        onSubmit={vi.fn()}
-        onCancel={vi.fn()}
+        onSubmit={vi.fn() as () => void}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -2033,8 +2033,8 @@ describe('EventForm', () => {
     render(
       <EventForm
         initialValues={baseValues}
-        onSubmit={vi.fn()}
-        onCancel={vi.fn()}
+        onSubmit={vi.fn() as () => void}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -2055,7 +2055,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, recurrenceRule: rule }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -2088,7 +2088,7 @@ describe('EventForm', () => {
       <EventForm
         initialValues={{ ...baseValues, recurrenceRule: rule }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}
@@ -2123,7 +2123,7 @@ describe('EventForm', () => {
           location: '  Location  ',
         }}
         onSubmit={handleSubmit}
-        onCancel={vi.fn()}
+        onCancel={vi.fn() as () => void}
         submitLabel="Create"
         t={t}
         tCommon={tCommon}

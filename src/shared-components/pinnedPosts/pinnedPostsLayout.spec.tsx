@@ -272,7 +272,7 @@ describe('PinnedPostsLayout Component', () => {
   });
 
   describe('Navigation Buttons', () => {
-    let scrollByMock: ReturnType<typeof vi.fn>;
+    let scrollByMock: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
     beforeEach(() => {
       scrollByMock = vi.fn();
@@ -462,7 +462,7 @@ describe('PinnedPostsLayout Component', () => {
   });
 
   describe('Defensive Branches in Scroll Functions', () => {
-    let scrollByMock: ReturnType<typeof vi.fn>;
+    let scrollByMock: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
     beforeEach(() => {
       scrollByMock = vi.fn();

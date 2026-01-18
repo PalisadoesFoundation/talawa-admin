@@ -38,7 +38,7 @@ vi.mock('utils/fieldTypes', () => ({
 }));
 
 describe('EditOrgCustomFieldDropDown Component', () => {
-  let mockSetCustomFieldData: ReturnType<typeof vi.fn>;
+  let mockSetCustomFieldData: ReturnType<typeof vi.fn> & (() => void) & (() => void);
   let defaultProps: {
     customFieldData: {
       type: string;

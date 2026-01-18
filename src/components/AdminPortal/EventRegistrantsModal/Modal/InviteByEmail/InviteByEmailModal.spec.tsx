@@ -20,15 +20,15 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
   },
 }));
 
-let mockHandleClose: ReturnType<typeof vi.fn>;
-let mockOnInvitesSent: ReturnType<typeof vi.fn>;
+let mockHandleClose: () => void;
+let mockOnInvitesSent: () => void;
 
 let defaultProps: {
   show: boolean;
-  handleClose: ReturnType<typeof vi.fn>;
+  handleClose: () => void;
   eventId: string;
   isRecurring: boolean;
-  onInvitesSent: ReturnType<typeof vi.fn>;
+  onInvitesSent: () => void;
 };
 
 const mocks = [
@@ -83,8 +83,8 @@ const renderComponent = (
 
 describe('InviteByEmailModal', () => {
   beforeEach(() => {
-    mockHandleClose = vi.fn();
-    mockOnInvitesSent = vi.fn();
+    mockHandleClose = vi.fn() as () => void;
+    mockOnInvitesSent = vi.fn() as () => void;
     defaultProps = {
       show: true,
       handleClose: mockHandleClose,

@@ -14,7 +14,7 @@ describe('SearchBar', () => {
   it('renders with the provided placeholder', () => {
     render(
       <SearchBar
-        onSearch={vi.fn()}
+        onSearch={vi.fn() as () => void}
         placeholder="Search records"
         clearButtonAriaLabel="clear"
       />,
@@ -27,7 +27,7 @@ describe('SearchBar', () => {
     const handleChange = vi.fn();
     render(
       <SearchBar
-        onSearch={vi.fn()}
+        onSearch={vi.fn() as () => void}
         onChange={handleChange}
         inputTestId="search-input"
         clearButtonAriaLabel="clear"
@@ -111,7 +111,7 @@ describe('SearchBar', () => {
       return (
         <SearchBar
           value={term}
-          onSearch={vi.fn()}
+          onSearch={vi.fn() as () => void}
           onChange={(nextValue) => setTerm(nextValue)}
           inputTestId="search-input"
           clearButtonAriaLabel="clear"
@@ -152,7 +152,7 @@ describe('SearchBar', () => {
     render(
       <SearchBar
         ref={ref}
-        onSearch={vi.fn()}
+        onSearch={vi.fn() as () => void}
         inputTestId="search-input"
         clearButtonAriaLabel="clear"
       />,
@@ -210,7 +210,7 @@ describe('SearchBar', () => {
     const handleChange = vi.fn();
     render(
       <SearchBar
-        onSearch={vi.fn()}
+        onSearch={vi.fn() as () => void}
         onClear={handleClear}
         onChange={handleChange}
         disabled={true}
@@ -252,7 +252,7 @@ describe('SearchBar', () => {
   it('has accessible search button', () => {
     render(
       <SearchBar
-        onSearch={vi.fn()}
+        onSearch={vi.fn() as () => void}
         buttonTestId="search-button"
         clearButtonAriaLabel="clear"
       />,
@@ -265,7 +265,7 @@ describe('SearchBar', () => {
     const user = userEvent.setup();
     render(
       <SearchBar
-        onSearch={vi.fn()}
+        onSearch={vi.fn() as () => void}
         inputTestId="search-input"
         clearButtonTestId="clear-search"
       />,
@@ -293,7 +293,7 @@ describe('SearchBar', () => {
     it('renders trailing search icon when showTrailingIcon is true', () => {
       render(
         <SearchBar
-          onSearch={vi.fn()}
+          onSearch={vi.fn() as () => void}
           showTrailingIcon={true}
           inputTestId="search-input"
         />,
@@ -310,7 +310,7 @@ describe('SearchBar', () => {
     it('does not render trailing search icon when showTrailingIcon is false', () => {
       render(
         <SearchBar
-          onSearch={vi.fn()}
+          onSearch={vi.fn() as () => void}
           showTrailingIcon={false}
           inputTestId="search-input"
         />,
@@ -323,7 +323,7 @@ describe('SearchBar', () => {
     });
 
     it('does not render trailing icon by default', () => {
-      render(<SearchBar onSearch={vi.fn()} inputTestId="search-input" />);
+      render(<SearchBar onSearch={vi.fn() as () => void} inputTestId="search-input" />);
 
       // Default behavior should not show trailing icon
       const container = screen.getByTestId('search-input').parentElement;
@@ -335,7 +335,7 @@ describe('SearchBar', () => {
       const user = userEvent.setup();
       render(
         <SearchBar
-          onSearch={vi.fn()}
+          onSearch={vi.fn() as () => void}
           showTrailingIcon={true}
           showClearButton={true}
           inputTestId="search-input"
@@ -356,7 +356,7 @@ describe('SearchBar', () => {
     it('positions trailing icon correctly in the input wrapper', () => {
       const { container } = render(
         <SearchBar
-          onSearch={vi.fn()}
+          onSearch={vi.fn() as () => void}
           showTrailingIcon={true}
           inputTestId="search-input"
         />,

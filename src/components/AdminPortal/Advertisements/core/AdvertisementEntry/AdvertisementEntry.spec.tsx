@@ -24,7 +24,7 @@ const translations = JSON.parse(
   ),
 );
 
-let mockUseMutation: ReturnType<typeof vi.fn>;
+let mockUseMutation: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 vi.mock('@apollo/client', async () => {
   const actual = await vi.importActual('@apollo/client');
   return {
@@ -76,8 +76,8 @@ describe('Testing Advertisement Entry Component', () => {
                   type: AdvertisementType.Banner,
                   updatedAt: new Date(),
                 }}
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -159,8 +159,8 @@ describe('Testing Advertisement Entry Component', () => {
                   type: AdvertisementType.Banner,
                   updatedAt: new Date(),
                 }}
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -211,8 +211,8 @@ describe('Testing Advertisement Entry Component', () => {
           type: AdvertisementType.Banner,
           updatedAt: new Date(),
         }}
-        setAfterActive={vi.fn()}
-        setAfterCompleted={vi.fn()}
+        setAfterActive={vi.fn() as () => void}
+        setAfterCompleted={vi.fn() as () => void}
       />,
     );
 
@@ -258,8 +258,8 @@ describe('Testing Advertisement Entry Component', () => {
           type: mockType,
           updatedAt: mockUpdatedAt,
         }}
-        setAfterActive={vi.fn()}
-        setAfterCompleted={vi.fn()}
+        setAfterActive={vi.fn() as () => void}
+        setAfterCompleted={vi.fn() as () => void}
       />,
     );
 
@@ -292,8 +292,8 @@ describe('Testing Advertisement Entry Component', () => {
                   type: AdvertisementType.Banner,
                   updatedAt: new Date(),
                 }}
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -353,8 +353,8 @@ describe('Testing Advertisement Entry Component', () => {
                   type: AdvertisementType.Banner,
                   updatedAt: new Date(),
                 }}
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -537,8 +537,8 @@ describe('Testing Advertisement Entry Component', () => {
                     type: AdvertisementType.Banner,
                     updatedAt: new Date(),
                   }}
-                  setAfterActive={vi.fn()}
-                  setAfterCompleted={vi.fn()}
+                  setAfterActive={vi.fn() as () => void}
+                  setAfterCompleted={vi.fn() as () => void}
                 />
               </MockedProvider>
             </I18nextProvider>
@@ -628,8 +628,8 @@ describe('Testing Advertisement Entry Component', () => {
                     type: AdvertisementType.Banner,
                     updatedAt: new Date(),
                   }}
-                  setAfterActive={vi.fn()}
-                  setAfterCompleted={vi.fn()}
+                  setAfterActive={vi.fn() as () => void}
+                  setAfterCompleted={vi.fn() as () => void}
                 />
               </MockedProvider>
             </I18nextProvider>
@@ -694,8 +694,8 @@ describe('Testing Advertisement Entry Component', () => {
                     type: AdvertisementType.Banner,
                     updatedAt: new Date(),
                   }}
-                  setAfterActive={vi.fn()}
-                  setAfterCompleted={vi.fn()}
+                  setAfterActive={vi.fn() as () => void}
+                  setAfterCompleted={vi.fn() as () => void}
                 />
               </MockedProvider>
             </I18nextProvider>
@@ -745,8 +745,8 @@ describe('Testing Advertisement Entry Component', () => {
                   type: AdvertisementType.Banner,
                   updatedAt: new Date(),
                 }}
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -782,8 +782,8 @@ describe('Testing Advertisement Entry Component', () => {
                   type: AdvertisementType.Banner,
                   updatedAt: new Date(),
                 }}
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -816,8 +816,8 @@ describe('Testing Advertisement Entry Component', () => {
                   type: AdvertisementType.Banner,
                   updatedAt: new Date(),
                 }}
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -851,8 +851,8 @@ describe('Testing Advertisement Entry Component', () => {
                   type: AdvertisementType.Banner,
                   updatedAt: new Date(),
                 }}
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -884,8 +884,8 @@ describe('Testing Advertisement Entry Component', () => {
                   type: AdvertisementType.Banner,
                   updatedAt: new Date(),
                 }}
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -917,8 +917,8 @@ describe('Testing Advertisement Entry Component', () => {
                   type: AdvertisementType.Banner,
                   updatedAt: new Date(),
                 }}
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -950,8 +950,8 @@ describe('Testing Advertisement Entry Component', () => {
                   type: AdvertisementType.Popup,
                   updatedAt: new Date(),
                 }}
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -984,8 +984,8 @@ describe('Testing Advertisement Entry Component', () => {
                   type: AdvertisementType.Banner,
                   updatedAt: new Date(),
                 }}
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -1020,8 +1020,8 @@ describe('Testing Advertisement Entry Component', () => {
                   type: AdvertisementType.Banner,
                   updatedAt: new Date(),
                 }}
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -1058,8 +1058,8 @@ describe('Testing Advertisement Entry Component', () => {
                   type: AdvertisementType.Banner,
                   updatedAt: new Date(),
                 }}
-                setAfterActive={vi.fn()}
-                setAfterCompleted={vi.fn()}
+                setAfterActive={vi.fn() as () => void}
+                setAfterCompleted={vi.fn() as () => void}
               />
             </I18nextProvider>
           </BrowserRouter>

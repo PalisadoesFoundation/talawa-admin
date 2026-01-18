@@ -14,9 +14,9 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
 // Mock the dependencies
-let mockT: ReturnType<typeof vi.fn>;
+let mockT: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
-let mockTCommon: ReturnType<typeof vi.fn>;
+let mockTCommon: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
 const mockTImplementation = (key: string) => {
   const translations: Record<string, string> = {

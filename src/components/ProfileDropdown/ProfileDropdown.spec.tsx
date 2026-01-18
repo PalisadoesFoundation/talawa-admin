@@ -20,7 +20,7 @@ beforeAll(() => {
   clearAllItems = storage.clearAllItems;
 });
 
-let mockNavigate: ReturnType<typeof vi.fn>;
+let mockNavigate: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
 // Mock useNavigate hook
 vi.mock('react-router', async () => {

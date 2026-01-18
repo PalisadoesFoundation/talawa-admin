@@ -13,7 +13,7 @@ import { vi } from 'vitest';
 
 const { setItem, clearAllItems } = useLocalStorage();
 
-let mockNavigate: ReturnType<typeof vi.fn>;
+let mockNavigate: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
 // Mock useNavigate hook
 vi.mock('react-router', async () => {

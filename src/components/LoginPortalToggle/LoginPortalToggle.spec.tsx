@@ -26,7 +26,7 @@ const renderComponent = (onToggle: ReturnType<typeof vi.fn>) => {
 };
 
 describe('Testing LoginPortalToggle component', () => {
-  let mockOnToggle: ReturnType<typeof vi.fn>;
+  let mockOnToggle: ReturnType<typeof vi.fn> & (() => void) & (() => void);
 
   beforeEach(() => {
     mockOnToggle = vi.fn();
