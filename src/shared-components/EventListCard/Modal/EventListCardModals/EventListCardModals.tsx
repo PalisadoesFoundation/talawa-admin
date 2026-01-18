@@ -88,12 +88,12 @@ function EventListCardModals({
   const [recurrence, setRecurrence] = useState<InterfaceRecurrenceRule | null>(
     eventListCardProps.recurrenceRule
       ? {
-        ...eventListCardProps.recurrenceRule,
-        endDate: eventListCardProps.recurrenceRule.recurrenceEndDate
-          ? new Date(eventListCardProps.recurrenceRule.recurrenceEndDate)
-          : undefined,
-        never: !eventListCardProps.recurrenceRule.recurrenceEndDate,
-      }
+          ...eventListCardProps.recurrenceRule,
+          endDate: eventListCardProps.recurrenceRule.recurrenceEndDate
+            ? new Date(eventListCardProps.recurrenceRule.recurrenceEndDate)
+            : undefined,
+          never: !eventListCardProps.recurrenceRule.recurrenceEndDate,
+        }
       : null,
   );
 
@@ -101,12 +101,12 @@ function EventListCardModals({
   const [originalRecurrence] = useState<InterfaceRecurrenceRule | null>(
     eventListCardProps.recurrenceRule
       ? {
-        ...eventListCardProps.recurrenceRule,
-        endDate: eventListCardProps.recurrenceRule.recurrenceEndDate
-          ? new Date(eventListCardProps.recurrenceRule.recurrenceEndDate)
-          : undefined,
-        never: !eventListCardProps.recurrenceRule.recurrenceEndDate,
-      }
+          ...eventListCardProps.recurrenceRule,
+          endDate: eventListCardProps.recurrenceRule.recurrenceEndDate
+            ? new Date(eventListCardProps.recurrenceRule.recurrenceEndDate)
+            : undefined,
+          never: !eventListCardProps.recurrenceRule.recurrenceEndDate,
+        }
       : null,
   );
 
@@ -114,12 +114,12 @@ function EventListCardModals({
     setRecurrence(
       eventListCardProps.recurrenceRule
         ? {
-          ...eventListCardProps.recurrenceRule,
-          endDate: eventListCardProps.recurrenceRule.recurrenceEndDate
-            ? new Date(eventListCardProps.recurrenceRule.recurrenceEndDate)
-            : undefined,
-          never: !eventListCardProps.recurrenceRule.recurrenceEndDate,
-        }
+            ...eventListCardProps.recurrenceRule,
+            endDate: eventListCardProps.recurrenceRule.recurrenceEndDate
+              ? new Date(eventListCardProps.recurrenceRule.recurrenceEndDate)
+              : undefined,
+            never: !eventListCardProps.recurrenceRule.recurrenceEndDate,
+          }
         : null,
     );
   }, [eventListCardProps.recurrenceRule]);
@@ -134,14 +134,14 @@ function EventListCardModals({
       originalRecurrence.frequency !== recurrence.frequency ||
       originalRecurrence.interval !== recurrence.interval ||
       JSON.stringify(originalRecurrence.byDay) !==
-      JSON.stringify(recurrence.byDay) ||
+        JSON.stringify(recurrence.byDay) ||
       JSON.stringify(originalRecurrence.byMonth) !==
-      JSON.stringify(recurrence.byMonth) ||
+        JSON.stringify(recurrence.byMonth) ||
       JSON.stringify(originalRecurrence.byMonthDay) !==
-      JSON.stringify(recurrence.byMonthDay) ||
+        JSON.stringify(recurrence.byMonthDay) ||
       originalRecurrence.count !== recurrence.count ||
       originalRecurrence.endDate?.toISOString() !==
-      recurrence.endDate?.toISOString() ||
+        recurrence.endDate?.toISOString() ||
       originalRecurrence.never !== recurrence.never;
 
     return changed;
@@ -212,7 +212,7 @@ function EventListCardModals({
   useEffect(() => {
     if (
       !availableUpdateOptions[
-      updateOption as keyof typeof availableUpdateOptions
+        updateOption as keyof typeof availableUpdateOptions
       ]
     ) {
       if (availableUpdateOptions.following) {

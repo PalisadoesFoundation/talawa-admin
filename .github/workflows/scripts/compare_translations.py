@@ -209,10 +209,8 @@ def main():
 
     """
     # Initialize key variables
-    parser = argparse.ArgumentParser(
-        description="""\
-Check and print missing translations for all non-default languages."""
-    )
+    parser = argparse.ArgumentParser(description="""\
+Check and print missing translations for all non-default languages.""")
     parser.add_argument(
         "--directory",
         type=str,
