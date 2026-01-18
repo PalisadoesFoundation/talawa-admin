@@ -48,7 +48,7 @@ interface InterfaceFormStateType {
  * OrgList component displays a list of organizations and allows administrators to create new ones.
  * It also handles the email verification warning banner.
  *
- * @returns \{JSX.Element\} The rendered OrgList component.
+ * @returns JSX.Element - The rendered OrgList component.
  */
 function OrgList(): JSX.Element {
   const { getItem, setItem, removeItem } = useLocalStorage();

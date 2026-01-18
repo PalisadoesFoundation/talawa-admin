@@ -43,7 +43,7 @@ type VerificationState = 'loading' | 'success' | 'error';
  * It reads the verification token from the URL, calls the verification mutation,
  * and handles success, error, and loading states.
  *
- * @returns \{JSX.Element\} The rendered VerifyEmail component.
+ * @returns JSX.Element - The rendered VerifyEmail component.
  */
 const VerifyEmail = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'verifyEmail' });

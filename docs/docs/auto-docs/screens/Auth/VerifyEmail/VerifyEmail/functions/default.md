@@ -18,4 +18,4 @@ and handles success, error, and loading states.
 
 `Element`
 
-{JSX.Element} The rendered VerifyEmail component.
+JSX.Element - The rendered VerifyEmail component.
