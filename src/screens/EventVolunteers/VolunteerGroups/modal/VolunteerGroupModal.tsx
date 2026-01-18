@@ -278,6 +278,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           isOptionEqualToValue={(option, value) => option.id === value.id}
           filterSelectedOptions={true}
           getOptionLabel={(member: InterfaceUserInfoPG): string => member.name}
+          aria-label={t('leader')}
           onChange={(_, newLeader): void => {
             if (newLeader) {
               setFormState({
@@ -323,6 +324,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           filterSelectedOptions={true}
           getOptionLabel={(member: InterfaceUserInfoPG): string => member.name}
           disabled={mode === 'edit'}
+          aria-label={t('volunteers')}
           onChange={(_, newUsers): void => {
             setFormState({
               ...formState,

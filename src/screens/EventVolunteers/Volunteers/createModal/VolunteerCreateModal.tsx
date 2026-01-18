@@ -185,6 +185,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
           isOptionEqualToValue={(option, value) => option.id === value.id}
           filterSelectedOptions={true}
           getOptionLabel={(member: InterfaceUserInfo): string => member.name}
+          aria-label={tCommon('members')}
           onChange={(_, newVolunteer): void => {
             setUserId(newVolunteer?.id ?? '');
           }}
