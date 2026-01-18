@@ -17,7 +17,7 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import type { IPluginMeta } from 'plugin';
 import React from 'react';
-import { vi } from 'vitest';
+import { vi, type Mock } from 'vitest';
 import type { InterfaceUninstallConfirmationModalProps } from 'types/AdminPortal/PluginStore/components/UninstallConfirmationModal/interface';
 import UninstallConfirmationModal from './UninstallConfirmationModal';
 
@@ -37,37 +37,40 @@ vi.mock('react-i18next', () => ({
 }));
 
 describe('UninstallConfirmationModal', () => {
+  // Define variables in the scope accessible to all tests
+
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  const mockOnClose = vi.fn();
-  const mockOnConfirm = vi.fn();
-  const pluginName = 'Test Plugin';
+  let mockOnClose: Mock;
+  let mockOnConfirm: Mock;
+  let defaultProps: InterfaceUninstallConfirmationModalProps;
 
-  // We partially mock the IPluginMeta interface for testing purposes
+  const pluginName = 'Test Plugin';
   const mockPlugin = {
     name: pluginName,
     id: 'test-plugin-id',
   } as unknown as IPluginMeta;
 
-  const defaultProps: InterfaceUninstallConfirmationModalProps = {
-    show: true,
-    onClose: mockOnClose,
-    onConfirm: mockOnConfirm,
-    plugin: mockPlugin,
-  };
-
+  // Setup fresh mocks before EVERY test to ensure isolation
   beforeEach(() => {
     vi.clearAllMocks();
+    mockOnClose = vi.fn();
+    mockOnConfirm = vi.fn();
+
+    defaultProps = {
+      show: true,
+      onClose: mockOnClose,
+      onConfirm: mockOnConfirm,
+      plugin: mockPlugin,
+    };
   });
 
   it('should render the modal with correct title and message', () => {
     render(<UninstallConfirmationModal {...defaultProps} />);
 
-    // Assert Title
     expect(screen.getByText('uninstallPlugin.title')).toBeInTheDocument();
-    // Assert Message (matches the mock translation logic)
     expect(
       screen.getByText(`uninstallPlugin.message ${pluginName}`),
     ).toBeInTheDocument();
@@ -82,31 +85,56 @@ describe('UninstallConfirmationModal', () => {
     expect(mockOnClose).toHaveBeenCalledTimes(1);
   });
 
-  it('should call onConfirm when uninstall button is clicked', () => {
+  it('should call onConfirm when uninstall button is clicked', async () => {
     render(<UninstallConfirmationModal {...defaultProps} />);
 
     const uninstallButton = screen.getByTestId('uninstall-remove-btn');
     fireEvent.click(uninstallButton);
 
-    // The component wraps onConfirm in an async function, so we expect it to be called
-    expect(mockOnConfirm).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(mockOnConfirm).toHaveBeenCalledTimes(1);
+    });
   });
 
-  it('should return null (not render) if plugin is null', () => {
-    const { container } = render(
-      <UninstallConfirmationModal {...defaultProps} plugin={null} />,
-    );
-    expect(container).toBeEmptyDOMElement();
+  it('should show loading state while uninstallation is in progress', async () => {
+    // Advanced Async Test: Use a controlled promise to "pause" execution
+    // Initialize with a no-op function to satisfy TypeScript (no @ts-ignore needed!)
+    let resolvePromise: (value: void | PromiseLike<void>) => void = () => {};
+
+    const confirmPromise = new Promise<void>((resolve) => {
+      resolvePromise = resolve;
+    });
+
+    // Mock onConfirm to wait for our signal
+    mockOnConfirm.mockReturnValue(confirmPromise);
+
+    render(<UninstallConfirmationModal {...defaultProps} />);
+    const uninstallButton = screen.getByTestId('uninstall-remove-btn');
+
+    // 1. Trigger the click
+    fireEvent.click(uninstallButton);
+
+    // 2. Verify Loading State (Promise is pending)
+    // The button should now say "deleting" and be disabled
+    expect(await screen.findByText('deleting')).toBeInTheDocument();
+    expect(uninstallButton).toBeDisabled();
+
+    // 3. Resolve the promise (Simulate API success)
+    resolvePromise();
+
+    // 4. Verify Loading State is gone (Promise resolved)
+    await waitFor(() => {
+      expect(screen.queryByText('deleting')).not.toBeInTheDocument();
+      expect(uninstallButton).not.toBeDisabled();
+    });
   });
 
-  // NEW TEST: Cover the error handling (lines 57-58)
   it('should handle errors during uninstall and reset loading state', async () => {
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {});
     const testError = new Error('Uninstall failed');
 
-    // Mock onConfirm to reject with an error
     mockOnConfirm.mockRejectedValueOnce(testError);
 
     render(<UninstallConfirmationModal {...defaultProps} />);
@@ -114,7 +142,6 @@ describe('UninstallConfirmationModal', () => {
     const uninstallButton = screen.getByTestId('uninstall-remove-btn');
     fireEvent.click(uninstallButton);
 
-    // Wait for the error to be caught and logged
     await waitFor(() => {
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Uninstall failed',
@@ -130,32 +157,10 @@ describe('UninstallConfirmationModal', () => {
     consoleErrorSpy.mockRestore();
   });
 
-  // OPTIONAL: Test loading state during uninstall
-  it('should show loading state during uninstall', async () => {
-    let resolveConfirm: (() => void) | undefined;
-    const confirmPromise = new Promise<void>((resolve) => {
-      resolveConfirm = resolve;
-    });
-    mockOnConfirm.mockReturnValueOnce(confirmPromise);
-
-    render(<UninstallConfirmationModal {...defaultProps} />);
-
-    const uninstallButton = screen.getByTestId('uninstall-remove-btn');
-    const cancelButton = screen.getByTestId('uninstall-cancel-btn');
-
-    fireEvent.click(uninstallButton);
-
-    // Verify buttons are disabled during loading
-    await waitFor(() => {
-      expect(uninstallButton).toBeDisabled();
-      expect(cancelButton).toBeDisabled();
-    });
-
-    // Verify loading text is shown
-    expect(mockTCommon).toHaveBeenCalledWith('deleting');
-    // Resolve the promise to complete the test
-    if (resolveConfirm) {
-      resolveConfirm();
-    }
+  it('should return null (not render) if plugin is null', () => {
+    const { container } = render(
+      <UninstallConfirmationModal {...defaultProps} plugin={null} />,
+    );
+    expect(container).toBeEmptyDOMElement();
   });
 });

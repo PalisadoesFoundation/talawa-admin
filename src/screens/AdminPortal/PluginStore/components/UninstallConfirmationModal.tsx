@@ -54,6 +54,8 @@ const UninstallConfirmationModal: React.FC<
       await onConfirm();
     } catch (error) {
       console.error('Uninstall failed', error);
+    } finally {
+      // FIX: Ensure loading state is reset regardless of success or failure
       setIsLoading(false);
     }
   };

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /**
  * Test Suite for AgendaItemsDeleteModal
  *
@@ -23,27 +24,39 @@
  */
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, type Mock } from 'vitest';
 import AgendaItemsDeleteModal from './AgendaItemsDeleteModal';
 import { InterfaceAgendaItemsDeleteModalProps } from 'types/components/AdminPortal/EventManagement/AgendaItemsDeleteModal/interface';
 
 describe('AgendaItemsDeleteModal', () => {
+  // Define mocks in the scope accessible to all tests
+
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  const mockToggleDeleteModal = vi.fn();
-  const mockDeleteAgendaItemHandler = vi.fn();
-  const mockT = vi.fn((key) => key);
-  const mockTCommon = vi.fn((key) => key);
+  let mockToggleDeleteModal: Mock;
+  let mockDeleteAgendaItemHandler: Mock;
+  let mockT: Mock;
+  let mockTCommon: Mock;
+  let defaultProps: InterfaceAgendaItemsDeleteModalProps;
 
-  const defaultProps: InterfaceAgendaItemsDeleteModalProps = {
-    agendaItemDeleteModalIsOpen: true,
-    toggleDeleteModal: mockToggleDeleteModal,
-    deleteAgendaItemHandler: mockDeleteAgendaItemHandler,
-    t: mockT,
-    tCommon: mockTCommon,
-  };
+  // Setup fresh mocks before EVERY test
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockToggleDeleteModal = vi.fn();
+    mockDeleteAgendaItemHandler = vi.fn();
+    mockT = vi.fn((key) => key);
+    mockTCommon = vi.fn((key) => key);
+
+    defaultProps = {
+      agendaItemDeleteModalIsOpen: true,
+      toggleDeleteModal: mockToggleDeleteModal,
+      deleteAgendaItemHandler: mockDeleteAgendaItemHandler,
+      t: mockT,
+      tCommon: mockTCommon,
+    };
+  });
 
   it('should render correctly when open', () => {
     render(<AgendaItemsDeleteModal {...defaultProps} />);
@@ -53,12 +66,25 @@ describe('AgendaItemsDeleteModal', () => {
     expect(screen.getByText('no')).toBeInTheDocument();
   });
 
+  // NEW TEST: Verify the modal is not visible when the prop is false
+  it('should not render the modal when agendaItemDeleteModalIsOpen is false', () => {
+    render(
+      <AgendaItemsDeleteModal
+        {...defaultProps}
+        agendaItemDeleteModalIsOpen={false}
+      />,
+    );
+    // When closed, the title (and everything else) should be absent
+    expect(screen.queryByText('deleteAgendaItem')).not.toBeInTheDocument();
+  });
+
   it('should call toggleDeleteModal when close button is clicked', () => {
     render(<AgendaItemsDeleteModal {...defaultProps} />);
     const closeBtn = screen.getByTestId('deleteAgendaItemCloseBtn');
     fireEvent.click(closeBtn);
     expect(mockToggleDeleteModal).toHaveBeenCalled();
   });
+
   it('should call deleteAgendaItemHandler when confirm button is clicked', () => {
     render(<AgendaItemsDeleteModal {...defaultProps} />);
     const confirmBtn = screen.getByTestId('deleteAgendaItemBtn');
