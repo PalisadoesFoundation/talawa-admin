@@ -119,7 +119,7 @@ const LoginPage = (): JSX.Element => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.socialIcon}
-                    aria-label={link.name}
+                    aria-label={link.tag}
                   >
                     {link.logo}
                   </a>
