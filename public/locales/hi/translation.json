@@ -2320,5 +2320,13 @@
     "paginationGoToPage": "पृष्ठ {{page}} पर जाएं",
     "paginationGoToType": "{{type}} पृष्ठ पर जाएं",
     "noEventsAttended": "कोई घटना में उपस्थित नहीं हुए"
+  },
+  "eventStats": {
+    "title": "इवेंट आंकड़े",
+    "reviews": {
+      "title": "समीक्षाएं",
+      "emptyState": "लोगों के इवेंट के बारे में बात करने की प्रतीक्षा है...",
+      "filledByCount": "{{count}} लोगों द्वारा भरा गया।"
+    }
   }
 }
