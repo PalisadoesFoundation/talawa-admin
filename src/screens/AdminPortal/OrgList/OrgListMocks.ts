@@ -63,7 +63,6 @@ const MOCKS = [
   {
     request: {
       query: CURRENT_USER,
-      variables: { userId: '123' },
     },
     result: {
       data: {
