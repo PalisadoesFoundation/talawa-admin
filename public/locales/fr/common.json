@@ -289,5 +289,6 @@
   "linkCopied": "Lien copié dans le presse-papiers",
   "copyToClipboardError": "Erreur lors de la copie du lien dans le presse-papiers",
   "share": "Partager",
-  "userNotFound": "Utilisateur non trouvé"
+  "userNotFound": "Utilisateur non trouvé",
+  "avatarProcessingError": "Erreur lors du traitement de l'avatar, veuillez vérifier votre image."
 }
