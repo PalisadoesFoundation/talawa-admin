@@ -19,6 +19,7 @@ import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
  */
 type CampaignWithStatus = InterfaceUserCampaign & {
   status: 'active' | 'inactive' | 'pending';
+  [key: string]: unknown;
 };
 
 import { type GridCellParams } from 'shared-components/DataGridWrapper';
