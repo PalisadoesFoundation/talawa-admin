@@ -125,7 +125,6 @@
 .card_list_item {
   display: flex;
   justify-content: space-between;
-  padding: var(--space-2) 0;
   color: var(--cardListItem-color);
   padding: var(--space-2);
   border-radius: var(--space-2);
