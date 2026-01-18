@@ -3,6 +3,7 @@
   "lastName": "姓",
   "searchByName": "按名称搜索",
   "loading": "加载中...",
+  "error": "错误",
   "endOfResults": "结果结束",
   "noResultsFoundFor": "没有找到 {{query}} 的结果",
   "tryAdjustingFilters": "尝试调整筛选条件或搜索词",
