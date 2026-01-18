@@ -1709,6 +1709,7 @@ export interface InterfaceQueryOrganizationFundCampaigns {
  * @property {Date} startDate - The start date of the campaign.
  * @property {Date} endDate - The end date of the campaign.
  * @property {string} currency - The currency of the campaign.
+ * @property {'active' | 'inactive' | 'pending'} status - The computed status of the campaign.
  */
 export interface InterfaceUserCampaign {
   _id: string;
@@ -1717,6 +1718,7 @@ export interface InterfaceUserCampaign {
   startDate: Date;
   endDate: Date;
   currency: string;
+  status: 'active' | 'inactive' | 'pending';
 }
 /**
  * @interface InterfaceQueryFundCampaignsPledges

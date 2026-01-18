@@ -108,14 +108,30 @@ const Campaigns = (): JSX.Element => {
             startAt: string;
             endAt: string;
           };
-        }) => ({
-          _id: campaign.id,
-          name: campaign.name,
-          fundingGoal: campaign.goalAmount,
-          startDate: new Date(campaign.startAt),
-          endDate: new Date(campaign.endAt),
-          currency: campaign.currencyCode,
-        }),
+        }) => {
+          const today = dayjs().startOf('day');
+          const startDate = dayjs(campaign.startAt).startOf('day');
+          const endDate = dayjs(campaign.endAt).startOf('day');
+
+          let status: 'active' | 'inactive' | 'pending';
+          if (endDate.isBefore(today)) {
+            status = 'inactive';
+          } else if (!startDate.isAfter(today) && !endDate.isBefore(today)) {
+            status = 'active';
+          } else {
+            status = 'pending';
+          }
+
+          return {
+            _id: campaign.id,
+            name: campaign.name,
+            fundingGoal: campaign.goalAmount,
+            startDate: new Date(campaign.startAt),
+            endDate: new Date(campaign.endAt),
+            currency: campaign.currencyCode,
+            status,
+          };
+        },
       );
   }, [campaignData]);
 
@@ -183,25 +199,12 @@ const Campaigns = (): JSX.Element => {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        const campaign = params.row as InterfaceUserCampaign;
-        const today = new Date();
-        const startDate = new Date(campaign.startDate);
-        const endDate = new Date(campaign.endDate);
-
-        let statusVariant: 'active' | 'inactive' | 'pending';
-        if (endDate < today) {
-          statusVariant = 'inactive'; // Ended campaigns
-        } else if (startDate <= today && today <= endDate) {
-          statusVariant = 'active'; // Active campaigns
-        } else {
-          statusVariant = 'pending'; // Upcoming campaigns
-        }
-
-        return (
-          <StatusBadge variant={statusVariant} dataTestId="campaignStatus" />
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <StatusBadge
+          variant={(params.row as InterfaceUserCampaign).status}
+          dataTestId="campaignStatus"
+        />
+      ),
     },
     {
       field: 'startDate',
