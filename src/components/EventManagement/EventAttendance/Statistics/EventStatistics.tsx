@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import {
-  Button,
   ButtonGroup,
   Tooltip,
   OverlayTrigger,
   Dropdown,
 } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import {
   Chart as ChartJS,
   CategoryScale,

@@ -14,7 +14,7 @@
  */
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';

@@ -31,7 +31,7 @@ import {
   PREFIX,
 } from 'utils/useLocalstorage';
 import styles from './OrgList.module.css';
-import { Button } from '@mui/material';
+
 import OrganizationModal from './modal/OrganizationModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Link } from 'react-router';
@@ -424,14 +424,14 @@ function OrgList(): JSX.Element {
             <>
               <NotificationIcon />
               {role === 'administrator' && (
-                <Button
+                <RBButton
                   className={`${styles.dropdown} ${styles.createorgdropdown}`}
                   onClick={toggleModal}
                   data-testid="createOrganizationBtn"
                 >
                   <i className="fa fa-plus me-2" />
                   {t('createOrganization')}
-                </Button>
+                </RBButton>
               )}
             </>
           }
@@ -561,7 +561,7 @@ function OrgList(): JSX.Element {
               >
                 {t('goToStore')}
               </Link>
-              <Button
+              <RBButton
                 type="submit"
                 className={styles.enableEverythingBtn}
                 onClick={closeDialogModal}
@@ -569,7 +569,7 @@ function OrgList(): JSX.Element {
                 data-testid="enableEverythingForm"
               >
                 {t('enableEverything')}
-              </Button>
+              </RBButton>
             </div>
           </div>
         </section>
