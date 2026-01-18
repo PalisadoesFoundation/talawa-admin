@@ -13,11 +13,12 @@ import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 
 import AgendaItemsCreateModal from './AgendaItemsCreateModal';
-import { toast } from 'react-toastify';
 import convertToBase64 from 'utils/convertToBase64';
 import type { MockedFunction } from 'vitest';
 import { describe, test, expect, vi } from 'vitest';
@@ -28,11 +29,16 @@ let mockSetFormState: ReturnType<typeof vi.fn>;
 let mockCreateAgendaItemHandler: ReturnType<typeof vi.fn>;
 const mockT = (key: string): string => key;
 
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+const mockNotificationToast = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
+  dismiss: vi.fn(),
+}));
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockNotificationToast,
 }));
 vi.mock('utils/convertToBase64');
 let mockedConvertToBase64: MockedFunction<typeof convertToBase64>;
@@ -49,6 +55,59 @@ describe('AgendaItemsCreateModal', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+  });
+
+  test('filters out empty URLs and attachments on mount', async () => {
+    // URLs use trim() !== '', attachments use att !== ''
+    const mockFormStateWithEmptyEntries = {
+      title: 'Test Title',
+      description: 'Test Description',
+      duration: '20',
+      attachments: ['valid-attachment', ''],
+      urls: ['https://valid.com', '', '   '],
+      agendaItemCategoryIds: [],
+    };
+
+    render(
+      <MockedProvider>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsCreateModal
+                  agendaItemCreateModalIsOpen
+                  hideCreateModal={mockHideCreateModal}
+                  formState={mockFormStateWithEmptyEntries}
+                  setFormState={mockSetFormState}
+                  createAgendaItemHandler={mockCreateAgendaItemHandler}
+                  t={mockT}
+                  agendaItemCategories={[]}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    // The useEffect should filter out empty entries
+    await waitFor(() => {
+      expect(mockSetFormState).toHaveBeenCalledWith(expect.any(Function));
+    });
+
+    // Verify the filter function was called with the correct logic
+    const setFormStateCalls = mockSetFormState.mock.calls;
+    const filterCall = setFormStateCalls.find(
+      (call) => typeof call[0] === 'function',
+    );
+    if (filterCall) {
+      const filterFn = filterCall[0];
+      const result = filterFn(mockFormStateWithEmptyEntries);
+      // URLs filter uses trim(), so whitespace-only strings are filtered
+      expect(result.urls).toEqual(['https://valid.com']);
+      // Attachments filter only checks !== '', so only empty strings are filtered
+      expect(result.attachments).toEqual(['valid-attachment']);
+    }
   });
 
   test('renders modal correctly', () => {
@@ -76,9 +135,7 @@ describe('AgendaItemsCreateModal', () => {
 
     expect(screen.getByText('agendaItemDetails')).toBeInTheDocument();
     expect(screen.getByTestId('createAgendaItemFormBtn')).toBeInTheDocument();
-    expect(
-      screen.getByTestId('createAgendaItemModalCloseBtn'),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
   });
 
   test('tests the condition for formState', async () => {
@@ -220,7 +277,7 @@ describe('AgendaItemsCreateModal', () => {
     fireEvent.click(linkBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('invalidUrl');
+      expect(mockNotificationToast.error).toHaveBeenCalledWith('invalidUrl');
     });
   });
 
@@ -260,7 +317,9 @@ describe('AgendaItemsCreateModal', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('fileSizeExceedsLimit');
+      expect(mockNotificationToast.error).toHaveBeenCalledWith(
+        'fileSizeExceedsLimit',
+      );
     });
   });
 
@@ -305,6 +364,46 @@ describe('AgendaItemsCreateModal', () => {
       });
     });
   });
+  test('renders video attachment preview correctly', async () => {
+    const mockFormStateWithVideo = {
+      title: 'Test Title',
+      description: 'Test Description',
+      duration: '20',
+      attachments: ['data:video/mp4;base64,AAAA'],
+      urls: [],
+      agendaItemCategoryIds: [],
+    };
+
+    render(
+      <MockedProvider>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <AgendaItemsCreateModal
+                  agendaItemCreateModalIsOpen
+                  hideCreateModal={mockHideCreateModal}
+                  formState={mockFormStateWithVideo}
+                  setFormState={mockSetFormState}
+                  createAgendaItemHandler={mockCreateAgendaItemHandler}
+                  t={mockT}
+                  agendaItemCategories={[]}
+                />
+              </LocalizationProvider>
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    const mediaPreview = screen.getByTestId('mediaPreview');
+    expect(mediaPreview).toBeInTheDocument();
+
+    // Check that video element is rendered (not img)
+    const videoElement = mediaPreview.querySelector('video');
+    expect(videoElement).toBeInTheDocument();
+  });
+
   test('renders autocomplete and selects categories correctly', async () => {
     render(
       <MockedProvider>
