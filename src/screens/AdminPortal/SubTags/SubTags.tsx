@@ -6,37 +6,6 @@
  * view, search, sort, and add sub-tags, as well as navigate between tags
  * and their sub-tags.
  *
- * Features:
- * - Displays a list of sub-tags in a paginated and scrollable DataGrid.
- * - Allows searching sub-tags by name.
- * - Provides sorting options for sub-tags (e.g., Latest, Oldest).
- * - Enables navigation to manage or view sub-tags and their assigned users.
- * - Includes breadcrumbs for navigating the tag hierarchy.
- * - Allows adding new sub-tags via a modal form.
- *
- * Queries and Mutations:
- * - Fetches sub-tags using the `USER_TAG_SUB_TAGS` GraphQL query.
- * - Adds new sub-tags using the `CREATE_USER_TAG` GraphQL mutation.
- *
- * Props:
- * - None (uses React Router hooks for parameters and navigation).
- *
- * State:
- * - `addSubTagModalIsOpen`: Controls the visibility of the "Add Sub-Tag" modal.
- * - `tagName`: Stores the name of the new sub-tag being created.
- * - `tagSearchName`: Stores the search term for filtering sub-tags.
- * - `tagSortOrder`: Stores the sorting order for sub-tags (ascending/descending).
- *
- * Dependencies:
- * - React, React Router, Apollo Client, Material-UI, React-Bootstrap, NotificationToast.
- *
- * Error Handling:
- * - Displays an error message if the sub-tags query fails.
- *
- * Usage:
- * - This component is used in the context of managing organizational tags
- *   and their hierarchy within the Talawa Admin application.
- *
  * @returns The rendered SubTags component.
  */
 import { useMutation, useQuery } from '@apollo/client';
@@ -46,9 +15,10 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useNavigate, useParams, Link } from 'react-router';
 import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
-import { Form } from 'react-bootstrap';
+import Form from 'react-bootstrap/Form';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -82,6 +52,7 @@ function SubTags(): JSX.Element {
   const navigate = useNavigate();
 
   const [tagName, setTagName] = useState<string>('');
+  const [tagNameTouched, setTagNameTouched] = useState(false);
 
   const [tagSearchName, setTagSearchName] = useState('');
   const [tagSortOrder, setTagSortOrder] = useState<SortedByType>('DESCENDING');
@@ -456,39 +427,32 @@ function SubTags(): JSX.Element {
       </Row>
 
       {/* Create Tag Modal */}
-      <Modal
+      <BaseModal
         show={addSubTagModalIsOpen}
         onHide={hideAddSubTagModal}
         backdrop="static"
-        aria-labelledby="contained-modal-title-vcenter"
         centered
+        title={t('tagDetails')}
       >
-        <Modal.Header
-          className={styles.modalHeader}
-          data-testid="tagHeader"
-          closeButton
-        >
-          <Modal.Title>{t('tagDetails')}</Modal.Title>
-        </Modal.Header>
         <Form onSubmitCapture={addSubTag}>
-          <Modal.Body>
-            <Form.Label htmlFor="tagName">{t('tagName')}</Form.Label>
-            <Form.Control
-              type="name"
-              id={'tagName'}
-              className={`mb-3 ${styles.inputField}`}
-              placeholder={t('tagNamePlaceholder')}
-              data-testid="modalTitle"
-              autoComplete="off"
-              required
-              value={tagName}
-              onChange={(e): void => {
-                setTagName(e.target.value);
-              }}
-            />
-          </Modal.Body>
+          <FormTextField
+            name="tagName"
+            label={t('tagName')}
+            placeholder={t('tagNamePlaceholder')}
+            value={tagName}
+            onChange={(val) => {
+              setTagName(val);
+              if (!tagNameTouched) setTagNameTouched(true);
+            }}
+            onBlur={() => setTagNameTouched(true)}
+            touched={tagNameTouched}
+            error={tagNameTouched && !tagName ? tCommon('required') : undefined}
+            required
+            data-testid="modalTitle"
+            autoComplete="off"
+          />
 
-          <Modal.Footer>
+          <div className="d-flex justify-content-end gap-2 mt-3">
             <Button
               variant="secondary"
               onClick={(): void => hideAddSubTagModal()}
@@ -506,9 +470,9 @@ function SubTags(): JSX.Element {
             >
               {createUserTagLoading ? tCommon('creating') : tCommon('create')}
             </Button>
-          </Modal.Footer>
+          </div>
         </Form>
-      </Modal>
+      </BaseModal>
     </>
   );
 }

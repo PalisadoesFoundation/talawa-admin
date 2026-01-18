@@ -8,7 +8,7 @@
 }
 
 .roleBadge {
-  font-size: 0.75rem;
+  font-size: var(--font-size-xs);
 }
 
 .hiddenInput {
@@ -16,13 +16,137 @@
 }
 
 .dropdownToggle {
-  color: black;
+  color: var(--color-black);
   border: none;
-  padding: 0;
+  padding: var(--space-0);
   background: none;
   box-shadow: none;
 }
 
 .removeItem {
   color: var(--bs-danger);
+}
+
+.modalContent {
+  width: var(--modal-width);
+  max-width: var(--modal-max-width);
+}
+
+.groupInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.groupImage {
+  margin-bottom: var(--space-5);
+}
+
+.editImgBtn {
+  padding: var(--space-1) var(--space-3) var(--space-3) var(--space-4);
+  border-radius: var(--radius-full);
+  background-color: var(--editImgBtn-bg);
+  border: var(--border-1) solid var(--editImgBtn-border);
+  color: var(--editImgBtn-color);
+  position: relative;
+  top: calc(var(--space-9) * -1);
+  left: var(--space-9);
+}
+
+.editImgBtn:focus-visible {
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: var(--space-1);
+}
+
+.editChatNameContainer {
+  display: flex;
+  gap: var(--space-7);
+  align-items: center;
+  font-size: var(--font-size-xl);
+  margin-bottom: var(--space-5);
+}
+
+.editChatNameContainer input {
+  border: none;
+  border-bottom: var(--border-1) solid var(--editChatNameContainer-border);
+  outline: none;
+  padding: var(--space-0) var(--space-3);
+}
+
+.editChatNameContainer input:focus-visible {
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: var(--space-1);
+}
+
+.editChatNameContainer h3 {
+  margin: var(--space-0);
+}
+
+.cancelIcon {
+  color: var(--icon-cancel);
+  cursor: pointer;
+  font-size: var(--font-size-md);
+}
+
+.memberList {
+  max-height: var(--space-23);
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge legacy */
+}
+
+.memberList::-webkit-scrollbar {
+  display: none;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.groupMembersList {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.groupMembersList p {
+  margin: var(--space-0);
+  color: var(--groupMemberList-p-color);
+}
+
+.membersImage {
+  width: var(--space-9) !important;
+}
+
+.chatUserDetails {
+  display: flex;
+  gap: var(--space-5);
+  align-items: center;
+}
+
+.input {
+  flex: 1;
+  position: relative;
+  padding-right: var(--space-9);
+  padding-inline-end: var(--space-9);
+  width: var(--space-25);
+}
+
+.input:active {
+  box-shadow: var(--dropdownItem-box-shadow) !important;
+  background-color: var(--create-button-bg-color);
+  border-color: var(--input-shadow) !important;
+  color: var(--input-text-color);
+}
+
+.input:focus {
+  box-shadow: var(--dropdownItem-box-shadow) !important;
+  border-color: var(--input-shadow) !important;
+}
+
+.userData {
+  /* TableContainer styling - can be empty or add specific styles if needed */
 }
