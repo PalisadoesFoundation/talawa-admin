@@ -27,7 +27,7 @@
 import React, { useState } from 'react';
 import type { JSX } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import styles from './EventDashboard.module.css';
 import { useTranslation } from 'react-i18next';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';

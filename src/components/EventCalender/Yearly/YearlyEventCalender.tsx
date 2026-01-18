@@ -35,7 +35,7 @@ import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect, type JSX } from 'react';
-import styles from '../../../style/app-fixed.module.css';
+import styles from './YearlyEventCalender.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import {
   type InterfaceEvent,

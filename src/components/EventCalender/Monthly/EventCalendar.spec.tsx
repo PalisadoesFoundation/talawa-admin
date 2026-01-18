@@ -969,7 +969,7 @@ describe('Calendar', () => {
 
       // Administrator should see all events (public and private)
       // Check that the day with events has the correct class indicating events are present
-      const dayWithEvents = container.querySelector('._day__events_d8535b');
+      const dayWithEvents = container.querySelector('[data-has-events="true"]');
       expect(dayWithEvents).toBeInTheDocument();
 
       // Check that "View all" button exists, indicating multiple events are available
@@ -1042,7 +1042,7 @@ describe('Calendar', () => {
       await wait();
 
       // Regular user who is a member should see both public and private events
-      const dayWithEvents = container.querySelector('._day__events_d8535b');
+      const dayWithEvents = container.querySelector('[data-has-events="true"]');
       expect(dayWithEvents).toBeInTheDocument();
 
       const viewAllButton = screen.queryByTestId('more');
@@ -1253,7 +1253,7 @@ describe('Calendar', () => {
       await wait();
 
       // When userRole is not provided, should see only public events (single event, no View all button)
-      const dayWithEvents = container.querySelector('._day__events_d8535b');
+      const dayWithEvents = container.querySelector('[data-has-events="true"]');
       expect(dayWithEvents).toBeInTheDocument();
     });
 
@@ -1346,7 +1346,7 @@ describe('Calendar', () => {
       await wait();
 
       // When userId is not provided, should see only public events
-      const dayWithEvents = container.querySelector('._day__events_d8535b');
+      const dayWithEvents = container.querySelector('[data-has-events="true"]');
       expect(dayWithEvents).toBeInTheDocument();
     });
 
@@ -1439,7 +1439,7 @@ describe('Calendar', () => {
       await wait();
 
       // When orgData is not provided, should see only public events
-      const dayWithEvents = container.querySelector('._day__events_d8535b');
+      const dayWithEvents = container.querySelector('[data-has-events="true"]');
       expect(dayWithEvents).toBeInTheDocument();
     });
 
@@ -1544,7 +1544,7 @@ describe('Calendar', () => {
       await wait();
 
       // When orgData has no members, should see only public events
-      const dayWithEvents = container.querySelector('._day__events_d8535b');
+      const dayWithEvents = container.querySelector('[data-has-events="true"]');
       expect(dayWithEvents).toBeInTheDocument();
     });
 
@@ -1627,7 +1627,7 @@ describe('Calendar', () => {
       await wait();
 
       // Check that the day with events has the correct class indicating events are present
-      const dayWithEvents = container.querySelector('._day__events_d8535b');
+      const dayWithEvents = container.querySelector('[data-has-events="true"]');
       expect(dayWithEvents).toBeInTheDocument();
 
       // Check that "View all" button exists, indicating multiple events are filtered and available
