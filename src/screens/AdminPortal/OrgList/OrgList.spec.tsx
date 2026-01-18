@@ -482,7 +482,6 @@ const mockConfigurations = {
     {
       request: {
         query: CURRENT_USER,
-        variables: { userId: '123' },
       },
       result: {
         data: {
@@ -492,6 +491,8 @@ const mockConfigurations = {
             lastName: 'Doe',
             email: 'john.doe@akatsuki.com',
             image: null,
+            isEmailAddressVerified: true,
+            emailAddress: 'john.doe@akatsuki.com',
           },
         },
       },
@@ -1553,6 +1554,8 @@ describe('Advanced Component Functionality Tests', () => {
               lastName: 'User',
               image: null,
               adminFor: [],
+              isEmailAddressVerified: true,
+              emailAddress: 'test@example.com',
             },
           },
         },
@@ -1613,7 +1616,6 @@ describe('Advanced Component Functionality Tests', () => {
       {
         request: {
           query: CURRENT_USER,
-          variables: { userId: '123' },
         },
         result: {
           data: {
@@ -1623,11 +1625,7 @@ describe('Advanced Component Functionality Tests', () => {
               lastName: 'User',
               email: 'test@test.com',
               image: null,
-            },
-            currentUser: {
-              id: '123',
-              name: 'Test User',
-              role: 'administrator',
+              isEmailAddressVerified: true,
               emailAddress: 'test@test.com',
             },
           },
@@ -1713,7 +1711,6 @@ describe('Advanced Component Functionality Tests', () => {
       {
         request: {
           query: CURRENT_USER,
-          variables: { userId: '123' },
         },
         result: {
           data: {
@@ -1723,11 +1720,7 @@ describe('Advanced Component Functionality Tests', () => {
               lastName: 'User',
               email: 'test@test.com',
               image: null,
-            },
-            currentUser: {
-              id: '123',
-              name: 'Test User',
-              role: 'administrator',
+              isEmailAddressVerified: true,
               emailAddress: 'test@test.com',
             },
           },
@@ -2275,7 +2268,6 @@ describe('Advanced Component Functionality Tests', () => {
       {
         request: {
           query: CURRENT_USER,
-          variables: { userId: '123' },
         },
         error: new Error('Unauthorized: Missing or invalid token'),
       },

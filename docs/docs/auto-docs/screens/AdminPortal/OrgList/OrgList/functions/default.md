@@ -15,4 +15,4 @@ It also handles the email verification warning banner.
 
 `Element`
 
-JSX.Element - The rendered OrgList component.
+The rendered OrgList component.

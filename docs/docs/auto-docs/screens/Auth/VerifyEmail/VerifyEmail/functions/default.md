@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/Auth/VerifyEmail/VerifyEmail.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Auth/VerifyEmail/VerifyEmail.tsx#L48)
+Defined in: [src/screens/Auth/VerifyEmail/VerifyEmail.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Auth/VerifyEmail/VerifyEmail.tsx#L47)
 
 VerifyEmail Component
 

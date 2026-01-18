@@ -55,7 +55,7 @@ interface InterfaceFormStateType {
  * OrgList component displays a list of organizations and allows administrators to create new ones.
  * It also handles the email verification warning banner.
  *
- * @returns JSX.Element - The rendered OrgList component.
+ * @returns The rendered OrgList component.
  */
 function OrgList(): JSX.Element {
   const { getItem, setItem, removeItem } = useLocalStorage();
@@ -69,11 +69,6 @@ function OrgList(): JSX.Element {
 
   // Email verification warning state
   const [showEmailWarning, setShowEmailWarning] = useState(false);
-
-  // Fetch current user status to sync verification state
-  const { data: currentUserData } = useQuery(CURRENT_USER, {
-    fetchPolicy: 'network-only', // Ensure fresh data
-  });
 
   const [resendVerificationEmail, { loading: resendLoading }] = useMutation(
     RESEND_VERIFICATION_EMAIL_MUTATION,
@@ -97,33 +92,6 @@ function OrgList(): JSX.Element {
   const toggleDialogModal = (): void =>
     setdialogModalIsOpen(!dialogModalisOpen);
 
-  // Check for email verification status on component mount and sync with backend
-  useEffect(() => {
-    // Priority: API data > LocalStorage
-    if (currentUserData?.user) {
-      if (currentUserData.user.isEmailAddressVerified) {
-        setShowEmailWarning(false);
-        // Clean up legacy flags
-        removeItem('emailNotVerified');
-        removeItem('unverifiedEmail');
-      } else {
-        setShowEmailWarning(true);
-        // Ensure flags are consistent
-        setItem('emailNotVerified', 'true');
-        if (currentUserData.user.emailAddress) {
-          setItem('unverifiedEmail', currentUserData.user.emailAddress);
-        }
-      }
-    } else {
-      // Fallback to local storage if API data not yet available
-      const emailNotVerified = getItem('emailNotVerified');
-      const email = getItem('unverifiedEmail');
-      if (emailNotVerified === 'true' && typeof email === 'string') {
-        setShowEmailWarning(true);
-      }
-    }
-  }, [currentUserData]);
-
   const handleDismissWarning = (): void => {
     setShowEmailWarning(false);
     removeItem('emailNotVerified');
@@ -137,7 +105,9 @@ function OrgList(): JSX.Element {
       if (data?.sendVerificationEmail?.success) {
         NotificationToast.success(tLogin('emailResent'));
       } else {
-        NotificationToast.info(tLogin('resendFailed'));
+        NotificationToast.error(
+          data?.sendVerificationEmail?.message || tLogin('resendFailed'),
+        );
       }
     } catch (error: unknown) {
       errorHandler(tLogin, error);
@@ -183,6 +153,7 @@ function OrgList(): JSX.Element {
   const context = token
     ? { headers: { authorization: 'Bearer ' + token } }
     : { headers: {} };
+  // Fetch current user status (consolidated query with network-only for fresh data)
   const {
     data: userData,
   }: {
@@ -190,9 +161,36 @@ function OrgList(): JSX.Element {
     loading: boolean;
     error?: Error | undefined;
   } = useQuery(CURRENT_USER, {
-    variables: { userId: getItem('id') },
+    fetchPolicy: 'network-only',
     context,
   });
+
+  // Check for email verification status on component mount and sync with backend
+  useEffect(() => {
+    // Priority: API data > LocalStorage
+    if (userData?.user) {
+      if (userData.user.isEmailAddressVerified) {
+        setShowEmailWarning(false);
+        // Clean up legacy flags
+        removeItem('emailNotVerified');
+        removeItem('unverifiedEmail');
+      } else {
+        setShowEmailWarning(true);
+        // Ensure flags are consistent
+        setItem('emailNotVerified', 'true');
+        if (userData.user.emailAddress) {
+          setItem('unverifiedEmail', userData.user.emailAddress);
+        }
+      }
+    } else {
+      // Fallback to local storage if API data not yet available
+      const emailNotVerified = getItem('emailNotVerified');
+      const email = getItem('unverifiedEmail');
+      if (emailNotVerified === 'true' && typeof email === 'string') {
+        setShowEmailWarning(true);
+      }
+    }
+  }, [userData, getItem, setItem, removeItem]);
 
   const {
     data: allOrganizationsData,
@@ -361,6 +359,7 @@ function OrgList(): JSX.Element {
           onClose={handleDismissWarning}
           className="mb-3"
           data-testid="email-verification-warning"
+          aria-live="polite"
         >
           <div className="d-flex justify-content-between align-items-center">
             <div>

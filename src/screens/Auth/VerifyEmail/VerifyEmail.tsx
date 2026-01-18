@@ -30,7 +30,6 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-// Import useLocalStorage
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './VerifyEmail.module.css';
 
@@ -99,7 +98,7 @@ const VerifyEmail = (): JSX.Element => {
           err.graphQLErrors?.[0]?.extensions?.code === 'UNAUTHENTICATED' ||
           err.message?.toLowerCase().includes('invalid arguments')
         ) {
-          NotificationToast.error(t('verifyEmail.loginRequired'));
+          NotificationToast.error(t('loginRequired'));
         } else {
           errorHandler(t, error);
         }
@@ -134,13 +133,13 @@ const VerifyEmail = (): JSX.Element => {
 
               {verificationState === 'loading' && (
                 <div className={styles.stateContainer}>
-                  <div
+                  <output
                     className="spinner-border text-primary"
                     role="status"
                     data-testid="loading-spinner"
                   >
                     <span className="visually-hidden">{t('verifying')}</span>
-                  </div>
+                  </output>
                   <h3 className="text-center fw-bold mt-4">{t('verifying')}</h3>
                 </div>
               )}
