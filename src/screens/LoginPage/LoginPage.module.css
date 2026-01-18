@@ -3,6 +3,38 @@
   animation: fadeIn 0.3s ease-in-out;
 }
 
+.tabContainer {
+  display: flex;
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-gray-300);
+}
+
+.tab {
+  flex: 1;
+  padding: var(--space-3) var(--space-4);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--color-gray-600);
+  transition: all 0.2s ease;
+}
+
+.tab:hover {
+  color: var(--color-blue-600);
+  background-color: var(--color-gray-50);
+}
+
+.activeTab {
+  color: var(--color-blue-600);
+  border-bottom-color: var(--color-blue-600);
+}
+
+.formContainer {
+  margin-top: var(--space-4);
+}
+
 .communityLogo {
   object-fit: contain;
 }

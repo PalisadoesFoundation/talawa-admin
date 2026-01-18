@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLazyQuery } from '@apollo/client';
-import { Form, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { EmailField } from '../EmailField/EmailField';
 import { PasswordField } from '../PasswordField/PasswordField';
@@ -61,7 +61,7 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
   // Handle successful login
   useEffect(() => {
     if (data?.signIn?.authenticationToken) {
-      onSuccessRef.current?.(data.signIn.authenticationToken);
+      onSuccessRef.current?.(data);
     }
   }, [data]);
 
@@ -95,7 +95,7 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
   };
 
   return (
-    <Form onSubmit={handleSubmit} data-testid={testId} aria-busy={loading}>
+    <form onSubmit={handleSubmit} data-testid={testId} aria-busy={loading}>
       <h3 data-testid={`${testId}-heading`}>
         {isAdmin ? t('adminLogin') : t('userLogin')}
       </h3>
@@ -122,7 +122,7 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
       >
         {loading ? t('loading') : tCommon('login')}
       </Button>
-    </Form>
+    </form>
   );
 };
 
