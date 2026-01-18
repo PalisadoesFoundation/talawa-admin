@@ -811,8 +811,8 @@ describe('Testing Agenda Items Components', () => {
       await userEvent.click(screen.getByTestId('createAgendaItemFormBtn'));
 
       await waitFor(() => {
-        expect(NotificationToast.success).not.toHaveBeenCalled();
-        expect(NotificationToast.error).not.toHaveBeenCalled();
+        expect(mockNotificationToast.success).not.toHaveBeenCalled();
+        expect(mockNotificationToast.error).not.toHaveBeenCalled();
         expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
       });
     } finally {

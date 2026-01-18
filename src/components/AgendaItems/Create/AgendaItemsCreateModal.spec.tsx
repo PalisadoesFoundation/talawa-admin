@@ -55,7 +55,7 @@ describe('AgendaItemsCreateModal', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   test('filters out empty URLs and attachments on mount', async () => {
