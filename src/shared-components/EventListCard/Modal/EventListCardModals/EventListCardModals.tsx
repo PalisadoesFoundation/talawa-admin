@@ -37,17 +37,17 @@ import {
 } from 'GraphQl/Mutations/EventMutations';
 import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { useUpdateEventHandler } from './updateLogic';
+import { useUpdateEventHandler } from 'components/EventListCard/Modal/updateLogic';
 import { errorHandler } from 'utils/errorHandler';
 
 import EventListCardDeleteModal from 'shared-components/EventListCard/Modal/Delete/EventListCardDeleteModal';
-import EventListCardPreviewModal from './Preview/EventListCardPreviewModal';
+import EventListCardPreviewModal from 'components/EventListCard/Modal/Preview/EventListCardPreviewModal';
 import Button from 'shared-components/Button/Button';
 import Form from 'react-bootstrap/Form';
 import styles from './EventListCardModals.module.css';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 
-import type { InterfaceEventListCardModalsProps } from 'types/EventListCard/Modal/EventListCardModals/interface';
+import type { InterfaceEventListCardModalsProps } from 'types/shared-components/EventListCard/Modal/EventListCardModals/interface';
 
 // Extend dayjs with utc plugin
 dayjs.extend(utc);

@@ -17,7 +17,7 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
 import EventListCardModals from './EventListCardModals';
-import EventListCardPreviewModal from './Preview/EventListCardPreviewModal';
+import EventListCardPreviewModal from 'components/EventListCard/Modal/Preview/EventListCardPreviewModal';
 import EventListCardDeleteModal from 'shared-components/EventListCard/Modal/Delete/EventListCardDeleteModal';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
@@ -60,9 +60,12 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
 }));
-vi.mock('./Preview/EventListCardPreviewModal', () => ({
-  default: vi.fn(),
-}));
+vi.mock(
+  'components/EventListCard/Modal/Preview/EventListCardPreviewModal',
+  () => ({
+    default: vi.fn(),
+  }),
+);
 vi.mock(
   'shared-components/EventListCard/Modal/Delete/EventListCardDeleteModal',
   () => ({

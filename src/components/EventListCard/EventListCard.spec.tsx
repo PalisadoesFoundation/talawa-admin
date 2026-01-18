@@ -1,6 +1,7 @@
 import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom/vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -19,7 +20,7 @@ import dayjs from 'dayjs';
 import { useLocalStorage } from 'utils/useLocalstorage';
 import { props } from './EventListCardProps';
 import { ERROR_MOCKS, MOCKS } from './Modal/EventListCardMocks';
-import { vi, beforeAll, afterAll, afterEach, expect, it } from 'vitest';
+import { vi, beforeAll, afterAll, afterEach, it } from 'vitest';
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
@@ -208,15 +209,13 @@ describe('Testing Event List Card', () => {
     await userEvent.click(screen.getByTestId('deleteEventModalBtn'));
 
     await waitFor(() => {
-      expect(
-        screen.getByTestId('eventDeleteModalCloseBtn'),
-      ).toBeInTheDocument();
+      expect(screen.getByTestId('modal-secondary-btn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('eventDeleteModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modal-secondary-btn'));
 
     await waitFor(() => {
       expect(
-        screen.queryByTestId('eventDeleteModalCloseBtn'),
+        screen.queryByTestId('modal-secondary-btn'),
       ).not.toBeInTheDocument();
     });
 

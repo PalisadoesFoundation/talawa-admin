@@ -8,7 +8,7 @@
  * @param deleteEventHandler - Function to handle the event deletion.
  * @returns JSX.Element
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Form from 'react-bootstrap/Form';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
@@ -25,6 +25,12 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
   const [deleteOption, setDeleteOption] = useState<
     'single' | 'following' | 'all'
   >('single');
+
+  useEffect(() => {
+    if (eventDeleteModalIsOpen) {
+      setDeleteOption('single');
+    }
+  }, [eventDeleteModalIsOpen, eventListCardProps.id]);
 
   // Check if this is a recurring instance
   const isRecurringInstance =

@@ -1,4 +1,4 @@
-/**
+  /**
  * EventListCard component.
  *
  * This component represents a card that displays event details and allows users
@@ -34,7 +34,7 @@ import React, { useState, JSX } from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import { Navigate, useParams } from 'react-router';
-import EventListCardModals from './Modal/EventListCardModals';
+import EventListCardModals from 'shared-components/EventListCard/Modal/EventListCardModals/EventListCardModals';
 import type { InterfaceEvent } from 'types/Event/interface';
 /**
  * Props for the EventListCard component.

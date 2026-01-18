@@ -339,8 +339,17 @@ describe('EventListCardDeleteModal', () => {
       const modal = screen.getByTestId(
         `deleteEventModal${mockRecurringEventProps.eventListCardProps.id}`,
       );
-      expect(modal).toBeInTheDocument();
-      expect(modal).toHaveClass('modal-lg');
+      // Check if modal itself has the class or contains it
+      const dialog = modal.classList.contains('modal-dialog')
+        ? modal
+        : modal.querySelector('.modal-dialog');
+
+      if (!dialog) {
+        throw new Error(
+          `Modal dialog not found. ID: ${modal.getAttribute('data-testid')}, Classes: ${modal.className}`,
+        );
+      }
+      expect(dialog).toHaveClass('modal-lg');
     });
   });
 
@@ -373,11 +382,17 @@ describe('EventListCardDeleteModal', () => {
       const modal = screen.getByTestId(
         `deleteEventModal${mockStandaloneEventProps.eventListCardProps.id}`,
       );
-      expect(modal).toBeInTheDocument();
-      // In react-bootstrap/testing-library, the element with data-testid often receives the size class
-      // or we should check if the modal *contains* the class directly if logic allows.
-      // Based on previous success, we revert to direct check.
-      expect(modal).toHaveClass('modal-sm');
+      // Check if modal itself has the class or contains it
+      const dialog = modal.classList.contains('modal-dialog')
+        ? modal
+        : modal.querySelector('.modal-dialog');
+
+      if (!dialog) {
+        throw new Error(
+          `Modal dialog not found. ID: ${modal.getAttribute('data-testid')}, Classes: ${modal.className}`,
+        );
+      }
+      expect(dialog).toHaveClass('modal-sm');
     });
   });
 
