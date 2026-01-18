@@ -20,8 +20,8 @@ import i18nForTest from 'utils/i18nForTest';
 import OrgList from './OrgList';
 import { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY } from './OrgListMocks';
 import {
-  ORGANIZATION_FILTER_LIST,
   CURRENT_USER,
+  ORGANIZATION_FILTER_LIST,
 } from 'GraphQl/Queries/Queries';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -33,6 +33,7 @@ dayjs.extend(utc);
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
+  RESEND_VERIFICATION_EMAIL_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
 
@@ -493,6 +494,39 @@ const mockConfigurations = {
             image: null,
             isEmailAddressVerified: true,
             emailAddress: 'john.doe@akatsuki.com',
+          },
+        },
+      },
+    },
+    {
+      request: {
+        query: CURRENT_USER,
+      },
+      result: {
+        data: {
+          user: {
+            id: '123',
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'john.unverified@example.com',
+            image: null,
+            adminFor: [],
+            isEmailAddressVerified: false,
+            emailAddress: 'john.unverified@example.com',
+            role: 'administrator',
+            __typename: 'User',
+            // Missing fields required by CURRENT_USER query
+            postalCode: null,
+            state: null,
+            updatedAt: null,
+            workPhoneNumber: null,
+            homePhoneNumber: null,
+            mobilePhoneNumber: null,
+            eventsAttended: [],
+            maritalStatus: null,
+            name: 'John Doe',
+            natalSex: null,
+            naturalLanguageCode: null,
           },
         },
       },
@@ -2366,5 +2400,150 @@ describe('Advanced Component Functionality Tests', () => {
     expect(localStorage.removeItem).toHaveBeenCalledWith(
       'Talawa-admin_emailNotVerified',
     );
+  });
+});
+
+describe('Email Verification Actions Tests', () => {
+  const unverifiedUserMock = {
+    request: {
+      query: CURRENT_USER,
+    },
+    result: {
+      data: {
+        user: {
+          id: '123',
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john.unverified@example.com',
+          image: null,
+          adminFor: [],
+          isEmailAddressVerified: false,
+          emailAddress: 'john.unverified@example.com',
+          role: 'administrator',
+          __typename: 'User',
+          // Missing fields required by CURRENT_USER query
+          postalCode: null,
+          state: null,
+          updatedAt: null,
+          workPhoneNumber: null,
+          homePhoneNumber: null,
+          mobilePhoneNumber: null,
+          eventsAttended: [],
+          maritalStatus: null,
+          name: 'John Doe',
+          natalSex: null,
+          naturalLanguageCode: null,
+        },
+      },
+    },
+  };
+
+  const resendSuccessMock = {
+    request: {
+      query: RESEND_VERIFICATION_EMAIL_MUTATION,
+    },
+    result: {
+      data: {
+        sendVerificationEmail: {
+          success: true,
+          message: 'Email resent successfully',
+        },
+      },
+    },
+  };
+
+  const resendFailureMock = {
+    request: {
+      query: RESEND_VERIFICATION_EMAIL_MUTATION,
+    },
+    result: {
+      data: {
+        sendVerificationEmail: {
+          success: false,
+          message: 'Failed to resend email',
+        },
+      },
+    },
+  };
+
+  test('dismisses warning and clears local storage', async () => {
+    setItem('id', '123');
+    setItem('role', 'administrator');
+
+    // We need to simulate the warning being present.
+    // The component sets it based on user data.
+    renderWithMocks([
+      unverifiedUserMock,
+      ...createOrgMock(mockOrgData.singleOrg),
+    ]);
+    await wait();
+
+    const warningAlert = await screen.findByTestId(
+      'email-verification-warning',
+    );
+    expect(warningAlert).toBeInTheDocument();
+
+    const closeBtn = warningAlert.querySelector('.btn-close');
+    if (closeBtn) {
+      fireEvent.click(closeBtn);
+    } else {
+      const altBtn = screen.getByLabelText('Close alert');
+      fireEvent.click(altBtn);
+    }
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('email-verification-warning'),
+      ).not.toBeInTheDocument();
+    });
+
+    // Verify key removal. Note: useLocalStorage mock might prefix keys?
+    // The component calls removeItem('emailNotVerified') and removeItem('unverifiedEmail')
+    expect(localStorage.removeItem).toHaveBeenCalledWith(
+      'Talawa-admin_emailNotVerified',
+    );
+    expect(localStorage.removeItem).toHaveBeenCalledWith(
+      'Talawa-admin_unverifiedEmail',
+    );
+  });
+
+  test('handleResendVerification success', async () => {
+    setItem('id', '123');
+    setItem('role', 'administrator');
+
+    renderWithMocks([
+      unverifiedUserMock,
+      resendSuccessMock,
+      ...createOrgMock(mockOrgData.singleOrg),
+    ]);
+    await wait();
+
+    const resendBtn = screen.getByTestId('resend-verification-btn');
+    fireEvent.click(resendBtn);
+
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalledWith('emailResent');
+    });
+  });
+
+  test('handleResendVerification failure (API returns false)', async () => {
+    setItem('id', '123');
+    setItem('role', 'administrator');
+
+    renderWithMocks([
+      unverifiedUserMock,
+      resendFailureMock,
+      ...createOrgMock(mockOrgData.singleOrg),
+    ]);
+    await wait();
+
+    const resendBtn = screen.getByTestId('resend-verification-btn');
+    fireEvent.click(resendBtn);
+
+    await waitFor(() => {
+      // The component uses tLogin('resendFailed') or data message
+      // Mock returns 'Failed to resend email'
+      expect(mockToast.error).toHaveBeenCalledWith('Failed to resend email');
+    });
   });
 });
