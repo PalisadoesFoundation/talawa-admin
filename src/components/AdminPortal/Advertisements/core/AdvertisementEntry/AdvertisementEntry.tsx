@@ -50,6 +50,7 @@ import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQu
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { BaseModal } from 'shared-components/BaseModal';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
 function AdvertisementEntry({
   advertisement,
@@ -156,6 +157,17 @@ function AdvertisementEntry({
       </Button>
     </>
   );
+  const now = new Date();
+
+  let statusVariant: 'active' | 'inactive' | 'pending';
+
+  if (advertisement.startAt && new Date(advertisement.startAt) > now) {
+    statusVariant = 'pending';
+  } else if (advertisement.endAt && new Date(advertisement.endAt) < now) {
+    statusVariant = 'inactive';
+  } else {
+    statusVariant = 'active';
+  }
 
   return (
     <ErrorBoundaryWrapper
@@ -268,6 +280,13 @@ function AdvertisementEntry({
                 <Card.Title className="t-bold" data-testid="Ad_name">
                   {advertisement.name}
                 </Card.Title>
+
+                <StatusBadge
+                  variant={statusVariant}
+                  size="sm"
+                  dataTestId="advertisement-status"
+                />
+
                 <Card.Text
                   data-testid="Ad_desc"
                   className={

@@ -91,6 +91,10 @@ describe('Testing Advertisement Entry Component', () => {
     expect(screen.getAllByText('Advert1')[0]).toBeInTheDocument();
     expect(screen.getByTestId('media')).toBeInTheDocument();
 
+    const statusBadge = screen.getByTestId('advertisement-status');
+    expect(statusBadge).toBeInTheDocument();
+    expect(statusBadge).toHaveTextContent(/active|inactive|pending/i);
+
     fireEvent.click(screen.getByTestId('moreiconbtn'));
     fireEvent.click(screen.getByTestId('deletebtn'));
 
