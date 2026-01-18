@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLazyQuery } from '@apollo/client';
-import { Button } from 'react-bootstrap';
+import { Button } from '../../../shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { EmailField } from '../EmailField/EmailField';
 import { PasswordField } from '../PasswordField/PasswordField';
