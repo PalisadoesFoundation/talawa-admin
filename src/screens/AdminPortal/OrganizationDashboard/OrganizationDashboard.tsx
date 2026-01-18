@@ -26,9 +26,10 @@
  */
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState, JSX } from 'react';
-import { Button, Card } from 'react-bootstrap';
+import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import {
   GET_ORGANIZATION_POSTS_COUNT_PG,
