@@ -50,6 +50,7 @@ describe('Testing Advertisement Entry Component', () => {
     mockUseMutation.mockReturnValue([vi.fn()]);
   });
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

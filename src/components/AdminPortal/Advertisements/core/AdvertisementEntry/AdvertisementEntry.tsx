@@ -36,8 +36,7 @@
  */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import styles from 'style/app-fixed.module.css';
-import localStyles from './AdvertisementEntry.module.css';
+import styles from './AdvertisementEntry.module.css';
 import { Button, Card, Col, Row, Carousel } from 'react-bootstrap';
 import { DELETE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
@@ -295,7 +294,7 @@ function AdvertisementEntry({
                     advertisement.description &&
                     advertisement.description.length > 0
                       ? undefined
-                      : localStyles.noDescription
+                      : styles.noDescription
                   }
                 >
                   {advertisement.description &&
