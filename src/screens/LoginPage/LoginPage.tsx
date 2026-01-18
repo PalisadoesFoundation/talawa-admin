@@ -99,6 +99,20 @@ const LoginPage = (): JSX.Element => {
     setTab('LOGIN');
   };
 
+  const getSocialMediaLabel = (tag: string): string => {
+    const labels: Record<string, string> = {
+      facebookURL: 'Facebook',
+      xURL: 'X (Twitter)',
+      linkedInURL: 'LinkedIn',
+      githubURL: 'GitHub',
+      youtubeURL: 'YouTube',
+      slackURL: 'Slack',
+      instagramURL: 'Instagram',
+      redditURL: 'Reddit',
+    };
+    return labels[tag] || tag;
+  };
+
   const handleAuthError = (error: Error): void => {
     console.error('Authentication error:', error);
   };
@@ -119,7 +133,7 @@ const LoginPage = (): JSX.Element => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className={styles.socialIcon}
-                    aria-label={link.tag}
+                    aria-label={getSocialMediaLabel(link.tag)}
                   >
                     {link.logo}
                   </a>
