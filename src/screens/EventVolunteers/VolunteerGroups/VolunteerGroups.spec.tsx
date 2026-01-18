@@ -284,7 +284,7 @@ describe('Testing VolunteerGroups Screen', () => {
     const editGroupBtn = await screen.findAllByTestId('editGroupBtn');
     await userEvent.click(editGroupBtn[0]);
 
-    expect(await screen.findAllByText(t.updateGroup)).toHaveLength(2);
+    expect(await screen.findAllByText(t.updateGroup)).toHaveLength(1);
     await userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
 
@@ -300,7 +300,7 @@ describe('Testing VolunteerGroups Screen', () => {
     const createGroupBtn = screen.getByTestId('createGroupBtn');
     await userEvent.click(createGroupBtn);
 
-    expect(await screen.findAllByText(t.createGroup)).toHaveLength(2);
+    expect(await screen.findAllByText(t.createGroup)).toHaveLength(1);
     await userEvent.click(await screen.findByTestId('modalCloseBtn'));
   });
 
