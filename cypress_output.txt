@@ -1,0 +1,32 @@
+
+DevTools listening on ws://127.0.0.1:34837/devtools/browser/0e13db8a-5601-4f89-bf04-334dc24428e1
+(node:606498) ExperimentalWarning: `--experimental-loader` may be removed in the future; instead use `register()`:
+--import 'data:text/javascript,import { register } from "node:module"; import { pathToFileURL } from "node:url"; register("file%3A///home/anant/.cache/Cypress/14.5.4/Cypress/resources/app/node_modules/ts-node/esm/transpile-only.mjs", pathToFileURL("./"));'
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:606498) [DEP0180] DeprecationWarning: fs.Stats constructor is deprecated.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[dotenv@17.2.3] injecting env (5) from .env -- tip: ✅ audit secrets and track compliance: https://dotenvx.com/ops
+
+================================================================================
+
+  (Run Starting)
+
+  ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
+  │ Cypress:        14.5.4                                                                         │
+  │ Browser:        Electron 130 (headless)                                                        │
+  │ Node Version:   v24.12.0 (/usr/local/bin/node)                                                 │
+  │ Specs:          1 found (event.cy.ts)                                                          │
+  │ Searched:       cypress/e2e/admin_spec/event.cy.ts                                             │
+  │ Experiments:    experimentalRunAllSpecs=true,experimentalStudio=true                           │
+  └────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+                                                                                                    
+  Running:  event.cy.ts                                                                     (1 of 1)
+Browserslist: browsers data (caniuse-lite) is 11 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+
+
+  Admin Event Tab

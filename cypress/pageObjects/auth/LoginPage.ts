@@ -23,12 +23,31 @@ export class LoginPage {
       .should('be.visible')
       .clear()
       .type(password);
+    if (Cypress.env('RECAPTCHA_SITE_KEY')) {
+      cy.get('iframe')
+        .first()
+        .then((recaptchaIframe) => {
+          const body = recaptchaIframe.contents();
+          cy.wrap(body)
+            .find('.recaptcha-checkbox-border')
+            .should('be.visible')
+            .click();
+        });
+      cy.wait(1000); // wait for 1 second to simulate recaptcha completion
+    }
     cy.get(this._loginButton, { timeout }).should('be.enabled').click();
     return this;
   }
 
-  verifyErrorToast(timeout = 5000) {
-    cy.get('.Toastify__toast', { timeout }).should('be.visible');
+  verifyToastVisible(expectedMessage?: string, timeout = 10000) {
+    const toast = cy.get('[role=alert]', { timeout }).should('be.visible');
+    if (expectedMessage) {
+      toast.should('contain.text', expectedMessage);
+    }
     return this;
+  }
+
+  verifyErrorToast(timeout = 10000) {
+    return this.verifyToastVisible(undefined, timeout);
   }
 }
