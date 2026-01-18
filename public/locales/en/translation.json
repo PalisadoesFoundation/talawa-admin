@@ -585,7 +585,11 @@
     "talawaApiUnavailable": "talawaApiUnavailable",
     "done": "done",
     "viewType": "View Type",
-    "search": "Search"
+    "search": "Search",
+    "selectDay": "Select Day",
+    "selectMonth": "Select Month",
+    "selectYear": "Select Year",
+    "workshops": "Workshops"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
@@ -1790,7 +1794,11 @@
     "deleteCategoryMsg": "Are you sure you want to delete this Action Item Category?",
     "noDescriptionProvided": "No description provided",
     "createButton": "createButton",
-    "editButton": "editButton"
+    "action": "Action",
+    "actionItemCategories": "Action Item Categories",
+    "category": "Category",
+    "createdOn": "Created On",
+    "serialNumber": "S. No."
   },
   "organizationVenues": {
     "title": "Venues",

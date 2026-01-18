@@ -585,7 +585,10 @@
     "done": "完成",
     "createChat": "创建聊天",
     "viewType": "视图类型",
-    "search": "搜索"
+    "selectDay": "Select Day",
+    "selectMonth": "Select Month",
+    "selectYear": "Select Year",
+    "workshops": "Workshops"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项类别",
@@ -1807,7 +1810,12 @@
     "deleteCategoryMsg": "您确定要删除此操作项目类别吗？",
     "noDescriptionProvided": "未提供描述",
     "createButton": "创建按钮",
-    "editButton": "编辑按钮"
+    "editButton": "编辑按钮",
+    "action": "Action",
+    "actionItemCategories": "Action Item Categories",
+    "category": "Category",
+    "createdOn": "Created On",
+    "serialNumber": "S. No."
   },
   "organizationVenues": {
     "title": "场地",
