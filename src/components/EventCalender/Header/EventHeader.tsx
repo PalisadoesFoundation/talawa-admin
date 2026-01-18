@@ -33,7 +33,7 @@
  */
 
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import AddIcon from '@mui/icons-material/Add';
 import styles from './EventHeader.module.css';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';

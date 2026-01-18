@@ -8,6 +8,9 @@ export interface InterfaceSortingOption {
   value: string | number;
 }
 
+/**
+ * Props for SortingButton component.
+ */
 export interface InterfaceSortingButtonProps {
   /** The title attribute for the Dropdown */
   title?: string;

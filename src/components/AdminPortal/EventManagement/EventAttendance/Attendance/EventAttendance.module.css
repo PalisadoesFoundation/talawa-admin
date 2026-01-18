@@ -33,7 +33,6 @@
 .input {
   flex: 1;
   position: relative;
-  padding-right: 30px;
   padding-inline-end: 30px;
   width: 425px;
 }

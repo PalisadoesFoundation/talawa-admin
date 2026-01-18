@@ -1,3 +1,4 @@
+import type React from 'react';
 /**
  * Props for PageHeader (Navbar) component.
  */

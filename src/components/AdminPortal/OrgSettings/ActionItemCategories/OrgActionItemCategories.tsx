@@ -28,7 +28,7 @@
 
 import type { FC } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import styles from './OrgActionItemCategories.module.css';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
