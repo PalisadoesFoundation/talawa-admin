@@ -23,7 +23,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import type { JSX } from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import type { InterfaceEvent } from 'types/Event/interface';
+
 import { UserRole } from 'types/Event/interface';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useNavigate, useParams } from 'react-router';
@@ -47,20 +47,11 @@ import Form from 'react-bootstrap/Form';
 import styles from './EventListCardModals.module.css';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 
+import type { InterfaceEventListCardModalsProps } from 'types/EventListCard/Modal/EventListCardModals/interface';
+
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
 
-interface IEventListCard extends InterfaceEvent {
-  refetchEvents?: () => void;
-}
-
-interface IEventListCardModalProps {
-  eventListCardProps: IEventListCard;
-  eventModalIsOpen: boolean;
-  hideViewModal: () => void;
-  t: (key: string, options?: Record<string, unknown>) => string;
-  tCommon: (key: string) => string;
-}
 const DEFAULT_TIME = '08:00:00';
 function EventListCardModals({
   eventListCardProps,
@@ -68,7 +59,7 @@ function EventListCardModals({
   hideViewModal,
   t,
   tCommon,
-}: IEventListCardModalProps): JSX.Element {
+}: InterfaceEventListCardModalsProps): JSX.Element {
   const { refetchEvents } = eventListCardProps;
 
   const { getItem } = useLocalStorage();
