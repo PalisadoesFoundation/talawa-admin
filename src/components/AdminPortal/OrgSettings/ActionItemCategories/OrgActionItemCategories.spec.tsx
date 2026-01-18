@@ -69,7 +69,6 @@ const renderActionItemCategories = (
 describe('Testing Organisation Action Item Categories', () => {
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   it('should render the Action Item Categories Screen', async () => {
