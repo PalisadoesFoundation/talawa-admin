@@ -13,6 +13,14 @@ import { Navigate, useNavigate, useParams } from 'react-router';
 import { Campaign, WarningAmberRounded } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
+
+/**
+ * Extended interface for campaigns with computed status
+ */
+type CampaignWithStatus = InterfaceUserCampaign & {
+  status: 'active' | 'inactive' | 'pending';
+};
+
 import { type GridCellParams } from 'shared-components/DataGridWrapper';
 import useLocalStorage from 'utils/useLocalstorage';
 import PledgeModal from './PledgeModal';
@@ -86,7 +94,7 @@ const Campaigns = (): JSX.Element => {
     setSelectedCampaign(null);
   }, []);
 
-  const campaigns = useMemo(() => {
+  const campaigns = useMemo((): CampaignWithStatus[] => {
     if (!campaignData?.organization?.funds?.edges) {
       return [];
     }
@@ -136,7 +144,7 @@ const Campaigns = (): JSX.Element => {
   }, [campaignData]);
 
   const filteredCampaigns = useMemo(() => {
-    return campaigns.filter((campaign: InterfaceUserCampaign) =>
+    return campaigns.filter((campaign: CampaignWithStatus) =>
       campaign.name.toLowerCase().includes(searchText.toLowerCase()),
     );
   }, [campaigns, searchText]);
@@ -201,7 +209,7 @@ const Campaigns = (): JSX.Element => {
       sortable: false,
       renderCell: (params: GridCellParams) => (
         <StatusBadge
-          variant={(params.row as InterfaceUserCampaign).status}
+          variant={(params.row as CampaignWithStatus).status}
           dataTestId="campaignStatus"
         />
       ),
