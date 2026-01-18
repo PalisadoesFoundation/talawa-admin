@@ -16,8 +16,17 @@
 .changeLanguageBtn:hover,
 .changeLanguageBtn:active,
 .changeLanguageBtn:focus {
-  background-color: #ffffff !important;
+  border-width: 2px;
+  background-color: #ffff !important;
   color: var(--changelangauge-btn-color) !important;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
   border-color: var(--changelangauge-btn-border) !important;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 49px;
+  width: 160px;
+  font-size: 0.8rem;
   box-shadow: 1.5px 1.5px 1.5px var(--actionsButton-box-shadow-hover);
 }
