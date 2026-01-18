@@ -1,76 +1,98 @@
-/**
- * Confirmation modal for plugin uninstallation
+﻿/*
+ * Copyright 2025 Palisadoes Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
-import React from 'react';
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Typography,
-  Button,
-} from '@mui/material';
-import type { IPluginMeta } from 'plugin';
+
+import React, { useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+import type { InterfaceUninstallConfirmationModalProps } from 'types/AdminPortal/PluginStore/components/UninstallConfirmationModal/interface';
 
-interface IUninstallConfirmationModalProps {
-  show: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  plugin: IPluginMeta | null;
-}
+/**
+ * UninstallConfirmationModal
+ *
+ * A confirmation modal displayed before uninstalling a plugin.
+ * It warns the user about the action and triggers the uninstall process.
+ *
+ * @param show - Boolean to control modal visibility
+ * @param onClose - Function to close the modal without taking action
+ * @param onConfirm - Function to proceed with uninstallation
+ * @param plugin - The plugin object being uninstalled
+ * @returns The rendered modal component or null if no plugin is selected.
+ */
+const UninstallConfirmationModal: React.FC<
+  InterfaceUninstallConfirmationModalProps
+> = ({ show, onClose, onConfirm, plugin }) => {
+  const { t } = useTranslation('pluginStore');
+  const { t: tCommon } = useTranslation('translation');
+  const [isLoading, setIsLoading] = useState(false);
 
-export default function UninstallConfirmationModal({
-  show,
-  onClose,
-  onConfirm,
-  plugin,
-}: IUninstallConfirmationModalProps) {
-  const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
-  const { t: tCommon } = useTranslation('common');
+  // Guard Clause: If plugin is null, do not render anything.
+  if (!plugin) {
+    return null;
+  }
+
+  /**
+   * Handles the confirmation action.
+   * Wraps onConfirm to manage loading state.
+   */
+  const handleConfirm = async () => {
+    setIsLoading(true);
+    try {
+      await onConfirm();
+    } catch (error) {
+      console.error('Uninstall failed', error);
+      setIsLoading(false);
+    }
+  };
 
   return (
-    <Dialog
-      open={show}
-      onClose={onClose}
-      maxWidth="sm"
-      fullWidth
-      data-testid="uninstall-modal"
+    <BaseModal
+      show={show}
+      onHide={onClose}
+      title={t('uninstallPlugin.title')}
+      footer={
+        <>
+          <Button
+            variant="secondary"
+            onClick={onClose}
+            disabled={isLoading}
+            data-testid="uninstall-cancel-btn"
+            className="me-2"
+          >
+            {tCommon('cancel')}
+          </Button>
+          <Button
+            variant="danger"
+            onClick={handleConfirm}
+            disabled={isLoading}
+            data-testid="uninstall-remove-btn"
+          >
+            {isLoading ? tCommon('deleting') : t('uninstallPlugin.removeBtn')}
+          </Button>
+        </>
+      }
     >
-      <DialogTitle sx={{ pb: 1 }}>{t('uninstallPlugin')}</DialogTitle>
-      <DialogContent>
-        <Typography
-          variant="body1"
-          sx={{ mb: 2 }}
-          data-testid="uninstall-modal-title"
-        >
-          {t('uninstallPluginMsg', {
-            pluginName: plugin?.name || '',
-          })}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          This action will permanently remove the plugin and all its data. This
-          action cannot be undone.
-        </Typography>
-      </DialogContent>
-      <DialogActions sx={{ px: 3, pb: 3 }}>
-        <Button
-          onClick={onClose}
-          color="inherit"
-          sx={{ mr: 1 }}
-          data-testid="uninstall-cancel-btn"
-        >
-          {tCommon('cancel')}
-        </Button>
-        <Button
-          onClick={onConfirm}
-          color="error"
-          variant="contained"
-          data-testid="uninstall-remove-btn"
-        >
-          {tCommon('removePermanently')}
-        </Button>
-      </DialogActions>
-    </Dialog>
+      <div data-testid="uninstall-modal">
+        <p className="mb-2" data-testid="uninstall-modal-title">
+          {t('uninstallPlugin.message', { name: plugin.name })}
+        </p>
+        <p className="text-secondary small">{t('uninstallPlugin.warning')}</p>
+      </div>
+    </BaseModal>
   );
-}
+};
+
+export default UninstallConfirmationModal;
