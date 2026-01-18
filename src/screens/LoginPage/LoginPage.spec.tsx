@@ -4,7 +4,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
-import { vi, beforeEach, expect, it, describe } from 'vitest';
+import { vi, expect, it, describe } from 'vitest';
 import LoginPage from './LoginPage';
 import useSession from '../../utils/useSession';
 import {
