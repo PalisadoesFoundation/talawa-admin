@@ -287,3 +287,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ESLint plugin build output
+scripts/eslint/dist/
