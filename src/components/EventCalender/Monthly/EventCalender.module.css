@@ -23,7 +23,6 @@
 .event_list_parent_current {
   display: flex;
   background-color: var(--eventListParentCurrent-bg);
-  /* width: 100%; */
 }
 
 .event_list_parent {
@@ -82,7 +81,7 @@
   color: var(--btnMore-color-hover);
 }
 
-@media only screen and (max-width: var(--breakpoint-mobile)) {
+@media only screen and (max-width: 576px) {
   .btn__more {
     font-size: var(--font-size-xs);
   }
@@ -226,8 +225,8 @@
 
 .day {
   background-color: var(--day-bg);
-  padding-left: 0.3rem;
-  padding-right: 0.3rem;
+  padding-left: var(--space-1);
+  padding-right: var(--space-1);
   border-radius: var(--space-3);
   margin: var(--space-2);
   border: 1px solid var(--day-border);
@@ -249,17 +248,11 @@
   margin: var(--space-2);
 }
 
-@media only screen and (max-width: var(--breakpoint-tablet)) {
+@media only screen and (max-width: 768px) {
   .event_list {
     display: none;
   }
 
-  .expand_list_container {
-    width: var(--space-15);
-  }
-}
-
-@media only screen and (max-width: var(--breakpoint-tablet)) {
   .holidayIndicator,
   .organizationIndicator {
     width: var(--space-5);
@@ -273,7 +266,7 @@
 }
 
 .calendar {
-  font-family: sans-serif;
+  font-family: var(--font-family-sans, 'Outfit', sans-serif);
   padding: var(--space-6);
   background-color: var(--calendar-bg);
   min-height: 80vh;
@@ -332,7 +325,7 @@
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   background-color: var(--calendarWeekdays-bg);
-  font-family: Outfit, sans-serif;
+  font-family: var(--font-family-sans, 'Outfit', sans-serif);
   height: var(--space-7);
 }
 
@@ -342,7 +335,7 @@
   align-items: center;
   background-color: var(--weekday-bg);
   color: var(--weekday-color);
-  font-size: medium;
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-semibold);
 }
 

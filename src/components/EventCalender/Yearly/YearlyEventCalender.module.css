@@ -165,7 +165,7 @@
 }
 
 .calendar {
-  font-family: sans-serif;
+  font-family: var(--font-family-sans, 'Outfit', sans-serif);
   padding: var(--space-6);
   background-color: var(--calendar-bg);
   min-height: 80vh;

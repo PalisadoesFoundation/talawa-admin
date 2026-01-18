@@ -757,9 +757,10 @@ Function: {issue.function}
 Issue: {issue.issue}
 Corrective Action: {issue.action}
 """)
+            total_issues = sum(len(issues) for issues in violations.values())
             print(f"""\
 Follow the online 'Google Python Style Guide' for our docstring expectations.
-There are {len(violations)} docstring violations
+There are {total_issues} docstring violations
 """)
 
             sys.exit(1)
