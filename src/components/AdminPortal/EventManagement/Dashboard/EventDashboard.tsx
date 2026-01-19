@@ -6,7 +6,6 @@
  * event data using the `EVENT_DETAILS` GraphQL query and displays it in a structured
  * layout using Bootstrap and custom styles.
  *
- * @param  props - Component properties.
  * @param eventId - The unique identifier of the event to be displayed.
  *
  * @returns  The rendered EventDashboard component.
@@ -82,7 +81,11 @@ const EventDashboard = ({
   }
 
   if (error) {
-    return <div data-testid="event-error">{tEventList('eventLoadError')}</div>;
+    return (
+      <div data-testid="event-error" role="alert" aria-live="polite">
+        {tEventList('eventLoadError')}
+      </div>
+    );
   }
 
   if (!eventData || !eventData.event) {

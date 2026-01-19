@@ -17,7 +17,7 @@
  * @example
  * ```tsx
  * <EventListCard
- *   title="Community Meetup"
+ *   name="Community Meetup"
  *   description="A meetup for the local community."
  *   date=dayjs().subtract(1, 'year').month(9).date(15).format('YYYY-MM-DD')
  *   location="Community Hall"
@@ -31,7 +31,7 @@ import { useTranslation } from 'react-i18next';
 import styles from './EventListCard.module.css';
 import { Navigate, useParams } from 'react-router';
 import EventListCardModals from 'shared-components/EventListCard/Modal/EventListCardModals/EventListCardModals';
-import type { InterfaceEventListCardProps } from 'types/components/EventListCard/interface';
+import type { InterfaceEventListCardProps } from 'types/shared-components/EventListCard/interface';
 
 function EventListCard(props: InterfaceEventListCardProps): JSX.Element {
   const { name } = props;

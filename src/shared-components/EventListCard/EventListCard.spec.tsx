@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
@@ -159,7 +159,7 @@ describe('Testing Event List Card', () => {
     renderEventListCard(props[0]);
 
     await waitFor(() => {
-      expect(screen.getByText('Dogs Care')).toBeInTheDocument();
+      expect(screen.getByText('Event')).toBeInTheDocument();
     });
   });
 

@@ -37,11 +37,11 @@ import {
 } from 'GraphQl/Mutations/EventMutations';
 import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { useUpdateEventHandler } from 'components/EventListCard/Modal/updateLogic';
+import { useUpdateEventHandler } from 'shared-components/EventListCard/Modal/updateLogic';
 import { errorHandler } from 'utils/errorHandler';
 
 import EventListCardDeleteModal from 'shared-components/EventListCard/Modal/Delete/EventListCardDeleteModal';
-import EventListCardPreviewModal from 'components/EventListCard/Modal/Preview/EventListCardPreviewModal';
+import EventListCardPreviewModal from 'shared-components/EventListCard/Modal/Preview/EventListCardPreviewModal';
 import Button from 'shared-components/Button/Button';
 import Form from 'react-bootstrap/Form';
 import styles from './EventListCardModals.module.css';
