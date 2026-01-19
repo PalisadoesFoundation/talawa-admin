@@ -735,7 +735,6 @@
     "options": "选项",
     "createAgendaItem": "创建议程项目",
     "noAgendaItems": "没有议程项目",
-    "search": "搜索",
     "selectAgendaItemCategory": "选择议程项目类别",
     "update": "更新",
     "delete": "删除",
@@ -744,6 +743,11 @@
     "agendaItemDeleted": "议程项目已成功删除",
     "deleteAgendaItem": "删除议程项目",
     "deleteAgendaItemMsg": "您要删除此议程项目吗？",
+<<<<<<< HEAD
+=======
+    "event": "活动",
+    "search": "搜索",
+>>>>>>> f997b14356e (fix the conflicting file and linting typos)
     "attachmentPreview": "附件預覽",
     "event": "活动",
     "errorLoadingAgendaCategories": "加载议程类别数据时发生错误",
@@ -1503,6 +1507,10 @@
     "options": "选项",
     "addRegistrant": "添加注册者",
     "noRegistrantsFound": "未找到注册者",
+<<<<<<< HEAD
+=======
+    "cannotUnregisterCheckedIn": "无法取消已签到的用户的注册",
+>>>>>>> f997b14356e (fix the conflicting file and linting typos)
     "removingAttendee": "正在移除参与者...",
     "attendeeRemovedSuccessfully": "参与者移除成功！",
     "errorRemovingAttendee": "移除参与者时出错。请重试。",
@@ -1921,6 +1929,11 @@
     "pdfGeneratedSuccessfully": "PDF 生成成功！",
     "errorGeneratingPdf": "生成 PDF 时出错",
     "unknownError": "未知错误",
+<<<<<<< HEAD
+=======
+    "checkInButton": "签到",
+    "searchAttendees": "搜尋參與者",
+>>>>>>> f997b14356e (fix the conflicting file and linting typos)
     "checkedIn": "已簽到",
     "downloadTag": "下載標籤",
     "checkInButton": "签到",
@@ -2345,11 +2358,11 @@
     "noEventsAttended": "未参加任何活动"
   },
   "eventStats": {
-    "title": "活動統計",
+    "title": "活动统计",
     "reviews": {
-      "title": "評論",
-      "emptyState": "等待人們談論活動...",
-      "filledByCount": "已由 {{count}} 人填寫。"
+      "title": "评论",
+      "emptyState": "等待人们谈论活动...",
+      "filledByCount": "已由 {{count}} 人填写。"
     }
   },
   "verifyEmail": {

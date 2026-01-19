@@ -37,7 +37,8 @@
  * ```
  */
 import React, { useState, useEffect } from 'react';
-import { Button, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
+import Button from 'shared-components/Button/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { Autocomplete } from '@mui/material';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
@@ -69,7 +70,7 @@ const AgendaItemsCreateModal: React.FC<
       urls: prevState.urls.filter((url) => url.trim() !== ''),
       attachments: prevState.attachments.filter((att) => att !== ''),
     }));
-  }, []);
+  }, [setFormState]);
 
   /**
    * Validates if a given URL is in a correct format.
@@ -247,21 +248,26 @@ const AgendaItemsCreateModal: React.FC<
         </FormFieldGroup>
 
         <div className="mb-3">
-          <label className="form-label">{t('url')}</label>
-          <div className="d-flex">
-            <input
-              className="form-control"
-              type="text"
-              placeholder={t('enterUrl')}
-              id="basic-url"
-              data-testid="urlInput"
-              value={newUrl}
-              onChange={(e) => setNewUrl(e.target.value)}
-            />
-            <Button onClick={handleAddUrl} data-testid="linkBtn">
-              {t('link')}
-            </Button>
-          </div>
+          <FormFieldGroup name="url" label={t('url')}>
+            <div className="d-flex">
+              <input
+                className="form-control"
+                type="text"
+                placeholder={t('enterUrl')}
+                id="url"
+                data-testid="urlInput"
+                value={newUrl}
+                onChange={(e) => setNewUrl(e.target.value)}
+              />
+              <Button
+                onClick={handleAddUrl}
+                data-testid="linkBtn"
+                type="button"
+              >
+                {t('link')}
+              </Button>
+            </div>
+          </FormFieldGroup>
 
           {formState.urls.map((url, index) => (
             <li key={index} className={styles.urlListItem}>
@@ -281,8 +287,11 @@ const AgendaItemsCreateModal: React.FC<
             </li>
           ))}
         </div>
-        <div className="mb-3">
-          <label className="form-label">{t('attachments')}</label>
+        <FormFieldGroup
+          name="attachment"
+          label={t('attachments')}
+          helpText={t('attachmentLimit')}
+        >
           <input
             className="form-control"
             accept="image/*, video/*"
@@ -293,8 +302,7 @@ const AgendaItemsCreateModal: React.FC<
             multiple={true}
             onChange={handleFileChange}
           />
-          <small className="form-text">{t('attachmentLimit')}</small>
-        </div>
+        </FormFieldGroup>
         {formState.attachments && (
           <div className={styles.previewFile} data-testid="mediaPreview">
             {formState.attachments.map((attachment, index) => (
@@ -313,6 +321,7 @@ const AgendaItemsCreateModal: React.FC<
                   <img src={attachment} alt={t('attachmentPreview')} />
                 )}
                 <button
+                  type="button"
                   className={styles.closeButtonFile}
                   onClick={(e) => {
                     e.preventDefault();

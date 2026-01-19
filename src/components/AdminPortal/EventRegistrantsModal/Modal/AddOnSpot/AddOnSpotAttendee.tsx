@@ -102,13 +102,17 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
 
     setIsSubmitting(true);
 
+    const generateTempPassword = (): string => {
+      return crypto.randomUUID().slice(0, 12);
+    };
     try {
+      const tempPassword = generateTempPassword();
       const response = await addSignUp({
         variables: {
           ID: orgId,
           name: `${formData.firstName} ${formData.lastName}`.trim(),
           email: formData.email,
-          password: '123456',
+          password: tempPassword,
         },
       });
 

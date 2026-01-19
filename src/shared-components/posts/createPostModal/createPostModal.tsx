@@ -146,8 +146,7 @@ function CreatePostModal({
     setIspinned(false);
 
     // Clear DOM file inputs
-    const fileInput = document.getElementById('addMedia') as HTMLInputElement;
-    if (fileInput) fileInput.value = '';
+    if (fileInputRef.current) fileInputRef.current.value = '';
     onHide();
   };
 
@@ -192,7 +191,7 @@ function CreatePostModal({
             },
           },
         });
-        if (data.updatePost) {
+        if (data?.updatePost) {
           onSuccess('edited');
         }
       }
@@ -346,7 +345,7 @@ function CreatePostModal({
               <PushPin
                 sx={{
                   transform: 'rotate(45deg)',
-                  color: isPinned ? '#0a66c2' : '',
+                  color: isPinned ? styles.pinActive : '',
                 }}
               />
             </button>

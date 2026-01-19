@@ -17,7 +17,7 @@ import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
-import Button from 'react-bootstrap/Button';
+import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
@@ -64,6 +64,7 @@ function SubTags(): JSX.Element {
   const hideAddSubTagModal = (): void => {
     setAddSubTagModalIsOpen(false);
     setTagName('');
+    setTagNameTouched(false);
   };
 
   const {
@@ -132,6 +133,7 @@ function SubTags(): JSX.Element {
         NotificationToast.success(t('tagCreationSuccess') as string);
         subTagsRefetch();
         setTagName('');
+        setTagNameTouched(false);
         setAddSubTagModalIsOpen(false);
       }
     } catch (error: unknown) {

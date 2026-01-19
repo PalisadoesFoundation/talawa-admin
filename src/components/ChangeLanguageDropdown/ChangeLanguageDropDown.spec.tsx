@@ -19,6 +19,7 @@ import { languages } from 'utils/languages';
 import useLocalStorage from 'utils/useLocalstorage';
 import { urlToFile } from 'utils/urlToFile';
 import i18nForTest from 'utils/i18nForTest';
+import userEvent from '@testing-library/user-event';
 
 // Mock dependencies
 const sharedMocks = vi.hoisted(() => ({
@@ -141,10 +142,10 @@ describe('ChangeLanguageDropDown', () => {
     );
 
     const dropdown = screen.getByTestId('language-dropdown-btn');
-    fireEvent.click(dropdown);
+    await userEvent.click(dropdown);
 
     const spanishOption = await screen.findByTestId('change-language-btn-es');
-    fireEvent.click(spanishOption);
+    await userEvent.click(spanishOption);
 
     await waitFor(() => {
       expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
@@ -217,7 +218,9 @@ describe('ChangeLanguageDropDown', () => {
 
     render(
       <MockedProvider mocks={mocksWithoutAvatar}>
-        <ChangeLanguageDropDown />
+        <I18nextProvider i18n={i18nForTest}>
+          <ChangeLanguageDropDown />
+        </I18nextProvider>
       </MockedProvider>,
     );
 

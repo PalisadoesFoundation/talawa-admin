@@ -104,6 +104,7 @@ const mockNotificationToast = vi.hoisted(() => ({
   warning: vi.fn(),
   info: vi.fn(),
   dismiss: vi.fn(),
+  promise: vi.fn(),
 }));
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
@@ -377,7 +378,9 @@ describe('Testing Agenda Items components', () => {
     await userEvent.click(screen.getByTestId('updateAgendaItemBtn'));
 
     await waitFor(() => {
-      // expect(toast.success).toBeCalledWith(translations.agendaItemUpdated);
+      expect(mockNotificationToast.success).toHaveBeenCalledWith(
+        translations.agendaItemUpdated,
+      );
     });
   });
 

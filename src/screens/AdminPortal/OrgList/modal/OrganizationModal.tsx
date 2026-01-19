@@ -25,14 +25,14 @@
  * @example
  * ```tsx
  * <OrganizationModal
- * showModal={true}
- * toggleModal={handleToggleModal}
- * formState={formState}
- * setFormState={setFormState}
- * createOrg={handleCreateOrg}
- * t={translate}
- * tCommon={translateCommon}
- * userData={currentUser}
+ *   showModal={true}
+ *   toggleModal={handleToggleModal}
+ *   formState={formState}
+ *   setFormState={setFormState}
+ *   createOrg={handleCreateOrg}
+ *   t={translate}
+ *   tCommon={translateCommon}
+ *   userData={currentUser}
  * />
  * ```
  *

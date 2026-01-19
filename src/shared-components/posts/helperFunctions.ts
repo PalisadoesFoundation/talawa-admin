@@ -43,7 +43,7 @@ export const formatPostForCard = (
   })(),
   pinnedAt: post.pinnedAt ?? null,
   mimeType: post.attachments?.[0]?.mimeType ?? null,
-  attachmentURL: post.attachmentURL ?? null,
+  attachmentURL: post.attachmentURL,
   title: post.caption ?? '',
   text: post.caption ?? '',
   body: post.body,

@@ -9,16 +9,16 @@
  * requires
  * - react
  * - react-i18next
- * - react-bootstrap
  * - react-router-dom
  * - \@mui/icons-material
  * - \@apollo/client
- * - \@mui/x-data-grid
  * - \@mui/material
  * - shared-components/LoadingState/LoadingState
  * - components/Avatar/Avatar
  * - shared-components/SortingButton/SortingButton
  * - shared-components/SearchBar/SearchBar
+ * - shared-components/Button/Button
+ * - shared-components/DataGridWrapper/DataGridWrapper
  * - GraphQl/Queries/EventVolunteerQueries
  * - utils/interfaces
  * - ./createModal/VolunteerCreateModal

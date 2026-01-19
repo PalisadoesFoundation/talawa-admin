@@ -5,7 +5,8 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { Button, Alert } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useParams, useNavigate } from 'react-router';
@@ -206,7 +207,7 @@ const LeaveOrganization = (): JSX.Element => {
                   variant="danger"
                   disabled={loading}
                   onClick={handleVerifyAndLeave}
-                  aria-label="confirm-leave-button"
+                  aria-label={t('common:confirm')}
                 >
                   {t('common:confirm')}
                 </Button>

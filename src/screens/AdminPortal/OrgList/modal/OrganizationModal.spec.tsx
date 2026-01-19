@@ -73,6 +73,7 @@ describe('OrganizationModal Component', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

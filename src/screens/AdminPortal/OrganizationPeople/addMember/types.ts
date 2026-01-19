@@ -23,7 +23,7 @@ export interface IQueryVariable {
   after?: string | null;
   last?: number | null;
   before?: string | null;
-  where?: { role: { equal: 'administrator' | 'regular' } };
+  where?: { role: { equal: OrganizationMembershipRole } };
 }
 
 /**

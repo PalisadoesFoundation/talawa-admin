@@ -274,3 +274,8 @@
     transform: rotate(360deg);
   }
 }
+
+/* In createPostModal.module.css */
+.pinActive svg {
+  color: var(--color-blue-600);
+}

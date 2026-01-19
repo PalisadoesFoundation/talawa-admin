@@ -26,11 +26,8 @@ import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { vi } from 'vitest';
 import { setupLocalStorageMock } from 'test-utils/localStorageMock';
-import PledgeModal, {
-  type InterfacePledgeModal,
-  areOptionsEqual,
-  getMemberLabel,
-} from './PledgeModal';
+import type { InterfacePledgeModal } from 'types/UserPortal/PledgeModal/interface';
+import PledgeModal, { areOptionsEqual, getMemberLabel } from './PledgeModal';
 
 // Mock utils/i18n to use the test i18n instance for NotificationToast
 vi.mock('utils/i18n', () => ({

@@ -23,6 +23,11 @@
   box-shadow: none;
 }
 
+.dropdownToggle:focus-visible {
+  outline: var(--border-2) solid var(--color-blue-500);
+  outline-offset: var(--space-1);
+}
+
 .removeItem {
   color: var(--bs-danger);
 }
@@ -92,8 +97,10 @@
 .memberList {
   max-height: var(--space-23);
   overflow-y: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge legacy */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE/Edge legacy */
 }
 
 .memberList::-webkit-scrollbar {

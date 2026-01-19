@@ -30,7 +30,8 @@
 
 import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useMutation } from '@apollo/client';
@@ -45,16 +46,13 @@ import styles from './AgendaCategoryContainer.module.css';
 import AgendaCategoryDeleteModal from 'components/AdminPortal/OrgSettings/AgendaItemCategories/Delete/AgendaCategoryDeleteModal';
 import AgendaCategoryPreviewModal from 'components/AdminPortal/OrgSettings/AgendaItemCategories/Preview/AgendaCategoryPreviewModal';
 import AgendaCategoryUpdateModal from 'components/AdminPortal/OrgSettings/AgendaItemCategories/Update/AgendaCategoryUpdateModal';
+import type { InterfaceAgendaCategoryContainerProps } from 'types/AdminPortal/AgendaCategoryContainer/interface';
 
 function agendaCategoryContainer({
   agendaCategoryConnection,
   agendaCategoryData,
   agendaCategoryRefetch,
-}: {
-  agendaCategoryConnection: 'Organization';
-  agendaCategoryData: InterfaceAgendaItemCategoryInfo[] | undefined;
-  agendaCategoryRefetch: () => void;
-}): JSX.Element {
+}: InterfaceAgendaCategoryContainerProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationAgendaCategory',
   });
@@ -145,7 +143,7 @@ function agendaCategoryContainer({
     } catch (error: unknown) {
       if (error instanceof Error) {
         NotificationToast.error(
-          `Agenda Category Update Failed ${error.message}`,
+          t('agendaCategoryUpdateFailed', { error: error.message }) as string,
         );
       }
     }
@@ -169,7 +167,7 @@ function agendaCategoryContainer({
     } catch (error: unknown) {
       if (error instanceof Error) {
         NotificationToast.error(
-          `Agenda Category Delete Failed, ${error.message}`,
+          t('agendaCategoryDeleteFailed', { error: error.message }) as string,
         );
       }
     }

@@ -39,7 +39,7 @@
  *
  */
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button/Button';
 import { Close } from '@mui/icons-material';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import PostCard from 'shared-components/postCard/PostCard';

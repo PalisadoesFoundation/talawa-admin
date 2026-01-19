@@ -40,12 +40,7 @@
   margin: 5px;
 }
 
-.agendaCategoryOptionsButton {
-  width: 24px;
-  height: 24px;
-}
-
-.agendaItemsOptionsButton {
+.optionsButton {
   width: 24px;
   height: 24px;
 }

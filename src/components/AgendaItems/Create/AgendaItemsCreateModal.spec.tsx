@@ -54,6 +54,7 @@ describe('AgendaItemsCreateModal', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

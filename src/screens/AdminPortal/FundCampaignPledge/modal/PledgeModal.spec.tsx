@@ -239,6 +239,7 @@ describe('PledgeModal', () => {
 
   afterEach(() => {
     cleanup();
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -435,13 +436,13 @@ describe('PledgeModal', () => {
   });
 
   it('should update pledge amount in edit mode', async () => {
-    const mockLink = new StaticMockLink([
+    const updateMockLink = new StaticMockLink([
       ...PLEDGE_MODAL_MOCKS,
       MOCK_UPDATE_PLEDGE_DATA,
     ]);
     const props = { ...pledgeProps[1], refetchPledge: vi.fn(), hide: vi.fn() };
 
-    renderPledgeModal(mockLink, props);
+    renderPledgeModal(updateMockLink, props);
 
     const amountInput = screen.getByLabelText('Amount');
     fireEvent.change(amountInput, { target: { value: '200' } });
@@ -460,12 +461,12 @@ describe('PledgeModal', () => {
   });
 
   it('should handle form submission when pledge amount has not changed', async () => {
-    const mockLink = new StaticMockLink([
+    const noChangeMockLink = new StaticMockLink([
       ...PLEDGE_MODAL_MOCKS,
       NO_CHANGE_MOCK,
     ]);
     const props = { ...pledgeProps[1], refetchPledge: vi.fn(), hide: vi.fn() };
-    renderPledgeModal(mockLink, props);
+    renderPledgeModal(noChangeMockLink, props);
 
     await waitFor(() => {
       expect(screen.getByLabelText('Amount')).toHaveAttribute('value', '100');
@@ -505,9 +506,9 @@ describe('PledgeModal', () => {
       error: new Error('Update failed'),
     };
 
-    const mockLink = new StaticMockLink([updateErrorMock]);
+    const errorMockLink = new StaticMockLink([updateErrorMock]);
     const props = { ...pledgeProps[1], refetchPledge: vi.fn(), hide: vi.fn() };
-    renderPledgeModal(mockLink, props);
+    renderPledgeModal(errorMockLink, props);
 
     const amountInput = screen.getByLabelText('Amount');
     await act(async () => {

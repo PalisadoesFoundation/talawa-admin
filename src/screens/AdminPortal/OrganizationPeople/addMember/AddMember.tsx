@@ -34,7 +34,6 @@ import {
 } from 'GraphQl/Queries/Queries';
 import type { ChangeEvent } from 'react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { InputGroup, FormControl } from 'react-bootstrap';
 import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';

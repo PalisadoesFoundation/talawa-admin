@@ -464,7 +464,7 @@ function OrganizationDashboard(): JSX.Element {
                 <Button
                   size="sm"
                   variant="light"
-                  data-testid="viewAllLeadeboard"
+                  data-testid="viewAllLeaderboard"
                   onClick={async (): Promise<void> => {
                     await Promise.resolve(
                       NotificationToast.success(t('comingSoon')),

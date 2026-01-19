@@ -16,6 +16,5 @@
 }
 
 .addButton:disabled {
-  margin-bottom: 10px;
   background-color: var(--disabled-btn);
 }

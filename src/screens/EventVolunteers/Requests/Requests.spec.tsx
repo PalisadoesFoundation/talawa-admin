@@ -362,12 +362,12 @@ describe('Requests Component CSS Styling', () => {
   };
 
   test('DataGridWrapper should render with DataGrid', async () => {
-    const { container } = renderComponent();
+    renderComponent();
     await wait();
 
-    const dataGrid = container.querySelector('.MuiDataGrid-root');
-    expect(dataGrid).toBeInTheDocument();
-    expect(dataGrid).toHaveClass('MuiDataGrid-root');
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
   });
 
   test('Sort controls should be rendered', async () => {

@@ -540,6 +540,7 @@ describe('PostCard', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

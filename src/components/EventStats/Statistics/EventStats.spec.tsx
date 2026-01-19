@@ -28,6 +28,7 @@ vi.mock('react-i18next', async () => {
 
 describe('Testing Event Stats', () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   const props = {

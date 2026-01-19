@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState, type FormEvent } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button/Button';
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
-  InterfacePledgeInfo,
   InterfaceUserInfoPG,
   InterfaceCreatePledge,
 } from 'utils/interfaces';
@@ -16,27 +15,7 @@ import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { Autocomplete, InputLabel, MenuItem, Select } from '@mui/material';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
-
-/**
- * Props for the `PledgeModal` component.
- */
-export interface InterfacePledgeModal {
-  /** Indicates whether the modal is open or closed. */
-  isOpen: boolean;
-  /** Handler to close the modal. */
-  hide: () => void;
-  /** ID of the campaign associated with the pledge. */
-  campaignId: string;
-  /** ID of the user creating or editing the pledge. */
-  userId: string;
-  /** Pledge data to edit; null when creating a new pledge. */
-  pledge: InterfacePledgeInfo | null;
-  /** Trigger to refetch pledge data after updates. */
-  refetchPledge: () => void;
-  /** Determines whether the modal is in create or edit mode. */
-  mode: 'create' | 'edit';
-}
-
+import type { InterfacePledgeModal } from 'types/UserPortal/PledgeModal/interface';
 /**
  * Compares two user options by ID.
  * Used by MUI Autocomplete to determine equality.

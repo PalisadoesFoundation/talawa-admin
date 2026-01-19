@@ -27,7 +27,7 @@
  * ```
  */
 import React from 'react';
-import type { InterfaceTableCheckIn } from 'types/shared-components/CheckIn/interface';
+import type { InterfaceTableRowProps } from 'types/shared-components/CheckIn/interface';
 import Button from '@mui/material/Button';
 import { useMutation } from '@apollo/client';
 import { MARK_CHECKIN } from 'GraphQl/Mutations/mutations';
@@ -42,11 +42,7 @@ export const TableRow = ({
   data,
   refetch,
   onCheckInUpdate,
-}: {
-  data: InterfaceTableCheckIn;
-  refetch: () => void;
-  onCheckInUpdate?: () => void;
-}): JSX.Element => {
+}: InterfaceTableRowProps): JSX.Element => {
   const [checkInMutation] = useMutation(MARK_CHECKIN);
   const { t } = useTranslation('translation', { keyPrefix: 'checkIn' });
   const { t: tErrors } = useTranslation('errors');

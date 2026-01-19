@@ -44,3 +44,12 @@ export interface InterfaceTableData {
   id: string;
   checkInData: InterfaceTableCheckIn;
 }
+
+/**
+ * Props for TableRow component.
+ */
+export interface InterfaceTableRowProps {
+  data: InterfaceTableCheckIn;
+  refetch: () => void;
+  onCheckInUpdate?: () => void;
+}

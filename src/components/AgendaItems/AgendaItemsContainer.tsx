@@ -15,7 +15,7 @@
  *
  * @remarks
  * Uses `@hello-pangea/dnd` for drag-and-drop functionality.
- * Integrates with `react-toastify` for user notifications.
+ * Integrates with `NotificationToast` for user notifications.
  * Includes modals for previewing, updating, and deleting agenda items.
  *
  * @example
@@ -30,21 +30,20 @@
  */
 import React, { useState } from 'react';
 import type { FormEvent, JSX } from 'react';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useMutation } from '@apollo/client';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import type { DropResult } from '@hello-pangea/dnd';
+import type { InterfaceAgendaItemsContainerProps } from 'types/components/AgendaItems/AgendaItemsContainer/interface';
 
 import {
   DELETE_AGENDA_ITEM_MUTATION,
   UPDATE_AGENDA_ITEM_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import type {
-  InterfaceAgendaItemInfo,
-  InterfaceAgendaItemCategoryInfo,
-} from 'utils/interfaces';
+import type { InterfaceAgendaItemInfo } from 'utils/interfaces';
 import styles from './AgendaItemsContainer.module.css';
 
 import AgendaItemsPreviewModal from 'components/AgendaItems/Preview/AgendaItemsPreviewModal';
@@ -56,12 +55,7 @@ function AgendaItemsContainer({
   agendaItemData,
   agendaItemRefetch,
   agendaItemCategories,
-}: {
-  agendaItemConnection: 'Event';
-  agendaItemData: InterfaceAgendaItemInfo[] | undefined;
-  agendaItemRefetch: () => void;
-  agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;
-}): JSX.Element {
+}: InterfaceAgendaItemsContainerProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'agendaItems' });
   const { t: tCommon } = useTranslation('common');
 
