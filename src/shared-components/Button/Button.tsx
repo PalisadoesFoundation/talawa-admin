@@ -1,32 +1,104 @@
-/*
- * Copyright 2025 Palisadoes Foundation
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-import React from 'react';
-// eslint-disable-next-line no-restricted-imports
-import { Button as BootstrapButton, ButtonProps } from 'react-bootstrap';
-
 /**
- * Shared Button Component
+ * Shared Button wrapper around react-bootstrap's Button.
+ * Adds loading, icon placement, full-width option, and an `xl` size while
+ * forwarding all standard Button props.
  *
- * Wrapper for the Bootstrap button to satisfy linter architecture rules.
+ * @param props - Props passed to the Button component, forwarding react-bootstrap ButtonProps plus custom props like loading, icon placement, fullWidth, and xl sizing.
+ * @returns JSX.Element - A wrapped react-bootstrap Button with loading state, icon placement, full-width, and xl size support.
  */
-const Button = (props: ButtonProps) => {
-  // We disable the 'no-explicit-any' rule for this specific line to bypass the type mismatch
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return <BootstrapButton {...(props as any)} />;
+import { forwardRef } from 'react';
+import type { ForwardedRef } from 'react';
+import RBButton from 'react-bootstrap/Button';
+import styles from './Button.module.css';
+import type { ButtonProps, ButtonSize } from './Button.types';
+
+const mapSizeToBootstrap = (
+  size: ButtonSize | undefined,
+): 'sm' | 'lg' | undefined => {
+  if (size === 'sm' || size === 'lg') {
+    return size;
+  }
+  if (size === 'xl') {
+    return 'lg';
+  }
+  return undefined; // md/default
 };
+
+const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
+  (
+    {
+      children,
+      className,
+      fullWidth,
+      isLoading = false,
+      loadingText,
+      icon,
+      iconPosition = 'start',
+      size = 'md',
+      disabled,
+      ...rest
+    },
+    ref: ForwardedRef<HTMLButtonElement | HTMLAnchorElement>,
+  ) => {
+    const bootstrapSize = mapSizeToBootstrap(size);
+    const isDisabled = disabled || isLoading;
+    const showStartIcon = icon && iconPosition === 'start' && !isLoading;
+    const showEndIcon = icon && iconPosition === 'end' && !isLoading;
+    const content = isLoading && loadingText ? loadingText : children;
+    const { variant, role, ...restProps } = rest;
+    const resolvedVariant =
+      variant === 'outlined' || variant === 'outline'
+        ? 'outline-primary'
+        : variant;
+    const hasHref = 'href' in restProps && restProps.href !== undefined;
+
+    const classes = [
+      styles.button,
+      fullWidth ? styles.fullWidth : '',
+      size === 'xl' ? styles.sizeXl : '',
+      isLoading ? styles.isLoading : '',
+      className || '',
+    ]
+      .filter(Boolean)
+      .join(' ');
+
+    return (
+      <RBButton
+        ref={ref}
+        className={classes}
+        size={bootstrapSize}
+        variant={resolvedVariant}
+        disabled={isDisabled}
+        aria-busy={isLoading || undefined}
+        aria-live={isLoading ? 'polite' : undefined}
+        data-size={size}
+        data-fullwidth={fullWidth ? 'true' : undefined}
+        role={role ?? (hasHref ? 'link' : undefined)}
+        {...restProps}
+      >
+        <span className={styles.content}>
+          {showStartIcon && (
+            <span className={`${styles.icon} ${styles.iconStart}`}>{icon}</span>
+          )}
+          <span className={styles.label}>
+            {isLoading && (
+              <span
+                className={styles.spinner}
+                aria-hidden="true"
+                data-testid="button-spinner"
+              />
+            )}
+            {content}
+          </span>
+          {showEndIcon && (
+            <span className={`${styles.icon} ${styles.iconEnd}`}>{icon}</span>
+          )}
+        </span>
+      </RBButton>
+    );
+  },
+);
+
+Button.displayName = 'Button';
 
 export default Button;
