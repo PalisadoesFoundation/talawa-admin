@@ -123,7 +123,8 @@ cleanup() {
 }
 
 # Set up signal traps for cleanup
-trap cleanup EXIT INT TERM
+# Note: To enable automatic cleanup, add this to your script after sourcing:
+# trap cleanup EXIT INT TERM
 
 # Exit with an error message and code
 # Usage: die "Error message" [exit_code]
@@ -151,7 +152,9 @@ confirm() {
     local prompt_suffix
 
     # Build prompt suffix based on default
-    if [[ "${default,,}" == "y" || "${default,,}" == "yes" ]]; then
+    local default_lower
+    default_lower="$(printf '%s' "$default" | tr '[:upper:]' '[:lower:]')"
+    if [[ "$default_lower" == "y" || "$default_lower" == "yes" ]]; then
         prompt_suffix="[Y/n]"
     else
         prompt_suffix="[y/N]"
@@ -195,6 +198,11 @@ prompt_input() {
     local validation="${4:-}"
     local input
     local prompt_display
+
+    # Validate varname is a valid identifier (letters, digits, underscores, not starting with digit)
+    if [[ ! "$varname" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
+        die "prompt_input: Invalid variable name '$varname'" "$E_INVALID_ARG"
+    fi
 
     if [[ -n "$default" ]]; then
         prompt_display="$prompt [$default]"
@@ -365,8 +373,10 @@ resolve_path() {
         resolved="$(cd "$(dirname "$path")" && pwd)/$(basename "$path")"
     else
         # Path doesn't exist yet, resolve what we can
-        local dir="$(dirname "$path")"
-        local base="$(basename "$path")"
+        local dir
+        local base
+        dir="$(dirname "$path")"
+        base="$(basename "$path")"
         if [[ -d "$dir" ]]; then
             resolved="$(cd "$dir" && pwd)/$base"
         else
