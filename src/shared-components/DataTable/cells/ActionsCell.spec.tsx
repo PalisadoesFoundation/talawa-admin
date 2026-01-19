@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { ActionsCell } from './ActionsCell';
 import type { IRowAction } from '../../../types/shared-components/DataTable/interface';
@@ -23,14 +24,15 @@ describe('ActionsCell', () => {
     expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
   });
 
-  it('calls onClick with row data when action is clicked', () => {
+  it('calls onClick with row data when action is clicked', async () => {
+    const user = userEvent.setup();
     const onClick = vi.fn();
     const actions: IRowAction<Row>[] = [{ id: 'edit', label: 'Edit', onClick }];
     const row: Row = { id: '1', name: 'Ada' };
 
     render(<ActionsCell row={row} actions={actions} />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Edit' }));
+    await user.click(screen.getByRole('button', { name: 'Edit' }));
 
     expect(onClick).toHaveBeenCalledTimes(1);
     expect(onClick).toHaveBeenCalledWith(row);
@@ -118,7 +120,8 @@ describe('ActionsCell', () => {
     expect(screen.queryByRole('button')).toBeNull();
   });
 
-  it('does not call onClick when disabled button is clicked', () => {
+  it('does not call onClick when disabled button is clicked', async () => {
+    const user = userEvent.setup();
     const onClick = vi.fn();
     const actions: IRowAction<Row>[] = [
       { id: 'edit', label: 'Edit', onClick, disabled: true },
@@ -128,7 +131,7 @@ describe('ActionsCell', () => {
     render(<ActionsCell row={row} actions={actions} />);
 
     const button = screen.getByRole('button', { name: 'Edit' });
-    fireEvent.click(button);
+    await user.click(button);
 
     // Disabled button should prevent onClick
     expect(onClick).not.toHaveBeenCalled();

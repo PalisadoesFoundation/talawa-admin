@@ -2277,7 +2277,14 @@
     "talawaBranding": "Talawa Branding",
     "view": "View",
     "changeLanguage": "Change Language",
-    "userNotFoundError": "User not found"
+    "userNotFoundError": "User not found",
+    "selectAllOnPage": "Select all rows on this page",
+    "actions": "Actions",
+    "bulkActions": "Bulk actions",
+    "selected": "selected",
+    "clear": "Clear",
+    "clearSelection": "Clear selection",
+    "loading": "Loading..."
   },
   "donation": {
     "amount_label": "Amount",

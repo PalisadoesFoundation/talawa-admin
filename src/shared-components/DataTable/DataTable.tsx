@@ -568,7 +568,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
                 <input
                   ref={headerCheckboxRef}
                   type="checkbox"
-                  aria-label="Select all rows on this page"
+                  aria-label={tCommon('selectAllOnPage')}
                   checked={allSelectedOnPage}
                   onChange={(e) => selectAllOnPage(e.currentTarget.checked)}
                   data-testid="select-all-checkbox"
@@ -582,7 +582,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
             ))}
             {hasRowActions && (
               <th scope="col" className={localStyles.actionsCol}>
-                Actions
+                {tCommon('actions')}
               </th>
             )}
           </tr>

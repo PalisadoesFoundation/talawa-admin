@@ -2281,7 +2281,14 @@
     "talawaBranding": "Marca Talawa",
     "view": "Ver",
     "changeLanguage": "Cambiar idioma",
-    "userNotFoundError": "Usuario no encontrado"
+    "userNotFoundError": "Usuario no encontrado",
+    "selectAllOnPage": "Seleccionar todas las filas de esta página",
+    "actions": "Acciones",
+    "bulkActions": "Acciones masivas",
+    "selected": "seleccionado(s)",
+    "clear": "Limpiar",
+    "clearSelection": "Limpiar selección",
+    "loading": "Cargando..."
   },
   "donation": {
     "amount_label": "Cantidad",

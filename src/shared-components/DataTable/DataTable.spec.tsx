@@ -1167,4 +1167,118 @@ describe('DataTable', () => {
     const openBtn = screen.getByRole('button', { name: 'Open' });
     expect(openBtn).toBeDisabled();
   });
+
+  it('bulk action with confirm shows dialog and calls onClick when confirmed', async () => {
+    const user = userEvent.setup();
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const onBulk = vi.fn();
+    type Row = { id: string; name: string };
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data: Row[] = [{ id: '1', name: 'Ada' }];
+
+    render(
+      <DataTable<Row>
+        data={data}
+        columns={columns}
+        selectable
+        rowKey="id"
+        bulkActions={[
+          {
+            id: 'delete',
+            label: 'Delete',
+            onClick: onBulk,
+            confirm: 'Are you sure?',
+          },
+        ]}
+      />,
+    );
+
+    // Select row
+    await user.click(screen.getByTestId('select-row-1'));
+
+    // Click bulk action
+    await user.click(screen.getByTestId('bulk-action-delete'));
+
+    expect(confirmSpy).toHaveBeenCalledWith('Are you sure?');
+    expect(onBulk).toHaveBeenCalled();
+
+    confirmSpy.mockRestore();
+  });
+
+  it('bulk action with confirm does not call onClick when cancelled', async () => {
+    const user = userEvent.setup();
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(false);
+    const onBulk = vi.fn();
+    type Row = { id: string; name: string };
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data: Row[] = [{ id: '1', name: 'Ada' }];
+
+    render(
+      <DataTable<Row>
+        data={data}
+        columns={columns}
+        selectable
+        rowKey="id"
+        bulkActions={[
+          {
+            id: 'delete',
+            label: 'Delete',
+            onClick: onBulk,
+            confirm: 'Are you sure?',
+          },
+        ]}
+      />,
+    );
+
+    // Select row
+    await user.click(screen.getByTestId('select-row-1'));
+
+    // Click bulk action
+    await user.click(screen.getByTestId('bulk-action-delete'));
+
+    expect(confirmSpy).toHaveBeenCalledWith('Are you sure?');
+    expect(onBulk).not.toHaveBeenCalled();
+
+    confirmSpy.mockRestore();
+  });
+
+  it('bulk action disabled function is called with selected rows and keys', async () => {
+    const user = userEvent.setup();
+    const disabledFn = vi.fn().mockReturnValue(true);
+    const onBulk = vi.fn();
+    type Row = { id: string; name: string };
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data: Row[] = [{ id: '1', name: 'Ada' }];
+
+    render(
+      <DataTable<Row>
+        data={data}
+        columns={columns}
+        selectable
+        rowKey="id"
+        bulkActions={[
+          {
+            id: 'delete',
+            label: 'Delete',
+            onClick: onBulk,
+            disabled: disabledFn,
+          },
+        ]}
+      />,
+    );
+
+    // Select row
+    await user.click(screen.getByTestId('select-row-1'));
+
+    // Disabled function should be called with selected rows and keys
+    expect(disabledFn).toHaveBeenCalledWith([data[0]], ['1']);
+
+    // Button should be disabled
+    const deleteBtn = screen.getByTestId('bulk-action-delete');
+    expect(deleteBtn).toBeDisabled();
+
+    // Click should not trigger onClick
+    await user.click(deleteBtn);
+    expect(onBulk).not.toHaveBeenCalled();
+  });
 });

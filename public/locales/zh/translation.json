@@ -2281,7 +2281,14 @@
     "talawaBranding": "Talawa 品牌形象",
     "view": "查看",
     "changeLanguage": "更改语言",
-    "userNotFoundError": "未找到用户"
+    "userNotFoundError": "未找到用户",
+    "selectAllOnPage": "选择此页所有行",
+    "actions": "操作",
+    "bulkActions": "批量操作",
+    "selected": "已选择",
+    "clear": "清除",
+    "clearSelection": "清除选择",
+    "loading": "加载中..."
   },
   "donation": {
     "amount_label": "金额",

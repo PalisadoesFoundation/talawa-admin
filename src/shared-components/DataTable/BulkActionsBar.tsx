@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './DataTable.module.css';
 import type { InterfaceBulkActionsBarProps } from '../../types/shared-components/DataTable/interface';
+import { useTranslation } from 'react-i18next';
 
 /**
  * BulkActionsBar displays a toolbar when rows are selected.
@@ -11,17 +12,18 @@ export function BulkActionsBar({
   children,
   onClear,
 }: InterfaceBulkActionsBarProps): React.JSX.Element | null {
+  const { t } = useTranslation('common');
+
   if (count <= 0) return null;
 
   return (
-    <div
+    <section
       className={styles.bulkBar}
-      role="region"
-      aria-label="Bulk actions"
+      aria-label={t('bulkActions')}
       data-testid="bulk-actions-bar"
     >
       <div className={styles.bulkLeft}>
-        <strong>{count}</strong> selected
+        <strong>{count}</strong> {t('selected')}
       </div>
       <div className={styles.bulkRight}>
         {children}
@@ -29,13 +31,13 @@ export function BulkActionsBar({
           type="button"
           onClick={onClear}
           className={styles.bulkClear}
-          aria-label="Clear selection"
+          aria-label={t('clearSelection')}
           data-testid="bulk-clear-btn"
         >
-          Clear
+          {t('clear')}
         </button>
       </div>
-    </div>
+    </section>
   );
 }
 
