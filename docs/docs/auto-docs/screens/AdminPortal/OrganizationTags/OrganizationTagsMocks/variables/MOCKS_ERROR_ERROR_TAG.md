@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: MOCKS\_ERROR\_ERROR\_TAG
+# Variable: MOCKS_ERROR_ERROR_TAG
 
-> `const` **MOCKS\_ERROR\_ERROR\_TAG**: `object`[] = `MOCK_RESPONSES.ERROR_CREATE_TAG`
+> `const` **MOCKS_ERROR_ERROR_TAG**: `object`[] = `MOCK_RESPONSES.ERROR_CREATE_TAG`
 
 Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:313](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts#L313)
 

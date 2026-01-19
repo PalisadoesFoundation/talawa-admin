@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: CheckInInput
 
@@ -16,7 +16,7 @@ Defined in: [src/types/shared-components/CheckIn/type.ts:16](https://github.com/
 
 Defined in: [src/types/shared-components/CheckIn/type.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/type.ts#L17)
 
-***
+---
 
 ### allotedSeat?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/shared-components/CheckIn/type.ts:17](https://github.com/
 
 Defined in: [src/types/shared-components/CheckIn/type.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/type.ts#L18)
 
-***
+---
 
 ### eventId
 
@@ -32,7 +32,7 @@ Defined in: [src/types/shared-components/CheckIn/type.ts:18](https://github.com/
 
 Defined in: [src/types/shared-components/CheckIn/type.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/type.ts#L19)
 
-***
+---
 
 ### userId
 

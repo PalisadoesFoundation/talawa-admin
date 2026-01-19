@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceConnectionData\<TNode\>
 
@@ -39,7 +39,7 @@ Defined in: [src/types/CursorPagination/interface.ts:24](https://github.com/Pali
 
 > **node**: `TNode`
 
-***
+---
 
 ### pageInfo?
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IAdminPluginManifest
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:10](https://github.com/Palisadoes
 
 Defined in: [src/utils/adminPluginInstaller.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L14)
 
-***
+---
 
 ### description
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:14](https://github.com/Palisadoes
 
 Defined in: [src/utils/adminPluginInstaller.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L13)
 
-***
+---
 
 ### extensionPoints?
 
@@ -34,7 +34,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:17](https://github.com/Palisadoes
 
 > `optional` **routes**: `object`[]
 
-***
+---
 
 ### main
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:17](https://github.com/Palisadoes
 
 Defined in: [src/utils/adminPluginInstaller.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L15)
 
-***
+---
 
 ### name
 
@@ -50,7 +50,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:15](https://github.com/Palisadoes
 
 Defined in: [src/utils/adminPluginInstaller.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L11)
 
-***
+---
 
 ### pluginId
 
@@ -58,7 +58,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:11](https://github.com/Palisadoes
 
 Defined in: [src/utils/adminPluginInstaller.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L16)
 
-***
+---
 
 ### version
 

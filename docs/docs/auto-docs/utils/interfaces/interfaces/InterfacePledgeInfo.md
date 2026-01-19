@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePledgeInfo
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1891](https://github.com/PalisadoesFoundati
 
 The amount of the pledge.
 
-***
+---
 
 ### campaign?
 
@@ -52,7 +52,7 @@ The campaign associated with the pledge (optional).
 
 > **name**: `string`
 
-***
+---
 
 ### createdAt
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:1894](https://github.com/PalisadoesFoundati
 
 The date the pledge was created.
 
-***
+---
 
 ### currency
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:1893](https://github.com/PalisadoesFoundati
 
 The currency of the pledge.
 
-***
+---
 
 ### id
 
@@ -82,7 +82,7 @@ Defined in: [src/utils/interfaces.ts:1883](https://github.com/PalisadoesFoundati
 
 The unique identifier of the pledge.
 
-***
+---
 
 ### note?
 
@@ -90,7 +90,7 @@ The unique identifier of the pledge.
 
 Defined in: [src/utils/interfaces.ts:1892](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1892)
 
-***
+---
 
 ### pledger
 
@@ -100,7 +100,7 @@ Defined in: [src/utils/interfaces.ts:1899](https://github.com/PalisadoesFoundati
 
 The primary pledger who made this pledge
 
-***
+---
 
 ### updatedAt?
 
@@ -110,7 +110,7 @@ Defined in: [src/utils/interfaces.ts:1895](https://github.com/PalisadoesFoundati
 
 The date the pledge was last updated.
 
-***
+---
 
 ### users?
 

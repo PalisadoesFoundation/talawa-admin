@@ -1,7 +1,6 @@
 // To check if your files contain the invalid css imports run the given command
 // Run manually: pnpm exec tsx scripts/check-css-imports.js --files <file1> <file2> ...
 
-
 import fs from 'fs';
 import path from 'path';
 import ts from 'typescript';
@@ -44,8 +43,13 @@ const collectCssImports = (filePath, content) => {
   sourceFile.forEachChild(function walk(node) {
     if (ts.isImportDeclaration(node)) {
       const specifier = node.moduleSpecifier;
-      if (ts.isStringLiteral(specifier) && CSS_EXTENSION_REGEX.test(specifier.text)) {
-        const { line } = sourceFile.getLineAndCharacterOfPosition(node.getStart());
+      if (
+        ts.isStringLiteral(specifier) &&
+        CSS_EXTENSION_REGEX.test(specifier.text)
+      ) {
+        const { line } = sourceFile.getLineAndCharacterOfPosition(
+          node.getStart(),
+        );
         imports.push({ importPath: specifier.text, line: line + 1 });
       }
     }

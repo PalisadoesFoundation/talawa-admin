@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: ADD\_PEOPLE\_TO\_TAG
+# Variable: ADD_PEOPLE_TO_TAG
 
-> `const` **ADD\_PEOPLE\_TO\_TAG**: `DocumentNode`
+> `const` **ADD_PEOPLE_TO_TAG**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/TagMutations.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L76)
 

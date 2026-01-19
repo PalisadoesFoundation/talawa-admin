@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePinnedPostsLayoutProps
 
@@ -18,7 +18,7 @@ Defined in: [src/types/Post/interface.ts:109](https://github.com/PalisadoesFound
 
 `void`
 
-***
+---
 
 ### onStoryClick()
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Post/interface.ts:108](https://github.com/PalisadoesFound
 
 `void`
 
-***
+---
 
 ### pinnedPosts
 

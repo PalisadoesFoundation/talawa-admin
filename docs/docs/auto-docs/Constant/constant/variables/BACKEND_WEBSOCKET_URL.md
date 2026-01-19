@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: BACKEND\_WEBSOCKET\_URL
+# Variable: BACKEND_WEBSOCKET_URL
 
-> `const` **BACKEND\_WEBSOCKET\_URL**: `string`
+> `const` **BACKEND_WEBSOCKET_URL**: `string`
 
 Defined in: [src/Constant/constant.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/constant.ts#L25)

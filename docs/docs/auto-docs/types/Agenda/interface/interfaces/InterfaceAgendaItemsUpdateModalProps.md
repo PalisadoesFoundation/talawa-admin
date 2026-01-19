@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceAgendaItemsUpdateModalProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Agenda/interface.ts:58](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Agenda/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L65)
 
-***
+---
 
 ### agendaItemUpdateModalIsOpen
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Agenda/interface.ts:65](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Agenda/interface.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L59)
 
-***
+---
 
 ### formState
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Agenda/interface.ts:59](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Agenda/interface.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L61)
 
-***
+---
 
 ### hideUpdateModal()
 
@@ -42,7 +42,7 @@ Defined in: [src/types/Agenda/interface.ts:60](https://github.com/PalisadoesFoun
 
 `void`
 
-***
+---
 
 ### setFormState()
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Agenda/interface.ts:62](https://github.com/PalisadoesFoun
 
 `void`
 
-***
+---
 
 ### t()
 
@@ -78,7 +78,7 @@ Defined in: [src/types/Agenda/interface.ts:64](https://github.com/PalisadoesFoun
 
 `string`
 
-***
+---
 
 ### updateAgendaItemHandler()
 

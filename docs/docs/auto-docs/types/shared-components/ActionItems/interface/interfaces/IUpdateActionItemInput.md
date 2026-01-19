@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IUpdateActionItemInput
 
@@ -14,7 +14,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:103](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L107)
 
-***
+---
 
 ### id
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:107](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L104)
 
-***
+---
 
 ### isCompleted
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:104](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L108)
 
-***
+---
 
 ### postCompletionNotes?
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:108](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L110)
 
-***
+---
 
 ### preCompletionNotes?
 
@@ -46,7 +46,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:110](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L109)
 
-***
+---
 
 ### volunteerGroupId?
 
@@ -54,7 +54,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:109](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L106)
 
-***
+---
 
 ### volunteerId?
 

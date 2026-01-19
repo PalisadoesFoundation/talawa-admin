@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceAgendaItemInfo
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:2460](https://github.com/PalisadoesFoundati
 
 The unique identifier of the agenda item.
 
-***
+---
 
 ### attachments
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:2464](https://github.com/PalisadoesFoundati
 
 An array of attachment URLs.
 
-***
+---
 
 ### categories
 
@@ -50,7 +50,7 @@ An array of categories for the agenda item.
 
 > **name**: `string`
 
-***
+---
 
 ### createdBy
 
@@ -72,7 +72,7 @@ The user who created this agenda item.
 
 > **lastName**: `string`
 
-***
+---
 
 ### description
 
@@ -82,7 +82,7 @@ Defined in: [src/utils/interfaces.ts:2462](https://github.com/PalisadoesFoundati
 
 The description of the agenda item.
 
-***
+---
 
 ### duration
 
@@ -92,7 +92,7 @@ Defined in: [src/utils/interfaces.ts:2463](https://github.com/PalisadoesFoundati
 
 The duration of the agenda item.
 
-***
+---
 
 ### organization
 
@@ -110,7 +110,7 @@ The organization associated with the agenda item.
 
 > **name**: `string`
 
-***
+---
 
 ### relatedEvent
 
@@ -128,7 +128,7 @@ The related event.
 
 > **title**: `string`
 
-***
+---
 
 ### sequence
 
@@ -138,7 +138,7 @@ Defined in: [src/utils/interfaces.ts:2476](https://github.com/PalisadoesFoundati
 
 The sequence number of the agenda item.
 
-***
+---
 
 ### title
 
@@ -148,7 +148,7 @@ Defined in: [src/utils/interfaces.ts:2461](https://github.com/PalisadoesFoundati
 
 The title of the agenda item.
 
-***
+---
 
 ### urls
 
@@ -158,7 +158,7 @@ Defined in: [src/utils/interfaces.ts:2470](https://github.com/PalisadoesFoundati
 
 An array of URLs related to the agenda item.
 
-***
+---
 
 ### users
 

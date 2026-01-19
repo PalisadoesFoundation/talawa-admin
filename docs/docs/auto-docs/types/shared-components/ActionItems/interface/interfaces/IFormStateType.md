@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IFormStateType
 
@@ -14,7 +14,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:121](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L122)
 
-***
+---
 
 ### categoryId
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:122](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L123)
 
-***
+---
 
 ### eventId?
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:123](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L126)
 
-***
+---
 
 ### isCompleted
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:126](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L129)
 
-***
+---
 
 ### postCompletionNotes
 
@@ -46,7 +46,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:129](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L128)
 
-***
+---
 
 ### preCompletionNotes
 
@@ -54,7 +54,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:128](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L127)
 
-***
+---
 
 ### volunteerGroupId
 
@@ -62,7 +62,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:127](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L125)
 
-***
+---
 
 ### volunteerId
 

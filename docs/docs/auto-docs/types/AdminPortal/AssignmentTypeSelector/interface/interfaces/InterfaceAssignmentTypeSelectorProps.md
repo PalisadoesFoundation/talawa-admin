@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceAssignmentTypeSelectorProps
 
@@ -18,7 +18,7 @@ Defined in: [src/types/AdminPortal/AssignmentTypeSelector/interface.ts:11](https
 
 Current assignment type selection
 
-***
+---
 
 ### isVolunteerDisabled
 
@@ -28,7 +28,7 @@ Defined in: [src/types/AdminPortal/AssignmentTypeSelector/interface.ts:15](https
 
 Whether the volunteer chip is disabled
 
-***
+---
 
 ### isVolunteerGroupDisabled
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/AssignmentTypeSelector/interface.ts:17](https
 
 Whether the volunteer group chip is disabled
 
-***
+---
 
 ### onClearVolunteer()
 
@@ -52,7 +52,7 @@ Callback to clear volunteer selection when switching to volunteer group
 
 `void`
 
-***
+---
 
 ### onClearVolunteerGroup()
 
@@ -66,7 +66,7 @@ Callback to clear volunteer group selection when switching to volunteer
 
 `void`
 
-***
+---
 
 ### onTypeChange()
 

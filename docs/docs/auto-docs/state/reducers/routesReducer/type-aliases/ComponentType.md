@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: ComponentType
 
@@ -10,13 +10,13 @@ Defined in: [src/state/reducers/routesReducer.ts:34](https://github.com/Palisado
 
 ## Properties
 
-### comp\_id
+### comp_id
 
-> **comp\_id**: `string` \| `null`
+> **comp_id**: `string` \| `null`
 
 Defined in: [src/state/reducers/routesReducer.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L36)
 
-***
+---
 
 ### component
 
@@ -24,7 +24,7 @@ Defined in: [src/state/reducers/routesReducer.ts:36](https://github.com/Palisado
 
 Defined in: [src/state/reducers/routesReducer.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L37)
 
-***
+---
 
 ### name
 
@@ -32,7 +32,7 @@ Defined in: [src/state/reducers/routesReducer.ts:37](https://github.com/Palisado
 
 Defined in: [src/state/reducers/routesReducer.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L35)
 
-***
+---
 
 ### subTargets?
 
@@ -40,9 +40,9 @@ Defined in: [src/state/reducers/routesReducer.ts:35](https://github.com/Palisado
 
 Defined in: [src/state/reducers/routesReducer.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L38)
 
-#### comp\_id
+#### comp_id
 
-> **comp\_id**: `string`
+> **comp_id**: `string`
 
 #### component
 

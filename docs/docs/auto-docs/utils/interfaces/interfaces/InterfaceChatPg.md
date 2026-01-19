@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceChatPg
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:811](https://github.com/PalisadoesFoundatio
 
 The MIME type of the chat's avatar.
 
-***
+---
 
 ### avatarURL
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:812](https://github.com/PalisadoesFoundatio
 
 The URL of the chat's avatar.
 
-***
+---
 
 ### createdAt
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:813](https://github.com/PalisadoesFoundatio
 
 The creation date of the chat record.
 
-***
+---
 
 ### creator
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:815](https://github.com/PalisadoesFoundatio
 
 The user who created this chat.
 
-***
+---
 
 ### description
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:810](https://github.com/PalisadoesFoundatio
 
 The description of the chat.
 
-***
+---
 
 ### id
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:808](https://github.com/PalisadoesFoundatio
 
 The unique identifier of the chat.
 
-***
+---
 
 ### name
 
@@ -82,7 +82,7 @@ Defined in: [src/utils/interfaces.ts:809](https://github.com/PalisadoesFoundatio
 
 The name of the chat.
 
-***
+---
 
 ### organization
 
@@ -92,7 +92,7 @@ Defined in: [src/utils/interfaces.ts:817](https://github.com/PalisadoesFoundatio
 
 The organization associated with this chat.
 
-***
+---
 
 ### updatedAt
 
@@ -102,7 +102,7 @@ Defined in: [src/utils/interfaces.ts:814](https://github.com/PalisadoesFoundatio
 
 The last update date of the chat record.
 
-***
+---
 
 ### updater
 

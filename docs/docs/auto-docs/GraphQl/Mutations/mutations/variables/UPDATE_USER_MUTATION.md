@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: UPDATE\_USER\_MUTATION
+# Variable: UPDATE_USER_MUTATION
 
-> `const` **UPDATE\_USER\_MUTATION**: `DocumentNode`
+> `const` **UPDATE_USER_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/mutations.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L98)

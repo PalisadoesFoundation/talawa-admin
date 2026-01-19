@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceVenueModalProps
 
@@ -14,7 +14,7 @@ Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:49](https://
 
 Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L55)
 
-***
+---
 
 ### onHide()
 
@@ -26,7 +26,7 @@ Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:51](https://
 
 `void`
 
-***
+---
 
 ### orgId
 
@@ -34,7 +34,7 @@ Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:51](https://
 
 Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L53)
 
-***
+---
 
 ### refetchVenues()
 
@@ -46,7 +46,7 @@ Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:52](https://
 
 `void`
 
-***
+---
 
 ### show
 
@@ -54,7 +54,7 @@ Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:52](https://
 
 Defined in: [src/components/AdminPortal/Venues/Modal/VenueModal.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/Venues/Modal/VenueModal.tsx#L50)
 
-***
+---
 
 ### venueData?
 

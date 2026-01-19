@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceQueryUserTagsAssignedMembers
 
@@ -30,7 +30,7 @@ An array of ancestor tags.
 
 > **name**: `string`
 
-***
+---
 
 ### name
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:1607](https://github.com/PalisadoesFoundati
 
 The name of the user tag.
 
-***
+---
 
 ### usersAssignedTo
 

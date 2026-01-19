@@ -49,16 +49,18 @@ The Talawa Admin Plugin System is a sophisticated, VS Code-inspired plugin archi
 
 ## Core Files
 
-### 1. `index.ts` - Main Entry Point - 
+### 1. `index.ts` - Main Entry Point -
 
 **Purpose**: Central export hub for the entire plugin system.
 
 **Responsibilities**:
+
 - Exports all public APIs, types, utilities, and components
 - Provides a clean, organized interface for consuming the plugin system
 - Single source of truth for what's available to external consumers
 
 **Key Exports**:
+
 - `PluginManager` - Main orchestrator class
 - React hooks (`usePluginRoutes`, `usePluginDrawerItems`, `useLoadedPlugins`)
 - Type definitions for manifests, extensions, and plugin metadata
@@ -71,12 +73,14 @@ The Talawa Admin Plugin System is a sophisticated, VS Code-inspired plugin archi
 **Purpose**: Main coordination layer that ties together all plugin subsystems.
 
 **Responsibilities**:
+
 - Initializes and coordinates all manager classes (Discovery, Lifecycle, Extension Registry, Events)
 - Provides unified API for plugin operations
 - Manages Apollo Client integration for GraphQL operations
 - Delegates specific functionality to specialized managers
 
 **Key Methods**:
+
 - `setApolloClient()` - Configure GraphQL backend connection
 - `loadPlugin()` - Load a specific plugin
 - `getExtensionPoints()` - Retrieve extensions by type
@@ -190,6 +194,7 @@ The Talawa Admin Plugin System is a sophisticated, VS Code-inspired plugin archi
 **Purpose**: Runtime component registration and retrieval system.
 
 **Responsibilities**:
+
 - Maintains registry of plugin components (`pluginRegistry` object)
 - Dynamically loads components from plugin bundles
 - Creates error boundary components for failed loads
@@ -241,6 +246,7 @@ The Talawa Admin Plugin System is a sophisticated, VS Code-inspired plugin archi
    - Creates/updates plugin records
 
 **Key Methods**:
+
 - `discoverPlugins()` - Find available plugins
 - `loadPluginManifest(pluginId)` - Load manifest file
 - `loadPluginComponents(pluginId, manifest)` - Import components
@@ -269,6 +275,7 @@ The Talawa Admin Plugin System is a sophisticated, VS Code-inspired plugin archi
    - Prevents orphaned extensions
 
 **Data Structure**:
+
 ```typescript
 {
   routes: [],     // Legacy routes
@@ -310,6 +317,7 @@ The Talawa Admin Plugin System is a sophisticated, VS Code-inspired plugin archi
    - `getEvents()` - List all events
 
 **Common Events**:
+
 - `plugin:loaded` - Plugin successfully loaded
 - `plugin:activated` - Plugin activated
 - `plugin:deactivated` - Plugin deactivated
@@ -323,6 +331,7 @@ The Talawa Admin Plugin System is a sophisticated, VS Code-inspired plugin archi
 **Purpose**: Manages complete plugin lifecycle from loading to unloading.
 
 **Lifecycle States**:
+
 ```
 LOADING → ACTIVE → INACTIVE → UNLOADED
             ↓
@@ -353,6 +362,7 @@ LOADING → ACTIVE → INACTIVE → UNLOADED
    - Provides status queries
 
 **Key Methods**:
+
 - `loadPlugin(pluginId)` - Load and initialize plugin
 - `activatePlugin(pluginId)` - Activate plugin
 - `deactivatePlugin(pluginId)` - Deactivate plugin
@@ -368,20 +378,23 @@ LOADING → ACTIVE → INACTIVE → UNLOADED
 **Purpose**: Renders plugin components at designated injection points throughout the UI.
 
 **Usage**:
+
 ```tsx
-<PluginInjector 
-  injectorType="G3" 
+<PluginInjector
+  injectorType="G3"
   data={{ postId: post.id, content: post.content }}
 />
 ```
 
 **Injection Points**:
+
 - **G1** - General component injection point 1
 - **G2** - General component injection point 2
 - **G3** - Organization posts (e.g., AI summarization, sentiment analysis)
 - **G4** - User portal posts
 
 **Features**:
+
 - Dynamically loads and renders injector components
 - Passes props/data to injected components
 - Handles rendering errors gracefully
@@ -396,16 +409,18 @@ LOADING → ACTIVE → INACTIVE → UNLOADED
 **Purpose**: Dynamically renders React Router routes from plugin manifests.
 
 **Features**:
+
 - Lazy-loads plugin route components
 - Filters routes by user permissions and admin status
 - Provides fallback UI during loading
 - Error boundaries for failed route loads
 
 **Usage**:
+
 ```tsx
 <Routes>
-  <PluginRoutes 
-    userPermissions={['read:posts']} 
+  <PluginRoutes
+    userPermissions={['read:posts']}
     isAdmin={true}
     fallback={<LoadingSpinner />}
   />
@@ -419,12 +434,14 @@ LOADING → ACTIVE → INACTIVE → UNLOADED
 **Purpose**: Renders individual plugin routes using the component registry.
 
 **Responsibilities**:
+
 - Validates plugin and component existence
 - Retrieves component from registry
 - Renders with Suspense boundary
 - Provides detailed error messages for debugging
 
 **Error Handling**:
+
 - Missing plugin ID
 - Plugin not registered
 - Component not found
@@ -456,6 +473,7 @@ LOADING → ACTIVE → INACTIVE → UNLOADED
    - Updates existing plugins
 
 **Key Methods**:
+
 - `validatePluginFiles(files)` - Validate before installation
 - `installPlugin(files, metadata)` - Install plugin
 - `getInstalledPlugins()` - List installed
@@ -488,6 +506,7 @@ LOADING → ACTIVE → INACTIVE → UNLOADED
 **Integration**: Works with Vite plugin for development, direct Node.js `fs` API for production.
 
 **Key Methods**:
+
 - `writePluginFiles(pluginId, files)` - Write files
 - `readPluginFile(pluginId, filePath)` - Read file
 - `deletePluginDirectory(pluginId)` - Delete plugin
@@ -502,12 +521,14 @@ LOADING → ACTIVE → INACTIVE → UNLOADED
 **Purpose**: Vite plugin that enables file system operations during development.
 
 **How It Works**:
+
 - Intercepts HTTP requests to special `/api/internal-file-writer/` endpoints
 - Provides file system operations without external server
 - Proxies operations to Node.js `fs` API
 - Only active in development mode
 
 **API Endpoints**:
+
 - `POST /api/internal-file-writer/write` - Write files
 - `POST /api/internal-file-writer/read` - Read files
 - `POST /api/internal-file-writer/delete` - Delete files
@@ -515,6 +536,7 @@ LOADING → ACTIVE → INACTIVE → UNLOADED
 - `POST /api/internal-file-writer/list` - List files
 
 **Configuration**:
+
 ```typescript
 // vite.config.ts
 import { createInternalFileWriterPlugin } from './src/plugin/vite/internalFileWriterPlugin';
@@ -524,10 +546,10 @@ export default {
     createInternalFileWriterPlugin({
       enabled: true,
       debug: false,
-      basePath: 'src/plugin/available'
-    })
-  ]
-}
+      basePath: 'src/plugin/available',
+    }),
+  ],
+};
 ```
 
 ---
@@ -539,19 +561,23 @@ export default {
 The system uses a clear naming pattern: `[Type][Role][Level]`
 
 **Types**:
+
 - `R` - Route extensions
 - `D` - Drawer (navigation) extensions
 - `G` - General injector extensions
 
 **Roles**:
+
 - `A` - Admin
 - `U` - User
 
 **Levels**:
+
 - `1` - Global context
 - `2` - Organization context
 
 **Examples**:
+
 - `RA1` - Routes for Admin in Global context
 - `DU2` - Drawer items for Users in Organization context
 - `G3` - General injector point 3 (org posts)
@@ -575,6 +601,7 @@ The system automatically filters extensions based on user permissions.
 ## Plugin Development Workflow
 
 ### 1. Plugin Structure
+
 ```
 my-plugin/
 ├── manifest.json          # Plugin metadata and extension declarations
@@ -587,6 +614,7 @@ my-plugin/
 ```
 
 ### 2. Manifest Example
+
 ```json
 {
   "name": "My Awesome Plugin",
@@ -623,6 +651,7 @@ my-plugin/
 ```
 
 ### 3. Component Export Pattern
+
 ```typescript
 // index.ts
 export { default as Dashboard } from './components/Dashboard';
@@ -630,6 +659,7 @@ export { default as PostEnhancer } from './components/Injector';
 ```
 
 ### 4. Installation
+
 ```typescript
 import { AdminPluginFileService } from '@/plugin/services/AdminPluginFileService';
 
@@ -638,10 +668,12 @@ const service = AdminPluginFileService.getInstance();
 const files = {
   'manifest.json': JSON.stringify(manifest),
   'index.ts': componentCode,
-  'components/Dashboard.tsx': dashboardCode
+  'components/Dashboard.tsx': dashboardCode,
 };
 
-await service.installPlugin(files, { /* metadata */ });
+await service.installPlugin(files, {
+  /* metadata */
+});
 ```
 
 ---

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: PostInput
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Post/type.ts:22](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Post/type.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L23)
 
-***
+---
 
 ### imageUrl?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Post/type.ts:23](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Post/type.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L24)
 
-***
+---
 
 ### organizationId
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Post/type.ts:24](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Post/type.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L25)
 
-***
+---
 
 ### pinned?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Post/type.ts:25](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Post/type.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L26)
 
-***
+---
 
 ### text
 
@@ -48,7 +48,7 @@ Defined in: [src/types/Post/type.ts:26](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Post/type.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L27)
 
-***
+---
 
 ### title?
 
@@ -56,7 +56,7 @@ Defined in: [src/types/Post/type.ts:27](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Post/type.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L28)
 
-***
+---
 
 ### videoUrl?
 

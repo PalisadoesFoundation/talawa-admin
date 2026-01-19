@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceSearchBarProps
 
@@ -22,7 +22,7 @@ Defined in: [src/types/SearchBar/interface.ts:77](https://github.com/PalisadoesF
 
 Accessible label for the search button.
 
-***
+---
 
 ### buttonClassName?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/SearchBar/interface.ts:55](https://github.com/PalisadoesF
 
 Additional class applied to the search button.
 
-***
+---
 
 ### buttonLabel?
 
@@ -42,7 +42,7 @@ Defined in: [src/types/SearchBar/interface.ts:75](https://github.com/PalisadoesF
 
 Optional label shown inside the search button.
 
-***
+---
 
 ### buttonTestId?
 
@@ -52,7 +52,7 @@ Defined in: [src/types/SearchBar/interface.ts:59](https://github.com/PalisadoesF
 
 Button test id override.
 
-***
+---
 
 ### className?
 
@@ -66,7 +66,7 @@ Additional class applied to the container.
 
 `Omit.className`
 
-***
+---
 
 ### clearButtonAriaLabel?
 
@@ -76,7 +76,7 @@ Defined in: [src/types/SearchBar/interface.ts:79](https://github.com/PalisadoesF
 
 Accessible label for the clear button.
 
-***
+---
 
 ### clearButtonTestId?
 
@@ -86,7 +86,7 @@ Defined in: [src/types/SearchBar/interface.ts:61](https://github.com/PalisadoesF
 
 Clear button test id override.
 
-***
+---
 
 ### defaultValue?
 
@@ -100,7 +100,7 @@ Initial value when used in uncontrolled mode.
 
 `Omit.defaultValue`
 
-***
+---
 
 ### icon?
 
@@ -110,7 +110,7 @@ Defined in: [src/types/SearchBar/interface.ts:83](https://github.com/PalisadoesF
 
 Optional custom icon rendered inside the input field.
 
-***
+---
 
 ### inputClassName?
 
@@ -120,7 +120,7 @@ Defined in: [src/types/SearchBar/interface.ts:53](https://github.com/PalisadoesF
 
 Additional class applied to the input element.
 
-***
+---
 
 ### inputTestId?
 
@@ -130,7 +130,7 @@ Defined in: [src/types/SearchBar/interface.ts:57](https://github.com/PalisadoesF
 
 Input test id override.
 
-***
+---
 
 ### isLoading?
 
@@ -140,7 +140,7 @@ Defined in: [src/types/SearchBar/interface.ts:81](https://github.com/PalisadoesF
 
 Renders a loading spinner inside the button when true.
 
-***
+---
 
 ### onChange()?
 
@@ -164,7 +164,7 @@ Callback fired whenever the input value changes.
 
 `void`
 
-***
+---
 
 ### onClear()?
 
@@ -178,7 +178,7 @@ Callback fired after the clear button is pressed.
 
 `void`
 
-***
+---
 
 ### onSearch()?
 
@@ -202,7 +202,7 @@ Callback invoked when the user submits a search via button, Enter, or clear.
 
 `void`
 
-***
+---
 
 ### placeholder?
 
@@ -216,7 +216,7 @@ Placeholder text for the search input.
 
 `Omit.placeholder`
 
-***
+---
 
 ### showClearButton?
 
@@ -226,7 +226,7 @@ Defined in: [src/types/SearchBar/interface.ts:69](https://github.com/PalisadoesF
 
 Toggle visibility of the inline clear button. Defaults to true.
 
-***
+---
 
 ### showLeadingIcon?
 
@@ -236,7 +236,7 @@ Defined in: [src/types/SearchBar/interface.ts:71](https://github.com/PalisadoesF
 
 Toggle the leading search icon visibility. Defaults to false.
 
-***
+---
 
 ### showSearchButton?
 
@@ -246,7 +246,7 @@ Defined in: [src/types/SearchBar/interface.ts:67](https://github.com/PalisadoesF
 
 Toggle visibility of the trailing search button. Defaults to true.
 
-***
+---
 
 ### showTrailingIcon?
 
@@ -256,7 +256,7 @@ Defined in: [src/types/SearchBar/interface.ts:73](https://github.com/PalisadoesF
 
 Toggle the trailing search icon visibility. Defaults to false.
 
-***
+---
 
 ### size?
 
@@ -266,7 +266,7 @@ Defined in: [src/types/SearchBar/interface.ts:63](https://github.com/PalisadoesF
 
 Visual size of the component.
 
-***
+---
 
 ### value?
 
@@ -280,7 +280,7 @@ Controlled input value.
 
 `Omit.value`
 
-***
+---
 
 ### variant?
 

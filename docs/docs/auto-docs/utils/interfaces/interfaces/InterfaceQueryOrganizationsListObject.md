@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceQueryOrganizationsListObject
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:602](https://github.com/PalisadoesFoundatio
 
 The address of the organization.
 
-***
+---
 
 ### admins
 
@@ -52,7 +52,7 @@ An array of administrators in the organization.
 
 > **lastName**: `string`
 
-***
+---
 
 ### blockedUsers
 
@@ -78,7 +78,7 @@ An array of users blocked by the organization.
 
 > **lastName**: `string`
 
-***
+---
 
 ### creator
 
@@ -100,7 +100,7 @@ The creator of the organization.
 
 > **lastName**: `string`
 
-***
+---
 
 ### description
 
@@ -110,7 +110,7 @@ Defined in: [src/utils/interfaces.ts:601](https://github.com/PalisadoesFoundatio
 
 The description of the organization.
 
-***
+---
 
 ### id
 
@@ -120,7 +120,7 @@ Defined in: [src/utils/interfaces.ts:593](https://github.com/PalisadoesFoundatio
 
 The unique identifier of the organization.
 
-***
+---
 
 ### image
 
@@ -130,7 +130,7 @@ Defined in: [src/utils/interfaces.ts:594](https://github.com/PalisadoesFoundatio
 
 The URL of the organization's image, or null.
 
-***
+---
 
 ### members
 
@@ -156,7 +156,7 @@ An array of members in the organization.
 
 > **lastName**: `string`
 
-***
+---
 
 ### membershipRequests
 
@@ -186,7 +186,7 @@ An array of membership requests for the organization.
 
 > **lastName**: `string`
 
-***
+---
 
 ### name
 
@@ -196,7 +196,7 @@ Defined in: [src/utils/interfaces.ts:600](https://github.com/PalisadoesFoundatio
 
 The name of the organization.
 
-***
+---
 
 ### userRegistrationRequired
 
@@ -206,7 +206,7 @@ Defined in: [src/utils/interfaces.ts:603](https://github.com/PalisadoesFoundatio
 
 Indicates if user registration is required for this organization.
 
-***
+---
 
 ### visibleInSearch
 

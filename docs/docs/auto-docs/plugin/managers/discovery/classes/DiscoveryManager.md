@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Class: DiscoveryManager
 
@@ -36,7 +36,7 @@ Defined in: [src/plugin/managers/discovery.ts:56](https://github.com/PalisadoesF
 
 `Promise`\<`string`[]\>
 
-***
+---
 
 ### findPluginInIndex()
 
@@ -54,7 +54,7 @@ Defined in: [src/plugin/managers/discovery.ts:31](https://github.com/PalisadoesF
 
 [`IPlugin`](../../../graphql-service/interfaces/IPlugin.md)
 
-***
+---
 
 ### getPluginIndex()
 
@@ -66,7 +66,7 @@ Defined in: [src/plugin/managers/discovery.ts:23](https://github.com/PalisadoesF
 
 [`IPlugin`](../../../graphql-service/interfaces/IPlugin.md)[]
 
-***
+---
 
 ### isPluginActivated()
 
@@ -84,7 +84,7 @@ Defined in: [src/plugin/managers/discovery.ts:35](https://github.com/PalisadoesF
 
 `boolean`
 
-***
+---
 
 ### isPluginInstalled()
 
@@ -102,7 +102,7 @@ Defined in: [src/plugin/managers/discovery.ts:40](https://github.com/PalisadoesF
 
 `boolean`
 
-***
+---
 
 ### loadPluginComponents()
 
@@ -124,7 +124,7 @@ Defined in: [src/plugin/managers/discovery.ts:116](https://github.com/Palisadoes
 
 `Promise`\<`Record`\<`string`, `ComponentType`\<\{ \}\>\>\>
 
-***
+---
 
 ### loadPluginIndexFromGraphQL()
 
@@ -136,7 +136,7 @@ Defined in: [src/plugin/managers/discovery.ts:45](https://github.com/PalisadoesF
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### loadPluginManifest()
 
@@ -154,7 +154,7 @@ Defined in: [src/plugin/managers/discovery.ts:79](https://github.com/PalisadoesF
 
 `Promise`\<[`IPluginManifest`](../../../types/interfaces/IPluginManifest.md)\>
 
-***
+---
 
 ### removePluginFromGraphQL()
 
@@ -172,7 +172,7 @@ Defined in: [src/plugin/managers/discovery.ts:160](https://github.com/Palisadoes
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### setGraphQLService()
 
@@ -190,7 +190,7 @@ Defined in: [src/plugin/managers/discovery.ts:19](https://github.com/PalisadoesF
 
 `void`
 
-***
+---
 
 ### setPluginIndex()
 
@@ -208,7 +208,7 @@ Defined in: [src/plugin/managers/discovery.ts:27](https://github.com/PalisadoesF
 
 `void`
 
-***
+---
 
 ### syncPluginWithGraphQL()
 
@@ -226,7 +226,7 @@ Defined in: [src/plugin/managers/discovery.ts:146](https://github.com/Palisadoes
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### updatePluginStatusInGraphQL()
 

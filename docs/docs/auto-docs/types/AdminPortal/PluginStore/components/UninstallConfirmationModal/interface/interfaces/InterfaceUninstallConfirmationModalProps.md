@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceUninstallConfirmationModalProps
 
@@ -25,7 +25,7 @@ Function to close the modal without taking action
 
 `void`
 
-***
+---
 
 ### onConfirm()
 
@@ -39,7 +39,7 @@ Function to proceed with the uninstallation process
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### plugin
 
@@ -49,7 +49,7 @@ Defined in: [src/types/AdminPortal/PluginStore/components/UninstallConfirmationM
 
 The metadata of the plugin selected for uninstallation, or null if none selected
 
-***
+---
 
 ### show
 

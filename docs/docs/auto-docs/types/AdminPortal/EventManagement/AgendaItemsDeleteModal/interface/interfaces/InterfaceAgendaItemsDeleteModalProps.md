@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceAgendaItemsDeleteModalProps
 
@@ -19,7 +19,7 @@ Defined in: [src/types/AdminPortal/EventManagement/AgendaItemsDeleteModal/interf
 
 Controls whether the delete confirmation modal is visible
 
-***
+---
 
 ### deleteAgendaItemHandler()
 
@@ -33,7 +33,7 @@ Event handler to execute the logic for deleting an agenda item
 
 `void`
 
-***
+---
 
 ### toggleDeleteModal()
 

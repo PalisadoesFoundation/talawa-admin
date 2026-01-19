@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Function: useAvatarUpload()
 
@@ -64,7 +64,8 @@ Object containing file, previewUrl, error state, and handlers
 ## Example
 
 ```tsx
-const { file, previewUrl, error, onFileSelect, clearError } = useAvatarUpload(currentAvatarUrl);
+const { file, previewUrl, error, onFileSelect, clearError } =
+  useAvatarUpload(currentAvatarUrl);
 
 const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   const selectedFile = e.target.files?.[0];

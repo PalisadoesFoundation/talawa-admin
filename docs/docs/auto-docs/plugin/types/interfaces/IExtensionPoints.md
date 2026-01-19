@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IExtensionPoints
 
@@ -14,7 +14,7 @@ Defined in: [src/plugin/types.ts:44](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L53)
 
-***
+---
 
 ### DA2?
 
@@ -22,7 +22,7 @@ Defined in: [src/plugin/types.ts:53](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L54)
 
-***
+---
 
 ### drawer?
 
@@ -30,7 +30,7 @@ Defined in: [src/plugin/types.ts:54](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L46)
 
-***
+---
 
 ### DU1?
 
@@ -38,7 +38,7 @@ Defined in: [src/plugin/types.ts:46](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L55)
 
-***
+---
 
 ### DU2?
 
@@ -46,7 +46,7 @@ Defined in: [src/plugin/types.ts:55](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L56)
 
-***
+---
 
 ### G1?
 
@@ -54,7 +54,7 @@ Defined in: [src/plugin/types.ts:56](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L58)
 
-***
+---
 
 ### G2?
 
@@ -62,7 +62,7 @@ Defined in: [src/plugin/types.ts:58](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L59)
 
-***
+---
 
 ### G3?
 
@@ -70,7 +70,7 @@ Defined in: [src/plugin/types.ts:59](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L60)
 
-***
+---
 
 ### G4?
 
@@ -78,7 +78,7 @@ Defined in: [src/plugin/types.ts:60](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L61)
 
-***
+---
 
 ### RA1?
 
@@ -86,7 +86,7 @@ Defined in: [src/plugin/types.ts:61](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L48)
 
-***
+---
 
 ### RA2?
 
@@ -94,7 +94,7 @@ Defined in: [src/plugin/types.ts:48](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L49)
 
-***
+---
 
 ### routes?
 
@@ -102,7 +102,7 @@ Defined in: [src/plugin/types.ts:49](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L45)
 
-***
+---
 
 ### RU1?
 
@@ -110,7 +110,7 @@ Defined in: [src/plugin/types.ts:45](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L50)
 
-***
+---
 
 ### RU2?
 

@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: CANCEL\_MEMBERSHIP\_REQUEST
+# Variable: CANCEL_MEMBERSHIP_REQUEST
 
-> `const` **CANCEL\_MEMBERSHIP\_REQUEST**: `DocumentNode`
+> `const` **CANCEL_MEMBERSHIP_REQUEST**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:266](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L266)

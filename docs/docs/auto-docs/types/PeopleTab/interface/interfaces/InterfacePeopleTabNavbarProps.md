@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePeopleTabNavbarProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/PeopleTab/interface.ts:24](https://github.com/PalisadoesF
 
 Defined in: [src/types/PeopleTab/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L41)
 
-***
+---
 
 ### search?
 
@@ -48,7 +48,7 @@ Defined in: [src/types/PeopleTab/interface.ts:26](https://github.com/PalisadoesF
 
 > **placeholder**: `string`
 
-***
+---
 
 ### showEventTypeFilter?
 
@@ -56,7 +56,7 @@ Defined in: [src/types/PeopleTab/interface.ts:26](https://github.com/PalisadoesF
 
 Defined in: [src/types/PeopleTab/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L40)
 
-***
+---
 
 ### sorting?
 
@@ -98,7 +98,7 @@ Defined in: [src/types/PeopleTab/interface.ts:32](https://github.com/PalisadoesF
 
 > **title**: `string`
 
-***
+---
 
 ### title?
 

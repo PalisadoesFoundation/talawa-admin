@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceFundPg
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1031](https://github.com/PalisadoesFoundati
 
 The creation date of the fund record.
 
-***
+---
 
 ### creator
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:1033](https://github.com/PalisadoesFoundati
 
 The user who created this fund.
 
-***
+---
 
 ### id
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:1028](https://github.com/PalisadoesFoundati
 
 The unique identifier of the fund.
 
-***
+---
 
 ### isTaxDeductible
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:1035](https://github.com/PalisadoesFoundati
 
 Indicates if the fund is tax deductible.
 
-***
+---
 
 ### name
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:1029](https://github.com/PalisadoesFoundati
 
 The name of the fund.
 
-***
+---
 
 ### organization
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:1030](https://github.com/PalisadoesFoundati
 
 The organization associated with this fund.
 
-***
+---
 
 ### updatedAt
 
@@ -82,7 +82,7 @@ Defined in: [src/utils/interfaces.ts:1032](https://github.com/PalisadoesFoundati
 
 The last update date of the fund record.
 
-***
+---
 
 ### updater
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: ILoadedPlugin
 
@@ -14,7 +14,7 @@ Defined in: [src/plugin/types.ts:119](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L126)
 
-***
+---
 
 ### error?
 
@@ -22,7 +22,7 @@ Defined in: [src/plugin/types.ts:126](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L124)
 
-***
+---
 
 ### errorMessage?
 
@@ -30,7 +30,7 @@ Defined in: [src/plugin/types.ts:124](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L125)
 
-***
+---
 
 ### id
 
@@ -38,7 +38,7 @@ Defined in: [src/plugin/types.ts:125](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L120)
 
-***
+---
 
 ### info?
 
@@ -46,7 +46,7 @@ Defined in: [src/plugin/types.ts:120](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L122)
 
-***
+---
 
 ### manifest
 
@@ -54,7 +54,7 @@ Defined in: [src/plugin/types.ts:122](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L121)
 
-***
+---
 
 ### status
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: GroupChat
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Chat/type.ts:18](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L19)
 
-***
+---
 
 ### admins
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Chat/type.ts:19](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L24)
 
-***
+---
 
 ### createdAt
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Chat/type.ts:24](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L28)
 
-***
+---
 
 ### creator?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Chat/type.ts:28](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L29)
 
-***
+---
 
 ### description
 
@@ -48,7 +48,7 @@ Defined in: [src/types/Chat/type.ts:29](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L27)
 
-***
+---
 
 ### image?
 
@@ -56,7 +56,7 @@ Defined in: [src/types/Chat/type.ts:27](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L22)
 
-***
+---
 
 ### isGroup
 
@@ -64,7 +64,7 @@ Defined in: [src/types/Chat/type.ts:22](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L20)
 
-***
+---
 
 ### lastMessageId?
 
@@ -72,7 +72,7 @@ Defined in: [src/types/Chat/type.ts:20](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L32)
 
-***
+---
 
 ### messages
 
@@ -80,7 +80,7 @@ Defined in: [src/types/Chat/type.ts:32](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L23)
 
-***
+---
 
 ### name?
 
@@ -88,7 +88,7 @@ Defined in: [src/types/Chat/type.ts:23](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L21)
 
-***
+---
 
 ### organization?
 
@@ -96,7 +96,7 @@ Defined in: [src/types/Chat/type.ts:21](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L30)
 
-***
+---
 
 ### unseenMessagesByUsers
 
@@ -104,7 +104,7 @@ Defined in: [src/types/Chat/type.ts:30](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L26)
 
-***
+---
 
 ### updatedAt?
 
@@ -112,7 +112,7 @@ Defined in: [src/types/Chat/type.ts:26](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L31)
 
-***
+---
 
 ### users
 

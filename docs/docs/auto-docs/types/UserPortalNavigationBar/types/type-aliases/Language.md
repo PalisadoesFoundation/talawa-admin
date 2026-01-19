@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: Language
 
@@ -18,15 +18,15 @@ Language configuration (from utils/languages)
 
 Defined in: [src/types/UserPortalNavigationBar/types.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L69)
 
-***
+---
 
-### country\_code
+### country_code
 
-> **country\_code**: `string`
+> **country_code**: `string`
 
 Defined in: [src/types/UserPortalNavigationBar/types.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L71)
 
-***
+---
 
 ### name
 

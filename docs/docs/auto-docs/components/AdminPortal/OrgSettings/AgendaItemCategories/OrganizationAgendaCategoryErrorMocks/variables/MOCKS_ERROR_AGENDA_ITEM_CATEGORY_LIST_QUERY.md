@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: MOCKS\_ERROR\_AGENDA\_ITEM\_CATEGORY\_LIST\_QUERY
+# Variable: MOCKS_ERROR_AGENDA_ITEM_CATEGORY_LIST_QUERY
 
-> `const` **MOCKS\_ERROR\_AGENDA\_ITEM\_CATEGORY\_LIST\_QUERY**: `object`[]
+> `const` **MOCKS_ERROR_AGENDA_ITEM_CATEGORY_LIST_QUERY**: `object`[]
 
 Defined in: [src/components/AdminPortal/OrgSettings/AgendaItemCategories/OrganizationAgendaCategoryErrorMocks.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/OrgSettings/AgendaItemCategories/OrganizationAgendaCategoryErrorMocks.ts#L5)
 
@@ -34,6 +34,6 @@ Defined in: [src/components/AdminPortal/OrgSettings/AgendaItemCategories/Organiz
 
 > **where**: `object`
 
-#### request.variables.where.name\_contains
+#### request.variables.where.name_contains
 
-> **name\_contains**: `string` = `''`
+> **name_contains**: `string` = `''`

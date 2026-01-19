@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Function: default()
 
@@ -12,7 +12,7 @@ Defined in: [src/shared-components/useDebounce/useDebounce.tsx:21](https://githu
 
 ### T
 
-`T` *extends* (...`args`) => `void`
+`T` _extends_ (...`args`) => `void`
 
 ## Parameters
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: CreateAdvertisementInput
 
@@ -16,7 +16,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:46](https://github.com/
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L53)
 
-***
+---
 
 ### description?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:53](https://github.com/
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L48)
 
-***
+---
 
 ### endAt
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:48](https://github.com/
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L52)
 
-***
+---
 
 ### name
 
@@ -40,7 +40,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:52](https://github.com/
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L47)
 
-***
+---
 
 ### organizationId
 
@@ -48,7 +48,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:47](https://github.com/
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L50)
 
-***
+---
 
 ### startAt
 
@@ -56,7 +56,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:50](https://github.com/
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L51)
 
-***
+---
 
 ### type
 

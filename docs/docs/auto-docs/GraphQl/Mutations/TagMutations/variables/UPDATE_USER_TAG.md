@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: UPDATE\_USER\_TAG
+# Variable: UPDATE_USER_TAG
 
-> `const` **UPDATE\_USER\_TAG**: `DocumentNode`
+> `const` **UPDATE_USER_TAG**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/TagMutations.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L47)
 

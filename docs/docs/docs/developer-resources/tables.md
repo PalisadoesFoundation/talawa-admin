@@ -403,10 +403,13 @@ type UsersQuery = {
 };
 
 const result = useQuery<UsersQuery>(/* GET_USERS */);
-const { rows, pageInfo, loadingMore } = useTableData<UsersQuery, User, User>(result, {
-  path: ['users'],
-  transformNode: (n) => n,
-});
+const { rows, pageInfo, loadingMore } = useTableData<UsersQuery, User, User>(
+  result,
+  {
+    path: ['users'],
+    transformNode: (n) => n,
+  },
+);
 
 <DataTable<User>
   data={rows}
@@ -415,7 +418,9 @@ const { rows, pageInfo, loadingMore } = useTableData<UsersQuery, User, User>(res
   paginationMode="server"
   pageInfo={pageInfo}
   loadingMore={loadingMore}
-  onLoadMore={() => result.fetchMore({ variables: { after: pageInfo?.endCursor } })}
+  onLoadMore={() =>
+    result.fetchMore({ variables: { after: pageInfo?.endCursor } })
+  }
 />;
 ```
 
@@ -480,7 +485,7 @@ When `loading=true` and no data yet, displays a skeleton grid.
   data={[]}
   columns={[nameCol, emailCol]}
   loading
-  skeletonRows={5}  // default: 5
+  skeletonRows={5} // default: 5
 />
 ```
 
@@ -494,7 +499,7 @@ This avoids content jump during refresh.
   data={users}
   columns={[nameCol, emailCol]}
   loading
-  loadingOverlay  // true to show overlay
+  loadingOverlay // true to show overlay
 />
 ```
 
@@ -506,7 +511,7 @@ When `loadingMore=true`, appends skeleton rows at the bottom of the table to ind
 <DataTable<User>
   data={users}
   columns={[nameCol, emailCol]}
-  loadingMore  // append skeleton rows
+  loadingMore // append skeleton rows
   skeletonRows={5}
 />
 ```
@@ -514,6 +519,7 @@ When `loadingMore=true`, appends skeleton rows at the bottom of the table to ind
 ### Accessibility & styling
 
 Skeleton cells render with:
+
 - `aria-hidden="true"` (visual placeholder, not announced)
 - `role="status"` + `aria-live="polite"` (grid announces loading to screen readers)
 - Shimmer animation (linear gradient) for visual feedback

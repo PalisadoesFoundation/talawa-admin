@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Class: EventManager
 
@@ -41,7 +41,7 @@ Defined in: [src/plugin/managers/event-manager.ts:45](https://github.com/Palisad
 
 `void`
 
-***
+---
 
 ### getEvents()
 
@@ -53,7 +53,7 @@ Defined in: [src/plugin/managers/event-manager.ts:76](https://github.com/Palisad
 
 `string`[]
 
-***
+---
 
 ### getListenerCount()
 
@@ -71,7 +71,7 @@ Defined in: [src/plugin/managers/event-manager.ts:71](https://github.com/Palisad
 
 `number`
 
-***
+---
 
 ### off()
 
@@ -93,7 +93,7 @@ Defined in: [src/plugin/managers/event-manager.ts:27](https://github.com/Palisad
 
 `void`
 
-***
+---
 
 ### on()
 
@@ -115,7 +115,7 @@ Defined in: [src/plugin/managers/event-manager.ts:10](https://github.com/Palisad
 
 `void`
 
-***
+---
 
 ### removeAllListeners()
 

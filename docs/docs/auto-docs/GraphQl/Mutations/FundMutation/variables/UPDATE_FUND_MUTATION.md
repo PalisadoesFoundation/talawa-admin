@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: UPDATE\_FUND\_MUTATION
+# Variable: UPDATE_FUND_MUTATION
 
-> `const` **UPDATE\_FUND\_MUTATION**: `DocumentNode`
+> `const` **UPDATE_FUND_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/FundMutation.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/FundMutation.ts#L37)
 

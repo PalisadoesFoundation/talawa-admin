@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceStatusBadgeProps
 
@@ -18,7 +18,7 @@ Defined in: [src/types/shared-components/StatusBadge/interface.ts:49](https://gi
 
 Custom aria-label for accessibility (optional, overrides default)
 
-***
+---
 
 ### className?
 
@@ -28,7 +28,7 @@ Defined in: [src/types/shared-components/StatusBadge/interface.ts:51](https://gi
 
 Additional CSS classes to apply
 
-***
+---
 
 ### dataTestId?
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/StatusBadge/interface.ts:53](https://gi
 
 Test ID for component testing (forwarded as data-testid)
 
-***
+---
 
 ### icon?
 
@@ -48,7 +48,7 @@ Defined in: [src/types/shared-components/StatusBadge/interface.ts:47](https://gi
 
 Optional icon to display in the badge
 
-***
+---
 
 ### label?
 
@@ -58,7 +58,7 @@ Defined in: [src/types/shared-components/StatusBadge/interface.ts:45](https://gi
 
 Custom label text (optional, overrides i18n)
 
-***
+---
 
 ### size?
 
@@ -68,7 +68,7 @@ Defined in: [src/types/shared-components/StatusBadge/interface.ts:43](https://gi
 
 The size of the badge (optional, defaults to 'md')
 
-***
+---
 
 ### variant
 

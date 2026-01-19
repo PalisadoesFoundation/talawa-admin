@@ -1,4 +1,3 @@
-
 <!--
 This section can be deleted after reading.
 
@@ -24,6 +23,7 @@ Thanks for submitting a pull request! Please provide enough information so that 
 **Issue Number:**
 
 <!--Add related issue number here.-->
+
 Fixes #
 
 **Snapshots/Videos:**
@@ -46,15 +46,16 @@ Fixes #
 ## Checklist
 
 ### CodeRabbit AI Review
+
 - [ ] I have reviewed and addressed all critical issues flagged by CodeRabbit AI
 - [ ] I have implemented or provided justification for each non-critical suggestion
 - [ ] I have documented my reasoning in the PR comments where CodeRabbit AI suggestions were not implemented
 
 ### Test Coverage
+
 - [ ] I have written tests for all new changes/features
 - [ ] I have verified that test coverage meets or exceeds 95%
 - [ ] I have run the test suite locally and all tests pass
-
 
 **Other information**
 

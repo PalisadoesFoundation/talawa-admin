@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrgOption
 
@@ -18,7 +18,7 @@ Defined in: [src/types/Auth/OrgSelector/interface.ts:6](https://github.com/Palis
 
 Unique identifier for the organization
 
-***
+---
 
 ### name
 

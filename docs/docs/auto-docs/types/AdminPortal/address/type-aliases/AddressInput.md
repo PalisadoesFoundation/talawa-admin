@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: AddressInput
 
@@ -16,7 +16,7 @@ Defined in: [src/types/AdminPortal/address.ts:12](https://github.com/PalisadoesF
 
 Defined in: [src/types/AdminPortal/address.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L13)
 
-***
+---
 
 ### countryCode?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/address.ts:13](https://github.com/PalisadoesF
 
 Defined in: [src/types/AdminPortal/address.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L14)
 
-***
+---
 
 ### dependentLocality?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/address.ts:14](https://github.com/PalisadoesF
 
 Defined in: [src/types/AdminPortal/address.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L15)
 
-***
+---
 
 ### line1?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/AdminPortal/address.ts:15](https://github.com/PalisadoesF
 
 Defined in: [src/types/AdminPortal/address.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L16)
 
-***
+---
 
 ### line2?
 
@@ -48,7 +48,7 @@ Defined in: [src/types/AdminPortal/address.ts:16](https://github.com/PalisadoesF
 
 Defined in: [src/types/AdminPortal/address.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L17)
 
-***
+---
 
 ### postalCode?
 
@@ -56,7 +56,7 @@ Defined in: [src/types/AdminPortal/address.ts:17](https://github.com/PalisadoesF
 
 Defined in: [src/types/AdminPortal/address.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L18)
 
-***
+---
 
 ### sortingCode?
 
@@ -64,7 +64,7 @@ Defined in: [src/types/AdminPortal/address.ts:18](https://github.com/PalisadoesF
 
 Defined in: [src/types/AdminPortal/address.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L19)
 
-***
+---
 
 ### state?
 

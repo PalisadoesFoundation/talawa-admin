@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: SEARCH\_EMPTY\_MOCKS
+# Variable: SEARCH_EMPTY_MOCKS
 
-> `const` **SEARCH\_EMPTY\_MOCKS**: `object`[]
+> `const` **SEARCH_EMPTY_MOCKS**: `object`[]
 
 Defined in: [src/screens/AdminPortal/Leaderboard/Leaderboard.mocks.ts:208](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Leaderboard/Leaderboard.mocks.ts#L208)
 

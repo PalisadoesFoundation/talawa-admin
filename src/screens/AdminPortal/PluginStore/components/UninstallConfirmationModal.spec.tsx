@@ -17,32 +17,26 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import type { IPluginMeta } from 'plugin';
 import React from 'react';
-import { vi, type Mock } from 'vitest';
+import {
+  vi,
+  type Mock,
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterEach,
+} from 'vitest';
 import type { InterfaceUninstallConfirmationModalProps } from 'types/AdminPortal/PluginStore/components/UninstallConfirmationModal/interface';
 import UninstallConfirmationModal from './UninstallConfirmationModal';
 
-// Mock Translations
-const mockT = vi.fn((key, options) => {
-  if (options && options.name) return `uninstallPlugin.message ${options.name}`;
-  return key;
-});
-const mockTCommon = vi.fn((key) => key);
-
+// Mock Translations: Simplified to match component's single namespace usage
 vi.mock('react-i18next', () => ({
-  useTranslation: (ns: string) => {
-    return {
-      t: ns === 'translation' ? mockTCommon : mockT,
-    };
-  },
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
 }));
 
 describe('UninstallConfirmationModal', () => {
-  // Define variables in the scope accessible to all tests
-
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   let mockOnClose: Mock;
   let mockOnConfirm: Mock;
   let defaultProps: InterfaceUninstallConfirmationModalProps;
@@ -52,6 +46,10 @@ describe('UninstallConfirmationModal', () => {
     name: pluginName,
     id: 'test-plugin-id',
   } as unknown as IPluginMeta;
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
 
   // Setup fresh mocks before EVERY test to ensure isolation
   beforeEach(() => {
@@ -71,9 +69,8 @@ describe('UninstallConfirmationModal', () => {
     render(<UninstallConfirmationModal {...defaultProps} />);
 
     expect(screen.getByText('uninstallPlugin.title')).toBeInTheDocument();
-    expect(
-      screen.getByText(`uninstallPlugin.message ${pluginName}`),
-    ).toBeInTheDocument();
+    // Updated: Removed ${pluginName} interpolation to match component logic
+    expect(screen.getByText('uninstallPlugin.message')).toBeInTheDocument();
   });
 
   it('should call onClose when cancel button is clicked', () => {
@@ -98,7 +95,6 @@ describe('UninstallConfirmationModal', () => {
 
   it('should show loading state while uninstallation is in progress', async () => {
     // Advanced Async Test: Use a controlled promise to "pause" execution
-    // Initialize with a no-op function to satisfy TypeScript (no @ts-ignore needed!)
     let resolvePromise: (value: void | PromiseLike<void>) => void = () => {};
 
     const confirmPromise = new Promise<void>((resolve) => {
@@ -115,8 +111,8 @@ describe('UninstallConfirmationModal', () => {
     fireEvent.click(uninstallButton);
 
     // 2. Verify Loading State (Promise is pending)
-    // The button should now say "deleting" and be disabled
-    expect(await screen.findByText('deleting')).toBeInTheDocument();
+    // Updated: The button should now say "loading" (key from translation)
+    expect(await screen.findByText('loading')).toBeInTheDocument();
     expect(uninstallButton).toBeDisabled();
 
     // 3. Resolve the promise (Simulate API success)
@@ -124,7 +120,8 @@ describe('UninstallConfirmationModal', () => {
 
     // 4. Verify Loading State is gone (Promise resolved)
     await waitFor(() => {
-      expect(screen.queryByText('deleting')).not.toBeInTheDocument();
+      // Updated: Check that 'loading' is gone
+      expect(screen.queryByText('loading')).not.toBeInTheDocument();
       expect(uninstallButton).not.toBeDisabled();
     });
   });

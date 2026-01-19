@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IOSInfo
 
@@ -14,7 +14,7 @@ Defined in: [src/install/types.ts:4](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/install/types.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/types.ts#L6)
 
-***
+---
 
 ### isWsl?
 
@@ -22,7 +22,7 @@ Defined in: [src/install/types.ts:6](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/install/types.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/types.ts#L8)
 
-***
+---
 
 ### name
 
@@ -30,7 +30,7 @@ Defined in: [src/install/types.ts:8](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/install/types.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/types.ts#L5)
 
-***
+---
 
 ### version?
 

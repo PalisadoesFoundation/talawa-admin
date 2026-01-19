@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: GET\_POST\_COMMENTS
+# Variable: GET_POST_COMMENTS
 
-> `const` **GET\_POST\_COMMENTS**: `DocumentNode`
+> `const` **GET_POST_COMMENTS**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/CommentQueries.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/CommentQueries.ts#L14)
 

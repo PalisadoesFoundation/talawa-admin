@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Class: InternalFileWriter
 
@@ -23,7 +23,7 @@ Initialize the file writer
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### listInstalledPlugins()
 
@@ -37,7 +37,7 @@ List installed plugin metadata
 
 `Promise`\<\{ `error?`: `string`; `plugins?`: `object`[]; `success`: `boolean`; \}\>
 
-***
+---
 
 ### readPluginFiles()
 
@@ -57,7 +57,7 @@ Read plugin files from filesystem
 
 `Promise`\<\{ `error?`: `string`; `files?`: `Record`\<`string`, `string`\>; `manifest?`: [`IAdminPluginManifest`](../../../../utils/adminPluginInstaller/interfaces/IAdminPluginManifest.md); `success`: `boolean`; \}\>
 
-***
+---
 
 ### removePlugin()
 
@@ -77,7 +77,7 @@ Remove plugin from filesystem
 
 `Promise`\<[`IFileOperationResult`](../interfaces/IFileOperationResult.md)\>
 
-***
+---
 
 ### writePluginFiles()
 
@@ -101,7 +101,7 @@ Write plugin files to filesystem
 
 `Promise`\<[`IFileWriteResult`](../interfaces/IFileWriteResult.md)\>
 
-***
+---
 
 ### getInstance()
 

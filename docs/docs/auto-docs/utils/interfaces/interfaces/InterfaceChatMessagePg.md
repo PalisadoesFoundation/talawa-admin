@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceChatMessagePg
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:833](https://github.com/PalisadoesFoundatio
 
 The body content of the chat message.
 
-***
+---
 
 ### chat
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:834](https://github.com/PalisadoesFoundatio
 
 The chat associated with this message.
 
-***
+---
 
 ### createdAt
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:835](https://github.com/PalisadoesFoundatio
 
 The creation date of the chat message.
 
-***
+---
 
 ### creator
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:836](https://github.com/PalisadoesFoundatio
 
 The user who created this message.
 
-***
+---
 
 ### id
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:832](https://github.com/PalisadoesFoundatio
 
 The unique identifier of the chat message.
 
-***
+---
 
 ### parentMessage
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:837](https://github.com/PalisadoesFoundatio
 
 The parent message if this is a reply.
 
-***
+---
 
 ### updatedAt
 

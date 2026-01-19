@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePostPg
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1099](https://github.com/PalisadoesFoundati
 
 The caption of the post.
 
-***
+---
 
 ### commentsCount
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:1100](https://github.com/PalisadoesFoundati
 
 The number of comments on the post.
 
-***
+---
 
 ### createdAt
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:1101](https://github.com/PalisadoesFoundati
 
 The creation date of the post record.
 
-***
+---
 
 ### creator
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:1102](https://github.com/PalisadoesFoundati
 
 The user who created this post.
 
-***
+---
 
 ### downVotesCount
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:1103](https://github.com/PalisadoesFoundati
 
 The number of downvotes on the post.
 
-***
+---
 
 ### id
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:1098](https://github.com/PalisadoesFoundati
 
 The unique identifier of the post.
 
-***
+---
 
 ### organization
 
@@ -82,7 +82,7 @@ Defined in: [src/utils/interfaces.ts:1104](https://github.com/PalisadoesFoundati
 
 The organization associated with this post.
 
-***
+---
 
 ### pinnedAt
 
@@ -92,7 +92,7 @@ Defined in: [src/utils/interfaces.ts:1105](https://github.com/PalisadoesFoundati
 
 The date and time the post was pinned.
 
-***
+---
 
 ### updatedAt
 
@@ -102,7 +102,7 @@ Defined in: [src/utils/interfaces.ts:1107](https://github.com/PalisadoesFoundati
 
 The last update date of the post record.
 
-***
+---
 
 ### updater
 
@@ -112,7 +112,7 @@ Defined in: [src/utils/interfaces.ts:1108](https://github.com/PalisadoesFoundati
 
 The user who last updated this post.
 
-***
+---
 
 ### upVotesCount
 

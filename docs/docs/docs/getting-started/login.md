@@ -86,7 +86,6 @@ Register a new user as described in the section above.
 1. Open **GraphiQL** in your browser:
 
 2. Sign in as Administrator
-
    1. Use the following GraphQL **query** to get an **authentication token** for authorization in later queries:
    2. Replace `user-id` with the actual ID of the registered user and `org-id` with organization ID wherever necessary. You can obtain this form the postgres database via cloudbeaver.
 
@@ -105,7 +104,6 @@ Register a new user as described in the section above.
    ```
 
 3. Make the registered user an Administrator
-
    - Use the following GraphQL mutation to assign an administrator role to user:
 
    ```graphql
@@ -118,7 +116,6 @@ Register a new user as described in the section above.
    ```
 
 4. Next create an organization
-
    - Use the following GraphQL mutation to create an organization:
 
    ```graphql
@@ -141,7 +138,6 @@ Register a new user as described in the section above.
    ```
 
 5. Make the user an administrator of the organization
-
    - Use the following GraphQL mutation to assign an administrator to an organization:
 
    ```graphql

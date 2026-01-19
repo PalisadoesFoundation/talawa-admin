@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceDeleteModalProps
 
@@ -28,7 +28,7 @@ Whether to center the modal vertically on the page
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`centered`](InterfaceCrudModalBaseProps.md#centered)
 
-***
+---
 
 ### children?
 
@@ -39,7 +39,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:204](htt
 Optional custom content to display in the modal body
 If not provided, shows the confirmationMessage
 
-***
+---
 
 ### className?
 
@@ -53,7 +53,7 @@ Additional CSS class name for the modal
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`className`](InterfaceCrudModalBaseProps.md#classname)
 
-***
+---
 
 ### data-testid?
 
@@ -67,7 +67,7 @@ Test ID for the modal container (useful for testing)
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`data-testid`](InterfaceCrudModalBaseProps.md#data-testid)
 
-***
+---
 
 ### entityName?
 
@@ -78,7 +78,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:216](htt
 Name of the entity being deleted (for display purposes)
 When provided, will be shown in the confirmation message
 
-***
+---
 
 ### error?
 
@@ -93,7 +93,7 @@ When provided, shows an Alert component with the error
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`error`](InterfaceCrudModalBaseProps.md#error)
 
-***
+---
 
 ### loading?
 
@@ -108,7 +108,7 @@ When true, displays a loading spinner and disables action buttons
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`loading`](InterfaceCrudModalBaseProps.md#loading)
 
-***
+---
 
 ### onClose()
 
@@ -127,7 +127,7 @@ Triggered by close button, backdrop click, or Escape key
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`onClose`](InterfaceCrudModalBaseProps.md#onclose)
 
-***
+---
 
 ### onDelete()
 
@@ -142,7 +142,7 @@ Should handle the delete logic and return a Promise
 
 `void` \| `Promise`\<`void`\>
 
-***
+---
 
 ### open?
 
@@ -156,7 +156,7 @@ Controls whether the modal is visible (defaults to false)
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`open`](InterfaceCrudModalBaseProps.md#open)
 
-***
+---
 
 ### primaryText?
 
@@ -170,7 +170,7 @@ Text for the primary action button
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`primaryText`](InterfaceCrudModalBaseProps.md#primarytext)
 
-***
+---
 
 ### recurringEventContent?
 
@@ -181,7 +181,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:228](htt
 Optional content to display for recurring event support
 Allows users to choose between deleting series or single instance
 
-***
+---
 
 ### secondaryText?
 
@@ -195,7 +195,7 @@ Text for the secondary action button
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`secondaryText`](InterfaceCrudModalBaseProps.md#secondarytext)
 
-***
+---
 
 ### showWarning?
 
@@ -205,7 +205,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:222](htt
 
 Whether to show warning styling (danger variant)
 
-***
+---
 
 ### size?
 
@@ -219,7 +219,7 @@ Modal size variant
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`size`](InterfaceCrudModalBaseProps.md#size)
 
-***
+---
 
 ### title
 

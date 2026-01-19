@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceMappedEvent
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Volunteer/interface.ts:114](https://github.com/Palisadoes
 
 Legacy ID format.
 
-***
+---
 
 ### baseEventId
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Volunteer/interface.ts:126](https://github.com/Palisadoes
 
 The base event ID for recurring events.
 
-***
+---
 
 ### description
 
@@ -42,7 +42,7 @@ Defined in: [src/types/Volunteer/interface.ts:118](https://github.com/Palisadoes
 
 The description of the event.
 
-***
+---
 
 ### endAt
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Volunteer/interface.ts:122](https://github.com/Palisadoes
 
 The original endAt field.
 
-***
+---
 
 ### endDate
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Volunteer/interface.ts:120](https://github.com/Palisadoes
 
 The end date (mapped from endAt).
 
-***
+---
 
 ### id
 
@@ -72,7 +72,7 @@ Defined in: [src/types/Volunteer/interface.ts:115](https://github.com/Palisadoes
 
 The unique identifier of the event.
 
-***
+---
 
 ### isRecurringInstance
 
@@ -82,7 +82,7 @@ Defined in: [src/types/Volunteer/interface.ts:125](https://github.com/Palisadoes
 
 Indicates if this is a recurring instance.
 
-***
+---
 
 ### location
 
@@ -92,7 +92,7 @@ Defined in: [src/types/Volunteer/interface.ts:123](https://github.com/Palisadoes
 
 The location of the event.
 
-***
+---
 
 ### name
 
@@ -102,7 +102,7 @@ Defined in: [src/types/Volunteer/interface.ts:116](https://github.com/Palisadoes
 
 The name of the event.
 
-***
+---
 
 ### recurrenceRule?
 
@@ -120,7 +120,7 @@ The recurrence rule for recurring events.
 
 > **id**: `string`
 
-***
+---
 
 ### recurring
 
@@ -130,7 +130,7 @@ Defined in: [src/types/Volunteer/interface.ts:124](https://github.com/Palisadoes
 
 Indicates if the event is recurring.
 
-***
+---
 
 ### startAt
 
@@ -140,7 +140,7 @@ Defined in: [src/types/Volunteer/interface.ts:121](https://github.com/Palisadoes
 
 The original startAt field.
 
-***
+---
 
 ### startDate
 
@@ -150,7 +150,7 @@ Defined in: [src/types/Volunteer/interface.ts:119](https://github.com/Palisadoes
 
 The start date (mapped from startAt).
 
-***
+---
 
 ### title
 
@@ -160,7 +160,7 @@ Defined in: [src/types/Volunteer/interface.ts:117](https://github.com/Palisadoes
 
 The title of the event (mapped from name).
 
-***
+---
 
 ### volunteerGroups
 
@@ -190,7 +190,7 @@ Array of volunteer groups with mapped structure.
 
 > **volunteersRequired**: `number`
 
-***
+---
 
 ### volunteers
 

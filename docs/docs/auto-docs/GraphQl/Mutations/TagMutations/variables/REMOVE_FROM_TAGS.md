@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: REMOVE\_FROM\_TAGS
+# Variable: REMOVE_FROM_TAGS
 
-> `const` **REMOVE\_FROM\_TAGS**: `DocumentNode`
+> `const` **REMOVE_FROM_TAGS**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/TagMutations.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L108)
 

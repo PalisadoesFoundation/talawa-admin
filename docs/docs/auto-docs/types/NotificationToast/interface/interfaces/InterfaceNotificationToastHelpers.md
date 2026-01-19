@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceNotificationToastHelpers
 
@@ -22,7 +22,7 @@ Dismiss all active toasts.
 
 `void`
 
-***
+---
 
 ### error()
 
@@ -46,7 +46,7 @@ Show an error toast.
 
 `Id`
 
-***
+---
 
 ### info()
 
@@ -70,7 +70,7 @@ Show an info toast.
 
 `Id`
 
-***
+---
 
 ### promise()
 
@@ -108,7 +108,7 @@ Promisified toast
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### success()
 
@@ -132,7 +132,7 @@ Show a success toast.
 
 `Id`
 
-***
+---
 
 ### warning()
 

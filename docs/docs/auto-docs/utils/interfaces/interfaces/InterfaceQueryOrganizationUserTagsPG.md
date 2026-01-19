@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceQueryOrganizationUserTagsPG
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/interfaces.ts:1573](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1574](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1574)
 
-***
+---
 
 ### name
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1574](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1575](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1575)
 
-***
+---
 
 ### tags
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Class: ErrorBoundaryWrapper
 
@@ -61,7 +61,7 @@ This lifecycle method is called during the commit phase (to log/ report)
 
 `React.Component.componentDidCatch`
 
-***
+---
 
 ### handleReset()
 
@@ -75,7 +75,7 @@ Reset error boundary state to recover from error
 
 `void`
 
-***
+---
 
 ### render()
 
@@ -91,7 +91,7 @@ Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx
 
 `React.Component.render`
 
-***
+---
 
 ### getDerivedStateFromError()
 

@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: COMPLETE\_ACTION\_ITEM\_FOR\_INSTANCE
+# Variable: COMPLETE_ACTION_ITEM_FOR_INSTANCE
 
-> `const` **COMPLETE\_ACTION\_ITEM\_FOR\_INSTANCE**: `DocumentNode`
+> `const` **COMPLETE_ACTION_ITEM_FOR_INSTANCE**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/ActionItemMutations.ts:149](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/ActionItemMutations.ts#L149)

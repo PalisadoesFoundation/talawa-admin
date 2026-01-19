@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IItemUpdateStatusModalProps
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemUpdateModal/ActionIte
 
 Defined in: [src/screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx#L54)
 
-***
+---
 
 ### actionItemsRefetch()
 
@@ -26,7 +26,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemUpdateModal/ActionIte
 
 `void`
 
-***
+---
 
 ### eventId?
 
@@ -34,7 +34,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemUpdateModal/ActionIte
 
 Defined in: [src/screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx#L56)
 
-***
+---
 
 ### hide()
 
@@ -46,7 +46,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemUpdateModal/ActionIte
 
 `void`
 
-***
+---
 
 ### isOpen
 
@@ -54,7 +54,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemUpdateModal/ActionIte
 
 Defined in: [src/screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal.tsx#L51)
 
-***
+---
 
 ### isRecurring?
 

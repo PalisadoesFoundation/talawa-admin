@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: EVENT\_REGISTRANTS
+# Variable: EVENT_REGISTRANTS
 
-> `const` **EVENT\_REGISTRANTS**: `DocumentNode`
+> `const` **EVENT_REGISTRANTS**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/Queries.ts:385](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L385)

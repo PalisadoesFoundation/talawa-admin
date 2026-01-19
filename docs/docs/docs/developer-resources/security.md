@@ -23,6 +23,7 @@ We have implemented strict ESLint rules to enforce secure token handling and pre
 Prevent potential `null` or `undefined` values being sent in the authorization header if `localStorage` retrieval fails. It ensures defensive coding by requiring explicit variable assignment and checking.
 
 **Prohibited Pattern:**
+
 ```javascript
 // Unsafe: Direct usage inside object literal
 const headers = {
@@ -31,6 +32,7 @@ const headers = {
 ```
 
 **Safe Alternative:**
+
 ```javascript
 // Safe: Extract to variable first
 const token = localStorage.getItem('token');
@@ -56,6 +58,7 @@ const headers = {
 The `REVOKE_REFRESH_TOKEN` mutation is deprecated for web clients because it relies on passing the refresh token from the client side. We have moved to an HTTP-only cookie-based authentication system where the server manages the tokens securely. The `LOGOUT_MUTATION` is designed to work with this system.
 
 **Prohibited Pattern:**
+
 ```javascript
 // Deprecated
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
@@ -64,6 +67,7 @@ const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
 ```
 
 **Safe Alternative:**
+
 ```javascript
 // Recommended
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -81,12 +85,14 @@ const [logout] = useMutation(LOGOUT_MUTATION);
 Since refresh tokens are now stored in HTTP-only cookies, the client code cannot and should not access them. Passing `refreshToken` as a variable suggests incorrect handling where the client is manually managing the token, which bypasses the security benefits of HTTP-only cookies.
 
 **Prohibited Pattern:**
+
 ```javascript
 // Incorrect: Manually passing refresh token
 logout({ variables: { refreshToken: someToken } });
 ```
 
 **Safe Alternative:**
+
 ```javascript
 // Correct: Let the server read the HTTP-only cookie
 logout();

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Class: PluginManager
 
@@ -42,7 +42,7 @@ Defined in: [src/plugin/manager.ts:103](https://github.com/PalisadoesFoundation/
 
 `Promise`\<`boolean`\>
 
-***
+---
 
 ### deactivatePlugin()
 
@@ -60,7 +60,7 @@ Defined in: [src/plugin/manager.ts:107](https://github.com/PalisadoesFoundation/
 
 `Promise`\<`boolean`\>
 
-***
+---
 
 ### getActivePluginCount()
 
@@ -72,7 +72,7 @@ Defined in: [src/plugin/manager.ts:143](https://github.com/PalisadoesFoundation/
 
 `number`
 
-***
+---
 
 ### getExtensionPoints()
 
@@ -84,7 +84,7 @@ Defined in: [src/plugin/manager.ts:148](https://github.com/PalisadoesFoundation/
 
 ##### T
 
-`T` *extends* keyof [`IExtensionRegistry`](../../types/interfaces/IExtensionRegistry.md)
+`T` _extends_ keyof [`IExtensionRegistry`](../../types/interfaces/IExtensionRegistry.md)
 
 #### Parameters
 
@@ -96,7 +96,7 @@ Defined in: [src/plugin/manager.ts:148](https://github.com/PalisadoesFoundation/
 
 [`IExtensionRegistry`](../../types/interfaces/IExtensionRegistry.md)\[`T`\]
 
-***
+---
 
 ### getLoadedPlugin()
 
@@ -114,7 +114,7 @@ Defined in: [src/plugin/manager.ts:128](https://github.com/PalisadoesFoundation/
 
 [`ILoadedPlugin`](../../types/interfaces/ILoadedPlugin.md)
 
-***
+---
 
 ### getLoadedPlugins()
 
@@ -126,7 +126,7 @@ Defined in: [src/plugin/manager.ts:124](https://github.com/PalisadoesFoundation/
 
 [`ILoadedPlugin`](../../types/interfaces/ILoadedPlugin.md)[]
 
-***
+---
 
 ### getPluginComponent()
 
@@ -148,7 +148,7 @@ Defined in: [src/plugin/manager.ts:132](https://github.com/PalisadoesFoundation/
 
 `ComponentType`\<\{ \}\>
 
-***
+---
 
 ### getPluginCount()
 
@@ -160,7 +160,7 @@ Defined in: [src/plugin/manager.ts:139](https://github.com/PalisadoesFoundation/
 
 `number`
 
-***
+---
 
 ### initializePluginSystem()
 
@@ -172,7 +172,7 @@ Defined in: [src/plugin/manager.ts:164](https://github.com/PalisadoesFoundation/
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### installPlugin()
 
@@ -190,7 +190,7 @@ Defined in: [src/plugin/manager.ts:95](https://github.com/PalisadoesFoundation/t
 
 `Promise`\<`boolean`\>
 
-***
+---
 
 ### isSystemInitialized()
 
@@ -202,7 +202,7 @@ Defined in: [src/plugin/manager.ts:173](https://github.com/PalisadoesFoundation/
 
 `boolean`
 
-***
+---
 
 ### loadPlugin()
 
@@ -220,7 +220,7 @@ Defined in: [src/plugin/manager.ts:87](https://github.com/PalisadoesFoundation/t
 
 `Promise`\<`boolean`\>
 
-***
+---
 
 ### off()
 
@@ -242,7 +242,7 @@ Defined in: [src/plugin/manager.ts:159](https://github.com/PalisadoesFoundation/
 
 `void`
 
-***
+---
 
 ### on()
 
@@ -264,7 +264,7 @@ Defined in: [src/plugin/manager.ts:155](https://github.com/PalisadoesFoundation/
 
 `void`
 
-***
+---
 
 ### refreshPluginDiscovery()
 
@@ -276,7 +276,7 @@ Defined in: [src/plugin/manager.ts:119](https://github.com/PalisadoesFoundation/
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### setApolloClient()
 
@@ -294,7 +294,7 @@ Defined in: [src/plugin/manager.ts:43](https://github.com/PalisadoesFoundation/t
 
 `void`
 
-***
+---
 
 ### togglePluginStatus()
 
@@ -316,7 +316,7 @@ Defined in: [src/plugin/manager.ts:111](https://github.com/PalisadoesFoundation/
 
 `Promise`\<`boolean`\>
 
-***
+---
 
 ### uninstallPlugin()
 
@@ -334,7 +334,7 @@ Defined in: [src/plugin/manager.ts:99](https://github.com/PalisadoesFoundation/t
 
 `Promise`\<`boolean`\>
 
-***
+---
 
 ### unloadPlugin()
 

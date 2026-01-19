@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: VenueInput
 
@@ -16,7 +16,7 @@ Defined in: [src/types/AdminPortal/venue.ts:12](https://github.com/PalisadoesFou
 
 Defined in: [src/types/AdminPortal/venue.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L13)
 
-***
+---
 
 ### description?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/venue.ts:13](https://github.com/PalisadoesFou
 
 Defined in: [src/types/AdminPortal/venue.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L14)
 
-***
+---
 
 ### file?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/venue.ts:14](https://github.com/PalisadoesFou
 
 Defined in: [src/types/AdminPortal/venue.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L15)
 
-***
+---
 
 ### name
 
@@ -40,7 +40,7 @@ Defined in: [src/types/AdminPortal/venue.ts:15](https://github.com/PalisadoesFou
 
 Defined in: [src/types/AdminPortal/venue.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L16)
 
-***
+---
 
 ### organizationId
 

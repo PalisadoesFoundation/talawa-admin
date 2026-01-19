@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceFundModal
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx:17](h
 
 Defined in: [src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx#L21)
 
-***
+---
 
 ### hide()
 
@@ -26,7 +26,7 @@ Defined in: [src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx:19](h
 
 `void`
 
-***
+---
 
 ### isOpen
 
@@ -34,7 +34,7 @@ Defined in: [src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx:19](h
 
 Defined in: [src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx#L18)
 
-***
+---
 
 ### mode
 
@@ -42,7 +42,7 @@ Defined in: [src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx:18](h
 
 Defined in: [src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx#L23)
 
-***
+---
 
 ### orgId
 
@@ -50,7 +50,7 @@ Defined in: [src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx:23](h
 
 Defined in: [src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFunds/modal/FundModal.tsx#L22)
 
-***
+---
 
 ### refetchFunds()
 

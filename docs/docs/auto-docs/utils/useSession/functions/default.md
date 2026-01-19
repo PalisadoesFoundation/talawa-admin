@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Function: default()
 
@@ -11,6 +11,7 @@ Defined in: [src/utils/useSession.tsx:32](https://github.com/PalisadoesFoundatio
 Custom hook for managing user session timeouts in a React application.
 
 This hook handles:
+
 - Starting and ending the user session.
 - Displaying a warning toast at half of the session timeout duration.
 - Logging the user out and displaying a session expiration toast when the session times out.

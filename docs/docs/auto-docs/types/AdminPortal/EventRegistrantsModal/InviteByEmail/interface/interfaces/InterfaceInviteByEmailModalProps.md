@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceInviteByEmailModalProps
 
@@ -16,7 +16,7 @@ Props for InviteByEmailModal component.
 
 Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts#L7)
 
-***
+---
 
 ### handleClose()
 
@@ -28,7 +28,7 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface
 
 `void`
 
-***
+---
 
 ### isRecurring?
 
@@ -36,7 +36,7 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface
 
 Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface.ts#L8)
 
-***
+---
 
 ### onInvitesSent()?
 
@@ -48,7 +48,7 @@ Defined in: [src/types/AdminPortal/EventRegistrantsModal/InviteByEmail/interface
 
 `void`
 
-***
+---
 
 ### show
 

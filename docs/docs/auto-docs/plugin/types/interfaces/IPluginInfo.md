@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IPluginInfo
 
@@ -14,7 +14,7 @@ Defined in: [src/plugin/types.ts:23](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L40)
 
-***
+---
 
 ### changelog?
 
@@ -34,7 +34,7 @@ Defined in: [src/plugin/types.ts:29](https://github.com/PalisadoesFoundation/tal
 
 > **version**: `string`
 
-***
+---
 
 ### features?
 
@@ -42,7 +42,7 @@ Defined in: [src/plugin/types.ts:29](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L28)
 
-***
+---
 
 ### homepage?
 
@@ -50,7 +50,7 @@ Defined in: [src/plugin/types.ts:28](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L24)
 
-***
+---
 
 ### license?
 
@@ -58,7 +58,7 @@ Defined in: [src/plugin/types.ts:24](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L25)
 
-***
+---
 
 ### permissions?
 
@@ -66,7 +66,7 @@ Defined in: [src/plugin/types.ts:25](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L39)
 
-***
+---
 
 ### requirements?
 
@@ -86,7 +86,7 @@ Defined in: [src/plugin/types.ts:34](https://github.com/PalisadoesFoundation/tal
 
 > `optional` **talawaVersion**: `string`
 
-***
+---
 
 ### screenshots?
 
@@ -94,7 +94,7 @@ Defined in: [src/plugin/types.ts:34](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L27)
 
-***
+---
 
 ### tags?
 

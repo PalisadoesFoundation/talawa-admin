@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceModalFormState
 
@@ -20,7 +20,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:275](htt
 
 Form validation errors
 
-***
+---
 
 ### isDirty?
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:265](htt
 
 Whether the form has unsaved changes
 
-***
+---
 
 ### isSubmitting?
 

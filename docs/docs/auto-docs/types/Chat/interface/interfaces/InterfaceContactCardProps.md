@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceContactCardProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Chat/interface.ts:117](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Chat/interface.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L118)
 
-***
+---
 
 ### image
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Chat/interface.ts:118](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Chat/interface.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L120)
 
-***
+---
 
 ### isGroup
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Chat/interface.ts:120](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Chat/interface.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L123)
 
-***
+---
 
 ### lastMessage
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Chat/interface.ts:123](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Chat/interface.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L125)
 
-***
+---
 
 ### selectedContact
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Chat/interface.ts:125](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Chat/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L121)
 
-***
+---
 
 ### setSelectedContact
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Chat/interface.ts:121](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Chat/interface.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L122)
 
-***
+---
 
 ### title
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Chat/interface.ts:122](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Chat/interface.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L119)
 
-***
+---
 
 ### unseenMessages
 

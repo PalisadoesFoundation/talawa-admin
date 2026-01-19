@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceRecurringEventProps
 
@@ -20,7 +20,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:297](htt
 
 Current selection: apply to entire series or single instance
 
-***
+---
 
 ### baseEventId?
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:292](htt
 
 Base event ID for recurring series
 
-***
+---
 
 ### isRecurring?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:287](htt
 
 Whether the event is recurring
 
-***
+---
 
 ### onApplyToChange()?
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceQueryOrganizationFundCampaigns
 
@@ -26,7 +26,7 @@ The campaigns connection object.
 
 > **edges**: `object`[]
 
-***
+---
 
 ### id
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:1686](https://github.com/PalisadoesFoundati
 
 The unique identifier of the fund.
 
-***
+---
 
 ### isArchived
 
@@ -46,7 +46,7 @@ Defined in: [src/utils/interfaces.ts:1688](https://github.com/PalisadoesFoundati
 
 Indicates if the fund is archived.
 
-***
+---
 
 ### name
 

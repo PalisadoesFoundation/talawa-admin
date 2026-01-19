@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceUser
 
@@ -14,7 +14,7 @@ Defined in: [src/types/shared-components/User/interface.ts:3](https://github.com
 
 Defined in: [src/types/shared-components/User/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L5)
 
-***
+---
 
 ### avatarURL?
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/User/interface.ts:5](https://github.com
 
 Defined in: [src/types/shared-components/User/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L16)
 
-***
+---
 
 ### birthDate?
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/User/interface.ts:16](https://github.co
 
 Defined in: [src/types/shared-components/User/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L6)
 
-***
+---
 
 ### createdAt
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/User/interface.ts:6](https://github.com
 
 Defined in: [src/types/shared-components/User/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L7)
 
-***
+---
 
 ### email
 
@@ -46,7 +46,7 @@ Defined in: [src/types/shared-components/User/interface.ts:7](https://github.com
 
 Defined in: [src/types/shared-components/User/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L8)
 
-***
+---
 
 ### firstName
 
@@ -54,7 +54,7 @@ Defined in: [src/types/shared-components/User/interface.ts:8](https://github.com
 
 Defined in: [src/types/shared-components/User/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L9)
 
-***
+---
 
 ### gender?
 
@@ -62,7 +62,7 @@ Defined in: [src/types/shared-components/User/interface.ts:9](https://github.com
 
 Defined in: [src/types/shared-components/User/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L11)
 
-***
+---
 
 ### id
 
@@ -70,7 +70,7 @@ Defined in: [src/types/shared-components/User/interface.ts:11](https://github.co
 
 Defined in: [src/types/shared-components/User/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L4)
 
-***
+---
 
 ### image?
 
@@ -78,7 +78,7 @@ Defined in: [src/types/shared-components/User/interface.ts:4](https://github.com
 
 Defined in: [src/types/shared-components/User/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L12)
 
-***
+---
 
 ### lastName
 
@@ -86,7 +86,7 @@ Defined in: [src/types/shared-components/User/interface.ts:12](https://github.co
 
 Defined in: [src/types/shared-components/User/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L10)
 
-***
+---
 
 ### name?
 
@@ -94,7 +94,7 @@ Defined in: [src/types/shared-components/User/interface.ts:10](https://github.co
 
 Defined in: [src/types/shared-components/User/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L15)
 
-***
+---
 
 ### updatedAt?
 
@@ -102,7 +102,7 @@ Defined in: [src/types/shared-components/User/interface.ts:15](https://github.co
 
 Defined in: [src/types/shared-components/User/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L13)
 
-***
+---
 
 ### userType?
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePostForm
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1398](https://github.com/PalisadoesFoundati
 
 Indicates if the post is pinned.
 
-***
+---
 
 ### postinfo
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:1395](https://github.com/PalisadoesFoundati
 
 The information/content of the post.
 
-***
+---
 
 ### postphoto
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:1396](https://github.com/PalisadoesFoundati
 
 The URL of the post's photo, or null.
 
-***
+---
 
 ### posttitle
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:1394](https://github.com/PalisadoesFoundati
 
 The title of the post.
 
-***
+---
 
 ### postvideo
 

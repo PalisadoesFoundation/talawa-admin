@@ -271,9 +271,8 @@ describe('useAvatarUpload', () => {
 
       // Re-import the hook with mocked dependency
       vi.resetModules();
-      const { useAvatarUpload: useAvatarUploadMocked } = await import(
-        './useAvatarUpload'
-      );
+      const { useAvatarUpload: useAvatarUploadMocked } =
+        await import('./useAvatarUpload');
 
       const { result } = renderHook(() => useAvatarUploadMocked());
       const file = createMockFile('test.jpg', 'image/jpeg', 1024);

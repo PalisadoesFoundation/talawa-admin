@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Function: DataGridWrapper()
 
@@ -14,7 +14,7 @@ A generic wrapper around MUI DataGrid with built-in search, sorting, and paginat
 
 ### T
 
-`T` *extends* `object`
+`T` _extends_ `object`
 
 ## Parameters
 

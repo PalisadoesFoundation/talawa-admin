@@ -734,6 +734,12 @@
     "agendaItemDeleted": "Agenda Item deleted successfully",
     "deleteAgendaItem": "Delete Agenda Item",
     "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
+    "uninstallPlugin": {
+      "title": "Uninstall Plugin",
+      "warning": "Warning: This action cannot be undone.",
+      "message": "Are you sure you want to uninstall this plugin?",
+      "removeBtn": "Uninstall"
+    },
     "event": "Event",
     "search": "Search",
     "attachmentPreview": "Attachment preview",

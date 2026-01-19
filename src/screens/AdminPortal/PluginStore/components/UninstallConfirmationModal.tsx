@@ -35,8 +35,8 @@ import type { InterfaceUninstallConfirmationModalProps } from 'types/AdminPortal
 const UninstallConfirmationModal: React.FC<
   InterfaceUninstallConfirmationModalProps
 > = ({ show, onClose, onConfirm, plugin }) => {
-  const { t } = useTranslation('pluginStore');
-  const { t: tCommon } = useTranslation('translation');
+  // FIX: Use only the 'translation' namespace
+  const { t } = useTranslation('translation');
   const [isLoading, setIsLoading] = useState(false);
 
   // Guard Clause: If plugin is null, do not render anything.
@@ -55,7 +55,6 @@ const UninstallConfirmationModal: React.FC<
     } catch (error) {
       console.error('Uninstall failed', error);
     } finally {
-      // FIX: Ensure loading state is reset regardless of success or failure
       setIsLoading(false);
     }
   };
@@ -74,7 +73,7 @@ const UninstallConfirmationModal: React.FC<
             data-testid="uninstall-cancel-btn"
             className="me-2"
           >
-            {tCommon('cancel')}
+            {t('cancel')}
           </Button>
           <Button
             variant="danger"
@@ -82,14 +81,14 @@ const UninstallConfirmationModal: React.FC<
             disabled={isLoading}
             data-testid="uninstall-remove-btn"
           >
-            {isLoading ? tCommon('deleting') : t('uninstallPlugin.removeBtn')}
+            {isLoading ? t('loading') : t('uninstallPlugin.removeBtn')}
           </Button>
         </>
       }
     >
       <div data-testid="uninstall-modal">
         <p className="mb-2" data-testid="uninstall-modal-title">
-          {t('uninstallPlugin.message', { name: plugin.name })}
+          {t('uninstallPlugin.message')}
         </p>
         <p className="text-secondary small">{t('uninstallPlugin.warning')}</p>
       </div>

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceMemberRequestCardProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Member/interface.ts:1](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Member/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L7)
 
-***
+---
 
 ### id
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Member/interface.ts:7](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Member/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L2)
 
-***
+---
 
 ### joinDate
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Member/interface.ts:2](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Member/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L5)
 
-***
+---
 
 ### memberImage
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Member/interface.ts:5](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Member/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L6)
 
-***
+---
 
 ### memberLocation
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Member/interface.ts:6](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Member/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L4)
 
-***
+---
 
 ### memberName
 

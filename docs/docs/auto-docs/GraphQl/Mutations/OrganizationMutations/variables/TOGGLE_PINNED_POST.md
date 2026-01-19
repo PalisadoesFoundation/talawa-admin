@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: TOGGLE\_PINNED\_POST
+# Variable: TOGGLE_PINNED_POST
 
-> `const` **TOGGLE\_PINNED\_POST**: `DocumentNode`
+> `const` **TOGGLE_PINNED_POST**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:217](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L217)
 

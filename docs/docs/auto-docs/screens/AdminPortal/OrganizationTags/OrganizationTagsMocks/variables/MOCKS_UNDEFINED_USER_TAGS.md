@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: MOCKS\_UNDEFINED\_USER\_TAGS
+# Variable: MOCKS_UNDEFINED_USER_TAGS
 
-> `const` **MOCKS\_UNDEFINED\_USER\_TAGS**: `object`[] = `MOCK_RESPONSES.UNDEFINED_USER_TAGS`
+> `const` **MOCKS_UNDEFINED_USER_TAGS**: `object`[] = `MOCK_RESPONSES.UNDEFINED_USER_TAGS`
 
 Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:315](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts#L315)
 
@@ -50,9 +50,9 @@ Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:3
 
 > **name**: `object`
 
-#### request.variables.where.name.starts\_with
+#### request.variables.where.name.starts_with
 
-> **starts\_with**: `string` = `''`
+> **starts_with**: `string` = `''`
 
 ### result
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: UserProfileMenuItem
 
@@ -20,7 +20,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:48](https://github.com/P
 
 Icon component (optional)
 
-***
+---
 
 ### id
 
@@ -30,7 +30,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:32](https://github.com/P
 
 Unique identifier
 
-***
+---
 
 ### isDivider?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:58](https://github.com/P
 
 Whether this is a divider item (renders as Dropdown.Divider)
 
-***
+---
 
 ### label
 
@@ -50,7 +50,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:37](https://github.com/P
 
 Display label or translation key
 
-***
+---
 
 ### onClick()
 
@@ -64,7 +64,7 @@ Click handler
 
 `void` \| `Promise`\<`void`\>
 
-***
+---
 
 ### testId?
 
@@ -74,7 +74,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:63](https://github.com/P
 
 Test ID for testing
 
-***
+---
 
 ### translationKey?
 
@@ -87,5 +87,5 @@ Translation key prefix (optional)
 #### Default
 
 ```ts
-'common'
+'common';
 ```

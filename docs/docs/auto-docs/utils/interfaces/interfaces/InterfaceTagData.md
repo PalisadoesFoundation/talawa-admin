@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceTagData
 
@@ -20,7 +20,7 @@ Defines the structure for tag data.
 
 Defined in: [src/utils/interfaces.ts:1458](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1458)
 
-***
+---
 
 ### ancestorTags
 
@@ -38,7 +38,7 @@ An array of ancestor tags.
 
 > **name**: `string`
 
-***
+---
 
 ### childTags
 
@@ -52,7 +52,7 @@ Information about child tags.
 
 > **totalCount**: `number`
 
-***
+---
 
 ### name
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:1459](https://github.com/PalisadoesFoundati
 
 The name of the tag.
 
-***
+---
 
 ### parentTag
 
@@ -76,7 +76,7 @@ The parent tag object.
 
 > **\_id**: `string`
 
-***
+---
 
 ### usersAssignedTo
 

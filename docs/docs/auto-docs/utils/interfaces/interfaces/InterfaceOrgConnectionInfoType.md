@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrgConnectionInfoType
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:493](https://github.com/PalisadoesFoundatio
 
 The unique identifier of the organization.
 
-***
+---
 
 ### address
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:508](https://github.com/PalisadoesFoundatio
 
 The address of the organization.
 
-***
+---
 
 ### admins
 
@@ -46,7 +46,7 @@ An array of administrators in the organization.
 
 > **\_id**: `string`
 
-***
+---
 
 ### createdAt
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:507](https://github.com/PalisadoesFoundatio
 
 The creation date of the organization.
 
-***
+---
 
 ### creator
 
@@ -78,7 +78,7 @@ The creator of the organization.
 
 > **lastName**: `string`
 
-***
+---
 
 ### image
 
@@ -88,7 +88,7 @@ Defined in: [src/utils/interfaces.ts:494](https://github.com/PalisadoesFoundatio
 
 The URL of the organization's image, or null.
 
-***
+---
 
 ### members
 
@@ -102,7 +102,7 @@ An array of members in the organization.
 
 > **\_id**: `string`
 
-***
+---
 
 ### name
 

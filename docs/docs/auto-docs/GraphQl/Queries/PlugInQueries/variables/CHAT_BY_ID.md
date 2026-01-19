@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: CHAT\_BY\_ID
+# Variable: CHAT_BY_ID
 
-> `const` **CHAT\_BY\_ID**: `DocumentNode`
+> `const` **CHAT_BY_ID**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/PlugInQueries.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L54)
 

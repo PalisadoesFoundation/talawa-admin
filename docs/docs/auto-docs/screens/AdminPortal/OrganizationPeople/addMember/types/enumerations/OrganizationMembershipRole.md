@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Enumeration: OrganizationMembershipRole
 
@@ -17,7 +17,7 @@ Used to define permissions and access levels.
 
 Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L34)
 
-***
+---
 
 ### REGULAR
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrganizationModalProps
 
@@ -26,7 +26,7 @@ Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:74](htt
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### formState
 
@@ -34,7 +34,7 @@ Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:74](htt
 
 Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L72)
 
-***
+---
 
 ### setFormState()
 
@@ -52,7 +52,7 @@ Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:73](htt
 
 `void`
 
-***
+---
 
 ### showModal
 
@@ -60,7 +60,7 @@ Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:73](htt
 
 Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L70)
 
-***
+---
 
 ### t()
 
@@ -78,7 +78,7 @@ Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:75](htt
 
 `string`
 
-***
+---
 
 ### tCommon()
 
@@ -96,7 +96,7 @@ Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:76](htt
 
 `string`
 
-***
+---
 
 ### toggleModal()
 
@@ -108,7 +108,7 @@ Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:71](htt
 
 `void`
 
-***
+---
 
 ### userData
 
