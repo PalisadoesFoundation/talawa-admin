@@ -878,8 +878,6 @@
 
   --input-bg: #f2f7ff;
 
-  --peopleTabUserTagTableBody: #ffffff;
-
   --peopleTabUserTagTableHeaderCell-color: #000000;
 
   --empty-state-bg: #ffffff;
@@ -4402,74 +4400,6 @@ form label,
   align-items: center;
   color: grey;
   padding: 1rem 1.2rem;
-}
-
-.peopleTabUserTagContainer {
-  width: 100%;
-}
-
-.peopleTabUserTagComponentSection {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: auto;
-  border-radius: 10px;
-}
-
-.peopleTabUserTagColumnHeader {
-  background: #dddddd;
-  border: 1px solid #ddd;
-}
-
-.peopleTabUserTagTableCell {
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  white-space: nowrap;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-}
-
-.peopleTabUserTagCreatedByButton {
-  color: #2563eb;
-  cursor: pointer;
-  transition: 0.2s ease;
-  text-decoration: underline #5f5fd9;
-}
-
-.peopleTabUserTagCreatedByButton:hover {
-  text-decoration: underline;
-  color: #1d4ed8;
-}
-
-.peopleTabUserTagTableHeader {
-  background-color: #f9fafb; /* bg-gray-50 */
-  border-top-width: 1px; /* border-y */
-  border-bottom-width: 1px;
-  border-color: #e5e7eb; /* border-gray-200 */
-  border-style: solid;
-}
-
-.peopleTabUserTagTableRow:hover {
-  background-color: #f9fafb;
-}
-
-.peopleTabUserTagTableHeaderCell {
-  padding: 0.75rem 1.5rem;
-  text-align: left;
-  font-size: 0.9rem;
-  color: var(--peopleTabUserTagTableHeaderCell-color);
-  text-transform: uppercase;
-  height: 4rem;
-}
-
-.peopleTabUserTagTableBody {
-  background: var(--peopleTabUserTagTableBody-bg);
-  border: 1px solid #ddd;
-}
-
-.peopleTabUserTagTable {
-  width: 100%;
 }
 
 .peopleTabIconWrapper:hover {
@@ -8112,10 +8042,6 @@ form {
   overflow: auto;
   margin-top: 20px !important;
 }
-
-/* -- RemoveUserTagModal.tsx -- */
-
-/* -- UnassignUserTagModal.tsx -- */
 
 /* -- MemberDetail.tsx -- */
 

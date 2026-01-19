@@ -26,7 +26,7 @@
  * ```
  */
 import React, { useState } from 'react';
-import styles from 'style/app-fixed.module.css';
+import styles from './UserTags.module.css';
 import { useTranslation } from 'react-i18next';
 import PeopleTabNavbar from 'shared-components/PeopleTabNavbar/PeopleTabNavbar';
 
