@@ -17,8 +17,8 @@ import {
 import { createDefaultRecurrenceRule } from 'utils/recurrenceUtils/recurrenceUtilityFunctions';
 import CustomRecurrenceModal from 'screens/AdminPortal/OrganizationEvents/CustomRecurrenceModal';
 
-import type { InterfacePreviewEventModalProps } from 'types/Event/interface';
-import { UserRole } from 'types/Event/interface';
+import type { InterfacePreviewEventModalProps } from 'types/shared-components/EventListCard/Modal/Preview/interface';
+import { UserRole } from 'types/shared-components/EventListCard/Modal/Preview/interface';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 dayjs.extend(customParseFormat);
