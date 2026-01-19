@@ -16,7 +16,7 @@ import { MOCKS, UPDATE_ERROR_MOCKS } from './Groups.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
-import type { InterfaceGroupModal } from './GroupModal';
+import type { InterfaceGroupModalProps } from 'types/UserPortal/GroupModal/interface';
 import GroupModal from './GroupModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
@@ -54,7 +54,7 @@ const t = {
  * Props for `GroupModal` component used in tests
  */
 
-const itemProps: InterfaceGroupModal[] = [
+const itemProps: InterfaceGroupModalProps[] = [
   {
     isOpen: true,
     hide: vi.fn(),
@@ -180,7 +180,7 @@ const itemProps: InterfaceGroupModal[] = [
 
 const renderGroupModal = (
   link: ApolloLink,
-  props: InterfaceGroupModal,
+  props: InterfaceGroupModalProps,
 ): RenderResult => {
   return render(
     <MockedProvider link={link}>
@@ -580,7 +580,7 @@ describe('Testing GroupModal', () => {
 
   it('should display image when user has avatarURL', async () => {
     // Create a custom itemProps with a user that has an avatarURL
-    const propsWithAvatar: InterfaceGroupModal = {
+    const propsWithAvatar: InterfaceGroupModalProps = {
       ...itemProps[0],
       group: {
         ...itemProps[0].group,

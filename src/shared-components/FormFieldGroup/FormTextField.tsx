@@ -25,7 +25,6 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
   disabled,
   'data-testid': dataTestId,
   onBlur,
-  ...props
 }) => {
   const isInvalid = touched && !!error;
 
@@ -38,10 +37,10 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
       onChange={(e) => {
         onChange(e.target.value);
       }}
+      onBlur={onBlur}
       isInvalid={isInvalid}
       disabled={disabled}
       data-testid={dataTestId}
-      {...props}
     />
   );
 

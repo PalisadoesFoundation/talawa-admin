@@ -28,7 +28,6 @@ import type { ChangeEvent } from 'react';
 import Button from 'shared-components/Button/Button';
 import type {
   InterfaceCreateVolunteerGroup,
-  InterfaceVolunteerGroupInfo,
   InterfaceVolunteerMembership,
 } from 'utils/interfaces';
 import styles from './GroupModal.module.css';
@@ -58,16 +57,9 @@ import Avatar from 'shared-components/Avatar/Avatar';
 import { FaXmark } from 'react-icons/fa6';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import type { InterfaceGroupModalProps } from 'types/UserPortal/GroupModal/interface';
 
-export interface InterfaceGroupModal {
-  isOpen: boolean;
-  hide: () => void;
-  eventId: string;
-  group: InterfaceVolunteerGroupInfo;
-  refetchGroups: () => void;
-}
-
-const GroupModal: React.FC<InterfaceGroupModal> = ({
+const GroupModal: React.FC<InterfaceGroupModalProps> = ({
   isOpen,
   hide,
   eventId,
@@ -99,8 +91,8 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
   });
 
   const { name, description, volunteersRequired } = formState;
-  const nameError =
-    touched.name && !name.trim() ? tCommon('nameRequired') : undefined;
+  const isNameInvalid = touched.name && !formState.name.trim();
+  const nameError = isNameInvalid ? tCommon('nameRequired') : undefined;
 
   const [updateVolunteerGroup] = useMutation(UPDATE_VOLUNTEER_GROUP);
   const [updateMembership] = useMutation(UPDATE_VOLUNTEER_MEMBERSHIP);
@@ -193,7 +185,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
         refetchGroups();
         hide();
       } catch (error: unknown) {
-        console.log(error);
+        console.error(error);
         NotificationToast.error((error as Error).message);
       }
     },
@@ -278,7 +270,11 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             onBlur={() => setTouched((prev) => ({ ...prev, name: true }))}
           />
 
-          {/* Input field to enter the group description */}
+          {/* 
+            Description is optional and intentionally does not participate in validation.
+            No touched/error props are passed to avoid displaying validation UI
+            for a non-required field.
+          */}
           <FormTextField
             name="description"
             label={tCommon('description')}
@@ -327,7 +323,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             type="submit"
             className={styles.regBtn}
             data-testid="submitBtn"
-            disabled={volunteersRequiredError || !!nameError}
+            disabled={volunteersRequiredError || isNameInvalid}
           >
             {t('updateGroup')}
           </Button>

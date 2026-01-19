@@ -6,7 +6,7 @@
 
 Defined in: [src/types/FormFieldGroup/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L15)
 
-Props for FormFieldGroup component.
+Props for FormTextField component, extending FormFieldGroup with text input-specific properties.
 
 ## Extends
 

@@ -1,5 +1,5 @@
 /**
- * Props for FormFieldGroup component.
+ * Props for FormTextField component, extending FormFieldGroup with text input-specific properties.
  */
 export interface InterfaceFormFieldGroupProps {
   name: string;
