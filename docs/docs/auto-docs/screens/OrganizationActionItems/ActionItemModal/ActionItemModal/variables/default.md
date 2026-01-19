@@ -6,7 +6,7 @@
 
 > `const` **default**: `FC`\<[`IItemModalProps`](../../../../../types/shared-components/ActionItems/interface/interfaces/IItemModalProps.md)\>
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L74)
+Defined in: [src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx#L75)
 
 Modal component for creating and editing action items.
 

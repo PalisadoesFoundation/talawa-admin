@@ -31,7 +31,7 @@
   outline-offset: var(--shadow-offset-sm);
 }
 
-.noOutline:is(:hover, :active, .show) {
+.noOutline:is(:hover, :active, .show):not(:focus-within) {
   outline: none;
 }
 
@@ -40,15 +40,10 @@
   color: var(--color-gray-700);
   background-color: var(--color-blue-200);
   border-color: var(--color-blue-200);
+  --bs-btn-focus-box-shadow: none;
 }
 
-.addButton:focus-visible {
-  outline: var(--border-2) solid var(--color-blue-500);
-  outline-offset: var(--shadow-offset-sm);
-  box-shadow: 0 0 0 var(--border-2) var(--color-blue-500);
-}
-
-.addButton:is(:hover, :active) {
+.addButton:is(:hover, :active, :focus) {
   background-color: var(--color-blue-500);
   border-color: var(--color-gray-700);
 }
@@ -56,10 +51,4 @@
 .addButton:disabled {
   background-color: var(--color-gray-50);
   border-color: var(--color-blue-200);
-}
-
-.addButton:disabled:focus-visible {
-  outline: var(--border-2) solid var(--color-gray-400);
-  outline-offset: var(--shadow-offset-sm);
-  box-shadow: 0 0 0 var(--border-2) var(--color-blue-400);
 }

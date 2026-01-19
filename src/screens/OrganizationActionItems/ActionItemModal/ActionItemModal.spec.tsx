@@ -1,11 +1,5 @@
 import { MockedProvider } from '@apollo/react-testing';
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  within,
-} from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import type {
   IItemModalProps,
@@ -727,16 +721,10 @@ describe('ItemModal - Additional Test Cases', () => {
 
       expect(volunteerGroupSelect).toBeInTheDocument();
 
-      // Use getAllByLabelText since aria-label on Chip creates multiple matches
-      const volunteerGroupInputs = screen.getAllByLabelText(/volunteerGroup/i);
-      const volunteerGroupInput = volunteerGroupInputs.find(
-        (el) => el.tagName === 'INPUT',
-      );
-      expect(volunteerGroupInput).toBeDefined();
-
+      // Check that the select element has the correct value
       await waitFor(
         () => {
-          expect(volunteerGroupInput).toHaveValue('Test Group 1');
+          expect(volunteerGroupSelect).toHaveValue('group1');
         },
         { timeout: 5000 },
       );
@@ -878,27 +866,21 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(screen.getByTestId('actionItemModal')).toBeInTheDocument();
       });
 
-      const volunteerInput = screen.getByLabelText('volunteer *');
-      await userEvent.click(volunteerInput);
-      await userEvent.type(volunteerInput, 'Jane Smith');
-
-      await waitFor(async () => {
-        const option = await screen.findByText('Jane Smith');
-        await userEvent.click(option);
-      });
+      const volunteerSelect = screen.getByTestId(
+        'volunteerSelect',
+      ) as HTMLSelectElement;
+      await userEvent.selectOptions(volunteerSelect, 'volunteer2');
 
       await waitFor(() => {
-        expect(screen.getByLabelText('volunteer *')).toHaveValue('Jane Smith');
+        expect(volunteerSelect).toHaveValue('volunteer2');
       });
 
       const seriesRadio = screen.getByLabelText('entireSeries');
       await userEvent.click(seriesRadio);
 
       await waitFor(() => {
-        expect(screen.getByLabelText('volunteer *')).toHaveValue('');
+        expect(volunteerSelect).toHaveValue('');
       });
-
-      expect(screen.queryByDisplayValue('Jane Smith')).not.toBeInTheDocument();
     });
 
     it('should clear non-template volunteer group when switching applyTo to series', async () => {
@@ -920,14 +902,10 @@ describe('ItemModal - Additional Test Cases', () => {
       });
 
       // Select a category first (required for volunteer group functionality)
-      const categorySelect = screen.getByTestId('categorySelect');
-      const categoryInput = within(categorySelect).getByRole('combobox');
-      await userEvent.click(categoryInput);
-      await userEvent.type(categoryInput, 'Category 1');
-      await waitFor(async () => {
-        const option = await screen.findByText('Category 1');
-        await userEvent.click(option);
-      });
+      const categorySelect = screen.getByTestId(
+        'categorySelect',
+      ) as HTMLSelectElement;
+      await userEvent.selectOptions(categorySelect, 'cat1');
 
       // Now click volunteer group chip to switch mode
       const volunteerGroupChip = screen.getByRole('button', {
@@ -936,30 +914,22 @@ describe('ItemModal - Additional Test Cases', () => {
       await userEvent.click(volunteerGroupChip);
 
       // Wait for volunteer group select to appear
-      const volunteerGroupSelect = await screen.findByTestId(
+      const volunteerGroupSelect = (await screen.findByTestId(
         'volunteerGroupSelect',
         {},
         { timeout: 5000 },
-      );
-      const volunteerGroupInput =
-        within(volunteerGroupSelect).getByRole('combobox');
-      await userEvent.click(volunteerGroupInput);
-      await userEvent.type(volunteerGroupInput, 'Test Group 2');
-
-      await waitFor(async () => {
-        const option = await screen.findByText('Test Group 2');
-        await userEvent.click(option);
-      });
+      )) as HTMLSelectElement;
+      await userEvent.selectOptions(volunteerGroupSelect, 'group2');
 
       await waitFor(() => {
-        expect(volunteerGroupInput).toHaveValue('Test Group 2');
+        expect(volunteerGroupSelect).toHaveValue('group2');
       });
 
       const seriesRadio = screen.getByLabelText('entireSeries');
       await userEvent.click(seriesRadio);
 
       await waitFor(() => {
-        expect(volunteerGroupInput).toHaveValue('');
+        expect(volunteerGroupSelect).toHaveValue('');
       });
     });
   });
@@ -983,14 +953,10 @@ describe('ItemModal - Additional Test Cases', () => {
       });
 
       // Select a category first (required for volunteer functionality)
-      const categorySelect = screen.getByTestId('categorySelect');
-      const categoryInput = within(categorySelect).getByRole('combobox');
-      await userEvent.click(categoryInput);
-      await userEvent.type(categoryInput, 'Category 1');
-      await waitFor(async () => {
-        const option = await screen.findByText('Category 1');
-        await userEvent.click(option);
-      });
+      const categorySelect = screen.getByTestId(
+        'categorySelect',
+      ) as HTMLSelectElement;
+      await userEvent.selectOptions(categorySelect, 'cat1');
 
       // Wait for volunteer select to be in the document
       await waitFor(
@@ -1000,16 +966,13 @@ describe('ItemModal - Additional Test Cases', () => {
         { timeout: 5000 },
       );
 
-      const volunteerSelect = screen.getByTestId('volunteerSelect');
-      const volunteerInput = within(volunteerSelect).getByRole('combobox');
-      await userEvent.click(volunteerInput);
-      await userEvent.type(volunteerInput, 'Jane Smith');
-
-      const volunteerOption = await screen.findByText('Jane Smith');
-      await userEvent.click(volunteerOption);
+      const volunteerSelect = screen.getByTestId(
+        'volunteerSelect',
+      ) as HTMLSelectElement;
+      await userEvent.selectOptions(volunteerSelect, 'volunteer2');
 
       await waitFor(() => {
-        expect(volunteerInput).toHaveValue('Jane Smith');
+        expect(volunteerSelect).toHaveValue('volunteer2');
       });
 
       const volunteerGroupChip = screen.getByRole('button', {
@@ -1024,17 +987,14 @@ describe('ItemModal - Additional Test Cases', () => {
       const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
       await userEvent.click(volunteerChip);
 
-      const reopenedVolunteerSelect = await screen.findByTestId(
+      const reopenedVolunteerSelect = (await screen.findByTestId(
         'volunteerSelect',
         {},
         { timeout: 5000 },
-      );
-      const reopenedVolunteerInput = within(reopenedVolunteerSelect).getByRole(
-        'combobox',
-      );
+      )) as HTMLSelectElement;
 
       await waitFor(() => {
-        expect(reopenedVolunteerInput).toHaveValue('');
+        expect(reopenedVolunteerSelect).toHaveValue('');
       });
     });
 
@@ -1056,14 +1016,10 @@ describe('ItemModal - Additional Test Cases', () => {
       });
 
       // Select a category first (required for volunteer functionality)
-      const categorySelect = screen.getByTestId('categorySelect');
-      const categoryInput = within(categorySelect).getByRole('combobox');
-      await userEvent.click(categoryInput);
-      await userEvent.type(categoryInput, 'Category 1');
-      await waitFor(async () => {
-        const option = await screen.findByText('Category 1');
-        await userEvent.click(option);
-      });
+      const categorySelect = screen.getByTestId(
+        'categorySelect',
+      ) as HTMLSelectElement;
+      await userEvent.selectOptions(categorySelect, 'cat1');
 
       // Wait for volunteer select to be in the document
       await waitFor(
@@ -1080,26 +1036,15 @@ describe('ItemModal - Additional Test Cases', () => {
       await userEvent.click(volunteerGroupChip);
 
       // Wait for volunteerGroupSelect to appear (this confirms the switch happened)
-      const volunteerGroupSelect = await screen.findByTestId(
+      const volunteerGroupSelect = (await screen.findByTestId(
         'volunteerGroupSelect',
         {},
         { timeout: 5000 },
-      );
-      const volunteerGroupInput =
-        within(volunteerGroupSelect).getByRole('combobox');
-      await userEvent.click(volunteerGroupInput);
-      await userEvent.type(volunteerGroupInput, 'Test Group 2');
-
-      // Wait for the autocomplete dropdown to appear
-      await waitFor(() => {
-        expect(screen.getByRole('listbox')).toBeInTheDocument();
-      });
-
-      const groupOption = await screen.findByText('Test Group 2');
-      await userEvent.click(groupOption);
+      )) as HTMLSelectElement;
+      await userEvent.selectOptions(volunteerGroupSelect, 'group2');
 
       await waitFor(() => {
-        expect(volunteerGroupInput).toHaveValue('Test Group 2');
+        expect(volunteerGroupSelect).toHaveValue('group2');
       });
 
       const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
@@ -1116,16 +1061,14 @@ describe('ItemModal - Additional Test Cases', () => {
       });
       await userEvent.click(volunteerGroupChipAgain);
 
-      const reopenedGroupSelect = await screen.findByTestId(
+      const reopenedGroupSelect = (await screen.findByTestId(
         'volunteerGroupSelect',
         {},
         { timeout: 5000 },
-      );
-      const reopenedGroupInput =
-        within(reopenedGroupSelect).getByRole('combobox');
+      )) as HTMLSelectElement;
 
       await waitFor(() => {
-        expect(reopenedGroupInput).toHaveValue('');
+        expect(reopenedGroupSelect).toHaveValue('');
       });
     });
   });
@@ -1511,28 +1454,22 @@ describe('ItemModal - Specific Test Coverage', () => {
       });
 
       // Select a category through CategorySelector
-      const categorySelect = screen.getByTestId('categorySelect');
-      const categoryInput = within(categorySelect).getByRole('combobox');
-      await userEvent.click(categoryInput);
+      const categorySelect = screen.getByTestId(
+        'categorySelect',
+      ) as HTMLSelectElement;
+      await userEvent.selectOptions(categorySelect, 'cat1');
 
-      const categoryOption = await screen.findByText('Category 1');
-      await userEvent.click(categoryOption);
-
-      // Verify the category is displayed in the input (proves setActionItemCategory updated the state)
+      // Verify the category is selected (proves setActionItemCategory updated the state)
       await waitFor(() => {
-        expect(categoryInput).toHaveValue('Category 1');
+        expect(categorySelect).toHaveValue('cat1');
       });
 
       // Verify form state includes categoryId by submitting and checking mutation
       // First, fill required fields
-      const volunteerSelect = screen.getByTestId('volunteerSelect');
-      const volunteerInput = within(volunteerSelect).getByRole('combobox');
-      await userEvent.click(volunteerInput);
-
-      // Wait for the listbox to appear
-      await waitFor(() => {
-        expect(screen.getByRole('listbox')).toBeInTheDocument();
-      });
+      const volunteerSelect = screen.getByTestId(
+        'volunteerSelect',
+      ) as HTMLSelectElement;
+      await userEvent.selectOptions(volunteerSelect, 'volunteer1');
 
       const volunteerOption = await screen.findByText('John Doe');
       await userEvent.click(volunteerOption);
@@ -2567,14 +2504,14 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
       expect(screen.getByDisplayValue('Test notes')).toBeInTheDocument();
       expect(screen.getByDisplayValue('Category 1')).toBeInTheDocument();
       // Wait for volunteer field to be visible and populated
-      expect(screen.getByLabelText('volunteer *')).toBeInTheDocument();
+      expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
     });
 
     // Change category
-    const categoryInput = screen.getByLabelText('actionItemCategory *');
-    fireEvent.change(categoryInput, { target: { value: 'Category 2' } });
-    const categoryOption = await screen.findByText('Category 2');
-    fireEvent.click(categoryOption);
+    const categorySelect = screen.getByTestId(
+      'categorySelect',
+    ) as HTMLSelectElement;
+    await userEvent.selectOptions(categorySelect, 'cat2');
 
     await waitFor(() => {
       expect(screen.getByDisplayValue('Category 2')).toBeInTheDocument();
@@ -2586,21 +2523,16 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
 
     // Change volunteer - first wait for volunteer dropdown to be ready
     await waitFor(() => {
-      expect(screen.getByLabelText('volunteer *')).toBeInTheDocument();
+      expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
     });
 
-    const volunteerInput = screen.getByLabelText('volunteer *');
-
-    await userEvent.click(volunteerInput);
-    await userEvent.clear(volunteerInput);
-    await userEvent.type(volunteerInput, 'Jane');
-
-    const listbox = await screen.findByRole('listbox');
-    const volunteerOption = within(listbox).getByText('Jane Smith');
-    await userEvent.click(volunteerOption);
+    const volunteerSelect = screen.getByTestId(
+      'volunteerSelect',
+    ) as HTMLSelectElement;
+    await userEvent.selectOptions(volunteerSelect, 'volunteer2');
 
     await waitFor(() => {
-      expect(volunteerInput).toHaveValue('Jane Smith');
+      expect(volunteerSelect).toHaveValue('volunteer2');
     });
 
     // Change pre-completion notes
@@ -3041,29 +2973,23 @@ describe('orgActionItemsRefetch functionality', () => {
       expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
     });
 
-    // Wait for volunteer options to be available by checking the Autocomplete
+    // Wait for volunteer options to be available by checking the select
     await waitFor(() => {
-      const volunteerInput = screen.getByLabelText('volunteer *');
-      expect(volunteerInput).toBeInTheDocument();
+      const volunteerSelect = screen.getByTestId('volunteerSelect');
+      expect(volunteerSelect).toBeInTheDocument();
     });
 
     // Select category
-    const categoryInput = screen.getByLabelText('actionItemCategory *');
-    await userEvent.click(categoryInput);
-    await userEvent.type(categoryInput, 'Category 1');
-    await waitFor(async () => {
-      const option = screen.getByText('Category 1');
-      await userEvent.click(option);
-    });
+    const categorySelect = screen.getByTestId(
+      'categorySelect',
+    ) as HTMLSelectElement;
+    await userEvent.selectOptions(categorySelect, 'cat1');
 
     // Select volunteer
-    const volunteerInput = screen.getByLabelText('volunteer *');
-    await userEvent.click(volunteerInput);
-    await userEvent.type(volunteerInput, 'John Doe');
-    await waitFor(async () => {
-      const option = await screen.findByText('John Doe');
-      await userEvent.click(option);
-    });
+    const volunteerSelect = screen.getByTestId(
+      'volunteerSelect',
+    ) as HTMLSelectElement;
+    await userEvent.selectOptions(volunteerSelect, 'volunteer1');
 
     // Wait for notes field to appear
     await waitFor(() => {
@@ -3279,22 +3205,16 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       });
 
       // Select category
-      const categoryInput = screen.getByLabelText('actionItemCategory *');
-      await userEvent.click(categoryInput);
-      await userEvent.type(categoryInput, 'Category 1');
-      await waitFor(async () => {
-        const option = screen.getByText('Category 1');
-        await userEvent.click(option);
-      });
+      const categorySelect = screen.getByTestId(
+        'categorySelect',
+      ) as HTMLSelectElement;
+      await userEvent.selectOptions(categorySelect, 'cat1');
 
       // Select volunteer
-      const volunteerInput = screen.getByLabelText('volunteer *');
-      await userEvent.click(volunteerInput);
-      await userEvent.type(volunteerInput, 'John Doe');
-      await waitFor(async () => {
-        const option = await screen.findByText('John Doe');
-        await userEvent.click(option);
-      });
+      const volunteerSelect = screen.getByTestId(
+        'volunteerSelect',
+      ) as HTMLSelectElement;
+      await userEvent.selectOptions(volunteerSelect, 'volunteer1');
 
       // Wait for notes field to appear
       await waitFor(() => {
@@ -3383,22 +3303,16 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       });
 
       // Select category
-      const categoryInput = screen.getByLabelText('actionItemCategory *');
-      await userEvent.click(categoryInput);
-      await userEvent.type(categoryInput, 'Category 1');
-      await waitFor(async () => {
-        const option = screen.getByText('Category 1');
-        await userEvent.click(option);
-      });
+      const categorySelect = screen.getByTestId(
+        'categorySelect',
+      ) as HTMLSelectElement;
+      await userEvent.selectOptions(categorySelect, 'cat1');
 
       // Select volunteer
-      const volunteerInput = screen.getByLabelText('volunteer *');
-      await userEvent.click(volunteerInput);
-      await userEvent.type(volunteerInput, 'John Doe');
-      await waitFor(async () => {
-        const option = await screen.findByText('John Doe');
-        await userEvent.click(option);
-      });
+      const volunteerSelect = screen.getByTestId(
+        'volunteerSelect',
+      ) as HTMLSelectElement;
+      await userEvent.selectOptions(volunteerSelect, 'volunteer1');
 
       // Wait for notes field to appear
       await waitFor(() => {
@@ -3995,14 +3909,10 @@ describe('Partially Covered Lines Test Coverage', () => {
       });
 
       // Select volunteer but not category (categoryId will be empty)
-      const volunteerInput = screen.getByLabelText('volunteer *');
-      await userEvent.click(volunteerInput);
-      await userEvent.type(volunteerInput, 'John Doe');
-
-      await waitFor(async () => {
-        const option = await screen.findByText('John Doe');
-        await userEvent.click(option);
-      });
+      const volunteerSelect = screen.getByTestId(
+        'volunteerSelect',
+      ) as HTMLSelectElement;
+      await userEvent.selectOptions(volunteerSelect, 'volunteer1');
 
       // Submit without category (categoryId is empty, but volunteerId is set)
       const form = document.querySelector('form');
@@ -4041,14 +3951,10 @@ describe('Partially Covered Lines Test Coverage', () => {
       });
 
       // Select category but no volunteer or volunteer group
-      const categoryInput = screen.getByLabelText('actionItemCategory *');
-      await userEvent.click(categoryInput);
-      await userEvent.type(categoryInput, 'Category 1');
-
-      await waitFor(async () => {
-        const option = screen.getByText('Category 1');
-        await userEvent.click(option);
-      });
+      const categorySelect = screen.getByTestId(
+        'categorySelect',
+      ) as HTMLSelectElement;
+      await userEvent.selectOptions(categorySelect, 'cat1');
 
       // Submit without selecting volunteer or volunteer group
       const form = document.querySelector('form');
@@ -4155,13 +4061,10 @@ describe('Partially Covered Lines Test Coverage', () => {
       });
 
       // Select category
-      const categoryInput = screen.getByLabelText('actionItemCategory *');
-      await userEvent.click(categoryInput);
-      await userEvent.type(categoryInput, 'Category 1');
-      await waitFor(async () => {
-        const option = screen.getByText('Category 1');
-        await userEvent.click(option);
-      });
+      const categorySelect = screen.getByTestId(
+        'categorySelect',
+      ) as HTMLSelectElement;
+      await userEvent.selectOptions(categorySelect, 'cat1');
 
       // Switch to volunteer group assignment
       const volunteerGroupChip = screen.getByRole('button', {
@@ -4175,15 +4078,10 @@ describe('Partially Covered Lines Test Coverage', () => {
         {},
         { timeout: 5000 },
       );
-      const volunteerGroupInput =
-        within(volunteerGroupSelect).getByRole('combobox');
-      await userEvent.click(volunteerGroupInput);
-      await userEvent.type(volunteerGroupInput, 'Test Group 1');
-
-      await waitFor(async () => {
-        const option = await screen.findByText('Test Group 1');
-        await userEvent.click(option);
-      });
+      await userEvent.selectOptions(
+        volunteerGroupSelect as HTMLSelectElement,
+        'group1',
+      );
 
       // Submit form - this should result in volunteerId being undefined
       const submitButton = screen.getByTestId('submitBtn');
@@ -4220,14 +4118,10 @@ describe('Partially Covered Lines Test Coverage', () => {
       });
 
       // Select a category first (required for volunteer functionality)
-      const categorySelect = screen.getByTestId('categorySelect');
-      const categoryInput = within(categorySelect).getByRole('combobox');
-      await userEvent.click(categoryInput);
-      await userEvent.type(categoryInput, 'Category 1');
-      await waitFor(async () => {
-        const option = await screen.findByText('Category 1');
-        await userEvent.click(option);
-      });
+      const categorySelect = screen.getByTestId(
+        'categorySelect',
+      ) as HTMLSelectElement;
+      await userEvent.selectOptions(categorySelect, 'cat1');
 
       // Wait for volunteer select to be in the document
       await waitFor(
@@ -4320,14 +4214,10 @@ describe('Partially Covered Lines Test Coverage', () => {
       });
 
       // Select a category first (required for volunteer functionality)
-      const categorySelect = screen.getByTestId('categorySelect');
-      const categoryInput = within(categorySelect).getByRole('combobox');
-      await userEvent.click(categoryInput);
-      await userEvent.type(categoryInput, 'Category 1');
-      await waitFor(async () => {
-        const option = await screen.findByText('Category 1');
-        await userEvent.click(option);
-      });
+      const categorySelect = screen.getByTestId(
+        'categorySelect',
+      ) as HTMLSelectElement;
+      await userEvent.selectOptions(categorySelect, 'cat1');
 
       // Initially should show volunteer select (default)
       await waitFor(() => {
@@ -4433,9 +4323,9 @@ describe('Partially Covered Lines Test Coverage', () => {
         expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
       });
 
-      // This tests that the autocomplete renders properly with volunteer options
-      const volunteerInput = screen.getByLabelText('volunteer *');
-      expect(volunteerInput).toBeInTheDocument();
+      // This tests that the select renders properly with volunteer options
+      const volunteerSelect = screen.getByTestId('volunteerSelect');
+      expect(volunteerSelect).toBeInTheDocument();
     });
   });
 });

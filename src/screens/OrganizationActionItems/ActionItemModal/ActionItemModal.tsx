@@ -38,14 +38,15 @@ import {
 } from 'GraphQl/Mutations/ActionItemMutations';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import {
+  FormFieldGroup,
+  FormSelectField,
+} from 'shared-components/FormFieldGroup/FormFieldGroup';
+import {
   GET_EVENT_VOLUNTEERS,
   GET_EVENT_VOLUNTEER_GROUPS,
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'types/Volunteer/interface';
-import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import Button from 'shared-components/Button';
-import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
 
 const initializeFormState = (
   actionItem: IActionItemInfo | null,
@@ -499,68 +500,64 @@ const ItemModal: FC<IItemModalProps> = ({
 
             {/* Volunteer Selection */}
             {assignmentType === 'volunteer' && (
-              <div className="mb-3 w-100">
-                <Autocomplete
-                  className={`${styles.noOutline} w-100`}
-                  data-testid="volunteerSelect"
-                  data-cy="volunteerSelect"
-                  options={volunteers}
-                  value={selectedVolunteer}
-                  isOptionEqualToValue={(option, value) =>
-                    option.id === value?.id
-                  }
-                  filterSelectedOptions={true}
-                  getOptionLabel={(
-                    volunteer: InterfaceEventVolunteerInfo,
-                  ): string => {
-                    return volunteer.user?.name || t('unknownVolunteer');
-                  }}
-                  onChange={(_, newVolunteer): void => {
-                    const volunteerId = newVolunteer?.id;
-                    handleFormChange('volunteerId', volunteerId);
-                    handleFormChange('volunteerGroupId', '');
-                    setSelectedVolunteer(newVolunteer);
-                    setSelectedVolunteerGroup(null);
-                  }}
-                  renderInput={(params) => (
-                    <TextField {...params} label={t('volunteer')} required />
-                  )}
-                />
-              </div>
+              <FormSelectField
+                name="volunteerSelect"
+                label={t('volunteer')}
+                value={selectedVolunteer?.id || ''}
+                onChange={(value): void => {
+                  const volunteer =
+                    volunteers.find(
+                      (v: InterfaceEventVolunteerInfo) => v.id === value,
+                    ) || null;
+                  const volunteerId = volunteer?.id;
+                  handleFormChange('volunteerId', volunteerId);
+                  handleFormChange('volunteerGroupId', '');
+                  setSelectedVolunteer(volunteer);
+                  setSelectedVolunteerGroup(null);
+                }}
+                required
+                data-testid="volunteerSelect"
+              >
+                <option value="">
+                  {t('selectVolunteer') || 'Select a volunteer'}
+                </option>
+                {volunteers.map((volunteer: InterfaceEventVolunteerInfo) => (
+                  <option key={volunteer.id} value={volunteer.id}>
+                    {volunteer.user?.name || t('unknownVolunteer')}
+                  </option>
+                ))}
+              </FormSelectField>
             )}
 
             {/* Volunteer Group Selection */}
             {assignmentType === 'volunteerGroup' && (
-              <div className="mb-3 w-100">
-                <Autocomplete
-                  className={`${styles.noOutline} w-100`}
-                  data-testid="volunteerGroupSelect"
-                  data-cy="volunteerGroupSelect"
-                  options={volunteerGroups}
-                  value={selectedVolunteerGroup}
-                  isOptionEqualToValue={(option, value) =>
-                    option.id === value?.id
-                  }
-                  filterSelectedOptions={true}
-                  getOptionLabel={(group: IEventVolunteerGroup): string => {
-                    return group.name;
-                  }}
-                  onChange={(_, newGroup): void => {
-                    const groupId = newGroup?.id;
-                    handleFormChange('volunteerGroupId', groupId);
-                    handleFormChange('volunteerId', '');
-                    setSelectedVolunteerGroup(newGroup);
-                    setSelectedVolunteer(null);
-                  }}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label={t('volunteerGroup')}
-                      required
-                    />
-                  )}
-                />
-              </div>
+              <FormSelectField
+                name="volunteerGroupSelect"
+                label={t('volunteerGroup')}
+                value={selectedVolunteerGroup?.id || ''}
+                onChange={(value): void => {
+                  const group =
+                    volunteerGroups.find(
+                      (g: IEventVolunteerGroup) => g.id === value,
+                    ) || null;
+                  const groupId = group?.id;
+                  handleFormChange('volunteerGroupId', groupId);
+                  handleFormChange('volunteerId', '');
+                  setSelectedVolunteerGroup(group);
+                  setSelectedVolunteer(null);
+                }}
+                required
+                data-testid="volunteerGroupSelect"
+              >
+                <option value="">
+                  {t('selectVolunteerGroup') || 'Select a volunteer group'}
+                </option>
+                {volunteerGroups.map((group: IEventVolunteerGroup) => (
+                  <option key={group.id} value={group.id}>
+                    {group.name}
+                  </option>
+                ))}
+              </FormSelectField>
             )}
 
             <div className="d-flex gap-3 mx-auto mb-3">
@@ -579,29 +576,39 @@ const ItemModal: FC<IItemModalProps> = ({
               />
             </div>
 
-            <FormTextField
+            <FormFieldGroup
               name="preCompletionNotes"
               label={t('preCompletionNotes')}
-              data-cy="preCompletionNotes"
-              className={styles.noOutline}
-              value={preCompletionNotes}
-              onChange={(value) =>
-                handleFormChange('preCompletionNotes', value)
-              }
-            />
+            >
+              <input
+                type="text"
+                id="preCompletionNotes"
+                value={preCompletionNotes}
+                onChange={(e) =>
+                  handleFormChange('preCompletionNotes', e.target.value)
+                }
+                data-cy="preCompletionNotes"
+                className={`form-control ${styles.noOutline}`}
+              />
+            </FormFieldGroup>
           </>
         )}
 
         {isCompleted && (
-          <FormTextField
+          <FormFieldGroup
             name="postCompletionNotes"
             label={t('postCompletionNotes')}
-            className={styles.noOutline}
-            value={postCompletionNotes || ''}
-            onChange={(value) => handleFormChange('postCompletionNotes', value)}
-            as="textarea"
-            rows={3}
-          />
+          >
+            <textarea
+              id="postCompletionNotes"
+              rows={3}
+              value={postCompletionNotes || ''}
+              onChange={(e) =>
+                handleFormChange('postCompletionNotes', e.target.value)
+              }
+              className={`form-control ${styles.noOutline}`}
+            />
+          </FormFieldGroup>
         )}
 
         <Button

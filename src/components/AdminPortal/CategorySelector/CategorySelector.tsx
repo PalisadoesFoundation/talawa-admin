@@ -1,18 +1,16 @@
 import type { FC } from 'react';
-import { Autocomplete, TextField } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { FormSelectField } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import type { InterfaceCategorySelectorProps } from 'types/AdminPortal/CategorySelector/interface';
-import type { IActionItemCategoryInfo } from 'types/shared-components/ActionItems/interface';
-import styles from 'style/app-fixed.module.css';
 
 /**
  * A dropdown selector for choosing an action item category.
- * Uses MUI Autocomplete for searchable category selection.
+ * Uses Bootstrap FormSelectField for category selection.
  *
  * @param categories - List of available action item categories
  * @param selectedCategory - Currently selected category
  * @param onCategoryChange - Callback fired when category changes
- * @returns Autocomplete dropdown for category selection
+ * @returns Select dropdown for category selection
  */
 const CategorySelector: FC<InterfaceCategorySelectorProps> = ({
   categories,
@@ -25,27 +23,24 @@ const CategorySelector: FC<InterfaceCategorySelectorProps> = ({
 
   return (
     <div className="d-flex gap-3 mb-3">
-      <Autocomplete
-        className={`${styles.noOutline} w-100`}
-        data-testid="categorySelect"
-        data-cy="categorySelect"
-        options={categories}
-        value={selectedCategory}
-        isOptionEqualToValue={(option, value) => option.id === value?.id}
-        filterSelectedOptions={true}
-        getOptionLabel={(item: IActionItemCategoryInfo): string => item.name}
-        onChange={(_, newCategory): void => {
-          onCategoryChange(newCategory);
+      <FormSelectField
+        name="categorySelect"
+        label={t('actionItemCategory')}
+        value={selectedCategory?.id || ''}
+        onChange={(value): void => {
+          const category = categories.find((cat) => cat.id === value) || null;
+          onCategoryChange(category);
         }}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label={t('actionItemCategory')}
-            required
-            aria-required="true"
-          />
-        )}
-      />
+        required
+        data-testid="categorySelect"
+      >
+        <option value="">{t('selectActionItemCategory')}</option>
+        {categories.map((category) => (
+          <option key={category.id} value={category.id}>
+            {category.name}
+          </option>
+        ))}
+      </FormSelectField>
     </div>
   );
 };

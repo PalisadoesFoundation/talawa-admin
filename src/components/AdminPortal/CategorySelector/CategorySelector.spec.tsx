@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
@@ -55,7 +55,7 @@ describe('CategorySelector', () => {
     );
   };
 
-  it('renders the category autocomplete', () => {
+  it('renders the category select', () => {
     renderComponent();
 
     expect(screen.getByTestId('categorySelect')).toBeInTheDocument();
@@ -70,28 +70,34 @@ describe('CategorySelector', () => {
   it('shows selected category when provided', () => {
     renderComponent(mockCategories, mockCategories[0]);
 
-    expect(screen.getByDisplayValue('Category One')).toBeInTheDocument();
+    const select = screen.getByTestId('categorySelect');
+    expect(select).toHaveValue('cat1');
   });
 
-  it('shows empty input when no category selected', () => {
+  it('shows empty value when no category selected', () => {
     renderComponent(mockCategories, null);
 
-    const input = screen.getByRole('combobox');
-    expect(input).toHaveValue('');
+    const select = screen.getByTestId('categorySelect');
+    expect(select).toHaveValue('');
   });
 
-  it('opens dropdown and shows options when clicked', async () => {
+  it('displays all category options', () => {
     renderComponent();
 
-    const user = userEvent.setup();
-    const input = screen.getByRole('combobox');
-    await user.click(input);
+    const select = screen.getByTestId('categorySelect') as HTMLSelectElement;
+    const options = Array.from(select.options).map((opt) => opt.text);
 
-    await waitFor(() => {
-      expect(screen.getByText('Category One')).toBeInTheDocument();
-      expect(screen.getByText('Category Two')).toBeInTheDocument();
-      expect(screen.getByText('Category Three')).toBeInTheDocument();
-    });
+    // Check for the default option (either translation key or fallback)
+    expect(
+      options.some(
+        (opt) =>
+          opt === 'Select an action item category' ||
+          opt === 'organizationActionItems.selectActionItemCategory',
+      ),
+    ).toBe(true);
+    expect(options).toContain('Category One');
+    expect(options).toContain('Category Two');
+    expect(options).toContain('Category Three');
   });
 
   it('calls onCategoryChange when a category is selected', async () => {
@@ -99,133 +105,57 @@ describe('CategorySelector', () => {
     renderComponent(mockCategories, null, onCategoryChange);
 
     const user = userEvent.setup();
-    const input = screen.getByRole('combobox');
-    await user.click(input);
+    const select = screen.getByTestId('categorySelect');
 
-    await waitFor(() => {
-      expect(screen.getByText('Category Two')).toBeInTheDocument();
-    });
-
-    await user.click(screen.getByText('Category Two'));
+    await user.selectOptions(select, 'cat2');
 
     expect(onCategoryChange).toHaveBeenCalledWith(mockCategories[1]);
   });
 
-  it('calls onCategoryChange with null when category is cleared', async () => {
+  it('calls onCategoryChange with null when empty option is selected', async () => {
     const onCategoryChange = vi.fn();
     renderComponent(mockCategories, mockCategories[0], onCategoryChange);
 
     const user = userEvent.setup();
-    const clearButton = screen.getByLabelText('Clear');
-    await user.click(clearButton);
+    const select = screen.getByTestId('categorySelect');
+
+    await user.selectOptions(select, '');
 
     expect(onCategoryChange).toHaveBeenCalledWith(null);
-  });
-
-  it('filters options based on input text', async () => {
-    renderComponent();
-
-    const user = userEvent.setup();
-    const input = screen.getByRole('combobox');
-    await user.click(input);
-    await user.type(input, 'Two');
-
-    await waitFor(() => {
-      expect(screen.getByText('Category Two')).toBeInTheDocument();
-      expect(screen.queryByText('Category One')).not.toBeInTheDocument();
-      expect(screen.queryByText('Category Three')).not.toBeInTheDocument();
-    });
   });
 
   it('renders with empty categories array', () => {
     renderComponent([]);
 
     expect(screen.getByTestId('categorySelect')).toBeInTheDocument();
-    expect(screen.getByRole('combobox')).toBeInTheDocument();
+    const select = screen.getByTestId('categorySelect') as HTMLSelectElement;
+    const options = Array.from(select.options);
+    // Should only have the default "Select an action item category" option
+    expect(options).toHaveLength(1);
+    // Accept either the translation key or the translated text
+    expect(
+      options[0].text === 'Select an action item category' ||
+        options[0].text === 'organizationActionItems.selectActionItemCategory',
+    ).toBe(true);
   });
 
-  it('shows no options message when categories are empty and dropdown is opened', async () => {
-    renderComponent([]);
-
-    const user = userEvent.setup();
-    const input = screen.getByRole('combobox');
-    await user.click(input);
-
-    await waitFor(() => {
-      expect(screen.getByText('No options')).toBeInTheDocument();
-    });
-  });
-
-  it('has required attribute on input', () => {
+  it('has required attribute on select', () => {
     renderComponent();
 
-    const input = screen.getByRole('combobox');
-    expect(input).toBeRequired();
+    const select = screen.getByTestId('categorySelect');
+    expect(select).toBeRequired();
   });
 
-  it('displays category name correctly in dropdown options', async () => {
+  it('displays category name correctly in options', () => {
     renderComponent();
 
-    const user = userEvent.setup();
-    const input = screen.getByRole('combobox');
-    await user.click(input);
+    const select = screen.getByTestId('categorySelect') as HTMLSelectElement;
+    const options = Array.from(select.options);
 
-    await waitFor(() => {
-      const options = screen.getAllByRole('option');
-      expect(options).toHaveLength(3);
-      expect(options[0]).toHaveTextContent('Category One');
-      expect(options[1]).toHaveTextContent('Category Two');
-      expect(options[2]).toHaveTextContent('Category Three');
-    });
-  });
-
-  it('allows keyboard interaction on combobox', async () => {
-    renderComponent();
-
-    const user = userEvent.setup();
-    const input = screen.getByRole('combobox');
-
-    // Focus and open dropdown via keyboard
-    await user.click(input);
-    await user.keyboard('{ArrowDown}');
-
-    // Verify dropdown is open
-    await waitFor(() => {
-      expect(screen.getByRole('listbox')).toBeInTheDocument();
-    });
-
-    // Select option via Enter key
-    await user.keyboard('{Enter}');
-
-    await waitFor(() => {
-      expect(screen.getByDisplayValue('Category One')).toBeInTheDocument();
-    });
-  });
-
-  it('allows keyboard selection with Enter key', async () => {
-    const onCategoryChange = vi.fn();
-    renderComponent(mockCategories, null, onCategoryChange);
-
-    const user = userEvent.setup();
-    const input = screen.getByRole('combobox');
-
-    await user.click(input);
-    await user.keyboard('{ArrowDown}{ArrowDown}{Enter}');
-
-    expect(onCategoryChange).toHaveBeenCalledWith(mockCategories[1]);
-  });
-
-  it('displays disabled category in dropdown', async () => {
-    renderComponent();
-
-    const user = userEvent.setup();
-    const input = screen.getByRole('combobox');
-    await user.click(input);
-
-    // Verify disabled category (Category Three with isDisabled: true) is rendered in dropdown
-    await waitFor(() => {
-      expect(screen.getByText('Category Three')).toBeInTheDocument();
-    });
+    // First option is the default "Select an action item category"
+    expect(options[1].text).toBe('Category One');
+    expect(options[2].text).toBe('Category Two');
+    expect(options[3].text).toBe('Category Three');
   });
 
   it('allows selecting disabled category', async () => {
@@ -233,104 +163,17 @@ describe('CategorySelector', () => {
     renderComponent(mockCategories, null, onCategoryChange);
 
     const user = userEvent.setup();
-    const input = screen.getByRole('combobox');
-    await user.click(input);
+    const select = screen.getByTestId('categorySelect');
 
-    await waitFor(() => {
-      expect(screen.getByText('Category Three')).toBeInTheDocument();
-    });
-
-    // Click the disabled category - component doesn't filter disabled categories
-    await user.click(screen.getByText('Category Three'));
+    await user.selectOptions(select, 'cat3');
 
     expect(onCategoryChange).toHaveBeenCalledWith(mockCategories[2]);
-  });
-
-  it('closes dropdown with Escape key', async () => {
-    renderComponent();
-
-    const user = userEvent.setup();
-    const input = screen.getByRole('combobox');
-    await user.click(input);
-
-    // Verify dropdown is open
-    await waitFor(() => {
-      expect(screen.getByRole('listbox')).toBeInTheDocument();
-    });
-
-    // Press Escape to close
-    await user.keyboard('{Escape}');
-
-    await waitFor(() => {
-      expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
-    });
-  });
-
-  it('navigates options with ArrowUp and ArrowDown keys', async () => {
-    renderComponent();
-
-    const user = userEvent.setup();
-    const input = screen.getByRole('combobox');
-    await user.click(input);
-
-    await waitFor(() => {
-      expect(screen.getByRole('listbox')).toBeInTheDocument();
-    });
-
-    // Navigate down twice then up once
-    await user.keyboard('{ArrowDown}{ArrowDown}{ArrowUp}');
-
-    // Verify we can still select with Enter
-    await user.keyboard('{Enter}');
-
-    await waitFor(() => {
-      expect(screen.getByDisplayValue('Category One')).toBeInTheDocument();
-    });
-  });
-
-  it('does not call onCategoryChange when dropdown is closed without selection', async () => {
-    const onCategoryChange = vi.fn();
-    renderComponent(mockCategories, null, onCategoryChange);
-
-    const user = userEvent.setup();
-    const input = screen.getByRole('combobox');
-    await user.click(input);
-
-    await waitFor(() => {
-      expect(screen.getByRole('listbox')).toBeInTheDocument();
-    });
-
-    // Close without selecting
-    await user.keyboard('{Escape}');
-
-    expect(onCategoryChange).not.toHaveBeenCalled();
-  });
-
-  it('maintains selected value when reopening dropdown', async () => {
-    const onCategoryChange = vi.fn();
-    renderComponent(mockCategories, mockCategories[0], onCategoryChange);
-
-    const user = userEvent.setup();
-    const input = screen.getByRole('combobox');
-
-    // Open dropdown
-    await user.click(input);
-    await waitFor(() => {
-      expect(screen.getByRole('listbox')).toBeInTheDocument();
-    });
-
-    // Close without changing
-    await user.keyboard('{Escape}');
-
-    // Value should still be displayed
-    expect(screen.getByDisplayValue('Category One')).toBeInTheDocument();
   });
 
   it('uses correct test id for integration testing', () => {
     renderComponent();
 
-    const autocomplete = screen.getByTestId('categorySelect');
-    expect(autocomplete).toBeInTheDocument();
-    expect(autocomplete).toHaveAttribute('data-cy', 'categorySelect');
+    const select = screen.getByTestId('categorySelect');
+    expect(select).toBeInTheDocument();
   });
 });
