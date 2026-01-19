@@ -1,7 +1,7 @@
 @import '../../../style/tokens/index.css';
 
-.yearlyCalender {
-  background-color: var(--yearlyCalender-bg);
+.yearlyCalendar {
+  background-color: var(--yearlyCalendar-bg);
   box-sizing: border-box;
 }
 
@@ -31,7 +31,7 @@
 .buttonEventCalendar {
   border-radius: 100px;
   color: var(--buttonEventCalendar-color);
-  border: 0px;
+  border: 0;
   font-size: 40px;
 }
 
@@ -161,7 +161,7 @@
 }
 
 .btn__more {
-  border: 0px;
+  border: 0;
   font-size: 14px;
   background-color: initial;
   color: var(--btnMore-color);

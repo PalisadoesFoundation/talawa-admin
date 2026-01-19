@@ -759,6 +759,8 @@
     "updateThisInstance": "仅更新此实例",
     "updateThisAndFollowing": "更新此事件和所有后续事件",
     "updateEntireSeries": "更新系列中的所有事件",
+    "enterName": "输入名称",
+    "enterDescription": "输入描述",
     "eventName": "名称",
     "alreadyRegistered": "已经注册",
     "startTime": "开始时间",

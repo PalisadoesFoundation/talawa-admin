@@ -759,6 +759,8 @@
     "updateThisInstance": "Update only this instance",
     "updateThisAndFollowing": "Update this and all following events",
     "updateEntireSeries": "Update all events in the series",
+    "enterName": "Enter Name",
+    "enterDescription": "Enter Description",
     "eventName": "Name",
     "alreadyRegistered": "Already registered",
     "allDay": "All Day",

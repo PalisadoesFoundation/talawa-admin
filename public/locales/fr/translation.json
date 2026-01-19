@@ -759,6 +759,8 @@
     "updateThisInstance": "Mettre à jour uniquement cette instance",
     "updateThisAndFollowing": "Mettre à jour cet événement et tous les suivants",
     "updateEntireSeries": "Mettre à jour tous les événements de la série",
+    "enterName": "Entrer le nom",
+    "enterDescription": "Entrer la description",
     "eventName": "Nom",
     "alreadyRegistered": "Déjà enregistré",
     "startTime": "Heure de début",

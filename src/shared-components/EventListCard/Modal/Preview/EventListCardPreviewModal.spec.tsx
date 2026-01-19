@@ -16,7 +16,7 @@ import {
 dayjs.extend(utc);
 
 import PreviewModal from './EventListCardPreviewModal';
-import { UserRole } from 'types/Event/interface';
+import { UserRole } from 'types/shared-components/EventListCard/Modal/Preview/interface';
 import { Frequency } from 'utils/recurrenceUtils/recurrenceTypes';
 
 vi.mock('screens/AdminPortal/OrganizationEvents/CustomRecurrenceModal', () => ({
@@ -94,10 +94,7 @@ vi.mock('shared-components/TimePicker/TimePicker', () => ({
 
 // Removed getPickerInputByTestId and getDateButtonByText as they are no longer needed with mocks
 
-const mockT = (
-  key: string,
-  _options?: Record<string, unknown>,
-): string => {
+const mockT = (key: string, _options?: Record<string, unknown>): string => {
   if (key === 'recurrence.daily') return 'Daily';
   if (key === 'recurrence.weeklyOn') return `Weekly on {{day}}`; // update mock to return template
   if (key === 'recurrence.monthlyOn') return `Monthly on day {{day}}`; // update mock to return template

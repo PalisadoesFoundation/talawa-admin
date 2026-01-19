@@ -23,6 +23,11 @@ import { UserRole } from 'types/shared-components/EventListCard/Modal/Preview/in
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 dayjs.extend(customParseFormat);
+/**
+ * Preview modal for EventListCard details and actions.
+ * `@param` props - Props for PreviewModal.
+ * `@returns` JSX.Element
+ */
 const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   eventListCardProps,
   eventModalIsOpen,

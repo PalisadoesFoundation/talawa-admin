@@ -776,6 +776,8 @@
     "updateThisInstance": "केवल इस इंस्टेंस को अपडेट करें",
     "updateThisAndFollowing": "इस और सभी निम्नलिखित ईवेंट्स को अपडेट करें",
     "updateEntireSeries": "श्रृंखला की सभी घटनाओं को अपडेट करें",
+    "enterName": "नाम दर्ज करें",
+    "enterDescription": "विवरण दर्ज करें",
     "eventName": "नाम",
     "alreadyRegistered": "पहले से ही पंजीकृत",
     "startTime": "समय शुरू",

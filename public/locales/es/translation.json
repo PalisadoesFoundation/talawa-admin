@@ -762,6 +762,8 @@
     "updateThisInstance": "Actualizar solo esta instancia",
     "updateThisAndFollowing": "Actualizar este y todos los eventos siguientes",
     "updateEntireSeries": "Actualizar todos los eventos de la serie",
+    "enterName": "Ingrese Nombre",
+    "enterDescription": "Ingrese Descripción",
     "eventName": "Nombre",
     "description": "Descripción",
     "startDate": "Fecha de inicio",
