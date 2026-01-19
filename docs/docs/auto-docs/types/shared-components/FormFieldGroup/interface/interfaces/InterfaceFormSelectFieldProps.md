@@ -82,6 +82,22 @@ Defined in: [src/types/FormFieldGroup/interface.ts:5](https://github.com/Palisad
 
 ***
 
+### onBlur()?
+
+> `optional` **onBlur**: () => `void`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L12)
+
+#### Returns
+
+`void`
+
+#### Inherited from
+
+[`InterfaceFormFieldGroupProps`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md).[`onBlur`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md#onblur)
+
+***
+
 ### onChange()
 
 > **onChange**: (`v`) => `void`
