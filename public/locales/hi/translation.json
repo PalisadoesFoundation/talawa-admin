@@ -725,7 +725,9 @@
     "agendaCategoryUpdated": "एजेंडा श्रेणी सफलतापूर्वक अपडेट की गई",
     "agendaCategoryDeleted": "एजेंडा श्रेणी सफलतापूर्वक हटा दी गई",
     "deleteAgendaCategory": "एजेंडा श्रेणी हटाएं",
-    "deleteAgendaCategoryMsg": "क्या आप इस एजेंडा श्रेणी को हटाना चाहते हैं?"
+    "deleteAgendaCategoryMsg": "क्या आप इस एजेंडा श्रेणी को हटाना चाहते हैं?",
+    "agendaCategoryUpdateFailed": "एजेंडा श्रेणी अपडेट करने में विफल",
+    "agendaCategoryDeleteFailed": "एजेंडा श्रेणी हटाने में विफल"
   },
   "agendaItems": {
     "agendaItemDetails": "एजेंडा आइटम विवरण",
@@ -1342,7 +1344,8 @@
     "settings": "समायोजन",
     "logout": "लॉग आउट करें",
     "close": "बंद करें",
-    "talawaBranding": "तालावा ब्रांडिंग"
+    "talawaBranding": "तालावा ब्रांडिंग",
+    "workshops": "कार्यशाला"
   },
   "userOrganizations": {
     "allOrganizations": "सभी संगठन",

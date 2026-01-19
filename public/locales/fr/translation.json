@@ -708,7 +708,9 @@
     "agendaCategoryUpdated": "Catégorie d'ordre du jour mise à jour avec succès",
     "agendaCategoryDeleted": "Catégorie d'ordre du jour supprimée avec succès",
     "deleteAgendaCategory": "Supprimer la catégorie d'ordre du jour",
-    "deleteAgendaCategoryMsg": "Souhaitez-vous supprimer cette catégorie d'ordre du jour ?"
+    "deleteAgendaCategoryMsg": "Souhaitez-vous supprimer cette catégorie d'ordre du jour ?",
+    "agendaCategoryUpdateFailed": "Échec de la mise à jour de la catégorie d'ordre du jour",
+    "agendaCategoryDeleteFailed": "Échec de la suppression de la catégorie d'ordre du jour"
   },
   "agendaItems": {
     "agendaItemDetails": "Détails du point de l'ordre du jour",
@@ -1341,7 +1343,8 @@
     "settings": "Paramètres",
     "logout": "Déconnexion",
     "close": "Fermer",
-    "talawaBranding": "Image de marque Talawa"
+    "talawaBranding": "Image de marque Talawa",
+    "workshops": "Ateliers"
   },
   "userOrganizations": {
     "allOrganizations": "Toutes les organisations",

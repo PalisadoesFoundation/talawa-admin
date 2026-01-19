@@ -708,7 +708,9 @@
     "agendaCategoryUpdated": "Categoría de la agenda actualizada exitosamente",
     "agendaCategoryDeleted": "Categoría de la agenda eliminada exitosamente",
     "deleteAgendaCategory": "Eliminar categoría de la agenda",
-    "deleteAgendaCategoryMsg": "¿Desea eliminar esta categoría de la agenda?"
+    "deleteAgendaCategoryMsg": "¿Desea eliminar esta categoría de la agenda?",
+    "agendaCategoryUpdateFailed": "Error al actualizar la categoría de la agenda",
+    "agendaCategoryDeleteFailed": "Error al eliminar la categoría de la agenda"
   },
   "agendaItems": {
     "agendaItemDetails": "Detalles del punto del orden del día",
@@ -1326,7 +1328,8 @@
     "language": "Idioma",
     "logout": "Cerrar sesión",
     "close": "Cerrar",
-    "talawaBranding": "Marca Talawa"
+    "talawaBranding": "Marca Talawa",
+    "workshops": "Talleres"
   },
   "userOrganizations": {
     "allOrganizations": "Todas las organizaciones",

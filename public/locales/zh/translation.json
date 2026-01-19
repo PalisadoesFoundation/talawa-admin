@@ -708,7 +708,9 @@
     "agendaCategoryUpdated": "议程类别更新成功",
     "agendaCategoryDeleted": "议程类别删除成功",
     "deleteAgendaCategory": "删除议程类别",
-    "deleteAgendaCategoryMsg": "是否要删除此议程类别？"
+    "deleteAgendaCategoryMsg": "是否要删除此议程类别？",
+    "agendaCategoryUpdateFailed": "议程类别更新失败",
+    "agendaCategoryDeleteFailed": "议程类别删除失败"
   },
   "agendaItems": {
     "agendaItemDetails": "议程项目详细信息",
@@ -1346,7 +1348,8 @@
     "settings": "设置",
     "logout": "退出登录",
     "close": "关闭",
-    "talawaBranding": "Talawa 品牌形象"
+    "talawaBranding": "Talawa 品牌形象",
+    "workshops": "工作坊"
   },
   "userOrganizations": {
     "allOrganizations": "所有组织",
