@@ -195,10 +195,9 @@ const FundModal: React.FC<InterfaceFundModal> = ({
             touched={touched.fundName}
             error={fundNameError}
             onChange={(value) =>
-              setFormState({ ...formState, fundName: value })
+              setFormState((prev) => ({ ...prev, fundName: value }))
             }
             onBlur={() => setTouched((prev) => ({ ...prev, fundName: true }))}
-            aria-label={t('fundName')}
           />
         </div>
 
@@ -210,9 +209,10 @@ const FundModal: React.FC<InterfaceFundModal> = ({
             value={formState.fundRef}
             touched={touched.fundRef}
             error={fundRefError}
-            onChange={(value) => setFormState({ ...formState, fundRef: value })}
+            onChange={(value) =>
+              setFormState((prev) => ({ ...prev, fundRef: value }))
+            }
             onBlur={() => setTouched((prev) => ({ ...prev, fundRef: true }))}
-            aria-label={t('fundId')}
           />
         </div>
 
