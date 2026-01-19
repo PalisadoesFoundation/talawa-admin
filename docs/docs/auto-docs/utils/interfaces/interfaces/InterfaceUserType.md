@@ -4,11 +4,7 @@
 
 # Interface: InterfaceUserType
 
-Defined in: [src/utils/interfaces.ts:347](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L347)
-
-InterfaceUserType
-
-## Description
+Defined in: [src/utils/interfaces.ts:333](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L333)
 
 Defines the structure for a basic user type.
 
@@ -18,9 +14,7 @@ Defines the structure for a basic user type.
 
 > **user**: `object`
 
-Defined in: [src/utils/interfaces.ts:348](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L348)
-
-The user object.
+Defined in: [src/utils/interfaces.ts:334](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L334)
 
 #### email
 

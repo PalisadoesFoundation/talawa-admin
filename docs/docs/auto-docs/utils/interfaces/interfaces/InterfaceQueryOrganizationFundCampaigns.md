@@ -4,11 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationFundCampaigns
 
-Defined in: [src/utils/interfaces.ts:1688](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1688)
-
-InterfaceQueryOrganizationFundCampaigns
-
-## Description
+Defined in: [src/utils/interfaces.ts:1205](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1205)
 
 Defines the structure for a query result containing organization fund campaigns.
 
@@ -18,9 +14,7 @@ Defines the structure for a query result containing organization fund campaigns.
 
 > **campaigns**: `object`
 
-Defined in: [src/utils/interfaces.ts:1692](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1692)
-
-The campaigns connection object.
+Defined in: [src/utils/interfaces.ts:1209](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1209)
 
 #### edges
 
@@ -32,9 +26,7 @@ The campaigns connection object.
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1689](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1689)
-
-The unique identifier of the fund.
+Defined in: [src/utils/interfaces.ts:1206](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1206)
 
 ***
 
@@ -42,9 +34,7 @@ The unique identifier of the fund.
 
 > **isArchived**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1691](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1691)
-
-Indicates if the fund is archived.
+Defined in: [src/utils/interfaces.ts:1208](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1208)
 
 ***
 
@@ -52,6 +42,4 @@ Indicates if the fund is archived.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1690](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1690)
-
-The name of the fund.
+Defined in: [src/utils/interfaces.ts:1207](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1207)

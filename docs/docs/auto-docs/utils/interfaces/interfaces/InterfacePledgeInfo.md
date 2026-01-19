@@ -4,11 +4,7 @@
 
 # Interface: InterfacePledgeInfo
 
-Defined in: [src/utils/interfaces.ts:1885](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1885)
-
-InterfacePledgeInfo
-
-## Description
+Defined in: [src/utils/interfaces.ts:1327](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1327)
 
 Defines the structure for pledge information.
 
@@ -18,9 +14,7 @@ Defines the structure for pledge information.
 
 > **amount**: `number`
 
-Defined in: [src/utils/interfaces.ts:1894](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1894)
-
-The amount of the pledge.
+Defined in: [src/utils/interfaces.ts:1336](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1336)
 
 ***
 
@@ -28,9 +22,7 @@ The amount of the pledge.
 
 > `optional` **campaign**: `object`
 
-Defined in: [src/utils/interfaces.ts:1887](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1887)
-
-The campaign associated with the pledge (optional).
+Defined in: [src/utils/interfaces.ts:1329](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1329)
 
 #### currencyCode
 
@@ -58,9 +50,7 @@ The campaign associated with the pledge (optional).
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1897](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1897)
-
-The date the pledge was created.
+Defined in: [src/utils/interfaces.ts:1339](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1339)
 
 ***
 
@@ -68,9 +58,7 @@ The date the pledge was created.
 
 > **currency**: `string`
 
-Defined in: [src/utils/interfaces.ts:1896](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1896)
-
-The currency of the pledge.
+Defined in: [src/utils/interfaces.ts:1338](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1338)
 
 ***
 
@@ -78,9 +66,7 @@ The currency of the pledge.
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1886](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1886)
-
-The unique identifier of the pledge.
+Defined in: [src/utils/interfaces.ts:1328](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1328)
 
 ***
 
@@ -88,7 +74,7 @@ The unique identifier of the pledge.
 
 > `optional` **note**: `string`
 
-Defined in: [src/utils/interfaces.ts:1895](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1895)
+Defined in: [src/utils/interfaces.ts:1337](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1337)
 
 ***
 
@@ -96,9 +82,7 @@ Defined in: [src/utils/interfaces.ts:1895](https://github.com/PalisadoesFoundati
 
 > **pledger**: [`InterfaceUserInfoPG`](InterfaceUserInfoPG.md)
 
-Defined in: [src/utils/interfaces.ts:1902](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1902)
-
-The primary pledger who made this pledge
+Defined in: [src/utils/interfaces.ts:1341](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1341)
 
 ***
 
@@ -106,9 +90,7 @@ The primary pledger who made this pledge
 
 > `optional` **updatedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1898](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1898)
-
-The date the pledge was last updated.
+Defined in: [src/utils/interfaces.ts:1340](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1340)
 
 ***
 
@@ -116,6 +98,4 @@ The date the pledge was last updated.
 
 > `optional` **users**: [`InterfaceUserInfoPG`](InterfaceUserInfoPG.md)[]
 
-Defined in: [src/utils/interfaces.ts:1907](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1907)
-
-An array of user information associated with the pledge.
+Defined in: [src/utils/interfaces.ts:1342](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1342)

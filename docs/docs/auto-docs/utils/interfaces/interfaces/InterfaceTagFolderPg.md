@@ -4,11 +4,7 @@
 
 # Interface: InterfaceTagFolderPg
 
-Defined in: [src/utils/interfaces.ts:1169](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1169)
-
-InterfaceTagFolderPg
-
-## Description
+Defined in: [src/utils/interfaces.ts:867](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L867)
 
 Defines the structure for a tag folder with PostgreSQL-specific fields.
 
@@ -18,9 +14,7 @@ Defines the structure for a tag folder with PostgreSQL-specific fields.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1172](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1172)
-
-The creation date of the tag folder record.
+Defined in: [src/utils/interfaces.ts:870](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L870)
 
 ***
 
@@ -28,9 +22,7 @@ The creation date of the tag folder record.
 
 > **creator**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:1174](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1174)
-
-The user who created this tag folder.
+Defined in: [src/utils/interfaces.ts:872](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L872)
 
 ***
 
@@ -38,9 +30,7 @@ The user who created this tag folder.
 
 > **id**: `ID`
 
-Defined in: [src/utils/interfaces.ts:1170](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1170)
-
-The unique identifier of the tag folder.
+Defined in: [src/utils/interfaces.ts:868](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L868)
 
 ***
 
@@ -48,9 +38,7 @@ The unique identifier of the tag folder.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1171](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1171)
-
-The name of the tag folder.
+Defined in: [src/utils/interfaces.ts:869](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L869)
 
 ***
 
@@ -58,9 +46,7 @@ The name of the tag folder.
 
 > **organization**: [`InterfaceOrganizationPg`](InterfaceOrganizationPg.md)
 
-Defined in: [src/utils/interfaces.ts:1176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1176)
-
-The organization associated with this tag folder.
+Defined in: [src/utils/interfaces.ts:874](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L874)
 
 ***
 
@@ -68,9 +54,7 @@ The organization associated with this tag folder.
 
 > **updatedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1173](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1173)
-
-The last update date of the tag folder record.
+Defined in: [src/utils/interfaces.ts:871](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L871)
 
 ***
 
@@ -78,6 +62,4 @@ The last update date of the tag folder record.
 
 > **updater**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:1175](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1175)
-
-The user who last updated this tag folder.
+Defined in: [src/utils/interfaces.ts:873](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L873)

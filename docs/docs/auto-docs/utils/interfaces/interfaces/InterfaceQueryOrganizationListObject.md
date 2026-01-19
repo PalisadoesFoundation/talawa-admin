@@ -4,11 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationListObject
 
-Defined in: [src/utils/interfaces.ts:1380](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1380)
-
-InterfaceQueryOrganizationListObject
-
-## Description
+Defined in: [src/utils/interfaces.ts:1001](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1001)
 
 Defines the structure for an organization list object returned from a query.
 
@@ -18,7 +14,7 @@ Defines the structure for an organization list object returned from a query.
 
 > **addressLine1**: `string`
 
-Defined in: [src/utils/interfaces.ts:1383](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1383)
+Defined in: [src/utils/interfaces.ts:1004](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1004)
 
 ***
 
@@ -26,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1383](https://github.com/PalisadoesFoundati
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:1384](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1384)
+Defined in: [src/utils/interfaces.ts:1005](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1005)
 
 ***
 
@@ -34,7 +30,7 @@ Defined in: [src/utils/interfaces.ts:1384](https://github.com/PalisadoesFoundati
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1381](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1381)
+Defined in: [src/utils/interfaces.ts:1002](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1002)
 
 ***
 
@@ -42,6 +38,4 @@ Defined in: [src/utils/interfaces.ts:1381](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1382](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1382)
-
-The name of the organization.
+Defined in: [src/utils/interfaces.ts:1003](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1003)
