@@ -19,7 +19,7 @@ import Button from 'shared-components/Button/Button';
 import { useTranslation } from 'react-i18next';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import styles from './AgendaItemsDeleteModal.module.css';
-import type { InterfaceAgendaItemsDeleteModalProps } from 'types/components/AdminPortal/EventManagement/AgendaItemsDeleteModal/interface';
+import type { InterfaceAgendaItemsDeleteModalProps } from 'types/AdminPortal/EventManagement/AgendaItemsDeleteModal/interface';
 
 /**
  * AgendaItemsDeleteModal
@@ -29,8 +29,6 @@ import type { InterfaceAgendaItemsDeleteModalProps } from 'types/components/Admi
  * @param agendaItemDeleteModalIsOpen - Boolean to control modal visibility
  * @param toggleDeleteModal - Function to close the modal
  * @param deleteAgendaItemHandler - Function to execute the deletion logic
- * @param t - Translation function
- * @param tCommon - Common translation function
  * @returns  The rendered modal component
  */
 const AgendaItemsDeleteModal: React.FC<
@@ -39,12 +37,9 @@ const AgendaItemsDeleteModal: React.FC<
   agendaItemDeleteModalIsOpen,
   toggleDeleteModal,
   deleteAgendaItemHandler,
-  t,
-  tCommon,
 }) => {
-  // Required: Validates 'translation' and 'events' namespaces for the linter
-  // This fixes the "Missing: deleteAgendaItem" error.
-  useTranslation(['translation', 'events']);
+  // Validates 'translation' and 'events' namespaces and assigns the translation function 't'
+  const { t } = useTranslation(['translation', 'events']);
 
   return (
     <BaseModal
@@ -61,7 +56,7 @@ const AgendaItemsDeleteModal: React.FC<
             onClick={toggleDeleteModal}
             data-testid="deleteAgendaItemCloseBtn"
           >
-            {tCommon('no')}
+            {t('no')}
           </Button>
           <Button
             type="button"
@@ -69,7 +64,7 @@ const AgendaItemsDeleteModal: React.FC<
             onClick={deleteAgendaItemHandler}
             data-testid="deleteAgendaItemBtn"
           >
-            {tCommon('yes')}
+            {t('yes')}
           </Button>
         </>
       }

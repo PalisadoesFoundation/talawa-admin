@@ -26,10 +26,4 @@ export interface InterfaceAgendaItemsDeleteModalProps {
 
   /** Event handler to execute the logic for deleting an agenda item */
   deleteAgendaItemHandler: () => void;
-
-  /** Translation function for specific namespaces */
-  t: (key: string) => string;
-
-  /** Common translation function for shared strings */
-  tCommon: (key: string) => string;
 }

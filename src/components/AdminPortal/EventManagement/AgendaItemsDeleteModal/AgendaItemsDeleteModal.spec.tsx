@@ -24,49 +24,58 @@
  */
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi, type Mock } from 'vitest';
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  type Mock,
+  beforeEach,
+  afterEach,
+} from 'vitest';
 import AgendaItemsDeleteModal from './AgendaItemsDeleteModal';
-import { InterfaceAgendaItemsDeleteModalProps } from 'types/components/AdminPortal/EventManagement/AgendaItemsDeleteModal/interface';
+import { InterfaceAgendaItemsDeleteModalProps } from 'types/AdminPortal/EventManagement/AgendaItemsDeleteModal/interface';
+
+// MOCK: Since the component uses the hook internally, we must mock the library
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
 
 describe('AgendaItemsDeleteModal', () => {
-  // Define mocks in the scope accessible to all tests
+  let mockToggleDeleteModal: Mock;
+  let mockDeleteAgendaItemHandler: Mock;
+  let defaultProps: InterfaceAgendaItemsDeleteModalProps;
 
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  let mockToggleDeleteModal: Mock;
-  let mockDeleteAgendaItemHandler: Mock;
-  let mockT: Mock;
-  let mockTCommon: Mock;
-  let defaultProps: InterfaceAgendaItemsDeleteModalProps;
-
   // Setup fresh mocks before EVERY test
   beforeEach(() => {
-    vi.clearAllMocks();
     mockToggleDeleteModal = vi.fn();
     mockDeleteAgendaItemHandler = vi.fn();
-    mockT = vi.fn((key) => key);
-    mockTCommon = vi.fn((key) => key);
 
+    // Note: 't' and 'tCommon' are removed from props as they are now internal hooks
     defaultProps = {
       agendaItemDeleteModalIsOpen: true,
       toggleDeleteModal: mockToggleDeleteModal,
       deleteAgendaItemHandler: mockDeleteAgendaItemHandler,
-      t: mockT,
-      tCommon: mockTCommon,
     };
   });
 
   it('should render correctly when open', () => {
     render(<AgendaItemsDeleteModal {...defaultProps} />);
+
+    // The mock returns the key name, so we check for the keys
     expect(screen.getByText('deleteAgendaItem')).toBeInTheDocument();
     expect(screen.getByText('deleteAgendaItemMsg')).toBeInTheDocument();
     expect(screen.getByText('yes')).toBeInTheDocument();
     expect(screen.getByText('no')).toBeInTheDocument();
   });
 
-  // NEW TEST: Verify the modal is not visible when the prop is false
+  // Verify the modal is not visible when the prop is false
   it('should not render the modal when agendaItemDeleteModalIsOpen is false', () => {
     render(
       <AgendaItemsDeleteModal
