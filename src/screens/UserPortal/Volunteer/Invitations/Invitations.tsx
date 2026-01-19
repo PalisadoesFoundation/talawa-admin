@@ -284,7 +284,7 @@ const Invitations = (): JSX.Element => {
               <StatusBadge
                 {...getStatusBadgeProps(invite.status)}
                 size="sm"
-                dataTestId={`invitation-status-${invite.id}`}
+                dataTestId={`invitation-status-${invite.id}`} // i18n-ignore-line
               />
               <Button
                 variant="outline-success"
