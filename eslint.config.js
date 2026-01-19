@@ -110,6 +110,18 @@ const restrictedImports = [
     message:
       'Do not import FormControl from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
   },
+  {
+    name: '@mui/material',
+    importNames: ['Button'],
+    message:
+      'Direct imports of Button from @mui/material are not allowed. Use the shared Button component from src/shared-components/Button/ instead.',
+  },
+  {
+    name: '@mui/material/Button',
+    importNames: ['Button'],
+    message:
+      'Direct imports of Button from @mui/material are not allowed. Use the shared Button component from src/shared-components/Button/ instead.',
+  },
 ];
 
 const stripId = (entry) => {
