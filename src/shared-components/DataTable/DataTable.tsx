@@ -4,11 +4,16 @@ import type {
   IDataTableProps,
   IColumnDef,
   HeaderRender,
+  Key,
+  IBulkAction,
 } from '../../types/shared-components/DataTable/interface';
 import { PaginationControls } from './Pagination';
 import { SearchBar } from './SearchBar';
 import { TableLoader } from './TableLoader';
+import { ActionsCell } from './cells/ActionsCell';
+import { BulkActionsBar } from './BulkActionsBar';
 import styles from 'style/app-fixed.module.css';
+import localStyles from './DataTable.module.css';
 import { useTranslation } from 'react-i18next';
 
 function renderHeader(header: HeaderRender) {
@@ -68,6 +73,13 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     onColumnFiltersChange,
     serverSearch = false,
     serverFilter = false,
+    // Selection & Actions
+    selectable = false,
+    selectedKeys,
+    onSelectionChange,
+    initialSelectedKeys,
+    rowActions = [],
+    bulkActions = [],
   } = props;
 
   // Pagination state (controlled or uncontrolled)
@@ -258,6 +270,111 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     [rowKey],
   );
 
+  // Selection state (controlled or uncontrolled)
+  const isSelectionControlled =
+    selectedKeys !== undefined && onSelectionChange !== undefined;
+  const [internalSelectedKeys, setInternalSelectedKeys] = React.useState<
+    Set<Key>
+  >(new Set(initialSelectedKeys ?? []));
+  const currentSelection = isSelectionControlled
+    ? new Set(selectedKeys)
+    : internalSelectedKeys;
+
+  const updateSelection = React.useCallback(
+    (next: Set<Key>) => {
+      if (isSelectionControlled && onSelectionChange) {
+        onSelectionChange(next);
+      } else {
+        setInternalSelectedKeys(new Set(next));
+      }
+    },
+    [isSelectionControlled, onSelectionChange],
+  );
+
+  // Selection helpers
+  const keysOnPage = React.useMemo(
+    () => paginatedData.map((r, i) => getKey(r, startIndex + i)),
+    [paginatedData, getKey, startIndex],
+  );
+
+  const selectedCountOnPage = React.useMemo(
+    () => keysOnPage.filter((k) => currentSelection.has(k)).length,
+    [keysOnPage, currentSelection],
+  );
+
+  const allSelectedOnPage =
+    selectable &&
+    keysOnPage.length > 0 &&
+    selectedCountOnPage === keysOnPage.length;
+  const someSelectedOnPage =
+    selectable && selectedCountOnPage > 0 && !allSelectedOnPage;
+
+  // Header checkbox ref for indeterminate state
+  const headerCheckboxRef = React.useRef<HTMLInputElement>(null);
+  React.useEffect(() => {
+    if (headerCheckboxRef.current) {
+      headerCheckboxRef.current.indeterminate = someSelectedOnPage;
+    }
+  }, [someSelectedOnPage]);
+
+  const toggleRowSelection = React.useCallback(
+    (key: Key) => {
+      const next = new Set(currentSelection);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      updateSelection(next);
+    },
+    [currentSelection, updateSelection],
+  );
+
+  const selectAllOnPage = React.useCallback(
+    (checked: boolean) => {
+      const next = new Set(currentSelection);
+      if (checked) {
+        keysOnPage.forEach((k) => next.add(k));
+      } else {
+        keysOnPage.forEach((k) => next.delete(k));
+      }
+      updateSelection(next);
+    },
+    [currentSelection, keysOnPage, updateSelection],
+  );
+
+  const clearSelection = React.useCallback(() => {
+    const next = new Set(currentSelection);
+    keysOnPage.forEach((k) => next.delete(k));
+    updateSelection(next);
+  }, [currentSelection, keysOnPage, updateSelection]);
+
+  const runBulkAction = React.useCallback(
+    (action: IBulkAction<T>) => {
+      const selectedRows = paginatedData.filter((r, i) =>
+        currentSelection.has(getKey(r, startIndex + i)),
+      );
+      const keys = selectedRows.map((r, i) => getKey(r, startIndex + i));
+
+      const isDisabled =
+        typeof action.disabled === 'function'
+          ? action.disabled(selectedRows, keys)
+          : !!action.disabled;
+
+      if (isDisabled) return;
+
+      if (action.confirm && !window.confirm(action.confirm)) return;
+
+      void action.onClick(selectedRows, keys);
+    },
+    [paginatedData, currentSelection, getKey, startIndex],
+  );
+
+  // Check if we should show row actions column
+  const hasRowActions = rowActions && rowActions.length > 0;
+  // Check if we should show bulk actions bar
+  const hasBulkActions = bulkActions && bulkActions.length > 0;
+
   // 1) Error state (highest priority)
   if (error) {
     return (
@@ -377,6 +494,34 @@ export function DataTable<T>(props: IDataTableProps<T>) {
         />
       )}
 
+      {/* Bulk actions bar */}
+      {selectable && hasBulkActions && (
+        <BulkActionsBar count={selectedCountOnPage} onClear={clearSelection}>
+          {bulkActions.map((action) => {
+            const selectedRows = paginatedData.filter((r, i) =>
+              currentSelection.has(getKey(r, startIndex + i)),
+            );
+            const keys = selectedRows.map((r, i) => getKey(r, startIndex + i));
+            const isDisabled =
+              typeof action.disabled === 'function'
+                ? action.disabled(selectedRows, keys)
+                : !!action.disabled;
+            return (
+              <button
+                key={action.id}
+                type="button"
+                disabled={isDisabled}
+                onClick={() => runBulkAction(action)}
+                className={localStyles.bulkBtn}
+                data-testid={`bulk-action-${action.id}`}
+              >
+                {action.label}
+              </button>
+            );
+          })}
+        </BulkActionsBar>
+      )}
+
       <Table
         striped
         hover
@@ -390,11 +535,28 @@ export function DataTable<T>(props: IDataTableProps<T>) {
         )}
         <thead>
           <tr>
+            {selectable && (
+              <th scope="col" className={localStyles.selectCol}>
+                <input
+                  ref={headerCheckboxRef}
+                  type="checkbox"
+                  aria-label="Select all rows on this page"
+                  checked={allSelectedOnPage}
+                  onChange={(e) => selectAllOnPage(e.currentTarget.checked)}
+                  data-testid="select-all-checkbox"
+                />
+              </th>
+            )}
             {columns.map((col) => (
               <th key={col.id} scope="col">
                 {renderHeader(col.header)}
               </th>
             ))}
+            {hasRowActions && (
+              <th scope="col" className={localStyles.actionsCol}>
+                Actions
+              </th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -404,23 +566,47 @@ export function DataTable<T>(props: IDataTableProps<T>) {
                   {renderRow(row, idx)}
                 </React.Fragment>
               ))
-            : paginatedData.map((row, idx) => (
-                <tr
-                  key={getKey(row, idx)}
-                  data-testid={`datatable-row-${getKey(row, idx)}`}
-                >
-                  {columns.map((col) => {
-                    const val = getCellValue(row, col.accessor);
-                    return (
-                      <td key={col.id} data-testid={`datatable-cell-${col.id}`}>
-                        {col.render
-                          ? col.render(val, row)
-                          : renderCellValue(val)}
+            : paginatedData.map((row, idx) => {
+                const rowKeyValue = getKey(row, startIndex + idx);
+                const isRowSelected = currentSelection.has(rowKeyValue);
+                return (
+                  <tr
+                    key={rowKeyValue}
+                    data-testid={`datatable-row-${rowKeyValue}`}
+                    data-selected={isRowSelected}
+                  >
+                    {selectable && (
+                      <td className={localStyles.selectCol}>
+                        <input
+                          type="checkbox"
+                          aria-label={`Select row ${String(rowKeyValue)}`}
+                          checked={isRowSelected}
+                          onChange={() => toggleRowSelection(rowKeyValue)}
+                          data-testid={`select-row-${rowKeyValue}`}
+                        />
                       </td>
-                    );
-                  })}
-                </tr>
-              ))}
+                    )}
+                    {columns.map((col) => {
+                      const val = getCellValue(row, col.accessor);
+                      return (
+                        <td
+                          key={col.id}
+                          data-testid={`datatable-cell-${col.id}`}
+                        >
+                          {col.render
+                            ? col.render(val, row)
+                            : renderCellValue(val)}
+                        </td>
+                      );
+                    })}
+                    {hasRowActions && (
+                      <td className={localStyles.actionsCol}>
+                        <ActionsCell row={row} actions={rowActions} />
+                      </td>
+                    )}
+                  </tr>
+                );
+              })}
 
           {/* Partial loading: append skeleton rows for fetchMore */}
           {loadingMore &&
@@ -429,6 +615,15 @@ export function DataTable<T>(props: IDataTableProps<T>) {
                 key={`skeleton-append-${rowIdx}`}
                 data-testid={`skeleton-append-${rowIdx}`}
               >
+                {selectable && (
+                  <td>
+                    <div
+                      className={styles.dataSkeletonCell}
+                      data-testid="data-skeleton-cell"
+                      aria-hidden="true"
+                    />
+                  </td>
+                )}
                 {columns.map((col) => (
                   <td key={col.id}>
                     <div
@@ -438,6 +633,15 @@ export function DataTable<T>(props: IDataTableProps<T>) {
                     />
                   </td>
                 ))}
+                {hasRowActions && (
+                  <td>
+                    <div
+                      className={styles.dataSkeletonCell}
+                      data-testid="data-skeleton-cell"
+                      aria-hidden="true"
+                    />
+                  </td>
+                )}
               </tr>
             ))}
         </tbody>

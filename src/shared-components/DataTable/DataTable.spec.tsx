@@ -950,4 +950,213 @@ describe('DataTable', () => {
       ).toBe(columns.length);
     });
   });
+
+  /* ------------------------------------------------------------------
+   * Row selection and actions
+   * ------------------------------------------------------------------ */
+
+  it('toggles row selection when checkbox is clicked', () => {
+    type Row = { id: string; name: string };
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data: Row[] = [
+      { id: '1', name: 'Ada' },
+      { id: '2', name: 'Bob' },
+    ];
+
+    render(
+      <DataTable<Row> data={data} columns={columns} selectable rowKey="id" />,
+    );
+
+    const rowCb1 = screen.getByTestId('select-row-1') as HTMLInputElement;
+    expect(rowCb1.checked).toBe(false);
+
+    fireEvent.click(rowCb1);
+    expect(rowCb1.checked).toBe(true);
+
+    fireEvent.click(rowCb1);
+    expect(rowCb1.checked).toBe(false);
+  });
+
+  it('select-all checkbox selects all rows on page', () => {
+    type Row = { id: string; name: string };
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data: Row[] = [
+      { id: '1', name: 'Ada' },
+      { id: '2', name: 'Bob' },
+    ];
+
+    render(
+      <DataTable<Row> data={data} columns={columns} selectable rowKey="id" />,
+    );
+
+    const headerCb = screen.getByTestId(
+      'select-all-checkbox',
+    ) as HTMLInputElement;
+    expect(headerCb.checked).toBe(false);
+
+    fireEvent.click(headerCb);
+    expect(headerCb.checked).toBe(true);
+
+    const row1 = screen.getByTestId('select-row-1') as HTMLInputElement;
+    const row2 = screen.getByTestId('select-row-2') as HTMLInputElement;
+    expect(row1.checked).toBe(true);
+    expect(row2.checked).toBe(true);
+
+    // Unselect all
+    fireEvent.click(headerCb);
+    expect(headerCb.checked).toBe(false);
+    expect(row1.checked).toBe(false);
+    expect(row2.checked).toBe(false);
+  });
+
+  it('header checkbox shows indeterminate state when some rows selected', () => {
+    type Row = { id: string; name: string };
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data: Row[] = [
+      { id: '1', name: 'Ada' },
+      { id: '2', name: 'Bob' },
+    ];
+
+    render(
+      <DataTable<Row> data={data} columns={columns} selectable rowKey="id" />,
+    );
+
+    const headerCb = screen.getByTestId(
+      'select-all-checkbox',
+    ) as HTMLInputElement;
+    const rowCb1 = screen.getByTestId('select-row-1');
+
+    // Select only first row
+    fireEvent.click(rowCb1);
+
+    // Header should be indeterminate (not checked, but indeterminate property set)
+    expect(headerCb.checked).toBe(false);
+    expect(headerCb.indeterminate).toBe(true);
+  });
+
+  it('renders row action buttons and calls onClick', () => {
+    type Row = { id: string; name: string };
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data: Row[] = [{ id: '1', name: 'Ada' }];
+    const onClick = vi.fn();
+
+    render(
+      <DataTable<Row>
+        data={data}
+        columns={columns}
+        rowKey="id"
+        rowActions={[{ id: 'open', label: 'Open', onClick }]}
+      />,
+    );
+
+    const openBtn = screen.getByRole('button', { name: 'Open' });
+    expect(openBtn).toBeInTheDocument();
+
+    fireEvent.click(openBtn);
+    expect(onClick).toHaveBeenCalledWith(data[0]);
+  });
+
+  it('renders bulk actions bar when rows are selected', () => {
+    type Row = { id: string; name: string };
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data: Row[] = [
+      { id: '1', name: 'Ada' },
+      { id: '2', name: 'Bob' },
+    ];
+    const onBulk = vi.fn();
+
+    render(
+      <DataTable<Row>
+        data={data}
+        columns={columns}
+        selectable
+        rowKey="id"
+        bulkActions={[{ id: 'export', label: 'Export', onClick: onBulk }]}
+      />,
+    );
+
+    // Initially no bulk bar
+    expect(screen.queryByTestId('bulk-actions-bar')).toBeNull();
+
+    // Select first row
+    fireEvent.click(screen.getByTestId('select-row-1'));
+
+    // Bulk bar should appear
+    expect(screen.getByTestId('bulk-actions-bar')).toBeInTheDocument();
+    expect(screen.getByText('1')).toBeInTheDocument(); // count
+
+    // Click bulk action
+    fireEvent.click(screen.getByTestId('bulk-action-export'));
+    expect(onBulk).toHaveBeenCalled();
+  });
+
+  it('clear button clears selection', () => {
+    type Row = { id: string; name: string };
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data: Row[] = [{ id: '1', name: 'Ada' }];
+
+    render(
+      <DataTable<Row>
+        data={data}
+        columns={columns}
+        selectable
+        rowKey="id"
+        bulkActions={[{ id: 'test', label: 'Test', onClick: vi.fn() }]}
+      />,
+    );
+
+    // Select row
+    fireEvent.click(screen.getByTestId('select-row-1'));
+    expect(screen.getByTestId('bulk-actions-bar')).toBeInTheDocument();
+
+    // Click clear
+    fireEvent.click(screen.getByTestId('bulk-clear-btn'));
+
+    // Bar should disappear
+    expect(screen.queryByTestId('bulk-actions-bar')).toBeNull();
+    expect(
+      (screen.getByTestId('select-row-1') as HTMLInputElement).checked,
+    ).toBe(false);
+  });
+
+  it('controlled selection calls onSelectionChange', () => {
+    type Row = { id: string; name: string };
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data: Row[] = [{ id: '1', name: 'Ada' }];
+    const onSelectionChange = vi.fn();
+
+    render(
+      <DataTable<Row>
+        data={data}
+        columns={columns}
+        selectable
+        rowKey="id"
+        selectedKeys={new Set()}
+        onSelectionChange={onSelectionChange}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId('select-row-1'));
+    expect(onSelectionChange).toHaveBeenCalled();
+  });
+
+  it('row actions disabled state works correctly', () => {
+    type Row = { id: string; name: string };
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data: Row[] = [{ id: '1', name: 'Ada' }];
+
+    render(
+      <DataTable<Row>
+        data={data}
+        columns={columns}
+        rowKey="id"
+        rowActions={[
+          { id: 'open', label: 'Open', onClick: vi.fn(), disabled: true },
+        ]}
+      />,
+    );
+
+    const openBtn = screen.getByRole('button', { name: 'Open' });
+    expect(openBtn).toBeDisabled();
+  });
 });

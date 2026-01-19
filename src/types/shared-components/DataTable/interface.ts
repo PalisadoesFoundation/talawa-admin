@@ -381,6 +381,32 @@ export interface IBaseDataTableProps<T, TValue = unknown> {
   // Server-side modes (do not filter locally; only emit changes)
   serverSearch?: boolean;
   serverFilter?: boolean;
+
+  // Selection & Actions
+  /**
+   * When true, render a checkbox column for row selection.
+   */
+  selectable?: boolean;
+  /**
+   * Controlled selection state. When provided with onSelectionChange, selection is controlled.
+   */
+  selectedKeys?: ReadonlySet<Key>;
+  /**
+   * Callback when selection changes. Required for controlled selection.
+   */
+  onSelectionChange?: (next: ReadonlySet<Key>) => void;
+  /**
+   * Initial selected keys for uncontrolled selection.
+   */
+  initialSelectedKeys?: ReadonlySet<Key>;
+  /**
+   * Per-row action buttons rendered in an actions column.
+   */
+  rowActions?: ReadonlyArray<IRowAction<T>>;
+  /**
+   * Bulk actions shown in a toolbar when rows are selected.
+   */
+  bulkActions?: ReadonlyArray<IBulkAction<T>>;
 }
 
 /**
@@ -498,7 +524,60 @@ export interface ITableState {
   sorting?: ISortState[];
   filters?: IFilterState[];
   globalSearch?: string;
-  selectedRows?: Set<string | number>;
+  selectedRows?: Set<Key>;
+}
+
+/**
+ * Key type for uniquely identifying rows.
+ */
+export type Key = string | number;
+
+/**
+ * Row-level action definition for per-row action buttons.
+ *
+ * @example
+ * ```ts
+ * const rowActions: IRowAction<User>[] = [
+ *   { id: 'edit', label: 'Edit', onClick: (row) => console.log('edit', row.id) },
+ *   { id: 'delete', label: 'Delete', onClick: (row) => console.log('delete', row.id), disabled: (row) => row.isAdmin },
+ * ];
+ * ```
+ */
+export interface IRowAction<T> {
+  /** Unique identifier for the action */
+  id: string;
+  /** Button label text */
+  label: string;
+  /** Callback when action is triggered */
+  onClick: (row: T) => void;
+  /** Disable this action (boolean or function returning boolean) */
+  disabled?: boolean | ((row: T) => boolean);
+  /** Accessible label for screen readers */
+  ariaLabel?: string;
+}
+
+/**
+ * Bulk action for operations on multiple selected rows.
+ *
+ * @example
+ * ```ts
+ * const bulkActions: IBulkAction<User>[] = [
+ *   { id: 'export', label: 'Export', onClick: (rows, keys) => console.log('export', keys) },
+ *   { id: 'delete', label: 'Delete', onClick: (rows, keys) => console.log('delete', keys), confirm: 'Delete selected items?' },
+ * ];
+ * ```
+ */
+export interface IBulkAction<T> {
+  /** Unique identifier for the action */
+  id: string;
+  /** Button label text */
+  label: string;
+  /** Callback when action is triggered with selected rows and their keys */
+  onClick: (rows: T[], keys: Key[]) => void | Promise<void>;
+  /** Disable this action (boolean or function returning boolean based on selection) */
+  disabled?: boolean | ((rows: T[], keys: Key[]) => boolean);
+  /** Optional confirmation message shown before executing the action */
+  confirm?: string;
 }
 
 /**
