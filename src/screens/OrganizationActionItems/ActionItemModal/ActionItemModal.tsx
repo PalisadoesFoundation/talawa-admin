@@ -5,7 +5,6 @@
  * It allows users to specify whether an action item should apply to an entire series of recurring events or just a single instance.
  */
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button } from 'react-bootstrap';
 import type { FormEvent, FC } from 'react';
 import styles from './ActionItemModal.module.css';
 import DatePicker from 'shared-components/DatePicker/DatePicker';
@@ -38,12 +37,15 @@ import {
   UPDATE_ACTION_ITEM_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
-import { Autocomplete, FormControl, TextField } from '@mui/material';
 import {
   GET_EVENT_VOLUNTEERS,
   GET_EVENT_VOLUNTEER_GROUPS,
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'types/Volunteer/interface';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import Button from 'shared-components/Button';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 
 const initializeFormState = (
   actionItem: IActionItemInfo | null,
@@ -577,34 +579,29 @@ const ItemModal: FC<IItemModalProps> = ({
               />
             </div>
 
-            <FormControl fullWidth className="mb-2">
-              <TextField
-                label={t('preCompletionNotes')}
-                variant="outlined"
-                data-cy="preCompletionNotes"
-                className={styles.noOutline}
-                value={preCompletionNotes}
-                onChange={(e) =>
-                  handleFormChange('preCompletionNotes', e.target.value)
-                }
-              />
-            </FormControl>
+            <FormTextField
+              name="preCompletionNotes"
+              label={t('preCompletionNotes')}
+              data-cy="preCompletionNotes"
+              className={styles.noOutline}
+              value={preCompletionNotes}
+              onChange={(value) =>
+                handleFormChange('preCompletionNotes', value)
+              }
+            />
           </>
         )}
 
         {isCompleted && (
-          <FormControl fullWidth className="mb-2">
-            <TextField
-              label={t('postCompletionNotes')}
-              className={styles.noOutline}
-              value={postCompletionNotes || ''}
-              multiline
-              maxRows={3}
-              onChange={(e) =>
-                handleFormChange('postCompletionNotes', e.target.value)
-              }
-            />
-          </FormControl>
+          <FormTextField
+            name="postCompletionNotes"
+            label={t('postCompletionNotes')}
+            className={styles.noOutline}
+            value={postCompletionNotes || ''}
+            onChange={(value) => handleFormChange('postCompletionNotes', value)}
+            as="textarea"
+            rows={3}
+          />
         )}
 
         <Button

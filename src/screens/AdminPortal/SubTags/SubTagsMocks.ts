@@ -25,6 +25,7 @@ const createTagNode = (
 const ANCESTOR_TAG_1 = [{ _id: '1', name: 'userTag 1' }];
 
 export const MOCKS = [
+  // 1. Default Load (Descending, No Search)
   {
     request: {
       query: USER_TAG_SUB_TAGS,
@@ -65,6 +66,7 @@ export const MOCKS = [
       },
     },
   },
+  // 2. Load More (Infinite Scroll)
   {
     request: {
       query: USER_TAG_SUB_TAGS,
@@ -97,6 +99,7 @@ export const MOCKS = [
       },
     },
   },
+  // 3. Navigate to a Child Tag (Drill down)
   {
     request: {
       query: USER_TAG_SUB_TAGS,
@@ -136,6 +139,7 @@ export const MOCKS = [
       },
     },
   },
+  // 4. Search Functionality
   {
     request: {
       query: USER_TAG_SUB_TAGS,
@@ -180,13 +184,14 @@ export const MOCKS = [
       },
     },
   },
+  // 5. Sort Functionality (Ascending - Empty Search)
   {
     request: {
       query: USER_TAG_SUB_TAGS,
       variables: {
         id: '1',
         first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: { name: { starts_with: 'searchSubTag' } },
+        where: { name: { starts_with: '' } }, // Fixed: Empty search for standard sort test
         sortedBy: { id: 'ASCENDING' },
       },
     },
@@ -224,6 +229,7 @@ export const MOCKS = [
       },
     },
   },
+  // 6. Create Tag Mutation
   {
     request: {
       query: CREATE_USER_TAG,
@@ -279,6 +285,7 @@ export const emptyMocks = [
               hasNextPage: false,
               endCursor: null,
             },
+            totalCount: 0,
           },
           ancestorTags: [],
         },

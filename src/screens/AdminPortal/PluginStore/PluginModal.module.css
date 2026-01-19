@@ -372,6 +372,14 @@
   padding-left: var(--space-7);
 }
 
+.screenshotThumbnailButton {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: block;
+}
+
 /* Animations */
 @keyframes fadeIn {
   from {
@@ -396,19 +404,6 @@
 }
 
 /* Icon styles */
-.iconPowerOff {
-  font-size: var(--font-size-sm);
-}
-
-.iconPowerOffActive {
-  composes: iconPowerOff;
-  color: var(--color-gray-600);
-}
-
-.iconPowerOffInactive {
-  composes: iconPowerOff;
-  color: var(--color-white);
-}
 
 .iconTrash {
   font-size: var(--font-size-sm);

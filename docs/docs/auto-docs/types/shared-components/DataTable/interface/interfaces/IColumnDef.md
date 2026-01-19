@@ -71,13 +71,83 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:46](https://gith
 
 Optional metadata for future features
 
+#### align?
+
+> `optional` **align**: `"center"` \| `"left"` \| `"right"`
+
+#### ariaLabel?
+
+> `optional` **ariaLabel**: `string`
+
 #### filterable?
 
 > `optional` **filterable**: `boolean`
 
+If true, this column participates in local filtering and/or global search.
+Defaults: filterable=true, searchable=true unless set false.
+
+#### filterFn()?
+
+> `optional` **filterFn**: (`row`, `value`) => `boolean`
+
+Custom filter for this column. Return true to keep the row.
+value is columnFilters[col.id].
+
+##### Parameters
+
+###### row
+
+`T`
+
+###### value
+
+`unknown`
+
+##### Returns
+
+`boolean`
+
+#### getSearchValue()?
+
+> `optional` **getSearchValue**: (`row`) => `string`
+
+Optional extractor for global search (if the default cell string is not ideal).
+
+##### Parameters
+
+###### row
+
+`T`
+
+##### Returns
+
+`string`
+
+#### searchable?
+
+> `optional` **searchable**: `boolean`
+
 #### sortable?
 
 > `optional` **sortable**: `boolean`
+
+#### sortFn()?
+
+> `optional` **sortFn**: (`a`, `b`) => `number`
+
+##### Parameters
+
+###### a
+
+`T`
+
+###### b
+
+`T`
+
+##### Returns
+
+`number`
 
 #### width?
 
