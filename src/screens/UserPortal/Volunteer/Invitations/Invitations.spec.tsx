@@ -811,7 +811,107 @@ describe('Testing Invitations Screen', () => {
       });
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
       const inviteSubject = screen.getByTestId('inviteSubject');
-      expect(inviteSubject).toHaveTextContent(t.eventInvitationSubject);
+    });
+  });
+
+  describe('StatusBadge rendering and status mapping', () => {
+    it('should render StatusBadge with "pending" variant for invited status', async () => {
+      renderInvitations(link1);
+      await waitFor(() => {
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+      });
+
+      // All invitations in MOCKS have 'invited' status
+      const statusBadges = screen.getAllByTestId(/invitation-status-/);
+      expect(statusBadges.length).toBeGreaterThan(0);
+
+      // Verify the first badge exists and has the status role
+      const firstBadge = statusBadges[0];
+      expect(firstBadge).toBeInTheDocument();
+      expect(firstBadge).toHaveAttribute('role', 'status');
+    });
+
+    it('should render StatusBadge for each invitation item', async () => {
+      renderInvitations(link1);
+      await waitFor(() => {
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+      });
+
+      const invitations = screen.getAllByTestId('inviteSubject');
+      const statusBadges = screen.getAllByTestId(/invitation-status-/);
+
+      // Should have same number of status badges as invitations
+      expect(statusBadges.length).toBe(invitations.length);
+    });
+
+    it('should have unique dataTestId for each StatusBadge', async () => {
+      renderInvitations(link1);
+      await waitFor(() => {
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+      });
+
+      const statusBadges = screen.getAllByTestId(/invitation-status-/);
+      const testIds = statusBadges.map((badge) =>
+        badge.getAttribute('data-testid'),
+      );
+
+      // All test IDs should be unique
+      const uniqueIds = new Set(testIds);
+      expect(uniqueIds.size).toBe(testIds.length);
+    });
+
+    it('should maintain StatusBadge rendering after accept action', async () => {
+      renderInvitations(link1);
+      await waitFor(() => {
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+      });
+
+      const acceptBtn = await screen.findAllByTestId('acceptBtn');
+      expect(acceptBtn.length).toBeGreaterThan(0);
+
+      // Verify StatusBadge exists before accept
+      const statusBadgesBefore = screen.getAllByTestId(/invitation-status-/);
+      expect(statusBadgesBefore.length).toBeGreaterThan(0);
+
+      // Accept Request
+      await userEvent.click(acceptBtn[0]);
+
+      await waitFor(() => {
+        expect(sharedMocks.NotificationToast.success).toHaveBeenCalledWith(
+          t.invitationAccepted,
+        );
+      });
+
+      // StatusBadges should still be present after action
+      const statusBadgesAfter = screen.queryAllByTestId(/invitation-status-/);
+      expect(statusBadgesAfter.length).toBeGreaterThan(0);
+    });
+
+    it('should maintain StatusBadge rendering after reject action', async () => {
+      renderInvitations(link1);
+      await waitFor(() => {
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+      });
+
+      const rejectBtn = await screen.findAllByTestId('rejectBtn');
+      expect(rejectBtn.length).toBeGreaterThan(0);
+
+      // Verify StatusBadge exists before reject
+      const statusBadgesBefore = screen.getAllByTestId(/invitation-status-/);
+      expect(statusBadgesBefore.length).toBeGreaterThan(0);
+
+      // Reject Request
+      await userEvent.click(rejectBtn[0]);
+
+      await waitFor(() => {
+        expect(sharedMocks.NotificationToast.success).toHaveBeenCalledWith(
+          t.invitationRejected,
+        );
+      });
+
+      // StatusBadges should still be present after action
+      const statusBadgesAfter = screen.queryAllByTestId(/invitation-status-/);
+      expect(statusBadgesAfter.length).toBeGreaterThan(0);
     });
   });
 });

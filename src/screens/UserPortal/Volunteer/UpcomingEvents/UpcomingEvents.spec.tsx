@@ -1911,37 +1911,4 @@ describe('UpcomingEvents', () => {
       });
     });
   });
-
-  describe('getStatusBadgeProps', () => {
-    it('should return pending variant for requested status', () => {
-      const result = getStatusBadgeProps('requested');
-      expect(result.variant).toBe('pending');
-    });
-
-    it('should return pending variant for invited status', () => {
-      const result = getStatusBadgeProps('invited');
-      expect(result.variant).toBe('pending');
-    });
-
-    it('should return accepted variant for accepted status', () => {
-      const result = getStatusBadgeProps('accepted');
-      expect(result.variant).toBe('accepted');
-    });
-
-    it('should return rejected variant for rejected status', () => {
-      const result = getStatusBadgeProps('rejected');
-      expect(result.variant).toBe('rejected');
-    });
-
-    // THIS TEST COVERS THE DEFAULT CASE (lines 232-233)
-    it('should return pending variant for unknown status (default case)', () => {
-      const result = getStatusBadgeProps('unknown-status');
-      expect(result.variant).toBe('pending');
-    });
-
-    it('should return pending variant for empty string (default case)', () => {
-      const result = getStatusBadgeProps('');
-      expect(result.variant).toBe('pending');
-    });
-  });
 });

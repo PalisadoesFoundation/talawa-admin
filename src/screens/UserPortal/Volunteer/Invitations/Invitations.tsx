@@ -54,32 +54,13 @@ import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMut
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
-import type { StatusVariant } from 'types/shared-components/StatusBadge/interface';
 import Button from 'shared-components/Button/Button';
+import { mapVolunteerStatusToVariant } from 'utils/volunteerStatusMapper';
 
 enum ItemFilter {
   Group = 'group',
   Individual = 'individual',
 }
-
-/**
- * Maps membership status to StatusBadge variant.
- *
- * @param status - The membership status string (e.g., 'invited', 'accepted', 'rejected')
- * @returns Object containing the StatusBadge variant
- */
-const getStatusBadgeProps = (status: string): { variant: StatusVariant } => {
-  switch (status) {
-    case 'invited':
-      return { variant: 'pending' };
-    case 'accepted':
-      return { variant: 'accepted' };
-    case 'rejected':
-      return { variant: 'declined' };
-    default:
-      return { variant: 'no_response' };
-  }
-};
 
 const Invitations = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
@@ -282,7 +263,7 @@ const Invitations = (): JSX.Element => {
             </div>
             <div className="d-flex gap-2 align-items-center">
               <StatusBadge
-                {...getStatusBadgeProps(invite.status)}
+                {...mapVolunteerStatusToVariant(invite.status)}
                 size="sm"
                 dataTestId={`invitation-status-${invite.id}`} // i18n-ignore-line
               />
