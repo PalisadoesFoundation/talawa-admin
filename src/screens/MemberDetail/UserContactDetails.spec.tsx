@@ -162,20 +162,18 @@ const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
   );
 };
 
-// Mock localStorage for user profile tests
-const mockLocalStorage = {
-  getItem: (key: string) => {
-    if (key === 'id') return '456';
-    if (key === 'sidebar') return 'false';
-    return null;
-  },
-  setItem: vi.fn(),
-};
-
-Object.defineProperty(window, 'localStorage', {
-  value: mockLocalStorage,
-  writable: true,
-});
+vi.mock('utils/useLocalStorage', () => ({
+  useLocalStorage: () => ({
+    getItem: (key: string) => {
+      if (key === 'id') return '456';
+      if (key === 'sidebar') return 'false';
+      return null;
+    },
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+    clearAllItems: vi.fn(),
+  }),
+}));
 
 const renderUserProfileScreen = (link: ApolloLink): RenderResult => {
   return render(
@@ -420,7 +418,28 @@ describe('MemberDetail', () => {
       expect(descriptionInput.value).toBe('New description');
     });
 
-    it('updates formState.natalSex when selecting a new value', async () => {
+    test('updates formState.state when typing in state input', async () => {
+      render(
+        <MockedProvider link={link1}>
+          <BrowserRouter>
+            <MemberDetail />
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      const stateInput = await waitFor(
+        () => screen.getByTestId('inputState') as HTMLInputElement,
+      );
+
+      // stimulate typing input
+      fireEvent.change(stateInput, {
+        target: { value: 'California' },
+      });
+
+      expect(stateInput.value).toBe('California');
+    });
+
+    test('updates formState.natalSex when selecting a new value', async () => {
       render(
         <MockedProvider link={link1}>
           <BrowserRouter>
