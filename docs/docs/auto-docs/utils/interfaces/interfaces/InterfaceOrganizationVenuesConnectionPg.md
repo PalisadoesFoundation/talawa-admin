@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceOrganizationVenuesConnectionPg
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1226](https://github.com/PalisadoesFoundati
 
 An array of edges, where each edge contains a cursor and a venue node.
 
----
+***
 
 ### pageInfo
 

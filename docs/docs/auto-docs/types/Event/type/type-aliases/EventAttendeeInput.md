@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: EventAttendeeInput
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Event/type.ts:78](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L79)
 
----
+***
 
 ### userId
 

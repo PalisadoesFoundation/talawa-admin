@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceCreateVolunteerGroup
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:2632](https://github.com/PalisadoesFoundati
 
 The description of the volunteer group, or null.
 
----
+***
 
 ### leader
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:2633](https://github.com/PalisadoesFoundati
 
 The leader of the volunteer group, or null.
 
----
+***
 
 ### name
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:2631](https://github.com/PalisadoesFoundati
 
 The name of the volunteer group.
 
----
+***
 
 ### volunteersRequired
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:2634](https://github.com/PalisadoesFoundati
 
 The number of volunteers required for the group, or null.
 
----
+***
 
 ### volunteerUsers
 

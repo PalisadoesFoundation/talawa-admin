@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: NavigationLink
 
@@ -20,7 +20,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:130](https://github.com/
 
 Icon component (optional)
 
----
+***
 
 ### id
 
@@ -30,7 +30,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:109](https://github.com/
 
 Unique identifier for the link (used for active state)
 
----
+***
 
 ### isActive?
 
@@ -46,7 +46,7 @@ Whether this link is currently active
 false (will be determined by comparing id with currentPage)
 ```
 
----
+***
 
 ### label
 
@@ -56,7 +56,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:114](https://github.com/
 
 Display text for the link
 
----
+***
 
 ### onClick()?
 
@@ -70,7 +70,7 @@ Click handler (optional, overrides default navigation)
 
 `void` \| `Promise`\<`void`\>
 
----
+***
 
 ### path
 
@@ -80,7 +80,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:119](https://github.com/
 
 URL path or route
 
----
+***
 
 ### testId?
 
@@ -90,7 +90,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:146](https://github.com/
 
 Additional data attributes for testing
 
----
+***
 
 ### translationKey?
 

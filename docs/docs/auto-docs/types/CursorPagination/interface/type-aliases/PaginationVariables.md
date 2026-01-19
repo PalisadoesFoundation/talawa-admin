@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: PaginationVariables\<T\>
 
@@ -24,4 +24,4 @@ Helper type to combine pagination variables with custom query variables
 
 ### T
 
-`T` _extends_ `Record`\<`string`, `unknown`\>
+`T` *extends* `Record`\<`string`, `unknown`\>

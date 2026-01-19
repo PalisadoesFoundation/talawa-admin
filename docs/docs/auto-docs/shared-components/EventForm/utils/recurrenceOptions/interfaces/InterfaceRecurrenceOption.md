@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceRecurrenceOption
 
@@ -16,7 +16,7 @@ Represents a recurrence option in the dropdown.
 
 Defined in: [src/shared-components/EventForm/utils/recurrenceOptions.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EventForm/utils/recurrenceOptions.ts#L16)
 
----
+***
 
 ### value
 

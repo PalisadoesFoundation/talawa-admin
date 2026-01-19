@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: UserPortalNavbarState
 
@@ -20,7 +20,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:162](https://github.com/
 
 Current selected language code
 
----
+***
 
 ### isMobileMenuOpen
 
@@ -30,7 +30,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:172](https://github.com/
 
 Whether mobile menu is open
 
----
+***
 
 ### organizationDetails
 
@@ -40,7 +40,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:167](https://github.com/
 
 Organization details (null for user mode or when not fetched)
 
----
+***
 
 ### userName
 

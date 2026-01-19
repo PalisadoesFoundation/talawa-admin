@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: InfiniteScrollProps
 
@@ -18,7 +18,7 @@ Props for the InfiniteScroll component used in ReportingTable
 
 Defined in: [src/types/ReportingTable/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L49)
 
----
+***
 
 ### hasMore
 
@@ -26,7 +26,7 @@ Defined in: [src/types/ReportingTable/interface.ts:49](https://github.com/Palisa
 
 Defined in: [src/types/ReportingTable/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L51)
 
----
+***
 
 ### next()
 

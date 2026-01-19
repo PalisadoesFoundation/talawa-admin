@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: VoteState
 
@@ -16,7 +16,7 @@ Defined in: [src/utils/interfaces.ts:2269](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2269](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2269)
 
----
+***
 
 ### voteType
 

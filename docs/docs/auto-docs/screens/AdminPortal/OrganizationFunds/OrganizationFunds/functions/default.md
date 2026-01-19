@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Function: default()
 
@@ -16,7 +16,6 @@ and includes functionality for filtering and sorting. It also handles the openin
 for creating and editing.
 
 It includes:
-
 - A search input field to filter funds by name.
 - A dropdown menu to sort funds by creation date.
 - A button to create a new fund.
@@ -24,15 +23,12 @@ It includes:
 - Modals for creating and editing funds.
 
 ### GraphQL Queries
-
 - `FUND_LIST`: Fetches a list of funds for the given organization, filtered and sorted based on the provided parameters.
 
 ### Props
-
 - `orgId`: The ID of the organization whose funds are being managed.
 
 ### State
-
 - `fund`: The currently selected fund for editing or deletion.
 - `searchTerm`: The current search term used for filtering funds.
 - `sortBy`: The current sorting order for funds.
@@ -40,7 +36,6 @@ It includes:
 - `fundModalMode`: The mode of the fund modal (edit or create).
 
 ### Methods
-
 - `handleOpenModal(fund: InterfaceFundInfo | null, mode: 'edit' | 'create')`: Opens the fund modal with the given fund and mode.
 - `handleClick(fundId: string)`: Navigates to the campaign page for the specified fund.
 
@@ -58,13 +53,11 @@ component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.gree
 class (e.g., .addButton) is now applied.
 
 ### Benefits:
-
-- \*\*Reduces redundant CSS code.
-- \*\*Improves maintainability by centralizing common styles.
-- \*\*Ensures consistent styling across components.
+- **Reduces redundant CSS code.
+- **Improves maintainability by centralizing common styles.
+- **Ensures consistent styling across components.
 
 ### Global CSS Classes used:
-
 - `.tableHeader`
 - `.subtleBlueGrey`
 - `.head`

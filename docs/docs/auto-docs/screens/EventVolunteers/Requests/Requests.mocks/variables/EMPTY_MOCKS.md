@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: EMPTY_MOCKS
+# Variable: EMPTY\_MOCKS
 
-> `const` **EMPTY_MOCKS**: `object`[]
+> `const` **EMPTY\_MOCKS**: `object`[]
 
 Defined in: [src/screens/EventVolunteers/Requests/Requests.mocks.ts:305](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Requests/Requests.mocks.ts#L305)
 

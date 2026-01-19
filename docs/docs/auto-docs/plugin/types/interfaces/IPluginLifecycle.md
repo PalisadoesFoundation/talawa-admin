@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IPluginLifecycle
 
@@ -18,7 +18,7 @@ Defined in: [src/plugin/types.ts:199](https://github.com/PalisadoesFoundation/ta
 
 `Promise`\<`void`\>
 
----
+***
 
 ### onDeactivate()?
 
@@ -30,7 +30,7 @@ Defined in: [src/plugin/types.ts:200](https://github.com/PalisadoesFoundation/ta
 
 `Promise`\<`void`\>
 
----
+***
 
 ### onInstall()?
 
@@ -42,7 +42,7 @@ Defined in: [src/plugin/types.ts:201](https://github.com/PalisadoesFoundation/ta
 
 `Promise`\<`void`\>
 
----
+***
 
 ### onUninstall()?
 
@@ -54,7 +54,7 @@ Defined in: [src/plugin/types.ts:202](https://github.com/PalisadoesFoundation/ta
 
 `Promise`\<`void`\>
 
----
+***
 
 ### onUpdate()?
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: CheckIn
 
@@ -16,7 +16,7 @@ Defined in: [src/types/shared-components/CheckIn/type.ts:4](https://github.com/P
 
 Defined in: [src/types/shared-components/CheckIn/type.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/type.ts#L5)
 
----
+***
 
 ### allotedRoom?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/shared-components/CheckIn/type.ts:5](https://github.com/P
 
 Defined in: [src/types/shared-components/CheckIn/type.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/type.ts#L6)
 
----
+***
 
 ### allotedSeat?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/shared-components/CheckIn/type.ts:6](https://github.com/P
 
 Defined in: [src/types/shared-components/CheckIn/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/type.ts#L7)
 
----
+***
 
 ### createdAt
 
@@ -40,7 +40,7 @@ Defined in: [src/types/shared-components/CheckIn/type.ts:7](https://github.com/P
 
 Defined in: [src/types/shared-components/CheckIn/type.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/type.ts#L8)
 
----
+***
 
 ### event
 
@@ -48,7 +48,7 @@ Defined in: [src/types/shared-components/CheckIn/type.ts:8](https://github.com/P
 
 Defined in: [src/types/shared-components/CheckIn/type.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/type.ts#L9)
 
----
+***
 
 ### feedbackSubmitted
 
@@ -56,7 +56,7 @@ Defined in: [src/types/shared-components/CheckIn/type.ts:9](https://github.com/P
 
 Defined in: [src/types/shared-components/CheckIn/type.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/type.ts#L10)
 
----
+***
 
 ### time
 
@@ -64,7 +64,7 @@ Defined in: [src/types/shared-components/CheckIn/type.ts:10](https://github.com/
 
 Defined in: [src/types/shared-components/CheckIn/type.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/type.ts#L11)
 
----
+***
 
 ### updatedAt
 
@@ -72,7 +72,7 @@ Defined in: [src/types/shared-components/CheckIn/type.ts:11](https://github.com/
 
 Defined in: [src/types/shared-components/CheckIn/type.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/type.ts#L12)
 
----
+***
 
 ### user
 

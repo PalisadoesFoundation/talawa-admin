@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceOrganizationBlockedUsersConnectionPg
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:789](https://github.com/PalisadoesFoundatio
 
 An array of edges, where each edge contains a cursor and a user node.
 
----
+***
 
 ### pageInfo
 

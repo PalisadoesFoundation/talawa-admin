@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IOrgList
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Event/interface.ts:76](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L77)
 
----
+***
 
 ### members
 

@@ -26,6 +26,7 @@ export const fixturesDir = path.resolve(
 
 const tempDirs = [];
 
+
 const sleepSync = (ms) => {
   if (ms <= 0) return;
   const sab = new SharedArrayBuffer(4);
@@ -36,6 +37,7 @@ const sleepSync = (ms) => {
 export const runScript = (targets, options = {}) => {
   const { env, scriptContent, ...rest } = options;
   let targetScript = scriptPath;
+
 
   if (scriptContent) {
     const tempDir = makeTempDir();

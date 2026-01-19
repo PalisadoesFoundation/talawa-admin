@@ -136,7 +136,6 @@ To ensure consistency across the application, all empty or no-data UI states mus
 The shared `EmptyState` component **must** be used for all new empty state implementations.
 
 Use `EmptyState` for:
-
 - Empty lists or tables
 - No search results
 - No organizations, users, events, or records
@@ -145,12 +144,12 @@ Use `EmptyState` for:
 
 ### NotFound vs EmptyState
 
-| Use Case                      | Component    |
-| ----------------------------- | ------------ |
-| No data / empty list          | `EmptyState` |
-| No search results             | `EmptyState` |
-| Resource does not exist (404) | `NotFound`   |
-| Invalid route                 | `NotFound`   |
+| Use Case | Component |
+|--------|-----------|
+| No data / empty list | `EmptyState` |
+| No search results | `EmptyState` |
+| Resource does not exist (404) | `NotFound` |
+| Invalid route | `NotFound` |
 
 ### Migration Rule
 
@@ -166,6 +165,7 @@ Use `EmptyState` for:
 <div className={styles.notFound}>
   <h4>{t('noResultsFound')}</h4>
 </div>
+
 ```
 
 **After (preferred pattern):**
@@ -177,7 +177,7 @@ import EmptyState from 'shared-components/EmptyState/EmptyState';
   icon="search"
   message="noResultsFound"
   description="tryAdjustingFilters"
-/>;
+/>
 ```
 
 ### NotFound vs EmptyState Distinction
@@ -185,26 +185,22 @@ import EmptyState from 'shared-components/EmptyState/EmptyState';
 Although both components represent “absence” scenarios, they serve **different purposes** and must not be used interchangeably.
 
 #### Use `EmptyState` when:
-
 - The page or screen is valid, but the data set is empty
 - A list, table, or search returns zero results
 - Filters remove all visible items
 - The user has no data yet (first-time or onboarding state)
 
 **Examples:**
-
 - No users in a table
 - No organizations found after search
 - No membership requests
 
 #### Use `NotFound` when:
-
 - A requested resource does not exist
 - A route is invalid or inaccessible
 - A user navigates to a non-existent entity
 
 **Examples:**
-
 - Invalid organization ID
 - Unknown user profile URL
 - 404-style navigation errors
@@ -214,6 +210,7 @@ Although both components represent “absence” scenarios, they serve **differe
 - Do not show EmptyState while data is loading
 - Use LoadingState during fetch operations
 - All user-visible text must use i18n keys
+
 
 ## TSDoc
 
@@ -309,6 +306,7 @@ Follow this [link](https://getbootstrap.com/docs/5.3/customize/sass/) to learn h
 **File Structure**
 
 - `src/assets/scss/components/{'{partialFile}'}.scss` - where the {'{partialFile}'} are the following files
+
   - **\_accordion.scss**
   - **\_alert.scss**
   - **\_badge.scss**
@@ -329,10 +327,12 @@ Follow this [link](https://getbootstrap.com/docs/5.3/customize/sass/) to learn h
   - **\_spinners.scss**
 
 - `src/assets/scss/content/{'{partialFile}'}.scss` - where the {'{partialFile}'} are the following files
+
   - **\_table.scss**
   - **\_typography.scss**
 
 - `src/assets/scss/forms/{'{partialFile}'}.scss` - where the {'{partialFile}'} are the following files
+
   - **\_check-radios.scss**
   - **\_floating-label.scss**
   - **\_form-control.scss**

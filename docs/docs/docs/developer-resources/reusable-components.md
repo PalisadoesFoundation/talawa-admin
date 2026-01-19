@@ -150,26 +150,26 @@ There are many reasons for this structure:
 
 ### Screen Placement Rules
 
-1. Authentication-related screens
-   ```
-   src/screens/Auth/**
-   Examples: Login, ForgotPassword, ResetPassword
-   ```
-2. Admin-only screens
-   ```
-   src/screens/AdminPortal/**
-   Examples: Users, CommunityProfile, Notification
-   ```
-3. User-only screens
-   ```
-   src/screens/UserPortal/**
-   Examples: Campaigns, Chat, Donate
-   ```
-4. Public, unauthenticated screens
-   ```
-   src/screens/Public/**
-   Examples: Invitation acceptance, PageNotFound, public info pages
-   ```
+  1. Authentication-related screens
+        ```
+        src/screens/Auth/**
+        Examples: Login, ForgotPassword, ResetPassword
+        ```
+  2. Admin-only screens
+        ```
+        src/screens/AdminPortal/**
+        Examples: Users, CommunityProfile, Notification
+        ```
+  3. User-only screens
+        ```
+        src/screens/UserPortal/**
+        Examples: Campaigns, Chat, Donate
+        ```
+  4. Public, unauthenticated screens  
+        ```
+        src/screens/Public/**
+        Examples: Invitation acceptance, PageNotFound, public info pages
+        ```
 
 ### Naming Conventions
 
@@ -334,7 +334,7 @@ Example:
 
 - Path: `src/shared-components/Button/Button.tsx` (barrel at `src/shared-components/Button/index.ts`).
 - Import: `import { Button } from 'shared-components/Button';`.
-- Features: wraps `react-bootstrap/Button`, supports common variants (primary/secondary/success/ danger/warning/info/dark/light/outline-\*; aliases `outlined`/`outline` map to `outline-primary`), sizes `sm`/`md`/`lg`/`xl`, full-width layout, loading state (`isLoading`, `loadingText`), optional icons with `iconPosition`, and forwards all other bootstrap button props.
+- Features: wraps `react-bootstrap/Button`, supports common variants (primary/secondary/success/ danger/warning/info/dark/light/outline-*; aliases `outlined`/`outline` map to `outline-primary`), sizes `sm`/`md`/`lg`/`xl`, full-width layout, loading state (`isLoading`, `loadingText`), optional icons with `iconPosition`, and forwards all other bootstrap button props.
 - Lint: direct imports from `react-bootstrap` or `react-bootstrap/Button` are restricted; use the shared Button wrapper instead (the wrapper folder is exempted to build it).
 
 ## Understanding Components Reuse

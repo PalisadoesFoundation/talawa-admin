@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceUserInfo
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:404](https://github.com/PalisadoesFoundatio
 
 The URL of the user's avatar, or null if not available.
 
----
+***
 
 ### createdAt?
 
@@ -30,7 +30,7 @@ The URL of the user's avatar, or null if not available.
 
 Defined in: [src/utils/interfaces.ts:406](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L406)
 
----
+***
 
 ### emailAddress
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:403](https://github.com/PalisadoesFoundatio
 
 The email address of the user.
 
----
+***
 
 ### id
 
@@ -50,7 +50,7 @@ Defined in: [src/utils/interfaces.ts:401](https://github.com/PalisadoesFoundatio
 
 The unique identifier of the user.
 
----
+***
 
 ### name
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/interfaces.ts:402](https://github.com/PalisadoesFoundatio
 
 The full name of the user.
 
----
+***
 
 ### role?
 
@@ -68,7 +68,7 @@ The full name of the user.
 
 Defined in: [src/utils/interfaces.ts:405](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L405)
 
----
+***
 
 ### updatedAt?
 

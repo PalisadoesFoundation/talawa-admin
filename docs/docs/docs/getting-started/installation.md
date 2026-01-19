@@ -25,12 +25,12 @@ If you're using Windows with WSL:
    - Settings → Resources → WSL Integration → Enable for your distro
    - See: https://docs.docker.com/desktop/wsl/
 
+
 ### Prerequisites
 
 The only prerequisite is having `git` installed on your system (usually pre-installed on macOS/Linux, or install via your package manager).
 
 **Additional prerequisites for contributors:**
-
 - **curl** or **wget**: Required by pre-commit hooks to download centralized scripts
   - **macOS**: `curl` is pre-installed
   - **Linux (Ubuntu/Debian)**: Install with `sudo apt install curl`
@@ -325,19 +325,16 @@ python -m venv venv
 Then activate the virtual environment:
 
 **On macOS/Linux:**
-
 ```bash
 source venv/bin/activate
 ```
 
 **On Windows (PowerShell):**
-
 ```powershell
 venv\Scripts\Activate.ps1
 ```
 
 **On Windows (Git Bash/MSYS2):**
-
 ```bash
 source venv/Scripts/activate
 ```
@@ -347,6 +344,7 @@ Now install the required Python packages:
 ```bash
 pip install -r .github/workflows/requirements.txt
 ```
+
 
 ### Install The Required Packages
 

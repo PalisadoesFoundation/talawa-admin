@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceTagUsersToAssignToQuery
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:57](https://github.com/Palis
 
 > **getUsersToAssignTo**: [`InterfaceQueryUserTagsMembersToAssignTo`](InterfaceQueryUserTagsMembersToAssignTo.md)
 
----
+***
 
 ### error?
 
@@ -34,7 +34,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:41](https://github.com/Palis
 
 [`InterfaceBaseQueryResult`](InterfaceBaseQueryResult.md).[`error`](InterfaceBaseQueryResult.md#error)
 
----
+***
 
 ### fetchMore()
 
@@ -52,7 +52,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:60](https://github.com/Palis
 
 `void`
 
----
+***
 
 ### loading
 
@@ -64,7 +64,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:40](https://github.com/Palis
 
 [`InterfaceBaseQueryResult`](InterfaceBaseQueryResult.md).[`loading`](InterfaceBaseQueryResult.md#loading)
 
----
+***
 
 ### refetch()?
 

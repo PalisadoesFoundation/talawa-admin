@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: ADD_VOLUNTEER
+# Variable: ADD\_VOLUNTEER
 
-> `const` **ADD_VOLUNTEER**: `DocumentNode`
+> `const` **ADD\_VOLUNTEER**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/EventVolunteerMutation.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventVolunteerMutation.ts#L11)
 

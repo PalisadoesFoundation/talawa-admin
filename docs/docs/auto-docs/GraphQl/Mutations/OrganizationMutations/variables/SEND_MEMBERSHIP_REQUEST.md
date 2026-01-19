@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: SEND_MEMBERSHIP_REQUEST
+# Variable: SEND\_MEMBERSHIP\_REQUEST
 
-> `const` **SEND_MEMBERSHIP_REQUEST**: `DocumentNode`
+> `const` **SEND\_MEMBERSHIP\_REQUEST**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:241](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L241)
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceUserAttendee
 
@@ -14,7 +14,7 @@ Defined in: [src/types/shared-components/User/interface.ts:19](https://github.co
 
 Defined in: [src/types/shared-components/User/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L27)
 
----
+***
 
 ### id
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/User/interface.ts:27](https://github.co
 
 Defined in: [src/types/shared-components/User/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L20)
 
----
+***
 
 ### isRegistered
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/User/interface.ts:20](https://github.co
 
 Defined in: [src/types/shared-components/User/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L26)
 
----
+***
 
 ### time
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/User/interface.ts:26](https://github.co
 
 Defined in: [src/types/shared-components/User/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/interface.ts#L28)
 
----
+***
 
 ### user
 

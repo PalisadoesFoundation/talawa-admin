@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IValidationResult
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Auth/useFieldValidation.ts:1](https://github.com/Palisado
 
 Defined in: [src/types/Auth/useFieldValidation.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/useFieldValidation.ts#L3)
 
----
+***
 
 ### isValid
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: AgendaCategory
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Agenda/type.ts:4](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Agenda/type.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L5)
 
----
+***
 
 ### createdAt
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Agenda/type.ts:5](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Agenda/type.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L6)
 
----
+***
 
 ### createdBy
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Agenda/type.ts:6](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Agenda/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L7)
 
----
+***
 
 ### description?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Agenda/type.ts:7](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Agenda/type.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L8)
 
----
+***
 
 ### name
 
@@ -48,7 +48,7 @@ Defined in: [src/types/Agenda/type.ts:8](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Agenda/type.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L9)
 
----
+***
 
 ### organization
 
@@ -56,7 +56,7 @@ Defined in: [src/types/Agenda/type.ts:9](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Agenda/type.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L10)
 
----
+***
 
 ### updatedAt?
 
@@ -64,7 +64,7 @@ Defined in: [src/types/Agenda/type.ts:10](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/types/Agenda/type.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/type.ts#L11)
 
----
+***
 
 ### updatedBy?
 

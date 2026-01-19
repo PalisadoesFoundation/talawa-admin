@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceRecurrenceDropdownProps
 
@@ -16,7 +16,7 @@ Props for the RecurrenceDropdown component.
 
 Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L8)
 
----
+***
 
 ### isOpen
 
@@ -24,7 +24,7 @@ Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:8](http
 
 Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L9)
 
----
+***
 
 ### onSelect()
 
@@ -42,7 +42,7 @@ Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:11](htt
 
 `void`
 
----
+***
 
 ### onToggle()
 
@@ -60,7 +60,7 @@ Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:10](htt
 
 `void`
 
----
+***
 
 ### recurrenceOptions
 
@@ -68,7 +68,7 @@ Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:10](htt
 
 Defined in: [src/types/shared-components/RecurrenceDropdown/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/RecurrenceDropdown/interface.ts#L7)
 
----
+***
 
 ### t()
 

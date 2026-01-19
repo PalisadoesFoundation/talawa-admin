@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Variable: propTypes
 

@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION
+# Variable: UPDATE\_SINGLE\_RECURRING\_EVENT\_INSTANCE\_MUTATION
 
-> `const` **UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION**: `DocumentNode`
+> `const` **UPDATE\_SINGLE\_RECURRING\_EVENT\_INSTANCE\_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/EventMutations.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventMutations.ts#L120)

@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: MOCKS_MISSING_DATA
+# Variable: MOCKS\_MISSING\_DATA
 
-> `const` **MOCKS_MISSING_DATA**: `object`[]
+> `const` **MOCKS\_MISSING\_DATA**: `object`[]
 
 Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts#L99)
 

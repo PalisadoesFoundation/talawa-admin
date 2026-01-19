@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: NO_FUNDS
+# Variable: NO\_FUNDS
 
-> `const` **NO_FUNDS**: `object`[]
+> `const` **NO\_FUNDS**: `object`[]
 
 Defined in: [src/screens/AdminPortal/OrganizationFunds/OrganizationFundsMocks.ts:164](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFunds/OrganizationFundsMocks.ts#L164)
 

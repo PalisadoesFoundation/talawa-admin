@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceLanguageSelectorProps
 
@@ -23,7 +23,7 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:186](https://github.
 
 Currently active language code
 
----
+***
 
 ### dropDirection?
 
@@ -33,7 +33,7 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:184](https://github.
 
 Direction for dropdown menu
 
----
+***
 
 ### handleLanguageChange()
 
@@ -53,7 +53,7 @@ Handler called when language is selected
 
 `void` \| `Promise`\<`void`\>
 
----
+***
 
 ### showLanguageSelector?
 
@@ -63,7 +63,7 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:182](https://github.
 
 Whether to display the language selector
 
----
+***
 
 ### testIdPrefix?
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfacePostCreator
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Post/interface.ts:17](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L19)
 
----
+***
 
 ### id
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Post/interface.ts:19](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L18)
 
----
+***
 
 ### lastName?
 

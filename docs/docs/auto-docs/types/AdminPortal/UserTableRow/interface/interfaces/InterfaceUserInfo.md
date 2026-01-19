@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceUserInfo
 
@@ -16,7 +16,7 @@ User information interface for UserTableRow component
 
 Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L10)
 
----
+***
 
 ### createdAt?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:10](https://github.
 
 Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L11)
 
----
+***
 
 ### emailAddress?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:11](https://github.
 
 Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L9)
 
----
+***
 
 ### id
 
@@ -40,7 +40,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:9](https://github.c
 
 Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L7)
 
----
+***
 
 ### name
 

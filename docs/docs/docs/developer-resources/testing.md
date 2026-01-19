@@ -242,7 +242,7 @@ describe('MyComponent', () => {
 afterEach(() => {
   cleanup(); // React Testing Library cleanup
   vi.restoreAllMocks(); // Mock cleanup
-  clearAllItems(); // LocalStorage cleanup
+  clearAllItems(); // LocalStorage cleanup 
 });
 ```
 

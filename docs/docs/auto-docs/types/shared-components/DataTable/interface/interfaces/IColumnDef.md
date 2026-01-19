@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IColumnDef\<T, TValue\>
 
@@ -41,7 +41,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:40](https://gith
 
 Accessor to extract cell value
 
----
+***
 
 ### header
 
@@ -51,7 +51,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:37](https://gith
 
 Header label or render function
 
----
+***
 
 ### id
 
@@ -61,7 +61,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:34](https://gith
 
 Unique column identifier
 
----
+***
 
 ### meta?
 
@@ -153,7 +153,7 @@ Optional extractor for global search (if the default cell string is not ideal).
 
 > `optional` **width**: `string` \| `number`
 
----
+***
 
 ### render()?
 

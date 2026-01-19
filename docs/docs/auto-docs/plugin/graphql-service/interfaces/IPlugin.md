@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IPlugin
 
@@ -14,7 +14,7 @@ Defined in: [src/plugin/graphql-service.ts:20](https://github.com/PalisadoesFoun
 
 Defined in: [src/plugin/graphql-service.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L25)
 
----
+***
 
 ### createdAt
 
@@ -22,7 +22,7 @@ Defined in: [src/plugin/graphql-service.ts:25](https://github.com/PalisadoesFoun
 
 Defined in: [src/plugin/graphql-service.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L26)
 
----
+***
 
 ### id
 
@@ -30,7 +30,7 @@ Defined in: [src/plugin/graphql-service.ts:26](https://github.com/PalisadoesFoun
 
 Defined in: [src/plugin/graphql-service.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L21)
 
----
+***
 
 ### isActivated
 
@@ -38,7 +38,7 @@ Defined in: [src/plugin/graphql-service.ts:21](https://github.com/PalisadoesFoun
 
 Defined in: [src/plugin/graphql-service.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L23)
 
----
+***
 
 ### isInstalled
 
@@ -46,7 +46,7 @@ Defined in: [src/plugin/graphql-service.ts:23](https://github.com/PalisadoesFoun
 
 Defined in: [src/plugin/graphql-service.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L24)
 
----
+***
 
 ### pluginId
 
@@ -54,7 +54,7 @@ Defined in: [src/plugin/graphql-service.ts:24](https://github.com/PalisadoesFoun
 
 Defined in: [src/plugin/graphql-service.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L22)
 
----
+***
 
 ### updatedAt
 

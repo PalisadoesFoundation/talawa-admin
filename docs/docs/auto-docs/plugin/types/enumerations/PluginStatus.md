@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Enumeration: PluginStatus
 
@@ -14,7 +14,7 @@ Defined in: [src/plugin/types.ts:150](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:151](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L151)
 
----
+***
 
 ### ERROR
 
@@ -22,7 +22,7 @@ Defined in: [src/plugin/types.ts:151](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:153](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L153)
 
----
+***
 
 ### INACTIVE
 

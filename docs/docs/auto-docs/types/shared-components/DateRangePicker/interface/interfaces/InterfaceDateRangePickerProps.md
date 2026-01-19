@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceDateRangePickerProps
 
@@ -18,7 +18,7 @@ Controlled props for the DateRangePicker component.
 
 Defined in: [src/types/shared-components/DateRangePicker/interface.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L70)
 
----
+***
 
 ### dataTestId?
 
@@ -26,7 +26,7 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:70](https:
 
 Defined in: [src/types/shared-components/DateRangePicker/interface.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L71)
 
----
+***
 
 ### disabled?
 
@@ -34,7 +34,7 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:71](https:
 
 Defined in: [src/types/shared-components/DateRangePicker/interface.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L67)
 
----
+***
 
 ### error?
 
@@ -42,7 +42,7 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:67](https:
 
 Defined in: [src/types/shared-components/DateRangePicker/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L68)
 
----
+***
 
 ### helperText?
 
@@ -50,7 +50,7 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:68](https:
 
 Defined in: [src/types/shared-components/DateRangePicker/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L69)
 
----
+***
 
 ### onChange()
 
@@ -68,7 +68,7 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:65](https:
 
 `void`
 
----
+***
 
 ### presets?
 
@@ -76,7 +76,7 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:65](https:
 
 Defined in: [src/types/shared-components/DateRangePicker/interface.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L66)
 
----
+***
 
 ### showPresets?
 
@@ -84,7 +84,7 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:66](https:
 
 Defined in: [src/types/shared-components/DateRangePicker/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L72)
 
----
+***
 
 ### value
 

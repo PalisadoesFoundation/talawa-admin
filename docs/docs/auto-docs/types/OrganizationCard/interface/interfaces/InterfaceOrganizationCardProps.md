@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceOrganizationCardProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:1](https://github.com/Palis
 
 Defined in: [src/types/OrganizationCard/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L14)
 
----
+***
 
 ### admins?
 
@@ -26,7 +26,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:13](https://github.com/Pali
 
 > **id**: `string`
 
----
+***
 
 ### adminsCount?
 
@@ -34,7 +34,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:13](https://github.com/Pali
 
 Defined in: [src/types/OrganizationCard/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L16)
 
----
+***
 
 ### avatarURL?
 
@@ -42,7 +42,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:16](https://github.com/Pali
 
 Defined in: [src/types/OrganizationCard/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L26)
 
----
+***
 
 ### createdAt?
 
@@ -50,7 +50,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:26](https://github.com/Pali
 
 Defined in: [src/types/OrganizationCard/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L27)
 
----
+***
 
 ### description
 
@@ -58,7 +58,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:27](https://github.com/Pali
 
 Defined in: [src/types/OrganizationCard/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L5)
 
----
+***
 
 ### id
 
@@ -66,7 +66,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:5](https://github.com/Palis
 
 Defined in: [src/types/OrganizationCard/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L2)
 
----
+***
 
 ### image?
 
@@ -74,7 +74,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:2](https://github.com/Palis
 
 Defined in: [src/types/OrganizationCard/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L4)
 
----
+***
 
 ### isJoined?
 
@@ -82,7 +82,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:4](https://github.com/Palis
 
 Defined in: [src/types/OrganizationCard/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L25)
 
----
+***
 
 ### members?
 
@@ -94,7 +94,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:6](https://github.com/Palis
 
 > **edges**: `object`[]
 
----
+***
 
 ### membersCount?
 
@@ -102,7 +102,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:6](https://github.com/Palis
 
 Defined in: [src/types/OrganizationCard/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L15)
 
----
+***
 
 ### membershipRequests?
 
@@ -122,7 +122,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:19](https://github.com/Pali
 
 > **id**: `string`
 
----
+***
 
 ### membershipRequestStatus?
 
@@ -130,7 +130,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:19](https://github.com/Pali
 
 Defined in: [src/types/OrganizationCard/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L17)
 
----
+***
 
 ### name
 
@@ -138,7 +138,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:17](https://github.com/Pali
 
 Defined in: [src/types/OrganizationCard/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L3)
 
----
+***
 
 ### role
 
@@ -146,7 +146,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:3](https://github.com/Palis
 
 Defined in: [src/types/OrganizationCard/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/OrganizationCard/interface.ts#L28)
 
----
+***
 
 ### userRegistrationRequired?
 

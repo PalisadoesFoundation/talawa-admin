@@ -63,26 +63,30 @@ const users: User[] = [
   { id: '2', name: 'Jane Smith', email: 'jane@example.com' },
 ];
 
-<DataGridWrapper<User> rows={users} columns={columns} />;
+<DataGridWrapper<User>
+  rows={users}
+  columns={columns}
+/>
 ```
 
 ## Component API
 
 ### Props Reference
 
-| Prop                | Type                       | Required | Default            | Description                                                                                                      |
-| ------------------- | -------------------------- | -------- | ------------------ | ---------------------------------------------------------------------------------------------------------------- |
-| `rows`              | `GridRowsProp<T>`          | Yes      | -                  | Array of data rows. Each row must have a unique `id` property                                                    |
-| `columns`           | `GridColDef[]`             | Yes      | -                  | Column configuration defining headers, widths, and rendering                                                     |
-| `loading`           | `boolean`                  | No       | `false`            | Shows loading overlay when `true`                                                                                |
-| `searchConfig`      | `SearchConfig<T>`          | No       | -                  | Configuration for search functionality                                                                           |
-| `sortConfig`        | `SortConfig`               | No       | -                  | Configuration for sorting options                                                                                |
-| `paginationConfig`  | `PaginationConfig`         | No       | -                  | Configuration for pagination                                                                                     |
-| `onRowClick`        | `(row: T) => void`         | No       | -                  | Callback fired when a row is clicked                                                                             |
-| `actionColumn`      | `(row: T) => ReactNode`    | No       | -                  | Render function for custom actions column                                                                        |
-| `emptyStateProps`   | `InterfaceEmptyStateProps` | No       | -                  | Full customization of empty state with icon, description, and actions. Takes precedence over `emptyStateMessage` |
-| `emptyStateMessage` | `string`                   | No       | "No results found" | Message shown when no rows are available                                                                         |
-| `error`             | `string \| ReactNode`      | No       | -                  | Error message or component to display                                                                            |
+| Prop | Type | Required | Default | Description |
+|------|------|----------|---------|-------------|
+| `rows` | `GridRowsProp<T>` | Yes | - | Array of data rows. Each row must have a unique `id` property |
+| `columns` | `GridColDef[]` | Yes | - | Column configuration defining headers, widths, and rendering |
+| `loading` | `boolean` | No | `false` | Shows loading overlay when `true` |
+| `searchConfig` | `SearchConfig<T>` | No | - | Configuration for search functionality |
+| `sortConfig` | `SortConfig` | No | - | Configuration for sorting options |
+| `paginationConfig` | `PaginationConfig` | No | - | Configuration for pagination |
+| `onRowClick` | `(row: T) => void` | No | - | Callback fired when a row is clicked |
+| `actionColumn` | `(row: T) => ReactNode` | No | - | Render function for custom actions column |
+| `emptyStateProps` | `InterfaceEmptyStateProps` | No | - | Full customization of empty state with icon, description, and actions. Takes precedence over `emptyStateMessage` |
+| `emptyStateMessage` | `string` | No | "No results found" | Message shown when no rows are available |
+| `error` | `string \| ReactNode` | No | - | Error message or component to display |
+
 
 ### SearchConfig
 
@@ -130,6 +134,7 @@ interface PaginationConfig {
 
 ## Usage Examples
 
+
 ### With Custom Empty State
 
 ```tsx
@@ -143,9 +148,9 @@ interface PaginationConfig {
     action: {
       label: 'inviteUser',
       onClick: handleInvite,
-      variant: 'primary',
+      variant: 'primary'
     },
-    dataTestId: 'users-empty-state',
+    dataTestId: 'users-empty-state'
   }}
 />
 ```
@@ -208,7 +213,7 @@ const { data, loading } = useQuery(GET_USERS);
   rows={data?.users || []}
   columns={columns}
   loading={loading}
-/>;
+/>
 ```
 
 The component displays a custom loading overlay using the `LoadingState` component.
@@ -223,7 +228,7 @@ const { data, loading, error } = useQuery(GET_USERS);
   columns={columns}
   loading={loading}
   error={error ? 'Failed to load users. Please try again.' : undefined}
-/>;
+/>
 ```
 
 The error state is displayed using a custom error overlay component (`DataGridErrorOverlay`) that appears in place of the data grid, providing a consistent UX with the loading and empty states. The overlay includes an error icon and message, with proper accessibility attributes (`role="alert"`, `aria-live="assertive"`).
@@ -250,7 +255,7 @@ import { Edit, Delete } from '@mui/icons-material';
       </IconButton>
     </>
   )}
-/>;
+/>
 ```
 
 ### With Row Click Handler
@@ -334,14 +339,12 @@ If you're currently using `@mui/x-data-grid` directly in `src/screens/**`, follo
 #### Step 1: Replace Import
 
 **Before:**
-
 ```tsx
 import { DataGrid } from '@mui/x-data-grid';
 import type { GridColDef } from '@mui/x-data-grid';
 ```
 
 **After:**
-
 ```tsx
 import { DataGridWrapper } from 'src/shared-components/DataGridWrapper/DataGridWrapper';
 import type { GridColDef } from '@mui/x-data-grid';
@@ -350,7 +353,6 @@ import type { GridColDef } from '@mui/x-data-grid';
 #### Step 2: Update Component Usage
 
 **Before:**
-
 ```tsx
 <DataGrid
   rows={users}
@@ -363,7 +365,6 @@ import type { GridColDef } from '@mui/x-data-grid';
 ```
 
 **After:**
-
 ```tsx
 <DataGridWrapper<User>
   rows={users}
@@ -383,13 +384,11 @@ import type { GridColDef } from '@mui/x-data-grid';
 If you have custom search logic:
 
 **Before:**
-
 ```tsx
 const [searchTerm, setSearchTerm] = useState('');
-const filteredUsers = users.filter(
-  (u) =>
-    u.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    u.email.toLowerCase().includes(searchTerm.toLowerCase()),
+const filteredUsers = users.filter(u => 
+  u.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  u.email.toLowerCase().includes(searchTerm.toLowerCase())
 );
 
 <>
@@ -399,11 +398,10 @@ const filteredUsers = users.filter(
     placeholder="Search..."
   />
   <DataGrid rows={filteredUsers} columns={columns} />
-</>;
+</>
 ```
 
 **After:**
-
 ```tsx
 <DataGridWrapper<User>
   rows={users}
@@ -421,20 +419,20 @@ const filteredUsers = users.filter(
 If you have custom sorting:
 
 **Before:**
-
 ```tsx
-const [sortModel, setSortModel] = useState([{ field: 'name', sort: 'asc' }]);
+const [sortModel, setSortModel] = useState([
+  { field: 'name', sort: 'asc' }
+]);
 
 <DataGrid
   rows={users}
   columns={columns}
   sortModel={sortModel}
   onSortModelChange={setSortModel}
-/>;
+/>
 ```
 
 **After:**
-
 ```tsx
 <DataGridWrapper<User>
   rows={users}
@@ -455,19 +453,15 @@ const [sortModel, setSortModel] = useState([{ field: 'name', sort: 'asc' }]);
 #### Pattern 1: Empty State Handling
 
 **Before:**
-
 ```tsx
-{
-  users.length === 0 && !loading ? (
-    <div>No users found</div>
-  ) : (
-    <DataGrid rows={users} columns={columns} />
-  );
-}
+{users.length === 0 && !loading ? (
+  <div>No users found</div>
+) : (
+  <DataGrid rows={users} columns={columns} />
+)}
 ```
 
 **After:**
-
 ```tsx
 <DataGridWrapper<User>
   rows={users}
@@ -479,19 +473,15 @@ const [sortModel, setSortModel] = useState([{ field: 'name', sort: 'asc' }]);
 #### Pattern 2: Error Handling
 
 **Before:**
-
 ```tsx
-{
-  error ? (
-    <div>Error: {error.message}</div>
-  ) : (
-    <DataGrid rows={users} columns={columns} />
-  );
-}
+{error ? (
+  <div>Error: {error.message}</div>
+) : (
+  <DataGrid rows={users} columns={columns} />
+)}
 ```
 
 **After:**
-
 ```tsx
 <DataGridWrapper<User>
   rows={users}
@@ -505,7 +495,6 @@ The error now displays as an overlay within the DataGrid using the `slots` API, 
 #### Pattern 3: Action Buttons
 
 **Before:**
-
 ```tsx
 const columns: GridColDef[] = [
   { field: 'name', headerName: 'Name' },
@@ -520,15 +509,18 @@ const columns: GridColDef[] = [
 ```
 
 **After:**
-
 ```tsx
-const columns: GridColDef[] = [{ field: 'name', headerName: 'Name' }];
+const columns: GridColDef[] = [
+  { field: 'name', headerName: 'Name' },
+];
 
 <DataGridWrapper<User>
   rows={users}
   columns={columns}
-  actionColumn={(row) => <button onClick={() => handleEdit(row)}>Edit</button>}
-/>;
+  actionColumn={(row) => (
+    <button onClick={() => handleEdit(row)}>Edit</button>
+  )}
+/>
 ```
 
 ## Common Patterns and Best Practices
@@ -572,7 +564,9 @@ export const UsersScreen = () => {
 
 // ❌ Bad: Defined inside component (re-creates on every render)
 export const UsersScreen = () => {
-  const columns = [{ field: 'name', headerName: 'Name', width: 200 }];
+  const columns = [
+    { field: 'name', headerName: 'Name', width: 200 },
+  ];
   return <DataGridWrapper<User> rows={users} columns={columns} />;
 };
 ```
@@ -631,7 +625,7 @@ const { data, loading, error } = useQuery(GET_USERS);
   loading={loading}
   error={error ? 'Failed to load users' : undefined}
   emptyStateMessage="No users found"
-/>;
+/>
 ```
 
 ### i18n Support
@@ -653,7 +647,7 @@ const { t } = useTranslation('users');
   }}
   emptyStateMessage={t('noUsersFound')}
   error={error ? t('loadError') : undefined}
-/>;
+/>
 ```
 
 ### Accessibility
@@ -666,13 +660,13 @@ Ensure action buttons have proper aria labels:
   columns={columns}
   actionColumn={(row) => (
     <>
-      <IconButton
+      <IconButton 
         onClick={() => handleEdit(row.id)}
         aria-label={`Edit user ${row.name}`}
       >
         <Edit />
       </IconButton>
-      <IconButton
+      <IconButton 
         onClick={() => handleDelete(row.id)}
         aria-label={`Delete user ${row.name}`}
       >
@@ -706,7 +700,6 @@ sortConfig={{
 ```
 
 If an invalid format is detected, you'll see a console warning:
-
 ```
 [DataGridWrapper] Invalid sort format: "name". Expected format: "field_asc" or "field_desc"
 ```
@@ -721,8 +714,8 @@ Direct usage of `@mui/x-data-grid` and `@mui/x-data-grid-pro` is enforced via ES
 Only the `DataGridWrapper` and its associated type definitions are allowed to import
 these packages directly. All other usage must go through the standardized wrapper.
 
-**Linter runs:**
 
+**Linter runs:**
 - Pre-commit (via lint-staged)
 - Pull request CI (via GitHub Actions)
 
@@ -741,7 +734,9 @@ import { render, screen } from '@testing-library/react';
 import { DataGridWrapper } from 'src/shared-components/DataGridWrapper/DataGridWrapper';
 
 test('renders user data correctly', () => {
-  const users = [{ id: '1', name: 'John Doe', email: 'john@example.com' }];
+  const users = [
+    { id: '1', name: 'John Doe', email: 'john@example.com' },
+  ];
 
   const columns = [
     { field: 'name', headerName: 'Name' },
@@ -760,7 +755,7 @@ test('renders empty state message', () => {
       rows={[]}
       columns={[]}
       emptyStateMessage="No data available"
-    />,
+    />
   );
 
   expect(screen.getByText('No data available')).toBeInTheDocument();
@@ -772,7 +767,6 @@ test('renders empty state message', () => {
 **Q: Can I use MUI DataGrid props not exposed by DataGridWrapper?**
 
 A: DataGridWrapper exposes the most commonly used props. If you need additional DataGrid functionality, consider:
-
 1. Opening an issue to discuss adding it to DataGridWrapper
 2. Proposing changes to enhance the wrapper component
 
@@ -786,7 +780,7 @@ const columns: GridColDef[] = [
     field: 'status',
     headerName: 'Status',
     renderCell: (params) => (
-      <Chip
+      <Chip 
         label={params.value}
         color={params.value === 'active' ? 'success' : 'default'}
       />
@@ -813,7 +807,7 @@ const { data, loading } = useQuery(GET_USERS, {
   rows={data?.users || []}
   columns={columns}
   loading={loading}
-/>;
+/>
 ```
 
 **Q: Can I disable pagination?**

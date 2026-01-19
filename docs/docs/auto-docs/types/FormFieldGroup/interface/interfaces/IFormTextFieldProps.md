@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IFormTextFieldProps
 
@@ -28,7 +28,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:11](https://github.com/Palisa
 
 [`InterfaceFormFieldGroupProps`](InterfaceFormFieldGroupProps.md).[`data-testid`](InterfaceFormFieldGroupProps.md#data-testid)
 
----
+***
 
 ### disabled?
 
@@ -36,7 +36,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:11](https://github.com/Palisa
 
 Defined in: [src/types/FormFieldGroup/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L21)
 
----
+***
 
 ### endAdornment?
 
@@ -44,7 +44,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:21](https://github.com/Palisa
 
 Defined in: [src/types/FormFieldGroup/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L20)
 
----
+***
 
 ### error?
 
@@ -56,7 +56,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:9](https://github.com/Palisad
 
 [`InterfaceFormFieldGroupProps`](InterfaceFormFieldGroupProps.md).[`error`](InterfaceFormFieldGroupProps.md#error)
 
----
+***
 
 ### helpText?
 
@@ -68,7 +68,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:8](https://github.com/Palisad
 
 [`InterfaceFormFieldGroupProps`](InterfaceFormFieldGroupProps.md).[`helpText`](InterfaceFormFieldGroupProps.md#helptext)
 
----
+***
 
 ### label
 
@@ -80,7 +80,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:6](https://github.com/Palisad
 
 [`InterfaceFormFieldGroupProps`](InterfaceFormFieldGroupProps.md).[`label`](InterfaceFormFieldGroupProps.md#label)
 
----
+***
 
 ### name
 
@@ -92,7 +92,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:5](https://github.com/Palisad
 
 [`InterfaceFormFieldGroupProps`](InterfaceFormFieldGroupProps.md).[`name`](InterfaceFormFieldGroupProps.md#name)
 
----
+***
 
 ### onChange()
 
@@ -110,7 +110,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:18](https://github.com/Palisa
 
 `void`
 
----
+***
 
 ### placeholder?
 
@@ -118,7 +118,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:18](https://github.com/Palisa
 
 Defined in: [src/types/FormFieldGroup/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L16)
 
----
+***
 
 ### required?
 
@@ -130,7 +130,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:7](https://github.com/Palisad
 
 [`InterfaceFormFieldGroupProps`](InterfaceFormFieldGroupProps.md).[`required`](InterfaceFormFieldGroupProps.md#required)
 
----
+***
 
 ### startAdornment?
 
@@ -138,7 +138,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:7](https://github.com/Palisad
 
 Defined in: [src/types/FormFieldGroup/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L19)
 
----
+***
 
 ### touched?
 
@@ -150,7 +150,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:10](https://github.com/Palisa
 
 [`InterfaceFormFieldGroupProps`](InterfaceFormFieldGroupProps.md).[`touched`](InterfaceFormFieldGroupProps.md#touched)
 
----
+***
 
 ### type?
 
@@ -158,7 +158,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:10](https://github.com/Palisa
 
 Defined in: [src/types/FormFieldGroup/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L15)
 
----
+***
 
 ### value
 

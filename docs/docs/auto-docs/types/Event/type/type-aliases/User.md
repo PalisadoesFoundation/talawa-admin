@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: User
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Event/type.ts:5](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Event/type.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L9)
 
----
+***
 
 ### createdAt?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Event/type.ts:9](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Event/type.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L11)
 
----
+***
 
 ### emailAddress
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Event/type.ts:11](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L8)
 
----
+***
 
 ### id
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Event/type.ts:8](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Event/type.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L6)
 
----
+***
 
 ### name
 
@@ -48,7 +48,7 @@ Defined in: [src/types/Event/type.ts:6](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Event/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L7)
 
----
+***
 
 ### natalSex?
 
@@ -56,7 +56,7 @@ Defined in: [src/types/Event/type.ts:7](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Event/type.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L13)
 
----
+***
 
 ### role?
 
@@ -64,7 +64,7 @@ Defined in: [src/types/Event/type.ts:13](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L10)
 
----
+***
 
 ### updatedAt?
 

@@ -221,8 +221,11 @@ Run the following command to start the development server:
 pnpm run serve
 ```
 
-The app will run until you hit:
+The app will run until you hit: 
 
 ```
 <CTRL-C>
 ```
+
+
+

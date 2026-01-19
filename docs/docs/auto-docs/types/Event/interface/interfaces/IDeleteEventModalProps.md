@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IDeleteEventModalProps
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Event/interface.ts:133](https://github.com/PalisadoesFoun
 
 `Promise`\<`void`\>
 
----
+***
 
 ### eventDeleteModalIsOpen
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Event/interface.ts:133](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L129)
 
----
+***
 
 ### eventListCardProps
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Event/interface.ts:129](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L128)
 
----
+***
 
 ### t()
 
@@ -58,7 +58,7 @@ Defined in: [src/types/Event/interface.ts:131](https://github.com/PalisadoesFoun
 
 `string`
 
----
+***
 
 ### tCommon()
 
@@ -76,7 +76,7 @@ Defined in: [src/types/Event/interface.ts:132](https://github.com/PalisadoesFoun
 
 `string`
 
----
+***
 
 ### toggleDeleteModal()
 

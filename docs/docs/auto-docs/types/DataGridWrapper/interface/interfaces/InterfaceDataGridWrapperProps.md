@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceDataGridWrapperProps\<T\>
 
@@ -15,7 +15,7 @@ MUI's DataGrid that provides consistent search, sorting, pagination, and styling
 
 ### T
 
-`T` _extends_ `GridValidRowModel` = `GridValidRowModel`
+`T` *extends* `GridValidRowModel` = `GridValidRowModel`
 
 ## Properties
 
@@ -41,7 +41,7 @@ The data object for the row being rendered.
 
 A ReactNode (e.g., buttons, menu) to display in the actions cell.
 
----
+***
 
 ### columns?
 
@@ -52,7 +52,7 @@ Defined in: [src/types/DataGridWrapper/interface.ts:26](https://github.com/Palis
 Configuration for the grid columns.
 Defines headers, widths, and cell rendering logic.
 
----
+***
 
 ### emptyStateMessage?
 
@@ -65,7 +65,7 @@ Use `emptyStateProps` instead for full customization.
 If `emptyStateProps` is provided, this prop is ignored.
 This property is maintained for backward compatibility.
 
----
+***
 
 ### emptyStateProps?
 
@@ -93,7 +93,7 @@ emptyStateProps={{
 }}
 ```
 
----
+***
 
 ### error?
 
@@ -103,7 +103,7 @@ Defined in: [src/types/DataGridWrapper/interface.ts:159](https://github.com/Pali
 
 Error message or component to display instead of the grid when data fetch fails.
 
----
+***
 
 ### loading?
 
@@ -113,7 +113,7 @@ Defined in: [src/types/DataGridWrapper/interface.ts:31](https://github.com/Palis
 
 If `true`, displays a loading indicator (e.g., Progress Bar) overlaying the grid.
 
----
+***
 
 ### onRowClick()?
 
@@ -135,7 +135,7 @@ The data object of the clicked row.
 
 `void`
 
----
+***
 
 ### paginationConfig?
 
@@ -163,7 +163,7 @@ Enables pagination controls.
 
 Available options for rows per page. default: [10, 25, 50, 100]
 
----
+***
 
 ### rows?
 
@@ -174,7 +174,7 @@ Defined in: [src/types/DataGridWrapper/interface.ts:20](https://github.com/Palis
 The array of data rows to display in the grid.
 Each row must include a unique `id` property (string or number).
 
----
+***
 
 ### searchConfig?
 
@@ -300,7 +300,7 @@ searchConfig: {
 }
 ```
 
----
+***
 
 ### sortConfig?
 

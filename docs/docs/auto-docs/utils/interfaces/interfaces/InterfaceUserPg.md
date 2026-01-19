@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceUserPg
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:679](https://github.com/PalisadoesFoundatio
 
 The first line of the user's address.
 
----
+***
 
 ### addressLine2
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:680](https://github.com/PalisadoesFoundatio
 
 The second line of the user's address.
 
----
+***
 
 ### avatarMimeType
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:681](https://github.com/PalisadoesFoundatio
 
 The MIME type of the user's avatar.
 
----
+***
 
 ### avatarURL
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:682](https://github.com/PalisadoesFoundatio
 
 The URL of the user's avatar.
 
----
+***
 
 ### birthDate
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:683](https://github.com/PalisadoesFoundatio
 
 The birth date of the user.
 
----
+***
 
 ### city
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:684](https://github.com/PalisadoesFoundatio
 
 The city of the user's address.
 
----
+***
 
 ### countryCode
 
@@ -82,7 +82,7 @@ Defined in: [src/utils/interfaces.ts:685](https://github.com/PalisadoesFoundatio
 
 The country code of the user's address.
 
----
+***
 
 ### createdAt
 
@@ -92,7 +92,7 @@ Defined in: [src/utils/interfaces.ts:686](https://github.com/PalisadoesFoundatio
 
 The creation date of the user record.
 
----
+***
 
 ### creator
 
@@ -102,7 +102,7 @@ Defined in: [src/utils/interfaces.ts:687](https://github.com/PalisadoesFoundatio
 
 The user who created this record.
 
----
+***
 
 ### description
 
@@ -112,7 +112,7 @@ Defined in: [src/utils/interfaces.ts:688](https://github.com/PalisadoesFoundatio
 
 A description of the user.
 
----
+***
 
 ### educationGrade
 
@@ -122,7 +122,7 @@ Defined in: [src/utils/interfaces.ts:689](https://github.com/PalisadoesFoundatio
 
 The education grade of the user.
 
----
+***
 
 ### emailAddress
 
@@ -132,7 +132,7 @@ Defined in: [src/utils/interfaces.ts:690](https://github.com/PalisadoesFoundatio
 
 The email address of the user.
 
----
+***
 
 ### employmentStatus
 
@@ -142,7 +142,7 @@ Defined in: [src/utils/interfaces.ts:691](https://github.com/PalisadoesFoundatio
 
 The employment status of the user.
 
----
+***
 
 ### homePhoneNumber
 
@@ -152,7 +152,7 @@ Defined in: [src/utils/interfaces.ts:692](https://github.com/PalisadoesFoundatio
 
 The home phone number of the user.
 
----
+***
 
 ### id
 
@@ -162,7 +162,7 @@ Defined in: [src/utils/interfaces.ts:693](https://github.com/PalisadoesFoundatio
 
 The unique identifier of the user.
 
----
+***
 
 ### isEmailAddressVerified
 
@@ -172,7 +172,7 @@ Defined in: [src/utils/interfaces.ts:694](https://github.com/PalisadoesFoundatio
 
 Indicates if the user's email address is verified.
 
----
+***
 
 ### maritalStatus
 
@@ -182,7 +182,7 @@ Defined in: [src/utils/interfaces.ts:695](https://github.com/PalisadoesFoundatio
 
 The marital status of the user.
 
----
+***
 
 ### mobilePhoneNumber
 
@@ -192,7 +192,7 @@ Defined in: [src/utils/interfaces.ts:696](https://github.com/PalisadoesFoundatio
 
 The mobile phone number of the user.
 
----
+***
 
 ### name
 
@@ -202,7 +202,7 @@ Defined in: [src/utils/interfaces.ts:697](https://github.com/PalisadoesFoundatio
 
 The full name of the user.
 
----
+***
 
 ### natalSex
 
@@ -212,7 +212,7 @@ Defined in: [src/utils/interfaces.ts:698](https://github.com/PalisadoesFoundatio
 
 The natal sex of the user.
 
----
+***
 
 ### postalCode
 
@@ -222,7 +222,7 @@ Defined in: [src/utils/interfaces.ts:699](https://github.com/PalisadoesFoundatio
 
 The postal code of the user's address.
 
----
+***
 
 ### role
 
@@ -232,7 +232,7 @@ Defined in: [src/utils/interfaces.ts:700](https://github.com/PalisadoesFoundatio
 
 The role of the user.
 
----
+***
 
 ### state
 
@@ -242,7 +242,7 @@ Defined in: [src/utils/interfaces.ts:701](https://github.com/PalisadoesFoundatio
 
 The state of the user's address.
 
----
+***
 
 ### updatedAt
 
@@ -252,7 +252,7 @@ Defined in: [src/utils/interfaces.ts:702](https://github.com/PalisadoesFoundatio
 
 The last update date of the user record.
 
----
+***
 
 ### updater
 
@@ -262,7 +262,7 @@ Defined in: [src/utils/interfaces.ts:703](https://github.com/PalisadoesFoundatio
 
 The user who last updated this record.
 
----
+***
 
 ### workPhoneNumber
 

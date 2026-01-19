@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Variable: CreateModal
 
@@ -14,7 +14,6 @@ Specialized modal template for creating new entities.
 Wraps form content with proper submission handling and loading states.
 
 Features:
-
 - Auto-focus on first input field when modal opens
 - Keyboard shortcut: Ctrl/Cmd+Enter to submit form
 - Form validation support via submitDisabled prop

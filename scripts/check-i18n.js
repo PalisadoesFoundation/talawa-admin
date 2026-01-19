@@ -624,8 +624,7 @@ const collectViolations = (filePath, lineFilter = null) => {
     if (importLike) return;
 
     // Skip if the line is a function declaration (including export, generics, arrow functions)
-    const functionDeclOrArrowPattern =
-      /^(export\s+)?(async\s+)?function\s*\w*\s*(<[^>]*>)?\s*\([^)]*\)\s*\{|^(export\s+)?(const|let|var)\s+\w+\s*(?::[^=]*)?=\s*\([^)]*\)\s*=>/;
+    const functionDeclOrArrowPattern = /^(export\s+)?(async\s+)?function\s*\w*\s*(<[^>]*>)?\s*\([^)]*\)\s*\{|^(export\s+)?(const|let|var)\s+\w+\s*(?::[^=]*)?=\s*\([^)]*\)\s*=>/;
     if (functionDeclOrArrowPattern.test(line.trim())) {
       return;
     }
@@ -966,9 +965,7 @@ const main = () => {
   if (diffOnly) {
     const diffFiles = Array.from(changedLinesByFile.keys());
     const diffTargets =
-      cliFiles.length > 0
-        ? diffFiles
-        : diffFiles.filter((file) => isUnderSrc(file));
+      cliFiles.length > 0 ? diffFiles : diffFiles.filter((file) => isUnderSrc(file));
     targets = diffTargets
       .filter((file) => fs.existsSync(file))
       .filter((file) => shouldAnalyzeFile(file));

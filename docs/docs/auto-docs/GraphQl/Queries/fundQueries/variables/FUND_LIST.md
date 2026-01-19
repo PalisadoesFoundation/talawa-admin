@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: FUND_LIST
+# Variable: FUND\_LIST
 
-> `const` **FUND_LIST**: `DocumentNode`
+> `const` **FUND\_LIST**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/fundQueries.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/fundQueries.ts#L13)
 

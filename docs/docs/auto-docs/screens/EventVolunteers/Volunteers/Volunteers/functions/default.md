@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Function: default()
 
@@ -11,7 +11,6 @@ Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.tsx:101](https://
 Renders the Event Volunteers screen.
 
 Responsibilities:
-
 - Displays volunteer listings with status chips
 - Supports search and filter via SearchFilterBar
 - Shows volunteer avatars and hours volunteered
@@ -19,7 +18,6 @@ Responsibilities:
 - Integrates with DataGrid for table display
 
 Localization:
-
 - Uses `common` and `eventVolunteers` namespaces
 
 ## Returns

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceTableData
 
@@ -14,7 +14,7 @@ Defined in: [src/types/shared-components/CheckIn/interface.ts:42](https://github
 
 Defined in: [src/types/shared-components/CheckIn/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/interface.ts#L45)
 
----
+***
 
 ### id
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/CheckIn/interface.ts:45](https://github
 
 Defined in: [src/types/shared-components/CheckIn/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/interface.ts#L44)
 
----
+***
 
 ### userName
 

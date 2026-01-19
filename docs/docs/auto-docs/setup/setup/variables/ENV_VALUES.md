@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: ENV_VALUES
+# Variable: ENV\_VALUES
 
-> `const` **ENV_VALUES**: `object`
+> `const` **ENV\_VALUES**: `object`
 
 Defined in: [src/setup/setup.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L15)
 

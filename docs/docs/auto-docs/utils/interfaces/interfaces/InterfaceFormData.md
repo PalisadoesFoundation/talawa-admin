@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceFormData
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:2426](https://github.com/PalisadoesFoundati
 
 The email address.
 
----
+***
 
 ### firstName
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:2424](https://github.com/PalisadoesFoundati
 
 The first name.
 
----
+***
 
 ### gender
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:2428](https://github.com/PalisadoesFoundati
 
 The gender.
 
----
+***
 
 ### lastName
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:2425](https://github.com/PalisadoesFoundati
 
 The last name.
 
----
+***
 
 ### phoneNo
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IEventFormProps
 
@@ -31,7 +31,7 @@ Provides a reusable form for creating and editing events across Admin and User p
 
 Defined in: [src/types/EventForm/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L79)
 
----
+***
 
 ### initialValues
 
@@ -39,7 +39,7 @@ Defined in: [src/types/EventForm/interface.ts:79](https://github.com/PalisadoesF
 
 Defined in: [src/types/EventForm/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L69)
 
----
+***
 
 ### onCancel()
 
@@ -51,7 +51,7 @@ Defined in: [src/types/EventForm/interface.ts:71](https://github.com/PalisadoesF
 
 `void`
 
----
+***
 
 ### onSubmit()
 
@@ -69,7 +69,7 @@ Defined in: [src/types/EventForm/interface.ts:70](https://github.com/PalisadoesF
 
 `void` \| `Promise`\<`void`\>
 
----
+***
 
 ### showCancelButton?
 
@@ -77,7 +77,7 @@ Defined in: [src/types/EventForm/interface.ts:70](https://github.com/PalisadoesF
 
 Defined in: [src/types/EventForm/interface.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L82)
 
----
+***
 
 ### showCreateChat?
 
@@ -85,7 +85,7 @@ Defined in: [src/types/EventForm/interface.ts:82](https://github.com/PalisadoesF
 
 Defined in: [src/types/EventForm/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L75)
 
----
+***
 
 ### showPublicToggle?
 
@@ -93,7 +93,7 @@ Defined in: [src/types/EventForm/interface.ts:75](https://github.com/PalisadoesF
 
 Defined in: [src/types/EventForm/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L77)
 
----
+***
 
 ### showRecurrenceToggle?
 
@@ -101,7 +101,7 @@ Defined in: [src/types/EventForm/interface.ts:77](https://github.com/PalisadoesF
 
 Defined in: [src/types/EventForm/interface.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L81)
 
----
+***
 
 ### showRegisterable?
 
@@ -109,7 +109,7 @@ Defined in: [src/types/EventForm/interface.ts:81](https://github.com/PalisadoesF
 
 Defined in: [src/types/EventForm/interface.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L76)
 
----
+***
 
 ### submitLabel
 
@@ -117,7 +117,7 @@ Defined in: [src/types/EventForm/interface.ts:76](https://github.com/PalisadoesF
 
 Defined in: [src/types/EventForm/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L72)
 
----
+***
 
 ### submitting?
 
@@ -125,7 +125,7 @@ Defined in: [src/types/EventForm/interface.ts:72](https://github.com/PalisadoesF
 
 Defined in: [src/types/EventForm/interface.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L80)
 
----
+***
 
 ### t()
 
@@ -147,7 +147,7 @@ Defined in: [src/types/EventForm/interface.ts:73](https://github.com/PalisadoesF
 
 `string`
 
----
+***
 
 ### tCommon()
 

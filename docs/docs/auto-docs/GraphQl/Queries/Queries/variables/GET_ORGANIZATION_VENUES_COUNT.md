@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: GET_ORGANIZATION_VENUES_COUNT
+# Variable: GET\_ORGANIZATION\_VENUES\_COUNT
 
-> `const` **GET_ORGANIZATION_VENUES_COUNT**: `DocumentNode`
+> `const` **GET\_ORGANIZATION\_VENUES\_COUNT**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/Queries.ts:505](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L505)

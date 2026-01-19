@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Class: LifecycleManager
 
@@ -50,7 +50,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:142](https://github.com/Palisadoes
 
 `Promise`\<`boolean`\>
 
----
+***
 
 ### deactivatePlugin()
 
@@ -68,7 +68,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:178](https://github.com/Palisadoes
 
 `Promise`\<`boolean`\>
 
----
+***
 
 ### getActivePluginCount()
 
@@ -80,7 +80,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:53](https://github.com/PalisadoesF
 
 `number`
 
----
+***
 
 ### getLoadedPlugin()
 
@@ -98,7 +98,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:26](https://github.com/PalisadoesF
 
 [`ILoadedPlugin`](../../../types/interfaces/ILoadedPlugin.md)
 
----
+***
 
 ### getLoadedPlugins()
 
@@ -110,7 +110,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:22](https://github.com/PalisadoesF
 
 [`ILoadedPlugin`](../../../types/interfaces/ILoadedPlugin.md)[]
 
----
+***
 
 ### getPluginComponent()
 
@@ -132,7 +132,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:33](https://github.com/PalisadoesF
 
 `ComponentType`\<\{ \}\>
 
----
+***
 
 ### getPluginCount()
 
@@ -144,7 +144,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:49](https://github.com/PalisadoesF
 
 `number`
 
----
+***
 
 ### installPlugin()
 
@@ -162,7 +162,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:214](https://github.com/Palisadoes
 
 `Promise`\<`boolean`\>
 
----
+***
 
 ### loadPlugin()
 
@@ -180,7 +180,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:59](https://github.com/PalisadoesF
 
 `Promise`\<`boolean`\>
 
----
+***
 
 ### togglePluginStatus()
 
@@ -202,7 +202,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:131](https://github.com/Palisadoes
 
 `Promise`\<`boolean`\>
 
----
+***
 
 ### uninstallPlugin()
 
@@ -220,7 +220,7 @@ Defined in: [src/plugin/managers/lifecycle.ts:268](https://github.com/Palisadoes
 
 `Promise`\<`boolean`\>
 
----
+***
 
 ### unloadPlugin()
 

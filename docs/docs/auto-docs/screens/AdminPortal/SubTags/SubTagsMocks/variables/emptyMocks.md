@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Variable: emptyMocks
 
@@ -46,9 +46,9 @@ Defined in: [src/screens/AdminPortal/SubTags/SubTagsMocks.ts:267](https://github
 
 > **name**: `object`
 
-#### request.variables.where.name.starts_with
+#### request.variables.where.name.starts\_with
 
-> **starts_with**: `string` = `''`
+> **starts\_with**: `string` = `''`
 
 ### result
 

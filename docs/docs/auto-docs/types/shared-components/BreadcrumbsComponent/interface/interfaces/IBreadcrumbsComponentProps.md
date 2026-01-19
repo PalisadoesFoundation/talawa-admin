@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IBreadcrumbsComponentProps
 
@@ -23,7 +23,7 @@ Optional aria-label translation key for the navigation landmark.
 - Key is resolved from the `common` i18n namespace.
 - Defaults to `'breadcrumbs'` (i.e., `common.breadcrumbs`).
 
----
+***
 
 ### items
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceVolunteerRank
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:2719](https://github.com/PalisadoesFoundati
 
 The number of hours volunteered.
 
----
+***
 
 ### rank
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:2718](https://github.com/PalisadoesFoundati
 
 The rank of the volunteer.
 
----
+***
 
 ### user
 

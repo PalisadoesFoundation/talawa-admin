@@ -142,9 +142,11 @@ describe('check-i18n test utils', () => {
     });
 
     it('skips waiting when computed backoff is non-positive', () => {
-      const waitSpy = vi.spyOn(Atomics, 'wait').mockImplementation(() => {
-        throw new Error('should not wait');
-      });
+      const waitSpy = vi
+        .spyOn(Atomics, 'wait')
+        .mockImplementation(() => {
+          throw new Error('should not wait');
+        });
       const minSpy = vi.spyOn(Math, 'min').mockReturnValue(0);
 
       spawnSyncMock

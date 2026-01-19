@@ -8,7 +8,7 @@ sidebar_position: 40
 ## Overview
 
 The Design Token System has been introduced, if you want to use any colour or any dimensional values you must refer to the `src/style/tokens` and use tokens from there.
-If the desired color or sizes are not present in the token files then you may add that in the token
+If the desired color or sizes are not present in the token files then you may add that in the token 
 file with proper naming convention, then reference it via `var(--token-name)`.
 
 ## Token Files

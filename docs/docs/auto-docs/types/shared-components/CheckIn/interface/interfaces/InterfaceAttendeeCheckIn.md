@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceAttendeeCheckIn
 
@@ -14,7 +14,7 @@ Defined in: [src/types/shared-components/CheckIn/interface.ts:7](https://github.
 
 Defined in: [src/types/shared-components/CheckIn/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/interface.ts#L10)
 
----
+***
 
 ### checkOutTime
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/CheckIn/interface.ts:10](https://github
 
 Defined in: [src/types/shared-components/CheckIn/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/interface.ts#L11)
 
----
+***
 
 ### id
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/CheckIn/interface.ts:11](https://github
 
 Defined in: [src/types/shared-components/CheckIn/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/interface.ts#L8)
 
----
+***
 
 ### isCheckedIn
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/CheckIn/interface.ts:8](https://github.
 
 Defined in: [src/types/shared-components/CheckIn/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/interface.ts#L12)
 
----
+***
 
 ### isCheckedOut
 
@@ -46,7 +46,7 @@ Defined in: [src/types/shared-components/CheckIn/interface.ts:12](https://github
 
 Defined in: [src/types/shared-components/CheckIn/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/interface.ts#L13)
 
----
+***
 
 ### user
 

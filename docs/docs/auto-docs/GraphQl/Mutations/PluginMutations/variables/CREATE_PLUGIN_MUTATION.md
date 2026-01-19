@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: CREATE_PLUGIN_MUTATION
+# Variable: CREATE\_PLUGIN\_MUTATION
 
-> `const` **CREATE_PLUGIN_MUTATION**: `DocumentNode`
+> `const` **CREATE\_PLUGIN\_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/PluginMutations.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PluginMutations.ts#L9)
 

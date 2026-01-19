@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: USER_TAG_SUB_TAGS
+# Variable: USER\_TAG\_SUB\_TAGS
 
-> `const` **USER_TAG_SUB_TAGS**: `DocumentNode`
+> `const` **USER\_TAG\_SUB\_TAGS**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/userTagQueries.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/userTagQueries.ts#L60)
 

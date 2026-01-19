@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Function: EventStatsWrapper()
 
@@ -12,7 +12,7 @@ Defined in: [src/components/EventStats/EventStatsWrapper.tsx:38](https://github.
 
 ### \_\_namedParameters
 
-#### \_id
+#### _id
 
 `string`
 

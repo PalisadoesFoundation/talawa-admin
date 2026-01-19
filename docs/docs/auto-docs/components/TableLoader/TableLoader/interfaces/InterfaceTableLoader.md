@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceTableLoader
 
@@ -14,7 +14,7 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:35](https://github.com/P
 
 Defined in: [src/components/TableLoader/TableLoader.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L39)
 
----
+***
 
 ### headerTitles?
 
@@ -22,7 +22,7 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:39](https://github.com/P
 
 Defined in: [src/components/TableLoader/TableLoader.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L37)
 
----
+***
 
 ### noOfCols?
 
@@ -30,7 +30,7 @@ Defined in: [src/components/TableLoader/TableLoader.tsx:37](https://github.com/P
 
 Defined in: [src/components/TableLoader/TableLoader.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/TableLoader/TableLoader.tsx#L38)
 
----
+***
 
 ### noOfRows
 

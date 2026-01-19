@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfacePaginationVariables
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:35](https://github.com/Palis
 
 Defined in: [src/types/AdminPortal/Tag/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L36)
 
----
+***
 
 ### first?
 

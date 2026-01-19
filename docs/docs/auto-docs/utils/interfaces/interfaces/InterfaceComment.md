@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceComment
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/interfaces.ts:2293](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2295](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2295)
 
----
+***
 
 ### createdAt
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:2295](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2301](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2301)
 
----
+***
 
 ### creator
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:2296](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
----
+***
 
 ### downVotesCount
 
@@ -50,7 +50,7 @@ Defined in: [src/utils/interfaces.ts:2296](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2303](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2303)
 
----
+***
 
 ### hasUserVoted?
 
@@ -66,7 +66,7 @@ Defined in: [src/utils/interfaces.ts:2304](https://github.com/PalisadoesFoundati
 
 > **voteType**: [`VoteType`](VoteType.md)
 
----
+***
 
 ### id
 
@@ -74,7 +74,7 @@ Defined in: [src/utils/interfaces.ts:2304](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2294](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2294)
 
----
+***
 
 ### upVotesCount
 

@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: UPDATE_VOLUNTEER_GROUP
+# Variable: UPDATE\_VOLUNTEER\_GROUP
 
-> `const` **UPDATE_VOLUNTEER_GROUP**: `DocumentNode`
+> `const` **UPDATE\_VOLUNTEER\_GROUP**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/EventVolunteerMutation.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventVolunteerMutation.ts#L85)
 

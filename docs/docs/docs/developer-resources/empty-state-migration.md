@@ -132,10 +132,10 @@ The following screens have been successfully migrated to use the shared
 The following screens still use legacy patterns and were intentionally
 left unchanged:
 
-| Screen | Reason |
-| ------ | ------ |
-|        |        |
-|        |        |
+| Screen                           | Reason                                  |
+| -------------------------------- | --------------------------------------- |
+|                                  |                                         |
+|                                  |                                         |
 
 > Note: Any future exclusions should be documented here with rationale.
 

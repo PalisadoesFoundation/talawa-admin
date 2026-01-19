@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: USER_TAGS_MEMBERS_TO_ASSIGN_TO
+# Variable: USER\_TAGS\_MEMBERS\_TO\_ASSIGN\_TO
 
-> `const` **USER_TAGS_MEMBERS_TO_ASSIGN_TO**: `DocumentNode`
+> `const` **USER\_TAGS\_MEMBERS\_TO\_ASSIGN\_TO**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/userTagQueries.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/userTagQueries.ts#L119)
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceOrgContriCardsProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/Contribution/interface.ts:8](https://github.c
 
 Defined in: [src/types/AdminPortal/Contribution/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Contribution/interface.ts#L13)
 
----
+***
 
 ### contriDate
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/Contribution/interface.ts:13](https://github.
 
 Defined in: [src/types/AdminPortal/Contribution/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Contribution/interface.ts#L12)
 
----
+***
 
 ### contriTransactionId
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/Contribution/interface.ts:12](https://github.
 
 Defined in: [src/types/AdminPortal/Contribution/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Contribution/interface.ts#L14)
 
----
+***
 
 ### id
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/Contribution/interface.ts:14](https://github.
 
 Defined in: [src/types/AdminPortal/Contribution/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Contribution/interface.ts#L10)
 
----
+***
 
 ### key
 
@@ -46,7 +46,7 @@ Defined in: [src/types/AdminPortal/Contribution/interface.ts:10](https://github.
 
 Defined in: [src/types/AdminPortal/Contribution/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Contribution/interface.ts#L9)
 
----
+***
 
 ### userEmail
 
@@ -54,7 +54,7 @@ Defined in: [src/types/AdminPortal/Contribution/interface.ts:9](https://github.c
 
 Defined in: [src/types/AdminPortal/Contribution/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Contribution/interface.ts#L15)
 
----
+***
 
 ### userName
 

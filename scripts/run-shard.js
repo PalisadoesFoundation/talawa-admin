@@ -26,11 +26,7 @@ if (withCoverage) args.push('--coverage');
 args.push('--shard', `${shardIndex}/${shardCount}`);
 
 // Ensure SHARD_INDEX is set for vitest.config.ts to detect sharded runs
-const env = {
-  ...process.env,
-  SHARD_INDEX: shardIndex,
-  SHARD_COUNT: shardCount,
-};
+const env = { ...process.env, SHARD_INDEX: shardIndex, SHARD_COUNT: shardCount };
 
 const child = spawn('npx', args, { stdio: 'inherit', shell: true, env });
 

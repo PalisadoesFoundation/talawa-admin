@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceUserTableRowProps
 
@@ -16,7 +16,7 @@ Props interface for UserTableRow component
 
 Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L43)
 
----
+***
 
 ### compact?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:43](https://github.
 
 Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L47)
 
----
+***
 
 ### isDataGrid?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:47](https://github.
 
 Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L46)
 
----
+***
 
 ### linkPath?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:46](https://github.
 
 Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L42)
 
----
+***
 
 ### onRowClick()?
 
@@ -58,7 +58,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:45](https://github.
 
 `void`
 
----
+***
 
 ### rowNumber?
 
@@ -66,7 +66,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:45](https://github.
 
 Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L41)
 
----
+***
 
 ### showJoinedDate?
 
@@ -74,7 +74,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:41](https://github.
 
 Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L44)
 
----
+***
 
 ### testIdPrefix?
 
@@ -82,7 +82,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:44](https://github.
 
 Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L48)
 
----
+***
 
 ### user
 

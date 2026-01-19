@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: UPLOAD_PLUGIN_ZIP_MUTATION
+# Variable: UPLOAD\_PLUGIN\_ZIP\_MUTATION
 
-> `const` **UPLOAD_PLUGIN_ZIP_MUTATION**: `DocumentNode`
+> `const` **UPLOAD\_PLUGIN\_ZIP\_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/PluginMutations.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PluginMutations.ts#L81)

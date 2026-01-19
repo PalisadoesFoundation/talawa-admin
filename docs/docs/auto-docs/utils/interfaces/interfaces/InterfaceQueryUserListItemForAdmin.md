@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceQueryUserListItemForAdmin
 
@@ -25,7 +25,7 @@ Note: This field is present in several GraphQL responses and is optional.
 
 > `optional` **isSuperAdmin**: `boolean`
 
----
+***
 
 ### avatarURL
 
@@ -33,7 +33,7 @@ Note: This field is present in several GraphQL responses and is optional.
 
 Defined in: [src/utils/interfaces.ts:2099](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2099)
 
----
+***
 
 ### birthDate
 
@@ -41,7 +41,7 @@ Defined in: [src/utils/interfaces.ts:2099](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2100)
 
----
+***
 
 ### city
 
@@ -49,7 +49,7 @@ Defined in: [src/utils/interfaces.ts:2100](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2101)
 
----
+***
 
 ### countryCode
 
@@ -57,7 +57,7 @@ Defined in: [src/utils/interfaces.ts:2101](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2102)
 
----
+***
 
 ### createdAt
 
@@ -65,7 +65,7 @@ Defined in: [src/utils/interfaces.ts:2102](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2103)
 
----
+***
 
 ### createdOrganizations
 
@@ -85,7 +85,7 @@ Defined in: [src/utils/interfaces.ts:2118](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
----
+***
 
 ### educationGrade
 
@@ -93,7 +93,7 @@ Defined in: [src/utils/interfaces.ts:2118](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2105)
 
----
+***
 
 ### emailAddress
 
@@ -101,7 +101,7 @@ Defined in: [src/utils/interfaces.ts:2105](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2098](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2098)
 
----
+***
 
 ### employmentStatus
 
@@ -109,7 +109,7 @@ Defined in: [src/utils/interfaces.ts:2098](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2106)
 
----
+***
 
 ### homePhoneNumber
 
@@ -117,7 +117,7 @@ Defined in: [src/utils/interfaces.ts:2106](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2115)
 
----
+***
 
 ### id
 
@@ -125,7 +125,7 @@ Defined in: [src/utils/interfaces.ts:2115](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2096](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2096)
 
----
+***
 
 ### isEmailAddressVerified
 
@@ -133,7 +133,7 @@ Defined in: [src/utils/interfaces.ts:2096](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2107)
 
----
+***
 
 ### maritalStatus
 
@@ -141,7 +141,7 @@ Defined in: [src/utils/interfaces.ts:2107](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2108)
 
----
+***
 
 ### mobilePhoneNumber
 
@@ -149,7 +149,7 @@ Defined in: [src/utils/interfaces.ts:2108](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2114)
 
----
+***
 
 ### name
 
@@ -157,7 +157,7 @@ Defined in: [src/utils/interfaces.ts:2114](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2097](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2097)
 
----
+***
 
 ### natalSex
 
@@ -165,7 +165,7 @@ Defined in: [src/utils/interfaces.ts:2097](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2109)
 
----
+***
 
 ### naturalLanguageCode
 
@@ -173,7 +173,7 @@ Defined in: [src/utils/interfaces.ts:2109](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2110)
 
----
+***
 
 ### organizationsWhereMember
 
@@ -185,7 +185,7 @@ Defined in: [src/utils/interfaces.ts:2124](https://github.com/PalisadoesFoundati
 
 > **edges**: `object`[]
 
----
+***
 
 ### orgsWhereUserIsBlocked?
 
@@ -197,7 +197,7 @@ Defined in: [src/utils/interfaces.ts:2144](https://github.com/PalisadoesFoundati
 
 > **edges**: `object`[]
 
----
+***
 
 ### postalCode
 
@@ -205,7 +205,7 @@ Defined in: [src/utils/interfaces.ts:2144](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2111)
 
----
+***
 
 ### role
 
@@ -213,7 +213,7 @@ Defined in: [src/utils/interfaces.ts:2111](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2112)
 
----
+***
 
 ### state
 
@@ -221,7 +221,7 @@ Defined in: [src/utils/interfaces.ts:2112](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2113)
 
----
+***
 
 ### updatedAt
 
@@ -229,7 +229,7 @@ Defined in: [src/utils/interfaces.ts:2113](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2104)
 
----
+***
 
 ### workPhoneNumber
 

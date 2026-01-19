@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: NewChatType
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Chat/interface.ts:3](https://github.com/PalisadoesFoundat
 
 Defined in: [src/types/Chat/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L7)
 
----
+***
 
 ### avatarURL?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Chat/interface.ts:7](https://github.com/PalisadoesFoundat
 
 Defined in: [src/types/Chat/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L8)
 
----
+***
 
 ### createdAt
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Chat/interface.ts:8](https://github.com/PalisadoesFoundat
 
 Defined in: [src/types/Chat/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L10)
 
----
+***
 
 ### creator?
 
@@ -56,7 +56,7 @@ Defined in: [src/types/Chat/interface.ts:42](https://github.com/PalisadoesFounda
 
 > **name**: `string`
 
----
+***
 
 ### description?
 
@@ -64,7 +64,7 @@ Defined in: [src/types/Chat/interface.ts:42](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Chat/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L6)
 
----
+***
 
 ### firstUnreadMessageId?
 
@@ -72,7 +72,7 @@ Defined in: [src/types/Chat/interface.ts:6](https://github.com/PalisadoesFoundat
 
 Defined in: [src/types/Chat/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L15)
 
----
+***
 
 ### hasUnread?
 
@@ -80,7 +80,7 @@ Defined in: [src/types/Chat/interface.ts:15](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Chat/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L14)
 
----
+***
 
 ### id
 
@@ -88,7 +88,7 @@ Defined in: [src/types/Chat/interface.ts:14](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Chat/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L4)
 
----
+***
 
 ### isGroup
 
@@ -96,7 +96,7 @@ Defined in: [src/types/Chat/interface.ts:4](https://github.com/PalisadoesFoundat
 
 Defined in: [src/types/Chat/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L9)
 
----
+***
 
 ### lastMessage?
 
@@ -168,7 +168,7 @@ Defined in: [src/types/Chat/interface.ts:16](https://github.com/PalisadoesFounda
 
 > `optional` **updatedAt**: `string` \| `null`
 
----
+***
 
 ### members
 
@@ -180,7 +180,7 @@ Defined in: [src/types/Chat/interface.ts:54](https://github.com/PalisadoesFounda
 
 > **edges**: `object`[]
 
----
+***
 
 ### messages
 
@@ -192,7 +192,7 @@ Defined in: [src/types/Chat/interface.ts:68](https://github.com/PalisadoesFounda
 
 > **edges**: `object`[]
 
----
+***
 
 ### name
 
@@ -200,7 +200,7 @@ Defined in: [src/types/Chat/interface.ts:68](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Chat/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L5)
 
----
+***
 
 ### organization?
 
@@ -220,7 +220,7 @@ Defined in: [src/types/Chat/interface.ts:37](https://github.com/PalisadoesFounda
 
 > **name**: `string`
 
----
+***
 
 ### unreadMessagesCount?
 
@@ -228,7 +228,7 @@ Defined in: [src/types/Chat/interface.ts:37](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Chat/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L13)
 
----
+***
 
 ### updatedAt
 
@@ -236,7 +236,7 @@ Defined in: [src/types/Chat/interface.ts:13](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Chat/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L11)
 
----
+***
 
 ### updater?
 

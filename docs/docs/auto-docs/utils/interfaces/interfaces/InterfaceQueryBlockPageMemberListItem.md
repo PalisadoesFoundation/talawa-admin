@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceQueryBlockPageMemberListItem
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1978](https://github.com/PalisadoesFoundati
 
 The unique identifier of the member.
 
----
+***
 
 ### email
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:1981](https://github.com/PalisadoesFoundati
 
 The email address of the member.
 
----
+***
 
 ### firstName
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:1979](https://github.com/PalisadoesFoundati
 
 The first name of the member.
 
----
+***
 
 ### lastName
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:1980](https://github.com/PalisadoesFoundati
 
 The last name of the member.
 
----
+***
 
 ### organizationsBlockedBy
 

@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: REVOKE_REFRESH_TOKEN
+# Variable: REVOKE\_REFRESH\_TOKEN
 
-> `const` **REVOKE_REFRESH_TOKEN**: `DocumentNode`
+> `const` **REVOKE\_REFRESH\_TOKEN**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/mutations.ts:296](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L296)
 

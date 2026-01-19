@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceTagFolderPg
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1169](https://github.com/PalisadoesFoundati
 
 The creation date of the tag folder record.
 
----
+***
 
 ### creator
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:1171](https://github.com/PalisadoesFoundati
 
 The user who created this tag folder.
 
----
+***
 
 ### id
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:1167](https://github.com/PalisadoesFoundati
 
 The unique identifier of the tag folder.
 
----
+***
 
 ### name
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:1168](https://github.com/PalisadoesFoundati
 
 The name of the tag folder.
 
----
+***
 
 ### organization
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:1173](https://github.com/PalisadoesFoundati
 
 The organization associated with this tag folder.
 
----
+***
 
 ### updatedAt
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:1170](https://github.com/PalisadoesFoundati
 
 The last update date of the tag folder record.
 
----
+***
 
 ### updater
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfacePaginationArgs
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1280](https://github.com/PalisadoesFoundati
 
 The cursor to paginate after.
 
----
+***
 
 ### before
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:1281](https://github.com/PalisadoesFoundati
 
 The cursor to paginate before.
 
----
+***
 
 ### first
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:1282](https://github.com/PalisadoesFoundati
 
 The maximum number of items to return from the beginning.
 
----
+***
 
 ### last
 

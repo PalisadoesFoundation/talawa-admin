@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceContriStatsProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/Contribution/interface.ts:1](https://github.c
 
 Defined in: [src/types/AdminPortal/Contribution/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Contribution/interface.ts#L4)
 
----
+***
 
 ### id
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/Contribution/interface.ts:4](https://github.c
 
 Defined in: [src/types/AdminPortal/Contribution/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Contribution/interface.ts#L2)
 
----
+***
 
 ### recentAmount
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/Contribution/interface.ts:2](https://github.c
 
 Defined in: [src/types/AdminPortal/Contribution/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Contribution/interface.ts#L3)
 
----
+***
 
 ### totalAmount
 

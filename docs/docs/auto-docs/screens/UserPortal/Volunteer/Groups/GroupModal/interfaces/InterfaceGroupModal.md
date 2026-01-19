@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceGroupModal
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:65](https://
 
 Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L68)
 
----
+***
 
 ### group
 
@@ -22,7 +22,7 @@ Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:68](https://
 
 Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L69)
 
----
+***
 
 ### hide()
 
@@ -34,7 +34,7 @@ Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:67](https://
 
 `void`
 
----
+***
 
 ### isOpen
 
@@ -42,7 +42,7 @@ Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:67](https://
 
 Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L66)
 
----
+***
 
 ### refetchGroups()
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceActionButton
 
@@ -16,7 +16,7 @@ Action button configuration interface
 
 Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L33)
 
----
+***
 
 ### disabled?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:33](https://github.
 
 Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L32)
 
----
+***
 
 ### icon?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:32](https://github.
 
 Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L29)
 
----
+***
 
 ### label
 
@@ -40,7 +40,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:29](https://github.
 
 Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L27)
 
----
+***
 
 ### onClick()
 
@@ -58,7 +58,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:28](https://github.
 
 `void`
 
----
+***
 
 ### testId?
 
@@ -66,7 +66,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:28](https://github.
 
 Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L31)
 
----
+***
 
 ### variant?
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceEmailFieldProps
 
@@ -23,7 +23,7 @@ Defined in: [src/types/Auth/EmailField/interface.ts:27](https://github.com/Palis
 
 Error message to display - null or undefined means no error
 
----
+***
 
 ### label?
 
@@ -33,7 +33,7 @@ Defined in: [src/types/Auth/EmailField/interface.ts:12](https://github.com/Palis
 
 Optional label text displayed above the input - defaults to "Email"
 
----
+***
 
 ### name?
 
@@ -43,7 +43,7 @@ Defined in: [src/types/Auth/EmailField/interface.ts:15](https://github.com/Palis
 
 Name attribute for the input field - defaults to "email"
 
----
+***
 
 ### onChange()
 
@@ -63,7 +63,7 @@ Change handler called when input value changes
 
 `void`
 
----
+***
 
 ### placeholder?
 
@@ -73,7 +73,7 @@ Defined in: [src/types/Auth/EmailField/interface.ts:24](https://github.com/Palis
 
 Placeholder text for the input - defaults to "name@example.com"
 
----
+***
 
 ### testId?
 
@@ -83,7 +83,7 @@ Defined in: [src/types/Auth/EmailField/interface.ts:30](https://github.com/Palis
 
 Test ID for testing purposes
 
----
+***
 
 ### value
 

@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: GET_ALL_PLUGINS
+# Variable: GET\_ALL\_PLUGINS
 
-> `const` **GET_ALL_PLUGINS**: `DocumentNode`
+> `const` **GET\_ALL\_PLUGINS**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/PlugInQueries.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L8)
 

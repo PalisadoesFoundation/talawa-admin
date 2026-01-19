@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: GET_USER_NOTIFICATIONS
+# Variable: GET\_USER\_NOTIFICATIONS
 
-> `const` **GET_USER_NOTIFICATIONS**: `DocumentNode`
+> `const` **GET\_USER\_NOTIFICATIONS**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/NotificationQueries.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/NotificationQueries.ts#L3)

@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: PASSWORD_REGEX
+# Variable: PASSWORD\_REGEX
 
-> `const` **PASSWORD_REGEX**: `object`
+> `const` **PASSWORD\_REGEX**: `object`
 
 Defined in: [src/utils/validators/authValidators.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/validators/authValidators.ts#L6)
 

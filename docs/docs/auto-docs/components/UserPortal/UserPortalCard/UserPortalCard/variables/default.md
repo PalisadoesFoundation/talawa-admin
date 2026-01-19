@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Variable: default
 
@@ -16,13 +16,11 @@ Structure:
 [ imageSlot ] [ content (children) ] [ actionsSlot ]
 
 Responsibilities:
-
 - Centralizes spacing and alignment logic
 - Supports density variants (compact / standard / expanded)
 - Remains content-agnostic and styling-agnostic
 
 Accessibility:
-
 - role="group"
 - aria-label provided by consumer (i18n required)
 

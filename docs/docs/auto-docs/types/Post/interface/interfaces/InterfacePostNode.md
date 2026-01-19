@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfacePostNode
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Post/interface.ts:23](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L25)
 
----
+***
 
 ### createdAt
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Post/interface.ts:25](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L31)
 
----
+***
 
 ### creator?
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Post/interface.ts:31](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L29)
 
----
+***
 
 ### id
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Post/interface.ts:29](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L24)
 
----
+***
 
 ### imageUrl?
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Post/interface.ts:24](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L27)
 
----
+***
 
 ### pinned?
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Post/interface.ts:27](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L30)
 
----
+***
 
 ### text?
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Post/interface.ts:30](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L26)
 
----
+***
 
 ### videoUrl?
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceVolunteerMembership
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Volunteer/interface.ts:210](https://github.com/Palisadoes
 
 The creation date of the volunteer membership record.
 
----
+***
 
 ### createdBy
 
@@ -40,7 +40,7 @@ The user who created this membership.
 
 > **name**: `string`
 
----
+***
 
 ### event
 
@@ -74,7 +74,7 @@ The event associated with the volunteer membership.
 
 > **startAt**: `string`
 
----
+***
 
 ### group?
 
@@ -92,7 +92,7 @@ The group associated with the membership.
 
 > **name**: `string`
 
----
+***
 
 ### id
 
@@ -102,7 +102,7 @@ Defined in: [src/types/Volunteer/interface.ts:208](https://github.com/Palisadoes
 
 The unique identifier of the volunteer membership.
 
----
+***
 
 ### status
 
@@ -112,7 +112,7 @@ Defined in: [src/types/Volunteer/interface.ts:209](https://github.com/Palisadoes
 
 The status of the volunteer membership.
 
----
+***
 
 ### updatedAt
 
@@ -122,7 +122,7 @@ Defined in: [src/types/Volunteer/interface.ts:211](https://github.com/Palisadoes
 
 The last update date of the volunteer membership record.
 
----
+***
 
 ### updatedBy
 
@@ -140,7 +140,7 @@ The user who last updated this membership.
 
 > **name**: `string`
 
----
+***
 
 ### volunteer
 

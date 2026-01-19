@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceRecurringEventVolunteerModalProps
 
@@ -18,7 +18,7 @@ Defined in: [src/types/UserPortal/RecurringEventVolunteerModal/interface.ts:23](
 
 Date of the event instance (ISO string format)
 
----
+***
 
 ### eventName
 
@@ -28,7 +28,7 @@ Defined in: [src/types/UserPortal/RecurringEventVolunteerModal/interface.ts:18](
 
 Name of the event
 
----
+***
 
 ### groupName?
 
@@ -38,7 +38,7 @@ Defined in: [src/types/UserPortal/RecurringEventVolunteerModal/interface.ts:43](
 
 Name of the volunteer group (required when isForGroup is true)
 
----
+***
 
 ### isForGroup?
 
@@ -48,7 +48,7 @@ Defined in: [src/types/UserPortal/RecurringEventVolunteerModal/interface.ts:38](
 
 Whether this is for joining a volunteer group (vs individual volunteering)
 
----
+***
 
 ### onHide()
 
@@ -62,7 +62,7 @@ Callback function to hide/close the modal
 
 `void`
 
----
+***
 
 ### onSelectInstance()
 
@@ -76,7 +76,7 @@ Callback when user selects to volunteer for a single instance
 
 `void`
 
----
+***
 
 ### onSelectSeries()
 
@@ -90,7 +90,7 @@ Callback when user selects to volunteer for the entire series
 
 `void`
 
----
+***
 
 ### show
 

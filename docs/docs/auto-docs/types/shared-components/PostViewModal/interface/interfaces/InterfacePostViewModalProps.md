@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfacePostViewModalProps
 
@@ -36,7 +36,7 @@ Defined in: [src/types/shared-components/PostViewModal/interface.ts:13](https://
 
 `void`
 
----
+***
 
 ### post
 
@@ -44,7 +44,7 @@ Defined in: [src/types/shared-components/PostViewModal/interface.ts:13](https://
 
 Defined in: [src/types/shared-components/PostViewModal/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/PostViewModal/interface.ts#L14)
 
----
+***
 
 ### refetch()
 
@@ -56,7 +56,7 @@ Defined in: [src/types/shared-components/PostViewModal/interface.ts:15](https://
 
 `Promise`\<`unknown`\>
 
----
+***
 
 ### show
 

@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: MOCKS_NULL_USERS_ASSIGNED_TO
+# Variable: MOCKS\_NULL\_USERS\_ASSIGNED\_TO
 
-> `const` **MOCKS_NULL_USERS_ASSIGNED_TO**: `object`[]
+> `const` **MOCKS\_NULL\_USERS\_ASSIGNED\_TO**: `object`[]
 
 Defined in: [src/screens/AdminPortal/ManageTag/ManageTagNullFalsyMocks.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/ManageTagNullFalsyMocks.ts#L10)
 
@@ -46,17 +46,17 @@ Defined in: [src/screens/AdminPortal/ManageTag/ManageTagNullFalsyMocks.ts:10](ht
 
 > **firstName**: `object`
 
-#### request.variables.where.firstName.starts_with
+#### request.variables.where.firstName.starts\_with
 
-> **starts_with**: `string` = `''`
+> **starts\_with**: `string` = `''`
 
 #### request.variables.where.lastName
 
 > **lastName**: `object`
 
-#### request.variables.where.lastName.starts_with
+#### request.variables.where.lastName.starts\_with
 
-> **starts_with**: `string` = `''`
+> **starts\_with**: `string` = `''`
 
 ### result
 

@@ -1,13 +1,4 @@
-import {
-  describe,
-  it,
-  expect,
-  beforeAll,
-  afterAll,
-  beforeEach,
-  afterEach,
-  vi,
-} from 'vitest';
+import { describe, it, expect, beforeAll, afterAll, beforeEach, afterEach, vi } from 'vitest';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
@@ -350,9 +341,7 @@ describe.sequential('check-i18n diff and CLI behavior', () => {
     expect(isUnderSrc(srcDir)).toBe(true);
     expect(isUnderSrc(path.join(srcDir, 'components'))).toBe(true);
     expect(isUnderSrc(path.join(sharedWorkspaceRoot, 'src-other'))).toBe(false);
-    expect(
-      isUnderSrc(path.join(sharedWorkspaceRoot, 'other', 'file.tsx')),
-    ).toBe(false);
+    expect(isUnderSrc(path.join(sharedWorkspaceRoot, 'other', 'file.tsx'))).toBe(false);
   });
 
   it('filters violations by line when a line filter is provided', async () => {

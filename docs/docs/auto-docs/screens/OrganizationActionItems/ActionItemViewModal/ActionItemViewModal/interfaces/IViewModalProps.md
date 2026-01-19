@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IViewModalProps
 
@@ -18,7 +18,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemV
 
 `void`
 
----
+***
 
 ### isOpen
 
@@ -26,7 +26,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemV
 
 Defined in: [src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal.tsx#L22)
 
----
+***
 
 ### item
 

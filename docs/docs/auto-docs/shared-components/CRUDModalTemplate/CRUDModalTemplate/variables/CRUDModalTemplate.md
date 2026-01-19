@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Variable: CRUDModalTemplate
 
@@ -15,7 +15,6 @@ and behavior for all CRUD operations. This component serves as the foundation
 for specialized modal templates (Create, Edit, Delete, View).
 
 Features:
-
 - Consistent modal structure and styling
 - Loading state management with spinner overlay
 - Error display with alert component
@@ -37,7 +36,7 @@ Features:
 >
   <Form.Group>
     <Form.Label>Name</Form.Label>
-    <Form.Control value={name} onChange={(e) => setName(e.target.value)} />
+    <Form.Control value={name} onChange={e => setName(e.target.value)} />
   </Form.Group>
 </CRUDModalTemplate>
 ```

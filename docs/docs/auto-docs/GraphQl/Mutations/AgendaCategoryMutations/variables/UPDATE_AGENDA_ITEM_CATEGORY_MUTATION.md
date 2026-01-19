@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: UPDATE_AGENDA_ITEM_CATEGORY_MUTATION
+# Variable: UPDATE\_AGENDA\_ITEM\_CATEGORY\_MUTATION
 
-> `const` **UPDATE_AGENDA_ITEM_CATEGORY_MUTATION**: `DocumentNode`
+> `const` **UPDATE\_AGENDA\_ITEM\_CATEGORY\_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/AgendaCategoryMutations.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/AgendaCategoryMutations.ts#L36)
 

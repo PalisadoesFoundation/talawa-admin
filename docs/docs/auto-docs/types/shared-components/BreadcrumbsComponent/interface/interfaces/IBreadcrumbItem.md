@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IBreadcrumbItem
 
@@ -30,7 +30,7 @@ Marks the breadcrumb as the current page.
 
 Applies `aria-current="page"` for accessibility.
 
----
+***
 
 ### label?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/shared-components/BreadcrumbsComponent/interface.ts:17](h
 
 Fallback label when no translation key is provided.
 
----
+***
 
 ### to?
 
@@ -51,7 +51,7 @@ Defined in: [src/types/shared-components/BreadcrumbsComponent/interface.ts:23](h
 Navigation path for React Router `Link`.
 If omitted, breadcrumb is rendered as plain text.
 
----
+***
 
 ### translationKey?
 

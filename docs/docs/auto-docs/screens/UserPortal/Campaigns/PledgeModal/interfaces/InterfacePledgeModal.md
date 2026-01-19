@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfacePledgeModal
 
@@ -18,7 +18,7 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:29](https://github
 
 ID of the campaign associated with the pledge.
 
----
+***
 
 ### hide()
 
@@ -32,7 +32,7 @@ Handler to close the modal.
 
 `void`
 
----
+***
 
 ### isOpen
 
@@ -42,7 +42,7 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:25](https://github
 
 Indicates whether the modal is open or closed.
 
----
+***
 
 ### mode
 
@@ -52,7 +52,7 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:37](https://github
 
 Determines whether the modal is in create or edit mode.
 
----
+***
 
 ### pledge
 
@@ -62,7 +62,7 @@ Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:33](https://github
 
 Pledge data to edit; null when creating a new pledge.
 
----
+***
 
 ### refetchPledge()
 
@@ -76,7 +76,7 @@ Trigger to refetch pledge data after updates.
 
 `void`
 
----
+***
 
 ### userId
 

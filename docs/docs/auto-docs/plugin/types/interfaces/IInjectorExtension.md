@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IInjectorExtension
 
@@ -14,7 +14,7 @@ Defined in: [src/plugin/types.ts:81](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L84)
 
----
+***
 
 ### injector
 
@@ -22,7 +22,7 @@ Defined in: [src/plugin/types.ts:84](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L83)
 
----
+***
 
 ### order?
 
@@ -30,7 +30,7 @@ Defined in: [src/plugin/types.ts:83](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L86)
 
----
+***
 
 ### pluginId?
 
@@ -38,7 +38,7 @@ Defined in: [src/plugin/types.ts:86](https://github.com/PalisadoesFoundation/tal
 
 Defined in: [src/plugin/types.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L82)
 
----
+***
 
 ### target?
 

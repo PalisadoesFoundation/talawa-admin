@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: ENV_KEYS
+# Variable: ENV\_KEYS
 
-> `const` **ENV_KEYS**: `object`
+> `const` **ENV\_KEYS**: `object`
 
 Defined in: [src/setup/setup.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L23)
 
@@ -12,26 +12,26 @@ Environment variable key names used by the setup script
 
 ## Type Declaration
 
-### ALLOW_LOGS
+### ALLOW\_LOGS
 
-> `readonly` **ALLOW_LOGS**: `"ALLOW_LOGS"` = `'ALLOW_LOGS'`
+> `readonly` **ALLOW\_LOGS**: `"ALLOW_LOGS"` = `'ALLOW_LOGS'`
 
-### BACKEND_WEBSOCKET_URL
+### BACKEND\_WEBSOCKET\_URL
 
-> `readonly` **BACKEND_WEBSOCKET_URL**: `"REACT_APP_BACKEND_WEBSOCKET_URL"` = `'REACT_APP_BACKEND_WEBSOCKET_URL'`
+> `readonly` **BACKEND\_WEBSOCKET\_URL**: `"REACT_APP_BACKEND_WEBSOCKET_URL"` = `'REACT_APP_BACKEND_WEBSOCKET_URL'`
 
-### RECAPTCHA_SITE_KEY
+### RECAPTCHA\_SITE\_KEY
 
-> `readonly` **RECAPTCHA_SITE_KEY**: `"REACT_APP_RECAPTCHA_SITE_KEY"` = `'REACT_APP_RECAPTCHA_SITE_KEY'`
+> `readonly` **RECAPTCHA\_SITE\_KEY**: `"REACT_APP_RECAPTCHA_SITE_KEY"` = `'REACT_APP_RECAPTCHA_SITE_KEY'`
 
-### TALAWA_URL
+### TALAWA\_URL
 
-> `readonly` **TALAWA_URL**: `"REACT_APP_TALAWA_URL"` = `'REACT_APP_TALAWA_URL'`
+> `readonly` **TALAWA\_URL**: `"REACT_APP_TALAWA_URL"` = `'REACT_APP_TALAWA_URL'`
 
-### USE_DOCKER
+### USE\_DOCKER
 
-> `readonly` **USE_DOCKER**: `"USE_DOCKER"` = `'USE_DOCKER'`
+> `readonly` **USE\_DOCKER**: `"USE_DOCKER"` = `'USE_DOCKER'`
 
-### USE_RECAPTCHA
+### USE\_RECAPTCHA
 
-> `readonly` **USE_RECAPTCHA**: `"REACT_APP_USE_RECAPTCHA"` = `'REACT_APP_USE_RECAPTCHA'`
+> `readonly` **USE\_RECAPTCHA**: `"REACT_APP_USE_RECAPTCHA"` = `'REACT_APP_USE_RECAPTCHA'`

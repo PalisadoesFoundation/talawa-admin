@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: ICreateEventInput
 
@@ -20,7 +20,7 @@ formatRecurrenceForPayload from EventForm.tsx
 
 Defined in: [src/types/Event/interface.ts:256](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L256)
 
----
+***
 
 ### description?
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Event/interface.ts:256](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:264](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L264)
 
----
+***
 
 ### endAt
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Event/interface.ts:264](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:254](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L254)
 
----
+***
 
 ### isInviteOnly
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Event/interface.ts:254](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:263](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L263)
 
----
+***
 
 ### isPublic
 
@@ -55,7 +55,7 @@ Defined in: [src/types/Event/interface.ts:261](https://github.com/PalisadoesFoun
 Determines if the event is visible to the entire community.
 Often referred to as "Community Visible" in the UI.
 
----
+***
 
 ### isRegisterable
 
@@ -63,7 +63,7 @@ Often referred to as "Community Visible" in the UI.
 
 Defined in: [src/types/Event/interface.ts:262](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L262)
 
----
+***
 
 ### location?
 
@@ -71,7 +71,7 @@ Defined in: [src/types/Event/interface.ts:262](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:265](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L265)
 
----
+***
 
 ### name
 
@@ -79,7 +79,7 @@ Defined in: [src/types/Event/interface.ts:265](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:252](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L252)
 
----
+***
 
 ### organizationId
 
@@ -87,7 +87,7 @@ Defined in: [src/types/Event/interface.ts:252](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:255](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L255)
 
----
+***
 
 ### recurrence?
 
@@ -101,7 +101,7 @@ Defined in: [src/types/Event/interface.ts:266](https://github.com/PalisadoesFoun
 
 > `optional` **endDate**: `string`
 
----
+***
 
 ### startAt
 

@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: UNLIKE_COMMENT
+# Variable: UNLIKE\_COMMENT
 
-> `const` **UNLIKE_COMMENT**: `DocumentNode`
+> `const` **UNLIKE\_COMMENT**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/CommentMutations.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/CommentMutations.ts#L54)
 

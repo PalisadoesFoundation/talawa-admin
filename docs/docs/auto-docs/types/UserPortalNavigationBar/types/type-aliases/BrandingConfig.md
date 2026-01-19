@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: BrandingConfig
 
@@ -26,7 +26,7 @@ Brand name to display next to logo
 'Talawa' for user mode, organization name for organization mode
 ```
 
----
+***
 
 ### logo?
 
@@ -42,7 +42,7 @@ Logo image source URL or path
 Talawa logo from assets/images/talawa-logo-600x600.png
 ```
 
----
+***
 
 ### logoAltText?
 
@@ -58,7 +58,7 @@ Alt text for logo image
 Translation key 'userNavbar.talawaBranding'
 ```
 
----
+***
 
 ### onBrandClick()?
 

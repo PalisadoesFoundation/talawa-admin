@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceUnassignUserTagModalProps
 
@@ -18,7 +18,7 @@ Defined in: [src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModa
 
 `Promise`\<`void`\>
 
----
+***
 
 ### toggleUnassignUserTagModal()
 
@@ -30,7 +30,7 @@ Defined in: [src/screens/AdminPortal/ManageTag/unassignModal/UnassignUserTagModa
 
 `void`
 
----
+***
 
 ### unassignUserTagModalIsOpen
 

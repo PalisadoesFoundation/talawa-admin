@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceFormStateType
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Agenda/interface.ts:23](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Agenda/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L24)
 
----
+***
 
 ### agendaItemCategoryNames
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Agenda/interface.ts:24](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Agenda/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L25)
 
----
+***
 
 ### attachments
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Agenda/interface.ts:25](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Agenda/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L29)
 
----
+***
 
 ### createdBy
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Agenda/interface.ts:31](https://github.com/PalisadoesFoun
 
 > **lastName**: `string`
 
----
+***
 
 ### description
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Agenda/interface.ts:31](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Agenda/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L27)
 
----
+***
 
 ### duration
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Agenda/interface.ts:27](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Agenda/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L28)
 
----
+***
 
 ### title
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Agenda/interface.ts:28](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Agenda/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L26)
 
----
+***
 
 ### urls
 

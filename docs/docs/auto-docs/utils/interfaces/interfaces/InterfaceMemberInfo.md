@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceMemberInfo
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:464](https://github.com/PalisadoesFoundatio
 
 The unique identifier of the member.
 
----
+***
 
 ### createdAt
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:469](https://github.com/PalisadoesFoundatio
 
 The creation date of the member record.
 
----
+***
 
 ### email
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:467](https://github.com/PalisadoesFoundatio
 
 The email address of the member.
 
----
+***
 
 ### firstName
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:465](https://github.com/PalisadoesFoundatio
 
 The first name of the member.
 
----
+***
 
 ### image
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:468](https://github.com/PalisadoesFoundatio
 
 The URL of the member's image.
 
----
+***
 
 ### lastName
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:466](https://github.com/PalisadoesFoundatio
 
 The last name of the member.
 
----
+***
 
 ### organizationsBlockedBy
 

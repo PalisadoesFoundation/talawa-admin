@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceQueryUserTagsMembersToAssignTo
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1622](https://github.com/PalisadoesFoundati
 
 The name of the user tag.
 
----
+***
 
 ### usersToAssignTo
 

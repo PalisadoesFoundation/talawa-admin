@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: MembershipRequest
 
@@ -16,7 +16,7 @@ Defined in: [src/types/AdminPortal/membership.ts:4](https://github.com/Palisadoe
 
 Defined in: [src/types/AdminPortal/membership.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/membership.ts#L5)
 
----
+***
 
 ### organization
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/membership.ts:5](https://github.com/Palisadoe
 
 Defined in: [src/types/AdminPortal/membership.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/membership.ts#L6)
 
----
+***
 
 ### user
 

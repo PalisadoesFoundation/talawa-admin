@@ -7,9 +7,10 @@ sidebar_position: 30
 
 ## Introduction
 
-This is the given architecture diagram for MiniO-file upload system:
+This is the given architecture diagram for MiniO-file upload system: 
 
 ![minio-architecture](../../../static/img/markdown/minio/architecture.png)
+
 
 ## File Uploads
 
@@ -28,7 +29,7 @@ File updates are handled in this way:
 
 1. **User Update Request:** The user initiates an update to an existing file.
 1. **ObjectName Retrieval:** The backend retrieves the MinIO `objectName` associated with the file from the database.
-1. **Presigned URL Generation:** As there is no specific way to _update_ files in MiniO we will be overwriting the file on the existing `objectName`. The backend generates a presigned URL for the file in MinIO using the retrieved objectName.
+1. **Presigned URL Generation:** As there is no specific way to *update* files in MiniO we will be overwriting the file on the existing `objectName`. The backend generates a presigned URL for  the file in MinIO using the retrieved objectName.
 1. **File Update to MinIO:** The client uses the presigned URL to upload the updated file to MinIO, overwriting the existing object.
 1. **Metadata Update:** The backend updates the file metadata in the database, including the file hash (if changed) and any other relevant information.
 
@@ -45,7 +46,6 @@ File viewing is handled in this way:
 NOTE: Contributors need to set `NODE_ENV=DEVELOPMENT` in the `.env` file of Talawa API to configure `localhost` as the endpoint for MiniO.
 
 ## Helper-Functions
-
 These are related helper functions.
 
 ### Uploading Files to MiniO
@@ -55,7 +55,7 @@ Used for file uploads:
 1. Helper function-1 `talawa-admin`
 1. location: `src\utils\MinioUpload.ts`
 
-### For _put object_ presignedUrl
+### For *put object*  presignedUrl
 
 Used for creating pre-signed URLs:
 

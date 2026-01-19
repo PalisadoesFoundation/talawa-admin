@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceQueryUserTagChildTags
 
@@ -30,7 +30,7 @@ An array of ancestor tags.
 
 > **name**: `string`
 
----
+***
 
 ### childTags
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:1590](https://github.com/PalisadoesFoundati
 
 The child tags data.
 
----
+***
 
 ### name
 

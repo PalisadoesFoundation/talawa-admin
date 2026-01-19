@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceTagPg
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1212](https://github.com/PalisadoesFoundati
 
 The creation date of the tag record.
 
----
+***
 
 ### creator
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:1214](https://github.com/PalisadoesFoundati
 
 The user who created this tag.
 
----
+***
 
 ### id
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:1210](https://github.com/PalisadoesFoundati
 
 The unique identifier of the tag.
 
----
+***
 
 ### name
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:1211](https://github.com/PalisadoesFoundati
 
 The name of the tag.
 
----
+***
 
 ### organization
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:1216](https://github.com/PalisadoesFoundati
 
 The organization associated with this tag.
 
----
+***
 
 ### updatedAt
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:1213](https://github.com/PalisadoesFoundati
 
 The last update date of the tag record.
 
----
+***
 
 ### updater
 

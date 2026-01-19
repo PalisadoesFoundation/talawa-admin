@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceAdvertisementAttachmentPg
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:745](https://github.com/PalisadoesFoundatio
 
 The MIME type of the attachment.
 
----
+***
 
 ### url
 

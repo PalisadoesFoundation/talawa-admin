@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceAddOnEntryProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:32](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L40)
 
----
+***
 
 ### endAt?
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:40](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L39)
 
----
+***
 
 ### existingAttachments?
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:39](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L35)
 
----
+***
 
 ### id
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:35](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L33)
 
----
+***
 
 ### name?
 
@@ -46,7 +46,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:33](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L34)
 
----
+***
 
 ### organizationId?
 
@@ -54,7 +54,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:34](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L37)
 
----
+***
 
 ### setAfter
 
@@ -62,7 +62,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:37](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L41)
 
----
+***
 
 ### startAt?
 
@@ -70,7 +70,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:41](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L38)
 
----
+***
 
 ### type?
 

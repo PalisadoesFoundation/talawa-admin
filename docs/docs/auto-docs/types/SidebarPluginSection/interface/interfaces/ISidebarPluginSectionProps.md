@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: ISidebarPluginSectionProps
 
@@ -8,7 +8,7 @@ Defined in: [src/types/SidebarPluginSection/interface.ts:13](https://github.com/
 
 Interface for SidebarPluginSection component props.
 
-ISidebarPluginSectionProps
+ ISidebarPluginSectionProps
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: [src/types/SidebarPluginSection/interface.ts:15](https://github.com/
 
 Whether the drawer is hidden/collapsed
 
----
+***
 
 ### onItemClick()?
 
@@ -34,7 +34,7 @@ Handler for plugin item clicks
 
 `void`
 
----
+***
 
 ### orgId?
 
@@ -44,7 +44,7 @@ Defined in: [src/types/SidebarPluginSection/interface.ts:16](https://github.com/
 
 Organization ID for org-specific plugins
 
----
+***
 
 ### pluginItems
 
@@ -54,7 +54,7 @@ Defined in: [src/types/SidebarPluginSection/interface.ts:14](https://github.com/
 
 Array of plugin drawer items
 
----
+***
 
 ### useSimpleButton?
 

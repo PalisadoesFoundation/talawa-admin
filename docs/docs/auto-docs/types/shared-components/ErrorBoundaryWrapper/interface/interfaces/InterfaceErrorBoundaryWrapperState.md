@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceErrorBoundaryWrapperState
 
@@ -21,7 +21,7 @@ Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:100](
 
 The error that was caught
 
----
+***
 
 ### errorInfo
 
@@ -31,7 +31,7 @@ Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:102](
 
 Additional error information including component stack.
 
----
+***
 
 ### hasError
 

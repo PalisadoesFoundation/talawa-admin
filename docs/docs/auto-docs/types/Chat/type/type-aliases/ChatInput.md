@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: ChatInput
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Chat/type.ts:35](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L36)
 
----
+***
 
 ### name?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Chat/type.ts:36](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L39)
 
----
+***
 
 ### organizationId?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Chat/type.ts:39](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L37)
 
----
+***
 
 ### userIds
 

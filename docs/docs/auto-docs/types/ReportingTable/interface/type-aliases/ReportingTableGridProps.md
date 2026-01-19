@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: ReportingTableGridProps
 
@@ -22,7 +22,7 @@ Props for the ReportingTableGrid component
 
 Defined in: [src/types/ReportingTable/interface.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L59)
 
----
+***
 
 ### compactColumns?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/ReportingTable/interface.ts:61](https://github.com/Palisa
 
 When true, applies tighter column widths for tables with many columns (7+)
 
----
+***
 
 ### rows?
 

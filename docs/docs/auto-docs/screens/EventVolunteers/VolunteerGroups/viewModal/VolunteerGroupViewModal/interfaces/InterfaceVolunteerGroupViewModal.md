@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceVolunteerGroupViewModal
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGrou
 
 Defined in: [src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal.tsx#L59)
 
----
+***
 
 ### hide()
 
@@ -26,7 +26,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGrou
 
 `void`
 
----
+***
 
 ### isOpen
 

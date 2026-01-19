@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceQueryOrganizationEventListItem
 
@@ -30,7 +30,7 @@ The unique identifier of the event.
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`_id`](InterfaceBaseEvent.md#_id)
 
----
+***
 
 ### allDay
 
@@ -44,7 +44,7 @@ Indicates if the event is an all-day event.
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`allDay`](InterfaceBaseEvent.md#allday)
 
----
+***
 
 ### description
 
@@ -58,7 +58,7 @@ The description of the event.
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`description`](InterfaceBaseEvent.md#description)
 
----
+***
 
 ### endDate
 
@@ -72,7 +72,7 @@ The end date of the event.
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`endDate`](InterfaceBaseEvent.md#enddate)
 
----
+***
 
 ### endTime
 
@@ -86,7 +86,7 @@ The end time of the event.
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`endTime`](InterfaceBaseEvent.md#endtime)
 
----
+***
 
 ### isPublic
 
@@ -96,7 +96,7 @@ Defined in: [src/utils/interfaces.ts:1963](https://github.com/PalisadoesFoundati
 
 Indicates if the event is public.
 
----
+***
 
 ### isRegisterable
 
@@ -106,7 +106,7 @@ Defined in: [src/utils/interfaces.ts:1964](https://github.com/PalisadoesFoundati
 
 Indicates if the event is registerable.
 
----
+***
 
 ### location
 
@@ -120,7 +120,7 @@ The location of the event.
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`location`](InterfaceBaseEvent.md#location)
 
----
+***
 
 ### recurring
 
@@ -134,7 +134,7 @@ Indicates if the event is a recurring event.
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`recurring`](InterfaceBaseEvent.md#recurring)
 
----
+***
 
 ### startDate
 
@@ -148,7 +148,7 @@ The start date of the event.
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`startDate`](InterfaceBaseEvent.md#startdate)
 
----
+***
 
 ### startTime
 
@@ -162,7 +162,7 @@ The start time of the event.
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`startTime`](InterfaceBaseEvent.md#starttime)
 
----
+***
 
 ### title
 

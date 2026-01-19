@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: ACTION_ITEM_LIST
+# Variable: ACTION\_ITEM\_LIST
 
-> `const` **ACTION_ITEM_LIST**: `DocumentNode`
+> `const` **ACTION\_ITEM\_LIST**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/ActionItemQueries.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/ActionItemQueries.ts#L14)
 

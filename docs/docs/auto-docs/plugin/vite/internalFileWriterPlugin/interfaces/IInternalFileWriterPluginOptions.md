@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IInternalFileWriterPluginOptions
 
@@ -16,7 +16,7 @@ Defined in: [src/plugin/vite/internalFileWriterPlugin.ts:26](https://github.com/
 
 Base path for plugin files
 
----
+***
 
 ### debug?
 
@@ -26,7 +26,7 @@ Defined in: [src/plugin/vite/internalFileWriterPlugin.ts:21](https://github.com/
 
 Debug mode for verbose logging
 
----
+***
 
 ### enabled?
 

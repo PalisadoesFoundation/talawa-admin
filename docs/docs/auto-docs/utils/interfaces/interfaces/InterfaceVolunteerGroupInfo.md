@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceVolunteerGroupInfo
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:2609](https://github.com/PalisadoesFoundati
 
 The creation date of the volunteer group record.
 
----
+***
 
 ### creator
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:2610](https://github.com/PalisadoesFoundati
 
 The user who created this volunteer group.
 
----
+***
 
 ### description
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:2602](https://github.com/PalisadoesFoundati
 
 The description of the volunteer group, or null.
 
----
+***
 
 ### event
 
@@ -56,7 +56,7 @@ The event associated with the volunteer group.
 
 > **id**: `string`
 
----
+***
 
 ### id
 
@@ -66,7 +66,7 @@ Defined in: [src/utils/interfaces.ts:2600](https://github.com/PalisadoesFoundati
 
 The unique identifier of the volunteer group.
 
----
+***
 
 ### isInstanceException
 
@@ -74,7 +74,7 @@ The unique identifier of the volunteer group.
 
 Defined in: [src/utils/interfaces.ts:2608](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2608)
 
----
+***
 
 ### isTemplate
 
@@ -82,7 +82,7 @@ Defined in: [src/utils/interfaces.ts:2608](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:2607](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2607)
 
----
+***
 
 ### leader
 
@@ -92,7 +92,7 @@ Defined in: [src/utils/interfaces.ts:2611](https://github.com/PalisadoesFoundati
 
 The leader of the volunteer group.
 
----
+***
 
 ### name
 
@@ -102,7 +102,7 @@ Defined in: [src/utils/interfaces.ts:2601](https://github.com/PalisadoesFoundati
 
 The name of the volunteer group.
 
----
+***
 
 ### volunteers
 
@@ -132,7 +132,7 @@ An array of volunteers in the group.
 
 > **user**: [`InterfaceUserInfoPG`](InterfaceUserInfoPG.md)
 
----
+***
 
 ### volunteersRequired
 

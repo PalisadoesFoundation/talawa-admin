@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceAgendaItemCategoryInfo
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:2382](https://github.com/PalisadoesFoundati
 
 The unique identifier of the agenda item category.
 
----
+***
 
 ### createdBy
 
@@ -44,7 +44,7 @@ The user who created this agenda item category.
 
 > **lastName**: `string`
 
----
+***
 
 ### description
 
@@ -54,7 +54,7 @@ Defined in: [src/utils/interfaces.ts:2384](https://github.com/PalisadoesFoundati
 
 The description of the agenda item category.
 
----
+***
 
 ### name
 

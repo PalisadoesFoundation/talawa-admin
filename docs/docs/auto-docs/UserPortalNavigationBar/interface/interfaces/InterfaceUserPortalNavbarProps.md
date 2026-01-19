@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceUserPortalNavbarProps
 
@@ -18,7 +18,7 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:66](https://github.c
 
 Branding configuration for logo and brand name
 
----
+***
 
 ### className?
 
@@ -28,7 +28,7 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:155](https://github.
 
 Additional CSS class names
 
----
+***
 
 ### currentPage?
 
@@ -39,7 +39,7 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:78](https://github.c
 Current active page identifier (matches NavigationLink.id)
 Used to highlight the active navigation link
 
----
+***
 
 ### customStyles?
 
@@ -49,7 +49,7 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:160](https://github.
 
 Inline styles
 
----
+***
 
 ### expandBreakpoint?
 
@@ -62,10 +62,10 @@ Breakpoint at which navbar expands
 #### Default
 
 ```ts
-'md';
+'md'
 ```
 
----
+***
 
 ### fetchOrganizationData?
 
@@ -81,7 +81,7 @@ Whether to fetch organization data via GraphQL
 true when mode === 'organization'
 ```
 
----
+***
 
 ### mobileLayout?
 
@@ -97,7 +97,7 @@ Mobile layout style
 'collapse' for user mode, 'offcanvas' for organization mode
 ```
 
----
+***
 
 ### mode?
 
@@ -110,10 +110,10 @@ Navigation mode - determines default behavior and styling
 #### Default
 
 ```ts
-'user';
+'user'
 ```
 
----
+***
 
 ### navigationLinks?
 
@@ -124,7 +124,7 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:72](https://github.c
 Array of navigation links to display in the navbar
 Only shown in organization mode or when explicitly provided
 
----
+***
 
 ### onLanguageChange()?
 
@@ -145,7 +145,7 @@ If not provided, uses default i18next language change
 
 `void` \| `Promise`\<`void`\>
 
----
+***
 
 ### onLogout()?
 
@@ -160,7 +160,7 @@ If not provided, uses default logout behavior based on mode
 
 `void` \| `Promise`\<`void`\>
 
----
+***
 
 ### onNavigation()?
 
@@ -181,7 +181,7 @@ If not provided, uses react-router navigation
 
 `void` \| `Promise`\<`void`\>
 
----
+***
 
 ### organizationId?
 
@@ -192,7 +192,7 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:84](https://github.c
 Organization ID - required for organization mode
 Used for GraphQL queries and navigation
 
----
+***
 
 ### organizationName?
 
@@ -203,7 +203,7 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:90](https://github.c
 Organization name - can be provided directly or fetched via GraphQL
 If not provided and fetchOrganizationData is true, will be fetched
 
----
+***
 
 ### showLanguageSelector?
 
@@ -216,10 +216,10 @@ Show language selector dropdown
 #### Default
 
 ```ts
-true;
+true
 ```
 
----
+***
 
 ### showNotifications?
 
@@ -235,7 +235,7 @@ Show notification icon component
 true when mode === 'user', false when mode === 'organization'
 ```
 
----
+***
 
 ### showUserProfile?
 
@@ -248,10 +248,10 @@ Show user profile dropdown
 #### Default
 
 ```ts
-true;
+true
 ```
 
----
+***
 
 ### userName?
 
@@ -262,7 +262,7 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:166](https://github.
 Override user name (for testing or external state management)
 If not provided, reads from localStorage
 
----
+***
 
 ### variant?
 
@@ -275,5 +275,5 @@ Navbar color variant
 #### Default
 
 ```ts
-'dark';
+'dark'
 ```

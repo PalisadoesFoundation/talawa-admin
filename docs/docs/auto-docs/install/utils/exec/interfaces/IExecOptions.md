@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IExecOptions
 
@@ -14,7 +14,7 @@ Defined in: [src/install/utils/exec.ts:9](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/install/utils/exec.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L11)
 
----
+***
 
 ### silent?
 
@@ -22,7 +22,7 @@ Defined in: [src/install/utils/exec.ts:11](https://github.com/PalisadoesFoundati
 
 Defined in: [src/install/utils/exec.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/utils/exec.ts#L12)
 
----
+***
 
 ### sudo?
 

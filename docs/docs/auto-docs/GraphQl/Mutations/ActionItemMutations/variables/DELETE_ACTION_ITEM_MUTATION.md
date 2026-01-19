@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: DELETE_ACTION_ITEM_MUTATION
+# Variable: DELETE\_ACTION\_ITEM\_MUTATION
 
-> `const` **DELETE_ACTION_ITEM_MUTATION**: `DocumentNode`
+> `const` **DELETE\_ACTION\_ITEM\_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/ActionItemMutations.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/ActionItemMutations.ts#L129)
 

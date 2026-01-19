@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: MOCKS_ERROR_SUBTAGS_QUERY1
+# Variable: MOCKS\_ERROR\_SUBTAGS\_QUERY1
 
-> `const` **MOCKS_ERROR_SUBTAGS_QUERY1**: `object`[]
+> `const` **MOCKS\_ERROR\_SUBTAGS\_QUERY1**: `object`[]
 
 Defined in: [src/components/AdminPortal/TagActions/Node/TagNodeMocks.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/TagActions/Node/TagNodeMocks.ts#L64)
 

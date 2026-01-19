@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: GET_ORGANIZATION_BASIC_DATA
+# Variable: GET\_ORGANIZATION\_BASIC\_DATA
 
-> `const` **GET_ORGANIZATION_BASIC_DATA**: `DocumentNode`
+> `const` **GET\_ORGANIZATION\_BASIC\_DATA**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/Queries.ts:725](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L725)

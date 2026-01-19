@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceSearchFilterBarTranslations
 
@@ -20,7 +20,7 @@ Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:351](https
 
 Clear button accessible label (screen readers)
 
----
+***
 
 ### clearSearchLabel?
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:348](https
 
 Clear search button text/label
 
----
+***
 
 ### dropdownAriaLabel?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:363](https
 
 Dropdown toggle accessible label pattern
 
----
+***
 
 ### filterAndSortOptionsLabel?
 
@@ -50,7 +50,7 @@ Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:372](https
 
 Filter and sort options toolbar accessible label
 
----
+***
 
 ### filterButtonAriaLabel?
 
@@ -60,7 +60,7 @@ Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:369](https
 
 Filter button accessible label
 
----
+***
 
 ### loadingLabel?
 
@@ -70,7 +70,7 @@ Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:354](https
 
 Loading state text
 
----
+***
 
 ### noResultsLabel?
 
@@ -80,7 +80,7 @@ Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:357](https
 
 No results found message
 
----
+***
 
 ### searchButtonAriaLabel?
 
@@ -90,7 +90,7 @@ Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:345](https
 
 Search button accessible label (screen readers)
 
----
+***
 
 ### searchInputAriaDescription?
 
@@ -100,7 +100,7 @@ Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:360](https
 
 Search input accessible description
 
----
+***
 
 ### sortButtonAriaLabel?
 

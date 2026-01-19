@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceCardItem
 
@@ -14,7 +14,7 @@ Defined in: [src/components/MemberActivity/Card/EventsAttendedCardItem.tsx:44](h
 
 Defined in: [src/components/MemberActivity/Card/EventsAttendedCardItem.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Card/EventsAttendedCardItem.tsx#L48)
 
----
+***
 
 ### eventId?
 
@@ -22,7 +22,7 @@ Defined in: [src/components/MemberActivity/Card/EventsAttendedCardItem.tsx:48](h
 
 Defined in: [src/components/MemberActivity/Card/EventsAttendedCardItem.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Card/EventsAttendedCardItem.tsx#L50)
 
----
+***
 
 ### location?
 
@@ -30,7 +30,7 @@ Defined in: [src/components/MemberActivity/Card/EventsAttendedCardItem.tsx:50](h
 
 Defined in: [src/components/MemberActivity/Card/EventsAttendedCardItem.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Card/EventsAttendedCardItem.tsx#L49)
 
----
+***
 
 ### orgId?
 
@@ -38,7 +38,7 @@ Defined in: [src/components/MemberActivity/Card/EventsAttendedCardItem.tsx:49](h
 
 Defined in: [src/components/MemberActivity/Card/EventsAttendedCardItem.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Card/EventsAttendedCardItem.tsx#L51)
 
----
+***
 
 ### startdate?
 
@@ -46,7 +46,7 @@ Defined in: [src/components/MemberActivity/Card/EventsAttendedCardItem.tsx:51](h
 
 Defined in: [src/components/MemberActivity/Card/EventsAttendedCardItem.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Card/EventsAttendedCardItem.tsx#L47)
 
----
+***
 
 ### time?
 
@@ -54,7 +54,7 @@ Defined in: [src/components/MemberActivity/Card/EventsAttendedCardItem.tsx:47](h
 
 Defined in: [src/components/MemberActivity/Card/EventsAttendedCardItem.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Card/EventsAttendedCardItem.tsx#L46)
 
----
+***
 
 ### title
 

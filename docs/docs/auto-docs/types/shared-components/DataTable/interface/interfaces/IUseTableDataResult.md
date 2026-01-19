@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IUseTableDataResult\<TRow, TData\>
 
@@ -26,7 +26,7 @@ Result of the useTableData hook
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:296](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L296)
 
----
+***
 
 ### fetchMore()
 
@@ -42,7 +42,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:299](https://git
 
 ##### TFetchVars
 
-`TFetchVars` _extends_ `OperationVariables` = `OperationVariables`
+`TFetchVars` *extends* `OperationVariables` = `OperationVariables`
 
 #### Parameters
 
@@ -54,7 +54,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:299](https://git
 
 `Promise`\<`ApolloQueryResult`\<`TFetchData`\>\>
 
----
+***
 
 ### loading
 
@@ -62,7 +62,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:299](https://git
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:294](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L294)
 
----
+***
 
 ### loadingMore
 
@@ -70,7 +70,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:294](https://git
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:295](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L295)
 
----
+***
 
 ### networkStatus
 
@@ -78,7 +78,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:295](https://git
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:300](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L300)
 
----
+***
 
 ### pageInfo
 
@@ -86,7 +86,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:300](https://git
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:297](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L297)
 
----
+***
 
 ### refetch()
 
@@ -104,7 +104,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:298](https://git
 
 `Promise`\<`ApolloQueryResult`\<`TData`\>\>
 
----
+***
 
 ### rows
 

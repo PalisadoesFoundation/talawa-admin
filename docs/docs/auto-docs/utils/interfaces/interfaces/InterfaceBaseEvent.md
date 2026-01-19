@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceBaseEvent
 
@@ -26,7 +26,7 @@ Defined in: [src/utils/interfaces.ts:425](https://github.com/PalisadoesFoundatio
 
 The unique identifier of the event.
 
----
+***
 
 ### allDay
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:433](https://github.com/PalisadoesFoundatio
 
 Indicates if the event is an all-day event.
 
----
+***
 
 ### description
 
@@ -46,7 +46,7 @@ Defined in: [src/utils/interfaces.ts:427](https://github.com/PalisadoesFoundatio
 
 The description of the event.
 
----
+***
 
 ### endDate
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:429](https://github.com/PalisadoesFoundatio
 
 The end date of the event.
 
----
+***
 
 ### endTime
 
@@ -66,7 +66,7 @@ Defined in: [src/utils/interfaces.ts:432](https://github.com/PalisadoesFoundatio
 
 The end time of the event.
 
----
+***
 
 ### location
 
@@ -76,7 +76,7 @@ Defined in: [src/utils/interfaces.ts:430](https://github.com/PalisadoesFoundatio
 
 The location of the event.
 
----
+***
 
 ### recurring
 
@@ -86,7 +86,7 @@ Defined in: [src/utils/interfaces.ts:434](https://github.com/PalisadoesFoundatio
 
 Indicates if the event is a recurring event.
 
----
+***
 
 ### startDate
 
@@ -96,7 +96,7 @@ Defined in: [src/utils/interfaces.ts:428](https://github.com/PalisadoesFoundatio
 
 The start date of the event.
 
----
+***
 
 ### startTime
 
@@ -106,7 +106,7 @@ Defined in: [src/utils/interfaces.ts:431](https://github.com/PalisadoesFoundatio
 
 The start time of the event.
 
----
+***
 
 ### title
 

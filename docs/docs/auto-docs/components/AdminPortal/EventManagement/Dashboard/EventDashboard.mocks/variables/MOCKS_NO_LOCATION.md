@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: MOCKS_NO_LOCATION
+# Variable: MOCKS\_NO\_LOCATION
 
-> `const` **MOCKS_NO_LOCATION**: `object`[]
+> `const` **MOCKS\_NO\_LOCATION**: `object`[]
 
 Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts#L111)
 

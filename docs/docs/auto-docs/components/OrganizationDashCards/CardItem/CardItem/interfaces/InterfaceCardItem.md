@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceCardItem
 
@@ -22,7 +22,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:38](http
 
 > **name**: `string`
 
----
+***
 
 ### enddate?
 
@@ -30,7 +30,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:38](http
 
 Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L37)
 
----
+***
 
 ### image?
 
@@ -38,7 +38,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:37](http
 
 Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L40)
 
----
+***
 
 ### location?
 
@@ -46,7 +46,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:40](http
 
 Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L39)
 
----
+***
 
 ### startdate?
 
@@ -54,7 +54,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:39](http
 
 Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L36)
 
----
+***
 
 ### time?
 
@@ -62,7 +62,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:36](http
 
 Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L35)
 
----
+***
 
 ### title
 
@@ -70,7 +70,7 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:35](http
 
 Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrganizationDashCards/CardItem/CardItem.tsx#L34)
 
----
+***
 
 ### type
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Function: PaginationControls()
 
@@ -15,7 +15,6 @@ TypeScript prevents string/unknown types at compile-time, so runtime Number.isFi
 checks are defensive fallbacks only (should never receive strings from properly-typed callers).
 
 AUDIT RESULT: All call sites verified (DataTable.tsx only caller):
-
 - pageSize: defaults to 10 (numeric), derived from props with number type
 - totalItems: comes from (totalItems ?? data.length), both numeric
 - No URL/form-based string-to-number coercion needed (type safety enforced)

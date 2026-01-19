@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceVolunteerStatus
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Volunteer/interface.ts:166](https://github.com/Palisadoes
 
 The text to display on the button.
 
----
+***
 
 ### buttonVariant
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Volunteer/interface.ts:167](https://github.com/Palisadoes
 
 The Bootstrap variant for the button.
 
----
+***
 
 ### disabled
 
@@ -42,7 +42,7 @@ Defined in: [src/types/Volunteer/interface.ts:172](https://github.com/Palisadoes
 
 Whether the button should be disabled.
 
----
+***
 
 ### icon
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Volunteer/interface.ts:173](https://github.com/Palisadoes
 
 The icon component to display.
 
----
+***
 
 ### status
 

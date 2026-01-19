@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: UNASSIGN_USER_TAG
+# Variable: UNASSIGN\_USER\_TAG
 
-> `const` **UNASSIGN_USER_TAG**: `DocumentNode`
+> `const` **UNASSIGN\_USER\_TAG**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/TagMutations.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L32)
 

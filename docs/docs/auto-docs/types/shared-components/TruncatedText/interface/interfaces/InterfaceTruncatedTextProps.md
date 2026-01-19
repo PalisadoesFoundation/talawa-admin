@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceTruncatedTextProps
 
@@ -18,7 +18,7 @@ Defined in: [src/types/shared-components/TruncatedText/interface.ts:10](https://
 
 Optional: Override for the maximum width for truncation.
 
----
+***
 
 ### text
 

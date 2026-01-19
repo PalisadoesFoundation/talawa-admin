@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceOrganizationPinnedPostsConnectionPg
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1067](https://github.com/PalisadoesFoundati
 
 An array of edges, where each edge contains a cursor and a post node.
 
----
+***
 
 ### pageInfo
 

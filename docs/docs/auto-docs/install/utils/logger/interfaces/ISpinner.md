@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: ISpinner
 
@@ -24,7 +24,7 @@ Defined in: [src/install/utils/logger.ts:29](https://github.com/PalisadoesFounda
 
 `void`
 
----
+***
 
 ### start()
 
@@ -36,7 +36,7 @@ Defined in: [src/install/utils/logger.ts:27](https://github.com/PalisadoesFounda
 
 `void`
 
----
+***
 
 ### stop()
 
@@ -48,7 +48,7 @@ Defined in: [src/install/utils/logger.ts:30](https://github.com/PalisadoesFounda
 
 `void`
 
----
+***
 
 ### succeed()
 

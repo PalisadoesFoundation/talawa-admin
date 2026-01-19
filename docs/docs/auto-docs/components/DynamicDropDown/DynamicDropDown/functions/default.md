@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Function: default()
 
@@ -12,7 +12,7 @@ Defined in: [src/components/DynamicDropDown/DynamicDropDown.tsx:58](https://gith
 
 ### T
 
-`T` _extends_ `Record`\<`string`, `unknown`\>
+`T` *extends* `Record`\<`string`, `unknown`\>
 
 ## Parameters
 
