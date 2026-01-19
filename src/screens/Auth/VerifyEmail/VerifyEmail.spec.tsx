@@ -305,6 +305,45 @@ describe('Testing VerifyEmail screen', () => {
     });
   });
 
+  it('Should handle resend email failure (api returns false)', async () => {
+    const resendFailureMock = {
+      request: {
+        query: RESEND_VERIFICATION_EMAIL_MUTATION,
+      },
+      result: {
+        data: {
+          sendVerificationEmail: {
+            success: false,
+            message: 'Failed to resend',
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[resendFailureMock]}>
+        <MemoryRouter initialEntries={['/auth/verify-email']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <VerifyEmail />
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('error-state')).toBeInTheDocument();
+    });
+
+    const resendBtn = screen.getByTestId('resendVerificationBtn');
+    await userEvent.click(resendBtn);
+
+    await waitFor(() => {
+      expect(toastMocks.error).toHaveBeenCalledWith('Failed to resend');
+    });
+  });
+
   it('Should have back to login link in error state', async () => {
     render(
       <MockedProvider link={link}>
