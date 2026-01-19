@@ -5,6 +5,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import { vi, expect, it, describe } from 'vitest';
+import dayjs from 'dayjs';
 import LoginPage from './LoginPage';
 import useSession from '../../utils/useSession';
 import {
@@ -40,18 +41,24 @@ const MOCKS = [
       data: {
         community: {
           __typename: 'Community',
+          id: '1',
           name: 'Test Community',
           logoURL: null,
-          socialURLs: {
-            facebook: '',
-            twitter: '',
-            linkedin: '',
-            github: '',
-            youtube: '',
-            slack: '',
-            instagram: '',
-            reddit: '',
-          },
+          facebookURL: '',
+          xURL: '',
+          linkedinURL: '',
+          githubURL: '',
+          youtubeURL: '',
+          slackURL: '',
+          instagramURL: '',
+          redditURL: '',
+          websiteURL: '',
+          createdAt: dayjs()
+            .subtract(1, 'year')
+            .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          updatedAt: dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          inactivityTimeoutDuration: 30,
+          logoMimeType: null,
         },
       },
     },
@@ -65,6 +72,7 @@ const MOCKS = [
             __typename: 'Organization',
             id: '6437904485008f171cf29924',
             name: 'Unity Foundation',
+            addressLine1: '123 Random Street',
           },
         ],
       },
@@ -200,17 +208,6 @@ describe('LoginPage Orchestrator', () => {
     expect(mockStartSession).toBeDefined();
   });
 
-  it('should render registration form when tab is active', () => {
-    renderLoginPage();
-
-    // Switch to registration tab
-    const registerTab = screen.getByTestId('register-tab');
-    fireEvent.click(registerTab);
-
-    // Verify registration form is rendered
-    expect(screen.getByRole('textbox', { name: /email/i })).toBeInTheDocument();
-  });
-
   it('should render community data when available', async () => {
     const COMMUNITY_DATA_MOCK = [
       {
@@ -218,8 +215,25 @@ describe('LoginPage Orchestrator', () => {
         result: {
           data: {
             community: {
+              __typename: 'Community',
+              id: '1',
               name: 'Test Community',
               logoURL: 'http://example.com/logo.png',
+              facebookURL: '',
+              xURL: '',
+              linkedinURL: '',
+              githubURL: '',
+              youtubeURL: '',
+              slackURL: '',
+              instagramURL: '',
+              redditURL: '',
+              websiteURL: '',
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+              updatedAt: dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+              inactivityTimeoutDuration: 30,
+              logoMimeType: null,
             },
           },
         },

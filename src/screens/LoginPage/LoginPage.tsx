@@ -6,7 +6,10 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import LoginForm from '../../components/Auth/LoginForm/LoginForm';
 import RegistrationForm from '../../components/Auth/RegistrationForm/RegistrationForm';
-import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
+import {
+  NotificationToastContainer,
+  NotificationToast,
+} from 'components/NotificationToast/NotificationToast';
 import {
   ORGANIZATION_LIST_NO_MEMBERS,
   GET_COMMUNITY_DATA_PG,
@@ -33,6 +36,7 @@ import type { InterfaceSignUpData } from '../../types/Auth/RegistrationForm/inte
 const LoginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const { t: tCommon } = useTranslation('common');
+  const { t: tGlobal } = useTranslation('translation');
   const navigate = useNavigate();
   const location = useLocation();
   const { setItem } = useLocalStorage();
@@ -60,6 +64,19 @@ const LoginPage = (): JSX.Element => {
   const { data: communityData, error: communityError } = useQuery(
     GET_COMMUNITY_DATA_PG,
   );
+
+  // Handle GraphQL errors
+  useEffect(() => {
+    if (orgError) {
+      NotificationToast.error(tGlobal('errorOccurred'));
+    }
+  }, [orgError, tGlobal]);
+
+  useEffect(() => {
+    if (communityError) {
+      NotificationToast.error(tGlobal('errorOccurred'));
+    }
+  }, [communityError, tGlobal]);
 
   useEffect(() => {
     if (orgData?.organizations) {
@@ -120,6 +137,7 @@ const LoginPage = (): JSX.Element => {
 
   const handleAuthError = (error: Error): void => {
     console.error('Authentication error:', error);
+    NotificationToast.error(t('Something_went_wrong'));
   };
 
   // Handle GraphQL errors
