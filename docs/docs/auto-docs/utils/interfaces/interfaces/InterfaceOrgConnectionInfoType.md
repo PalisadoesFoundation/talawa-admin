@@ -4,11 +4,7 @@
 
 # Interface: InterfaceOrgConnectionInfoType
 
-Defined in: [src/utils/interfaces.ts:492](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L492)
-
-InterfaceOrgConnectionInfoType
-
-## Description
+Defined in: [src/utils/interfaces.ts:423](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L423)
 
 Defines the structure for organization connection information.
 
@@ -18,9 +14,7 @@ Defines the structure for organization connection information.
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:493](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L493)
-
-The unique identifier of the organization.
+Defined in: [src/utils/interfaces.ts:424](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L424)
 
 ***
 
@@ -28,9 +22,7 @@ The unique identifier of the organization.
 
 > **address**: [`InterfaceAddress`](InterfaceAddress.md)
 
-Defined in: [src/utils/interfaces.ts:508](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L508)
-
-The address of the organization.
+Defined in: [src/utils/interfaces.ts:439](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L439)
 
 ***
 
@@ -38,9 +30,7 @@ The address of the organization.
 
 > **admins**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:504](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L504)
-
-An array of administrators in the organization.
+Defined in: [src/utils/interfaces.ts:435](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L435)
 
 #### \_id
 
@@ -52,9 +42,7 @@ An array of administrators in the organization.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:507](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L507)
-
-The creation date of the organization.
+Defined in: [src/utils/interfaces.ts:438](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L438)
 
 ***
 
@@ -62,9 +50,7 @@ The creation date of the organization.
 
 > **creator**: `object`
 
-Defined in: [src/utils/interfaces.ts:495](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L495)
-
-The creator of the organization.
+Defined in: [src/utils/interfaces.ts:426](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L426)
 
 #### \_id
 
@@ -84,9 +70,7 @@ The creator of the organization.
 
 > **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:494](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L494)
-
-The URL of the organization's image, or null.
+Defined in: [src/utils/interfaces.ts:425](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L425)
 
 ***
 
@@ -94,9 +78,7 @@ The URL of the organization's image, or null.
 
 > **members**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:501](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L501)
-
-An array of members in the organization.
+Defined in: [src/utils/interfaces.ts:432](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L432)
 
 #### \_id
 
@@ -108,6 +90,4 @@ An array of members in the organization.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:500](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L500)
-
-The name of the organization.
+Defined in: [src/utils/interfaces.ts:431](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L431)
