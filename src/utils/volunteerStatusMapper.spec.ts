@@ -5,10 +5,13 @@
  * to ensure consistent visual representation across all volunteer screens.
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { mapVolunteerStatusToVariant } from './volunteerStatusMapper';
 
 describe('volunteerStatusMapper', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
   describe('mapVolunteerStatusToVariant', () => {
     it('should map "requested" status to "pending" variant', () => {
       const result = mapVolunteerStatusToVariant('requested');
