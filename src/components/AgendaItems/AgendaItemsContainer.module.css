@@ -1,0 +1,51 @@
+.tableHeadAgendaItems {
+  background-color: var(--tableHeadAgendaItems-bg) !important;
+  color: var(--tableHeadAgendaItems-color);
+  border-radius: 20px 20px 0px 0px !important;
+  padding: 20px;
+}
+
+.agendaItemRow {
+  border: 1px solid var(--agendaItemRow-border);
+  border-radius: 4px;
+  transition: box-shadow 0.2s ease;
+  background-color: var(--agendaItemRow-bg);
+}
+
+.agendaItemRow:hover {
+  background-color: var(--agendaItemRow-bg-hover);
+}
+
+.dragging {
+  box-shadow: 0 4px 8px var(--dragging-box-shadow);
+  z-index: 1000;
+  background-color: var(--dragging-bg);
+}
+
+.categoryContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.categoryChip {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--categoryChip-bg);
+  border-radius: 16px;
+  padding: 0 12px;
+  font-size: 14px;
+  height: 32px;
+  margin: 5px;
+}
+
+.agendaCategoryOptionsButton {
+  width: 24px;
+  height: 24px;
+}
+
+.agendaItemsOptionsButton {
+  width: 24px;
+  height: 24px;
+}

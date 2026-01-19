@@ -6,23 +6,22 @@
  * categories, URLs, and attachments. The modal also provides functionality
  * for validating URLs, managing attachments, and submitting the form.
  *
- * @component
- * @param {InterfaceAgendaItemsCreateModalProps} props - The props for the component.
- * @param {boolean} props.agendaItemCreateModalIsOpen - Determines if the modal is open.
- * @param {() => void} props.hideCreateModal - Function to close the modal.
- * @param {object} props.formState - The current state of the form.
- * @param {React.Dispatch<React.SetStateAction<object>>} props.setFormState - Function to update the form state.
- * @param {() => void} props.createAgendaItemHandler - Function to handle form submission.
- * @param {(key: string) => string} props.t - Translation function for localization.
- * @param {InterfaceAgendaItemCategoryInfo[]} props.agendaItemCategories - List of available agenda item categories.
+ * @param props - The props for the component containing:
+ *   - `agendaItemCreateModalIsOpen`: Determines if the modal is open
+ *   - `hideCreateModal`: Function to close the modal
+ *   - `formState`: The current state of the form
+ *   - `setFormState`: Function to update the form state
+ *   - `createAgendaItemHandler`: Function to handle form submission
+ *   - `t`: Translation function for localization
+ *   - `agendaItemCategories`: List of available agenda item categories
  *
- * @returns {JSX.Element} The rendered modal component.
+ * @returns The rendered modal component
  *
  * @remarks
- * - The component uses `react-bootstrap` for modal and form styling.
- * - `@mui/material` is used for the Autocomplete component.
- * - Attachments are converted to base64 format before being added to the form state.
- * - URLs are validated using a regular expression before being added.
+ * - The component uses `react-bootstrap` for modal and form styling
+ * - `@mui/material` is used for the Autocomplete component
+ * - Attachments are converted to base64 format before being added to the form state
+ * - URLs are validated using a regular expression before being added
  *
  * @example
  * ```tsx
@@ -38,15 +37,18 @@
  * ```
  */
 import React, { useState, useEffect } from 'react';
-import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
-import { Autocomplete, TextField } from '@mui/material';
+import { Button, Row, Col } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { Autocomplete } from '@mui/material';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 import { FaLink, FaTrash } from 'react-icons/fa';
-import { toast } from 'react-toastify';
-import styles from '../../../style/app-fixed.module.css';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import styles from './AgendaItemsCreateModal.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import convertToBase64 from 'utils/convertToBase64';
 import type { InterfaceAgendaItemsCreateModalProps } from 'types/Agenda/interface';
+// translation-check-keyPrefix: agendaItems
 const AgendaItemsCreateModal: React.FC<
   InterfaceAgendaItemsCreateModalProps
 > = ({
@@ -94,7 +96,7 @@ const AgendaItemsCreateModal: React.FC<
       });
       setNewUrl('');
     } else {
-      toast.error(t('invalidUrl'));
+      NotificationToast.error(t('invalidUrl'));
     }
   };
 
@@ -126,7 +128,7 @@ const AgendaItemsCreateModal: React.FC<
         totalSize += file.size;
       });
       if (totalSize > 10 * 1024 * 1024) {
-        toast.error(t('fileSizeExceedsLimit'));
+        NotificationToast.error(t('fileSizeExceedsLimit'));
         return;
       }
       const base64Files = await Promise.all(
@@ -152,185 +154,188 @@ const AgendaItemsCreateModal: React.FC<
   };
 
   return (
-    <Modal
+    <BaseModal
       className={styles.AgendaItemsModal}
       show={agendaItemCreateModalIsOpen}
       onHide={hideCreateModal}
-    >
-      <Modal.Header>
+      headerContent={
         <p className={styles.titlemodalAgendaItems}>{t('agendaItemDetails')}</p>
-        <Button
-          variant="danger"
-          onClick={hideCreateModal}
-          data-testid="createAgendaItemModalCloseBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-      </Modal.Header>
-      <Modal.Body>
-        <Form onSubmit={createAgendaItemHandler}>
-          <Form.Group className="d-flex mb-3 w-100">
-            <Autocomplete
-              multiple
-              className={`${styles.noOutline} w-100`}
-              limitTags={2}
-              data-testid="categorySelect"
-              options={agendaItemCategories || []}
-              value={
-                agendaItemCategories?.filter((category) =>
-                  formState.agendaItemCategoryIds.includes(category._id),
-                ) || []
-              }
-              filterSelectedOptions={true}
-              getOptionLabel={(
-                category: InterfaceAgendaItemCategoryInfo,
-              ): string => category.name}
-              onChange={(_, newCategories): void => {
-                setFormState({
-                  ...formState,
-                  agendaItemCategoryIds: newCategories.map(
-                    (category) => category._id,
-                  ),
-                });
-              }}
-              renderInput={(params) => (
-                <TextField {...params} label={t('category')} />
-              )}
-            />
-          </Form.Group>
-          <Row className="mb-3">
-            <Col>
-              <Form.Group className="mb-3" controlId="title">
-                <Form.Label>{t('title')}</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder={t('enterTitle')}
-                  value={formState.title}
-                  required
-                  onChange={(e) =>
-                    setFormState({ ...formState, title: e.target.value })
-                  }
-                />
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group controlId="duration">
-                <Form.Label>{t('duration')}</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder={t('enterDuration')}
-                  value={formState.duration}
-                  required
-                  onChange={(e) =>
-                    setFormState({ ...formState, duration: e.target.value })
-                  }
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-          <Form.Group className="mb-3" controlId="description">
-            <Form.Label>{t('description')}</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={1}
-              placeholder={t('enterDescription')}
-              value={formState.description}
-              required
-              onChange={(e) =>
-                setFormState({ ...formState, description: e.target.value })
-              }
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>{t('url')}</Form.Label>
-            <div className="d-flex">
-              <Form.Control
-                type="text"
-                placeholder={t('enterUrl')}
-                id="basic-url"
-                data-testid="urlInput"
-                value={newUrl}
-                onChange={(e) => setNewUrl(e.target.value)}
-              />
-              <Button onClick={handleAddUrl} data-testid="linkBtn">
-                {t('link')}
-              </Button>
-            </div>
-
-            {formState.urls.map((url, index) => (
-              <li key={index} className={styles.urlListItem}>
-                <FaLink className={styles.urlIcon} />
-                <a href={url} target="_blank" rel="noopener noreferrer">
-                  {url.length > 50 ? url.substring(0, 50) + '...' : url}
-                </a>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  className={styles.deleteButtonAgendaItems}
-                  data-testid="deleteUrl"
-                  onClick={() => handleRemoveUrl(url)}
-                >
-                  <FaTrash />
-                </Button>
-              </li>
-            ))}
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>{t('attachments')}</Form.Label>
-            <Form.Control
-              accept="image/*, video/*"
-              data-testid="attachment"
-              name="attachment"
-              type="file"
-              id="attachment"
-              multiple={true}
-              onChange={handleFileChange}
-            />
-            <Form.Text>{t('attachmentLimit')}</Form.Text>
-          </Form.Group>
-          {formState.attachments && (
-            <div className={styles.previewFile} data-testid="mediaPreview">
-              {formState.attachments.map((attachment, index) => (
-                <div key={index} className={styles.attachmentPreview}>
-                  {attachment.includes('video') ? (
-                    <video
-                      muted
-                      autoPlay={true}
-                      loop={true}
-                      playsInline
-                      crossOrigin="anonymous"
-                    >
-                      <source src={attachment} type="video/mp4" />
-                    </video>
-                  ) : (
-                    <img src={attachment} alt="Attachment preview" />
-                  )}
-                  <button
-                    className={styles.closeButtonFile}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleRemoveAttachment(attachment);
-                    }}
-                    data-testid="deleteAttachment"
-                  >
-                    <i className="fa fa-times" />
-                  </button>
+      }
+    >
+      <form onSubmit={createAgendaItemHandler}>
+        <div className="d-flex mb-3 w-100">
+          <Autocomplete
+            multiple
+            className={`${styles.noOutline} w-100`}
+            limitTags={2}
+            data-testid="categorySelect"
+            options={agendaItemCategories || []}
+            value={
+              agendaItemCategories?.filter((category) =>
+                formState.agendaItemCategoryIds.includes(category._id),
+              ) || []
+            }
+            filterSelectedOptions={true}
+            getOptionLabel={(
+              category: InterfaceAgendaItemCategoryInfo,
+            ): string => category.name}
+            onChange={(_, newCategories): void => {
+              setFormState({
+                ...formState,
+                agendaItemCategoryIds: newCategories.map(
+                  (category) => category._id,
+                ),
+              });
+            }}
+            renderInput={(params) => (
+              <FormFieldGroup name="category" label={t('category')}>
+                <div ref={params.InputProps.ref}>
+                  <input
+                    {...params.inputProps}
+                    className="form-control"
+                    placeholder={t('category')}
+                  />
                 </div>
-              ))}
-            </div>
-          )}
-          <Button
-            type="submit"
-            className={styles.greenregbtnAgendaItems}
-            value="createAgendaItem"
-            data-testid="createAgendaItemFormBtn"
-          >
-            {t('createAgendaItem')}
-          </Button>
-        </Form>
-      </Modal.Body>
-    </Modal>
+              </FormFieldGroup>
+            )}
+          />
+        </div>
+        <Row className="mb-3">
+          <Col>
+            <FormFieldGroup name="title" label={t('title')}>
+              <input
+                className="form-control"
+                id="title"
+                type="text"
+                placeholder={t('enterTitle')}
+                value={formState.title}
+                required
+                onChange={(e) =>
+                  setFormState({ ...formState, title: e.target.value })
+                }
+              />
+            </FormFieldGroup>
+          </Col>
+          <Col>
+            <FormFieldGroup name="duration" label={t('duration')}>
+              <input
+                className="form-control"
+                id="duration"
+                type="text"
+                placeholder={t('enterDuration')}
+                value={formState.duration}
+                required
+                onChange={(e) =>
+                  setFormState({ ...formState, duration: e.target.value })
+                }
+              />
+            </FormFieldGroup>
+          </Col>
+        </Row>
+        <FormFieldGroup name="description" label={t('description')}>
+          <textarea
+            className="form-control"
+            id="description"
+            rows={1}
+            placeholder={t('enterDescription')}
+            value={formState.description}
+            required
+            onChange={(e) =>
+              setFormState({ ...formState, description: e.target.value })
+            }
+          />
+        </FormFieldGroup>
+
+        <div className="mb-3">
+          <label className="form-label">{t('url')}</label>
+          <div className="d-flex">
+            <input
+              className="form-control"
+              type="text"
+              placeholder={t('enterUrl')}
+              id="basic-url"
+              data-testid="urlInput"
+              value={newUrl}
+              onChange={(e) => setNewUrl(e.target.value)}
+            />
+            <Button onClick={handleAddUrl} data-testid="linkBtn">
+              {t('link')}
+            </Button>
+          </div>
+
+          {formState.urls.map((url, index) => (
+            <li key={index} className={styles.urlListItem}>
+              <FaLink className={styles.urlIcon} />
+              <a href={url} target="_blank" rel="noopener noreferrer">
+                {url.length > 50 ? url.substring(0, 50) + '...' : url}
+              </a>
+              <Button
+                variant="danger"
+                size="sm"
+                className={styles.deleteButtonAgendaItems}
+                data-testid="deleteUrl"
+                onClick={() => handleRemoveUrl(url)}
+              >
+                <FaTrash />
+              </Button>
+            </li>
+          ))}
+        </div>
+        <div className="mb-3">
+          <label className="form-label">{t('attachments')}</label>
+          <input
+            className="form-control"
+            accept="image/*, video/*"
+            data-testid="attachment"
+            name="attachment"
+            type="file"
+            id="attachment"
+            multiple={true}
+            onChange={handleFileChange}
+          />
+          <small className="form-text">{t('attachmentLimit')}</small>
+        </div>
+        {formState.attachments && (
+          <div className={styles.previewFile} data-testid="mediaPreview">
+            {formState.attachments.map((attachment, index) => (
+              <div key={index} className={styles.attachmentPreview}>
+                {attachment.includes('video') ? (
+                  <video
+                    muted
+                    autoPlay={true}
+                    loop={true}
+                    playsInline
+                    crossOrigin="anonymous"
+                  >
+                    <source src={attachment} type="video/mp4" />
+                  </video>
+                ) : (
+                  <img src={attachment} alt={t('attachmentPreview')} />
+                )}
+                <button
+                  className={styles.closeButtonFile}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleRemoveAttachment(attachment);
+                  }}
+                  data-testid="deleteAttachment"
+                >
+                  <i className="fa fa-times" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+        <Button
+          type="submit"
+          className={styles.greenregbtnAgendaItems}
+          value="createAgendaItem"
+          data-testid="createAgendaItemFormBtn"
+        >
+          {t('createAgendaItem')}
+        </Button>
+      </form>
+    </BaseModal>
   );
 };
 

@@ -46,10 +46,10 @@ global.URL.createObjectURL = vi.fn(() => 'mocked-url');
 describe('Testing Advertisement Entry Component', () => {
   beforeEach(() => {
     mockUseMutation = vi.fn();
-    vi.clearAllMocks();
     mockUseMutation.mockReturnValue([vi.fn()]);
   });
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -91,6 +91,9 @@ describe('Testing Advertisement Entry Component', () => {
     expect(screen.getAllByText('Advert1')[0]).toBeInTheDocument();
     expect(screen.getByTestId('media')).toBeInTheDocument();
 
+    const statusBadge = screen.getByTestId('advertisement-status');
+    expect(statusBadge).toBeInTheDocument();
+    expect(statusBadge).toHaveAttribute('aria-label', 'Inactive');
     fireEvent.click(screen.getByTestId('moreiconbtn'));
     fireEvent.click(screen.getByTestId('deletebtn'));
 
@@ -1068,5 +1071,106 @@ describe('Testing Advertisement Entry Component', () => {
     );
 
     expect(screen.getByText('No media available')).toBeInTheDocument();
+  });
+
+  it('should render pending status when startAt is in the future', () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementEntry
+                advertisement={{
+                  id: '1',
+                  name: 'Future Ad',
+                  startAt: dayjs().add(5, 'days').toDate(),
+                  endAt: dayjs().add(10, 'days').toDate(),
+                  attachments: [],
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                  organization: { id: '12' },
+                  orgId: '1',
+                  type: AdvertisementType.Banner,
+                }}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('advertisement-status')).toHaveAttribute(
+      'aria-label',
+      'Pending',
+    );
+  });
+
+  it('should render Inactive status when endAt is in the past', () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementEntry
+                advertisement={{
+                  id: '1',
+                  name: 'Past Ad',
+                  startAt: dayjs().subtract(10, 'days').toDate(),
+                  endAt: dayjs().subtract(5, 'days').toDate(),
+                  attachments: [],
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                  organization: { id: '12' },
+                  orgId: '1',
+                  type: AdvertisementType.Banner,
+                }}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+    expect(screen.getByTestId('advertisement-status')).toHaveAttribute(
+      'aria-label',
+      'Inactive',
+    );
+  });
+
+  it('should render active status when now is between startAt and endAt', () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementEntry
+                advertisement={{
+                  id: '1',
+                  name: 'Active Ad',
+                  startAt: dayjs().subtract(1, 'day').toDate(),
+                  endAt: dayjs().add(1, 'day').toDate(),
+                  attachments: [],
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                  organization: { id: '12' },
+                  orgId: '1',
+                  type: AdvertisementType.Banner,
+                }}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    expect(screen.getByTestId('advertisement-status')).toHaveAttribute(
+      'aria-label',
+      'Active',
+    );
   });
 });

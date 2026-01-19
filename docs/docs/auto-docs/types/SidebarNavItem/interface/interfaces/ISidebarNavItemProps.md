@@ -44,7 +44,7 @@ Icon component or element
 
 ### iconType?
 
-> `optional` **iconType**: `"react-icon"` \| `"svg"`
+> `optional` **iconType**: `"svg"` \| `"react-icon"`
 
 Defined in: [src/types/SidebarNavItem/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SidebarNavItem/interface.ts#L23)
 

@@ -46,7 +46,7 @@
  * - Modals are used for adding, viewing, and deleting volunteers.
  * - Displays a loader while fetching data and handles errors gracefully.
  */
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
@@ -55,12 +55,11 @@ import { VolunteerActivism, WarningAmberRounded } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import {
-  DataGrid,
-  type GridCellParams,
-  type GridColDef,
+import type {
+  GridCellParams,
+  GridColDef,
 } from 'shared-components/DataGridWrapper';
-import { debounce } from '@mui/material';
+import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
 import Avatar from 'shared-components/Avatar/Avatar';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 import styles from './Volunteers.module.css';
@@ -70,7 +69,6 @@ import VolunteerCreateModal from './createModal/VolunteerCreateModal';
 import VolunteerDeleteModal from './deleteModal/VolunteerDeleteModal';
 import VolunteerViewModal from './viewModal/VolunteerViewModal';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
-import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 enum VolunteerStatus {
   All = 'all',
@@ -108,16 +106,10 @@ function Volunteers(): JSX.Element {
   // Get the organization ID from URL parameters
   const { orgId, eventId } = useParams();
 
-  if (!orgId || !eventId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const [volunteer, setVolunteer] =
     useState<InterfaceEventVolunteerInfo | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, setSortBy] = useState<
-    'hoursVolunteered_ASC' | 'hoursVolunteered_DESC' | null
-  >(null);
+  const [sortBy, setSortBy] = useState<string>('');
   const [status, setStatus] = useState<VolunteerStatus>(VolunteerStatus.All);
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
   const [baseEvent, setBaseEvent] = useState<{ id: string } | null>(null);
@@ -137,16 +129,13 @@ function Volunteers(): JSX.Element {
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
   };
 
-  const handleOpenModal = useCallback(
-    (
-      volunteer: InterfaceEventVolunteerInfo | null,
-      modalType: ModalState,
-    ): void => {
-      setVolunteer(volunteer);
-      openModal(modalType);
-    },
-    [openModal],
-  );
+  const handleOpenModal = (
+    volunteer: InterfaceEventVolunteerInfo | null,
+    modalType: ModalState,
+  ): void => {
+    setVolunteer(volunteer);
+    openModal(modalType);
+  };
 
   /**
    * Query to fetch event volunteers for the event.
@@ -181,26 +170,11 @@ function Volunteers(): JSX.Element {
             : status === VolunteerStatus.Accepted,
         name_contains: searchTerm,
       },
-      orderBy: sortBy,
+      orderBy: sortBy
+        ? (sortBy as 'hoursVolunteered_ASC' | 'hoursVolunteered_DESC')
+        : undefined,
     },
   });
-
-  // Extracted callback for proper coverage instrumentation
-  const handleSearchChange = useCallback((value: string): void => {
-    setSearchTerm(value);
-  }, []);
-
-  const debouncedSearch = useMemo(
-    () => debounce(handleSearchChange, 300),
-    [handleSearchChange],
-  );
-
-  // Debounce cleanup effect
-  useEffect(() => {
-    return () => {
-      debouncedSearch.clear();
-    };
-  }, [debouncedSearch]);
 
   // Effect to set recurring event info similar to EventActionItems
   useEffect(() => {
@@ -248,6 +222,9 @@ function Volunteers(): JSX.Element {
     }
   }, [eventData, status, searchTerm]);
 
+  if (!orgId || !eventId) {
+    return <Navigate to={'/'} replace />;
+  }
   if (volunteersError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
@@ -411,8 +388,8 @@ function Volunteers(): JSX.Element {
         <SearchFilterBar
           searchPlaceholder={tCommon('searchBy', { item: tCommon('name') })}
           searchValue={searchTerm}
-          onSearchChange={debouncedSearch}
-          onSearchSubmit={(value) => setSearchTerm(value)}
+          onSearchChange={(value: string) => setSearchTerm(value)}
+          onSearchSubmit={(value: string) => setSearchTerm(value)}
           searchInputTestId="searchBy"
           searchButtonTestId="searchBtn"
           hasDropdowns
@@ -434,10 +411,7 @@ function Volunteers(): JSX.Element {
                   value: 'hoursVolunteered_ASC',
                 },
               ],
-              onOptionChange: (value) =>
-                setSortBy(
-                  value as 'hoursVolunteered_DESC' | 'hoursVolunteered_ASC',
-                ),
+              onOptionChange: (value) => setSortBy(String(value)),
             },
             {
               id: 'filter',
@@ -475,28 +449,18 @@ function Volunteers(): JSX.Element {
         />
 
         {/* Table with Volunteers */}
-        <DataGrid
-          disableColumnMenu
-          disableColumnResize
-          columnBufferPx={7}
-          hideFooter={true}
-          getRowId={(row) => row.id}
-          slots={{
-            noRowsOverlay: () => (
-              <EmptyState
-                icon={<VolunteerActivism />}
-                message={t('eventVolunteers.noVolunteers')}
-                dataTestId="volunteers-empty-state"
-              />
-            ),
-          }}
-          className={styles.dataGridContainer}
-          getRowClassName={() => `${styles.rowBackgrounds}`}
-          autoHeight
-          rowHeight={65}
+        <DataGridWrapper
           rows={volunteers}
           columns={columns}
-          isRowSelectable={() => false}
+          loading={volunteersLoading}
+          emptyStateProps={{
+            icon: <VolunteerActivism />,
+            message: t('eventVolunteers.noVolunteers'),
+            dataTestId: 'volunteers-empty-state',
+          }}
+          paginationConfig={{
+            enabled: false,
+          }}
         />
 
         <VolunteerCreateModal

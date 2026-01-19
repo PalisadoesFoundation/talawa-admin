@@ -409,7 +409,9 @@
     "profile": "Perfil",
     "joined": "Unido",
     "notFound": "No se encontraron miembros",
-    "createUser": "Crear usuario"
+    "createUser": "Crear usuario",
+    "showPassword": "Mostrar contraseña",
+    "hidePassword": "Ocultar contraseña"
   },
   "organizationCard": {
     "join": "Unirse",
@@ -724,6 +726,7 @@
     "options": "Opciones",
     "createAgendaItem": "Crear punto del orden del día",
     "noAgendaItems": "No hay puntos del orden del día",
+    "search": "Buscar",
     "selectAgendaItemCategory": "Seleccionar una categoría de punto del orden del día",
     "update": "Actualizar",
     "delete": "Eliminar",
@@ -732,6 +735,7 @@
     "agendaItemDeleted": "Punto del orden del día eliminado exitosamente",
     "deleteAgendaItem": "Eliminar punto del orden del día",
     "deleteAgendaItemMsg": "¿Desea eliminar este punto del orden del día?",
+    "attachmentPreview": "Vista previa del archivo adjunto",
     "event": "Evento",
     "search": "Buscar",
     "attachmentPreview": "Vista previa del adjunto",
@@ -1383,12 +1387,13 @@
   },
   "posts": {
     "pinnedPosts": "Publicaciones fijadas",
+    "errorLoadingPreviewPost": "Error al cargar la vista previa de la publicación.",
     "title": "Publicaciones",
     "latest": "El Más Reciente",
     "oldest": "El Más Antiguo",
     "none": "Ninguno",
     "unknownUser": "Usuario desconocido",
-    "closePinnedPost": "Cerrar publicación fijada",
+    "closePostView": "Cerrar vista de publicación",
     "searchPosts": "Buscar publicaciones",
     "nothingToShow": "Nada que mostrar aquí.",
     "noPosts": "No hay publicaciones para mostrar.",
@@ -1474,6 +1479,10 @@
     "options": "Opciones",
     "addRegistrant": "Agregar registrado",
     "noRegistrantsFound": "No se encontraron registrados",
+    "removingAttendee": "Eliminando el asistente...",
+    "attendeeRemovedSuccessfully": "Asistente eliminado con éxito",
+    "errorRemovingAttendee": "Error al eliminar asistente",
+    "cannotUnregisterCheckedIn": "No se puede anular el registro de un usuario que ya se ha registrado",
     "removingAttendee": "Eliminando asistente...",
     "attendeeRemovedSuccessfully": "Asistente eliminado con éxito",
     "errorRemovingAttendee": "Error al eliminar asistente. Por favor, inténtelo de nuevo.",
@@ -1882,6 +1891,13 @@
   "checkIn": {
     "errorCheckingIn": "Error al registrarse",
     "checkedInSuccessfully": "Registrado con éxito",
+    "generatingPdf": "Generando PDF...",
+    "pdfGeneratedSuccessfully": "¡PDF generado con éxito!",
+    "errorGeneratingPdf": "Error al generar PDF",
+    "unknownError": "Error desconocido",
+    "checkedIn": "Registrado",
+    "downloadTag": "Descargar etiqueta",
+    "checkInButton": "Registrarse",
     "searchAttendees": "Buscar asistentes",
     "checkedIn": "Registrado",
     "downloadTag": "Descargar etiqueta",
@@ -1975,6 +1991,7 @@
     "raised": "Recaudado",
     "amountRaised": "Monto Recaudado",
     "campaignIndex": "#",
+    "campaignStatus": "Estado",
     "campaignName": "Nombre de la Campaña",
     "startDate": "Fecha de Inicio",
     "endDate": "Fecha de Finalización",
@@ -1991,7 +2008,20 @@
     "searchPledges": "Buscar promesas"
   },
   "leaveOrganization": {
-    "title": "Dejar la organización"
+    "title": "Dejar la organización",
+    "leaveOrganization": "Dejar la organización",
+    "confirmLeaveOrganization": "Confirmar dejar la organización",
+    "leaveOrganizationConfirmation": "¿Estás seguro de que quieres dejar {{orgName}}? Perderás el acceso al contenido exclusivo para miembros.",
+    "enterEmailToConfirm": "Ingresa tu correo electrónico para confirmar:",
+    "enterYourEmail": "Ingresa tu correo electrónico",
+    "confirmEmailInput": "Confirmar entrada de correo electrónico",
+    "leftOrganizationSuccess": "¡Has dejado la organización con éxito!",
+    "leftOrganizationError": "No se pudo dejar la organización. Por favor, inténtalo de nuevo.",
+    "networkError": "No se puede procesar tu solicitud. Por favor, verifica tu conexión.",
+    "emailMismatchError": "El correo electrónico que ingresaste no coincide con el de tu cuenta.",
+    "continue": "Continuar",
+    "missingRequiredInfo": "No se puede procesar la solicitud: Falta información requerida.",
+    "organizationNotFound": "Organización no encontrada"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Selector de vista de voluntarios",
@@ -2249,7 +2279,9 @@
     "title": "Portal de Usuario",
     "talawa": "Talawa",
     "talawaBranding": "Marca Talawa",
-    "view": "Ver"
+    "view": "Ver",
+    "changeLanguage": "Cambiar idioma",
+    "userNotFoundError": "Usuario no encontrado"
   },
   "donation": {
     "amount_label": "Cantidad",
@@ -2277,5 +2309,40 @@
   },
   "userGlobalScreen": {
     "globalFeatures": "Características Globales"
+  },
+  "recurringEventVolunteerModal": {
+    "joinGroupTitle": "Unirse a {{groupName}} - {{eventName}}",
+    "volunteerTitle": "Voluntario para {{eventName}}",
+    "joinGroupQuestion": "¿Desea unirse a \"{{groupName}}\" para toda la serie o solo para esta instancia?",
+    "volunteerQuestion": "¿Desea ser voluntario para toda la serie o solo para esta instancia?",
+    "volunteerForSeries": "Voluntario para toda la serie",
+    "joinGroupForSeries": "Se unirá a este grupo para todos los eventos de la serie recurrente",
+    "volunteerForSeriesDesc": "Será voluntario para todos los eventos de esta serie recurrente",
+    "volunteerForInstance": "Voluntario solo para esta instancia",
+    "joinGroupForInstance": "Se unirá a este grupo solo para el evento del {{date}}",
+    "volunteerForInstanceDesc": "Solo será voluntario para el evento del {{date}}",
+    "cancel": "Cancelar",
+    "submitRequest": "Enviar solicitud"
+  },
+  "eventsAttendedMemberModal": {
+    "title": "Lista de eventos asistidos",
+    "showing": "Mostrando {{start}} - {{end}} de {{total}} eventos",
+    "eventName": "Nombre del evento",
+    "dateOfEvent": "Fecha del evento",
+    "recurringEvent": "Evento recurrente",
+    "attendees": "Asistentes",
+    "tableAriaLabel": "Tabla de eventos asistidos",
+    "paginationAriaLabel": "Navegación de paginación de eventos",
+    "paginationGoToPage": "Ir a la página {{page}}",
+    "paginationGoToType": "Ir a la página {{type}}",
+    "noEventsAttended": "No hay eventos asistidos"
+  },
+  "eventStats": {
+    "title": "Estadísticas del evento",
+    "reviews": {
+      "title": "Reseñas",
+      "emptyState": "Esperando a que la gente hable sobre el evento...",
+      "filledByCount": "Completado por {{count}} personas."
+    }
   }
 }
