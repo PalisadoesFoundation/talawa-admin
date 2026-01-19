@@ -35,6 +35,9 @@ const DEFAULT_CONTAINER_PROPS: ToastContainerProps = {
  *
  * If an i18n object is provided, we translate using `i18n.getFixedT()` so this
  * is safe to call from non-React modules (no hooks required).
+ *
+ * @param message - The message to resolve. Can be a plain string or an i18n key object with key, namespace, and interpolation values.
+ * @returns The resolved message string.
  */
 function resolveNotificationToastMessage(message: NotificationToastMessage) {
   if (typeof message === 'string') return message;
@@ -86,6 +89,9 @@ export const NotificationToast: InterfaceNotificationToastHelpers = {
  *
  * Wrapper for `ToastContainer` with project defaults. Consumers can override
  * any prop via `props`.
+ *
+ * @param props - Optional ToastContainerProps to override DEFAULT_CONTAINER_PROPS
+ * @returns React.ReactElement rendering ToastContainer with merged props
  */
 export function NotificationToastContainer(
   props: ToastContainerProps = {},

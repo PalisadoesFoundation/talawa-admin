@@ -70,7 +70,6 @@ afterEach(() => {
 });
 
 describe('NotificationToast', () => {
-
   it('calls toast.success with defaults for a string message', () => {
     const id = NotificationToast.success('Saved');
 

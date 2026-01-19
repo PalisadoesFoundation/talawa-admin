@@ -1020,7 +1020,7 @@ describe('UserPortalNavigationBar', () => {
 
       // Import NotificationToast to spy on it
       const { NotificationToast } =
-        await import('components/NotificationToast/NotificationToast');
+        await import('shared-components/NotificationToast/NotificationToast');
       const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
       render(
