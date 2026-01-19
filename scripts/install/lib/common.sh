@@ -151,10 +151,25 @@ confirm() {
     local reply
     local prompt_suffix
 
-    # Build prompt suffix based on default
+    # Normalize and validate the default to ensure it's always a valid y/n value
+    # This prevents infinite loops in non-TTY environments with invalid defaults
     local default_lower
     default_lower="$(printf '%s' "$default" | tr '[:upper:]' '[:lower:]')"
-    if [[ "$default_lower" == "y" || "$default_lower" == "yes" ]]; then
+    case "$default_lower" in
+        y|yes)
+            default_lower="y"
+            ;;
+        n|no)
+            default_lower="n"
+            ;;
+        *)
+            # Invalid default provided, fall back to safe default "n"
+            default_lower="n"
+            ;;
+    esac
+
+    # Build prompt suffix based on normalized default
+    if [[ "$default_lower" == "y" ]]; then
         prompt_suffix="[Y/n]"
     else
         prompt_suffix="[y/N]"
@@ -165,11 +180,11 @@ confirm() {
         if [[ -t 0 ]]; then
             read -r -p "$prompt $prompt_suffix: " reply
         else
-            read -r -p "$prompt $prompt_suffix: " reply </dev/tty 2>/dev/null || reply="$default"
+            read -r -p "$prompt $prompt_suffix: " reply </dev/tty 2>/dev/null || reply="$default_lower"
         fi
 
-        # Use default if empty
-        reply="${reply:-$default}"
+        # Use normalized default if empty
+        reply="${reply:-$default_lower}"
 
         # Convert to lowercase for comparison (bash 4.0+ syntax with fallback)
         reply="$(printf '%s' "$reply" | tr '[:upper:]' '[:lower:]')"
@@ -267,6 +282,9 @@ create_temp_file() {
         tmpfile="$(mktemp --tmpdir "${prefix}.XXXXXX" 2>/dev/null)" || \
         tmpfile="$(mktemp "/tmp/${prefix}.XXXXXX")"
     fi
+    if [[ -z "$tmpfile" ]]; then
+        die "Failed to create temporary file" "$E_IO_ERROR"
+    fi
 
     printf '%s' "$tmpfile"
 }
@@ -285,6 +303,9 @@ create_temp_dir() {
         # Linux/WSL
         tmpdir="$(mktemp -d --tmpdir "${prefix}.XXXXXX" 2>/dev/null)" || \
         tmpdir="$(mktemp -d "/tmp/${prefix}.XXXXXX")"
+    fi
+    if [[ -z "$tmpdir" ]]; then
+        die "Failed to create temporary directory" "$E_IO_ERROR"
     fi
 
     printf '%s' "$tmpdir"
