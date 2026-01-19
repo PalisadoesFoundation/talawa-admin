@@ -176,6 +176,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
   ],
   multipleOrgs: [
@@ -188,6 +189,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz2',
@@ -198,6 +200,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz3',
@@ -208,6 +211,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz4',
@@ -218,6 +222,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz5',
@@ -228,6 +233,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz6',
@@ -238,6 +244,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
   ],
   paginationOrgs: Array.from({ length: 15 }, (_, i) => ({
@@ -260,6 +267,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz2',
@@ -270,6 +278,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz3',
@@ -280,6 +289,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz4',
@@ -290,6 +300,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz5',
@@ -300,6 +311,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz6',
@@ -310,6 +322,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz7',
@@ -320,6 +333,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz8',
@@ -330,6 +344,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
   ],
   searchTestOrgs: [
@@ -342,6 +357,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz2',
@@ -352,6 +368,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz3',
@@ -362,6 +379,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz4',
@@ -372,6 +390,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz5',
@@ -382,6 +401,7 @@ const mockOrgData = {
       members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
       isMember: false,
+      __typename: 'Organization',
     },
   ],
   scrollOrgs: [
@@ -390,12 +410,13 @@ const mockOrgData = {
       name: 'Organization 1',
       addressLine1: '123 Main Street',
       isMember: false,
+      __typename: 'Organization',
       description: 'Description 1',
       avatarURL: null,
       createdAt: dayjs().subtract(1, 'year').toISOString(),
       membersCount: 4,
       adminsCount: 2,
-      __typename: 'Organization',
+
       members: {
         id: 'members_conn',
         edges: [
@@ -419,12 +440,13 @@ const mockOrgData = {
       name: 'Organization 2',
       addressLine1: '456 Oak Avenue',
       isMember: false,
+      __typename: 'Organization',
       description: 'Description 2',
       avatarURL: null,
       createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
       membersCount: 5,
       adminsCount: 2,
-      __typename: 'Organization',
+
       members: {
         id: 'members_conn',
         edges: [
