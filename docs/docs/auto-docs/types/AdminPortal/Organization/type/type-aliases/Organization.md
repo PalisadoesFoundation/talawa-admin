@@ -28,7 +28,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:26](https://github.com/P
 
 ### address?
 
-> `optional` **address**: [`Address`](../../../../address/type-aliases/Address.md)
+> `optional` **address**: [`Address`](../../../address/type-aliases/Address.md)
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L27)
 
@@ -116,7 +116,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:37](https://github.com/P
 
 ### membershipRequests?
 
-> `optional` **membershipRequests**: [`MembershipRequest`](../../../../membership/type-aliases/MembershipRequest.md)[]
+> `optional` **membershipRequests**: [`MembershipRequest`](../../../membership/type-aliases/MembershipRequest.md)[]
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L38)
 

@@ -1,0 +1,45 @@
+.whiteContainer {
+  background-color: var(--color-white);
+  border-radius: var(--space-5);
+  margin-top: var(--space-5);
+  margin-bottom: var(--space-5);
+}
+
+.message {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.errorIcon {
+  font-size: var(--font-size-4xl);
+  color: var(--color-red-500);
+  margin-bottom: var(--space-5);
+
+  /* Add error icon for non-color indication */
+  &::before {
+    content: '⚠️';
+    margin-right: var(--space-2);
+  }
+}
+
+.errorIconLarge {
+  font-size: var(--font-size-3xl);
+}
+
+.tableHeader {
+  font-weight: var(--font-weight-bold);
+}
+
+.requestsTableItemIndex {
+  vertical-align: middle;
+}
+
+.rowBackground {
+  background-color: var(--color-white);
+  color: var(--color-black);
+  max-height: var(--space-14);
+  overflow-y: auto;
+}

@@ -18,7 +18,6 @@ vi.mock('./EditUserTagModal.module.css', () => ({
 }));
 
 describe('EditUserTagModal Component', () => {
-  // Properly typed mock translation functions
   const mockT = vi.fn((key) => key) as unknown as TFunction<
     'translation',
     'manageTag'
@@ -28,13 +27,12 @@ describe('EditUserTagModal Component', () => {
     undefined
   >;
 
-  // Common props for all tests with correct typing
   const defaultProps: InterfaceEditUserTagModalProps = {
     editUserTagModalIsOpen: true,
     hideEditUserTagModal: vi.fn(),
     newTagName: 'Test Tag',
     setNewTagName: vi.fn(),
-    handleEditUserTag: vi.fn().mockImplementation(() => Promise.resolve()),
+    handleEditUserTag: vi.fn().mockResolvedValue(undefined),
     t: mockT,
     tCommon: mockTCommon,
   };
@@ -51,7 +49,7 @@ describe('EditUserTagModal Component', () => {
     render(<EditUserTagModal {...defaultProps} />);
 
     expect(screen.getByText('tagDetails')).toBeInTheDocument();
-    expect(screen.getByLabelText('tagName')).toBeInTheDocument();
+    expect(screen.getByLabelText(/tagName/i)).toBeInTheDocument();
     expect(screen.getByTestId('tagNameInput')).toBeInTheDocument();
     expect(screen.getByTestId('closeEditTagModalBtn')).toBeInTheDocument();
     expect(screen.getByTestId('editTagSubmitBtn')).toBeInTheDocument();
@@ -85,17 +83,14 @@ describe('EditUserTagModal Component', () => {
   it('calls hideEditUserTagModal when cancel button is clicked', () => {
     render(<EditUserTagModal {...defaultProps} />);
 
-    const cancelButton = screen.getByTestId('closeEditTagModalBtn');
-    fireEvent.click(cancelButton);
-
+    fireEvent.click(screen.getByTestId('closeEditTagModalBtn'));
     expect(defaultProps.hideEditUserTagModal).toHaveBeenCalledTimes(1);
   });
 
   it('calls handleEditUserTag when form is submitted with valid input', async () => {
     render(<EditUserTagModal {...defaultProps} />);
 
-    const submitButton = screen.getByTestId('editTagSubmitBtn');
-    fireEvent.click(submitButton);
+    fireEvent.click(screen.getByTestId('editTagSubmitBtn'));
 
     await waitFor(() => {
       expect(defaultProps.handleEditUserTag).toHaveBeenCalledTimes(1);
@@ -103,12 +98,9 @@ describe('EditUserTagModal Component', () => {
   });
 
   it('does not call handleEditUserTag when form is submitted with empty input', async () => {
-    const propsWithEmptyTag = { ...defaultProps, newTagName: '' };
+    render(<EditUserTagModal {...defaultProps} newTagName="" />);
 
-    render(<EditUserTagModal {...propsWithEmptyTag} />);
-
-    const submitButton = screen.getByTestId('editTagSubmitBtn');
-    fireEvent.click(submitButton);
+    fireEvent.click(screen.getByTestId('editTagSubmitBtn'));
 
     await waitFor(() => {
       expect(defaultProps.handleEditUserTag).not.toHaveBeenCalled();
@@ -116,12 +108,9 @@ describe('EditUserTagModal Component', () => {
   });
 
   it('does not call handleEditUserTag when form is submitted with whitespace-only input', async () => {
-    const propsWithWhitespaceTag = { ...defaultProps, newTagName: '   ' };
+    render(<EditUserTagModal {...defaultProps} newTagName="   " />);
 
-    render(<EditUserTagModal {...propsWithWhitespaceTag} />);
-
-    const submitButton = screen.getByTestId('editTagSubmitBtn');
-    fireEvent.click(submitButton);
+    fireEvent.click(screen.getByTestId('editTagSubmitBtn'));
 
     await waitFor(() => {
       expect(defaultProps.handleEditUserTag).not.toHaveBeenCalled();
@@ -145,15 +134,14 @@ describe('EditUserTagModal Component', () => {
 
   it('sets the required attribute on the input field', () => {
     render(<EditUserTagModal {...defaultProps} />);
-
-    const inputField = screen.getByTestId('tagNameInput');
-    expect(inputField).toHaveAttribute('required');
+    expect(screen.getByTestId('tagNameInput')).toHaveAttribute('required');
   });
 
   it('sets autoComplete to off on the input field', () => {
     render(<EditUserTagModal {...defaultProps} />);
-
-    const inputField = screen.getByTestId('tagNameInput');
-    expect(inputField).toHaveAttribute('autoComplete', 'off');
+    expect(screen.getByTestId('tagNameInput')).toHaveAttribute(
+      'autoComplete',
+      'off',
+    );
   });
 });

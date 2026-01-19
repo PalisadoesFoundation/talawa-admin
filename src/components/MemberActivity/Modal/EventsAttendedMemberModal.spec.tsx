@@ -15,7 +15,22 @@ dayjs.extend(utc);
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => key,
+    t: (key: string, params?: Record<string, unknown>) => {
+      const translations: Record<string, string> = {
+        noEventsAttended: 'No events attended',
+        title: 'Events Attended List',
+        showing: `Showing ${params?.start} - ${params?.end} of ${params?.total} Events`,
+        eventName: 'Event Name',
+        dateOfEvent: 'Date of Event',
+        recurringEvent: 'Recurring Event',
+        attendees: 'Attendees',
+        tableAriaLabel: 'Events attended table',
+        paginationAriaLabel: 'Events pagination navigation',
+        paginationGoToPage: `Go to page ${params?.page}`,
+        paginationGoToType: `Go to ${params?.type} page`,
+      };
+      return translations[key] || key;
+    },
     i18n: { changeLanguage: () => Promise.resolve() },
   }),
 }));
@@ -85,7 +100,7 @@ describe('EventsAttendedMemberModal', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByText('noeventsAttended')).toBeInTheDocument();
+    expect(screen.getByText('No events attended')).toBeInTheDocument();
   });
 
   test('renders correct number of events per page', () => {
@@ -126,7 +141,7 @@ describe('EventsAttendedMemberModal', () => {
       </MockedProvider>,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+    fireEvent.click(screen.getByTestId('modalCloseBtn'));
     expect(mockSetShow).toHaveBeenCalledWith(false);
     expect(mockSetShow).toHaveBeenCalledTimes(1);
   });

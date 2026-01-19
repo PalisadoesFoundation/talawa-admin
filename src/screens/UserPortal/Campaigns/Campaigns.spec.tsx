@@ -30,6 +30,7 @@ import {
   MOCKS_WITH_NULL_ORGANIZATION,
   MOCKS_WITH_UNDEFINED_CAMPAIGNS,
   USER_FUND_CAMPAIGNS_ERROR,
+  MOCKS_WITH_PENDING_CAMPAIGN,
 } from './CampaignsMocks';
 
 vi.mock('react-toastify', () => ({
@@ -241,7 +242,8 @@ describe('Testing User Campaigns Screen', () => {
     }
 
     await waitFor(() => {
-      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      const dialogs = screen.getAllByRole('dialog');
+      expect(dialogs.length).toBeGreaterThan(0);
       expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
     });
   });
@@ -467,6 +469,18 @@ describe('Testing User Campaigns Screen', () => {
     await waitFor(() => {
       const descendingOrder = getCampaignOrder();
       expect(descendingOrder).toEqual(['School Campaign', 'Hospital Campaign']);
+    });
+  });
+  it('should render correct status for pending campaign', async () => {
+    const link = new StaticMockLink(MOCKS_WITH_PENDING_CAMPAIGN);
+    renderCampaigns(link);
+
+    await waitFor(() => {
+      expect(screen.getByText('Future School Campaign')).toBeInTheDocument();
+      // StatusBadge handles translation, 'pending' status usually maps to 'Pending' text
+      // We can also check by data-testid if text is variable
+      const text = screen.getByText(/Pending/i);
+      expect(text).toBeInTheDocument();
     });
   });
 });

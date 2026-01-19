@@ -6,12 +6,22 @@
  * The component uses ReportingTable for consistent table display.
  */
 import React, { useCallback, useMemo, useState } from 'react';
-import { Button } from 'react-bootstrap';
-import styles from '../../../style/app-fixed.module.css';
+import styles from './Campaigns.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import { Campaign, WarningAmberRounded } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
+import Button from 'shared-components/Button/Button';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
+
+/**
+ * Extended interface for campaigns with computed status
+ */
+export type CampaignWithStatus = InterfaceUserCampaign & {
+  status: 'active' | 'inactive' | 'pending';
+  [key: string]: unknown;
+};
+
 import { type GridCellParams } from 'shared-components/DataGridWrapper';
 import useLocalStorage from 'utils/useLocalstorage';
 import PledgeModal from './PledgeModal';
@@ -85,7 +95,7 @@ const Campaigns = (): JSX.Element => {
     setSelectedCampaign(null);
   }, []);
 
-  const campaigns = useMemo(() => {
+  const campaigns = useMemo((): CampaignWithStatus[] => {
     if (!campaignData?.organization?.funds?.edges) {
       return [];
     }
@@ -107,19 +117,35 @@ const Campaigns = (): JSX.Element => {
             startAt: string;
             endAt: string;
           };
-        }) => ({
-          _id: campaign.id,
-          name: campaign.name,
-          fundingGoal: campaign.goalAmount,
-          startDate: new Date(campaign.startAt),
-          endDate: new Date(campaign.endAt),
-          currency: campaign.currencyCode,
-        }),
+        }) => {
+          const today = dayjs().startOf('day');
+          const startDate = dayjs(campaign.startAt).startOf('day');
+          const endDate = dayjs(campaign.endAt).startOf('day');
+
+          let status: 'active' | 'inactive' | 'pending';
+          if (endDate.isBefore(today)) {
+            status = 'inactive';
+          } else if (!startDate.isAfter(today) && !endDate.isBefore(today)) {
+            status = 'active';
+          } else {
+            status = 'pending';
+          }
+
+          return {
+            _id: campaign.id,
+            name: campaign.name,
+            fundingGoal: campaign.goalAmount,
+            startDate: new Date(campaign.startAt),
+            endDate: new Date(campaign.endAt),
+            currency: campaign.currencyCode,
+            status,
+          };
+        },
       );
   }, [campaignData]);
 
   const filteredCampaigns = useMemo(() => {
-    return campaigns.filter((campaign: InterfaceUserCampaign) =>
+    return campaigns.filter((campaign: CampaignWithStatus) =>
       campaign.name.toLowerCase().includes(searchText.toLowerCase()),
     );
   }, [campaigns, searchText]);
@@ -172,6 +198,21 @@ const Campaigns = (): JSX.Element => {
       sortable: false,
       renderCell: (params: GridCellParams) => (
         <div data-testid="campaignName">{params.row.name}</div>
+      ),
+    },
+    {
+      field: 'status',
+      headerName: t('campaignStatus'),
+      flex: 1,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => (
+        <StatusBadge
+          variant={(params.row as CampaignWithStatus).status}
+          dataTestId="campaignStatus"
+        />
       ),
     },
     {
