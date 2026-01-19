@@ -2,6 +2,7 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import { formatPostForCard } from './helperFunctions';
 import type { InterfacePost } from 'types/Post/interface';
 import dayjs from 'dayjs';
+import * as dateFormatter from 'utils/dateFormatter';
 
 describe('formatPostForCard', () => {
   const t = (key: string) => key;
@@ -38,5 +39,68 @@ describe('formatPostForCard', () => {
     expect(card.hasUserVoted).toEqual({ hasVoted: false, voteType: null });
     expect(card.mimeType).toBeNull();
     expect(card.attachmentURL).toBeUndefined();
+  });
+
+  it('should format a complete post correctly', () => {
+    const post: InterfacePost = {
+      id: '1',
+      caption: 'Full Post',
+      body: 'Body content',
+      createdAt: dayjs().format('YYYY-MM-DD'),
+      creator: {
+        id: 'creator-1',
+        name: 'John Doe',
+        email: 'john@example.com',
+        avatarURL: 'https://example.com/avatar.jpg',
+      },
+      commentsCount: 5,
+      upVotesCount: 10,
+      downVotesCount: 2,
+      pinnedAt: dayjs().add(1, 'day').format('YYYY-MM-DD'),
+      hasUserVoted: { hasVoted: true, voteType: 'up_vote' },
+      attachments: [{ mimeType: 'image/png' }],
+      attachmentURL: 'https://example.com/image.png',
+    };
+
+    const card = formatPostForCard(post, t, refetch);
+
+    expect(card.id).toBe('1');
+    expect(card.creator.name).toBe('John Doe');
+    expect(card.attachmentURL).toBe('https://example.com/image.png');
+    expect(card.mimeType).toBe('image/png');
+    expect(card.hasUserVoted).toEqual({ hasVoted: true, voteType: 'up_vote' });
+  });
+
+  it('should fallback to empty string when date formatting fails', () => {
+    vi.spyOn(dateFormatter, 'formatDate').mockImplementation(() => {
+      throw new Error('Invalid date');
+    });
+
+    const post: InterfacePost = {
+      id: '3',
+      createdAt: 'invalid-date',
+      // minimal required fields
+    };
+
+    const card = formatPostForCard(post, t, refetch);
+
+    expect(card.postedAt).toBe('');
+  });
+
+  it('should fallback to unknownUser when creator.name is missing', () => {
+    const post: InterfacePost = {
+      id: '4',
+      createdAt: dayjs().format('YYYY-MM-DD'),
+      creator: {
+        id: 'creator-2',
+        name: undefined as unknown as string,
+        email: 'test@example.com',
+      },
+      hasUserVoted: undefined,
+    };
+
+    const card = formatPostForCard(post, t, refetch);
+
+    expect(card.creator.name).toBe('unknownUser');
   });
 });

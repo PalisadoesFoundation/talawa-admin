@@ -104,7 +104,7 @@ export default function PageHeader({
               title={t('eventType')}
               sortingOptions={[
                 { label: t('events'), value: 'Events' },
-                { label: t('navbar.workshops'), value: 'Workshops' },
+                { label: t('userNavbar.workshops'), value: 'Workshops' },
               ]}
               selectedOption={'Events'}
               onSortChange={() => {}}
