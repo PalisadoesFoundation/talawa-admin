@@ -816,14 +816,12 @@
     "attendeesIcon": "Icono de asistentes",
     "feedbackIcon": "Icono de retroalimentación",
     "selectRecurrencePattern": "Seleccionar patrón de repetición",
-    "recurrence": {
-      "daily": "Diario",
-      "weeklyOn": "Semanalmente el {{day}}",
-      "monthlyOn": "Mensualmente el día {{day}}",
-      "annuallyOn": "Anualmente el {{month}} {{day}}",
-      "everyWeekday": "Todos los días de la semana (Lun-Vie)",
-      "custom": "Personalizado"
-    }
+    "recurrence.daily": "Diario",
+    "recurrence.weeklyOn": "Semanalmente el {{day}}",
+    "recurrence.monthlyOn": "Mensualmente el día {{day}}",
+    "recurrence.annuallyOn": "Anualmente el {{month}} {{day}}",
+    "recurrence.everyWeekday": "Todos los días de la semana (Lun-Vie)",
+    "recurrence.custom": "Personalizado"
   },
   "funds": {
     "title": "Fondos",

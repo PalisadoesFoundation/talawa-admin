@@ -833,14 +833,12 @@
     "attendeesIcon": "उपस्थित लोगों का आइकन",
     "feedbackIcon": "प्रतिक्रिया आइकन",
     "selectRecurrencePattern": "पुनरावृत्ति पैटर्न चुनें",
-    "recurrence": {
-      "daily": "दैनिक",
-      "weeklyOn": "साप्ताहिक {{day}} को",
-      "monthlyOn": "मासिक {{day}} दिन को",
-      "annuallyOn": "वार्षिक {{month}} {{day}} को",
-      "everyWeekday": "हर कार्यदिवस (सोम-शुक्र)",
-      "custom": "कस्टम"
-    }
+    "recurrence.daily": "दैनिक",
+    "recurrence.weeklyOn": "साप्ताहिक {{day}} को",
+    "recurrence.monthlyOn": "मासिक {{day}} दिन को",
+    "recurrence.annuallyOn": "वार्षिक {{month}} {{day}} को",
+    "recurrence.everyWeekday": "हर कार्यदिवस (सोम-शुक्र)",
+    "recurrence.custom": "कस्टम"
   },
   "funds": {
     "title": "फंड",
