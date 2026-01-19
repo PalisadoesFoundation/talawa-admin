@@ -637,3 +637,30 @@ export interface InterfaceSearchBarProps {
    */
   'clear-aria-label'?: string;
 }
+
+/**
+ * Props for the BulkActionsBar component.
+ *
+ * Used to display a toolbar when rows are selected in a DataTable.
+ */
+export interface InterfaceBulkActionsBarProps {
+  /** Number of selected rows */
+  count: number;
+  /** Bulk action buttons to render */
+  children: React.ReactNode;
+  /** Callback to clear selection */
+  onClear: () => void;
+}
+
+/**
+ * Props for the ActionsCell component.
+ *
+ * Used to render per-row action buttons in a DataTable.
+ * @typeParam T - The type of the row data
+ */
+export interface InterfaceActionsCellProps<T> {
+  /** The row data object */
+  row: T;
+  /** Array of action definitions */
+  actions: ReadonlyArray<IRowAction<T>>;
+}

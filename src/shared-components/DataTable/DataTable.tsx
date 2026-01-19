@@ -351,27 +351,53 @@ export function DataTable<T>(props: IDataTableProps<T>) {
 
   const runBulkAction = React.useCallback(
     (action: IBulkAction<T>) => {
-      const selectedRows = paginatedData.filter((r, i) =>
-        currentSelection.has(getKey(r, startIndex + i)),
+      // Use keysOnPage for stable key derivation (avoids issues when getKey falls back to index)
+      const selectedKeysOnPage = keysOnPage.filter((k) =>
+        currentSelection.has(k),
       );
-      const keys = selectedRows.map((r, i) => getKey(r, startIndex + i));
+      const selectedRows = paginatedData.filter((_, i) =>
+        currentSelection.has(keysOnPage[i]),
+      );
 
       const isDisabled =
         typeof action.disabled === 'function'
-          ? action.disabled(selectedRows, keys)
+          ? action.disabled(selectedRows, selectedKeysOnPage)
           : !!action.disabled;
 
       if (isDisabled) return;
 
       if (action.confirm && !window.confirm(action.confirm)) return;
 
-      void action.onClick(selectedRows, keys);
+      void action.onClick(selectedRows, selectedKeysOnPage);
     },
-    [paginatedData, currentSelection, getKey, startIndex],
+    [paginatedData, currentSelection, keysOnPage],
   );
 
+  // When renderRow is provided, disable selection/actions to prevent column count mismatch
+  // The custom renderRow doesn't know about the selection/actions columns
+  const effectiveSelectable = renderRow ? false : selectable;
+  const effectiveRowActions = renderRow ? [] : rowActions;
+
+  // Warn in development if renderRow is used with selection/actions
+  React.useEffect(() => {
+    if (process.env.NODE_ENV !== 'production' && renderRow) {
+      if (selectable) {
+        console.warn(
+          'DataTable: `selectable` is ignored when `renderRow` is provided. ' +
+            'Custom row renderers must handle selection UI manually.',
+        );
+      }
+      if (rowActions && rowActions.length > 0) {
+        console.warn(
+          'DataTable: `rowActions` is ignored when `renderRow` is provided. ' +
+            'Custom row renderers must handle action buttons manually.',
+        );
+      }
+    }
+  }, [renderRow, selectable, rowActions]);
+
   // Check if we should show row actions column
-  const hasRowActions = rowActions && rowActions.length > 0;
+  const hasRowActions = effectiveRowActions && effectiveRowActions.length > 0;
   // Check if we should show bulk actions bar
   const hasBulkActions = bulkActions && bulkActions.length > 0;
 
@@ -495,16 +521,18 @@ export function DataTable<T>(props: IDataTableProps<T>) {
       )}
 
       {/* Bulk actions bar */}
-      {selectable && hasBulkActions && (
+      {effectiveSelectable && hasBulkActions && (
         <BulkActionsBar count={selectedCountOnPage} onClear={clearSelection}>
           {bulkActions.map((action) => {
-            const selectedRows = paginatedData.filter((r, i) =>
-              currentSelection.has(getKey(r, startIndex + i)),
+            const selectedKeysOnPage = keysOnPage.filter((k) =>
+              currentSelection.has(k),
             );
-            const keys = selectedRows.map((r, i) => getKey(r, startIndex + i));
+            const selectedRows = paginatedData.filter((_, i) =>
+              currentSelection.has(keysOnPage[i]),
+            );
             const isDisabled =
               typeof action.disabled === 'function'
-                ? action.disabled(selectedRows, keys)
+                ? action.disabled(selectedRows, selectedKeysOnPage)
                 : !!action.disabled;
             return (
               <button
@@ -535,7 +563,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
         )}
         <thead>
           <tr>
-            {selectable && (
+            {effectiveSelectable && (
               <th scope="col" className={localStyles.selectCol}>
                 <input
                   ref={headerCheckboxRef}
@@ -575,7 +603,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
                     data-testid={`datatable-row-${rowKeyValue}`}
                     data-selected={isRowSelected}
                   >
-                    {selectable && (
+                    {effectiveSelectable && (
                       <td className={localStyles.selectCol}>
                         <input
                           type="checkbox"
@@ -601,7 +629,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
                     })}
                     {hasRowActions && (
                       <td className={localStyles.actionsCol}>
-                        <ActionsCell row={row} actions={rowActions} />
+                        <ActionsCell row={row} actions={effectiveRowActions} />
                       </td>
                     )}
                   </tr>
@@ -615,7 +643,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
                 key={`skeleton-append-${rowIdx}`}
                 data-testid={`skeleton-append-${rowIdx}`}
               >
-                {selectable && (
+                {effectiveSelectable && (
                   <td>
                     <div
                       className={styles.dataSkeletonCell}

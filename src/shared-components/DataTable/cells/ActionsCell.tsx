@@ -1,21 +1,17 @@
 import React from 'react';
-import type { IRowAction } from '../../../types/shared-components/DataTable/interface';
+import type { InterfaceActionsCellProps } from '../../../types/shared-components/DataTable/interface';
 import styles from '../DataTable.module.css';
 
 /**
  * ActionsCell renders a row of action buttons for a single table row.
  *
  * @typeParam T - The type of the row data
- * @param row - The row data object
- * @param actions - Array of action definitions
+ * @param props - Props containing row data and action definitions
  */
-export function ActionsCell<T>({
-  row,
-  actions,
-}: {
-  row: T;
-  actions: ReadonlyArray<IRowAction<T>>;
-}): React.JSX.Element {
+export function ActionsCell<T>(
+  props: InterfaceActionsCellProps<T>,
+): React.JSX.Element {
+  const { row, actions } = props;
   return (
     <div className={styles.actionsCellContainer} data-testid="actions-cell">
       {actions.map((action) => {

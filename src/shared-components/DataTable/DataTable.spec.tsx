@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import dayjs from 'dayjs';
 import { DataTable } from './DataTable';
@@ -955,7 +956,8 @@ describe('DataTable', () => {
    * Row selection and actions
    * ------------------------------------------------------------------ */
 
-  it('toggles row selection when checkbox is clicked', () => {
+  it('toggles row selection when checkbox is clicked', async () => {
+    const user = userEvent.setup();
     type Row = { id: string; name: string };
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data: Row[] = [
@@ -970,14 +972,15 @@ describe('DataTable', () => {
     const rowCb1 = screen.getByTestId('select-row-1') as HTMLInputElement;
     expect(rowCb1.checked).toBe(false);
 
-    fireEvent.click(rowCb1);
+    await user.click(rowCb1);
     expect(rowCb1.checked).toBe(true);
 
-    fireEvent.click(rowCb1);
+    await user.click(rowCb1);
     expect(rowCb1.checked).toBe(false);
   });
 
-  it('select-all checkbox selects all rows on page', () => {
+  it('select-all checkbox selects all rows on page', async () => {
+    const user = userEvent.setup();
     type Row = { id: string; name: string };
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data: Row[] = [
@@ -994,7 +997,7 @@ describe('DataTable', () => {
     ) as HTMLInputElement;
     expect(headerCb.checked).toBe(false);
 
-    fireEvent.click(headerCb);
+    await user.click(headerCb);
     expect(headerCb.checked).toBe(true);
 
     const row1 = screen.getByTestId('select-row-1') as HTMLInputElement;
@@ -1003,13 +1006,14 @@ describe('DataTable', () => {
     expect(row2.checked).toBe(true);
 
     // Unselect all
-    fireEvent.click(headerCb);
+    await user.click(headerCb);
     expect(headerCb.checked).toBe(false);
     expect(row1.checked).toBe(false);
     expect(row2.checked).toBe(false);
   });
 
-  it('header checkbox shows indeterminate state when some rows selected', () => {
+  it('header checkbox shows indeterminate state when some rows selected', async () => {
+    const user = userEvent.setup();
     type Row = { id: string; name: string };
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data: Row[] = [
@@ -1027,14 +1031,15 @@ describe('DataTable', () => {
     const rowCb1 = screen.getByTestId('select-row-1');
 
     // Select only first row
-    fireEvent.click(rowCb1);
+    await user.click(rowCb1);
 
     // Header should be indeterminate (not checked, but indeterminate property set)
     expect(headerCb.checked).toBe(false);
     expect(headerCb.indeterminate).toBe(true);
   });
 
-  it('renders row action buttons and calls onClick', () => {
+  it('renders row action buttons and calls onClick', async () => {
+    const user = userEvent.setup();
     type Row = { id: string; name: string };
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data: Row[] = [{ id: '1', name: 'Ada' }];
@@ -1052,11 +1057,12 @@ describe('DataTable', () => {
     const openBtn = screen.getByRole('button', { name: 'Open' });
     expect(openBtn).toBeInTheDocument();
 
-    fireEvent.click(openBtn);
+    await user.click(openBtn);
     expect(onClick).toHaveBeenCalledWith(data[0]);
   });
 
-  it('renders bulk actions bar when rows are selected', () => {
+  it('renders bulk actions bar when rows are selected', async () => {
+    const user = userEvent.setup();
     type Row = { id: string; name: string };
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data: Row[] = [
@@ -1079,18 +1085,19 @@ describe('DataTable', () => {
     expect(screen.queryByTestId('bulk-actions-bar')).toBeNull();
 
     // Select first row
-    fireEvent.click(screen.getByTestId('select-row-1'));
+    await user.click(screen.getByTestId('select-row-1'));
 
     // Bulk bar should appear
     expect(screen.getByTestId('bulk-actions-bar')).toBeInTheDocument();
     expect(screen.getByText('1')).toBeInTheDocument(); // count
 
     // Click bulk action
-    fireEvent.click(screen.getByTestId('bulk-action-export'));
+    await user.click(screen.getByTestId('bulk-action-export'));
     expect(onBulk).toHaveBeenCalled();
   });
 
-  it('clear button clears selection', () => {
+  it('clear button clears selection', async () => {
+    const user = userEvent.setup();
     type Row = { id: string; name: string };
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data: Row[] = [{ id: '1', name: 'Ada' }];
@@ -1106,11 +1113,11 @@ describe('DataTable', () => {
     );
 
     // Select row
-    fireEvent.click(screen.getByTestId('select-row-1'));
+    await user.click(screen.getByTestId('select-row-1'));
     expect(screen.getByTestId('bulk-actions-bar')).toBeInTheDocument();
 
     // Click clear
-    fireEvent.click(screen.getByTestId('bulk-clear-btn'));
+    await user.click(screen.getByTestId('bulk-clear-btn'));
 
     // Bar should disappear
     expect(screen.queryByTestId('bulk-actions-bar')).toBeNull();
@@ -1119,7 +1126,8 @@ describe('DataTable', () => {
     ).toBe(false);
   });
 
-  it('controlled selection calls onSelectionChange', () => {
+  it('controlled selection calls onSelectionChange', async () => {
+    const user = userEvent.setup();
     type Row = { id: string; name: string };
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data: Row[] = [{ id: '1', name: 'Ada' }];
@@ -1136,7 +1144,7 @@ describe('DataTable', () => {
       />,
     );
 
-    fireEvent.click(screen.getByTestId('select-row-1'));
+    await user.click(screen.getByTestId('select-row-1'));
     expect(onSelectionChange).toHaveBeenCalled();
   });
 

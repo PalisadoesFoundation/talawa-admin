@@ -1,11 +1,15 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { ActionsCell } from './ActionsCell';
 import type { IRowAction } from '../../../types/shared-components/DataTable/interface';
 
 type Row = { id: string; name: string };
 
 describe('ActionsCell', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('renders all action buttons', () => {
     const actions: IRowAction<Row>[] = [
       { id: 'edit', label: 'Edit', onClick: vi.fn() },

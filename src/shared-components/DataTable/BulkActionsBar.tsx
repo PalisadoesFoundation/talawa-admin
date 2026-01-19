@@ -1,17 +1,6 @@
 import React from 'react';
 import styles from './DataTable.module.css';
-
-/**
- * Props for the BulkActionsBar component.
- */
-export interface IBulkActionsBarProps {
-  /** Number of selected rows */
-  count: number;
-  /** Bulk action buttons to render */
-  children: React.ReactNode;
-  /** Callback to clear selection */
-  onClear: () => void;
-}
+import type { InterfaceBulkActionsBarProps } from '../../types/shared-components/DataTable/interface';
 
 /**
  * BulkActionsBar displays a toolbar when rows are selected.
@@ -21,7 +10,7 @@ export function BulkActionsBar({
   count,
   children,
   onClear,
-}: IBulkActionsBarProps): React.JSX.Element | null {
+}: InterfaceBulkActionsBarProps): React.JSX.Element | null {
   if (count <= 0) return null;
 
   return (
