@@ -12,6 +12,10 @@ Props for FormFieldGroup component.
 
 - [`InterfaceFormFieldGroupProps`](InterfaceFormFieldGroupProps.md)
 
+## Indexable
+
+\[`x`: `string`\]: `unknown`
+
 ## Properties
 
 ### data-testid?
@@ -23,6 +27,22 @@ Defined in: [src/types/FormFieldGroup/interface.ts:11](https://github.com/Palisa
 #### Inherited from
 
 [`InterfaceFormFieldGroupProps`](InterfaceFormFieldGroupProps.md).[`data-testid`](InterfaceFormFieldGroupProps.md#data-testid)
+
+***
+
+### disabled?
+
+> `optional` **disabled**: `boolean`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L21)
+
+***
+
+### endAdornment?
+
+> `optional` **endAdornment**: `ReactNode`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L20)
 
 ***
 
@@ -109,6 +129,14 @@ Defined in: [src/types/FormFieldGroup/interface.ts:7](https://github.com/Palisad
 #### Inherited from
 
 [`InterfaceFormFieldGroupProps`](InterfaceFormFieldGroupProps.md).[`required`](InterfaceFormFieldGroupProps.md#required)
+
+***
+
+### startAdornment?
+
+> `optional` **startAdornment**: `ReactNode`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L19)
 
 ***
 

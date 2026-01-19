@@ -6,11 +6,11 @@
  * - Generate and download a PDF tag for the user.
  *
  * @remarks
- * - If the user is already checked in, the "Checked In" button is disabled, and a "Download Tag" button is displayed.
- * - If the user is not checked in, a "Check In" button is displayed.
- * - The component uses Apollo Client's `useMutation` hook to perform the check-in operation.
+ * - If the user is already checked in, the "Checked In" button is disabled, and a "Download Tag" button is displayed
+ * - If the user is not checked in, a "Check In" button is displayed
+ * - The component uses Apollo Client's `useMutation` hook to perform the check-in operation
  * - The `generate` function from `@pdfme/generator` is used to create the PDF tag.
- * - Notifications are displayed using `react-toastify` for success, error, and pending states.
+ * - Notifications are displayed using `NotificationToast` for success, error, and pending states.
  *
  * @remarks
  * Example usage:
@@ -75,9 +75,9 @@ export const TableRow = ({
    */
   const notify = (): Promise<void> =>
     NotificationToast.promise(generateTag, {
-      pending: 'Generating pdf...',
-      success: 'PDF generated successfully!',
-      error: 'Error generating pdf!',
+      pending: t('generatingPdf') as string,
+      success: t('pdfGeneratedSuccessfully') as string,
+      error: t('errorGeneratingPdf') as string,
     });
 
   /**
@@ -97,7 +97,9 @@ export const TableRow = ({
       const url = URL.createObjectURL(blob);
       window.open(url);
     } catch (error: unknown) {
-      throw error instanceof Error ? error : new Error('Unknown error');
+      throw error instanceof Error
+        ? error
+        : new Error(t('unknownError') as string);
     }
   };
 

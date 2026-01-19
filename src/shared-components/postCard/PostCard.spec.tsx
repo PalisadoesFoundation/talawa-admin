@@ -1,6 +1,12 @@
 import React from 'react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+  within,
+} from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
@@ -1727,6 +1733,131 @@ describe('PostCard', () => {
 
     await waitFor(() => {
       expect(screen.getByText('New test comment')).toBeInTheDocument();
+    });
+  });
+
+  describe('Share functionality', () => {
+    let originalClipboard: typeof navigator.clipboard;
+    let originalLocation: Location;
+    beforeEach(() => {
+      originalClipboard = navigator.clipboard;
+      originalLocation = window.location;
+      // Mock the clipboard API
+      Object.defineProperty(navigator, 'clipboard', {
+        value: {
+          writeText: vi.fn().mockResolvedValue(undefined),
+        },
+        writable: true,
+      });
+
+      // Mock window.location
+      Object.defineProperty(window, 'location', {
+        value: {
+          href: 'http://localhost:3000/orgs/123',
+          pathname: '/orgs/123',
+        },
+        writable: true,
+      });
+    });
+    afterEach(() => {
+      Object.defineProperty(navigator, 'clipboard', {
+        value: originalClipboard,
+        writable: true,
+      });
+      Object.defineProperty(window, 'location', {
+        value: originalLocation,
+        writable: true,
+      });
+      vi.clearAllMocks();
+    });
+
+    test('opens share menu item and copies link to clipboard', async () => {
+      renderPostCard();
+
+      // Open the more options menu
+      const moreButton = screen.getByTestId('post-more-options-button');
+      await userEvent.click(moreButton);
+
+      // Find and click the share menu item
+      const shareMenuItem = await screen.findByTestId('share-post-menu-item');
+      expect(shareMenuItem).toBeInTheDocument();
+
+      await userEvent.click(shareMenuItem);
+
+      // Verify clipboard.writeText was called with the correct URL
+      await waitFor(() => {
+        expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+          'http://localhost:3000/orgs/123?previewPostID=1',
+        );
+      });
+
+      // Verify success notification
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        'Link copied to clipboard',
+      );
+    });
+
+    test('share button displays correct icon and text', async () => {
+      renderPostCard();
+
+      const moreButton = screen.getByTestId('post-more-options-button');
+      await userEvent.click(moreButton);
+
+      const shareMenuItem = await screen.findByTestId('share-post-menu-item');
+      const shareButton =
+        within(shareMenuItem).getByTestId('share-post-button');
+
+      expect(shareButton).toBeInTheDocument();
+      expect(shareButton).toHaveTextContent(/share/i);
+    });
+
+    test('closes menu after sharing', async () => {
+      renderPostCard();
+
+      const moreButton = screen.getByTestId('post-more-options-button');
+      await userEvent.click(moreButton);
+
+      const shareMenuItem = await screen.findByTestId('share-post-menu-item');
+      await userEvent.click(shareMenuItem);
+
+      // Verify menu closes after sharing
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('share-post-menu-item'),
+        ).not.toBeInTheDocument();
+      });
+    });
+
+    test('handles clipboard write failure gracefully', async () => {
+      // Mock clipboard to fail
+      Object.defineProperty(navigator, 'clipboard', {
+        value: {
+          writeText: vi.fn().mockRejectedValue(new Error('Clipboard failed')),
+        },
+        writable: true,
+      });
+
+      renderPostCard();
+
+      const moreButton = screen.getByTestId('post-more-options-button');
+      await userEvent.click(moreButton);
+
+      const shareMenuItem = await screen.findByTestId('share-post-menu-item');
+      await userEvent.click(shareMenuItem);
+
+      // Verify error notification is shown
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Error copying link to clipboard',
+        );
+      });
+
+      // Verify menu still closes after error
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('share-post-menu-item'),
+        ).not.toBeInTheDocument();
+      });
     });
   });
 });
