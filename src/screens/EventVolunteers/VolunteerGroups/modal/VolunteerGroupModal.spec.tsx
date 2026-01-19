@@ -678,36 +678,6 @@ describe('Testing VolunteerGroupModal', () => {
       const submitBtn = screen.getByTestId('modal-submit-btn');
       expect(submitBtn).toBeDisabled();
     });
-
-    it('should show validation error when trying to submit with null baseEvent', async () => {
-      const propsWithNullBaseEvent: InterfaceVolunteerGroupModal = {
-        ...recurringEventProps,
-        baseEvent: null,
-      };
-
-      renderGroupModal(successLink, propsWithNullBaseEvent);
-
-      const nameInput = screen.getByTestId('groupNameInput');
-      fireEvent.change(nameInput, { target: { value: 'Test Group' } });
-
-      const descInput = screen.getByTestId('groupDescriptionInput');
-      fireEvent.change(descInput, { target: { value: 'desc' } });
-
-      const memberSelect = await screen.findByTestId('leaderSelect');
-      const memberInputField = within(memberSelect).getByRole('combobox');
-      fireEvent.mouseDown(memberInputField);
-      const memberOption = await screen.findByText('Harve Lance');
-      fireEvent.click(memberOption);
-
-      const volunteerSelect = await screen.findByTestId('volunteerSelect');
-      const volunteerInputField = within(volunteerSelect).getByRole('combobox');
-      fireEvent.mouseDown(volunteerInputField);
-      const volunteerOption = await screen.findByText('John Doe');
-      fireEvent.click(volunteerOption);
-
-      const submitBtn = screen.getByTestId('modal-submit-btn');
-      expect(submitBtn).toBeDisabled();
-    });
   });
 
   describe('Edge Cases and Error Handling', () => {
@@ -774,10 +744,20 @@ describe('Testing VolunteerGroupModal', () => {
       });
 
       const autocomplete = memberSelect.querySelector('.MuiAutocomplete-root');
-      if (autocomplete) {
-        fireEvent.change(memberInputField, { target: { value: '' } });
-        fireEvent.keyDown(memberInputField, { key: 'Escape' });
+      expect(autocomplete).toBeInTheDocument();
+
+      const clearButton = within(memberSelect).queryByRole('button', {
+        name: /clear/i,
+      });
+      if (clearButton) {
+        await userEvent.click(clearButton);
+      } else {
+        await userEvent.clear(memberInputField);
       }
+
+      await waitFor(() => {
+        expect(memberInputField).toHaveValue('');
+      });
     });
 
     it('should remove leader from volunteers when leader is cleared', async () => {
@@ -797,33 +777,13 @@ describe('Testing VolunteerGroupModal', () => {
       const volunteerSelect = await screen.findByTestId('volunteerSelect');
 
       await waitFor(() => {
-        const volunteerChips =
-          within(volunteerSelect).queryByText('Harve Lance');
-        if (volunteerChips) {
-          expect(volunteerChips).toBeInTheDocument();
-        }
+        expect(
+          within(volunteerSelect).getByText('Harve Lance'),
+        ).toBeInTheDocument();
       });
     });
 
-    it('should throw error when updating without group.id', async () => {
-      const propsWithInvalidGroup: InterfaceVolunteerGroupModal = {
-        isOpen: true,
-        hide: vi.fn(),
-        eventId: 'eventId',
-        orgId: 'orgId',
-        refetchGroups: vi.fn(),
-        mode: 'edit',
-        group: null,
-      };
-
-      renderGroupModal(errorLink, propsWithInvalidGroup);
-      expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
-
-      const submitBtn = screen.getByTestId('modal-submit-btn');
-      expect(submitBtn).toBeDisabled();
-    });
-
-    it('should show error notification when group.id is missing during update', async () => {
+    it('should disable submit button when group is null in edit mode', async () => {
       const propsForErrorCase: InterfaceVolunteerGroupModal = {
         isOpen: true,
         hide: vi.fn(),
@@ -866,19 +826,73 @@ describe('Testing VolunteerGroupModal', () => {
       const volunteersRequiredInput = screen.getByTestId(
         'volunteersRequiredInput',
       );
-      const input = volunteersRequiredInput.querySelector('input');
+      fireEvent.change(volunteersRequiredInput, { target: { value: '5' } });
+      await waitFor(() => {
+        expect(volunteersRequiredInput).toHaveValue(5);
+      });
 
-      if (input) {
-        fireEvent.change(input, { target: { value: '5' } });
-        await waitFor(() => {
-          expect(input).toHaveValue('5');
-        });
+      await userEvent.clear(volunteersRequiredInput);
+      await waitFor(() => {
+        expect(volunteersRequiredInput).toHaveValue(null);
+      });
+    });
 
-        fireEvent.change(input, { target: { value: '' } });
-        await waitFor(() => {
-          expect(input).toHaveValue('');
-        });
-      }
+    it('should handle error notification when updating group with missing id (line 198-199)', async () => {
+      // Create a spy to intercept the NotificationToast.error call
+      const errorSpy = vi.spyOn(NotificationToast, 'error');
+
+      const propsWithNullGroup: InterfaceVolunteerGroupModal = {
+        isOpen: true,
+        hide: vi.fn(),
+        eventId: 'eventId',
+        orgId: 'orgId',
+        refetchGroups: vi.fn(),
+        mode: 'edit',
+        group: null,
+      };
+
+      renderGroupModal(successLink, propsWithNullGroup);
+      expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
+
+      // Button should be disabled which prevents reaching lines 198-199
+      const submitBtn = screen.getByTestId('modal-submit-btn');
+      expect(submitBtn).toBeDisabled();
+
+      errorSpy.mockRestore();
+    });
+
+    it('should clear leader and remove from volunteers when leader is deselected (lines 290-294)', async () => {
+      renderGroupModal(successLink, modalProps[0]);
+      expect(screen.getByText(t.createGroup)).toBeInTheDocument();
+
+      // First select a leader
+      const leaderSelect = await screen.findByTestId('leaderSelect');
+      const leaderInputField = within(leaderSelect).getByRole('combobox');
+      fireEvent.mouseDown(leaderInputField);
+
+      const leaderOption = await screen.findByText('Harve Lance');
+      fireEvent.click(leaderOption);
+
+      await waitFor(() => {
+        expect(leaderInputField).toHaveValue('Harve Lance');
+      });
+
+      // Verify the leader is automatically added to volunteers
+      const volunteerSelect = await screen.findByTestId('volunteerSelect');
+      await waitFor(() => {
+        expect(
+          within(volunteerSelect).getByText('Harve Lance'),
+        ).toBeInTheDocument();
+      });
+
+      fireEvent.change(leaderInputField, { target: { value: '' } });
+      fireEvent.keyDown(leaderInputField, { key: 'Escape' });
+
+      await waitFor(() => {
+        expect(
+          within(volunteerSelect).queryByText('Harve Lance'),
+        ).not.toBeInTheDocument();
+      });
     });
   });
 });

@@ -135,64 +135,67 @@ describe('Testing VolunteerGroupViewModal', () => {
   });
 
   describe('Field onChange handlers', () => {
-    it('should handle group name field onChange', () => {
+    it('should keep group name field read-only', () => {
       renderGroupViewModal(itemProps[0]);
 
       const groupNameField = screen.getByTestId('groupName');
       const input = groupNameField.querySelector('input');
+      expect(input).not.toBeNull();
 
-      if (input) {
-        fireEvent.change(input, { target: { value: 'New Name' } });
-        expect(input).toHaveValue('Group 1');
-      }
+      fireEvent.change(input as HTMLInputElement, {
+        target: { value: 'New Name' },
+      });
+      expect(input).toHaveValue('Group 1');
     });
 
-    it('should handle volunteersRequired field onChange', () => {
+    it('should keep volunteersRequired field read-only', () => {
       renderGroupViewModal(itemProps[1]);
 
       const volunteersRequiredField = screen.getByTestId('volunteersRequired');
       const input = volunteersRequiredField.querySelector('input');
+      expect(input).not.toBeNull();
 
-      if (input) {
-        fireEvent.change(input, { target: { value: '20' } });
-        expect(input).toHaveValue('10');
-      }
+      fireEvent.change(input as HTMLInputElement, { target: { value: '20' } });
+      expect(input).toHaveValue('10');
     });
 
-    it('should handle description field onChange', () => {
+    it('should keep description field read-only', () => {
       renderGroupViewModal(itemProps[0]);
 
       const descriptionField = screen.getByTestId('groupDescription');
       const input = descriptionField.querySelector('input');
+      expect(input).not.toBeNull();
 
-      if (input) {
-        fireEvent.change(input, { target: { value: 'New Description' } });
-        expect(input).toHaveValue('desc');
-      }
+      fireEvent.change(input as HTMLInputElement, {
+        target: { value: 'New Description' },
+      });
+      expect(input).toHaveValue('desc');
     });
 
-    it('should handle leader field onChange', () => {
+    it('should keep leader field read-only', () => {
       renderGroupViewModal(itemProps[0]);
 
       const leaderField = screen.getByTestId('groupLeader');
       const input = leaderField.querySelector('input');
+      expect(input).not.toBeNull();
 
-      if (input) {
-        fireEvent.change(input, { target: { value: 'New Leader' } });
-        expect(input).toHaveValue('Teresa Bradley');
-      }
+      fireEvent.change(input as HTMLInputElement, {
+        target: { value: 'New Leader' },
+      });
+      expect(input).toHaveValue('Teresa Bradley');
     });
 
-    it('should handle creator field onChange', () => {
+    it('should keep creator field read-only', () => {
       renderGroupViewModal(itemProps[0]);
 
       const creatorField = screen.getByTestId('groupCreator');
       const input = creatorField.querySelector('input');
+      expect(input).not.toBeNull();
 
-      if (input) {
-        fireEvent.change(input, { target: { value: 'New Creator' } });
-        expect(input).toHaveValue('Wilt Shepherd');
-      }
+      fireEvent.change(input as HTMLInputElement, {
+        target: { value: 'New Creator' },
+      });
+      expect(input).toHaveValue('Wilt Shepherd');
     });
   });
 });
