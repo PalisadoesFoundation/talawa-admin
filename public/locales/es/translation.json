@@ -1984,6 +1984,7 @@
     "raised": "Recaudado",
     "amountRaised": "Monto Recaudado",
     "campaignIndex": "#",
+    "campaignStatus": "Estado",
     "campaignName": "Nombre de la Campaña",
     "startDate": "Fecha de Inicio",
     "endDate": "Fecha de Finalización",
