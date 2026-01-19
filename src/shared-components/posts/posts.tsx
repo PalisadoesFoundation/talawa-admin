@@ -55,9 +55,9 @@ import {
 } from 'types/Post/interface';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useTranslation } from 'react-i18next';
-import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import { Add } from '@mui/icons-material';
+import Button from 'shared-components/Button';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import PinnedPostsLayout from 'shared-components/pinnedPosts/pinnedPostsLayout';
