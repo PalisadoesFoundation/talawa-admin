@@ -15,13 +15,7 @@
     "src/test-utils/**",
     "src/shared-components/BreadcrumbsComponent/**",
     "src/shared-components/DateRangePicker/index.ts",
-    "src/types/shared-components/DateRangePicker/index.ts",
-    "src/plugin/available/plugin_map/**",
-    "src/components/EventManagement/EventAttendance/Statistics/EventStatistics.tsx",
-    "src/components/EventManagement/EventAttendance/Statistics/EventStatistics.module.css",
-    "src/components/EventManagement/EventAttendance/Statistics/EventStatisticsChartConfig.ts",
-    "src/components/EventRegistrantsModal/Modal/AddOnSpot/AddOnSpotAttendee.tsx",
-    "src/components/EventRegistrantsModal/Modal/AddOnSpot/AddOnSpotAttendee.module.css"
+    "src/types/shared-components/DateRangePicker/index.ts"
   ],
   "ignoreDependencies": [],
   "ignoreExportsUsedInFile": true
