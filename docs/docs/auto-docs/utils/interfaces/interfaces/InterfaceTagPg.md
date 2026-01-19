@@ -4,11 +4,7 @@
 
 # Interface: InterfaceTagPg
 
-Defined in: [src/utils/interfaces.ts:1209](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1209)
-
-InterfaceTagPg
-
-## Description
+Defined in: [src/utils/interfaces.ts:893](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L893)
 
 Defines the structure for a tag with PostgreSQL-specific fields.
 
@@ -18,9 +14,7 @@ Defines the structure for a tag with PostgreSQL-specific fields.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1212](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1212)
-
-The creation date of the tag record.
+Defined in: [src/utils/interfaces.ts:896](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L896)
 
 ***
 
@@ -28,9 +22,7 @@ The creation date of the tag record.
 
 > **creator**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:1214](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1214)
-
-The user who created this tag.
+Defined in: [src/utils/interfaces.ts:898](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L898)
 
 ***
 
@@ -38,9 +30,7 @@ The user who created this tag.
 
 > **id**: `ID`
 
-Defined in: [src/utils/interfaces.ts:1210](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1210)
-
-The unique identifier of the tag.
+Defined in: [src/utils/interfaces.ts:894](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L894)
 
 ***
 
@@ -48,9 +38,7 @@ The unique identifier of the tag.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1211](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1211)
-
-The name of the tag.
+Defined in: [src/utils/interfaces.ts:895](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L895)
 
 ***
 
@@ -58,9 +46,7 @@ The name of the tag.
 
 > **organization**: [`InterfaceOrganizationPg`](InterfaceOrganizationPg.md)
 
-Defined in: [src/utils/interfaces.ts:1216](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1216)
-
-The organization associated with this tag.
+Defined in: [src/utils/interfaces.ts:900](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L900)
 
 ***
 
@@ -68,9 +54,7 @@ The organization associated with this tag.
 
 > **updatedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1213](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1213)
-
-The last update date of the tag record.
+Defined in: [src/utils/interfaces.ts:897](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L897)
 
 ***
 
@@ -78,6 +62,4 @@ The last update date of the tag record.
 
 > **updater**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:1215](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1215)
-
-The user who last updated this tag.
+Defined in: [src/utils/interfaces.ts:899](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L899)
