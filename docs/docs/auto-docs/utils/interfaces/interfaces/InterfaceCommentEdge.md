@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:2310](https://github.com/PalisadoesFoundati
 
 ##### hasUserVoted.voteType
 
-> **voteType**: [`VoteType`](VoteType.md)
+> **voteType**: [`VoteType`](../type-aliases/VoteType.md)
 
 #### id
 

@@ -64,7 +64,7 @@ Defined in: [src/utils/interfaces.ts:2303](https://github.com/PalisadoesFoundati
 
 #### voteType
 
-> **voteType**: [`VoteType`](VoteType.md)
+> **voteType**: [`VoteType`](../type-aliases/VoteType.md)
 
 ***
 

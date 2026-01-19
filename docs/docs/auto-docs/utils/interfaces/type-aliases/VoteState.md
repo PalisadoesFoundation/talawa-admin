@@ -20,6 +20,6 @@ Defined in: [src/utils/interfaces.ts:2268](https://github.com/PalisadoesFoundati
 
 ### voteType
 
-> **voteType**: [`VoteType`](../interfaces/VoteType.md)
+> **voteType**: [`VoteType`](VoteType.md)
 
 Defined in: [src/utils/interfaces.ts:2268](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2268)
