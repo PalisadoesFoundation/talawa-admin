@@ -323,4 +323,42 @@ describe('Testing VolunteerViewModal', () => {
       expect(rows[2]).toHaveTextContent('2');
     });
   });
+
+  describe('Field onChange handlers', () => {
+    it('should handle volunteer name field onChange', () => {
+      renderVolunteerViewModal(itemProps[0]);
+
+      const volunteerNameField = screen.getByTestId('volunteerName');
+      const input = volunteerNameField.querySelector('input');
+
+      if (input) {
+        fireEvent.change(input, { target: { value: 'New Name' } });
+        expect(input).toHaveValue('Teresa Bradley');
+      }
+    });
+
+    it('should handle status field onChange', () => {
+      renderVolunteerViewModal(itemProps[0]);
+
+      const statusField = screen.getByTestId('volunteerStatus');
+      const input = statusField.querySelector('input');
+
+      if (input) {
+        fireEvent.change(input, { target: { value: 'New Status' } });
+        expect(input).toHaveValue('Accepted');
+      }
+    });
+
+    it('should handle hours volunteered field onChange', () => {
+      renderVolunteerViewModal(itemProps[0]);
+
+      const hoursField = screen.getByTestId('hoursVolunteered');
+      const input = hoursField.querySelector('input');
+
+      if (input) {
+        fireEvent.change(input, { target: { value: '20' } });
+        expect(input).toHaveValue('10');
+      }
+    });
+  });
 });

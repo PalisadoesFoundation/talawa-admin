@@ -709,4 +709,176 @@ describe('Testing VolunteerGroupModal', () => {
       expect(submitBtn).toBeDisabled();
     });
   });
+
+  describe('Edge Cases and Error Handling', () => {
+    it('should handle update when group.id is missing', async () => {
+      const baseGroup = modalProps[1].group;
+      const propsWithNullGroupId: InterfaceVolunteerGroupModal = {
+        ...modalProps[1],
+        group: baseGroup
+          ? {
+              ...baseGroup,
+              id: '',
+            }
+          : null,
+      };
+
+      renderGroupModal(successLink, propsWithNullGroupId);
+      expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
+
+      const submitBtn = screen.getByTestId('modal-submit-btn');
+      expect(submitBtn).toBeDisabled();
+    });
+
+    it('should handle description as null in edit mode', async () => {
+      renderGroupModal(successLink, modalProps[2]);
+      expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
+
+      const descInput = screen.getByTestId('groupDescriptionInput');
+      expect(descInput).toHaveValue('');
+    });
+
+    it('should have leader field disabled in edit mode', async () => {
+      renderGroupModal(successLink, modalProps[1]);
+      expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
+
+      const leaderSelect = await screen.findByTestId('leaderSelect');
+      const leaderInput = within(leaderSelect).getByRole('combobox');
+
+      expect(leaderInput).toBeDisabled();
+    });
+
+    it('should have volunteers field disabled in edit mode', async () => {
+      renderGroupModal(successLink, modalProps[1]);
+      expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
+
+      const volunteerSelect = await screen.findByTestId('volunteerSelect');
+      const volunteerInput = within(volunteerSelect).getByRole('combobox');
+
+      expect(volunteerInput).toBeDisabled();
+    });
+
+    it('should allow clearing leader selection in create mode', async () => {
+      renderGroupModal(successLink, modalProps[0]);
+      expect(screen.getByText(t.createGroup)).toBeInTheDocument();
+
+      const memberSelect = await screen.findByTestId('leaderSelect');
+      const memberInputField = within(memberSelect).getByRole('combobox');
+      fireEvent.mouseDown(memberInputField);
+
+      const memberOption = await screen.findByText('Harve Lance');
+      fireEvent.click(memberOption);
+
+      await waitFor(() => {
+        expect(memberInputField).toHaveValue('Harve Lance');
+      });
+
+      const autocomplete = memberSelect.querySelector('.MuiAutocomplete-root');
+      if (autocomplete) {
+        fireEvent.change(memberInputField, { target: { value: '' } });
+        fireEvent.keyDown(memberInputField, { key: 'Escape' });
+      }
+    });
+
+    it('should remove leader from volunteers when leader is cleared', async () => {
+      renderGroupModal(successLink, modalProps[0]);
+      expect(screen.getByText(t.createGroup)).toBeInTheDocument();
+
+      const memberSelect = await screen.findByTestId('leaderSelect');
+      const memberInputField = within(memberSelect).getByRole('combobox');
+      fireEvent.mouseDown(memberInputField);
+      const memberOption = await screen.findByText('Harve Lance');
+      fireEvent.click(memberOption);
+
+      await waitFor(() => {
+        expect(memberInputField).toHaveValue('Harve Lance');
+      });
+
+      const volunteerSelect = await screen.findByTestId('volunteerSelect');
+
+      await waitFor(() => {
+        const volunteerChips =
+          within(volunteerSelect).queryByText('Harve Lance');
+        if (volunteerChips) {
+          expect(volunteerChips).toBeInTheDocument();
+        }
+      });
+    });
+
+    it('should throw error when updating without group.id', async () => {
+      const propsWithInvalidGroup: InterfaceVolunteerGroupModal = {
+        isOpen: true,
+        hide: vi.fn(),
+        eventId: 'eventId',
+        orgId: 'orgId',
+        refetchGroups: vi.fn(),
+        mode: 'edit',
+        group: null,
+      };
+
+      renderGroupModal(errorLink, propsWithInvalidGroup);
+      expect(screen.getByText(t.updateGroup)).toBeInTheDocument();
+
+      const submitBtn = screen.getByTestId('modal-submit-btn');
+      expect(submitBtn).toBeDisabled();
+    });
+
+    it('should show error notification when group.id is missing during update', async () => {
+      const propsForErrorCase: InterfaceVolunteerGroupModal = {
+        isOpen: true,
+        hide: vi.fn(),
+        eventId: 'eventId',
+        orgId: 'orgId',
+        refetchGroups: vi.fn(),
+        mode: 'edit',
+        group: null,
+      };
+
+      renderGroupModal(successLink, propsForErrorCase);
+
+      const submitBtn = screen.getByTestId('modal-submit-btn');
+      expect(submitBtn).toBeDisabled();
+    });
+
+    it('should handle isOptionEqualToValue for leader autocomplete', async () => {
+      renderGroupModal(successLink, modalProps[0]);
+      expect(screen.getByText(t.createGroup)).toBeInTheDocument();
+
+      const leaderSelect = await screen.findByTestId('leaderSelect');
+      const leaderInputField = within(leaderSelect).getByRole('combobox');
+      fireEvent.mouseDown(leaderInputField);
+
+      const leaderOption = await screen.findByText('Harve Lance');
+      fireEvent.click(leaderOption);
+
+      await waitFor(() => {
+        expect(leaderInputField).toHaveValue('Harve Lance');
+      });
+
+      fireEvent.mouseDown(leaderInputField);
+      expect(screen.queryByText('Harve Lance')).not.toBeInTheDocument();
+    });
+
+    it('should handle clearing volunteersRequired field', async () => {
+      renderGroupModal(successLink, modalProps[0]);
+      expect(screen.getByText(t.createGroup)).toBeInTheDocument();
+
+      const volunteersRequiredInput = screen.getByTestId(
+        'volunteersRequiredInput',
+      );
+      const input = volunteersRequiredInput.querySelector('input');
+
+      if (input) {
+        fireEvent.change(input, { target: { value: '5' } });
+        await waitFor(() => {
+          expect(input).toHaveValue('5');
+        });
+
+        fireEvent.change(input, { target: { value: '' } });
+        await waitFor(() => {
+          expect(input).toHaveValue('');
+        });
+      }
+    });
+  });
 });

@@ -5,7 +5,7 @@ import {
   AdapterDayjs,
 } from 'shared-components/DatePicker';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -132,5 +132,67 @@ describe('Testing VolunteerGroupViewModal', () => {
     expect(screen.getByText(t.groupDetails)).toBeInTheDocument();
     expect(screen.getByTestId('leader_avatar')).toBeInTheDocument();
     expect(screen.getByTestId('creator_avatar')).toBeInTheDocument();
+  });
+
+  describe('Field onChange handlers', () => {
+    it('should handle group name field onChange', () => {
+      renderGroupViewModal(itemProps[0]);
+
+      const groupNameField = screen.getByTestId('groupName');
+      const input = groupNameField.querySelector('input');
+
+      if (input) {
+        fireEvent.change(input, { target: { value: 'New Name' } });
+        expect(input).toHaveValue('Group 1');
+      }
+    });
+
+    it('should handle volunteersRequired field onChange', () => {
+      renderGroupViewModal(itemProps[1]);
+
+      const volunteersRequiredField = screen.getByTestId('volunteersRequired');
+      const input = volunteersRequiredField.querySelector('input');
+
+      if (input) {
+        fireEvent.change(input, { target: { value: '20' } });
+        expect(input).toHaveValue('10');
+      }
+    });
+
+    it('should handle description field onChange', () => {
+      renderGroupViewModal(itemProps[0]);
+
+      const descriptionField = screen.getByTestId('groupDescription');
+      const input = descriptionField.querySelector('input');
+
+      if (input) {
+        fireEvent.change(input, { target: { value: 'New Description' } });
+        expect(input).toHaveValue('desc');
+      }
+    });
+
+    it('should handle leader field onChange', () => {
+      renderGroupViewModal(itemProps[0]);
+
+      const leaderField = screen.getByTestId('groupLeader');
+      const input = leaderField.querySelector('input');
+
+      if (input) {
+        fireEvent.change(input, { target: { value: 'New Leader' } });
+        expect(input).toHaveValue('Teresa Bradley');
+      }
+    });
+
+    it('should handle creator field onChange', () => {
+      renderGroupViewModal(itemProps[0]);
+
+      const creatorField = screen.getByTestId('groupCreator');
+      const input = creatorField.querySelector('input');
+
+      if (input) {
+        fireEvent.change(input, { target: { value: 'New Creator' } });
+        expect(input).toHaveValue('Wilt Shepherd');
+      }
+    });
   });
 });

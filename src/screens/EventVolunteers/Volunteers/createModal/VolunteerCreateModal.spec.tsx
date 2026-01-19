@@ -322,4 +322,40 @@ describe('Testing VolunteerCreateModal', () => {
       });
     });
   });
+
+  describe('Error Handling', () => {
+    it('should disable submit button when no volunteer is selected', async () => {
+      renderCreateModal(link1, itemProps[0]);
+      expect(screen.getByText(t.addVolunteer)).toBeInTheDocument();
+
+      const submitBtn = screen.getByTestId('modal-submit-btn');
+      expect(submitBtn).toBeDisabled();
+    });
+
+    it('should handle volunteer deselection and disable submit button', async () => {
+      renderCreateModal(link1, itemProps[0]);
+
+      // Select a volunteer first
+      const membersSelect = await screen.findByTestId('membersSelect');
+      const volunteerInputField = within(membersSelect).getByRole('combobox');
+      fireEvent.mouseDown(volunteerInputField);
+
+      const volunteerOption = await screen.findByText('John Doe');
+      fireEvent.click(volunteerOption);
+
+      await waitFor(() => {
+        const submitBtn = screen.getByTestId('modal-submit-btn');
+        expect(submitBtn).not.toBeDisabled();
+      });
+
+      // Clear the selection
+      fireEvent.change(volunteerInputField, { target: { value: '' } });
+      fireEvent.blur(volunteerInputField);
+
+      await waitFor(() => {
+        const submitBtn = screen.getByTestId('modal-submit-btn');
+        expect(submitBtn).toBeDisabled();
+      });
+    });
+  });
 });
