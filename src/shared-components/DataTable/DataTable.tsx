@@ -276,9 +276,11 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   const [internalSelectedKeys, setInternalSelectedKeys] = React.useState<
     Set<Key>
   >(new Set(initialSelectedKeys ?? []));
-  const currentSelection = isSelectionControlled
-    ? new Set(selectedKeys)
-    : internalSelectedKeys;
+  const currentSelection = React.useMemo(
+    () =>
+      isSelectionControlled ? new Set(selectedKeys) : internalSelectedKeys,
+    [isSelectionControlled, selectedKeys, internalSelectedKeys],
+  );
 
   const updateSelection = React.useCallback(
     (next: Set<Key>) => {
