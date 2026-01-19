@@ -1,3 +1,4 @@
+@import 'style/tokens/index.css';
 .addButton {
   margin-bottom: var(--space-3);
   color: var(--addButton-font);

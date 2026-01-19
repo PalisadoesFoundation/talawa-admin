@@ -19,7 +19,9 @@ import CustomRecurrenceModal from 'screens/AdminPortal/OrganizationEvents/Custom
 
 import type { InterfacePreviewEventModalProps } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
+dayjs.extend(customParseFormat);
 const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   eventListCardProps,
   eventModalIsOpen,
@@ -53,7 +55,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   const timeToDayJs = (time: string, baseDate: Date): Dayjs => {
     const dateStr = dayjs(baseDate).format('YYYY-MM-DD');
     const dateTimeString = dateStr + ' ' + time;
-    return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
+    return dayjs(dateTimeString, 'YYYY-MM-DD HH:mm:ss', true);
   };
 
   const canEditEvent =
@@ -251,7 +253,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             label={tCommon('description')}
             as="textarea"
             placeholder={t('enterDescription')}
-            className={`mb - 3 ${styles.inputField} `}
+            className={`mb-3 ${styles.inputField}`}
             autoComplete="off"
             data-testid="updateDescription"
             data-cy="updateDescription"
@@ -271,7 +273,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             name="location"
             label={tCommon('location')}
             placeholder={tCommon('enterLocation')}
-            className={`mb - 3 ${styles.inputField} `}
+            className={`mb-3 ${styles.inputField}`}
             autoComplete="off"
             data-testid="updateLocation"
             data-cy="updateLocation"

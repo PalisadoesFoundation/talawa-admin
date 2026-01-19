@@ -444,14 +444,13 @@ describe('Calendar Component', () => {
     const expandButton = container.querySelector(
       '[data-testid^="no-events-btn-"]',
     );
-    if (expandButton) {
-      await act(async () => {
-        fireEvent.click(expandButton);
-      });
-      await waitFor(() => {
-        expect(screen.getByText('No Event Available!')).toBeInTheDocument();
-      });
-    }
+    expect(expandButton).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.click(expandButton as HTMLButtonElement);
+    });
+    await waitFor(() => {
+      expect(screen.getByText('No Event Available!')).toBeInTheDocument();
+    });
   });
 
   it('updates events when props change', async () => {

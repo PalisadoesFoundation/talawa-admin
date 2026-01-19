@@ -1,9 +1,9 @@
-import type { IEventListCard } from 'types/Event/interface';
+import type { InterfaceEventListCardProps } from 'types/shared-components/EventListCard/interface';
 /**
  * Props for EventListCardDeleteModal.
  */
 export interface IDeleteEventModalProps {
-  eventListCardProps: IEventListCard;
+  eventListCardProps: InterfaceEventListCardProps;
   eventDeleteModalIsOpen: boolean;
   toggleDeleteModal: () => void;
   deleteEventHandler: (
