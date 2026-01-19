@@ -140,16 +140,6 @@ const LoginPage = (): JSX.Element => {
     NotificationToast.error(t('Something_went_wrong'));
   };
 
-  // Handle GraphQL errors
-  useEffect(() => {
-    if (orgError) {
-      console.error('Organization data error:', orgError);
-    }
-    if (communityError) {
-      console.error('Community data error:', communityError);
-    }
-  }, [orgError, communityError]);
-
   return (
     <>
       <section className={styles.loginPage}>
@@ -186,6 +176,7 @@ const LoginPage = (): JSX.Element => {
                 <button
                   type="button"
                   role="tab"
+                  id="login-tab"
                   aria-selected={tab === 'LOGIN'}
                   aria-controls="login-panel"
                   className={`${styles.tab} ${tab === 'LOGIN' ? styles.activeTab : ''}`}
@@ -197,6 +188,7 @@ const LoginPage = (): JSX.Element => {
                 <button
                   type="button"
                   role="tab"
+                  id="register-tab"
                   aria-selected={tab === 'REGISTER'}
                   aria-controls="register-panel"
                   className={`${styles.tab} ${tab === 'REGISTER' ? styles.activeTab : ''}`}

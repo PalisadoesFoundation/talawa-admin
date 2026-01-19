@@ -82,7 +82,7 @@ const MOCKS = [
 
 const renderLoginPage = (mocks = MOCKS) => {
   return render(
-    <MockedProvider mocks={mocks}>
+    <MockedProvider mocks={mocks} addTypename={false}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
