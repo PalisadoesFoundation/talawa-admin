@@ -6,7 +6,7 @@
 
 > **NotificationToastContainer**(`props`): `ReactElement`
 
-Defined in: [src/shared-components/NotificationToast/NotificationToast.tsx:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/NotificationToast/NotificationToast.tsx#L90)
+Defined in: [src/shared-components/NotificationToast/NotificationToast.tsx:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/NotificationToast/NotificationToast.tsx#L96)
 
 NotificationToastContainer
 
@@ -19,6 +19,10 @@ any prop via `props`.
 
 `ToastContainerProps` = `{}`
 
+Optional ToastContainerProps to override DEFAULT_CONTAINER_PROPS
+
 ## Returns
 
 `ReactElement`
+
+React.ReactElement rendering ToastContainer with merged props
