@@ -5,7 +5,7 @@
 # and various CI parity checks on staged files.
 # Used by pre-commit hooks to enforce code quality before commits.
 #
-set -e
+set -euo pipefail
 
 STAGED_SRC_FILE="$1"
 

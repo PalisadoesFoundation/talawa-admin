@@ -6,7 +6,7 @@
 # Used by pre-commit hooks to run Python-based CI checks locally.
 #
 
-set -eu
+set -euo pipefail
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
 
@@ -21,7 +21,7 @@ else
   exit 1
 fi
 
-LOCK_FILE="$REPO_ROOT/.git/venv-setup.lock"
+LOCK_FILE=$(git rev-parse --git-path venv-setup.lock)
 exec 9>"$LOCK_FILE"
 
 if command -v flock >/dev/null 2>&1; then

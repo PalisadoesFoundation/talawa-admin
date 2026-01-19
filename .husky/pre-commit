@@ -3,31 +3,26 @@ set -euo pipefail
 
 .github/workflows/scripts/pre-commit/check-tools.sh
 
-# One temp file for staged sources
 STAGED_SRC_FILE=$(mktemp)
-trap 'rm -f "$STAGED_SRC_FILE"' EXIT
+STAGED_ALL_FILE=$(mktemp)
+trap 'rm -f "$STAGED_SRC_FILE" "$STAGED_ALL_FILE"' EXIT
 
 git diff --cached -z --name-only --diff-filter=ACMRT \
   | grep -zE '^(src|scripts)/.*\.(ts|tsx|js|jsx)$' \
   > "$STAGED_SRC_FILE" || true
 
-# All staged files (for early exit only)
-STAGED_ANY=$(git diff --cached --name-only --diff-filter=ACMRT)
+git diff --cached -z --name-only --diff-filter=ACMRT > "$STAGED_ALL_FILE"
 
-[ -z "$STAGED_ANY" ] && {
+# Early exit if nothing staged
+[ ! -s "$STAGED_ALL_FILE" ] && {
   echo "No staged files to check..."
   exit 0
 }
 
-# Node checks (only if JS/TS exist)
 if [ -s "$STAGED_SRC_FILE" ]; then
   .github/workflows/scripts/pre-commit/precommit-node.sh "$STAGED_SRC_FILE"
 fi
 
-# Python checks (always run when anything staged)
 .github/workflows/scripts/pre-commit/precommit-python.sh "$STAGED_SRC_FILE"
 
-# Safe re-stage (no whitespace issues)
-if [ -s "$STAGED_SRC_FILE" ]; then
-  xargs -0 -a "$STAGED_SRC_FILE" git add --
-fi
+xargs -0 -a "$STAGED_ALL_FILE" git add --

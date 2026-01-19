@@ -4,13 +4,11 @@
 # Runs formatters, linters, type checks, and various CI parity checks on staged files.
 # Used by pre-commit hooks to enforce code quality before commits.
 #
-set -e
+set -euo pipefail
 
 STAGED_SRC_FILE="$1"
 
 [ ! -s "$STAGED_SRC_FILE" ] && exit 0
-
-STAGED_SRC=$(tr '\0' ' ' < "$STAGED_SRC_FILE")
 
 echo "Running Node.js pre-commit checks..."
 
