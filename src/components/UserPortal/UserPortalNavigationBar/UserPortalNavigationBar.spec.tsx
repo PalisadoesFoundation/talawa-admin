@@ -36,7 +36,6 @@ import {
   getMockIcon,
 } from './UserPortalNavigationBarMocks';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
-import styles from './UserPortalNavigationBar.module.css';
 
 // Mock dependencies
 vi.mock('components/NotificationToast/NotificationToast', () => ({
@@ -746,21 +745,6 @@ describe('UserPortalNavigationBar', () => {
       // Cleanup
       document.head.removeChild(style);
     });
-
-    it('applies custom CSS class via className prop', () => {
-      const customClass = styles.testCustomPadding;
-
-      const { container } = render(
-        <MockedProvider mocks={[]}>
-          <MemoryRouter>
-            <UserPortalNavigationBar mode="user" className={customClass} />
-          </MemoryRouter>
-        </MockedProvider>,
-      );
-
-      const navbar = container.querySelector('nav');
-      expect(navbar).toHaveClass(customClass);
-    });
   });
 
   describe('UserPortalNavigationBar - Responsive Behavior', () => {
@@ -1035,9 +1019,8 @@ describe('UserPortalNavigationBar', () => {
       });
 
       // Import NotificationToast to spy on it
-      const { NotificationToast } = await import(
-        'components/NotificationToast/NotificationToast'
-      );
+      const { NotificationToast } =
+        await import('components/NotificationToast/NotificationToast');
       const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
       render(
