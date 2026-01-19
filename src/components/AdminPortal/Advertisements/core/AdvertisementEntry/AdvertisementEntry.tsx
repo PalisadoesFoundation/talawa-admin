@@ -36,9 +36,9 @@
  */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import styles from 'style/app-fixed.module.css';
-import localStyles from './AdvertisementEntry.module.css';
-import { Button, Card, Col, Row, Carousel } from 'react-bootstrap';
+import styles from './AdvertisementEntry.module.css';
+import { Card, Col, Row, Carousel } from 'react-bootstrap';
+import Button from 'shared-components/Button/Button';
 import { DELETE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
@@ -50,6 +50,7 @@ import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQu
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { BaseModal } from 'shared-components/BaseModal';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
 function AdvertisementEntry({
   advertisement,
@@ -156,6 +157,19 @@ function AdvertisementEntry({
       </Button>
     </>
   );
+  const now = new Date();
+
+  let statusVariant: 'active' | 'inactive' | 'pending';
+  // Default to 'active' when dates are missing;
+  // 'pending' requires a future startAt,
+  // 'inactive' requires a past endAt.
+  if (advertisement.startAt && new Date(advertisement.startAt) > now) {
+    statusVariant = 'pending';
+  } else if (advertisement.endAt && new Date(advertisement.endAt) < now) {
+    statusVariant = 'inactive';
+  } else {
+    statusVariant = 'active';
+  }
 
   return (
     <ErrorBoundaryWrapper
@@ -268,13 +282,20 @@ function AdvertisementEntry({
                 <Card.Title className="t-bold" data-testid="Ad_name">
                   {advertisement.name}
                 </Card.Title>
+
+                <StatusBadge
+                  variant={statusVariant}
+                  size="sm"
+                  dataTestId="advertisement-status"
+                />
+
                 <Card.Text
                   data-testid="Ad_desc"
                   className={
                     advertisement.description &&
                     advertisement.description.length > 0
                       ? undefined
-                      : localStyles.noDescription
+                      : styles.noDescription
                   }
                 >
                   {advertisement.description &&
