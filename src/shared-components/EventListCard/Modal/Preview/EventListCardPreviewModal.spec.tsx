@@ -193,6 +193,7 @@ const renderComponent = (props = {}) => {
 
 describe('EventListCardPreviewModal', () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   beforeEach(() => {

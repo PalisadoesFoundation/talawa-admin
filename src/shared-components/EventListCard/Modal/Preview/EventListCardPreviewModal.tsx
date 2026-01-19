@@ -51,21 +51,25 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   customRecurrenceModalIsOpen,
   setCustomRecurrenceModalIsOpen,
 }) => {
-  // FIX: Accept a baseDate to ensure time comparisons happen on the correct day
-  const timeToDayJs = (time: string, baseDate: Date): Dayjs => {
-    const dateStr = dayjs(baseDate).format('YYYY-MM-DD');
-    const dateTimeString = dateStr + ' ' + time;
-    return dayjs(dateTimeString, 'YYYY-MM-DD HH:mm:ss', true);
-  };
+  // Memoize timeToDayJs to prevent recreation on every render
+  const timeToDayJs = React.useCallback(
+    (time: string, baseDate: Date): Dayjs => {
+      const dateStr = dayjs(baseDate).format('YYYY-MM-DD');
+      const dateTimeString = dateStr + ' ' + time;
+      return dayjs(dateTimeString, 'YYYY-MM-DD HH:mm:ss', true);
+    },
+    [],
+  );
 
-  const canEditEvent =
-    eventListCardProps.creator?.id === userId ||
-    eventListCardProps.userRole === UserRole.ADMINISTRATOR;
+  const canEditEvent = React.useMemo(
+    () =>
+      eventListCardProps.creator?.id === userId ||
+      eventListCardProps.userRole === UserRole.ADMINISTRATOR,
+    [eventListCardProps.creator?.id, eventListCardProps.userRole, userId],
+  );
 
-  const getRecurrenceOptions = (): Array<{
-    label: string;
-    value: InterfaceRecurrenceRule | 'custom';
-  }> => {
+  // Memoize recurrence options to prevent recalculation on every render
+  const recurrenceOptions = React.useMemo(() => {
     const eventDate = dayjs(eventStartDate);
     const dayName = eventDate.format('dddd');
     const monthName = eventDate.format('MMMM');
@@ -110,31 +114,33 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
       },
       {
         label: t('recurrence.custom'),
-        value: 'custom',
+        value: 'custom' as const,
       },
     ];
-  };
+  }, [eventStartDate, t]);
 
-  const handleRecurrenceSelect = (option: {
-    label: string;
-    value: InterfaceRecurrenceRule | 'custom' | null;
-  }): void => {
-    if (option.value === 'custom') {
-      if (!recurrence) {
-        setRecurrence(
-          createDefaultRecurrenceRule(eventStartDate, Frequency.WEEKLY),
-        );
+  const handleRecurrenceSelect = React.useCallback(
+    (option: {
+      label: string;
+      value: InterfaceRecurrenceRule | 'custom' | null;
+    }): void => {
+      if (option.value === 'custom') {
+        if (!recurrence) {
+          setRecurrence(
+            createDefaultRecurrenceRule(eventStartDate, Frequency.WEEKLY),
+          );
+        }
+        setCustomRecurrenceModalIsOpen(true);
+      } else {
+        setRecurrence(option.value);
       }
-      setCustomRecurrenceModalIsOpen(true);
-    } else {
-      setRecurrence(option.value);
-    }
-  };
+    },
+    [recurrence, eventStartDate, setRecurrence, setCustomRecurrenceModalIsOpen],
+  );
 
-  const getCurrentRecurrenceLabel = (): string => {
+  const getCurrentRecurrenceLabel = React.useCallback((): string => {
     if (recurrence) {
-      const options = getRecurrenceOptions();
-      const matchingOption = options.find((option) => {
+      const matchingOption = recurrenceOptions.find((option) => {
         if (option.value === 'custom') return false;
         return JSON.stringify(option.value) === JSON.stringify(recurrence);
       });
@@ -156,12 +162,23 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
     }
 
     return t('selectRecurrencePattern');
-  };
+  }, [
+    recurrence,
+    recurrenceOptions,
+    eventListCardProps.recurrenceDescription,
+    t,
+  ]);
 
-  const isRecurringEvent =
-    eventListCardProps.isRecurringEventTemplate ||
-    (!eventListCardProps.isRecurringEventTemplate &&
-      !!eventListCardProps.baseEvent?.id);
+  const isRecurringEvent = React.useMemo(
+    () =>
+      eventListCardProps.isRecurringEventTemplate ||
+      (!eventListCardProps.isRecurringEventTemplate &&
+        !!eventListCardProps.baseEvent?.id),
+    [
+      eventListCardProps.isRecurringEventTemplate,
+      eventListCardProps.baseEvent?.id,
+    ],
+  );
 
   const canChangeRecurrence = isRecurringEvent;
 
@@ -402,7 +419,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 {getCurrentRecurrenceLabel()}
               </Dropdown.Toggle>
               <Dropdown.Menu className="w-100">
-                {getRecurrenceOptions().map((option, index) => (
+                {recurrenceOptions.map((option, index) => (
                   <Dropdown.Item
                     key={index}
                     data-testid={`recurrenceOption-${index}`}

@@ -908,26 +908,28 @@ describe('Calendar Component', () => {
     );
 
     // Check if there are events by clicking expand buttons and checking content
+    let foundEventList = false;
     for (const button of Array.from(expandButtons)) {
       await act(async () => {
         fireEvent.click(button);
       });
 
-      // Wait for potential event list to appear
-      await waitFor(
-        () => {
-          const eventList = container.querySelector(
-            '[data-testid="event-list-container"]',
-          );
-          if (eventList) {
-            // Assert public event is present and private event is not
-            expect(screen.getByText('Public Event')).toBeInTheDocument();
-            expect(screen.queryByText('Private Event')).toBeNull();
-          }
-        },
-        { timeout: 1000 },
-      );
+      const eventList = await waitFor(() => {
+        const el = container.querySelector(
+          '[data-testid="event-list-container"]',
+        );
+        if (!el) {
+          throw new Error('Event list not rendered yet');
+        }
+        return el;
+      });
+      expect(eventList).toBeInTheDocument();
+      expect(screen.getByText('Public Event')).toBeInTheDocument();
+      expect(screen.queryByText('Private Event')).toBeNull();
+      foundEventList = true;
+      break;
     }
+    expect(foundEventList).toBe(true);
   });
 
   test('filters events correctly when userId is undefined but has userRole', async () => {
@@ -996,26 +998,28 @@ describe('Calendar Component', () => {
     );
 
     // Check if there are events by clicking expand buttons and checking content
+    let foundEventList = false;
     for (const button of Array.from(expandButtons)) {
       await act(async () => {
         fireEvent.click(button);
       });
 
-      // Wait for potential event list to appear
-      await waitFor(
-        () => {
-          const eventList = container.querySelector(
-            '[data-testid="event-list-container"]',
-          );
-          if (eventList) {
-            // Assert public event is present and private event is not
-            expect(screen.getByText('Public Event')).toBeInTheDocument();
-            expect(screen.queryByText('Private Event')).not.toBeInTheDocument();
-          }
-        },
-        { timeout: 1000 },
-      );
+      const eventList = await waitFor(() => {
+        const el = container.querySelector(
+          '[data-testid="event-list-container"]',
+        );
+        if (!el) {
+          throw new Error('Event list not rendered yet');
+        }
+        return el;
+      });
+      expect(eventList).toBeInTheDocument();
+      expect(screen.getByText('Public Event')).toBeInTheDocument();
+      expect(screen.queryByText('Private Event')).not.toBeInTheDocument();
+      foundEventList = true;
+      break;
     }
+    expect(foundEventList).toBe(true);
   });
 
   test('handles orgData being undefined', async () => {
