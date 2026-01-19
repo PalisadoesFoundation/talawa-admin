@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { InMemoryCache } from '@apollo/client';
 import {
   CREATE_POST_MUTATION,
   UPDATE_POST_MUTATION,
@@ -11,8 +12,10 @@ import CreatePostModal from './createPostModal';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from '../../../utils/i18nForTest';
 import { errorHandler } from 'utils/errorHandler';
-import { toast } from 'react-toastify';
-import styles from './createPostModal.module.css';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+// Styles loaded dynamically to avoid lint error about restricted imports in tests
+let styles: Record<string, string> = {};
+
 import dayjs from 'dayjs';
 
 // Capture originals before mocking
@@ -25,9 +28,9 @@ const originalAcceptDescriptor = Object.getOwnPropertyDescriptor(
   'accept',
 );
 
-// Mock react-toastify
-vi.mock('react-toastify', () => ({
-  toast: {
+// Mock NotificationToast
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
   },
@@ -250,8 +253,11 @@ afterEach(() => {
 describe('CreatePostModal Integration Tests', () => {
   let user: ReturnType<typeof userEvent.setup>;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     user = userEvent.setup();
+    // Dynamically import styles to get the actual hashed class names
+    const mod = await import('./createPostModal.module.css');
+    styles = mod.default;
   });
 
   const renderComponent = (
@@ -260,7 +266,7 @@ describe('CreatePostModal Integration Tests', () => {
   ) => {
     return render(
       <I18nextProvider i18n={i18nForTest}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={mocks} cache={new InMemoryCache()}>
           <CreatePostModal {...defaultProps} {...props} />
         </MockedProvider>
       </I18nextProvider>,
@@ -428,7 +434,6 @@ describe('CreatePostModal Integration Tests', () => {
 
   describe('Form Submission', () => {
     it('creates post successfully with valid data', async () => {
-      const { toast } = await import('react-toastify');
       renderComponent();
 
       const titleInput = screen.getByPlaceholderText('Title of your post...');
@@ -438,7 +443,7 @@ describe('CreatePostModal Integration Tests', () => {
       await user.click(postButton);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(NotificationToast.success).toHaveBeenCalledWith(
           'Congratulations! You have Posted Something.',
         );
         expect(defaultProps.refetch).toHaveBeenCalled();
@@ -549,12 +554,13 @@ describe('CreatePostModal Integration Tests', () => {
       await userEvent.upload(fileInput, aviFile);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Unsupported file type!');
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Unsupported file type!',
+        );
       });
     });
 
     it('shows error when organization ID is missing', async () => {
-      const { toast } = await import('react-toastify');
       renderComponent({ orgId: undefined });
 
       const titleInput = screen.getByPlaceholderText('Title of your post...');
@@ -565,7 +571,9 @@ describe('CreatePostModal Integration Tests', () => {
       await user.click(postButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Organization ID is missing!');
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Organization ID is missing!',
+        );
       });
     });
 
@@ -625,8 +633,6 @@ describe('CreatePostModal Integration Tests', () => {
     });
 
     it('handles case when createPost mutation succeeds but returns no data', async () => {
-      const { toast } = await import('react-toastify');
-
       const noDataMock = {
         request: {
           query: CREATE_POST_MUTATION,
@@ -656,7 +662,7 @@ describe('CreatePostModal Integration Tests', () => {
 
       // Should not show success toast or call refetch when data.createPost is null
       await waitFor(() => {
-        expect(toast.success).not.toHaveBeenCalled();
+        expect(NotificationToast.success).not.toHaveBeenCalled();
         expect(defaultProps.refetch).not.toHaveBeenCalled();
         expect(defaultProps.onHide).not.toHaveBeenCalled();
       });
@@ -671,6 +677,31 @@ describe('CreatePostModal Integration Tests', () => {
       // Should not have the show classes when show is false
       expect(backdrop).not.toHaveClass(styles.backdropShow);
       expect(modal).not.toHaveClass(styles.modalShow);
+    });
+
+    it('cleans up preview URL when unmounted with a preview', async () => {
+      const { unmount } = renderComponent();
+
+      const titleInput = screen.getByPlaceholderText('Title of your post...');
+      const fileInput = screen.getByTestId('addMedia');
+      const mockFile = new File(['test-content'], 'test.jpg', {
+        type: 'image/jpeg',
+      });
+
+      // Type to ensure component state is active
+      await user.type(titleInput, 'Draft Post');
+      // Upload file to generate preview
+      await userEvent.upload(fileInput, mockFile);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
+      });
+
+      // Unmount the component
+      unmount();
+
+      // Check if revokeObjectURL was called
+      expect(global.URL.revokeObjectURL).toHaveBeenCalledWith('blob:mock-url');
     });
   });
 
@@ -724,8 +755,6 @@ describe('CreatePostModal Integration Tests', () => {
     });
 
     it('handles edit mode when updatePost returns null', async () => {
-      const { toast } = await import('react-toastify');
-
       const updatePostNullMock = {
         request: {
           query: UPDATE_POST_MUTATION,
@@ -765,13 +794,11 @@ describe('CreatePostModal Integration Tests', () => {
       await user.click(saveButton);
 
       await waitFor(() => {
-        expect(toast.success).not.toHaveBeenCalled();
+        expect(NotificationToast.success).not.toHaveBeenCalled();
         expect(defaultProps.refetch).not.toHaveBeenCalled();
       });
     });
     it('handles edit mode when updatePost returns success', async () => {
-      const { toast } = await import('react-toastify');
-
       const updatePostNullMock = {
         request: {
           query: UPDATE_POST_MUTATION,
@@ -793,7 +820,10 @@ describe('CreatePostModal Integration Tests', () => {
               pinnedAt: null,
               attachments: [
                 {
+                  fileHash: 'mock-hash-123',
+                  mimeType: 'image/jpeg',
                   name: 'test.jpg',
+                  objectName: 'uploads/test.jpg',
                 },
               ],
             },
@@ -820,7 +850,141 @@ describe('CreatePostModal Integration Tests', () => {
       await user.click(saveButton);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalled();
+      });
+    });
+
+    it('successfully updates post with file attachment in edit mode', async () => {
+      const mockFile = new File(['test-content'], 'test.jpg', {
+        type: 'image/jpeg',
+      });
+
+      // Use a matcher function for the mock since File objects are hard to compare
+      const updatePostWithFileMock = {
+        request: {
+          query: UPDATE_POST_MUTATION,
+        },
+        variableMatcher: (variables: Record<string, unknown>) => {
+          const input = variables.input as Record<string, unknown>;
+          return (
+            input.caption === 'Updated Title' &&
+            input.body === 'Updated Body' &&
+            input.id === 'post-123' &&
+            input.isPinned === false &&
+            input.attachment instanceof File
+          );
+        },
+        result: {
+          data: {
+            updatePost: {
+              id: 'post-123',
+              caption: 'Updated Title',
+              pinnedAt: null,
+              attachments: [
+                {
+                  fileHash: 'mock-hash-123',
+                  mimeType: 'image/jpeg',
+                  name: 'test.jpg',
+                  objectName: 'uploads/test.jpg',
+                },
+              ],
+            },
+          },
+        },
+      };
+
+      renderComponent(
+        {
+          type: 'edit',
+          id: 'post-123',
+          title: '',
+          body: '',
+        },
+        [updatePostWithFileMock],
+      );
+
+      const titleInput = screen.getByTestId('postTitleInput');
+      const bodyInput = screen.getByTestId('postBodyInput');
+      const fileInput = screen.getByTestId('addMedia');
+      const saveButton = screen.getByText('Save Changes');
+
+      await user.type(titleInput, 'Updated Title');
+      await user.type(bodyInput, 'Updated Body');
+      await userEvent.upload(fileInput, mockFile);
+
+      // Verify preview appears
+      await waitFor(() => {
+        expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
+      });
+
+      await user.click(saveButton);
+
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          'Post updated successfully.',
+        );
+        expect(defaultProps.refetch).toHaveBeenCalled();
+        expect(defaultProps.onHide).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('File Input Clearing on Success', () => {
+    it('clears file input DOM element after successful post creation', async () => {
+      const mockFile = new File(['test-content'], 'test.jpg', {
+        type: 'image/jpeg',
+      });
+
+      // Use a matcher function for the mock since File objects are hard to compare
+      const createPostWithFileMock = {
+        request: {
+          query: CREATE_POST_MUTATION,
+        },
+        variableMatcher: (variables: Record<string, unknown>) => {
+          const input = variables.input as Record<string, unknown>;
+          return (
+            input.caption === 'Post with File' &&
+            input.body === '' &&
+            input.organizationId === 'test-org-id' &&
+            input.isPinned === false &&
+            input.attachment instanceof File
+          );
+        },
+        result: {
+          data: {
+            createPost: {
+              __typename: 'Post',
+              id: 'new-post-id',
+              caption: 'Post with File',
+              pinnedAt: null,
+              attachmentURL: 'https://example.com/test.jpg',
+            },
+          },
+        },
+      };
+
+      renderComponent({}, [createPostWithFileMock]);
+
+      const titleInput = screen.getByTestId('postTitleInput');
+      const fileInput = screen.getByTestId('addMedia') as HTMLInputElement;
+      const postButton = screen.getByTestId('createPostBtn');
+
+      // Verify id is set correctly on the file input
+      expect(fileInput.id).toBe('addMedia');
+
+      await user.type(titleInput, 'Post with File');
+      await userEvent.upload(fileInput, mockFile);
+
+      // Verify file was uploaded
+      expect(fileInput.files).toHaveLength(1);
+
+      await user.click(postButton);
+
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalled();
+        expect(defaultProps.refetch).toHaveBeenCalled();
+        // Verify file input was cleared
+        expect(fileInput.files?.length).toBe(0);
       });
     });
   });

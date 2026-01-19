@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceDeletePledgeModal`](../interfaces/InterfaceDeletePledgeModal.md)\>
 
-Defined in: [src/screens/AdminPortal/FundCampaignPledge/deleteModal/PledgeDeleteModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/deleteModal/PledgeDeleteModal.tsx#L49)
+Defined in: [src/screens/AdminPortal/FundCampaignPledge/deleteModal/PledgeDeleteModal.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/deleteModal/PledgeDeleteModal.tsx#L38)

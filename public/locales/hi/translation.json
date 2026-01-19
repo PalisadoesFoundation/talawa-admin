@@ -7,6 +7,9 @@
   },
   "ends": "समाप्त होता है",
   "occurrences": "घटनाओं",
+  "customRecurrence": "कस्टम पुनरावृत्ति",
+  "invalidDetailsMessage": "कृपया दर्ज किए गए विवरणों की जाँच करें।",
+  "selectAtLeastOneDay": "कृपया कम से कम एक दिन चुनें।",
   "leaderboard": {
     "title": "लीडरबोर्ड",
     "searchByVolunteer": "स्वयंसेवक द्वारा खोजें",
@@ -406,7 +409,9 @@
     "create": "बनाएं",
     "cancel": "रद्द करें",
     "createUser": "उपयोगकर्ता बनाएं",
-    "notFound": "कोई सदस्य नहीं मिले"
+    "notFound": "कोई सदस्य नहीं मिले",
+    "showPassword": "पासवर्ड दिखाएं",
+    "hidePassword": "पासवर्ड छुपाएं"
   },
   "organizationCard": {
     "join": "जॉइन करें",
@@ -682,7 +687,19 @@
     "pendingForSeries": "श्रृंखला के लिए लंबित",
     "completeForInstance": "इस उदाहरण के लिए पूर्ण",
     "completeForSeries": "श्रृंखला के लिए पूर्ण",
-    "postCompletionNotesRequired": "पूर्ण होने के बाद के नोट्स आवश्यक हैं"
+    "postCompletionNotesRequired": "पूर्ण होने के बाद के नोट्स आवश्यक हैं",
+    "itemCategory": "आइटम श्रेणी",
+    "assignedDate": "आवंटन तिथि",
+    "actions": "क्रियाएं",
+    "noCategory": "कोई श्रेणी नहीं",
+    "viewActionItem": "क्रिया वस्तु देखें",
+    "updateStatus": "स्थिति अपडेट करें",
+    "pending": "लंबित",
+    "completed": "पूर्ण",
+    "late": "देर",
+    "searchByAssignee": "प्राप्तकर्ता द्वारा खोजें",
+    "searchByCategory": "श्रेणी द्वारा खोजें",
+    "sortByAssignedDate": "आवंटन तिथि द्वारा क्रमबद्ध करें"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "एजेंडा श्रेणी विवरण",
@@ -726,6 +743,7 @@
     "options": "विकल्प",
     "createAgendaItem": "एजेंडा आइटम बनाएं",
     "noAgendaItems": "कोई एजेंडा आइटम नहीं",
+    "search": "खोजें",
     "selectAgendaItemCategory": "एजेंडा आइटम श्रेणी चुनें",
     "update": "अपडेट करें",
     "delete": "हटाएं",
@@ -734,9 +752,12 @@
     "agendaItemDeleted": "एजेंडा आइटम सफलतापूर्वक हटा दिया गया",
     "deleteAgendaItem": "एजेंडा आइटम हटाएं",
     "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?",
+    "attachmentPreview": "अनुलग्नक पूर्वावलोकन",
     "event": "कार्यक्रम",
     "search": "खोज",
-    "attachmentPreview": "अटैचमेंट पूर्वावलोकन"
+    "attachmentPreview": "अटैचमेंट पूर्वावलोकन",
+    "errorLoadingAgendaCategories": "एजेंडा श्रेणी डेटा लोड करते समय त्रुटि हुई",
+    "errorLoadingAgendaItems": "एजेंडा आइटम डेटा लोड करते समय त्रुटि हुई"
   },
   "eventListCard": {
     "deleteEvent": "ईवेंट हटाएँ",
@@ -788,7 +809,19 @@
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "done": "समाप्त",
     "invalidDate": "Invalid Date",
-    "createChat": "चैट बनाएं"
+    "createChat": "चैट बनाएं",
+    "isRegisterable": "पंजीकरणीय है",
+    "creator": "निर्माता",
+    "edit": "संपादित करें",
+    "delete": "हटाएँ",
+    "viewDetails": "विवरण देखें",
+    "noEventsFound": "कोई ईवेंट नहीं मिला",
+    "noEvent": "कोई ईवेंट नहीं",
+    "averageFeedback": "औसत प्रतिक्रिया",
+    "noOfAttendees": "उपस्थित की संख्या",
+    "noRegistrations": "कोई पंजीकरण नहीं",
+    "registrants": "पंजीकृत",
+    "to": "को"
   },
   "funds": {
     "title": "फंड",
@@ -846,9 +879,14 @@
     "earliestEndDate": "सबसे पहली समाप्ति तिथि",
     "lowestGoal": "सबसे कम उद्देश्य",
     "highestGoal": "सबसे ऊंचा उद्देश्य",
-    "errorLoading": "अभियान डेटा लोड करते समय त्रुटि हुई",
+    "errorLoading": "कैंपेन डेटा लोड करते समय त्रुटि हुई",
     "percentageRaised": "% एकत्रित",
-    "campaignProgress": "अभियान प्रगति: {{percentage}}%"
+    "campaignProgress": "कैंपेन प्रगति: {{percentage}}%",
+    "campaignNotFound": "कैंपेन नहीं मिली",
+    "dateRangeRequired": "कृपया एक मान्य तिथि सीमा चुनें",
+    "campaignNameRequired": "कैंपेन का नाम आवश्यक है",
+    "invalidDate": "अमान्य तिथि चुनी गई है",
+    "endDateBeforeStart": "समाप्ति तिथि प्रारंभ तिथि से पहले नहीं हो सकती"
   },
   "pledges": {
     "title": "निधि अभियान प्रतिज्ञाएँ",
@@ -864,6 +902,7 @@
     "updatePledge": "प्रतिज्ञा अद्यतन करें",
     "deletePledge": "प्रतिज्ञा हटाएँ",
     "amount": "मात्रा",
+    "amountMustBeAtLeastOne": "राशि कम से कम 1 होनी चाहिए",
     "editPledge": "प्रतिज्ञा संपादित करें",
     "deletePledgeMsg": "क्या आप वाकई इस प्रतिज्ञा को हटाना चाहते हैं?",
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
@@ -887,7 +926,8 @@
     "pledgeDate": "प्रतिज्ञा तिथि",
     "pledged": "प्रतिबद्ध",
     "donated": "दान किया गया",
-    "campaignNotActive": "अभियान वर्तमान में सक्रिय नहीं है"
+    "campaignNotActive": "अभियान वर्तमान में सक्रिय नहीं है",
+    "close": "बंद करें"
   },
   "createPostModal": {
     "title": "पदों",
@@ -1364,12 +1404,13 @@
   },
   "posts": {
     "pinnedPosts": "पिन किए गए पोस्ट",
+    "errorLoadingPreviewPost": "पूर्वावलोकन पोस्ट लोड करने में त्रुटि हुई। कृपया बाद में पुनः प्रयास करें।",
     "title": "पोस्ट",
     "latest": "नवीनतम",
     "oldest": "सबसे पुराना",
     "none": "कोई नहीं",
     "unknownUser": "अज्ञात उपयोगकर्ता",
-    "closePinnedPost": "पिन किए गए पोस्ट बंद करें",
+    "closePostView": "पोस्ट दृश्य बंद करें",
     "searchPosts": "पोस्ट खोजें",
     "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
     "noMorePosts": "और कोई पोस्ट नहीं है",
@@ -1425,7 +1466,24 @@
     "pageNumber": "पृष्ठ {{page}}",
     "goToToday": "आज पर जाएं",
     "genderDistribution": "लिंग वितरण",
-    "ageDistribution": "आयु वितरण"
+    "ageDistribution": "आयु वितरण",
+    "trends": "रुझान",
+    "demography": "जनसांख्यिकी",
+    "male": "पुरुष",
+    "female": "महिला",
+    "other": "अन्य",
+    "under18": "18 वर्ष से कम",
+    "age18to40": "18 से 40",
+    "over40": "40 से अधिक",
+    "exportData": "डेटा निर्यात करें",
+    "demographics": "जनसांख्यिकी डेटा",
+    "today": "आज",
+    "attendanceCount": "उपस्थिति गणना",
+    "totalMembers": "कुल सदस्य",
+    "membersAttended": "उपस्थित सदस्य",
+    "age": "आयु",
+    "close": "बंद करें",
+    "gender": "लिंग"
   },
   "eventRegistrant": {
     "sort": "छांटें",
@@ -1438,29 +1496,16 @@
     "options": "विकल्प",
     "addRegistrant": "पंजीकृत व्यक्ति जोड़ें",
     "noRegistrantsFound": "कोई पंजीकृत व्यक्ति नहीं मिला",
+    "removingAttendee": "उपस्थित होने वाले को हटाया जा रहा है...",
+    "attendeeRemovedSuccessfully": "उपस्थित होने वाला सफलतापूर्वक हटा दिया गया",
+    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
+    "cannotUnregisterCheckedIn": "किसी उपयोगकर्ता का पंजीकरण रद्द नहीं किया जा सकता जो पहले से ही चेक-इन कर चुका है",
     "removingAttendee": "प्रतिभागी को हटाया जा रहा है...",
     "attendeeRemovedSuccessfully": "प्रतिभागी सफलतापूर्वक हटा दिया गया",
     "errorRemovingAttendee": "प्रतिभागी को हटाने में त्रुटि हुई। कृपया पुनः प्रयास करें।",
     "checkedIn": "चेक इन किया गया",
     "unregister": "पंजीकरण रद्द करें",
     "cannotUnregisterCheckedInTooltip": "पहले से चेक इन किए गए उपयोगकर्ता का पंजीकरण रद्द नहीं किया जा सकता"
-  },
-  "onSpotAttendee": {
-    "title": "ऑन-स्पॉट प्रतिभागी",
-    "enterFirstName": "प्रथम नाम दर्ज करें",
-    "enterLastName": "अंतिम नाम दर्ज करें",
-    "enterEmail": "ईमेल दर्ज करें",
-    "enterPhoneNo": "फ़ोन नंबर दर्ज करें",
-    "selectGender": "लिंग चुनें",
-    "invalidDetailsMessage": "कृपया सभी आवश्यक फ़ील्ड भरें",
-    "orgIdMissing": "संगठन आईडी गायब है। कृपया पुनः प्रयास करें।",
-    "attendeeAddedSuccess": "प्रतिभागी सफलतापूर्वक जोड़ा गया!",
-    "addAttendee": "जोड़ें",
-    "phoneNumber": "फ़ोन नंबर",
-    "addingAttendee": "जोड़ा जा रहा है...",
-    "male": "पुरुष",
-    "female": "महिला",
-    "other": "अन्य"
   },
   "settings": {
     "noeventsAttended": "कोई कार्यक्रम में उपस्थित नहीं",
@@ -1863,16 +1908,32 @@
   "checkIn": {
     "errorCheckingIn": "चेक-इन में त्रुटि",
     "checkedInSuccessfully": "सफलतापूर्वक चेक-इन किया गया",
+    "generatingPdf": "PDF जेनरेट हो रहा है...",
+    "pdfGeneratedSuccessfully": "PDF सफलतापूर्वक जेनरेट किया गया!",
+    "errorGeneratingPdf": "PDF जेनरेट करने में त्रुटि",
+    "unknownError": "अज्ञात त्रुटि",
+    "checkedIn": "चेक-इन हुआ",
+    "downloadTag": "टैग डाउनलोड करें",
+    "checkInButton": "चेक इन करें",
     "searchAttendees": "उपस्थित लोगों को खोजें",
     "checkedIn": "चेक इन किया गया",
     "downloadTag": "टैग डाउनलोड करें",
     "checkIn": "चेक इन करें",
-    "eventCheckInManagement": "इवेंट चेक इन प्रबंधन"
+    "eventCheckInManagement": "इवेंट चेक इन प्रबंधन",
+    "checkInMembers": "सदस्यों को चेक इन करें",
+    "unknownUser": "अज्ञात उपयोगकर्ता",
+    "user": "उपयोगकर्ता",
+    "checkInStatus": "चेक इन स्थिति"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
     "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
     "eventRegistrantsTitle": "कार्यक्रम पंजीकृत व्यक्ति",
+    "registerMember": "सदस्य पंजीकृत करें",
+    "showAttendees": "प्रतिभागियों को दिखाएं",
+    "addingAttendee": "प्रतिभागी को जोड़ा जा रहा है...",
+    "selectUserFirst": "कृपया पहले जोड़ने के लिए एक उपयोगकर्ता चुनें!",
+    "unknownUser": "अज्ञात उपयोगकर्ता",
     "inviteByEmailButton": "ईमेल द्वारा आमंत्रित करें",
     "addRegistrantButton": "पंजीकृत व्यक्ति जोड़ें",
     "noRegistrationsFound": "कोई पंजीकरण नहीं मिला",
@@ -1892,8 +1953,34 @@
       "expiresInDaysLabel": "समाप्ति (दिनों में)",
       "errorSendingInvites": "निमंत्रण भेजने में त्रुटि",
       "emailsLabel": "प्राप्तकर्ता ईमेल और नाम",
-      "emailsHelp": "प्रत्येक प्राप्तकर्ता के लिए ईमेल और वैकल्पिक नाम प्रदान करें। आवश्यकतानुसार कई प्राप्तकर्ता जोड़ें।"
+      "emailsHelp": "प्रत्येक प्राप्तकर्ता के लिए ईमेल और वैकल्पिक नाम प्रदान करें। आवश्यकतानुसार कई प्राप्तकर्ता जोड़ें।",
+      "noRecipientsError": "कृपया कम से कम एक प्राप्तकर्ता ईमेल प्रदान करें",
+      "invalidEmailsError": "अमान्य ईमेल: {{emails}}",
+      "invitesSentSuccessfully": "आमंत्रण सफलतापूर्वक भेजे गए"
     }
+  },
+  "onSpotAttendee": {
+    "invalidEmailFormat": "अमान्य ईमेल प्रारूप",
+    "organizationIdMissing": "संगठन आईडी अनुपलब्ध है।",
+    "title": "ऑन-स्पॉट प्रतिभागी",
+    "enterFirstName": "प्रथम नाम दर्ज करें",
+    "enterLastName": "अंतिम नाम दर्ज करें",
+    "enterEmail": "ईमेल दर्ज करें",
+    "enterPhoneNo": "फ़ोन नंबर दर्ज करें",
+    "selectGender": "लिंग चुनें",
+    "invalidDetailsMessage": "कृपया सभी आवश्यक फ़ील्ड भरें",
+    "orgIdMissing": "संगठन आईडी गायब है। कृपया पुनः प्रयास करें।",
+    "attendeeAddedSuccess": "प्रतिभागी सफलतापूर्वक जोड़ा गया!",
+    "addAttendee": "जोड़ें",
+    "phoneNumber": "फ़ोन नंबर",
+    "phoneNumberPlaceholder": "1234567890",
+    "addingAttendee": "जोड़ा जा रहा है...",
+    "male": "पुरुष",
+    "female": "महिला",
+    "other": "अन्य",
+    "placeholderFirstName": "राम",
+    "placeholderLastName": "शर्मा",
+    "placeholderEmail": "abc@gmail.com"
   },
   "userCampaigns": {
     "title": "धन उगाहने के अभियान",
@@ -1927,6 +2014,7 @@
     "viewPledge": "प्रतिज्ञा देखें",
     "amountRaised": "एकत्रित राशि",
     "campaignIndex": "#",
+    "campaignStatus": "स्थिति",
     "fundGoal": "वित्त पोषण लक्ष्य",
     "percentRaised": "% एकत्रित",
     "createFirstCampaign": "इसे यहाँ देखने के लिए अपना पहला धन उगाहने का अभियान बनाएं।",
@@ -1937,7 +2025,20 @@
     "searchPledges": "प्रतिज्ञाएँ खोजें"
   },
   "leaveOrganization": {
-    "title": "संगठन छोड़ें"
+    "title": "संगठन छोड़ें",
+    "leaveOrganization": "संगठन छोड़ें",
+    "confirmLeaveOrganization": "संगठन छोड़ने की पुष्टि करें",
+    "leaveOrganizationConfirmation": "क्या आप वाकई {{orgName}} छोड़ना चाहते हैं? आप केवल सदस्यों के लिए सामग्री तक पहुंच खो देंगे।",
+    "enterEmailToConfirm": "पुष्टि करने के लिए अपना ईमेल दर्ज करें:",
+    "enterYourEmail": "अपना ईमेल दर्ज करें",
+    "confirmEmailInput": "ईमेल इनपुट की पुष्टि करें",
+    "leftOrganizationSuccess": "आपने सफलतापूर्वक संगठन छोड़ दिया है!",
+    "leftOrganizationError": "संगठन छोड़ने में विफल। कृपया पुन: प्रयास करें।",
+    "networkError": "आपके अनुरोध को संसाधित करने में असमर्थ। कृपया अपना कनेक्शन जांचें।",
+    "emailMismatchError": "आपके द्वारा दर्ज किया गया ईमेल आपके खाते के ईमेल से मेल नहीं खाता है।",
+    "continue": "जारी रखें",
+    "missingRequiredInfo": "अनुरोध संसाधित करने में असमर्थ: आवश्यक जानकारी अनुपलब्ध।",
+    "organizationNotFound": "संगठन नहीं मिला"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "स्वयंसेवक दृश्य चयनकर्ता",
@@ -1984,6 +2085,8 @@
     "earliest": "प्रारंभिक",
     "requestAccepted": "अनुरोध सफलतापूर्वक स्वीकृत",
     "requestRejected": "अनुरोध सफलतापूर्वक अस्वीकृत",
+    "acceptRequest": "अनुरोध स्वीकार करें",
+    "rejectRequest": "अनुरोध अस्वीकार करें",
     "details": "विवरण",
     "manageGroup": "समूह प्रबंधित करें",
     "mostVolunteers": "सबसे अधिक स्वयंसेवक",
@@ -2007,7 +2110,9 @@
     "deleteVolunteerGroup": "{{name}} स्वयंसेवक समूह हटाएं",
     "deleteVolunteerEntry": "{{name}} स्वयंसेवक प्रविष्टि हटाएं",
     "viewGroup": "समूह देखें",
-    "editGroup": "समूह संपादित करें"
+    "editGroup": "समूह संपादित करें",
+    "invalidNumber": "अमान्य संख्या",
+    "viewToggle": "दृश्य टॉगल"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",
@@ -2065,7 +2170,11 @@
     "groupName": "समूह का नाम",
     "noOfMembers": "सदस्यों की संख्या",
     "options": "विकल्प",
-    "notSpecified": "निर्दिष्ट नहीं"
+    "notSpecified": "निर्दिष्ट नहीं",
+    "invited": "आमंत्रित",
+    "groupsAvailable": "{{count}} समूह उपलब्ध",
+    "volunteersRequired": "आवश्यक",
+    "signedUp": "पंजीकृत"
   },
   "pluginStore": {
     "title": "प्लगइन स्टोर",
@@ -2170,7 +2279,9 @@
     "title": "उपयोगकर्ता पोर्टल",
     "talawa": "तलावा",
     "talawaBranding": "तालावा ब्रांडिंग",
-    "view": "देखें"
+    "view": "देखें",
+    "changeLanguage": "भाषा बदलें",
+    "userNotFoundError": "उपयोगकर्ता नहीं मिला"
   },
   "donation": {
     "amount_label": "राशि",
@@ -2195,5 +2306,43 @@
   },
   "orgProfileField": {
     "editCustomField": "कस्टम फ़ील्ड संपादित करें"
+  },
+  "userGlobalScreen": {
+    "globalFeatures": "वैश्विक सुविधाएं"
+  },
+  "recurringEventVolunteerModal": {
+    "joinGroupTitle": "{{groupName}} में शामिल हों - {{eventName}}",
+    "volunteerTitle": "{{eventName}} के लिए स्वयंसेवक",
+    "joinGroupQuestion": "क्या आप पूरी श्रृंखला के लिए \"{{groupName}}\" में शामिल होना चाहते हैं या केवल इस उदाहरण के लिए?",
+    "volunteerQuestion": "क्या आप पूरी श्रृंखला के लिए स्वयंसेवा करना चाहते हैं या केवल इस उदाहरण के लिए?",
+    "volunteerForSeries": "पूरी श्रृंखला के लिए स्वयंसेवक",
+    "joinGroupForSeries": "आप इस समूह में आवर्ती श्रृंखला की सभी घटनाओं के लिए शामिल होंगे",
+    "volunteerForSeriesDesc": "आप इस आवर्ती श्रृंखला की सभी घटनाओं के लिए स्वयंसेवा करेंगे",
+    "volunteerForInstance": "केवल इस उदाहरण के लिए स्वयंसेवक",
+    "joinGroupForInstance": "आप केवल {{date}} को होने वाली घटना के लिए इस समूह में शामिल होंगे",
+    "volunteerForInstanceDesc": "आप केवल {{date}} को होने वाली घटना के लिए स्वयंसेवा करेंगे",
+    "cancel": "रद्द करें",
+    "submitRequest": "अनुरोध सबमिट करें"
+  },
+  "eventsAttendedMemberModal": {
+    "title": "उपस्थित घटनाओं की सूची",
+    "showing": "{{start}} - {{end}} में से {{total}} घटनाएँ दिखाई जा रही हैं",
+    "eventName": "घटना का नाम",
+    "dateOfEvent": "घटना की तारीख",
+    "recurringEvent": "आवर्ती घटना",
+    "attendees": "उपस्थित लोग",
+    "tableAriaLabel": "उपस्थित घटनाओं की तालिका",
+    "paginationAriaLabel": "घटनाओं का पेजिनेशन नेविगेशन",
+    "paginationGoToPage": "पृष्ठ {{page}} पर जाएं",
+    "paginationGoToType": "{{type}} पृष्ठ पर जाएं",
+    "noEventsAttended": "कोई घटना में उपस्थित नहीं हुए"
+  },
+  "eventStats": {
+    "title": "इवेंट आंकड़े",
+    "reviews": {
+      "title": "समीक्षाएं",
+      "emptyState": "लोगों के इवेंट के बारे में बात करने की प्रतीक्षा है...",
+      "filledByCount": "{{count}} लोगों द्वारा भरा गया।"
+    }
   }
 }
