@@ -25,13 +25,13 @@ import { WarningAmberRounded } from '@mui/icons-material';
 import { useNavigate, useParams, Link } from 'react-router';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Form } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import IconComponent from 'components/IconComponent/IconComponent';
+import Button from 'shared-components/Button';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type { InterfaceTagDataPG } from 'utils/interfaces';
 import styles from './OrganizationTags.module.css';
@@ -49,6 +49,7 @@ import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQuer
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 function OrganizationTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -421,19 +422,16 @@ function OrganizationTags(): JSX.Element {
         </Modal.Header>
         <Form onSubmitCapture={createTag}>
           <Modal.Body>
-            <Form.Label htmlFor="tagName">{t('tagName')}</Form.Label>
-            <Form.Control
-              type="name"
-              id="orgname"
-              className={'mb-3 ' + styles.inputField}
+            <FormTextField
+              name="tagName"
+              label={t('tagName')}
               placeholder={t('tagNamePlaceholder')}
-              data-testid="tagNameInput"
-              autoComplete="off"
-              required
               value={tagName}
-              onChange={(e): void => {
-                setTagName(e.target.value);
-              }}
+              onChange={setTagName}
+              required
+              autoComplete="off"
+              data-testid="tagNameInput"
+              className={styles.inputField}
             />
           </Modal.Body>
 

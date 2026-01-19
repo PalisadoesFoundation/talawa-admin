@@ -68,6 +68,19 @@ const restrictedImports = [
       'Do not import react-bootstrap/Table directly. Use the shared DataTable component instead.',
   },
   {
+    id: 'rb-button',
+    name: 'react-bootstrap',
+    importNames: ['Button'],
+    message:
+      'Direct imports of Button from react-bootstrap are not allowed. Use the shared Button component from src/shared-components/Button/ instead.',
+  },
+  {
+    id: 'rb-button-path',
+    name: 'react-bootstrap/Button',
+    message:
+      'Direct imports of react-bootstrap/Button are not allowed. Use the shared Button component from src/shared-components/Button/ instead.',
+  },
+  {
     id: 'react-toastify',
     name: 'react-toastify',
     message:
@@ -80,11 +93,34 @@ const restrictedImports = [
       'Direct imports from @dicebear/core are not allowed. Use the shared createAvatar wrapper instead.',
   },
   {
-    id: 'mui-chip',
     name: '@mui/material',
     importNames: ['Chip'],
     message:
       'Do not import Chip from @mui/material. Use the shared StatusBadge component from src/shared-components/StatusBadge/ instead.',
+  },
+  {
+    name: '@mui/material',
+    importNames: ['TextField'],
+    message:
+      'Do not import TextField from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
+  },
+  {
+    name: '@mui/material',
+    importNames: ['FormControl'],
+    message:
+      'Do not import FormControl from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
+  },
+  {
+    name: '@mui/material',
+    importNames: ['Button'],
+    message:
+      'Direct imports of Button from @mui/material are not allowed. Use the shared Button component from src/shared-components/Button/ instead.',
+  },
+  {
+    name: '@mui/material/Button',
+    importNames: ['Button'],
+    message:
+      'Direct imports of Button from @mui/material are not allowed. Use the shared Button component from src/shared-components/Button/ instead.',
   },
 ];
 
@@ -118,7 +154,7 @@ export default [
       'tsconfig.json',
       'fix-readme-links.js',
       'fix-repo-url.js',
-      'src/components/CheckIn/tagTemplate.ts',
+      'src/shared-components/CheckIn/tagTemplate.ts',
       'docs/**',
       '*.md',
       'docker/**',
@@ -387,6 +423,20 @@ export default [
     ],
     rules: restrictImportsExcept(['rb-table', 'rb-table-path']),
   },
+  /**
+   * Exemption: Shared Button wrapper implementation
+   *
+   * The shared Button component needs direct react-bootstrap Button access.
+   * These files are the only ones allowed to import Button directly.
+   * Allowed IDs: rb-button, rb-button-path.
+   */
+  {
+    files: [
+      'src/shared-components/Button/**/*.{ts,tsx}',
+      'src/types/shared-components/Button/**/*.{ts,tsx}',
+    ],
+    rules: restrictImportsExcept(['rb-button', 'rb-button-path']),
+  },
   {
     files: ['*.graphql'],
     languageOptions: {
@@ -420,20 +470,6 @@ export default [
       'src/types/shared-components/createAvatar/**/*.{ts,tsx}',
     ],
     rules: restrictImportsExcept(['dicebear-core']),
-  },
-  /**
-   * Exemption: StatusBadge component files
-   *
-   * StatusBadge files need direct Chip access from @mui/material for wrapper implementation.
-   * These files are the only ones allowed to import Chip directly from @mui/material.
-   * Allowed ID: mui-chip.
-   */
-  {
-    files: [
-      'src/shared-components/StatusBadge/**/*.{ts,tsx}',
-      'src/types/shared-components/StatusBadge/**/*.{ts,tsx}',
-    ],
-    rules: restrictImportsExcept(['mui-chip']),
   },
   // Cypress-specific configuration
   {

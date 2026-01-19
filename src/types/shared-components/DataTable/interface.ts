@@ -44,9 +44,32 @@ export interface IColumnDef<T, TValue = unknown> {
 
   /** Optional metadata for future features */
   meta?: {
+    // Sorting
     sortable?: boolean;
+    sortFn?: (a: T, b: T) => number;
+
+    // Filtering / search
+    /**
+     * If true, this column participates in local filtering and/or global search.
+     * Defaults: filterable=true, searchable=true unless set false.
+     */
     filterable?: boolean;
+    searchable?: boolean;
+
+    /**
+     * Custom filter for this column. Return true to keep the row.
+     * value is columnFilters[col.id].
+     */
+    filterFn?: (row: T, value: unknown) => boolean;
+
+    /**
+     * Optional extractor for global search (if the default cell string is not ideal).
+     */
+    getSearchValue?: (row: T) => string;
+
     width?: string | number;
+    align?: 'left' | 'center' | 'right';
+    ariaLabel?: string;
   };
 }
 
@@ -339,6 +362,25 @@ export interface IBaseDataTableProps<T, TValue = unknown> {
    * while a refetch is in flight. This avoids content jump during refresh.
    */
   loadingOverlay?: boolean;
+
+  // Filtering and Global Search
+  showSearch?: boolean; // render a SearchBar above the table
+  searchPlaceholder?: string;
+
+  // Global search (controlled)
+  globalSearch?: string;
+  onGlobalSearchChange?: (q: string) => void;
+
+  // Global search (uncontrolled initial)
+  initialGlobalSearch?: string;
+
+  // Per-column filters (controlled)
+  columnFilters?: Record<string, unknown>;
+  onColumnFiltersChange?: (filters: Record<string, unknown>) => void;
+
+  // Server-side modes (do not filter locally; only emit changes)
+  serverSearch?: boolean;
+  serverFilter?: boolean;
 }
 
 /**
@@ -477,4 +519,42 @@ export interface ITableLoaderProps<T> {
 
   /** Accessible label for the loading table, used for screen readers */
   ariaLabel?: string;
+}
+
+/**
+ * Props for the SearchBar component.
+ *
+ * Used to render a controlled search input field with an optional clear button.
+ */
+export interface InterfaceSearchBarProps {
+  /**
+   * The current search query value.
+   * This is a controlled value that should be managed by the parent component.
+   */
+  value: string;
+
+  /**
+   * Callback fired when the input value changes or when the clear button is clicked.
+   * @param query - The new search query string (empty string when cleared)
+   */
+  onChange: (query: string) => void;
+
+  /**
+   * Placeholder text displayed when the input is empty.
+   * @defaultValue 'Search…'
+   */
+  placeholder?: string;
+
+  /**
+   * Accessible label for screen readers.
+   * Applied to the search input's aria-label attribute.
+   * @defaultValue 'Search'
+   */
+  'aria-label'?: string;
+
+  /**
+   * Accessible label for the clear button, announced by screen readers.
+   * @defaultValue 'Clear search'
+   */
+  'clear-aria-label'?: string;
 }

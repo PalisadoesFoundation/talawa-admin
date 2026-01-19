@@ -20,22 +20,32 @@ import LoadingState from '../../../shared-components/LoadingState/LoadingState';
 import { useTranslation } from 'react-i18next';
 import { X } from '@mui/icons-material';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
 const TABS = ['details', 'features', 'changelog'] as const;
 type TabType = (typeof TABS)[number];
 
-const PluginModal: React.FC<IPluginModalProps> = ({
-  show,
-  onHide,
-  pluginId,
-  meta,
-  loading,
-  isInstalled,
-  getInstalledPlugin,
-  installPlugin,
-  togglePluginStatus,
-  uninstallPlugin,
-}) => {
+/**
+ * Modal dialog showing plugin details with install, uninstall,
+ * and active/inactive status actions.
+ *
+ * @param props - PluginModal props.
+ * @returns JSX.Element
+ */
+const PluginModal = (props: IPluginModalProps): JSX.Element => {
+  const {
+    show,
+    onHide,
+    pluginId,
+    meta,
+    loading,
+    isInstalled,
+    getInstalledPlugin,
+    installPlugin,
+    togglePluginStatus,
+    uninstallPlugin,
+  } = props;
+
   const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
   const { t: tCommon } = useTranslation('common');
 
@@ -92,6 +102,8 @@ const PluginModal: React.FC<IPluginModalProps> = ({
 
   // Use details if loaded, else fallback to meta
   const plugin = details || meta;
+  const installedPlugin = plugin ? getInstalledPlugin(plugin.name) : undefined;
+  const isPluginActive = installedPlugin?.status === 'active';
 
   // Get features from details (loaded from info.json) or extract from readme as fallback
   const features =
@@ -181,44 +193,35 @@ const PluginModal: React.FC<IPluginModalProps> = ({
           <div className={styles.pluginName}>{plugin?.name}</div>
           <div className={styles.pluginAuthor}>{plugin?.author}</div>
           {details && (
-            <>
-              <div className={styles.pluginVersion}>v{details.version}</div>
-            </>
+            <div className={styles.pluginVersion}>v{details.version}</div>
           )}
+          {plugin && isInstalled(plugin.name) && (
+            <div className="mb-2 d-flex justify-content-center">
+              <StatusBadge
+                variant={isPluginActive ? 'active' : 'inactive'}
+                size="md"
+                dataTestId="plugin-status-badge"
+                ariaLabel={isPluginActive ? 'active' : 'inactive'}
+              />
+            </div>
+          )}
+
           <div className={styles.actionButtons}>
             {plugin && isInstalled(plugin.name) && meta && (
               <>
                 <LoadingState isLoading={loading} variant="inline">
                   <Button
-                    variant={
-                      getInstalledPlugin(plugin.name)?.status === 'active'
-                        ? 'light'
-                        : 'primary'
-                    }
-                    className={`w-100 mb-2 d-flex align-items-center justify-content-center gap-2 ${
-                      getInstalledPlugin(plugin.name)?.status === 'active'
-                        ? styles.actionButtonLight
-                        : styles.actionButton
-                    }`}
+                    variant="light"
+                    className={`w-100 mb-2 d-flex align-items-center justify-content-center gap-2 ${styles.actionButton}`}
                     onClick={() =>
                       togglePluginStatus(
                         meta,
-                        getInstalledPlugin(plugin.name)?.status === 'active'
-                          ? 'inactive'
-                          : 'active',
+                        isPluginActive ? 'inactive' : 'active',
                       )
                     }
                   >
-                    <FaPowerOff
-                      className={
-                        getInstalledPlugin(plugin.name)?.status === 'active'
-                          ? styles.iconPowerOffActive
-                          : styles.iconPowerOffInactive
-                      }
-                    />
-                    {getInstalledPlugin(plugin.name)?.status === 'active'
-                      ? t('deactivate')
-                      : t('activate')}
+                    <FaPowerOff />
+                    {isPluginActive ? t('deactivate') : t('activate')}
                   </Button>
                 </LoadingState>
                 <LoadingState isLoading={loading} variant="inline">
