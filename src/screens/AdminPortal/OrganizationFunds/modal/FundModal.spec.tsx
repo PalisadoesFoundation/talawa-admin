@@ -448,4 +448,50 @@ describe('PledgeModal', () => {
       expect(screen.getByLabelText(translations.fundId)).toHaveValue('');
     });
   });
+
+  it('should reset touched state when modal reopens', async () => {
+    const { rerender } = renderFundModal(link1, {
+      ...fundProps[1],
+      isOpen: true,
+    });
+
+    const fundNameInput = screen.getByLabelText(translations.fundName);
+
+    // Trigger validation error
+    fireEvent.change(fundNameInput, { target: { value: '' } });
+    fireEvent.blur(fundNameInput);
+
+    expect(screen.getByText('Required')).toBeInTheDocument();
+
+    //  Close modal
+    rerender(
+      <MockedProvider link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <FundModal {...fundProps[1]} isOpen={false} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    //  Reopen modal
+    rerender(
+      <MockedProvider link={link1}>
+        <Provider store={store}>
+          <BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <FundModal {...fundProps[1]} isOpen={true} />
+            </I18nextProvider>
+          </BrowserRouter>
+        </Provider>
+      </MockedProvider>,
+    );
+
+    //  Error should be gone because touched reset
+    await waitFor(() => {
+      expect(screen.queryByText('Required')).not.toBeInTheDocument();
+    });
+  });
 });
