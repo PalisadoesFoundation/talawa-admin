@@ -9,6 +9,7 @@ const toastMock = vi.hoisted(() => ({
   warning: vi.fn(() => 'warning-id'),
   info: vi.fn(() => 'info-id'),
   dismiss: vi.fn(),
+  promise: vi.fn(),
 }));
 
 const toastContainerSpy = vi.hoisted(() =>
@@ -151,6 +152,26 @@ describe('NotificationToast', () => {
     NotificationToast.dismiss();
 
     expect(toastMock.dismiss).toHaveBeenCalled();
+  });
+
+  it('calls toast.promise with resolved messages', () => {
+    const promiseFn = vi.fn().mockResolvedValue(undefined);
+    NotificationToast.promise(promiseFn, {
+      pending: 'Pending...',
+      success: { key: 'successMsg', namespace: 'common' },
+      error: 'Error!',
+    });
+
+    expect(getFixedTMock).toHaveBeenCalledWith(null, 'common');
+    expect(toastMock.promise).toHaveBeenCalledWith(
+      promiseFn,
+      {
+        pending: 'Pending...',
+        success: 'common:successMsg',
+        error: 'Error!',
+      },
+      expect.any(Object),
+    );
   });
 });
 
