@@ -26,33 +26,5 @@
  * This hook is useful for scenarios like search input handling, where you want to
  * limit the frequency of function execution to improve performance.
  */
-import { useRef, useCallback } from 'react';
-
-function useDebounce<T extends (...args: unknown[]) => void>(
-  callback: T,
-  delay: number,
-): { debouncedCallback: (...args: Parameters<T>) => void; cancel: () => void } {
-  const timeoutRef = useRef<number | null>(null);
-
-  const debouncedCallback = useCallback(
-    (...args: Parameters<T>) => {
-      if (timeoutRef.current !== null) clearTimeout(timeoutRef.current);
-      timeoutRef.current = window.setTimeout(() => {
-        callback(...args);
-        timeoutRef.current = null;
-      }, delay);
-    },
-    [callback, delay],
-  );
-
-  const cancel = useCallback(() => {
-    if (timeoutRef.current !== null) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
-  }, []);
-
-  return { debouncedCallback, cancel };
-}
-
-export default useDebounce;
+// Deprecated: centralized implementation moved to `src/utils/useDebounce.ts`
+export { default } from 'utils/useDebounce';

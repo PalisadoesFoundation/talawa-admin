@@ -55,7 +55,7 @@ import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { toast } from 'react-toastify';
-import { debounce } from '@mui/material';
+import { debounce } from 'utils/performance';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 

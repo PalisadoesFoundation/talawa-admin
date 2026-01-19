@@ -44,7 +44,7 @@
  * - `OrganizationModal` - For creating new organizations.
  * - `Modal` - For managing features after organization creation.
  */
-import React, { useEffect, useState, useRef, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
@@ -63,6 +63,7 @@ import type {
   InterfaceOrgInfoTypePG,
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
+import useDebounce from 'utils/useDebounce';
 import styles from 'style/app-fixed.module.css';
 import SortingButton from 'subComponents/SortingButton';
 import { Button } from '@mui/material';
@@ -77,20 +78,7 @@ import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 const { getItem } = useLocalStorage();
 
-function useDebounce<T>(fn: (val: T) => void, delay: number) {
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  function debouncedFn(val: T) {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-    timerRef.current = setTimeout(() => {
-      fn(val);
-    }, delay);
-  }
-
-  return debouncedFn;
-}
+// useDebounce moved to src/utils/useDebounce
 
 interface InterfaceFormStateType {
   addressLine1: string;
@@ -296,7 +284,7 @@ function orgList(): JSX.Element {
     refetchOrgs({ filter: value });
   };
 
-  const debouncedSearch = useDebounce(doSearch, 300);
+  const { debouncedCallback: debouncedSearch } = useDebounce(doSearch, 300);
 
   const handleChangeFilter = (val: string) => {
     setTypedValue(val);

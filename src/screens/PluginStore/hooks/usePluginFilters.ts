@@ -4,7 +4,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLoadedPlugins } from 'plugin/hooks';
-import useDebounce from 'components/OrgListCard/useDebounce';
+import useDebounce from 'utils/useDebounce';
 import type { IPluginMeta, IInstalledPlugin } from 'plugin';
 
 import type { IPlugin } from 'plugin/graphql-service';

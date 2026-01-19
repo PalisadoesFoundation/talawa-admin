@@ -61,7 +61,8 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { debounce, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
+import { debounce } from 'utils/performance';
 import Avatar from 'components/Avatar/Avatar';
 import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 import { useQuery } from '@apollo/client';

@@ -27,7 +27,7 @@
  *
  */
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import useDebounce from './useDebounce';
+import useDebounce from 'utils/useDebounce';
 
 interface InterfaceTruncatedTextProps {
   /** The full text to display. It may be truncated if it exceeds the maximum width. */

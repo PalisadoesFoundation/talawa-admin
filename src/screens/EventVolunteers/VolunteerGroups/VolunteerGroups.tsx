@@ -32,7 +32,8 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { debounce, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
+import { debounce } from 'utils/performance';
 import Avatar from 'components/Avatar/Avatar';
 import styles from 'style/app-fixed.module.css';
 import { GET_EVENT_VOLUNTEER_GROUPS } from 'GraphQl/Queries/EventVolunteerQueries';

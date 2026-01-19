@@ -48,7 +48,8 @@ import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { useQuery } from '@apollo/client';
-import { debounce, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
+import { debounce } from 'utils/performance';
 
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';

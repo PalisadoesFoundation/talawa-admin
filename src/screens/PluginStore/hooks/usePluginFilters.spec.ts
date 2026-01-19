@@ -48,7 +48,7 @@ vi.mock('plugin/hooks', () => ({
 }));
 
 // Mock the useDebounce hook
-vi.mock('components/OrgListCard/useDebounce', () => ({
+vi.mock('utils/useDebounce', () => ({
   default: vi.fn((callback) => ({
     debouncedCallback: (value: string) => {
       callback(value);

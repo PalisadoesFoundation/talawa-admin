@@ -47,7 +47,8 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Chip, debounce, Stack } from '@mui/material';
+import { Chip, Stack } from '@mui/material';
+import { debounce } from 'utils/performance';
 import ItemViewModal from 'screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal';
 import Avatar from 'components/Avatar/Avatar';
 import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';

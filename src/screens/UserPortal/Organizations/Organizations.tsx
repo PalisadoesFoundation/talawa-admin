@@ -1,4 +1,4 @@
-/* global clearTimeout, HTMLButtonElement, HTMLTextAreaElement */
+/* global HTMLButtonElement, HTMLTextAreaElement */
 /**
  * Organizations.tsx
  *
@@ -41,29 +41,17 @@ import {
 } from 'GraphQl/Queries/Queries';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
+import useDebounce from 'utils/useDebounce';
 import styles from '../../../style/app-fixed.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import type { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
 
-function useDebounce<T>(fn: (val: T) => void, delay: number) {
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  function debouncedFn(val: T) {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-    timerRef.current = setTimeout(() => {
-      fn(val);
-    }, delay);
-  }
-
-  return debouncedFn;
-}
+// useDebounce hook moved to src/utils/useDebounce
 
 type IOrganizationCardProps = InterfaceOrganizationCardProps;
 
@@ -226,7 +214,7 @@ export default function Organizations(): React.JSX.Element {
     }
   }
 
-  const debouncedSearch = useDebounce(doSearch, 300);
+  const { debouncedCallback: debouncedSearch } = useDebounce(doSearch, 300);
 
   const handleChangeFilter = (newVal: string): void => {
     setTypedValue(newVal);

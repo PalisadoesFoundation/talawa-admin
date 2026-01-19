@@ -43,7 +43,8 @@ import { Navigate, useParams } from 'react-router';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { TbCalendarEvent } from 'react-icons/tb';
 import { FaUserGroup } from 'react-icons/fa6';
-import { debounce, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
+import { debounce } from 'utils/performance';
 
 import useLocalStorage from 'utils/useLocalstorage';
 import { useMutation, useQuery } from '@apollo/client';
