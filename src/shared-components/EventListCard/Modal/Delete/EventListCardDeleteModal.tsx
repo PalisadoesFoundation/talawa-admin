@@ -1,4 +1,3 @@
-// translation-check-keyPrefix: eventListCard
 /**
  * EventListCardDeleteModal Component
  *

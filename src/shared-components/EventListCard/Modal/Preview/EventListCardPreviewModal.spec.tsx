@@ -39,8 +39,9 @@ vi.mock('shared-components/DatePicker/DatePicker', () => ({
     disabled?: boolean;
   }) => (
     <div data-testid={`${dataTestId}-wrapper`}>
-      <label>{label}</label>
+      <label htmlFor={`${dataTestId}-input`}>{label}</label>
       <input
+        id={`${dataTestId}-input`}
         data-testid={dataTestId}
         value={value ? value.format('YYYY-MM-DD') : ''}
         onChange={(e) => {
@@ -70,8 +71,9 @@ vi.mock('shared-components/TimePicker/TimePicker', () => ({
     disabled?: boolean;
   }) => (
     <div data-testid={`${dataTestId}-wrapper`}>
-      <label>{label}</label>
+      <label htmlFor={`${dataTestId}-input`}>{label}</label>
       <input
+        id={`${dataTestId}-input`}
         data-testid={dataTestId}
         value={value ? value.format('HH:mm:ss') : ''}
         onChange={(e) => {

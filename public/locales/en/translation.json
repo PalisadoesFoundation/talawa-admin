@@ -812,7 +812,16 @@
     "eventLoadError": "Error loading event details",
     "notAvailable": "N/A",
     "attendeesIcon": "Attendees icon",
-    "feedbackIcon": "Feedback icon"
+    "feedbackIcon": "Feedback icon",
+    "selectRecurrencePattern": "Select recurrence pattern",
+    "recurrence": {
+      "daily": "Daily",
+      "weeklyOn": "Weekly on {{day}}",
+      "monthlyOn": "Monthly on day {{day}}",
+      "annuallyOn": "Annually on {{month}} {{day}}",
+      "everyWeekday": "Every weekday (Mon–Fri)",
+      "custom": "Custom"
+    }
   },
   "funds": {
     "title": "Funds",

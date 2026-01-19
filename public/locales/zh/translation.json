@@ -812,7 +812,16 @@
     "eventLoadError": "加载活动详情时出错",
     "notAvailable": "不可用",
     "attendeesIcon": "参与者图标",
-    "feedbackIcon": "反馈图标"
+    "feedbackIcon": "反馈图标",
+    "selectRecurrencePattern": "选择重复模式",
+    "recurrence": {
+      "daily": "每天",
+      "weeklyOn": "每周的 {{day}}",
+      "monthlyOn": "每月的第 {{day}} 天",
+      "annuallyOn": "每年的 {{month}} {{day}}",
+      "everyWeekday": "每个工作日（周一至周五）",
+      "custom": "自定义"
+    }
   },
   "funds": {
     "title": "基金",

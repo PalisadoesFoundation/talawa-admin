@@ -829,7 +829,16 @@
     "eventLoadError": "ईवेंट विवरण लोड करने में त्रुटि",
     "notAvailable": "उपलब्ध नहीं",
     "attendeesIcon": "उपस्थित लोगों का आइकन",
-    "feedbackIcon": "प्रतिक्रिया आइकन"
+    "feedbackIcon": "प्रतिक्रिया आइकन",
+    "selectRecurrencePattern": "पुनरावृत्ति पैटर्न चुनें",
+    "recurrence": {
+      "daily": "दैनिक",
+      "weeklyOn": "साप्ताहिक {{day}} को",
+      "monthlyOn": "मासिक {{day}} दिन को",
+      "annuallyOn": "वार्षिक {{month}} {{day}} को",
+      "everyWeekday": "हर कार्यदिवस (सोम-शुक्र)",
+      "custom": "कस्टम"
+    }
   },
   "funds": {
     "title": "फंड",

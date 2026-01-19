@@ -812,7 +812,16 @@
     "eventLoadError": "Error al cargar los detalles del evento",
     "notAvailable": "N/D",
     "attendeesIcon": "Icono de asistentes",
-    "feedbackIcon": "Icono de retroalimentación"
+    "feedbackIcon": "Icono de retroalimentación",
+    "selectRecurrencePattern": "Seleccionar patrón de repetición",
+    "recurrence": {
+      "daily": "Diario",
+      "weeklyOn": "Semanalmente el {{day}}",
+      "monthlyOn": "Mensualmente el día {{day}}",
+      "annuallyOn": "Anualmente el {{month}} {{day}}",
+      "everyWeekday": "Todos los días de la semana (Lun-Vie)",
+      "custom": "Personalizado"
+    }
   },
   "funds": {
     "title": "Fondos",

@@ -91,19 +91,6 @@
   margin-bottom: 30px;
 }
 
-.day {
-  background-color: var(--day-bg);
-  padding-left: 0.3rem;
-  padding-right: 0.3rem;
-  border-radius: 10px;
-  margin: 5px;
-  border: 1px solid var(--day-border);
-  color: var(--day-color);
-  font-weight: 600;
-  height: 9rem;
-  position: relative;
-}
-
 .day__today {
   background-color: var(--dayToday-bg);
   font-weight: 700;
@@ -117,7 +104,16 @@
 }
 
 .day__yearly {
-  /* Placeholder if not found */
+  background-color: var(--day-bg);
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
+  border-radius: 10px;
+  margin: 5px;
+  border: 1px solid var(--day-border);
+  color: var(--day-color);
+  font-weight: 600;
+  height: 9rem;
+  position: relative;
   display: block;
 }
 
@@ -187,6 +183,9 @@
 }
 
 .circularButton {
-  /* Placeholder */
-  display: block;
+  width: 6px;
+  height: 6px;
+  background-color: currentColor;
+  border-radius: 50%;
+  display: inline-block;
 }

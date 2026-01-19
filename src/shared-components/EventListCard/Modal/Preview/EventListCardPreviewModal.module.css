@@ -1,4 +1,4 @@
-@import '../../style/tokens/index.css';
+@import '../../../../style/tokens/index.css';
 .previewEventListCardModals {
   display: flex;
   flex-direction: row;
@@ -72,10 +72,6 @@
 }
 
 @media only screen and (max-width: 600px) {
-  .datediv {
-    flex-direction: column;
-  }
-
   .datediv > div {
     width: 100%;
     margin-left: 0;
@@ -85,4 +81,49 @@
   .datediv > div p {
     margin-bottom: 5px;
   }
+}
+
+.addButton {
+  background-color: var(--color-blue-200);
+  color: var(--color-gray-500);
+  border: 1px solid var(--color-gray-100);
+}
+
+.addButton:hover {
+  background-color: var(--color-blue-500);
+  border-color: var(--color-gray-500);
+}
+
+.removeButton {
+  background-color: var(--color-red-100);
+  color: #c8102e;
+  border: 1px solid var(--color-red-100);
+}
+
+.removeButton:hover {
+  background-color: var(--color-red-500);
+  border-color: var(--color-red-500);
+  color: var(--color-white);
+}
+
+.switch {
+  /* Using bootstrap override styles from global, simplified mapping */
+  --bs-form-switch-bg: url('data:image/svg+xml,%3csvg xmlns=''http://www.w3.org/2000/svg'' viewBox=''-4 -4 8 8''%3e%3ccircle r=''3'' fill=''%23fff''/%3e%3c/svg%3e');
+}
+
+.switch:checked {
+  background-color: var(--color-blue-500);
+  border-color: var(--color-blue-500);
+}
+
+.dropdown {
+  background-color: var(--color-gray-50);
+  color: var(--color-black);
+  border: 1px solid var(--color-gray-300);
+}
+
+.inputField {
+  background-color: var(--color-white);
+  border: 1px solid var(--border-1);
+  color: var(--color-gray-500);
 }

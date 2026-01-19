@@ -239,13 +239,8 @@ describe('Testing Event List Card', () => {
     });
     await userEvent.click(screen.getByTestId('deleteEventModalBtn'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('modal-primary-btn')).toBeInTheDocument();
-    });
-    await waitFor(() =>
-      expect(screen.getByTestId('modal-primary-btn')).toBeInTheDocument(),
-    );
-    await userEvent.click(screen.getByTestId('modal-primary-btn'));
+    const primaryBtn = await screen.findByTestId('modal-primary-btn');
+    await userEvent.click(primaryBtn);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -286,7 +281,8 @@ describe('Testing Event List Card', () => {
 
     await userEvent.click(screen.getByTestId('card'));
     await userEvent.click(screen.getByTestId('deleteEventModalBtn'));
-    await userEvent.click(screen.getByTestId('modal-primary-btn'));
+    const primaryBtn = await screen.findByTestId('modal-primary-btn');
+    await userEvent.click(primaryBtn);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();

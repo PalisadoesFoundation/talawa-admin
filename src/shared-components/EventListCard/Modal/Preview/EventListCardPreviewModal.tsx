@@ -5,7 +5,6 @@ import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import styles from './EventListCardPreviewModal.module.css';
-import globalStyles from 'style/app-fixed.module.css';
 import DatePicker from 'shared-components/DatePicker/DatePicker';
 import TimePicker from 'shared-components/TimePicker/TimePicker';
 import dayjs from 'dayjs';
@@ -178,7 +177,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 variant="success"
                 onClick={openEventDashboard}
                 data-testid="showEventDashboardBtn"
-                className={globalStyles.addButton}
+                className={styles.addButton}
                 aria-label={t('showEventDashboard')}
               >
                 {t('showEventDashboard')}
@@ -187,7 +186,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             {canEditEvent && (
               <Button
                 variant="success"
-                className={globalStyles.addButton}
+                className={styles.addButton}
                 data-testid="previewUpdateEventBtn"
                 data-cy="previewUpdateEventBtn"
                 onClick={handleEventUpdate}
@@ -201,7 +200,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 variant="danger"
                 data-testid="deleteEventModalBtn"
                 data-cy="deleteEventModalBtn"
-                className={globalStyles.removeButton}
+                className={styles.removeButton}
                 onClick={toggleDeleteModal}
                 aria-label={t('deleteEvent')}
               >
@@ -211,16 +210,12 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             {eventListCardProps.userRole === UserRole.REGULAR &&
               !(eventListCardProps.creator?.id === userId) &&
               (isRegistered ? (
-                <Button
-                  className={globalStyles.addButton}
-                  variant="success"
-                  disabled
-                >
+                <Button className={styles.addButton} variant="success" disabled>
                   {t('alreadyRegistered')}
                 </Button>
               ) : (
                 <Button
-                  className={globalStyles.addButton}
+                  className={styles.addButton}
                   variant="success"
                   onClick={registerEventHandler}
                   data-testid="registerEventBtn"
@@ -237,7 +232,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             name="eventname"
             label={t('eventName')}
             placeholder={t('enterName')}
-            className={`mb - 3 ${globalStyles.inputField} `}
+            className={`mb-3 ${styles.inputField}`}
             autoComplete="off"
             data-testid="updateName"
             data-cy="updateName"
@@ -256,7 +251,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             label={tCommon('description')}
             as="textarea"
             placeholder={t('enterDescription')}
-            className={`mb - 3 ${globalStyles.inputField} `}
+            className={`mb - 3 ${styles.inputField} `}
             autoComplete="off"
             data-testid="updateDescription"
             data-cy="updateDescription"
@@ -276,7 +271,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             name="location"
             label={tCommon('location')}
             placeholder={tCommon('enterLocation')}
-            className={`mb - 3 ${globalStyles.inputField} `}
+            className={`mb - 3 ${styles.inputField} `}
             autoComplete="off"
             data-testid="updateLocation"
             data-cy="updateLocation"
@@ -362,7 +357,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 type="switch"
                 id="allday"
                 data-testid="updateAllDay"
-                className={`me-4 ${globalStyles.switch}`}
+                className={`me-4 ${styles.switch}`}
                 checked={alldaychecked}
                 onChange={() => setAllDayChecked(!alldaychecked)}
                 disabled={!canEditEvent}
@@ -374,7 +369,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 type="switch"
                 id="ispublic"
                 data-testid="updateIsPublic"
-                className={`me-4 ${globalStyles.switch}`}
+                className={`me-4 ${styles.switch}`}
                 checked={publicchecked}
                 onChange={() => setPublicChecked(!publicchecked)}
                 disabled={!canEditEvent}
@@ -386,7 +381,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 type="switch"
                 id="registrable"
                 data-testid="updateRegistrable"
-                className={`me-4 ${globalStyles.switch}`}
+                className={`me-4 ${styles.switch}`}
                 checked={registrablechecked}
                 onChange={() => setRegistrableChecked(!registrablechecked)}
                 disabled={!canEditEvent}
@@ -400,7 +395,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 variant="outline-secondary"
                 id="recurrence-dropdown"
                 data-testid="recurrenceDropdown"
-                className={`${globalStyles.dropdown} `}
+                className={`${styles.dropdown} `}
               >
                 {getCurrentRecurrenceLabel()}
               </Dropdown.Toggle>
@@ -451,7 +446,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             setCustomRecurrenceModalIsOpen(false)
           }
           setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
-          t={(key: string) => key}
+          t={t}
           startDate={eventStartDate}
         />
       )}
