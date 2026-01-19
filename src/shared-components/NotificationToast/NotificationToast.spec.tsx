@@ -8,6 +8,7 @@ const toastMock = vi.hoisted(() => ({
   error: vi.fn(() => 'error-id'),
   warning: vi.fn(() => 'warning-id'),
   info: vi.fn(() => 'info-id'),
+  dismiss: vi.fn(),
 }));
 
 const toastContainerSpy = vi.hoisted(() =>
@@ -145,6 +146,12 @@ describe('NotificationToast', () => {
       'common:someError',
       expect.any(Object),
     );
+  });
+
+  it('calls toast.dismiss when dismiss is invoked', () => {
+    NotificationToast.dismiss();
+
+    expect(toastMock.dismiss).toHaveBeenCalled();
   });
 });
 
