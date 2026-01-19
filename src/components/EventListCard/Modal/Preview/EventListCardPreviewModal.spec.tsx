@@ -599,7 +599,9 @@ describe('EventListCardPreviewModal', () => {
       isRegistered: true,
     });
 
-    const alreadyRegisteredBtn = screen.getByText('alreadyRegistered');
+    const alreadyRegisteredBtn = screen
+      .getByText('alreadyRegistered')
+      .closest('button');
     expect(alreadyRegisteredBtn).toBeInTheDocument();
     expect(alreadyRegisteredBtn).toBeDisabled();
   });

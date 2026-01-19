@@ -33,7 +33,8 @@
  */
 // translation-check-keyPrefix: eventListCard
 import React from 'react';
-import { Button, Dropdown } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import BaseModal from 'shared-components/BaseModal/BaseModal';

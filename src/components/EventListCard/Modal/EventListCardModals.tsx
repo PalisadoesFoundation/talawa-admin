@@ -43,7 +43,7 @@ import { errorHandler } from 'utils/errorHandler';
 import EventListCardDeleteModal from './Delete/EventListCardDeleteModal';
 import EventListCardPreviewModal from './Preview/EventListCardPreviewModal';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { FormCheckField } from 'shared-components/FormFieldGroup/FormCheckField';
 import styles from './EventListCardModals.module.css';
 

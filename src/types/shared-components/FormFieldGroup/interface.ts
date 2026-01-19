@@ -9,8 +9,7 @@ export interface InterfaceFormSelectFieldProps extends InterfaceFormFieldGroupPr
   children: React.ReactNode;
 }
 
-export interface InterfaceFormCheckFieldProps
-  extends InterfaceFormFieldGroupProps {
+export interface InterfaceFormCheckFieldProps extends InterfaceFormFieldGroupProps {
   type?: 'checkbox' | 'radio' | 'switch';
   id?: string;
   checked?: boolean;
