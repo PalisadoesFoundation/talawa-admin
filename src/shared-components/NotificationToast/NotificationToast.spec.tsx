@@ -196,7 +196,7 @@ describe('NotificationToastContainer', () => {
 
   it('handles undefined props correctly when called directly', () => {
     // Direct call to hit default parameter coverage
-    const { container } = render(NotificationToastContainer(undefined));
+    render(NotificationToastContainer(undefined));
     const toastContainer = screen.getByTestId('toast-container');
     expect(toastContainer).toBeInTheDocument();
     expect(toastContainer).toHaveAttribute('data-limit', '5');
