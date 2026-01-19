@@ -736,7 +736,6 @@
     "deleteAgendaItem": "Supprimer le point de l'ordre du jour",
     "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?",
     "event": "Événement",
-    "search": "Rechercher",
     "attachmentPreview": "Aperçu de la pièce jointe",
     "errorLoadingAgendaCategories": "Une erreur s'est produite lors du chargement des données des catégories de l'ordre du jour",
     "errorLoadingAgendaItems": "Une erreur s'est produite lors du chargement des données des points de l'ordre du jour"
@@ -1912,8 +1911,6 @@
     "downloadTag": "Télécharger l'étiquette",
     "checkInButton": "S'enregistrer",
     "searchAttendees": "Rechercher des participants",
-    "checkedIn": "Enregistré",
-    "downloadTag": "Télécharger l'étiquette",
     "checkIn": "Enregistrer",
     "eventCheckInManagement": "Gestion des enregistrements d'événement",
     "checkInMembers": "Enregistrer les membres",
@@ -2340,5 +2337,18 @@
       "emptyState": "En attente que les gens parlent de l'événement...",
       "filledByCount": "Rempli par {{count}} personnes."
     }
+  },
+  "verifyEmail": {
+    "title": "Verify Email",
+    "verifying": "Verifying your email...",
+    "success": "Email Verified!",
+    "successMessage": "Your email has been successfully verified. You can now login.",
+    "error": "Verification Failed",
+    "invalidToken": "The verification link is invalid or has expired.",
+    "loginRequired": "Please login to verify your email.",
+    "resendButton": "Resend Verification Email",
+    "resendSuccess": "Verification email has been resent successfully.",
+    "resendFailed": "Failed to resend verification email. Please try again.",
+    "goToLogin": "Go to Login"
   }
 }

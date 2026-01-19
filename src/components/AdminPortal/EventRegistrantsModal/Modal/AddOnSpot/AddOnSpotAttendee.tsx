@@ -40,7 +40,6 @@ import { BaseModal } from 'shared-components/BaseModal';
 import styles from './AddOnSpotAttendee.module.css';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
-import { toast } from 'react-toastify';
 import type {
   InterfaceAddOnSpotAttendeeProps,
   InterfaceFormData,
@@ -75,7 +74,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
       return false;
     }
     if (!formData.firstName || !formData.lastName || !formData.email) {
-      toast.error(t('invalidDetailsMessage'));
+      NotificationToast.error(t('invalidDetailsMessage'));
       return false;
     }
     return true;
@@ -114,7 +113,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
       });
 
       if (response.data?.signUp) {
-        toast.success(t('attendeeAddedSuccess'));
+        NotificationToast.success(t('attendeeAddedSuccess'));
         resetForm();
         reloadMembers();
         handleClose();

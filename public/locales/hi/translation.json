@@ -743,7 +743,7 @@
     "options": "विकल्प",
     "createAgendaItem": "एजेंडा आइटम बनाएं",
     "noAgendaItems": "कोई एजेंडा आइटम नहीं",
-    "search": "खोजें",
+    "search": "खोज",
     "selectAgendaItemCategory": "एजेंडा आइटम श्रेणी चुनें",
     "update": "अपडेट करें",
     "delete": "हटाएं",
@@ -752,10 +752,8 @@
     "agendaItemDeleted": "एजेंडा आइटम सफलतापूर्वक हटा दिया गया",
     "deleteAgendaItem": "एजेंडा आइटम हटाएं",
     "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?",
-    "attachmentPreview": "अनुलग्नक पूर्वावलोकन",
-    "event": "कार्यक्रम",
-    "search": "खोज",
     "attachmentPreview": "अटैचमेंट पूर्वावलोकन",
+    "event": "कार्यक्रम",
     "errorLoadingAgendaCategories": "एजेंडा श्रेणी डेटा लोड करते समय त्रुटि हुई",
     "errorLoadingAgendaItems": "एजेंडा आइटम डेटा लोड करते समय त्रुटि हुई"
   },
@@ -1496,13 +1494,10 @@
     "options": "विकल्प",
     "addRegistrant": "पंजीकृत व्यक्ति जोड़ें",
     "noRegistrantsFound": "कोई पंजीकृत व्यक्ति नहीं मिला",
-    "removingAttendee": "उपस्थित होने वाले को हटाया जा रहा है...",
-    "attendeeRemovedSuccessfully": "उपस्थित होने वाला सफलतापूर्वक हटा दिया गया",
-    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
-    "cannotUnregisterCheckedIn": "किसी उपयोगकर्ता का पंजीकरण रद्द नहीं किया जा सकता जो पहले से ही चेक-इन कर चुका है",
     "removingAttendee": "प्रतिभागी को हटाया जा रहा है...",
     "attendeeRemovedSuccessfully": "प्रतिभागी सफलतापूर्वक हटा दिया गया",
     "errorRemovingAttendee": "प्रतिभागी को हटाने में त्रुटि हुई। कृपया पुनः प्रयास करें।",
+    "cannotUnregisterCheckedIn": "किसी उपयोगकर्ता का पंजीकरण रद्द नहीं किया जा सकता जो पहले से ही चेक-इन कर चुका है",
     "checkedIn": "चेक इन किया गया",
     "unregister": "पंजीकरण रद्द करें",
     "cannotUnregisterCheckedInTooltip": "पहले से चेक इन किए गए उपयोगकर्ता का पंजीकरण रद्द नहीं किया जा सकता"
@@ -1912,12 +1907,10 @@
     "pdfGeneratedSuccessfully": "PDF सफलतापूर्वक जेनरेट किया गया!",
     "errorGeneratingPdf": "PDF जेनरेट करने में त्रुटि",
     "unknownError": "अज्ञात त्रुटि",
-    "checkedIn": "चेक-इन हुआ",
+    "checkedIn": "चेक इन किया गया",
     "downloadTag": "टैग डाउनलोड करें",
     "checkInButton": "चेक इन करें",
     "searchAttendees": "उपस्थित लोगों को खोजें",
-    "checkedIn": "चेक इन किया गया",
-    "downloadTag": "टैग डाउनलोड करें",
     "checkIn": "चेक इन करें",
     "eventCheckInManagement": "इवेंट चेक इन प्रबंधन",
     "checkInMembers": "सदस्यों को चेक इन करें",
@@ -2344,5 +2337,18 @@
       "emptyState": "लोगों के इवेंट के बारे में बात करने की प्रतीक्षा है...",
       "filledByCount": "{{count}} लोगों द्वारा भरा गया।"
     }
+  },
+  "verifyEmail": {
+    "title": "Verify Email",
+    "verifying": "Verifying your email...",
+    "success": "Email Verified!",
+    "successMessage": "Your email has been successfully verified. You can now login.",
+    "error": "Verification Failed",
+    "invalidToken": "The verification link is invalid or has expired.",
+    "loginRequired": "Please login to verify your email.",
+    "resendButton": "Resend Verification Email",
+    "resendSuccess": "Verification email has been resent successfully.",
+    "resendFailed": "Failed to resend verification email. Please try again.",
+    "goToLogin": "Go to Login"
   }
 }

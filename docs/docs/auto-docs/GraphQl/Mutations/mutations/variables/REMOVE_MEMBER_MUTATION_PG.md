@@ -6,4 +6,4 @@
 
 > `const` **REMOVE\_MEMBER\_MUTATION\_PG**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:429](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L429)
+Defined in: [src/GraphQl/Mutations/mutations.ts:446](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L446)

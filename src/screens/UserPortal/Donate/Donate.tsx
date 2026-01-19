@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Button, Dropdown, FormControl, InputGroup } from 'react-bootstrap';
+import { Dropdown, FormControl, InputGroup } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useQuery, useMutation } from '@apollo/client';
 import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
@@ -172,6 +173,7 @@ export default function Donate(): JSX.Element {
             data-testid="donateBtn"
             onClick={donateToOrg}
             className={`${styles.addButton} ${styles.donateBtn}`}
+            variant="primary"
           >
             {t('donate')} <SendIcon />
           </Button>

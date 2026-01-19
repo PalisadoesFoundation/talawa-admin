@@ -315,7 +315,7 @@ describe('AddOnSpotAttendee Component', () => {
     await userEvent.type(screen.getByLabelText(/First Name/i), 'John');
     await userEvent.type(screen.getByLabelText(/Last Name/i), 'Doe');
     // Email skipped intentionally
-    await userEvent.type(screen.getByLabelText(/Phone Number/i), '1234567890');
+    await userEvent.type(screen.getByLabelText(/Phone No\./i), '1234567890');
     const genderSelect = screen.getByLabelText(/Gender/i);
     fireEvent.change(genderSelect, { target: { value: 'Male' } });
 

@@ -2510,6 +2510,8 @@ describe('Cookie-based authentication verification', () => {
       </MockedProvider>,
     );
 
-    expect(routerMocks.navigate).toHaveBeenCalledWith('/orglist');
+    await waitFor(() => {
+      expect(routerMocks.navigate).toHaveBeenCalledWith('/orglist');
+    });
   });
 });

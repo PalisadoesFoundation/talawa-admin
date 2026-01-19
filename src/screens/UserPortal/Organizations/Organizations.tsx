@@ -156,17 +156,13 @@ export default function Organizations(): React.JSX.Element {
         removeItem('unverifiedEmail');
       } else {
         setShowEmailWarning(true);
-        // Ensure flags are consistent
+        // Only store boolean flag, not PII
         setItem('emailNotVerified', 'true');
-        if (currentUserData.currentUser.emailAddress) {
-          setItem('unverifiedEmail', currentUserData.currentUser.emailAddress);
-        }
       }
     } else {
       // Fallback to local storage if API data not yet available
       const emailNotVerified = getItem('emailNotVerified');
-      const email = getItem('unverifiedEmail');
-      if (emailNotVerified === 'true' && typeof email === 'string') {
+      if (emailNotVerified === 'true') {
         setShowEmailWarning(true);
       }
     }

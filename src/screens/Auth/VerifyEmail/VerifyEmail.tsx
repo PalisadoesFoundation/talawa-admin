@@ -117,6 +117,10 @@ const VerifyEmail = (): JSX.Element => {
 
       if (data?.sendVerificationEmail?.success) {
         NotificationToast.success(t('resendSuccess'));
+      } else {
+        NotificationToast.error(
+          data?.sendVerificationEmail?.message || t('resendFailed'),
+        );
       }
     } catch (error: unknown) {
       errorHandler(t, error);

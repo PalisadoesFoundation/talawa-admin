@@ -735,10 +735,8 @@
     "agendaItemDeleted": "Punto del orden del día eliminado exitosamente",
     "deleteAgendaItem": "Eliminar punto del orden del día",
     "deleteAgendaItemMsg": "¿Desea eliminar este punto del orden del día?",
-    "attachmentPreview": "Vista previa del archivo adjunto",
-    "event": "Evento",
-    "search": "Buscar",
     "attachmentPreview": "Vista previa del adjunto",
+    "event": "Evento",
     "errorLoadingAgendaCategories": "Ocurrió un error al cargar los datos de las Categorías de la Agenda",
     "errorLoadingAgendaItems": "Ocurrió un error al cargar los datos de los Puntos de la Agenda"
   },
@@ -1479,13 +1477,10 @@
     "options": "Opciones",
     "addRegistrant": "Agregar registrado",
     "noRegistrantsFound": "No se encontraron registrados",
-    "removingAttendee": "Eliminando el asistente...",
-    "attendeeRemovedSuccessfully": "Asistente eliminado con éxito",
-    "errorRemovingAttendee": "Error al eliminar asistente",
-    "cannotUnregisterCheckedIn": "No se puede anular el registro de un usuario que ya se ha registrado",
     "removingAttendee": "Eliminando asistente...",
     "attendeeRemovedSuccessfully": "Asistente eliminado con éxito",
     "errorRemovingAttendee": "Error al eliminar asistente. Por favor, inténtelo de nuevo.",
+    "cannotUnregisterCheckedIn": "No se puede anular el registro de un usuario que ya se ha registrado",
     "checkedIn": "Registrado",
     "unregister": "Dar de baja",
     "cannotUnregisterCheckedInTooltip": "No se puede dar de baja a un usuario que ya se registró"
@@ -1899,8 +1894,6 @@
     "downloadTag": "Descargar etiqueta",
     "checkInButton": "Registrarse",
     "searchAttendees": "Buscar asistentes",
-    "checkedIn": "Registrado",
-    "downloadTag": "Descargar etiqueta",
     "checkIn": "Registrar",
     "eventCheckInManagement": "Gestión de registro de eventos",
     "checkInMembers": "Registrar miembros",
@@ -2344,5 +2337,18 @@
       "emptyState": "Esperando a que la gente hable sobre el evento...",
       "filledByCount": "Completado por {{count}} personas."
     }
+  },
+  "verifyEmail": {
+    "title": "Verify Email",
+    "verifying": "Verifying your email...",
+    "success": "Email Verified!",
+    "successMessage": "Your email has been successfully verified. You can now login.",
+    "error": "Verification Failed",
+    "invalidToken": "The verification link is invalid or has expired.",
+    "loginRequired": "Please login to verify your email.",
+    "resendButton": "Resend Verification Email",
+    "resendSuccess": "Verification email has been resent successfully.",
+    "resendFailed": "Failed to resend verification email. Please try again.",
+    "goToLogin": "Go to Login"
   }
 }
