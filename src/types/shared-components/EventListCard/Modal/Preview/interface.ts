@@ -48,7 +48,7 @@ export interface InterfacePreviewEventModalProps {
   registrablechecked: boolean;
   setRegistrableChecked: Dispatch<SetStateAction<boolean>>;
   formState: InterfaceEventFormState;
-  setFormState: (state: InterfaceEventFormState) => void;
+  setFormState: Dispatch<SetStateAction<InterfaceEventFormState>>;
   registerEventHandler: () => Promise<void>;
   handleEventUpdate: () => Promise<void>;
   openEventDashboard: () => void;
