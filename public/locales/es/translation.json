@@ -86,7 +86,10 @@
     "accountLockedWithTimer": "Su cuenta ha sido bloqueada temporalmente. Por favor, inténtelo de nuevo en {{minutes}} minuto(s).",
     "backToLogin": "Volver al inicio de sesión",
     "signupSuccessVerifyEmail": "Successfully registered! Please check your email to verify your account.",
-    "emailResent": "Verification email has been resent successfully."
+    "emailResent": "Verification email has been resent successfully.",
+    "emailNotVerified": "Your email is not verified. Please check your inbox for the verification link.",
+    "resendVerification": "Resend Verification",
+    "resendFailed": "Failed to resend verification email. Please try again."
   },
   "adminProfile": {
     "title": "Perfil de Administrador",

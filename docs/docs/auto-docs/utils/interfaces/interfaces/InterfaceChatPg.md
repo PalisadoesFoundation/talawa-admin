@@ -4,7 +4,7 @@
 
 # Interface: InterfaceChatPg
 
-Defined in: [src/utils/interfaces.ts:807](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L807)
+Defined in: [src/utils/interfaces.ts:810](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L810)
 
 InterfaceChatPg
 
@@ -18,7 +18,7 @@ Defines the structure for a chat with PostgreSQL-specific fields.
 
 > **avatarMimeType**: `string`
 
-Defined in: [src/utils/interfaces.ts:811](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L811)
+Defined in: [src/utils/interfaces.ts:814](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L814)
 
 The MIME type of the chat's avatar.
 
@@ -28,7 +28,7 @@ The MIME type of the chat's avatar.
 
 > **avatarURL**: `string`
 
-Defined in: [src/utils/interfaces.ts:812](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L812)
+Defined in: [src/utils/interfaces.ts:815](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L815)
 
 The URL of the chat's avatar.
 
@@ -38,7 +38,7 @@ The URL of the chat's avatar.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:813](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L813)
+Defined in: [src/utils/interfaces.ts:816](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L816)
 
 The creation date of the chat record.
 
@@ -48,7 +48,7 @@ The creation date of the chat record.
 
 > **creator**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:815](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L815)
+Defined in: [src/utils/interfaces.ts:818](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L818)
 
 The user who created this chat.
 
@@ -58,7 +58,7 @@ The user who created this chat.
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:810](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L810)
+Defined in: [src/utils/interfaces.ts:813](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L813)
 
 The description of the chat.
 
@@ -68,7 +68,7 @@ The description of the chat.
 
 > **id**: `ID`
 
-Defined in: [src/utils/interfaces.ts:808](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L808)
+Defined in: [src/utils/interfaces.ts:811](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L811)
 
 The unique identifier of the chat.
 
@@ -78,7 +78,7 @@ The unique identifier of the chat.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:809](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L809)
+Defined in: [src/utils/interfaces.ts:812](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L812)
 
 The name of the chat.
 
@@ -88,7 +88,7 @@ The name of the chat.
 
 > **organization**: [`InterfaceOrganizationPg`](InterfaceOrganizationPg.md)
 
-Defined in: [src/utils/interfaces.ts:817](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L817)
+Defined in: [src/utils/interfaces.ts:820](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L820)
 
 The organization associated with this chat.
 
@@ -98,7 +98,7 @@ The organization associated with this chat.
 
 > **updatedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:814](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L814)
+Defined in: [src/utils/interfaces.ts:817](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L817)
 
 The last update date of the chat record.
 
@@ -108,6 +108,6 @@ The last update date of the chat record.
 
 > **updater**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:816](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L816)
+Defined in: [src/utils/interfaces.ts:819](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L819)
 
 The user who last updated this chat.

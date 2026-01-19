@@ -15,7 +15,7 @@
  */
 import { useMutation } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router';
+import { Link, useSearchParams } from 'react-router-dom';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   VERIFY_EMAIL_MUTATION,

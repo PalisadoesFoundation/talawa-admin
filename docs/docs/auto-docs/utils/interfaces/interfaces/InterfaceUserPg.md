@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserPg
 
-Defined in: [src/utils/interfaces.ts:678](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L678)
+Defined in: [src/utils/interfaces.ts:680](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L680)
 
 InterfaceUserPg
 
@@ -18,7 +18,7 @@ Defines the structure for a user with PostgreSQL-specific fields.
 
 > **addressLine1**: `string`
 
-Defined in: [src/utils/interfaces.ts:679](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L679)
+Defined in: [src/utils/interfaces.ts:681](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L681)
 
 The first line of the user's address.
 
@@ -28,7 +28,7 @@ The first line of the user's address.
 
 > **addressLine2**: `string`
 
-Defined in: [src/utils/interfaces.ts:680](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L680)
+Defined in: [src/utils/interfaces.ts:682](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L682)
 
 The second line of the user's address.
 
@@ -38,7 +38,7 @@ The second line of the user's address.
 
 > **avatarMimeType**: `string`
 
-Defined in: [src/utils/interfaces.ts:681](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L681)
+Defined in: [src/utils/interfaces.ts:683](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L683)
 
 The MIME type of the user's avatar.
 
@@ -48,7 +48,7 @@ The MIME type of the user's avatar.
 
 > **avatarURL**: `string`
 
-Defined in: [src/utils/interfaces.ts:682](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L682)
+Defined in: [src/utils/interfaces.ts:684](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L684)
 
 The URL of the user's avatar.
 
@@ -58,7 +58,7 @@ The URL of the user's avatar.
 
 > **birthDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:683](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L683)
+Defined in: [src/utils/interfaces.ts:685](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L685)
 
 The birth date of the user.
 
@@ -68,7 +68,7 @@ The birth date of the user.
 
 > **city**: `string`
 
-Defined in: [src/utils/interfaces.ts:684](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L684)
+Defined in: [src/utils/interfaces.ts:686](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L686)
 
 The city of the user's address.
 
@@ -78,7 +78,7 @@ The city of the user's address.
 
 > **countryCode**: [`Iso3166Alpha2CountryCode`](../enumerations/Iso3166Alpha2CountryCode.md)
 
-Defined in: [src/utils/interfaces.ts:685](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L685)
+Defined in: [src/utils/interfaces.ts:687](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L687)
 
 The country code of the user's address.
 
@@ -88,7 +88,7 @@ The country code of the user's address.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:686](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L686)
+Defined in: [src/utils/interfaces.ts:688](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L688)
 
 The creation date of the user record.
 
@@ -98,7 +98,7 @@ The creation date of the user record.
 
 > **creator**: `InterfaceUserPg`
 
-Defined in: [src/utils/interfaces.ts:687](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L687)
+Defined in: [src/utils/interfaces.ts:689](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L689)
 
 The user who created this record.
 
@@ -108,7 +108,7 @@ The user who created this record.
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:688](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L688)
+Defined in: [src/utils/interfaces.ts:690](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L690)
 
 A description of the user.
 
@@ -118,7 +118,7 @@ A description of the user.
 
 > **educationGrade**: `UserEducationGrade`
 
-Defined in: [src/utils/interfaces.ts:689](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L689)
+Defined in: [src/utils/interfaces.ts:691](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L691)
 
 The education grade of the user.
 
@@ -128,7 +128,7 @@ The education grade of the user.
 
 > **emailAddress**: `string`
 
-Defined in: [src/utils/interfaces.ts:690](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L690)
+Defined in: [src/utils/interfaces.ts:692](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L692)
 
 The email address of the user.
 
@@ -138,7 +138,7 @@ The email address of the user.
 
 > **employmentStatus**: `UserEmploymentStatus`
 
-Defined in: [src/utils/interfaces.ts:691](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L691)
+Defined in: [src/utils/interfaces.ts:693](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L693)
 
 The employment status of the user.
 
@@ -148,7 +148,7 @@ The employment status of the user.
 
 > **homePhoneNumber**: `string`
 
-Defined in: [src/utils/interfaces.ts:692](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L692)
+Defined in: [src/utils/interfaces.ts:694](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L694)
 
 The home phone number of the user.
 
@@ -158,7 +158,7 @@ The home phone number of the user.
 
 > **id**: `ID`
 
-Defined in: [src/utils/interfaces.ts:693](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L693)
+Defined in: [src/utils/interfaces.ts:695](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L695)
 
 The unique identifier of the user.
 
@@ -168,7 +168,7 @@ The unique identifier of the user.
 
 > **isEmailAddressVerified**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:694](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L694)
+Defined in: [src/utils/interfaces.ts:696](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L696)
 
 Indicates if the user's email address is verified.
 
@@ -178,7 +178,7 @@ Indicates if the user's email address is verified.
 
 > **maritalStatus**: `UserMaritalStatus`
 
-Defined in: [src/utils/interfaces.ts:695](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L695)
+Defined in: [src/utils/interfaces.ts:697](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L697)
 
 The marital status of the user.
 
@@ -188,7 +188,7 @@ The marital status of the user.
 
 > **mobilePhoneNumber**: `string`
 
-Defined in: [src/utils/interfaces.ts:696](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L696)
+Defined in: [src/utils/interfaces.ts:698](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L698)
 
 The mobile phone number of the user.
 
@@ -198,7 +198,7 @@ The mobile phone number of the user.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:697](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L697)
+Defined in: [src/utils/interfaces.ts:699](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L699)
 
 The full name of the user.
 
@@ -208,9 +208,17 @@ The full name of the user.
 
 > **natalSex**: `UserNatalSex`
 
-Defined in: [src/utils/interfaces.ts:698](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L698)
+Defined in: [src/utils/interfaces.ts:700](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L700)
 
 The natal sex of the user.
+
+***
+
+### naturalLanguageCode
+
+> **naturalLanguageCode**: `string`
+
+Defined in: [src/utils/interfaces.ts:707](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L707)
 
 ***
 
@@ -218,7 +226,7 @@ The natal sex of the user.
 
 > **postalCode**: `string`
 
-Defined in: [src/utils/interfaces.ts:699](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L699)
+Defined in: [src/utils/interfaces.ts:701](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L701)
 
 The postal code of the user's address.
 
@@ -228,7 +236,7 @@ The postal code of the user's address.
 
 > **role**: `UserRole`
 
-Defined in: [src/utils/interfaces.ts:700](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L700)
+Defined in: [src/utils/interfaces.ts:702](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L702)
 
 The role of the user.
 
@@ -238,7 +246,7 @@ The role of the user.
 
 > **state**: `string`
 
-Defined in: [src/utils/interfaces.ts:701](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L701)
+Defined in: [src/utils/interfaces.ts:703](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L703)
 
 The state of the user's address.
 
@@ -248,7 +256,7 @@ The state of the user's address.
 
 > **updatedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:702](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L702)
+Defined in: [src/utils/interfaces.ts:704](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L704)
 
 The last update date of the user record.
 
@@ -258,7 +266,7 @@ The last update date of the user record.
 
 > **updater**: `InterfaceUserPg`
 
-Defined in: [src/utils/interfaces.ts:703](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L703)
+Defined in: [src/utils/interfaces.ts:705](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L705)
 
 The user who last updated this record.
 
@@ -268,6 +276,6 @@ The user who last updated this record.
 
 > **workPhoneNumber**: `string`
 
-Defined in: [src/utils/interfaces.ts:704](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L704)
+Defined in: [src/utils/interfaces.ts:706](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L706)
 
 The work phone number of the user.

@@ -4,7 +4,7 @@
 
 # Interface: InterfacePaginationArgs
 
-Defined in: [src/utils/interfaces.ts:1279](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1279)
+Defined in: [src/utils/interfaces.ts:1282](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1282)
 
 InterfacePaginationArgs
 
@@ -18,7 +18,7 @@ Defines the arguments for pagination.
 
 > **after**: `string`
 
-Defined in: [src/utils/interfaces.ts:1280](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1280)
+Defined in: [src/utils/interfaces.ts:1283](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1283)
 
 The cursor to paginate after.
 
@@ -28,7 +28,7 @@ The cursor to paginate after.
 
 > **before**: `string`
 
-Defined in: [src/utils/interfaces.ts:1281](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1281)
+Defined in: [src/utils/interfaces.ts:1284](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1284)
 
 The cursor to paginate before.
 
@@ -38,7 +38,7 @@ The cursor to paginate before.
 
 > **first**: `number`
 
-Defined in: [src/utils/interfaces.ts:1282](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1282)
+Defined in: [src/utils/interfaces.ts:1285](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1285)
 
 The maximum number of items to return from the beginning.
 
@@ -48,6 +48,6 @@ The maximum number of items to return from the beginning.
 
 > **last**: `number`
 
-Defined in: [src/utils/interfaces.ts:1283](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1283)
+Defined in: [src/utils/interfaces.ts:1286](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1286)
 
 The maximum number of items to return from the end.

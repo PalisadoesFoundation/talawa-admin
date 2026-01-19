@@ -86,7 +86,10 @@
     "accountLocked": "Your account has been temporarily locked due to too many failed login attempts. Please try again later.",
     "accountLockedWithTimer": "Your account has been temporarily locked. Please try again in {{minutes}} minute(s).",
     "signupSuccessVerifyEmail": "Successfully registered! Please check your email to verify your account.",
-    "emailResent": "Verification email has been resent successfully."
+    "emailResent": "Verification email has been resent successfully.",
+    "emailNotVerified": "Your email is not verified. Please check your inbox for the verification link.",
+    "resendVerification": "Resend Verification",
+    "resendFailed": "Failed to resend verification email. Please try again."
   },
   "adminProfile": {
     "title": "Admin Profile",

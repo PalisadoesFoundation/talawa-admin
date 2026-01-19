@@ -1394,7 +1394,7 @@ describe('Email Verification Warning', () => {
 
     await waitFor(() => {
       expect(toastMocks.success).toHaveBeenCalledWith(
-        'Verification email sent successfully!',
+        'Verification email has been resent successfully.',
       );
     });
   });

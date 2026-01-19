@@ -62,6 +62,14 @@ The unique identifier of the organization.
 
 ***
 
+### isMember?
+
+> `optional` **isMember**: `boolean`
+
+Defined in: [src/utils/interfaces.ts:554](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L554)
+
+***
+
 ### members?
 
 > `optional` **members**: `object`
@@ -73,6 +81,10 @@ The members connection object.
 #### edges
 
 > **edges**: `object`[]
+
+#### id?
+
+> `optional` **id**: `string`
 
 ***
 
@@ -98,4 +110,4 @@ The name of the organization.
 
 > **role**: `string`
 
-Defined in: [src/utils/interfaces.ts:552](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L552)
+Defined in: [src/utils/interfaces.ts:553](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L553)

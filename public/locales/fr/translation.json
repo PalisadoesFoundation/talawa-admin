@@ -86,7 +86,10 @@
     "accountLocked": "Votre compte a été temporairement verrouillé en raison de trop nombreuses tentatives de connexion échouées. Veuillez réessayer plus tard.",
     "accountLockedWithTimer": "Votre compte a été temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s).",
     "signupSuccessVerifyEmail": "Successfully registered! Please check your email to verify your account.",
-    "emailResent": "Verification email has been resent successfully."
+    "emailResent": "Verification email has been resent successfully.",
+    "emailNotVerified": "Your email is not verified. Please check your inbox for the verification link.",
+    "resendVerification": "Resend Verification",
+    "resendFailed": "Failed to resend verification email. Please try again."
   },
   "adminProfile": {
     "title": "Profil Administrateur",

@@ -543,6 +543,7 @@ export interface InterfaceOrgInfoTypePG {
   createdAt: string;
   membersCount?: number;
   members?: {
+    id?: string;
     edges: {
       node: {
         id: string;
@@ -550,6 +551,7 @@ export interface InterfaceOrgInfoTypePG {
     }[];
   };
   role: string;
+  isMember?: boolean;
 }
 
 /**
@@ -702,6 +704,7 @@ export interface InterfaceUserPg {
   updatedAt: string;
   updater: InterfaceUserPg;
   workPhoneNumber: string;
+  naturalLanguageCode: string;
 }
 
 /**

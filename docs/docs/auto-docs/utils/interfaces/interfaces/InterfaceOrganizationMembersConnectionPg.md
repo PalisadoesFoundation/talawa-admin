@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationMembersConnectionPg
 
-Defined in: [src/utils/interfaces.ts:1044](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1044)
+Defined in: [src/utils/interfaces.ts:1047](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1047)
 
 InterfaceOrganizationMembersConnectionPg
 
@@ -18,7 +18,7 @@ Defines the structure for a connection of organization members with PostgreSQL-s
 
 > **edges**: [`InterfaceOrganizationMembersConnectionEdgePg`](InterfaceOrganizationMembersConnectionEdgePg.md)[]
 
-Defined in: [src/utils/interfaces.ts:1045](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1045)
+Defined in: [src/utils/interfaces.ts:1048](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1048)
 
 An array of edges, where each edge contains a cursor and a user node.
 
@@ -28,6 +28,6 @@ An array of edges, where each edge contains a cursor and a user node.
 
 > **pageInfo**: [`InterfacePageInfoPg`](InterfacePageInfoPg.md)
 
-Defined in: [src/utils/interfaces.ts:1046](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1046)
+Defined in: [src/utils/interfaces.ts:1049](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1049)
 
 Pagination information.

@@ -86,7 +86,10 @@
     "accountLocked": "由于登录失败次数过多，您的账户已被暂时锁定。请稍后重试。",
     "accountLockedWithTimer": "您的账户已被暂时锁定。请在 {{minutes}} 分钟后重试。",
     "signupSuccessVerifyEmail": "Successfully registered! Please check your email to verify your account.",
-    "emailResent": "Verification email has been resent successfully."
+    "emailResent": "Verification email has been resent successfully.",
+    "emailNotVerified": "Your email is not verified. Please check your inbox for the verification link.",
+    "resendVerification": "Resend Verification",
+    "resendFailed": "Failed to resend verification email. Please try again."
   },
   "adminProfile": {
     "title": "管理员资料",

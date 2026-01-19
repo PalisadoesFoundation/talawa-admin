@@ -173,8 +173,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Dog care center',
       createdAt: dayjs().subtract(1, 'year').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
   ],
   multipleOrgs: [
@@ -184,8 +185,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Dog care center',
       createdAt: dayjs().subtract(1, 'year').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
     {
       id: 'xyz2',
@@ -193,8 +195,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Cat care center',
       createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
     {
       id: 'xyz3',
@@ -202,8 +205,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Bird care center',
       createdAt: dayjs().subtract(1, 'year').add(2, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
     {
       id: 'xyz4',
@@ -211,8 +215,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Fish care center',
       createdAt: dayjs().subtract(1, 'year').add(3, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
     {
       id: 'xyz5',
@@ -220,8 +225,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Rabbit care center',
       createdAt: dayjs().subtract(1, 'year').add(4, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
     {
       id: 'xyz6',
@@ -229,8 +235,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Horse care center',
       createdAt: dayjs().subtract(1, 'year').add(5, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
   ],
   paginationOrgs: Array.from({ length: 15 }, (_, i) => ({
@@ -239,8 +246,9 @@ const mockOrgData = {
     avatarURL: '',
     description: `Description ${i + 1}`,
     createdAt: dayjs().subtract(1, 'year').add(i, 'days').toISOString(),
-    members: { edges: [] },
+    members: { id: 'members_conn', edges: [] },
     addressLine1: 'Test Address',
+    isMember: false,
   })),
   manyOrgs: [
     {
@@ -249,8 +257,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Dog care center 1',
       createdAt: dayjs().subtract(1, 'year').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
     {
       id: 'xyz2',
@@ -258,8 +267,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Cat care center 2',
       createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
     {
       id: 'xyz3',
@@ -267,8 +277,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Bird care center 3',
       createdAt: dayjs().subtract(1, 'year').add(2, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
     {
       id: 'xyz4',
@@ -276,8 +287,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Fish care center 4',
       createdAt: dayjs().subtract(1, 'year').add(3, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
     {
       id: 'xyz5',
@@ -285,8 +297,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Rabbit care center 5',
       createdAt: dayjs().subtract(1, 'year').add(4, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
     {
       id: 'xyz6',
@@ -294,8 +307,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Horse care center 6',
       createdAt: dayjs().subtract(1, 'year').add(5, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
     {
       id: 'xyz7',
@@ -303,8 +317,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Turtle care center 7',
       createdAt: dayjs().subtract(1, 'year').add(6, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
     {
       id: 'xyz8',
@@ -312,8 +327,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Hamster care center 8',
       createdAt: dayjs().subtract(1, 'year').add(7, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
   ],
   searchTestOrgs: [
@@ -323,8 +339,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Dog care center',
       createdAt: dayjs().subtract(1, 'year').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
     {
       id: 'xyz2',
@@ -332,8 +349,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Cat care center',
       createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
     {
       id: 'xyz3',
@@ -341,8 +359,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Dog training facility',
       createdAt: dayjs().subtract(1, 'year').add(2, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
     {
       id: 'xyz4',
@@ -350,8 +369,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Pet grooming',
       createdAt: dayjs().subtract(1, 'year').add(3, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
     {
       id: 'xyz5',
@@ -359,8 +379,9 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Professional dog walking',
       createdAt: dayjs().subtract(1, 'year').add(4, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
     },
   ],
   scrollOrgs: [
@@ -368,6 +389,7 @@ const mockOrgData = {
       id: 'org1',
       name: 'Organization 1',
       addressLine1: '123 Main Street',
+      isMember: false,
       description: 'Description 1',
       avatarURL: null,
       createdAt: dayjs().subtract(1, 'year').toISOString(),
@@ -375,6 +397,7 @@ const mockOrgData = {
       adminsCount: 2,
       __typename: 'Organization',
       members: {
+        id: 'members_conn',
         edges: [
           {
             node: {
@@ -395,6 +418,7 @@ const mockOrgData = {
       id: 'org2',
       name: 'Organization 2',
       addressLine1: '456 Oak Avenue',
+      isMember: false,
       description: 'Description 2',
       avatarURL: null,
       createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
@@ -402,6 +426,7 @@ const mockOrgData = {
       adminsCount: 2,
       __typename: 'Organization',
       members: {
+        id: 'members_conn',
         edges: [
           {
             node: {
@@ -450,7 +475,7 @@ const mockConfigurations = {
               avatarURL: '',
               description: 'Dog care center',
               createdAt: dayjs().subtract(1, 'year').toISOString(),
-              members: { edges: [] },
+              members: { id: 'members_conn', edges: [] },
               addressLine1: 'Texas, USA',
             },
             {
@@ -462,7 +487,7 @@ const mockConfigurations = {
                 .subtract(1, 'year')
                 .add(2, 'days')
                 .toISOString(),
-              members: { edges: [] },
+              members: { id: 'members_conn', edges: [] },
               addressLine1: 'Texas, USA',
             },
             {
@@ -474,7 +499,7 @@ const mockConfigurations = {
                 .subtract(1, 'year')
                 .add(4, 'days')
                 .toISOString(),
-              members: { edges: [] },
+              members: { id: 'members_conn', edges: [] },
               addressLine1: 'Texas, USA',
             },
           ],
@@ -977,7 +1002,7 @@ describe('Advanced Component Functionality Tests', () => {
                 name: 'Single Organization',
                 avatarURL: '',
                 description: 'Only organization',
-                members: { edges: [] },
+                members: { id: 'members_conn', edges: [] },
                 addressLine1: 'Single Address',
               },
             ],
@@ -1715,7 +1740,7 @@ describe('Advanced Component Functionality Tests', () => {
               avatarURL: '',
               description: `Description ${i + 1}`,
               createdAt: `2023-04-${String(13 + i).padStart(2, '0')}T04:53:17.742+00:00`,
-              members: { edges: [] },
+              members: { id: 'members_conn', edges: [] },
               addressLine1: 'Test Address',
             })),
           },
@@ -1811,7 +1836,7 @@ describe('Advanced Component Functionality Tests', () => {
                 avatarURL: '',
                 description: 'Test',
                 createdAt: dayjs().subtract(1, 'year').toISOString(),
-                members: { edges: [] },
+                members: { id: 'members_conn', edges: [] },
                 addressLine1: 'Test Address',
               },
             ],
@@ -2556,7 +2581,7 @@ describe('Email Verification Actions Tests', () => {
 
     await waitFor(() => {
       expect(mockToast.success).toHaveBeenCalledWith(
-        'Verification email sent successfully!',
+        'Verification email has been resent successfully.',
         expect.anything(),
       );
     });

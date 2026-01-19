@@ -4,7 +4,7 @@
 
 # Interface: InterfaceChatMessagePg
 
-Defined in: [src/utils/interfaces.ts:831](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L831)
+Defined in: [src/utils/interfaces.ts:834](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L834)
 
 InterfaceChatMessagePg
 
@@ -18,7 +18,7 @@ Defines the structure for a chat message with PostgreSQL-specific fields.
 
 > **body**: `string`
 
-Defined in: [src/utils/interfaces.ts:833](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L833)
+Defined in: [src/utils/interfaces.ts:836](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L836)
 
 The body content of the chat message.
 
@@ -28,7 +28,7 @@ The body content of the chat message.
 
 > **chat**: [`InterfaceChatPg`](InterfaceChatPg.md)
 
-Defined in: [src/utils/interfaces.ts:834](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L834)
+Defined in: [src/utils/interfaces.ts:837](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L837)
 
 The chat associated with this message.
 
@@ -38,7 +38,7 @@ The chat associated with this message.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:835](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L835)
+Defined in: [src/utils/interfaces.ts:838](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L838)
 
 The creation date of the chat message.
 
@@ -48,7 +48,7 @@ The creation date of the chat message.
 
 > **creator**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:836](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L836)
+Defined in: [src/utils/interfaces.ts:839](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L839)
 
 The user who created this message.
 
@@ -58,7 +58,7 @@ The user who created this message.
 
 > **id**: `ID`
 
-Defined in: [src/utils/interfaces.ts:832](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L832)
+Defined in: [src/utils/interfaces.ts:835](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L835)
 
 The unique identifier of the chat message.
 
@@ -68,7 +68,7 @@ The unique identifier of the chat message.
 
 > **parentMessage**: `InterfaceChatMessagePg`
 
-Defined in: [src/utils/interfaces.ts:837](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L837)
+Defined in: [src/utils/interfaces.ts:840](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L840)
 
 The parent message if this is a reply.
 
@@ -78,6 +78,6 @@ The parent message if this is a reply.
 
 > **updatedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:838](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L838)
+Defined in: [src/utils/interfaces.ts:841](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L841)
 
 The last update date of the chat message.
