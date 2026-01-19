@@ -10856,6 +10856,11 @@ form {
   background-color: var(--row-hover-bg, #f0f0f0);
 }
 
+/* Error icon large size */
+.errorIconLarge {
+  font-size: 2rem;
+}
+
 /* Progress cell container */
 .progressCellContainer {
   display: flex;
