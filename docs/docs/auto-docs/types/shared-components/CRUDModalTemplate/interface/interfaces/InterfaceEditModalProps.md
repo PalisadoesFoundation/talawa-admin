@@ -4,7 +4,7 @@
 
 # Interface: InterfaceEditModalProps
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:168](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L168)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:167](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L167)
 
 Props for EditModal template
 
@@ -35,7 +35,7 @@ Whether to center the modal vertically on the page
 
 > **children**: `ReactNode`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:173](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L173)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:172](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L172)
 
 Form content to render inside the modal body
 Parent should pass form fields pre-populated with entity data
@@ -104,7 +104,7 @@ When true, displays a loading spinner and disables action buttons
 
 > `optional` **loadingData**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:185](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L185)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:184](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L184)
 
 Whether data is currently being loaded
 Shows a loading state while fetching entity data
@@ -134,7 +134,7 @@ Triggered by close button, backdrop click, or Escape key
 
 > **onSubmit**: (`event`) => `void` \| `Promise`\<`void`\>
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:179](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L179)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:178](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L178)
 
 Callback function invoked when the form is submitted
 Should handle the update logic and return a Promise
@@ -211,7 +211,7 @@ Modal size variant
 
 > `optional` **submitDisabled**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:191](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L191)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:190](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L190)
 
 Whether the submit button should be disabled
 Useful for dirty form checking
