@@ -38,7 +38,7 @@ import {
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 
 // Mock dependencies
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
