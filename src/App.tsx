@@ -54,9 +54,7 @@ const OrganizationFunds = lazy(
 );
 const OrganizationTransactions = lazy(
   () =>
-    import(
-      'screens/AdminPortal/OrganizationTransactions/OrganizationTransactions'
-    ),
+    import('screens/AdminPortal/OrganizationTransactions/OrganizationTransactions'),
 );
 const FundCampaignPledge = lazy(
   () => import('screens/AdminPortal/FundCampaignPledge/FundCampaignPledge'),

@@ -4,11 +4,7 @@
 
 # Interface: InterfaceUserInfoPG
 
-Defined in: [src/utils/interfaces.ts:1946](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1946)
-
-InterfaceUserInfoPG
-
-## Description
+Defined in: [src/utils/interfaces.ts:1364](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1364)
 
 Defines the structure for user information with PostgreSQL-specific fields.
 
@@ -18,7 +14,7 @@ Defines the structure for user information with PostgreSQL-specific fields.
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/utils/interfaces.ts:1951](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1951)
+Defined in: [src/utils/interfaces.ts:1369](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1369)
 
 ***
 
@@ -26,9 +22,7 @@ Defined in: [src/utils/interfaces.ts:1951](https://github.com/PalisadoesFoundati
 
 > `optional` **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:1947](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1947)
-
-The first name of the user.
+Defined in: [src/utils/interfaces.ts:1365](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1365)
 
 ***
 
@@ -36,9 +30,7 @@ The first name of the user.
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1950](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1950)
-
-The unique identifier of the user.
+Defined in: [src/utils/interfaces.ts:1368](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1368)
 
 ***
 
@@ -46,9 +38,7 @@ The unique identifier of the user.
 
 > `optional` **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:1948](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1948)
-
-The last name of the user.
+Defined in: [src/utils/interfaces.ts:1366](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1366)
 
 ***
 
@@ -56,6 +46,4 @@ The last name of the user.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1949](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1949)
-
-The full name of the user.
+Defined in: [src/utils/interfaces.ts:1367](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1367)
