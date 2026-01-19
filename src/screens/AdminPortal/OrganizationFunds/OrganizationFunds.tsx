@@ -6,6 +6,7 @@ import {
 } from '@mui/icons-material';
 import { Stack } from '@mui/material';
 import { type GridCellParams } from 'shared-components/DataGridWrapper';
+import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
@@ -28,7 +29,6 @@ import {
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import styles from './OrganizationFunds.module.css';
-import Button from 'shared-components/Button';
 
 const dataGridStyle = {
   ...baseDataGridStyle,

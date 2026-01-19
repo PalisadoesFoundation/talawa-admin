@@ -5,6 +5,7 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
 import { currencySymbols } from 'utils/currency';
@@ -23,7 +24,6 @@ import type {
 } from 'utils/interfaces';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { getPledgeColumns } from './PledgeColumns';
-import Button from 'shared-components/Button';
 
 enum ModalState {
   SAME = 'same',
