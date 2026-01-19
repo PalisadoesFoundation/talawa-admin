@@ -233,10 +233,10 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                 checked={formState.isTaxDeductible}
                 data-testid="setisTaxDeductibleSwitch"
                 onChange={() =>
-                  setFormState({
-                    ...formState,
-                    isTaxDeductible: !formState.isTaxDeductible,
-                  })
+                  setFormState((prev) => ({
+                    ...prev,
+                    isTaxDeductible: !prev.isTaxDeductible,
+                  }))
                 }
               />
             </div>
@@ -252,10 +252,10 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                 checked={formState.isDefault}
                 data-testid="setDefaultSwitch"
                 onChange={() =>
-                  setFormState({
-                    ...formState,
-                    isDefault: !formState.isDefault,
-                  })
+                  setFormState((prev) => ({
+                    ...prev,
+                    isDefault: !prev.isDefault,
+                  }))
                 }
               />
             </div>
@@ -272,10 +272,10 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                   checked={formState.isArchived}
                   data-testid="archivedSwitch"
                   onChange={() =>
-                    setFormState({
-                      ...formState,
-                      isArchived: !formState.isArchived,
-                    })
+                    setFormState((prev) => ({
+                      ...prev,
+                      isArchived: !prev.isArchived,
+                    }))
                   }
                 />
               </div>
