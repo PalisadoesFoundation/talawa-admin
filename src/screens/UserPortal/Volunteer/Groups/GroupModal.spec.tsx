@@ -819,10 +819,6 @@ describe('Testing GroupModal', () => {
   });
 
   describe('Testing GroupModal - Additional Coverage', () => {
-    afterEach(() => {
-      vi.clearAllMocks();
-    });
-
     it('should prevent form submission when name is empty after being touched', async () => {
       renderGroupModal(link1, itemProps[0]);
 

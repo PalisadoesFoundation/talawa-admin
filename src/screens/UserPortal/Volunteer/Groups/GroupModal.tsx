@@ -53,7 +53,7 @@ import type { InterfaceGroupModalProps } from 'types/UserPortal/GroupModal/inter
  * - An input field for entering the number of volunteers required.
  * - A submit button to update the group.
  * On form submission, the component calls `updateVolunteerGroup` to update the existing group.
- * - Calls `updateVolunteerGroup` mutation to update an existing group, or
+ * - Calls `updateVolunteerGroup` mutation to update an existing group.
  *
  * Success or error messages are displayed using toast notifications based on the result of the mutation.
  */
@@ -195,7 +195,7 @@ const GroupModal: React.FC<InterfaceGroupModalProps> = ({
       formState,
       group,
       volunteersRequiredError,
-      nameError,
+      isNameEmpty,
       updateVolunteerGroup,
       refetchGroups,
       hide,
