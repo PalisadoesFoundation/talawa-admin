@@ -14,8 +14,11 @@ import { EventStats } from './Statistics/EventStats';
 import Button from 'shared-components/Button/Button';
 import IconComponent from 'components/IconComponent/IconComponent';
 import styles from 'style/app-fixed.module.css';
+import type { InterfaceEventStatsWrapperProps } from 'types/Event/EventStatsWrapper/interface';
 
-export const EventStatsWrapper = ({ _id }: { _id: string }): JSX.Element => {
+export const EventStatsWrapper = ({
+  _id,
+}: InterfaceEventStatsWrapperProps): JSX.Element => {
   // State to control the visibility of the EventStats component
   const [showModal, setShowModal] = useState(false);
   const { t } = useTranslation('common');
