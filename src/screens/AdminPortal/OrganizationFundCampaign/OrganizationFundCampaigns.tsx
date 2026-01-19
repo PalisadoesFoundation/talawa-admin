@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client';
 import { Campaign, Search, WarningAmberRounded } from '@mui/icons-material';
 import { Typography, Box, CircularProgress } from '@mui/material';
 import { type GridCellParams } from 'shared-components/DataGridWrapper';
+import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -24,8 +25,7 @@ import {
 import { PAGE_SIZE, ROW_HEIGHT } from 'types/ReportingTable/utils';
 import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/BreadcrumbsComponent';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
-import styles from './OrganizationFundCampaigns.module.css';
-import Button from 'shared-components/Button';
+import styles from './OrganizationFundCampaign.module.css';
 
 const dataGridStyle = {
   borderRadius: 'var(--table-head-radius)',
