@@ -63,10 +63,12 @@ import {
   NotificationToastContainer,
 } from './NotificationToast';
 
+// Clear mocks after each test for isolation across all describe blocks
+afterEach(() => {
+  vi.clearAllMocks();
+});
+
 describe('NotificationToast', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
 
   it('calls toast.success with defaults for a string message', () => {
     const id = NotificationToast.success('Saved');
