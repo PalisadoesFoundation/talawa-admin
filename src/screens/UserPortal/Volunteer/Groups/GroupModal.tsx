@@ -33,7 +33,7 @@ import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import type { InterfaceGroupModalProps } from 'types/UserPortal/GroupModal/interface';
 
 /**
- * A modal dialog for creating or editing a volunteer group.
+ * A modal dialog for editing a volunteer group.
  *
  * @param isOpen - Indicates whether the modal is open.
  * @param hide - Function to close the modal.
@@ -52,7 +52,7 @@ import type { InterfaceGroupModalProps } from 'types/UserPortal/GroupModal/inter
  * - A textarea for entering the group description.
  * - An input field for entering the number of volunteers required.
  * - A submit button to update the group.
- * On form submission, the component either:
+ * On form submission, the component calls `updateVolunteerGroup` to update the existing group.
  * - Calls `updateVolunteerGroup` mutation to update an existing group, or
  *
  * Success or error messages are displayed using toast notifications based on the result of the mutation.
@@ -89,8 +89,9 @@ const GroupModal: React.FC<InterfaceGroupModalProps> = ({
   });
 
   const { name, description, volunteersRequired } = formState;
-  const isNameInvalid = touched.name && !formState.name.trim();
-  const nameError = isNameInvalid ? tCommon('nameRequired') : undefined;
+  const isNameEmpty = !name.trim();
+  const showNameError = touched.name && isNameEmpty;
+  const nameError = showNameError ? tCommon('nameRequired') : undefined;
 
   const [updateVolunteerGroup] = useMutation(UPDATE_VOLUNTEER_GROUP);
   const [updateMembership] = useMutation(UPDATE_VOLUNTEER_MEMBERSHIP);
@@ -155,7 +156,10 @@ const GroupModal: React.FC<InterfaceGroupModalProps> = ({
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
 
-      if (volunteersRequiredError || nameError) {
+      if (volunteersRequiredError || isNameEmpty) {
+        if (isNameEmpty) {
+          setTouched((prev) => ({ ...prev, name: true }));
+        }
         return;
       }
 
@@ -187,7 +191,17 @@ const GroupModal: React.FC<InterfaceGroupModalProps> = ({
         NotificationToast.error((error as Error).message);
       }
     },
-    [formState, group, volunteersRequiredError, nameError],
+    [
+      formState,
+      group,
+      volunteersRequiredError,
+      nameError,
+      updateVolunteerGroup,
+      refetchGroups,
+      hide,
+      eventId,
+      t,
+    ],
   );
 
   return (
@@ -326,7 +340,7 @@ const GroupModal: React.FC<InterfaceGroupModalProps> = ({
             type="submit"
             className={styles.regBtn}
             data-testid="submitBtn"
-            disabled={volunteersRequiredError || isNameInvalid}
+            disabled={volunteersRequiredError || isNameEmpty}
           >
             {t('updateGroup')}
           </Button>

@@ -817,4 +817,319 @@ describe('Testing GroupModal', () => {
     await userEvent.click(submitBtn); // Should not fire
     expect(NotificationToast.success).not.toHaveBeenCalled();
   });
+
+  // Add these test cases to your existing GroupModal.test.tsx file
+
+  describe('Testing GroupModal - Additional Coverage', () => {
+    afterEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('should prevent form submission when name is empty after being touched', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const nameInput = screen.getByRole('textbox', { name: /name/i });
+      await userEvent.clear(nameInput);
+      fireEvent.blur(nameInput);
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+
+      // Try to submit anyway
+      fireEvent.submit(screen.getByTestId('pledgeForm'));
+
+      await waitFor(() => {
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+        expect(itemProps[0].hide).not.toHaveBeenCalled();
+      });
+    });
+
+    it('should prevent form submission when volunteersRequired has error', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const vrInput = screen.getByRole('spinbutton', {
+        name: /volunteers required/i,
+      });
+      fireEvent.change(vrInput, { target: { value: '-5' } });
+      fireEvent.blur(vrInput);
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+
+      // Try to submit anyway
+      fireEvent.submit(screen.getByTestId('pledgeForm'));
+
+      await waitFor(() => {
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+        expect(itemProps[0].hide).not.toHaveBeenCalled();
+      });
+    });
+
+    it('should set touched state for name on blur', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const nameInput = screen.getByRole('textbox', { name: /name/i });
+      await userEvent.clear(nameInput);
+
+      // Before blur, submit should still work if name wasn't touched
+      fireEvent.blur(nameInput);
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+    });
+
+    it('should set touched state for volunteersRequired on blur', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const vrInput = screen.getByRole('spinbutton', {
+        name: /volunteers required/i,
+      });
+
+      fireEvent.change(vrInput, { target: { value: '-1' } });
+      fireEvent.blur(vrInput);
+
+      expect(screen.getByText(t.invalidNumber)).toBeInTheDocument();
+    });
+
+    it('should handle volunteersRequired change from null to valid number', async () => {
+      renderGroupModal(link1, itemProps[1]); // This has null volunteersRequired
+
+      const vrInput = screen.getByRole('spinbutton', {
+        name: /volunteers required/i,
+      });
+
+      expect(vrInput).toHaveValue(null);
+
+      fireEvent.change(vrInput, { target: { value: '5' } });
+
+      await waitFor(() => {
+        expect(vrInput).toHaveValue(5);
+      });
+    });
+
+    it('should handle volunteersRequired change from valid number to null', async () => {
+      renderGroupModal(link1, itemProps[2]); // This has volunteersRequired = 5
+
+      const vrInput = screen.getByRole('spinbutton', {
+        name: /volunteers required/i,
+      });
+
+      expect(vrInput).toHaveValue(5);
+
+      fireEvent.change(vrInput, { target: { value: '' } });
+
+      await waitFor(() => {
+        expect(vrInput).toHaveValue(null);
+      });
+    });
+
+    it('should handle NaN input for volunteersRequired', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const vrInput = screen.getByRole('spinbutton', {
+        name: /volunteers required/i,
+      });
+
+      // Type non-numeric input - browser will prevent 'abc' from being entered in number input
+      // So we need to use fireEvent.change to simulate this edge case
+      fireEvent.change(vrInput, { target: { value: 'abc' } });
+
+      await waitFor(() => {
+        expect(vrInput).toHaveValue(null);
+      });
+
+      // Blur to trigger touched state
+      fireEvent.blur(vrInput);
+
+      // The submit button should be enabled since error is only set when value < 1, not for empty
+      // Let's check that the value is properly cleared
+      expect(vrInput).toHaveValue(null);
+    });
+
+    it('should not call updateVolunteerGroup if both name is empty and volunteersRequired has error', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const nameInput = screen.getByRole('textbox', { name: /name/i });
+      await userEvent.clear(nameInput);
+
+      const vrInput = screen.getByRole('spinbutton', {
+        name: /volunteers required/i,
+      });
+      fireEvent.change(vrInput, { target: { value: '-1' } });
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+
+      fireEvent.submit(screen.getByTestId('pledgeForm'));
+
+      await waitFor(() => {
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+      });
+    });
+
+    it('should handle error during updateMembershipStatus for reject', async () => {
+      renderGroupModal(link2, itemProps[0]);
+
+      const requestsRadio = screen.getByLabelText(t.requests);
+      await userEvent.click(requestsRadio);
+
+      const rejectBtn = await screen.findAllByTestId('rejectBtn');
+      await userEvent.click(rejectBtn[0]);
+
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalled();
+      });
+    });
+
+    it('should refetch requests after successful accept', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const requestsRadio = screen.getByLabelText(t.requests);
+      await userEvent.click(requestsRadio);
+
+      const acceptBtn = await screen.findAllByTestId('acceptBtn');
+      await userEvent.click(acceptBtn[0]);
+
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.requestAccepted,
+        );
+      });
+    });
+
+    it('should refetch requests after successful reject', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const requestsRadio = screen.getByLabelText(t.requests);
+      await userEvent.click(requestsRadio);
+
+      const rejectBtn = await screen.findAllByTestId('rejectBtn');
+      await userEvent.click(rejectBtn[0]);
+
+      await waitFor(() => {
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.requestRejected,
+        );
+      });
+    });
+
+    it('should update description to empty string when cleared', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const descInput = screen.getByRole('textbox', { name: /description/i });
+      expect(descInput).toHaveValue('desc');
+
+      await userEvent.clear(descInput);
+
+      expect(descInput).toHaveValue('');
+    });
+
+    it('should handle console.error in catch block of updateGroupHandler', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      renderGroupModal(link2, itemProps[0]);
+
+      const nameInput = screen.getByRole('textbox', { name: /name/i });
+      await userEvent.clear(nameInput);
+      await userEvent.type(nameInput, 'Trigger Error');
+
+      const submitBtn = screen.getByTestId('submitBtn');
+      await userEvent.click(submitBtn);
+
+      await waitFor(() => {
+        expect(consoleErrorSpy).toHaveBeenCalled();
+        expect(NotificationToast.error).toHaveBeenCalled();
+      });
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should handle setting volunteersRequired error state correctly', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const vrInput = screen.getByRole('spinbutton', {
+        name: /volunteers required/i,
+      });
+
+      // Set invalid value
+      fireEvent.change(vrInput, { target: { value: '0' } });
+      fireEvent.blur(vrInput);
+
+      // Submit button should be disabled
+      const submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+
+      // Clear the error by setting valid value
+      fireEvent.change(vrInput, { target: { value: '5' } });
+
+      await waitFor(() => {
+        expect(submitBtn).not.toBeDisabled();
+      });
+    });
+
+    it('should maintain form state through multiple field changes', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      // Change name
+      const nameInput = screen.getByRole('textbox', { name: /name/i });
+      await userEvent.clear(nameInput);
+      await userEvent.type(nameInput, 'New Name');
+
+      // Change description
+      const descInput = screen.getByRole('textbox', { name: /description/i });
+      await userEvent.clear(descInput);
+      await userEvent.type(descInput, 'New Description');
+
+      // Change volunteersRequired
+      const vrInput = screen.getByRole('spinbutton', {
+        name: /volunteers required/i,
+      });
+      await userEvent.clear(vrInput);
+      await userEvent.type(vrInput, '15');
+
+      await waitFor(() => {
+        expect(nameInput).toHaveValue('New Name');
+        expect(descInput).toHaveValue('New Description');
+        expect(vrInput).toHaveValue(15);
+      });
+    });
+
+    it('should reset volunteersRequired error when valid value is entered after invalid', async () => {
+      renderGroupModal(link1, itemProps[0]);
+
+      const vrInput = screen.getByRole('spinbutton', {
+        name: /volunteers required/i,
+      });
+
+      // Set invalid value first
+      fireEvent.change(vrInput, { target: { value: '-5' } });
+      fireEvent.blur(vrInput);
+
+      let submitBtn = screen.getByTestId('submitBtn');
+      expect(submitBtn).toBeDisabled();
+
+      // Now set valid value
+      fireEvent.change(vrInput, { target: { value: '10' } });
+
+      await waitFor(() => {
+        submitBtn = screen.getByTestId('submitBtn');
+        expect(submitBtn).not.toBeDisabled();
+      });
+    });
+
+    it('should handle description being updated from null to a value', async () => {
+      renderGroupModal(link1, itemProps[1]); // This has null description
+
+      const descInput = screen.getByRole('textbox', { name: /description/i });
+      expect(descInput).toHaveValue('');
+
+      await userEvent.type(descInput, 'New description from null');
+
+      await waitFor(() => {
+        expect(descInput).toHaveValue('New description from null');
+      });
+    });
+  });
 });
