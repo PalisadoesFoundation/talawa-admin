@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: AppUserProfile
 
@@ -16,7 +16,7 @@ Defined in: [src/types/shared-components/User/type.ts:43](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L44)
 
-***
+---
 
 ### adminFor
 
@@ -24,7 +24,7 @@ Defined in: [src/types/shared-components/User/type.ts:44](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L45)
 
-***
+---
 
 ### appLanguageCode
 
@@ -32,7 +32,7 @@ Defined in: [src/types/shared-components/User/type.ts:45](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L46)
 
-***
+---
 
 ### createdEvents
 
@@ -40,7 +40,7 @@ Defined in: [src/types/shared-components/User/type.ts:46](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L47)
 
-***
+---
 
 ### createdOrganizations
 
@@ -48,7 +48,7 @@ Defined in: [src/types/shared-components/User/type.ts:47](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L48)
 
-***
+---
 
 ### eventAdmin
 
@@ -56,7 +56,7 @@ Defined in: [src/types/shared-components/User/type.ts:48](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L49)
 
-***
+---
 
 ### isSuperAdmin
 
@@ -64,7 +64,7 @@ Defined in: [src/types/shared-components/User/type.ts:49](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L50)
 
-***
+---
 
 ### userId
 

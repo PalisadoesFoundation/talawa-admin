@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: EventVolunteer
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Event/type.ts:83](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L88)
 
-***
+---
 
 ### creator?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Event/type.ts:88](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L92)
 
-***
+---
 
 ### event?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Event/type.ts:92](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L91)
 
-***
+---
 
 ### hasAccepted
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Event/type.ts:91](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L85)
 
-***
+---
 
 ### hoursVolunteered
 
@@ -48,7 +48,7 @@ Defined in: [src/types/Event/type.ts:85](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L86)
 
-***
+---
 
 ### id
 
@@ -56,7 +56,7 @@ Defined in: [src/types/Event/type.ts:86](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:84](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L84)
 
-***
+---
 
 ### isPublic
 
@@ -64,7 +64,7 @@ Defined in: [src/types/Event/type.ts:84](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L87)
 
-***
+---
 
 ### updatedAt
 
@@ -72,7 +72,7 @@ Defined in: [src/types/Event/type.ts:87](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L89)
 
-***
+---
 
 ### updater?
 
@@ -80,7 +80,7 @@ Defined in: [src/types/Event/type.ts:89](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L93)
 
-***
+---
 
 ### user
 

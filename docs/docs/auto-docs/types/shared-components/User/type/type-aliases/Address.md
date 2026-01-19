@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: Address
 
@@ -16,7 +16,7 @@ Defined in: [src/types/shared-components/User/type.ts:17](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L18)
 
-***
+---
 
 ### countryCode?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/shared-components/User/type.ts:18](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L19)
 
-***
+---
 
 ### dependentLocality?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/shared-components/User/type.ts:19](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L20)
 
-***
+---
 
 ### line1?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/shared-components/User/type.ts:20](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L21)
 
-***
+---
 
 ### line2?
 
@@ -48,7 +48,7 @@ Defined in: [src/types/shared-components/User/type.ts:21](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L22)
 
-***
+---
 
 ### postalCode?
 
@@ -56,7 +56,7 @@ Defined in: [src/types/shared-components/User/type.ts:22](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L23)
 
-***
+---
 
 ### sortingCode?
 
@@ -64,7 +64,7 @@ Defined in: [src/types/shared-components/User/type.ts:23](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L24)
 
-***
+---
 
 ### state?
 

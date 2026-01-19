@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePinnedPostCardProps
 
@@ -18,7 +18,7 @@ Defined in: [src/types/Post/interface.ts:115](https://github.com/PalisadoesFound
 
 `void`
 
-***
+---
 
 ### onStoryClick()
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Post/interface.ts:114](https://github.com/PalisadoesFound
 
 `void`
 
-***
+---
 
 ### pinnedPost
 

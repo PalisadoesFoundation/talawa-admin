@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: CREATE\_COMMENT\_POST
+# Variable: CREATE_COMMENT_POST
 
-> `const` **CREATE\_COMMENT\_POST**: `DocumentNode`
+> `const` **CREATE_COMMENT_POST**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/CommentMutations.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/CommentMutations.ts#L11)
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceUserDropdownProps
 
@@ -18,7 +18,7 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:205](https://github.
 
 Direction for dropdown menu
 
-***
+---
 
 ### finalUserName
 
@@ -28,7 +28,7 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:207](https://github.
 
 User display name
 
-***
+---
 
 ### handleLogout()
 
@@ -42,7 +42,7 @@ Handler called when logout is clicked
 
 `void`
 
-***
+---
 
 ### navigate
 
@@ -52,7 +52,7 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:208](https://github.
 
 React Router navigate function
 
-***
+---
 
 ### PermIdentityIcon
 
@@ -62,7 +62,7 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:211](https://github.
 
 Material-UI person icon component
 
-***
+---
 
 ### showUserProfile
 
@@ -72,7 +72,7 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:203](https://github.
 
 Whether to display the user profile dropdown
 
-***
+---
 
 ### styles
 
@@ -82,7 +82,7 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:210](https://github.
 
 CSS module classes object
 
-***
+---
 
 ### tCommon
 
@@ -92,7 +92,7 @@ Defined in: [src/types/UserPortalNavigationBar/interface.ts:209](https://github.
 
 i18next translation function
 
-***
+---
 
 ### testIdPrefix
 

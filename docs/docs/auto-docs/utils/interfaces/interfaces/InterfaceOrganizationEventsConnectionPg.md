@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrganizationEventsConnectionPg
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:945](https://github.com/PalisadoesFoundatio
 
 An array of edges, where each edge contains a cursor and an event node.
 
-***
+---
 
 ### pageInfo
 

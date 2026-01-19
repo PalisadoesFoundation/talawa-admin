@@ -6,7 +6,7 @@
 const requireAfterEachCleanup = require('./require-aftereach-cleanup');
 
 module.exports = {
-    rules: {
-        'require-aftereach-cleanup': requireAfterEachCleanup,
-    },
+  rules: {
+    'require-aftereach-cleanup': requireAfterEachCleanup,
+  },
 };

@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: RECURRING\_EVENT\_DETAILS\_MOCK
+# Variable: RECURRING_EVENT_DETAILS_MOCK
 
-> `const` **RECURRING\_EVENT\_DETAILS\_MOCK**: `MockedResponse`
+> `const` **RECURRING_EVENT_DETAILS_MOCK**: `MockedResponse`
 
 Defined in: [src/components/AdminPortal/EventManagement/EventRegistrant/Registrations.mocks.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/EventRegistrant/Registrations.mocks.ts#L29)

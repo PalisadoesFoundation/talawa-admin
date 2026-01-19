@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IMember
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Event/interface.ts:18](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L26)
 
-***
+---
 
 ### createdAt
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Event/interface.ts:26](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L19)
 
-***
+---
 
 ### emailAddress
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Event/interface.ts:19](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L21)
 
-***
+---
 
 ### eventsAttended?
 
@@ -42,7 +42,7 @@ Defined in: [src/types/Event/interface.ts:23](https://github.com/PalisadoesFound
 
 > **id**: `string`
 
-***
+---
 
 ### id
 
@@ -50,7 +50,7 @@ Defined in: [src/types/Event/interface.ts:23](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L28)
 
-***
+---
 
 ### name
 
@@ -58,7 +58,7 @@ Defined in: [src/types/Event/interface.ts:28](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L20)
 
-***
+---
 
 ### natalSex
 
@@ -66,7 +66,7 @@ Defined in: [src/types/Event/interface.ts:20](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L22)
 
-***
+---
 
 ### role
 
@@ -74,7 +74,7 @@ Defined in: [src/types/Event/interface.ts:22](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Event/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L27)
 
-***
+---
 
 ### tagsAssignedWith
 

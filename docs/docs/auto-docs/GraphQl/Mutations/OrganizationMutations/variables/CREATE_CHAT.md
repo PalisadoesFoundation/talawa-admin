@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: CREATE\_CHAT
+# Variable: CREATE_CHAT
 
-> `const` **CREATE\_CHAT**: `DocumentNode`
+> `const` **CREATE_CHAT**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L69)
 

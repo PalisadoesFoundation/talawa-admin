@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceUserInfoPG
 
@@ -20,7 +20,7 @@ Defines the structure for user information with PostgreSQL-specific fields.
 
 Defined in: [src/utils/interfaces.ts:1951](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1951)
 
-***
+---
 
 ### firstName?
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/interfaces.ts:1947](https://github.com/PalisadoesFoundati
 
 The first name of the user.
 
-***
+---
 
 ### id
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:1950](https://github.com/PalisadoesFoundati
 
 The unique identifier of the user.
 
-***
+---
 
 ### lastName?
 
@@ -50,7 +50,7 @@ Defined in: [src/utils/interfaces.ts:1948](https://github.com/PalisadoesFoundati
 
 The last name of the user.
 
-***
+---
 
 ### name
 

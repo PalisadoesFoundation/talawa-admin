@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceAvatarProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/shared-components/Avatar/interface.ts:1](https://github.c
 
 Defined in: [src/types/shared-components/Avatar/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Avatar/interface.ts#L3)
 
-***
+---
 
 ### avatarStyle?
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/Avatar/interface.ts:3](https://github.c
 
 Defined in: [src/types/shared-components/Avatar/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Avatar/interface.ts#L6)
 
-***
+---
 
 ### containerStyle?
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/Avatar/interface.ts:6](https://github.c
 
 Defined in: [src/types/shared-components/Avatar/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Avatar/interface.ts#L5)
 
-***
+---
 
 ### dataTestId?
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/Avatar/interface.ts:5](https://github.c
 
 Defined in: [src/types/shared-components/Avatar/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Avatar/interface.ts#L7)
 
-***
+---
 
 ### name?
 
@@ -46,7 +46,7 @@ Defined in: [src/types/shared-components/Avatar/interface.ts:7](https://github.c
 
 Defined in: [src/types/shared-components/Avatar/interface.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Avatar/interface.ts#L2)
 
-***
+---
 
 ### radius?
 
@@ -54,7 +54,7 @@ Defined in: [src/types/shared-components/Avatar/interface.ts:2](https://github.c
 
 Defined in: [src/types/shared-components/Avatar/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Avatar/interface.ts#L8)
 
-***
+---
 
 ### size?
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceCreateVolunteerGroupData
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Volunteer/interface.ts:330](https://github.com/Palisadoes
 
 The description of the volunteer group (optional).
 
-***
+---
 
 ### eventId
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Volunteer/interface.ts:327](https://github.com/Palisadoes
 
 The event ID.
 
-***
+---
 
 ### leaderId?
 
@@ -42,7 +42,7 @@ Defined in: [src/types/Volunteer/interface.ts:328](https://github.com/Palisadoes
 
 The ID of the group leader (optional).
 
-***
+---
 
 ### name
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Volunteer/interface.ts:329](https://github.com/Palisadoes
 
 The name of the volunteer group.
 
-***
+---
 
 ### recurringEventInstanceId?
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Volunteer/interface.ts:334](https://github.com/Palisadoes
 
 Optional instance ID for recurring events.
 
-***
+---
 
 ### scope?
 
@@ -72,7 +72,7 @@ Defined in: [src/types/Volunteer/interface.ts:333](https://github.com/Palisadoes
 
 Optional scope for recurring events.
 
-***
+---
 
 ### volunteersRequired?
 
@@ -82,7 +82,7 @@ Defined in: [src/types/Volunteer/interface.ts:331](https://github.com/Palisadoes
 
 Number of volunteers required (optional).
 
-***
+---
 
 ### volunteerUserIds
 

@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: ERROR\_MOCKS
+# Variable: ERROR_MOCKS
 
-> `const` **ERROR\_MOCKS**: `object`[]
+> `const` **ERROR_MOCKS**: `object`[]
 
 Defined in: [src/screens/AdminPortal/Leaderboard/Leaderboard.mocks.ts:191](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/Leaderboard/Leaderboard.mocks.ts#L191)
 

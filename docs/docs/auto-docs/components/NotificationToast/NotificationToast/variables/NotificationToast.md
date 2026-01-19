@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Variable: NotificationToast
 
@@ -29,8 +29,8 @@ NotificationToast.dismiss(); // Dismiss all active toasts
 
 ```ts
 Notification.promise(promisifiedFunction, {
- pending: 'pending message',
- success: 'success message',
- error: 'error message'
+  pending: 'pending message',
+  success: 'success message',
+  error: 'error message',
 });
 ```

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Function: areOptionsEqual()
 
@@ -35,8 +35,8 @@ True if both options refer to the same user
 
 ```ts
 areOptionsEqual(
-{ id: '1' } as InterfaceUserInfoPG,
-{ id: '1' } as InterfaceUserInfoPG,
+  { id: '1' } as InterfaceUserInfoPG,
+  { id: '1' } as InterfaceUserInfoPG,
 );
 // returns true
 ```

@@ -81,12 +81,10 @@ The `Name` of property provided to any of the below variables should the exactly
 ```
 
 1. `child`
-
    - Type `Widget?`
    - It can be any flutter UI widget like `Container()`, `Text()`, `Row()`,etc. For example if your features is encapsulated within an `Container()` widget then wrap that widget into the `TalawaPluginProvider` .
 
 2. `visible`
-
    - Type `Boolean`
    - True if plugin is Installed and plugin will be visible, Otherwise false hence plugin is hidden.
 
@@ -103,7 +101,6 @@ The `Name` of property provided to any of the below variables should the exactly
 </u>
 
 4. `serverVisible`
-
    - Type `Boolean`
    - True will make all plugins visible if set to `true` otherwise `false` won't change anything.
    - This property is accessible for the developers only as it can be only set during development phase. We can see that it is defined in build method of the widget.

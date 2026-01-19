@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: DateOrNull
 
@@ -24,5 +24,5 @@ const [range, setRange] = useState<IDateRangeValue>({
   endDate: null,
 });
 
-<DateRangePicker value={range} onChange={setRange} />
+<DateRangePicker value={range} onChange={setRange} />;
 ```

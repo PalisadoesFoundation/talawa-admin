@@ -17,6 +17,7 @@ Before running Cypress tests, ensure you have the following setup:
 2. Please follow the complete installation guide at: https://github.com/PalisadoesFoundation/talawa-api/blob/develop/INSTALLATION.md
 
 ### Application Server
+
 Ensure your local development server is running on `http://localhost:4321`.
 
 ## Directory Structure
@@ -50,7 +51,7 @@ Follow these steps to run end to end tests
 
 ```bash
 
-# Open Cypress Test Runner (Interactive Mode) 
+# Open Cypress Test Runner (Interactive Mode)
 # Preferred for Debugging
 
 pnpm run cy:open
@@ -99,7 +100,7 @@ import { LoginPage } from '../pageObjects/auth/LoginPage';
 const loginPage = new LoginPage();
 
 it('should login successfully', () => {
-  loginPage.verifyLoginPage().login(userData.email, userData.password);;
+  loginPage.verifyLoginPage().login(userData.email, userData.password);
 });
 ```
 
@@ -123,11 +124,13 @@ cy.fixture('users').then((users) => {
 After running your Cypress tests, you can generate detailed HTML coverage reports to analyze code coverage:
 
 1. **Run Cypress tests** to collect coverage data:
+
    ```bash
    pnpm run cy:run
    ```
 
 2. **Generate HTML coverage report** using nyc:
+
    ```bash
    npx nyc --reporter=html
    ```

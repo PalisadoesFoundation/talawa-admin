@@ -34,18 +34,21 @@ For security guidelines regarding token handling and authentication, please refe
 ### Quick Reference
 
 **Testing:**
+
 - Run all tests: `pnpm run test`
 - Run specific test: `pnpm run test /path/to/test/file`
 - Run with coverage: `pnpm run test:coverage`
 - Run with sharding: `pnpm run test:shard`
 
 **Linting and Formatting:**
+
 - Fix linting issues: `pnpm run lint:fix`
 - Fix formatting issues: `pnpm run format:fix`
 - Check linting: `pnpm run lint:check`
 - Check formatting: `pnpm run format:check`
 
 **Cypress E2E Testing:**
+
 - See the [Cypress Guide](cypress/README.md) for end-to-end testing
 
 For complete documentation including test sharding, code coverage setup, debugging, and git hooks, visit the [Testing Guide](docs/docs/docs/developer-resources/testing.md).
@@ -63,7 +66,7 @@ describe('YourComponent', () => {
   afterEach(() => {
     vi.restoreAllMocks(); // or vi.clearAllMocks()
   });
-  
+
   // Your tests here
 });
 ```
@@ -91,6 +94,7 @@ pnpm run lint:check
 ### Common Violations and Fixes
 
 **Missing cleanup:**
+
 ```typescript
 // Bad - no cleanup
 describe('Test', () => {
@@ -101,13 +105,14 @@ describe('Test', () => {
 ```
 
 **Correct pattern:**
+
 ```typescript
 // Good - has cleanup
 describe('Test', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
-  
+
   it('test', () => {
     const mock = vi.fn();
   });
@@ -115,6 +120,7 @@ describe('Test', () => {
 ```
 
 **Window/Timer manipulation without cleanup:**
+
 ```typescript
 // Bad - modifies global state
 it('test', () => {
@@ -124,11 +130,12 @@ it('test', () => {
 ```
 
 **Correct pattern:**
+
 ```typescript
-// Good - restores global state  
+// Good - restores global state
 describe('Test', () => {
   const originalLocation = window.location;
-  
+
   afterEach(() => {
     window.location = originalLocation;
     vi.clearAllTimers();
@@ -145,7 +152,7 @@ describe('Test', () => {
 
 For comprehensive guidance, see the [Testing Guide](docs/docs/docs/developer-resources/testing.md#test-isolation-and-mock-cleanup).
 
-## Making Contributions   
+## Making Contributions
 
 1. After making changes you can add them to git locally using `git add <file_name>`(to add changes only in a particular file) or `git add .` (to add all changes).
 1. After adding the changes you need to commit them using `git commit -m '<commit message>'`(look at the commit guidelines below for commit messages).

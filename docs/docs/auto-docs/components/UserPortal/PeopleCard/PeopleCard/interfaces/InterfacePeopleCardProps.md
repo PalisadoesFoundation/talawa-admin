@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePeopleCardProps
 
@@ -14,7 +14,7 @@ Defined in: [src/components/UserPortal/PeopleCard/PeopleCard.tsx:40](https://git
 
 Defined in: [src/components/UserPortal/PeopleCard/PeopleCard.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PeopleCard/PeopleCard.tsx#L44)
 
-***
+---
 
 ### id
 
@@ -22,7 +22,7 @@ Defined in: [src/components/UserPortal/PeopleCard/PeopleCard.tsx:44](https://git
 
 Defined in: [src/components/UserPortal/PeopleCard/PeopleCard.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PeopleCard/PeopleCard.tsx#L41)
 
-***
+---
 
 ### image
 
@@ -30,7 +30,7 @@ Defined in: [src/components/UserPortal/PeopleCard/PeopleCard.tsx:41](https://git
 
 Defined in: [src/components/UserPortal/PeopleCard/PeopleCard.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PeopleCard/PeopleCard.tsx#L43)
 
-***
+---
 
 ### name
 
@@ -38,7 +38,7 @@ Defined in: [src/components/UserPortal/PeopleCard/PeopleCard.tsx:43](https://git
 
 Defined in: [src/components/UserPortal/PeopleCard/PeopleCard.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PeopleCard/PeopleCard.tsx#L42)
 
-***
+---
 
 ### role
 
@@ -46,7 +46,7 @@ Defined in: [src/components/UserPortal/PeopleCard/PeopleCard.tsx:42](https://git
 
 Defined in: [src/components/UserPortal/PeopleCard/PeopleCard.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PeopleCard/PeopleCard.tsx#L45)
 
-***
+---
 
 ### sno
 

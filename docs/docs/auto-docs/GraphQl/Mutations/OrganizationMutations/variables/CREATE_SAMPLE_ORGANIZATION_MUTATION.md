@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: CREATE\_SAMPLE\_ORGANIZATION\_MUTATION
+# Variable: CREATE_SAMPLE_ORGANIZATION_MUTATION
 
-> `const` **CREATE\_SAMPLE\_ORGANIZATION\_MUTATION**: `DocumentNode`
+> `const` **CREATE_SAMPLE_ORGANIZATION_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L43)
 

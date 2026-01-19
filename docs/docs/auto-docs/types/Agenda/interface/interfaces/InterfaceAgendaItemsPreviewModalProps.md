@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceAgendaItemsPreviewModalProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Agenda/interface.ts:49](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Agenda/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L50)
 
-***
+---
 
 ### formState
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Agenda/interface.ts:50](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Agenda/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L54)
 
-***
+---
 
 ### hidePreviewModal()
 
@@ -34,7 +34,7 @@ Defined in: [src/types/Agenda/interface.ts:51](https://github.com/PalisadoesFoun
 
 `void`
 
-***
+---
 
 ### showUpdateModal()
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Agenda/interface.ts:52](https://github.com/PalisadoesFoun
 
 `void`
 
-***
+---
 
 ### t()
 
@@ -64,7 +64,7 @@ Defined in: [src/types/Agenda/interface.ts:55](https://github.com/PalisadoesFoun
 
 `string`
 
-***
+---
 
 ### toggleDeleteModal()
 

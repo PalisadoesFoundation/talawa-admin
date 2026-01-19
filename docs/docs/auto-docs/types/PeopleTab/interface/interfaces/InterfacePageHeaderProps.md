@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePageHeaderProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/PeopleTab/interface.ts:4](https://github.com/PalisadoesFo
 
 Defined in: [src/types/PeopleTab/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L21)
 
-***
+---
 
 ### search?
 
@@ -48,7 +48,7 @@ Defined in: [src/types/PeopleTab/interface.ts:6](https://github.com/PalisadoesFo
 
 > **placeholder**: `string`
 
-***
+---
 
 ### showEventTypeFilter?
 
@@ -56,7 +56,7 @@ Defined in: [src/types/PeopleTab/interface.ts:6](https://github.com/PalisadoesFo
 
 Defined in: [src/types/PeopleTab/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L20)
 
-***
+---
 
 ### sorting?
 
@@ -98,7 +98,7 @@ Defined in: [src/types/PeopleTab/interface.ts:12](https://github.com/PalisadoesF
 
 > **title**: `string`
 
-***
+---
 
 ### title?
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: UpdateEventVolunteerInput
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Event/type.ts:102](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/types/Event/type.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L103)
 
-***
+---
 
 ### hasAccepted?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Event/type.ts:103](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/types/Event/type.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L104)
 
-***
+---
 
 ### isPublic?
 

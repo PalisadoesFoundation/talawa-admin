@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: SIGNIN\_QUERY
+# Variable: SIGNIN_QUERY
 
-> `const` **SIGNIN\_QUERY**: `DocumentNode`
+> `const` **SIGNIN_QUERY**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/Queries.ts:1181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L1181)

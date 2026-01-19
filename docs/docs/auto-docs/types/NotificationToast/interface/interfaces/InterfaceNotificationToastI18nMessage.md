@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceNotificationToastI18nMessage
 
@@ -21,10 +21,10 @@ The i18next key to translate.
 #### Example
 
 ```ts
-'sessionWarning'
+'sessionWarning';
 ```
 
-***
+---
 
 ### namespace?
 
@@ -36,7 +36,7 @@ Optional i18next namespace to use for translation.
 
 Defaults to `'common'` when omitted.
 
-***
+---
 
 ### values?
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceUserSidebarOrgProps
 
@@ -14,7 +14,7 @@ Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:47](htt
 
 Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L50)
 
-***
+---
 
 ### orgId
 
@@ -22,7 +22,7 @@ Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:50](htt
 
 Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L48)
 
-***
+---
 
 ### setHideDrawer
 
@@ -30,7 +30,7 @@ Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:48](htt
 
 Defined in: [src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebarOrg/UserSidebarOrg.tsx#L51)
 
-***
+---
 
 ### targets
 

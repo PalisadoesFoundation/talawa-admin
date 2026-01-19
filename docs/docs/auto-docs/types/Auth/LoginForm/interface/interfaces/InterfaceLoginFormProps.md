@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceLoginFormProps
 
@@ -23,7 +23,7 @@ Defined in: [src/types/Auth/LoginForm/interface.ts:20](https://github.com/Palisa
 
 Whether this is an admin login form (affects heading text)
 
-***
+---
 
 ### onError()?
 
@@ -43,7 +43,7 @@ Callback fired when login fails with error details
 
 `void`
 
-***
+---
 
 ### onSuccess()?
 
@@ -63,7 +63,7 @@ Callback fired on successful login with authentication token
 
 `void`
 
-***
+---
 
 ### testId?
 

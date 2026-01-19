@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: TagEdge
 
@@ -16,7 +16,7 @@ Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:9
 
 Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts#L18)
 
-***
+---
 
 ### node
 

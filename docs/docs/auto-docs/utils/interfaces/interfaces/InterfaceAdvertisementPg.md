@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceAdvertisementPg
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:735](https://github.com/PalisadoesFoundatio
 
 An array of attachments for the advertisement.
 
-***
+---
 
 ### createdAt
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:730](https://github.com/PalisadoesFoundatio
 
 The creation date of the advertisement record.
 
-***
+---
 
 ### creator
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:732](https://github.com/PalisadoesFoundatio
 
 The user who created this advertisement.
 
-***
+---
 
 ### description
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:726](https://github.com/PalisadoesFoundatio
 
 The description of the advertisement.
 
-***
+---
 
 ### endAt
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:729](https://github.com/PalisadoesFoundatio
 
 The end date and time of the advertisement.
 
-***
+---
 
 ### id
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:724](https://github.com/PalisadoesFoundatio
 
 The unique identifier of the advertisement.
 
-***
+---
 
 ### name
 
@@ -82,7 +82,7 @@ Defined in: [src/utils/interfaces.ts:725](https://github.com/PalisadoesFoundatio
 
 The name of the advertisement.
 
-***
+---
 
 ### organization
 
@@ -92,7 +92,7 @@ Defined in: [src/utils/interfaces.ts:734](https://github.com/PalisadoesFoundatio
 
 The organization associated with this advertisement.
 
-***
+---
 
 ### startAt
 
@@ -102,7 +102,7 @@ Defined in: [src/utils/interfaces.ts:728](https://github.com/PalisadoesFoundatio
 
 The start date and time of the advertisement.
 
-***
+---
 
 ### type
 
@@ -112,7 +112,7 @@ Defined in: [src/utils/interfaces.ts:727](https://github.com/PalisadoesFoundatio
 
 The type of the advertisement.
 
-***
+---
 
 ### updatedAt
 
@@ -122,7 +122,7 @@ Defined in: [src/utils/interfaces.ts:731](https://github.com/PalisadoesFoundatio
 
 The last update date of the advertisement record.
 
-***
+---
 
 ### updater
 

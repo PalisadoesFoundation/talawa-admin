@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Function: formatPostForCard()
 
@@ -44,5 +44,5 @@ An object formatted to match the InterfacePostCard interface
 
 ```tsx
 const formattedPost = formatPostForCard(rawPost, t, refetch);
-<PostCard {...formattedPost} />
+<PostCard {...formattedPost} />;
 ```

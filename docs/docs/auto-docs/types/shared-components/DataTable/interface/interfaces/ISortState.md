@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: ISortState
 
@@ -16,7 +16,7 @@ Sorting state
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:484](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L484)
 
-***
+---
 
 ### direction
 

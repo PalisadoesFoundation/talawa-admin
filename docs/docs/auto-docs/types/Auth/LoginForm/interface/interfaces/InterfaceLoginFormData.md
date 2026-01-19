@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceLoginFormData
 
@@ -18,7 +18,7 @@ Defined in: [src/types/Auth/LoginForm/interface.ts:6](https://github.com/Palisad
 
 User email address
 
-***
+---
 
 ### password
 

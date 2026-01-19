@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: UpdateActionItemInput
 
@@ -16,7 +16,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:39](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L40)
 
-***
+---
 
 ### completionDate?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:40](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L41)
 
-***
+---
 
 ### dueDate?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:41](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L42)
 
-***
+---
 
 ### isCompleted?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:42](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L43)
 
-***
+---
 
 ### postCompletionNotes?
 
@@ -48,7 +48,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:43](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L44)
 
-***
+---
 
 ### preCompletionNotes?
 

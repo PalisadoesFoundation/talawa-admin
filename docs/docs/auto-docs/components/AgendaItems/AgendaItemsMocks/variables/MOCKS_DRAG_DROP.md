@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: MOCKS\_DRAG\_DROP
+# Variable: MOCKS_DRAG_DROP
 
-> `const` **MOCKS\_DRAG\_DROP**: `object`[]
+> `const` **MOCKS_DRAG_DROP**: `object`[]
 
 Defined in: [src/components/AgendaItems/AgendaItemsMocks.ts:246](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AgendaItems/AgendaItemsMocks.ts#L246)
 

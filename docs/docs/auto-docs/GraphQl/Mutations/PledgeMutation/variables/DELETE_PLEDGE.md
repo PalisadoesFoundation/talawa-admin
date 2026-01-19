@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: DELETE\_PLEDGE
+# Variable: DELETE_PLEDGE
 
-> `const` **DELETE\_PLEDGE**: `DocumentNode`
+> `const` **DELETE_PLEDGE**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/PledgeMutation.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PledgeMutation.ts#L77)
 

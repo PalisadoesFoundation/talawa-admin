@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceTagMembersData
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:11](https://github.com/Palis
 
 > **lastName**: `string`
 
-***
+---
 
 ### pageInfo
 
@@ -54,7 +54,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:18](https://github.com/Palis
 
 > **startCursor**: `string`
 
-***
+---
 
 ### totalCount
 

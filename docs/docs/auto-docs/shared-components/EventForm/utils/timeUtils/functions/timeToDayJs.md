@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Function: timeToDayJs()
 
@@ -27,5 +27,5 @@ A dayjs object with the specified time set on today's date
 ## Example
 
 ```ts
-timeToDayJs('14:30:00') // Returns dayjs object for 2:30 PM today
+timeToDayJs('14:30:00'); // Returns dayjs object for 2:30 PM today
 ```

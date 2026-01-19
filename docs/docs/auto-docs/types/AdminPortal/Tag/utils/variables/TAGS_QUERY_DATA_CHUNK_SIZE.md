@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: TAGS\_QUERY\_DATA\_CHUNK\_SIZE
+# Variable: TAGS_QUERY_DATA_CHUNK_SIZE
 
-> `const` **TAGS\_QUERY\_DATA\_CHUNK\_SIZE**: `10` = `10`
+> `const` **TAGS_QUERY_DATA_CHUNK_SIZE**: `10` = `10`
 
 Defined in: [src/types/AdminPortal/Tag/utils.ts:1](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/utils.ts#L1)

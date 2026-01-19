@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Variable: EditModal
 
@@ -14,6 +14,7 @@ Specialized modal template for editing existing entities.
 Supports data loading states and pre-population of form fields.
 
 Features:
+
 - Auto-focus on first input field when modal opens and data is loaded
 - Keyboard shortcut: Ctrl/Cmd+Enter to submit form
 - Loading state for data fetching (loadingData prop)

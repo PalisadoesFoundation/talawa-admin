@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePostCard
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Post/interface.ts:3](https://github.com/PalisadoesFoundat
 
 Defined in: [src/types/Post/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L4)
 
-***
+---
 
 ### commentCount
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Post/interface.ts:4](https://github.com/PalisadoesFoundat
 
 Defined in: [src/types/Post/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L12)
 
-***
+---
 
 ### comments
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Post/interface.ts:12](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L13)
 
-***
+---
 
 ### creator
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Post/interface.ts:13](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L5)
 
-***
+---
 
 ### fetchPosts()
 
@@ -50,7 +50,7 @@ Defined in: [src/types/Post/interface.ts:14](https://github.com/PalisadoesFounda
 
 `void`
 
-***
+---
 
 ### image
 
@@ -58,7 +58,7 @@ Defined in: [src/types/Post/interface.ts:14](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L7)
 
-***
+---
 
 ### likeCount
 
@@ -66,7 +66,7 @@ Defined in: [src/types/Post/interface.ts:7](https://github.com/PalisadoesFoundat
 
 Defined in: [src/types/Post/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L11)
 
-***
+---
 
 ### postedAt
 
@@ -74,7 +74,7 @@ Defined in: [src/types/Post/interface.ts:11](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L6)
 
-***
+---
 
 ### text
 
@@ -82,7 +82,7 @@ Defined in: [src/types/Post/interface.ts:6](https://github.com/PalisadoesFoundat
 
 Defined in: [src/types/Post/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L9)
 
-***
+---
 
 ### title
 
@@ -90,7 +90,7 @@ Defined in: [src/types/Post/interface.ts:9](https://github.com/PalisadoesFoundat
 
 Defined in: [src/types/Post/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L10)
 
-***
+---
 
 ### video
 

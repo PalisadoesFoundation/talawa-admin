@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: DONATE\_TO\_ORGANIZATION
+# Variable: DONATE_TO_ORGANIZATION
 
-> `const` **DONATE\_TO\_ORGANIZATION**: `DocumentNode`
+> `const` **DONATE_TO_ORGANIZATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/mutations.ts:586](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L586)

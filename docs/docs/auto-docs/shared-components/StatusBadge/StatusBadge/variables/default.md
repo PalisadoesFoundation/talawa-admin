@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Variable: default
 
@@ -11,6 +11,7 @@ Defined in: [src/shared-components/StatusBadge/StatusBadge.tsx:69](https://githu
 StatusBadge component for displaying status information with consistent styling.
 
 This component wraps MUI Chip and provides:
+
 - Domain-to-semantic variant mapping (e.g., 'completed' implies 'success')
 - Three size variants: sm (20px), md (24px), lg (32px)
 - Internationalization support with fallback keys (statusBadge.variant)

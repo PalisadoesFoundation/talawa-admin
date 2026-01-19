@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: DELETE\_PLUGIN\_MUTATION
+# Variable: DELETE_PLUGIN_MUTATION
 
-> `const` **DELETE\_PLUGIN\_MUTATION**: `DocumentNode`
+> `const` **DELETE_PLUGIN_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/PluginMutations.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PluginMutations.ts#L72)
 

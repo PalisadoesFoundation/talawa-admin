@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceCampaignModal
 
@@ -24,7 +24,7 @@ Props interface for the CampaignModal component.
 
 Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/types.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/modal/types.ts#L19)
 
-***
+---
 
 ### fundId
 
@@ -32,7 +32,7 @@ Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/types.ts:19]
 
 Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/types.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/modal/types.ts#L17)
 
-***
+---
 
 ### hide()
 
@@ -44,7 +44,7 @@ Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/types.ts:16]
 
 `void`
 
-***
+---
 
 ### isOpen
 
@@ -52,7 +52,7 @@ Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/types.ts:16]
 
 Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/types.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/modal/types.ts#L15)
 
-***
+---
 
 ### mode
 
@@ -60,7 +60,7 @@ Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/types.ts:15]
 
 Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/types.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/modal/types.ts#L21)
 
-***
+---
 
 ### orgId
 
@@ -68,7 +68,7 @@ Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/types.ts:21]
 
 Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/modal/types.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/modal/types.ts#L18)
 
-***
+---
 
 ### refetchCampaign()
 

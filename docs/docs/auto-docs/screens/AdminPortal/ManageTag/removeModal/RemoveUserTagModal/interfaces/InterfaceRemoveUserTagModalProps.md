@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceRemoveUserTagModalProps
 
@@ -18,7 +18,7 @@ Defined in: [src/screens/AdminPortal/ManageTag/removeModal/RemoveUserTagModal.ts
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### removeUserTagModalIsOpen
 
@@ -26,7 +26,7 @@ Defined in: [src/screens/AdminPortal/ManageTag/removeModal/RemoveUserTagModal.ts
 
 Defined in: [src/screens/AdminPortal/ManageTag/removeModal/RemoveUserTagModal.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/removeModal/RemoveUserTagModal.tsx#L29)
 
-***
+---
 
 ### toggleRemoveUserTagModal()
 

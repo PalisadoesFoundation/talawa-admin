@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: EVENT\_ATTENDEES
+# Variable: EVENT_ATTENDEES
 
-> `const` **EVENT\_ATTENDEES**: `DocumentNode`
+> `const` **EVENT_ATTENDEES**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/Queries.ts:365](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L365)

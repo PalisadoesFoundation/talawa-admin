@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IInstalledPlugin
 
@@ -22,7 +22,7 @@ Defined in: [src/plugin/types.ts:94](https://github.com/PalisadoesFoundation/tal
 
 [`IPluginDetails`](IPluginDetails.md).[`author`](IPluginDetails.md#author)
 
-***
+---
 
 ### cdnUrl
 
@@ -34,7 +34,7 @@ Defined in: [src/plugin/types.ts:100](https://github.com/PalisadoesFoundation/ta
 
 [`IPluginDetails`](IPluginDetails.md).[`cdnUrl`](IPluginDetails.md#cdnurl)
 
-***
+---
 
 ### changelog
 
@@ -58,7 +58,7 @@ Defined in: [src/plugin/types.ts:107](https://github.com/PalisadoesFoundation/ta
 
 [`IPluginDetails`](IPluginDetails.md).[`changelog`](IPluginDetails.md#changelog)
 
-***
+---
 
 ### description
 
@@ -70,7 +70,7 @@ Defined in: [src/plugin/types.ts:93](https://github.com/PalisadoesFoundation/tal
 
 [`IPluginDetails`](IPluginDetails.md).[`description`](IPluginDetails.md#description)
 
-***
+---
 
 ### features?
 
@@ -82,7 +82,7 @@ Defined in: [src/plugin/types.ts:106](https://github.com/PalisadoesFoundation/ta
 
 [`IPluginDetails`](IPluginDetails.md).[`features`](IPluginDetails.md#features)
 
-***
+---
 
 ### homepage?
 
@@ -94,7 +94,7 @@ Defined in: [src/plugin/types.ts:103](https://github.com/PalisadoesFoundation/ta
 
 [`IPluginDetails`](IPluginDetails.md).[`homepage`](IPluginDetails.md#homepage)
 
-***
+---
 
 ### icon
 
@@ -106,7 +106,7 @@ Defined in: [src/plugin/types.ts:95](https://github.com/PalisadoesFoundation/tal
 
 [`IPluginDetails`](IPluginDetails.md).[`icon`](IPluginDetails.md#icon)
 
-***
+---
 
 ### id
 
@@ -118,7 +118,7 @@ Defined in: [src/plugin/types.ts:91](https://github.com/PalisadoesFoundation/tal
 
 [`IPluginDetails`](IPluginDetails.md).[`id`](IPluginDetails.md#id)
 
-***
+---
 
 ### license?
 
@@ -130,7 +130,7 @@ Defined in: [src/plugin/types.ts:104](https://github.com/PalisadoesFoundation/ta
 
 [`IPluginDetails`](IPluginDetails.md).[`license`](IPluginDetails.md#license)
 
-***
+---
 
 ### name
 
@@ -142,7 +142,7 @@ Defined in: [src/plugin/types.ts:92](https://github.com/PalisadoesFoundation/tal
 
 [`IPluginDetails`](IPluginDetails.md).[`name`](IPluginDetails.md#name)
 
-***
+---
 
 ### readme
 
@@ -154,7 +154,7 @@ Defined in: [src/plugin/types.ts:101](https://github.com/PalisadoesFoundation/ta
 
 [`IPluginDetails`](IPluginDetails.md).[`readme`](IPluginDetails.md#readme)
 
-***
+---
 
 ### screenshots
 
@@ -166,7 +166,7 @@ Defined in: [src/plugin/types.ts:102](https://github.com/PalisadoesFoundation/ta
 
 [`IPluginDetails`](IPluginDetails.md).[`screenshots`](IPluginDetails.md#screenshots)
 
-***
+---
 
 ### status
 
@@ -174,7 +174,7 @@ Defined in: [src/plugin/types.ts:102](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L115)
 
-***
+---
 
 ### tags?
 
@@ -186,7 +186,7 @@ Defined in: [src/plugin/types.ts:105](https://github.com/PalisadoesFoundation/ta
 
 [`IPluginDetails`](IPluginDetails.md).[`tags`](IPluginDetails.md#tags)
 
-***
+---
 
 ### version
 

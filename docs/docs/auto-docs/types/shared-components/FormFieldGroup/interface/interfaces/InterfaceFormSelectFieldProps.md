@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceFormSelectFieldProps
 
@@ -20,7 +20,7 @@ Props for FormSelectField component.
 
 Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L10)
 
-***
+---
 
 ### data-testid?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:11](https://github.com/Palisa
 
 [`InterfaceFormFieldGroupProps`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md).[`data-testid`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md#data-testid)
 
-***
+---
 
 ### error?
 
@@ -44,7 +44,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:9](https://github.com/Palisad
 
 [`InterfaceFormFieldGroupProps`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md).[`error`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md#error)
 
-***
+---
 
 ### helpText?
 
@@ -56,7 +56,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:8](https://github.com/Palisad
 
 [`InterfaceFormFieldGroupProps`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md).[`helpText`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md#helptext)
 
-***
+---
 
 ### label
 
@@ -68,7 +68,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:6](https://github.com/Palisad
 
 [`InterfaceFormFieldGroupProps`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md).[`label`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md#label)
 
-***
+---
 
 ### name
 
@@ -80,7 +80,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:5](https://github.com/Palisad
 
 [`InterfaceFormFieldGroupProps`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md).[`name`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md#name)
 
-***
+---
 
 ### onChange()
 
@@ -98,7 +98,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:9](https://
 
 `void`
 
-***
+---
 
 ### required?
 
@@ -110,7 +110,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:7](https://github.com/Palisad
 
 [`InterfaceFormFieldGroupProps`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md).[`required`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md#required)
 
-***
+---
 
 ### touched?
 
@@ -122,7 +122,7 @@ Defined in: [src/types/FormFieldGroup/interface.ts:10](https://github.com/Palisa
 
 [`InterfaceFormFieldGroupProps`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md).[`touched`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md#touched)
 
-***
+---
 
 ### value
 

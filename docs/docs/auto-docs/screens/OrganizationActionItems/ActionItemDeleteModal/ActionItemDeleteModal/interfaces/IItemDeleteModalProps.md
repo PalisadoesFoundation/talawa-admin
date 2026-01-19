@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IItemDeleteModalProps
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionIte
 
 Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L45)
 
-***
+---
 
 ### actionItemsRefetch()
 
@@ -26,7 +26,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionIte
 
 `void`
 
-***
+---
 
 ### eventId?
 
@@ -34,7 +34,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionIte
 
 Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L47)
 
-***
+---
 
 ### hide()
 
@@ -46,7 +46,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionIte
 
 `void`
 
-***
+---
 
 ### isOpen
 
@@ -54,7 +54,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionIte
 
 Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L43)
 
-***
+---
 
 ### isRecurring?
 

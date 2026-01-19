@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IQueryVariable
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:20](h
 
 Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L23)
 
-***
+---
 
 ### before?
 
@@ -22,7 +22,7 @@ Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:23](h
 
 Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L25)
 
-***
+---
 
 ### first?
 
@@ -30,7 +30,7 @@ Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:25](h
 
 Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L22)
 
-***
+---
 
 ### last?
 
@@ -38,7 +38,7 @@ Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:22](h
 
 Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L24)
 
-***
+---
 
 ### orgId?
 
@@ -46,7 +46,7 @@ Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:24](h
 
 Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L21)
 
-***
+---
 
 ### where?
 

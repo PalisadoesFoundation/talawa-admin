@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrgInfoTypePG
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:540](https://github.com/PalisadoesFoundatio
 
 The first line of the organization's address.
 
-***
+---
 
 ### avatarURL
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:542](https://github.com/PalisadoesFoundatio
 
 The URL of the organization's avatar, or null.
 
-***
+---
 
 ### createdAt
 
@@ -40,7 +40,7 @@ The URL of the organization's avatar, or null.
 
 Defined in: [src/utils/interfaces.ts:543](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L543)
 
-***
+---
 
 ### description
 
@@ -50,7 +50,7 @@ Defined in: [src/utils/interfaces.ts:541](https://github.com/PalisadoesFoundatio
 
 The description of the organization.
 
-***
+---
 
 ### id
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/interfaces.ts:538](https://github.com/PalisadoesFoundatio
 
 The unique identifier of the organization.
 
-***
+---
 
 ### members?
 
@@ -74,7 +74,7 @@ The members connection object.
 
 > **edges**: `object`[]
 
-***
+---
 
 ### membersCount?
 
@@ -82,7 +82,7 @@ The members connection object.
 
 Defined in: [src/utils/interfaces.ts:544](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L544)
 
-***
+---
 
 ### name
 
@@ -92,7 +92,7 @@ Defined in: [src/utils/interfaces.ts:539](https://github.com/PalisadoesFoundatio
 
 The name of the organization.
 
-***
+---
 
 ### role
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceQueryFundCampaignsPledges
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1752](https://github.com/PalisadoesFoundati
 
 The currency code of the campaign.
 
-***
+---
 
 ### endAt
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:1754](https://github.com/PalisadoesFoundati
 
 The end date of the campaign.
 
-***
+---
 
 ### fundId
 
@@ -46,7 +46,7 @@ The fund ID object.
 
 > **name**: `string`
 
-***
+---
 
 ### goalAmount
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:1751](https://github.com/PalisadoesFoundati
 
 The goal amount of the campaign.
 
-***
+---
 
 ### name
 
@@ -66,7 +66,7 @@ Defined in: [src/utils/interfaces.ts:1750](https://github.com/PalisadoesFoundati
 
 The name of the campaign.
 
-***
+---
 
 ### pledges
 
@@ -80,7 +80,7 @@ The pledges connection object.
 
 > **edges**: `object`[]
 
-***
+---
 
 ### startAt
 

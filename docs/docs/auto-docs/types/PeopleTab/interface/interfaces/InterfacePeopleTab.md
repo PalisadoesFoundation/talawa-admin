@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePeopleTab
 
@@ -18,7 +18,7 @@ Defined in: [src/types/PeopleTab/interface.ts:49](https://github.com/PalisadoesF
 
 `void`
 
-***
+---
 
 ### icon?
 
@@ -26,7 +26,7 @@ Defined in: [src/types/PeopleTab/interface.ts:49](https://github.com/PalisadoesF
 
 Defined in: [src/types/PeopleTab/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L47)
 
-***
+---
 
 ### isActive?
 
@@ -34,7 +34,7 @@ Defined in: [src/types/PeopleTab/interface.ts:47](https://github.com/PalisadoesF
 
 Defined in: [src/types/PeopleTab/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L48)
 
-***
+---
 
 ### testId?
 
@@ -42,7 +42,7 @@ Defined in: [src/types/PeopleTab/interface.ts:48](https://github.com/PalisadoesF
 
 Defined in: [src/types/PeopleTab/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L50)
 
-***
+---
 
 ### title
 

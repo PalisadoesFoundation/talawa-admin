@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePeopletabUserEventsProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/PeopleTab/interface.ts:62](https://github.com/PalisadoesF
 
 Defined in: [src/types/PeopleTab/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L69)
 
-***
+---
 
 ### actionName?
 
@@ -22,7 +22,7 @@ Defined in: [src/types/PeopleTab/interface.ts:69](https://github.com/PalisadoesF
 
 Defined in: [src/types/PeopleTab/interface.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L70)
 
-***
+---
 
 ### endDate?
 
@@ -30,7 +30,7 @@ Defined in: [src/types/PeopleTab/interface.ts:70](https://github.com/PalisadoesF
 
 Defined in: [src/types/PeopleTab/interface.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L66)
 
-***
+---
 
 ### endTime?
 
@@ -38,7 +38,7 @@ Defined in: [src/types/PeopleTab/interface.ts:66](https://github.com/PalisadoesF
 
 Defined in: [src/types/PeopleTab/interface.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L64)
 
-***
+---
 
 ### eventDescription?
 
@@ -46,7 +46,7 @@ Defined in: [src/types/PeopleTab/interface.ts:64](https://github.com/PalisadoesF
 
 Defined in: [src/types/PeopleTab/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L68)
 
-***
+---
 
 ### eventName?
 
@@ -54,7 +54,7 @@ Defined in: [src/types/PeopleTab/interface.ts:68](https://github.com/PalisadoesF
 
 Defined in: [src/types/PeopleTab/interface.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L67)
 
-***
+---
 
 ### startDate?
 
@@ -62,7 +62,7 @@ Defined in: [src/types/PeopleTab/interface.ts:67](https://github.com/PalisadoesF
 
 Defined in: [src/types/PeopleTab/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L65)
 
-***
+---
 
 ### startTime?
 

@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: MOCKS\_WITH\_ANCESTOR\_TAGS
+# Variable: MOCKS_WITH_ANCESTOR_TAGS
 
-> `const` **MOCKS\_WITH\_ANCESTOR\_TAGS**: `object`[]
+> `const` **MOCKS_WITH_ANCESTOR_TAGS**: `object`[]
 
 Defined in: [src/screens/AdminPortal/ManageTag/ManageTagNonErrorMocks.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/ManageTagNonErrorMocks.ts#L126)
 
@@ -46,17 +46,17 @@ Defined in: [src/screens/AdminPortal/ManageTag/ManageTagNonErrorMocks.ts:126](ht
 
 > **firstName**: `object`
 
-#### request.variables.where.firstName.starts\_with
+#### request.variables.where.firstName.starts_with
 
-> **starts\_with**: `string` = `''`
+> **starts_with**: `string` = `''`
 
 #### request.variables.where.lastName
 
 > **lastName**: `object`
 
-#### request.variables.where.lastName.starts\_with
+#### request.variables.where.lastName.starts_with
 
-> **starts\_with**: `string` = `''`
+> **starts_with**: `string` = `''`
 
 ### result
 

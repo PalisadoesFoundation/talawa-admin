@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: UPDATE\_PLEDGE
+# Variable: UPDATE_PLEDGE
 
-> `const` **UPDATE\_PLEDGE**: `DocumentNode`
+> `const` **UPDATE_PLEDGE**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/PledgeMutation.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/PledgeMutation.ts#L51)
 

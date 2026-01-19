@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IRegistrationFormData
 
@@ -16,7 +16,7 @@ Form data structure for user registration
 
 Defined in: [src/types/Auth/RegistrationForm/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L10)
 
-***
+---
 
 ### email
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Auth/RegistrationForm/interface.ts:10](https://github.com
 
 Defined in: [src/types/Auth/RegistrationForm/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L8)
 
-***
+---
 
 ### name
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Auth/RegistrationForm/interface.ts:8](https://github.com/
 
 Defined in: [src/types/Auth/RegistrationForm/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L7)
 
-***
+---
 
 ### orgId?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Auth/RegistrationForm/interface.ts:7](https://github.com/
 
 Defined in: [src/types/Auth/RegistrationForm/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L11)
 
-***
+---
 
 ### password
 

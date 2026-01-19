@@ -67,7 +67,7 @@ import { Form } from 'react-bootstrap';
       onChange={(e) => setEventName(e.target.value)}
     />
   </Form.Group>
-</CreateModal>
+</CreateModal>;
 ```
 
 ### EditModal
@@ -92,7 +92,7 @@ import { Form } from 'react-bootstrap';
       onChange={(e) => setEventName(e.target.value)}
     />
   </Form.Group>
-</EditModal>
+</EditModal>;
 ```
 
 ### DeleteModal
@@ -106,7 +106,7 @@ import { DeleteModal } from 'shared-components/CRUDModalTemplate/DeleteModal';
   onClose={() => setShowModal(false)}
   onDelete={handleDelete}
   showWarning={true}
-/>
+/>;
 ```
 
 ### ViewModal
@@ -131,54 +131,54 @@ import { Button } from 'react-bootstrap';
     <strong>Event Name:</strong>
     <p>Annual Conference 2024</p>
   </div>
-</ViewModal>
+</ViewModal>;
 ```
 
 ## Component API
 
 ### CreateModal Props
 
-| Prop | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `title` | `string` | Yes | - | The title displayed in the modal header |
-| `onClose` | `() => void` | Yes | - | Callback function when the modal is closed |
-| `onSubmit` | `(e: FormEvent) => void` | Yes | - | Callback function when the form is submitted |
-| `children` | `ReactNode` | Yes | - | Form fields to render inside the modal body |
-| `loading` | `boolean` | No | `false` | Shows a loading spinner on the submit button |
-| `submitDisabled` | `boolean` | No | `false` | Disables the submit button |
+| Prop             | Type                     | Required | Default | Description                                  |
+| ---------------- | ------------------------ | -------- | ------- | -------------------------------------------- |
+| `title`          | `string`                 | Yes      | -       | The title displayed in the modal header      |
+| `onClose`        | `() => void`             | Yes      | -       | Callback function when the modal is closed   |
+| `onSubmit`       | `(e: FormEvent) => void` | Yes      | -       | Callback function when the form is submitted |
+| `children`       | `ReactNode`              | Yes      | -       | Form fields to render inside the modal body  |
+| `loading`        | `boolean`                | No       | `false` | Shows a loading spinner on the submit button |
+| `submitDisabled` | `boolean`                | No       | `false` | Disables the submit button                   |
 
 ### EditModal Props
 
-| Prop | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `title` | `string` | Yes | - | The title displayed in the modal header |
-| `onClose` | `() => void` | Yes | - | Callback function when the modal is closed |
-| `onSubmit` | `(e: FormEvent) => void` | Yes | - | Callback function when the form is submitted |
-| `children` | `ReactNode` | Yes | - | Form fields to render inside the modal body |
-| `loading` | `boolean` | No | `false` | Shows a loading spinner on the submit button |
-| `loadingData` | `boolean` | No | `false` | Shows a full modal loading state when fetching entity data |
-| `submitDisabled` | `boolean` | No | `false` | Disables the submit button |
+| Prop             | Type                     | Required | Default | Description                                                |
+| ---------------- | ------------------------ | -------- | ------- | ---------------------------------------------------------- |
+| `title`          | `string`                 | Yes      | -       | The title displayed in the modal header                    |
+| `onClose`        | `() => void`             | Yes      | -       | Callback function when the modal is closed                 |
+| `onSubmit`       | `(e: FormEvent) => void` | Yes      | -       | Callback function when the form is submitted               |
+| `children`       | `ReactNode`              | Yes      | -       | Form fields to render inside the modal body                |
+| `loading`        | `boolean`                | No       | `false` | Shows a loading spinner on the submit button               |
+| `loadingData`    | `boolean`                | No       | `false` | Shows a full modal loading state when fetching entity data |
+| `submitDisabled` | `boolean`                | No       | `false` | Disables the submit button                                 |
 
 ### DeleteModal Props
 
-| Prop | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `title` | `string` | Yes | - | The title displayed in the modal header |
-| `onClose` | `() => void` | Yes | - | Callback function when the modal is closed |
-| `onDelete` | `() => void` | Yes | - | Callback function when the delete action is confirmed |
-| `entityName` | `string` | Yes | - | The name of the entity being deleted |
-| `showWarning` | `boolean` | No | `false` | Shows a warning alert about the irreversible nature of the action |
-| `recurringEventContent` | `ReactNode` | No | - | Optional content for handling recurring event deletion options |
+| Prop                    | Type         | Required | Default | Description                                                       |
+| ----------------------- | ------------ | -------- | ------- | ----------------------------------------------------------------- |
+| `title`                 | `string`     | Yes      | -       | The title displayed in the modal header                           |
+| `onClose`               | `() => void` | Yes      | -       | Callback function when the modal is closed                        |
+| `onDelete`              | `() => void` | Yes      | -       | Callback function when the delete action is confirmed             |
+| `entityName`            | `string`     | Yes      | -       | The name of the entity being deleted                              |
+| `showWarning`           | `boolean`    | No       | `false` | Shows a warning alert about the irreversible nature of the action |
+| `recurringEventContent` | `ReactNode`  | No       | -       | Optional content for handling recurring event deletion options    |
 
 ### ViewModal Props
 
-| Prop | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `title` | `string` | Yes | - | The title displayed in the modal header |
-| `onClose` | `() => void` | Yes | - | Callback function when the modal is closed |
-| `children` | `ReactNode` | Yes | - | Content to display inside the modal body |
-| `loadingData` | `boolean` | No | `false` | Shows a loading state when fetching entity data |
-| `customActions` | `ReactNode` | No | - | Optional custom action buttons for the modal footer |
+| Prop            | Type         | Required | Default | Description                                         |
+| --------------- | ------------ | -------- | ------- | --------------------------------------------------- |
+| `title`         | `string`     | Yes      | -       | The title displayed in the modal header             |
+| `onClose`       | `() => void` | Yes      | -       | Callback function when the modal is closed          |
+| `children`      | `ReactNode`  | Yes      | -       | Content to display inside the modal body            |
+| `loadingData`   | `boolean`    | No       | `false` | Shows a loading state when fetching entity data     |
+| `customActions` | `ReactNode`  | No       | -       | Optional custom action buttons for the modal footer |
 
 ## Usage Examples
 
@@ -315,7 +315,9 @@ export const DeleteEventModal = ({ show, event, onClose, onSuccess }) => {
 
   const recurringContent = event.isRecurring ? (
     <div className="mt-3">
-      <p className="mb-2">This is a recurring event. How would you like to proceed?</p>
+      <p className="mb-2">
+        This is a recurring event. How would you like to proceed?
+      </p>
       <div className="d-flex flex-column gap-2">
         <label className="d-flex align-items-center gap-2">
           <input
@@ -361,7 +363,14 @@ import React from 'react';
 import { ViewModal } from 'shared-components/CRUDModalTemplate/ViewModal';
 import { Button } from 'react-bootstrap';
 
-export const ViewEventModal = ({ show, event, loadingData, onClose, onEdit, onDelete }) => {
+export const ViewEventModal = ({
+  show,
+  event,
+  loadingData,
+  onClose,
+  onEdit,
+  onDelete,
+}) => {
   if (!show) return null;
 
   return (
@@ -418,7 +427,7 @@ const isFormValid = name.trim() && email.includes('@');
   loading={loading}
 >
   {/* form fields */}
-</CreateModal>
+</CreateModal>;
 ```
 
 ### Loading States
@@ -430,8 +439,8 @@ Use appropriate loading states for different scenarios:
 <EditModal
   title="Edit User"
   onSubmit={handleSubmit}
-  loading={isSubmitting}      // For form submission
-  loadingData={isFetching}    // For initial data fetch
+  loading={isSubmitting} // For form submission
+  loadingData={isFetching} // For initial data fetch
 >
   {/* form fields */}
 </EditModal>
@@ -493,16 +502,12 @@ import { useTranslation } from 'react-i18next';
 
 const { t } = useTranslation('events');
 
-<CreateModal
-  title={t('createEvent')}
-  onClose={onClose}
-  onSubmit={handleSubmit}
->
+<CreateModal title={t('createEvent')} onClose={onClose} onSubmit={handleSubmit}>
   <Form.Group className="mb-3">
     <Form.Label>{t('eventName')}</Form.Label>
     <Form.Control placeholder={t('enterEventName')} />
   </Form.Group>
-</CreateModal>
+</CreateModal>;
 ```
 
 ### Delete Confirmation
@@ -515,7 +520,7 @@ Always use `showWarning` for destructive actions:
   title="Delete User"
   entityName={user.name}
   onDelete={handleDelete}
-  showWarning={true}  // Important for user awareness
+  showWarning={true} // Important for user awareness
 />
 ```
 
@@ -539,13 +544,9 @@ import { CreateModal } from 'shared-components/CRUDModalTemplate/CreateModal';
 describe('CreateModal', () => {
   test('renders modal with title', () => {
     render(
-      <CreateModal
-        title="Create Item"
-        onClose={jest.fn()}
-        onSubmit={jest.fn()}
-      >
+      <CreateModal title="Create Item" onClose={jest.fn()} onSubmit={jest.fn()}>
         <input data-testid="name-input" />
-      </CreateModal>
+      </CreateModal>,
     );
 
     expect(screen.getByText('Create Item')).toBeInTheDocument();
@@ -555,13 +556,9 @@ describe('CreateModal', () => {
     const onClose = jest.fn();
 
     render(
-      <CreateModal
-        title="Create Item"
-        onClose={onClose}
-        onSubmit={jest.fn()}
-      >
+      <CreateModal title="Create Item" onClose={onClose} onSubmit={jest.fn()}>
         <input />
-      </CreateModal>
+      </CreateModal>,
     );
 
     fireEvent.click(screen.getByText('Cancel'));
@@ -577,7 +574,7 @@ describe('CreateModal', () => {
         submitDisabled={true}
       >
         <input />
-      </CreateModal>
+      </CreateModal>,
     );
 
     expect(screen.getByText('Create')).toBeDisabled();
@@ -610,7 +607,7 @@ const { register, handleSubmit } = useForm();
   onSubmit={handleSubmit(onFormSubmit)}
 >
   <input {...register('name')} />
-</CreateModal>
+</CreateModal>;
 ```
 
 **Q: How do I customize the modal size?**

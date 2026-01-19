@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IUpdateEventModalProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Event/interface.ts:180](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L181)
 
-***
+---
 
 ### recurringEventUpdateModalIsOpen
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Event/interface.ts:181](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L182)
 
-***
+---
 
 ### t()
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Event/interface.ts:184](https://github.com/PalisadoesFoun
 
 `string`
 
-***
+---
 
 ### tCommon()
 
@@ -58,7 +58,7 @@ Defined in: [src/types/Event/interface.ts:185](https://github.com/PalisadoesFoun
 
 `string`
 
-***
+---
 
 ### toggleRecurringEventUpdateModal()
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Event/interface.ts:183](https://github.com/PalisadoesFoun
 
 `void`
 
-***
+---
 
 ### updateEventHandler()
 

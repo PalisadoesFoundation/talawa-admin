@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceSearchFilterBarAdvanced
 
@@ -25,12 +25,12 @@ sorting/filtering dropdowns.
       type: 'filter',
       options: [
         { label: 'All Plugins', value: 'all' },
-        { label: 'Installed Plugins', value: 'installed' }
+        { label: 'Installed Plugins', value: 'installed' },
       ],
       selectedOption: filterState.selectedOption,
       onOptionChange: handleFilterChange,
-      dataTestIdPrefix: 'filterPlugins'
-    }
+      dataTestIdPrefix: 'filterPlugins',
+    },
   ]}
 />
 ```
@@ -47,23 +47,23 @@ sorting/filtering dropdowns.
       type: 'sort',
       options: [
         { label: 'Most Hours', value: 'hours_DESC' },
-        { label: 'Least Hours', value: 'hours_ASC' }
+        { label: 'Least Hours', value: 'hours_ASC' },
       ],
       selectedOption: sortBy,
       onOptionChange: (value) => setSortBy(value as 'hours_DESC' | 'hours_ASC'),
-      dataTestIdPrefix: 'sort'
+      dataTestIdPrefix: 'sort',
     },
     {
       label: 'Time Frame',
       type: 'filter',
       options: [
         { label: 'All Time', value: 'allTime' },
-        { label: 'Weekly', value: 'weekly' }
+        { label: 'Weekly', value: 'weekly' },
       ],
       selectedOption: timeFrame,
       onOptionChange: (value) => setTimeFrame(value as TimeFrame),
-      dataTestIdPrefix: 'timeFrame'
-    }
+      dataTestIdPrefix: 'timeFrame',
+    },
   ]}
 />
 ```
@@ -94,7 +94,7 @@ additionalButtons={
 }
 ```
 
-***
+---
 
 ### containerClassName?
 
@@ -109,14 +109,14 @@ default "btnsContainerSearchBar"
 #### Example
 
 ```ts
-"btnsContainer", "btnsContainerSearchBar"
+('btnsContainer', 'btnsContainerSearchBar');
 ```
 
 #### Inherited from
 
 `InterfaceSearchFilterBarBase.containerClassName`
 
-***
+---
 
 ### debounceDelay?
 
@@ -132,14 +132,14 @@ default 300
 #### Example
 
 ```ts
-300, 500, 1000
+(300, 500, 1000);
 ```
 
 #### Inherited from
 
 `InterfaceSearchFilterBarBase.debounceDelay`
 
-***
+---
 
 ### dropdowns
 
@@ -167,7 +167,7 @@ dropdowns={[
 ]}
 ```
 
-***
+---
 
 ### hasDropdowns
 
@@ -178,7 +178,7 @@ Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:299](https
 Discriminator property indicating this variant has dropdowns.
 **Job:** When `true`, the `dropdowns` property must be provided.
 
-***
+---
 
 ### onSearchChange()
 
@@ -213,7 +213,7 @@ onSearchChange={(value) => setSearchTerm(value)}
 
 `InterfaceSearchFilterBarBase.onSearchChange`
 
-***
+---
 
 ### onSearchSubmit()?
 
@@ -251,7 +251,7 @@ onSearchSubmit={(value) => {
 
 `InterfaceSearchFilterBarBase.onSearchSubmit`
 
-***
+---
 
 ### searchButtonTestId?
 
@@ -266,14 +266,14 @@ default "searchButton"
 #### Example
 
 ```ts
-"searchPluginsBtn", "searchBtn", "searchButton"
+('searchPluginsBtn', 'searchBtn', 'searchButton');
 ```
 
 #### Inherited from
 
 `InterfaceSearchFilterBarBase.searchButtonTestId`
 
-***
+---
 
 ### searchInputTestId?
 
@@ -288,14 +288,14 @@ default "searchInput"
 #### Example
 
 ```ts
-"searchPlugins", "searchBy", "searchRequests"
+('searchPlugins', 'searchBy', 'searchRequests');
 ```
 
 #### Inherited from
 
 `InterfaceSearchFilterBarBase.searchInputTestId`
 
-***
+---
 
 ### searchPlaceholder
 
@@ -309,14 +309,14 @@ Placeholder text displayed in the search input field.
 #### Example
 
 ```ts
-"Search by volunteer", "Search requests", "Search plugins"
+('Search by volunteer', 'Search requests', 'Search plugins');
 ```
 
 #### Inherited from
 
 `InterfaceSearchFilterBarBase.searchPlaceholder`
 
-***
+---
 
 ### searchValue
 
@@ -331,14 +331,14 @@ This should be managed in the parent component's state.
 #### Example
 
 ```ts
-"John Doe", "authentication", ""
+('John Doe', 'authentication', '');
 ```
 
 #### Inherited from
 
 `InterfaceSearchFilterBarBase.searchValue`
 
-***
+---
 
 ### translations?
 

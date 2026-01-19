@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: GET\_ACTION\_ITEM\_CATEGORY
+# Variable: GET_ACTION_ITEM_CATEGORY
 
-> `const` **GET\_ACTION\_ITEM\_CATEGORY**: `DocumentNode`
+> `const` **GET_ACTION_ITEM_CATEGORY**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/ActionItemCategoryQueries.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/ActionItemCategoryQueries.ts#L29)
 

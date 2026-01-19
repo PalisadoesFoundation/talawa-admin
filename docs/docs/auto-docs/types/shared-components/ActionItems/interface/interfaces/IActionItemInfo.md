@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IActionItemInfo
 
@@ -14,7 +14,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:25](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L36)
 
-***
+---
 
 ### avatarURL?
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:36](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L29)
 
-***
+---
 
 ### category
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:29](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L80)
 
-***
+---
 
 ### categoryId
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:80](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L30)
 
-***
+---
 
 ### completionAt
 
@@ -46,7 +46,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:30](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L37)
 
-***
+---
 
 ### createdAt
 
@@ -54,7 +54,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:37](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L38)
 
-***
+---
 
 ### creator
 
@@ -62,7 +62,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:38](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L77)
 
-***
+---
 
 ### creatorId
 
@@ -70,7 +70,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:77](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L34)
 
-***
+---
 
 ### event
 
@@ -78,7 +78,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:34](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L78)
 
-***
+---
 
 ### eventId
 
@@ -86,7 +86,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:78](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L31)
 
-***
+---
 
 ### hasExceptions?
 
@@ -94,7 +94,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:31](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L43)
 
-***
+---
 
 ### id
 
@@ -102,7 +102,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:43](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L26)
 
-***
+---
 
 ### isCompleted
 
@@ -110,7 +110,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:26](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L40)
 
-***
+---
 
 ### isInstanceException?
 
@@ -118,7 +118,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:40](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L44)
 
-***
+---
 
 ### isTemplate?
 
@@ -126,7 +126,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:44](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L45)
 
-***
+---
 
 ### organizationId
 
@@ -134,7 +134,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:45](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L33)
 
-***
+---
 
 ### postCompletionNotes
 
@@ -142,7 +142,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:33](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L42)
 
-***
+---
 
 ### preCompletionNotes
 
@@ -150,7 +150,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:42](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L41)
 
-***
+---
 
 ### recurringEventInstance
 
@@ -158,7 +158,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:41](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L79)
 
-***
+---
 
 ### recurringEventInstanceId
 
@@ -166,7 +166,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:79](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L32)
 
-***
+---
 
 ### updatedAt
 
@@ -174,7 +174,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:32](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L39)
 
-***
+---
 
 ### updaterId
 
@@ -182,7 +182,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:39](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L35)
 
-***
+---
 
 ### volunteer
 
@@ -222,7 +222,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:48](https://gi
 
 > **name**: `string`
 
-***
+---
 
 ### volunteerGroup
 
@@ -266,7 +266,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:59](https://gi
 
 > **volunteersRequired**: `number`
 
-***
+---
 
 ### volunteerGroupId
 
@@ -274,7 +274,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:59](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L28)
 
-***
+---
 
 ### volunteerId
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: AdvertisementsConnection
 
@@ -16,7 +16,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:40](https://github.com/
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L41)
 
-***
+---
 
 ### pageInfo?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:41](https://github.com/
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L42)
 
-***
+---
 
 ### totalCount?
 

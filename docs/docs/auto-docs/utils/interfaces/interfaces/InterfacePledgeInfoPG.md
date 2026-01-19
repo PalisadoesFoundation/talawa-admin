@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePledgeInfoPG
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1930](https://github.com/PalisadoesFoundati
 
 The amount of the pledge.
 
-***
+---
 
 ### campaign?
 
@@ -52,7 +52,7 @@ The campaign associated with the pledge (optional).
 
 > **name**: `string`
 
-***
+---
 
 ### createdAt
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:1932](https://github.com/PalisadoesFoundati
 
 The date the pledge was created.
 
-***
+---
 
 ### currencyCode
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:1931](https://github.com/PalisadoesFoundati
 
 The currency code of the pledge.
 
-***
+---
 
 ### id
 
@@ -82,7 +82,7 @@ Defined in: [src/utils/interfaces.ts:1922](https://github.com/PalisadoesFoundati
 
 The unique identifier of the pledge.
 
-***
+---
 
 ### pledger
 
@@ -92,7 +92,7 @@ Defined in: [src/utils/interfaces.ts:1934](https://github.com/PalisadoesFoundati
 
 The pledger information.
 
-***
+---
 
 ### updatedAt?
 

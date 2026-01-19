@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceVolunteerMembership
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:2671](https://github.com/PalisadoesFoundati
 
 The creation date of the volunteer membership record.
 
-***
+---
 
 ### createdBy
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/interfaces.ts:2697](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-***
+---
 
 ### event
 
@@ -72,7 +72,7 @@ The event associated with the volunteer membership.
 
 > **startAt**: `string`
 
-***
+---
 
 ### group?
 
@@ -90,7 +90,7 @@ The group associated with the membership.
 
 > **name**: `string`
 
-***
+---
 
 ### id
 
@@ -98,7 +98,7 @@ The group associated with the membership.
 
 Defined in: [src/utils/interfaces.ts:2669](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2669)
 
-***
+---
 
 ### status
 
@@ -108,7 +108,7 @@ Defined in: [src/utils/interfaces.ts:2670](https://github.com/PalisadoesFoundati
 
 The status of the volunteer membership.
 
-***
+---
 
 ### updatedAt
 
@@ -116,7 +116,7 @@ The status of the volunteer membership.
 
 Defined in: [src/utils/interfaces.ts:2672](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2672)
 
-***
+---
 
 ### updatedBy
 
@@ -132,7 +132,7 @@ Defined in: [src/utils/interfaces.ts:2701](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-***
+---
 
 ### volunteer
 

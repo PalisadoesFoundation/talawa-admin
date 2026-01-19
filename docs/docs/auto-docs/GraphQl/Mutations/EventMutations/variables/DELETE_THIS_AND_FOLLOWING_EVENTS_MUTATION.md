@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: DELETE\_THIS\_AND\_FOLLOWING\_EVENTS\_MUTATION
+# Variable: DELETE_THIS_AND_FOLLOWING_EVENTS_MUTATION
 
-> `const` **DELETE\_THIS\_AND\_FOLLOWING\_EVENTS\_MUTATION**: `DocumentNode`
+> `const` **DELETE_THIS_AND_FOLLOWING_EVENTS_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/EventMutations.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventMutations.ts#L109)

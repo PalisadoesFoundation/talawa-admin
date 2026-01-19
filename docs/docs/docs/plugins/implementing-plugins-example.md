@@ -97,6 +97,6 @@ This is how the code will look like
 
 ---
 
-Congrats! you've successfully converted your feature to a plugin. Now you can  install/uninstall  `Donation`  plugin from the  `Plugin Store`  of the  [Talawa Admin](https://github.com/PalisadoesFoundation/talawa-admin) to see the plugin UI becoming visible if it's installed for that organization otherwise hidden.
+Congrats! you've successfully converted your feature to a plugin. Now you can install/uninstall `Donation` plugin from the `Plugin Store` of the [Talawa Admin](https://github.com/PalisadoesFoundation/talawa-admin) to see the plugin UI becoming visible if it's installed for that organization otherwise hidden.
 
 For development purposes to see the plugin even if it's uninstalled you can set the `serverVisible` property to `true`
