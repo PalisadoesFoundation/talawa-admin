@@ -6,6 +6,6 @@
 
 > `const` **REVOKE\_REFRESH\_TOKEN**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:295](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L295)
+Defined in: [src/GraphQl/Mutations/mutations.ts:294](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L294)
 
 to revoke a refresh token (legacy - use LOGOUT_MUTATION for cookie-based auth)

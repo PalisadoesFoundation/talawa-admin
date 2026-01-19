@@ -6,4 +6,4 @@
 
 > `const` **LOGOUT\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:283](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L283)
+Defined in: [src/GraphQl/Mutations/mutations.ts:282](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L282)

@@ -7,7 +7,7 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import Button from 'react-bootstrap/Button';
+import { Button } from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams } from 'react-router';
 import styles from './UserContactDetails.module.css';
