@@ -213,7 +213,7 @@ prompt_input() {
     local validation="${4:-}"
     local input
     local prompt_display
-    local attempts = 0
+    local attempts=0
     local max_attempts=3
 
     # Validate varname is a valid identifier (letters, digits, underscores, not starting with digit)
