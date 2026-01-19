@@ -50,6 +50,14 @@ function resolveNotificationToastMessage(message: NotificationToastMessage) {
 
 /**
  * Show a toast of the given variant using standardized defaults and overrides.
+ *
+ * Resolves the message via `resolveNotificationToastMessage` and merges options
+ * with `DEFAULT_TOAST_OPTIONS`.
+ *
+ * @param variant - The toast type: 'success', 'error', 'warning', or 'info'.
+ * @param message - The message to display. Can be a string or i18n key object.
+ * @param options - Optional ToastOptions to override DEFAULT_TOAST_OPTIONS.
+ * @returns The toast ID returned by react-toastify.
  */
 function showToast(
   variant: 'success' | 'error' | 'warning' | 'info',
