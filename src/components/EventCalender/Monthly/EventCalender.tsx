@@ -33,12 +33,12 @@
  * ```
  *
  */
-import EventListCard from 'components/EventListCard/EventListCard';
+import EventListCard from 'shared-components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import React, { useState, useEffect, useMemo } from 'react';
 import type { JSX } from 'react';
-import Button from 'react-bootstrap/Button';
-import styles from '../../../style/app-fixed.module.css';
+import Button from 'shared-components/Button';
+import styles from './EventCalender.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import HolidayCard from '../../HolidayCards/HolidayCard';
@@ -451,6 +451,7 @@ const Calendar: React.FC<
           key={index}
           className={`${className} ${allEventsList?.length > 0 ? styles.day__events : ''}`}
           data-testid="day"
+          data-has-events={allEventsList?.length > 0 ? 'true' : undefined}
         >
           {date.getDate()}
           {date.getMonth() !== currentMonth ? null : (

@@ -140,7 +140,7 @@ i18n.init({
 });
 
 // Simplify EventListCard rendering to avoid router/i18n dependencies in tests
-vi.mock('components/EventListCard/EventListCard', () => {
+vi.mock('shared-components/EventListCard/EventListCard', () => {
   return {
     __esModule: true,
     default: (props: { name?: string } & Record<string, unknown>) => (
@@ -441,7 +441,9 @@ describe('Calendar Component', () => {
       <Calendar eventData={[]} refetchEvents={mockRefetchEvents} />,
     );
 
-    const expandButton = container.querySelector('.btn__more');
+    const expandButton = container.querySelector(
+      '[data-testid^="no-events-btn-"]',
+    );
     if (expandButton) {
       await act(async () => {
         fireEvent.click(expandButton);
@@ -916,7 +918,7 @@ describe('Calendar Component', () => {
       await waitFor(
         () => {
           const eventList = container.querySelector(
-            '._expand_event_list_d8535b',
+            '[data-testid="event-list-container"]',
           );
           if (eventList) {
             // Assert public event is present and private event is not
@@ -1004,7 +1006,7 @@ describe('Calendar Component', () => {
       await waitFor(
         () => {
           const eventList = container.querySelector(
-            '._expand_event_list_d8535b',
+            '[data-testid="event-list-container"]',
           );
           if (eventList) {
             // Assert public event is present and private event is not

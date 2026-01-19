@@ -1,0 +1,370 @@
+.calendar {
+  font-family: sans-serif;
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  background: var(--calendar-bg);
+  border-radius: 10px;
+  padding-left: 70px;
+  padding-right: 70px;
+  padding-top: 5px;
+}
+
+.calendar__header {
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-right: 0;
+}
+
+.calender_month {
+  display: flex;
+  align-items: center;
+}
+
+.navigation_buttons {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.buttonEventCalendar {
+  border-radius: 100px;
+  color: var(--buttonEventCalendar-color);
+  border: 0px;
+  font-size: 40px;
+}
+
+.calendar__header_month {
+  margin: 0.5rem;
+  color: var(--calendarHeaderMonth-color);
+  font-weight: 800;
+  font-size: 45px;
+  display: flex;
+  gap: 23px;
+  flex-direction: row;
+}
+
+.calendar__header_month div {
+  font-weight: 400;
+  color: var(--calendarHeaderMonthDiv-color);
+  font-family: Outfit, sans-serif;
+}
+
+.editButton {
+  background-color: var(--editButton-bg);
+  color: var(--editButton-font);
+  border-color: var(--editButton-border);
+  --bs-btn-active-bg: var(--editButton-bg-active);
+  --bs-btn-active-border-color: var(--editButton-border-active);
+}
+
+.editButton:is(:hover, :active) {
+  background-color: var(--editButton-bg-hover);
+  border-color: var(--editButton-border-hover);
+  box-shadow: none;
+}
+
+.calendar__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background-color: var(--calendarWeekdays-bg);
+  font-family: Outfit, sans-serif;
+  height: 25px;
+}
+
+.weekday {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--weekday-bg);
+  color: var(--weekday-color);
+  font-size: medium;
+  font-weight: 600;
+}
+
+.calendar__days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: repeat(5, 1fr);
+  margin-bottom: 30px;
+}
+
+.day {
+  background-color: var(--day-bg);
+  padding-left: 0.3rem;
+  padding-right: 0.3rem;
+  border-radius: 10px;
+  margin: 5px;
+  border: 1px solid var(--day-border);
+  color: var(--day-color);
+  font-weight: 600;
+  height: 9rem;
+  position: relative;
+}
+
+.day_weekends {
+  background-color: var(--dayWeekends-bg);
+}
+
+.day__today {
+  background-color: var(--dayToday-bg);
+  font-weight: 700;
+  text-decoration: underline;
+  color: var(--dayToday-color);
+}
+
+.day__outside {
+  background-color: var(--dayOutside-bg);
+  color: var(--dayOutside-color);
+}
+
+.day__selected {
+  background-color: var(--daySelected-bg);
+  color: var(--daySelected-color);
+}
+
+.day__events {
+  background-color: var(--dayEvents-bg);
+}
+
+.calendar__hours {
+  /* Placeholder if not found */
+  display: block;
+}
+
+.calendar_hour_block {
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid var(--calenderHourBlock-border);
+  position: relative;
+  height: 50px;
+  border-bottom-right-radius: 5px;
+}
+
+.calendar_hour_text_container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  border-right: 1px solid var(--calenderHourTextContainer-border);
+  width: 40px;
+}
+
+.calendar_timezone_text {
+  top: -10px;
+  left: -11px;
+  position: relative;
+  color: var(--calenderTimezoneText-color);
+  font-size: 9px;
+}
+
+.dummyWidth {
+  width: 1px;
+}
+
+.event_list_parent_current {
+  background-color: var(--eventListParentCurrent-bg);
+  position: relative;
+  width: 100%;
+}
+
+.event_list_parent {
+  position: relative;
+  width: 100%;
+}
+
+.expand_list_container {
+  width: 200px;
+  max-height: 250px;
+  z-index: 10;
+  position: absolute;
+  left: auto;
+  right: auto;
+  overflow: auto;
+  padding: 10px 4px 0px 4px;
+  background-color: var(--expandListContainer-bg);
+  border: 1px solid var(--expandListContainer-border);
+  border-radius: 5px;
+  margin: 5px;
+}
+
+@media only screen and (max-width: 768px) {
+  .expand_list_container {
+    width: 150px;
+    padding: 4px 4px 0px 4px;
+  }
+}
+
+.list_container {
+  padding: 5px;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.expand_event_list {
+  display: block;
+}
+
+.event_list {
+  /* Base style */
+  display: block;
+}
+
+@media only screen and (max-width: 768px) {
+  .event_list {
+    display: none;
+  }
+}
+
+.event_list_hour {
+  display: flex;
+  flex-direction: row;
+}
+
+.btn__more {
+  border: 0px;
+  font-size: 14px;
+  background-color: initial;
+  color: var(--btnMore-color);
+  font-weight: 600;
+  transition: all 200ms;
+  position: relative;
+}
+
+.btn__more:hover {
+  color: var(--btnMore-color-hover);
+}
+
+.no_events_message {
+  /* Placeholder */
+  display: block;
+}
+
+.calendar_infocards {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 20px 0px 20px 0px;
+}
+
+.holidays_card,
+.events_card {
+  flex: 1;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px var(--eventsCard-box-shadow);
+}
+
+.holidays_card {
+  background-color: var(--holidaysCard-bg);
+}
+
+.events_card {
+  background-color: var(--eventsCard-bg);
+}
+
+.card_title {
+  font-size: 20px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: var(--cardTitle-color);
+}
+
+.card_list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.card_list_item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-size: 14px;
+  color: var(--cardListItem-color);
+}
+
+.card_list_item:hover {
+  background-color: var(--cardListItem-bg-hover);
+  transition: background-color 0.2s ease;
+  padding: 0.5px 8px 0.5px 8px;
+  border-radius: 4px;
+}
+
+.card_list_item:focus-visible {
+  background-color: var(--cardListItem-focus-bg);
+  transition: background-color 0.2s ease;
+}
+
+.holiday_date {
+  font-weight: 600;
+  margin-right: 40px;
+  font-size: 18px;
+  color: var(--holidays-card-date-color);
+}
+
+.holiday_name {
+  font-size: 16px;
+  font-weight: 200;
+  color: var(--holidayName-color);
+}
+
+.legend {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.eventsLegend {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.holidayIndicator,
+.organizationIndicator {
+  width: 35px;
+  height: 12px;
+  border-radius: 4px;
+}
+
+.organizationIndicator {
+  background-color: var(--organizationIndicator-bg);
+}
+
+.legendText {
+  margin-left: 15px;
+  font-size: 18px;
+  color: var(--legendText-color);
+}
+
+.list_container_holidays {
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.holidayIndicator {
+  background-color: var(--holidayIndicator-bg);
+  opacity: 15%;
+}
+
+.holidayText {
+  margin-left: 15px;
+  font-size: 18px;
+  color: var(--holidayText-color);
+}
+
+@media only screen and (max-width: 768px) {
+  .holidayIndicator,
+  .organizationIndicator {
+    width: 16px;
+    height: 10px;
+  }
+}
