@@ -4,11 +4,7 @@
 
 # Interface: InterfacePageInfoPg
 
-Defined in: [src/utils/interfaces.ts:642](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L642)
-
-InterfacePageInfoPg
-
-## Description
+Defined in: [src/utils/interfaces.ts:518](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L518)
 
 Defines the structure for pagination information in PostgreSQL-backed connections.
 
@@ -18,9 +14,7 @@ Defines the structure for pagination information in PostgreSQL-backed connection
 
 > **endCursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:643](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L643)
-
-The cursor for the last item in the current page.
+Defined in: [src/utils/interfaces.ts:519](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L519)
 
 ***
 
@@ -28,9 +22,7 @@ The cursor for the last item in the current page.
 
 > **hasNextPage**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:644](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L644)
-
-Indicates if there is a next page.
+Defined in: [src/utils/interfaces.ts:520](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L520)
 
 ***
 
@@ -38,9 +30,7 @@ Indicates if there is a next page.
 
 > **hasPreviousPage**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:645](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L645)
-
-Indicates if there is a previous page.
+Defined in: [src/utils/interfaces.ts:521](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L521)
 
 ***
 
@@ -48,6 +38,4 @@ Indicates if there is a previous page.
 
 > **startCursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:646](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L646)
-
-The cursor for the first item in the current page.
+Defined in: [src/utils/interfaces.ts:522](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L522)
