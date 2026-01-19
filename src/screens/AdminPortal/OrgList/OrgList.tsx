@@ -41,7 +41,6 @@
 import React, { type ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { Group, Search } from '@mui/icons-material';
-import { Button } from '@mui/material';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
@@ -56,6 +55,7 @@ import PaginationList from 'components/Pagination/PaginationList/PaginationList'
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
+import Button from 'shared-components/Button';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
