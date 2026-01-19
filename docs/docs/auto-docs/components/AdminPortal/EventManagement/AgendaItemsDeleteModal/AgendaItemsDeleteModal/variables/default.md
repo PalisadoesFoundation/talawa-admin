@@ -4,9 +4,9 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<[`InterfaceAgendaItemsDeleteModalProps`](../../../../../../types/components/AdminPortal/EventManagement/AgendaItemsDeleteModal/interface/interfaces/InterfaceAgendaItemsDeleteModalProps.md)\>
+> `const` **default**: `React.FC`\<[`InterfaceAgendaItemsDeleteModalProps`](../../../../../../types/AdminPortal/EventManagement/AgendaItemsDeleteModal/interface/interfaces/InterfaceAgendaItemsDeleteModalProps.md)\>
 
-Defined in: [src/components/AdminPortal/EventManagement/AgendaItemsDeleteModal/AgendaItemsDeleteModal.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/AgendaItemsDeleteModal/AgendaItemsDeleteModal.tsx#L36)
+Defined in: [src/components/AdminPortal/EventManagement/AgendaItemsDeleteModal/AgendaItemsDeleteModal.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/AgendaItemsDeleteModal/AgendaItemsDeleteModal.tsx#L34)
 
 AgendaItemsDeleteModal
 
@@ -23,14 +23,6 @@ Function to close the modal
 ## Param
 
 Function to execute the deletion logic
-
-## Param
-
-Translation function
-
-## Param
-
-Common translation function
 
 ## Returns
 

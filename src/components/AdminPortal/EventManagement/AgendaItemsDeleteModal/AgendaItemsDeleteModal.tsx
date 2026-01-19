@@ -39,7 +39,7 @@ const AgendaItemsDeleteModal: React.FC<
   deleteAgendaItemHandler,
 }) => {
   // Validates 'translation' and 'events' namespaces and assigns the translation function 't'
-  const { t } = useTranslation(['translation', 'events']);
+  const { t } = useTranslation('translation');
 
   return (
     <BaseModal
