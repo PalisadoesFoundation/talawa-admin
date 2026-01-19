@@ -3,6 +3,22 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { EmailField } from './EmailField';
 
+vi.mock('react-i18next', async () => {
+  const actual = await vi.importActual('react-i18next');
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => {
+        const translations: Record<string, string> = {
+          email: 'Email',
+          emailPlaceholder: 'name@example.com',
+        };
+        return translations[key] || key;
+      },
+    }),
+  };
+});
+
 describe('EmailField', () => {
   const defaultProps = {
     value: '',

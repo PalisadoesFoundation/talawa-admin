@@ -46,7 +46,7 @@ describe('Testing Event Stats Wrapper', () => {
     expect(document.querySelector('.modal-title')).toBeNull();
 
     // Open the modal
-    const button = queryByText('View Event Statistics') as Element;
+    const button = queryByText('viewEventStatistics') as Element;
     expect(button).toBeInTheDocument();
     fireEvent.click(button);
 
@@ -77,10 +77,10 @@ describe('Testing Event Stats Wrapper', () => {
     );
 
     // Check button text and aria-label
-    const buttonText = getByText('View Event Statistics');
+    const buttonText = getByText('viewEventStatistics');
     expect(buttonText).toBeInTheDocument();
 
-    const button = getByLabelText('checkInRegistrants');
+    const button = getByLabelText('checkInRegistrantsAriaLabel');
     expect(button).toBeInTheDocument();
     expect(button).toHaveClass('btn-light', 'text-secondary');
     expect(button.tagName).toBe('BUTTON');
@@ -102,7 +102,7 @@ describe('Testing Event Stats Wrapper', () => {
     expect(document.querySelector('.modal-title')).toBeNull();
 
     // Open modal to verify eventId prop is passed
-    const openButton = getByText('View Event Statistics');
+    const openButton = getByText('viewEventStatistics');
     fireEvent.click(openButton);
 
     await waitFor(() => {
@@ -132,7 +132,7 @@ describe('Testing Event Stats Wrapper', () => {
     );
 
     // Button should still render with empty _id
-    const buttonAfterRerender = getByText('View Event Statistics');
+    const buttonAfterRerender = getByText('viewEventStatistics');
     expect(buttonAfterRerender).toBeInTheDocument();
     expect(buttonAfterRerender).toBeEnabled();
   });
@@ -147,7 +147,7 @@ describe('Testing Event Stats Wrapper', () => {
     );
 
     // Cycle 1: Open and close
-    const button = getByText('View Event Statistics');
+    const button = getByText('viewEventStatistics');
     fireEvent.click(button);
 
     await waitFor(() => {
@@ -201,7 +201,7 @@ describe('Testing Event Stats Wrapper', () => {
     );
 
     // Open modal
-    const button = getByText('View Event Statistics');
+    const button = getByText('viewEventStatistics');
     fireEvent.click(button);
 
     // Verify modal opened with correct content
@@ -236,7 +236,7 @@ describe('Testing Event Stats Wrapper', () => {
     );
 
     // Verify button exists
-    const button = getByLabelText('checkInRegistrants');
+    const button = getByLabelText('checkInRegistrantsAriaLabel');
     expect(button).toBeInTheDocument();
 
     // Verify button parent structure
@@ -256,7 +256,7 @@ describe('Testing Event Stats Wrapper', () => {
     );
 
     // Verify initial render
-    expect(getByText('View Event Statistics')).toBeInTheDocument();
+    expect(getByText('viewEventStatistics')).toBeInTheDocument();
 
     // Rerender with different _id - only verify button renders, don't open modal
     rerender(
@@ -268,7 +268,7 @@ describe('Testing Event Stats Wrapper', () => {
     );
 
     // Verify component still renders correctly
-    expect(getByText('View Event Statistics')).toBeInTheDocument();
+    expect(getByText('viewEventStatistics')).toBeInTheDocument();
 
     // Rerender back to original _id
     rerender(
@@ -280,6 +280,6 @@ describe('Testing Event Stats Wrapper', () => {
     );
 
     // Component should still render
-    expect(getByText('View Event Statistics')).toBeInTheDocument();
+    expect(getByText('viewEventStatistics')).toBeInTheDocument();
   });
 });

@@ -43,8 +43,9 @@
   "resetChanges": "Reset Changes",
   "displayImage": "Display Image",
   "enterEmail": "Enter Email",
-  "emailAddress": "Email Address",
-  "email": "Email",
+  "emailAddress": "Dirección de Correo",
+  "email": "Correo Electrónico",
+  "emailPlaceholder": "nombre@ejemplo.com",
   "name": "Name",
   "desc": "Description",
   "enterPassword": "Enter Password",
@@ -287,5 +288,7 @@
   "attendedEventsList": "Lista de eventos asistidos",
   "linkCopied": "Enlace copiado al portapapeles",
   "copyToClipboardError": "Error al copiar el enlace al portapapeles",
-  "share": "Compartir"
+  "share": "Compartir",
+  "viewEventStatistics": "Ver Estadísticas del Evento",
+  "checkInRegistrantsAriaLabel": "Registrar asistentes"
 }
