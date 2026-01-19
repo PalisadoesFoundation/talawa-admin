@@ -5,7 +5,6 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
 import { currencySymbols } from 'utils/currency';
@@ -15,8 +14,7 @@ import PledgeModal from './modal/PledgeModal';
 import { Popover } from '@mui/material';
 import Avatar from 'shared-components/Avatar/Avatar';
 import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/BreadcrumbsComponent';
-import { DataGrid } from 'shared-components/DataGridWrapper';
-import EmptyState from 'shared-components/EmptyState/EmptyState';
+import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
 import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
@@ -25,6 +23,7 @@ import type {
 } from 'utils/interfaces';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import { getPledgeColumns } from './PledgeColumns';
+import Button from 'shared-components/Button';
 
 enum ModalState {
   SAME = 'same',
@@ -388,34 +387,7 @@ const fundCampaignPledge = (): JSX.Element => {
             }
           />
         </div>
-        <DataGrid
-          disableColumnMenu
-          columnBufferPx={7}
-          hideFooter={true}
-          getRowId={(row) => row.id}
-          slots={{
-            noRowsOverlay: () => (
-              <EmptyState
-                icon="volunteer_activism"
-                message={t('pledges.noPledges')}
-                dataTestId="fund-campaign-pledge-empty-state"
-              />
-            ),
-          }}
-          className={`${styles.dataGridNoHover} ${styles.dataGridRounded}`}
-          sx={{
-            '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-              outline: '2px solid var(--primary-theme-color)',
-              outlineOffset: '-2px',
-            },
-            '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-              outline: '2px solid var(--primary-theme-color)',
-              outlineOffset: '-2px',
-            },
-          }}
-          getRowClassName={() => `${styles.rowBackgroundPledge}`}
-          autoHeight
-          rowHeight={65}
+        <DataGridWrapper
           rows={pledges.map((pledge) => ({
             id: pledge.id,
             users: pledge.users,
@@ -425,7 +397,15 @@ const fundCampaignPledge = (): JSX.Element => {
             currency: pledge.currency,
           }))}
           columns={columns}
-          isRowSelectable={() => false}
+          loading={pledgeLoading}
+          emptyStateProps={{
+            icon: 'volunteer_activism',
+            message: t('pledges.noPledges'),
+            dataTestId: 'fund-campaign-pledge-empty-state',
+          }}
+          paginationConfig={{
+            enabled: false,
+          }}
         />
         <PledgeModal
           isOpen={modalState[ModalState.SAME]}

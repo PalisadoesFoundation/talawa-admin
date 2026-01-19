@@ -651,8 +651,8 @@ describe('Testing VolunteerGroups Screen', () => {
     const link = new StaticMockLink(delayedMocks);
     renderVolunteerGroups(link);
 
-    // Assert loading spinner is visible
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    // Assert loading spinner is visible (may be multiple spinners from LoadingState and DataGridWrapper)
+    expect(screen.getAllByTestId('spinner').length).toBeGreaterThan(0);
 
     await waitFor(() => {
       // Assert spinner is removed after loading

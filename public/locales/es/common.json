@@ -3,6 +3,7 @@
   "lastName": "Last Name",
   "searchByName": "Search By Name",
   "loading": "Loading...",
+  "error": "Error",
   "endOfResults": "End of results",
   "noResultsFoundFor": "No se encontraron resultados para {{query}}",
   "tryAdjustingFilters": "Intenta ajustar tus filtros o término de búsqueda.",
@@ -250,6 +251,7 @@
   "organizationEventDescription": "Visible para todos los miembros de la organización",
   "inviteOnlyEvent": "Solo por invitación",
   "inviteOnlyEventDescription": "Visible solo para miembros invitados y administradores de eventos",
+  "noCategory": "Sin categoría",
   "to": "A",
   "sortingIcon": "icono de ordenación",
   "peopleTabTagName": "Personas",
@@ -280,5 +282,8 @@
   "cannotUnregisterCheckedIn": "No se puede anular el registro de un usuario que ya ha registrado su asistencia",
   "errorLoadingEventDetails": "Error al cargar los detalles del evento. Por favor, intente más tarde.",
   "eventDate": "Fecha del Evento",
-  "attendedEventsList": "Lista de eventos asistidos"
+  "attendedEventsList": "Lista de eventos asistidos",
+  "linkCopied": "Enlace copiado al portapapeles",
+  "copyToClipboardError": "Error al copiar el enlace al portapapeles",
+  "share": "Compartir"
 }
