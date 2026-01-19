@@ -22,10 +22,10 @@ else
 fi
 
 LOCK_FILE="$REPO_ROOT/.git/venv-setup.lock"
-exec 200>"$LOCK_FILE"
+exec 9>"$LOCK_FILE"
 
 if command -v flock >/dev/null 2>&1; then
-  flock 200
+  flock 9
 else
   echo "Warning: flock not available, proceeding without lock" >&2
 fi

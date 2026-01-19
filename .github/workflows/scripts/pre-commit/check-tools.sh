@@ -24,6 +24,13 @@ if ! command -v curl >/dev/null 2>&1 && ! command -v wget >/dev/null 2>&1; then
   exit 1
 fi
 
+# Checksum tools (required by precommit-python.sh)
+if ! command -v shasum >/dev/null 2>&1 && ! command -v sha256sum >/dev/null 2>&1; then
+  echo "Error: Neither 'shasum' nor 'sha256sum' is installed."
+  echo "Please install one of them to continue."
+  exit 1
+fi
+
 # Python (used via venv)
 if ! command -v python3 >/dev/null 2>&1 && ! command -v python >/dev/null 2>&1; then
   echo "Error: Neither 'python3' nor 'python' is installed."

@@ -7,7 +7,7 @@
 #
 set -e
 
-STAGED_SRC="$1"
+STAGED_SRC_FILE="$1"
 
 echo "Initializing Python virtual environment..."
 VENV_BIN=$(./.github/workflows/scripts/pre-commit/venv.sh) || exit 1
@@ -32,13 +32,14 @@ echo "Running Python CI parity checks..."
   --lines 600 \
   --files ./.github/workflows/config/countline_excluded_file_list.txt
 
-if [ -z "$STAGED_SRC" ]; then
-  echo "No staged files detected. Skipping Python checks."
+if [ ! -s "$STAGED_SRC_FILE" ]; then
+  echo "No staged source files detected. Skipping file-based Python checks."
   exit 0
 fi
 
+
 echo "Running translation checks on staged files..."
-printf '%s\n' "$STAGED_SRC" | xargs "$@" .github/workflows/scripts/translation_check.py --files
+xargs -0 -a "$STAGED_SRC_FILE" "$@" .github/workflows/scripts/translation_check.py --files
 
 echo "Running disable statements check..."
 
@@ -126,7 +127,7 @@ if [ "$NEEDS_DOWNLOAD" = true ]; then
   chmod +x "$SCRIPT_PATH"
 fi
 
-printf '%s\n' "$STAGED_SRC" | xargs "$@" "$SCRIPT_PATH" --files
+xargs -0 -a "$STAGED_SRC_FILE" "$@" "$SCRIPT_PATH" --files
 
 
 echo "Running CSS policy checks..."
@@ -134,12 +135,17 @@ echo "Running CSS policy checks..."
 # CSS Policy Check
 # Exclude src/utils/ (utility/helper functions) and src/types/ (type definitions)
 # as they cannot contain UI styling code
-CSS_STAGED=$(git diff --cached --name-only --diff-filter=ACMRT \
-  | grep -v '^src/utils/' \
-  | grep -v '^src/types/' || true)
+CSS_TMP=$(mktemp)
+trap 'rm -f "$CSS_TMP"' EXIT
 
-if [ -n "$CSS_STAGED" ]; then
-  echo "$CSS_STAGED" | xargs "$@" .github/workflows/scripts/css_check.py --files
+git diff --cached -z --name-only --diff-filter=ACMRT \
+  | grep -zv '^src/utils/' \
+  | grep -zv '^src/types/' \
+  > "$CSS_TMP" || true
+
+if [ -s "$CSS_TMP" ]; then
+  xargs -0 -a "$CSS_TMP" "$@" \
+    .github/workflows/scripts/css_check.py --files
 fi
 
 echo "Python checks completed."

@@ -1,37 +1,33 @@
 #!/usr/bin/env sh
-
 set -euo pipefail
 
-# Ensure required tools are installed
 .github/workflows/scripts/pre-commit/check-tools.sh
 
-STAGED_SRC=$(git diff --cached --name-only --diff-filter=ACMRT \
-  | grep -E '^(src|scripts)/.*\.(ts|tsx|js|jsx)$' \
-  | tr '\n' ' ' || true)
-  
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMRT) || exit 1
-CSS_STAGED=$(echo "$STAGED_FILES" | grep -v '^src/utils/' | grep -v '^src/types/' || true)
+# One temp file for staged sources
+STAGED_SRC_FILE=$(mktemp)
+trap 'rm -f "$STAGED_SRC_FILE"' EXIT
 
-[ -z "$STAGED_FILES" ] && {
+git diff --cached -z --name-only --diff-filter=ACMRT \
+  | grep -zE '^(src|scripts)/.*\.(ts|tsx|js|jsx)$' \
+  > "$STAGED_SRC_FILE" || true
+
+# All staged files (for early exit only)
+STAGED_ANY=$(git diff --cached --name-only --diff-filter=ACMRT)
+
+[ -z "$STAGED_ANY" ] && {
   echo "No staged files to check..."
   exit 0
 }
 
-# Node.js Pre-commit Checks
-.github/workflows/scripts/pre-commit/precommit-node.sh "$STAGED_SRC"
-
-# Python Pre-commit Checks
-.github/workflows/scripts/pre-commit/precommit-python.sh "$STAGED_SRC"
-
-
-# Only re-stage the files that were originally staged and potentially modified by formatters
-if [ -n "$STAGED_SRC" ]; then
-  echo "$STAGED_SRC" | xargs git add
+# Node checks (only if JS/TS exist)
+if [ -s "$STAGED_SRC_FILE" ]; then
+  .github/workflows/scripts/pre-commit/precommit-node.sh "$STAGED_SRC_FILE"
 fi
 
-if [ -n "$CSS_STAGED" ]; then
-  echo "$CSS_STAGED" | xargs git add
-fi
+# Python checks (always run when anything staged)
+.github/workflows/scripts/pre-commit/precommit-python.sh "$STAGED_SRC_FILE"
 
-# Re-add any files that format:fix or other formatters might have modified
-git diff --cached --name-only --diff-filter=ACMRT | xargs -I {} git add {}
+# Safe re-stage (no whitespace issues)
+if [ -s "$STAGED_SRC_FILE" ]; then
+  xargs -0 -a "$STAGED_SRC_FILE" git add --
+fi

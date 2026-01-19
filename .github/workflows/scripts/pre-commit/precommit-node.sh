@@ -6,12 +6,11 @@
 #
 set -e
 
-STAGED_SRC="$1"
+STAGED_SRC_FILE="$1"
 
-if [ -z "$STAGED_SRC" ]; then
-  echo "No staged files detected. Skipping Node.js checks."
-  exit 0
-fi
+[ ! -s "$STAGED_SRC_FILE" ] && exit 0
+
+STAGED_SRC=$(tr '\0' ' ' < "$STAGED_SRC_FILE")
 
 echo "Running Node.js pre-commit checks..."
 
@@ -19,7 +18,7 @@ pnpm run generate-docs
 pnpm run format:fix
 pnpm run lint-staged
 pnpm run typecheck
-pnpm run check-i18n -- --staged "$STAGED_SRC"
+xargs -0 -a "$STAGED_SRC_FILE" pnpm run check-i18n -- --staged
 
 # MinIO compliance check (prevent unsupported upload patterns)
 echo "Running MinIO compliance check (policy enforcement)..."
