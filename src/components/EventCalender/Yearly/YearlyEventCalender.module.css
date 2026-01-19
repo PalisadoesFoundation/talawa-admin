@@ -1,3 +1,5 @@
+@import '../../../style/tokens/index.css';
+
 .yearlyCalender {
   background-color: var(--yearlyCalender-bg);
   box-sizing: border-box;

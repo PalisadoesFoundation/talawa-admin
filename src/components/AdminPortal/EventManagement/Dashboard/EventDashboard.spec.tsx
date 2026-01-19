@@ -1,3 +1,10 @@
+vi.mock(
+  'shared-components/EventListCard/Modal/EventListCardModals/EventListCardModals',
+  () => ({
+    __esModule: true,
+    default: () => <div data-testid="event-list-card-modals" />,
+  }),
+);
 import React from 'react';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import type { RenderResult } from '@testing-library/react';
@@ -124,6 +131,7 @@ describe('Testing Event Dashboard Screen', () => {
   afterEach(() => {
     // Clean up after each test
     localStorageMock.clear();
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

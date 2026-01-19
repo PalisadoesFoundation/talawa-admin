@@ -1,3 +1,4 @@
+// translation-check-keyPrefix: eventListCard
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import FormCheck from 'react-bootstrap/FormCheck';

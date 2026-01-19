@@ -33,8 +33,8 @@ export interface InterfacePreviewEventModalProps {
   eventModalIsOpen: boolean;
   hideViewModal: () => void;
   toggleDeleteModal: () => void;
-  t: (key: string) => string;
-  tCommon: (key: string) => string;
+  t: (key: string, options?: Record<string, unknown>) => string;
+  tCommon: (key: string, options?: Record<string, unknown>) => string;
   isRegistered?: boolean;
   userId: string;
   eventStartDate: Date;

@@ -1,4 +1,4 @@
-@import '../../../style/tokens/index.css';
+  @import '../../../style/tokens/index.css';
 
 .calendar {
   font-family: sans-serif;
@@ -245,7 +245,7 @@
   text-align: center;
   padding: 2.5rem 0;
   font-style: italic;
-  color: #6c757d;
+  color: var(--color-gray-600);
 }
 
 .calendar_infocards {
@@ -367,6 +367,7 @@
 }
 
 @media only screen and (max-width: 768px) {
+
   .holidayIndicator,
   .organizationIndicator {
     width: 16px;

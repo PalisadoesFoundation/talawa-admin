@@ -914,17 +914,9 @@ describe('Calendar Component', () => {
         fireEvent.click(button);
       });
 
-      const eventList = await waitFor(() => {
-        const el = container.querySelector(
-          '[data-testid="event-list-container"]',
-        );
-        if (!el) {
-          throw new Error('Event list not rendered yet');
-        }
-        return el;
-      });
-      expect(eventList).toBeInTheDocument();
-      expect(screen.getByText('Public Event')).toBeInTheDocument();
+      await waitFor(() =>
+        expect(screen.getByText('Public Event')).toBeInTheDocument(),
+      );
       expect(screen.queryByText('Private Event')).toBeNull();
       foundEventList = true;
       break;

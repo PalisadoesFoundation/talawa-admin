@@ -1,19 +1,11 @@
-import { InterfaceEvent } from 'types/Event/interface';
-
-/**
- * Extended event interface for EventListCard with optional refetch capability.
- */
-export interface InterfaceEventListCard extends InterfaceEvent {
-  /** Callback to refetch events after mutations. */
-  refetchEvents?: () => void;
-}
+import type { InterfaceEventListCardProps } from 'types/shared-components/EventListCard/interface';
 
 /**
  * Props for EventListCardModals component.
  */
 export interface InterfaceEventListCardModalsProps {
   /** Event card properties including event details. */
-  eventListCardProps: InterfaceEventListCard;
+  eventListCardProps: InterfaceEventListCardProps;
   /** Whether the event modal is currently open. */
   eventModalIsOpen: boolean;
   /** Callback to hide the view modal. */
@@ -23,3 +15,6 @@ export interface InterfaceEventListCardModalsProps {
   /** Translation function for common localized strings. */
   tCommon: (key: string) => string;
 }
+
+// Re-export for backward compatibility if needed
+export type InterfaceEventListCard = InterfaceEventListCardProps;

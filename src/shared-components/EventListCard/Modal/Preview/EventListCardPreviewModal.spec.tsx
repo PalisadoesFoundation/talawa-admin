@@ -96,7 +96,7 @@ vi.mock('shared-components/TimePicker/TimePicker', () => ({
 
 const mockT = (
   key: string,
-  _options: Record<string, string | number> = {},
+  _options?: Record<string, unknown>,
 ): string => {
   if (key === 'recurrence.daily') return 'Daily';
   if (key === 'recurrence.weeklyOn') return `Weekly on {{day}}`; // update mock to return template
