@@ -193,4 +193,12 @@ describe('NotificationToastContainer', () => {
     expect(container).toHaveAttribute('data-limit', '5');
     expect(container).toHaveAttribute('data-position', 'top-right');
   });
+
+  it('handles undefined props correctly when called directly', () => {
+    // Direct call to hit default parameter coverage
+    const { container } = render(NotificationToastContainer(undefined));
+    const toastContainer = screen.getByTestId('toast-container');
+    expect(toastContainer).toBeInTheDocument();
+    expect(toastContainer).toHaveAttribute('data-limit', '5');
+  });
 });
