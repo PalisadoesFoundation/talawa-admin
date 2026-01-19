@@ -1993,6 +1993,7 @@
     "noCampaigns": "No Campaigns Found",
     "amountRaised": "Amount Raised",
     "campaignIndex": "#",
+    "campaignStatus": "Status",
     "fundGoal": "Fund Goal",
     "percentRaised": "% Raised",
     "createFirstCampaign": "Create your first fundraising campaign to see it here.",
