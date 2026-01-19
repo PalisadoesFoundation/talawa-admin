@@ -15,7 +15,7 @@
  */
 
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button/Button';
 import { useTranslation } from 'react-i18next';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { InterfaceUninstallConfirmationModalProps } from 'types/AdminPortal/PluginStore/components/UninstallConfirmationModal/interface';
