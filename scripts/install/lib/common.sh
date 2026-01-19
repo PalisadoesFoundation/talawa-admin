@@ -213,6 +213,8 @@ prompt_input() {
     local validation="${4:-}"
     local input
     local prompt_display
+    local attempts = 0
+    local max_attempts=3
 
     # Validate varname is a valid identifier (letters, digits, underscores, not starting with digit)
     if [[ ! "$varname" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
@@ -230,6 +232,7 @@ prompt_input() {
             read -r -p "$prompt_display: " input
         else
             read -r -p "$prompt_display: " input </dev/tty 2>/dev/null || input="$default"
+            ((attempts++))
         fi
 
         # Use default if empty
@@ -241,6 +244,9 @@ prompt_input() {
                 eval "$varname=\"\$input\""
                 return 0
             else
+                if [[ ! -t 0 ]] && ((attempts >= max_attempts)); then
+                    die "prompt_input: Validation failed after $max_attempts attempts in non-interactive mode" "$E_INVALID_ARG"
+                fi
                 log_warning "Invalid input. Please try again."
             fi
         else
