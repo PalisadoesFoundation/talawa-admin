@@ -6,6 +6,11 @@ import { useTranslation } from 'react-i18next';
 /**
  * BulkActionsBar displays a toolbar when rows are selected.
  * Shows the selected count, action buttons, and a clear button.
+ *
+ * @param count - The number of selected rows.
+ * @param children - The action buttons to display.
+ * @param onClear - Callback to clear the selection.
+ * @returns The rendered toolbar or null if no rows are selected.
  */
 export function BulkActionsBar({
   count,
