@@ -151,7 +151,6 @@ fi
 # as they cannot contain UI styling code
 CSS_STAGED=$(git diff --cached --name-only --diff-filter=ACMRT \
   | grep -v '^src/utils/' \
-  | grep -v 'EventStatisticsChartConfig.ts' \
   | grep -v '^src/types/' || true)
 
 if [ -n "$CSS_STAGED" ]; then
