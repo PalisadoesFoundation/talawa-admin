@@ -4,11 +4,7 @@
 
 # Interface: InterfaceVolunteerRank
 
-Defined in: [src/utils/interfaces.ts:2717](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2717)
-
-InterfaceVolunteerRank
-
-## Description
+Defined in: [src/utils/interfaces.ts:1873](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1873)
 
 Defines the structure for volunteer ranking information.
 
@@ -18,9 +14,7 @@ Defines the structure for volunteer ranking information.
 
 > **hoursVolunteered**: `number`
 
-Defined in: [src/utils/interfaces.ts:2719](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2719)
-
-The number of hours volunteered.
+Defined in: [src/utils/interfaces.ts:1875](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1875)
 
 ***
 
@@ -28,9 +22,7 @@ The number of hours volunteered.
 
 > **rank**: `number`
 
-Defined in: [src/utils/interfaces.ts:2718](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2718)
-
-The rank of the volunteer.
+Defined in: [src/utils/interfaces.ts:1874](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1874)
 
 ***
 
@@ -38,9 +30,7 @@ The rank of the volunteer.
 
 > **user**: `object`
 
-Defined in: [src/utils/interfaces.ts:2720](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2720)
-
-The user information of the volunteer.
+Defined in: [src/utils/interfaces.ts:1876](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1876)
 
 #### avatarURL
 

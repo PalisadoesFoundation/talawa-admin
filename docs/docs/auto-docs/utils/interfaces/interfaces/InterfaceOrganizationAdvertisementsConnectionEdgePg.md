@@ -4,11 +4,7 @@
 
 # Interface: InterfaceOrganizationAdvertisementsConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:766](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L766)
-
-InterfaceOrganizationAdvertisementsConnectionEdgePg
-
-## Description
+Defined in: [src/utils/interfaces.ts:594](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L594)
 
 Defines the structure for an edge in the organization advertisements connection with PostgreSQL-specific fields.
 
@@ -18,9 +14,7 @@ Defines the structure for an edge in the organization advertisements connection 
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:767](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L767)
-
-The cursor for this edge.
+Defined in: [src/utils/interfaces.ts:595](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L595)
 
 ***
 
@@ -28,6 +22,4 @@ The cursor for this edge.
 
 > **node**: [`InterfaceAdvertisementPg`](InterfaceAdvertisementPg.md)
 
-Defined in: [src/utils/interfaces.ts:768](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L768)
-
-The advertisement node.
+Defined in: [src/utils/interfaces.ts:596](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L596)
