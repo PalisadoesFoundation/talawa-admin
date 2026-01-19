@@ -818,8 +818,6 @@ describe('Testing GroupModal', () => {
     expect(NotificationToast.success).not.toHaveBeenCalled();
   });
 
-  // Add these test cases to your existing GroupModal.test.tsx file
-
   describe('Testing GroupModal - Additional Coverage', () => {
     afterEach(() => {
       vi.clearAllMocks();
@@ -835,7 +833,6 @@ describe('Testing GroupModal', () => {
       const submitBtn = screen.getByTestId('submitBtn');
       expect(submitBtn).toBeDisabled();
 
-      // Try to submit anyway
       fireEvent.submit(screen.getByTestId('pledgeForm'));
 
       await waitFor(() => {
@@ -871,7 +868,6 @@ describe('Testing GroupModal', () => {
       const nameInput = screen.getByRole('textbox', { name: /name/i });
       await userEvent.clear(nameInput);
 
-      // Before blur, submit should still work if name wasn't touched
       fireEvent.blur(nameInput);
 
       const submitBtn = screen.getByTestId('submitBtn');
@@ -892,7 +888,7 @@ describe('Testing GroupModal', () => {
     });
 
     it('should handle volunteersRequired change from null to valid number', async () => {
-      renderGroupModal(link1, itemProps[1]); // This has null volunteersRequired
+      renderGroupModal(link1, itemProps[1]);
 
       const vrInput = screen.getByRole('spinbutton', {
         name: /volunteers required/i,
@@ -908,7 +904,7 @@ describe('Testing GroupModal', () => {
     });
 
     it('should handle volunteersRequired change from valid number to null', async () => {
-      renderGroupModal(link1, itemProps[2]); // This has volunteersRequired = 5
+      renderGroupModal(link1, itemProps[2]);
 
       const vrInput = screen.getByRole('spinbutton', {
         name: /volunteers required/i,
@@ -941,8 +937,6 @@ describe('Testing GroupModal', () => {
       // Blur to trigger touched state
       fireEvent.blur(vrInput);
 
-      // The submit button should be enabled since error is only set when value < 1, not for empty
-      // Let's check that the value is properly cleared
       expect(vrInput).toHaveValue(null);
     });
 
@@ -1053,11 +1047,9 @@ describe('Testing GroupModal', () => {
         name: /volunteers required/i,
       });
 
-      // Set invalid value
       fireEvent.change(vrInput, { target: { value: '0' } });
       fireEvent.blur(vrInput);
 
-      // Submit button should be disabled
       const submitBtn = screen.getByTestId('submitBtn');
       expect(submitBtn).toBeDisabled();
 
@@ -1072,17 +1064,14 @@ describe('Testing GroupModal', () => {
     it('should maintain form state through multiple field changes', async () => {
       renderGroupModal(link1, itemProps[0]);
 
-      // Change name
       const nameInput = screen.getByRole('textbox', { name: /name/i });
       await userEvent.clear(nameInput);
       await userEvent.type(nameInput, 'New Name');
 
-      // Change description
       const descInput = screen.getByRole('textbox', { name: /description/i });
       await userEvent.clear(descInput);
       await userEvent.type(descInput, 'New Description');
 
-      // Change volunteersRequired
       const vrInput = screen.getByRole('spinbutton', {
         name: /volunteers required/i,
       });
@@ -1103,14 +1092,12 @@ describe('Testing GroupModal', () => {
         name: /volunteers required/i,
       });
 
-      // Set invalid value first
       fireEvent.change(vrInput, { target: { value: '-5' } });
       fireEvent.blur(vrInput);
 
       let submitBtn = screen.getByTestId('submitBtn');
       expect(submitBtn).toBeDisabled();
 
-      // Now set valid value
       fireEvent.change(vrInput, { target: { value: '10' } });
 
       await waitFor(() => {
@@ -1120,7 +1107,7 @@ describe('Testing GroupModal', () => {
     });
 
     it('should handle description being updated from null to a value', async () => {
-      renderGroupModal(link1, itemProps[1]); // This has null description
+      renderGroupModal(link1, itemProps[1]);
 
       const descInput = screen.getByRole('textbox', { name: /description/i });
       expect(descInput).toHaveValue('');

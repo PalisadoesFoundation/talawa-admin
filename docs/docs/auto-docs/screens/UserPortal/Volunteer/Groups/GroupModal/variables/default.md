@@ -8,7 +8,7 @@
 
 Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L60)
 
-A modal dialog for creating or editing a volunteer group.
+A modal dialog for editing a volunteer group.
 
 ## Param
 
@@ -44,7 +44,7 @@ The modal includes:
 - A textarea for entering the group description.
 - An input field for entering the number of volunteers required.
 - A submit button to update the group.
-On form submission, the component either:
+On form submission, the component calls `updateVolunteerGroup` to update the existing group.
 - Calls `updateVolunteerGroup` mutation to update an existing group, or
 
 Success or error messages are displayed using toast notifications based on the result of the mutation.
