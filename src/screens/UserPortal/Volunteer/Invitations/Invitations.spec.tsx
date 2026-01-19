@@ -810,7 +810,7 @@ describe('Testing Invitations Screen', () => {
         expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
-      const inviteSubject = screen.getByTestId('inviteSubject');
+      expect(screen.getByTestId('inviteSubject')).toBeInTheDocument();
     });
   });
 

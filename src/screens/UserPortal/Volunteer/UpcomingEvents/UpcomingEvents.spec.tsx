@@ -14,7 +14,7 @@ import { MemoryRouter, Route, Routes } from 'react-router';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
-import UpcomingEvents, { getStatusBadgeProps } from './UpcomingEvents';
+import UpcomingEvents from './UpcomingEvents';
 import type { ApolloLink } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
