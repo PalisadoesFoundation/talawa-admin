@@ -216,3 +216,43 @@ export const USER_FUND_CAMPAIGNS_ERROR = [
   },
   userDetailsQuery,
 ];
+
+export const MOCKS_WITH_PENDING_CAMPAIGN = [
+  {
+    request: {
+      query: USER_FUND_CAMPAIGNS,
+      variables: {
+        input: { id: 'orgId' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          funds: {
+            edges: [
+              {
+                node: {
+                  campaigns: {
+                    edges: [
+                      {
+                        node: {
+                          id: 'pendingCampaignId',
+                          name: 'Future School Campaign',
+                          currencyCode: 'USD',
+                          goalAmount: 50000,
+                          startAt: dayjs().add(5, 'days').toISOString(),
+                          endAt: dayjs().add(10, 'days').toISOString(),
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  userDetailsQuery,
+];

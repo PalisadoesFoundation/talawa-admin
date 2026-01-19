@@ -25,13 +25,14 @@
  * @see {@link OrganizationAgendaCategory} for the Agenda Item Categories tab content.
  */
 import React, { useState } from 'react';
-import { Button, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from './OrgSettings.module.css';
 import OrgActionItemCategories from 'components/AdminPortal/OrgSettings/ActionItemCategories/OrgActionItemCategories';
 import OrganizationAgendaCategory from 'components/AdminPortal/OrgSettings/AgendaItemCategories/OrganizationAgendaCategory';
 import { Navigate, useParams } from 'react-router';
 import GeneralSettings from 'components/AdminPortal/OrgSettings/General/GeneralSettings';
+import Button from 'shared-components/Button';
 
 type SettingType = 'general' | 'actionItemCategories' | 'agendaItemCategories';
 
