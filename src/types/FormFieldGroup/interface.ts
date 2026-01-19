@@ -1,5 +1,5 @@
 /**
- * Props for FormTextField component, extending FormFieldGroup with text input-specific properties.
+ * Props for FormFieldGroup component.
  */
 export interface InterfaceFormFieldGroupProps {
   name: string;
@@ -9,13 +9,12 @@ export interface InterfaceFormFieldGroupProps {
   error?: string;
   touched?: boolean;
   'data-testid'?: string;
-  onBlur?: () => void;
 }
 
 export interface IFormTextFieldProps extends InterfaceFormFieldGroupProps {
   type?: 'text' | 'email' | 'password' | 'number' | 'url' | 'tel';
   placeholder?: string;
-  value: string | number;
+  value: string;
   onChange: (v: string) => void;
   startAdornment?: React.ReactNode;
   endAdornment?: React.ReactNode;

@@ -6,7 +6,7 @@
 
 Defined in: [src/types/FormFieldGroup/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L4)
 
-Props for FormTextField component, extending FormFieldGroup with text input-specific properties.
+Props for FormFieldGroup component.
 
 ## Extended by
 
@@ -52,18 +52,6 @@ Defined in: [src/types/FormFieldGroup/interface.ts:6](https://github.com/Palisad
 > **name**: `string`
 
 Defined in: [src/types/FormFieldGroup/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L5)
-
-***
-
-### onBlur()?
-
-> `optional` **onBlur**: () => `void`
-
-Defined in: [src/types/FormFieldGroup/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L12)
-
-#### Returns
-
-`void`
 
 ***
 

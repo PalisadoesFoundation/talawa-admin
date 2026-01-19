@@ -1,29 +1,3 @@
-/**
- * A modal dialog for creating or editing a volunteer group.
- *
- * @param isOpen - Indicates whether the modal is open.
- * @param hide - Function to close the modal.
- * @param eventId - The ID of the event associated with volunteer group.
- * @param orgId - The ID of the organization associated with volunteer group.
- * @param group - The volunteer group object to be edited.
- * @param refetchGroups - Function to refetch the volunteer groups after creation or update.
- * @returns The rendered modal component.
- *
- * The `GroupModal` component displays a form within a modal dialog for updating a Volunteer Group.
- * It includes fields for entering the group name, description, and volunteersRequired.
- *
- * The modal includes:
- * - A header with a title and a close button.
- * - A form with:
- * - An input field for entering the group name.
- * - A textarea for entering the group description.
- * - An input field for entering the number of volunteers required.
- * - A submit button to update the group.
- * On form submission, the component either:
- * - Calls `updateVolunteerGroup` mutation to update an existing group, or
- *
- * Success or error messages are displayed using toast notifications based on the result of the mutation.
- */
 import type { ChangeEvent } from 'react';
 import Button from 'shared-components/Button/Button';
 import type {
@@ -55,10 +29,34 @@ import { TbListDetails } from 'react-icons/tb';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import Avatar from 'shared-components/Avatar/Avatar';
 import { FaXmark } from 'react-icons/fa6';
-import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import type { InterfaceGroupModalProps } from 'types/UserPortal/GroupModal/interface';
 
+/**
+ * A modal dialog for creating or editing a volunteer group.
+ *
+ * @param isOpen - Indicates whether the modal is open.
+ * @param hide - Function to close the modal.
+ * @param eventId - The ID of the event associated with volunteer group.
+ * @param group - The volunteer group object to be edited.
+ * @param refetchGroups - Function to refetch the volunteer groups after creation or update.
+ * @returns The rendered modal component.
+ *
+ * The `GroupModal` component displays a form within a modal dialog for updating a Volunteer Group.
+ * It includes fields for entering the group name, description, and volunteersRequired.
+ *
+ * The modal includes:
+ * - A header with a title and a close button.
+ * - A form with:
+ * - An input field for entering the group name.
+ * - A textarea for entering the group description.
+ * - An input field for entering the number of volunteers required.
+ * - A submit button to update the group.
+ * On form submission, the component either:
+ * - Calls `updateVolunteerGroup` mutation to update an existing group, or
+ *
+ * Success or error messages are displayed using toast notifications based on the result of the mutation.
+ */
 const GroupModal: React.FC<InterfaceGroupModalProps> = ({
   isOpen,
   hide,
@@ -284,40 +282,45 @@ const GroupModal: React.FC<InterfaceGroupModalProps> = ({
             }
           />
 
-          <FormFieldGroup
+          <FormTextField
             name="volunteersRequired"
             label={t('volunteersRequired')}
+            type="number"
+            value={
+              volunteersRequired !== null ? String(volunteersRequired) : ''
+            }
             touched={touched.volunteersRequired}
             error={volunteersRequiredError ? t('invalidNumber') : undefined}
-          >
-            <FormTextField
-              name="volunteersRequired"
-              label={t('volunteersRequired')}
-              type="number"
-              value={volunteersRequired ?? ''}
-              touched={touched.volunteersRequired}
-              error={volunteersRequiredError ? t('invalidNumber') : undefined}
-              onChange={(value) => {
-                const parsed = parseInt(value, 10);
-                if (Number.isNaN(parsed) || parsed < 1) {
-                  setVolunteersRequiredError(true);
-                  setFormState((prev) => ({
-                    ...prev,
-                    volunteersRequired: null,
-                  }));
-                } else {
-                  setVolunteersRequiredError(false);
-                  setFormState((prev) => ({
-                    ...prev,
-                    volunteersRequired: parsed,
-                  }));
-                }
-              }}
-              onBlur={() =>
-                setTouched((prev) => ({ ...prev, volunteersRequired: true }))
+            onChange={(value) => {
+              // Handle empty string case
+              if (value === '') {
+                setVolunteersRequiredError(false);
+                setFormState((prev) => ({
+                  ...prev,
+                  volunteersRequired: null,
+                }));
+                return;
               }
-            />
-          </FormFieldGroup>
+
+              const parsed = parseInt(value, 10);
+              if (Number.isNaN(parsed) || parsed < 1) {
+                setVolunteersRequiredError(true);
+                setFormState((prev) => ({
+                  ...prev,
+                  volunteersRequired: null,
+                }));
+              } else {
+                setVolunteersRequiredError(false);
+                setFormState((prev) => ({
+                  ...prev,
+                  volunteersRequired: parsed,
+                }));
+              }
+            }}
+            onBlur={() =>
+              setTouched((prev) => ({ ...prev, volunteersRequired: true }))
+            }
+          />
 
           <Button
             type="submit"
