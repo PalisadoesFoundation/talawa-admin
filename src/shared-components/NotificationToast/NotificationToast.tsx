@@ -7,6 +7,8 @@ import type {
   InterfaceNotificationToastHelpers,
   NotificationToastMessage,
   NotificationToastNamespace,
+  InterfacePromiseMessages,
+  PromiseFunction,
 } from 'types/shared-components/NotificationToast/interface';
 
 const DEFAULT_NAMESPACE: NotificationToastNamespace = 'common';
@@ -70,6 +72,38 @@ function showToast(
 }
 
 /**
+ * Show a promise toast with pending, success, and error states.
+ *
+ * @param promisifiedFunction - The async function to execute.
+ * @param messages - Messages for pending, success, and error states.
+ * @param options - Optional ToastOptions to override DEFAULT_TOAST_OPTIONS.
+ * @returns Promise that resolves when the function completes.
+ */
+function showPromise(
+  promisifiedFunction: PromiseFunction,
+  messages: InterfacePromiseMessages,
+  options?: ToastOptions,
+): Promise<void> {
+  const mergedOptions: ToastOptions = { ...DEFAULT_TOAST_OPTIONS, ...options };
+  const resolvedPendingMessage = resolveNotificationToastMessage(
+    messages.pending,
+  );
+  const resolvedSuccessMessage = resolveNotificationToastMessage(
+    messages.success,
+  );
+  const resolvedErrorMessage = resolveNotificationToastMessage(messages.error);
+  return toast.promise(
+    promisifiedFunction,
+    {
+      pending: resolvedPendingMessage,
+      error: resolvedErrorMessage,
+      success: resolvedSuccessMessage,
+    },
+    mergedOptions,
+  ) as Promise<void>;
+}
+
+/**
  * NotificationToast
  *
  * A small wrapper around `react-toastify` that standardizes toast defaults and
@@ -90,6 +124,8 @@ export const NotificationToast: InterfaceNotificationToastHelpers = {
   warning: (message, options) => showToast('warning', message, options),
   info: (message, options) => showToast('info', message, options),
   dismiss: () => toast.dismiss(),
+  promise: (promisifiedFunction, messages, options) =>
+    showPromise(promisifiedFunction, messages, options),
 };
 
 /**
