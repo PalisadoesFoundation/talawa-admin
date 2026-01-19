@@ -12,6 +12,14 @@ import {
 } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
+import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev';
+
+// Load Apollo Client error messages in development for better debugging
+// See: https://www.apollographql.com/docs/react/errors
+if (import.meta.env.DEV) {
+  loadDevMessages();
+  loadErrorMessages();
+}
 import { createClient } from 'graphql-ws';
 import { onError } from '@apollo/link-error';
 import './assets/css/app.css';
