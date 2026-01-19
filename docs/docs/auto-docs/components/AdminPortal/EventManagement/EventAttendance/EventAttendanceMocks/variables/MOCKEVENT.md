@@ -6,7 +6,7 @@
 
 > `const` **MOCKEVENT**: `object`
 
-Defined in: [src/components/AdminPortal/EventManagement/EventAttendance/EventAttendanceMocks.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/EventAttendance/EventAttendanceMocks.ts#L3)
+Defined in: [src/components/AdminPortal/EventManagement/EventAttendance/EventAttendanceMocks.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/EventAttendance/EventAttendanceMocks.ts#L6)
 
 ## Type Declaration
 

@@ -6,7 +6,7 @@
 
 > `const` **MOCKS**: `object`[]
 
-Defined in: [src/components/AdminPortal/EventManagement/EventAttendance/EventAttendanceMocks.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/EventAttendance/EventAttendanceMocks.ts#L48)
+Defined in: [src/components/AdminPortal/EventManagement/EventAttendance/EventAttendanceMocks.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/EventAttendance/EventAttendanceMocks.ts#L51)
 
 ## Type Declaration
 
@@ -16,7 +16,7 @@ Defined in: [src/components/AdminPortal/EventManagement/EventAttendance/EventAtt
 
 #### request.query
 
-> **query**: `DocumentNode` = `EVENT_ATTENDEES`
+> **query**: `DocumentNode` = `_EVENT_ATTENDEES`
 
 #### request.variables
 

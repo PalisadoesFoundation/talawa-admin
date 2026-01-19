@@ -14,4 +14,6 @@ Props for OrgActionItemCategories component.
 
 > **orgId**: `string`
 
-Defined in: [src/types/AdminPortal/OrgActionItemCategories/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgActionItemCategories/interface.ts#L5)
+Defined in: [src/types/AdminPortal/OrgActionItemCategories/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/OrgActionItemCategories/interface.ts#L6)
+
+The organization ID

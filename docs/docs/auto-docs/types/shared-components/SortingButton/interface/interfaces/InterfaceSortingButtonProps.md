@@ -4,7 +4,9 @@
 
 # Interface: InterfaceSortingButtonProps
 
-Defined in: [src/types/shared-components/SortingButton/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L11)
+Defined in: [src/types/shared-components/SortingButton/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L14)
+
+Props for SortingButton component.
 
 ## Properties
 
@@ -12,7 +14,7 @@ Defined in: [src/types/shared-components/SortingButton/interface.ts:11](https://
 
 > `optional` **ariaLabel**: `string`
 
-Defined in: [src/types/shared-components/SortingButton/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L31)
+Defined in: [src/types/shared-components/SortingButton/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L34)
 
 Accessible label for the dropdown button (screen readers)
 
@@ -22,7 +24,7 @@ Accessible label for the dropdown button (screen readers)
 
 > `optional` **buttonLabel**: `string`
 
-Defined in: [src/types/shared-components/SortingButton/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L27)
+Defined in: [src/types/shared-components/SortingButton/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L30)
 
 Optional prop for custom button label
 
@@ -32,7 +34,7 @@ Optional prop for custom button label
 
 > `optional` **className**: `string`
 
-Defined in: [src/types/shared-components/SortingButton/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L25)
+Defined in: [src/types/shared-components/SortingButton/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L28)
 
 Custom class name for the Dropdown
 
@@ -42,7 +44,7 @@ Custom class name for the Dropdown
 
 > **dataTestIdPrefix**: `string`
 
-Defined in: [src/types/shared-components/SortingButton/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L21)
+Defined in: [src/types/shared-components/SortingButton/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L24)
 
 The prefix for data-testid attributes for testing
 
@@ -52,7 +54,7 @@ The prefix for data-testid attributes for testing
 
 > `optional` **dropdownTestId**: `string`
 
-Defined in: [src/types/shared-components/SortingButton/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L23)
+Defined in: [src/types/shared-components/SortingButton/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L26)
 
 The data-testid attribute for the Dropdown
 
@@ -62,7 +64,7 @@ The data-testid attribute for the Dropdown
 
 > `optional` **icon**: `string`
 
-Defined in: [src/types/shared-components/SortingButton/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L32)
+Defined in: [src/types/shared-components/SortingButton/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L35)
 
 ***
 
@@ -70,7 +72,7 @@ Defined in: [src/types/shared-components/SortingButton/interface.ts:32](https://
 
 > **onSortChange**: (`value`) => `void`
 
-Defined in: [src/types/shared-components/SortingButton/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L19)
+Defined in: [src/types/shared-components/SortingButton/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L22)
 
 Callback function to handle sorting option change
 
@@ -90,7 +92,7 @@ Callback function to handle sorting option change
 
 > `optional` **selectedOption**: `string` \| `number`
 
-Defined in: [src/types/shared-components/SortingButton/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L17)
+Defined in: [src/types/shared-components/SortingButton/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L20)
 
 The currently selected sorting option
 
@@ -100,7 +102,7 @@ The currently selected sorting option
 
 > **sortingOptions**: [`InterfaceSortingOption`](InterfaceSortingOption.md)[]
 
-Defined in: [src/types/shared-components/SortingButton/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L15)
+Defined in: [src/types/shared-components/SortingButton/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L18)
 
 The list of sorting options to display in the Dropdown
 
@@ -110,7 +112,7 @@ The list of sorting options to display in the Dropdown
 
 > `optional` **title**: `string`
 
-Defined in: [src/types/shared-components/SortingButton/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L13)
+Defined in: [src/types/shared-components/SortingButton/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L16)
 
 The title attribute for the Dropdown
 
@@ -120,6 +122,6 @@ The title attribute for the Dropdown
 
 > `optional` **type**: `"filter"` \| `"sort"`
 
-Defined in: [src/types/shared-components/SortingButton/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L29)
+Defined in: [src/types/shared-components/SortingButton/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L32)
 
 Type to determine the icon to display: 'sort' or 'filter'

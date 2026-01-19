@@ -4,7 +4,7 @@
 
 # Interface: InterfacePageHeaderProps
 
-Defined in: [src/types/shared-components/Navbar/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L4)
+Defined in: [src/types/shared-components/Navbar/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L5)
 
 Props for PageHeader (Navbar) component.
 
@@ -14,7 +14,7 @@ Props for PageHeader (Navbar) component.
 
 > `optional` **actions**: `ReactNode`
 
-Defined in: [src/types/shared-components/Navbar/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L20)
+Defined in: [src/types/shared-components/Navbar/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L21)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/Navbar/interface.ts:20](https://github.
 
 > `optional` **search**: `object`
 
-Defined in: [src/types/shared-components/Navbar/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L6)
+Defined in: [src/types/shared-components/Navbar/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L7)
 
 #### buttonTestId?
 
@@ -56,7 +56,7 @@ Defined in: [src/types/shared-components/Navbar/interface.ts:6](https://github.c
 
 > `optional` **showEventTypeFilter**: `boolean`
 
-Defined in: [src/types/shared-components/Navbar/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L19)
+Defined in: [src/types/shared-components/Navbar/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L20)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [src/types/shared-components/Navbar/interface.ts:19](https://github.
 
 > `optional` **sorting**: `object`[]
 
-Defined in: [src/types/shared-components/Navbar/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L12)
+Defined in: [src/types/shared-components/Navbar/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L13)
 
 #### onChange()
 
@@ -102,4 +102,4 @@ Defined in: [src/types/shared-components/Navbar/interface.ts:12](https://github.
 
 > `optional` **title**: `string`
 
-Defined in: [src/types/shared-components/Navbar/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L5)
+Defined in: [src/types/shared-components/Navbar/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L6)
