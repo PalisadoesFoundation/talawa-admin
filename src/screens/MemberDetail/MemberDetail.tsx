@@ -26,7 +26,7 @@
  */
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from './MemberDetail.module.css';
 import {
   AdapterDayjs,
   LocalizationProvider,

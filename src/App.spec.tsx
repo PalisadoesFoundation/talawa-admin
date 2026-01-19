@@ -10,7 +10,6 @@ import { store } from 'state/store';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import i18nForTest from './utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import 'style/app-fixed.module.css';
 import * as useLSModule from 'utils/useLocalstorage';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';

@@ -31,7 +31,7 @@
 import React, { useState, useMemo } from 'react';
 import { Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from './UserEvents.module.css';
 import PeopleTabUserEvents from 'shared-components/PeopleTabUserEvents/PeopleTabUserEvents';
 import PeopleTabNavbar from 'shared-components/PeopleTabNavbar/PeopleTabNavbar';
 import { IconButton } from '@mui/material';
@@ -168,7 +168,7 @@ const UserEvents: React.FC<PeopleTabUserEventsProps> = () => {
         <Card.Body className={`${styles.peoplePageUserEventCardBody}`}>
           {filteredEvents.length === 0 ? (
             <div
-              className={`${styles.emptyContainer} w-100 h-100 d-flex justify-content-center align-items-center fw-semibold text-secondary`}
+              className={`w-100 h-100 d-flex justify-content-center align-items-center fw-semibold text-secondary`}
             >
               {t('noeventsAttended')}
             </div>

@@ -35,7 +35,7 @@ import React, { useMemo, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import PeopleTabUserOrganizations from 'shared-components/PeopleTabUserOrganization/PeopleTabUserOrganizations';
 import PeopleTabNavbar from 'shared-components/PeopleTabNavbar/PeopleTabNavbar';
-import styles from 'style/app-fixed.module.css';
+import styles from './UserOrganizations.module.css';
 import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import useLocalStorage from 'utils/useLocalstorage';

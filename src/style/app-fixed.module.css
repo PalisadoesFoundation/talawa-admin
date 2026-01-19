@@ -4404,22 +4404,6 @@ form label,
   padding: 1rem 1.2rem;
 }
 
-.peopleTabComponent {
-  background: #fff;
-  padding-top: 1rem;
-  border-radius: 20px;
-  margin: 1rem;
-}
-
-.peopleTabComponentSection {
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  padding: 1rem 3rem;
-}
-
 .peopleTabUserTagContainer {
   width: 100%;
 }
@@ -4488,22 +4472,10 @@ form label,
   width: 100%;
 }
 
-.peopleTabNavbarButtonHeader {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  margin-left: 4rem;
-  margin-top: 2rem;
-}
-
 .peopleTabIconWrapper:hover {
   color: #808080;
   border: 1px solid #dddddd;
   cursor: pointer;
-}
-
-.peopleTabUserEventsContainer {
-  width: 100%;
 }
 
 .peopleTabUserEventContainer {
@@ -4536,12 +4508,6 @@ form label,
   margin: 2rem 0.5rem;
   display: flex;
   flex-direction: column;
-}
-.peoplePageUserEventCardBody {
-  display: grid;
-  gap: 1rem;
-  justify-content: center;
-  grid-template-columns: repeat(2, minmax(650px, 1fr));
 }
 
 .peopleTabUserEventActionButton {
@@ -4709,16 +4675,6 @@ form label,
 
 .peopleTabUserOrganizationsEditButton:hover {
   background-color: #90c1ff;
-}
-
-.peopleTabUserOrganizationsContainer {
-  width: 100%;
-}
-
-.peopleTabUserOrganizationsGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
 }
 
 .peopleTabUserEventsGrid {
@@ -9842,48 +9798,6 @@ form {
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
   background-color: var(--people-card-container-bg);
-}
-
-.userContactDetailPersonalCardHeader {
-  padding: 1rem 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top-left-radius: 0.5rem;
-  border-top-right-radius: 0.5rem;
-  background: #eaebef;
-}
-
-.userContactDetailContactCardHeader {
-  background-color: #a8c7fa;
-  color: #555;
-}
-
-.userContactDetailProfileImage {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-}
-
-.userContactDetailEditAvatarIcon {
-  cursor: pointer;
-  font-size: 1.2rem;
-}
-
-.userContactDetailSaveChangesBtn {
-  background-color: #a8c7fa;
-  color: #555;
-}
-
-.userContactDetailContactAvatarUrl {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-}
-
-.userContactDetailContactAvatarEditIcon {
-  cursor: pointer;
-  font-size: '1.2rem';
 }
 
 .custom_row_center {
