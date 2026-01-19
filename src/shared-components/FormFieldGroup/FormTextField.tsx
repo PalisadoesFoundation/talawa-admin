@@ -69,17 +69,6 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
       ) : (
         renderControl()
       )}
-      <Form.Control
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => {
-          onChange(e.target.value);
-        }}
-        onBlur={onBlur}
-        isInvalid={touched && !!error}
-        data-testid={dataTestId}
-      />
     </FormFieldGroup>
   );
 };
