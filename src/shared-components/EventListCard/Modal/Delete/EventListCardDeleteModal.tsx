@@ -1,18 +1,18 @@
-/**
- * EventListCardDeleteModal Component
- *
- * @param eventListCardProps - The properties of the event to be deleted.
- * @param eventDeleteModalIsOpen - Determines if the modal is open.
- * @param toggleDeleteModal - Function to toggle the modal visibility.
- * @param deleteEventHandler - Function to handle the event deletion.
- * @returns JSX.Element
- */
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Form from 'react-bootstrap/Form';
 import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import type { InterfaceDeleteEventModalProps } from 'types/shared-components/EventListCard/Modal/Delete/interface';
 
+/**
+ * EventListCardDeleteModal Component
+ *
+ * `@param` eventListCardProps - The properties of the event to be deleted.
+ * `@param` eventDeleteModalIsOpen - Determines if the modal is open.
+ * `@param` toggleDeleteModal - Function to toggle the modal visibility.
+ * `@param` deleteEventHandler - Function to handle the event deletion.
+ * `@returns` JSX.Element
+ */
 const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
   eventListCardProps,
   eventDeleteModalIsOpen,

@@ -159,7 +159,7 @@ describe('Testing Event List Card', () => {
     renderEventListCard(props[0]);
 
     await waitFor(() => {
-      expect(screen.getByText('Event')).toBeInTheDocument();
+      expect(screen.getByText(translations.defaultTitle)).toBeInTheDocument();
     });
   });
 
