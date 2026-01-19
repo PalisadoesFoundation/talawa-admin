@@ -157,3 +157,8 @@
     transform 0.2s,
     box-shadow 0.2s;
 }
+
+.greenregbtnAgendaItems:focus-visible {
+  outline: 2px solid var(--regBtnAgendaItems-border);
+  outline-offset: 2px;
+}
