@@ -19,7 +19,7 @@
   flex-direction: row;
 }
 
-.yearlyCalendarHeader > div {
+.year {
   font-weight: 600;
   font-size: 2rem;
   padding: 0 10px;
@@ -31,11 +31,6 @@
   color: var(--buttonEventCalendar-color);
   border: 0px;
   font-size: 40px;
-}
-
-.year {
-  /* No specific style found */
-  display: block;
 }
 
 .rowYearlyEventCalender {

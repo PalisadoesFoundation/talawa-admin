@@ -1,16 +1,7 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  within,
-} from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
-import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
@@ -26,49 +17,95 @@ dayjs.extend(utc);
 
 import PreviewModal from './EventListCardPreviewModal';
 import { UserRole } from 'types/Event/interface';
-import {
-  Frequency,
-  InterfaceRecurrenceRule,
-} from 'utils/recurrenceUtils/recurrenceTypes';
+import { Frequency } from 'utils/recurrenceUtils/recurrenceTypes';
 
 vi.mock('screens/AdminPortal/OrganizationEvents/CustomRecurrenceModal', () => ({
   default: vi.fn(),
 }));
 
-const getPickerInputByTestId = (testId: string): HTMLElement => {
-  const input = screen.getByTestId(testId);
-  if (!input) {
-    throw new Error(`Could not find picker input with testId: ${testId}`);
-  }
-  return input;
+// Mock the heavy DatePicker and TimePicker components
+vi.mock('shared-components/DatePicker/DatePicker', () => ({
+  default: ({
+    label,
+    value,
+    onChange,
+    'data-testid': dataTestId,
+    disabled,
+  }: {
+    label: string;
+    value: Dayjs | null;
+    onChange: (date: Dayjs | null) => void;
+    'data-testid': string;
+    disabled?: boolean;
+  }) => (
+    <div data-testid={`${dataTestId}-wrapper`}>
+      <label>{label}</label>
+      <input
+        data-testid={dataTestId}
+        value={value ? value.format('YYYY-MM-DD') : ''}
+        onChange={(e) => {
+          if (!onChange) return;
+          // Create a dayjs object from the input string
+          const date = e.target.value ? dayjs(e.target.value) : null;
+          onChange(date);
+        }}
+        disabled={disabled}
+      />
+    </div>
+  ),
+}));
+
+vi.mock('shared-components/TimePicker/TimePicker', () => ({
+  default: ({
+    label,
+    value,
+    onChange,
+    'data-testid': dataTestId,
+    disabled,
+  }: {
+    label: string;
+    value: Dayjs | null;
+    onChange: (date: Dayjs | null) => void;
+    'data-testid': string;
+    disabled?: boolean;
+  }) => (
+    <div data-testid={`${dataTestId}-wrapper`}>
+      <label>{label}</label>
+      <input
+        data-testid={dataTestId}
+        value={value ? value.format('HH:mm:ss') : ''}
+        onChange={(e) => {
+          if (!onChange) return;
+          // Create a dayjs object (using a dummy date + time string)
+          const time = e.target.value
+            ? dayjs(`2000-01-01T${e.target.value}`)
+            : null;
+          onChange(time);
+        }}
+        disabled={disabled}
+      />
+    </div>
+  ),
+}));
+
+// We definitely do not need createMockStore anymore
+
+// Removed getPickerInputByTestId and getDateButtonByText as they are no longer needed with mocks
+
+const mockT = (
+  key: string,
+  _options: Record<string, string | number> = {},
+): string => {
+  if (key === 'recurrence.daily') return 'Daily';
+  if (key === 'recurrence.weeklyOn') return `Weekly on {{day}}`; // update mock to return template
+  if (key === 'recurrence.monthlyOn') return `Monthly on day {{day}}`; // update mock to return template
+  if (key === 'recurrence.annuallyOn') return `Annually on {{month}} {{day}}`; // update mock to return template
+  if (key === 'recurrence.everyWeekday')
+    return 'Every weekday (Monday to Friday)';
+  if (key === 'recurrence.custom') return 'Custom...';
+  if (key === 'selectRecurrencePattern') return 'selectRecurrencePattern';
+  return key;
 };
-
-/**
- * Helper function to find a date button in the calendar grid by its text content
- * @param calendarGrid - The calendar grid element
- * @param dateText - The date text to find (e.g., "20", "22")
- * @returns The button element containing the date
- */
-export const getDateButtonByText = (
-  calendarGrid: HTMLElement,
-  dateText: string,
-): HTMLElement => {
-  const gridCells = within(calendarGrid).getAllByRole('gridcell');
-  const dateButton = gridCells.find((cell) => {
-    const text = cell.textContent?.trim();
-    return text === dateText;
-  });
-
-  if (!dateButton) {
-    throw new Error(
-      `Could not find date button with text "${dateText}" in calendar grid`,
-    );
-  }
-
-  return dateButton;
-};
-
-const mockT = (key: string): string => key;
 const mockTCommon = (key: string): string => key;
 
 const mockEventListCardProps = {
@@ -140,18 +177,15 @@ const mockDefaultProps = {
 
 const renderComponent = (props = {}) => {
   const finalProps = { ...mockDefaultProps, ...props };
+
   return render(
-    <MockedProvider>
-      <Provider store={store}>
-        <BrowserRouter>
-          <I18nextProvider i18n={i18nForTest}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <PreviewModal {...finalProps} />
-            </LocalizationProvider>
-          </I18nextProvider>
-        </BrowserRouter>
-      </Provider>
-    </MockedProvider>,
+    <BrowserRouter>
+      <I18nextProvider i18n={i18nForTest}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <PreviewModal {...finalProps} />
+        </LocalizationProvider>
+      </I18nextProvider>
+    </BrowserRouter>,
   );
 };
 
@@ -473,7 +507,9 @@ describe('EventListCardPreviewModal', () => {
       isRegistered: true,
     });
 
-    const alreadyRegisteredBtn = screen.getByText('alreadyRegistered');
+    const alreadyRegisteredBtn = screen.getByRole('button', {
+      name: 'alreadyRegistered',
+    });
     expect(alreadyRegisteredBtn).toBeInTheDocument();
     expect(alreadyRegisteredBtn).toBeDisabled();
   });
@@ -575,7 +611,7 @@ describe('EventListCardPreviewModal', () => {
       recurrence: null,
     });
 
-    expect(screen.getByText('Select recurrence pattern')).toBeInTheDocument();
+    expect(screen.getByText('selectRecurrencePattern')).toBeInTheDocument();
   });
 
   test('opens recurrence dropdown and shows options', async () => {
@@ -717,23 +753,14 @@ describe('EventListCardPreviewModal', () => {
       setEventEndDate: mockSetEventEndDate,
     });
 
-    const startDateInput = getPickerInputByTestId('startDate');
-    expect(startDateInput.parentElement).toBeTruthy();
-    const startDatePicker = startDateInput.parentElement;
-    const calendarButton = within(
-      startDatePicker as HTMLElement,
-    ).getByLabelText(/choose date/i);
-    await userEvent.click(calendarButton);
-
-    const calendarGrid = await screen.findByRole('grid');
-    const dateToSelect = within(calendarGrid).getByRole('gridcell', {
-      name: '20',
+    const startDateInput = screen.getByTestId('startDate');
+    fireEvent.change(startDateInput, {
+      target: {
+        value: dayjs().year(2025).month(0).date(20).format('YYYY-MM-DD'),
+      },
     });
-    await userEvent.click(dateToSelect);
 
-    await waitFor(() => {
-      expect(mockSetEventStartDate).toHaveBeenCalled();
-    });
+    expect(mockSetEventStartDate).toHaveBeenCalled();
   });
 
   test('updates end date when end date changes', async () => {
@@ -745,81 +772,58 @@ describe('EventListCardPreviewModal', () => {
       setEventEndDate: mockSetEventEndDate,
     });
 
-    const endDateInput = getPickerInputByTestId('endDate');
-    expect(endDateInput.parentElement).toBeTruthy();
-    const endDatePicker = endDateInput.parentElement;
-    const calendarButton = within(endDatePicker as HTMLElement).getByLabelText(
-      /choose date/i,
-    );
-    await userEvent.click(calendarButton);
-
-    const calendarGrid = await screen.findByRole('grid');
-    const dateToSelect = within(calendarGrid).getByRole('gridcell', {
-      name: '20',
+    const endDateInput = screen.getByTestId('endDate');
+    fireEvent.change(endDateInput, {
+      target: {
+        value: dayjs().year(2025).month(0).date(20).format('YYYY-MM-DD'),
+      },
     });
-    await userEvent.click(dateToSelect);
 
-    await waitFor(() => {
-      expect(mockSetEventEndDate).toHaveBeenCalled();
-    });
+    expect(mockSetEventEndDate).toHaveBeenCalled();
   });
 
   test('updates start time when start time changes', async () => {
     const mockSetFormState = vi.fn();
+    const fixedDate = dayjs()
+      .year(2025)
+      .month(0)
+      .date(15)
+      .hour(12)
+      .minute(0)
+      .second(0)
+      .toDate();
+
     renderComponent({
       setFormState: mockSetFormState,
+      eventStartDate: fixedDate, // Ensure stable date for time comparisons
     });
 
-    const startTimeInput = getPickerInputByTestId('startTime');
-    expect(startTimeInput.parentElement).toBeTruthy();
-    const startTimePicker = startTimeInput.parentElement;
-    const clockButton = within(startTimePicker as HTMLElement).getByLabelText(
-      /choose time/i,
-    );
-    await userEvent.click(clockButton);
+    const startTimeInput = screen.getByTestId('startTime');
+    fireEvent.change(startTimeInput, { target: { value: '11:00:00' } });
 
-    await waitFor(() => {
-      expect(
-        screen.getByRole('listbox', { name: /select hours/i }),
-      ).toBeInTheDocument();
-    });
-
-    const hoursListbox = screen.getByRole('listbox', { name: /select hours/i });
-    const timeToSelect = within(hoursListbox).getByText('11');
-    await userEvent.click(timeToSelect);
-
-    await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalled();
-    });
+    expect(mockSetFormState).toHaveBeenCalled();
   });
 
   test('updates end time when end time changes', async () => {
     const mockSetFormState = vi.fn();
+    const fixedDate = dayjs()
+      .year(2025)
+      .month(0)
+      .date(15)
+      .hour(12)
+      .minute(0)
+      .second(0)
+      .toDate();
+
     renderComponent({
       setFormState: mockSetFormState,
+      eventStartDate: fixedDate, // Ensure stable date
     });
 
-    const endTimeInput = getPickerInputByTestId('endTime');
-    expect(endTimeInput.parentElement).toBeTruthy();
-    const endTimePicker = endTimeInput.parentElement;
-    const clockButton = within(endTimePicker as HTMLElement).getByLabelText(
-      /choose time/i,
-    );
-    await userEvent.click(clockButton);
+    const endTimeInput = screen.getByTestId('endTime');
+    fireEvent.change(endTimeInput, { target: { value: '11:00:00' } });
 
-    await waitFor(() => {
-      expect(
-        screen.getByRole('listbox', { name: /select hours/i }),
-      ).toBeInTheDocument();
-    });
-
-    const hoursListbox = screen.getByRole('listbox', { name: /select hours/i });
-    const timeToSelect = within(hoursListbox).getByText('11');
-    await userEvent.click(timeToSelect);
-
-    await waitFor(() => {
-      expect(mockSetFormState).toHaveBeenCalled();
-    });
+    expect(mockSetFormState).toHaveBeenCalled();
   });
 
   test('disables time pickers when all-day is checked', () => {
@@ -1324,4 +1328,5 @@ describe('EventListCardPreviewModal', () => {
       expect(mockSetEventEndDate).toHaveBeenCalled();
     });
   });
+  // Removed redundant "fake" unit tests that tested local logic instead of the component
 });

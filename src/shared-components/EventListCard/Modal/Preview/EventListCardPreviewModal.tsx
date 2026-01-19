@@ -1,41 +1,11 @@
-/**
- * PreviewModal Component
- *
- * This component renders a modal for previewing and editing event details.
- * It provides functionality to view, update, and manage event properties such as
- * name, description, location, date, time, and visibility settings.
- *
- * @param  props - The props for the PreviewModal component.
- * @param eventModalIsOpen - Determines if the modal is open.
- * @param hideViewModal - Function to close the modal.
- * @param toggleDeleteModal - Function to toggle the delete confirmation modal.
- * @param t - Translation function for event-specific strings.
- * @param tCommon - Translation function for common strings.
- * @param isRegistered - Indicates if the user is registered for the event.
- * @param userId - The ID of the current user.
- * @param eventStartDate - The start date of the event.
- * @param eventEndDate - The end date of the event.
- * @param setEventStartDate - Function to update the event start date.
- * @param setEventEndDate - Function to update the event end date.
- * @param alldaychecked - Indicates if the event is an all-day event.
- * @param setAllDayChecked - Function to toggle the all-day event setting.
- * @param publicchecked - Indicates if the event is public.
- * @param setPublicChecked - Function to toggle the public event setting.
- * @param registrablechecked - Indicates if the event is registrable.
- * @param setRegistrableChecked - Function to toggle the registrable event setting.
- * @param formState - The state of the form fields.
- * @param setFormState - Function to update the form state.
- * @param registerEventHandler - Function to handle event registration.
- * @param handleEventUpdate - Function to handle event updates.
- * @param openEventDashboard - Function to navigate to the event dashboard.
- *
- * @returns A modal for previewing and managing event details.
- */
-// translation-check-keyPrefix: eventListCard
 import React from 'react';
-import { Button, Form, Dropdown } from 'react-bootstrap';
+import { Dropdown } from 'react-bootstrap';
+import FormCheck from 'react-bootstrap/FormCheck';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import styles from 'style/app-fixed.module.css';
+import styles from './EventListCardPreviewModal.module.css';
+import globalStyles from 'style/app-fixed.module.css';
 import DatePicker from 'shared-components/DatePicker/DatePicker';
 import TimePicker from 'shared-components/TimePicker/TimePicker';
 import dayjs from 'dayjs';
@@ -80,83 +50,56 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   customRecurrenceModalIsOpen,
   setCustomRecurrenceModalIsOpen,
 }) => {
-  const timeToDayJs = (time: string): Dayjs => {
-    const dateTimeString = dayjs().format('YYYY-MM-DD') + ' ' + time;
+  // FIX: Accept a baseDate to ensure time comparisons happen on the correct day
+  const timeToDayJs = (time: string, baseDate: Date): Dayjs => {
+    const dateStr = dayjs(baseDate).format('YYYY-MM-DD');
+    const dateTimeString = dateStr + ' ' + time;
     return dayjs(dateTimeString, { format: 'YYYY-MM-DD HH:mm:ss' });
   };
 
-  // Check if the user has permission to edit the event
   const canEditEvent =
     eventListCardProps.creator?.id === userId ||
     eventListCardProps.userRole === UserRole.ADMINISTRATOR;
-
-  const getDayName = (dayIndex: number): string => {
-    const days = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-    ];
-    return days[dayIndex];
-  };
-
-  const getMonthName = (monthIndex: number): string => {
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-    return months[monthIndex];
-  };
 
   const getRecurrenceOptions = (): Array<{
     label: string;
     value: InterfaceRecurrenceRule | 'custom';
   }> => {
-    const eventDate = new Date(eventStartDate);
-    const dayOfWeek = eventDate.getDay();
-    const dayOfMonth = eventDate.getDate();
-    const month = eventDate.getMonth();
-    const dayName = getDayName(dayOfWeek);
-    const monthName = getMonthName(month);
+    const eventDate = dayjs(eventStartDate);
+    const dayName = eventDate.format('dddd');
+    const monthName = eventDate.format('MMMM');
+    const dayOfMonth = eventDate.date();
 
     return [
       {
-        label: 'Daily',
-        value: createDefaultRecurrenceRule(eventDate, Frequency.DAILY),
+        label: t('recurrence.daily'),
+        value: createDefaultRecurrenceRule(eventStartDate, Frequency.DAILY),
       },
       {
-        label: `Weekly on ${dayName}`,
-        value: createDefaultRecurrenceRule(eventDate, Frequency.WEEKLY),
+        label: t('recurrence.weeklyOn').replace('{{day}}', dayName),
+        value: createDefaultRecurrenceRule(eventStartDate, Frequency.WEEKLY),
       },
       {
-        label: `Monthly on day ${dayOfMonth}`,
-        value: createDefaultRecurrenceRule(eventDate, Frequency.MONTHLY),
+        label: t('recurrence.monthlyOn').replace(
+          '{{day}}',
+          dayOfMonth.toString(),
+        ),
+        value: createDefaultRecurrenceRule(eventStartDate, Frequency.MONTHLY),
       },
       {
-        label: `Annually on ${monthName} ${dayOfMonth}`,
+        label: t('recurrence.annuallyOn')
+          .replace('{{month}}', monthName)
+          .replace('{{day}}', dayOfMonth.toString()),
         value: {
           frequency: Frequency.YEARLY,
           interval: 1,
-          byMonth: [month + 1],
+          byMonth: [eventDate.month() + 1],
           byMonthDay: [dayOfMonth],
           never: true,
         },
       },
       {
-        label: 'Every weekday (Monday to Friday)',
+        label: t('recurrence.everyWeekday'),
         value: {
           frequency: Frequency.WEEKLY,
           interval: 1,
@@ -165,7 +108,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
         },
       },
       {
-        label: 'Custom...',
+        label: t('recurrence.custom'),
         value: 'custom',
       },
     ];
@@ -188,7 +131,6 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   };
 
   const getCurrentRecurrenceLabel = (): string => {
-    // If the user has interacted with the dropdown, show the selected recurrence
     if (recurrence) {
       const options = getRecurrenceOptions();
       const matchingOption = options.find((option) => {
@@ -200,7 +142,6 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
         return matchingOption.label;
       }
 
-      // If no standard option matches, display the frequency of the custom rule.
       if (recurrence.frequency) {
         return (
           recurrence.frequency.charAt(0).toUpperCase() +
@@ -209,22 +150,18 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
       }
     }
 
-    // If the user has not interacted with the dropdown, show the original description
     if (eventListCardProps.recurrenceDescription) {
       return eventListCardProps.recurrenceDescription;
     }
 
-    // Fallback for non-recurring events or events without a description
-    return 'Select recurrence pattern';
+    return t('selectRecurrencePattern');
   };
 
-  // Check if this is a recurring event (either template or instance)
   const isRecurringEvent =
     eventListCardProps.isRecurringEventTemplate ||
     (!eventListCardProps.isRecurringEventTemplate &&
       !!eventListCardProps.baseEvent?.id);
 
-  // For update purposes, allow recurrence changes on recurring instances
   const canChangeRecurrence = isRecurringEvent;
 
   return (
@@ -241,7 +178,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 variant="success"
                 onClick={openEventDashboard}
                 data-testid="showEventDashboardBtn"
-                className={styles.addButton}
+                className={globalStyles.addButton}
                 aria-label={t('showEventDashboard')}
               >
                 {t('showEventDashboard')}
@@ -250,7 +187,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             {canEditEvent && (
               <Button
                 variant="success"
-                className={styles.addButton}
+                className={globalStyles.addButton}
                 data-testid="previewUpdateEventBtn"
                 data-cy="previewUpdateEventBtn"
                 onClick={handleEventUpdate}
@@ -264,7 +201,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 variant="danger"
                 data-testid="deleteEventModalBtn"
                 data-cy="deleteEventModalBtn"
-                className={styles.removeButton}
+                className={globalStyles.removeButton}
                 onClick={toggleDeleteModal}
                 aria-label={t('deleteEvent')}
               >
@@ -274,12 +211,16 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             {eventListCardProps.userRole === UserRole.REGULAR &&
               !(eventListCardProps.creator?.id === userId) &&
               (isRegistered ? (
-                <Button className={styles.addButton} variant="success" disabled>
+                <Button
+                  className={globalStyles.addButton}
+                  variant="success"
+                  disabled
+                >
                   {t('alreadyRegistered')}
                 </Button>
               ) : (
                 <Button
-                  className={styles.addButton}
+                  className={globalStyles.addButton}
                   variant="success"
                   onClick={registerEventHandler}
                   data-testid="registerEventBtn"
@@ -291,13 +232,12 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
         }
         centered={true}
       >
-        <Form>
-          {/* Event Name */}
-          <p className={styles.previewEventListCardModals}>{t('eventName')}</p>
-          <Form.Control
-            type="name"
-            id="eventname"
-            className={`mb-3 ${styles.inputField}`}
+        <div className="w-100">
+          <FormTextField
+            name="eventname"
+            label={t('eventName')}
+            placeholder={t('enterName')}
+            className={`mb - 3 ${globalStyles.inputField} `}
             autoComplete="off"
             data-testid="updateName"
             data-cy="updateName"
@@ -307,20 +247,16 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 ? formState.name.substring(0, 100) + '...'
                 : formState.name || ''
             }
-            onChange={(e) =>
-              setFormState({ ...formState, name: e.target.value })
-            }
+            onChange={(val) => setFormState({ ...formState, name: val })}
             disabled={!canEditEvent}
           />
 
-          {/* Description */}
-          <p className={styles.previewEventListCardModals}>
-            {tCommon('description')}
-          </p>
-          <Form.Control
-            type="eventdescrip"
-            id="eventdescrip"
-            className={`mb-3 ${styles.inputField}`}
+          <FormTextField
+            name="eventdescrip"
+            label={tCommon('description')}
+            as="textarea"
+            placeholder={t('enterDescription')}
+            className={`mb - 3 ${globalStyles.inputField} `}
             autoComplete="off"
             data-testid="updateDescription"
             data-cy="updateDescription"
@@ -330,32 +266,26 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 ? formState.eventdescrip.substring(0, 256) + '...'
                 : formState.eventdescrip || ''
             }
-            onChange={(e) =>
-              setFormState({ ...formState, eventdescrip: e.target.value })
+            onChange={(val) =>
+              setFormState({ ...formState, eventdescrip: val })
             }
             disabled={!canEditEvent}
           />
 
-          {/* Location */}
-          <p className={styles.previewEventListCardModals}>
-            {tCommon('location')}
-          </p>
-          <Form.Control
-            type="text"
-            id="location"
-            className={`mb-3 ${styles.inputField}`}
+          <FormTextField
+            name="location"
+            label={tCommon('location')}
+            placeholder={tCommon('enterLocation')}
+            className={`mb - 3 ${globalStyles.inputField} `}
             autoComplete="off"
             data-testid="updateLocation"
             data-cy="updateLocation"
             required
             value={formState.location || ''}
-            onChange={(e) =>
-              setFormState({ ...formState, location: e.target.value })
-            }
+            onChange={(val) => setFormState({ ...formState, location: val })}
             disabled={!canEditEvent}
           />
 
-          {/* DatePickers & TimePickers */}
           <div className={styles.datediv}>
             <DatePicker
               label={tCommon('startDate')}
@@ -388,7 +318,8 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
               <TimePicker
                 label={tCommon('startTime')}
                 className={styles.datebox}
-                value={timeToDayJs(formState.startTime)}
+                // FIX: Use current event date
+                value={timeToDayJs(formState.startTime, eventStartDate)}
                 data-testid="startTime"
                 onChange={(time) => {
                   if (time) {
@@ -396,7 +327,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                       ...formState,
                       startTime: time.format('HH:mm:ss'),
                       endTime:
-                        timeToDayJs(formState.endTime) < time
+                        timeToDayJs(formState.endTime, eventStartDate) < time
                           ? time.format('HH:mm:ss')
                           : formState.endTime,
                     });
@@ -407,7 +338,8 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
               <TimePicker
                 label={tCommon('endTime')}
                 className={styles.datebox}
-                value={timeToDayJs(formState.endTime)}
+                // FIX: Use current event date
+                value={timeToDayJs(formState.endTime, eventStartDate)}
                 data-testid="endTime"
                 onChange={(time) =>
                   time &&
@@ -416,45 +348,45 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                     endTime: time.format('HH:mm:ss'),
                   })
                 }
-                minTime={timeToDayJs(formState.startTime)}
+                // FIX: Use current event date for minTime comparison
+                minTime={timeToDayJs(formState.startTime, eventStartDate)}
                 disabled={!canEditEvent}
               />
             </div>
           )}
 
-          {/* Checkboxes */}
-          <div className={styles.checkboxdiv}>
-            <div className={styles.dispflexOrganizationEvents}>
+          <div className={styles.checkboxdivEventListCardModals}>
+            <div className={styles.dispflexEventListCardModals}>
               <label htmlFor="allday">{t('allDay')}?</label>
-              <Form.Switch
+              <FormCheck
+                type="switch"
                 id="allday"
-                type="checkbox"
                 data-testid="updateAllDay"
-                className={`me-4 ${styles.switch}`}
+                className={`me-4 ${globalStyles.switch}`}
                 checked={alldaychecked}
                 onChange={() => setAllDayChecked(!alldaychecked)}
                 disabled={!canEditEvent}
               />
             </div>
-            <div className={styles.dispflexOrganizationEvents}>
+            <div className={styles.dispflexEventListCardModals}>
               <label htmlFor="ispublic">{t('isPublic')}?</label>
-              <Form.Switch
+              <FormCheck
+                type="switch"
                 id="ispublic"
-                type="checkbox"
                 data-testid="updateIsPublic"
-                className={`me-4 ${styles.switch}`}
+                className={`me-4 ${globalStyles.switch}`}
                 checked={publicchecked}
                 onChange={() => setPublicChecked(!publicchecked)}
                 disabled={!canEditEvent}
               />
             </div>
-            <div className={styles.dispflexOrganizationEvents}>
+            <div className={styles.dispflexEventListCardModals}>
               <label htmlFor="registrable">{t('isRegistrable')}?</label>
-              <Form.Switch
+              <FormCheck
+                type="switch"
                 id="registrable"
-                type="checkbox"
                 data-testid="updateRegistrable"
-                className={`me-4 ${styles.switch}`}
+                className={`me-4 ${globalStyles.switch}`}
                 checked={registrablechecked}
                 onChange={() => setRegistrableChecked(!registrablechecked)}
                 disabled={!canEditEvent}
@@ -462,14 +394,13 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             </div>
           </div>
 
-          {/* Recurrence Dropdown */}
           {canEditEvent && canChangeRecurrence && (
             <Dropdown className="mb-3">
               <Dropdown.Toggle
                 variant="outline-secondary"
                 id="recurrence-dropdown"
                 data-testid="recurrenceDropdown"
-                className={`${styles.dropdown}`}
+                className={`${globalStyles.dropdown} `}
               >
                 {getCurrentRecurrenceLabel()}
               </Dropdown.Toggle>
@@ -486,7 +417,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
               </Dropdown.Menu>
             </Dropdown>
           )}
-        </Form>
+        </div>
       </BaseModal>
 
       {recurrence && isRecurringEvent && (
@@ -494,7 +425,14 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
           recurrenceRuleState={recurrence}
           setRecurrenceRuleState={(newRecurrence) => {
             if (typeof newRecurrence === 'function') {
-              setRecurrence((prev) => (prev ? newRecurrence(prev) : null));
+              // FIX: Handle case where 'prev' is null but function is called
+              setRecurrence((prev) => {
+                if (prev) return newRecurrence(prev);
+                // Fallback: If no previous rule, create a default to update
+                return newRecurrence(
+                  createDefaultRecurrenceRule(eventStartDate, Frequency.WEEKLY),
+                );
+              });
             } else {
               setRecurrence(newRecurrence);
             }
@@ -502,6 +440,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
           endDate={eventEndDate}
           setEndDate={(date: React.SetStateAction<Date | null>) => {
             if (typeof date === 'function') {
+              // FIX: Ensure safe handling of null
               setEventEndDate((prev) => date(prev) || prev);
             } else {
               setEventEndDate(date || eventEndDate);
@@ -512,7 +451,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
             setCustomRecurrenceModalIsOpen(false)
           }
           setCustomRecurrenceModalIsOpen={setCustomRecurrenceModalIsOpen}
-          t={(key: string) => key} // Pass translation function if available
+          t={(key: string) => key}
           startDate={eventStartDate}
         />
       )}

@@ -242,6 +242,9 @@ describe('Testing Event List Card', () => {
     await waitFor(() => {
       expect(screen.getByTestId('modal-primary-btn')).toBeInTheDocument();
     });
+    await waitFor(() =>
+      expect(screen.getByTestId('modal-primary-btn')).toBeInTheDocument(),
+    );
     await userEvent.click(screen.getByTestId('modal-primary-btn'));
 
     await waitFor(() => {
