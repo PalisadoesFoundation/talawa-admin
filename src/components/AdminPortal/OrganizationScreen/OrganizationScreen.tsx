@@ -34,7 +34,7 @@ import { updateTargets } from 'state/action-creators';
 import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import styles from 'style/app-fixed.module.css';
+import styles from './OrganizationScreen.module.css';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useQuery } from '@apollo/client';
 import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
@@ -138,7 +138,7 @@ const OrganizationScreen = (): JSX.Element => {
 
   return (
     <>
-      <div className={styles.opendrawerdrawer}>
+      <div className={styles.opendrawer}>
         <LeftDrawerOrg
           orgId={orgId}
           targets={targets}

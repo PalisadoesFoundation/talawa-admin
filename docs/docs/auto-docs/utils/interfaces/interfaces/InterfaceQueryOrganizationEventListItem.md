@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationEventListItem
 
-Defined in: [src/utils/interfaces.ts:1375](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1375)
+Defined in: [src/utils/interfaces.ts:1378](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1378)
 
 Extends InterfaceBaseEvent with additional properties for an organization event list item.
 
@@ -78,7 +78,7 @@ Defined in: [src/utils/interfaces.ts:390](https://github.com/PalisadoesFoundatio
 
 > **isPublic**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1376](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1376)
+Defined in: [src/utils/interfaces.ts:1379](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1379)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [src/utils/interfaces.ts:1376](https://github.com/PalisadoesFoundati
 
 > **isRegisterable**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1377](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1377)
+Defined in: [src/utils/interfaces.ts:1380](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1380)
 
 ***
 

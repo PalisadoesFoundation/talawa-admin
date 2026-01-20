@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationListObject
 
-Defined in: [src/utils/interfaces.ts:998](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L998)
+Defined in: [src/utils/interfaces.ts:1001](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1001)
 
 Defines the structure for an organization list object returned from a query.
 
@@ -14,7 +14,7 @@ Defines the structure for an organization list object returned from a query.
 
 > **addressLine1**: `string`
 
-Defined in: [src/utils/interfaces.ts:1001](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1001)
+Defined in: [src/utils/interfaces.ts:1004](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1004)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1001](https://github.com/PalisadoesFoundati
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:1002](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1002)
+Defined in: [src/utils/interfaces.ts:1005](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1005)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/interfaces.ts:1002](https://github.com/PalisadoesFoundati
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:999](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L999)
+Defined in: [src/utils/interfaces.ts:1002](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1002)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/utils/interfaces.ts:999](https://github.com/PalisadoesFoundatio
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1000](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1000)
+Defined in: [src/utils/interfaces.ts:1003](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1003)

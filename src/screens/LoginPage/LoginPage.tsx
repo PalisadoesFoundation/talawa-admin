@@ -17,8 +17,8 @@ import Check from '@mui/icons-material/Check';
 import Clear from '@mui/icons-material/Clear';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
-import { Form } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
+
+import Button from 'shared-components/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
@@ -178,11 +178,16 @@ const LoginPage = (): JSX.Element => {
 
   useEffect(() => {
     const isLoggedIn = getItem('IsLoggedIn');
-    if (isLoggedIn == 'TRUE') {
-      navigate(getItem('userId') !== null ? '/user/organizations' : '/orglist');
+    if (isLoggedIn === 'TRUE') {
+      const storedRole = getItem('role');
+      const target =
+        storedRole === 'administrator' || storedRole === 'superuser'
+          ? '/orglist'
+          : '/user/organizations';
+      navigate(target);
       extendSession();
     }
-  }, []);
+  }, [navigate]);
 
   const togglePassword = (): void => setShowPassword(!showPassword);
   const toggleConfirmPassword = (): void =>
@@ -279,11 +284,7 @@ const LoginPage = (): JSX.Element => {
           });
 
           if (signUpData) {
-            NotificationToast.success(
-              t(
-                role === 'admin' ? 'successfullyRegistered' : 'afterRegister',
-              ) as string,
-            );
+            NotificationToast.success(t('signupSuccessVerifyEmail') as string);
             setShowTab('LOGIN');
             setSignFormState({
               signName: '',
@@ -295,11 +296,14 @@ const LoginPage = (): JSX.Element => {
             SignupRecaptchaRef.current?.reset();
             // If signup was successful, set session state and resume pending invite
             // Note: Tokens are now set via HTTP-Only cookies by the server (XSS protection)
-            if (signUpData.signUp && signUpData.signUp.authenticationToken) {
+            if (signUpData.signUp) {
               setItem('IsLoggedIn', 'TRUE');
               // Use form data for name/email since SIGNUP_MUTATION only returns user.id
               setItem('name', signName);
               setItem('email', signEmail);
+              // Newly signed up users are unverified by default
+              setItem('emailNotVerified', 'true');
+              setItem('unverifiedEmail', signEmail);
               // Persist userId from API response
               if (signUpData.signUp.user?.id) {
                 setItem('userId', signUpData.signUp.user.id);
@@ -312,6 +316,8 @@ const LoginPage = (): JSX.Element => {
                 window.location.href = `/event/invitation/${pendingInvitationToken}`;
                 return;
               }
+              startSession();
+              navigate('/user/organizations');
             }
           }
         } catch (error) {
@@ -396,6 +402,16 @@ const LoginPage = (): JSX.Element => {
           setItem('id', loggedInUserId);
         } else {
           setItem('userId', loggedInUserId);
+        }
+
+        // Check if email is not verified and store in localStorage for post-login warning
+        if (!user.isEmailAddressVerified) {
+          setItem('emailNotVerified', 'true');
+          setItem('unverifiedEmail', user.emailAddress);
+        } else {
+          // Clear the flags if email is verified
+          removeItem('emailNotVerified');
+          removeItem('unverifiedEmail');
         }
 
         // If there is a pending invitation token from the public invite flow, resume it
@@ -511,7 +527,8 @@ const LoginPage = (): JSX.Element => {
                     touched={touched.email}
                   >
                     <div className="position-relative">
-                      <Form.Control
+                      <input
+                        className="form-control"
                         type="email"
                         disabled={loginLoading}
                         placeholder={tCommon('enterEmail')}
@@ -542,9 +559,9 @@ const LoginPage = (): JSX.Element => {
                       touched={touched.password}
                     >
                       <div className="position-relative">
-                        <Form.Control
+                        <input
+                          className="form-control input_box_second lh-1"
                           type={showPassword ? 'text' : 'password'}
-                          className="input_box_second lh-1"
                           placeholder={tCommon('enterPassword')}
                           required
                           value={formState.password}
@@ -640,7 +657,7 @@ const LoginPage = (): JSX.Element => {
                   showTab === 'REGISTER' ? styles.active_tab : 'd-none'
                 }`}
               >
-                <Form onSubmit={signupLink}>
+                <form onSubmit={signupLink}>
                   <h1
                     className="fs-2 fw-bold text-dark mb-3"
                     data-testid="register-text"
@@ -657,10 +674,10 @@ const LoginPage = (): JSX.Element => {
                         error={signNameError}
                         touched={signTouched.signName}
                       >
-                        <Form.Control
+                        <input
+                          className="form-control mb-3"
                           disabled={signinLoading}
                           type="text"
-                          className="mb-3"
                           placeholder={tCommon('Name')}
                           required
                           value={signformState.signName}
@@ -679,8 +696,8 @@ const LoginPage = (): JSX.Element => {
                     {/* </Col> */}
                     {/* <Col sm={6}>
                       <div>
-                        <Form.Label>{tCommon('lastName')}</Form.Label>
-                        <Form.Control
+                        <label className="form-label">{tCommon('lastName')}</label>
+                        <input className="form-control"
                           disabled={signinLoading}
                           type="text"
                           id="signlastname"
@@ -706,11 +723,11 @@ const LoginPage = (): JSX.Element => {
                     touched={signTouched.signEmail}
                   >
                     <div className="position-relative">
-                      <Form.Control
+                      <input
+                        className="form-control mb-3"
                         disabled={signinLoading}
                         type="email"
                         data-testid="signInEmail"
-                        className="mb-3"
                         placeholder={tCommon('email')}
                         autoComplete="username"
                         required
@@ -743,7 +760,8 @@ const LoginPage = (): JSX.Element => {
                       touched={signTouched.signPassword}
                     >
                       <div className="position-relative">
-                        <Form.Control
+                        <input
+                          className="form-control"
                           disabled={signinLoading}
                           type={showPassword ? 'text' : 'password'}
                           data-testid="passwordField"
@@ -910,7 +928,8 @@ const LoginPage = (): JSX.Element => {
                     touched={signTouched.cPassword}
                   >
                     <div className="position-relative">
-                      <Form.Control
+                      <input
+                        className="form-control"
                         disabled={signinLoading}
                         type={showConfirmPassword ? 'text' : 'password'}
                         placeholder={tCommon('confirmPassword')}
@@ -951,7 +970,7 @@ const LoginPage = (): JSX.Element => {
                       </div>
                     )}
                   <div className="position-relative  my-2">
-                    <Form.Label>{t('selectOrg')}</Form.Label>
+                    <label className="form-label">{t('selectOrg')}</label>
                     <div className="position-relative">
                       <Autocomplete
                         disablePortal
@@ -1015,7 +1034,7 @@ const LoginPage = (): JSX.Element => {
                       {t('backToLogin')}
                     </Link>
                   </Button>
-                </Form>
+                </form>
               </div>
             </div>
           </Col>
