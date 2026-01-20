@@ -6,17 +6,11 @@
 # Used by pre-commit hooks to run Python-based CI checks locally.
 #
 
-set -eu
+set -euo pipefail
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
 
 VENV_DIR="$REPO_ROOT/venv"
-if [ ! -d "$VENV_DIR" ]; then
-    echo "Error: Virtual environment not found at $VENV_DIR"
-    echo "Please create it manually with: python -m venv venv"
-    exit 1
-fi
-
 if [ -x "$VENV_DIR/bin/python" ]; then
   VENV_PY="$VENV_DIR/bin/python"
 elif [ -x "$VENV_DIR/Scripts/python.exe" ]; then
@@ -27,7 +21,20 @@ else
   exit 1
 fi
 
+LOCK_FILE=$(git rev-parse --git-path venv-setup.lock)
+exec 9>"$LOCK_FILE"
+
+if command -v flock >/dev/null 2>&1; then
+  flock 9
+else
+  echo "Warning: flock not available, proceeding without lock" >&2
+fi
+
 # Install deps
 "$VENV_PY" -m pip install -q --disable-pip-version-check -r "$REPO_ROOT/.github/workflows/requirements.txt"
+
+if command -v cygpath >/dev/null 2>&1; then
+  VENV_PY=$(cygpath -u "$VENV_PY")
+fi
 
 echo "$VENV_PY"
