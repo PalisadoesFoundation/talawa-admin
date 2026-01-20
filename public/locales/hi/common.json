@@ -290,5 +290,11 @@
   "copyToClipboardError": "लिंक क्लिपबोर्ड पर कॉपी करने में त्रुटि",
   "share": "शेयर करें",
   "viewEventStatistics": "इवेंट सांख्यिकी देखें",
-  "checkInRegistrantsAriaLabel": "पंजीकृतों को चेक इन करें"
+  "checkInRegistrantsAriaLabel": "पंजीकृतों को चेक इन करें",
+  "auth": {
+    "emailField": {
+      "label": "Email",
+      "placeholder": "name@example.com"
+    }
+  }
 }

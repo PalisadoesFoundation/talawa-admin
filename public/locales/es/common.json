@@ -290,5 +290,11 @@
   "copyToClipboardError": "Error al copiar el enlace al portapapeles",
   "share": "Compartir",
   "viewEventStatistics": "Ver Estadísticas del Evento",
-  "checkInRegistrantsAriaLabel": "Registrar asistentes"
+  "checkInRegistrantsAriaLabel": "Registrar asistentes",
+  "auth": {
+    "emailField": {
+      "label": "Email",
+      "placeholder": "name@example.com"
+    }
+  }
 }

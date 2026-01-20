@@ -290,5 +290,11 @@
   "copyToClipboardError": "Error copying link to clipboard",
   "share": "Share",
   "viewEventStatistics": "View Event Statistics",
-  "checkInRegistrantsAriaLabel": "Check in registrants"
+  "checkInRegistrantsAriaLabel": "Check in registrants",
+  "auth": {
+    "emailField": {
+      "label": "Email",
+      "placeholder": "name@example.com"
+    }
+  }
 }
