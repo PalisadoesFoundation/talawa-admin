@@ -3,36 +3,8 @@
  *
  * This component renders a modal dialog that allows users to create a new post
  * within an organization. Users can add a title, optional body text, attach an
- * image or video, and optionally pin the post. The component handles file preview,
- * file hashing, GraphQL mutation submission, and UI state reset on success.
+ * image or video, and optionally pin the post.
  *
- * @component
- * @param {ICreatePostModalProps} props - The props for the CreatePostModal component.
- * @param {boolean} props.show - Controls the visibility of the modal.
- * @param {() => void} props.onHide - Callback invoked to close the modal.
- * @param {() => Promise<unknown>} props.refetch - Function to refetch posts after a successful creation.
- * @param {string | undefined} props.orgId - The organization ID where the post will be created.
- *
- * @returns {JSX.Element} A JSX element representing the create post modal.
- *
- * @remarks
- * - Uses `@apollo/client` for executing the `CREATE_POST_MUTATION`.
- * - Supports image and video uploads with MIME type validation.
- * - File integrity is ensured by generating a SHA-256 hash using the Web Crypto API.
- * - Displays media previews using `URL.createObjectURL`.
- * - Uses `react-i18next` for localization and `react-toastify` for user feedback.
- * - Automatically resets form state and clears file inputs after successful submission.
- * - The modal can be dismissed by clicking the backdrop or pressing the `Escape` key.
- *
- * @example
- * ```tsx
- * <CreatePostModal
- *   show={true}
- *   onHide={() => setShowModal(false)}
- *   refetch={refetchPosts}
- *   orgId="org_123"
- * />
- * ```
  */
 
 import React, {
@@ -50,10 +22,11 @@ import {
   CREATE_POST_MUTATION,
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import { useTranslation } from 'react-i18next';
 import { ICreatePostData, ICreatePostInput } from 'types/Post/type';
+
 import { ICreatePostModalProps } from 'types/Post/interface';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
@@ -132,13 +105,17 @@ function CreatePostModal({
     }
   }
 
+  /**
+   * Handles file selection from the input.
+   * Validates the mime type against allowed types and generates a blob URL for previewing the selected image or video.
+   */
   const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
     if (getMimeTypeEnum(file.type) === '0') {
       setFile(null);
       setPreview(null);
-      toast.error(t('createPostModal.unsupportedFileType'));
+      NotificationToast.error(t('createPostModal.unsupportedFileType'));
       return;
     }
     if (file.type.startsWith('image/')) {
@@ -154,7 +131,7 @@ function CreatePostModal({
   };
 
   const onSuccess = async (type: 'edited' | 'created') => {
-    toast.success(
+    NotificationToast.success(
       type === 'created'
         ? (t('createPostModal.postCreatedSuccess') as string)
         : (t('createPostModal.postUpdatedSuccess') as string),
@@ -174,6 +151,10 @@ function CreatePostModal({
     onHide();
   };
 
+  /**
+   * Submits the post data to the server.
+   * Validates required fields, executes the create or update mutation, handles success, and catches errors.
+   */
   const createPostHandler = async (
     e: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
@@ -181,7 +162,7 @@ function CreatePostModal({
 
     try {
       if (!orgId) {
-        toast.error(t('createPostModal.organizationIdMissing'));
+        NotificationToast.error(t('createPostModal.organizationIdMissing'));
         return;
       }
       if (type === 'create') {
@@ -338,6 +319,7 @@ function CreatePostModal({
                 ref={fileInputRef}
                 type="file"
                 accept="image/*, video/*"
+                id="addMedia"
                 data-testid="addMedia"
                 data-cy="addMediaField"
                 hidden

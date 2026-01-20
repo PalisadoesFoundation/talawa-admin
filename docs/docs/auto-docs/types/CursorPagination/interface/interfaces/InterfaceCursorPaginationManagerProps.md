@@ -61,12 +61,7 @@ Custom component to show when no items are available
 Defined in: [src/types/CursorPagination/interface.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L62)
 
 Number of items to fetch per page
-
-#### Default
-
-```ts
-10
-```
+default 10
 
 ***
 

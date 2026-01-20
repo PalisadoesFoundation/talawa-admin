@@ -12,7 +12,7 @@ Defined in: [src/components/AdminPortal/OrgContriCards/OrgContriCards.tsx:37](ht
 
 ### props
 
-[`InterfaceOrgContriCardsProps`](../../../../../types/Contribution/interface/interfaces/InterfaceOrgContriCardsProps.md)
+[`InterfaceOrgContriCardsProps`](../../../../../types/AdminPortal/Contribution/interface/interfaces/InterfaceOrgContriCardsProps.md)
 
 ## Returns
 

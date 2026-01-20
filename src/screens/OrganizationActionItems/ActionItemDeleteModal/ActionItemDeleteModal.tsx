@@ -4,19 +4,13 @@
  * This component renders a modal for confirming the deletion of an action item.
  * It provides a user-friendly interface to confirm or cancel the deletion process.
  *
- * @param  props - The props for the ItemDeleteModal component.
- * @param props - Determines whether the modal is visible.
- * @param  props - Function to hide the modal.
- * @param props - The action item to be deleted.
- * @param props - Function to refetch the list of action items after deletion.
- *
  * @returns  A React functional component rendering the delete confirmation modal.
  *
  * @remarks
- * - Uses `react-bootstrap` for modal and button components.
- * - Integrates with Apollo Client's `useMutation` for handling the deletion of the action item.
- * - Displays success or error messages using `react-toastify`.
- * - Supports internationalization with `react-i18next`.
+ * Uses `BaseModal` from `shared-components` for the modal and `react-bootstrap` for button components.
+ * Integrates with Apollo Client's `useMutation` for handling the deletion of the action item.
+ * Displays success or error messages using `NotificationToast`.
+ * Supports internationalization with `react-i18next`.
  *
  * @example
  * ```tsx
@@ -43,6 +37,7 @@ import type {
 } from 'types/shared-components/ActionItems/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 export interface IItemDeleteModalProps {
   isOpen: boolean;
@@ -81,7 +76,6 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
   const handleDelete = async (): Promise<void> => {
     try {
       if (actionItem.isTemplate && applyTo === 'instance') {
-        // Delete for specific instance only
         const input = {
           actionId: actionItem.id,
           eventId: eventId,
@@ -91,7 +85,6 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
           variables: { input },
         });
       } else {
-        // Delete for entire series or non-recurring event
         const input: IDeleteActionItemInput = {
           id: actionItem.id,
         };
@@ -133,8 +126,12 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
       <p>{t('deleteActionItemMsg')}</p>
 
       {actionItem.isTemplate && !actionItem.isInstanceException && (
-        <Form.Group className="mt-3">
-          <Form.Label>{t('applyTo')}</Form.Label>
+        <FormFieldGroup
+          name="applyTo"
+          label={t('applyTo')}
+          touched={false}
+          error={undefined}
+        >
           <Form.Check
             type="radio"
             label={t('entireSeries')}
@@ -153,7 +150,7 @@ const ItemDeleteModal: React.FC<IItemDeleteModalProps> = ({
             checked={applyTo === 'instance'}
             onChange={() => setApplyTo('instance')}
           />
-        </Form.Group>
+        </FormFieldGroup>
       )}
     </BaseModal>
   );

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
+import Dropdown from 'react-bootstrap/Dropdown';
 import { useQuery, useMutation } from '@apollo/client';
 import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
@@ -11,7 +12,7 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
-import styles from 'style/app-fixed.module.css';
+import styles from './Donate.module.css';
 import DonationCard from 'components/UserPortal/DonationCard/DonationCard';
 import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
@@ -23,6 +24,7 @@ import {
   InterfaceDonationCardProps,
 } from 'types/Donation/interface';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 /**
  * Component for handling donations to an organization.
@@ -129,43 +131,41 @@ export default function Donate(): JSX.Element {
             {t('donateForThe')} {organizationDetails.name}
           </div>
 
-          <InputGroup className={styles.width100}>
-            <Dropdown>
-              <Dropdown.Toggle
-                className={`${styles.colorPrimary} ${styles.dropdown}`}
-                variant="success"
-                data-testid="modeChangeBtn"
-              >
-                <span data-testid="changeCurrencyBtn">
-                  {currencies[selectedCurrency]}
-                </span>
-              </Dropdown.Toggle>
+          <FormTextField
+            name="donationAmount"
+            type="text"
+            label={t('amount')}
+            placeholder={t('amount')}
+            value={amount}
+            onChange={setAmount}
+            required
+            data-testid="donationAmount"
+            startAdornment={
+              <Dropdown>
+                <Dropdown.Toggle
+                  data-testid="changeCurrencyBtn"
+                  className={`${styles.colorPrimary} ${styles.dropdown}`}
+                  variant="success"
+                >
+                  <span>{currencies[selectedCurrency]}</span>
+                </Dropdown.Toggle>
 
-              <Dropdown.Menu>
-                {currencies.map((currency, index) => (
-                  <Dropdown.Item
-                    key={currency}
-                    data-testid={`currency${index}`}
-                    onClick={() => setSelectedCurrency(index)}
-                  >
-                    {currency}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
+                <Dropdown.Menu>
+                  {currencies.map((currency, index) => (
+                    <Dropdown.Item
+                      key={currency}
+                      data-testid={`currency${index}`}
+                      onClick={() => setSelectedCurrency(index)}
+                    >
+                      {currency}
+                    </Dropdown.Item>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
+            }
+          />
 
-            <Form.Control
-              type="text"
-              data-testid="donationAmount"
-              placeholder={t('amount')}
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
-          </InputGroup>
-
-          <Form.Text className="text-muted">
-            {t('donationAmountDescription')}
-          </Form.Text>
+          <small className="text-muted">{t('donationAmountDescription')}</small>
 
           <Button
             size="sm"
@@ -177,7 +177,7 @@ export default function Donate(): JSX.Element {
           </Button>
         </div>
 
-        <div className={styles.sectionContainer}>
+        <div className={styles.container}>
           <h5>{t('yourPreviousDonations')}</h5>
 
           {loading ? (

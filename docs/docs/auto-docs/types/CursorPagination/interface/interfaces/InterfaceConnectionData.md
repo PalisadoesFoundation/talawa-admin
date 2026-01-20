@@ -43,6 +43,6 @@ Defined in: [src/types/CursorPagination/interface.ts:24](https://github.com/Pali
 
 ### pageInfo?
 
-> `optional` **pageInfo**: [`DefaultConnectionPageInfo`](../../../pagination/type-aliases/DefaultConnectionPageInfo.md)
+> `optional` **pageInfo**: [`DefaultConnectionPageInfo`](../../../AdminPortal/pagination/type-aliases/DefaultConnectionPageInfo.md)
 
 Defined in: [src/types/CursorPagination/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L28)

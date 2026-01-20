@@ -6,8 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@mui/material';
-import styles from 'style/app-fixed.module.css';
-import pluginStoreStyles from './PluginStore.module.css';
+import styles from './PluginStore.module.css';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import PluginModal from './PluginModal';
 import UploadPluginModal from './UploadPluginModal';
@@ -137,10 +136,7 @@ export default function PluginStore() {
   );
 
   return (
-    <div
-      className={`${styles.pageContent} ${pluginStoreStyles.pageContent}`}
-      data-testid="plugin-store-page"
-    >
+    <div className={styles.pageContent} data-testid="plugin-store-page">
       <SearchFilterBar
         searchPlaceholder={t('searchPlaceholder')}
         searchValue={searchTerm}
@@ -151,7 +147,7 @@ export default function PluginStore() {
         dropdowns={pluginStoreDropdowns}
         additionalButtons={uploadPluginButton}
       />
-      <div className={pluginStoreStyles.pluginListContainer}>
+      <div className={styles.pluginListContainer}>
         <PluginList
           plugins={paginatedPlugins}
           searchTerm={searchTerm}
@@ -160,7 +156,7 @@ export default function PluginStore() {
         />
       </div>
       {/* Pagination Controls */}
-      <div className={pluginStoreStyles.paginationContainer}>
+      <div className={styles.paginationContainer}>
         <table>
           <tbody>
             <tr>

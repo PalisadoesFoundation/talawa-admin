@@ -1,0 +1,113 @@
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  font-weight: var(--font-weight-semibold);
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    opacity 120ms ease;
+}
+
+.button:focus-visible {
+  outline: var(--border-3) solid
+    var(--primary-theme-color, var(--color-blue-500));
+  outline-offset: var(--border-1);
+}
+
+.button:active {
+  transform: translateY(1px);
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.content {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+}
+
+.label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.iconStart {
+  margin-right: var(--space-2);
+}
+
+.iconEnd {
+  margin-left: var(--space-2);
+}
+
+.sizeXl {
+  padding: var(--space-4) var(--space-6);
+  font-size: var(--font-size-md);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+.isLoading {
+  cursor: wait;
+}
+
+:global(.btn-outlined),
+:global(.btn-outline) {
+  color: var(--primary-theme-color, var(--color-blue-500));
+  background-color: transparent;
+  border: var(--border-1) solid currentColor;
+}
+
+:global(.btn-outlined:hover),
+:global(.btn-outline:hover),
+:global(.btn-outlined:focus-visible),
+:global(.btn-outline:focus-visible) {
+  color: var(--color-white);
+  background-color: var(--primary-theme-color, var(--color-blue-500));
+  border-color: var(--primary-theme-color, var(--color-blue-500));
+}
+
+:global(.btn-outlined:active),
+:global(.btn-outline:active) {
+  color: var(--color-white);
+  background-color: var(--primary-theme-color, var(--color-blue-500));
+  border-color: var(--primary-theme-color, var(--color-blue-500));
+}
+
+:global(.btn-outlined:disabled),
+:global(.btn-outline:disabled),
+:global(.btn-outlined.disabled),
+:global(.btn-outline.disabled) {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 1em;
+  height: 1em;
+  border: var(--border-2) solid currentColor;
+  border-right-color: transparent;
+  border-radius: var(--radius-full);
+  animation: spin 0.75s linear infinite;
+}

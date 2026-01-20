@@ -7,6 +7,9 @@
   },
   "ends": "Ends",
   "occurrences": "Occurrences",
+  "customRecurrence": "Custom Recurrence",
+  "invalidDetailsMessage": "Please check the details you entered.",
+  "selectAtLeastOneDay": "Please select at least one day.",
   "leaderboard": {
     "title": "Leaderboard",
     "searchByVolunteer": "Search By Volunteer",
@@ -420,7 +423,9 @@
     "actions": "Actions",
     "profile": "Profile",
     "joined": "Joined",
-    "notFound": "No Members Found"
+    "notFound": "No Members Found",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password"
   },
   "organizationTags": {
     "title": "Organization Tags",
@@ -665,7 +670,19 @@
     "pendingForInstance": "Pending for this instance",
     "pendingForSeries": "Pending for series",
     "completeForInstance": "Complete for this instance",
-    "completeForSeries": "Complete for series"
+    "completeForSeries": "Complete for series",
+    "itemCategory": "Item Category",
+    "assignedDate": "Assigned Date",
+    "actions": "Actions",
+    "noCategory": "No category",
+    "viewActionItem": "View Action Item",
+    "updateStatus": "Update Status",
+    "pending": "Pending",
+    "completed": "Completed",
+    "late": "Late",
+    "searchByAssignee": "Search by assignee",
+    "searchByCategory": "Search by category",
+    "sortByAssignedDate": "Sort by assigned date"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Agenda Category Details",
@@ -709,6 +726,7 @@
     "options": "Options",
     "createAgendaItem": "Create Agenda Item",
     "noAgendaItems": "No Agenda Items",
+    "search": "Search",
     "selectAgendaItemCategory": "Select an agenda item category",
     "update": "Update",
     "delete": "Delete",
@@ -719,7 +737,9 @@
     "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
     "event": "Event",
     "search": "Search",
-    "attachmentPreview": "Attachment preview"
+    "attachmentPreview": "Attachment preview",
+    "errorLoadingAgendaCategories": "Error occurred while loading Agenda Categories Data",
+    "errorLoadingAgendaItems": "Error occurred while loading Agenda Items Data"
   },
   "eventListCard": {
     "deleteEvent": "Delete Event",
@@ -771,7 +791,19 @@
     "close": "close",
     "talawaApiUnavailable": "talawaApiUnavailable",
     "done": "done",
-    "invalidDate": "Invalid Date"
+    "invalidDate": "Invalid Date",
+    "isRegisterable": "Registerable",
+    "creator": "Creator",
+    "edit": "Edit",
+    "delete": "Delete",
+    "viewDetails": "View Details",
+    "noEventsFound": "No events found",
+    "noEvent": "No Event",
+    "averageFeedback": "Average Feedback",
+    "noOfAttendees": "No. of Attendees",
+    "noRegistrations": "No Registrations",
+    "registrants": "Registrants",
+    "to": "To"
   },
   "funds": {
     "title": "Funds",
@@ -829,9 +861,14 @@
     "earliestEndDate": "Earliest End Date",
     "lowestGoal": "Lowest Goal",
     "highestGoal": "Highest Goal",
-    "errorLoading": "Error occured while loading campaigns data",
+    "errorLoading": "Error occurred while loading campaigns data",
     "percentageRaised": "% Raised",
-    "campaignProgress": "Campaign progress: {{percentage}}%"
+    "campaignProgress": "Campaign progress: {{percentage}}%",
+    "campaignNotFound": "Campaign not found",
+    "dateRangeRequired": "Please select a valid date range",
+    "campaignNameRequired": "Campaign name is required",
+    "invalidDate": "Invalid date selected",
+    "endDateBeforeStart": "End date cannot be before start date"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
@@ -847,6 +884,7 @@
     "updatePledge": "Update Pledge",
     "deletePledge": "Delete Pledge",
     "amount": "Amount",
+    "amountMustBeAtLeastOne": "Amount must be at least 1",
     "editPledge": "Edit Pledge",
     "deletePledgeMsg": "Are you sure you want to delete this pledge?",
     "noPledges": "No Pledges Found",
@@ -870,7 +908,8 @@
     "pledgeDate": "Pledge Date",
     "pledged": "Pledged",
     "donated": "Donated",
-    "campaignNotActive": "Campaign is not currently active"
+    "campaignNotActive": "Campaign is not currently active",
+    "close": "Close"
   },
   "createPostModal": {
     "title": "Posts",
@@ -1027,7 +1066,24 @@
     "pageNumber": "Page {{page}}",
     "goToToday": "Go to today",
     "genderDistribution": "Gender Distribution",
-    "ageDistribution": "Age Distribution"
+    "ageDistribution": "Age Distribution",
+    "trends": "Trends",
+    "demography": "Demography",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "under18": "Under 18",
+    "age18to40": "18 to 40",
+    "over40": "Over 40",
+    "exportData": "Export Data",
+    "demographics": "Demographics",
+    "today": "Today",
+    "attendanceCount": "Attendance Count",
+    "totalMembers": "Total Members",
+    "membersAttended": "Members Attended",
+    "age": "Age",
+    "close": "Close",
+    "gender": "Gender"
   },
   "eventRegistrant": {
     "sort": "Sort",
@@ -1043,26 +1099,10 @@
     "removingAttendee": "Removing the attendee...",
     "attendeeRemovedSuccessfully": "Attendee removed successfully",
     "errorRemovingAttendee": "Error removing attendee",
+    "cannotUnregisterCheckedIn": "Cannot unregister a user who has already checked in",
     "checkedIn": "Checked In",
     "unregister": "Unregister",
     "cannotUnregisterCheckedInTooltip": "Cannot unregister checked-in user"
-  },
-  "onSpotAttendee": {
-    "title": "On-spot Attendee",
-    "enterFirstName": "Enter First Name",
-    "enterLastName": "Enter Last Name",
-    "enterEmail": "Enter Email",
-    "enterPhoneNo": "Enter Phone Number",
-    "selectGender": "Select Gender",
-    "invalidDetailsMessage": "Please fill in all required fields",
-    "orgIdMissing": "Organization ID is missing. Please try again.",
-    "attendeeAddedSuccess": "Attendee added successfully!",
-    "addAttendee": "Add",
-    "phoneNumber": "Phone No.",
-    "addingAttendee": "Adding...",
-    "male": "Male",
-    "female": "Female",
-    "other": "Other"
   },
   "forgotPassword": {
     "title": "Talawa Forgot Password",
@@ -1407,12 +1447,13 @@
   },
   "posts": {
     "pinnedPosts": "Pinned Posts",
+    "errorLoadingPreviewPost": "Error loading preview post",
     "title": "Posts",
     "latest": "Latest",
     "oldest": "Oldest",
     "none": "None",
     "unknownUser": "Unknown User",
-    "closePinnedPost": "Close Pinned Post",
+    "closePostView": "Close Post View",
     "searchPosts": "Search posts",
     "nothingToShow": "Nothing to show here.",
     "noMorePosts": "No more posts to load.",
@@ -1846,16 +1887,32 @@
   "checkIn": {
     "errorCheckingIn": "Error checking in",
     "checkedInSuccessfully": "Checked in successfully",
+    "generatingPdf": "Generating pdf...",
+    "pdfGeneratedSuccessfully": "PDF generated successfully!",
+    "errorGeneratingPdf": "Error generating pdf",
+    "unknownError": "Unknown error",
+    "checkedIn": "Checked In",
+    "downloadTag": "Download Tag",
+    "checkInButton": "Check In",
     "searchAttendees": "Search Attendees",
     "checkedIn": "Checked In",
     "downloadTag": "Download Tag",
     "checkIn": "Check In",
-    "eventCheckInManagement": "Event Check In Management"
+    "eventCheckInManagement": "Event Check In Management",
+    "unknownUser": "Unknown User",
+    "user": "User",
+    "checkInStatus": "Check In Status",
+    "checkInMembers": "Check In Members"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",
     "errorRemovingAttendee": "Error removing attendee",
     "eventRegistrantsTitle": "Event Registrants",
+    "registerMember": "Register Member",
+    "showAttendees": "Show Attendees",
+    "addingAttendee": "Adding the attendee...",
+    "selectUserFirst": "Please choose a user to add first!",
+    "unknownUser": "Unknown User",
     "inviteByEmailButton": "Invite by Email",
     "addRegistrantButton": "Add Registrant",
     "noRegistrationsFound": "No Registrations found",
@@ -1875,8 +1932,34 @@
       "expiresInDaysLabel": "Expires in (days)",
       "errorSendingInvites": "Error sending invites",
       "emailsLabel": "Recipient emails and names",
-      "emailsHelp": "Provide email and optional name for each recipient. Add multiple recipients as needed."
+      "emailsHelp": "Provide email and optional name for each recipient. Add multiple recipients as needed.",
+      "noRecipientsError": "Please provide at least one recipient email",
+      "invalidEmailsError": "Invalid email(s): {{emails}}",
+      "invitesSentSuccessfully": "Invites sent successfully"
     }
+  },
+  "onSpotAttendee": {
+    "invalidEmailFormat": "Invalid email format",
+    "organizationIdMissing": "Organization ID is missing.",
+    "title": "On-spot Attendee",
+    "enterFirstName": "Enter First Name",
+    "enterLastName": "Enter Last Name",
+    "enterEmail": "Enter Email",
+    "enterPhoneNo": "Enter Phone Number",
+    "selectGender": "Select Gender",
+    "invalidDetailsMessage": "Please fill in all required details",
+    "orgIdMissing": "Organization ID is missing. Please try again.",
+    "attendeeAddedSuccess": "Attendee added successfully!",
+    "addAttendee": "Add Attendee",
+    "phoneNumber": "Phone No.",
+    "phoneNumberPlaceholder": "1234567890",
+    "addingAttendee": "Adding...",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "placeholderFirstName": "John",
+    "placeholderLastName": "Doe",
+    "placeholderEmail": "abc@gmail.com"
   },
   "userCampaigns": {
     "title": "Fundraising Campaigns",
@@ -1910,6 +1993,7 @@
     "noCampaigns": "No Campaigns Found",
     "amountRaised": "Amount Raised",
     "campaignIndex": "#",
+    "campaignStatus": "Status",
     "fundGoal": "Fund Goal",
     "percentRaised": "% Raised",
     "createFirstCampaign": "Create your first fundraising campaign to see it here.",
@@ -1920,7 +2004,20 @@
     "searchPledges": "Search Pledges"
   },
   "leaveOrganization": {
-    "title": "Leave Organization"
+    "title": "Leave Organization",
+    "leaveOrganization": "Leave Organization",
+    "confirmLeaveOrganization": "Confirm Leaving Organization",
+    "leaveOrganizationConfirmation": "Are you sure you want to leave {{orgName}}? You will lose access to member-only content.",
+    "enterEmailToConfirm": "Enter your email to confirm:",
+    "enterYourEmail": "Enter your email",
+    "confirmEmailInput": "Confirm email input",
+    "leftOrganizationSuccess": "You have successfully left the organization!",
+    "leftOrganizationError": "Failed to leave organization. Please try again.",
+    "networkError": "Unable to process your request. Please check your connection.",
+    "emailMismatchError": "The email you entered does not match your account email.",
+    "continue": "Continue",
+    "missingRequiredInfo": "Unable to process request: Missing required information.",
+    "organizationNotFound": "Organization not found"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Volunteer view selector",
@@ -1967,6 +2064,8 @@
     "earliest": "Earliest",
     "requestAccepted": "Request accepted successfully",
     "requestRejected": "Request rejected successfully",
+    "acceptRequest": "Accept Request",
+    "rejectRequest": "Reject Request",
     "details": "Details",
     "manageGroup": "Manage Group",
     "mostVolunteers": "Most Volunteers",
@@ -1990,7 +2089,9 @@
     "deleteVolunteerGroup": "Delete {{name}} volunteer group",
     "deleteVolunteerEntry": "Delete {{name}} volunteer entry",
     "viewGroup": "View group",
-    "editGroup": "Edit group"
+    "editGroup": "Edit group",
+    "invalidNumber": "Invalid number",
+    "viewToggle": "Toggle view"
   },
   "userVolunteer": {
     "title": "Volunteership",
@@ -2033,6 +2134,10 @@
     "eventInvitationSubject": "Invitation to volunteer for event",
     "groupInvitationRecurringSubject": "Invitation to join volunteer group for recurring event series",
     "eventInvitationRecurringSubject": "Invitation to volunteer for recurring event series",
+    "invited": "Invited",
+    "groupsAvailable": "{{count}} groups available",
+    "volunteersRequired": "Required",
+    "signedUp": "Signed up",
     "assignee": "Assignee",
     "group": "Group",
     "event": "Event",
@@ -2170,7 +2275,9 @@
     "title": "User Portal",
     "talawa": "Talawa",
     "talawaBranding": "Talawa Branding",
-    "view": "View"
+    "view": "View",
+    "changeLanguage": "Change Language",
+    "userNotFoundError": "User not found"
   },
   "donation": {
     "amount_label": "Amount",
@@ -2195,5 +2302,43 @@
   },
   "orgProfileField": {
     "editCustomField": "Edit Custom Field"
+  },
+  "userGlobalScreen": {
+    "globalFeatures": "Global Features"
+  },
+  "recurringEventVolunteerModal": {
+    "joinGroupTitle": "Join {{groupName}} - {{eventName}}",
+    "volunteerTitle": "Volunteer for {{eventName}}",
+    "joinGroupQuestion": "Would you like to join \"{{groupName}}\" for the entire series or just this instance?",
+    "volunteerQuestion": "Would you like to volunteer for the entire series or just this instance?",
+    "volunteerForSeries": "Volunteer for Entire Series",
+    "joinGroupForSeries": "You will join this group for all events in the recurring series",
+    "volunteerForSeriesDesc": "You will be volunteering for all events in this recurring series",
+    "volunteerForInstance": "Volunteer for This Instance Only",
+    "joinGroupForInstance": "You will join this group only for the event on {{date}}",
+    "volunteerForInstanceDesc": "You will only be volunteering for the event on {{date}}",
+    "cancel": "Cancel",
+    "submitRequest": "Submit Request"
+  },
+  "eventsAttendedMemberModal": {
+    "title": "Events Attended List",
+    "showing": "Showing {{start}} - {{end}} of {{total}} Events",
+    "eventName": "Event Name",
+    "dateOfEvent": "Date of Event",
+    "recurringEvent": "Recurring Event",
+    "attendees": "Attendees",
+    "tableAriaLabel": "Events attended table",
+    "paginationAriaLabel": "Events pagination navigation",
+    "paginationGoToPage": "Go to page {{page}}",
+    "paginationGoToType": "Go to {{type}} page",
+    "noEventsAttended": "No events attended"
+  },
+  "eventStats": {
+    "title": "Event Statistics",
+    "reviews": {
+      "title": "Reviews",
+      "emptyState": "Waiting for people to talk about the event...",
+      "filledByCount": "Filled by {{count}} people."
+    }
   }
 }

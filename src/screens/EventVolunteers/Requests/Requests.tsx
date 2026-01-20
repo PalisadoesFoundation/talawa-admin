@@ -36,9 +36,8 @@
  * @example
  * <Requests />
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { debounce } from '@mui/material';
 import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
 import { FaXmark } from 'react-icons/fa6';
@@ -46,19 +45,19 @@ import { WarningAmberRounded } from '@mui/icons-material';
 
 import { useMutation, useQuery } from '@apollo/client';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import {
-  DataGrid,
-  type GridCellParams,
-  type GridColDef,
+import type {
+  GridCellParams,
+  GridColDef,
 } from 'shared-components/DataGridWrapper';
+import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
 import Avatar from 'shared-components/Avatar/Avatar';
-import styles from '../../../style/app-fixed.module.css';
+import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import styles from './Requests.module.css';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 
 function Requests(): JSX.Element {
   const { t } = useTranslation('translation');
@@ -68,34 +67,17 @@ function Requests(): JSX.Element {
   // Get the organization ID from URL parameters
   const { orgId, eventId } = useParams();
 
-  if (!orgId || !eventId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, setSortBy] = useState<
-    'createdAt_ASC' | 'createdAt_DESC' | null
-  >(null);
+  const [sortBy, setSortBy] = useState<string>('');
   const [filterBy, setFilterBy] = useState<'all' | 'individual' | 'group'>(
     'all',
   );
 
-  const debouncedSearch = useCallback(
-    debounce((value: string) => {
-      setSearchTerm(value);
-    }, 300),
-    [],
-  );
-
-  // Debounce cleanup effect
-  useEffect(() => {
-    return () => {
-      debouncedSearch.clear();
-    };
-  }, [debouncedSearch]);
-
   const [updateMembership] = useMutation(UPDATE_VOLUNTEER_MEMBERSHIP);
 
+  if (!orgId || !eventId) {
+    return <Navigate to={'/'} replace />;
+  }
   const updateMembershipStatus = async (
     id: string,
     status: 'accepted' | 'rejected',
@@ -131,9 +113,11 @@ function Requests(): JSX.Element {
       where: {
         eventId,
         status: 'requested',
-        userName: searchTerm ? searchTerm : undefined,
+        userName: searchTerm || undefined,
       },
-      orderBy: sortBy ? sortBy : undefined,
+      orderBy: sortBy
+        ? (sortBy as 'createdAt_ASC' | 'createdAt_DESC')
+        : undefined,
     },
   });
 
@@ -205,14 +189,14 @@ function Requests(): JSX.Element {
                 src={avatarURL}
                 alt={`${name} ${tCommon('avatar')}`}
                 data-testid={`volunteer_image`}
-                className={styles.TableImages}
+                className={styles.tableImages}
               />
             ) : (
               <div className={styles.avatarContainer}>
                 <Avatar
                   key="volunteer_avatar"
                   containerStyle={styles.imageContainer}
-                  avatarStyle={styles.TableImages}
+                  avatarStyle={styles.tableImages}
                   name={name}
                   alt={name}
                 />
@@ -298,14 +282,12 @@ function Requests(): JSX.Element {
   return (
     <LoadingState isLoading={requestsLoading} variant="spinner">
       <div>
-        {/* Header with search, filter  and Create Button */}
+        {/* Header with search, filter and sort */}
         <SearchFilterBar
           searchPlaceholder={tCommon('searchBy', { item: tCommon('name') })}
           searchValue={searchTerm}
-          onSearchChange={debouncedSearch}
-          onSearchSubmit={(value: string) => {
-            setSearchTerm(value);
-          }}
+          onSearchChange={(value: string) => setSearchTerm(value)}
+          onSearchSubmit={(value: string) => setSearchTerm(value)}
           searchInputTestId="searchBy"
           searchButtonTestId="searchBtn"
           hasDropdowns
@@ -323,7 +305,7 @@ function Requests(): JSX.Element {
               ],
               selectedOption: sortBy ?? '',
               onOptionChange: (value: string | number) =>
-                setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC'),
+                setSortBy(String(value)),
               dataTestIdPrefix: 'sort',
             },
             {
@@ -347,26 +329,18 @@ function Requests(): JSX.Element {
         />
 
         {/* Table with Volunteer Membership Requests */}
-
-        {requests.length > 0 ? (
-          <DataGrid
-            disableColumnMenu
-            columnBufferPx={5}
-            hideFooter={true}
-            getRowId={(row) => row.id}
-            className={styles.dataGridContainer}
-            getRowClassName={() => `${styles.rowBackgrounds}`}
-            autoHeight
-            rowHeight={65}
-            rows={requests}
-            columns={columns}
-            isRowSelectable={() => false}
-          />
-        ) : (
-          <div className="d-flex justify-content-center align-items-center mt-5">
-            <h5>{t('eventVolunteers.noRequests')}</h5>
-          </div>
-        )}
+        <DataGridWrapper
+          rows={requests}
+          columns={columns}
+          loading={requestsLoading}
+          emptyStateProps={{
+            message: t('eventVolunteers.noRequests'),
+            dataTestId: 'no-requests',
+          }}
+          paginationConfig={{
+            enabled: false,
+          }}
+        />
       </div>
     </LoadingState>
   );

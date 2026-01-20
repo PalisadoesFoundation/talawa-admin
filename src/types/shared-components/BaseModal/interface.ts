@@ -29,7 +29,7 @@
 export interface IBaseModalProps {
   show: boolean;
   onHide: () => void;
-  title?: string;
+  title?: React.ReactNode;
   headerContent?: React.ReactNode;
   children: React.ReactNode;
   footer?: React.ReactNode;

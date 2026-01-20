@@ -49,13 +49,13 @@ import { useTranslation } from 'react-i18next';
 import { Button, Dropdown } from 'react-bootstrap';
 import styles from './EventManagement.module.css';
 
-import EventDashboard from 'components/EventManagement/Dashboard/EventDashboard';
-import EventActionItems from 'components/EventManagement/EventActionItems/EventActionItems';
+import EventDashboard from 'components/AdminPortal/EventManagement/Dashboard/EventDashboard';
+import EventActionItems from 'components/AdminPortal/EventManagement/EventActionItems/EventActionItems';
 import VolunteerContainer from 'screens/EventVolunteers/VolunteerContainer';
-import EventAgendaItems from 'components/EventManagement/EventAgendaItems/EventAgendaItems';
+import EventAgendaItems from 'components/AdminPortal/EventManagement/EventAgendaItems/EventAgendaItems';
 import useLocalStorage from 'utils/useLocalstorage';
-import EventAttendance from 'components/EventManagement/EventAttendance/Attendance/EventAttendance';
-import EventRegistrants from 'components/EventManagement/EventRegistrant/EventRegistrants';
+import EventAttendance from 'components/AdminPortal/EventManagement/EventAttendance/Attendance/EventAttendance';
+import EventRegistrants from 'components/AdminPortal/EventManagement/EventRegistrant/EventRegistrants';
 /**
  * Tab options for the event management component.
  */

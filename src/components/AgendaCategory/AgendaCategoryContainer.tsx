@@ -12,10 +12,10 @@
  *          to preview, edit, and delete each category.
  *
  * @remarks
- * - Uses `useState` for managing modal visibility and form state.
- * - Integrates `useMutation` from Apollo Client for GraphQL operations.
- * - Displays success and error messages using `react-toastify`.
- * - Includes three modals: Preview, Update, and Delete.
+ * - Uses `useState` for managing modal visibility and form state
+ * - Integrates `useMutation` from Apollo Client for GraphQL operations
+ * - Displays success and error messages using NotificationToast
+ * - Includes three modals: Preview, Update, and Delete
  *
  * @example
  * ```tsx
@@ -32,7 +32,7 @@ import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useMutation } from '@apollo/client';
 
 import {
@@ -40,7 +40,7 @@ import {
   UPDATE_AGENDA_ITEM_CATEGORY_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
-import styles from '../../style/app-fixed.module.css';
+import styles from './AgendaCategoryContainer.module.css';
 
 import AgendaCategoryDeleteModal from 'components/AdminPortal/OrgSettings/AgendaItemCategories/Delete/AgendaCategoryDeleteModal';
 import AgendaCategoryPreviewModal from 'components/AdminPortal/OrgSettings/AgendaItemCategories/Preview/AgendaCategoryPreviewModal';
@@ -141,10 +141,12 @@ function agendaCategoryContainer({
 
       agendaCategoryRefetch();
       hideUpdateModal();
-      toast.success(t('agendaCategoryUpdated') as string);
+      NotificationToast.success(t('agendaCategoryUpdated') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(`Agenda Category Update Failed ${error.message}`);
+        NotificationToast.error(
+          `Agenda Category Update Failed ${error.message}`,
+        );
       }
     }
   };
@@ -163,10 +165,12 @@ function agendaCategoryContainer({
       });
       agendaCategoryRefetch();
       toggleDeleteModal();
-      toast.success(t('agendaCategoryDeleted') as string);
+      NotificationToast.success(t('agendaCategoryDeleted') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(`Agenda Category Delete Failed, ${error.message}`);
+        NotificationToast.error(
+          `Agenda Category Delete Failed, ${error.message}`,
+        );
       }
     }
   };
