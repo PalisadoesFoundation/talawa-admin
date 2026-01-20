@@ -32,8 +32,8 @@
  * />
  * ```
  *
- * @dependencies
- * - @apollo/client
+ * Dependencies
+ * - apollo/client
  * - shared-components/BaseModal
  * - NotificationToast
  * - react-i18next

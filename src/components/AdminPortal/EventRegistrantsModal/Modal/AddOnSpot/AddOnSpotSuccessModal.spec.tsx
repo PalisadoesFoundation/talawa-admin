@@ -6,7 +6,7 @@ import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import AddOnSpotAttendee from './AddOnSpotAttendee';
 import userEvent from '@testing-library/user-event';
 import type { RenderResult } from '@testing-library/react';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import { store } from 'state/store';
@@ -25,8 +25,9 @@ vi.mock('react-router', async () => {
   };
 });
 
-vi.mock('react-toastify', () => ({
-  toast: {
+/* MOCK NotificationToast */
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
   },
@@ -138,7 +139,7 @@ describe('AddOnSpotAttendee Component', () => {
     fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalled();
       expect(mockProps.reloadMembers).toHaveBeenCalled();
     });
 
@@ -186,7 +187,7 @@ describe('AddOnSpotAttendee Component', () => {
     fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -196,7 +197,7 @@ describe('AddOnSpotAttendee Component', () => {
     fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -217,7 +218,8 @@ describe('AddOnSpotAttendee Component', () => {
     fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 });
+

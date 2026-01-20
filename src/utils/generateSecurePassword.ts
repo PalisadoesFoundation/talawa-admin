@@ -8,7 +8,7 @@
  * - Contain at least one number
  * - Contain at least one special character
  *
- * @returns {string} A secure random password string.
+ * @returns A secure random password string.
  *
  * @example
  * ```ts
@@ -22,6 +22,7 @@ export const generateSecurePassword = (): string => {
   const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
   const numberChars = '0123456789';
   const specialChars = '!@#$%^&*(),.?":{}|<>';
+  
 
   const minLength = 12;
   const char = uppercaseChars + lowercaseChars + numberChars + specialChars;
@@ -29,23 +30,30 @@ export const generateSecurePassword = (): string => {
 
   const charArr = [uppercaseChars, lowercaseChars, numberChars, specialChars];
 
+  const randomArr = new Uint32Array(minLength)
+  crypto.getRandomValues(randomArr)
+
   for (let i = 0; i < charArr.length; i++) {
-    password += charArr[i][Math.floor(Math.random() * charArr[i].length)];
+    password += (charArr[i][randomArr[i]%charArr[i].length]);
   }
 
   for (let i = password.length; i < minLength; i++) {
-    password += char[Math.floor(Math.random() * char.length)];
+    password += (char[randomArr[i]%char.length])
   }
+
 
   return shuffleString(password);
 };
 
 const shuffleString = (password: string): string => {
-  const arrOfPassword = password.split('');
-  for (let i = arrOfPassword.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arrOfPassword[i], arrOfPassword[j]] = [arrOfPassword[j], arrOfPassword[i]];
+  const arr = password.split('');
+  const randomValues = new Uint32Array(arr.length);
+  crypto.getRandomValues(randomValues);
+
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = randomValues[i] % (i + 1);
+    [arr[i], arr[j]] = [arr[j], arr[i]];
   }
 
-  return arrOfPassword.join('');
+  return arr.join('');
 };

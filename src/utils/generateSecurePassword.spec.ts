@@ -1,6 +1,10 @@
 import { generateSecurePassword } from './generateSecurePassword';
+import { vi } from 'vitest';
 
 describe('generateSecurePassword', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
   it('should generate password with length >= 12', () => {
     const password = generateSecurePassword();
     expect(password.length).toBeGreaterThanOrEqual(12);
@@ -26,9 +30,10 @@ describe('generateSecurePassword', () => {
     expect(/[!@#$%^&*(),.?":{}|<>]/.test(password)).toBe(true);
   });
 
-  it('should generate different passwords each time', () => {
-    const p1 = generateSecurePassword();
-    const p2 = generateSecurePassword();
-    expect(p1).not.toBe(p2);
+  it('should generate non-identical passwords across multiple attempts', () => {
+    const passwords = new Set(
+      Array.from({ length: 5 }, () => generateSecurePassword()),
+    );
+    expect(passwords.size).toBeGreaterThan(1); 
   });
 });

@@ -36,7 +36,7 @@
  * />
  * ```
  *
- * @dependencies
+ * Dependencies
  * - shared-components/BaseModal
  * - NotificationToast
  * - react-i18next
@@ -49,16 +49,12 @@ import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import { BaseModal } from 'shared-components/BaseModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { AddOnSpotSuccessModalProps } from "types/AdminPortal/AddOnSpotSuccessModal/interface";
 
-interface Props {
-  show: boolean;
-  password: string;
-  email: string;
-  attendeeName: string;
-  handleClose: () => void;
-}
 
-const AddOnSpotSuccessModal = ({
+
+
+const AddOnSpotSuccessModal: FC<AddOnSpotSuccessModalProps> = ({
   show,
   password,
   email,
