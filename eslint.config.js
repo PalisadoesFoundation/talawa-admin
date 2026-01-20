@@ -93,6 +93,12 @@ const restrictedImports = [
       'Direct imports from @dicebear/core are not allowed. Use the shared createAvatar wrapper instead.',
   },
   {
+    name: '@testing-library/react',
+    importNames: ['fireEvent'],
+    message:
+      'Tests in this file use fireEvent for user interactions; our test standards require @testing-library/user-event for interaction fidelity and test reliability.',
+  },
+  {
     name: '@mui/material',
     importNames: ['Chip'],
     message:
