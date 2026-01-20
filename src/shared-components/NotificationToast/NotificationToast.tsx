@@ -2,6 +2,7 @@ import React from 'react';
 import type { Id, ToastContainerProps, ToastOptions } from 'react-toastify';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import styles from './NotificationToast.module.css';
 import i18n from 'utils/i18n';
 
 import type {
@@ -31,7 +32,7 @@ const DEFAULT_CONTAINER_PROPS: ToastContainerProps = {
   limit: 5,
   newestOnTop: false,
   theme: 'colored',
-  style: { zIndex: 9999999 },
+  className: styles.notificationContainer,
 };
 
 /**
