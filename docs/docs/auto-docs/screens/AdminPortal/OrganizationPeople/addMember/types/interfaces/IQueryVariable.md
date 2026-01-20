@@ -60,4 +60,4 @@ Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:26](h
 
 ##### role.equal
 
-> **equal**: `"regular"` \| `"administrator"`
+> **equal**: [`OrganizationMembershipRole`](../enumerations/OrganizationMembershipRole.md)

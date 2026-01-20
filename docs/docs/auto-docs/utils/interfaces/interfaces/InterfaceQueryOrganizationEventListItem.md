@@ -78,7 +78,11 @@ Defined in: [src/utils/interfaces.ts:390](https://github.com/PalisadoesFoundatio
 
 > **isPublic**: `boolean`
 
+<<<<<<< HEAD
 Defined in: [src/utils/interfaces.ts:1379](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1379)
+=======
+Defined in: [src/utils/interfaces.ts:1377](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1377)
+>>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
 ***
 
@@ -86,7 +90,11 @@ Defined in: [src/utils/interfaces.ts:1379](https://github.com/PalisadoesFoundati
 
 > **isRegisterable**: `boolean`
 
+<<<<<<< HEAD
 Defined in: [src/utils/interfaces.ts:1380](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1380)
+=======
+Defined in: [src/utils/interfaces.ts:1378](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1378)
+>>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
 ***
 

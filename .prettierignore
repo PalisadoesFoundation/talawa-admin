@@ -4,3 +4,4 @@ src/shared-components/CheckIn/tagTemplate.ts
 vitest.config.ts
 docs/pnpm-lock.yaml
 pnpm-lock.yaml
+src/App.tsx

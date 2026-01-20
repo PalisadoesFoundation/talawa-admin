@@ -6,7 +6,11 @@
 
 > **default**(): `ReactElement`
 
+<<<<<<< HEAD
 Defined in: [src/App.tsx:138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/App.tsx#L138)
+=======
+Defined in: [src/App.tsx:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/App.tsx#L139)
+>>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
 This is the main function for our application. It sets up all the routes and components,
 defining how the user can navigate through the app. The function uses React Router's `Routes`

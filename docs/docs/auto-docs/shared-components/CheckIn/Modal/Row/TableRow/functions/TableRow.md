@@ -12,17 +12,7 @@ Defined in: [src/shared-components/CheckIn/Modal/Row/TableRow.tsx:41](https://gi
 
 ### \_\_namedParameters
 
-#### data
-
-[`InterfaceTableCheckIn`](../../../../../../types/shared-components/CheckIn/interface/interfaces/InterfaceTableCheckIn.md)
-
-#### onCheckInUpdate?
-
-() => `void`
-
-#### refetch
-
-() => `void`
+[`InterfaceTableRowProps`](../../../../../../types/shared-components/CheckIn/interface/interfaces/InterfaceTableRowProps.md)
 
 ## Returns
 
