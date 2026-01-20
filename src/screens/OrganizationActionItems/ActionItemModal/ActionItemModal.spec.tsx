@@ -1471,9 +1471,6 @@ describe('ItemModal - Specific Test Coverage', () => {
       ) as HTMLSelectElement;
       await userEvent.selectOptions(volunteerSelect, 'volunteer1');
 
-      const volunteerOption = await screen.findByText('John Doe');
-      await userEvent.click(volunteerOption);
-
       // Submit the form
       const submitButton = screen.getByTestId('submitBtn');
       await userEvent.click(submitButton);
