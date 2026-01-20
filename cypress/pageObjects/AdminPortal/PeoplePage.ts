@@ -37,9 +37,7 @@ export class PeoplePage {
     // Click the dropdown toggle first (SortingButton with testIdPrefix="addMembers")
     cy.get(this._addMembersBtn, { timeout }).should('be.visible').click();
     // Wait for dropdown menu to appear and click the existingUser option
-    cy.get(this._existingUserToggle, { timeout })
-      .should('be.visible')
-      .click();
+    cy.get(this._existingUserToggle, { timeout }).should('be.visible').click();
     return this;
   }
 
