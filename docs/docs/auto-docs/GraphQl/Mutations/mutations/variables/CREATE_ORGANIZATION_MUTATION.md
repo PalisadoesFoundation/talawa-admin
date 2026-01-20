@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: CREATE_ORGANIZATION_MUTATION
+# Variable: CREATE\_ORGANIZATION\_MUTATION
 
-> `const` **CREATE_ORGANIZATION_MUTATION**: `DocumentNode`
+> `const` **CREATE\_ORGANIZATION\_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/mutations.ts:340](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L340)

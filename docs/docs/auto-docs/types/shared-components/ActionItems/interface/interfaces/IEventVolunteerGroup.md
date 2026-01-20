@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IEventVolunteerGroup
 
@@ -14,7 +14,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:171](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:178](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L178)
 
----
+***
 
 ### creator
 
@@ -34,7 +34,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:179](https://g
 
 > **name**: `string`
 
----
+***
 
 ### description
 
@@ -42,7 +42,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:179](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:174](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L174)
 
----
+***
 
 ### event
 
@@ -54,7 +54,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:198](https://g
 
 > **id**: `string`
 
----
+***
 
 ### id
 
@@ -62,7 +62,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:198](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:172](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L172)
 
----
+***
 
 ### isInstanceException
 
@@ -70,7 +70,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:172](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:177](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L177)
 
----
+***
 
 ### isTemplate
 
@@ -78,7 +78,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:177](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L176)
 
----
+***
 
 ### leader
 
@@ -98,7 +98,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:184](https://g
 
 > **name**: `string`
 
----
+***
 
 ### name
 
@@ -106,7 +106,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:184](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:173](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L173)
 
----
+***
 
 ### volunteers
 
@@ -138,7 +138,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:189](https://g
 
 > **name**: `string`
 
----
+***
 
 ### volunteersRequired
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceVisibilitySelectorProps
 
@@ -26,7 +26,7 @@ Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:8](http
 
 `void`
 
----
+***
 
 ### tCommon()
 
@@ -44,7 +44,7 @@ Defined in: [src/types/shared-components/VisibilitySelector/interface.ts:9](http
 
 `string`
 
----
+***
 
 ### visibility
 

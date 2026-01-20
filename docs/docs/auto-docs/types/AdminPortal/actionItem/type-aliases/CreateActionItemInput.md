@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: CreateActionItemInput
 
@@ -16,7 +16,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:32](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L33)
 
----
+***
 
 ### dueDate?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:33](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L34)
 
----
+***
 
 ### eventId?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:34](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L35)
 
----
+***
 
 ### preCompletionNotes?
 

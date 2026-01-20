@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IPackageStatus
 
@@ -14,7 +14,7 @@ Defined in: [src/install/types.ts:11](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/install/types.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/types.ts#L13)
 
----
+***
 
 ### name
 
@@ -22,7 +22,7 @@ Defined in: [src/install/types.ts:13](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/install/types.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/types.ts#L12)
 
----
+***
 
 ### version?
 

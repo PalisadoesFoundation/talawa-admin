@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: PostUpdateInput
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Post/type.ts:54](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Post/type.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L55)
 
----
+***
 
 ### text?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Post/type.ts:55](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Post/type.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L56)
 
----
+***
 
 ### title?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Post/type.ts:56](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Post/type.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L57)
 
----
+***
 
 ### videoUrl?
 

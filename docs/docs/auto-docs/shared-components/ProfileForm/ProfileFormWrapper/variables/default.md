@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Variable: default
 
@@ -23,7 +23,7 @@ The component props
 ## Param
 
 If true, renders with UserSidebar and ProfileHeader for user profile view.
-If false, renders children directly for admin member view.
+                      If false, renders children directly for admin member view.
 
 ## Param
 

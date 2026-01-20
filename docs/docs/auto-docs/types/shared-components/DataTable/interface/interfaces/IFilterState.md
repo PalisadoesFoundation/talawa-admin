@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IFilterState
 
@@ -16,7 +16,7 @@ Filter state
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:490](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L490)
 
----
+***
 
 ### value
 

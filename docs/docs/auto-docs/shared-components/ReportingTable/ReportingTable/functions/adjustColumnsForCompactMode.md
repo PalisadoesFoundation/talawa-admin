@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Function: adjustColumnsForCompactMode()
 
@@ -10,7 +10,6 @@ Defined in: [src/shared-components/ReportingTable/ReportingTable.tsx:20](https:/
 
 Adjusts column widths for compact display mode.
 In compact mode:
-
 - First column gets flex: 0.5 and minWidth: 50 (typically for row numbers)
 - Second column gets flex capped at 1.5 (typically for names)
 - Remaining columns are unchanged

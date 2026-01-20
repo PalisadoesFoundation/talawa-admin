@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: EventWhereInput
 
@@ -16,47 +16,47 @@ Defined in: [src/types/Event/type.ts:141](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/types/Event/type.ts:142](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L142)
 
----
+***
 
-### description_contains?
+### description\_contains?
 
-> `optional` **description_contains**: `string`
+> `optional` **description\_contains**: `string`
 
 Defined in: [src/types/Event/type.ts:143](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L143)
 
----
+***
 
-### description_in?
+### description\_in?
 
-> `optional` **description_in**: `string`[]
+> `optional` **description\_in**: `string`[]
 
 Defined in: [src/types/Event/type.ts:144](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L144)
 
----
+***
 
-### description_not?
+### description\_not?
 
-> `optional` **description_not**: `string`
+> `optional` **description\_not**: `string`
 
 Defined in: [src/types/Event/type.ts:145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L145)
 
----
+***
 
-### description_not_in?
+### description\_not\_in?
 
-> `optional` **description_not_in**: `string`[]
+> `optional` **description\_not\_in**: `string`[]
 
 Defined in: [src/types/Event/type.ts:146](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L146)
 
----
+***
 
-### description_starts_with?
+### description\_starts\_with?
 
-> `optional` **description_starts_with**: `string`
+> `optional` **description\_starts\_with**: `string`
 
 Defined in: [src/types/Event/type.ts:147](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L147)
 
----
+***
 
 ### id?
 
@@ -64,47 +64,47 @@ Defined in: [src/types/Event/type.ts:147](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/types/Event/type.ts:149](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L149)
 
----
+***
 
-### id_contains?
+### id\_contains?
 
-> `optional` **id_contains**: `string`
+> `optional` **id\_contains**: `string`
 
 Defined in: [src/types/Event/type.ts:150](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L150)
 
----
+***
 
-### id_in?
+### id\_in?
 
-> `optional` **id_in**: `string`[]
+> `optional` **id\_in**: `string`[]
 
 Defined in: [src/types/Event/type.ts:151](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L151)
 
----
+***
 
-### id_not?
+### id\_not?
 
-> `optional` **id_not**: `string`
+> `optional` **id\_not**: `string`
 
 Defined in: [src/types/Event/type.ts:152](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L152)
 
----
+***
 
-### id_not_in?
+### id\_not\_in?
 
-> `optional` **id_not_in**: `string`[]
+> `optional` **id\_not\_in**: `string`[]
 
 Defined in: [src/types/Event/type.ts:153](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L153)
 
----
+***
 
-### id_starts_with?
+### id\_starts\_with?
 
-> `optional` **id_starts_with**: `string`
+> `optional` **id\_starts\_with**: `string`
 
 Defined in: [src/types/Event/type.ts:154](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L154)
 
----
+***
 
 ### location?
 
@@ -112,55 +112,55 @@ Defined in: [src/types/Event/type.ts:154](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/types/Event/type.ts:156](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L156)
 
----
+***
 
-### location_contains?
+### location\_contains?
 
-> `optional` **location_contains**: `string`
+> `optional` **location\_contains**: `string`
 
 Defined in: [src/types/Event/type.ts:157](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L157)
 
----
+***
 
-### location_in?
+### location\_in?
 
-> `optional` **location_in**: `string`[]
+> `optional` **location\_in**: `string`[]
 
 Defined in: [src/types/Event/type.ts:158](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L158)
 
----
+***
 
-### location_not?
+### location\_not?
 
-> `optional` **location_not**: `string`
+> `optional` **location\_not**: `string`
 
 Defined in: [src/types/Event/type.ts:159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L159)
 
----
+***
 
-### location_not_in?
+### location\_not\_in?
 
-> `optional` **location_not_in**: `string`[]
+> `optional` **location\_not\_in**: `string`[]
 
 Defined in: [src/types/Event/type.ts:160](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L160)
 
----
+***
 
-### location_starts_with?
+### location\_starts\_with?
 
-> `optional` **location_starts_with**: `string`
+> `optional` **location\_starts\_with**: `string`
 
 Defined in: [src/types/Event/type.ts:161](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L161)
 
----
+***
 
-### organization_id?
+### organization\_id?
 
-> `optional` **organization_id**: `string`
+> `optional` **organization\_id**: `string`
 
 Defined in: [src/types/Event/type.ts:163](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L163)
 
----
+***
 
 ### title?
 
@@ -168,42 +168,42 @@ Defined in: [src/types/Event/type.ts:163](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/types/Event/type.ts:165](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L165)
 
----
+***
 
-### title_contains?
+### title\_contains?
 
-> `optional` **title_contains**: `string`
+> `optional` **title\_contains**: `string`
 
 Defined in: [src/types/Event/type.ts:166](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L166)
 
----
+***
 
-### title_in?
+### title\_in?
 
-> `optional` **title_in**: `string`[]
+> `optional` **title\_in**: `string`[]
 
 Defined in: [src/types/Event/type.ts:167](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L167)
 
----
+***
 
-### title_not?
+### title\_not?
 
-> `optional` **title_not**: `string`
+> `optional` **title\_not**: `string`
 
 Defined in: [src/types/Event/type.ts:168](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L168)
 
----
+***
 
-### title_not_in?
+### title\_not\_in?
 
-> `optional` **title_not_in**: `string`[]
+> `optional` **title\_not\_in**: `string`[]
 
 Defined in: [src/types/Event/type.ts:169](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L169)
 
----
+***
 
-### title_starts_with?
+### title\_starts\_with?
 
-> `optional` **title_starts_with**: `string`
+> `optional` **title\_starts\_with**: `string`
 
 Defined in: [src/types/Event/type.ts:170](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L170)

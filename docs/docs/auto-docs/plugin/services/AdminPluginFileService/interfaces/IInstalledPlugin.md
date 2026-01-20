@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IInstalledPlugin
 
@@ -14,7 +14,7 @@ Defined in: [src/plugin/services/AdminPluginFileService.ts:35](https://github.co
 
 Defined in: [src/plugin/services/AdminPluginFileService.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L38)
 
----
+***
 
 ### lastUpdated
 
@@ -22,7 +22,7 @@ Defined in: [src/plugin/services/AdminPluginFileService.ts:38](https://github.co
 
 Defined in: [src/plugin/services/AdminPluginFileService.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L39)
 
----
+***
 
 ### manifest
 
@@ -30,7 +30,7 @@ Defined in: [src/plugin/services/AdminPluginFileService.ts:39](https://github.co
 
 Defined in: [src/plugin/services/AdminPluginFileService.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L37)
 
----
+***
 
 ### pluginId
 

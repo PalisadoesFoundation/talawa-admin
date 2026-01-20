@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Function: default()
 
@@ -46,7 +46,7 @@ const handleLanguageChange = async (languageCode: string) => {
   dropDirection="start"
   handleLanguageChange={handleLanguageChange}
   currentLanguageCode="en"
-/>;
+/>
 ```
 
 ## Remarks
@@ -58,5 +58,5 @@ const handleLanguageChange = async (languageCode: string) => {
 
 ## See
 
-- [InterfaceLanguageSelectorProps](../../../../../UserPortalNavigationBar/interface/interfaces/InterfaceLanguageSelectorProps.md) for detailed prop type definitions
-- [languages](../../../../../utils/languages/variables/languages.md) for the list of supported languages
+ - [InterfaceLanguageSelectorProps](../../../../../UserPortalNavigationBar/interface/interfaces/InterfaceLanguageSelectorProps.md) for detailed prop type definitions
+ - [languages](../../../../../utils/languages/variables/languages.md) for the list of supported languages

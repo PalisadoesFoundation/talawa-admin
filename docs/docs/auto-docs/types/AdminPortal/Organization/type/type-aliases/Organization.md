@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: Organization
 
@@ -16,7 +16,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:24](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L25)
 
----
+***
 
 ### actionItemCategories?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:25](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L26)
 
----
+***
 
 ### address?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:26](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L27)
 
----
+***
 
 ### admins?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:27](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L28)
 
----
+***
 
 ### agendaCategories?
 
@@ -48,7 +48,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:28](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L29)
 
----
+***
 
 ### apiUrl
 
@@ -56,7 +56,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:29](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L30)
 
----
+***
 
 ### blockedUsers?
 
@@ -64,7 +64,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:30](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L31)
 
----
+***
 
 ### createdAt
 
@@ -72,7 +72,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:31](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L32)
 
----
+***
 
 ### creator?
 
@@ -80,7 +80,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:32](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L33)
 
----
+***
 
 ### customFields
 
@@ -88,7 +88,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:33](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L34)
 
----
+***
 
 ### description
 
@@ -96,7 +96,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:34](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L35)
 
----
+***
 
 ### image?
 
@@ -104,7 +104,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:35](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L36)
 
----
+***
 
 ### members?
 
@@ -112,7 +112,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:36](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L37)
 
----
+***
 
 ### membershipRequests?
 
@@ -120,7 +120,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:37](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L38)
 
----
+***
 
 ### name
 
@@ -128,7 +128,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:38](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L39)
 
----
+***
 
 ### pinnedPosts?
 
@@ -136,7 +136,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:39](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L40)
 
----
+***
 
 ### updatedAt
 
@@ -144,7 +144,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:40](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L41)
 
----
+***
 
 ### userRegistrationRequired
 
@@ -152,7 +152,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:41](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L42)
 
----
+***
 
 ### venues?
 
@@ -160,7 +160,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:42](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L44)
 
----
+***
 
 ### visibleInSearch
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: OrganizationData
 
@@ -18,7 +18,7 @@ Organization data structure (from GraphQL ORGANIZATION_LIST query)
 
 Defined in: [src/types/UserPortalNavigationBar/types.ts:186](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L186)
 
----
+***
 
 ### adminsCount?
 
@@ -26,7 +26,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:186](https://github.com/
 
 Defined in: [src/types/UserPortalNavigationBar/types.ts:190](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L190)
 
----
+***
 
 ### avatarURL?
 
@@ -34,7 +34,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:190](https://github.com/
 
 Defined in: [src/types/UserPortalNavigationBar/types.ts:188](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L188)
 
----
+***
 
 ### createdAt?
 
@@ -42,7 +42,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:188](https://github.com/
 
 Defined in: [src/types/UserPortalNavigationBar/types.ts:191](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L191)
 
----
+***
 
 ### description?
 
@@ -50,7 +50,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:191](https://github.com/
 
 Defined in: [src/types/UserPortalNavigationBar/types.ts:187](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L187)
 
----
+***
 
 ### id
 
@@ -58,7 +58,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:187](https://github.com/
 
 Defined in: [src/types/UserPortalNavigationBar/types.ts:184](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L184)
 
----
+***
 
 ### membersCount?
 
@@ -66,7 +66,7 @@ Defined in: [src/types/UserPortalNavigationBar/types.ts:184](https://github.com/
 
 Defined in: [src/types/UserPortalNavigationBar/types.ts:189](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/types.ts#L189)
 
----
+***
 
 ### name
 

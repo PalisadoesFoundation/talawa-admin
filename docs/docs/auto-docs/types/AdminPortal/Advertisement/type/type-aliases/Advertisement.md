@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: Advertisement
 
@@ -16,7 +16,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:12](https://github.com/
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L26)
 
----
+***
 
 ### createdAt
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:26](https://github.com/
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L14)
 
----
+***
 
 ### creator?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:14](https://github.com/
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L16)
 
----
+***
 
 ### description?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:16](https://github.com/
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L15)
 
----
+***
 
 ### endAt
 
@@ -48,7 +48,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:15](https://github.com/
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L20)
 
----
+***
 
 ### id
 
@@ -56,7 +56,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:20](https://github.com/
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L13)
 
----
+***
 
 ### name
 
@@ -64,7 +64,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:13](https://github.com/
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L21)
 
----
+***
 
 ### organization
 
@@ -76,7 +76,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:17](https://github.com/
 
 > **id**: `string`
 
----
+***
 
 ### orgId
 
@@ -84,7 +84,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:17](https://github.com/
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L22)
 
----
+***
 
 ### startAt
 
@@ -92,7 +92,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:22](https://github.com/
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L23)
 
----
+***
 
 ### type
 
@@ -100,7 +100,7 @@ Defined in: [src/types/AdminPortal/Advertisement/type.ts:23](https://github.com/
 
 Defined in: [src/types/AdminPortal/Advertisement/type.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/type.ts#L24)
 
----
+***
 
 ### updatedAt
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: User
 
@@ -16,7 +16,7 @@ Defined in: [src/types/shared-components/User/type.ts:4](https://github.com/Pali
 
 Defined in: [src/types/shared-components/User/type.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L5)
 
----
+***
 
 ### address?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/shared-components/User/type.ts:5](https://github.com/Pali
 
 Defined in: [src/types/shared-components/User/type.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L6)
 
----
+***
 
 ### birthDate?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/shared-components/User/type.ts:6](https://github.com/Pali
 
 Defined in: [src/types/shared-components/User/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L7)
 
----
+***
 
 ### createdAt
 
@@ -40,7 +40,7 @@ Defined in: [src/types/shared-components/User/type.ts:7](https://github.com/Pali
 
 Defined in: [src/types/shared-components/User/type.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L8)
 
----
+***
 
 ### email
 
@@ -48,7 +48,7 @@ Defined in: [src/types/shared-components/User/type.ts:8](https://github.com/Pali
 
 Defined in: [src/types/shared-components/User/type.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L9)
 
----
+***
 
 ### firstName
 
@@ -56,7 +56,7 @@ Defined in: [src/types/shared-components/User/type.ts:9](https://github.com/Pali
 
 Defined in: [src/types/shared-components/User/type.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L10)
 
----
+***
 
 ### gender?
 
@@ -64,7 +64,7 @@ Defined in: [src/types/shared-components/User/type.ts:10](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L12)
 
----
+***
 
 ### image?
 
@@ -72,7 +72,7 @@ Defined in: [src/types/shared-components/User/type.ts:12](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L13)
 
----
+***
 
 ### lastName
 
@@ -80,7 +80,7 @@ Defined in: [src/types/shared-components/User/type.ts:13](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L11)
 
----
+***
 
 ### updatedAt?
 

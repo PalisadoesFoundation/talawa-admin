@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceOrganizationPinnedPostsConnectionPg
 
@@ -16,7 +16,7 @@ Defines the structure for a connection of organization pinned posts with Postgre
 
 Defined in: [src/utils/interfaces.ts:803](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L803)
 
----
+***
 
 ### pageInfo
 

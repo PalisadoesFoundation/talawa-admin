@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IPageInfo
 
@@ -18,7 +18,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:96](https://gith
 
 Cursor for the end of the current page
 
----
+***
 
 ### hasNextPage
 
@@ -28,7 +28,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:84](https://gith
 
 Indicates if there is a next page available
 
----
+***
 
 ### hasPreviousPage
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:88](https://gith
 
 Indicates if there is a previous page available
 
----
+***
 
 ### startCursor?
 

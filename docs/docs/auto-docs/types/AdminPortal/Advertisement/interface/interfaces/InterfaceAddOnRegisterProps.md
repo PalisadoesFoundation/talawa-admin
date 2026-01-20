@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceAddOnRegisterProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:3](https://github.
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L10)
 
----
+***
 
 ### descriptionEdit?
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:10](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L8)
 
----
+***
 
 ### endAtEdit?
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:8](https://github.
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L11)
 
----
+***
 
 ### formStatus?
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:11](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L4)
 
----
+***
 
 ### id?
 
@@ -46,7 +46,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:4](https://github.
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L9)
 
----
+***
 
 ### idEdit?
 
@@ -54,7 +54,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:9](https://github.
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L5)
 
----
+***
 
 ### nameEdit?
 
@@ -62,7 +62,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:5](https://github.
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L6)
 
----
+***
 
 ### setAfterActive
 
@@ -70,7 +70,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:6](https://github.
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L13)
 
----
+***
 
 ### setAfterCompleted
 
@@ -78,7 +78,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:13](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L16)
 
----
+***
 
 ### startAtEdit?
 
@@ -86,7 +86,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:16](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L12)
 
----
+***
 
 ### typeEdit?
 

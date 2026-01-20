@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfacePasswordFieldProps
 
@@ -17,7 +17,7 @@ Extends basic form field functionality with password visibility toggle features.
 
 Defined in: [src/types/Auth/PasswordField/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L13)
 
----
+***
 
 ### label?
 
@@ -25,7 +25,7 @@ Defined in: [src/types/Auth/PasswordField/interface.ts:13](https://github.com/Pa
 
 Defined in: [src/types/Auth/PasswordField/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L8)
 
----
+***
 
 ### name?
 
@@ -33,7 +33,7 @@ Defined in: [src/types/Auth/PasswordField/interface.ts:8](https://github.com/Pal
 
 Defined in: [src/types/Auth/PasswordField/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L9)
 
----
+***
 
 ### onChange()
 
@@ -51,7 +51,7 @@ Defined in: [src/types/Auth/PasswordField/interface.ts:11](https://github.com/Pa
 
 `void`
 
----
+***
 
 ### onToggleVisibility()?
 
@@ -63,7 +63,7 @@ Defined in: [src/types/Auth/PasswordField/interface.ts:16](https://github.com/Pa
 
 `void`
 
----
+***
 
 ### placeholder?
 
@@ -71,7 +71,7 @@ Defined in: [src/types/Auth/PasswordField/interface.ts:16](https://github.com/Pa
 
 Defined in: [src/types/Auth/PasswordField/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L12)
 
----
+***
 
 ### showPassword?
 
@@ -79,7 +79,7 @@ Defined in: [src/types/Auth/PasswordField/interface.ts:12](https://github.com/Pa
 
 Defined in: [src/types/Auth/PasswordField/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L15)
 
----
+***
 
 ### testId?
 
@@ -87,7 +87,7 @@ Defined in: [src/types/Auth/PasswordField/interface.ts:15](https://github.com/Pa
 
 Defined in: [src/types/Auth/PasswordField/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/PasswordField/interface.ts#L14)
 
----
+***
 
 ### value
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceDropdown()
 
@@ -32,7 +32,7 @@ Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:10](https://github.co
 
 Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/mocks/react-bootstrap/types.ts#L13)
 
----
+***
 
 ### Menu
 
@@ -40,7 +40,7 @@ Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:13](https://github.co
 
 Defined in: [src/test-utils/mocks/react-bootstrap/types.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/mocks/react-bootstrap/types.ts#L12)
 
----
+***
 
 ### Toggle
 

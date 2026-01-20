@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: PostWhereInput
 
@@ -16,47 +16,47 @@ Defined in: [src/types/Post/type.ts:61](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Post/type.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L63)
 
----
+***
 
-### id_contains?
+### id\_contains?
 
-> `optional` **id_contains**: `string`
+> `optional` **id\_contains**: `string`
 
 Defined in: [src/types/Post/type.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L64)
 
----
+***
 
-### id_in?
+### id\_in?
 
-> `optional` **id_in**: `string`[]
+> `optional` **id\_in**: `string`[]
 
 Defined in: [src/types/Post/type.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L65)
 
----
+***
 
-### id_not?
+### id\_not?
 
-> `optional` **id_not**: `string`
+> `optional` **id\_not**: `string`
 
 Defined in: [src/types/Post/type.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L66)
 
----
+***
 
-### id_not_in?
+### id\_not\_in?
 
-> `optional` **id_not_in**: `string`[]
+> `optional` **id\_not\_in**: `string`[]
 
 Defined in: [src/types/Post/type.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L67)
 
----
+***
 
-### id_starts_with?
+### id\_starts\_with?
 
-> `optional` **id_starts_with**: `string`
+> `optional` **id\_starts\_with**: `string`
 
 Defined in: [src/types/Post/type.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L68)
 
----
+***
 
 ### text?
 
@@ -64,47 +64,47 @@ Defined in: [src/types/Post/type.ts:68](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Post/type.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L69)
 
----
+***
 
-### text_contains?
+### text\_contains?
 
-> `optional` **text_contains**: `string`
+> `optional` **text\_contains**: `string`
 
 Defined in: [src/types/Post/type.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L70)
 
----
+***
 
-### text_in?
+### text\_in?
 
-> `optional` **text_in**: `string`[]
+> `optional` **text\_in**: `string`[]
 
 Defined in: [src/types/Post/type.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L71)
 
----
+***
 
-### text_not?
+### text\_not?
 
-> `optional` **text_not**: `string`
+> `optional` **text\_not**: `string`
 
 Defined in: [src/types/Post/type.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L72)
 
----
+***
 
-### text_not_in?
+### text\_not\_in?
 
-> `optional` **text_not_in**: `string`[]
+> `optional` **text\_not\_in**: `string`[]
 
 Defined in: [src/types/Post/type.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L73)
 
----
+***
 
-### text_starts_with?
+### text\_starts\_with?
 
-> `optional` **text_starts_with**: `string`
+> `optional` **text\_starts\_with**: `string`
 
 Defined in: [src/types/Post/type.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L74)
 
----
+***
 
 ### title?
 
@@ -112,42 +112,42 @@ Defined in: [src/types/Post/type.ts:74](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Post/type.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L75)
 
----
+***
 
-### title_contains?
+### title\_contains?
 
-> `optional` **title_contains**: `string`
+> `optional` **title\_contains**: `string`
 
 Defined in: [src/types/Post/type.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L76)
 
----
+***
 
-### title_in?
+### title\_in?
 
-> `optional` **title_in**: `string`[]
+> `optional` **title\_in**: `string`[]
 
 Defined in: [src/types/Post/type.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L77)
 
----
+***
 
-### title_not?
+### title\_not?
 
-> `optional` **title_not**: `string`
+> `optional` **title\_not**: `string`
 
 Defined in: [src/types/Post/type.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L78)
 
----
+***
 
-### title_not_in?
+### title\_not\_in?
 
-> `optional` **title_not_in**: `string`[]
+> `optional` **title\_not\_in**: `string`[]
 
 Defined in: [src/types/Post/type.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L79)
 
----
+***
 
-### title_starts_with?
+### title\_starts\_with?
 
-> `optional` **title_starts_with**: `string`
+> `optional` **title\_starts\_with**: `string`
 
 Defined in: [src/types/Post/type.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L80)

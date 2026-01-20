@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceCampaignInfo
 
@@ -16,7 +16,7 @@ Defines the structure for campaign information.
 
 Defined in: [src/utils/interfaces.ts:1320](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1320)
 
----
+***
 
 ### currencyCode
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1320](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1321](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1321)
 
----
+***
 
 ### endAt
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:1321](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1319](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1319)
 
----
+***
 
 ### goalAmount
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:1319](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1317](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1317)
 
----
+***
 
 ### id
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:1317](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1315](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1315)
 
----
+***
 
 ### name
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:1315](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1316](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1316)
 
----
+***
 
 ### startAt
 

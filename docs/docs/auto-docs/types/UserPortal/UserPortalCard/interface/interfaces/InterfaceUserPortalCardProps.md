@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceUserPortalCardProps
 
@@ -24,7 +24,7 @@ Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:23](https://github
 
 Optional right section (buttons, badges, counters)
 
----
+***
 
 ### ariaLabel?
 
@@ -34,7 +34,7 @@ Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:27](https://github
 
 Accessible label for the card container (i18n required)
 
----
+***
 
 ### children
 
@@ -44,7 +44,7 @@ Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:22](https://github
 
 Main content area (required)
 
----
+***
 
 ### className?
 
@@ -54,7 +54,7 @@ Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:25](https://github
 
 Optional additional class for the outer container
 
----
+***
 
 ### dataTestId?
 
@@ -64,7 +64,7 @@ Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:26](https://github
 
 Optional test id prefix for unit/e2e testing
 
----
+***
 
 ### imageSlot?
 
@@ -74,7 +74,7 @@ Defined in: [src/types/UserPortal/UserPortalCard/interface.ts:21](https://github
 
 Optional left section (avatar, logo, thumbnail, icon)
 
----
+***
 
 ### variant?
 

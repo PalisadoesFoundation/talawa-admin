@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceErrorBoundaryWrapperProps
 
@@ -12,7 +12,6 @@ ErrorBoundaryWrapper catches JavaScript errors anywhere in the child component t
 logs those errors, and displays a fallback UI instead of crashing the entire app.
 
 **Key Features:**
-
 - Catches render errors that try-catch cannot handle
 - Provides default and custom fallback UI options
 - Integrates with toast notification system
@@ -41,7 +40,7 @@ Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:29](h
 
 Child components to wrap with error boundary
 
----
+***
 
 ### errorMessage?
 
@@ -52,7 +51,7 @@ Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:48](h
 Custom error message to display in toast notification.
 Falls back to error.message or 'An unexpected error occurred' if not provided.
 
----
+***
 
 ### fallback?
 
@@ -63,7 +62,7 @@ Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:35](h
 Custom fallback UI (JSX element) to display when an error occurs.
 Takes precedence over default fallback but not over fallbackComponent.
 
----
+***
 
 ### fallbackComponent?
 
@@ -75,7 +74,7 @@ Custom fallback component that receives error details and reset function.
 Takes precedence over both default fallback and custom JSX fallback.
 Receives error and onReset as props.
 
----
+***
 
 ### fallbackErrorMessage
 
@@ -85,7 +84,7 @@ Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:77](h
 
 Translated fallback error message when error.message is unavailable.
 
----
+***
 
 ### fallbackTitle
 
@@ -95,7 +94,7 @@ Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:72](h
 
 Translated title text for default fallback UI.
 
----
+***
 
 ### onError()?
 
@@ -121,7 +120,7 @@ Receives the Error object and ErrorInfo containing component stack trace.
 
 `void`
 
----
+***
 
 ### onReset()?
 
@@ -136,7 +135,7 @@ Can be used to navigate away, refresh data, or perform cleanup operations.
 
 `void`
 
----
+***
 
 ### resetButtonAriaLabel
 
@@ -146,7 +145,7 @@ Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:87](h
 
 Translated aria-label for reset button (accessibility).
 
----
+***
 
 ### resetButtonText
 
@@ -156,7 +155,7 @@ Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:82](h
 
 Translated reset button text.
 
----
+***
 
 ### showToast?
 
@@ -169,5 +168,5 @@ Whether to show toast notification on error.
 #### Default
 
 ```ts
-true;
+true
 ```

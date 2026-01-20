@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: UserInput
 
@@ -16,7 +16,7 @@ Defined in: [src/types/shared-components/User/type.ts:34](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L35)
 
----
+***
 
 ### email
 
@@ -24,7 +24,7 @@ Defined in: [src/types/shared-components/User/type.ts:35](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L36)
 
----
+***
 
 ### firstName
 
@@ -32,7 +32,7 @@ Defined in: [src/types/shared-components/User/type.ts:36](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L37)
 
----
+***
 
 ### lastName
 
@@ -40,7 +40,7 @@ Defined in: [src/types/shared-components/User/type.ts:37](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L38)
 
----
+***
 
 ### password
 
@@ -48,7 +48,7 @@ Defined in: [src/types/shared-components/User/type.ts:38](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L39)
 
----
+***
 
 ### selectedOrganization
 

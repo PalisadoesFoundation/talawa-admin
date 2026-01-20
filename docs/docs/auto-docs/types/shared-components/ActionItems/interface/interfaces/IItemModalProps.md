@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IItemModalProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:132](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L139)
 
----
+***
 
 ### actionItemsRefetch()
 
@@ -26,7 +26,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:137](https://g
 
 `void`
 
----
+***
 
 ### baseEvent?
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:142](https://g
 
 > **id**: `string`
 
----
+***
 
 ### editMode
 
@@ -46,7 +46,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:142](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:140](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L140)
 
----
+***
 
 ### eventId
 
@@ -54,7 +54,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:140](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:136](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L136)
 
----
+***
 
 ### hide()
 
@@ -66,7 +66,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:134](https://g
 
 `void`
 
----
+***
 
 ### isOpen
 
@@ -74,7 +74,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:134](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:133](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L133)
 
----
+***
 
 ### isRecurring?
 
@@ -82,7 +82,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:133](https://g
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:141](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L141)
 
----
+***
 
 ### orgActionItemsRefetch()?
 
@@ -94,7 +94,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:138](https://g
 
 `void`
 
----
+***
 
 ### orgId
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Class: ExtensionRegistryManager
 
@@ -28,7 +28,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:245](https://github.com/P
 
 ##### T
 
-`T` _extends_ keyof [`IExtensionRegistry`](../../../types/interfaces/IExtensionRegistry.md)
+`T` *extends* keyof [`IExtensionRegistry`](../../../types/interfaces/IExtensionRegistry.md)
 
 #### Parameters
 
@@ -40,7 +40,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:245](https://github.com/P
 
 [`IExtensionRegistry`](../../../types/interfaces/IExtensionRegistry.md)\[`T`\]
 
----
+***
 
 ### getExtensionRegistry()
 
@@ -52,7 +52,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:30](https://github.com/Pa
 
 [`IExtensionRegistry`](../../../types/interfaces/IExtensionRegistry.md)
 
----
+***
 
 ### registerExtensionPoints()
 
@@ -74,7 +74,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:34](https://github.com/Pa
 
 `void`
 
----
+***
 
 ### unregisterExtensionPoints()
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IPluginRouterProps
 
@@ -14,7 +14,7 @@ Defined in: [src/plugin/types.ts:192](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:194](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L194)
 
----
+***
 
 ### userPermissions?
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: Feedback
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Event/type.ts:45](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L46)
 
----
+***
 
 ### createdAt
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Event/type.ts:46](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L47)
 
----
+***
 
 ### event?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Event/type.ts:47](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L48)
 
----
+***
 
 ### rating
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Event/type.ts:48](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L49)
 
----
+***
 
 ### review
 
@@ -48,7 +48,7 @@ Defined in: [src/types/Event/type.ts:49](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L50)
 
----
+***
 
 ### updatedAt
 

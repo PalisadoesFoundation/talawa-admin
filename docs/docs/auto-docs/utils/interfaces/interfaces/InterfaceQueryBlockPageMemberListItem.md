@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceQueryBlockPageMemberListItem
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1387](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1385](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1385)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### email
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:1390](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1388](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1388)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### firstName
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:1388](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1386](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1386)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### lastName
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/interfaces.ts:1389](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1387](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1387)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### organizationsBlockedBy
 

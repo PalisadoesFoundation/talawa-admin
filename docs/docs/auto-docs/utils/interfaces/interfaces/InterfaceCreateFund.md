@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceCreateFund
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1561](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1559](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1559)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### fundRef
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:1562](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1560](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1560)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### isArchived
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:1564](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1562](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1562)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### isDefault
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/interfaces.ts:1563](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1561](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1561)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### isTaxDeductible
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceOrganizationFundsConnectionPg
 
@@ -16,7 +16,7 @@ Defines the structure for a connection of organization funds with PostgreSQL-spe
 
 Defined in: [src/utils/interfaces.ts:757](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L757)
 
----
+***
 
 ### pageInfo
 

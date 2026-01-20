@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceSearchingButtonProps
 
@@ -18,7 +18,7 @@ Defined in: [src/types/shared-components/SearchingButton/interface.ts:14](https:
 
 Custom class name for the Dropdown
 
----
+***
 
 ### dataTestIdPrefix
 
@@ -28,7 +28,7 @@ Defined in: [src/types/shared-components/SearchingButton/interface.ts:10](https:
 
 The prefix for data-testid attributes for testing
 
----
+***
 
 ### dropdownTestId?
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/SearchingButton/interface.ts:12](https:
 
 The data-testid attribute for the Dropdown
 
----
+***
 
 ### text?
 
@@ -48,7 +48,7 @@ Defined in: [src/types/shared-components/SearchingButton/interface.ts:8](https:/
 
 The text to display in the button
 
----
+***
 
 ### title?
 
@@ -58,7 +58,7 @@ Defined in: [src/types/shared-components/SearchingButton/interface.ts:6](https:/
 
 The title attribute for the Dropdown
 
----
+***
 
 ### type?
 

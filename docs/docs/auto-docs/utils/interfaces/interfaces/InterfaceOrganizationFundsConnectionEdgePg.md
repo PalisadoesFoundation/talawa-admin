@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceOrganizationFundsConnectionEdgePg
 
@@ -16,7 +16,7 @@ Defines the structure for an edge in the organization funds connection with Post
 
 Defined in: [src/utils/interfaces.ts:765](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L765)
 
----
+***
 
 ### node
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IPluginDrawerItemsProps
 
@@ -14,7 +14,7 @@ Defined in: [src/plugin/types.ts:183](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:188](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L188)
 
----
+***
 
 ### className?
 
@@ -22,7 +22,7 @@ Defined in: [src/plugin/types.ts:188](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:186](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L186)
 
----
+***
 
 ### isAdmin?
 
@@ -30,7 +30,7 @@ Defined in: [src/plugin/types.ts:186](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:185](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L185)
 
----
+***
 
 ### itemClassName?
 
@@ -38,7 +38,7 @@ Defined in: [src/plugin/types.ts:185](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:187](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L187)
 
----
+***
 
 ### onItemClick()?
 
@@ -56,7 +56,7 @@ Defined in: [src/plugin/types.ts:189](https://github.com/PalisadoesFoundation/ta
 
 `void`
 
----
+***
 
 ### userPermissions?
 

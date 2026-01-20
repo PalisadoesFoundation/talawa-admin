@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: DELETE_ORGANIZATION_MUTATION
+# Variable: DELETE\_ORGANIZATION\_MUTATION
 
-> `const` **DELETE_ORGANIZATION_MUTATION**: `DocumentNode`
+> `const` **DELETE\_ORGANIZATION\_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/mutations.ts:416](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L416)

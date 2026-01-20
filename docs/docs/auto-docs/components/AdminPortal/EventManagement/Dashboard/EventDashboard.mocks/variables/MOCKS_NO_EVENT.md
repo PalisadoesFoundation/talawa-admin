@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: MOCKS_NO_EVENT
+# Variable: MOCKS\_NO\_EVENT
 
-> `const` **MOCKS_NO_EVENT**: `object`[]
+> `const` **MOCKS\_NO\_EVENT**: `object`[]
 
 Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts#L85)
 

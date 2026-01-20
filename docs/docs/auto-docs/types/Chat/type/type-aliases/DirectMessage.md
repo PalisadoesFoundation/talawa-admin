@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: DirectMessage
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Chat/type.ts:4](https://github.com/PalisadoesFoundation/t
 
 Defined in: [src/types/Chat/type.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L5)
 
----
+***
 
 ### chatMessageBelongsTo?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Chat/type.ts:5](https://github.com/PalisadoesFoundation/t
 
 Defined in: [src/types/Chat/type.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L11)
 
----
+***
 
 ### createdAt
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Chat/type.ts:11](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L6)
 
----
+***
 
 ### deletedBy?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Chat/type.ts:6](https://github.com/PalisadoesFoundation/t
 
 Defined in: [src/types/Chat/type.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L14)
 
----
+***
 
 ### media?
 
@@ -48,7 +48,7 @@ Defined in: [src/types/Chat/type.ts:14](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L12)
 
----
+***
 
 ### messageContent
 
@@ -56,7 +56,7 @@ Defined in: [src/types/Chat/type.ts:12](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L10)
 
----
+***
 
 ### receiver?
 
@@ -64,7 +64,7 @@ Defined in: [src/types/Chat/type.ts:10](https://github.com/PalisadoesFoundation/
 
 Defined in: [src/types/Chat/type.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L8)
 
----
+***
 
 ### replyTo?
 
@@ -72,7 +72,7 @@ Defined in: [src/types/Chat/type.ts:8](https://github.com/PalisadoesFoundation/t
 
 Defined in: [src/types/Chat/type.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L9)
 
----
+***
 
 ### sender
 
@@ -80,7 +80,7 @@ Defined in: [src/types/Chat/type.ts:9](https://github.com/PalisadoesFoundation/t
 
 Defined in: [src/types/Chat/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L7)
 
----
+***
 
 ### type?
 
@@ -88,7 +88,7 @@ Defined in: [src/types/Chat/type.ts:7](https://github.com/PalisadoesFoundation/t
 
 Defined in: [src/types/Chat/type.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/type.ts#L13)
 
----
+***
 
 ### updatedAt
 

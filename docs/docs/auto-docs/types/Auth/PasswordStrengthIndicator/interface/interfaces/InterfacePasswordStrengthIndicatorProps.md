@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfacePasswordStrengthIndicatorProps
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Auth/PasswordStrengthIndicator/interface.ts:12](https://g
 
 Controls component visibility - defaults to true
 
----
+***
 
 ### password
 

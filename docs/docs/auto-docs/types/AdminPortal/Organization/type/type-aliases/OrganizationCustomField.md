@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: OrganizationCustomField
 
@@ -16,7 +16,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:47](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L48)
 
----
+***
 
 ### name
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:48](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L49)
 
----
+***
 
 ### organizationId
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:49](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L50)
 
----
+***
 
 ### type
 

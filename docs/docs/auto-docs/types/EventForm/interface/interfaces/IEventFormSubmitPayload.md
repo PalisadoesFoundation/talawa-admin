@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IEventFormSubmitPayload
 
@@ -25,7 +25,7 @@ Defined in: [src/types/EventForm/interface.ts:11](https://github.com/PalisadoesF
 
 `IEventFormBase.allDay`
 
----
+***
 
 ### createChat?
 
@@ -37,7 +37,7 @@ Defined in: [src/types/EventForm/interface.ts:25](https://github.com/PalisadoesF
 
 `IEventFormBase.createChat`
 
----
+***
 
 ### description
 
@@ -49,7 +49,7 @@ Defined in: [src/types/EventForm/interface.ts:9](https://github.com/PalisadoesFo
 
 `IEventFormBase.description`
 
----
+***
 
 ### endAtISO
 
@@ -57,7 +57,7 @@ Defined in: [src/types/EventForm/interface.ts:9](https://github.com/PalisadoesFo
 
 Defined in: [src/types/EventForm/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L45)
 
----
+***
 
 ### endDate
 
@@ -65,7 +65,7 @@ Defined in: [src/types/EventForm/interface.ts:45](https://github.com/PalisadoesF
 
 Defined in: [src/types/EventForm/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L47)
 
----
+***
 
 ### isInviteOnly
 
@@ -80,7 +80,7 @@ Mutually exclusive with isPublic.
 
 `IEventFormBase.isInviteOnly`
 
----
+***
 
 ### isPublic
 
@@ -95,7 +95,7 @@ Often referred to as "Community Visible" in the UI.
 
 `IEventFormBase.isPublic`
 
----
+***
 
 ### isRegisterable
 
@@ -107,7 +107,7 @@ Defined in: [src/types/EventForm/interface.ts:22](https://github.com/PalisadoesF
 
 `IEventFormBase.isRegisterable`
 
----
+***
 
 ### location
 
@@ -119,7 +119,7 @@ Defined in: [src/types/EventForm/interface.ts:10](https://github.com/PalisadoesF
 
 `IEventFormBase.location`
 
----
+***
 
 ### name
 
@@ -131,7 +131,7 @@ Defined in: [src/types/EventForm/interface.ts:8](https://github.com/PalisadoesFo
 
 `IEventFormBase.name`
 
----
+***
 
 ### recurrenceRule
 
@@ -143,7 +143,7 @@ Defined in: [src/types/EventForm/interface.ts:24](https://github.com/PalisadoesF
 
 `IEventFormBase.recurrenceRule`
 
----
+***
 
 ### startAtISO
 
@@ -151,7 +151,7 @@ Defined in: [src/types/EventForm/interface.ts:24](https://github.com/PalisadoesF
 
 Defined in: [src/types/EventForm/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L44)
 
----
+***
 
 ### startDate
 

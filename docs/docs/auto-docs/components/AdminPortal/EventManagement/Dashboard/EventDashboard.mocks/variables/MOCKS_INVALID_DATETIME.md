@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: MOCKS_INVALID_DATETIME
+# Variable: MOCKS\_INVALID\_DATETIME
 
-> `const` **MOCKS_INVALID_DATETIME**: `object`[]
+> `const` **MOCKS\_INVALID\_DATETIME**: `object`[]
 
 Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts:156](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts#L156)
 

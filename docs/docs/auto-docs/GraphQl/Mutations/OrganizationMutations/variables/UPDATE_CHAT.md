@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: UPDATE_CHAT
+# Variable: UPDATE\_CHAT
 
-> `const` **UPDATE_CHAT**: `DocumentNode`
+> `const` **UPDATE\_CHAT**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L110)

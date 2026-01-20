@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: UserPhone
 
@@ -16,7 +16,7 @@ Defined in: [src/types/shared-components/User/type.ts:28](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L29)
 
----
+***
 
 ### mobile?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/shared-components/User/type.ts:29](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L30)
 
----
+***
 
 ### work?
 

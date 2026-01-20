@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceSortingOption
 
@@ -22,10 +22,10 @@ The display text shown to the user in the dropdown menu.
 #### Example
 
 ```ts
-('Latest', 'Oldest', 'Most Hours');
+"Latest", "Oldest", "Most Hours"
 ```
 
----
+***
 
 ### value
 
@@ -39,5 +39,5 @@ This value is passed to the onOptionChange callback when the option is selected.
 #### Example
 
 ```ts
-('DESCENDING', 'hours_DESC', 'all', 0, 1, 2);
+"DESCENDING", "hours_DESC", "all", 0, 1, 2
 ```

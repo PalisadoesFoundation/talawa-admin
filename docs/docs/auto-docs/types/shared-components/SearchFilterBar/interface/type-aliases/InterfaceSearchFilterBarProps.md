@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: InterfaceSearchFilterBarProps
 
@@ -11,7 +11,6 @@ Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:418](https
 Main props interface for the SearchFilterBar component.
 
 This is a discriminated union type that ensures type safety:
-
 - When `hasDropdowns` is `false`, the `dropdowns` property cannot be provided
 - When `hasDropdowns` is `true`, the `dropdowns` property must be provided
 
@@ -20,9 +19,9 @@ This is a discriminated union type that ensures type safety:
 ```tsx
 const props: InterfaceSearchFilterBarProps = {
   hasDropdowns: false,
-  searchPlaceholder: 'Search...',
+  searchPlaceholder: "Search...",
   searchValue: searchTerm,
-  onSearchChange: setSearchTerm,
+  onSearchChange: setSearchTerm
 };
 ```
 

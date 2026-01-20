@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceUserSidebarProps
 
@@ -14,7 +14,7 @@ Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:40](https://g
 
 Defined in: [src/components/UserPortal/UserSidebar/UserSidebar.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserSidebar/UserSidebar.tsx#L41)
 
----
+***
 
 ### setHideDrawer
 

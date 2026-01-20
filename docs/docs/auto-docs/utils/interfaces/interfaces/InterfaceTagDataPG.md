@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceTagDataPG
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1074](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
----
+***
 
 ### childTags
 
@@ -34,7 +34,7 @@ Defined in: [src/utils/interfaces.ts:1071](https://github.com/PalisadoesFoundati
 
 > **totalCount**: `number`
 
----
+***
 
 ### id
 
@@ -42,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:1071](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1065](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1065)
 
----
+***
 
 ### name
 
@@ -50,7 +50,7 @@ Defined in: [src/utils/interfaces.ts:1065](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1066](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1066)
 
----
+***
 
 ### parentTag
 
@@ -62,7 +62,7 @@ Defined in: [src/utils/interfaces.ts:1067](https://github.com/PalisadoesFoundati
 
 > **id**: `string`
 
----
+***
 
 ### usersAssignedTo
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceOrgConnectionInfoType
 
@@ -16,7 +16,7 @@ Defines the structure for organization connection information.
 
 Defined in: [src/utils/interfaces.ts:424](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L424)
 
----
+***
 
 ### address
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:424](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:439](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L439)
 
----
+***
 
 ### admins
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:435](https://github.com/PalisadoesFoundatio
 
 > **\_id**: `string`
 
----
+***
 
 ### createdAt
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/interfaces.ts:435](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:438](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L438)
 
----
+***
 
 ### creator
 
@@ -64,7 +64,7 @@ Defined in: [src/utils/interfaces.ts:426](https://github.com/PalisadoesFoundatio
 
 > **lastName**: `string`
 
----
+***
 
 ### image
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:426](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:425](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L425)
 
----
+***
 
 ### members
 
@@ -84,7 +84,7 @@ Defined in: [src/utils/interfaces.ts:432](https://github.com/PalisadoesFoundatio
 
 > **\_id**: `string`
 
----
+***
 
 ### name
 

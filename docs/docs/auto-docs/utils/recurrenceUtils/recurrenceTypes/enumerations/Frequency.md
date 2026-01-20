@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Enumeration: Frequency
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:20](https://github.com
 
 Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L21)
 
----
+***
 
 ### MONTHLY
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:21](https://github.com
 
 Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L23)
 
----
+***
 
 ### WEEKLY
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:23](https://github.com
 
 Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L22)
 
----
+***
 
 ### YEARLY
 

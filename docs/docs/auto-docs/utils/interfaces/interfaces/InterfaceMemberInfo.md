@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceMemberInfo
 
@@ -16,7 +16,7 @@ Defines the structure for member information.
 
 Defined in: [src/utils/interfaces.ts:409](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L409)
 
----
+***
 
 ### createdAt
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:409](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:414](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L414)
 
----
+***
 
 ### email
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:414](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:412](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L412)
 
----
+***
 
 ### firstName
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:412](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:410](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L410)
 
----
+***
 
 ### image
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:410](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:413](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L413)
 
----
+***
 
 ### lastName
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:413](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:411](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L411)
 
----
+***
 
 ### organizationsBlockedBy
 

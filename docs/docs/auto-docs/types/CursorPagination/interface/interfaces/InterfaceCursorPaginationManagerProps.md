@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceCursorPaginationManagerProps\<TNode, TVariables\>
 
@@ -18,7 +18,7 @@ The type of individual items extracted from edges
 
 ### TVariables
 
-`TVariables` _extends_ `Record`\<`string`, `unknown`\> = `Record`\<`string`, `unknown`\>
+`TVariables` *extends* `Record`\<`string`, `unknown`\> = `Record`\<`string`, `unknown`\>
 
 The GraphQL query variables type (defaults to `Record<string, unknown>`)
 
@@ -42,7 +42,7 @@ Dot-separated path to extract connection data from the query response
 "organization.members" for data.organization.members
 ```
 
----
+***
 
 ### emptyStateComponent?
 
@@ -52,7 +52,7 @@ Defined in: [src/types/CursorPagination/interface.ts:115](https://github.com/Pal
 
 Custom component to show when no items are available
 
----
+***
 
 ### itemsPerPage?
 
@@ -63,7 +63,7 @@ Defined in: [src/types/CursorPagination/interface.ts:62](https://github.com/Pali
 Number of items to fetch per page
 default 10
 
----
+***
 
 ### keyExtractor()?
 
@@ -104,7 +104,7 @@ falls back to using the array index as the key.
 keyExtractor={(user) => user.id}
 ```
 
----
+***
 
 ### loadingComponent?
 
@@ -114,7 +114,7 @@ Defined in: [src/types/CursorPagination/interface.ts:110](https://github.com/Pal
 
 Custom loading component to show during initial data fetch
 
----
+***
 
 ### onDataChange()?
 
@@ -134,7 +134,7 @@ Callback invoked when the data changes (initial load or after loading more)
 
 `void`
 
----
+***
 
 ### query
 
@@ -144,7 +144,7 @@ Defined in: [src/types/CursorPagination/interface.ts:44](https://github.com/Pali
 
 GraphQL query document for fetching data
 
----
+***
 
 ### queryVariables?
 
@@ -154,7 +154,7 @@ Defined in: [src/types/CursorPagination/interface.ts:49](https://github.com/Pali
 
 Query variables (excluding pagination variables like 'first' and 'after')
 
----
+***
 
 ### refetchTrigger?
 
@@ -165,7 +165,7 @@ Defined in: [src/types/CursorPagination/interface.ts:126](https://github.com/Pal
 Trigger value that causes a refetch when changed
 Can be a number (counter) or any value that changes
 
----
+***
 
 ### renderItem()
 

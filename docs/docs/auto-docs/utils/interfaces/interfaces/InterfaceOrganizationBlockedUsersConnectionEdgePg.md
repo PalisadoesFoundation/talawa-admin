@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceOrganizationBlockedUsersConnectionEdgePg
 
@@ -16,7 +16,7 @@ Defines the structure for an edge in the organization blocked users connection w
 
 Defined in: [src/utils/interfaces.ts:606](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L606)
 
----
+***
 
 ### node
 

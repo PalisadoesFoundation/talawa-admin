@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceCreatePledge
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1637](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1635](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1635)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### pledgeCurrency
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:1638](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1636](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1636)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### pledgeUsers
 

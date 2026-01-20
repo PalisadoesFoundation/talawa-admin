@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceUserEvents
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1872](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1890](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1890)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### endAt
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:1874](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1892](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1892)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### id
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:1870](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1888](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1888)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### location
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/interfaces.ts:1875](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1893](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1893)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### name
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:1871](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1889](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1889)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### startAt
 
@@ -84,7 +84,7 @@ Defined in: [src/utils/interfaces.ts:1873](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1891](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1891)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### volunteerGroups
 
@@ -96,7 +96,7 @@ Defined in: [src/utils/interfaces.ts:1876](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1894](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1894)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### volunteers
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: ICreatePostInput
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Post/type.ts:170](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Post/type.ts:175](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L175)
 
----
+***
 
 ### body?
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Post/type.ts:175](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Post/type.ts:172](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L172)
 
----
+***
 
 ### caption
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Post/type.ts:172](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Post/type.ts:171](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L171)
 
----
+***
 
 ### isPinned
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Post/type.ts:171](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Post/type.ts:174](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L174)
 
----
+***
 
 ### organizationId
 

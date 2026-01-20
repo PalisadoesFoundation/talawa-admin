@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: CreateUserFamilyInput
 
@@ -16,7 +16,7 @@ Defined in: [src/types/shared-components/User/type.ts:54](https://github.com/Pal
 
 Defined in: [src/types/shared-components/User/type.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/User/type.ts#L55)
 
----
+***
 
 ### userIds
 

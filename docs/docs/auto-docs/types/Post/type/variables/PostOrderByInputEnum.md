@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Variable: PostOrderByInputEnum
 
@@ -10,66 +10,66 @@ Defined in: [src/types/Post/type.ts:32](https://github.com/PalisadoesFoundation/
 
 ## Type Declaration
 
-### COMMENT_COUNT_ASC
+### COMMENT\_COUNT\_ASC
 
-> `readonly` **COMMENT_COUNT_ASC**: `"commentCount_ASC"` = `'commentCount_ASC'`
+> `readonly` **COMMENT\_COUNT\_ASC**: `"commentCount_ASC"` = `'commentCount_ASC'`
 
-### COMMENT_COUNT_DESC
+### COMMENT\_COUNT\_DESC
 
-> `readonly` **COMMENT_COUNT_DESC**: `"commentCount_DESC"` = `'commentCount_DESC'`
+> `readonly` **COMMENT\_COUNT\_DESC**: `"commentCount_DESC"` = `'commentCount_DESC'`
 
-### CREATED_AT_ASC
+### CREATED\_AT\_ASC
 
-> `readonly` **CREATED_AT_ASC**: `"createdAt_ASC"` = `'createdAt_ASC'`
+> `readonly` **CREATED\_AT\_ASC**: `"createdAt_ASC"` = `'createdAt_ASC'`
 
-### CREATED_AT_DESC
+### CREATED\_AT\_DESC
 
-> `readonly` **CREATED_AT_DESC**: `"createdAt_DESC"` = `'createdAt_DESC'`
+> `readonly` **CREATED\_AT\_DESC**: `"createdAt_DESC"` = `'createdAt_DESC'`
 
-### ID_ASC
+### ID\_ASC
 
-> `readonly` **ID_ASC**: `"id_ASC"` = `'id_ASC'`
+> `readonly` **ID\_ASC**: `"id_ASC"` = `'id_ASC'`
 
-### ID_DESC
+### ID\_DESC
 
-> `readonly` **ID_DESC**: `"id_DESC"` = `'id_DESC'`
+> `readonly` **ID\_DESC**: `"id_DESC"` = `'id_DESC'`
 
-### IMAGE_URL_ASC
+### IMAGE\_URL\_ASC
 
-> `readonly` **IMAGE_URL_ASC**: `"imageUrl_ASC"` = `'imageUrl_ASC'`
+> `readonly` **IMAGE\_URL\_ASC**: `"imageUrl_ASC"` = `'imageUrl_ASC'`
 
-### IMAGE_URL_DESC
+### IMAGE\_URL\_DESC
 
-> `readonly` **IMAGE_URL_DESC**: `"imageUrl_DESC"` = `'imageUrl_DESC'`
+> `readonly` **IMAGE\_URL\_DESC**: `"imageUrl_DESC"` = `'imageUrl_DESC'`
 
-### LIKE_COUNT_ASC
+### LIKE\_COUNT\_ASC
 
-> `readonly` **LIKE_COUNT_ASC**: `"likeCount_ASC"` = `'likeCount_ASC'`
+> `readonly` **LIKE\_COUNT\_ASC**: `"likeCount_ASC"` = `'likeCount_ASC'`
 
-### LIKE_COUNT_DESC
+### LIKE\_COUNT\_DESC
 
-> `readonly` **LIKE_COUNT_DESC**: `"likeCount_DESC"` = `'likeCount_DESC'`
+> `readonly` **LIKE\_COUNT\_DESC**: `"likeCount_DESC"` = `'likeCount_DESC'`
 
-### TEXT_ASC
+### TEXT\_ASC
 
-> `readonly` **TEXT_ASC**: `"text_ASC"` = `'text_ASC'`
+> `readonly` **TEXT\_ASC**: `"text_ASC"` = `'text_ASC'`
 
-### TEXT_DESC
+### TEXT\_DESC
 
-> `readonly` **TEXT_DESC**: `"text_DESC"` = `'text_DESC'`
+> `readonly` **TEXT\_DESC**: `"text_DESC"` = `'text_DESC'`
 
-### TITLE_ASC
+### TITLE\_ASC
 
-> `readonly` **TITLE_ASC**: `"title_ASC"` = `'title_ASC'`
+> `readonly` **TITLE\_ASC**: `"title_ASC"` = `'title_ASC'`
 
-### TITLE_DESC
+### TITLE\_DESC
 
-> `readonly` **TITLE_DESC**: `"title_DESC"` = `'title_DESC'`
+> `readonly` **TITLE\_DESC**: `"title_DESC"` = `'title_DESC'`
 
-### VIDEO_URL_ASC
+### VIDEO\_URL\_ASC
 
-> `readonly` **VIDEO_URL_ASC**: `"videoUrl_ASC"` = `'videoUrl_ASC'`
+> `readonly` **VIDEO\_URL\_ASC**: `"videoUrl_ASC"` = `'videoUrl_ASC'`
 
-### VIDEO_URL_DESC
+### VIDEO\_URL\_DESC
 
-> `readonly` **VIDEO_URL_DESC**: `"videoUrl_DESC"` = `'videoUrl_DESC'`
+> `readonly` **VIDEO\_URL\_DESC**: `"videoUrl_DESC"` = `'videoUrl_DESC'`

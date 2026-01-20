@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceFundPg
 
@@ -16,7 +16,7 @@ Defines the structure for a fund with PostgreSQL-specific fields.
 
 Defined in: [src/utils/interfaces.ts:776](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L776)
 
----
+***
 
 ### creator
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:776](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:778](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L778)
 
----
+***
 
 ### id
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:778](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:773](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L773)
 
----
+***
 
 ### isTaxDeductible
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:773](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:780](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L780)
 
----
+***
 
 ### name
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:780](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:774](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L774)
 
----
+***
 
 ### organization
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:774](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:775](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L775)
 
----
+***
 
 ### updatedAt
 
@@ -64,7 +64,7 @@ Defined in: [src/utils/interfaces.ts:775](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:777](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L777)
 
----
+***
 
 ### updater
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceAdvertisementPg
 
@@ -16,7 +16,7 @@ Defines the structure for an advertisement with PostgreSQL-specific fields.
 
 Defined in: [src/utils/interfaces.ts:575](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L575)
 
----
+***
 
 ### createdAt
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:575](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:570](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L570)
 
----
+***
 
 ### creator
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:570](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:572](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L572)
 
----
+***
 
 ### description
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:572](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:566](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L566)
 
----
+***
 
 ### endAt
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:566](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:569](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L569)
 
----
+***
 
 ### id
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:569](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:564](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L564)
 
----
+***
 
 ### name
 
@@ -64,7 +64,7 @@ Defined in: [src/utils/interfaces.ts:564](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:565](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L565)
 
----
+***
 
 ### organization
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:565](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:574](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L574)
 
----
+***
 
 ### startAt
 
@@ -80,7 +80,7 @@ Defined in: [src/utils/interfaces.ts:574](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:568](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L568)
 
----
+***
 
 ### type
 
@@ -88,7 +88,7 @@ Defined in: [src/utils/interfaces.ts:568](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:567](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L567)
 
----
+***
 
 ### updatedAt
 
@@ -96,7 +96,7 @@ Defined in: [src/utils/interfaces.ts:567](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:571](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L571)
 
----
+***
 
 ### updater
 

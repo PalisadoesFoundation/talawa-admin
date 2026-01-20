@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: UPDATE_MOCK
+# Variable: UPDATE\_MOCK
 
-> `const` **UPDATE_MOCK**: `object`[]
+> `const` **UPDATE\_MOCK**: `object`[]
 
 Defined in: [src/shared-components/ProfileForm/profileForm.mock.ts:259](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileForm/profileForm.mock.ts#L259)
 

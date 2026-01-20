@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: ERROR_MOCKS
+# Variable: ERROR\_MOCKS
 
-> `const` **ERROR_MOCKS**: `object`[]
+> `const` **ERROR\_MOCKS**: `object`[]
 
 Defined in: [src/components/EventListCard/Modal/EventListCardMocks.ts:295](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/EventListCardMocks.ts#L295)
 

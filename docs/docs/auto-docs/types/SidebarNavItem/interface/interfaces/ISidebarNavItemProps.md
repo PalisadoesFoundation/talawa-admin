@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: ISidebarNavItemProps
 
@@ -8,7 +8,7 @@ Defined in: [src/types/SidebarNavItem/interface.ts:15](https://github.com/Palisa
 
 Interface for SidebarNavItem component props.
 
-ISidebarNavItemProps
+ ISidebarNavItemProps
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: [src/types/SidebarNavItem/interface.ts:24](https://github.com/Palisa
 
 Cypress E2E test selector (data-cy attribute)
 
----
+***
 
 ### hideDrawer
 
@@ -30,7 +30,7 @@ Defined in: [src/types/SidebarNavItem/interface.ts:20](https://github.com/Palisa
 
 Whether the drawer is hidden/collapsed
 
----
+***
 
 ### icon
 
@@ -40,7 +40,7 @@ Defined in: [src/types/SidebarNavItem/interface.ts:17](https://github.com/Palisa
 
 Icon component or element
 
----
+***
 
 ### iconType?
 
@@ -50,7 +50,7 @@ Defined in: [src/types/SidebarNavItem/interface.ts:23](https://github.com/Palisa
 
 Type of icon being passed. Use 'react-icon' for icons from react-icons library, 'svg' for SVG components. Defaults to 'svg' if not specified.
 
----
+***
 
 ### label
 
@@ -60,7 +60,7 @@ Defined in: [src/types/SidebarNavItem/interface.ts:18](https://github.com/Palisa
 
 Display label for the navigation item
 
----
+***
 
 ### onClick()?
 
@@ -74,7 +74,7 @@ Optional click handler
 
 `void`
 
----
+***
 
 ### testId
 
@@ -84,7 +84,7 @@ Defined in: [src/types/SidebarNavItem/interface.ts:19](https://github.com/Palisa
 
 Test ID for testing purposes
 
----
+***
 
 ### to
 
@@ -94,7 +94,7 @@ Defined in: [src/types/SidebarNavItem/interface.ts:16](https://github.com/Palisa
 
 Navigation target URL
 
----
+***
 
 ### useSimpleButton?
 

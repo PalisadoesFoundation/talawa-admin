@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: MEMBERS_LIST_WITH_DETAILS
+# Variable: MEMBERS\_LIST\_WITH\_DETAILS
 
-> `const` **MEMBERS_LIST_WITH_DETAILS**: `DocumentNode`
+> `const` **MEMBERS\_LIST\_WITH\_DETAILS**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/Queries.ts:839](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L839)

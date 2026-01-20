@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceOrganizationBlockedUsersConnectionPg
 
@@ -16,7 +16,7 @@ Defines the structure for a connection of organization blocked users with Postgr
 
 Defined in: [src/utils/interfaces.ts:614](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L614)
 
----
+***
 
 ### pageInfo
 

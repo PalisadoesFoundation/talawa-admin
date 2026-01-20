@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: IS_SAMPLE_ORGANIZATION_QUERY
+# Variable: IS\_SAMPLE\_ORGANIZATION\_QUERY
 
-> `const` **IS_SAMPLE_ORGANIZATION_QUERY**: `DocumentNode`
+> `const` **IS\_SAMPLE\_ORGANIZATION\_QUERY**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/PlugInQueries.ts:359](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/PlugInQueries.ts#L359)
 

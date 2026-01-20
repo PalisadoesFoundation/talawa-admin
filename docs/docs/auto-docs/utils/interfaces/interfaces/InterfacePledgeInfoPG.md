@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfacePledgeInfoPG
 
@@ -16,7 +16,7 @@ Defines the structure for pledge information with PostgreSQL-specific fields.
 
 Defined in: [src/utils/interfaces.ts:1357](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1357)
 
----
+***
 
 ### campaign?
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/interfaces.ts:1350](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
----
+***
 
 ### createdAt
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:1350](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1359](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1359)
 
----
+***
 
 ### currencyCode
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/interfaces.ts:1359](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1358](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1358)
 
----
+***
 
 ### id
 
@@ -68,7 +68,7 @@ Defined in: [src/utils/interfaces.ts:1358](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1349](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1349)
 
----
+***
 
 ### pledger
 
@@ -76,7 +76,7 @@ Defined in: [src/utils/interfaces.ts:1349](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1361](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1361)
 
----
+***
 
 ### updatedAt?
 

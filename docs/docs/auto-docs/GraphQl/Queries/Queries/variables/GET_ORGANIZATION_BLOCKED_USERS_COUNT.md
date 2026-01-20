@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: GET_ORGANIZATION_BLOCKED_USERS_COUNT
+# Variable: GET\_ORGANIZATION\_BLOCKED\_USERS\_COUNT
 
-> `const` **GET_ORGANIZATION_BLOCKED_USERS_COUNT**: `DocumentNode`
+> `const` **GET\_ORGANIZATION\_BLOCKED\_USERS\_COUNT**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/Queries.ts:495](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L495)

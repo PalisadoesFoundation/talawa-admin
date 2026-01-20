@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfacePledgeInfo
 
@@ -16,7 +16,7 @@ Defines the structure for pledge information.
 
 Defined in: [src/utils/interfaces.ts:1336](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1336)
 
----
+***
 
 ### campaign?
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/interfaces.ts:1329](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
----
+***
 
 ### createdAt
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:1329](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1339](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1339)
 
----
+***
 
 ### currency
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/interfaces.ts:1339](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1338](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1338)
 
----
+***
 
 ### id
 
@@ -68,7 +68,7 @@ Defined in: [src/utils/interfaces.ts:1338](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1328](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1328)
 
----
+***
 
 ### note?
 
@@ -76,7 +76,7 @@ Defined in: [src/utils/interfaces.ts:1328](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1337](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1337)
 
----
+***
 
 ### pledger
 
@@ -84,7 +84,7 @@ Defined in: [src/utils/interfaces.ts:1337](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1341](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1341)
 
----
+***
 
 ### updatedAt?
 
@@ -92,7 +92,7 @@ Defined in: [src/utils/interfaces.ts:1341](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1340](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1340)
 
----
+***
 
 ### users?
 

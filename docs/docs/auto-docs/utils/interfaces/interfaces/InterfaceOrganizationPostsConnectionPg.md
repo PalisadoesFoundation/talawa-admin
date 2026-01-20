@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceOrganizationPostsConnectionPg
 
@@ -16,7 +16,7 @@ Defines the structure for a connection of organization posts with PostgreSQL-spe
 
 Defined in: [src/utils/interfaces.ts:836](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L836)
 
----
+***
 
 ### pageInfo
 

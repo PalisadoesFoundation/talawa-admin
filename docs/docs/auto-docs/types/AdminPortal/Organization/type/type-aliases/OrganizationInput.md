@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: OrganizationInput
 
@@ -16,7 +16,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:54](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L55)
 
----
+***
 
 ### apiUrl?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:55](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L56)
 
----
+***
 
 ### attendees?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:56](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L57)
 
----
+***
 
 ### description
 
@@ -40,7 +40,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:57](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L58)
 
----
+***
 
 ### image?
 
@@ -48,7 +48,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:58](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L59)
 
----
+***
 
 ### name
 
@@ -56,7 +56,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:59](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L60)
 
----
+***
 
 ### userRegistrationRequired?
 
@@ -64,7 +64,7 @@ Defined in: [src/types/AdminPortal/Organization/type.ts:60](https://github.com/P
 
 Defined in: [src/types/AdminPortal/Organization/type.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Organization/type.ts#L61)
 
----
+***
 
 ### visibleInSearch?
 

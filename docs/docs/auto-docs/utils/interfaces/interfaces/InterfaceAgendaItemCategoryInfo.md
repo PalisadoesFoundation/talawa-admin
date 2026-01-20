@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceAgendaItemCategoryInfo
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1663](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1661](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1661)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### createdBy
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:1664](https://github.com/PalisadoesFoundati
 
 > **lastName**: `string`
 
----
+***
 
 ### description
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/interfaces.ts:1665](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1663](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1663)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### name
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: ActionItem
 
@@ -16,7 +16,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:5](https://github.com/Palisadoe
 
 Defined in: [src/types/AdminPortal/actionItem.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L6)
 
----
+***
 
 ### actionItemCategory?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:6](https://github.com/Palisadoe
 
 Defined in: [src/types/AdminPortal/actionItem.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L7)
 
----
+***
 
 ### assignee?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:7](https://github.com/Palisadoe
 
 Defined in: [src/types/AdminPortal/actionItem.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L8)
 
----
+***
 
 ### assigner?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:8](https://github.com/Palisadoe
 
 Defined in: [src/types/AdminPortal/actionItem.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L9)
 
----
+***
 
 ### assignmentDate
 
@@ -48,7 +48,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:9](https://github.com/Palisadoe
 
 Defined in: [src/types/AdminPortal/actionItem.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L10)
 
----
+***
 
 ### completionDate
 
@@ -56,7 +56,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:10](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L11)
 
----
+***
 
 ### createdAt
 
@@ -64,7 +64,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:11](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L12)
 
----
+***
 
 ### creator?
 
@@ -72,7 +72,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:12](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L13)
 
----
+***
 
 ### dueDate
 
@@ -80,7 +80,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:13](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L14)
 
----
+***
 
 ### event?
 
@@ -88,7 +88,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:14](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L15)
 
----
+***
 
 ### isCompleted
 
@@ -96,7 +96,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:15](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L16)
 
----
+***
 
 ### postCompletionNotes?
 
@@ -104,7 +104,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:16](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L17)
 
----
+***
 
 ### preCompletionNotes?
 
@@ -112,7 +112,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:17](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L18)
 
----
+***
 
 ### updatedAt
 

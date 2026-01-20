@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IEdge
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:1](ht
 
 Defined in: [src/screens/AdminPortal/OrganizationPeople/addMember/types.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationPeople/addMember/types.ts#L2)
 
----
+***
 
 ### node
 

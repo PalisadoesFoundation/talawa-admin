@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceQueryUserTagsMembersToAssignTo
 
@@ -16,7 +16,7 @@ Defines the structure for a query result containing user tags and members availa
 
 Defined in: [src/utils/interfaces.ts:1172](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1172)
 
----
+***
 
 ### usersToAssignTo
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IDateRangePreset
 
@@ -46,7 +46,7 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:55](https:
 
 [`IDateRangeValue`](IDateRangeValue.md)
 
----
+***
 
 ### key
 
@@ -54,7 +54,7 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:55](https:
 
 Defined in: [src/types/shared-components/DateRangePicker/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L53)
 
----
+***
 
 ### label
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IRegistrationFormProps
 
@@ -16,7 +16,7 @@ Props for the RegistrationForm component
 
 Defined in: [src/types/Auth/RegistrationForm/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/RegistrationForm/interface.ts#L21)
 
----
+***
 
 ### onError()?
 
@@ -34,7 +34,7 @@ Defined in: [src/types/Auth/RegistrationForm/interface.ts:20](https://github.com
 
 `void`
 
----
+***
 
 ### onSuccess()?
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Auth/RegistrationForm/interface.ts:19](https://github.com
 
 `void`
 
----
+***
 
 ### organizations
 

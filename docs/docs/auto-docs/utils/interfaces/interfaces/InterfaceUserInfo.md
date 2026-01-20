@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceUserInfo
 
@@ -16,7 +16,7 @@ Defines the basic information for a user.
 
 Defined in: [src/utils/interfaces.ts:373](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L373)
 
----
+***
 
 ### createdAt?
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:373](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:375](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L375)
 
----
+***
 
 ### emailAddress
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:375](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:372](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L372)
 
----
+***
 
 ### id
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:372](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:370](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L370)
 
----
+***
 
 ### name
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:370](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:371](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L371)
 
----
+***
 
 ### role?
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:371](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:374](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L374)
 
----
+***
 
 ### updatedAt?
 

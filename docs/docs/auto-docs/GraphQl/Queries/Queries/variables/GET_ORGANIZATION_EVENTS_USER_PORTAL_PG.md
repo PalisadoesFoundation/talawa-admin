@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG
+# Variable: GET\_ORGANIZATION\_EVENTS\_USER\_PORTAL\_PG
 
-> `const` **GET_ORGANIZATION_EVENTS_USER_PORTAL_PG**: `DocumentNode`
+> `const` **GET\_ORGANIZATION\_EVENTS\_USER\_PORTAL\_PG**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/Queries.ts:595](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L595)

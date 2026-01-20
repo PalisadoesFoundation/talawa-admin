@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceFormFieldProps
 
@@ -26,10 +26,10 @@ When true, error messages are announced to screen readers.
 #### Default
 
 ```ts
-true;
+true
 ```
 
----
+***
 
 ### disabled?
 
@@ -39,7 +39,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:35](https://github.com/Palisa
 
 Whether the input is disabled
 
----
+***
 
 ### error?
 
@@ -49,7 +49,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:41](https://github.com/Palisa
 
 Error message to display - null or undefined means no error
 
----
+***
 
 ### helperText?
 
@@ -59,7 +59,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:44](https://github.com/Palisa
 
 Helper text to display below the input when no error
 
----
+***
 
 ### label?
 
@@ -69,7 +69,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:11](https://github.com/Palisa
 
 Optional label text displayed above the input
 
----
+***
 
 ### name
 
@@ -79,7 +79,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:14](https://github.com/Palisa
 
 Name attribute for the input field (required for form handling)
 
----
+***
 
 ### onBlur()?
 
@@ -99,7 +99,7 @@ Blur handler called when input loses focus
 
 `void`
 
----
+***
 
 ### onChange()
 
@@ -119,7 +119,7 @@ Change handler called when input value changes
 
 `void`
 
----
+***
 
 ### placeholder?
 
@@ -129,7 +129,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:29](https://github.com/Palisa
 
 Placeholder text for the input
 
----
+***
 
 ### required?
 
@@ -139,7 +139,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:32](https://github.com/Palisa
 
 Whether the field is required - shows asterisk if true
 
----
+***
 
 ### testId?
 
@@ -149,7 +149,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:38](https://github.com/Palisa
 
 Test ID for testing purposes
 
----
+***
 
 ### type?
 
@@ -159,7 +159,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:17](https://github.com/Palisa
 
 Input type - defaults to 'text'
 
----
+***
 
 ### value
 

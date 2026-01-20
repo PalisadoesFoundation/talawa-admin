@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceFormStateTypes
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:21](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L28)
 
----
+***
 
 ### description
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:28](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L25)
 
----
+***
 
 ### endAt
 
@@ -30,7 +30,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:25](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L26)
 
----
+***
 
 ### existingAttachments?
 
@@ -38,7 +38,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:26](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L29)
 
----
+***
 
 ### name
 
@@ -46,7 +46,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:29](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L22)
 
----
+***
 
 ### organizationId?
 
@@ -54,7 +54,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:22](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L27)
 
----
+***
 
 ### startAt
 
@@ -62,7 +62,7 @@ Defined in: [src/types/AdminPortal/Advertisement/interface.ts:27](https://github
 
 Defined in: [src/types/AdminPortal/Advertisement/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Advertisement/interface.ts#L24)
 
----
+***
 
 ### type
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceCampaignInfoPG
 
@@ -16,7 +16,7 @@ Defines the structure for campaign information with PostgreSQL-specific fields.
 
 Defined in: [src/utils/interfaces.ts:1278](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1278)
 
----
+***
 
 ### endDate
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1278](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1277](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1277)
 
----
+***
 
 ### goal
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:1277](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1275](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1275)
 
----
+***
 
 ### name
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:1275](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1274](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1274)
 
----
+***
 
 ### startDate
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IPluginModalProps
 
@@ -24,7 +24,7 @@ Defined in: [src/plugin/types.ts:174](https://github.com/PalisadoesFoundation/ta
 
 [`IInstalledPlugin`](IInstalledPlugin.md)
 
----
+***
 
 ### installPlugin()
 
@@ -42,7 +42,7 @@ Defined in: [src/plugin/types.ts:175](https://github.com/PalisadoesFoundation/ta
 
 `void`
 
----
+***
 
 ### isInstalled()
 
@@ -60,7 +60,7 @@ Defined in: [src/plugin/types.ts:173](https://github.com/PalisadoesFoundation/ta
 
 `boolean`
 
----
+***
 
 ### loading
 
@@ -68,7 +68,7 @@ Defined in: [src/plugin/types.ts:173](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:172](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L172)
 
----
+***
 
 ### meta
 
@@ -76,7 +76,7 @@ Defined in: [src/plugin/types.ts:172](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:171](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L171)
 
----
+***
 
 ### onHide()
 
@@ -88,7 +88,7 @@ Defined in: [src/plugin/types.ts:169](https://github.com/PalisadoesFoundation/ta
 
 `void`
 
----
+***
 
 ### pluginId
 
@@ -96,7 +96,7 @@ Defined in: [src/plugin/types.ts:169](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:170](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L170)
 
----
+***
 
 ### show
 
@@ -104,7 +104,7 @@ Defined in: [src/plugin/types.ts:170](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:168](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L168)
 
----
+***
 
 ### togglePluginStatus()
 
@@ -126,7 +126,7 @@ Defined in: [src/plugin/types.ts:176](https://github.com/PalisadoesFoundation/ta
 
 `void`
 
----
+***
 
 ### uninstallPlugin()
 

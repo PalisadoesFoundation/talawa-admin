@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Function: AdvertisementSkeleton()
 
@@ -16,7 +16,6 @@ It creates a list of 6 skeleton items, each styled to resemble the layout of an
 advertisement card.
 
 Each skeleton item includes:
-
 - A shimmering image container to represent the advertisement image.
 - A shimmering title placeholder to represent the advertisement name.
 - A shimmering button placeholder.

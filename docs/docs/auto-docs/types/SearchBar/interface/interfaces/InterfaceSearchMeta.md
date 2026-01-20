@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceSearchMeta
 
@@ -18,7 +18,7 @@ Defined in: [src/types/SearchBar/interface.ts:15](https://github.com/PalisadoesF
 
 The original DOM event that triggered the search, if available
 
----
+***
 
 ### trigger
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceComment
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1598](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1596](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1596)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### createdAt
 
@@ -34,7 +34,7 @@ Defined in: [src/utils/interfaces.ts:1604](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1602](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1602)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### creator
 
@@ -58,7 +58,7 @@ Defined in: [src/utils/interfaces.ts:1597](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
----
+***
 
 ### downVotesCount
 
@@ -70,7 +70,7 @@ Defined in: [src/utils/interfaces.ts:1606](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1604](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1604)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### hasUserVoted?
 
@@ -90,7 +90,7 @@ Defined in: [src/utils/interfaces.ts:1605](https://github.com/PalisadoesFoundati
 
 > **voteType**: [`VoteType`](../type-aliases/VoteType.md)
 
----
+***
 
 ### id
 
@@ -102,7 +102,7 @@ Defined in: [src/utils/interfaces.ts:1597](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1595](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1595)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### upVotesCount
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceQueryFundCampaignsPledges
 
@@ -16,7 +16,7 @@ Defines the structure for a query result containing fund campaigns and their ple
 
 Defined in: [src/utils/interfaces.ts:1244](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1244)
 
----
+***
 
 ### endAt
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1244](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1246](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1246)
 
----
+***
 
 ### fundId
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:1239](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
----
+***
 
 ### goalAmount
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/interfaces.ts:1239](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1243](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1243)
 
----
+***
 
 ### name
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:1243](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1242](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1242)
 
----
+***
 
 ### pledges
 
@@ -64,7 +64,7 @@ Defined in: [src/utils/interfaces.ts:1247](https://github.com/PalisadoesFoundati
 
 > **edges**: `object`[]
 
----
+***
 
 ### startAt
 

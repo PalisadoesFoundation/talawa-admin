@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceErrorFallbackProps
 
@@ -14,10 +14,7 @@ to render a custom error UI with access to error details and reset functionality
 ## Example
 
 ```tsx
-const CustomErrorFallback = ({
-  error,
-  onReset,
-}: InterfaceErrorFallbackProps) => (
+const CustomErrorFallback = ({ error, onReset }: InterfaceErrorFallbackProps) => (
   <div>
     <h2>Custom Error UI</h2>
     <p>{error?.message}</p>
@@ -36,7 +33,7 @@ Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:124](
 
 The error that was caught by the error boundary
 
----
+***
 
 ### onReset()
 

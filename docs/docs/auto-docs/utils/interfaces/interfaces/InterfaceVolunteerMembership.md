@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceVolunteerMembership
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1817](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1835](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1835)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### createdBy
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/interfaces.ts:1861](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
----
+***
 
 ### event
 
@@ -80,7 +80,7 @@ Defined in: [src/utils/interfaces.ts:1837](https://github.com/PalisadoesFoundati
 
 > **startAt**: `string`
 
----
+***
 
 ### group?
 
@@ -100,7 +100,7 @@ Defined in: [src/utils/interfaces.ts:1857](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
----
+***
 
 ### id
 
@@ -112,7 +112,7 @@ Defined in: [src/utils/interfaces.ts:1815](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1833](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1833)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### status
 
@@ -124,7 +124,7 @@ Defined in: [src/utils/interfaces.ts:1816](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1834](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1834)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### updatedAt
 
@@ -136,7 +136,7 @@ Defined in: [src/utils/interfaces.ts:1818](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1836](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1836)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### updatedBy
 
@@ -156,7 +156,7 @@ Defined in: [src/utils/interfaces.ts:1865](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
----
+***
 
 ### volunteer
 

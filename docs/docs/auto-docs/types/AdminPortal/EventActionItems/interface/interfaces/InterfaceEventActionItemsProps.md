@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceEventActionItemsProps
 
@@ -16,7 +16,7 @@ Props for EventActionItems component.
 
 Defined in: [src/types/AdminPortal/EventActionItems/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/EventActionItems/interface.ts#L5)
 
----
+***
 
 ### orgActionItemsRefetch()?
 

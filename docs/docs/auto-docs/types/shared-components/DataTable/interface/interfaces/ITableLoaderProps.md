@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: ITableLoaderProps\<T\>
 
@@ -27,7 +27,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:521](https://git
 
 Accessible label for the loading table, used for screen readers
 
----
+***
 
 ### asOverlay?
 
@@ -37,7 +37,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:518](https://git
 
 When true, render as a translucent overlay over existing table content instead of standalone
 
----
+***
 
 ### columns
 
@@ -47,7 +47,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:512](https://git
 
 Column definitions to match the structure of the actual table
 
----
+***
 
 ### rows?
 

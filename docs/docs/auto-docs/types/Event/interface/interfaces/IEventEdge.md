@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IEventEdge
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Event/interface.ts:208](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:241](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L241)
 
----
+***
 
 ### node
 

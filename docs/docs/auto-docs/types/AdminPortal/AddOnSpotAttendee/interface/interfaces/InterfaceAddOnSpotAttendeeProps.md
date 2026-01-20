@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceAddOnSpotAttendeeProps
 
@@ -20,7 +20,7 @@ Defined in: [src/types/AdminPortal/AddOnSpotAttendee/interface.ts:6](https://git
 
 `void`
 
----
+***
 
 ### reloadMembers()
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/AddOnSpotAttendee/interface.ts:7](https://git
 
 `void`
 
----
+***
 
 ### show
 

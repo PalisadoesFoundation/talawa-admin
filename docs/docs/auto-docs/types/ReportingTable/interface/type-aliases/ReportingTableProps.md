@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: ReportingTableProps
 
@@ -18,7 +18,7 @@ Props for the ReportingTable component
 
 Defined in: [src/types/ReportingTable/interface.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L71)
 
----
+***
 
 ### gridProps?
 
@@ -26,7 +26,7 @@ Defined in: [src/types/ReportingTable/interface.ts:71](https://github.com/Palisa
 
 Defined in: [src/types/ReportingTable/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L72)
 
----
+***
 
 ### infiniteProps?
 
@@ -36,7 +36,7 @@ Defined in: [src/types/ReportingTable/interface.ts:74](https://github.com/Palisa
 
 Optional InfiniteScroll behavior; when provided, wraps the grid
 
----
+***
 
 ### listProps?
 
@@ -70,7 +70,7 @@ Optional props applied to the InfiniteScroll container
 
 > `optional` **style**: `React.CSSProperties`
 
----
+***
 
 ### rows
 

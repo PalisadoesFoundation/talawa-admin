@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: ICreatePostModalProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Post/interface.ts:118](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Post/interface.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L122)
 
----
+***
 
 ### id?
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Post/interface.ts:122](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Post/interface.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L120)
 
----
+***
 
 ### onHide()
 
@@ -34,7 +34,7 @@ Defined in: [src/types/Post/interface.ts:123](https://github.com/PalisadoesFound
 
 `void`
 
----
+***
 
 ### orgId
 
@@ -42,7 +42,7 @@ Defined in: [src/types/Post/interface.ts:123](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Post/interface.ts:125](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L125)
 
----
+***
 
 ### refetch()
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Post/interface.ts:124](https://github.com/PalisadoesFound
 
 `Promise`\<`unknown`\>
 
----
+***
 
 ### show
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Post/interface.ts:124](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Post/interface.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L119)
 
----
+***
 
 ### title?
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Post/interface.ts:119](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Post/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L121)
 
----
+***
 
 ### type
 

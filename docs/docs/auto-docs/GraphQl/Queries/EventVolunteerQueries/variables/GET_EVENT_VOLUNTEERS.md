@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: GET_EVENT_VOLUNTEERS
+# Variable: GET\_EVENT\_VOLUNTEERS
 
-> `const` **GET_EVENT_VOLUNTEERS**: `DocumentNode`
+> `const` **GET\_EVENT\_VOLUNTEERS**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/EventVolunteerQueries.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/EventVolunteerQueries.ts#L12)
 

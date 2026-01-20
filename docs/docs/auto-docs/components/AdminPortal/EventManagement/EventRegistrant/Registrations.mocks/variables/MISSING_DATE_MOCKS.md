@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: MISSING_DATE_MOCKS
+# Variable: MISSING\_DATE\_MOCKS
 
-> `const` **MISSING_DATE_MOCKS**: `MockedResponse`[]
+> `const` **MISSING\_DATE\_MOCKS**: `MockedResponse`[]
 
 Defined in: [src/components/AdminPortal/EventManagement/EventRegistrant/Registrations.mocks.ts:254](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/EventRegistrant/Registrations.mocks.ts#L254)

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: ILeftDrawerProps
 
@@ -14,7 +14,7 @@ Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:30](https://github.com/Pal
 
 Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/LeftDrawer/LeftDrawer.tsx#L31)
 
----
+***
 
 ### setHideDrawer
 

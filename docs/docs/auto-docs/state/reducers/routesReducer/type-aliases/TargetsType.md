@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Type Alias: TargetsType
 
@@ -16,7 +16,7 @@ Defined in: [src/state/reducers/routesReducer.ts:3](https://github.com/Palisadoe
 
 Defined in: [src/state/reducers/routesReducer.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L4)
 
----
+***
 
 ### subTargets?
 
@@ -24,7 +24,7 @@ Defined in: [src/state/reducers/routesReducer.ts:4](https://github.com/Palisadoe
 
 Defined in: [src/state/reducers/routesReducer.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/state/reducers/routesReducer.ts#L6)
 
----
+***
 
 ### url?
 

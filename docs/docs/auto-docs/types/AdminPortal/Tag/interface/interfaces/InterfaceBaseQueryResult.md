@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceBaseQueryResult
 
@@ -18,7 +18,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:39](https://github.com/Palis
 
 Defined in: [src/types/AdminPortal/Tag/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L41)
 
----
+***
 
 ### loading
 
@@ -26,7 +26,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:41](https://github.com/Palis
 
 Defined in: [src/types/AdminPortal/Tag/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L40)
 
----
+***
 
 ### refetch()?
 

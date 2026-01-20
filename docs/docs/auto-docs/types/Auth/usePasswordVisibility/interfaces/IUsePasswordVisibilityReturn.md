@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IUsePasswordVisibilityReturn
 
@@ -16,7 +16,7 @@ Return type for the usePasswordVisibility hook.
 
 Defined in: [src/types/Auth/usePasswordVisibility.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/usePasswordVisibility.ts#L5)
 
----
+***
 
 ### togglePassword()
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Class: PluginGraphQLService
 
@@ -42,7 +42,7 @@ Defined in: [src/plugin/graphql-service.ts:102](https://github.com/PalisadoesFou
 
 `Promise`\<[`IPlugin`](../interfaces/IPlugin.md)\>
 
----
+***
 
 ### deletePlugin()
 
@@ -60,7 +60,7 @@ Defined in: [src/plugin/graphql-service.ts:144](https://github.com/PalisadoesFou
 
 `Promise`\<\{ `id`: `string`; `pluginId`: `string`; \}\>
 
----
+***
 
 ### getAllPlugins()
 
@@ -72,7 +72,7 @@ Defined in: [src/plugin/graphql-service.ts:89](https://github.com/PalisadoesFoun
 
 `Promise`\<[`IPlugin`](../interfaces/IPlugin.md)[]\>
 
----
+***
 
 ### installPlugin()
 
@@ -90,7 +90,7 @@ Defined in: [src/plugin/graphql-service.ts:116](https://github.com/PalisadoesFou
 
 `Promise`\<[`IPlugin`](../interfaces/IPlugin.md)\>
 
----
+***
 
 ### updatePlugin()
 

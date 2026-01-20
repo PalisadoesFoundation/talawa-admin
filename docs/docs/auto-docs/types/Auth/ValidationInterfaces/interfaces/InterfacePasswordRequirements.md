@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfacePasswordRequirements
 
@@ -18,7 +18,7 @@ Defined in: [src/types/Auth/ValidationInterfaces.ts:16](https://github.com/Palis
 
 Has lowercase letter
 
----
+***
 
 ### numeric
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Auth/ValidationInterfaces.ts:20](https://github.com/Palis
 
 Has numeric digit
 
----
+***
 
 ### specialChar
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Auth/ValidationInterfaces.ts:22](https://github.com/Palis
 
 Has special character
 
----
+***
 
 ### uppercase
 

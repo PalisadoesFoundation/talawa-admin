@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceQueryUserListItem
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:1445](https://github.com/PalisadoesFoundati
 
 > `optional` **isSuperAdmin**: `boolean`
 
----
+***
 
 ### avatarURL
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/interfaces.ts:1403](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1401](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1401)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### birthDate
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:1404](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1402](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1402)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### city
 
@@ -68,7 +68,7 @@ Defined in: [src/utils/interfaces.ts:1405](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1403](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1403)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### countryCode
 
@@ -80,7 +80,7 @@ Defined in: [src/utils/interfaces.ts:1406](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1404](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1404)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### createdAt
 
@@ -92,7 +92,7 @@ Defined in: [src/utils/interfaces.ts:1407](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1405](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1405)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### createdOrganizations
 
@@ -116,7 +116,7 @@ Defined in: [src/utils/interfaces.ts:1420](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
----
+***
 
 ### educationGrade
 
@@ -128,7 +128,7 @@ Defined in: [src/utils/interfaces.ts:1409](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1407](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1407)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### emailAddress
 
@@ -140,7 +140,7 @@ Defined in: [src/utils/interfaces.ts:1402](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1400](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1400)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### employmentStatus
 
@@ -152,7 +152,7 @@ Defined in: [src/utils/interfaces.ts:1410](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1408](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1408)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### homePhoneNumber
 
@@ -164,7 +164,7 @@ Defined in: [src/utils/interfaces.ts:1419](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1417](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1417)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### id
 
@@ -176,7 +176,7 @@ Defined in: [src/utils/interfaces.ts:1400](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1398](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1398)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### isEmailAddressVerified
 
@@ -188,7 +188,7 @@ Defined in: [src/utils/interfaces.ts:1411](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1409](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1409)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### maritalStatus
 
@@ -200,7 +200,7 @@ Defined in: [src/utils/interfaces.ts:1412](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1410](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1410)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### mobilePhoneNumber
 
@@ -212,7 +212,7 @@ Defined in: [src/utils/interfaces.ts:1418](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1416](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1416)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### name
 
@@ -224,7 +224,7 @@ Defined in: [src/utils/interfaces.ts:1401](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1399](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1399)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### natalSex
 
@@ -236,7 +236,7 @@ Defined in: [src/utils/interfaces.ts:1413](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1411](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1411)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### naturalLanguageCode
 
@@ -248,7 +248,7 @@ Defined in: [src/utils/interfaces.ts:1414](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1412](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1412)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### organizationsWhereMember
 
@@ -264,7 +264,7 @@ Defined in: [src/utils/interfaces.ts:1426](https://github.com/PalisadoesFoundati
 
 > **edges**: `object`[]
 
----
+***
 
 ### postalCode
 
@@ -276,7 +276,7 @@ Defined in: [src/utils/interfaces.ts:1415](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1413](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1413)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### role
 
@@ -288,7 +288,7 @@ Defined in: [src/utils/interfaces.ts:1416](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1414](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1414)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### state
 
@@ -300,7 +300,7 @@ Defined in: [src/utils/interfaces.ts:1417](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1415](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1415)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### updatedAt
 
@@ -312,7 +312,7 @@ Defined in: [src/utils/interfaces.ts:1408](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1406](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1406)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### workPhoneNumber
 

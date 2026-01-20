@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfacePromiseMessages
 
@@ -16,7 +16,7 @@ interface for the messages
 
 Defined in: [src/types/NotificationToast/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/NotificationToast/interface.ts#L53)
 
----
+***
 
 ### pending
 
@@ -24,7 +24,7 @@ Defined in: [src/types/NotificationToast/interface.ts:53](https://github.com/Pal
 
 Defined in: [src/types/NotificationToast/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/NotificationToast/interface.ts#L51)
 
----
+***
 
 ### success
 

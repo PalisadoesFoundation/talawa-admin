@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IUseTableDataOptions\<TNode, TRow, TData\>
 
@@ -44,7 +44,7 @@ Only include values that should trigger path re-evaluation.
 The `data` parameter is already tracked automatically.
 Use this for additional dependencies like query variables or state.
 
----
+***
 
 ### path
 
@@ -55,7 +55,6 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:220](https://git
 Path to the GraphQL connection within the query result.
 
 Can be specified as either:
-
 1. **String/number array path**: For deep property traversal with support for both object keys and array indices.
    - String segments: Navigate object properties (e.g., 'users', 'organization')
    - Numeric segments: Navigate array elements by index (e.g., 0, 5, 100)
@@ -66,7 +65,7 @@ Can be specified as either:
 
 ```tsx
 // Traverse into nested structure with array indexing
-path: ['data', 'organizations', 0, 'members', 'edges'];
+path: ['data', 'organizations', 0, 'members', 'edges']
 
 // Equivalent to: data.organizations[0].members.edges
 // Where organizations[0] accesses the first organization in an array
@@ -74,7 +73,7 @@ path: ['data', 'organizations', 0, 'members', 'edges'];
 
 ```tsx
 // Navigate through arrays of items
-path: ['results', 2, 'connection'];
+path: ['results', 2, 'connection']
 
 // Equivalent to: results[2].connection
 // Where results[2] gets the 3rd item in the results array
@@ -82,7 +81,7 @@ path: ['results', 2, 'connection'];
 
 ```tsx
 // Use a function for optional chaining or conditional logic
-path: (data) => data.activeOrganization?.teams?.[selectedTeamIndex]?.members;
+path: (data) => data.activeOrganization?.teams?.[selectedTeamIndex]?.members
 
 // Safe navigation that returns undefined if any property is missing
 // Useful when you need to select based on component state
@@ -101,13 +100,12 @@ interface QueryData {
 }
 
 // Access the 5th item's connection
-path: ['items', 5, 'connection'];
+path: ['items', 5, 'connection']
 ```
 
 #### Remarks
 
 **Numeric Segment Semantics:**
-
 - Numeric segments are coerced to property access, working with both:
   - Array indices: `array[0]`, `array[1]`, etc.
   - String-keyed object properties: `obj['0']`, `obj['1']`, etc. (rarely used)
@@ -115,7 +113,6 @@ path: ['items', 5, 'connection'];
 - Mixed string/number traversal is fully supported: `['org', 0, 'members', 2, 'name']`
 
 **When to Use Numeric Segments:**
-
 - Traversing arrays of items where each item contains a GraphQL connection
 - Accessing specific paginated result sets in a multi-result query
 - Array-based navigation in complex nested structures
@@ -123,12 +120,11 @@ path: ['items', 5, 'connection'];
 
 **Expected Final Result:**
 The path (whether string[] or function) must resolve to a GraphQL connection type or undefined:
-
 - Must have an edges property that is an array
 - May have optional pageInfo property with pagination information
 - Will be safely validated at runtime
 
----
+***
 
 ### transformNode()?
 
@@ -160,8 +156,8 @@ Defaults to identity when omitted (TNode to TRow), matching the hook implementat
 transformNode: (node) => ({
   ...node,
   displayName: node.name.toUpperCase(),
-  isActive: Boolean(node.activeAt),
-});
+  isActive: Boolean(node.activeAt)
+})
 ```
 
 ```tsx
@@ -169,7 +165,7 @@ transformNode: (node) => ({
 transformNode: (node) => {
   if (!node.isActive) return null;
   return { ...node };
-};
+}
 ```
 
 ```tsx
@@ -178,22 +174,20 @@ transformNode: (node) => ({
   id: node.id,
   text: node.content,
   author: `${node.user.firstName} ${node.user.lastName}`,
-  timestamp: new Date(node.createdAt).toLocaleDateString(),
-});
+  timestamp: new Date(node.createdAt).toLocaleDateString()
+})
 ```
 
 ```tsx
 // Calculate derived properties
 transformNode: (node) => {
   const createdDate = new Date(node.createdAt);
-  const ageInDays = Math.floor(
-    (Date.now() - createdDate.getTime()) / (1000 * 60 * 60 * 24),
-  );
+  const ageInDays = Math.floor((Date.now() - createdDate.getTime()) / (1000 * 60 * 60 * 24));
   return {
     ...node,
     isRecent: ageInDays < 30,
     ageInDays,
-    status: ageInDays < 7 ? 'new' : 'old',
+    status: ageInDays < 7 ? 'new' : 'old'
   };
-};
+}
 ```

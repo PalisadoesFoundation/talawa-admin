@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceAddOnSpotAttendeeProps
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:1683](https://github.com/PalisadoesFoundati
 
 `void`
 
----
+***
 
 ### reloadMembers()
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:1684](https://github.com/PalisadoesFoundati
 
 `void`
 
----
+***
 
 ### show
 

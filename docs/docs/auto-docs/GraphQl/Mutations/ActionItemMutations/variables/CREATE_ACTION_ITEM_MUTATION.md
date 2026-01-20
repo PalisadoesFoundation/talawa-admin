@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: CREATE_ACTION_ITEM_MUTATION
+# Variable: CREATE\_ACTION\_ITEM\_MUTATION
 
-> `const` **CREATE_ACTION_ITEM_MUTATION**: `DocumentNode`
+> `const` **CREATE\_ACTION\_ITEM\_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/ActionItemMutations.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/ActionItemMutations.ts#L7)
 

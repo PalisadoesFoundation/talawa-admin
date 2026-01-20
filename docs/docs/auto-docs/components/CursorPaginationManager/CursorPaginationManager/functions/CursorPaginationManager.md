@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Function: CursorPaginationManager()
 
@@ -29,7 +29,7 @@ The type of individual items
 
 ### TVariables
 
-`TVariables` _extends_ `Record`\<`string`, `unknown`\> = `Record`\<`string`, `unknown`\>
+`TVariables` *extends* `Record`\<`string`, `unknown`\> = `Record`\<`string`, `unknown`\>
 
 The GraphQL query variables type
 
@@ -90,14 +90,12 @@ function UsersList() {
 ## Remarks
 
 **Integration Requirements:**
-
 - GraphQL query MUST follow Relay cursor pagination spec (edges, node, pageInfo)
 - Query MUST accept `first: Int!` and `after: String` variables
 - pageInfo MUST include: hasNextPage, hasPreviousPage, startCursor, endCursor
 - Use `dataPath` prop to specify where connection data is in response (e.g., "users" or "organization.members")
 
 **Features:**
-
 - Automatic loading, empty, and error states using shared components
 - "Load More" button with cursor-based pagination
 - Manual refetch via `refetchTrigger` prop

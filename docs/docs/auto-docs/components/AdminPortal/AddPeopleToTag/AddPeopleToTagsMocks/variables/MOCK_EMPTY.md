@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: MOCK_EMPTY
+# Variable: MOCK\_EMPTY
 
-> `const` **MOCK_EMPTY**: `object`[]
+> `const` **MOCK\_EMPTY**: `object`[]
 
 Defined in: [src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts:294](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts#L294)
 
@@ -38,17 +38,17 @@ Defined in: [src/components/AdminPortal/AddPeopleToTag/AddPeopleToTagsMocks.ts:2
 
 > **firstName**: `object`
 
-#### request.variables.where.firstName.starts_with
+#### request.variables.where.firstName.starts\_with
 
-> **starts_with**: `string` = `''`
+> **starts\_with**: `string` = `''`
 
 #### request.variables.where.lastName
 
 > **lastName**: `object`
 
-#### request.variables.where.lastName.starts_with
+#### request.variables.where.lastName.starts\_with
 
-> **starts_with**: `string` = `''`
+> **starts\_with**: `string` = `''`
 
 ### result
 

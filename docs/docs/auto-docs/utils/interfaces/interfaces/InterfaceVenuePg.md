@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceVenuePg
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:930](https://github.com/PalisadoesFoundatio
 
 > **url**: `string`
 
----
+***
 
 ### capacity?
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:930](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:929](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L929)
 
----
+***
 
 ### createdAt
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:929](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:934](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L934)
 
----
+***
 
 ### creator
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:934](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:936](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L936)
 
----
+***
 
 ### description?
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:936](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:928](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L928)
 
----
+***
 
 ### id
 
@@ -64,7 +64,7 @@ Defined in: [src/utils/interfaces.ts:928](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:926](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L926)
 
----
+***
 
 ### name
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:926](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:927](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L927)
 
----
+***
 
 ### organization
 
@@ -80,7 +80,7 @@ Defined in: [src/utils/interfaces.ts:927](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:938](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L938)
 
----
+***
 
 ### updatedAt
 
@@ -88,7 +88,7 @@ Defined in: [src/utils/interfaces.ts:938](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:935](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L935)
 
----
+***
 
 ### updater
 

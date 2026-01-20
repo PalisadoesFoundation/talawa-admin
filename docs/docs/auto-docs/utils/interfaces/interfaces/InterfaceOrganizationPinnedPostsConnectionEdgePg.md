@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceOrganizationPinnedPostsConnectionEdgePg
 
@@ -16,7 +16,7 @@ Defines the structure for an edge in the organization pinned posts connection wi
 
 Defined in: [src/utils/interfaces.ts:811](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L811)
 
----
+***
 
 ### node
 

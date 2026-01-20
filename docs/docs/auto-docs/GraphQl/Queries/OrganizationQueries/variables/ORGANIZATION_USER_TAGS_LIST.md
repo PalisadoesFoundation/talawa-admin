@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: ORGANIZATION_USER_TAGS_LIST
+# Variable: ORGANIZATION\_USER\_TAGS\_LIST
 
-> `const` **ORGANIZATION_USER_TAGS_LIST**: `DocumentNode`
+> `const` **ORGANIZATION\_USER\_TAGS\_LIST**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:194](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L194)
 

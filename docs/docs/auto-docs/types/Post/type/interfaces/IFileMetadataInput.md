@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: IFileMetadataInput
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Post/type.ts:178](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Post/type.ts:179](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L179)
 
----
+***
 
 ### mimetype
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Post/type.ts:179](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Post/type.ts:180](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L180)
 
----
+***
 
 ### name
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Post/type.ts:180](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Post/type.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L181)
 
----
+***
 
 ### objectName
 

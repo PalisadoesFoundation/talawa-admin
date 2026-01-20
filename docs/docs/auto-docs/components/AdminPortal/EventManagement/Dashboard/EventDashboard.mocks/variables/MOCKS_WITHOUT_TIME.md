@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: MOCKS_WITHOUT_TIME
+# Variable: MOCKS\_WITHOUT\_TIME
 
-> `const` **MOCKS_WITHOUT_TIME**: `object`[]
+> `const` **MOCKS\_WITHOUT\_TIME**: `object`[]
 
 Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts#L52)
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Class: TestErrorBoundary
 
@@ -48,7 +48,7 @@ Defined in: [src/test-utils/TestErrorBoundary.tsx:43](https://github.com/Palisad
 
 `React.Component.render`
 
----
+***
 
 ### getDerivedStateFromError()
 

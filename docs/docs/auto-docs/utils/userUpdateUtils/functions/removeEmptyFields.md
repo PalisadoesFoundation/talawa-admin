@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Function: removeEmptyFields()
 
@@ -18,7 +18,7 @@ string, File, null
 
 ### T
 
-`T` _extends_ `Record`\<`string`, `string` \| `File`\>
+`T` *extends* `Record`\<`string`, `string` \| `File`\>
 
 ## Parameters
 

@@ -1,18 +1,18 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: MOCK_RESPONSES
+# Variable: MOCK\_RESPONSES
 
-> `const` **MOCK_RESPONSES**: `object`
+> `const` **MOCK\_RESPONSES**: `object`
 
 Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts#L107)
 
 ## Type Declaration
 
-### ASCENDING_NO_SEARCH
+### ASCENDING\_NO\_SEARCH
 
-> **ASCENDING_NO_SEARCH**: `ListMock`[]
+> **ASCENDING\_NO\_SEARCH**: `ListMock`[]
 
 ### DEFAULT
 
@@ -22,22 +22,22 @@ Defined in: [src/screens/AdminPortal/OrganizationTags/OrganizationTagsMocks.ts:1
 
 > **EMPTY**: `ListMock`[]
 
-### ERROR_CREATE_TAG
+### ERROR\_CREATE\_TAG
 
-> **ERROR_CREATE_TAG**: `object`[]
+> **ERROR\_CREATE\_TAG**: `object`[]
 
-### ERROR_ORG
+### ERROR\_ORG
 
-> **ERROR_ORG**: `ErrorMock`[]
+> **ERROR\_ORG**: `ErrorMock`[]
 
-### FETCHMORE_UNDEFINED
+### FETCHMORE\_UNDEFINED
 
-> **FETCHMORE_UNDEFINED**: `ListMock`[]
+> **FETCHMORE\_UNDEFINED**: `ListMock`[]
 
-### NULL_END_CURSOR
+### NULL\_END\_CURSOR
 
-> **NULL_END_CURSOR**: (`ListMock` \| \{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after`: `any`; `first`: `number`; `input`: \{ `id`: `string`; \}; `sortedBy`: \{ `id`: `string`; \}; `where`: \{ `name`: \{ `starts_with`: `string`; \}; \}; \}; \}; \})[]
+> **NULL\_END\_CURSOR**: (`ListMock` \| \{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after`: `any`; `first`: `number`; `input`: \{ `id`: `string`; \}; `sortedBy`: \{ `id`: `string`; \}; `where`: \{ `name`: \{ `starts_with`: `string`; \}; \}; \}; \}; \})[]
 
-### UNDEFINED_USER_TAGS
+### UNDEFINED\_USER\_TAGS
 
-> **UNDEFINED_USER_TAGS**: `object`[]
+> **UNDEFINED\_USER\_TAGS**: `object`[]

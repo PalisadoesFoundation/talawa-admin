@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceVolunteerRank
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1858](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1876](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1876)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### rank
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:1857](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1875](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1875)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
----
+***
 
 ### user
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Interface: InterfaceEditUserTagModalProps
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/AdminPortal/ManageTag/editModal/EditUserTagModal.tsx:35
 
 Defined in: [src/screens/AdminPortal/ManageTag/editModal/EditUserTagModal.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/editModal/EditUserTagModal.tsx#L36)
 
----
+***
 
 ### handleEditUserTag()
 
@@ -32,7 +32,7 @@ Defined in: [src/screens/AdminPortal/ManageTag/editModal/EditUserTagModal.tsx:40
 
 `Promise`\<`void`\>
 
----
+***
 
 ### hideEditUserTagModal()
 
@@ -44,7 +44,7 @@ Defined in: [src/screens/AdminPortal/ManageTag/editModal/EditUserTagModal.tsx:37
 
 `void`
 
----
+***
 
 ### newTagName
 
@@ -52,7 +52,7 @@ Defined in: [src/screens/AdminPortal/ManageTag/editModal/EditUserTagModal.tsx:37
 
 Defined in: [src/screens/AdminPortal/ManageTag/editModal/EditUserTagModal.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/editModal/EditUserTagModal.tsx#L38)
 
----
+***
 
 ### setNewTagName()
 
@@ -70,7 +70,7 @@ Defined in: [src/screens/AdminPortal/ManageTag/editModal/EditUserTagModal.tsx:39
 
 `void`
 
----
+***
 
 ### t
 
@@ -78,7 +78,7 @@ Defined in: [src/screens/AdminPortal/ManageTag/editModal/EditUserTagModal.tsx:39
 
 Defined in: [src/screens/AdminPortal/ManageTag/editModal/EditUserTagModal.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/editModal/EditUserTagModal.tsx#L41)
 
----
+***
 
 ### tCommon
 

@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
----
+***
 
-# Variable: CREATE_VENUE_MUTATION
+# Variable: CREATE\_VENUE\_MUTATION
 
-> `const` **CREATE_VENUE_MUTATION**: `DocumentNode`
+> `const` **CREATE\_VENUE\_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/VenueMutations.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/VenueMutations.ts#L13)
 

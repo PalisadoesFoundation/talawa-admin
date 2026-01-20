@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Function: default()
 
@@ -11,7 +11,6 @@ Defined in: [src/screens/AdminPortal/Requests/Requests.tsx:80](https://github.co
 Renders the Membership Requests screen.
 
 Responsibilities:
-
 - Displays membership requests with infinite scroll support
 - Supports search submission via SearchFilterBar
 - Shows user avatars and request details
@@ -19,7 +18,6 @@ Responsibilities:
 - Shows empty state via DataGrid overlay when no requests exist
 
 Localization:
-
 - Uses `common` and `requests` namespaces
 
 ## Returns

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Variable: default
 
@@ -13,7 +13,6 @@ A flexible reporting table component that wraps MUI DataGrid with optional infin
 ## Remarks
 
 This component provides a consistent table interface across the application with support for:
-
 - Standard DataGrid rendering for static data
 - Infinite scroll wrapper for paginated/lazy-loaded data
 - Customizable grid and scroll container properties

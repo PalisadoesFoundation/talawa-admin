@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
----
+***
 
 # Function: main()
 
@@ -19,7 +19,6 @@ Main setup orchestrator for Talawa Admin initial configuration.
 ## Remarks
 
 Executes the following steps in order:
-
 1. Validates .env file existence
 2. Creates backup of existing .env
 3. Configures Docker options
