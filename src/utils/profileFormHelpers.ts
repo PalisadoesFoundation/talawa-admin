@@ -9,10 +9,7 @@ import { removeEmptyFields } from 'utils/userUpdateUtils';
 import { urlToFile } from 'utils/urlToFile';
 import { IFormState } from 'types/ProfileForm/type';
 
-type Translator = (
-  key: string,
-  options?: Record<string, unknown>,
-) => string;
+type Translator = (key: string, options?: Record<string, unknown>) => string;
 
 interface UpdateCurrentUser {
   avatarURL: string;
