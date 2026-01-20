@@ -443,7 +443,7 @@ is_wsl() {
 }
 
 # Get the current operating system name
-# Returns: "darwin", "linux", or "unknown"
+# Returns: "darwin", "linux", "windows", or "unknown"
 # Usage: os=$(get_os)
 get_os() {
     local uname_out
