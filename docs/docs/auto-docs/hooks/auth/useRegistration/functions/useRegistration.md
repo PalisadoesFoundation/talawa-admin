@@ -48,6 +48,10 @@ Custom hook for user registration
 
 `string`
 
+###### recaptchaToken?
+
+`string`
+
 #### Returns
 
 `Promise`\<`void`\>

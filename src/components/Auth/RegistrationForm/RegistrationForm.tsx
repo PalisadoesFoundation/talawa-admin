@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { FormField } from '../FormField/FormField';
 import { EmailField } from '../EmailField/EmailField';
 import { PasswordField } from '../PasswordField/PasswordField';
 import { PasswordStrengthIndicator } from '../PasswordStrengthIndicator/PasswordStrengthIndicator';
 import { OrgSelector } from '../OrgSelector/OrgSelector';
 import { useRegistration } from '../../../hooks/auth/useRegistration';
+import {
+  REACT_APP_USE_RECAPTCHA,
+  RECAPTCHA_SITE_KEY,
+} from '../../../Constant/constant';
 import {
   validateName,
   validateEmail,
@@ -24,7 +29,6 @@ export const RegistrationForm = ({
   organizations,
   onSuccess,
   onError,
-  enableRecaptcha = false,
 }: IRegistrationFormProps) => {
   const { t } = useTranslation('common');
   const { t: tErrors } = useTranslation('translation');
@@ -41,6 +45,8 @@ export const RegistrationForm = ({
     password: '',
     confirmPassword: '',
   });
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const { register, loading } = useRegistration({ onSuccess, onError });
 
   const submit = async (e: React.FormEvent) => {
@@ -84,7 +90,12 @@ export const RegistrationForm = ({
       email: formData.email,
       password: formData.password,
       organizationId: formData.orgId || '',
+      ...(recaptchaToken && { recaptchaToken }),
     });
+  };
+
+  const handleCaptcha = (token: string | null): void => {
+    setRecaptchaToken(token);
   };
 
   return (
@@ -128,9 +139,14 @@ export const RegistrationForm = ({
         value={formData.orgId}
         onChange={(orgId) => setFormData((s) => ({ ...s, orgId }))}
       />
-      {enableRecaptcha && (
-        <div data-testid="recaptcha-placeholder" data-content="recaptcha-ready">
-          {/* reCAPTCHA component will be rendered here */}
+      {REACT_APP_USE_RECAPTCHA === 'YES' && (
+        <div className="mt-3">
+          <ReCAPTCHA
+            ref={recaptchaRef}
+            sitekey={RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'}
+            onChange={handleCaptcha}
+            data-cy="registrationRecaptcha"
+          />
         </div>
       )}
       <button type="submit" disabled={loading}>

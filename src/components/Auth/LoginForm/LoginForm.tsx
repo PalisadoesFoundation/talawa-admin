@@ -1,10 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useLazyQuery } from '@apollo/client';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { Button } from '../../../shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { EmailField } from '../EmailField/EmailField';
 import { PasswordField } from '../PasswordField/PasswordField';
 import { SIGNIN_QUERY } from '../../../GraphQl/Queries/Queries';
+import {
+  REACT_APP_USE_RECAPTCHA,
+  RECAPTCHA_SITE_KEY,
+} from '../../../Constant/constant';
 import type {
   InterfaceLoginFormData,
   InterfaceLoginFormProps,
@@ -54,6 +59,9 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
     password: '',
   });
 
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+
   const [signin, { loading, data, error }] = useLazyQuery(SIGNIN_QUERY, {
     fetchPolicy: 'network-only',
   });
@@ -80,8 +88,13 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
       variables: {
         email: formData.email,
         password: formData.password,
+        ...(recaptchaToken && { recaptchaToken }),
       },
     });
+  };
+
+  const handleCaptcha = (token: string | null): void => {
+    setRecaptchaToken(token);
   };
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -113,6 +126,17 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
         placeholder={tCommon('enterPassword')}
         testId={`${testId}-password`}
       />
+
+      {REACT_APP_USE_RECAPTCHA === 'YES' && (
+        <div className="mt-3">
+          <ReCAPTCHA
+            ref={recaptchaRef}
+            sitekey={RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'}
+            onChange={handleCaptcha}
+            data-cy="loginRecaptcha"
+          />
+        </div>
+      )}
 
       <Button
         type="submit"

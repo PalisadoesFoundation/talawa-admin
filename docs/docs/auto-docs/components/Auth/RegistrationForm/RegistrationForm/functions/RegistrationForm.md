@@ -6,7 +6,7 @@
 
 > **RegistrationForm**(`__namedParameters`): `Element`
 
-Defined in: [src/components/Auth/RegistrationForm/RegistrationForm.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/RegistrationForm/RegistrationForm.tsx#L23)
+Defined in: [src/components/Auth/RegistrationForm/RegistrationForm.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/RegistrationForm/RegistrationForm.tsx#L28)
 
 RegistrationForm component for user registration with validation and reCAPTCHA support
 

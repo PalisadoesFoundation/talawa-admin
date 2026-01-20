@@ -25,6 +25,7 @@ export const useRegistration = ({
     email: string;
     password: string;
     organizationId: string;
+    recaptchaToken?: string;
   }) => {
     setLoading(true);
     try {
