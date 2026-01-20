@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { EventStats } from './Statistics/EventStats';
 import Button from 'shared-components/Button/Button';
 import IconComponent from 'components/IconComponent/IconComponent';
-import styles from './EventStats.module.css';
+import styles from './EventStatsWrapper.module.css';
 import type { InterfaceEventStatsWrapperProps } from 'types/AdminPortal/EventStatsWrapper/interface';
 
 export const EventStatsWrapper = ({
