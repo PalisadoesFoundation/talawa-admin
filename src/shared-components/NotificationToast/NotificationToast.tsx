@@ -31,6 +31,7 @@ const DEFAULT_CONTAINER_PROPS: ToastContainerProps = {
   limit: 5,
   newestOnTop: false,
   theme: 'colored',
+  style: { zIndex: 9999999 },
 };
 
 /**
