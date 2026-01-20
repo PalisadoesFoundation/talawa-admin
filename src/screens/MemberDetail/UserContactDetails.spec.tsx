@@ -396,75 +396,6 @@ describe('MemberDetail', () => {
       );
     });
 
-    test('updates formState.description when typing in description input', async () => {
-      render(
-        <MockedProvider link={link1}>
-          <BrowserRouter>
-            <MemberDetail />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      // wait for the description input to appear
-      const descriptionInput = await waitFor(
-        () => screen.getByTestId('inputDescription') as HTMLInputElement,
-      );
-
-      // simulate typing
-      fireEvent.change(descriptionInput, {
-        target: { value: 'New description' },
-      });
-
-      // assert the input value updated
-      expect(descriptionInput.value).toBe('New description');
-    });
-
-    test('updates formState.state when typing in state input', async () => {
-      render(
-        <MockedProvider link={link1}>
-          <BrowserRouter>
-            <MemberDetail />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      const stateInput = await waitFor(
-        () => screen.getByTestId('inputState') as HTMLInputElement,
-      );
-
-      // stimulate typing input
-      fireEvent.change(stateInput, {
-        target: { value: 'California' },
-      });
-
-      expect(stateInput.value).toBe('California');
-    });
-
-    test('updates formState.natalSex when selecting a new value', async () => {
-      render(
-        <MockedProvider link={link1}>
-          <BrowserRouter>
-            <MemberDetail />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
-
-      // Get the dropdown button
-      const natalSexDropdownBtn = await waitFor(() =>
-        screen.getByTestId('natalsex-dropdown-btn'),
-      );
-
-      // Click to open dropdown
-      fireEvent.click(natalSexDropdownBtn);
-
-      // Find the option you want to select (assuming options are rendered as <button> or <li>)
-      const femaleOption = await screen.findByText('Female');
-      fireEvent.click(femaleOption);
-
-      // Assert button text updated
-      expect(natalSexDropdownBtn).toHaveTextContent('Female');
-    });
-
     test('sets formState correctly when data.user is returned', async () => {
       render(
         <MockedProvider mocks={MOCKS1} addTypename={false}>
@@ -934,135 +865,17 @@ describe('MemberDetail', () => {
     const postalCode = screen.getByTestId('inputPostalCode');
     fireEvent.change(postalCode, { target: { value: '12345' } });
     expect(postalCode).toHaveValue('12345');
-  });
 
-  it('updates formState.employmentStatus when selecting a new employment status', async () => {
-    render(
-      <MockedProvider link={link1}>
-        <BrowserRouter>
-          <MemberDetail />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // wait for loading to finish
-    await waitFor(() => {
-      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
-    });
-
-    const employmentStatusDropdownBtn = await screen.findByTestId(
-      'employmentstatus-dropdown-btn',
-    );
-
-    // open dropdown
-    fireEvent.click(employmentStatusDropdownBtn);
-
-    // select option
-    const option = await screen.findByText(/Full-Time/i);
-    fireEvent.click(option);
-
-    // assert UI updated
-    expect(employmentStatusDropdownBtn).toHaveTextContent(/Full-Time/i);
-  });
-
-  it('updates formState.maritalStatus when selecting a new marital status', async () => {
-    render(
-      <MockedProvider link={link1}>
-        <BrowserRouter>
-          <MemberDetail />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // wait for loading to finish
-    await waitFor(() => {
-      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
-    });
-
-    const maritalStatusDropdownBtn = await screen.findByTestId(
-      'maritalstatus-dropdown-btn',
-    );
-
-    // open dropdown
-    fireEvent.click(maritalStatusDropdownBtn);
-
-    // select an option (must exist in maritalStatusEnum)
-    const option = await screen.findByText(/married/i);
-    fireEvent.click(option);
-
-    // assert UI updated → proves handleFieldChange ran
-    expect(maritalStatusDropdownBtn).toHaveTextContent(/married/i);
-  });
-
-  it('updates formState.educationGrade when selecting a new education grade', async () => {
-    render(
-      <MockedProvider link={link1}>
-        <BrowserRouter>
-          <MemberDetail />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // wait for loading to finish
-    await waitFor(() => {
-      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
-    });
-
-    const educationGradeDropdownBtn = await screen.findByTestId(
-      'educationgrade-dropdown-btn',
-    );
-
-    // open dropdown
-    fireEvent.click(educationGradeDropdownBtn);
-
-    // select an option (must exist in educationGradeEnum)
-    const option = await screen.findByText(/Pre-Kg/i);
-    fireEvent.click(option);
-
-    // assert UI updated → proves handleFieldChange ran
-    expect(educationGradeDropdownBtn).toHaveTextContent(/Pre-Kg/i);
-  });
-
-  it('updates formState.addressLine1 when typing in addressLine1 input', async () => {
-    render(
-      <MockedProvider link={link1}>
-        <BrowserRouter>
-          <MemberDetail />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // wait for loading to finish
-    await waitFor(() => {
-      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
-    });
-
+    // Test addressLine1
     const addressLine1Input = screen.getByTestId(
       'inputAddressLine1',
     ) as HTMLInputElement;
-
-    // simulate user typing
     fireEvent.change(addressLine1Input, {
       target: { value: '221B Baker Street' },
     });
-
-    // assert input reflects updated state
     expect(addressLine1Input).toHaveValue('221B Baker Street');
-  });
 
-  it('updates formState.city when typing in city input', async () => {
-    render(
-      <MockedProvider link={link1}>
-        <BrowserRouter>
-          <MemberDetail />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
-    });
-
+    // Test city
     const cityInput = screen.getByTestId('inputCity') as HTMLInputElement;
 
     fireEvent.change(cityInput, {
@@ -1070,6 +883,60 @@ describe('MemberDetail', () => {
     });
 
     expect(cityInput).toHaveValue('Bengaluru');
+
+    //Test Description
+    const descriptionInput = await waitFor(
+      () => screen.getByTestId('inputDescription') as HTMLInputElement,
+    );
+    fireEvent.change(descriptionInput, {
+      target: { value: 'New description' },
+    });
+    expect(descriptionInput.value).toBe('New description');
+
+    //Test State
+    const stateInput = await waitFor(
+      () => screen.getByTestId('inputState') as HTMLInputElement,
+    );
+    fireEvent.change(stateInput, {
+      target: { value: 'California' },
+    });
+    expect(stateInput.value).toBe('California');
+
+    //Test Natal Sex
+    const natalSexDropdownBtn = await waitFor(() =>
+      screen.getByTestId('natalsex-dropdown-btn'),
+    );
+    fireEvent.click(natalSexDropdownBtn);
+    const femaleOption = await screen.findByText('Female');
+    fireEvent.click(femaleOption);
+    expect(natalSexDropdownBtn).toHaveTextContent('Female');
+
+    //Test Education Grade
+    const educationGradeDropdownBtn = await screen.findByTestId(
+      'educationgrade-dropdown-btn',
+    );
+    fireEvent.click(educationGradeDropdownBtn);
+    const option = await screen.findByText(/Pre-Kg/i);
+    fireEvent.click(option);
+    expect(educationGradeDropdownBtn).toHaveTextContent(/Pre-Kg/i);
+
+    // Test Employment Status
+    const employmentStatusDropdownBtn = await screen.findByTestId(
+      'employmentstatus-dropdown-btn',
+    );
+    fireEvent.click(employmentStatusDropdownBtn);
+    const employmentOption = await screen.findByText(/Full-Time/i);
+    fireEvent.click(employmentOption);
+    expect(employmentStatusDropdownBtn).toHaveTextContent(/Full-Time/i);
+
+    //Test Marital Status
+    const maritalStatusDropdownBtn = await screen.findByTestId(
+      'maritalstatus-dropdown-btn',
+    );
+    fireEvent.click(maritalStatusDropdownBtn);
+    const maritalStatusOption = await screen.findByText(/married/i);
+    fireEvent.click(maritalStatusOption);
+    expect(maritalStatusDropdownBtn).toHaveTextContent(/married/i);
   });
 
   it('shows preview image when selectedAvatar is present', async () => {
