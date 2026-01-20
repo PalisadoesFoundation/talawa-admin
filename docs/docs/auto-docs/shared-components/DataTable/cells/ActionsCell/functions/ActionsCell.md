@@ -6,7 +6,7 @@
 
 > **ActionsCell**\<`T`\>(`props`): `Element`
 
-Defined in: [src/shared-components/DataTable/cells/ActionsCell.tsx:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/cells/ActionsCell.tsx#L11)
+Defined in: [src/shared-components/DataTable/cells/ActionsCell.tsx:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/cells/ActionsCell.tsx#L12)
 
 ActionsCell renders a row of action buttons for a single table row.
 
@@ -29,3 +29,5 @@ Props containing row data and action definitions
 ## Returns
 
 `Element`
+
+The rendered actions cell element
