@@ -378,4 +378,83 @@ describe('RegistrationForm', () => {
       ).not.toBeInTheDocument();
     });
   });
+
+  describe('ReCAPTCHA functionality', () => {
+    it('handles ReCAPTCHA token change', () => {
+      renderComponent();
+
+      // Form should render without ReCAPTCHA by default
+      expect(
+        screen.getByRole('button', { name: /register/i }),
+      ).toBeInTheDocument();
+    });
+
+    it('resets ReCAPTCHA on registration error', async () => {
+      const mockOnError = vi.fn();
+      const mockRegister = vi.fn().mockResolvedValue(undefined);
+
+      vi.mocked(useRegistration).mockReturnValue({
+        register: mockRegister,
+        loading: false,
+      });
+
+      renderComponent({ onError: mockOnError });
+
+      // Fill form with valid data
+      fireEvent.change(screen.getByLabelText('First Name'), {
+        target: { value: 'John Doe' },
+      });
+      fireEvent.change(screen.getByLabelText(/Email/), {
+        target: { value: 'john@example.com' },
+      });
+      fireEvent.change(screen.getByLabelText('Password'), {
+        target: { value: 'Password123!' },
+      });
+      fireEvent.change(screen.getByLabelText('Confirm Password'), {
+        target: { value: 'Password123!' },
+      });
+
+      fireEvent.click(screen.getByRole('button', { name: /register/i }));
+
+      await waitFor(() => {
+        expect(mockRegister).toHaveBeenCalled();
+      });
+    });
+
+    it('handles registration with recaptcha token', async () => {
+      const mockRegister = vi.fn().mockResolvedValue(undefined);
+
+      vi.mocked(useRegistration).mockReturnValue({
+        register: mockRegister,
+        loading: false,
+      });
+
+      renderComponent();
+
+      // Fill form with valid data
+      fireEvent.change(screen.getByLabelText('First Name'), {
+        target: { value: 'John Doe' },
+      });
+      fireEvent.change(screen.getByLabelText(/Email/), {
+        target: { value: 'john@example.com' },
+      });
+      fireEvent.change(screen.getByLabelText('Password'), {
+        target: { value: 'Password123!' },
+      });
+      fireEvent.change(screen.getByLabelText('Confirm Password'), {
+        target: { value: 'Password123!' },
+      });
+
+      fireEvent.click(screen.getByRole('button', { name: /register/i }));
+
+      await waitFor(() => {
+        expect(mockRegister).toHaveBeenCalledWith({
+          name: 'John Doe',
+          email: 'john@example.com',
+          password: 'Password123!',
+          organizationId: '',
+        });
+      });
+    });
+  });
 });

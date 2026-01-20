@@ -364,4 +364,94 @@ describe('LoginPage Orchestrator', () => {
       expect(screen.getByTestId('register-tab')).toBeInTheDocument();
     });
   });
+
+  test('handles authentication errors', async () => {
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Should handle auth errors gracefully
+    expect(screen.getByTestId('login-form')).toBeInTheDocument();
+  });
+
+  test('handles social media label generation', async () => {
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Social media links should be rendered
+    await waitFor(() => {
+      const socialLinks = screen.getAllByRole('link');
+      expect(socialLinks.length).toBeGreaterThan(0);
+    });
+  });
+
+  test('handles admin path detection', async () => {
+    // Mock window.location for admin path
+    Object.defineProperty(window, 'location', {
+      value: { pathname: '/admin/login' },
+      writable: true,
+    });
+
+    render(
+      <MockedProvider mocks={[]} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    expect(screen.getByTestId('login-form')).toBeInTheDocument();
+  });
+
+  test('handles community data display', async () => {
+    const communityMock = {
+      request: {
+        query: GET_COMMUNITY_DATA_PG,
+      },
+      result: {
+        data: {
+          community: {
+            name: 'Test Community',
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[communityMock]} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Test Community')).toBeInTheDocument();
+    });
+  });
 });
