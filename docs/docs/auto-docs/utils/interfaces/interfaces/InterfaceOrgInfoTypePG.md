@@ -50,6 +50,14 @@ Defined in: [src/utils/interfaces.ts:453](https://github.com/PalisadoesFoundatio
 
 ***
 
+### isMember?
+
+> `optional` **isMember**: `boolean`
+
+Defined in: [src/utils/interfaces.ts:469](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L469)
+
+***
+
 ### members?
 
 > `optional` **members**: `object`
@@ -59,6 +67,10 @@ Defined in: [src/utils/interfaces.ts:460](https://github.com/PalisadoesFoundatio
 #### edges
 
 > **edges**: `object`[]
+
+#### id?
+
+> `optional` **id**: `string`
 
 ***
 
@@ -82,4 +94,4 @@ Defined in: [src/utils/interfaces.ts:454](https://github.com/PalisadoesFoundatio
 
 > **role**: `string`
 
-Defined in: [src/utils/interfaces.ts:467](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L467)
+Defined in: [src/utils/interfaces.ts:468](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L468)

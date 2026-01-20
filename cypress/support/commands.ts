@@ -28,7 +28,7 @@ declare global {
        */
       loginByApi(role: string): Chainable<Subject>;
       /**
-       * @param expectedMessage The expected text (string or RegExp)
+       * @param expectedMessage - The expected text (string or RegExp)
        */
       assertToast(expectedMessage: string | RegExp): Chainable<void>;
     }

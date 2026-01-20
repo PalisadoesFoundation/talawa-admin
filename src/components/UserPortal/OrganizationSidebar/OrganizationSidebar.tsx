@@ -5,19 +5,13 @@
  * and upcoming events. It fetches data using GraphQL queries and provides links
  * to view all members and events.
  *
- * @component
- * @returns {JSX.Element} The rendered OrganizationSidebar component.
+ * @returns The rendered OrganizationSidebar component.
  *
  * @remarks
  * - Uses `useQuery` from Apollo Client to fetch members and events data.
  * - Displays loading indicators while data is being fetched.
  * - Uses `useTranslation` for internationalization.
  * - Extracts `organizationId` from URL parameters using `useParams`.
- *
- * @dependencies
- * - React, React Router, Apollo Client, dayjs, react-bootstrap, Material-UI icons.
- * - Custom styles from `OrganizationSidebar.module.css`.
- * - GraphQL queries: `ORGANIZATIONS_MEMBER_CONNECTION_LIST`, `ORGANIZATION_EVENT_CONNECTION_LIST`.
  *
  * @example
  * ```tsx
@@ -33,7 +27,7 @@ import { ListGroup } from 'react-bootstrap';
 import AboutImg from 'assets/images/defaultImg.png';
 import styles from './OrganizationSidebar.module.css';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { Link, useParams } from 'react-router';
+import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
