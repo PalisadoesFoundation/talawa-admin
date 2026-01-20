@@ -87,9 +87,9 @@
     "accountLockedWithTimer": "您的账户已被暂时锁定。请在 {{minutes}} 分钟后重试。",
     "signupSuccessVerifyEmail": "Successfully registered! Please check your email to verify your account.",
     "emailResent": "Verification email has been resent successfully.",
-    "emailNotVerified": "Your email is not verified. Please check your inbox for the verification link.",
-    "resendVerification": "Resend Verification",
-    "resendFailed": "Failed to resend verification email. Please try again."
+    "emailNotVerified": "您的电子邮件未验证。请检查收件箱中的验证链接。",
+    "resendVerification": "重新发送验证邮件",
+    "resendFailed": "重新发送验证邮件失败，请重试。"
   },
   "adminProfile": {
     "title": "管理员资料",
@@ -2344,16 +2344,16 @@
     }
   },
   "verifyEmail": {
-    "title": "Verify Email",
-    "verifying": "Verifying your email...",
-    "success": "Email Verified!",
-    "successMessage": "Your email has been successfully verified. You can now login.",
-    "error": "Verification Failed",
-    "invalidToken": "The verification link is invalid or has expired.",
-    "loginRequired": "Please login to verify your email.",
-    "resendButton": "Resend Verification Email",
-    "resendSuccess": "Verification email has been resent successfully.",
-    "resendFailed": "Failed to resend verification email. Please try again.",
-    "goToLogin": "Go to Login"
+    "title": "验证您的邮箱",
+    "verifying": "正在验证您的邮箱...",
+    "success": "验证成功!",
+    "successMessage": "您的邮箱已成功验证。您现在可以登录了。",
+    "error": "验证失败",
+    "invalidToken": "无效或过期的验证链接。",
+    "loginRequired": "请登录以继续。",
+    "resendButton": "重新发送验证邮件",
+    "resendSuccess": "验证邮件发送成功!",
+    "resendFailed": "发送验证邮件失败。请稍后再试。",
+    "goToLogin": "前往登录"
   }
 }

@@ -4,20 +4,15 @@
  * This component renders a responsive navigation bar for an organization portal.
  * It includes branding, navigation links, language selection, and user account options.
  *
- * @param props - Component props.
+ * @param props - Component props including currentPage: string.
  *
  * @returns The rendered OrganizationNavbar component.
  *
  * @remarks
- * - Uses \`react-bootstrap\` for layout and styling.
- * - Integrates \`i18next\` for language translation.
+ * - Uses `react-bootstrap` for layout and styling.
+ * - Integrates `i18next` for language translation.
  * - Fetches organization details using Apollo GraphQL query.
  * - Provides user logout functionality and redirects to the home page.
- *
- * @example
- * \`\`\`tsx
- * <OrganizationNavbar currentPage="home" />
- * \`\`\`
  */
 import React from 'react';
 import styles from './OrganizationNavbar.module.css';

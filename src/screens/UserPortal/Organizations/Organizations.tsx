@@ -370,6 +370,7 @@ export default function Organizations(): React.JSX.Element {
               onClose={handleDismissWarning}
               className="mb-3"
               data-testid="email-verification-warning"
+              aria-live="polite"
             >
               <div className="d-flex justify-content-between align-items-center">
                 <div>

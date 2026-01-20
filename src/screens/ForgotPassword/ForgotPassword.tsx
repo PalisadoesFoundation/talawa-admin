@@ -28,7 +28,8 @@
  * - `FORGOT_PASSWORD_MUTATION`: Resets the user's password using the OTP and new password.
  *
  * UI Components:
- * - `Form` and `Button` from React Bootstrap for form handling and submission.
+ * - Uses native HTML form elements (`<form>`, `<input>`, `<label>`) for accessibility and structure.
+ * - `Button` from `shared-components/Button` for consistent styling.
  * - `Loader`: Displays a loading spinner during mutation operations.
  * - `KeyLogo`: SVG logo for visual representation.
  * - `Link`: For navigation back to the login page.

@@ -10,7 +10,7 @@
  * @param handleClose - Function to close the modal.
  * @param reloadMembers - Function to reload the list of members.
  *
- * @returns {JSX.Element} The rendered AddOnSpotAttendee component.
+ * @returns The rendered AddOnSpotAttendee component.
  *
  * @remarks
  * - Uses `react-bootstrap` for modal and form styling
@@ -43,7 +43,7 @@ import { useMutation } from '@apollo/client';
 import type {
   InterfaceAddOnSpotAttendeeProps,
   InterfaceFormData,
-} from 'utils/interfaces';
+} from 'types/AdminPortal/EventRegistrantsModal/AddOnSpot';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import LoadingState from 'shared-components/LoadingState/LoadingState';

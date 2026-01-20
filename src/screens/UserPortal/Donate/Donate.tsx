@@ -155,16 +155,21 @@ export default function Donate(): JSX.Element {
               </Dropdown.Menu>
             </Dropdown>
 
+            <label htmlFor="donationAmountInput" className="visually-hidden">
+              {t('amount')}
+            </label>
             <FormControl
+              id="donationAmountInput"
               type="text"
               data-testid="donationAmount"
               placeholder={t('amount')}
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
+              aria-describedby="donationAmountHelp"
             />
           </InputGroup>
 
-          <div className="text-muted form-text">
+          <div id="donationAmountHelp" className="text-muted form-text">
             {t('donationAmountDescription')}
           </div>
 

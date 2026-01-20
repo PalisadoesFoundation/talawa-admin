@@ -350,12 +350,11 @@ describe('AddOnSpotAttendee Component', () => {
 
     await waitFor(() => {
       expect(sharedMocks.NotificationToast.success).toHaveBeenCalled();
+      // Since handleClose is a mock, the component remains mounted with show=true.
+      // verify resetForm() effect.
+      expect(firstNameInput).toHaveValue('');
+      expect(lastNameInput).toHaveValue('');
+      expect(emailInput).toHaveValue('');
     });
-
-    // Since handleClose is a mock, the component remains mounted with show=true.
-    // verify resetForm() effect.
-    expect(firstNameInput).toHaveValue('');
-    expect(lastNameInput).toHaveValue('');
-    expect(emailInput).toHaveValue('');
   });
 });
