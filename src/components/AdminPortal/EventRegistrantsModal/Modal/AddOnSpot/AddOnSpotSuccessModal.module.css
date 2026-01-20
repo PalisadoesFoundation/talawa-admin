@@ -1,0 +1,18 @@
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.modalBody p {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.modalBody b {
+  font-weight: 600;
+}
+
+.warningText {
+  font-size: 0.85rem;
+}

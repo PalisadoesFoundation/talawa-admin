@@ -44,23 +44,20 @@
  */
 
 import { Button } from 'react-bootstrap';
-import { useState } from 'react';
+import { useState, type FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from './AddOnSpotSuccessModal.module.css';
 import { BaseModal } from 'shared-components/BaseModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { AddOnSpotSuccessModalProps } from "types/AdminPortal/AddOnSpotSuccessModal/interface";
+import { InterfaceAddOnSpotSuccessModalProps } from 'types/AdminPortal/AddOnSpotSuccessModal/interface';
 
-
-
-
-const AddOnSpotSuccessModal: FC<AddOnSpotSuccessModalProps> = ({
+const AddOnSpotSuccessModal: FC<InterfaceAddOnSpotSuccessModalProps> = ({
   show,
   password,
   email,
   attendeeName,
   handleClose,
-}: Props) => {
+}) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'onSpotAttendee',
   });

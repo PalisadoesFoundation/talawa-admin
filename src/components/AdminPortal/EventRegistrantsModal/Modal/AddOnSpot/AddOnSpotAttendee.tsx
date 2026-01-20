@@ -53,7 +53,7 @@ import { useMutation } from '@apollo/client';
 import type {
   InterfaceAddOnSpotAttendeeProps,
   InterfaceFormData,
-} from 'types/AdminPortal/EventRegistrantsModal/AddOnSpot';
+} from 'types/AdminPortal/AddOnSpotAttendee/interface';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import LoadingState from 'shared-components/LoadingState/LoadingState';

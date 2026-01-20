@@ -106,7 +106,6 @@ describe('AddOnSpotAttendee Component', () => {
   });
 
   beforeEach(() => {
-    vi.clearAllMocks();
     mockUseParams.mockReturnValue({
       eventId: '123',
       orgId: '123',
