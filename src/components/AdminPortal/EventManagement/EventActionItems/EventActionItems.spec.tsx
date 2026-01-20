@@ -131,7 +131,7 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
 
 // Mock modal components
 vi.mock(
-  'screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal',
+  'shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal',
   () => ({
     default: ({ isOpen }: { isOpen: boolean }) =>
       isOpen ? <div data-testid="view-modal">View Modal</div> : null,
@@ -139,7 +139,7 @@ vi.mock(
 );
 
 vi.mock(
-  'screens/OrganizationActionItems/ActionItemModal/ActionItemModal',
+  'shared-components/ActionItems/ActionItemModal/ActionItemModal',
   () => ({
     default: ({ isOpen }: { isOpen: boolean }) =>
       isOpen ? (
@@ -149,7 +149,7 @@ vi.mock(
 );
 
 vi.mock(
-  'screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal',
+  'shared-components/ActionItems/ActionItemDeleteModal/ActionItemDeleteModal',
   () => ({
     default: ({ isOpen }: { isOpen: boolean }) =>
       isOpen ? <div data-testid="delete-modal">Delete Modal</div> : null,
@@ -157,7 +157,7 @@ vi.mock(
 );
 
 vi.mock(
-  'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal',
+  'shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal',
   () => ({
     default: ({ isOpen }: { isOpen: boolean }) =>
       isOpen ? <div data-testid="status-modal">Status Modal</div> : null,

@@ -113,6 +113,8 @@
   "createdLatest": "Créé le plus récemment",
   "createdEarliest": "Créé le plus tôt",
   "searchBy": "Rechercher par {{item}}",
+  "viewDetails": "Voir les détails",
+  "markComplete": "Marquer comme complété",
   "plugins": "Extensions",
   "save": "Enregistrer",
   "saving": "Enregistrement...",
