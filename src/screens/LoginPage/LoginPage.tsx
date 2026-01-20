@@ -70,13 +70,10 @@ const LoginPage = (): JSX.Element => {
     if (orgError) {
       NotificationToast.error(tGlobal('errorOccurred'));
     }
-  }, [orgError, tGlobal]);
-
-  useEffect(() => {
     if (communityError) {
       NotificationToast.error(tGlobal('errorOccurred'));
     }
-  }, [communityError, tGlobal]);
+  }, [orgError, communityError, tGlobal]);
 
   useEffect(() => {
     if (orgData?.organizations) {

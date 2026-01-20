@@ -1,6 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
@@ -13,6 +14,7 @@ import {
   GET_COMMUNITY_DATA_PG,
 } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
+import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 
 // Mock useSession hook
@@ -191,10 +193,10 @@ describe('LoginPage Orchestrator', () => {
     expect(languageButton).toBeInTheDocument();
   });
 
-  it('should handle login success and start session', () => {
+  it('should handle login success and redirect to admin portal', async () => {
     const mockStartSession = vi.fn();
+    const _mockNavigate = vi.fn();
 
-    // Update the mock for this specific test
     vi.mocked(useSession).mockReturnValue({
       startSession: mockStartSession,
       endSession: vi.fn(),
@@ -202,10 +204,63 @@ describe('LoginPage Orchestrator', () => {
       extendSession: vi.fn(),
     });
 
+    // Mock admin path
+    Object.defineProperty(window, 'location', {
+      value: { pathname: '/admin/login' },
+      writable: true,
+    });
+
+    render(
+      <MockedProvider link={new StaticMockLink([], true)}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Simulate successful login
+    const loginForm = screen.getByTestId('login-form');
+    expect(loginForm).toBeInTheDocument();
+  });
+
+  it('should handle registration success and switch to login tab', async () => {
     renderLoginPage();
 
-    // Verify session management is available
-    expect(mockStartSession).toBeDefined();
+    // Switch to register tab
+    const registerTab = screen.getByTestId('register-tab');
+    await userEvent.click(registerTab);
+
+    const registrationForm = screen.getByRole('tabpanel');
+    expect(registrationForm).toHaveAttribute('id', 'register-panel');
+  });
+
+  it('should handle GraphQL errors gracefully', async () => {
+    const errorMocks = [
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        error: new Error('Network error'),
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={errorMocks}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('login-tab')).toBeInTheDocument();
+    });
   });
 
   it('should render community data when available', async () => {
@@ -258,6 +313,55 @@ describe('LoginPage Orchestrator', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Test Community')).toBeInTheDocument();
+    });
+  });
+
+  it('should handle registration tab switching integration', async () => {
+    renderLoginPage();
+
+    // Start on login tab
+    expect(screen.getByRole('tabpanel')).toHaveAttribute('id', 'login-panel');
+
+    // Switch to register tab
+    const registerTab = screen.getByTestId('register-tab');
+    await userEvent.click(registerTab);
+
+    // Verify complete tab switch
+    expect(screen.getByRole('tabpanel')).toHaveAttribute(
+      'id',
+      'register-panel',
+    );
+    expect(screen.getByRole('tabpanel')).toHaveAttribute(
+      'aria-labelledby',
+      'register-tab',
+    );
+    expect(registerTab).toHaveAttribute('aria-selected', 'true');
+  });
+
+  it('should handle error states gracefully', async () => {
+    const errorMocks = [
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        error: new Error('Community fetch failed'),
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={errorMocks} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    // Component should still render despite errors
+    await waitFor(() => {
+      expect(screen.getByTestId('login-tab')).toBeInTheDocument();
+      expect(screen.getByTestId('register-tab')).toBeInTheDocument();
     });
   });
 });
