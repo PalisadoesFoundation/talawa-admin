@@ -518,7 +518,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                   />
                 </Col>
                 <Col md={12}>
-                  <label htmlFor="city" className="form-label">
+                  <label htmlFor="postalCode" className="form-label">
                     {t('postalCode')}
                   </label>
                   <input

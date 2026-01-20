@@ -89,8 +89,8 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
           id: org.id,
           name: org.name,
           relation: 'CREATED' as const,
-          adminsCount: org.adminsCount ?? 0,
-          membersCount: org.membersCount ?? 0,
+          adminsCount: org.adminsCount,
+          membersCount: org.membersCount,
           description: org.description || 'No Description',
           avatarURL: org.avatarURL || '',
         }),
@@ -111,8 +111,8 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
           id: edge.node.id,
           name: edge.node.name,
           relation: 'BELONG_TO' as const,
-          adminsCount: edge.node.adminsCount ?? 0,
-          membersCount: edge.node.membersCount ?? 0,
+          adminsCount: edge.node.adminsCount,
+          membersCount: edge.node.membersCount,
           description: edge.node.description || 'No Description',
           avatarURL: edge.node.avatarURL || '',
         }),
@@ -133,8 +133,8 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
           id: edge.node.id,
           name: edge.node.name,
           relation: 'JOINED' as const,
-          adminsCount: edge.node.adminsCount ?? 0,
-          membersCount: edge.node.membersCount ?? 0,
+          adminsCount: edge.node.adminsCount,
+          membersCount: edge.node.membersCount,
           description: edge.node.description || 'No Description',
           avatarURL: edge.node.avatarURL || '',
         }),
@@ -225,7 +225,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
             <PeopleTabUserOrganizations
               key={org.id}
               title={org.name}
-              description={org.description || 'No Description'}
+              description={org.description}
               adminCount={org.adminsCount}
               membersCount={org.membersCount}
               img={org.avatarURL || ''}
