@@ -47,11 +47,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import { InterfaceJoinedOrganizationsData } from 'types/AdminPortal/UserDetails/UserOrganization/interface';
 import {
-  MemberDetailProps,
+  UserOrganizationProps,
   OrgRelationType,
   UserOrg,
 } from 'types/AdminPortal/UserDetails/UserOrganization/type';
-const UserOrganizations: React.FC<MemberDetailProps> = ({
+const UserOrganizations: React.FC<UserOrganizationProps> = ({
   id,
 }): JSX.Element => {
   const { t: tCommon } = useTranslation('common');

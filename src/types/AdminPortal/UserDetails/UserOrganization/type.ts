@@ -1,4 +1,4 @@
-export type MemberDetailProps = { id?: string };
+export type UserOrganizationProps = { id?: string };
 export type OrgRelationType = 'CREATED' | 'BELONG_TO' | 'JOINED';
 
 export type UserOrg = {
