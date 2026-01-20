@@ -4,11 +4,7 @@
 
 # Interface: InterfaceVenuePg
 
-Defined in: [src/utils/interfaces.ts:1255](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1255)
-
-InterfaceVenuePg
-
-## Description
+Defined in: [src/utils/interfaces.ts:922](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L922)
 
 Defines the structure for a venue with PostgreSQL-specific fields.
 
@@ -18,9 +14,7 @@ Defines the structure for a venue with PostgreSQL-specific fields.
 
 > `optional` **attachments**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:1260](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1260)
-
-The attachments associated with the venue.
+Defined in: [src/utils/interfaces.ts:927](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L927)
 
 #### mimeType
 
@@ -36,9 +30,7 @@ The attachments associated with the venue.
 
 > `optional` **capacity**: `number`
 
-Defined in: [src/utils/interfaces.ts:1259](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1259)
-
-The capacity of the venue.
+Defined in: [src/utils/interfaces.ts:926](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L926)
 
 ***
 
@@ -46,9 +38,7 @@ The capacity of the venue.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1264](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1264)
-
-The creation date of the venue record.
+Defined in: [src/utils/interfaces.ts:931](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L931)
 
 ***
 
@@ -56,9 +46,7 @@ The creation date of the venue record.
 
 > **creator**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:1266](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1266)
-
-The user who created this venue.
+Defined in: [src/utils/interfaces.ts:933](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L933)
 
 ***
 
@@ -66,9 +54,7 @@ The user who created this venue.
 
 > `optional` **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:1258](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1258)
-
-The description of the venue.
+Defined in: [src/utils/interfaces.ts:925](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L925)
 
 ***
 
@@ -76,9 +62,7 @@ The description of the venue.
 
 > **id**: `ID`
 
-Defined in: [src/utils/interfaces.ts:1256](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1256)
-
-The unique identifier of the venue.
+Defined in: [src/utils/interfaces.ts:923](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L923)
 
 ***
 
@@ -86,9 +70,7 @@ The unique identifier of the venue.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1257](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1257)
-
-The name of the venue.
+Defined in: [src/utils/interfaces.ts:924](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L924)
 
 ***
 
@@ -96,9 +78,7 @@ The name of the venue.
 
 > **organization**: [`InterfaceOrganizationPg`](InterfaceOrganizationPg.md)
 
-Defined in: [src/utils/interfaces.ts:1268](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1268)
-
-The organization associated with this venue.
+Defined in: [src/utils/interfaces.ts:935](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L935)
 
 ***
 
@@ -106,9 +86,7 @@ The organization associated with this venue.
 
 > **updatedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1265](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1265)
-
-The last update date of the venue record.
+Defined in: [src/utils/interfaces.ts:932](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L932)
 
 ***
 
@@ -116,6 +94,4 @@ The last update date of the venue record.
 
 > **updater**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:1267](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1267)
-
-The user who last updated this venue.
+Defined in: [src/utils/interfaces.ts:934](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L934)
