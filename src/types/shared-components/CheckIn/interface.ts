@@ -47,9 +47,13 @@ export interface InterfaceTableData {
 
 /**
  * Props for TableRow component.
+ * @remarks Used to render check-in status and actions for event attendees.
  */
 export interface InterfaceTableRowProps {
+  /** The check-in data for the attendee row */
   data: InterfaceTableCheckIn;
+  /** Callback to refresh the attendee list after mutations */
   refetch: () => void;
+  /** Optional callback invoked after a successful check-in to notify parent components */
   onCheckInUpdate?: () => void;
 }
