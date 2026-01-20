@@ -96,7 +96,7 @@ const restrictedImports = [
     name: '@testing-library/react',
     importNames: ['fireEvent'],
     message:
-      'Tests in this file use fireEvent for user interactions; our test standards require @testing-library/user-event for interaction fidelity and test reliability.',
+      'Tests in this file use fireEvent for user interactions; our test standards require using userEvent from @testing-library/user-event for interaction fidelity and test reliability.',
   },
   {
     name: '@mui/material',
