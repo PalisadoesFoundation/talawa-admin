@@ -20,7 +20,7 @@ Defined in: [src/types/shared-components/EventListCard/Modal/Delete/interface.ts
 
 ##### deleteOption?
 
-`"single"` | `"following"` | `"all"`
+`"all"` | `"single"` | `"following"`
 
 #### Returns
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/EventListCard/Modal/Delete/interface.ts
 
 ### eventListCardProps
 
-> **eventListCardProps**: [`IEventListCard`](../../../../../../Event/interface/interfaces/IEventListCard.md)
+> **eventListCardProps**: [`InterfaceEventListCardProps`](../../../../interface/interfaces/InterfaceEventListCardProps.md)
 
 Defined in: [src/types/shared-components/EventListCard/Modal/Delete/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/Modal/Delete/interface.ts#L6)
 

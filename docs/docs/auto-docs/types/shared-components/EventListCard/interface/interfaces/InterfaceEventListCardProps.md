@@ -2,15 +2,15 @@
 
 ***
 
-# Interface: InterfaceEventListCard
+# Interface: InterfaceEventListCardProps
 
-Defined in: [src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts#L6)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L10)
 
-Extended event interface for EventListCard with optional refetch capability.
+Props for the EventListCard component.
 
 ## Extends
 
-- [`InterfaceEvent`](../../../../../../Event/interface/type-aliases/InterfaceEvent.md)
+- [`InterfaceEvent`](../../../../Event/interface/type-aliases/InterfaceEvent.md)
 
 ## Properties
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Event/interface.ts:50](https://github.com/PalisadoesFound
 
 ### attendees
 
-> **attendees**: `Partial`\<[`User`](../../../../../../Event/type/type-aliases/User.md)\>[]
+> **attendees**: `Partial`\<[`User`](../../../../Event/type/type-aliases/User.md)\>[]
 
 Defined in: [src/types/Event/interface.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L58)
 
@@ -68,7 +68,7 @@ Defined in: [src/types/Event/interface.ts:64](https://github.com/PalisadoesFound
 
 ### creator
 
-> **creator**: `Partial`\<[`User`](../../../../../../Event/type/type-aliases/User.md)\>
+> **creator**: `Partial`\<[`User`](../../../../Event/type/type-aliases/User.md)\>
 
 Defined in: [src/types/Event/interface.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L59)
 
@@ -116,7 +116,7 @@ Defined in: [src/types/Event/interface.ts:49](https://github.com/PalisadoesFound
 
 ### feedback?
 
-> `optional` **feedback**: [`Feedback`](../../../../../../Event/type/type-aliases/Feedback.md)[]
+> `optional` **feedback**: [`Feedback`](../../../../Event/type/type-aliases/Feedback.md)[]
 
 Defined in: [src/types/Event/interface.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L61)
 
@@ -251,7 +251,7 @@ Defined in: [src/types/Event/interface.ts:72](https://github.com/PalisadoesFound
 
 ### recurrenceRule?
 
-> `optional` **recurrenceRule**: [`InterfaceRecurrenceRule`](../../../../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)
+> `optional` **recurrenceRule**: [`InterfaceRecurrenceRule`](../../../../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md)
 
 Defined in: [src/types/Event/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L73)
 
@@ -265,9 +265,9 @@ Defined in: [src/types/Event/interface.ts:73](https://github.com/PalisadoesFound
 
 > `optional` **refetchEvents**: () => `void`
 
-Defined in: [src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts#L8)
+Defined in: [src/types/shared-components/EventListCard/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/interface.ts#L14)
 
-Callback to refetch events after mutations.
+Optional callback function to refetch events after an action.
 
 #### Returns
 

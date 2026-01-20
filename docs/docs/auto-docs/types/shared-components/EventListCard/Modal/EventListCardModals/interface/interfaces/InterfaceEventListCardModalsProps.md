@@ -4,7 +4,7 @@
 
 # Interface: InterfaceEventListCardModalsProps
 
-Defined in: [src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts#L14)
+Defined in: [src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts#L6)
 
 Props for EventListCardModals component.
 
@@ -12,9 +12,9 @@ Props for EventListCardModals component.
 
 ### eventListCardProps
 
-> **eventListCardProps**: [`InterfaceEventListCard`](InterfaceEventListCard.md)
+> **eventListCardProps**: [`InterfaceEventListCardProps`](../../../../interface/interfaces/InterfaceEventListCardProps.md)
 
-Defined in: [src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts#L16)
+Defined in: [src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts#L8)
 
 Event card properties including event details.
 
@@ -24,7 +24,7 @@ Event card properties including event details.
 
 > **eventModalIsOpen**: `boolean`
 
-Defined in: [src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts#L18)
+Defined in: [src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts#L10)
 
 Whether the event modal is currently open.
 
@@ -34,7 +34,7 @@ Whether the event modal is currently open.
 
 > **hideViewModal**: () => `void`
 
-Defined in: [src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts#L20)
+Defined in: [src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts#L12)
 
 Callback to hide the view modal.
 
@@ -48,7 +48,7 @@ Callback to hide the view modal.
 
 > **t**: (`key`, `options?`) => `string`
 
-Defined in: [src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts#L22)
+Defined in: [src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts#L14)
 
 Translation function for localized strings.
 
@@ -72,7 +72,7 @@ Translation function for localized strings.
 
 > **tCommon**: (`key`) => `string`
 
-Defined in: [src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts#L24)
+Defined in: [src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/EventListCard/Modal/EventListCardModals/interface.ts#L16)
 
 Translation function for common localized strings.
 
