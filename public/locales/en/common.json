@@ -295,5 +295,12 @@
     "annuallyOn": "Annually on {{month}} {{day}}",
     "everyWeekday": "Every weekday (Monday to Friday)",
     "custom": "Custom..."
+  },
+  "checkInRegistrantsAriaLabel": "Check in registrants",
+  "auth": {
+    "emailField": {
+      "label": "Email",
+      "placeholder": "name@example.com"
+    }
   }
 }
