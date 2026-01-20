@@ -774,8 +774,7 @@
     "close": "close",
     "talawaApiUnavailable": "talawaApiUnavailable",
     "done": "done",
-    "invalidDate": "Invalid Date",
-    "eventManagementDashboard": "Event Management Dashboard"
+    "invalidDate": "Invalid Date"
   },
   "funds": {
     "title": "Funds",

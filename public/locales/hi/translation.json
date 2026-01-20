@@ -791,8 +791,7 @@
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "done": "समाप्त",
     "invalidDate": "Invalid Date",
-    "createChat": "चैट बनाएं",
-    "eventManagementDashboard": "इवेंट मैनेजमेंट डैशबोर्ड"
+    "createChat": "चैट बनाएं"
   },
   "funds": {
     "title": "फंड",

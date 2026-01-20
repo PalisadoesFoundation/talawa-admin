@@ -774,8 +774,7 @@
     "talawaApiUnavailable": "API Talawa non disponible",
     "done": "Terminé",
     "invalidDate": "Invalid Date",
-    "createChat": "Créer une discussion",
-    "eventManagementDashboard": "Tableau de bord de gestion des événements"
+    "createChat": "Créer une discussion"
   },
   "funds": {
     "title": "Fonds",

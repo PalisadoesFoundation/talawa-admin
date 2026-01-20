@@ -774,8 +774,7 @@
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "done": "完成",
     "invalidDate": "Invalid Date",
-    "createChat": "创建聊天",
-    "eventManagementDashboard": "事件管理仪表板"
+    "createChat": "创建聊天"
   },
   "funds": {
     "title": "基金",
