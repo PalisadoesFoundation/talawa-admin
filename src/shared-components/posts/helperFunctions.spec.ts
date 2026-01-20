@@ -1,3 +1,14 @@
+/**
+ * Tests for `formatPostForCard` helper function.
+ *
+ * This function formats a post object for display in post cards.
+ * The tests cover:
+ *   - Fallback behavior when `creator` or `attachments` are missing
+ *   - Correct handling of `hasUserVoted` and `mimeType`
+ *   - Proper formatting of `postedAt`, including error handling when dates are invalid
+ *   - Happy path with all fields populated
+ *
+ */
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { formatPostForCard } from './helperFunctions';
 import type { InterfacePost } from 'types/Post/interface';
@@ -41,6 +52,7 @@ describe('formatPostForCard', () => {
     expect(card.attachmentURL).toBeUndefined();
   });
 
+  // Should
   it('should format a complete post correctly', () => {
     const post: InterfacePost = {
       id: '1',
