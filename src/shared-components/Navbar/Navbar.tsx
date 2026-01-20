@@ -107,7 +107,9 @@ export default function PageHeader({
                 { label: t('userNavbar.workshops'), value: 'Workshops' },
               ]}
               selectedOption={'Events'}
-              onSortChange={() => {}}
+              onSortChange={() => {
+                // TODO: Implement event type filtering logic
+              }}
               dataTestIdPrefix="eventType"
               className={styles.dropdown}
               buttonLabel={t('eventType')}

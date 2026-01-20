@@ -64,6 +64,7 @@ describe('UploadPluginModal Component', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
