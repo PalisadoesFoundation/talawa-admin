@@ -26,6 +26,7 @@ vi.mock('react-i18next', async () => {
 
 describe('Testing Event Stats Wrapper', () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

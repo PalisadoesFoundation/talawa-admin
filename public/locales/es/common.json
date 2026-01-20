@@ -293,7 +293,7 @@
   "checkInRegistrantsAriaLabel": "Registrar asistentes",
   "auth": {
     "emailField": {
-      "label": "Email",
+      "label": "Correo Electrónico",
       "placeholder": "name@example.com"
     }
   }

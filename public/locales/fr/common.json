@@ -293,7 +293,7 @@
   "checkInRegistrantsAriaLabel": "Enregistrer les participants",
   "auth": {
     "emailField": {
-      "label": "Email",
+      "label": "E-mail",
       "placeholder": "name@example.com"
     }
   }
