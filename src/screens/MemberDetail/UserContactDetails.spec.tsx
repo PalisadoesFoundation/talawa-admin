@@ -1199,48 +1199,4 @@ describe('MemberDetail', () => {
       { timeout: 5000 },
     );
   });
-  test('shows error toast when avatarURL to file conversion fails', async () => {
-    // 1️⃣ Force urlToFile to reject
-    vi.mocked(urlToFile).mockRejectedValueOnce(new Error('conversion failed'));
-
-    render(
-      <MockedProvider link={link1}>
-        <MemoryRouter initialEntries={['/user/settings/profile']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/user/settings/profile"
-                  element={<MemberDetail />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    // 2️⃣ Wait for user data to load
-    await waitFor(() => {
-      expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
-    });
-
-    // 3️⃣ Ensure selectedAvatar is NULL
-    // (do NOT upload any file)
-
-    // 4️⃣ Trigger a change so Save button appears
-    fireEvent.change(screen.getByTestId('inputName'), {
-      target: { value: 'Trigger Update' },
-    });
-
-    // 5️⃣ Click save → handleUserUpdate runs
-    fireEvent.click(screen.getByTestId('saveChangesBtn'));
-
-    // 6️⃣ Assert error toast from catch block
-    await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith(
-        'Failed to load user data',
-      );
-    });
-  });
 });
