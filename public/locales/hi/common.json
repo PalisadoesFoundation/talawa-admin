@@ -288,6 +288,13 @@
   "linkCopied": "लिंक क्लिपबोर्ड पर कॉपी किया गया",
   "copyToClipboardError": "लिंक क्लिपबोर्ड पर कॉपी करने में त्रुटि",
   "share": "शेयर करें",
+  "checkInRegistrantsAriaLabel": "पंजीकृतों को चेक इन करें",
+  "auth": {
+    "emailField": {
+      "label": "Email",
+      "placeholder": "name@example.com"
+    }
+  },
   "recurrence": {
     "daily": "Daily",
     "weeklyOn": "Weekly on {{day}}",
