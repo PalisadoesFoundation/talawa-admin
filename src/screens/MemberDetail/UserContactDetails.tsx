@@ -36,7 +36,7 @@ import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
 import { urlToFile } from 'utils/urlToFile';
 import { validatePassword } from 'utils/passwordValidator';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
-type MemberDetailProps = { id?: string };
+import { MemberDetailProps } from 'types/AdminPortal/MemberDetail/type';
 const UserContactDetails: React.FC<MemberDetailProps> = ({
   id,
 }): JSX.Element => {
@@ -267,7 +267,6 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                     multiple={false}
                     ref={fileInputRef}
                     onChange={handleFileUpload}
-                    style={{ display: 'none' }}
                   />
                 </FormFieldGroup>
               </Col>
@@ -485,7 +484,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                   />
                 </Col>
                 <Col md={12}>
-                  <label htmlFor="address" className="form-label">
+                  <label htmlFor="addressLine1" className="form-label">
                     {t('addressLine1')}
                   </label>
                   <input
@@ -502,7 +501,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                   />
                 </Col>
                 <Col md={12}>
-                  <label htmlFor="address" className="form-label">
+                  <label htmlFor="addressLine2" className="form-label">
                     {t('addressLine2')}
                   </label>
                   <input
@@ -519,7 +518,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                   />
                 </Col>
                 <Col md={12}>
-                  <label htmlFor="address" className="form-label">
+                  <label htmlFor="city" className="form-label">
                     {t('postalCode')}
                   </label>
                   <input
@@ -609,7 +608,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
               </Button>
               <Button
                 variant="outline"
-                style={{ backgroundColor: '#A8C7FA', color: '#555' }}
+                className={styles.saveChangesBtn}
                 onClick={handleUserUpdate}
                 data-testid="saveChangesBtn"
               >

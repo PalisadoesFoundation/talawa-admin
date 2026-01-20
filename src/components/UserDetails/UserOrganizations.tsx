@@ -45,39 +45,12 @@ import {
   USER_DETAILS,
 } from 'GraphQl/Queries/Queries';
 import { useTranslation } from 'react-i18next';
-
-type MemberDetailProps = { id?: string };
-type OrgRelationType = 'CREATED' | 'BELONG_TO' | 'JOINED';
-
-type UserOrg = {
-  id: string;
-  name: string;
-  relation: OrgRelationType;
-  adminsCount: number;
-  membersCount: number;
-  description?: string;
-  avatarURL?: string;
-};
-
-interface InterfaceJoinedOrgEdge {
-  node: {
-    id: string;
-    name: string;
-    adminsCount: number;
-    membersCount: number;
-    description?: string;
-    avatarURL?: string;
-  };
-}
-
-interface InterfaceJoinedOrganizationsData {
-  user: {
-    organizationsWhereMember?: {
-      edges?: InterfaceJoinedOrgEdge[];
-    };
-  };
-}
-
+import { InterfaceJoinedOrganizationsData } from 'types/AdminPortal/UserDetails/UserOrganization/interface';
+import {
+  MemberDetailProps,
+  OrgRelationType,
+  UserOrg,
+} from 'types/AdminPortal/UserDetails/UserOrganization/type';
 const UserOrganizations: React.FC<MemberDetailProps> = ({
   id,
 }): JSX.Element => {
@@ -261,7 +234,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
                   <EditIcon />
                 </IconButton>
               }
-              actionName="Edit"
+              actionName={tCommon('edit')}
             />
           ))
         )}

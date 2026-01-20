@@ -1160,4 +1160,16 @@ describe('makeUserTags utility function - pageInfo default parameter coverage', 
     expect(result.pageInfo.hasNextPage).toBe(false);
     expect(result.pageInfo.hasPreviousPage).toBe(false);
   });
+
+  test('should handle empty initial input for search', async () => {
+    const input = screen.getByPlaceholderText(translations.searchByName);
+    fireEvent.change(input, { target: { value: 'testSearch' } });
+    // Verify search value is set
+    expect(input).toHaveValue('testSearch');
+    // Click sort
+    await userEvent.click(screen.getByTestId('sortTags'));
+    await userEvent.click(screen.getByTestId('latest'));
+    // Verify search input is cleared
+    expect(input).toHaveValue('');
+  });
 });

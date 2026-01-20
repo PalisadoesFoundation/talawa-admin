@@ -3,14 +3,19 @@
 }
 .cardControl {
   margin-bottom: 20px;
+  display: none;
 }
 .inputColor {
   background: #f1f3f6;
 }
+.saveChangesBtn {
+  background-color: #a8c7fa;
+  color: #555;
+}
 .topRadius {
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
-  color: '#555';
+  color: #555;
   background: #eaebef;
 }
 

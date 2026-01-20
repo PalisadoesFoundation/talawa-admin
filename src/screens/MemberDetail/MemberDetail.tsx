@@ -37,8 +37,7 @@ import UserContactDetails from './UserContactDetails';
 import UserOrganizations from 'components/UserDetails/UserOrganizations';
 import UserEvents from 'components/UserDetails/UserEvents';
 import UserTags from 'components/UserDetails/UserTags';
-
-type MemberDetailProps = { id?: string };
+import { MemberDetailProps } from 'types/AdminPortal/MemberDetail/type';
 
 const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
