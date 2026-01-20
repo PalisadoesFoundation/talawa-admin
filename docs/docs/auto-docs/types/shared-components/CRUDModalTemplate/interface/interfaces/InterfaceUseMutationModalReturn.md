@@ -28,7 +28,7 @@ Return type for useMutationModal hook
 
 > **clearError**: () => `void`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:346](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L346)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:348](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L348)
 
 Clears the error state
 
@@ -42,7 +42,7 @@ Clears the error state
 
 > **close**: () => `void`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:314](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L314)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:313](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L313)
 
 Closes the modal
 
@@ -60,7 +60,7 @@ Closes the modal
 
 > **error**: `Error`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:344](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L344)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:346](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L346)
 
 Error from the last mutation attempt
 
@@ -70,7 +70,7 @@ Error from the last mutation attempt
 
 > **execute**: (`data?`) => `Promise`\<`TResult`\>
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:342](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L342)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:344](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L344)
 
 Executes the mutation with current form data
 
@@ -104,7 +104,7 @@ Form data being edited
 
 > **isOpen**: `boolean`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:310](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L310)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:309](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L309)
 
 Whether the modal is currently open
 
@@ -132,7 +132,7 @@ Whether the form is currently submitting
 
 > **open**: () => `void`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:312](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L312)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:311](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L311)
 
 Opens the modal
 
@@ -216,7 +216,7 @@ Sets the submitting state
 
 > **toggle**: () => `void`
 
-Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:316](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L316)
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:315](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L315)
 
 Toggles the modal open/close state
 
