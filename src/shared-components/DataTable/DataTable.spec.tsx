@@ -1281,4 +1281,316 @@ describe('DataTable', () => {
     await user.click(deleteBtn);
     expect(onBulk).not.toHaveBeenCalled();
   });
+
+  /* ------------------------------------------------------------------
+   * Selection normalization on page change
+   * ------------------------------------------------------------------ */
+
+  it('normalizes selection to only include keys on current page when page changes', async () => {
+    const user = userEvent.setup();
+    type Row = { id: string; name: string };
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    // 3 items with pageSize=1 means 3 pages
+    const data: Row[] = [
+      { id: '1', name: 'Ada' },
+      { id: '2', name: 'Bob' },
+      { id: '3', name: 'Charlie' },
+    ];
+    const onSelectionChange = vi.fn();
+
+    render(
+      <DataTable<Row>
+        data={data}
+        columns={columns}
+        selectable
+        rowKey="id"
+        paginationMode="client"
+        pageSize={1}
+        selectedKeys={new Set(['1'])}
+        onSelectionChange={onSelectionChange}
+      />,
+    );
+
+    // Initially on page 1, selection '1' is on current page
+    expect(screen.getByText('Ada')).toBeInTheDocument();
+
+    // Navigate to page 2 - this should trigger normalization
+    const nextButton = screen.getByRole('button', { name: /next/i });
+    await user.click(nextButton);
+
+    // After page change, selection should be normalized (cleared since '1' is not on page 2)
+    expect(onSelectionChange).toHaveBeenCalled();
+    const lastCall =
+      onSelectionChange.mock.calls[onSelectionChange.mock.calls.length - 1];
+    // The normalized selection should be empty (no keys from page 2 were in the original selection)
+    expect(lastCall[0].size).toBe(0);
+  });
+
+  it('keeps selections that exist on the new page after page change', async () => {
+    const user = userEvent.setup();
+    type Row = { id: string; name: string };
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data: Row[] = [
+      { id: '1', name: 'Ada' },
+      { id: '2', name: 'Bob' },
+    ];
+
+    // Start with selection that includes key '2' (which will be on page 2)
+    const { rerender } = render(
+      <DataTable<Row>
+        data={data}
+        columns={columns}
+        selectable
+        rowKey="id"
+        paginationMode="client"
+        pageSize={2}
+        initialSelectedKeys={new Set(['1', '2'])}
+      />,
+    );
+
+    // Both items on page 1, both selected
+    expect(screen.getByTestId('select-row-1')).toBeChecked();
+    expect(screen.getByTestId('select-row-2')).toBeChecked();
+
+    // Now re-render with pageSize=1 to force page change behavior
+    rerender(
+      <DataTable<Row>
+        data={data}
+        columns={columns}
+        selectable
+        rowKey="id"
+        paginationMode="client"
+        pageSize={1}
+        initialSelectedKeys={new Set(['1', '2'])}
+      />,
+    );
+
+    // On page 1 with pageSize=1, only '1' is visible and should be checked
+    expect(screen.getByTestId('select-row-1')).toBeChecked();
+  });
+
+  /* ------------------------------------------------------------------
+   * renderRow warnings for selectable and rowActions
+   * ------------------------------------------------------------------ */
+
+  it('warns when renderRow is used with selectable prop', () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const originalEnv = process.env.NODE_ENV;
+    (process.env as any).NODE_ENV = 'development';
+
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ name: 'Ada' }];
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        selectable
+        renderRow={(row) => (
+          <tr key={row.name}>
+            <td>{row.name}</td>
+          </tr>
+        )}
+      />,
+    );
+
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining(
+        '`selectable` is ignored when `renderRow` is provided',
+      ),
+    );
+
+    warnSpy.mockRestore();
+    (process.env as any).NODE_ENV = originalEnv;
+  });
+
+  it('warns when renderRow is used with rowActions prop', () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const originalEnv = process.env.NODE_ENV;
+    (process.env as any).NODE_ENV = 'development';
+
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ name: 'Ada' }];
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        rowActions={[{ id: 'edit', label: 'Edit', onClick: () => {} }]}
+        renderRow={(row) => (
+          <tr key={row.name}>
+            <td>{row.name}</td>
+          </tr>
+        )}
+      />,
+    );
+
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining(
+        '`rowActions` is ignored when `renderRow` is provided',
+      ),
+    );
+
+    warnSpy.mockRestore();
+    (process.env as any).NODE_ENV = originalEnv;
+  });
+
+  /* ------------------------------------------------------------------
+   * Development warnings for pagination props
+   * ------------------------------------------------------------------ */
+
+  it('warns when currentPage is provided without onPageChange', () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const originalEnv = process.env.NODE_ENV;
+    (process.env as any).NODE_ENV = 'development';
+
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ name: 'Ada' }];
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        paginationMode="client"
+        currentPage={1}
+        // Note: onPageChange is intentionally NOT provided
+      />,
+    );
+
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining(
+        '`currentPage` was provided without `onPageChange`',
+      ),
+    );
+
+    warnSpy.mockRestore();
+    (process.env as any).NODE_ENV = originalEnv;
+  });
+
+  it('warns when paginationMode is server but totalItems is not provided', () => {
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const originalEnv = process.env.NODE_ENV;
+    (process.env as any).NODE_ENV = 'development';
+
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ name: 'Ada' }];
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        paginationMode="server"
+        pageInfo={{ hasNextPage: true, hasPreviousPage: false }}
+        onLoadMore={() => {}}
+        // Note: totalItems is intentionally NOT provided
+      />,
+    );
+
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining(
+        '`paginationMode="server"` requires `totalItems`',
+      ),
+    );
+
+    warnSpy.mockRestore();
+    (process.env as any).NODE_ENV = originalEnv;
+  });
+
+  it('calls onPageChange callback when page is changed in controlled mode', async () => {
+    const user = userEvent.setup();
+    const onPageChange = vi.fn();
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ name: 'Ada' }, { name: 'Bob' }, { name: 'Charlie' }];
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        paginationMode="client"
+        pageSize={1}
+        currentPage={1}
+        onPageChange={onPageChange}
+      />,
+    );
+
+    // Click next page button
+    const nextButton = screen.getByRole('button', { name: /next/i });
+    await user.click(nextButton);
+
+    expect(onPageChange).toHaveBeenCalledWith(2);
+  });
+
+  /* ------------------------------------------------------------------
+   * loadingMore skeleton rows with selection and row actions columns
+   * ------------------------------------------------------------------ */
+
+  it('renders skeleton cells for selection and actions columns when loadingMore with selectable and rowActions', () => {
+    type Row = { id: string; name: string };
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data: Row[] = [{ id: '1', name: 'Ada' }];
+
+    render(
+      <DataTable<Row>
+        data={data}
+        columns={columns}
+        selectable
+        rowKey="id"
+        rowActions={[{ id: 'edit', label: 'Edit', onClick: () => {} }]}
+        loadingMore
+        skeletonRows={2}
+      />,
+    );
+
+    // Should have skeleton append rows
+    const appendedRows = document.querySelectorAll(
+      '[data-testid^="skeleton-append-"]',
+    );
+    expect(appendedRows.length).toBe(2);
+
+    // Each skeleton row should have cells for: selection column + data columns + actions column
+    // That's 1 (select) + 1 (name) + 1 (actions) = 3 cells
+    appendedRows.forEach((row) => {
+      const cells = row.querySelectorAll('td');
+      expect(cells.length).toBe(3);
+    });
+  });
+
+  it('bulk action does not run when disabled function returns true', async () => {
+    const user = userEvent.setup();
+    const onBulk = vi.fn();
+    type Row = { id: string; name: string };
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data: Row[] = [{ id: '1', name: 'Ada' }];
+
+    render(
+      <DataTable<Row>
+        data={data}
+        columns={columns}
+        selectable
+        rowKey="id"
+        bulkActions={[
+          {
+            id: 'delete',
+            label: 'Delete',
+            onClick: onBulk,
+            disabled: () => true, // Always disabled
+          },
+        ]}
+      />,
+    );
+
+    // Select row
+    await user.click(screen.getByTestId('select-row-1'));
+
+    // The button is rendered via BulkActionsBar
+    const deleteBtn = screen.getByTestId('bulk-action-delete');
+    expect(deleteBtn).toBeDisabled();
+
+    // Directly calling runBulkAction through the button click (even if disabled, we should test the internal logic)
+    // Actually, BulkActionsBar renders the button with the disabled prop.
+    // To hit line 389 'if (isDisabled) return;', we can rely on the onClick handler calling runBulkAction.
+    await user.click(deleteBtn);
+
+    expect(onBulk).not.toHaveBeenCalled();
+  });
 });

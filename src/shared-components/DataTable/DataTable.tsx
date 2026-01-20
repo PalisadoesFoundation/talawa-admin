@@ -2,8 +2,6 @@ import React from 'react';
 import Table from 'react-bootstrap/Table';
 import type {
   IDataTableProps,
-  IColumnDef,
-  HeaderRender,
   Key,
   IBulkAction,
 } from '../../types/shared-components/DataTable/interface';
@@ -14,22 +12,11 @@ import { ActionsCell } from './cells/ActionsCell';
 import { BulkActionsBar } from './BulkActionsBar';
 import styles from './DataTable.module.css';
 import { useTranslation } from 'react-i18next';
+import { renderHeader, renderCellValue, getCellValue } from './utils';
+import { useDataTableFiltering } from './hooks/useDataTableFiltering';
+import { useDataTableSelection } from './hooks/useDataTableSelection';
 
 // translation-check-keyPrefix: common
-
-function renderHeader(header: HeaderRender) {
-  return typeof header === 'function' ? header() : header;
-}
-
-function renderCellValue(value: unknown) {
-  if (value == null) return '';
-  if (typeof value === 'string' || typeof value === 'number') return value;
-  try {
-    return JSON.stringify(value);
-  } catch {
-    return '';
-  }
-}
 
 /**
  * DataTable is a reusable, typed table component for displaying tabular data with loading, empty, and error states.
@@ -88,108 +75,24 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   const isControlled = currentPage !== undefined && onPageChange !== undefined;
   const page = isControlled ? currentPage : internalPage;
 
-  // --- Filtering & Search Logic ---
+  const handlePageReset = React.useCallback(() => {
+    if (!isControlled) setInternalPage(1);
+  }, [isControlled]);
 
-  // Controlled / uncontrolled global search
-  const controlledSearch =
-    typeof globalSearch === 'string' &&
-    typeof onGlobalSearchChange === 'function';
-  const [uQuery, setUQuery] = React.useState(initialGlobalSearch);
-  const query = controlledSearch ? (globalSearch as string) : uQuery;
-
-  // Controlled / uncontrolled column filters
-  const controlledFilters =
-    !!columnFilters && typeof onColumnFiltersChange === 'function';
-  const [uFilters, _setUFilters] = React.useState<Record<string, unknown>>({});
-  const filters = controlledFilters
-    ? (columnFilters as Record<string, unknown>)
-    : uFilters;
-
-  function updateGlobalSearch(next: string) {
-    if (controlledSearch && onGlobalSearchChange) onGlobalSearchChange(next);
-    else setUQuery(next);
-    // Reset to first page on search change if using client pagination
-    if (paginationMode === 'client' && !isControlled) setInternalPage(1);
-  }
-
-  // Note: Per-column filter UI can be added in the future.
-  // When implemented, add an updateColumnFilters function here to update
-  // the filters state and call onColumnFiltersChange callback.
-
-  // Helper to get raw cell value
-  function getCellValue(row: T, accessor: IColumnDef<T>['accessor']) {
-    return typeof accessor === 'function'
-      ? accessor(row)
-      : row[accessor as keyof T];
-  }
-
-  // Helper for text search interactions
-  function toSearchableString(v: unknown): string {
-    if (v === null || v === undefined) return '';
-    if (v instanceof Date) return v.toISOString();
-    return String(v);
-  }
-
-  // Client-side filtering pipeline (skip when server flags are set)
-  const filteredRows: T[] = React.useMemo(() => {
-    let rows = data ?? [];
-    if (!rows.length) return rows;
-
-    // 1) Per-column filters
-    if (!serverFilter && filters && Object.keys(filters).length > 0) {
-      rows = rows.filter((row) => {
-        for (const [colId, filterValueRaw] of Object.entries(filters)) {
-          const col = columns.find((c) => c.id === colId);
-          if (!col) continue;
-          if (col.meta?.filterable === false) continue; // opt-out
-
-          const filterValue = filterValueRaw;
-          if (
-            filterValue === '' ||
-            filterValue === undefined ||
-            filterValue === null
-          )
-            continue;
-
-          if (typeof col.meta?.filterFn === 'function') {
-            if (!col.meta.filterFn(row, filterValue)) return false;
-            continue;
-          }
-
-          // Default text "contains" (case-insensitive) for strings, equals for others
-          const cell = getCellValue(row, col.accessor);
-          if (typeof filterValue === 'string') {
-            const hay = toSearchableString(cell).toLowerCase();
-            const needle = filterValue.toLowerCase();
-            if (!hay.includes(needle)) return false;
-          } else {
-            // shallow equality fallback
-            if (cell !== filterValue) return false;
-          }
-        }
-        return true;
-      });
-    }
-
-    // 2) Global search across searchable columns
-    const q = (query ?? '').trim().toLowerCase();
-    if (!serverSearch && q) {
-      const searchable = columns.filter((c) => c.meta?.searchable !== false);
-      rows = rows.filter((row) => {
-        return searchable.some((col) => {
-          if (typeof col.meta?.getSearchValue === 'function') {
-            return col.meta.getSearchValue(row).toLowerCase().includes(q);
-          }
-          const v = getCellValue(row, col.accessor);
-          return toSearchableString(v).toLowerCase().includes(q);
-        });
-      });
-    }
-
-    return rows;
-  }, [data, columns, filters, serverFilter, query, serverSearch]);
-
-  // --- End Filtering Logic ---
+  // Filtering & Search Logic (Extracted to hook)
+  const { query, updateGlobalSearch, filteredRows } = useDataTableFiltering({
+    data,
+    columns,
+    initialGlobalSearch,
+    globalSearch,
+    onGlobalSearchChange,
+    columnFilters,
+    onColumnFiltersChange,
+    serverSearch,
+    serverFilter,
+    paginationMode,
+    onPageReset: handlePageReset,
+  });
 
   // Track warning state for each console.warn to prevent spam independently
   const hasWarnedCurrentPageRef = React.useRef(false);
@@ -208,6 +111,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
       );
     }
   }, [currentPage, onPageChange]);
+
   React.useEffect(() => {
     if (
       process.env.NODE_ENV !== 'production' &&
@@ -221,6 +125,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
       );
     }
   }, [paginationMode, totalItems]);
+
   const handlePageChange = (newPage: number) => {
     if (onPageChange) {
       onPageChange(newPage);
@@ -231,12 +136,10 @@ export function DataTable<T>(props: IDataTableProps<T>) {
 
   // Client-side data slicing and pagination control visibility
   const shouldSliceClientSide = paginationMode === 'client';
-  // Show pagination controls for client mode OR server mode with pageInfo (variant A)
   const showPaginationControls =
     paginationMode === 'client' ||
     (paginationMode === 'server' && pageInfo !== undefined);
 
-  // NOTE: We use filteredRows here instead of data!
   const startIndex = shouldSliceClientSide ? (page - 1) * pageSize : 0;
   const endIndex = shouldSliceClientSide
     ? startIndex + pageSize
@@ -271,65 +174,30 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     [rowKey],
   );
 
-  // Selection state (controlled or uncontrolled)
-  const isSelectionControlled =
-    selectedKeys !== undefined && onSelectionChange !== undefined;
-  const [internalSelectedKeys, setInternalSelectedKeys] = React.useState<
-    Set<Key>
-  >(new Set(initialSelectedKeys ?? []));
-  const currentSelection = React.useMemo(
-    () =>
-      isSelectionControlled ? new Set(selectedKeys) : internalSelectedKeys,
-    [isSelectionControlled, selectedKeys, internalSelectedKeys],
-  );
-
-  const updateSelection = React.useCallback(
-    (next: Set<Key>) => {
-      if (isSelectionControlled && onSelectionChange) {
-        onSelectionChange(next);
-      } else {
-        setInternalSelectedKeys(new Set(next));
-      }
-    },
-    [isSelectionControlled, onSelectionChange],
-  );
-
-  // Selection helpers
   const keysOnPage = React.useMemo(
     () => paginatedData.map((r, i) => getKey(r, startIndex + i)),
     [paginatedData, getKey, startIndex],
   );
 
-  // Normalize selection on page change: only keep selections that exist on the current page
-  // This ensures bulk actions and selection counts are consistent with visible rows
-  const keysOnPageSet = React.useMemo(() => new Set(keysOnPage), [keysOnPage]);
-  React.useEffect(() => {
-    // Compute intersection of currentSelection with keysOnPage
-    const normalizedSelection = new Set<Key>();
-    for (const key of currentSelection) {
-      if (keysOnPageSet.has(key)) {
-        normalizedSelection.add(key);
-      }
-    }
-    // Only update if there are stale keys (selections from other pages)
-    if (normalizedSelection.size !== currentSelection.size) {
-      updateSelection(normalizedSelection);
-    }
-  }, [keysOnPageSet]); // eslint-disable-line react-hooks/exhaustive-deps
-  // Note: We intentionally omit currentSelection and updateSelection from deps
-  // to avoid infinite loops. This effect should only run when the page changes.
-
-  const selectedCountOnPage = React.useMemo(
-    () => keysOnPage.filter((k) => currentSelection.has(k)).length,
-    [keysOnPage, currentSelection],
-  );
-
-  const allSelectedOnPage =
-    selectable &&
-    keysOnPage.length > 0 &&
-    selectedCountOnPage === keysOnPage.length;
-  const someSelectedOnPage =
-    selectable && selectedCountOnPage > 0 && !allSelectedOnPage;
+  // Selection & Selection-based Actions Logic (Extracted to hook)
+  const {
+    currentSelection,
+    selectedCountOnPage,
+    allSelectedOnPage,
+    someSelectedOnPage,
+    toggleRowSelection,
+    selectAllOnPage,
+    clearSelection,
+    runBulkAction,
+  } = useDataTableSelection({
+    paginatedData,
+    keysOnPage,
+    selectable,
+    selectedKeys,
+    onSelectionChange,
+    initialSelectedKeys,
+    bulkActions,
+  });
 
   // Header checkbox ref for indeterminate state
   const headerCheckboxRef = React.useRef<HTMLInputElement>(null);
@@ -339,64 +207,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     }
   }, [someSelectedOnPage]);
 
-  const toggleRowSelection = React.useCallback(
-    (key: Key) => {
-      const next = new Set(currentSelection);
-      if (next.has(key)) {
-        next.delete(key);
-      } else {
-        next.add(key);
-      }
-      updateSelection(next);
-    },
-    [currentSelection, updateSelection],
-  );
-
-  const selectAllOnPage = React.useCallback(
-    (checked: boolean) => {
-      const next = new Set(currentSelection);
-      if (checked) {
-        keysOnPage.forEach((k) => next.add(k));
-      } else {
-        keysOnPage.forEach((k) => next.delete(k));
-      }
-      updateSelection(next);
-    },
-    [currentSelection, keysOnPage, updateSelection],
-  );
-
-  const clearSelection = React.useCallback(() => {
-    const next = new Set(currentSelection);
-    keysOnPage.forEach((k) => next.delete(k));
-    updateSelection(next);
-  }, [currentSelection, keysOnPage, updateSelection]);
-
-  const runBulkAction = React.useCallback(
-    (action: IBulkAction<T>) => {
-      // Use keysOnPage for stable key derivation (avoids issues when getKey falls back to index)
-      const selectedKeysOnPage = keysOnPage.filter((k) =>
-        currentSelection.has(k),
-      );
-      const selectedRows = paginatedData.filter((_, i) =>
-        currentSelection.has(keysOnPage[i]),
-      );
-
-      const isDisabled =
-        typeof action.disabled === 'function'
-          ? action.disabled(selectedRows, selectedKeysOnPage)
-          : !!action.disabled;
-
-      if (isDisabled) return;
-
-      if (action.confirm && !window.confirm(action.confirm)) return;
-
-      void action.onClick(selectedRows, selectedKeysOnPage);
-    },
-    [paginatedData, currentSelection, keysOnPage],
-  );
-
   // When renderRow is provided, disable selection/actions to prevent column count mismatch
-  // The custom renderRow doesn't know about the selection/actions columns
   const effectiveSelectable = renderRow ? false : selectable;
   const effectiveRowActions = renderRow ? [] : rowActions;
 
@@ -418,12 +229,10 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     }
   }, [renderRow, selectable, rowActions]);
 
-  // Check if we should show row actions column
   const hasRowActions = effectiveRowActions && effectiveRowActions.length > 0;
-  // Check if we should show bulk actions bar
   const hasBulkActions = bulkActions && bulkActions.length > 0;
 
-  // 1) Error state (highest priority)
+  // 1) Error state
   if (error) {
     return (
       <div
@@ -445,7 +254,6 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   }
 
   // 2) Table with skeleton rows when loading (initial load, no data)
-  // Check if we have no data at all (ignore filters for initial load check)
   if (loading && (!data || data.length === 0)) {
     return (
       <div className={styles.dataTableWrapper} data-testid="datatable-loading">
@@ -491,7 +299,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     );
   }
 
-  // 3) Empty state (if no rows after filter or empty dataset)
+  // 3) Empty state
   if (!loading && (!paginatedData || paginatedData.length === 0)) {
     return (
       <div className={styles.dataTableWrapper}>
@@ -517,7 +325,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     );
   }
 
-  // 4) Table content with optional loading overlay and partial loading
+  // 4) Data view
   return (
     <div className={styles.dataTableWrapper}>
       {showSearch && (
@@ -532,7 +340,6 @@ export function DataTable<T>(props: IDataTableProps<T>) {
         </div>
       )}
 
-      {/* Loading overlay for refetch state */}
       {loading && loadingOverlay && (
         <TableLoader
           columns={columns}
@@ -542,7 +349,6 @@ export function DataTable<T>(props: IDataTableProps<T>) {
         />
       )}
 
-      {/* Bulk actions bar */}
       {effectiveSelectable && hasBulkActions && (
         <BulkActionsBar count={selectedCountOnPage} onClear={clearSelection}>
           {bulkActions.map((action) => {
@@ -591,6 +397,9 @@ export function DataTable<T>(props: IDataTableProps<T>) {
                   ref={headerCheckboxRef}
                   type="checkbox"
                   aria-label={tCommon('selectAllOnPage')}
+                  aria-checked={
+                    someSelectedOnPage ? 'mixed' : allSelectedOnPage
+                  }
                   checked={allSelectedOnPage}
                   onChange={(e) => selectAllOnPage(e.currentTarget.checked)}
                   data-testid="select-all-checkbox"
@@ -660,7 +469,6 @@ export function DataTable<T>(props: IDataTableProps<T>) {
                 );
               })}
 
-          {/* Partial loading: append skeleton rows for fetchMore */}
           {loadingMore &&
             Array.from({ length: skeletonRows }).map((_, rowIdx) => (
               <tr
