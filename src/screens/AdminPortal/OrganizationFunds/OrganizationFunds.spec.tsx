@@ -19,8 +19,10 @@ import i18nForTest from 'utils/i18nForTest';
 import OrganizationFunds from './OrganizationFunds';
 import { MOCKS, MOCKS_ERROR, NO_FUNDS } from './OrganizationFundsMocks';
 import type { ApolloLink } from '@apollo/client';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DatePicker';
 import { vi, afterEach } from 'vitest';
 
 async function wait(ms = 500): Promise<void> {
@@ -99,7 +101,7 @@ describe('OrganizationFunds Screen =>', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
     cleanup();
   });
 
@@ -205,9 +207,9 @@ describe('OrganizationFunds Screen =>', () => {
       expect(modalTitle).toHaveTextContent(translations.fundCreate);
     });
 
-    await userEvent.click(screen.getByTestId('fundModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() => {
-      expect(screen.queryByTestId('fundModalCloseBtn')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
 
@@ -228,9 +230,9 @@ describe('OrganizationFunds Screen =>', () => {
         screen.getAllByText(translations.fundUpdate)[0],
       ).toBeInTheDocument(),
     );
-    await userEvent.click(screen.getByTestId('fundModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
-      expect(screen.queryByTestId('fundModalCloseBtn')).toBeNull(),
+      expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
   });
 
