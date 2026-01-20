@@ -34,10 +34,10 @@ export class PeoplePage {
   }
 
   clickAddExistingMember(timeout = 40000) {
-    // Click the dropdown toggle first (SortingButton with testIdPrefix="addMembers")
     cy.get(this._addMembersBtn, { timeout }).should('be.visible').click();
-    // Wait for dropdown menu to appear and click the existingUser option
-    cy.get(this._existingUserToggle, { timeout }).should('be.visible').click();
+    cy.get(this._existingUserToggle, { timeout })
+      .should('be.visible')
+      .trigger('click');
     return this;
   }
 
@@ -62,19 +62,7 @@ export class PeoplePage {
   deleteMember(name: string, timeout = 40000) {
     this.searchMemberByName(name, timeout);
     this.verifyMemberInList(name, timeout);
-
-    // Wait for DataGrid to stabilize after search
-    cy.wait(1000);
-
-    // Scope search to DataGrid rows to avoid matching headers/other UI
-    cy.get('.MuiDataGrid-row', { timeout })
-      .contains(name)
-      .should('be.visible')
-      .parents('.MuiDataGrid-row')
-      .find(this._removeModalBtn)
-      .should('be.visible')
-      .click();
-
+    cy.get(this._removeModalBtn, { timeout }).should('be.visible').click();
     cy.get(this._confirmRemoveBtn, { timeout }).should('be.visible').click();
     cy.get(this._alert, { timeout })
       .should('be.visible')
