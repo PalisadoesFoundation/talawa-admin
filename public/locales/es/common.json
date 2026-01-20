@@ -114,6 +114,7 @@
   "createdEarliest": "Creado más temprano",
   "searchBy": "Buscar por {{item}}",
   "viewDetails": "Ver detalles",
+  "markComplete": "Marcar como completado",
   "plugins": "Complementos",
   "save": "Guardar",
   "saving": "Guardando...",

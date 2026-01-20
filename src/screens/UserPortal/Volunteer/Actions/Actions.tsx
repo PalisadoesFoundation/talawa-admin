@@ -208,6 +208,7 @@ function Actions(): JSX.Element {
           data-testid="statusCheckbox"
           checked={p.row.isCompleted}
           onChange={() => handleModalClick(p.row, ModalState.STATUS)}
+          aria-label={tCommon('markComplete')}
         />
       ),
     },
