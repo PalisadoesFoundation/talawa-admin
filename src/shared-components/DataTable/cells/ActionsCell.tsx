@@ -7,6 +7,7 @@ import styles from './ActionsCell.module.css';
  *
  * @typeParam T - The type of the row data
  * @param props - Props containing row data and action definitions
+ * @returns The rendered actions cell element
  */
 export function ActionsCell<T>(
   props: InterfaceActionsCellProps<T>,
