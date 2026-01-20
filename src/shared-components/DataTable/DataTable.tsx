@@ -300,6 +300,25 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     [paginatedData, getKey, startIndex],
   );
 
+  // Normalize selection on page change: only keep selections that exist on the current page
+  // This ensures bulk actions and selection counts are consistent with visible rows
+  const keysOnPageSet = React.useMemo(() => new Set(keysOnPage), [keysOnPage]);
+  React.useEffect(() => {
+    // Compute intersection of currentSelection with keysOnPage
+    const normalizedSelection = new Set<Key>();
+    for (const key of currentSelection) {
+      if (keysOnPageSet.has(key)) {
+        normalizedSelection.add(key);
+      }
+    }
+    // Only update if there are stale keys (selections from other pages)
+    if (normalizedSelection.size !== currentSelection.size) {
+      updateSelection(normalizedSelection);
+    }
+  }, [keysOnPageSet]); // eslint-disable-line react-hooks/exhaustive-deps
+  // Note: We intentionally omit currentSelection and updateSelection from deps
+  // to avoid infinite loops. This effect should only run when the page changes.
+
   const selectedCountOnPage = React.useMemo(
     () => keysOnPage.filter((k) => currentSelection.has(k)).length,
     [keysOnPage, currentSelection],
