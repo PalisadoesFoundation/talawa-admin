@@ -45,6 +45,7 @@
   "enterEmail": "ईमेल दर्ज करें",
   "emailAddress": "ईमेल पता",
   "email": "ईमेल",
+  "emailPlaceholder": "name@example.com",
   "name": "नाम",
   "desc": "विवरण",
   "enterPassword": "पासवर्ड दर्ज करें",
