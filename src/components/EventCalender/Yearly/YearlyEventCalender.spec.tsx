@@ -449,7 +449,9 @@ describe('Calendar Component', () => {
       fireEvent.click(expandButton as HTMLButtonElement);
     });
     await waitFor(() => {
-      expect(screen.getByText('No Event Available!')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18n.t('userEvents.noEventAvailable')),
+      ).toBeInTheDocument();
     });
   });
 
@@ -760,7 +762,9 @@ describe('Calendar Component', () => {
     }
 
     await waitFor(() => {
-      expect(screen.getByText('No Event Available!')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18n.t('userEvents.noEventAvailable')),
+      ).toBeInTheDocument();
     });
 
     expect(screen.queryByText('NonMember Private Event')).toBeNull();
@@ -788,7 +792,9 @@ describe('Calendar Component', () => {
     }
 
     await waitFor(() => {
-      expect(screen.getByText('No Event Available!')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18n.t('userEvents.noEventAvailable')),
+      ).toBeInTheDocument();
     });
   });
 

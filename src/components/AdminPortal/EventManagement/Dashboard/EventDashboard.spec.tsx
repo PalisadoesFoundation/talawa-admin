@@ -212,7 +212,9 @@ describe('Testing Event Dashboard Screen', () => {
     const { getByTestId } = renderEventDashboard(mockNoLocation);
     await wait();
 
-    expect(getByTestId('event-location')).toHaveTextContent('N/A');
+    expect(getByTestId('event-location')).toHaveTextContent(
+      i18nForTest.t('eventListCard.notAvailable'),
+    );
     expect(getByTestId('event-name')).toHaveTextContent('Test Event');
   });
 
@@ -287,16 +289,24 @@ describe('Testing Event Dashboard Screen', () => {
     const { getByTestId } = renderEventDashboard(mockWithTime);
     await wait();
 
-    expect(getByTestId('registrations-count')).toHaveTextContent('N/A');
-    expect(getByTestId('attendees-count')).toHaveTextContent('N/A');
-    expect(getByTestId('feedback-rating')).toHaveTextContent('N/A');
+    expect(getByTestId('registrations-count')).toHaveTextContent(
+      i18nForTest.t('eventListCard.notAvailable'),
+    );
+    expect(getByTestId('attendees-count')).toHaveTextContent(
+      i18nForTest.t('eventListCard.notAvailable'),
+    );
+    expect(getByTestId('feedback-rating')).toHaveTextContent(
+      i18nForTest.t('eventListCard.notAvailable'),
+    );
   });
 
   it('Should display event registrants as N/A', async () => {
     const { getByTestId } = renderEventDashboard(mockWithTime);
     await wait();
 
-    expect(getByTestId('event-registrants')).toHaveTextContent('N/A');
+    expect(getByTestId('event-registrants')).toHaveTextContent(
+      i18nForTest.t('eventListCard.notAvailable'),
+    );
   });
 
   it('Should display event-stats section', async () => {
