@@ -32,7 +32,7 @@
 }
 
 .tableHeader {
-  background-color: red;
+  background-color: var(--color-red-500);
   font-weight: bold;
 }
 
@@ -71,8 +71,8 @@
 
 .checkboxButton input:focus {
   border-color: var(--checkbox-focus-border);
-  outline: none;
-  box-shadow: none;
+  outline: 2px solid var(--checkbox-focus-border);
+  outline-offset: 2px;
 }
 
 .dropdown {
@@ -116,12 +116,6 @@
   .btnsContainer {
     flex-direction: column;
     margin: 1.5rem 0;
-  }
-}
-
-@media (max-width: 520px) {
-  .btnsContainer {
-    margin-bottom: 0;
   }
 }
 

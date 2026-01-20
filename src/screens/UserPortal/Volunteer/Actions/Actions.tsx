@@ -129,7 +129,7 @@ function Actions(): JSX.Element {
   const columns: GridColDef[] = [
     {
       field: 'assignee',
-      headerName: 'Assignee',
+      headerName: t('assignee'),
       flex: 1,
       renderCell: (params: GridCellParams) => {
         const user = params.row.volunteer?.user;
@@ -154,7 +154,7 @@ function Actions(): JSX.Element {
     },
     {
       field: 'itemCategory',
-      headerName: 'Item Category',
+      headerName: t('itemCategory'),
       flex: 1,
       renderCell: (p) => (
         <div data-testid="categoryName">{p.row.category?.name}</div>
@@ -162,7 +162,7 @@ function Actions(): JSX.Element {
     },
     {
       field: 'status',
-      headerName: 'Status',
+      headerName: t('status'),
       flex: 1,
       renderCell: (p) => (
         <StatusBadge
@@ -175,7 +175,7 @@ function Actions(): JSX.Element {
     },
     {
       field: 'assignedAt',
-      headerName: 'Assigned Date',
+      headerName: t('assignedDate'),
       flex: 1,
       renderCell: (p) => (
         <div data-testid="assignedAt">
@@ -185,13 +185,14 @@ function Actions(): JSX.Element {
     },
     {
       field: 'options',
-      headerName: 'Options',
+      headerName: t('options'),
       flex: 1,
       renderCell: (p) => (
         <Button
           size="sm"
           data-testid="viewItemBtn"
           onClick={() => handleModalClick(p.row, ModalState.VIEW)}
+          aria-label={tCommon('viewDetails')}
         >
           <i className="fa fa-info" />
         </Button>
@@ -199,7 +200,7 @@ function Actions(): JSX.Element {
     },
     {
       field: 'completed',
-      headerName: 'Completed',
+      headerName: t('completed'),
       flex: 1,
       renderCell: (p) => (
         <input
