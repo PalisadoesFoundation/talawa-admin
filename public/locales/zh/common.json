@@ -24,6 +24,21 @@
   "menu": "菜单",
   "settings": "设置",
   "users": "用户",
+  "checkInRegistrantsAriaLabel": "签到登记者",
+  "auth": {
+    "emailField": {
+      "label": "Email",
+      "placeholder": "name@example.com"
+    }
+  },
+  "recurrence": {
+    "daily": "Daily",
+    "weeklyOn": "Weekly on {{day}}",
+    "monthlyOn": "Monthly on day {{day}}",
+    "annuallyOn": "Annually on {{month}} {{day}}",
+    "everyWeekday": "Every weekday (Monday to Friday)",
+    "custom": "Custom..."
+  },
   "requests": "请求",
   "OR": "或",
   "cancel": "取消",

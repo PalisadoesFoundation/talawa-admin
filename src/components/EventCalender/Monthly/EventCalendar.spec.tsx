@@ -337,21 +337,6 @@ describe('Calendar', () => {
     // Since I can't easily guarantee which day has event without updated mocks, I'll search by class if it exists
     const eventDays = document.getElementsByClassName('day__events');
     expect(eventDays.length).toBeGreaterThan(0);
-
-    // Check selected day (simulate click)
-    // The component currently does not implement click-to-select functionality (no onClick handler on day div)
-    // so we skip testing it to avoid false negatives.
-    /*
-    const todayDate = new Date().getDate().toString();
-    const dayToSelect = screen
-      .getAllByTestId('day')
-      .find((el) => el.textContent?.startsWith(todayDate));
-    if (dayToSelect) {
-      fireEvent.click(dayToSelect);
-    }
-    expect(dayToSelect).toBeDefined();
-    expect(dayToSelect).toHaveClass('day__selected');
-    */
   });
 
   it('Should handle window resize in day view', async () => {
@@ -461,7 +446,6 @@ describe('Calendar', () => {
 
     // Check for "View all" button if there are more than 2 events
     const viewAllButton = await screen.findAllByTestId('more');
-    console.log('hi', viewAllButton); // This will show the buttons found in the test
     expect(viewAllButton.length).toBeGreaterThan(0);
 
     // Simulate clicking the "View all" button to expand the list

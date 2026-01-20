@@ -287,5 +287,13 @@
   "attendedEventsList": "उपस्थित इवेंट की सूची",
   "linkCopied": "लिंक क्लिपबोर्ड पर कॉपी किया गया",
   "copyToClipboardError": "लिंक क्लिपबोर्ड पर कॉपी करने में त्रुटि",
-  "share": "शेयर करें"
+  "share": "शेयर करें",
+  "recurrence": {
+    "daily": "Daily",
+    "weeklyOn": "Weekly on {{day}}",
+    "monthlyOn": "Monthly on day {{day}}",
+    "annuallyOn": "Annually on {{month}} {{day}}",
+    "everyWeekday": "Every weekday (Monday to Friday)",
+    "custom": "Custom..."
+  }
 }

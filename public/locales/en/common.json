@@ -287,5 +287,13 @@
   "attendedEventsList": "Attended events list",
   "linkCopied": "Link copied to clipboard",
   "copyToClipboardError": "Error copying link to clipboard",
-  "share": "Share"
+  "share": "Share",
+  "recurrence": {
+    "daily": "Daily",
+    "weeklyOn": "Weekly on {{day}}",
+    "monthlyOn": "Monthly on day {{day}}",
+    "annuallyOn": "Annually on {{month}} {{day}}",
+    "everyWeekday": "Every weekday (Monday to Friday)",
+    "custom": "Custom..."
+  }
 }

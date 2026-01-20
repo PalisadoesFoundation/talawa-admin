@@ -42,6 +42,21 @@
   "saveChanges": "Save Changes",
   "resetChanges": "Reset Changes",
   "displayImage": "Display Image",
+  "checkInRegistrantsAriaLabel": "Registrar asistentes",
+  "auth": {
+    "emailField": {
+      "label": "Email",
+      "placeholder": "name@example.com"
+    }
+  },
+  "recurrence": {
+    "daily": "Daily",
+    "weeklyOn": "Weekly on {{day}}",
+    "monthlyOn": "Monthly on day {{day}}",
+    "annuallyOn": "Annually on {{month}} {{day}}",
+    "everyWeekday": "Every weekday (Monday to Friday)",
+    "custom": "Custom..."
+  },
   "enterEmail": "Enter Email",
   "emailAddress": "Email Address",
   "email": "Email",
