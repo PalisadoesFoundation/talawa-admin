@@ -15,6 +15,8 @@ import { BulkActionsBar } from './BulkActionsBar';
 import styles from './DataTable.module.css';
 import { useTranslation } from 'react-i18next';
 
+// translation-check-keyPrefix: common
+
 function renderHeader(header: HeaderRender) {
   return typeof header === 'function' ? header() : header;
 }
@@ -608,7 +610,9 @@ export function DataTable<T>(props: IDataTableProps<T>) {
                       <td className={styles.selectCol}>
                         <input
                           type="checkbox"
-                          aria-label={`Select row ${String(rowKeyValue)}`}
+                          aria-label={tCommon('selectRow', {
+                            rowKey: String(rowKeyValue),
+                          })}
                           checked={isRowSelected}
                           onChange={() => toggleRowSelection(rowKeyValue)}
                           data-testid={`select-row-${rowKeyValue}`}

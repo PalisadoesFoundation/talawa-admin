@@ -2284,7 +2284,8 @@
     "selected": "selected",
     "clear": "Clear",
     "clearSelection": "Clear selection",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "selectRow": "Select row {{rowKey}}"
   },
   "donation": {
     "amount_label": "Amount",
