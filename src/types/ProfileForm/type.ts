@@ -1,4 +1,4 @@
-export interface FormStateType {
+export interface IFormState {
   addressLine1: string;
   addressLine2: string;
   birthDate: string | null;

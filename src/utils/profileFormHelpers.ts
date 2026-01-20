@@ -11,7 +11,7 @@ import { IFormState } from 'types/ProfileForm/type';
 
 type Translator = (
   key: string,
-  options?: Record<string, unknown>
+  options?: Record<string, unknown>,
 ) => string;
 
 interface UpdateCurrentUser {
@@ -32,7 +32,7 @@ export const prepareUpdatePayload = async (
   userId: string,
   isUser: boolean,
   isAdmin: boolean,
-  tCommon: Translator
+  tCommon: Translator,
 ): Promise<Record<string, unknown> | null> => {
   let avatarFile: File | null = null;
 
@@ -40,14 +40,12 @@ export const prepareUpdatePayload = async (
     try {
       avatarFile = await urlToFile(formState.avatarURL);
     } catch {
-      NotificationToast.error(
-        tCommon('profilePictureUploadError')
-      );
+      NotificationToast.error(tCommon('profilePictureUploadError'));
       return null;
     }
   }
 
-  const data: Record<string, unknown> = {
+  const data: Record<string, string | File | null> = {
     addressLine1: formState.addressLine1,
     addressLine2: formState.addressLine2,
     birthDate: formState.birthDate,
@@ -75,7 +73,7 @@ export const prepareUpdatePayload = async (
 
 export const updateLocalStorageProfile = (
   updateData: UpdateResponse,
-  setItem: (key: string, value: string) => void
+  setItem: (key: string, value: string) => void,
 ): void => {
   const { updateCurrentUser } = updateData;
 
@@ -95,14 +93,14 @@ export const handleProfileUpdate = async (
   setSelectedAvatar: (avatar: File | null) => void,
   setIsUpdated: (updated: boolean) => void,
   tCommon: Translator,
-  t: Translator
+  t: Translator,
 ): Promise<void> => {
   try {
     const { data: updateData } = await executeUpdate(input);
 
     if (updateData) {
       NotificationToast.success(
-        tCommon('updatedSuccessfully', { item: 'Profile' })
+        tCommon('updatedSuccessfully', { item: 'Profile' }),
       );
 
       if (isUser || isAdmin) {
@@ -118,7 +116,7 @@ export const handleProfileUpdate = async (
 };
 
 export const determineUserContext = (
-  pathname: string
+  pathname: string,
 ): { isUser: boolean; isAdmin: boolean } => {
   const pathParts = pathname.split('/');
   const isUser = pathParts[1] === 'user';
