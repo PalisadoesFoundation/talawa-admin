@@ -290,11 +290,5 @@
   "copyToClipboardError": "Erreur lors de la copie du lien dans le presse-papiers",
   "share": "Partager",
   "viewEventStatistics": "Voir les statistiques de l'événement",
-  "checkInRegistrantsAriaLabel": "Enregistrer les participants",
-  "auth": {
-    "emailField": {
-      "label": "E-mail",
-      "placeholder": "name@example.com"
-    }
-  }
+  "checkInRegistrantsAriaLabel": "Enregistrer les participants"
 }

@@ -10,8 +10,8 @@ vi.mock('react-i18next', async () => {
     useTranslation: () => ({
       t: (key: string) => {
         const translations: Record<string, string> = {
-          label: 'Email',
-          placeholder: 'name@example.com',
+          email: 'Email',
+          emailPlaceholder: 'name@example.com',
         };
         return translations[key] || key;
       },
