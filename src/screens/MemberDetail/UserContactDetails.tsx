@@ -83,7 +83,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     document.title = t('title');
   }, [t]);
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
-  const { data, loading } = useQuery(GET_USER_BY_ID, {
+  const { data, loading, error } = useQuery(GET_USER_BY_ID, {
     variables: {
       input: {
         id: currentId,
@@ -92,6 +92,10 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     },
   });
   useEffect(() => {
+    if (error) {
+      NotificationToast.error(t('failedToLoadUserData'));
+      return;
+    }
     if (!data?.user) return;
     const { birthDate, ...rest } = data.user;
     setFormState((prev) => ({
@@ -99,7 +103,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
       ...rest,
       birthDate: birthDate ? dayjs(birthDate).format('YYYY-MM-DD') : '',
     }));
-  }, [data]);
+  }, [data, error, t]);
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target?.files?.[0];
     if (!file) return;
@@ -182,7 +186,9 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
       });
       if (updateData)
         NotificationToast.success(
-          tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
+          tCommon('updatedSuccessfully', {
+            item: tCommon('profile'),
+          }) as string,
         );
       setSelectedAvatar(null);
       setisUpdated(false);
@@ -210,7 +216,9 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                 disabled
                 className="rounded-pill fw-bolder"
               >
-                {data?.user?.role === 'administrator' ? 'Admin' : 'User'}
+                {data?.user?.role === 'administrator'
+                  ? tCommon('admin')
+                  : tCommon('user')}
               </Button>
             </Card.Header>
             <Card.Body className="py-3 px-3">
@@ -239,16 +247,12 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                       />
                     )}
                     <button
+                      type="button"
                       className={`fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle ${styles.userContactDetailContactAvatarEditIcon}`}
                       onClick={() => fileInputRef.current?.click()}
                       data-testid="uploadImageBtn"
                       title={tCommon('userEditProfilePicture')}
-                      role="button"
                       aria-label={tCommon('userEditProfilePicture')}
-                      tabIndex={0}
-                      onKeyDown={(e) =>
-                        e.key === 'Enter' && fileInputRef.current?.click()
-                      }
                     />
                   </div>
                 </div>
@@ -345,7 +349,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                   </label>
                   <DynamicDropDown
                     formState={formState}
-                    data-testid="'employmentstatus-dropdown-btn"
+                    data-testid="employmentstatus-dropdown-btn"
                     setFormState={setFormState}
                     fieldOptions={employmentStatusEnum}
                     fieldName="employmentStatus"

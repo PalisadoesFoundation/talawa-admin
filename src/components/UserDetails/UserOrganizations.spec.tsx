@@ -26,11 +26,18 @@ vi.mock('react-router', async (importOriginal) => {
   };
 });
 
-vi.mock('utils/useLocalstorage', () => ({
-  default: () => ({
-    getItem: vi.fn(() => null),
-  }),
-}));
+vi.mock('utils/useLocalstorage', () => {
+  const getItemFn = vi.fn((key: string) => {
+    if (key === 'id' || key === 'userId') return 'user-1';
+    return null;
+  });
+
+  return {
+    default: () => ({
+      getItem: getItemFn,
+    }),
+  };
+});
 
 // ---- DATA ---- //
 
@@ -92,14 +99,6 @@ const mockJoinedOrganizationsData = {
     },
   },
 };
-
-// ---- MOCKS ---- //
-
-vi.mock('utils/useLocalstorage', () => ({
-  default: () => ({
-    getItem: vi.fn(() => 'user-1'),
-  }),
-}));
 
 vi.mock(
   'shared-components/PeopleTabUserOrganizations/PeopleTabUserOrganizations',
@@ -490,7 +489,7 @@ describe('UserOrganizations', () => {
                   name: 'Org Without Description',
                   adminsCount: 1,
                   membersCount: 2,
-                  description: undefined, // 👈 important
+                  description: undefined,
                   avatarURL: '',
                 },
               ],
@@ -530,6 +529,68 @@ describe('UserOrganizations', () => {
       expect(screen.getByText('Org Without Description')).toBeInTheDocument();
 
       // fallback text rendered
+      expect(screen.getByText('No Description')).toBeInTheDocument();
+    });
+  });
+
+  it('falls back to default values for edge organizations', async () => {
+    // Mock useQuery to return edge with missing fields
+    mockUseQuery.mockImplementation((query: DocumentNode) => {
+      if (query === USER_DETAILS) {
+        return {
+          data: {
+            user: {
+              createdOrganizations: [],
+              organizationsWhereMember: {
+                edges: [
+                  {
+                    node: {
+                      id: 'edge-org-1',
+                      name: 'Edge Org',
+                      adminsCount: undefined, //   missing adminsCount
+                      membersCount: undefined, //   missing membersCount
+                      description: undefined, //   missing description
+                      avatarURL: undefined,
+                    },
+                  },
+                ],
+              },
+            },
+          },
+          loading: false,
+          error: undefined,
+          refetch: vi.fn(),
+        };
+      }
+
+      if (query === USER_JOINED_ORGANIZATIONS_NO_MEMBERS) {
+        return {
+          data: {
+            user: {
+              organizationsWhereMember: { edges: [] },
+            },
+          },
+          loading: false,
+          error: undefined,
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        refetch: vi.fn(),
+      };
+    });
+
+    renderComponent();
+
+    await waitFor(() => {
+      // The org should render
+      expect(screen.getByText('Edge Org')).toBeInTheDocument();
+
+      // Check fallback description
       expect(screen.getByText('No Description')).toBeInTheDocument();
     });
   });

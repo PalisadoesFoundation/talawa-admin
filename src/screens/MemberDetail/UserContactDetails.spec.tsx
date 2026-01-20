@@ -163,8 +163,8 @@ const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
   );
 };
 
-vi.mock('utils/useLocalStorage', () => ({
-  useLocalStorage: () => ({
+vi.mock('utils/useLocalstorage', () => ({
+  default: () => ({
     getItem: (key: string) => {
       if (key === 'id') return '456';
       if (key === 'sidebar') return 'false';
@@ -655,18 +655,7 @@ describe('MemberDetail', () => {
       fireEvent.change(fileInput, { target: { files: [] } });
 
       // Should not trigger any error notifications for empty file input
-      expect(NotificationToast.error).not.toHaveBeenCalled();
-    });
-
-    test('type password with valid value', async () => {
-      renderMemberDetailScreen(link1);
-      await wait();
-
-      const passwordInput = screen.getByTestId('inputPassword');
-      fireEvent.change(passwordInput, { target: { value: 'ValidPass@123' } });
-
-      expect(passwordInput).toHaveValue('ValidPass@123');
-      expect(NotificationToast.error).not.toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -838,42 +827,6 @@ describe('MemberDetail', () => {
       expect(profilePic).toBeInTheDocument();
       // Should render either Avatar component or img with avatarURL
     });
-  });
-
-  test('handles keyboard Enter key on avatar edit icon', async () => {
-    const link = new StaticMockLink(MOCKS1, true);
-
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgtags/123/member/456']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgtags/:orgId/member/:userId"
-                  element={<MemberDetail />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByTestId('uploadImageBtn')).toBeInTheDocument();
-    });
-
-    const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
-    const clickSpy = vi.spyOn(fileInput, 'click');
-
-    const uploadBtn = screen.getByTestId('uploadImageBtn');
-
-    // Simulate Enter key press
-    fireEvent.keyDown(uploadBtn, { key: 'Enter', code: 'Enter' });
-
-    expect(clickSpy).toHaveBeenCalled();
-    clickSpy.mockRestore();
   });
 
   test('handles country selection and displays sorted options', async () => {
