@@ -396,8 +396,10 @@ describe('Testing People Screen [User Portal]', () => {
     await userEvent.type(screen.getByTestId('searchInput'), 'Ad{enter}');
     await wait(SEARCH_DEBOUNCE_MS);
 
-    expect(screen.queryByText('Admin User')).toBeInTheDocument();
-    expect(screen.queryByText('Test User')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText('Admin User')).toBeInTheDocument();
+      expect(screen.queryByText('Test User')).not.toBeInTheDocument();
+    });
   });
 
   it('Search works properly by clicking search Btn', async () => {
@@ -422,8 +424,10 @@ describe('Testing People Screen [User Portal]', () => {
     await userEvent.click(searchBtn);
     await wait();
 
-    expect(screen.queryByText('Admin User')).toBeInTheDocument();
-    expect(screen.queryByText('Test User')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByText('Admin User')).toBeInTheDocument();
+      expect(screen.queryByText('Test User')).not.toBeInTheDocument();
+    });
   });
 
   it('Mode is changed to Admins', async () => {
