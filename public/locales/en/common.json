@@ -285,5 +285,6 @@
   "attendedEventsList": "Attended events list",
   "linkCopied": "Link copied to clipboard",
   "copyToClipboardError": "Error copying link to clipboard",
-  "share": "Share"
+  "share": "Share",
+  "failedToLoadUserData": "Failed to load user data"
 }

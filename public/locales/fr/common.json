@@ -285,5 +285,6 @@
   "attendedEventsList": "Liste des événements suivis",
   "linkCopied": "Lien copié dans le presse-papiers",
   "copyToClipboardError": "Erreur lors de la copie du lien dans le presse-papiers",
-  "share": "Partager"
+  "share": "Partager",
+  "failedToLoadUserData": "Échec du chargement des données utilisateur"
 }

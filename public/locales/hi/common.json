@@ -285,5 +285,6 @@
   "attendedEventsList": "उपस्थित इवेंट की सूची",
   "linkCopied": "लिंक क्लिपबोर्ड पर कॉपी किया गया",
   "copyToClipboardError": "लिंक क्लिपबोर्ड पर कॉपी करने में त्रुटि",
-  "share": "शेयर करें"
+  "share": "शेयर करें",
+  "failedToLoadUserData": "उपयोगकर्ता डेटा लोड करने में विफल"
 }
