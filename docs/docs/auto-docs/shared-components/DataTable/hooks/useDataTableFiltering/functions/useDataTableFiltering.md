@@ -6,7 +6,7 @@
 
 > **useDataTableFiltering**\<`T`\>(`options`): `object`
 
-Defined in: src/shared-components/DataTable/hooks/useDataTableFiltering.ts:22
+Defined in: [src/shared-components/DataTable/hooks/useDataTableFiltering.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/hooks/useDataTableFiltering.ts#L22)
 
 Hook to manage DataTable filtering and search logic.
 
@@ -20,7 +20,7 @@ Hook to manage DataTable filtering and search logic.
 
 ### options
 
-`UseDataTableFilteringOptions`\<`T`\>
+`IUseDataTableFilteringOptions`\<`T`\>
 
 ## Returns
 

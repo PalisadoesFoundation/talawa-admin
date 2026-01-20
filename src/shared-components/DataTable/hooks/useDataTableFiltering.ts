@@ -2,7 +2,7 @@ import React from 'react';
 import { IColumnDef } from '../../../types/shared-components/DataTable/interface';
 import { getCellValue, toSearchableString } from '../utils';
 
-interface UseDataTableFilteringOptions<T> {
+interface IUseDataTableFilteringOptions<T> {
   data: T[];
   columns: Array<IColumnDef<T>>;
   initialGlobalSearch?: string;
@@ -20,7 +20,7 @@ interface UseDataTableFilteringOptions<T> {
  * Hook to manage DataTable filtering and search logic.
  */
 export function useDataTableFiltering<T>(
-  options: UseDataTableFilteringOptions<T>,
+  options: IUseDataTableFilteringOptions<T>,
 ) {
   const {
     data,

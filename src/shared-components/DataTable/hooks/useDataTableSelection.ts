@@ -4,7 +4,7 @@ import {
   IBulkAction,
 } from '../../../types/shared-components/DataTable/interface';
 
-interface UseDataTableSelectionOptions<T> {
+interface IUseDataTableSelectionOptions<T> {
   paginatedData: T[];
   keysOnPage: Key[];
   selectable?: boolean;
@@ -18,7 +18,7 @@ interface UseDataTableSelectionOptions<T> {
  * Hook to manage DataTable selection and bulk action logic.
  */
 export function useDataTableSelection<T>(
-  options: UseDataTableSelectionOptions<T>,
+  options: IUseDataTableSelectionOptions<T>,
 ) {
   const {
     paginatedData,
@@ -67,7 +67,7 @@ export function useDataTableSelection<T>(
     if (normalizedSelection.size !== currentSelection.size) {
       updateSelection(normalizedSelection);
     }
-  }, [keysOnPageSet]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [keysOnPageSet, currentSelection, updateSelection]);
 
   const selectedCountOnPage = React.useMemo(
     () => keysOnPage.filter((k) => currentSelection.has(k)).length,

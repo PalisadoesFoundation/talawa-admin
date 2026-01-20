@@ -1,10 +1,6 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
-import type {
-  IDataTableProps,
-  Key,
-  IBulkAction,
-} from '../../types/shared-components/DataTable/interface';
+import type { IDataTableProps } from '../../types/shared-components/DataTable/interface';
 import { PaginationControls } from './Pagination';
 import { SearchBar } from './SearchBar';
 import { TableLoader } from './TableLoader';

@@ -1327,7 +1327,6 @@ describe('DataTable', () => {
   });
 
   it('keeps selections that exist on the new page after page change', async () => {
-    const user = userEvent.setup();
     type Row = { id: string; name: string };
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data: Row[] = [
@@ -1376,7 +1375,8 @@ describe('DataTable', () => {
   it('warns when renderRow is used with selectable prop', () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const originalEnv = process.env.NODE_ENV;
-    (process.env as any).NODE_ENV = 'development';
+    (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
+      'development';
 
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data = [{ name: 'Ada' }];
@@ -1401,13 +1401,15 @@ describe('DataTable', () => {
     );
 
     warnSpy.mockRestore();
-    (process.env as any).NODE_ENV = originalEnv;
+    (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
+      originalEnv;
   });
 
   it('warns when renderRow is used with rowActions prop', () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const originalEnv = process.env.NODE_ENV;
-    (process.env as any).NODE_ENV = 'development';
+    (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
+      'development';
 
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data = [{ name: 'Ada' }];
@@ -1432,7 +1434,8 @@ describe('DataTable', () => {
     );
 
     warnSpy.mockRestore();
-    (process.env as any).NODE_ENV = originalEnv;
+    (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
+      originalEnv;
   });
 
   /* ------------------------------------------------------------------
@@ -1442,7 +1445,8 @@ describe('DataTable', () => {
   it('warns when currentPage is provided without onPageChange', () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const originalEnv = process.env.NODE_ENV;
-    (process.env as any).NODE_ENV = 'development';
+    (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
+      'development';
 
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data = [{ name: 'Ada' }];
@@ -1464,13 +1468,15 @@ describe('DataTable', () => {
     );
 
     warnSpy.mockRestore();
-    (process.env as any).NODE_ENV = originalEnv;
+    (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
+      originalEnv;
   });
 
   it('warns when paginationMode is server but totalItems is not provided', () => {
     const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const originalEnv = process.env.NODE_ENV;
-    (process.env as any).NODE_ENV = 'development';
+    (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
+      'development';
 
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data = [{ name: 'Ada' }];
@@ -1493,7 +1499,8 @@ describe('DataTable', () => {
     );
 
     warnSpy.mockRestore();
-    (process.env as any).NODE_ENV = originalEnv;
+    (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
+      originalEnv;
   });
 
   it('calls onPageChange callback when page is changed in controlled mode', async () => {

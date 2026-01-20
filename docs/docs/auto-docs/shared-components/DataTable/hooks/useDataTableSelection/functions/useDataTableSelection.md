@@ -6,7 +6,7 @@
 
 > **useDataTableSelection**\<`T`\>(`options`): `object`
 
-Defined in: src/shared-components/DataTable/hooks/useDataTableSelection.ts:20
+Defined in: [src/shared-components/DataTable/hooks/useDataTableSelection.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/hooks/useDataTableSelection.ts#L20)
 
 Hook to manage DataTable selection and bulk action logic.
 
@@ -20,7 +20,7 @@ Hook to manage DataTable selection and bulk action logic.
 
 ### options
 
-`UseDataTableSelectionOptions`\<`T`\>
+`IUseDataTableSelectionOptions`\<`T`\>
 
 ## Returns
 
