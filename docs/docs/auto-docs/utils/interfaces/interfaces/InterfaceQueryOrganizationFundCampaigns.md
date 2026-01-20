@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceQueryOrganizationFundCampaigns
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/interfaces.ts:1209](https://github.com/PalisadoesFoundati
 
 > **edges**: `object`[]
 
-***
+---
 
 ### id
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:1209](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1206](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1206)
 
-***
+---
 
 ### isArchived
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:1206](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1208](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1208)
 
-***
+---
 
 ### name
 

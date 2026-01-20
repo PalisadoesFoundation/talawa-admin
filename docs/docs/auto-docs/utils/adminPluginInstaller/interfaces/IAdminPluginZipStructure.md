@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IAdminPluginZipStructure
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:27](https://github.com/Palisadoes
 
 Defined in: [src/utils/adminPluginInstaller.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L30)
 
-***
+---
 
 ### apiFiles?
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:30](https://github.com/Palisadoes
 
 Defined in: [src/utils/adminPluginInstaller.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L34)
 
-***
+---
 
 ### apiManifest?
 
@@ -30,7 +30,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:34](https://github.com/Palisadoes
 
 Defined in: [src/utils/adminPluginInstaller.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L31)
 
-***
+---
 
 ### files
 
@@ -38,7 +38,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:31](https://github.com/Palisadoes
 
 Defined in: [src/utils/adminPluginInstaller.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L33)
 
-***
+---
 
 ### hasAdminFolder
 
@@ -46,7 +46,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:33](https://github.com/Palisadoes
 
 Defined in: [src/utils/adminPluginInstaller.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L28)
 
-***
+---
 
 ### hasApiFolder
 
@@ -54,7 +54,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:28](https://github.com/Palisadoes
 
 Defined in: [src/utils/adminPluginInstaller.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/adminPluginInstaller.ts#L29)
 
-***
+---
 
 ### pluginId?
 

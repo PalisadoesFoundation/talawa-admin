@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceChatMessagePg
 
@@ -16,7 +16,7 @@ Defines the structure for a chat message with PostgreSQL-specific fields.
 
 Defined in: [src/utils/interfaces.ts:639](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L639)
 
-***
+---
 
 ### chat
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:639](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:640](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L640)
 
-***
+---
 
 ### createdAt
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:640](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:641](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L641)
 
-***
+---
 
 ### creator
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:641](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:642](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L642)
 
-***
+---
 
 ### id
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:642](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:638](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L638)
 
-***
+---
 
 ### parentMessage
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:638](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:643](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L643)
 
-***
+---
 
 ### updatedAt
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: CheckInStatus
 
@@ -16,7 +16,7 @@ Defined in: [src/types/shared-components/CheckIn/type.ts:23](https://github.com/
 
 Defined in: [src/types/shared-components/CheckIn/type.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/type.ts#L24)
 
-***
+---
 
 ### checkIn?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/shared-components/CheckIn/type.ts:24](https://github.com/
 
 Defined in: [src/types/shared-components/CheckIn/type.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/type.ts#L25)
 
-***
+---
 
 ### user
 

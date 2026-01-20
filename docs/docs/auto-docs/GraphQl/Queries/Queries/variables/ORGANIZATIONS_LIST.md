@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: ORGANIZATIONS\_LIST
+# Variable: ORGANIZATIONS_LIST
 
-> `const` **ORGANIZATIONS\_LIST**: `DocumentNode`
+> `const` **ORGANIZATIONS_LIST**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/Queries.ts:775](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L775)

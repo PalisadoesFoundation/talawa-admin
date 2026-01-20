@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: GENERATE\_OTP\_MUTATION
+# Variable: GENERATE_OTP_MUTATION
 
-> `const` **GENERATE\_OTP\_MUTATION**: `DocumentNode`
+> `const` **GENERATE_OTP_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/mutations.ts:487](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L487)

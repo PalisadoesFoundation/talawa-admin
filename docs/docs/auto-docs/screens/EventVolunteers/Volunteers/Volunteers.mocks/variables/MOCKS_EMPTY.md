@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: MOCKS\_EMPTY
+# Variable: MOCKS_EMPTY
 
-> `const` **MOCKS\_EMPTY**: `object`[]
+> `const` **MOCKS_EMPTY**: `object`[]
 
 Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:414](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts#L414)
 
@@ -46,9 +46,9 @@ Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:414](htt
 
 > **hasAccepted**: `any` = `undefined`
 
-#### request.variables.where.name\_contains
+#### request.variables.where.name_contains
 
-> **name\_contains**: `string` = `''`
+> **name_contains**: `string` = `''`
 
 ### result
 

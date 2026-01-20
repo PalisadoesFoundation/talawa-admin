@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrganization
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Post/interface.ts:50](https://github.com/PalisadoesFounda
 
 Defined in: [src/types/Post/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L51)
 
-***
+---
 
 ### pinnedPosts
 
@@ -34,7 +34,7 @@ Defined in: [src/types/Post/interface.ts:57](https://github.com/PalisadoesFounda
 
 > **totalCount**: `number`
 
-***
+---
 
 ### posts
 

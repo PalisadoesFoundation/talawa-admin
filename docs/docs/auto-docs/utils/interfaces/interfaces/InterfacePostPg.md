@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePostPg
 
@@ -16,7 +16,7 @@ Defines the structure for a post with PostgreSQL-specific fields.
 
 Defined in: [src/utils/interfaces.ts:820](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L820)
 
-***
+---
 
 ### commentsCount
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:820](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:821](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L821)
 
-***
+---
 
 ### createdAt
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:821](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:822](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L822)
 
-***
+---
 
 ### creator
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:822](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:823](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L823)
 
-***
+---
 
 ### downVotesCount
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:823](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:824](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L824)
 
-***
+---
 
 ### id
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:824](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:819](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L819)
 
-***
+---
 
 ### organization
 
@@ -64,7 +64,7 @@ Defined in: [src/utils/interfaces.ts:819](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:825](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L825)
 
-***
+---
 
 ### pinnedAt
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:825](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:826](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L826)
 
-***
+---
 
 ### updatedAt
 
@@ -80,7 +80,7 @@ Defined in: [src/utils/interfaces.ts:826](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:828](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L828)
 
-***
+---
 
 ### updater
 
@@ -88,7 +88,7 @@ Defined in: [src/utils/interfaces.ts:828](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:829](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L829)
 
-***
+---
 
 ### upVotesCount
 

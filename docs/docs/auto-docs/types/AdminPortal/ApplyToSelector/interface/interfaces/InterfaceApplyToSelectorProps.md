@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceApplyToSelectorProps
 
@@ -18,7 +18,7 @@ Defined in: [src/types/AdminPortal/ApplyToSelector/interface.ts:13](https://gith
 
 Current selection value ('series' or 'instance')
 
-***
+---
 
 ### onChange()
 

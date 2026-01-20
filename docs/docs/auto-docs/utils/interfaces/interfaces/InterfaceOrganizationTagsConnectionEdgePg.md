@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrganizationTagsConnectionEdgePg
 
@@ -16,7 +16,7 @@ Defines the structure for an edge in the organization tags connection with Postg
 
 Defined in: [src/utils/interfaces.ts:889](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L889)
 
-***
+---
 
 ### node
 

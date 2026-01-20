@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceSortingButtonProps
 
@@ -18,7 +18,7 @@ Defined in: [src/types/shared-components/SortingButton/interface.ts:34](https://
 
 Accessible label for the dropdown button (screen readers)
 
-***
+---
 
 ### buttonLabel?
 
@@ -28,7 +28,7 @@ Defined in: [src/types/shared-components/SortingButton/interface.ts:30](https://
 
 Optional prop for custom button label
 
-***
+---
 
 ### className?
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/SortingButton/interface.ts:28](https://
 
 Custom class name for the Dropdown
 
-***
+---
 
 ### dataTestIdPrefix
 
@@ -48,7 +48,7 @@ Defined in: [src/types/shared-components/SortingButton/interface.ts:24](https://
 
 The prefix for data-testid attributes for testing
 
-***
+---
 
 ### dropdownTestId?
 
@@ -58,7 +58,7 @@ Defined in: [src/types/shared-components/SortingButton/interface.ts:26](https://
 
 The data-testid attribute for the Dropdown
 
-***
+---
 
 ### icon?
 
@@ -66,7 +66,7 @@ The data-testid attribute for the Dropdown
 
 Defined in: [src/types/shared-components/SortingButton/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SortingButton/interface.ts#L35)
 
-***
+---
 
 ### onSortChange()
 
@@ -86,7 +86,7 @@ Callback function to handle sorting option change
 
 `void`
 
-***
+---
 
 ### selectedOption?
 
@@ -96,7 +96,7 @@ Defined in: [src/types/shared-components/SortingButton/interface.ts:20](https://
 
 The currently selected sorting option
 
-***
+---
 
 ### sortingOptions
 
@@ -106,7 +106,7 @@ Defined in: [src/types/shared-components/SortingButton/interface.ts:18](https://
 
 The list of sorting options to display in the Dropdown
 
-***
+---
 
 ### title?
 
@@ -116,7 +116,7 @@ Defined in: [src/types/shared-components/SortingButton/interface.ts:16](https://
 
 The title attribute for the Dropdown
 
-***
+---
 
 ### type?
 

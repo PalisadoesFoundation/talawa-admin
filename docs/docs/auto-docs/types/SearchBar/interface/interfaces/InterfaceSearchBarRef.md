@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceSearchBarRef
 
@@ -22,7 +22,7 @@ Programmatically blur the search input
 
 `void`
 
-***
+---
 
 ### clear()
 
@@ -36,7 +36,7 @@ Clear the search input value and trigger onChange
 
 `void`
 
-***
+---
 
 ### focus()
 

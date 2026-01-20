@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: ADD\_ADMIN\_MUTATION
+# Variable: ADD_ADMIN_MUTATION
 
-> `const` **ADD\_ADMIN\_MUTATION**: `DocumentNode`
+> `const` **ADD_ADMIN_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/mutations.ts:457](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L457)

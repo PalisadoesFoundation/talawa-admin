@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: EVENT\_CHECKINS
+# Variable: EVENT_CHECKINS
 
-> `const` **EVENT\_CHECKINS**: `DocumentNode`
+> `const` **EVENT_CHECKINS**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/Queries.ts:406](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L406)

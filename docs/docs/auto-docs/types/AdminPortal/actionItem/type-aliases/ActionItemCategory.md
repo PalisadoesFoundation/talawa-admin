@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: ActionItemCategory
 
@@ -16,7 +16,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:22](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L23)
 
-***
+---
 
 ### createdAt
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:23](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L24)
 
-***
+---
 
 ### creator?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:24](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L25)
 
-***
+---
 
 ### isDisabled
 
@@ -40,7 +40,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:25](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L26)
 
-***
+---
 
 ### name
 
@@ -48,7 +48,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:26](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L27)
 
-***
+---
 
 ### organization?
 
@@ -56,7 +56,7 @@ Defined in: [src/types/AdminPortal/actionItem.ts:27](https://github.com/Palisado
 
 Defined in: [src/types/AdminPortal/actionItem.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/actionItem.ts#L28)
 
-***
+---
 
 ### updatedAt
 

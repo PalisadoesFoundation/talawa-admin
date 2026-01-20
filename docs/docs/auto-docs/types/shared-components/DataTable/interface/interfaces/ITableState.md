@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: ITableState
 
@@ -16,7 +16,7 @@ Shared table UI state
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:499](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L499)
 
-***
+---
 
 ### globalSearch?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:499](https://git
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:500](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L500)
 
-***
+---
 
 ### selectedRows?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:500](https://git
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:501](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L501)
 
-***
+---
 
 ### sorting?
 

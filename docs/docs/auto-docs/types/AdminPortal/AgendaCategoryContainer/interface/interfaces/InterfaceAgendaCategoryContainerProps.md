@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceAgendaCategoryContainerProps
 
@@ -16,7 +16,7 @@ Props for AgendaCategoryContainer component.
 
 Defined in: [src/types/AdminPortal/AgendaCategoryContainer/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/AgendaCategoryContainer/interface.ts#L6)
 
-***
+---
 
 ### agendaCategoryData
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/AgendaCategoryContainer/interface.ts:6](https
 
 Defined in: [src/types/AdminPortal/AgendaCategoryContainer/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/AgendaCategoryContainer/interface.ts#L7)
 
-***
+---
 
 ### agendaCategoryRefetch()
 

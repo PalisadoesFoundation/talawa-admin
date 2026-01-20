@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: UPDATE\_SESSION\_TIMEOUT\_PG
+# Variable: UPDATE_SESSION_TIMEOUT_PG
 
-> `const` **UPDATE\_SESSION\_TIMEOUT\_PG**: `DocumentNode`
+> `const` **UPDATE_SESSION_TIMEOUT_PG**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/mutations.ts:606](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L606)

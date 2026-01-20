@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceAddress
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1547](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1545](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1545)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### countryCode
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:1548](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1546](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1546)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### dependentLocality
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:1549](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1547](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1547)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### line1
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/interfaces.ts:1550](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1548](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1548)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### line2
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:1551](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1549](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1549)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### postalCode
 
@@ -84,7 +84,7 @@ Defined in: [src/utils/interfaces.ts:1552](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1550](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1550)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### sortingCode
 
@@ -96,7 +96,7 @@ Defined in: [src/utils/interfaces.ts:1553](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1551](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1551)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### state
 

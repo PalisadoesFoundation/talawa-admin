@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceEventVolunteerInfo
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1750](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1768](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1768)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### creator
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:1763](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1781](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1781)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### event
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:1771](https://github.com/PalisadoesFoundati
 
 > **id**: `string`
 
-***
+---
 
 ### groups
 
@@ -100,7 +100,7 @@ Defined in: [src/utils/interfaces.ts:1783](https://github.com/PalisadoesFoundati
 
 > **volunteers**: `object`[]
 
-***
+---
 
 ### hasAccepted
 
@@ -112,7 +112,7 @@ Defined in: [src/utils/interfaces.ts:1744](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1762](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1762)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### hoursVolunteered
 
@@ -124,7 +124,7 @@ Defined in: [src/utils/interfaces.ts:1746](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1764](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1764)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### id
 
@@ -136,7 +136,7 @@ Defined in: [src/utils/interfaces.ts:1743](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1761](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1761)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### isInstanceException
 
@@ -148,7 +148,7 @@ Defined in: [src/utils/interfaces.ts:1749](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1767](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1767)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### isPublic
 
@@ -160,7 +160,7 @@ Defined in: [src/utils/interfaces.ts:1747](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1765](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1765)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### isTemplate
 
@@ -172,7 +172,7 @@ Defined in: [src/utils/interfaces.ts:1748](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1766](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1766)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### updatedAt
 
@@ -184,7 +184,7 @@ Defined in: [src/utils/interfaces.ts:1751](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1769](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1769)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### updater
 
@@ -196,7 +196,7 @@ Defined in: [src/utils/interfaces.ts:1764](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1782](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1782)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### user
 
@@ -208,7 +208,7 @@ Defined in: [src/utils/interfaces.ts:1752](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1770](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1770)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### volunteerStatus
 

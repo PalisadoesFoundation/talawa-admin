@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceViewModalProps
 
@@ -29,7 +29,7 @@ Whether to center the modal vertically on the page
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`centered`](InterfaceCrudModalBaseProps.md#centered)
 
-***
+---
 
 ### children
 
@@ -40,7 +40,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:242](htt
 Content to display in the modal body
 Parent should pass formatted data display as children
 
-***
+---
 
 ### className?
 
@@ -54,7 +54,7 @@ Additional CSS class name for the modal
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`className`](InterfaceCrudModalBaseProps.md#classname)
 
-***
+---
 
 ### customActions?
 
@@ -65,7 +65,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:253](htt
 Optional custom action buttons to display in the footer
 Useful for actions like "Edit" or "Delete" from the view modal
 
-***
+---
 
 ### data-testid?
 
@@ -79,7 +79,7 @@ Test ID for the modal container (useful for testing)
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`data-testid`](InterfaceCrudModalBaseProps.md#data-testid)
 
-***
+---
 
 ### error?
 
@@ -94,7 +94,7 @@ When provided, shows an Alert component with the error
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`error`](InterfaceCrudModalBaseProps.md#error)
 
-***
+---
 
 ### loading?
 
@@ -109,7 +109,7 @@ When true, displays a loading spinner and disables action buttons
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`loading`](InterfaceCrudModalBaseProps.md#loading)
 
-***
+---
 
 ### loadingData?
 
@@ -119,7 +119,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:247](htt
 
 Whether data is currently being loaded
 
-***
+---
 
 ### onClose()
 
@@ -138,7 +138,7 @@ Triggered by close button, backdrop click, or Escape key
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`onClose`](InterfaceCrudModalBaseProps.md#onclose)
 
-***
+---
 
 ### open?
 
@@ -152,7 +152,7 @@ Controls whether the modal is visible (defaults to false)
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`open`](InterfaceCrudModalBaseProps.md#open)
 
-***
+---
 
 ### primaryText?
 
@@ -166,7 +166,7 @@ Text for the primary action button
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`primaryText`](InterfaceCrudModalBaseProps.md#primarytext)
 
-***
+---
 
 ### secondaryText?
 
@@ -180,7 +180,7 @@ Text for the secondary action button
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`secondaryText`](InterfaceCrudModalBaseProps.md#secondarytext)
 
-***
+---
 
 ### size?
 
@@ -194,7 +194,7 @@ Modal size variant
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`size`](InterfaceCrudModalBaseProps.md#size)
 
-***
+---
 
 ### title
 

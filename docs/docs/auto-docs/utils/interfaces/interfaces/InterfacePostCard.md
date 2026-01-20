@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePostCard
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1586](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1584](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1584)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### body?
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:1588](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1586](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1586)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### commentCount
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:1590](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1588](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1588)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### creator
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:1575](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-***
+---
 
 ### downVoteCount
 
@@ -84,7 +84,7 @@ Defined in: [src/utils/interfaces.ts:1592](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1590](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1590)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### fetchPosts()
 
@@ -100,7 +100,7 @@ Defined in: [src/utils/interfaces.ts:1591](https://github.com/PalisadoesFoundati
 
 `Promise`\<`unknown`\>
 
-***
+---
 
 ### hasUserVoted
 
@@ -112,7 +112,7 @@ Defined in: [src/utils/interfaces.ts:1582](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1580](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1580)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### id
 
@@ -124,7 +124,7 @@ Defined in: [src/utils/interfaces.ts:1575](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1573](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1573)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### isModalView?
 
@@ -136,7 +136,7 @@ Defined in: [src/utils/interfaces.ts:1576](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1574](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1574)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### mimeType?
 
@@ -148,7 +148,7 @@ Defined in: [src/utils/interfaces.ts:1585](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1583](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1583)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### pinnedAt?
 
@@ -160,7 +160,7 @@ Defined in: [src/utils/interfaces.ts:1584](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1582](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1582)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### postedAt
 
@@ -172,7 +172,7 @@ Defined in: [src/utils/interfaces.ts:1583](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1581](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1581)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### text
 
@@ -184,7 +184,7 @@ Defined in: [src/utils/interfaces.ts:1589](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1587](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1587)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### title
 
@@ -196,7 +196,7 @@ Defined in: [src/utils/interfaces.ts:1587](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1585](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1585)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### upVoteCount
 

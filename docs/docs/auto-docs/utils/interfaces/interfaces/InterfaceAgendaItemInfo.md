@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceAgendaItemInfo
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1684](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1702](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1702)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### attachments
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:1688](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1706](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1706)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### categories
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:1719](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-***
+---
 
 ### createdBy
 
@@ -80,7 +80,7 @@ Defined in: [src/utils/interfaces.ts:1707](https://github.com/PalisadoesFoundati
 
 > **lastName**: `string`
 
-***
+---
 
 ### description
 
@@ -92,7 +92,7 @@ Defined in: [src/utils/interfaces.ts:1686](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1704](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1704)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### duration
 
@@ -104,7 +104,7 @@ Defined in: [src/utils/interfaces.ts:1687](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1705](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1705)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### organization
 
@@ -124,7 +124,7 @@ Defined in: [src/utils/interfaces.ts:1723](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-***
+---
 
 ### relatedEvent
 
@@ -144,7 +144,7 @@ Defined in: [src/utils/interfaces.ts:1727](https://github.com/PalisadoesFoundati
 
 > **title**: `string`
 
-***
+---
 
 ### sequence
 
@@ -156,7 +156,7 @@ Defined in: [src/utils/interfaces.ts:1700](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1718](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1718)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### title
 
@@ -168,7 +168,7 @@ Defined in: [src/utils/interfaces.ts:1685](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1703](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1703)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### urls
 
@@ -180,7 +180,7 @@ Defined in: [src/utils/interfaces.ts:1694](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1712](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1712)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### users
 

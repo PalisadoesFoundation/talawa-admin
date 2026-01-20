@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IAttendanceStatisticsModalProps
 
@@ -18,7 +18,7 @@ Defined in: [src/types/Event/interface.ts:191](https://github.com/PalisadoesFoun
 
 `void`
 
-***
+---
 
 ### memberData
 
@@ -26,7 +26,7 @@ Defined in: [src/types/Event/interface.ts:191](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:197](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L197)
 
-***
+---
 
 ### show
 
@@ -34,7 +34,7 @@ Defined in: [src/types/Event/interface.ts:197](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:190](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L190)
 
-***
+---
 
 ### statistics
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Event/interface.ts:192](https://github.com/PalisadoesFoun
 
 > **totalMembers**: `number`
 
-***
+---
 
 ### t()
 

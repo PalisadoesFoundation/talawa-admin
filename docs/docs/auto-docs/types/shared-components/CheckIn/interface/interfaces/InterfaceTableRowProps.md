@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceTableRowProps
 
@@ -16,7 +16,7 @@ Props for TableRow component.
 
 Defined in: [src/types/shared-components/CheckIn/interface.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CheckIn/interface.ts#L52)
 
-***
+---
 
 ### onCheckInUpdate()?
 
@@ -28,7 +28,7 @@ Defined in: [src/types/shared-components/CheckIn/interface.ts:54](https://github
 
 `void`
 
-***
+---
 
 ### refetch()
 

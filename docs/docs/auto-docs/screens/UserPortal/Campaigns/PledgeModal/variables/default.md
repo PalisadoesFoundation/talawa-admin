@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Variable: default
 
@@ -26,12 +26,12 @@ Rendered `PledgeModal` component.
 
 ```tsx
 <PledgeModal
-isOpen={true}
-hide={() => {}}
-campaignId="123"
-userId="456"
-pledge={null}
-refetchPledge={() => {}}
-mode="create"
+  isOpen={true}
+  hide={() => {}}
+  campaignId="123"
+  userId="456"
+  pledge={null}
+  refetchPledge={() => {}}
+  mode="create"
 />
 ```

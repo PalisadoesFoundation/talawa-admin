@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrganizationMembersConnectionPg
 
@@ -16,7 +16,7 @@ Defines the structure for a connection of organization members with PostgreSQL-s
 
 Defined in: [src/utils/interfaces.ts:787](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L787)
 
-***
+---
 
 ### pageInfo
 

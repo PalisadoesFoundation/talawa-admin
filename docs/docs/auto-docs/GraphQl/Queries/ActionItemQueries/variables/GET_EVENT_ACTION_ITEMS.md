@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: GET\_EVENT\_ACTION\_ITEMS
+# Variable: GET_EVENT_ACTION_ITEMS
 
-> `const` **GET\_EVENT\_ACTION\_ITEMS**: `DocumentNode`
+> `const` **GET_EVENT_ACTION_ITEMS**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/ActionItemQueries.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/ActionItemQueries.ts#L85)

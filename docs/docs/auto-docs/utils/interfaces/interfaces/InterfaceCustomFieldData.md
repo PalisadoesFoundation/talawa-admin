@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceCustomFieldData
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1733](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1751](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1751)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### name
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:1734](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1752](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1752)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### organizationId?
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:1736](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1754](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1754)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### type
 

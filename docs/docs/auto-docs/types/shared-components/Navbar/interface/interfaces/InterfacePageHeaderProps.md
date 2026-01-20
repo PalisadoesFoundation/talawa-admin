@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePageHeaderProps
 
@@ -16,7 +16,7 @@ Props for PageHeader (Navbar) component.
 
 Defined in: [src/types/shared-components/Navbar/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L21)
 
-***
+---
 
 ### search?
 
@@ -50,7 +50,7 @@ Defined in: [src/types/shared-components/Navbar/interface.ts:7](https://github.c
 
 > **placeholder**: `string`
 
-***
+---
 
 ### showEventTypeFilter?
 
@@ -58,7 +58,7 @@ Defined in: [src/types/shared-components/Navbar/interface.ts:7](https://github.c
 
 Defined in: [src/types/shared-components/Navbar/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/Navbar/interface.ts#L20)
 
-***
+---
 
 ### sorting?
 
@@ -96,7 +96,7 @@ Defined in: [src/types/shared-components/Navbar/interface.ts:13](https://github.
 
 > **title**: `string`
 
-***
+---
 
 ### title?
 

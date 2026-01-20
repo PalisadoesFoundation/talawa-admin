@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Variable: EmailField
 
@@ -13,6 +13,7 @@ Reusable email input field component.
 ## Remarks
 
 This component wraps FormField with email-specific defaults including:
+
 - HTML5 email input type for built-in validation
 - Default label "Email" and placeholder "name@example.com"
 - Required field marking
@@ -21,9 +22,5 @@ This component wraps FormField with email-specific defaults including:
 ## Example
 
 ```tsx
-<EmailField
-  value={email}
-  onChange={handleEmailChange}
-  error={emailError}
-/>
+<EmailField value={email} onChange={handleEmailChange} error={emailError} />
 ```

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: FeedbackInput
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Event/type.ts:54](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L55)
 
-***
+---
 
 ### rating
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Event/type.ts:55](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L56)
 
-***
+---
 
 ### review?
 

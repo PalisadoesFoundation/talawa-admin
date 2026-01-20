@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceCustomRecurrenceModalProps
 
@@ -18,7 +18,7 @@ Defined in: [src/types/Recurrence/interface.ts:19](https://github.com/Palisadoes
 
 Whether the custom recurrence modal is open
 
-***
+---
 
 ### endDate
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Recurrence/interface.ts:15](https://github.com/Palisadoes
 
 Event end date
 
-***
+---
 
 ### hideCustomRecurrenceModal()
 
@@ -42,7 +42,7 @@ Function to hide the custom recurrence modal
 
 `void`
 
-***
+---
 
 ### recurrenceRuleState
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Recurrence/interface.ts:9](https://github.com/PalisadoesF
 
 Current recurrence rule state
 
-***
+---
 
 ### setCustomRecurrenceModalIsOpen()
 
@@ -72,7 +72,7 @@ Function to set custom recurrence modal open state
 
 `void`
 
-***
+---
 
 ### setEndDate()
 
@@ -92,7 +92,7 @@ Function to set event end date
 
 `void`
 
-***
+---
 
 ### setRecurrenceRuleState()
 
@@ -112,7 +112,7 @@ Function to update recurrence rule state
 
 `void`
 
-***
+---
 
 ### startDate
 
@@ -122,7 +122,7 @@ Defined in: [src/types/Recurrence/interface.ts:29](https://github.com/Palisadoes
 
 Event start date
 
-***
+---
 
 ### t()
 

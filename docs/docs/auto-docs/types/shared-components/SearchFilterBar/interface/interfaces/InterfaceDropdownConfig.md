@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceDropdownConfig
 
@@ -24,10 +24,10 @@ This is passed directly to the SortingButton component's `dataTestIdPrefix` prop
 #### Example
 
 ```ts
-"sortTags", "filterPlugins", "timeFrame"
+('sortTags', 'filterPlugins', 'timeFrame');
 ```
 
-***
+---
 
 ### dropdownTestId?
 
@@ -41,10 +41,10 @@ Optional data-testid for the dropdown element itself.
 #### Example
 
 ```ts
-"filter", "sort", "timeFrame"
+('filter', 'sort', 'timeFrame');
 ```
 
-***
+---
 
 ### id
 
@@ -58,10 +58,10 @@ Used as the React key for stable rendering and should be unique across all dropd
 #### Example
 
 ```ts
-"sort-by-date", "filter-by-status", "group-by-category"
+('sort-by-date', 'filter-by-status', 'group-by-category');
 ```
 
-***
+---
 
 ### label
 
@@ -75,10 +75,10 @@ This is typically a user-facing label like "Sort", "Filter", or "Time Frame".
 #### Example
 
 ```ts
-"Sort", "Filter plugins", "Time Frame"
+('Sort', 'Filter plugins', 'Time Frame');
 ```
 
-***
+---
 
 ### onOptionChange()
 
@@ -108,7 +108,7 @@ The `value` field of the selected option
 onOptionChange={(value) => setSortOrder(value as SortedByType)}
 ```
 
-***
+---
 
 ### options
 
@@ -124,11 +124,11 @@ Each option contains a label (display text) and a value (underlying data).
 ```ts
 [
   { label: 'Latest', value: 'DESCENDING' },
-  { label: 'Oldest', value: 'ASCENDING' }
-]
+  { label: 'Oldest', value: 'ASCENDING' },
+];
 ```
 
-***
+---
 
 ### selectedOption
 
@@ -142,10 +142,10 @@ This should match the `value` field of one of the options in the `options` array
 #### Example
 
 ```ts
-"DESCENDING", "hours_DESC", "all", 0, 1, 2
+('DESCENDING', 'hours_DESC', 'all', 0, 1, 2);
 ```
 
-***
+---
 
 ### title?
 
@@ -159,10 +159,10 @@ Optional title attribute for the dropdown element.
 #### Example
 
 ```ts
-"Filter plugins", "Sort options"
+('Filter plugins', 'Sort options');
 ```
 
-***
+---
 
 ### type
 
@@ -171,5 +171,6 @@ Optional title attribute for the dropdown element.
 Defined in: [src/types/shared-components/SearchFilterBar/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/SearchFilterBar/interface.ts#L54)
 
 The type of dropdown control.
+
 - `'sort'`: Displays a sort icon and is used for ordering data
 - `'filter'`: Displays a filter icon and is used for filtering data

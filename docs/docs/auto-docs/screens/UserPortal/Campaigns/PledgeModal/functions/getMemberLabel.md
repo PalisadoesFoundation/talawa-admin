@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Function: getMemberLabel()
 
@@ -29,8 +29,8 @@ Full name string constructed from available name parts
 
 ```ts
 getMemberLabel({
-firstName: 'John',
-lastName: 'Doe',
+  firstName: 'John',
+  lastName: 'Doe',
 } as InterfaceUserInfoPG);
 // returns "John Doe"
 ```

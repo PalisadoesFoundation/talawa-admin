@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrganizationTagsConnectionPg
 
@@ -16,7 +16,7 @@ Defines the structure for a connection of organization tags with PostgreSQL-spec
 
 Defined in: [src/utils/interfaces.ts:881](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L881)
 
-***
+---
 
 ### pageInfo
 

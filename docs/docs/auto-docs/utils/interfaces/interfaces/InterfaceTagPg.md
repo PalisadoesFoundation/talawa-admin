@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceTagPg
 
@@ -16,7 +16,7 @@ Defines the structure for a tag with PostgreSQL-specific fields.
 
 Defined in: [src/utils/interfaces.ts:899](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L899)
 
-***
+---
 
 ### creator
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:899](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:901](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L901)
 
-***
+---
 
 ### id
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:901](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:897](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L897)
 
-***
+---
 
 ### name
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:897](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:898](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L898)
 
-***
+---
 
 ### organization
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:898](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:903](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L903)
 
-***
+---
 
 ### updatedAt
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:903](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:900](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L900)
 
-***
+---
 
 ### updater
 

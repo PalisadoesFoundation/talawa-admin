@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceEmptyStateProps
 
@@ -8,7 +8,7 @@ Defined in: [src/types/shared-components/EmptyState/interface.ts:7](https://gith
 
 Props interface for the EmptyState component.
 
- InterfaceEmptyStateProps
+InterfaceEmptyStateProps
 
 ## Properties
 
@@ -36,7 +36,7 @@ Action button configuration.
 
 > `optional` **variant**: `"primary"` \| `"secondary"` \| `"outlined"`
 
-***
+---
 
 ### className?
 
@@ -46,7 +46,7 @@ Defined in: [src/types/shared-components/EmptyState/interface.ts:36](https://git
 
 Custom CSS class name.
 
-***
+---
 
 ### dataTestId?
 
@@ -56,7 +56,7 @@ Defined in: [src/types/shared-components/EmptyState/interface.ts:41](https://git
 
 Test identifier.
 
-***
+---
 
 ### description?
 
@@ -66,7 +66,7 @@ Defined in: [src/types/shared-components/EmptyState/interface.ts:17](https://git
 
 Optional secondary description text.
 
-***
+---
 
 ### icon?
 
@@ -76,7 +76,7 @@ Defined in: [src/types/shared-components/EmptyState/interface.ts:22](https://git
 
 Icon to display above the message.
 
-***
+---
 
 ### message
 

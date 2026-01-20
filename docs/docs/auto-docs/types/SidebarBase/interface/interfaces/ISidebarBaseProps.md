@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: ISidebarBaseProps
 
@@ -8,7 +8,7 @@ Defined in: [src/types/SidebarBase/interface.ts:14](https://github.com/Palisadoe
 
 Interface for SidebarBase component props.
 
- ISidebarBaseProps
+ISidebarBaseProps
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: [src/types/SidebarBase/interface.ts:21](https://github.com/Palisadoe
 
 Optional background color override
 
-***
+---
 
 ### children
 
@@ -30,7 +30,7 @@ Defined in: [src/types/SidebarBase/interface.ts:18](https://github.com/Palisadoe
 
 Navigation items and other content
 
-***
+---
 
 ### footerContent?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/SidebarBase/interface.ts:20](https://github.com/Palisadoe
 
 Optional footer content
 
-***
+---
 
 ### headerContent?
 
@@ -50,7 +50,7 @@ Defined in: [src/types/SidebarBase/interface.ts:19](https://github.com/Palisadoe
 
 Optional content after branding (e.g., org section)
 
-***
+---
 
 ### hideDrawer
 
@@ -60,7 +60,7 @@ Defined in: [src/types/SidebarBase/interface.ts:15](https://github.com/Palisadoe
 
 State indicating whether the sidebar is hidden
 
-***
+---
 
 ### persistToggleState?
 
@@ -70,7 +70,7 @@ Defined in: [src/types/SidebarBase/interface.ts:22](https://github.com/Palisadoe
 
 Whether to persist toggle state to localStorage
 
-***
+---
 
 ### portalType
 
@@ -80,7 +80,7 @@ Defined in: [src/types/SidebarBase/interface.ts:17](https://github.com/Palisadoe
 
 Type of portal (admin or user)
 
-***
+---
 
 ### setHideDrawer
 

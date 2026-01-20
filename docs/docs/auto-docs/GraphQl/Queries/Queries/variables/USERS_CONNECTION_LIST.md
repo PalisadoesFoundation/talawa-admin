@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: USERS\_CONNECTION\_LIST
+# Variable: USERS_CONNECTION_LIST
 
-> `const` **USERS\_CONNECTION\_LIST**: `DocumentNode`
+> `const` **USERS_CONNECTION_LIST**: `DocumentNode`
 
 Defined in: [src/GraphQl/Queries/Queries.ts:1068](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L1068)

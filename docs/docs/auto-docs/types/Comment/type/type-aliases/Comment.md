@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: Comment
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Comment/type.ts:4](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/types/Comment/type.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L6)
 
-***
+---
 
 ### creator
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Comment/type.ts:6](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/types/Comment/type.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L7)
 
-***
+---
 
 ### id
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Comment/type.ts:7](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/types/Comment/type.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L5)
 
-***
+---
 
 ### likeCount?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Comment/type.ts:5](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/types/Comment/type.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L8)
 
-***
+---
 
 ### post
 
@@ -48,7 +48,7 @@ Defined in: [src/types/Comment/type.ts:8](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/types/Comment/type.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L9)
 
-***
+---
 
 ### text
 
@@ -56,7 +56,7 @@ Defined in: [src/types/Comment/type.ts:9](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/types/Comment/type.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Comment/type.ts#L10)
 
-***
+---
 
 ### updatedAt
 

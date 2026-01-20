@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: EventInput
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Event/type.ts:60](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L61)
 
-***
+---
 
 ### description
 
@@ -24,7 +24,7 @@ Defined in: [src/types/Event/type.ts:61](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L62)
 
-***
+---
 
 ### endDate?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Event/type.ts:62](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L63)
 
-***
+---
 
 ### endTime?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Event/type.ts:63](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L64)
 
-***
+---
 
 ### isPublic
 
@@ -48,7 +48,7 @@ Defined in: [src/types/Event/type.ts:64](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L65)
 
-***
+---
 
 ### isRegisterable
 
@@ -56,7 +56,7 @@ Defined in: [src/types/Event/type.ts:65](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L66)
 
-***
+---
 
 ### latitude?
 
@@ -64,7 +64,7 @@ Defined in: [src/types/Event/type.ts:66](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L67)
 
-***
+---
 
 ### location?
 
@@ -72,7 +72,7 @@ Defined in: [src/types/Event/type.ts:67](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L68)
 
-***
+---
 
 ### longitude?
 
@@ -80,7 +80,7 @@ Defined in: [src/types/Event/type.ts:68](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L69)
 
-***
+---
 
 ### organizationId
 
@@ -88,7 +88,7 @@ Defined in: [src/types/Event/type.ts:69](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L70)
 
-***
+---
 
 ### recurrence?
 
@@ -96,7 +96,7 @@ Defined in: [src/types/Event/type.ts:70](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L71)
 
-***
+---
 
 ### recurring
 
@@ -104,7 +104,7 @@ Defined in: [src/types/Event/type.ts:71](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L72)
 
-***
+---
 
 ### startDate
 
@@ -112,7 +112,7 @@ Defined in: [src/types/Event/type.ts:72](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L73)
 
-***
+---
 
 ### startTime?
 
@@ -120,7 +120,7 @@ Defined in: [src/types/Event/type.ts:73](https://github.com/PalisadoesFoundation
 
 Defined in: [src/types/Event/type.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L74)
 
-***
+---
 
 ### title
 

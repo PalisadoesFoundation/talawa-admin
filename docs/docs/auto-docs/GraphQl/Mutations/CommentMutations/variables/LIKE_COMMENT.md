@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: LIKE\_COMMENT
+# Variable: LIKE_COMMENT
 
-> `const` **LIKE\_COMMENT**: `DocumentNode`
+> `const` **LIKE_COMMENT**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/CommentMutations.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/CommentMutations.ts#L39)
 

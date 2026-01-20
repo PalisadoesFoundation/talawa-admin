@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceProfileNavigationOptions
 
@@ -14,7 +14,7 @@ Defined in: [src/utils/profileNavigation.ts:3](https://github.com/PalisadoesFoun
 
 Defined in: [src/utils/profileNavigation.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/profileNavigation.ts#L4)
 
-***
+---
 
 ### role?
 

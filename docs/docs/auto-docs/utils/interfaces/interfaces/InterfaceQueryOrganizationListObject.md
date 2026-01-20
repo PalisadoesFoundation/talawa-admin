@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceQueryOrganizationListObject
 
@@ -16,7 +16,7 @@ Defines the structure for an organization list object returned from a query.
 
 Defined in: [src/utils/interfaces.ts:1004](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1004)
 
-***
+---
 
 ### description
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1004](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1005](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1005)
 
-***
+---
 
 ### id
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:1005](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1002](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1002)
 
-***
+---
 
 ### name
 

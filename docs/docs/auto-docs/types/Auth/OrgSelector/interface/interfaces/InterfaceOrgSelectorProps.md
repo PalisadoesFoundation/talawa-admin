@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrgSelectorProps
 
@@ -23,7 +23,7 @@ Defined in: [src/types/Auth/OrgSelector/interface.ts:36](https://github.com/Pali
 
 Whether the selector is disabled
 
-***
+---
 
 ### error?
 
@@ -33,7 +33,7 @@ Defined in: [src/types/Auth/OrgSelector/interface.ts:30](https://github.com/Pali
 
 Error message to display - null or undefined means no error
 
-***
+---
 
 ### label?
 
@@ -43,7 +43,7 @@ Defined in: [src/types/Auth/OrgSelector/interface.ts:42](https://github.com/Pali
 
 Optional custom label text - defaults to "Organization"
 
-***
+---
 
 ### onChange()
 
@@ -63,7 +63,7 @@ Callback invoked when the selected organization changes
 
 `void`
 
-***
+---
 
 ### options
 
@@ -73,7 +73,7 @@ Defined in: [src/types/Auth/OrgSelector/interface.ts:21](https://github.com/Pali
 
 Array of available organizations to select from
 
-***
+---
 
 ### required?
 
@@ -83,7 +83,7 @@ Defined in: [src/types/Auth/OrgSelector/interface.ts:39](https://github.com/Pali
 
 Whether the field is required - shows asterisk if true
 
-***
+---
 
 ### testId?
 
@@ -93,7 +93,7 @@ Defined in: [src/types/Auth/OrgSelector/interface.ts:33](https://github.com/Pali
 
 Test ID for testing purposes
 
-***
+---
 
 ### value?
 

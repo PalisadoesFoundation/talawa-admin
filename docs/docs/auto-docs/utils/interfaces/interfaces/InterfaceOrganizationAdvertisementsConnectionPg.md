@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrganizationAdvertisementsConnectionPg
 
@@ -16,7 +16,7 @@ Defines the structure for a connection of organization advertisements with Postg
 
 Defined in: [src/utils/interfaces.ts:590](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L590)
 
-***
+---
 
 ### pageInfo
 

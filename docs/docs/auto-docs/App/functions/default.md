@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Function: default()
 
@@ -17,6 +17,7 @@ defining how the user can navigate through the app. The function uses React Rout
 and `Route` components to map different URL paths to corresponding screens and components.
 
 ## Important Details
+
 - **UseEffect Hook**: This hook checks user authentication status using the `CHECK_AUTH` GraphQL query.
 - **Routes**:
   - The root route ("/") takes the user to the `LoginPage`.

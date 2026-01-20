@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Variable: DeleteModal
 
@@ -14,6 +14,7 @@ Specialized modal template for delete confirmations.
 Displays warning UI and handles delete operations.
 
 Features:
+
 - Warning icon for visual emphasis
 - Highlighted entity name in confirmation message
 - Support for recurring event deletion patterns

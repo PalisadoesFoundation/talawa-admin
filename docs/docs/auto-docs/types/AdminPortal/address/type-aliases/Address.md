@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: Address
 
@@ -16,7 +16,7 @@ Defined in: [src/types/AdminPortal/address.ts:1](https://github.com/PalisadoesFo
 
 Defined in: [src/types/AdminPortal/address.ts:2](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L2)
 
-***
+---
 
 ### countryCode?
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/address.ts:2](https://github.com/PalisadoesFo
 
 Defined in: [src/types/AdminPortal/address.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L3)
 
-***
+---
 
 ### dependentLocality?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/address.ts:3](https://github.com/PalisadoesFo
 
 Defined in: [src/types/AdminPortal/address.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L4)
 
-***
+---
 
 ### line1?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/AdminPortal/address.ts:4](https://github.com/PalisadoesFo
 
 Defined in: [src/types/AdminPortal/address.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L5)
 
-***
+---
 
 ### line2?
 
@@ -48,7 +48,7 @@ Defined in: [src/types/AdminPortal/address.ts:5](https://github.com/PalisadoesFo
 
 Defined in: [src/types/AdminPortal/address.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L6)
 
-***
+---
 
 ### postalCode?
 
@@ -56,7 +56,7 @@ Defined in: [src/types/AdminPortal/address.ts:6](https://github.com/PalisadoesFo
 
 Defined in: [src/types/AdminPortal/address.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L7)
 
-***
+---
 
 ### sortingCode?
 
@@ -64,7 +64,7 @@ Defined in: [src/types/AdminPortal/address.ts:7](https://github.com/PalisadoesFo
 
 Defined in: [src/types/AdminPortal/address.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/address.ts#L8)
 
-***
+---
 
 ### state?
 

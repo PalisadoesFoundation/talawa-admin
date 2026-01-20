@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceSortingOption
 
@@ -18,7 +18,7 @@ Defined in: [src/types/shared-components/SortingButton/interface.ts:6](https://g
 
 The label to display for the sorting option
 
-***
+---
 
 ### value
 

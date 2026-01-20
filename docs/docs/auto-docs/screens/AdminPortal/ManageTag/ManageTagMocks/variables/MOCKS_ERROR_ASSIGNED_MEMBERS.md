@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: MOCKS\_ERROR\_ASSIGNED\_MEMBERS
+# Variable: MOCKS_ERROR_ASSIGNED_MEMBERS
 
-> `const` **MOCKS\_ERROR\_ASSIGNED\_MEMBERS**: `object`[]
+> `const` **MOCKS_ERROR_ASSIGNED_MEMBERS**: `object`[]
 
 Defined in: [src/screens/AdminPortal/ManageTag/ManageTagMocks.ts:391](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/ManageTagMocks.ts#L391)
 
@@ -50,14 +50,14 @@ Defined in: [src/screens/AdminPortal/ManageTag/ManageTagMocks.ts:391](https://gi
 
 > **firstName**: `object`
 
-#### request.variables.where.firstName.starts\_with
+#### request.variables.where.firstName.starts_with
 
-> **starts\_with**: `string` = `''`
+> **starts_with**: `string` = `''`
 
 #### request.variables.where.lastName
 
 > **lastName**: `object`
 
-#### request.variables.where.lastName.starts\_with
+#### request.variables.where.lastName.starts_with
 
-> **starts\_with**: `string` = `''`
+> **starts_with**: `string` = `''`

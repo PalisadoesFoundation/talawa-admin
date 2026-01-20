@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceQueryOrganizationEventListItem
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:383](https://github.com/PalisadoesFoundatio
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`_id`](InterfaceBaseEvent.md#_id)
 
-***
+---
 
 ### allDay
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:391](https://github.com/PalisadoesFoundatio
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`allDay`](InterfaceBaseEvent.md#allday)
 
-***
+---
 
 ### description
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:385](https://github.com/PalisadoesFoundatio
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`description`](InterfaceBaseEvent.md#description)
 
-***
+---
 
 ### endDate
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/interfaces.ts:387](https://github.com/PalisadoesFoundatio
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`endDate`](InterfaceBaseEvent.md#enddate)
 
-***
+---
 
 ### endTime
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:390](https://github.com/PalisadoesFoundatio
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`endTime`](InterfaceBaseEvent.md#endtime)
 
-***
+---
 
 ### isPublic
 
@@ -84,7 +84,7 @@ Defined in: [src/utils/interfaces.ts:1379](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1377](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1377)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### isRegisterable
 
@@ -96,7 +96,7 @@ Defined in: [src/utils/interfaces.ts:1380](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1378](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1378)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### location
 
@@ -108,7 +108,7 @@ Defined in: [src/utils/interfaces.ts:388](https://github.com/PalisadoesFoundatio
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`location`](InterfaceBaseEvent.md#location)
 
-***
+---
 
 ### recurring
 
@@ -120,7 +120,7 @@ Defined in: [src/utils/interfaces.ts:392](https://github.com/PalisadoesFoundatio
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`recurring`](InterfaceBaseEvent.md#recurring)
 
-***
+---
 
 ### startDate
 
@@ -132,7 +132,7 @@ Defined in: [src/utils/interfaces.ts:386](https://github.com/PalisadoesFoundatio
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`startDate`](InterfaceBaseEvent.md#startdate)
 
-***
+---
 
 ### startTime
 
@@ -144,7 +144,7 @@ Defined in: [src/utils/interfaces.ts:389](https://github.com/PalisadoesFoundatio
 
 [`InterfaceBaseEvent`](InterfaceBaseEvent.md).[`startTime`](InterfaceBaseEvent.md#starttime)
 
-***
+---
 
 ### title
 

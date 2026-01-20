@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IPreviewEventModalProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Event/interface.ts:138](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:151](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L151)
 
-***
+---
 
 ### customRecurrenceModalIsOpen
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Event/interface.ts:151](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L176)
 
-***
+---
 
 ### eventEndDate
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Event/interface.ts:176](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:148](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L148)
 
-***
+---
 
 ### eventListCardProps
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Event/interface.ts:148](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L139)
 
-***
+---
 
 ### eventModalIsOpen
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Event/interface.ts:139](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:140](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L140)
 
-***
+---
 
 ### eventStartDate
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Event/interface.ts:140](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:147](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L147)
 
-***
+---
 
 ### formState
 
@@ -82,7 +82,7 @@ Defined in: [src/types/Event/interface.ts:157](https://github.com/PalisadoesFoun
 
 > **startTime**: `string`
 
-***
+---
 
 ### handleEventUpdate()
 
@@ -94,7 +94,7 @@ Defined in: [src/types/Event/interface.ts:172](https://github.com/PalisadoesFoun
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### hideViewModal()
 
@@ -106,7 +106,7 @@ Defined in: [src/types/Event/interface.ts:141](https://github.com/PalisadoesFoun
 
 `void`
 
-***
+---
 
 ### isRegistered?
 
@@ -114,7 +114,7 @@ Defined in: [src/types/Event/interface.ts:141](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L145)
 
-***
+---
 
 ### openEventDashboard()
 
@@ -126,7 +126,7 @@ Defined in: [src/types/Event/interface.ts:173](https://github.com/PalisadoesFoun
 
 `void`
 
-***
+---
 
 ### publicchecked
 
@@ -134,7 +134,7 @@ Defined in: [src/types/Event/interface.ts:173](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:153](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L153)
 
-***
+---
 
 ### recurrence
 
@@ -142,7 +142,7 @@ Defined in: [src/types/Event/interface.ts:153](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:174](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L174)
 
-***
+---
 
 ### registerEventHandler()
 
@@ -154,7 +154,7 @@ Defined in: [src/types/Event/interface.ts:171](https://github.com/PalisadoesFoun
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### registrablechecked
 
@@ -162,7 +162,7 @@ Defined in: [src/types/Event/interface.ts:171](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:155](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L155)
 
-***
+---
 
 ### setAllDayChecked
 
@@ -170,7 +170,7 @@ Defined in: [src/types/Event/interface.ts:155](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:152](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L152)
 
-***
+---
 
 ### setCustomRecurrenceModalIsOpen
 
@@ -178,7 +178,7 @@ Defined in: [src/types/Event/interface.ts:152](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:177](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L177)
 
-***
+---
 
 ### setEventEndDate
 
@@ -186,7 +186,7 @@ Defined in: [src/types/Event/interface.ts:177](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:150](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L150)
 
-***
+---
 
 ### setEventStartDate
 
@@ -194,7 +194,7 @@ Defined in: [src/types/Event/interface.ts:150](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:149](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L149)
 
-***
+---
 
 ### setFormState()
 
@@ -230,7 +230,7 @@ Defined in: [src/types/Event/interface.ts:164](https://github.com/PalisadoesFoun
 
 `void`
 
-***
+---
 
 ### setPublicChecked
 
@@ -238,7 +238,7 @@ Defined in: [src/types/Event/interface.ts:164](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:154](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L154)
 
-***
+---
 
 ### setRecurrence
 
@@ -246,7 +246,7 @@ Defined in: [src/types/Event/interface.ts:154](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:175](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L175)
 
-***
+---
 
 ### setRegistrableChecked
 
@@ -254,7 +254,7 @@ Defined in: [src/types/Event/interface.ts:175](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Event/interface.ts:156](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L156)
 
-***
+---
 
 ### t()
 
@@ -272,7 +272,7 @@ Defined in: [src/types/Event/interface.ts:143](https://github.com/PalisadoesFoun
 
 `string`
 
-***
+---
 
 ### tCommon()
 
@@ -290,7 +290,7 @@ Defined in: [src/types/Event/interface.ts:144](https://github.com/PalisadoesFoun
 
 `string`
 
-***
+---
 
 ### toggleDeleteModal()
 
@@ -302,7 +302,7 @@ Defined in: [src/types/Event/interface.ts:142](https://github.com/PalisadoesFoun
 
 `void`
 
-***
+---
 
 ### userId
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceCrudModalBaseProps
 
@@ -29,7 +29,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:79](http
 
 Whether to center the modal vertically on the page
 
-***
+---
 
 ### className?
 
@@ -39,7 +39,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:73](http
 
 Additional CSS class name for the modal
 
-***
+---
 
 ### data-testid?
 
@@ -49,7 +49,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:84](http
 
 Test ID for the modal container (useful for testing)
 
-***
+---
 
 ### error?
 
@@ -60,7 +60,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:62](http
 Error message to display in the modal body
 When provided, shows an Alert component with the error
 
-***
+---
 
 ### loading?
 
@@ -71,7 +71,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:56](http
 Indicates whether an async operation is in progress
 When true, displays a loading spinner and disables action buttons
 
-***
+---
 
 ### onClose()
 
@@ -86,7 +86,7 @@ Triggered by close button, backdrop click, or Escape key
 
 `void`
 
-***
+---
 
 ### open?
 
@@ -96,7 +96,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:26](http
 
 Controls whether the modal is visible (defaults to false)
 
-***
+---
 
 ### primaryText?
 
@@ -106,7 +106,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:43](http
 
 Text for the primary action button
 
-***
+---
 
 ### secondaryText?
 
@@ -116,7 +116,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:49](http
 
 Text for the secondary action button
 
-***
+---
 
 ### size?
 
@@ -126,7 +126,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:68](http
 
 Modal size variant
 
-***
+---
 
 ### title
 

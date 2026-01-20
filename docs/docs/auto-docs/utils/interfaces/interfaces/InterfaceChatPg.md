@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceChatPg
 
@@ -16,7 +16,7 @@ Defines the structure for a chat with PostgreSQL-specific fields.
 
 Defined in: [src/utils/interfaces.ts:625](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L625)
 
-***
+---
 
 ### avatarURL
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:625](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:626](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L626)
 
-***
+---
 
 ### createdAt
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:626](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:627](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L627)
 
-***
+---
 
 ### creator
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:627](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:629](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L629)
 
-***
+---
 
 ### description
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:629](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:624](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L624)
 
-***
+---
 
 ### id
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:624](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:622](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L622)
 
-***
+---
 
 ### name
 
@@ -64,7 +64,7 @@ Defined in: [src/utils/interfaces.ts:622](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:623](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L623)
 
-***
+---
 
 ### organization
 
@@ -72,7 +72,7 @@ Defined in: [src/utils/interfaces.ts:623](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:631](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L631)
 
-***
+---
 
 ### updatedAt
 
@@ -80,7 +80,7 @@ Defined in: [src/utils/interfaces.ts:631](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:628](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L628)
 
-***
+---
 
 ### updater
 

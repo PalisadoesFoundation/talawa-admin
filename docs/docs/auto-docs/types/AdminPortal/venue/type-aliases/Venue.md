@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Type Alias: Venue
 
@@ -16,7 +16,7 @@ Defined in: [src/types/AdminPortal/venue.ts:3](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/AdminPortal/venue.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L4)
 
-***
+---
 
 ### capacity
 
@@ -24,7 +24,7 @@ Defined in: [src/types/AdminPortal/venue.ts:4](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/AdminPortal/venue.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L5)
 
-***
+---
 
 ### description?
 
@@ -32,7 +32,7 @@ Defined in: [src/types/AdminPortal/venue.ts:5](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/AdminPortal/venue.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L6)
 
-***
+---
 
 ### imageUrl?
 
@@ -40,7 +40,7 @@ Defined in: [src/types/AdminPortal/venue.ts:6](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/AdminPortal/venue.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L7)
 
-***
+---
 
 ### name
 
@@ -48,7 +48,7 @@ Defined in: [src/types/AdminPortal/venue.ts:7](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/AdminPortal/venue.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/venue.ts#L8)
 
-***
+---
 
 ### organization
 

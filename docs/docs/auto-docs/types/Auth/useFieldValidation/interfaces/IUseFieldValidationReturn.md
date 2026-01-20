@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IUseFieldValidationReturn
 
@@ -18,7 +18,7 @@ Defined in: [src/types/Auth/useFieldValidation.ts:11](https://github.com/Palisad
 
 `void`
 
-***
+---
 
 ### error
 
@@ -26,7 +26,7 @@ Defined in: [src/types/Auth/useFieldValidation.ts:11](https://github.com/Palisad
 
 Defined in: [src/types/Auth/useFieldValidation.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/useFieldValidation.ts#L9)
 
-***
+---
 
 ### validate()
 

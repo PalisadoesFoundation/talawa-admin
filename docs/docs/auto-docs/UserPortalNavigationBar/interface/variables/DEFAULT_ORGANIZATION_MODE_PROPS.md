@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: DEFAULT\_ORGANIZATION\_MODE\_PROPS
+# Variable: DEFAULT_ORGANIZATION_MODE_PROPS
 
-> `const` **DEFAULT\_ORGANIZATION\_MODE\_PROPS**: `Partial`\<[`InterfaceUserPortalNavbarProps`](../interfaces/InterfaceUserPortalNavbarProps.md)\>
+> `const` **DEFAULT_ORGANIZATION_MODE_PROPS**: `Partial`\<[`InterfaceUserPortalNavbarProps`](../interfaces/InterfaceUserPortalNavbarProps.md)\>
 
 Defined in: [src/types/UserPortalNavigationBar/interface.ts:231](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortalNavigationBar/interface.ts#L231)
 

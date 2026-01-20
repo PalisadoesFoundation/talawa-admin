@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IActionItemCategoryInfo
 
@@ -14,7 +14,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:3](https://git
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L8)
 
-***
+---
 
 ### creatorId?
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:8](https://git
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L10)
 
-***
+---
 
 ### description
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:10](https://gi
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L6)
 
-***
+---
 
 ### id
 
@@ -38,7 +38,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:6](https://git
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L4)
 
-***
+---
 
 ### isDisabled
 
@@ -46,7 +46,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:4](https://git
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L7)
 
-***
+---
 
 ### name
 
@@ -54,7 +54,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:7](https://git
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L5)
 
-***
+---
 
 ### organizationId
 
@@ -62,7 +62,7 @@ Defined in: [src/types/shared-components/ActionItems/interface.ts:5](https://git
 
 Defined in: [src/types/shared-components/ActionItems/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ActionItems/interface.ts#L11)
 
-***
+---
 
 ### updatedAt?
 

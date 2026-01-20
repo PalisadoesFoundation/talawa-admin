@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Function: filterByPermissions()
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/utils.ts:82](https://github.com/PalisadoesFoundation/tal
 
 ### T
 
-`T` *extends* `object`
+`T` _extends_ `object`
 
 ## Parameters
 

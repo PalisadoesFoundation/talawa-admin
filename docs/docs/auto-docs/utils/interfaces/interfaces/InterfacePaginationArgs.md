@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePaginationArgs
 
@@ -16,7 +16,7 @@ Defines the arguments for pagination.
 
 Defined in: [src/utils/interfaces.ts:945](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L945)
 
-***
+---
 
 ### before
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:945](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:946](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L946)
 
-***
+---
 
 ### first
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:946](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:947](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L947)
 
-***
+---
 
 ### last
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceAgendaItemsDeleteModalProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Agenda/interface.ts:68](https://github.com/PalisadoesFoun
 
 Defined in: [src/types/Agenda/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Agenda/interface.ts#L69)
 
-***
+---
 
 ### deleteAgendaItemHandler()
 
@@ -26,7 +26,7 @@ Defined in: [src/types/Agenda/interface.ts:71](https://github.com/PalisadoesFoun
 
 `Promise`\<`void`\>
 
-***
+---
 
 ### t()
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Agenda/interface.ts:72](https://github.com/PalisadoesFoun
 
 `string`
 
-***
+---
 
 ### tCommon()
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Agenda/interface.ts:73](https://github.com/PalisadoesFoun
 
 `string`
 
-***
+---
 
 ### toggleDeleteModal()
 

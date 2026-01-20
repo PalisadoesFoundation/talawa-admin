@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IPluginFileValidationResult
 
@@ -14,7 +14,7 @@ Defined in: [src/plugin/services/AdminPluginFileService.ts:19](https://github.co
 
 Defined in: [src/plugin/services/AdminPluginFileService.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L21)
 
-***
+---
 
 ### manifest?
 
@@ -22,7 +22,7 @@ Defined in: [src/plugin/services/AdminPluginFileService.ts:21](https://github.co
 
 Defined in: [src/plugin/services/AdminPluginFileService.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/AdminPluginFileService.ts#L22)
 
-***
+---
 
 ### valid
 

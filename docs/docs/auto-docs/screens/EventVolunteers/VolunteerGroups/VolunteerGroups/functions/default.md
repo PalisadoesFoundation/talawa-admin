@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Function: default()
 
@@ -11,6 +11,7 @@ Defined in: [src/screens/EventVolunteers/VolunteerGroups/VolunteerGroups.tsx:64]
 Renders the Volunteer Groups management screen.
 
 Responsibilities:
+
 - Displays volunteer groups for an event
 - Supports searching by group name or leader via SearchFilterBar
 - Enables sorting by volunteer count
@@ -18,6 +19,7 @@ Responsibilities:
 - Renders assignee avatars and volunteer counts
 
 Localization:
+
 - Uses `common` and `eventVolunteers` namespaces
 
 ## Returns

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceFundInfo
 
@@ -16,7 +16,7 @@ Defines the structure for fund information.
 
 Defined in: [src/utils/interfaces.ts:1291](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1291)
 
-***
+---
 
 ### creator
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:1293](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-***
+---
 
 ### edges
 
@@ -68,7 +68,7 @@ Defined in: [src/utils/interfaces.ts:1298](https://github.com/PalisadoesFoundati
 
 > **startDate**: `string`
 
-***
+---
 
 ### id
 
@@ -76,7 +76,7 @@ Defined in: [src/utils/interfaces.ts:1298](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1285](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1285)
 
-***
+---
 
 ### isArchived
 
@@ -84,7 +84,7 @@ Defined in: [src/utils/interfaces.ts:1285](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1289](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1289)
 
-***
+---
 
 ### isDefault
 
@@ -92,7 +92,7 @@ Defined in: [src/utils/interfaces.ts:1289](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1290](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1290)
 
-***
+---
 
 ### isTaxDeductible
 
@@ -100,7 +100,7 @@ Defined in: [src/utils/interfaces.ts:1290](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1288](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1288)
 
-***
+---
 
 ### name
 
@@ -108,7 +108,7 @@ Defined in: [src/utils/interfaces.ts:1288](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1286](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1286)
 
-***
+---
 
 ### organization
 
@@ -120,7 +120,7 @@ Defined in: [src/utils/interfaces.ts:1294](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-***
+---
 
 ### organizationId
 
@@ -128,7 +128,7 @@ Defined in: [src/utils/interfaces.ts:1294](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1292](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1292)
 
-***
+---
 
 ### refrenceNumber
 
@@ -136,7 +136,7 @@ Defined in: [src/utils/interfaces.ts:1292](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1287](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1287)
 
-***
+---
 
 ### updater
 

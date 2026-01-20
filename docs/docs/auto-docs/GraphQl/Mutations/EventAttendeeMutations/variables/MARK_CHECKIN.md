@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: MARK\_CHECKIN
+# Variable: MARK_CHECKIN
 
-> `const` **MARK\_CHECKIN**: `DocumentNode`
+> `const` **MARK_CHECKIN**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/EventAttendeeMutations.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventAttendeeMutations.ts#L108)
 

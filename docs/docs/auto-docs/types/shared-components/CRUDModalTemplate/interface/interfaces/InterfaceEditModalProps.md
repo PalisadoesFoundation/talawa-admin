@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceEditModalProps
 
@@ -29,7 +29,7 @@ Whether to center the modal vertically on the page
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`centered`](InterfaceCrudModalBaseProps.md#centered)
 
-***
+---
 
 ### children
 
@@ -40,7 +40,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:173](htt
 Form content to render inside the modal body
 Parent should pass form fields pre-populated with entity data
 
-***
+---
 
 ### className?
 
@@ -54,7 +54,7 @@ Additional CSS class name for the modal
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`className`](InterfaceCrudModalBaseProps.md#classname)
 
-***
+---
 
 ### data-testid?
 
@@ -68,7 +68,7 @@ Test ID for the modal container (useful for testing)
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`data-testid`](InterfaceCrudModalBaseProps.md#data-testid)
 
-***
+---
 
 ### error?
 
@@ -83,7 +83,7 @@ When provided, shows an Alert component with the error
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`error`](InterfaceCrudModalBaseProps.md#error)
 
-***
+---
 
 ### loading?
 
@@ -98,7 +98,7 @@ When true, displays a loading spinner and disables action buttons
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`loading`](InterfaceCrudModalBaseProps.md#loading)
 
-***
+---
 
 ### loadingData?
 
@@ -109,7 +109,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:185](htt
 Whether data is currently being loaded
 Shows a loading state while fetching entity data
 
-***
+---
 
 ### onClose()
 
@@ -128,7 +128,7 @@ Triggered by close button, backdrop click, or Escape key
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`onClose`](InterfaceCrudModalBaseProps.md#onclose)
 
-***
+---
 
 ### onSubmit()
 
@@ -149,7 +149,7 @@ Should handle the update logic and return a Promise
 
 `void` \| `Promise`\<`void`\>
 
-***
+---
 
 ### open?
 
@@ -163,7 +163,7 @@ Controls whether the modal is visible (defaults to false)
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`open`](InterfaceCrudModalBaseProps.md#open)
 
-***
+---
 
 ### primaryText?
 
@@ -177,7 +177,7 @@ Text for the primary action button
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`primaryText`](InterfaceCrudModalBaseProps.md#primarytext)
 
-***
+---
 
 ### secondaryText?
 
@@ -191,7 +191,7 @@ Text for the secondary action button
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`secondaryText`](InterfaceCrudModalBaseProps.md#secondarytext)
 
-***
+---
 
 ### size?
 
@@ -205,7 +205,7 @@ Modal size variant
 
 [`InterfaceCrudModalBaseProps`](InterfaceCrudModalBaseProps.md).[`size`](InterfaceCrudModalBaseProps.md#size)
 
-***
+---
 
 ### submitDisabled?
 
@@ -216,7 +216,7 @@ Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:191](htt
 Whether the submit button should be disabled
 Useful for dirty form checking
 
-***
+---
 
 ### title
 

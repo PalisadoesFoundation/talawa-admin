@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Function: askAndSetRecaptcha()
 
@@ -19,6 +19,7 @@ Prompts user to configure reCAPTCHA settings and updates the .env file.
 ## Remarks
 
 This function handles the interactive setup for reCAPTCHA configuration:
+
 - Asks whether to enable reCAPTCHA protection
 - If enabled, prompts for and validates the site key
 - Updates REACT_APP_USE_RECAPTCHA and REACT_APP_RECAPTCHA_SITE_KEY in .env

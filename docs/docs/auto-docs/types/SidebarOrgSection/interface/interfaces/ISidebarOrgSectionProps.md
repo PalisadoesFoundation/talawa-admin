@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: ISidebarOrgSectionProps
 
@@ -8,7 +8,7 @@ Defined in: [src/types/SidebarOrgSection/interface.ts:9](https://github.com/Pali
 
 Interface for SidebarOrgSection component props.
 
- ISidebarOrgSectionProps
+ISidebarOrgSectionProps
 
 ## Properties
 
@@ -20,7 +20,7 @@ Defined in: [src/types/SidebarOrgSection/interface.ts:11](https://github.com/Pal
 
 Whether the drawer is hidden/collapsed
 
-***
+---
 
 ### isProfilePage?
 
@@ -30,7 +30,7 @@ Defined in: [src/types/SidebarOrgSection/interface.ts:12](https://github.com/Pal
 
 Whether current page is the profile page
 
-***
+---
 
 ### orgId
 

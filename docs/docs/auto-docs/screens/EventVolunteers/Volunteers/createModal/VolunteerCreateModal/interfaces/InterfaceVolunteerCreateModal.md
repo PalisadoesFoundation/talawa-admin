@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceVolunteerCreateModal
 
@@ -18,7 +18,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateM
 
 > **id**: `string`
 
-***
+---
 
 ### eventId
 
@@ -26,7 +26,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateM
 
 Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L52)
 
-***
+---
 
 ### hide()
 
@@ -38,7 +38,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateM
 
 `void`
 
-***
+---
 
 ### isOpen
 
@@ -46,7 +46,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateM
 
 Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L50)
 
-***
+---
 
 ### isRecurring?
 
@@ -54,7 +54,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateM
 
 Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L56)
 
-***
+---
 
 ### orgId
 
@@ -62,7 +62,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateM
 
 Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L53)
 
-***
+---
 
 ### recurringEventInstanceId?
 
@@ -70,7 +70,7 @@ Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateM
 
 Defined in: [src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/createModal/VolunteerCreateModal.tsx#L58)
 
-***
+---
 
 ### refetchVolunteers()
 

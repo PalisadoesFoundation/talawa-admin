@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IUpdatePluginInput
 
@@ -14,7 +14,7 @@ Defined in: [src/plugin/graphql-service.ts:38](https://github.com/PalisadoesFoun
 
 Defined in: [src/plugin/graphql-service.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L42)
 
-***
+---
 
 ### id
 
@@ -22,7 +22,7 @@ Defined in: [src/plugin/graphql-service.ts:42](https://github.com/PalisadoesFoun
 
 Defined in: [src/plugin/graphql-service.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L39)
 
-***
+---
 
 ### isActivated?
 
@@ -30,7 +30,7 @@ Defined in: [src/plugin/graphql-service.ts:39](https://github.com/PalisadoesFoun
 
 Defined in: [src/plugin/graphql-service.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L40)
 
-***
+---
 
 ### isInstalled?
 

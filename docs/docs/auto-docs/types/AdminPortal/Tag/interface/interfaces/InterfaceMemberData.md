@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceMemberData
 
@@ -14,7 +14,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:4](https://github.com/Palisa
 
 Defined in: [src/types/AdminPortal/Tag/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L5)
 
-***
+---
 
 ### firstName
 
@@ -22,7 +22,7 @@ Defined in: [src/types/AdminPortal/Tag/interface.ts:5](https://github.com/Palisa
 
 Defined in: [src/types/AdminPortal/Tag/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/Tag/interface.ts#L6)
 
-***
+---
 
 ### lastName
 

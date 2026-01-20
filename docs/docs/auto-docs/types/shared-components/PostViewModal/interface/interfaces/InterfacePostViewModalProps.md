@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePostViewModalProps
 
@@ -22,7 +22,7 @@ Callback invoked when the modal should close.
 
 `void`
 
-***
+---
 
 ### post
 
@@ -32,7 +32,7 @@ Defined in: [src/types/shared-components/PostViewModal/interface.ts:12](https://
 
 The post data to display, or null if not loaded.
 
-***
+---
 
 ### refetch()
 
@@ -46,7 +46,7 @@ Function to refresh post data after mutations.
 
 `Promise`\<`unknown`\>
 
-***
+---
 
 ### show
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IBaseDataTableProps\<T, TValue\>
 
@@ -29,7 +29,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:357](https://git
 Optional accessible label for the table, used for both the visually hidden table caption and as aria-label on the table element.
 This improves accessibility for screen readers and navigation.
 
-***
+---
 
 ### columnFilters?
 
@@ -37,7 +37,7 @@ This improves accessibility for screen readers and navigation.
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:378](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L378)
 
-***
+---
 
 ### columns
 
@@ -45,7 +45,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:378](https://git
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:335](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L335)
 
-***
+---
 
 ### data
 
@@ -53,7 +53,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:335](https://git
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:334](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L334)
 
-***
+---
 
 ### emptyMessage?
 
@@ -61,7 +61,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:334](https://git
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:350](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L350)
 
-***
+---
 
 ### error?
 
@@ -69,7 +69,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:350](https://git
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:351](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L351)
 
-***
+---
 
 ### globalSearch?
 
@@ -77,7 +77,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:351](https://git
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:371](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L371)
 
-***
+---
 
 ### initialGlobalSearch?
 
@@ -85,7 +85,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:371](https://git
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:375](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L375)
 
-***
+---
 
 ### loading?
 
@@ -93,7 +93,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:375](https://git
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:336](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L336)
 
-***
+---
 
 ### loadingOverlay?
 
@@ -104,7 +104,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:364](https://git
 When true and data is already present, show a translucent overlay on top of the table
 while a refetch is in flight. This avoids content jump during refresh.
 
-***
+---
 
 ### onColumnFiltersChange()?
 
@@ -122,7 +122,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:379](https://git
 
 `void`
 
-***
+---
 
 ### onGlobalSearchChange()?
 
@@ -140,7 +140,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:372](https://git
 
 `void`
 
-***
+---
 
 ### renderError()?
 
@@ -158,7 +158,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:352](https://git
 
 `ReactNode`
 
-***
+---
 
 ### renderRow()?
 
@@ -182,7 +182,7 @@ Optional custom row renderer. When provided, rows are rendered using this functi
 
 `ReactNode`
 
-***
+---
 
 ### rowKey?
 
@@ -193,7 +193,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:341](https://git
 rowKey: A property name (keyof T) or a function to uniquely identify each row.
 If a property name is provided, its value will be coerced to string or number.
 
-***
+---
 
 ### searchPlaceholder?
 
@@ -201,7 +201,7 @@ If a property name is provided, its value will be coerced to string or number.
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:368](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L368)
 
-***
+---
 
 ### serverFilter?
 
@@ -209,7 +209,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:368](https://git
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:383](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L383)
 
-***
+---
 
 ### serverSearch?
 
@@ -217,7 +217,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:383](https://git
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:382](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L382)
 
-***
+---
 
 ### showSearch?
 
@@ -225,7 +225,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:382](https://git
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:367](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L367)
 
-***
+---
 
 ### skeletonRows?
 
@@ -235,7 +235,7 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:359](https://git
 
 Number of skeleton rows to show when loading (default: 5)
 
-***
+---
 
 ### tableClassName?
 

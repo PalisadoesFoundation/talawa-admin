@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceValidationResult
 
@@ -18,7 +18,7 @@ Defined in: [src/types/Auth/ValidationInterfaces.ts:8](https://github.com/Palisa
 
 Error message if validation failed
 
-***
+---
 
 ### isValid
 

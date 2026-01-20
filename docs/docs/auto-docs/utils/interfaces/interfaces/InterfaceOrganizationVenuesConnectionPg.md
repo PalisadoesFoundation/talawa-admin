@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrganizationVenuesConnectionPg
 
@@ -16,7 +16,7 @@ Defines the structure for a connection of organization venues with PostgreSQL-sp
 
 Defined in: [src/utils/interfaces.ts:910](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L910)
 
-***
+---
 
 ### pageInfo
 

@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: ASSIGN\_TO\_TAGS
+# Variable: ASSIGN_TO_TAGS
 
-> `const` **ASSIGN\_TO\_TAGS**: `DocumentNode`
+> `const` **ASSIGN_TO_TAGS**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/TagMutations.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L91)
 

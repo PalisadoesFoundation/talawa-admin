@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePledgeModal
 
@@ -14,7 +14,7 @@ Defined in: [src/types/UserPortal/PledgeModal/interface.ts:5](https://github.com
 
 Defined in: [src/types/UserPortal/PledgeModal/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PledgeModal/interface.ts#L8)
 
-***
+---
 
 ### hide()
 
@@ -26,7 +26,7 @@ Defined in: [src/types/UserPortal/PledgeModal/interface.ts:7](https://github.com
 
 `void`
 
-***
+---
 
 ### isOpen
 
@@ -34,7 +34,7 @@ Defined in: [src/types/UserPortal/PledgeModal/interface.ts:7](https://github.com
 
 Defined in: [src/types/UserPortal/PledgeModal/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PledgeModal/interface.ts#L6)
 
-***
+---
 
 ### mode
 
@@ -42,7 +42,7 @@ Defined in: [src/types/UserPortal/PledgeModal/interface.ts:6](https://github.com
 
 Defined in: [src/types/UserPortal/PledgeModal/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PledgeModal/interface.ts#L12)
 
-***
+---
 
 ### pledge
 
@@ -50,7 +50,7 @@ Defined in: [src/types/UserPortal/PledgeModal/interface.ts:12](https://github.co
 
 Defined in: [src/types/UserPortal/PledgeModal/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/UserPortal/PledgeModal/interface.ts#L10)
 
-***
+---
 
 ### refetchPledge()
 
@@ -62,7 +62,7 @@ Defined in: [src/types/UserPortal/PledgeModal/interface.ts:11](https://github.co
 
 `void`
 
-***
+---
 
 ### userId
 

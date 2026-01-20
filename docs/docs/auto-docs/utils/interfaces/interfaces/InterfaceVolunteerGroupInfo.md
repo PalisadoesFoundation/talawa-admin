@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceVolunteerGroupInfo
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1788](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1806](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1806)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### creator
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:1789](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1807](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1807)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### description
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:1781](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1799](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1799)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### event
 
@@ -64,7 +64,7 @@ Defined in: [src/utils/interfaces.ts:1800](https://github.com/PalisadoesFoundati
 
 > **id**: `string`
 
-***
+---
 
 ### id
 
@@ -76,7 +76,7 @@ Defined in: [src/utils/interfaces.ts:1779](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1797](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1797)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### isInstanceException
 
@@ -88,7 +88,7 @@ Defined in: [src/utils/interfaces.ts:1787](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1805](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1805)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### isTemplate
 
@@ -100,7 +100,7 @@ Defined in: [src/utils/interfaces.ts:1786](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1804](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1804)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### leader
 
@@ -112,7 +112,7 @@ Defined in: [src/utils/interfaces.ts:1790](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1808](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1808)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### name
 
@@ -124,7 +124,7 @@ Defined in: [src/utils/interfaces.ts:1780](https://github.com/PalisadoesFoundati
 Defined in: [src/utils/interfaces.ts:1798](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1798)
 >>>>>>> 68941e08f54 (chore: update prettier ignore and auto-generated docs)
 
-***
+---
 
 ### volunteers
 
@@ -156,7 +156,7 @@ Defined in: [src/utils/interfaces.ts:1809](https://github.com/PalisadoesFoundati
 
 > **user**: [`InterfaceUserInfoPG`](InterfaceUserInfoPG.md)
 
-***
+---
 
 ### volunteersRequired
 

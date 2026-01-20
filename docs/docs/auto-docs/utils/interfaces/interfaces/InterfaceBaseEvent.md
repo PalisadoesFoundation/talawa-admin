@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceBaseEvent
 
@@ -20,7 +20,7 @@ Base interface for common event properties.
 
 Defined in: [src/utils/interfaces.ts:383](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L383)
 
-***
+---
 
 ### allDay
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:383](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:391](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L391)
 
-***
+---
 
 ### description
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/interfaces.ts:391](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:385](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L385)
 
-***
+---
 
 ### endDate
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/interfaces.ts:385](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:387](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L387)
 
-***
+---
 
 ### endTime
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/interfaces.ts:387](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:390](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L390)
 
-***
+---
 
 ### location
 
@@ -60,7 +60,7 @@ Defined in: [src/utils/interfaces.ts:390](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:388](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L388)
 
-***
+---
 
 ### recurring
 
@@ -68,7 +68,7 @@ Defined in: [src/utils/interfaces.ts:388](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:392](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L392)
 
-***
+---
 
 ### startDate
 
@@ -76,7 +76,7 @@ Defined in: [src/utils/interfaces.ts:392](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:386](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L386)
 
-***
+---
 
 ### startTime
 
@@ -84,7 +84,7 @@ Defined in: [src/utils/interfaces.ts:386](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:389](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L389)
 
-***
+---
 
 ### title
 

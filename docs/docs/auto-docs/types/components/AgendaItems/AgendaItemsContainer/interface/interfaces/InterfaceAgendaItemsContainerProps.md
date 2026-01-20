@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceAgendaItemsContainerProps
 
@@ -16,7 +16,7 @@ Props for AgendaItemsContainer component.
 
 Defined in: [src/types/components/AgendaItems/AgendaItemsContainer/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/components/AgendaItems/AgendaItemsContainer/interface.ts#L13)
 
-***
+---
 
 ### agendaItemConnection
 
@@ -24,7 +24,7 @@ Defined in: [src/types/components/AgendaItems/AgendaItemsContainer/interface.ts:
 
 Defined in: [src/types/components/AgendaItems/AgendaItemsContainer/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/components/AgendaItems/AgendaItemsContainer/interface.ts#L10)
 
-***
+---
 
 ### agendaItemData
 
@@ -32,7 +32,7 @@ Defined in: [src/types/components/AgendaItems/AgendaItemsContainer/interface.ts:
 
 Defined in: [src/types/components/AgendaItems/AgendaItemsContainer/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/components/AgendaItems/AgendaItemsContainer/interface.ts#L11)
 
-***
+---
 
 ### agendaItemRefetch()
 

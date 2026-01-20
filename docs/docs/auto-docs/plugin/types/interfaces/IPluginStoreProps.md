@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IPluginStoreProps
 
@@ -14,7 +14,7 @@ Defined in: [src/plugin/types.ts:162](https://github.com/PalisadoesFoundation/ta
 
 Defined in: [src/plugin/types.ts:164](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/types.ts#L164)
 
-***
+---
 
 ### userPermissions?
 

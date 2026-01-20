@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceTagUsersToAssignToQuery
 
@@ -22,7 +22,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:128](https://github.com/Palisado
 
 > **getUsersToAssignTo**: [`InterfaceQueryUserTagsMembersToAssignTo`](../../interfaces/interfaces/InterfaceQueryUserTagsMembersToAssignTo.md)
 
-***
+---
 
 ### error?
 
@@ -34,7 +34,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:61](https://github.com/Palisadoe
 
 `InterfaceBaseQueryResult.error`
 
-***
+---
 
 ### fetchMore()
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:131](https://github.com/Palisado
 
 `void`
 
-***
+---
 
 ### loading
 
@@ -64,7 +64,7 @@ Defined in: [src/utils/organizationTagsUtils.ts:60](https://github.com/Palisadoe
 
 `InterfaceBaseQueryResult.loading`
 
-***
+---
 
 ### refetch()?
 

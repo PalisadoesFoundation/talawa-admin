@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: ADD\_ADVERTISEMENT\_MUTATION
+# Variable: ADD_ADVERTISEMENT_MUTATION
 
-> `const` **ADD\_ADVERTISEMENT\_MUTATION**: `DocumentNode`
+> `const` **ADD_ADVERTISEMENT_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/AdvertisementMutations.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/AdvertisementMutations.ts#L14)
 

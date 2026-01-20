@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrganizationAdvertisementsConnectionEdgePg
 
@@ -16,7 +16,7 @@ Defines the structure for an edge in the organization advertisements connection 
 
 Defined in: [src/utils/interfaces.ts:598](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L598)
 
-***
+---
 
 ### node
 

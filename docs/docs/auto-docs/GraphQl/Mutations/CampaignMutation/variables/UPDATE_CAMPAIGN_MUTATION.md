@@ -1,10 +1,10 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: UPDATE\_CAMPAIGN\_MUTATION
+# Variable: UPDATE_CAMPAIGN_MUTATION
 
-> `const` **UPDATE\_CAMPAIGN\_MUTATION**: `DocumentNode`
+> `const` **UPDATE_CAMPAIGN_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/CampaignMutation.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/CampaignMutation.ts#L51)
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: IFileOperationResult
 
@@ -14,7 +14,7 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:19](https://github.com/Pa
 
 Defined in: [src/plugin/services/InternalFileWriter.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L22)
 
-***
+---
 
 ### error?
 
@@ -22,7 +22,7 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:22](https://github.com/Pa
 
 Defined in: [src/plugin/services/InternalFileWriter.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/services/InternalFileWriter.ts#L21)
 
-***
+---
 
 ### success
 

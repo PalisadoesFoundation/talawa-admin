@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceOrganizationVenuesConnectionEdgePg
 
@@ -16,7 +16,7 @@ Defines the structure for an edge in the organization venues connection with Pos
 
 Defined in: [src/utils/interfaces.ts:918](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L918)
 
-***
+---
 
 ### node
 

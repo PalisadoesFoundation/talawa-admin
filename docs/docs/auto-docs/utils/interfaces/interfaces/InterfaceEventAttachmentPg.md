@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceEventAttachmentPg
 
@@ -16,7 +16,7 @@ Defines the structure for an event attachment with PostgreSQL-specific fields.
 
 Defined in: [src/utils/interfaces.ts:749](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L749)
 
-***
+---
 
 ### url
 

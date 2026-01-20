@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceFormData
 
@@ -16,7 +16,7 @@ Defines the structure for form data.
 
 Defined in: [src/utils/interfaces.ts:1693](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1693)
 
-***
+---
 
 ### firstName
 
@@ -24,7 +24,7 @@ Defined in: [src/utils/interfaces.ts:1693](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1691](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1691)
 
-***
+---
 
 ### gender
 
@@ -32,7 +32,7 @@ Defined in: [src/utils/interfaces.ts:1691](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1695](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1695)
 
-***
+---
 
 ### lastName
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:1695](https://github.com/PalisadoesFoundati
 
 Defined in: [src/utils/interfaces.ts:1692](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1692)
 
-***
+---
 
 ### phoneNo
 

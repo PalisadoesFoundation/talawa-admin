@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceSearchBarProps
 
@@ -24,10 +24,10 @@ Applied to the search input's aria-label attribute.
 #### Default Value
 
 ```ts
-'Search'
+'Search';
 ```
 
-***
+---
 
 ### clear-aria-label?
 
@@ -40,10 +40,10 @@ Accessible label for the clear button, announced by screen readers.
 #### Default Value
 
 ```ts
-'Clear search'
+'Clear search';
 ```
 
-***
+---
 
 ### onChange()
 
@@ -65,7 +65,7 @@ The new search query string (empty string when cleared)
 
 `void`
 
-***
+---
 
 ### placeholder?
 
@@ -78,10 +78,10 @@ Placeholder text displayed when the input is empty.
 #### Default Value
 
 ```ts
-'Search…'
+'Search…';
 ```
 
-***
+---
 
 ### value
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceRecurrenceRule
 
@@ -17,7 +17,7 @@ Based on RFC 5545 (iCalendar) specification
 
 Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L14)
 
-***
+---
 
 ### byMonth?
 
@@ -25,7 +25,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:14](https://github.com
 
 Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L15)
 
-***
+---
 
 ### byMonthDay?
 
@@ -33,7 +33,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:15](https://github.com
 
 Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L16)
 
-***
+---
 
 ### count?
 
@@ -41,7 +41,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:16](https://github.com
 
 Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L12)
 
-***
+---
 
 ### endDate?
 
@@ -49,7 +49,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:12](https://github.com
 
 Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L10)
 
-***
+---
 
 ### frequency
 
@@ -57,7 +57,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:10](https://github.com
 
 Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L8)
 
-***
+---
 
 ### interval?
 
@@ -65,7 +65,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:8](https://github.com/
 
 Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L9)
 
-***
+---
 
 ### never?
 
@@ -73,7 +73,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:9](https://github.com/
 
 Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L13)
 
-***
+---
 
 ### recurrenceEndDate?
 

@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceSearchFilterBarSimple
 
@@ -39,14 +39,14 @@ default "btnsContainerSearchBar"
 #### Example
 
 ```ts
-"btnsContainer", "btnsContainerSearchBar"
+('btnsContainer', 'btnsContainerSearchBar');
 ```
 
 #### Inherited from
 
 `InterfaceSearchFilterBarBase.containerClassName`
 
-***
+---
 
 ### debounceDelay?
 
@@ -62,14 +62,14 @@ default 300
 #### Example
 
 ```ts
-300, 500, 1000
+(300, 500, 1000);
 ```
 
 #### Inherited from
 
 `InterfaceSearchFilterBarBase.debounceDelay`
 
-***
+---
 
 ### hasDropdowns
 
@@ -81,7 +81,7 @@ Discriminator property indicating this variant has no dropdowns.
 
 **Job:** When `false`, the `dropdowns` property must be omitted.
 
-***
+---
 
 ### onSearchChange()
 
@@ -116,7 +116,7 @@ onSearchChange={(value) => setSearchTerm(value)}
 
 `InterfaceSearchFilterBarBase.onSearchChange`
 
-***
+---
 
 ### onSearchSubmit()?
 
@@ -154,7 +154,7 @@ onSearchSubmit={(value) => {
 
 `InterfaceSearchFilterBarBase.onSearchSubmit`
 
-***
+---
 
 ### searchButtonTestId?
 
@@ -169,14 +169,14 @@ default "searchButton"
 #### Example
 
 ```ts
-"searchPluginsBtn", "searchBtn", "searchButton"
+('searchPluginsBtn', 'searchBtn', 'searchButton');
 ```
 
 #### Inherited from
 
 `InterfaceSearchFilterBarBase.searchButtonTestId`
 
-***
+---
 
 ### searchInputTestId?
 
@@ -191,14 +191,14 @@ default "searchInput"
 #### Example
 
 ```ts
-"searchPlugins", "searchBy", "searchRequests"
+('searchPlugins', 'searchBy', 'searchRequests');
 ```
 
 #### Inherited from
 
 `InterfaceSearchFilterBarBase.searchInputTestId`
 
-***
+---
 
 ### searchPlaceholder
 
@@ -212,14 +212,14 @@ Placeholder text displayed in the search input field.
 #### Example
 
 ```ts
-"Search by volunteer", "Search requests", "Search plugins"
+('Search by volunteer', 'Search requests', 'Search plugins');
 ```
 
 #### Inherited from
 
 `InterfaceSearchFilterBarBase.searchPlaceholder`
 
-***
+---
 
 ### searchValue
 
@@ -234,14 +234,14 @@ This should be managed in the parent component's state.
 #### Example
 
 ```ts
-"John Doe", "authentication", ""
+('John Doe', 'authentication', '');
 ```
 
 #### Inherited from
 
 `InterfaceSearchFilterBarBase.searchValue`
 
-***
+---
 
 ### translations?
 

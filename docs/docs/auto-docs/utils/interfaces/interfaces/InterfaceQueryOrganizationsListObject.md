@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceQueryOrganizationsListObject
 
@@ -16,7 +16,7 @@ Defines the structure for an organization object returned from a query.
 
 Defined in: [src/utils/interfaces.ts:485](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L485)
 
-***
+---
 
 ### admins
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/interfaces.ts:494](https://github.com/PalisadoesFoundatio
 
 > **lastName**: `string`
 
-***
+---
 
 ### blockedUsers
 
@@ -68,7 +68,7 @@ Defined in: [src/utils/interfaces.ts:509](https://github.com/PalisadoesFoundatio
 
 > **lastName**: `string`
 
-***
+---
 
 ### creator
 
@@ -88,7 +88,7 @@ Defined in: [src/utils/interfaces.ts:478](https://github.com/PalisadoesFoundatio
 
 > **lastName**: `string`
 
-***
+---
 
 ### description
 
@@ -96,7 +96,7 @@ Defined in: [src/utils/interfaces.ts:478](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:484](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L484)
 
-***
+---
 
 ### id
 
@@ -104,7 +104,7 @@ Defined in: [src/utils/interfaces.ts:484](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:476](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L476)
 
-***
+---
 
 ### image
 
@@ -112,7 +112,7 @@ Defined in: [src/utils/interfaces.ts:476](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:477](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L477)
 
-***
+---
 
 ### members
 
@@ -136,7 +136,7 @@ Defined in: [src/utils/interfaces.ts:488](https://github.com/PalisadoesFoundatio
 
 > **lastName**: `string`
 
-***
+---
 
 ### membershipRequests
 
@@ -164,7 +164,7 @@ Defined in: [src/utils/interfaces.ts:501](https://github.com/PalisadoesFoundatio
 
 > **lastName**: `string`
 
-***
+---
 
 ### name
 
@@ -172,7 +172,7 @@ Defined in: [src/utils/interfaces.ts:501](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:483](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L483)
 
-***
+---
 
 ### userRegistrationRequired
 
@@ -180,7 +180,7 @@ Defined in: [src/utils/interfaces.ts:483](https://github.com/PalisadoesFoundatio
 
 Defined in: [src/utils/interfaces.ts:486](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L486)
 
-***
+---
 
 ### visibleInSearch
 

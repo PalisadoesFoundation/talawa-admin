@@ -1,9 +1,9 @@
 [Admin Docs](/)
 
-***
+---
 
-# Variable: DELETE\_CHAT\_MESSAGE
+# Variable: DELETE_CHAT_MESSAGE
 
-> `const` **DELETE\_CHAT\_MESSAGE**: `DocumentNode`
+> `const` **DELETE_CHAT_MESSAGE**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L28)

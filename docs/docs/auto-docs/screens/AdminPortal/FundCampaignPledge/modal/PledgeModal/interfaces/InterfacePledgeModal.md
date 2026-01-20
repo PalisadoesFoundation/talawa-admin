@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfacePledgeModal
 
@@ -14,7 +14,7 @@ Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:58
 
 Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L61)
 
-***
+---
 
 ### endDate
 
@@ -22,7 +22,7 @@ Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:61
 
 Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L65)
 
-***
+---
 
 ### hide()
 
@@ -34,7 +34,7 @@ Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:60
 
 `void`
 
-***
+---
 
 ### isOpen
 
@@ -42,7 +42,7 @@ Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:60
 
 Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L59)
 
-***
+---
 
 ### mode
 
@@ -50,7 +50,7 @@ Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:59
 
 Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L66)
 
-***
+---
 
 ### orgId
 
@@ -58,7 +58,7 @@ Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:66
 
 Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L62)
 
-***
+---
 
 ### pledge
 
@@ -66,7 +66,7 @@ Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:62
 
 Defined in: [src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/FundCampaignPledge/modal/PledgeModal.tsx#L63)
 
-***
+---
 
 ### refetchPledge()
 

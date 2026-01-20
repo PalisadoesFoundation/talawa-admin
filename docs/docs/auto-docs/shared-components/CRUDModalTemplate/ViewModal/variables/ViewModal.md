@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Variable: ViewModal
 
@@ -15,6 +15,7 @@ No form submission, only displays data with optional custom actions.
 Parent component handles data fetching and passes formatted content as children.
 
 Features:
+
 - Read-only data display
 - Loading state for data fetching
 - Optional custom action buttons (e.g., Edit, Delete)
@@ -48,7 +49,9 @@ Features:
   customActions={
     <>
       <Button onClick={() => setEditMode(true)}>Edit</Button>
-      <Button variant="danger" onClick={handleDelete}>Delete</Button>
+      <Button variant="danger" onClick={handleDelete}>
+        Delete
+      </Button>
     </>
   }
 >

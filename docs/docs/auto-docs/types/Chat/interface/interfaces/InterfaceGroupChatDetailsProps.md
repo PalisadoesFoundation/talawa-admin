@@ -1,6 +1,6 @@
 [Admin Docs](/)
 
-***
+---
 
 # Interface: InterfaceGroupChatDetailsProps
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Chat/interface.ts:100](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Chat/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L103)
 
-***
+---
 
 ### chatRefetch()
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Chat/interface.ts:104](https://github.com/PalisadoesFound
 
 `Promise`\<`ApolloQueryResult`\<\{ `chat`: [`NewChatType`](../type-aliases/NewChatType.md); \}\>\>
 
-***
+---
 
 ### groupChatDetailsModalisOpen
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Chat/interface.ts:104](https://github.com/PalisadoesFound
 
 Defined in: [src/types/Chat/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L102)
 
-***
+---
 
 ### toggleGroupChatDetailsModal()
 
