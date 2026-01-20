@@ -93,7 +93,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
   });
   useEffect(() => {
     if (error) {
-      NotificationToast.error(t('failedToLoadUserData'));
+      NotificationToast.error(tCommon('failedToLoadUserData'));
       return;
     }
     if (!data?.user) return;
