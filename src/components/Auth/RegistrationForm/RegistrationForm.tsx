@@ -47,7 +47,22 @@ export const RegistrationForm = ({
   });
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
-  const { register, loading } = useRegistration({ onSuccess, onError });
+
+  // Reset ReCAPTCHA on registration failure
+  const handleRegistrationError = (error: Error) => {
+    if (recaptchaRef.current) {
+      recaptchaRef.current.reset();
+      setRecaptchaToken(null);
+    }
+    if (onError) {
+      onError(error);
+    }
+  };
+
+  const { register, loading } = useRegistration({
+    onSuccess,
+    onError: handleRegistrationError,
+  });
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -139,11 +154,11 @@ export const RegistrationForm = ({
         value={formData.orgId}
         onChange={(orgId) => setFormData((s) => ({ ...s, orgId }))}
       />
-      {REACT_APP_USE_RECAPTCHA === 'YES' && (
+      {REACT_APP_USE_RECAPTCHA === 'YES' && RECAPTCHA_SITE_KEY && (
         <div className="mt-3">
           <ReCAPTCHA
             ref={recaptchaRef}
-            sitekey={RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'}
+            sitekey={RECAPTCHA_SITE_KEY}
             onChange={handleCaptcha}
             data-cy="registrationRecaptcha"
           />

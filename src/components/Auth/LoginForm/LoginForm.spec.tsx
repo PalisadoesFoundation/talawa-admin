@@ -227,7 +227,13 @@ describe('LoginForm', () => {
       fireEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(onSuccess).toHaveBeenCalledWith('test-auth-token');
+        expect(onSuccess).toHaveBeenCalledWith(
+          expect.objectContaining({
+            signIn: expect.objectContaining({
+              authenticationToken: 'test-auth-token',
+            }),
+          }),
+        );
       });
       expect(onSuccess).toHaveBeenCalledTimes(1);
     });
@@ -250,7 +256,13 @@ describe('LoginForm', () => {
       fireEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(onSuccess).toHaveBeenCalledWith('admin-auth-token');
+        expect(onSuccess).toHaveBeenCalledWith(
+          expect.objectContaining({
+            signIn: expect.objectContaining({
+              authenticationToken: 'admin-auth-token',
+            }),
+          }),
+        );
       });
       expect(onSuccess).toHaveBeenCalledTimes(1);
     });

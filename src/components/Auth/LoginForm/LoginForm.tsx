@@ -76,6 +76,11 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
   // Handle login error
   useEffect(() => {
     if (error) {
+      // Reset ReCAPTCHA on error to allow retry
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset();
+        setRecaptchaToken(null);
+      }
       onErrorRef.current?.(error);
     }
   }, [error]);
@@ -127,11 +132,11 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
         testId={`${testId}-password`}
       />
 
-      {REACT_APP_USE_RECAPTCHA === 'YES' && (
+      {REACT_APP_USE_RECAPTCHA === 'YES' && RECAPTCHA_SITE_KEY && (
         <div className="mt-3">
           <ReCAPTCHA
             ref={recaptchaRef}
-            sitekey={RECAPTCHA_SITE_KEY ? RECAPTCHA_SITE_KEY : 'XXX'}
+            sitekey={RECAPTCHA_SITE_KEY}
             onChange={handleCaptcha}
             data-cy="loginRecaptcha"
           />

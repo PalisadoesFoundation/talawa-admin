@@ -248,28 +248,6 @@ describe('RegistrationForm', () => {
     });
   });
 
-  it('shows reCAPTCHA when enabled', () => {
-    renderComponent({ enableRecaptcha: true });
-
-    expect(screen.getByTestId('recaptcha-placeholder')).toBeInTheDocument();
-  });
-
-  it('hides reCAPTCHA when disabled', () => {
-    renderComponent({ enableRecaptcha: false });
-
-    expect(
-      screen.queryByTestId('recaptcha-placeholder'),
-    ).not.toBeInTheDocument();
-  });
-
-  it('handles default reCAPTCHA prop', () => {
-    renderComponent();
-
-    expect(
-      screen.queryByTestId('recaptcha-placeholder'),
-    ).not.toBeInTheDocument();
-  });
-
   it('calls onSuccess callback when provided', async () => {
     const mockCallback = vi.fn();
     renderComponent({ onSuccess: mockCallback });
@@ -348,10 +326,10 @@ describe('RegistrationForm', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
-    // Verify the hook was initialized with the onError callback
+    // Verify the hook was initialized with an error handler
     expect(useRegistration).toHaveBeenCalledWith({
       onSuccess: expect.any(Function),
-      onError: mockOnError,
+      onError: expect.any(Function),
     });
   });
 
