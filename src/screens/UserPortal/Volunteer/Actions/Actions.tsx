@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Form } from 'react-bootstrap';
+import Button from 'shared-components/Button/Button';
 import { Navigate, useParams } from 'react-router';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
@@ -14,12 +14,12 @@ import {
   type GridCellParams,
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
-import { Chip } from '@mui/material';
-import ItemViewModal from 'screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal';
+import ItemViewModal from 'shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal';
 import Avatar from 'shared-components/Avatar/Avatar';
-import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
+import ItemUpdateStatusModal from 'shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
 import useLocalStorage from 'utils/useLocalstorage';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
 enum ModalState {
   VIEW = 'view',
@@ -165,9 +165,11 @@ function Actions(): JSX.Element {
       headerName: 'Status',
       flex: 1,
       renderCell: (p) => (
-        <Chip
+        <StatusBadge
           icon={<Circle />}
-          label={p.row.isCompleted ? 'Completed' : 'Pending'}
+          variant={p.row.isCompleted ? 'completed' : 'pending'}
+          size="sm"
+          dataTestId="statusChip"
         />
       ),
     },
@@ -200,7 +202,8 @@ function Actions(): JSX.Element {
       headerName: 'Completed',
       flex: 1,
       renderCell: (p) => (
-        <Form.Check
+        <input
+          type="checkbox"
           data-testid="statusCheckbox"
           checked={p.row.isCompleted}
           onChange={() => handleModalClick(p.row, ModalState.STATUS)}
