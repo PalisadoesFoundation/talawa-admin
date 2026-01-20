@@ -1,6 +1,6 @@
 import React from 'react';
 import type { InterfaceActionsCellProps } from '../../../types/shared-components/DataTable/interface';
-import styles from '../DataTable.module.css';
+import styles from './ActionsCell.module.css';
 
 /**
  * ActionsCell renders a row of action buttons for a single table row.

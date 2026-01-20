@@ -12,8 +12,7 @@ import { SearchBar } from './SearchBar';
 import { TableLoader } from './TableLoader';
 import { ActionsCell } from './cells/ActionsCell';
 import { BulkActionsBar } from './BulkActionsBar';
-import styles from 'style/app-fixed.module.css';
-import localStyles from './DataTable.module.css';
+import styles from './DataTable.module.css';
 import { useTranslation } from 'react-i18next';
 
 function renderHeader(header: HeaderRender) {
@@ -542,7 +541,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
                 type="button"
                 disabled={isDisabled}
                 onClick={() => runBulkAction(action)}
-                className={localStyles.bulkBtn}
+                className={styles.bulkBtn}
                 data-testid={`bulk-action-${action.id}`}
               >
                 {action.label}
@@ -566,7 +565,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
         <thead>
           <tr>
             {effectiveSelectable && (
-              <th scope="col" className={localStyles.selectCol}>
+              <th scope="col" className={styles.selectCol}>
                 <input
                   ref={headerCheckboxRef}
                   type="checkbox"
@@ -583,7 +582,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
               </th>
             ))}
             {hasRowActions && (
-              <th scope="col" className={localStyles.actionsCol}>
+              <th scope="col" className={styles.actionsCol}>
                 {tCommon('actions')}
               </th>
             )}
@@ -606,7 +605,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
                     data-selected={isRowSelected}
                   >
                     {effectiveSelectable && (
-                      <td className={localStyles.selectCol}>
+                      <td className={styles.selectCol}>
                         <input
                           type="checkbox"
                           aria-label={`Select row ${String(rowKeyValue)}`}
@@ -630,7 +629,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
                       );
                     })}
                     {hasRowActions && (
-                      <td className={localStyles.actionsCol}>
+                      <td className={styles.actionsCol}>
                         <ActionsCell row={row} actions={effectiveRowActions} />
                       </td>
                     )}

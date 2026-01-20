@@ -1,7 +1,9 @@
 import React from 'react';
-import styles from './DataTable.module.css';
+import styles from './BulkActionsBar.module.css';
 import type { InterfaceBulkActionsBarProps } from '../../types/shared-components/DataTable/interface';
 import { useTranslation } from 'react-i18next';
+
+// translation-check-keyPrefix: common
 
 /**
  * BulkActionsBar displays a toolbar when rows are selected.
