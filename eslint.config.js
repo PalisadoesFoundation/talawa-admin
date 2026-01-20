@@ -215,7 +215,7 @@ export default [
       ...js.configs.recommended.rules,
       ...ts.configs.recommended.rules,
 
-      'tsdoc/syntax': 'warn',
+      'tsdoc/syntax': 'error',
 
       '@typescript-eslint/no-require-imports': 'error',
       'react/destructuring-assignment': 'error',
