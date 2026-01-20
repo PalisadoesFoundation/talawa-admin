@@ -1,12 +1,11 @@
 import gql from 'graphql-tag';
-import 'style/app-fixed.module.css';
 //Query List
 // Check Auth
 
 // Query to get info about current user
 export const CURRENT_USER = gql`
   query CurrentUser {
-    currentUser {
+    user: currentUser {
       addressLine1
       addressLine2
       avatarMimeType
@@ -1198,6 +1197,7 @@ export const SIGNIN_QUERY = gql`
         role
         countryCode
         avatarURL
+        isEmailAddressVerified
       }
       authenticationToken
       refreshToken

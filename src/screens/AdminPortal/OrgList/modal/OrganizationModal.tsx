@@ -39,7 +39,7 @@
  * @returns The rendered organization modal.
  */
 import React, { type ChangeEvent } from 'react';
-import Button from 'react-bootstrap/Button';
+import Button from 'shared-components/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -48,7 +48,6 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { countryOptions } from 'utils/formEnumFields';
-import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
 import styles from './OrganizationModal.module.css';
 
 interface InterfaceFormStateType {
@@ -74,7 +73,6 @@ export interface InterfaceOrganizationModalProps {
   createOrg: (e: ChangeEvent<HTMLFormElement>) => Promise<void>;
   t: (key: string) => string;
   tCommon: (key: string) => string;
-  userData: InterfaceCurrentUserTypePG | undefined;
 }
 
 /**
