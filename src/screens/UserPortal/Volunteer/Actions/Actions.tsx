@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button, Form } from 'react-bootstrap';
+import Button from 'shared-components/Button/Button';
 import { Navigate, useParams } from 'react-router';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
@@ -14,12 +14,12 @@ import {
   type GridCellParams,
   type GridColDef,
 } from 'shared-components/DataGridWrapper';
-import { Chip } from '@mui/material';
-import ItemViewModal from 'screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal';
+import ItemViewModal from 'shared-components/ActionItems/ActionItemViewModal/ActionItemViewModal';
 import Avatar from 'shared-components/Avatar/Avatar';
-import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
+import ItemUpdateStatusModal from 'shared-components/ActionItems/ActionItemUpdateModal/ActionItemUpdateStatusModal';
 import useLocalStorage from 'utils/useLocalstorage';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
 enum ModalState {
   VIEW = 'view',
@@ -129,7 +129,7 @@ function Actions(): JSX.Element {
   const columns: GridColDef[] = [
     {
       field: 'assignee',
-      headerName: 'Assignee',
+      headerName: t('assignee'),
       flex: 1,
       renderCell: (params: GridCellParams) => {
         const user = params.row.volunteer?.user;
@@ -154,7 +154,7 @@ function Actions(): JSX.Element {
     },
     {
       field: 'itemCategory',
-      headerName: 'Item Category',
+      headerName: t('itemCategory'),
       flex: 1,
       renderCell: (p) => (
         <div data-testid="categoryName">{p.row.category?.name}</div>
@@ -162,18 +162,20 @@ function Actions(): JSX.Element {
     },
     {
       field: 'status',
-      headerName: 'Status',
+      headerName: t('status'),
       flex: 1,
       renderCell: (p) => (
-        <Chip
+        <StatusBadge
           icon={<Circle />}
-          label={p.row.isCompleted ? 'Completed' : 'Pending'}
+          variant={p.row.isCompleted ? 'completed' : 'pending'}
+          size="sm"
+          dataTestId="statusChip"
         />
       ),
     },
     {
       field: 'assignedAt',
-      headerName: 'Assigned Date',
+      headerName: t('assignedDate'),
       flex: 1,
       renderCell: (p) => (
         <div data-testid="assignedAt">
@@ -183,13 +185,14 @@ function Actions(): JSX.Element {
     },
     {
       field: 'options',
-      headerName: 'Options',
+      headerName: t('options'),
       flex: 1,
       renderCell: (p) => (
         <Button
           size="sm"
           data-testid="viewItemBtn"
           onClick={() => handleModalClick(p.row, ModalState.VIEW)}
+          aria-label={tCommon('viewDetails')}
         >
           <i className="fa fa-info" />
         </Button>
@@ -197,13 +200,15 @@ function Actions(): JSX.Element {
     },
     {
       field: 'completed',
-      headerName: 'Completed',
+      headerName: t('completed'),
       flex: 1,
       renderCell: (p) => (
-        <Form.Check
+        <input
+          type="checkbox"
           data-testid="statusCheckbox"
           checked={p.row.isCompleted}
           onChange={() => handleModalClick(p.row, ModalState.STATUS)}
+          aria-label={tCommon('markComplete')}
         />
       ),
     },
