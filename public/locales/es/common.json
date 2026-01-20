@@ -45,7 +45,7 @@
   "enterEmail": "Enter Email",
   "emailAddress": "Dirección de Correo",
   "email": "Correo Electrónico",
-  "emailPlaceholder": "nombre@ejemplo.com",
+  "emailPlaceholder": "name@example.com",
   "name": "Name",
   "desc": "Description",
   "enterPassword": "Enter Password",
