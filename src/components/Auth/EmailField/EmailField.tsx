@@ -31,16 +31,16 @@ export const EmailField: React.FC<InterfaceEmailFieldProps> = ({
   error,
   testId,
 }) => {
-  const { t } = useTranslation('common');
+  const { t } = useTranslation('common', { keyPrefix: 'auth.emailField' });
 
   return (
     <FormField
-      label={label ?? t('email')}
+      label={label ?? t('label')}
       name={name}
       type="email"
       value={value}
       onChange={onChange}
-      placeholder={placeholder ?? t('emailPlaceholder')}
+      placeholder={placeholder ?? t('placeholder')}
       error={error}
       testId={testId}
       required
