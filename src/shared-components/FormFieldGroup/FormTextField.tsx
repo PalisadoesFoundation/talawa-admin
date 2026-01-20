@@ -30,6 +30,7 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
 
   const renderControl = () => (
     <Form.Control
+      id={name}
       type={type}
       placeholder={placeholder}
       value={value}
