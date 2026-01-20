@@ -44,12 +44,11 @@ export function useDataTableFiltering<T>(
   const query = controlledSearch ? (globalSearch as string) : uQuery;
 
   // Controlled / uncontrolled column filters
-  const controlledFilters =
-    !!columnFilters && typeof onColumnFiltersChange === 'function';
-  const [uFilters] = React.useState<Record<string, unknown>>({});
-  const filters = controlledFilters
-    ? (columnFilters as Record<string, unknown>)
-    : uFilters;
+  const controlledFilters = columnFilters !== undefined;
+  const [uFilters] = React.useState<Record<string, unknown>>(
+    columnFilters ?? {},
+  );
+  const filters = controlledFilters ? (columnFilters ?? {}) : uFilters;
 
   const updateGlobalSearch = React.useCallback(
     (next: string) => {

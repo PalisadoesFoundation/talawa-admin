@@ -1,9 +1,11 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, renderHook, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import dayjs from 'dayjs';
 import { DataTable } from './DataTable';
 import { TableLoader } from './TableLoader';
+import { useDataTableFiltering } from './hooks/useDataTableFiltering';
+import { useDataTableSelection } from './hooks/useDataTableSelection';
 
 describe('DataTable', () => {
   afterEach(() => {
@@ -1599,5 +1601,275 @@ describe('DataTable', () => {
     await user.click(deleteBtn);
 
     expect(onBulk).not.toHaveBeenCalled();
+  });
+
+  /* ------------------------------------------------------------------
+   * Hook unit tests for coverage (default branches)
+   * ------------------------------------------------------------------ */
+
+  describe('useDataTableFiltering hook defaults', () => {
+    it('uses default values for initialGlobalSearch, serverSearch, and serverFilter', () => {
+      const columns = [
+        { id: 'name', header: 'Name', accessor: 'name' as const },
+      ];
+      const data = [{ name: 'Ada' }];
+
+      const { result } = renderHook(() =>
+        useDataTableFiltering({
+          data,
+          columns,
+          // Omitting initialGlobalSearch, serverSearch, serverFilter
+        }),
+      );
+
+      expect(result.current.query).toBe('');
+      expect(result.current.filteredRows).toEqual(data);
+    });
+
+    it('covers query and columnFilters fallback branches', () => {
+      const columns = [
+        { id: 'name', header: 'Name', accessor: 'name' as const },
+      ];
+
+      // Force controlledFilters=true but columnFilters=null for line 51
+      const { result: r1 } = renderHook(() =>
+        useDataTableFiltering({
+          data: [],
+          columns,
+          columnFilters: null as any,
+          onColumnFiltersChange: () => {},
+        }),
+      );
+      expect(r1.current.filters).toEqual({});
+
+      // Force query=null for line 110 by passing initialGlobalSearch as null
+      const { result: r2 } = renderHook(() =>
+        useDataTableFiltering({
+          data: [{ name: 'Ada' }] as any, // Provide data so the memo effect runs
+          columns,
+          initialGlobalSearch: null as any,
+        }),
+      );
+      expect(r2.current.query).toBe(null);
+      // Accessing filteredRows to trigger the useMemo
+      expect(r2.current.filteredRows).toEqual([{ name: 'Ada' }]);
+    });
+  });
+
+  describe('useDataTableSelection hook defaults', () => {
+    it('uses default values for selectable', () => {
+      const data = [{ id: '1', name: 'Ada' }];
+      const keysOnPage = ['1'];
+
+      const { result } = renderHook(() =>
+        useDataTableSelection({
+          paginatedData: data,
+          keysOnPage,
+          // Omitting selectable
+        }),
+      );
+
+      expect(result.current.allSelectedOnPage).toBe(false);
+      expect(result.current.someSelectedOnPage).toBe(false);
+    });
+
+    it('handles boolean disabled state and confirm cancel for bulk actions', () => {
+      const data = [{ id: '1', name: 'Ada' }];
+      const keysOnPage = ['1'];
+      const onBulk = vi.fn();
+      const confirmSpy = vi.spyOn(window, 'confirm');
+
+      const { result } = renderHook(() =>
+        useDataTableSelection({
+          paginatedData: data,
+          keysOnPage,
+          selectable: true,
+        }),
+      );
+
+      // Select row
+      result.current.toggleRowSelection('1');
+
+      // 1) Test boolean disabled: true
+      result.current.runBulkAction({
+        id: 'b1',
+        label: 'B1',
+        onClick: onBulk,
+        disabled: true,
+      });
+      expect(onBulk).not.toHaveBeenCalled();
+
+      // 2) Test boolean disabled: false
+      result.current.runBulkAction({
+        id: 'b2',
+        label: 'B2',
+        onClick: onBulk,
+        disabled: false,
+      });
+      expect(onBulk).toHaveBeenCalled();
+
+      // 3) Test confirm cancel
+      onBulk.mockClear();
+      confirmSpy.mockReturnValue(false);
+      result.current.runBulkAction({
+        id: 'b3',
+        label: 'B3',
+        onClick: onBulk,
+        confirm: 'Really?',
+      });
+      expect(confirmSpy).toHaveBeenCalledWith('Really?');
+      expect(onBulk).not.toHaveBeenCalled();
+
+      confirmSpy.mockRestore();
+    });
+  });
+
+  it('resets page to 1 in uncontrolled mode when search changes', async () => {
+    const user = userEvent.setup();
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [
+      { name: 'Ada' },
+      { name: 'Bob' },
+      { name: 'Charlie' },
+      { name: 'Dave' },
+    ];
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        showSearch
+        paginationMode="client"
+        pageSize={1}
+      />,
+    );
+
+    // Go to second page
+    await user.click(screen.getByRole('button', { name: /next/i }));
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+
+    // Type in search to reset page
+    const searchInput = screen.getByPlaceholderText(/search/i);
+    await user.type(searchInput, 'a');
+
+    // Should be back on page 1 (Ada) because of search change
+    expect(screen.getByText('Ada')).toBeInTheDocument();
+  });
+
+  it('covers sub-component edge cases (search clear, pagination prev, row action boolean disable)', async () => {
+    const user = userEvent.setup();
+    const onPageChange = vi.fn();
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [
+      { id: '1', name: 'Ada' },
+      { id: '2', name: 'Bob' },
+    ];
+    const onAction = vi.fn();
+
+    const { rerender } = render(
+      <DataTable
+        data={data}
+        columns={columns}
+        showSearch
+        initialGlobalSearch="Ada"
+        paginationMode="client"
+        pageSize={1}
+        currentPage={2}
+        onPageChange={onPageChange}
+        rowActions={[
+          {
+            id: 'edit',
+            label: 'Edit',
+            onClick: onAction,
+            disabled: true, // Boolean disabled
+          },
+        ]}
+      />,
+    );
+
+    // 1) Test search clear
+    const clearBtn = screen.getByLabelText(/clearSearch/i);
+    await user.click(clearBtn);
+    // SearchBar.tsx line 39 covered
+
+    // 2) Test pagination previous
+    const prevBtn = screen.getByRole('button', {
+      name: /paginationPrevLabel/i,
+    });
+    await user.click(prevBtn);
+    expect(onPageChange).toHaveBeenCalledWith(1);
+    // Pagination.tsx line 52 covered
+
+    // 3) Test row action boolean disable
+    const actionBtn = screen.getByTestId('action-btn-edit');
+    expect(actionBtn).toBeDisabled();
+    // ActionsCell.tsx line 20-22 covered (boolean branch)
+
+    // 4) Test TableLoader default rows
+    rerender(
+      <DataTable
+        data={[]}
+        columns={columns}
+        loading
+        // Missing skeletonRows to test default = 5
+      />,
+    );
+    const skeletonRows = screen.getAllByTestId(/^skeleton-row-/);
+    expect(skeletonRows.length).toBe(5);
+    // TableLoader.tsx line 18 covered
+  });
+
+  it('covers SearchBar branch fallbacks', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+
+    // SearchBar fallback labels (lines 22-23 in SearchBar.tsx)
+    render(
+      <DataTable
+        data={[]}
+        columns={columns}
+        showSearch
+        searchPlaceholder={undefined}
+        ariaLabel={undefined}
+      />,
+    );
+    // aria-label defaults to 'Search'
+    expect(screen.getByLabelText(/Search/i)).toBeInTheDocument();
+  });
+
+  it('covers disabled branches in ActionsCell and useDataTableSelection', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ id: '1', name: 'Ada' }];
+    const onAction = vi.fn();
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        rowActions={[
+          {
+            id: 'edit',
+            label: 'Edit',
+            onClick: onAction,
+            // disabled is undefined, hits !!action.disabled branch
+          },
+        ]}
+        selectable
+        bulkActions={[
+          {
+            id: 'bulk',
+            label: 'Bulk',
+            onClick: onAction,
+            // disabled is undefined
+          },
+        ]}
+      />,
+    );
+
+    // Row action button should NOT be disabled
+    expect(screen.getByTestId('action-btn-edit')).not.toBeDisabled();
+
+    // Bulk action button should NOT be disabled (once row is selected)
+    fireEvent.click(screen.getByTestId('select-row-1'));
+    expect(screen.getByTestId('bulk-action-bulk')).not.toBeDisabled();
   });
 });
