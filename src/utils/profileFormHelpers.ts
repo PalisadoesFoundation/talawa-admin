@@ -4,30 +4,50 @@
  */
 
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { urlToFile } from 'utils/urlToFile';
-import { removeEmptyFields } from 'utils/userUpdateUtils';
 import { errorHandler } from 'utils/errorHandler';
+import { removeEmptyFields } from 'utils/userUpdateUtils';
+import { urlToFile } from 'utils/urlToFile';
+import { IFormState } from 'types/ProfileForm/type';
+
+type Translator = (
+  key: string,
+  options?: Record<string, unknown>
+) => string;
+
+interface UpdateCurrentUser {
+  avatarURL: string;
+  name: string;
+  emailAddress: string;
+  id: string;
+  role: string;
+}
+
+interface UpdateResponse {
+  updateCurrentUser: UpdateCurrentUser;
+}
 
 export const prepareUpdatePayload = async (
-  formState: any,
+  formState: IFormState,
   selectedAvatar: File | null,
   userId: string,
   isUser: boolean,
   isAdmin: boolean,
-  tCommon: any
-) => {
+  tCommon: Translator
+): Promise<Record<string, unknown> | null> => {
   let avatarFile: File | null = null;
-  
+
   if (!selectedAvatar && formState.avatarURL) {
     try {
       avatarFile = await urlToFile(formState.avatarURL);
     } catch {
-      NotificationToast.error(tCommon('profilePictureUploadError') as string);
+      NotificationToast.error(
+        tCommon('profilePictureUploadError')
+      );
       return null;
     }
   }
 
-  const data: any = {
+  const data: Record<string, unknown> = {
     addressLine1: formState.addressLine1,
     addressLine2: formState.addressLine2,
     birthDate: formState.birthDate,
@@ -54,39 +74,41 @@ export const prepareUpdatePayload = async (
 };
 
 export const updateLocalStorageProfile = (
-  updateData: any,
+  updateData: UpdateResponse,
   setItem: (key: string, value: string) => void
-) => {
-  setItem('UserImage', updateData.updateCurrentUser.avatarURL);
-  setItem('name', updateData.updateCurrentUser.name);
-  setItem('email', updateData.updateCurrentUser.emailAddress);
-  setItem('id', updateData.updateCurrentUser.id);
-  setItem('role', updateData.updateCurrentUser.role);
+): void => {
+  const { updateCurrentUser } = updateData;
+
+  setItem('UserImage', updateCurrentUser.avatarURL);
+  setItem('name', updateCurrentUser.name);
+  setItem('email', updateCurrentUser.emailAddress);
+  setItem('id', updateCurrentUser.id);
+  setItem('role', updateCurrentUser.role);
 };
 
 export const handleProfileUpdate = async (
-  executeUpdate: (input: any) => Promise<any>,
-  input: any,
+  executeUpdate: (input: unknown) => Promise<{ data?: UpdateResponse }>,
+  input: unknown,
   isUser: boolean,
   isAdmin: boolean,
   setItem: (key: string, value: string) => void,
   setSelectedAvatar: (avatar: File | null) => void,
   setIsUpdated: (updated: boolean) => void,
-  tCommon: any,
-  t: any
-) => {
+  tCommon: Translator,
+  t: Translator
+): Promise<void> => {
   try {
     const { data: updateData } = await executeUpdate(input);
-    
+
     if (updateData) {
       NotificationToast.success(
-        tCommon('updatedSuccessfully', { item: 'Profile' }) as string
+        tCommon('updatedSuccessfully', { item: 'Profile' })
       );
-      
+
       if (isUser || isAdmin) {
         updateLocalStorageProfile(updateData, setItem);
       }
-      
+
       setSelectedAvatar(null);
       setIsUpdated(false);
     }
@@ -95,10 +117,12 @@ export const handleProfileUpdate = async (
   }
 };
 
-export const determineUserContext = (pathname: string) => {
+export const determineUserContext = (
+  pathname: string
+): { isUser: boolean; isAdmin: boolean } => {
   const pathParts = pathname.split('/');
   const isUser = pathParts[1] === 'user';
   const isAdmin = pathParts[1] === 'admin';
-  
+
   return { isUser, isAdmin };
 };

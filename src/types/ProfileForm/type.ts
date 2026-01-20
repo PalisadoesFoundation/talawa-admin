@@ -1,7 +1,7 @@
 export interface FormStateType {
   addressLine1: string;
   addressLine2: string;
-  birthDate: null | string;
+  birthDate: string | null;
   emailAddress: string;
   city: string;
   avatar: File | null;
