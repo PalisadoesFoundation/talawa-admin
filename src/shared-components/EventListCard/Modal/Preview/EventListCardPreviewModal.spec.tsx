@@ -25,7 +25,7 @@ import {
 dayjs.extend(utc);
 
 import PreviewModal from './EventListCardPreviewModal';
-import { UserRole } from 'types/Event/interface';
+import { UserRole } from 'types/shared-components/EventListCard/Modal/Preview/interface';
 import {
   Frequency,
   InterfaceRecurrenceRule,

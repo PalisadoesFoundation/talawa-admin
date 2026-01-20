@@ -96,7 +96,7 @@
 
 .removeButton {
   background-color: var(--color-red-100);
-  color: #c8102e;
+  color: var(--color-red-500);
   border: 1px solid var(--color-red-100);
 }
 

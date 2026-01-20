@@ -148,27 +148,32 @@ export const useUpdateEventHandler = () => {
           ? dayjs.utc(eventListCardProps.startAt).startOf('day').toISOString()
           : ''
         : (() => {
-            const dateTimeStr = `${dayjs.utc(eventListCardProps.startAt).format('YYYY-MM-DD')}T${eventListCardProps.startTime}`;
-            return dayjs.utc(dateTimeStr).isValid()
-              ? dayjs.utc(dateTimeStr).toISOString()
-              : '';
+            const baseDate = dayjs.utc(eventListCardProps.startAt);
+            if (!baseDate.isValid()) return '';
+            const [h, m, s] = (eventListCardProps.startTime || '').split(':');
+            const date = baseDate
+              .hour(parseInt(h) || 0)
+              .minute(parseInt(m) || 0)
+              .second(parseInt(s) || 0)
+              .millisecond(0);
+            return date.isValid() ? date.toISOString() : '';
           })();
 
       const originalEndAt = eventListCardProps.allDay
         ? dayjs.utc(eventListCardProps.endAt).isValid()
           ? dayjs.utc(eventListCardProps.endAt).endOf('day').toISOString()
           : ''
-        : dayjs
-              .utc(
-                `${dayjs.utc(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
-              )
-              .isValid()
-          ? dayjs
-              .utc(
-                `${dayjs.utc(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
-              )
-              .toISOString()
-          : '';
+        : (() => {
+            const baseDate = dayjs.utc(eventListCardProps.endAt);
+            if (!baseDate.isValid()) return '';
+            const [h, m, s] = (eventListCardProps.endTime || '').split(':');
+            const date = baseDate
+              .hour(parseInt(h) || 0)
+              .minute(parseInt(m) || 0)
+              .second(parseInt(s) || 0)
+              .millisecond(0);
+            return date.isValid() ? date.toISOString() : '';
+          })();
 
       // Only include timing changes if they actually changed
       if (newStartAt !== originalStartAt) {

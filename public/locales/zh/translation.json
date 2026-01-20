@@ -816,12 +816,14 @@
     "attendeesIcon": "参与者图标",
     "feedbackIcon": "反馈图标",
     "selectRecurrencePattern": "选择重复模式",
-    "recurrence.daily": "每天",
-    "recurrence.weeklyOn": "每周的 {{day}}",
-    "recurrence.monthlyOn": "每月的第 {{day}} 天",
-    "recurrence.annuallyOn": "每年的 {{month}} {{day}}",
-    "recurrence.everyWeekday": "每个工作日（周一至周五）",
-    "recurrence.custom": "自定义"
+    "recurrence": {
+      "daily": "每天",
+      "weeklyOn": "每周的 {{day}}",
+      "monthlyOn": "每月的第 {{day}} 天",
+      "annuallyOn": "每年的 {{month}} {{day}}",
+      "everyWeekday": "每个工作日（周一至周五）",
+      "custom": "自定义"
+    }
   },
   "funds": {
     "title": "基金",

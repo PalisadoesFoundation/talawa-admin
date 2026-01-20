@@ -33,15 +33,7 @@ import {
   MOCKS_INVALID_DATETIME,
 } from './EventDashboard.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import {
-  vi,
-  expect,
-  it,
-  describe,
-  beforeAll,
-  beforeEach,
-  afterEach,
-} from 'vitest';
+import { vi, expect, it, describe, beforeEach, afterEach } from 'vitest';
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -113,16 +105,6 @@ const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
 };
 
 describe('Testing Event Dashboard Screen', () => {
-  beforeAll(() => {
-    vi.mock(
-      'shared-components/EventListCard/Modal/EventListCardModals/EventListCardModals',
-      () => ({
-        __esModule: true,
-        default: () => <div data-testid="event-list-card-modals" />,
-      }),
-    );
-  });
-
   beforeEach(() => {
     // Clear localStorage before each test
     localStorageMock.clear();
