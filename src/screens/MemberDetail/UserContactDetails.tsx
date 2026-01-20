@@ -386,7 +386,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                       handleFieldChange('password', e.target.value)
                     }
                     data-testid="inputPassword"
-                    placeholder="* * * * * * * *"
+                    placeholder={tCommon('enterPassword')}
                   />
                 </Col>
                 <Col md={12}>
