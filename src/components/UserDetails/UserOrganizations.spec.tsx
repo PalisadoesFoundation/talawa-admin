@@ -15,6 +15,23 @@ import { DocumentNode } from 'graphql';
 import { OperationVariables } from '@apollo/client/core/types';
 import { QueryHookOptions } from '@apollo/client/react/types/types';
 
+vi.mock('react-router', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-router')>();
+  return {
+    ...actual,
+    useLocation: () => ({
+      state: null,
+      pathname: '/user',
+    }),
+  };
+});
+
+vi.mock('utils/useLocalstorage', () => ({
+  default: () => ({
+    getItem: vi.fn(() => null),
+  }),
+}));
+
 // ---- DATA ---- //
 
 const USER_ID = 'user-1';
@@ -363,6 +380,157 @@ describe('UserOrganizations', () => {
       expect(orgsDesc[0]).toHaveTextContent('Joined Org');
       expect(orgsDesc[1]).toHaveTextContent('Created Org');
       expect(orgsDesc[2]).toHaveTextContent('Belong Org');
+    });
+  });
+
+  it('handles undefined createdOrganizations and joinedOrganizationsData edges', async () => {
+    // Mock useQuery to return userData with undefined createdOrganizations
+    mockUseQuery.mockImplementation((query: DocumentNode) => {
+      if (query === USER_DETAILS) {
+        return {
+          data: {
+            user: {
+              createdOrganizations: undefined,
+              organizationsWhereMember: undefined, // undefined instead of empty edges
+            },
+          },
+          loading: false,
+          error: undefined,
+          refetch: vi.fn(),
+        };
+      }
+      if (query === USER_JOINED_ORGANIZATIONS_NO_MEMBERS) {
+        return {
+          data: {
+            user: {
+              organizationsWhereMember: undefined, // undefined edges
+            },
+          },
+          loading: false,
+          error: undefined,
+          refetch: vi.fn(),
+        };
+      }
+      return {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        refetch: vi.fn(),
+      };
+    });
+
+    renderComponent();
+
+    // Wait for the empty state text to appear
+    await waitFor(() => {
+      expect(screen.getByText('noOrganizationsFound')).toBeInTheDocument();
+    });
+  });
+  it('falls back to prop id when state and localStorage are missing', async () => {
+    render(
+      <MemoryRouter>
+        <UserOrganizations id="user-1" />
+      </MemoryRouter>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Created Org')).toBeInTheDocument();
+    });
+
+    expect(mockUseQuery).toHaveBeenCalledWith(
+      USER_DETAILS,
+      expect.objectContaining({
+        variables: { input: { id: 'user-1' } },
+      }),
+    );
+  });
+  it('shows loading state when both userData.user and joinedOrganizationsData.user are missing', async () => {
+    mockUseQuery.mockImplementation((query: DocumentNode) => {
+      if (query === USER_DETAILS) {
+        return {
+          data: {}, // user is undefined
+          loading: false,
+          error: undefined,
+          refetch: vi.fn(),
+        };
+      }
+
+      if (query === USER_JOINED_ORGANIZATIONS_NO_MEMBERS) {
+        return {
+          data: {}, // user is undefined
+          loading: false,
+          error: undefined,
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        refetch: vi.fn(),
+      };
+    });
+
+    renderComponent();
+
+    await waitFor(() => {
+      expect(screen.getByText('loadingOrganizations')).toBeInTheDocument();
+    });
+  });
+  it('falls back to "No Description" when organization description is missing', async () => {
+    mockUseQuery.mockImplementation((query: DocumentNode) => {
+      if (query === USER_DETAILS) {
+        return {
+          data: {
+            user: {
+              createdOrganizations: [
+                {
+                  id: 'org-no-desc',
+                  name: 'Org Without Description',
+                  adminsCount: 1,
+                  membersCount: 2,
+                  description: undefined, // 👈 important
+                  avatarURL: '',
+                },
+              ],
+              organizationsWhereMember: { edges: [] },
+            },
+          },
+          loading: false,
+          error: undefined,
+          refetch: vi.fn(),
+        };
+      }
+
+      if (query === USER_JOINED_ORGANIZATIONS_NO_MEMBERS) {
+        return {
+          data: {
+            user: {
+              organizationsWhereMember: { edges: [] },
+            },
+          },
+          loading: false,
+          error: undefined,
+          refetch: vi.fn(),
+        };
+      }
+
+      return {
+        data: undefined,
+        loading: false,
+        error: undefined,
+        refetch: vi.fn(),
+      };
+    });
+
+    renderComponent();
+
+    await waitFor(() => {
+      expect(screen.getByText('Org Without Description')).toBeInTheDocument();
+
+      // fallback text rendered
+      expect(screen.getByText('No Description')).toBeInTheDocument();
     });
   });
 });

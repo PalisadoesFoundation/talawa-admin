@@ -238,7 +238,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                         radius={150}
                       />
                     )}
-                    <i
+                    <button
                       className={`fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle ${styles.userContactDetailContactAvatarEditIcon}`}
                       onClick={() => fileInputRef.current?.click()}
                       data-testid="uploadImageBtn"
