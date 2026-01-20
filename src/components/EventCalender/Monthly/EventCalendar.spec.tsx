@@ -266,9 +266,10 @@ describe('Calendar', () => {
       </Router>,
     );
     const todayDate = new Date().getDate();
+    const todayMatcher = new RegExp(`^${todayDate}\\b`);
     const todayElement = screen
       .getAllByTestId('day')
-      .find((el) => el.textContent?.startsWith(todayDate.toString()));
+      .find((el) => todayMatcher.test(el.textContent?.trim() ?? ''));
     expect(todayElement).toBeDefined();
     expect(todayElement).toHaveClass('day__today');
   });
@@ -299,9 +300,10 @@ describe('Calendar', () => {
     const todayButton = screen.getByTestId('today');
     fireEvent.click(todayButton);
     const todayDateStr = new Date().getDate().toString();
+    const todayMatcher = new RegExp(`^${todayDateStr}\\b`);
     const todayCell = screen
       .getAllByTestId('day')
-      .find((el) => el.textContent?.startsWith(todayDateStr));
+      .find((el) => todayMatcher.test(el.textContent?.trim() ?? ''));
     expect(todayCell).toBeDefined();
     expect(todayCell).toHaveClass('day__today');
   });
@@ -327,18 +329,14 @@ describe('Calendar', () => {
     // Check outside day
     // This assumes the month view renders days from previous/next month which typically have 'day__outside' class
     const outsideDays = document.getElementsByClassName('day__outside');
-    if (outsideDays.length > 0) {
-      expect(outsideDays[0]).toHaveClass('day__outside');
-    }
+    expect(outsideDays.length).toBeGreaterThan(0);
 
     // Check event day
     // Finding a day with event from eventData. MOCKS has events.
     // Assuming eventData has events for current month/year or the component handles it.
     // Since I can't easily guarantee which day has event without updated mocks, I'll search by class if it exists
     const eventDays = document.getElementsByClassName('day__events');
-    if (eventDays.length > 0) {
-      expect(eventDays[0]).toHaveClass('day__events');
-    }
+    expect(eventDays.length).toBeGreaterThan(0);
 
     // Check selected day (simulate click)
     // The component currently does not implement click-to-select functionality (no onClick handler on day div)
