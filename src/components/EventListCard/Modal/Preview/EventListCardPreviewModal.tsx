@@ -23,6 +23,8 @@
  * @param setPublicChecked - Function to toggle the public event setting.
  * @param registrablechecked - Indicates if the event is registrable.
  * @param setRegistrableChecked - Function to toggle the registrable event setting.
+ * @param inviteOnlyChecked - Indicates if the event is invite-only.
+ * @param setInviteOnlyChecked - Function to toggle the invite-only event setting.
  * @param formState - The state of the form fields.
  * @param setFormState - Function to update the form state.
  * @param registerEventHandler - Function to handle event registration.
@@ -433,7 +435,18 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 data-testid="updateAllDay"
                 className={`me-4 ${styles.switch}`}
                 checked={alldaychecked}
-                onChange={() => setAllDayChecked(!alldaychecked)}
+                onChange={() => {
+                  const newAllDayChecked = !alldaychecked;
+                  setAllDayChecked(newAllDayChecked);
+                  if (
+                    !newAllDayChecked &&
+                    formState.startTime === formState.endTime
+                  ) {
+                    const start = timeToDayJs(formState.startTime);
+                    const newEnd = start.add(1, 'hour').format('HH:mm:ss');
+                    setFormState({ ...formState, endTime: newEnd });
+                  }
+                }}
                 disabled={!canEditEvent}
               />
             </div>

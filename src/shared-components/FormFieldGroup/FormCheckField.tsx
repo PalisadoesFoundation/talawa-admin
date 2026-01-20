@@ -41,7 +41,7 @@ export const FormCheckField: React.FC<InterfaceFormCheckFieldProps> = ({
       label={label}
       name={name}
       checked={checked}
-      onChange={(e) => onChange && onChange(e)}
+      onChange={onChange}
       disabled={disabled}
       inline={inline}
       className={className}
@@ -58,7 +58,10 @@ export const FormCheckField: React.FC<InterfaceFormCheckFieldProps> = ({
   return (
     <FormFieldGroup
       name={name}
-      label="" // Checks usually have their own label next to the input, so we might empty the group label or pass it if needed for a group title
+      // Form.Check renders its own visible label inline so the group label is intentionally left empty
+      // to avoid duplicate labels. FormFieldGroup still supplies field-level help/error,
+      // but the visible label is provided by the check input for accessibility.
+      label=""
       required={required}
       helpText={helpText}
       error={error}

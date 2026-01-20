@@ -9,6 +9,11 @@ export interface InterfaceFormSelectFieldProps extends InterfaceFormFieldGroupPr
   children: React.ReactNode;
 }
 
+/**
+ * Props for FormCheckField component.
+ * Used for checkbox, radio, and switch inputs.
+ * Supports standard form attributes like checked, onChange, disabled, etc.
+ */
 export interface InterfaceFormCheckFieldProps extends InterfaceFormFieldGroupProps {
   type?: 'checkbox' | 'radio' | 'switch';
   id?: string;
@@ -18,5 +23,4 @@ export interface InterfaceFormCheckFieldProps extends InterfaceFormFieldGroupPro
   disabled?: boolean;
   inline?: boolean;
   className?: string;
-  'data-testid'?: string;
 }

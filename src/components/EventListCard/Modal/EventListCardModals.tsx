@@ -171,7 +171,7 @@ function EventListCardModals({
     const registrableChanged =
       registrablechecked !== eventListCardProps.isRegisterable;
     const inviteOnlyChanged =
-      inviteOnlyChecked !== eventListCardProps.isInviteOnly;
+      inviteOnlyChecked !== Boolean(eventListCardProps.isInviteOnly);
     const allDayChanged = alldaychecked !== eventListCardProps.allDay;
     const recurrenceChanged = hasRecurrenceChanged();
 

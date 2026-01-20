@@ -328,6 +328,55 @@ describe('EventListCardPreviewModal', () => {
     expect(mockSetAllDayChecked).toHaveBeenCalledWith(true);
   });
 
+  test('adjusts end time when unchecking all-day if times are equal', async () => {
+    const mockSetAllDayChecked = vi.fn();
+    const mockSetFormState = vi.fn();
+    const sameTime = '10:00:00';
+
+    renderComponent({
+      alldaychecked: true,
+      setAllDayChecked: mockSetAllDayChecked,
+      setFormState: mockSetFormState,
+      formState: { ...mockFormState, startTime: sameTime, endTime: sameTime },
+    });
+
+    const allDayCheckbox = screen.getByTestId('updateAllDay');
+    await userEvent.click(allDayCheckbox);
+
+    // Should toggle checked state
+    expect(mockSetAllDayChecked).toHaveBeenCalledWith(false);
+
+    // Should update form state with new end time (10:00:00 + 1 hour = 11:00:00)
+    expect(mockSetFormState).toHaveBeenCalledWith(
+      expect.objectContaining({
+        endTime: '11:00:00',
+      }),
+    );
+  });
+
+  test('does not adjust end time when unchecking all-day if times are different', async () => {
+    const mockSetAllDayChecked = vi.fn();
+    const mockSetFormState = vi.fn();
+    const startTime = '10:00:00';
+    const endTime = '12:00:00';
+
+    renderComponent({
+      alldaychecked: true,
+      setAllDayChecked: mockSetAllDayChecked,
+      setFormState: mockSetFormState,
+      formState: { ...mockFormState, startTime, endTime },
+    });
+
+    const allDayCheckbox = screen.getByTestId('updateAllDay');
+    await userEvent.click(allDayCheckbox);
+
+    // Should toggle checked state
+    expect(mockSetAllDayChecked).toHaveBeenCalledWith(false);
+
+    // Should NOT update form state with new end time
+    expect(mockSetFormState).not.toHaveBeenCalled();
+  });
+
   test('renders visibility radio buttons for administrators', () => {
     renderComponent({
       eventListCardProps: {
