@@ -8,12 +8,12 @@ import {
   UPDATE_USER_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { UNASSIGN_USER_TAG } from 'GraphQl/Mutations/TagMutations';
-import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+import { GET_USER_BY_ID } from 'GraphQl/Queries/Queries';
 
 export const MOCKS1 = [
   {
     request: {
-      query: USER_DETAILS,
+      query: GET_USER_BY_ID,
       variables: {
         input: {
           id: '456',
@@ -165,7 +165,7 @@ export const MOCKS1 = [
 export const MOCKS2 = [
   {
     request: {
-      query: USER_DETAILS,
+      query: GET_USER_BY_ID,
       variables: {
         input: {
           id: '456',
@@ -259,7 +259,54 @@ export const MOCKS2 = [
 export const UPDATE_MOCK = [
   {
     request: {
-      query: UPDATE_CURRENT_USER_MUTATION,
+      query: GET_USER_BY_ID,
+      variables: {
+        input: {
+          id: '456',
+        },
+      },
+    },
+    result: {
+      data: {
+        user: {
+          addressLine1: '',
+          addressLine2: '',
+          avatarMimeType: 'image/jpeg',
+          avatarURL: 'http://example.com/test-avatar.jpg',
+          birthDate: null,
+          city: '',
+          countryCode: null,
+          createdAt: dayjs().subtract(1, 'year').toISOString(),
+          description: '',
+          educationGrade: null,
+          emailAddress: 'testadmin1@example.com',
+          employmentStatus: null,
+          homePhoneNumber: '',
+          id: '456',
+          isEmailAddressVerified: true,
+          maritalStatus: null,
+          mobilePhoneNumber: '',
+          name: 'Test User',
+          natalSex: null,
+          naturalLanguageCode: null,
+          postalCode: '',
+          role: 'administrator',
+          state: '',
+          updatedAt: dayjs().subtract(1, 'year').toISOString(),
+          workPhoneNumber: '',
+          organizationsWhereMember: {
+            edges: [],
+          },
+          createdOrganizations: [],
+          eventsAttended: [],
+          __typename: 'User',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_USER_MUTATION,
       variables: {
         input: {
           name: 'Updated User Name',
@@ -268,7 +315,7 @@ export const UPDATE_MOCK = [
     },
     result: {
       data: {
-        updateCurrentUser: {
+        updateUser: {
           addressLine1: '',
           addressLine2: '',
           avatarMimeType: null,
@@ -282,7 +329,7 @@ export const UPDATE_MOCK = [
           emailAddress: 'testadmin1@example.com',
           employmentStatus: null,
           homePhoneNumber: '',
-          id: '65378abd-8500-8f17-1cf2-990d00000002',
+          id: '456',
           isEmailAddressVerified: true,
           maritalStatus: null,
           mobilePhoneNumber: '',
@@ -292,8 +339,9 @@ export const UPDATE_MOCK = [
           postalCode: '',
           role: 'administrator',
           state: '',
-          updatedAt: dayjs().add(1, 'year').month(1).toISOString(),
+          updatedAt: dayjs().toISOString(),
           workPhoneNumber: '',
+          __typename: 'User',
         },
       },
     },
@@ -303,7 +351,7 @@ export const UPDATE_MOCK = [
 export const UPDATE_USER_ERROR_MOCKS = [
   {
     request: {
-      query: USER_DETAILS,
+      query: GET_USER_BY_ID,
       variables: {
         input: {
           id: '456',
@@ -371,7 +419,7 @@ export const UPDATE_USER_ERROR_MOCKS = [
 export const MOCK_FILE = [
   {
     request: {
-      query: USER_DETAILS,
+      query: GET_USER_BY_ID,
       variables: {
         input: {
           id: '456',

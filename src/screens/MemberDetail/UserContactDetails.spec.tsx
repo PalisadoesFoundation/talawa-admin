@@ -28,6 +28,7 @@ import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { urlToFile } from 'utils/urlToFile';
 
 const link1 = new StaticMockLink(MOCKS1, true);
 const link2 = new StaticMockLink(MOCKS2, true);
@@ -1167,5 +1168,82 @@ describe('MemberDetail', () => {
     const avatarImg = await screen.findByTestId('profile-picture');
 
     expect(avatarImg).toHaveAttribute('src', 'mocked-data-uri');
+  });
+
+  test('sets birthDate to empty string when birthDate is null', async () => {
+    const MOCK_NO_BIRTHDATE = [
+      {
+        request: { query: MOCKS1[0].request.query, variables: { id: '456' } },
+        result: {
+          data: {
+            user: {
+              id: '456',
+              name: 'Test User',
+              birthDate: null, // triggers the fallback branch
+              email: 'test@example.com',
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={MOCK_NO_BIRTHDATE} addTypename={false}>
+        <BrowserRouter>
+          <MemberDetail />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const birthDateInput = (await screen.findByTestId(
+      'birthDate',
+    )) as HTMLInputElement;
+
+    expect(birthDateInput.value).toBe('');
+  });
+
+  test('handles successful update', async () => {
+    vi.mocked(urlToFile).mockResolvedValueOnce(
+      new File(['avatar'], 'avatar.png', { type: 'image/png' }),
+    );
+
+    const link = new StaticMockLink(UPDATE_MOCK, true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/user/settings/profile']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/user/settings/profile"
+                  element={<MemberDetail />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
+    });
+
+    const nameInput = screen.getByTestId('inputName');
+    fireEvent.change(nameInput, { target: { value: 'Updated User Name' } });
+
+    const saveButton = screen.getByTestId('saveChangesBtn');
+    fireEvent.click(saveButton);
+
+    await waitFor(
+      () => {
+        // Change to expect only one string argument
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          expect.any(String),
+        );
+      },
+      { timeout: 5000 },
+    );
   });
 });
