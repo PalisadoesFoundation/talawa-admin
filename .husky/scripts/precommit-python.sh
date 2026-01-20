@@ -10,7 +10,7 @@ set -euo pipefail
 STAGED_SRC_FILE="$1"
 
 echo "Initializing Python virtual environment..."
-VENV_BIN=$(./.github/workflows/scripts/pre-commit/venv.sh) || exit 1
+VENV_BIN=$(./.husky/scripts/venv.sh) || exit 1
 
 if command -v cmd.exe >/dev/null 2>&1; then
   set -- cmd.exe //c "$VENV_BIN"

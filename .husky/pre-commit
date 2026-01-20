@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -euo pipefail
 
-.github/workflows/scripts/pre-commit/check-tools.sh
+.husky/scripts/check-tools.sh
 
 STAGED_SRC_FILE=$(mktemp)
 STAGED_ALL_FILE=$(mktemp)
@@ -20,9 +20,9 @@ git diff --cached -z --name-only --diff-filter=ACMRT > "$STAGED_ALL_FILE"
 }
 
 if [ -s "$STAGED_SRC_FILE" ]; then
-  .github/workflows/scripts/pre-commit/precommit-node.sh "$STAGED_SRC_FILE"
+  .husky/scripts/precommit-node.sh "$STAGED_SRC_FILE"
 fi
 
-.github/workflows/scripts/pre-commit/precommit-python.sh "$STAGED_SRC_FILE"
+.husky/scripts/precommit-python.sh "$STAGED_SRC_FILE"
 
 xargs -0 -a "$STAGED_ALL_FILE" git add --
