@@ -1753,19 +1753,19 @@ describe('Testing Events Screen [User Portal]', () => {
         // Ensure all conditions return boolean (not undefined via optional chaining)
         return Boolean(
           input.name === 'Recurring Test Event' &&
-            input.description === 'Recurring Test Description' &&
-            input.organizationId === 'org123' &&
-            input.allDay === true &&
-            input.location === 'Recurring Test Location' &&
-            input.isPublic === false &&
-            input.isRegisterable === true &&
-            input.isInviteOnly === true &&
-            typeof input.startAt === 'string' &&
-            typeof input.endAt === 'string' &&
-            input.recurrence &&
-            input.recurrence.frequency === Frequency.WEEKLY &&
-            input.recurrence.interval === 1 &&
-            input.recurrence.byDay?.includes(weekDayByJs[dayOfWeek]),
+          input.description === 'Recurring Test Description' &&
+          input.organizationId === 'org123' &&
+          input.allDay === true &&
+          input.location === 'Recurring Test Location' &&
+          input.isPublic === false &&
+          input.isRegisterable === true &&
+          input.isInviteOnly === true &&
+          typeof input.startAt === 'string' &&
+          typeof input.endAt === 'string' &&
+          input.recurrence &&
+          input.recurrence.frequency === Frequency.WEEKLY &&
+          input.recurrence.interval === 1 &&
+          input.recurrence.byDay?.includes(weekDayByJs[dayOfWeek]),
         );
       },
       result: {
