@@ -29,7 +29,7 @@ export function useDataTableFiltering<T>(
     globalSearch,
     onGlobalSearchChange,
     columnFilters,
-    onColumnFiltersChange,
+    onColumnFiltersChange: _onColumnFiltersChange,
     serverSearch = false,
     serverFilter = false,
     paginationMode,

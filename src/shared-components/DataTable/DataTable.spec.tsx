@@ -1636,7 +1636,7 @@ describe('DataTable', () => {
         useDataTableFiltering({
           data: [],
           columns,
-          columnFilters: null as any,
+          columnFilters: null as unknown as Record<string, unknown>,
           onColumnFiltersChange: () => {},
         }),
       );
@@ -1645,9 +1645,9 @@ describe('DataTable', () => {
       // Force query=null for line 110 by passing initialGlobalSearch as null
       const { result: r2 } = renderHook(() =>
         useDataTableFiltering({
-          data: [{ name: 'Ada' }] as any, // Provide data so the memo effect runs
+          data: [{ name: 'Ada' }],
           columns,
-          initialGlobalSearch: null as any,
+          initialGlobalSearch: null as unknown as string,
         }),
       );
       expect(r2.current.query).toBe(null);

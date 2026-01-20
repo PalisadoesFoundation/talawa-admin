@@ -164,8 +164,8 @@ export function DataTable<T>(props: IDataTableProps<T>) {
         }
         return idx;
       } else {
-        const rowAsAny = row as any;
-        const idValue = rowAsAny.id ?? rowAsAny._id;
+        const rowAsRecord = row as Record<string, unknown>;
+        const idValue = rowAsRecord.id ?? rowAsRecord._id;
         if (typeof idValue === 'string' || typeof idValue === 'number') {
           return idValue;
         }
