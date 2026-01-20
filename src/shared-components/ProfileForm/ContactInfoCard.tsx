@@ -7,7 +7,7 @@ import React from 'react';
 import { Card, Row, Col, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
-import profileForm from '../profileForm.module.css';
+import profileForm from './profileForm.module.css';
 import { countryOptions } from 'utils/formEnumFields';
 
 interface ContactInfoCardProps {
@@ -31,7 +31,7 @@ const ContactInfoCard: React.FC<ContactInfoCardProps> = ({
       >
         <h3 className="m-0">{t('contactInfoHeading')}</h3>
       </Card.Header>
-      
+
       <Card.Body className="py-3 px-3">
         <Row className="g-3">
           <Col md={12}>

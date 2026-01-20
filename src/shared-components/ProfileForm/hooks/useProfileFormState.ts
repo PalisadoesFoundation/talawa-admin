@@ -14,7 +14,7 @@ export const useProfileFormState = (tCommon: any) => {
   const originalImageState = useRef<string>('');
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
   const [isUpdated, setIsUpdated] = useState(false);
-  
+
   const [formState, setFormState] = useState<FormStateType>({
     addressLine1: '',
     addressLine2: '',
@@ -50,7 +50,7 @@ export const useProfileFormState = (tCommon: any) => {
     if (fieldName === 'password' && value) {
       if (!validatePassword(value)) {
         NotificationToast.error(
-          tCommon('passwordLengthRequirement', { length: 8 }) as string
+          tCommon('passwordLengthRequirement', { length: 8 }) as string,
         );
         return;
       }
@@ -63,7 +63,7 @@ export const useProfileFormState = (tCommon: any) => {
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target?.files?.[0];
     const isValid = validateImageFile(file, tCommon);
-    
+
     if (!isValid || !file) {
       return;
     }

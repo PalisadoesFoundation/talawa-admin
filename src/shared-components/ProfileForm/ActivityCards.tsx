@@ -7,7 +7,7 @@ import React from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
-import profileForm from '../profileForm.module.css';
+import profileForm from './profileForm.module.css';
 import EventsAttendedByMember from 'components/MemberActivity/EventsAttendedByMember';
 import type { IEvent } from 'types/Event/interface';
 

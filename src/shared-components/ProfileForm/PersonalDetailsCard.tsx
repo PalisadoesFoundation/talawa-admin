@@ -1,15 +1,15 @@
 /**
  * PersonalDetailsCard Component
- * 
+ *
  * Renders personal information fields including avatar, demographics, and credentials
- * 
+ *
  */
 
 import React from 'react';
 import { Card, Row, Col, Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
-import profileForm from '../profileForm.module.css';
+import profileForm from './profileForm.module.css';
 import Avatar from 'shared-components/Avatar/Avatar';
 import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
 import DatePicker from 'shared-components/DatePicker';
@@ -59,7 +59,7 @@ const PersonalDetailsCard: React.FC<PersonalDetailsCardProps> = ({
           {userRole === 'administrator' ? tCommon('Admin') : tCommon('User')}
         </Button>
       </Card.Header>
-      
+
       <Card.Body className="py-3 px-3">
         {/* Avatar Section */}
         <Col lg={12} className="mb-2">
@@ -137,7 +137,9 @@ const PersonalDetailsCard: React.FC<PersonalDetailsCardProps> = ({
               setFormState={setFormState}
               fieldOptions={genderEnum}
               fieldName="natalSex"
-              handleChange={(e) => handleFieldChange('natalSex', e.target.value)}
+              handleChange={(e) =>
+                handleFieldChange('natalSex', e.target.value)
+              }
             />
           </Col>
 
