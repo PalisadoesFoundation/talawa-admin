@@ -6,7 +6,7 @@
 
 > **NotificationToastContainer**(`props`): `ReactElement`
 
-Defined in: [src/shared-components/NotificationToast/NotificationToast.tsx:140](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/NotificationToast/NotificationToast.tsx#L140)
+Defined in: [src/shared-components/NotificationToast/NotificationToast.tsx:141](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/NotificationToast/NotificationToast.tsx#L141)
 
 NotificationToastContainer
 
