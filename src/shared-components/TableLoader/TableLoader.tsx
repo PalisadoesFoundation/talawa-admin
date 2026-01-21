@@ -30,7 +30,7 @@
  */
 import React, { useEffect } from 'react';
 import styles from './TableLoader.module.css';
-import DataTable from '../DataTable/DataTable';
+import Table from 'react-bootstrap/Table';
 import { InterfaceTableLoaderProps } from 'types/shared-components/TableLoader/interface';
 
 const TableLoader = (props: InterfaceTableLoaderProps): JSX.Element => {
@@ -46,7 +46,7 @@ const TableLoader = (props: InterfaceTableLoaderProps): JSX.Element => {
 
   return (
     <div data-testid={dataTestId || 'TableLoader'}>
-      <DataTable className="mb-4" responsive>
+      <Table className="mb-4" responsive>
         <thead>
           <tr>
             {headerTitles
@@ -84,7 +84,7 @@ const TableLoader = (props: InterfaceTableLoaderProps): JSX.Element => {
             );
           })}
         </tbody>
-      </DataTable>
+      </Table>
     </div>
   );
 };
