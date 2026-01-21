@@ -1,5 +1,4 @@
-#!/bin/sh
-
+#!/usr/bin/env bash
 set -eu
 
 .husky/scripts/check-tools.sh
@@ -15,10 +14,10 @@ git diff --cached -z --name-only --diff-filter=ACMRT \
 git diff --cached -z --name-only --diff-filter=ACMRT > "$STAGED_ALL_FILE"
 
 # Early exit if nothing staged
-if [ ! -s "$STAGED_ALL_FILE" ]; then
+[ ! -s "$STAGED_ALL_FILE" ] && {
   echo "No staged files to check..."
   exit 0
-fi
+}
 
 if [ -s "$STAGED_SRC_FILE" ]; then
   .husky/scripts/precommit-node.sh "$STAGED_SRC_FILE"
