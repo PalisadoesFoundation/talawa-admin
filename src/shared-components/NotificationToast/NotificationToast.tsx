@@ -10,6 +10,7 @@ import type {
   NotificationToastNamespace,
   InterfacePromiseMessages,
   PromiseFunction,
+  NotificationToastContainerProps,
 } from 'types/shared-components/NotificationToast/interface';
 
 const DEFAULT_NAMESPACE: NotificationToastNamespace = 'common';
@@ -143,7 +144,17 @@ export const NotificationToast: InterfaceNotificationToastHelpers = {
  * @returns React.ReactElement rendering ToastContainer with merged props
  */
 export function NotificationToastContainer(
-  props: ToastContainerProps = {},
+  props: NotificationToastContainerProps = {},
 ): React.ReactElement {
-  return <ToastContainer {...DEFAULT_CONTAINER_PROPS} {...props} />;
+  const combinedClassName = [DEFAULT_CONTAINER_PROPS.className, props.className]
+    .filter(Boolean)
+    .join(' ');
+
+  return (
+    <ToastContainer
+      {...DEFAULT_CONTAINER_PROPS}
+      {...props}
+      className={combinedClassName}
+    />
+  );
 }
