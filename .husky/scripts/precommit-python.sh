@@ -125,8 +125,8 @@ if [ -f "$SCRIPT_PATH" ]; then
       # Windows (Git Bash)
       if command -v powershell.exe >/dev/null 2>&1; then
         FILE_MOD_TIME=$(powershell.exe -NoProfile -Command \
-          "(Get-Item \"${SCRIPT_PATH}\").LastWriteTime.ToUnixTimeSeconds()" \
-          2>/dev/null || true)
+          "([DateTimeOffset](Get-Item -LiteralPath \"${SCRIPT_PATH}\").LastWriteTimeUtc).ToUnixTimeSeconds()" \
+          2>/dev/null | tr -d '\r' || true)
       fi
       ;;
     *)

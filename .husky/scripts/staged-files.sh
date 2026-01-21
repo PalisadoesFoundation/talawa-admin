@@ -11,6 +11,10 @@ cleanup_staged_cache() {
   [ -n "${_STAGED_CACHE_FILE:-}" ] && rm -f "$_STAGED_CACHE_FILE"
 }
 
+# Escape only Perl regex delimiters (not the regex itself)
+_escape_perl_regex() {
+  printf '%s' "$1" | sed 's/[\/&]/\\&/g'
+}
 
 get_staged_files() {
   include="${1:-}"
@@ -26,16 +30,18 @@ get_staged_files() {
     return
   fi
 
+  inc=$(_escape_perl_regex "$include")
+  exc=$(_escape_perl_regex "$exclude")
+
   if [ -n "$include" ] && [ -n "$exclude" ]; then
-    # Use perl for cross-platform null-delimited filtering
-    perl -0 -ne "print if m{$include} && !m{$exclude}" "$_STAGED_CACHE_FILE" || true
+    perl -0 -ne "print if /$inc/ && !/$exc/" "$_STAGED_CACHE_FILE" || true
     return
   fi
 
   if [ -n "$include" ]; then
-    perl -0 -ne "print if m{$include}" "$_STAGED_CACHE_FILE" || true
+    perl -0 -ne "print if /$inc/" "$_STAGED_CACHE_FILE" || true
     return
   fi
 
-  perl -0 -ne "print if !m{$exclude}" "$_STAGED_CACHE_FILE" || true
+  perl -0 -ne "print if !/$exc/" "$_STAGED_CACHE_FILE" || true
 }

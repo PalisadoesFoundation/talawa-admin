@@ -38,12 +38,14 @@ STAGED_SRC_FILE="$1"
 echo "Running Node.js pre-commit checks..."
 
 pnpm run generate-docs &
+PID_DOCS=$!
 PIDS+=("$PID_DOCS")
 
 pnpm run format:fix || exit 1
 pnpm run lint-staged || exit 1
 
 pnpm run typecheck &
+PID_TYPECHECK=$!
 PIDS+=("$PID_TYPECHECK")
 
 wait "$PID_DOCS"; STATUS_DOCS=$?
