@@ -1,11 +1,6 @@
 import React, { Suspense } from 'react';
-import {
-  render,
-  fireEvent,
-  act,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { render, act, screen, waitFor } from '@testing-library/react';
+import userEvent, { UserEvent } from '@testing-library/user-event';
 import { vi, it, describe, beforeEach, expect } from 'vitest';
 import Calendar from './YearlyEventCalender';
 // Removed dependency on Monthly EventCalendar for tests that target yearly view directly
@@ -47,6 +42,7 @@ function getToggleButtonForDate(
 }
 
 async function clickExpandForDate(
+  user: UserEvent,
   container: HTMLElement,
   date: Date,
 ): Promise<HTMLButtonElement> {
@@ -61,7 +57,7 @@ async function clickExpandForDate(
     return found as HTMLButtonElement;
   });
   await act(async () => {
-    fireEvent.click(btn);
+    await user.click(btn);
   });
   return btn;
 }
@@ -313,6 +309,7 @@ describe('Calendar Component', () => {
   });
 
   it('handles year navigation correctly', async () => {
+    const user = userEvent.setup();
     const { getByTestId, getByText } = renderWithRouterAndPath(
       <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
     );
@@ -320,14 +317,14 @@ describe('Calendar Component', () => {
     const currentYear = new Date().getFullYear();
 
     await act(async () => {
-      fireEvent.click(getByTestId('prevYear'));
+      await user.click(getByTestId('prevYear'));
     });
     await waitFor(() => {
       expect(getByText(String(currentYear - 1))).toBeInTheDocument();
     });
 
     await act(async () => {
-      fireEvent.click(getByTestId('nextYear'));
+      await user.click(getByTestId('nextYear'));
     });
     await waitFor(() => {
       expect(getByText(String(currentYear))).toBeInTheDocument();
@@ -437,6 +434,7 @@ describe('Calendar Component', () => {
   });
 
   it('displays "No Event Available!" message when no events exist', async () => {
+    const user = userEvent.setup();
     const { container } = renderWithRouterAndPath(
       <Calendar eventData={[]} refetchEvents={mockRefetchEvents} />,
     );
@@ -446,7 +444,7 @@ describe('Calendar Component', () => {
     );
     expect(expandButton).toBeInTheDocument();
     await act(async () => {
-      fireEvent.click(expandButton as HTMLButtonElement);
+      await user.click(expandButton as HTMLButtonElement);
     });
     await waitFor(() => {
       expect(
@@ -456,6 +454,7 @@ describe('Calendar Component', () => {
   });
 
   it('updates events when props change', async () => {
+    const user = userEvent.setup();
     const mockEvent = {
       ...mockEventData[0],
       name: 'Test Event',
@@ -495,7 +494,7 @@ describe('Calendar Component', () => {
 
     let foundMatch = false;
     for (const button of Array.from(expandButtons)) {
-      fireEvent.click(button);
+      await user.click(button);
       // Expect one of the event names to appear when expanded
       const matches = screen.queryAllByText(/New Test Event|Test Event/);
       if (matches.length > 0) {
@@ -530,6 +529,7 @@ describe('Calendar Component', () => {
   });
 
   it('handles event expansion with various event scenarios', async () => {
+    const user = userEvent.setup();
     const multiMonthEvents = [
       {
         ...mockEventData[0],
@@ -571,23 +571,24 @@ describe('Calendar Component', () => {
     });
 
     const start = new Date(today.getFullYear(), 0, 15);
-    await clickExpandForDate(container, start);
+    await clickExpandForDate(user, container, start);
   });
 
   it('handles calendar navigation and date rendering edge cases', async () => {
+    const user = userEvent.setup();
     // Use the helper with default route for consistency
     const { getByTestId, getByText, rerender } = renderWithRouterAndPath(
       <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
     );
 
     await act(async () => {
-      fireEvent.click(getByTestId('prevYear'));
-      fireEvent.click(getByTestId('prevYear'));
+      await user.click(getByTestId('prevYear'));
+      await user.click(getByTestId('prevYear'));
     });
 
     await act(async () => {
-      fireEvent.click(getByTestId('nextYear'));
-      fireEvent.click(getByTestId('nextYear'));
+      await user.click(getByTestId('nextYear'));
+      await user.click(getByTestId('nextYear'));
     });
 
     const currentYear = new Date().getFullYear();
@@ -703,6 +704,7 @@ describe('Calendar Component', () => {
   });
 
   it('excludes private events for REGULAR users who are not members and toggles no-events panel', async () => {
+    const user = userEvent.setup();
     const todayDate = new Date();
     const privateEventToday = {
       ...mockEventData[1],
@@ -757,7 +759,7 @@ describe('Calendar Component', () => {
     expect(noEventsButton).toBeInTheDocument();
     if (noEventsButton) {
       await act(async () => {
-        fireEvent.click(noEventsButton);
+        await user.click(noEventsButton);
       });
     }
 
@@ -771,6 +773,7 @@ describe('Calendar Component', () => {
   });
 
   it('handles undefined eventData by rendering with no events', async () => {
+    const user = userEvent.setup();
     const { findAllByTestId, container } = renderWithRouterAndPath(
       <Calendar
         eventData={undefined as unknown as InterfaceCalendarProps['eventData']}
@@ -787,7 +790,7 @@ describe('Calendar Component', () => {
 
     if (noEventsButton) {
       await act(async () => {
-        fireEvent.click(noEventsButton);
+        await user.click(noEventsButton);
       });
     }
 
@@ -851,6 +854,7 @@ describe('Calendar Component', () => {
   });
 
   test('filters events correctly when userRole is undefined but eventData contains events', async () => {
+    const user = userEvent.setup();
     const publicEvent: CalendarEventItem = {
       id: 'public-event',
       location: 'Public Location',
@@ -917,7 +921,7 @@ describe('Calendar Component', () => {
     let foundEventList = false;
     for (const button of Array.from(expandButtons)) {
       await act(async () => {
-        fireEvent.click(button);
+        await user.click(button);
       });
 
       await waitFor(() =>
@@ -931,6 +935,7 @@ describe('Calendar Component', () => {
   });
 
   test('filters events correctly when userId is undefined but has userRole', async () => {
+    const user = userEvent.setup();
     const publicEvent: CalendarEventItem = {
       id: 'public-event',
       location: 'Public Location',
@@ -999,7 +1004,7 @@ describe('Calendar Component', () => {
     let foundEventList = false;
     for (const button of Array.from(expandButtons)) {
       await act(async () => {
-        fireEvent.click(button);
+        await user.click(button);
       });
 
       await waitFor(() =>
@@ -1225,6 +1230,7 @@ describe('Calendar Component', () => {
   });
 
   test('handles calendar navigation across year boundaries', async () => {
+    const user = userEvent.setup();
     const { getByTestId } = render(
       <BrowserRouter>
         <Calendar
@@ -1243,7 +1249,7 @@ describe('Calendar Component', () => {
 
     // Test navigation to previous year
     await act(async () => {
-      fireEvent.click(prevButton);
+      await user.click(prevButton);
     });
 
     await waitFor(() => {
@@ -1252,7 +1258,7 @@ describe('Calendar Component', () => {
 
     // Test navigation to next year (back to current)
     await act(async () => {
-      fireEvent.click(nextButton);
+      await user.click(nextButton);
     });
 
     await waitFor(() => {
@@ -1261,7 +1267,7 @@ describe('Calendar Component', () => {
 
     // Test navigation to future year
     await act(async () => {
-      fireEvent.click(nextButton);
+      await user.click(nextButton);
     });
 
     await waitFor(() => {
@@ -1312,6 +1318,7 @@ describe('Calendar Component', () => {
   });
 
   test('handles empty eventData array', async () => {
+    const user = userEvent.setup();
     const { container } = render(
       <BrowserRouter>
         <Calendar
@@ -1341,7 +1348,7 @@ describe('Calendar Component', () => {
     expect(noEventsButton).toBeInTheDocument();
     if (noEventsButton) {
       await act(async () => {
-        fireEvent.click(noEventsButton);
+        await user.click(noEventsButton);
       });
     }
 
@@ -1351,6 +1358,7 @@ describe('Calendar Component', () => {
   });
 
   it('renders safely when eventData is null (renders days and no-events panel)', async () => {
+    const user = userEvent.setup();
     const { container, findAllByTestId } = renderWithRouterAndPath(
       <Calendar
         eventData={null as unknown as InterfaceCalendarProps['eventData']}
@@ -1368,7 +1376,7 @@ describe('Calendar Component', () => {
     expect(noEventsBtn).toBeInTheDocument();
 
     if (noEventsBtn) {
-      await act(async () => fireEvent.click(noEventsBtn));
+      await act(async () => await user.click(noEventsBtn));
       await waitFor(() =>
         expect(screen.getByText('No Event Available!')).toBeInTheDocument(),
       );
@@ -1376,6 +1384,7 @@ describe('Calendar Component', () => {
   });
 
   it('collapses previously expanded day when a new day is expanded', async () => {
+    const user = userEvent.setup();
     // Use fixed mid-month dates to avoid month boundary issues
     const currentYear = new Date().getFullYear();
     const dayOne = new Date(currentYear, 5, 10, 12, 0, 0); // June 10
@@ -1411,13 +1420,21 @@ describe('Calendar Component', () => {
       expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
     );
 
-    const btnA = await clickExpandForDate(container, new Date(eventA.startAt));
+    const btnA = await clickExpandForDate(
+      user,
+      container,
+      new Date(eventA.startAt),
+    );
     expect(btnA).toBeTruthy();
     await waitFor(() =>
       expect(screen.getByText('Event A')).toBeInTheDocument(),
     );
 
-    const btnB = await clickExpandForDate(container, new Date(eventB.startAt));
+    const btnB = await clickExpandForDate(
+      user,
+      container,
+      new Date(eventB.startAt),
+    );
     expect(btnB).toBeTruthy();
     await waitFor(() =>
       expect(screen.getByText('Event B')).toBeInTheDocument(),
@@ -1427,6 +1444,7 @@ describe('Calendar Component', () => {
   });
 
   it('handles month layout correctly when month starts on Sunday', async () => {
+    const user = userEvent.setup();
     // Find a month in the current year where the 1st is Sunday.
     const year = new Date().getFullYear();
     let sundayMonth = -1;
@@ -1464,7 +1482,7 @@ describe('Calendar Component', () => {
       expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
     );
 
-    const expandBtn = await clickExpandForDate(container, specialDate);
+    const expandBtn = await clickExpandForDate(user, container, specialDate);
     expect(expandBtn).toBeTruthy();
 
     await waitFor(() =>
@@ -1473,6 +1491,7 @@ describe('Calendar Component', () => {
   });
 
   it('handles malformed event dates without crashing and does not render an expand button', async () => {
+    const user = userEvent.setup();
     const malformedEvent = {
       ...mockEventData[0],
       id: 'bad-date',
@@ -1504,7 +1523,7 @@ describe('Calendar Component', () => {
     expect(noEventsBtn).toBeInTheDocument();
 
     if (noEventsBtn) {
-      await act(async () => fireEvent.click(noEventsBtn));
+      await act(async () => await user.click(noEventsBtn));
       await waitFor(() =>
         expect(screen.getByText('No Event Available!')).toBeInTheDocument(),
       );

@@ -8,7 +8,8 @@ vi.mock(
 import React from 'react';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import type { RenderResult } from '@testing-library/react';
-import { render, act, fireEvent, waitFor } from '@testing-library/react';
+import { render, act, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import EventDashboard from './EventDashboard';
 import { BrowserRouter } from 'react-router';
 import { MockedProvider } from '@apollo/react-testing';
@@ -214,8 +215,9 @@ describe('Testing Event Dashboard Screen', () => {
     const editButton = getByTestId('edit-event-button');
 
     // Click to open modal
+    const user = userEvent.setup();
     await act(async () => {
-      fireEvent.click(editButton);
+      await user.click(editButton);
     });
 
     await waitFor(() => {

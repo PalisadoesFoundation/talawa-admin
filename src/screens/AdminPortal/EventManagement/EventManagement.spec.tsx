@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -129,24 +129,26 @@ describe('Event Management', () => {
     });
 
     it('Testing back button navigation when userType is SuperAdmin', async () => {
+      const user = userEvent.setup();
       setItem('SuperAdmin', true);
       renderEventManagement();
 
       const backButton = screen.getByTestId('backBtn');
-      await act(() => fireEvent.click(backButton));
+      await user.click(backButton);
 
       const eventsScreen = screen.getByTestId('eventsScreen');
       expect(eventsScreen).toBeInTheDocument();
     });
 
     it('Testing back button navigation when userType is USER', async () => {
+      const user = userEvent.setup();
       setItem('SuperAdmin', false);
       setItem('AdminFor', []);
 
       renderEventManagement();
 
       const backButton = screen.getByTestId('backBtn');
-      await act(() => fireEvent.click(backButton));
+      await user.click(backButton);
 
       await waitFor(() => {
         const userEventsScreen = screen.getByTestId('userEventsScreen');
@@ -155,13 +157,14 @@ describe('Event Management', () => {
     });
 
     it('Testing back button navigation when userType is ADMIN', async () => {
+      const user = userEvent.setup();
       setItem('SuperAdmin', false);
       setItem('AdminFor', ['someOrg']);
 
       renderEventManagement();
 
       const backButton = screen.getByTestId('backBtn');
-      await act(() => fireEvent.click(backButton));
+      await user.click(backButton);
 
       await waitFor(() => {
         const eventsScreen = screen.getByTestId('eventsScreen');
@@ -194,6 +197,7 @@ describe('Event Management', () => {
     });
 
     it('switches between all available tabs', async () => {
+      const user = userEvent.setup();
       renderEventManagement();
 
       const tabsToTest = [
@@ -206,7 +210,7 @@ describe('Event Management', () => {
       ];
 
       for (const { button, tab } of tabsToTest) {
-        await userEvent.click(screen.getByTestId(button));
+        await user.click(screen.getByTestId(button));
         expect(screen.getByTestId(tab)).toBeInTheDocument();
       }
     });
@@ -249,6 +253,7 @@ describe('Event Management', () => {
     });
 
     it('renders dropdown with all options', async () => {
+      const user = userEvent.setup();
       await act(async () => {
         renderEventManagement();
       });
@@ -257,7 +262,7 @@ describe('Event Management', () => {
       expect(dropdownContainer).toBeInTheDocument();
 
       await act(async () => {
-        await userEvent.click(screen.getByTestId('tabsDropdownToggle'));
+        await user.click(screen.getByTestId('tabsDropdownToggle'));
       });
 
       const tabOptions = [
@@ -276,11 +281,12 @@ describe('Event Management', () => {
     });
 
     it('switches tabs through dropdown selection', async () => {
+      const user = userEvent.setup();
       await act(async () => {
         renderEventManagement();
       });
       await act(async () => {
-        await userEvent.click(screen.getByTestId('tabsDropdownToggle'));
+        await user.click(screen.getByTestId('tabsDropdownToggle'));
       });
 
       const tabOptions = [
@@ -295,7 +301,7 @@ describe('Event Management', () => {
 
       for (const option of tabOptions) {
         act(async () => {
-          await userEvent.click(screen.getByTestId(`${option}DropdownItem`));
+          await user.click(screen.getByTestId(`${option}DropdownItem`));
         });
 
         expect(screen.getByTestId(`${option}DropdownItem`)).toHaveClass(

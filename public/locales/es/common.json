@@ -50,12 +50,12 @@
     }
   },
   "recurrence": {
-    "daily": "Daily",
-    "weeklyOn": "Weekly on {{day}}",
-    "monthlyOn": "Monthly on day {{day}}",
-    "annuallyOn": "Annually on {{month}} {{day}}",
-    "everyWeekday": "Every weekday (Monday to Friday)",
-    "custom": "Custom..."
+    "daily": "Diario",
+    "weeklyOn": "Semanalmente el {{day}}",
+    "monthlyOn": "Mensualmente el día {{day}}",
+    "annuallyOn": "Anualmente el {{day}} de {{month}}",
+    "everyWeekday": "Todos los días laborables (lunes a viernes)",
+    "custom": "Personalizado..."
   },
   "enterEmail": "Enter Email",
   "emailAddress": "Email Address",
