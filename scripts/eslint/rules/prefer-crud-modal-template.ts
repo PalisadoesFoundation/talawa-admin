@@ -8,7 +8,6 @@ type Options = [];
  * Flags violations when handler props (onSubmit, onConfirm, onPrimary, onSave)
  * are present, or when form elements exist within the modal children.
  */
-
 const rule: TSESLint.RuleModule<MessageIds, Options> = {
   meta: {
     type: 'suggestion',
@@ -150,8 +149,8 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
               ? hasFormElement(parent.children)
               : false;
 
-        // Require both CRUD handler props AND form elements to trigger
-        if (hasCrudHandler && hasFormInChildren) {
+        // Flag when CRUD handler props OR form elements are present
+        if (hasCrudHandler || hasFormInChildren) {
           context.report({
             node: node,
             messageId: 'preferCrud',
