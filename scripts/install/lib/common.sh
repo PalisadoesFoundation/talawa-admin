@@ -330,7 +330,7 @@ command_exists() {
 # Usage: require_command "git" "Git is required for version control"
 require_command() {
     local cmd="${1:-}"
-    local message="${2:-Command '$cmd' is required but not installed}"
+    local message="${2:-Command ${cmd} is required but not installed}"
 
     if ! command_exists "$cmd"; then
         die "$message" "$E_MISSING_DEP"
