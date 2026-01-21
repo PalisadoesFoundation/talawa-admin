@@ -31,15 +31,9 @@
 import React, { useEffect } from 'react';
 import styles from './TableLoader.module.css';
 import { Table } from 'react-bootstrap';
+import { InterfaceTableLoaderProps } from 'types/shared-components/TableLoader/interface';
 
-export interface InterfaceTableLoader {
-  noOfRows: number;
-  headerTitles?: string[];
-  noOfCols?: number;
-  'data-testid'?: string;
-}
-
-const tableLoader = (props: InterfaceTableLoader): JSX.Element => {
+const tableLoader = (props: InterfaceTableLoaderProps): JSX.Element => {
   const { noOfRows, headerTitles, noOfCols, 'data-testid': dataTestId } = props;
 
   useEffect(() => {

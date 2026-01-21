@@ -33,7 +33,7 @@ import {
   MEMBERSHIP_REQUEST_PG,
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import TableLoader from 'components/TableLoader/TableLoader';
+import TableLoader from 'shared-components/TableLoader/TableLoader';
 import {
   GridCellParams,
   GridColDef,
