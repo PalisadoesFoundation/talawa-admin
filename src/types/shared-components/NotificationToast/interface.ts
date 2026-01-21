@@ -56,7 +56,7 @@ export interface InterfacePromiseMessages {
 /**
  * Promisified function type.
  */
-export type PromiseFunction = () => Promise<void>;
+export type PromiseFunction<T = void> = () => Promise<T>;
 
 /**
  * Reusable helper API exposed by `NotificationToast`.
@@ -90,11 +90,11 @@ export interface InterfaceNotificationToastHelpers {
   /**
    * Show a promise toast with pending, success, and error states.
    */
-  promise: (
-    promisifiedFunction: PromiseFunction,
+  promise: <T = void>(
+    promisifiedFunction: PromiseFunction<T>,
     messages: InterfacePromiseMessages,
     options?: ToastOptions,
-  ) => Promise<void>;
+  ) => Promise<T>;
 }
 
 /**

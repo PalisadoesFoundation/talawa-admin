@@ -81,11 +81,11 @@ function showToast(
  * @param options - Optional ToastOptions to override DEFAULT_TOAST_OPTIONS.
  * @returns Promise that resolves when the function completes.
  */
-function showPromise(
-  promisifiedFunction: PromiseFunction,
+function showPromise<T = void>(
+  promisifiedFunction: PromiseFunction<T>,
   messages: InterfacePromiseMessages,
   options?: ToastOptions,
-): Promise<void> {
+): Promise<T> {
   const mergedOptions: ToastOptions = { ...DEFAULT_TOAST_OPTIONS, ...options };
   const resolvedPendingMessage = resolveNotificationToastMessage(
     messages.pending,
@@ -102,7 +102,7 @@ function showPromise(
       success: resolvedSuccessMessage,
     },
     mergedOptions,
-  ) as Promise<void>;
+  ) as Promise<T>;
 }
 
 /**
@@ -126,8 +126,11 @@ export const NotificationToast: InterfaceNotificationToastHelpers = {
   warning: (message, options) => showToast('warning', message, options),
   info: (message, options) => showToast('info', message, options),
   dismiss: () => toast.dismiss(),
-  promise: (promisifiedFunction, messages, options) =>
-    showPromise(promisifiedFunction, messages, options),
+  promise: <T = void>(
+    promisifiedFunction: PromiseFunction<T>,
+    messages: InterfacePromiseMessages,
+    options?: ToastOptions,
+  ) => showPromise<T>(promisifiedFunction, messages, options),
 };
 
 /**

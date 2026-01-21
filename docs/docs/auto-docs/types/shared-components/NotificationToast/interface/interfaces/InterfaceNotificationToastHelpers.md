@@ -74,17 +74,23 @@ Show an info toast.
 
 ### promise()
 
-> **promise**: (`promisifiedFunction`, `messages`, `options?`) => `Promise`\<`void`\>
+> **promise**: \<`T`\>(`promisifiedFunction`, `messages`, `options?`) => `Promise`\<`T`\>
 
 Defined in: [src/types/shared-components/NotificationToast/interface.ts:93](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/NotificationToast/interface.ts#L93)
 
 Show a promise toast with pending, success, and error states.
 
+#### Type Parameters
+
+##### T
+
+`T` = `void`
+
 #### Parameters
 
 ##### promisifiedFunction
 
-[`PromiseFunction`](../type-aliases/PromiseFunction.md)
+[`PromiseFunction`](../type-aliases/PromiseFunction.md)\<`T`\>
 
 ##### messages
 
@@ -96,7 +102,7 @@ Show a promise toast with pending, success, and error states.
 
 #### Returns
 
-`Promise`\<`void`\>
+`Promise`\<`T`\>
 
 ***
 
