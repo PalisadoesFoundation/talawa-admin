@@ -1,3 +1,28 @@
+/**
+ * ChatHeader Component
+ *
+ * This component displays the header information for a chat room, including the chat image,
+ * title, and subtitle. For group chats, clicking on the header triggers the group details modal.
+ *
+ * @remarks
+ * - Uses ProfileAvatarDisplay for rendering the chat avatar.
+ * - Clickable header for group chats to view details.
+ *
+ * @param props - The props for the ChatHeader component.
+ * @returns The rendered ChatHeader component.
+ *
+ * @example
+ * ```tsx
+ * <ChatHeader
+ *   chatImage="https://example.com/avatar.jpg"
+ *   chatTitle="Chat Name"
+ *   chatSubtitle="2 members"
+ *   isGroup={true}
+ *   onGroupClick={() => setShowGroupDetails(true)}
+ * />
+ * ```
+ */
+
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import styles from './ChatRoom.module.css';
 

@@ -1,3 +1,36 @@
+/**
+ * ChatMessages Component
+ *
+ * This component renders the list of messages in a chat room. It handles message pagination,
+ * displays a loading indicator when fetching older messages, and manages scroll events.
+ *
+ * @remarks
+ * - Uses a ref to track the messages container for scroll handling.
+ * - Renders individual MessageItem components for each message.
+ * - Shows loading state when more messages are being fetched.
+ *
+ * @param props - The props for the ChatMessages component.
+ * @returns The rendered ChatMessages component.
+ *
+ * @example
+ * ```tsx
+ * <ChatMessages
+ *   messages={chat.messages.edges}
+ *   isGroup={false}
+ *   currentUserId="user123"
+ *   chatOrganizationId="org123"
+ *   getFileFromMinio={getFileFromMinio}
+ *   onScroll={handleScroll}
+ *   loadingMoreMessages={false}
+ *   onReply={setReplyToDirectMessage}
+ *   onEdit={setEditMessage}
+ *   onDelete={deleteMessage}
+ *   t={t}
+ *   setMessagesContainerRef={(ref) => (messagesContainerRef.current = ref)}
+ * />
+ * ```
+ */
+
 import { useRef, useEffect } from 'react';
 import type { INewChat } from './types';
 import MessageItem from './MessageItem';

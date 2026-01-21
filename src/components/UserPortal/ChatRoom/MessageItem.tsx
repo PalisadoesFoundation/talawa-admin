@@ -1,3 +1,34 @@
+/**
+ * MessageItem Component
+ *
+ * This component renders a single chat message. It displays the message content, sender information
+ * (for group chats), timestamp, and action buttons for reply, edit, and delete operations.
+ *
+ * @remarks
+ * - Differentiates between sent and received messages with distinct styling.
+ * - Shows sender avatar in group chats for non-own messages.
+ * - Displays parent message reference when replying to a message.
+ * - Supports both text and image attachments.
+ *
+ * @param props - The props for the MessageItem component.
+ * @returns The rendered MessageItem component.
+ *
+ * @example
+ * ```tsx
+ * <MessageItem
+ *   message={messageNode}
+ *   isGroup={false}
+ *   currentUserId="user123"
+ *   chatOrganizationId="org123"
+ *   getFileFromMinio={getFileFromMinio}
+ *   onReply={setReplyToDirectMessage}
+ *   onEdit={setEditMessage}
+ *   onDelete={deleteMessage}
+ *   t={t}
+ * />
+ * ```
+ */
+
 import { Dropdown } from 'react-bootstrap';
 import { MoreVert } from '@mui/icons-material';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';

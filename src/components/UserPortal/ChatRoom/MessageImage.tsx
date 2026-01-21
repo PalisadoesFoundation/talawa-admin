@@ -1,3 +1,27 @@
+/**
+ * MessageImage Component
+ *
+ * This component handles the display of image attachments in messages. It fetches the image
+ * URL from MinIO storage and manages loading, success, and error states.
+ *
+ * @remarks
+ * - Memoized component for performance optimization.
+ * - Uses useEffect to fetch image data on mount and when dependencies change.
+ * - Prevents memory leaks by checking component mount status before state updates.
+ *
+ * @param props - The props for the MessageImage component.
+ * @returns The rendered MessageImage component.
+ *
+ * @example
+ * ```tsx
+ * <MessageImage
+ *   media="uploads/img1.jpg"
+ *   organizationId="org123"
+ *   getFileFromMinio={getFileFromMinio}
+ * />
+ * ```
+ */
+
 import React from 'react';
 import styles from './ChatRoom.module.css';
 
