@@ -1,5 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
-import { Button, Alert } from 'react-bootstrap';
+import { Alert } from 'react-bootstrap';
+import Button from 'shared-components/Button/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type { InterfaceCRUDModalTemplateProps } from 'types/shared-components/CRUDModalTemplate/interface';
@@ -59,6 +60,7 @@ export const CRUDModalTemplate: React.FC<InterfaceCRUDModalTemplateProps> = ({
   hideSecondary = false,
   customFooter,
   showFooter = true,
+  primaryBtnTestId,
 }) => {
   const { t: tCommon } = useTranslation('common');
   const resolvedPrimaryText = primaryText ?? tCommon('save');
@@ -115,7 +117,7 @@ export const CRUDModalTemplate: React.FC<InterfaceCRUDModalTemplateProps> = ({
                   ? globalStyles.removeButton
                   : ''
             }
-            data-testid="modal-primary-btn"
+            data-testid={primaryBtnTestId || 'modal-primary-btn'}
           >
             {resolvedPrimaryText}
           </Button>

@@ -59,6 +59,7 @@ const EventListCardDeleteModal: React.FC<InterfaceDeleteEventModalProps> = ({
       size={isRecurringInstance ? 'lg' : 'sm'}
       centered
       data-testid={testid}
+      primaryBtnTestId="deleteEventBtn"
     >
       {isRecurringInstance ? (
         <div>

@@ -131,6 +131,11 @@ export interface InterfaceCRUDModalTemplateProps extends InterfaceCrudModalBaseP
    *
    */
   showFooter?: boolean;
+
+  /**
+   * Optional test ID for the primary button
+   */
+  primaryBtnTestId?: string;
 }
 
 /**
