@@ -64,10 +64,13 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
       // Check JSX usage
       JSXOpeningElement(node: TSESTree.JSXOpeningElement) {
         // Get the component name from JSX element
+        // Handle both JSXIdentifier (BaseModal) and JSXMemberExpression (UI.BaseModal)
         const elementName =
           node.name.type === AST_NODE_TYPES.JSXIdentifier
             ? node.name.name
-            : null;
+            : node.name.type === AST_NODE_TYPES.JSXMemberExpression
+              ? node.name.property.name
+              : null;
 
         // Check if this is a BaseModal usage (including aliased names)
         if (!elementName || !baseModalNames.has(elementName)) {
@@ -145,9 +148,7 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
         const hasFormInChildren =
           parent?.type === AST_NODE_TYPES.JSXElement
             ? hasFormElement(parent.children)
-            : parent?.type === AST_NODE_TYPES.JSXFragment
-              ? hasFormElement(parent.children)
-              : false;
+            : false;
 
         // Flag when CRUD handler props OR form elements are present
         if (hasCrudHandler || hasFormInChildren) {
