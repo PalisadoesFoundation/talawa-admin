@@ -49,7 +49,8 @@ export function useDataTableFiltering<T>(
     globalSearch,
     onGlobalSearchChange,
     columnFilters,
-    onColumnFiltersChange: _onColumnFiltersChange,
+    // Note: onColumnFiltersChange is provided by consumers for per-column filter UI
+    // This hook only reads columnFilters; updating them is consumer's responsibility
     serverSearch = false,
     serverFilter = false,
     paginationMode,

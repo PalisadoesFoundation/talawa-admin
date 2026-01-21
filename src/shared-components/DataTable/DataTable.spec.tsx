@@ -1837,6 +1837,7 @@ describe('DataTable', () => {
   });
 
   it('covers disabled branches in ActionsCell and useDataTableSelection', async () => {
+    const user = userEvent.setup();
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data = [{ id: '1', name: 'Ada' }];
     const onAction = vi.fn();
@@ -1869,7 +1870,7 @@ describe('DataTable', () => {
     expect(screen.getByTestId('action-btn-edit')).not.toBeDisabled();
 
     // Bulk action button should NOT be disabled (once row is selected)
-    await userEvent.click(screen.getByTestId('select-row-1'));
+    await user.click(screen.getByTestId('select-row-1'));
     expect(screen.getByTestId('bulk-action-bulk')).not.toBeDisabled();
   });
 });
