@@ -44,7 +44,9 @@ const DEFAULT_CONTAINER_PROPS: ToastContainerProps = {
  * @param message - The message to resolve. Can be a plain string or an i18n key object with key, namespace, and interpolation values.
  * @returns The resolved message string.
  */
-function resolveNotificationToastMessage(message: NotificationToastMessage) {
+function resolveNotificationToastMessage(
+  message: NotificationToastMessage,
+): string {
   if (typeof message === 'string') return message;
 
   const { key, namespace, values } = message;
