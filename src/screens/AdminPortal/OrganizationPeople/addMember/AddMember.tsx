@@ -24,6 +24,8 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import InputGroup from 'react-bootstrap/InputGroup';
+import FormControl from 'react-bootstrap/FormControl';
 import {
   CREATE_MEMBER_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
