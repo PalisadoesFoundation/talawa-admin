@@ -42,14 +42,14 @@ readonly TALAWA_COMMON_SOURCED=1
 # E_INVALID_ARG  (6) - Invalid argument or input provided
 # E_IO_ERROR     (7) - File/IO operation failed
 # ==============================================================================
-readonly E_SUCCESS=0
-readonly E_GENERAL=1
-readonly E_MISSING_DEP=2
-readonly E_PERMISSION=3
-readonly E_NETWORK=4
-readonly E_USER_ABORT=5
-readonly E_INVALID_ARG=6
-readonly E_IO_ERROR=7
+export E_SUCCESS=0
+export E_GENERAL=1
+export E_MISSING_DEP=2
+export E_PERMISSION=3
+export E_NETWORK=4
+export E_USER_ABORT=5
+export E_INVALID_ARG=6
+export E_IO_ERROR=7
 
 # ==============================================================================
 # SYMBOLS (Plain text, no ANSI colors)
@@ -241,7 +241,7 @@ prompt_input() {
         # Validate if pattern provided
         if [[ -n "$validation" ]]; then
             if [[ "$input" =~ $validation ]]; then
-                eval "$varname=\"\$input\""
+                printf -v "$varname" '%s' "$input"
                 return 0
             else
                 if [[ ! -t 0 ]] && ((attempts >= max_attempts)); then
@@ -250,7 +250,7 @@ prompt_input() {
                 log_warning "Invalid input. Please try again."
             fi
         else
-            eval "$varname=\"\$input\""
+            printf -v "$varname" '%s' "$input"
             return 0
         fi
     done
@@ -260,14 +260,12 @@ prompt_input() {
 # SECURITY HELPERS
 # ==============================================================================
 
-# Sanitize input by removing dangerous shell metacharacters
-# Removes: ; & | ` $ ( ) { } < > \ ! and newlines
-# Usage: safe_value=$(sanitize_input "$user_input")
+# Whitelist-based sanitization for security-critical inputs
+# Usage: safe_value=$(sanitize_input_strict "$user_input")
 sanitize_input() {
     local input="${1:-}"
-    # Remove dangerous shell metacharacters
-    # Using printf and sed for portability
-    printf '%s' "$input" | sed 's/[;&|`$(){}\\<>!]//g' | tr -d '\n\r'
+    # Allow only alphanumeric, underscore, hyphen, dot, and forward slash
+    printf '%s' "$input" | tr -cd 'a-zA-Z0-9_./-'
 }
 
 # Create a temporary file securely
@@ -421,7 +419,12 @@ resolve_path() {
 # Check if running as root
 # Usage: if is_root; then echo "Running as root"; fi
 is_root() {
-    [[ "$(id -u)" -eq 0 ]]
+    if command -v id >/dev/null 2>&1; then
+        [[ "$(id -u)" -eq 0 ]]
+    else
+        # Fallback: check UID environment variable
+        [[ "${UID:-$(whoami 2>/dev/null)}" == "0" ]] || [[ "$(whoami 2>/dev/null)" == "root" ]]
+    fi
 }
 
 # Check if running in WSL (Windows Subsystem for Linux)
