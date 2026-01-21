@@ -4,7 +4,7 @@
 
 # Interface: IPersonalDetailsCardProps
 
-Defined in: [src/types/shared-components/ProfileForm/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L68)
+Defined in: [src/types/shared-components/ProfileForm/interface.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L67)
 
 Props for the PersonalDetailsCard component
 
@@ -14,7 +14,7 @@ Props for the PersonalDetailsCard component
 
 > **fileInputRef**: `RefObject`\<`HTMLInputElement`\>
 
-Defined in: [src/types/shared-components/ProfileForm/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L73)
+Defined in: [src/types/shared-components/ProfileForm/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L72)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/shared-components/ProfileForm/interface.ts:73](https://gi
 
 > **formState**: [`IProfileFormState`](IProfileFormState.md)
 
-Defined in: [src/types/shared-components/ProfileForm/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L69)
+Defined in: [src/types/shared-components/ProfileForm/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L68)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/shared-components/ProfileForm/interface.ts:69](https://gi
 
 > **handleFieldChange**: (`fieldName`, `value`) => `void`
 
-Defined in: [src/types/shared-components/ProfileForm/interface.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L76)
+Defined in: [src/types/shared-components/ProfileForm/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L75)
 
 #### Parameters
 
@@ -52,7 +52,7 @@ Defined in: [src/types/shared-components/ProfileForm/interface.ts:76](https://gi
 
 > **handleFileUpload**: (`e`) => `void`
 
-Defined in: [src/types/shared-components/ProfileForm/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L75)
+Defined in: [src/types/shared-components/ProfileForm/interface.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L74)
 
 #### Parameters
 
@@ -70,7 +70,7 @@ Defined in: [src/types/shared-components/ProfileForm/interface.ts:75](https://gi
 
 > **selectedAvatar**: `File`
 
-Defined in: [src/types/shared-components/ProfileForm/interface.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L74)
+Defined in: [src/types/shared-components/ProfileForm/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L73)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [src/types/shared-components/ProfileForm/interface.ts:74](https://gi
 
 > **t**: `TFunction`
 
-Defined in: [src/types/shared-components/ProfileForm/interface.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L71)
+Defined in: [src/types/shared-components/ProfileForm/interface.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L70)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [src/types/shared-components/ProfileForm/interface.ts:71](https://gi
 
 > **tCommon**: `TFunction`
 
-Defined in: [src/types/shared-components/ProfileForm/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L72)
+Defined in: [src/types/shared-components/ProfileForm/interface.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L71)
 
 ***
 
@@ -94,4 +94,4 @@ Defined in: [src/types/shared-components/ProfileForm/interface.ts:72](https://gi
 
 > **userData**: [`IUserData`](IUserData.md)
 
-Defined in: [src/types/shared-components/ProfileForm/interface.ts:70](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L70)
+Defined in: [src/types/shared-components/ProfileForm/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L69)

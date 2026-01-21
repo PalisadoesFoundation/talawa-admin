@@ -48,8 +48,13 @@ vi.mock('./MemberActivitySection', () => ({
 }));
 
 // Mock the Button to capture clicks easily
+// FIX: Replaced 'any' with specific React button attributes
 vi.mock('shared-components/Button/Button', () => ({
-  default: ({ children, onClick, ...props }: any) => (
+  default: ({
+    children,
+    onClick,
+    ...props
+  }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
     <button onClick={onClick} {...props}>
       {children}
     </button>
@@ -86,11 +91,15 @@ describe('MemberDetail Component', () => {
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
     // Reset the hook to return default values before each test
     (useProfileLogic as unknown as ReturnType<typeof vi.fn>).mockReturnValue(
       defaultHookValues,
     );
+  });
+
+  // FIX: Added afterEach cleanup as required by linter
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   test('renders loading state correctly', () => {

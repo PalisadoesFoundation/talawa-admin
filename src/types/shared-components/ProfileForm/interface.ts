@@ -1,6 +1,6 @@
 import { TFunction } from 'i18next';
 import { IEvent } from 'types/Event/interface';
-import { languages } from 'utils/languages';
+// REMOVED: import { languages } from 'utils/languages';
 
 /**
  * Interface representing the state of the Profile Form.
@@ -59,7 +59,6 @@ export interface IContactInfoCardProps {
 export interface IMemberActivitySectionProps {
   events?: IEvent[];
   onViewAll: () => void;
-  // REMOVED: t: TFunction; (This is now handled internally by the component)
 }
 
 /**
@@ -76,10 +75,4 @@ export interface IPersonalDetailsCardProps {
   handleFieldChange: (fieldName: string, value: string) => void;
 }
 
-/**
- * Helper function to retrieve the full language name from its code.
- */
-export const getLanguageName = (code: string): string | null => {
-  const found = languages.find((data) => data.code === code);
-  return found?.name ?? null;
-};
+// REMOVED: getLanguageName function
