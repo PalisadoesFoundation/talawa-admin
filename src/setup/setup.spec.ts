@@ -9,6 +9,7 @@ import updateEnvFile from './updateEnvFile/updateEnvFile';
 import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
 import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
 import inquirer from 'inquirer';
+import { backupEnvFile } from './backupEnvFile/backupEnvFile';
 
 vi.mock('./backupEnvFile/backupEnvFile', () => ({
   backupEnvFile: vi.fn().mockResolvedValue('path/to/backup'),
@@ -21,13 +22,16 @@ vi.mock('inquirer', () => ({
 vi.mock('dotenv');
 vi.mock('fs', () => {
   const readFile = vi.fn();
+  const copyFileSync = vi.fn();
 
   return {
     default: {
+      copyFileSync,
       promises: {
         readFile,
       },
     },
+    copyFileSync,
     promises: {
       readFile,
     },
@@ -120,7 +124,7 @@ describe('Talawa Admin Setup', () => {
       .spyOn(console, 'error')
       .mockImplementation(() => undefined);
 
-    await main();
+    await expect(main()).rejects.toThrow('process.exit called with code 1');
 
     // Should not proceed with setup
     expect(consoleSpy).toHaveBeenCalledWith(
@@ -158,6 +162,35 @@ describe('Talawa Admin Setup', () => {
 
     // ALLOW_LOGS should be set to YES when user opts in
     expect(updateEnvFile).toHaveBeenCalledWith('ALLOW_LOGS', 'YES');
+  });
+
+  it('should restore from backup when setup fails and backupPath exists', async () => {
+    const mockError = new Error('Setup failed');
+    vi.mocked(backupEnvFile).mockResolvedValue('path/to/backup');
+    vi.mocked(askAndSetDockerOption).mockRejectedValueOnce(mockError);
+
+    const copyFileSyncSpy = vi
+      .spyOn(fs, 'copyFileSync')
+      .mockImplementation(() => undefined);
+    const consoleSpy = vi
+      .spyOn(console, 'log')
+      .mockImplementation(() => undefined);
+    const exitMock = vi
+      .spyOn(process, 'exit')
+      .mockImplementationOnce((code) => {
+        throw new Error(`process.exit called with code ${code}`);
+      });
+
+    await expect(main()).rejects.toThrow('process.exit called with code 1');
+
+    expect(consoleSpy).toHaveBeenCalledWith(
+      '🔄 Attempting to restore from backup...',
+    );
+    expect(copyFileSyncSpy).toHaveBeenCalledWith('path/to/backup', '.env');
+    expect(consoleSpy).toHaveBeenCalledWith(
+      '✅ Configuration restored from backup.',
+    );
+    expect(exitMock).toHaveBeenCalledWith(1);
   });
 
   it('should handle errors during setup process (and call process.exit(1))', async () => {

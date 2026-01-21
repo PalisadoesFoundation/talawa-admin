@@ -73,6 +73,7 @@ describe('backupEnvFile', () => {
     expect(mkdir).toHaveBeenCalledWith(path.join(mockCwd, '.backup'), {
       recursive: true,
     });
+    expect(result).not.toBeNull();
   });
 
   it('should handle missing .env file gracefully', async () => {
@@ -130,5 +131,6 @@ describe('backupEnvFile', () => {
       expect.any(String),
       expect.stringContaining(`.env.${mockEpochSec}`),
     );
+    expect(result).toContain(`.env.${mockEpochSec}`);
   });
 });

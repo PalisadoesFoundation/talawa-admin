@@ -157,7 +157,9 @@ export async function main(): Promise<void> {
       console.error(
         '❌ Environment file check failed. Please ensure .env exists.',
       );
-      process.exit(1);
+      throw new Error(
+        'Environment file check failed. Please ensure .env exists.',
+      );
     }
 
     console.log('Welcome to the Talawa Admin setup! 🚀');
@@ -201,7 +203,6 @@ export async function main(): Promise<void> {
       } catch (restoreError) {
         console.error('❌ Failed to restore backup:', restoreError);
         console.log(`Manual restore needed. Backup location: ${backupPath}`);
-        throw restoreError;
       }
     }
 

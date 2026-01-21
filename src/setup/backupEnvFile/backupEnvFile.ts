@@ -52,6 +52,8 @@ export const backupEnvFile = async (): Promise<string | null> => {
   } catch (error) {
     console.error('Error backing up .env file:', error);
     const errorMessage = error instanceof Error ? error.message : String(error);
-    throw new Error(`Failed to backup .env file: ${errorMessage}`);
+    throw new Error(`Failed to backup .env file: ${errorMessage}`, {
+      cause: error,
+    });
   }
 };
