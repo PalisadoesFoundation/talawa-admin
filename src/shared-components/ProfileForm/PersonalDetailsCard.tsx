@@ -15,6 +15,21 @@ import {
 import { IPersonalDetailsCardProps } from '../../types/shared-components/ProfileForm/interface';
 import styles from './PersonalDetailsCard.module.css';
 
+/**
+ * Renders the personal details section of the profile form.
+ * Includes fields for avatar, name, gender, birthdate, education, etc.
+ *
+ * @param props - The component props
+ * @param props.formState - Current state of the form fields
+ * @param props.userData - Original user data fetched from API
+ * @param props.t - Translation function for member details
+ * @param props.tCommon - Translation function for common terms
+ * @param props.fileInputRef - Reference to the hidden file input
+ * @param props.selectedAvatar - The currently selected avatar file
+ * @param props.handleFileUpload - Handler for avatar file uploads
+ * @param props.handleFieldChange - Handler for input changes
+ * @returns The rendered PersonalDetailsCard component
+ */
 const PersonalDetailsCard: React.FC<IPersonalDetailsCardProps> = ({
   formState,
   userData,

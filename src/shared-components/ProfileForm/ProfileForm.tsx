@@ -10,6 +10,13 @@ import ContactInfoCard from './ContactInfoCard';
 import MemberActivitySection from './MemberActivitySection';
 import styles from './ProfileForm.module.css';
 
+/**
+ * Main ProfileForm component (exported as MemberDetail).
+ * Orchestrates the display of user profile information, including personal details,
+ * contact information, and activity history.
+ *
+ * @returns The rendered MemberDetail component
+ */
 const MemberDetail: React.FC = (): JSX.Element => {
   const {
     formState,

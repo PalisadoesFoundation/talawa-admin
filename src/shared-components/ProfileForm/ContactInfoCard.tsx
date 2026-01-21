@@ -4,6 +4,18 @@ import { countryOptions } from 'utils/formEnumFields';
 import { IContactInfoCardProps } from '../../types/shared-components/ProfileForm/interface';
 import styles from './ContactInfoCard.module.css';
 
+/**
+ * Renders the contact information section of the profile form.
+ * Includes fields for email, phone numbers, and address details.
+ *
+ * @param props - The component props
+ * @param props.formState - Current state of the form fields
+ * @param props.email - The user's email address (read-only)
+ * @param props.t - Translation function for member details
+ * @param props.tCommon - Translation function for common terms
+ * @param props.handleFieldChange - Handler for input changes
+ * @returns The rendered ContactInfoCard component
+ */
 const ContactInfoCard: React.FC<IContactInfoCardProps> = ({
   formState,
   email,

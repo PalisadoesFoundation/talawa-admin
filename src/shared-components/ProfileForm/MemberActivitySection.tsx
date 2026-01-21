@@ -1,6 +1,5 @@
 import React from 'react';
 import { Card, Col } from 'react-bootstrap';
-// Add this import:
 import { useTranslation } from 'react-i18next';
 import EventsAttendedByMember from 'components/MemberActivity/EventsAttendedByMember';
 import Button from 'shared-components/Button/Button';
@@ -8,7 +7,14 @@ import type { IEvent } from 'types/Event/interface';
 import { IMemberActivitySectionProps } from '../../types/shared-components/ProfileForm/interface';
 import styles from './MemberActivitySection.module.css';
 
-// Remove 't' from the destructured props
+/**
+ * Renders the member activity section, displaying events attended and assigned tags.
+ *
+ * @param props - The component props
+ * @param props.events - List of events attended by the member
+ * @param props.onViewAll - Handler to open the "View All Events" modal
+ * @returns The rendered MemberActivitySection component
+ */
 const MemberActivitySection: React.FC<IMemberActivitySectionProps> = ({
   events,
   onViewAll,
