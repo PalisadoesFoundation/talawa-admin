@@ -1,12 +1,11 @@
 import gql from 'graphql-tag';
-import 'style/app-fixed.module.css';
 //Query List
 // Check Auth
 
 // Query to get info about current user
 export const CURRENT_USER = gql`
   query CurrentUser {
-    currentUser {
+    user: currentUser {
       addressLine1
       addressLine2
       avatarMimeType
@@ -304,6 +303,7 @@ export const EVENT_DETAILS = gql`
       allDay
       isPublic
       isRegisterable
+      isInviteOnly
       startAt
       endAt
       createdAt
@@ -540,6 +540,7 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             location
             isPublic
             isRegisterable
+            isInviteOnly
             # Recurring event fields
             isRecurringEventTemplate
             baseEvent {
@@ -621,6 +622,15 @@ export const GET_ORGANIZATION_EVENTS_USER_PORTAL_PG = gql`
             location
             isPublic
             isRegisterable
+            isInviteOnly
+            creator {
+              id
+              name
+            }
+            attendees {
+              id
+              name
+            }
             # Recurring event fields
             isRecurringEventTemplate
             baseEvent {
@@ -1198,6 +1208,7 @@ export const SIGNIN_QUERY = gql`
         role
         countryCode
         avatarURL
+        isEmailAddressVerified
       }
       authenticationToken
       refreshToken

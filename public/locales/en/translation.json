@@ -84,7 +84,12 @@
     "communityLogo": "Community Logo",
     "organizations": "Organizations",
     "accountLocked": "Your account has been temporarily locked due to too many failed login attempts. Please try again later.",
-    "accountLockedWithTimer": "Your account has been temporarily locked. Please try again in {{minutes}} minute(s)."
+    "accountLockedWithTimer": "Your account has been temporarily locked. Please try again in {{minutes}} minute(s).",
+    "signupSuccessVerifyEmail": "Successfully registered! Please check your email to verify your account.",
+    "emailResent": "Verification email has been resent successfully.",
+    "emailNotVerified": "Your email is not verified. Please check your inbox for the verification link.",
+    "resendVerification": "Resend Verification",
+    "resendFailed": "Failed to resend verification email. Please try again."
   },
   "adminProfile": {
     "title": "Admin Profile",
@@ -542,6 +547,10 @@
     "recurringEvent": "Recurring Event",
     "recurring": "Recurring",
     "isPublic": "Is Public",
+    "visibility": "Visibility",
+    "public": "Public",
+    "organizationMembers": "Organization Members",
+    "inviteOnly": "Invite Only",
     "isRegistrable": "Is Registrable",
     "registerable": "Is Registerable",
     "createChat": "Create Chat",
@@ -762,6 +771,10 @@
     "allDay": "All Day",
     "recurringEvent": "Recurring Event",
     "isPublic": "Is Public",
+    "visibility": "Visibility",
+    "public": "Public",
+    "organizationMembers": "Organization Members",
+    "inviteOnly": "Invite Only",
     "isRegistrable": "Is Registrable",
     "createChat": "Create Chat",
     "updatePost": "Update Post",
@@ -2342,5 +2355,18 @@
       "emptyState": "Waiting for people to talk about the event...",
       "filledByCount": "Filled by {{count}} people."
     }
+  },
+  "verifyEmail": {
+    "title": "Verify Email",
+    "verifying": "Verifying your email...",
+    "success": "Email Verified!",
+    "successMessage": "Your email has been successfully verified. You can now login.",
+    "error": "Verification Failed",
+    "invalidToken": "The verification link is invalid or has expired.",
+    "loginRequired": "Please login to verify your email.",
+    "resendButton": "Resend Verification Email",
+    "resendSuccess": "Verification email has been resent successfully.",
+    "resendFailed": "Failed to resend verification email. Please try again.",
+    "goToLogin": "Go to Login"
   }
 }

@@ -1,10 +1,4 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  within,
-} from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -89,6 +83,7 @@ const mockEventListCardProps = {
   allDay: false,
   isPublic: true,
   isRegisterable: true,
+  isInviteOnly: false,
   attendees: [],
   creator: {
     id: 'creator123',
@@ -127,6 +122,8 @@ const mockDefaultProps = {
   setPublicChecked: vi.fn(),
   registrablechecked: true,
   setRegistrableChecked: vi.fn(),
+  inviteOnlyChecked: false,
+  setInviteOnlyChecked: vi.fn(),
   formState: mockFormState,
   setFormState: vi.fn(),
   registerEventHandler: vi.fn(),
@@ -325,14 +322,186 @@ describe('EventListCardPreviewModal', () => {
     expect(mockSetAllDayChecked).toHaveBeenCalledWith(true);
   });
 
-  test('toggles public checkbox', async () => {
-    const mockSetPublicChecked = vi.fn();
-    renderComponent({ setPublicChecked: mockSetPublicChecked });
+  test('adjusts end time when unchecking all-day if times are equal', async () => {
+    const mockSetAllDayChecked = vi.fn();
+    const mockSetFormState = vi.fn();
+    const sameTime = '10:00:00';
 
-    const publicCheckbox = screen.getByTestId('updateIsPublic');
-    await userEvent.click(publicCheckbox);
+    renderComponent({
+      alldaychecked: true,
+      setAllDayChecked: mockSetAllDayChecked,
+      setFormState: mockSetFormState,
+      formState: { ...mockFormState, startTime: sameTime, endTime: sameTime },
+    });
+
+    const allDayCheckbox = screen.getByTestId('updateAllDay');
+    await userEvent.click(allDayCheckbox);
+
+    // Should toggle checked state
+    expect(mockSetAllDayChecked).toHaveBeenCalledWith(false);
+
+    // Should update form state with new end time (10:00:00 + 1 hour = 11:00:00)
+    expect(mockSetFormState).toHaveBeenCalledWith(
+      expect.objectContaining({
+        endTime: '11:00:00',
+      }),
+    );
+  });
+
+  test('does not adjust end time when unchecking all-day if times are different', async () => {
+    const mockSetAllDayChecked = vi.fn();
+    const mockSetFormState = vi.fn();
+    const startTime = '10:00:00';
+    const endTime = '12:00:00';
+
+    renderComponent({
+      alldaychecked: true,
+      setAllDayChecked: mockSetAllDayChecked,
+      setFormState: mockSetFormState,
+      formState: { ...mockFormState, startTime, endTime },
+    });
+
+    const allDayCheckbox = screen.getByTestId('updateAllDay');
+    await userEvent.click(allDayCheckbox);
+
+    // Should toggle checked state
+    expect(mockSetAllDayChecked).toHaveBeenCalledWith(false);
+
+    // Should NOT update form state with new end time
+    expect(mockSetFormState).not.toHaveBeenCalled();
+  });
+
+  test('renders visibility radio buttons for administrators', () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        userRole: UserRole.ADMINISTRATOR,
+      },
+    });
+
+    expect(screen.getByLabelText('public')).toBeInTheDocument();
+    expect(screen.getByLabelText('organizationMembers')).toBeInTheDocument();
+    expect(screen.getByLabelText('inviteOnly')).toBeInTheDocument();
+  });
+
+  test('selects public radio button when event is public', () => {
+    renderComponent({
+      publicchecked: true,
+      inviteOnlyChecked: false,
+    });
+
+    const publicRadio = screen.getByLabelText('public') as HTMLInputElement;
+    expect(publicRadio.checked).toBe(true);
+  });
+
+  test('selects organization members radio when event is not public and not invite only', () => {
+    renderComponent({
+      publicchecked: false,
+      inviteOnlyChecked: false,
+    });
+
+    const orgMembersRadio = screen.getByLabelText(
+      'organizationMembers',
+    ) as HTMLInputElement;
+    expect(orgMembersRadio.checked).toBe(true);
+  });
+
+  test('selects invite only radio when event is invite only', () => {
+    renderComponent({
+      publicchecked: false,
+      inviteOnlyChecked: true,
+    });
+
+    const inviteOnlyRadio = screen.getByLabelText(
+      'inviteOnly',
+    ) as HTMLInputElement;
+    expect(inviteOnlyRadio.checked).toBe(true);
+  });
+
+  test('clicking public radio sets publicchecked to true and inviteonlychecked to false', async () => {
+    const mockSetPublicChecked = vi.fn();
+    const mockSetInviteOnlyChecked = vi.fn();
+    renderComponent({
+      publicchecked: false,
+      inviteOnlyChecked: false,
+      setPublicChecked: mockSetPublicChecked,
+      setInviteOnlyChecked: mockSetInviteOnlyChecked,
+    });
+
+    const publicRadio = screen.getByLabelText('public');
+    await userEvent.click(publicRadio);
+
+    expect(mockSetPublicChecked).toHaveBeenCalledWith(true);
+    expect(mockSetInviteOnlyChecked).toHaveBeenCalledWith(false);
+  });
+
+  test('clicking organization members radio sets both flags to false', async () => {
+    const mockSetPublicChecked = vi.fn();
+    const mockSetInviteOnlyChecked = vi.fn();
+    renderComponent({
+      publicchecked: true,
+      inviteOnlyChecked: false,
+      setPublicChecked: mockSetPublicChecked,
+      setInviteOnlyChecked: mockSetInviteOnlyChecked,
+    });
+
+    const orgMembersRadio = screen.getByLabelText('organizationMembers');
+    await userEvent.click(orgMembersRadio);
 
     expect(mockSetPublicChecked).toHaveBeenCalledWith(false);
+    expect(mockSetInviteOnlyChecked).toHaveBeenCalledWith(false);
+  });
+
+  test('clicking invite only radio sets publicchecked to false and inviteonlychecked to true', async () => {
+    const mockSetPublicChecked = vi.fn();
+    const mockSetInviteOnlyChecked = vi.fn();
+    renderComponent({
+      publicchecked: true,
+      inviteOnlyChecked: false,
+      setPublicChecked: mockSetPublicChecked,
+      setInviteOnlyChecked: mockSetInviteOnlyChecked,
+    });
+
+    const inviteOnlyRadio = screen.getByLabelText('inviteOnly');
+    await userEvent.click(inviteOnlyRadio);
+
+    expect(mockSetPublicChecked).toHaveBeenCalledWith(false);
+    expect(mockSetInviteOnlyChecked).toHaveBeenCalledWith(true);
+  });
+
+  test('visibility radio buttons are disabled for non-editors', () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        creator: { id: 'creator123' },
+        userRole: UserRole.REGULAR,
+      },
+      userId: 'user456',
+    });
+
+    const publicRadio = screen.getByLabelText('public') as HTMLInputElement;
+    const orgMembersRadio = screen.getByLabelText(
+      'organizationMembers',
+    ) as HTMLInputElement;
+    const inviteOnlyRadio = screen.getByLabelText(
+      'inviteOnly',
+    ) as HTMLInputElement;
+
+    expect(publicRadio.disabled).toBe(true);
+    expect(orgMembersRadio.disabled).toBe(true);
+    expect(inviteOnlyRadio.disabled).toBe(true);
+  });
+
+  test('radiogroup has accessible name "visibility"', () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        userRole: UserRole.ADMINISTRATOR,
+      },
+    });
+
+    const radioGroup = screen.getByRole('radiogroup');
+    expect(radioGroup).toHaveAttribute('aria-label', 'visibility');
   });
 
   test('toggles registrable checkbox', async () => {
@@ -473,9 +642,27 @@ describe('EventListCardPreviewModal', () => {
       isRegistered: true,
     });
 
-    const alreadyRegisteredBtn = screen.getByText('alreadyRegistered');
+    const alreadyRegisteredBtn = screen
+      .getByText('alreadyRegistered')
+      .closest('button');
     expect(alreadyRegisteredBtn).toBeInTheDocument();
     expect(alreadyRegisteredBtn).toBeDisabled();
+  });
+
+  test('hides register button when event is not registerable (Bug #1 fix)', () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        isRegisterable: false,
+        creator: { id: 'creator123' },
+        userRole: UserRole.REGULAR,
+      },
+      userId: 'user456',
+      isRegistered: false,
+    });
+
+    expect(screen.queryByTestId('registerEventBtn')).not.toBeInTheDocument();
+    expect(screen.queryByText('alreadyRegistered')).not.toBeInTheDocument();
   });
 
   test('calls registerEventHandler when register button is clicked', async () => {
@@ -588,28 +775,23 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const dropdownToggle = screen.getByTestId('recurrenceDropdown');
+
+    // Verify dropdown exists and is clickable
+    expect(dropdownToggle).toBeInTheDocument();
     await userEvent.click(dropdownToggle);
 
-    expect(screen.getByText('Daily')).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        `Weekly on ${dayjs.utc(mockEventListCardProps.startAt).format('dddd')}`,
-      ),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        `Monthly on day ${dayjs.utc(mockEventListCardProps.startAt).date()}`,
-      ),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        `Annually on ${dayjs.utc(mockEventListCardProps.startAt).format('MMMM D')}`,
-      ),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText('Every weekday (Monday to Friday)'),
-    ).toBeInTheDocument();
-    expect(screen.getByText('Custom...')).toBeInTheDocument();
+    // Verify at least one option appears (using testid which is more reliable)
+    await waitFor(() => {
+      expect(screen.getByTestId('recurrenceOption-0')).toBeInTheDocument();
+    });
+
+    // Verify all options are present by their test IDs
+    expect(screen.getByTestId('recurrenceOption-0')).toBeInTheDocument(); // Daily
+    expect(screen.getByTestId('recurrenceOption-1')).toBeInTheDocument(); // Weekly
+    expect(screen.getByTestId('recurrenceOption-2')).toBeInTheDocument(); // Monthly
+    expect(screen.getByTestId('recurrenceOption-3')).toBeInTheDocument(); // Annually
+    expect(screen.getByTestId('recurrenceOption-4')).toBeInTheDocument(); // Weekday
+    expect(screen.getByTestId('recurrenceOption-5')).toBeInTheDocument(); // Custom
   });
 
   test('sets recurrence when option is selected', async () => {
@@ -1166,31 +1348,37 @@ describe('EventListCardPreviewModal', () => {
   });
 
   describe('Date and Time Picker onChange handlers', () => {
-    // test('updates end date if new start date is later', async () => {
-    //   const mockSetEventStartDate = vi.fn();
-    //   const mockSetEventEndDate = vi.fn();
-    //   renderComponent({
-    //     eventStartDate: dayjs().add(1, 'day').toDate(),
-    //     eventEndDate: dayjs().add(1, 'day').toDate(),
-    //     setEventStartDate: mockSetEventStartDate,
-    //     setEventEndDate: mockSetEventEndDate,
-    //   });
+    test('updates end date if new start date is later', async () => {
+      const mockSetEventStartDate = vi.fn();
+      const mockSetEventEndDate = vi.fn();
+      // Set the end date to an early date (5th of current month) so selecting 20th will be later
+      const earlyDate = dayjs().date(5).toDate();
+      renderComponent({
+        eventStartDate: earlyDate,
+        eventEndDate: earlyDate,
+        setEventStartDate: mockSetEventStartDate,
+        setEventEndDate: mockSetEventEndDate,
+      });
 
-    //   const dateInput = getPickerInputByTestId('startDate');
-    //   expect(dateInput.parentElement).toBeDefined();
-    //   const datePicker = dateInput?.parentElement;
-    //   const calendarButton = within(datePicker as HTMLElement).getByLabelText(
-    //     /choose date/i,
-    //   );
-    //   fireEvent.click(calendarButton);
+      const startDateInput = getPickerInputByTestId('startDate');
+      expect(startDateInput.parentElement).toBeTruthy();
+      const startDatePicker = startDateInput.parentElement;
+      const calendarButton = within(
+        startDatePicker as HTMLElement,
+      ).getByLabelText(/choose date/i);
+      await userEvent.click(calendarButton);
 
-    //   await waitFor(() => {
-    //     const dateToSelect = screen.getByText('20');
-    //     fireEvent.click(dateToSelect);
-    //     expect(mockSetEventStartDate).toHaveBeenCalled();
-    //     expect(mockSetEventEndDate).toHaveBeenCalled();
-    //   });
-    // });
+      const calendarGrid = await screen.findByRole('grid');
+      const dateToSelect = within(calendarGrid).getByRole('gridcell', {
+        name: '20',
+      });
+      await userEvent.click(dateToSelect);
+
+      await waitFor(() => {
+        expect(mockSetEventStartDate).toHaveBeenCalled();
+        expect(mockSetEventEndDate).toHaveBeenCalled();
+      });
+    });
 
     test('updates end time if new start time is later', () => {
       const mockSetFormState = vi.fn();

@@ -45,6 +45,7 @@
   "enterEmail": "输入电子邮件",
   "emailAddress": "电子邮件地址",
   "email": "电子邮件",
+  "emailPlaceholder": "name@example.com",
   "name": "姓名",
   "desc": "描述",
   "enterPassword": "输入密码",
@@ -113,6 +114,8 @@
   "createdLatest": "最近创建",
   "createdEarliest": "最早创建",
   "searchBy": "按 {{item}} 搜索",
+  "viewDetails": "查看详情",
+  "markComplete": "标记为完成",
   "plugins": "插件",
   "save": "保存",
   "saving": "保存中...",
@@ -285,5 +288,7 @@
   "attendedEventsList": "已参加活动列表",
   "linkCopied": "链接已复制到剪贴板",
   "copyToClipboardError": "复制链接到剪贴板时出错",
-  "share": "分享"
+  "share": "分享",
+  "viewEventStatistics": "查看活动统计",
+  "checkInRegistrantsAriaLabel": "签到登记者"
 }

@@ -20,11 +20,15 @@ import i18nForTest from 'utils/i18nForTest';
 import OrgList from './OrgList';
 import { MOCKS, MOCKS_ADMIN, MOCKS_EMPTY } from './OrgListMocks';
 import {
-  ORGANIZATION_FILTER_LIST,
   CURRENT_USER,
+  ORGANIZATION_FILTER_LIST,
 } from 'GraphQl/Queries/Queries';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
-import useLocalStorage from 'utils/useLocalstorage';
+import useLocalStorage, {
+  setItem as setItemStatic,
+  removeItem as removeItemStatic,
+  PREFIX,
+} from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -33,6 +37,7 @@ dayjs.extend(utc);
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
+  RESEND_VERIFICATION_EMAIL_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
 
@@ -61,9 +66,8 @@ let setItem: LSApi['setItem'];
 let removeItem: LSApi['removeItem'];
 
 beforeEach(() => {
-  const ls = useLocalStorage();
-  setItem = ls.setItem;
-  removeItem = ls.removeItem;
+  setItem = (key: string, value: unknown) => setItemStatic(PREFIX, key, value);
+  removeItem = (key: string) => removeItemStatic(PREFIX, key);
 
   // Seed guard keys for every test
   setItem('IsLoggedIn', 'TRUE');
@@ -169,8 +173,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Dog care center',
       createdAt: dayjs().subtract(1, 'year').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
   ],
   multipleOrgs: [
@@ -180,8 +186,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Dog care center',
       createdAt: dayjs().subtract(1, 'year').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz2',
@@ -189,8 +197,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Cat care center',
       createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz3',
@@ -198,8 +208,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Bird care center',
       createdAt: dayjs().subtract(1, 'year').add(2, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz4',
@@ -207,8 +219,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Fish care center',
       createdAt: dayjs().subtract(1, 'year').add(3, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz5',
@@ -216,8 +230,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Rabbit care center',
       createdAt: dayjs().subtract(1, 'year').add(4, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz6',
@@ -225,8 +241,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Horse care center',
       createdAt: dayjs().subtract(1, 'year').add(5, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
   ],
   paginationOrgs: Array.from({ length: 15 }, (_, i) => ({
@@ -235,8 +253,9 @@ const mockOrgData = {
     avatarURL: '',
     description: `Description ${i + 1}`,
     createdAt: dayjs().subtract(1, 'year').add(i, 'days').toISOString(),
-    members: { edges: [] },
+    members: { id: 'members_conn', edges: [] },
     addressLine1: 'Test Address',
+    isMember: false,
   })),
   manyOrgs: [
     {
@@ -245,8 +264,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Dog care center 1',
       createdAt: dayjs().subtract(1, 'year').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz2',
@@ -254,8 +275,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Cat care center 2',
       createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz3',
@@ -263,8 +286,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Bird care center 3',
       createdAt: dayjs().subtract(1, 'year').add(2, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz4',
@@ -272,8 +297,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Fish care center 4',
       createdAt: dayjs().subtract(1, 'year').add(3, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz5',
@@ -281,8 +308,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Rabbit care center 5',
       createdAt: dayjs().subtract(1, 'year').add(4, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz6',
@@ -290,8 +319,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Horse care center 6',
       createdAt: dayjs().subtract(1, 'year').add(5, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz7',
@@ -299,8 +330,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Turtle care center 7',
       createdAt: dayjs().subtract(1, 'year').add(6, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz8',
@@ -308,8 +341,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Hamster care center 8',
       createdAt: dayjs().subtract(1, 'year').add(7, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
   ],
   searchTestOrgs: [
@@ -319,8 +354,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Dog care center',
       createdAt: dayjs().subtract(1, 'year').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz2',
@@ -328,8 +365,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Cat care center',
       createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz3',
@@ -337,8 +376,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Dog training facility',
       createdAt: dayjs().subtract(1, 'year').add(2, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz4',
@@ -346,8 +387,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Pet grooming',
       createdAt: dayjs().subtract(1, 'year').add(3, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
     {
       id: 'xyz5',
@@ -355,8 +398,10 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Professional dog walking',
       createdAt: dayjs().subtract(1, 'year').add(4, 'days').toISOString(),
-      members: { edges: [] },
+      members: { id: 'members_conn', edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: false,
+      __typename: 'Organization',
     },
   ],
   scrollOrgs: [
@@ -364,13 +409,16 @@ const mockOrgData = {
       id: 'org1',
       name: 'Organization 1',
       addressLine1: '123 Main Street',
+      isMember: false,
+      __typename: 'Organization',
       description: 'Description 1',
       avatarURL: null,
       createdAt: dayjs().subtract(1, 'year').toISOString(),
       membersCount: 4,
       adminsCount: 2,
-      __typename: 'Organization',
+
       members: {
+        id: 'members_conn',
         edges: [
           {
             node: {
@@ -391,13 +439,16 @@ const mockOrgData = {
       id: 'org2',
       name: 'Organization 2',
       addressLine1: '456 Oak Avenue',
+      isMember: false,
+      __typename: 'Organization',
       description: 'Description 2',
       avatarURL: null,
       createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
       membersCount: 5,
       adminsCount: 2,
-      __typename: 'Organization',
+
       members: {
+        id: 'members_conn',
         edges: [
           {
             node: {
@@ -446,7 +497,7 @@ const mockConfigurations = {
               avatarURL: '',
               description: 'Dog care center',
               createdAt: dayjs().subtract(1, 'year').toISOString(),
-              members: { edges: [] },
+              members: { id: 'members_conn', edges: [] },
               addressLine1: 'Texas, USA',
             },
             {
@@ -458,7 +509,7 @@ const mockConfigurations = {
                 .subtract(1, 'year')
                 .add(2, 'days')
                 .toISOString(),
-              members: { edges: [] },
+              members: { id: 'members_conn', edges: [] },
               addressLine1: 'Texas, USA',
             },
             {
@@ -470,7 +521,7 @@ const mockConfigurations = {
                 .subtract(1, 'year')
                 .add(4, 'days')
                 .toISOString(),
-              members: { edges: [] },
+              members: { id: 'members_conn', edges: [] },
               addressLine1: 'Texas, USA',
             },
           ],
@@ -482,18 +533,75 @@ const mockConfigurations = {
     {
       request: {
         query: CURRENT_USER,
-        variables: { userId: '123' },
       },
       result: {
         data: {
           user: {
-            user: {
-              _id: '123',
-              firstName: 'John',
-              lastName: 'Doe',
-              email: 'john.doe@akatsuki.com',
-              image: null,
-            },
+            id: '123',
+            addressLine1: null,
+            addressLine2: null,
+            avatarMimeType: null,
+            avatarURL: null,
+            birthDate: null,
+            city: null,
+            countryCode: null,
+            createdAt: dayjs().subtract(1, 'year').toISOString(),
+            description: null,
+            educationGrade: null,
+            emailAddress: 'john.doe@akatsuki.com',
+            employmentStatus: null,
+            homePhoneNumber: null,
+            isEmailAddressVerified: true,
+            maritalStatus: null,
+            mobilePhoneNumber: null,
+            name: 'John Doe',
+            natalSex: null,
+            naturalLanguageCode: null,
+            postalCode: null,
+            role: 'administrator',
+            state: null,
+            updatedAt: null,
+            workPhoneNumber: null,
+            eventsAttended: [],
+            __typename: 'User',
+          },
+        },
+      },
+    },
+    {
+      request: {
+        query: CURRENT_USER,
+      },
+      result: {
+        data: {
+          user: {
+            id: '123',
+            addressLine1: null,
+            addressLine2: null,
+            avatarMimeType: null,
+            avatarURL: null,
+            birthDate: null,
+            city: null,
+            countryCode: null,
+            createdAt: dayjs().subtract(1, 'year').toISOString(),
+            description: null,
+            educationGrade: null,
+            emailAddress: 'john.unverified@example.com',
+            employmentStatus: null,
+            homePhoneNumber: null,
+            isEmailAddressVerified: false,
+            maritalStatus: null,
+            mobilePhoneNumber: null,
+            name: 'John Doe',
+            natalSex: null,
+            naturalLanguageCode: null,
+            postalCode: null,
+            role: 'administrator',
+            state: null,
+            updatedAt: null,
+            workPhoneNumber: null,
+            eventsAttended: [],
+            __typename: 'User',
           },
         },
       },
@@ -590,12 +698,14 @@ async function wait(ms = 100): Promise<void> {
 }
 
 beforeEach(() => {
-  vi.spyOn(Storage.prototype, 'setItem');
+  vi.spyOn(window.localStorage, 'setItem');
+  vi.spyOn(window.localStorage, 'removeItem');
 });
 
 afterEach(() => {
   cleanup();
   vi.clearAllMocks();
+  localStorage.clear();
 });
 
 describe('Organisations Page testing as SuperAdmin', () => {
@@ -915,7 +1025,7 @@ describe('Advanced Component Functionality Tests', () => {
                 name: 'Single Organization',
                 avatarURL: '',
                 description: 'Only organization',
-                members: { edges: [] },
+                members: { id: 'members_conn', edges: [] },
                 addressLine1: 'Single Address',
               },
             ],
@@ -1546,14 +1656,34 @@ describe('Advanced Component Functionality Tests', () => {
         },
         result: {
           data: {
-            currentUser: {
+            user: {
               __typename: 'User',
               id: '123',
-              email: 'test@example.com',
-              firstName: 'Test',
-              lastName: 'User',
-              image: null,
-              adminFor: [],
+              name: 'Test User',
+              emailAddress: 'test@example.com',
+              isEmailAddressVerified: true,
+              role: 'administrator',
+              addressLine1: '123 Main St',
+              addressLine2: '',
+              avatarMimeType: null,
+              avatarURL: null,
+              birthDate: null,
+              city: 'City',
+              countryCode: 'US',
+              createdAt: new Date().toISOString(),
+              description: '',
+              educationGrade: '',
+              employmentStatus: '',
+              homePhoneNumber: '',
+              maritalStatus: '',
+              mobilePhoneNumber: '',
+              natalSex: '',
+              naturalLanguageCode: 'en',
+              postalCode: '',
+              state: '',
+              updatedAt: new Date().toISOString(),
+              workPhoneNumber: '',
+              eventsAttended: [],
             },
           },
         },
@@ -1614,23 +1744,37 @@ describe('Advanced Component Functionality Tests', () => {
       {
         request: {
           query: CURRENT_USER,
-          variables: { userId: '123' },
         },
         result: {
           data: {
             user: {
-              user: {
-                firstName: 'Test',
-                lastName: 'User',
-                email: 'test@test.com',
-                image: null,
-              },
-            },
-            currentUser: {
+              __typename: 'User',
               id: '123',
               name: 'Test User',
-              role: 'administrator',
               emailAddress: 'test@test.com',
+              isEmailAddressVerified: true,
+              role: 'administrator',
+              addressLine1: '123 Main St',
+              addressLine2: '',
+              avatarMimeType: null,
+              avatarURL: null,
+              birthDate: null,
+              city: 'City',
+              countryCode: 'US',
+              createdAt: new Date().toISOString(),
+              description: '',
+              educationGrade: '',
+              employmentStatus: '',
+              homePhoneNumber: '',
+              maritalStatus: '',
+              mobilePhoneNumber: '',
+              natalSex: '',
+              naturalLanguageCode: 'en',
+              postalCode: '',
+              state: '',
+              updatedAt: new Date().toISOString(),
+              workPhoneNumber: '',
+              eventsAttended: [],
             },
           },
         },
@@ -1657,7 +1801,7 @@ describe('Advanced Component Functionality Tests', () => {
               avatarURL: '',
               description: `Description ${i + 1}`,
               createdAt: `2023-04-${String(13 + i).padStart(2, '0')}T04:53:17.742+00:00`,
-              members: { edges: [] },
+              members: { id: 'members_conn', edges: [] },
               addressLine1: 'Test Address',
             })),
           },
@@ -1715,23 +1859,37 @@ describe('Advanced Component Functionality Tests', () => {
       {
         request: {
           query: CURRENT_USER,
-          variables: { userId: '123' },
         },
         result: {
           data: {
             user: {
-              user: {
-                firstName: 'Test',
-                lastName: 'User',
-                email: 'test@test.com',
-                image: null,
-              },
-            },
-            currentUser: {
+              __typename: 'User',
               id: '123',
               name: 'Test User',
-              role: 'administrator',
               emailAddress: 'test@test.com',
+              isEmailAddressVerified: true,
+              role: 'administrator',
+              addressLine1: null,
+              addressLine2: null,
+              avatarMimeType: null,
+              avatarURL: null,
+              birthDate: null,
+              city: null,
+              countryCode: null,
+              createdAt: dayjs().subtract(1, 'year').toISOString(),
+              description: null,
+              educationGrade: null,
+              employmentStatus: null,
+              homePhoneNumber: null,
+              maritalStatus: null,
+              mobilePhoneNumber: null,
+              natalSex: null,
+              naturalLanguageCode: null,
+              postalCode: null,
+              state: null,
+              updatedAt: null,
+              workPhoneNumber: null,
+              eventsAttended: [],
             },
           },
         },
@@ -1759,7 +1917,7 @@ describe('Advanced Component Functionality Tests', () => {
                 avatarURL: '',
                 description: 'Test',
                 createdAt: dayjs().subtract(1, 'year').toISOString(),
-                members: { edges: [] },
+                members: { id: 'members_conn', edges: [] },
                 addressLine1: 'Test Address',
               },
             ],
@@ -2278,7 +2436,6 @@ describe('Advanced Component Functionality Tests', () => {
       {
         request: {
           query: CURRENT_USER,
-          variables: { userId: '123' },
         },
         error: new Error('Unauthorized: Missing or invalid token'),
       },
@@ -2315,5 +2472,274 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Verify component renders without authorization header
     expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+  });
+
+  test('Email verification warning should be shown if email is not verified', async () => {
+    setupUser('superAdmin');
+
+    const emailVerificationMock = {
+      request: {
+        query: CURRENT_USER,
+      },
+      result: {
+        data: {
+          user: {
+            id: '123',
+            name: 'John',
+            isEmailAddressVerified: false,
+            role: 'administrator',
+            emailAddress: 'test@example.com',
+          },
+        },
+      },
+    };
+
+    // Filter out existing CURRENT_USER mock from MOCKS if any, or just place this first
+    // MOCKS usually contains organization list mocks. CURRENT_USER mocks are in scrollMocks.
+    // But renderWithMocks takes priority.
+    renderWithMocks([emailVerificationMock, ...MOCKS]);
+    await wait();
+
+    // Verify setItem was called for 'emailNotVerified'
+    expect(localStorage.setItem).toHaveBeenCalledWith(
+      'Talawa-admin_emailNotVerified',
+      '"true"',
+    );
+  });
+
+  test('Email verification warning should NOT be shown if email is verified', async () => {
+    setupUser('superAdmin');
+
+    const emailVerificationVerifiedMock = {
+      request: {
+        query: CURRENT_USER,
+      },
+      result: {
+        data: {
+          user: {
+            id: '123',
+            name: 'John',
+            isEmailAddressVerified: true,
+            role: 'administrator',
+            emailAddress: 'test@example.com',
+          },
+        },
+      },
+    };
+
+    renderWithMocks([emailVerificationVerifiedMock, ...MOCKS]);
+    await wait();
+
+    // Verify removeItem was called for 'emailNotVerified'
+    expect(localStorage.removeItem).toHaveBeenCalledWith(
+      'Talawa-admin_emailNotVerified',
+    );
+  });
+});
+
+describe('Email Verification Actions Tests', () => {
+  const unverifiedUserMock = {
+    request: {
+      query: CURRENT_USER,
+    },
+    result: {
+      data: {
+        user: {
+          id: '123',
+          addressLine1: null,
+          addressLine2: null,
+          avatarMimeType: null,
+          avatarURL: null,
+          birthDate: null,
+          city: null,
+          countryCode: null,
+          createdAt: dayjs().subtract(1, 'year').toISOString(),
+          description: null,
+          educationGrade: null,
+          emailAddress: 'john.unverified@example.com',
+          employmentStatus: null,
+          homePhoneNumber: null,
+          isEmailAddressVerified: false,
+          maritalStatus: null,
+          mobilePhoneNumber: null,
+          name: 'John Doe',
+          natalSex: null,
+          naturalLanguageCode: null,
+          postalCode: null,
+          role: 'administrator',
+          state: null,
+          updatedAt: null,
+          workPhoneNumber: null,
+          eventsAttended: [],
+          __typename: 'User',
+        },
+      },
+    },
+  };
+
+  const resendSuccessMock = {
+    request: {
+      query: RESEND_VERIFICATION_EMAIL_MUTATION,
+    },
+    result: {
+      data: {
+        sendVerificationEmail: {
+          success: true,
+          message: 'Email resent successfully',
+        },
+      },
+    },
+  };
+
+  const resendFailureMock = {
+    request: {
+      query: RESEND_VERIFICATION_EMAIL_MUTATION,
+    },
+    result: {
+      data: {
+        sendVerificationEmail: {
+          success: false,
+          message: 'Failed to resend email',
+        },
+      },
+    },
+  };
+
+  test('dismisses warning and clears local storage', async () => {
+    setItem('id', '123');
+    setItem('role', 'administrator');
+
+    // We need to simulate the warning being present.
+    // The component sets it based on user data.
+    renderWithMocks([
+      unverifiedUserMock,
+      ...createOrgMock(mockOrgData.singleOrg),
+    ]);
+    await wait();
+
+    const warningAlert = await screen.findByTestId(
+      'email-verification-warning',
+    );
+    expect(warningAlert).toBeInTheDocument();
+
+    const closeBtn = warningAlert.querySelector('.btn-close');
+    if (closeBtn) {
+      fireEvent.click(closeBtn);
+    } else {
+      const altBtn = screen.getByLabelText('Close alert');
+      fireEvent.click(altBtn);
+    }
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('email-verification-warning'),
+      ).not.toBeInTheDocument();
+    });
+
+    // Verify key removal. Note: useLocalStorage mock might prefix keys?
+    // The component calls removeItem('emailNotVerified') and removeItem('unverifiedEmail')
+    expect(localStorage.removeItem).toHaveBeenCalledWith(
+      'Talawa-admin_emailNotVerified',
+    );
+    expect(localStorage.removeItem).toHaveBeenCalledWith(
+      'Talawa-admin_unverifiedEmail',
+    );
+  });
+
+  test('handleResendVerification success', async () => {
+    setItem('id', '123');
+    setItem('role', 'administrator');
+
+    renderWithMocks([
+      unverifiedUserMock,
+      resendSuccessMock,
+      ...createOrgMock(mockOrgData.singleOrg),
+    ]);
+    await wait();
+
+    const resendBtn = screen.getByTestId('resend-verification-btn');
+    fireEvent.click(resendBtn);
+
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalledWith(
+        'Verification email has been resent successfully.',
+        expect.anything(),
+      );
+    });
+  });
+
+  test('handleResendVerification failure (API returns false)', async () => {
+    setItem('id', '123');
+    setItem('role', 'administrator');
+
+    renderWithMocks([
+      unverifiedUserMock,
+      resendFailureMock,
+      ...createOrgMock(mockOrgData.singleOrg),
+    ]);
+    await wait();
+
+    const resendBtn = screen.getByTestId('resend-verification-btn');
+    fireEvent.click(resendBtn);
+
+    await waitFor(() => {
+      // The component uses tLogin('resendFailed') or data message
+      // Mock returns 'Failed to resend email'
+      expect(mockToast.error).toHaveBeenCalledWith(
+        'Failed to resend email',
+        expect.anything(),
+      );
+    });
+  });
+
+  test('handleResendVerification error (catch block)', async () => {
+    setItem('id', '123');
+    setItem('role', 'administrator');
+
+    const errorMock = {
+      request: {
+        query: RESEND_VERIFICATION_EMAIL_MUTATION,
+      },
+      error: new Error('Network error'),
+    };
+
+    renderWithMocks([
+      unverifiedUserMock,
+      errorMock,
+      ...createOrgMock(mockOrgData.singleOrg),
+    ]);
+    await wait();
+
+    const resendBtn = screen.getByTestId('resend-verification-btn');
+    fireEvent.click(resendBtn);
+
+    await waitFor(() => {
+      // errorHandler should be called
+      expect(mockToast.error).toHaveBeenCalled();
+    });
+  });
+
+  test('Shows email warning based on localStorage fallback', async () => {
+    setItem('emailNotVerified', 'true');
+    setItem('unverifiedEmail', 'test@example.com');
+    // Ensure API data is not returned to trigger fallback
+    const loadingUserMock = {
+      request: { query: CURRENT_USER },
+      result: { data: { user: null } },
+      delay: 500,
+    };
+
+    renderWithMocks([
+      loadingUserMock,
+      // Need valid org list response to avoid unrelated errors
+      ...createOrgMock(mockOrgData.singleOrg),
+    ]);
+
+    // Should verify warning shows up
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('email-verification-warning'),
+      ).toBeInTheDocument();
+    });
   });
 });

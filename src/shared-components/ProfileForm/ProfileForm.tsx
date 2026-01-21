@@ -76,11 +76,9 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
-import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams } from 'react-router';
-import styles from 'style/app-fixed.module.css';
-import profileForm from './profileForm.module.css';
+import styles from './ProfileForm.module.css';
 import {
   UPDATE_CURRENT_USER_MUTATION,
   UPDATE_USER_MUTATION,
@@ -89,7 +87,7 @@ import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { languages } from 'utils/languages';
 import { errorHandler } from 'utils/errorHandler';
-import { Card, Row, Col, Form } from 'react-bootstrap';
+import { Card, Row, Col } from 'react-bootstrap';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'shared-components/Avatar/Avatar';
@@ -111,6 +109,9 @@ import type { IEvent } from 'types/Event/interface';
 import ProfileFormWrapper from './ProfileFormWrapper';
 import DatePicker from 'shared-components/DatePicker';
 import { removeEmptyFields, validateImageFile } from 'utils/userUpdateUtils';
+import Button from 'shared-components/Button';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
+import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 
 const MemberDetail: React.FC = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
@@ -312,7 +313,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
             {/* Personal Details Card */}
             <Card className={`${styles.allRound}`}>
               <Card.Header
-                className={`py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius} ${profileForm.personalDetailsHeader}`}
+                className={`py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius} ${styles.personalDetailsHeader}`}
               >
                 <h3 className="m-0">{t('personalDetailsHeading')}</h3>
                 <Button
@@ -332,7 +333,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
                     <div className="position-relative d-inline-block">
                       {formState?.avatarURL ? (
                         <img
-                          className={`rounded-circle ${profileForm.profileImage}`}
+                          className={`rounded-circle ${styles.profileImage}`}
                           src={sanitizeAvatars(
                             selectedAvatar,
                             formState.avatarURL,
@@ -352,7 +353,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
                       )}
                       <button
                         type="button"
-                        className={`fas fa-edit position-absolute border-0 bottom-0 right-0 p-2 bg-white rounded-circle ${profileForm.editProfileIcon}`}
+                        className={`fas fa-edit position-absolute border-0 bottom-0 right-0 p-2 bg-white rounded-circle ${styles.editProfileIcon}`}
                         onClick={() => fileInputRef.current?.click()}
                         data-testid="uploadImageBtn"
                         title={`${tCommon('edit')} ${tCommon('profilePicture')}`}
@@ -364,12 +365,12 @@ const MemberDetail: React.FC = (): JSX.Element => {
                       />
                     </div>
                   </div>
-                  <Form.Control
+                  <input
                     accept="image/*"
                     id="postphoto"
                     name="photo"
                     type="file"
-                    className={`${styles.cardControl} ${profileForm.hiddenFileInput}`}
+                    className={`${styles.cardControl} ${styles.hiddenFileInput}`}
                     data-testid="fileInput"
                     multiple={false}
                     ref={fileInputRef}
@@ -378,19 +379,13 @@ const MemberDetail: React.FC = (): JSX.Element => {
                 </Col>
                 <Row className="g-3">
                   <Col md={6}>
-                    <label htmlFor="name" className="form-label">
-                      {tCommon('name')}
-                    </label>
-                    <input
-                      id="name"
-                      value={formState.name}
-                      className={`form-control ${styles.inputColor}`}
-                      type="text"
+                    <FormTextField
                       name="name"
+                      label={tCommon('name')}
+                      value={formState.name}
+                      className={styles.inputColor}
                       data-testid="inputName"
-                      onChange={(e) =>
-                        handleFieldChange('name', e.target.value)
-                      }
+                      onChange={(value) => handleFieldChange('name', value)}
                       required
                       placeholder={tCommon('name')}
                     />
@@ -481,35 +476,27 @@ const MemberDetail: React.FC = (): JSX.Element => {
                     />
                   </Col>
                   <Col md={12}>
-                    <label htmlFor="password" className="form-label">
-                      {tCommon('password')}
-                    </label>
-                    <input
-                      id="password"
-                      value={formState.password}
-                      className={`form-control ${styles.inputColor}`}
-                      type="password"
+                    <FormTextField
                       name="password"
-                      onChange={(e) =>
-                        handleFieldChange('password', e.target.value)
-                      }
+                      label={tCommon('password')}
+                      value={formState.password}
+                      className={styles.inputColor}
+                      type="password"
+                      onChange={(value) => handleFieldChange('password', value)}
                       data-testid="inputPassword"
                       placeholder="* * * * * * * *"
                     />
                   </Col>
                   <Col md={12}>
-                    <label htmlFor="description" className="form-label">
-                      {tCommon('description')}
-                    </label>
-                    <input
-                      id="description"
-                      value={formState.description}
-                      className={`form-control ${styles.inputColor}`}
-                      type="text"
+                    <FormTextField
                       name="description"
+                      label={tCommon('description')}
+                      value={formState.description}
+                      className={styles.inputColor}
+                      type="text"
                       data-testid="inputDescription"
-                      onChange={(e) =>
-                        handleFieldChange('description', e.target.value)
+                      onChange={(value) =>
+                        handleFieldChange('description', value)
                       }
                       required
                       placeholder={tCommon('enterDescription')}
@@ -521,13 +508,13 @@ const MemberDetail: React.FC = (): JSX.Element => {
             <Col>
               <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
                 <Card.Header
-                  className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius} ${profileForm.member_details_style}`}
+                  className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius} ${styles.member_details_style}`}
                 >
                   <h3 className="m-0" data-testid="eventsAttended-title">
                     {t('eventsAttended')}
                   </h3>
                   <Button
-                    className={profileForm.contact_btn}
+                    className={styles.contact_btn}
                     size="sm"
                     variant="light"
                     data-testid="viewAllEvents"
@@ -562,7 +549,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
             </Col>
             <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
               <Card.Header
-                className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius} ${profileForm.member_details_style}`}
+                className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius} ${styles.member_details_style}`}
               >
                 <h3 className="m-0" data-testid="tagsAssigned-title">
                   {t('tagsAssigned')}
@@ -579,40 +566,35 @@ const MemberDetail: React.FC = (): JSX.Element => {
           <Col md={6}>
             <Card className={`${styles.allRound}`}>
               <Card.Header
-                className={`py-3 px-4 ${styles.topRadius} ${profileForm.member_details_style}`}
+                className={`py-3 px-4 ${styles.topRadius} ${styles.member_details_style}`}
               >
                 <h3 className="m-0">{t('contactInfoHeading')}</h3>
               </Card.Header>
               <Card.Body className="py-3 px-3">
                 <Row className="g-3">
                   <Col md={12}>
-                    <label htmlFor="email" className="form-label">
-                      {tCommon('email')}
-                    </label>
-                    <input
-                      id="email"
-                      value={userData?.user?.emailAddress}
-                      className={`form-control ${styles.inputColor}`}
-                      type="email"
+                    <FormTextField
                       name="email"
+                      label={tCommon('email')}
+                      value={userData?.user?.emailAddress ?? ''}
+                      className={styles.inputColor}
+                      type="email"
                       data-testid="inputEmail"
                       disabled
                       placeholder={tCommon('email')}
+                      onChange={() => undefined}
                     />
                   </Col>
                   <Col md={12}>
-                    <label htmlFor="mobilePhoneNumber" className="form-label">
-                      {t('mobilePhoneNumber')}
-                    </label>
-                    <input
-                      id="mobilePhoneNumber"
-                      value={formState.mobilePhoneNumber}
-                      className={`form-control ${styles.inputColor}`}
-                      type="tel"
+                    <FormTextField
                       name="mobilePhoneNumber"
+                      label={t('mobilePhoneNumber')}
+                      value={formState.mobilePhoneNumber}
+                      className={styles.inputColor}
+                      type="tel"
                       data-testid="inputMobilePhoneNumber"
-                      onChange={(e) =>
-                        handleFieldChange('mobilePhoneNumber', e.target.value)
+                      onChange={(value) =>
+                        handleFieldChange('mobilePhoneNumber', value)
                       }
                       placeholder={
                         tCommon('example', { example: '+1234567890' }) as string
@@ -620,18 +602,15 @@ const MemberDetail: React.FC = (): JSX.Element => {
                     />
                   </Col>
                   <Col md={12}>
-                    <label htmlFor="workPhoneNumber" className="form-label">
-                      {t('workPhoneNumber')}
-                    </label>
-                    <input
-                      id="workPhoneNumber"
+                    <FormTextField
+                      name="workPhoneNumber"
+                      label={t('workPhoneNumber')}
                       value={formState.workPhoneNumber}
-                      className={`form-control ${styles.inputColor}`}
+                      className={styles.inputColor}
                       type="tel"
                       data-testid="inputWorkPhoneNumber"
-                      name="workPhoneNumber"
-                      onChange={(e) =>
-                        handleFieldChange('workPhoneNumber', e.target.value)
+                      onChange={(value) =>
+                        handleFieldChange('workPhoneNumber', value)
                       }
                       placeholder={
                         tCommon('example', { example: '+1234567890' }) as string
@@ -639,18 +618,15 @@ const MemberDetail: React.FC = (): JSX.Element => {
                     />
                   </Col>
                   <Col md={12}>
-                    <label htmlFor="homePhoneNumber" className="form-label">
-                      {t('homePhoneNumber')}
-                    </label>
-                    <input
-                      id="homePhoneNumber"
+                    <FormTextField
+                      name="homePhoneNumber"
+                      label={t('homePhoneNumber')}
                       value={formState.homePhoneNumber}
-                      className={`form-control ${styles.inputColor}`}
+                      className={styles.inputColor}
                       type="tel"
                       data-testid="inputHomePhoneNumber"
-                      name="homePhoneNumber"
-                      onChange={(e) =>
-                        handleFieldChange('homePhoneNumber', e.target.value)
+                      onChange={(value) =>
+                        handleFieldChange('homePhoneNumber', value)
                       }
                       placeholder={
                         tCommon('example', { example: '+1234567890' }) as string
@@ -658,18 +634,15 @@ const MemberDetail: React.FC = (): JSX.Element => {
                     />
                   </Col>
                   <Col md={12}>
-                    <label htmlFor="addressLine1" className="form-label">
-                      {t('addressLine1')}
-                    </label>
-                    <input
-                      id="addressLine1"
-                      value={formState.addressLine1}
-                      className={`form-control ${styles.inputColor}`}
-                      type="text"
+                    <FormTextField
                       name="addressLine1"
+                      label={t('addressLine1')}
+                      value={formState.addressLine1}
+                      className={styles.inputColor}
+                      type="text"
                       data-testid="addressLine1"
-                      onChange={(e) =>
-                        handleFieldChange('addressLine1', e.target.value)
+                      onChange={(value) =>
+                        handleFieldChange('addressLine1', value)
                       }
                       placeholder={
                         tCommon('example', { example: 'Lane 1' }) as string
@@ -677,18 +650,15 @@ const MemberDetail: React.FC = (): JSX.Element => {
                     />
                   </Col>
                   <Col md={12}>
-                    <label htmlFor="addressLine2" className="form-label">
-                      {t('addressLine2')}
-                    </label>
-                    <input
-                      id="addressLine2"
-                      value={formState.addressLine2}
-                      className={`form-control ${styles.inputColor}`}
-                      type="text"
+                    <FormTextField
                       name="addressLine2"
+                      label={t('addressLine2')}
+                      value={formState.addressLine2}
+                      className={styles.inputColor}
+                      type="text"
                       data-testid="addressLine2"
-                      onChange={(e) =>
-                        handleFieldChange('addressLine2', e.target.value)
+                      onChange={(value) =>
+                        handleFieldChange('addressLine2', value)
                       }
                       placeholder={
                         tCommon('example', { example: 'Lane 2' }) as string
@@ -696,18 +666,15 @@ const MemberDetail: React.FC = (): JSX.Element => {
                     />
                   </Col>
                   <Col md={12}>
-                    <label htmlFor="postalCode" className="form-label">
-                      {t('postalCode')}
-                    </label>
-                    <input
-                      id="postalCode"
-                      value={formState.postalCode}
-                      className={`form-control ${styles.inputColor}`}
-                      type="text"
+                    <FormTextField
                       name="postalCode"
+                      label={t('postalCode')}
+                      value={formState.postalCode}
+                      className={styles.inputColor}
+                      type="text"
                       data-testid="inputPostalCode"
-                      onChange={(e) =>
-                        handleFieldChange('postalCode', e.target.value)
+                      onChange={(value) =>
+                        handleFieldChange('postalCode', value)
                       }
                       placeholder={
                         tCommon('example', {
@@ -717,69 +684,62 @@ const MemberDetail: React.FC = (): JSX.Element => {
                     />
                   </Col>
                   <Col md={6}>
-                    <label htmlFor="city" className="form-label">
-                      {t('city')}
-                    </label>
-                    <input
-                      id="city"
-                      value={formState.city}
-                      className={`form-control ${styles.inputColor}`}
-                      type="text"
+                    <FormTextField
                       name="city"
+                      label={t('city')}
+                      value={formState.city}
+                      className={styles.inputColor}
+                      type="text"
                       data-testid="inputCity"
-                      onChange={(e) =>
-                        handleFieldChange('city', e.target.value)
-                      }
+                      onChange={(value) => handleFieldChange('city', value)}
                       placeholder={tCommon('enterCityName')}
                     />
                   </Col>
                   <Col md={6}>
-                    <label htmlFor="state" className="form-label">
-                      {t('state')}
-                    </label>
-                    <input
-                      id="state"
-                      value={formState.state}
-                      className={`form-control ${styles.inputColor}`}
-                      type="text"
+                    <FormTextField
                       name="state"
+                      label={t('state')}
+                      value={formState.state}
+                      className={styles.inputColor}
+                      type="text"
                       data-testid="inputState"
-                      onChange={(e) =>
-                        handleFieldChange('state', e.target.value)
-                      }
+                      onChange={(value) => handleFieldChange('state', value)}
                       placeholder={tCommon('enterStateName')}
                     />
                   </Col>
                   <Col md={12}>
-                    <Form.Label htmlFor="country" className="form-label">
-                      {tCommon('country')}
-                    </Form.Label>
-                    <Form.Select
-                      id="country"
-                      value={formState.countryCode}
-                      className={`${styles.inputColor}`}
+                    <FormFieldGroup
+                      name="country"
+                      label={tCommon('country')}
                       data-testid="inputCountry"
-                      onChange={(e) =>
-                        handleFieldChange('countryCode', e.target.value)
-                      }
                     >
-                      <option value="" disabled>
-                        {tCommon('select')} {tCommon('country')}
-                      </option>
-                      {[...countryOptions]
-                        .sort((a, b) => a.label.localeCompare(b.label))
-                        .map((country) => (
-                          <option
-                            key={country.value.toUpperCase()}
-                            value={country.value.toLowerCase()}
-                            aria-label={tCommon('selectAsYourCountry', {
-                              country: country.label,
-                            })}
-                          >
-                            {country.label}
-                          </option>
-                        ))}
-                    </Form.Select>
+                      <select
+                        id="country"
+                        value={formState.countryCode}
+                        className={`${styles.inputColor} form-select`}
+                        data-testid="inputCountry"
+                        onChange={(e) =>
+                          handleFieldChange('countryCode', e.target.value)
+                        }
+                      >
+                        <option value="" disabled>
+                          {tCommon('select')} {tCommon('country')}
+                        </option>
+                        {[...countryOptions]
+                          .sort((a, b) => a.label.localeCompare(b.label))
+                          .map((country) => (
+                            <option
+                              key={country.value.toUpperCase()}
+                              value={country.value.toLowerCase()}
+                              aria-label={tCommon('selectAsYourCountry', {
+                                country: country.label,
+                              })}
+                            >
+                              {country.label}
+                            </option>
+                          ))}
+                      </select>
+                    </FormFieldGroup>
                   </Col>
                 </Row>
               </Card.Body>
@@ -798,7 +758,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
                 </Button>
                 <Button
                   variant="outline"
-                  className={profileForm.member_details_style}
+                  className={styles.member_details_style}
                   onClick={handleUserUpdate}
                   data-testid="saveChangesBtn"
                 >

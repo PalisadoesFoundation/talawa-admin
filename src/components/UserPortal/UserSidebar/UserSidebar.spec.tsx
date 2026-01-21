@@ -10,6 +10,29 @@ import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+// Mock CSS modules
+vi.mock('shared-components/SidebarBase/SidebarBase.module.css', () => ({
+  default: {
+    leftDrawer: 'leftDrawer',
+    collapsedDrawer: 'collapsedDrawer',
+    expandedDrawer: 'expandedDrawer',
+  },
+}));
+
+vi.mock('style/app-fixed.module.css', () => ({
+  default: {
+    leftDrawer: 'leftDrawer',
+    hideElemByDefault: 'hideElemByDefault',
+    collapsedDrawer: 'collapsedDrawer',
+    expandedDrawer: 'expandedDrawer',
+    talawaLogo: 'talawaLogo',
+    talawaText: 'talawaText',
+    titleHeader: 'titleHeader',
+    leftbarcompheight: 'leftbarcompheight',
+    optionList: 'optionList',
+    iconWrapper: 'iconWrapper',
+  },
+}));
 
 dayjs.extend(utc);
 
@@ -126,22 +149,6 @@ vi.mock('assets/svgs/plugins.svg?react', () => ({
       PluginLogo
     </div>
   )),
-}));
-
-// Mock CSS modules
-vi.mock('../../../style/app-fixed.module.css', () => ({
-  default: {
-    leftDrawer: 'leftDrawer',
-    hideElemByDefault: 'hideElemByDefault',
-    collapsedDrawer: 'collapsedDrawer',
-    expandedDrawer: 'expandedDrawer',
-    talawaLogo: 'talawaLogo',
-    talawaText: 'talawaText',
-    titleHeader: 'titleHeader',
-    leftbarcompheight: 'leftbarcompheight',
-    optionList: 'optionList',
-    iconWrapper: 'iconWrapper',
-  },
 }));
 
 describe('UserSidebar', () => {

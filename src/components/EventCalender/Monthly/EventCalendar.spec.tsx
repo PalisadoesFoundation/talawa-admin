@@ -1,13 +1,19 @@
 import React from 'react';
 import Calendar from './EventCalender';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { weekdays, months } from 'types/Event/utils';
-import { BrowserRouter as Router } from 'react-router';
+import {
+  BrowserRouter as Router,
+  MemoryRouter,
+  Routes,
+  Route,
+} from 'react-router';
 import { vi, describe, it, expect, afterEach, test } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -15,8 +21,36 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 import { eventData, MOCKS } from '../EventCalenderMocks';
 import type { InterfaceEvent } from 'types/Event/interface';
+import { UserRole } from 'types/Event/interface';
 
 const link = new StaticMockLink(MOCKS, true);
+
+const { mockHolidays } = vi.hoisted(() => {
+  return {
+    mockHolidays: {
+      value: [] as
+        | {
+            name: string;
+            date: string;
+            month: string;
+          }[]
+        | null,
+    },
+  };
+});
+
+vi.mock('types/Event/utils', async () => {
+  const actual =
+    await vi.importActual<typeof import('types/Event/utils')>(
+      'types/Event/utils',
+    );
+  return {
+    ...actual,
+    get holidays() {
+      return mockHolidays.value;
+    },
+  };
+});
 
 async function wait(ms = 200): Promise<void> {
   await act(() => {
@@ -96,7 +130,7 @@ describe('Calendar', () => {
     expect(currentDateElement.textContent).toContain(expectedText);
   });
 
-  it('Should show prev and next month on clicking < & > buttons', () => {
+  it('Should show prev and next month on clicking < & > buttons', async () => {
     //testing previous month button
     render(
       <Router>
@@ -113,16 +147,16 @@ describe('Calendar', () => {
       </Router>,
     );
     const prevButton = screen.getByTestId('prevmonthordate');
-    fireEvent.click(prevButton);
+    await userEvent.click(prevButton);
     //testing next month button
     const nextButton = screen.getByTestId('nextmonthordate');
-    fireEvent.click(nextButton);
+    await userEvent.click(nextButton);
     //Testing year change
     for (let index = 0; index < 13; index++) {
-      fireEvent.click(nextButton);
+      await userEvent.click(nextButton);
     }
     for (let index = 0; index < 13; index++) {
-      fireEvent.click(prevButton);
+      await userEvent.click(prevButton);
     }
   });
 
@@ -143,15 +177,17 @@ describe('Calendar', () => {
     );
     await wait();
     const prevButtons = screen.getAllByTestId('prevYear');
-    prevButtons.forEach((button) => {
-      fireEvent.click(button);
-    });
+    // Use for...of to handle awaits sequentially
+    for (const button of prevButtons) {
+      await userEvent.click(button);
+    }
     await wait();
     //testing next year button
     const nextButton = screen.getAllByTestId('prevYear');
-    nextButton.forEach((button) => {
-      fireEvent.click(button);
-    });
+    // Use for...of to handle awaits sequentially
+    for (const button of nextButton) {
+      await userEvent.click(button);
+    }
   });
 
   it('Should show prev and next date on clicking < & > buttons in the day view', async () => {
@@ -171,16 +207,16 @@ describe('Calendar', () => {
     );
     //testing previous date button
     const prevButton = screen.getByTestId('prevmonthordate');
-    fireEvent.click(prevButton);
+    await userEvent.click(prevButton);
     //testing next date button
     const nextButton = screen.getByTestId('nextmonthordate');
-    fireEvent.click(nextButton);
+    await userEvent.click(nextButton);
     //Testing year change and month change
     for (let index = 0; index < 366; index++) {
-      fireEvent.click(prevButton);
+      await userEvent.click(prevButton);
     }
     for (let index = 0; index < 732; index++) {
-      fireEvent.click(nextButton);
+      await userEvent.click(nextButton);
     }
   });
 
@@ -198,6 +234,7 @@ describe('Calendar', () => {
         allDay: false,
         isPublic: true,
         isRegisterable: true,
+        isInviteOnly: false,
         attendees: [],
         creator: {},
       },
@@ -261,7 +298,7 @@ describe('Calendar', () => {
     // expect(todayElement).toHaveClass(styles.day__today);
   });
 
-  it('Today button should show today cell', () => {
+  it('Today button should show today cell', async () => {
     render(
       <Router>
         <MockedProvider link={link}>
@@ -280,11 +317,11 @@ describe('Calendar', () => {
     );
     //Changing the month
     const prevButton = screen.getByTestId('prevmonthordate');
-    fireEvent.click(prevButton);
+    await userEvent.click(prevButton);
 
     // Clicking today button
     const todayButton = screen.getByTestId('today');
-    fireEvent.click(todayButton);
+    await userEvent.click(todayButton);
     // const todayCell = screen.getByText(new Date().getDate().toString());
     // expect(todayCell).toHaveClass(styles.day__today);
   });
@@ -308,6 +345,7 @@ describe('Calendar', () => {
         allDay: true,
         isPublic: true,
         isRegisterable: true,
+        isInviteOnly: false,
         attendees: [],
         creator: {},
       },
@@ -323,6 +361,7 @@ describe('Calendar', () => {
         allDay: true,
         isPublic: true,
         isRegisterable: true,
+        isInviteOnly: false,
         attendees: [],
         creator: {},
       },
@@ -338,6 +377,7 @@ describe('Calendar', () => {
         allDay: false,
         isPublic: true,
         isRegisterable: true,
+        isInviteOnly: false,
         attendees: [],
         creator: {},
       },
@@ -353,6 +393,7 @@ describe('Calendar', () => {
         allDay: false,
         isPublic: true,
         isRegisterable: true,
+        isInviteOnly: false,
         attendees: [],
         creator: {},
       },
@@ -368,6 +409,7 @@ describe('Calendar', () => {
         allDay: false,
         isPublic: true,
         isRegisterable: true,
+        isInviteOnly: false,
         attendees: [],
         creator: {},
       },
@@ -396,11 +438,10 @@ describe('Calendar', () => {
 
     // Check for "View all" button if there are more than 2 events
     const viewAllButton = await screen.findAllByTestId('more');
-    console.log('hi', viewAllButton); // This will show the buttons found in the test
     expect(viewAllButton.length).toBeGreaterThan(0);
 
     // Simulate clicking the "View all" button to expand the list
-    fireEvent.click(viewAllButton[0]);
+    await userEvent.click(viewAllButton[0]);
 
     const event5 = screen.queryByText('Event 5');
     expect(event5).toBeNull();
@@ -409,7 +450,7 @@ describe('Calendar', () => {
     expect(viewLessButtons.length).toBeGreaterThan(0);
 
     // Simulate clicking "View less" to collapse the list
-    fireEvent.click(viewLessButtons[0]);
+    await userEvent.click(viewLessButtons[0]);
     const viewAllButtons = screen.getAllByText('View all');
     expect(viewAllButtons.length).toBeGreaterThan(0);
 
@@ -482,7 +523,7 @@ describe('Calendar', () => {
     expect(renderHourComponent).toBeInTheDocument();
   });
 
-  it('should handle date navigation boundary conditions in day view', () => {
+  it('should handle date navigation boundary conditions in day view', async () => {
     const mockOnMonthChange = vi.fn();
 
     // Test navigation at month boundaries
@@ -506,17 +547,17 @@ describe('Calendar', () => {
     const nextButton = screen.getByTestId('nextmonthordate');
 
     // Test previous date navigation - should trigger month change when needed
-    fireEvent.click(prevButton);
+    await userEvent.click(prevButton);
 
     // Test next date navigation - should trigger month change when needed
-    fireEvent.click(nextButton);
+    await userEvent.click(nextButton);
 
     // Verify the navigation functions are working
     expect(prevButton).toBeInTheDocument();
     expect(nextButton).toBeInTheDocument();
   });
 
-  it('should test specific date navigation logic for code coverage', () => {
+  it('should test specific date navigation logic for code coverage', async () => {
     const mockOnMonthChange = vi.fn();
 
     // This test ensures we cover the specific lines mentioned:
@@ -546,8 +587,8 @@ describe('Calendar', () => {
 
     // Execute the navigation functions to ensure code coverage
     // These clicks will exercise the handlePrevDate and handleNextDate functions
-    fireEvent.click(prevButton);
-    fireEvent.click(nextButton);
+    await userEvent.click(prevButton);
+    await userEvent.click(nextButton);
 
     // The specific logic being tested is internal state management,
     // so we verify the buttons exist and are functional
@@ -555,7 +596,7 @@ describe('Calendar', () => {
     expect(nextButton).toBeInTheDocument();
   });
 
-  it('should handle previous date navigation from January 1st (year boundary)', () => {
+  it('should handle previous date navigation from January 1st (year boundary)', async () => {
     const mockOnMonthChange = vi.fn();
 
     // Test the specific lines:
@@ -596,7 +637,7 @@ describe('Calendar', () => {
     const prevButton = screen.getByTestId('prevmonthordate');
 
     // Click previous when we're on January 1st to trigger year boundary logic
-    fireEvent.click(prevButton);
+    await userEvent.click(prevButton);
 
     // Verify onMonthChange was called with December of previous year
     expect(mockOnMonthChange).toHaveBeenCalledWith(11, dayjs().year() - 1);
@@ -605,7 +646,7 @@ describe('Calendar', () => {
     globalThis.Date = originalDate;
   });
 
-  it('should handle previous date navigation from any other month when currentDate is 1', () => {
+  it('should handle previous date navigation from any other month when currentDate is 1', async () => {
     const mockOnMonthChange = vi.fn();
 
     // Test the specific lines for non-January case:
@@ -650,7 +691,7 @@ describe('Calendar', () => {
     const prevButton = screen.getByTestId('prevmonthordate');
 
     // Click previous when we're on June 1st to trigger previous month logic
-    fireEvent.click(prevButton);
+    await userEvent.click(prevButton);
 
     // Verify onMonthChange was called with May of same year
     expect(mockOnMonthChange).toHaveBeenCalledWith(4, dayjs().year());
@@ -659,7 +700,7 @@ describe('Calendar', () => {
     globalThis.Date = originalDate;
   });
 
-  it('should handle next date navigation from December 31st (year boundary)', () => {
+  it('should handle next date navigation from December 31st (year boundary)', async () => {
     const mockOnMonthChange = vi.fn();
 
     // Test the specific lines:
@@ -703,7 +744,7 @@ describe('Calendar', () => {
     const nextButton = screen.getByTestId('nextmonthordate');
 
     // Click next when we're on December 31st to trigger year boundary logic
-    fireEvent.click(nextButton);
+    await userEvent.click(nextButton);
 
     // Verify onMonthChange was called with January of next year
     expect(mockOnMonthChange).toHaveBeenCalledWith(0, dayjs().year() + 1);
@@ -712,7 +753,7 @@ describe('Calendar', () => {
     globalThis.Date = originalDate;
   });
 
-  it('should handle next date navigation from end of any other month', () => {
+  it('should handle next date navigation from end of any other month', async () => {
     const mockOnMonthChange = vi.fn();
 
     // Test the specific lines for non-December case:
@@ -756,13 +797,67 @@ describe('Calendar', () => {
     const nextButton = screen.getByTestId('nextmonthordate');
 
     // Click next when we're on June 30th to trigger next month logic
-    fireEvent.click(nextButton);
+    await userEvent.click(nextButton);
 
     // Verify onMonthChange was called with July of same year
     expect(mockOnMonthChange).toHaveBeenCalledWith(6, dayjs().year());
 
     // Restore original Date
     globalThis.Date = originalDate;
+  });
+
+  it('should show invite-only event for an attendee', async () => {
+    const inviteOnlyEvent = [
+      {
+        id: 'invite-only-1',
+        name: 'Invite Only Event',
+        description: 'Private meeting',
+        startAt: new Date().toISOString(),
+        endAt: new Date().toISOString(),
+        location: 'Secret Room',
+        startTime: '10:00',
+        endTime: '11:00',
+        allDay: false,
+        isPublic: false,
+        isRegisterable: true,
+        isInviteOnly: true,
+        attendees: [
+          { id: 'user123', name: 'Test User', emailAddress: 'test@test.com' },
+        ],
+        creator: {
+          id: 'creator1',
+          name: 'Creator',
+          emailAddress: 'creator@test.com',
+        },
+      },
+    ];
+
+    render(
+      <MemoryRouter initialEntries={['/org/org1']}>
+        <Routes>
+          <Route
+            path="/org/:orgId"
+            element={
+              <MockedProvider link={link}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Calendar
+                    eventData={inviteOnlyEvent}
+                    userRole={UserRole.REGULAR}
+                    userId="user123"
+                    viewType={ViewType.MONTH}
+                    onMonthChange={onMonthChange}
+                    currentMonth={new Date().getMonth()}
+                    currentYear={new Date().getFullYear()}
+                  />
+                </I18nextProvider>
+              </MockedProvider>
+            }
+          />
+        </Routes>
+      </MemoryRouter>,
+    );
+
+    expect(await screen.findByText('Invite Only Event')).toBeInTheDocument();
   });
 
   describe('Event filtering logic tests', () => {
@@ -816,6 +911,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -831,6 +927,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -846,6 +943,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -874,7 +972,7 @@ describe('Calendar', () => {
 
       // Administrator should see all events (public and private)
       // Check that the day with events has the correct class indicating events are present
-      const dayWithEvents = container.querySelector('._day__events_d8535b');
+      const dayWithEvents = container.querySelector('[data-has-events="true"]');
       expect(dayWithEvents).toBeInTheDocument();
 
       // Check that "View all" button exists, indicating multiple events are available
@@ -903,6 +1001,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -918,6 +1017,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -945,7 +1045,7 @@ describe('Calendar', () => {
       await wait();
 
       // Regular user who is a member should see both public and private events
-      const dayWithEvents = container.querySelector('._day__events_d8535b');
+      const dayWithEvents = container.querySelector('[data-has-events="true"]');
       expect(dayWithEvents).toBeInTheDocument();
 
       const viewAllButton = screen.queryByTestId('more');
@@ -973,6 +1073,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -988,6 +1089,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1003,6 +1105,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1084,6 +1187,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1099,6 +1203,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1151,7 +1256,7 @@ describe('Calendar', () => {
       await wait();
 
       // When userRole is not provided, should see only public events (single event, no View all button)
-      const dayWithEvents = container.querySelector('._day__events_d8535b');
+      const dayWithEvents = container.querySelector('[data-has-events="true"]');
       expect(dayWithEvents).toBeInTheDocument();
     });
 
@@ -1175,6 +1280,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1190,6 +1296,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1242,7 +1349,7 @@ describe('Calendar', () => {
       await wait();
 
       // When userId is not provided, should see only public events
-      const dayWithEvents = container.querySelector('._day__events_d8535b');
+      const dayWithEvents = container.querySelector('[data-has-events="true"]');
       expect(dayWithEvents).toBeInTheDocument();
     });
 
@@ -1266,6 +1373,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1281,6 +1389,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1333,7 +1442,7 @@ describe('Calendar', () => {
       await wait();
 
       // When orgData is not provided, should see only public events
-      const dayWithEvents = container.querySelector('._day__events_d8535b');
+      const dayWithEvents = container.querySelector('[data-has-events="true"]');
       expect(dayWithEvents).toBeInTheDocument();
     });
 
@@ -1368,6 +1477,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1383,6 +1493,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1436,7 +1547,7 @@ describe('Calendar', () => {
       await wait();
 
       // When orgData has no members, should see only public events
-      const dayWithEvents = container.querySelector('._day__events_d8535b');
+      const dayWithEvents = container.querySelector('[data-has-events="true"]');
       expect(dayWithEvents).toBeInTheDocument();
     });
 
@@ -1459,6 +1570,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1474,6 +1586,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1489,6 +1602,7 @@ describe('Calendar', () => {
           allDay: false,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {},
         },
@@ -1516,7 +1630,7 @@ describe('Calendar', () => {
       await wait();
 
       // Check that the day with events has the correct class indicating events are present
-      const dayWithEvents = container.querySelector('._day__events_d8535b');
+      const dayWithEvents = container.querySelector('[data-has-events="true"]');
       expect(dayWithEvents).toBeInTheDocument();
 
       // Check that "View all" button exists, indicating multiple events are filtered and available
@@ -1528,6 +1642,225 @@ describe('Calendar', () => {
       // 2. Multiple events are available (View all button exists)
       // 3. The filtering allows both public and private events for org members
       expect(viewAllButton).toHaveTextContent('View all');
+    });
+    it('should show invite-only events only to creator and admins', async () => {
+      const today = dayjs();
+
+      const inviteOnlyTestEventData = [
+        {
+          id: 'event1',
+          name: 'Public Event',
+          description: 'This is a public event',
+          startAt: today.hour(10).minute(0).toISOString(),
+          endAt: today.hour(12).minute(0).toISOString(),
+          location: 'Public Location',
+          startTime: '10:00',
+          endTime: '12:00',
+          allDay: false,
+          isPublic: true,
+          isRegisterable: true,
+          isInviteOnly: false,
+          attendees: [],
+          creator: {
+            id: 'other',
+            name: 'Other',
+            emailAddress: 'other@example.com',
+          },
+        },
+        {
+          id: 'event2',
+          name: 'My Invite Only Event',
+          description: 'This is an invite only event',
+          startAt: today.hour(14).minute(0).toISOString(),
+          endAt: today.hour(16).minute(0).toISOString(),
+          location: 'Secret Location',
+          startTime: '14:00',
+          endTime: '16:00',
+          allDay: false,
+          isPublic: false,
+          isRegisterable: true,
+          isInviteOnly: true,
+          attendees: [],
+          creator: {
+            id: 'user1',
+            name: 'User 1',
+            emailAddress: 'user1@example.com',
+          },
+        },
+        {
+          id: 'event3',
+          name: 'Other Invite Only Event',
+          description: 'This is another invite only event',
+          startAt: today.hour(18).minute(0).toISOString(),
+          endAt: today.hour(20).minute(0).toISOString(),
+          location: 'Top Secret Location',
+          startTime: '18:00',
+          endTime: '20:00',
+          allDay: false,
+          isPublic: false,
+          isRegisterable: true,
+          isInviteOnly: true,
+          attendees: [],
+          creator: {
+            id: 'other',
+            name: 'Other',
+            emailAddress: 'other@example.com',
+          },
+        },
+      ];
+
+      render(
+        <MemoryRouter initialEntries={['/org/test-org/events']}>
+          <MockedProvider link={link}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/org/:orgId/events"
+                  element={
+                    <Calendar
+                      eventData={inviteOnlyTestEventData}
+                      orgData={mockOrgData}
+                      userRole="REGULAR"
+                      userId="user1"
+                      viewType={ViewType.MONTH}
+                      onMonthChange={vi.fn()}
+                      currentMonth={new Date().getMonth()}
+                      currentYear={new Date().getFullYear()}
+                    />
+                  }
+                />
+              </Routes>
+            </I18nextProvider>
+          </MockedProvider>
+        </MemoryRouter>,
+      );
+
+      // Wait for the public event to be rendered (stable UI signal)
+      await screen.findByText('Public Event');
+
+      // If "View all" button exists, click it to expand all events
+      const viewAllButton = screen.queryByTestId('more');
+      if (viewAllButton) {
+        await userEvent.click(viewAllButton);
+        // Wait for the expanded view to stabilize
+        await screen.findByText('Public Event');
+      }
+
+      // Now verify visibility with explicit assertions
+      expect(screen.getByText('Public Event')).toBeInTheDocument();
+      expect(screen.getByText('My Invite Only Event')).toBeInTheDocument();
+      expect(
+        screen.queryByText('Other Invite Only Event'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('should show all invite-only events to admins', async () => {
+      const today = dayjs();
+
+      const inviteOnlyTestEventData = [
+        {
+          id: 'event1',
+          name: 'Public Event',
+          description: 'This is a public event',
+          startAt: today.hour(10).minute(0).toISOString(),
+          endAt: today.hour(12).minute(0).toISOString(),
+          location: 'Public Location',
+          startTime: '10:00',
+          endTime: '12:00',
+          allDay: false,
+          isPublic: true,
+          isRegisterable: true,
+          isInviteOnly: false,
+          attendees: [],
+          creator: {
+            id: 'other',
+            name: 'Other',
+            emailAddress: 'other@example.com',
+          },
+        },
+        {
+          id: 'event2',
+          name: 'My Invite Only Event',
+          description: 'This is an invite only event',
+          startAt: today.hour(14).minute(0).toISOString(),
+          endAt: today.hour(16).minute(0).toISOString(),
+          location: 'Secret Location',
+          startTime: '14:00',
+          endTime: '16:00',
+          allDay: false,
+          isPublic: false,
+          isRegisterable: true,
+          isInviteOnly: true,
+          attendees: [],
+          creator: {
+            id: 'user1',
+            name: 'User 1',
+            emailAddress: 'user1@example.com',
+          },
+        },
+        {
+          id: 'event3',
+          name: 'Other Invite Only Event',
+          description: 'This is another invite only event',
+          startAt: today.hour(18).minute(0).toISOString(),
+          endAt: today.hour(20).minute(0).toISOString(),
+          location: 'Top Secret Location',
+          startTime: '18:00',
+          endTime: '20:00',
+          allDay: false,
+          isPublic: false,
+          isRegisterable: true,
+          isInviteOnly: true,
+          attendees: [],
+          creator: {
+            id: 'other',
+            name: 'Other',
+            emailAddress: 'other@example.com',
+          },
+        },
+      ];
+
+      render(
+        <MemoryRouter initialEntries={['/org/test-org/events']}>
+          <MockedProvider link={link}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/org/:orgId/events"
+                  element={
+                    <Calendar
+                      eventData={inviteOnlyTestEventData}
+                      orgData={mockOrgData}
+                      userRole={UserRole.ADMINISTRATOR}
+                      userId="user1"
+                      viewType={ViewType.MONTH}
+                      onMonthChange={vi.fn()}
+                      currentMonth={new Date().getMonth()}
+                      currentYear={new Date().getFullYear()}
+                    />
+                  }
+                />
+              </Routes>
+            </I18nextProvider>
+          </MockedProvider>
+        </MemoryRouter>,
+      );
+
+      // Wait for the public event to be rendered (stable UI signal)
+      await screen.findByText('Public Event');
+
+      // If "View all" button exists, click it to expand all events
+      const viewAllButton = screen.queryByTestId('more');
+      if (viewAllButton) {
+        await userEvent.click(viewAllButton);
+        // Wait for the expanded view to stabilize
+        await screen.findByText('Public Event');
+      }
+
+      // Now verify visibility - Admin should see EVERYTHING
+      expect(screen.getByText('Public Event')).toBeInTheDocument();
+      expect(screen.getByText('My Invite Only Event')).toBeInTheDocument();
+      expect(screen.getByText('Other Invite Only Event')).toBeInTheDocument();
     });
   });
   describe('Additional Coverage Tests (Day View & Edge Cases)', () => {
@@ -1550,6 +1883,7 @@ describe('Calendar', () => {
         allDay: false,
         isPublic: true,
         isRegisterable: true,
+        isInviteOnly: false,
         attendees: [],
         creator: { id: 'user-1' } as InterfaceEvent['creator'],
       }));
@@ -1573,11 +1907,11 @@ describe('Calendar', () => {
       const viewAllBtn = await screen.findByText('View all');
       expect(viewAllBtn).toBeInTheDocument();
 
-      fireEvent.click(viewAllBtn);
+      await userEvent.click(viewAllBtn);
       const viewLessBtn = await screen.findByText('View less');
       expect(viewLessBtn).toBeInTheDocument();
 
-      fireEvent.click(viewLessBtn);
+      await userEvent.click(viewLessBtn);
       const viewAllBtnAgain = await screen.findByText('View all');
       expect(viewAllBtnAgain).toBeInTheDocument();
     });
@@ -1602,6 +1936,79 @@ describe('Calendar', () => {
       );
 
       expect(screen.getByTestId('current-date')).toBeInTheDocument();
+    });
+
+    it('should log a warning if a holiday has no date and return false', () => {
+      // Explicitly set value for this test
+      const originalValue = mockHolidays.value;
+      mockHolidays.value = [
+        { name: 'Invalid Holiday', date: '', month: 'Unknown' },
+      ];
+
+      const consoleWarnSpy = vi
+        .spyOn(console, 'warn')
+        .mockImplementation(() => {});
+
+      try {
+        render(
+          <Router>
+            <MockedProvider link={link}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Calendar
+                  eventData={[]}
+                  viewType={ViewType.MONTH}
+                  onMonthChange={onMonthChange}
+                  currentMonth={new Date().getMonth()}
+                  currentYear={new Date().getFullYear()}
+                />
+              </I18nextProvider>
+            </MockedProvider>
+          </Router>,
+        );
+
+        // Filter out Apollo Client warnings and check for holiday warning
+        const calls = consoleWarnSpy.mock.calls;
+        const holidayWarnings = calls.filter(
+          (call) =>
+            typeof call[0] === 'string' &&
+            call[0].includes('Holiday') &&
+            call[0].includes('has no date'),
+        );
+
+        expect(holidayWarnings.length).toBeGreaterThan(0);
+      } finally {
+        mockHolidays.value = originalValue;
+        consoleWarnSpy.mockRestore();
+      }
+    });
+    it('should handle non-array holidays gracefully', () => {
+      // Set holidays to explicitly null/undefined to trigger the fallback branch (line 159)
+      const originalValue = mockHolidays.value;
+      mockHolidays.value = null;
+
+      try {
+        render(
+          <Router>
+            <MockedProvider link={link}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Calendar
+                  eventData={[]}
+                  userRole={UserRole.REGULAR}
+                  userId="user1"
+                  onMonthChange={onMonthChange}
+                  currentMonth={new Date().getMonth()}
+                  currentYear={new Date().getFullYear()}
+                />
+              </I18nextProvider>
+            </MockedProvider>
+          </Router>,
+        );
+        // If it renders without crashing, the fallback [] worked
+        // Verify positive rendering by checking for the month/year header or similar stable element
+        expect(screen.getByTestId('current-date')).toBeInTheDocument();
+      } finally {
+        mockHolidays.value = originalValue;
+      }
     });
   });
 });

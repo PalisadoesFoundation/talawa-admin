@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button/Button';
 import styles from './UpcomingEvents.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
@@ -13,7 +13,6 @@ import {
   InterfaceMappedEvent,
   InterfaceVolunteerStatus,
 } from 'types/Volunteer/interface';
-import type { StatusVariant } from 'types/shared-components/StatusBadge/interface';
 import { IoLocationOutline } from 'react-icons/io5';
 import { IoIosHand } from 'react-icons/io';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -26,29 +25,18 @@ import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
+import { mapVolunteerStatusToVariant } from 'utils/volunteerStatusMapper';
 
 /**
  * Maps membership status to StatusBadge variant.
  *
+ * @deprecated Use mapVolunteerStatusToVariant from utils/volunteerStatusMapper instead.
+ * This export is maintained for backward compatibility with existing tests.
+ *
  * @param status - The membership status string (e.g., 'requested', 'invited', 'accepted', 'rejected')
  * @returns Object containing the StatusBadge variant
  */
-export const getStatusBadgeProps = (
-  status: string,
-): { variant: StatusVariant } => {
-  switch (status) {
-    case 'requested':
-    case 'invited':
-      return { variant: 'pending' };
-    case 'accepted':
-      return { variant: 'accepted' };
-    case 'rejected':
-      return { variant: 'rejected' };
-    default:
-      return { variant: 'pending' };
-  }
-};
-
+export const getStatusBadgeProps = mapVolunteerStatusToVariant;
 /**
  * Component for displaying upcoming volunteer events for an organization.
  * Allows users to volunteer for events and groups, and tracks their membership status.
