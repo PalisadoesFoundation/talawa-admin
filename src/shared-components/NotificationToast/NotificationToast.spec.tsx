@@ -19,6 +19,7 @@ const toastContainerSpy = vi.hoisted(() =>
         data-testid="toast-container"
         data-limit={props.limit}
         data-position={props.position}
+        className={props.className as string}
       />
     );
   }),
@@ -192,6 +193,8 @@ describe('NotificationToastContainer', () => {
     const container = screen.getByTestId('toast-container');
     expect(container).toHaveAttribute('data-limit', '5');
     expect(container).toHaveAttribute('data-position', 'top-right');
+    // Ensure CSS module class is applied for z-index containment
+    expect(container).toHaveClass(/notificationContainer/);
   });
 
   it('handles undefined props correctly when called directly', () => {
