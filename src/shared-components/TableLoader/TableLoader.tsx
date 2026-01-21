@@ -30,7 +30,7 @@
  */
 import React, { useEffect } from 'react';
 import styles from './TableLoader.module.css';
-import DataTable from '../../shared-components/DataTable/DataTable';
+import DataTable from '../DataTable/DataTable';
 import { InterfaceTableLoaderProps } from 'types/shared-components/TableLoader/interface';
 
 const TableLoader = (props: InterfaceTableLoaderProps): JSX.Element => {
