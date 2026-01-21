@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter } from 'react-router-dom';
 import {
@@ -181,7 +182,7 @@ describe('UserPortalNavigationBar', () => {
       expect(screen.queryByTestId('offcanvasTitle')).not.toBeInTheDocument();
     });
 
-    it('handles brand click in user mode', () => {
+    it('handles brand click in user mode', async () => {
       const mockBrandClick = vi.fn();
 
       render(
@@ -195,11 +196,13 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
-      fireEvent.click(screen.getByTestId('brandLogo'));
+      const user = userEvent.setup();
+      await user.click(screen.getByTestId('brandLogo'));
       expect(mockBrandClick).toHaveBeenCalled();
     });
 
-    it('displays custom userName when provided', () => {
+    it('displays custom userName when provided', async () => {
+      const user = userEvent.setup();
       render(
         <MockedProvider mocks={[organizationDataMock]}>
           <MemoryRouter>
@@ -209,7 +212,7 @@ describe('UserPortalNavigationBar', () => {
       );
 
       const dropdown = screen.getByTestId('logoutDropdown');
-      fireEvent.click(dropdown);
+      await user.click(dropdown);
 
       expect(screen.getByText('Custom User')).toBeInTheDocument();
     });
@@ -232,11 +235,12 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const dropdown = screen.getByTestId('logoutDropdown');
-      fireEvent.click(dropdown);
+      await user.click(dropdown);
 
       const logoutBtn = screen.getByTestId('logoutBtn');
-      fireEvent.click(logoutBtn);
+      await user.click(logoutBtn);
 
       await waitFor(() => {
         expect(clearAllItems).toHaveBeenCalled();
@@ -255,11 +259,12 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const dropdown = screen.getByTestId('logoutDropdown');
-      fireEvent.click(dropdown);
+      await user.click(dropdown);
 
       const logoutBtn = screen.getByTestId('logoutBtn');
-      fireEvent.click(logoutBtn);
+      await user.click(logoutBtn);
 
       await waitFor(() => {
         expect(customLogout).toHaveBeenCalled();
@@ -376,11 +381,12 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const dropdown = screen.getByTestId('logoutDropdown');
-      fireEvent.click(dropdown);
+      await user.click(dropdown);
 
       const logoutBtn = screen.getByTestId('logoutBtn');
-      fireEvent.click(logoutBtn);
+      await user.click(logoutBtn);
 
       await waitFor(() => {
         expect(clearAllItems).toHaveBeenCalled();
@@ -388,7 +394,8 @@ describe('UserPortalNavigationBar', () => {
       });
     });
 
-    it('navigates to organization home when brand is clicked', () => {
+    it('navigates to organization home when brand is clicked', async () => {
+      const user = userEvent.setup();
       render(
         <MockedProvider mocks={[]}>
           <MemoryRouter>
@@ -400,7 +407,7 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
-      fireEvent.click(screen.getByTestId('brandLogo'));
+      await user.click(screen.getByTestId('brandLogo'));
       expect(mockNavigate).toHaveBeenCalledWith(
         `/user/organization/${mockOrganizationId}`,
       );
@@ -462,8 +469,9 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const homeLink = screen.getAllByTestId('navigationLink-home')[0];
-      fireEvent.click(homeLink);
+      await user.click(homeLink);
 
       await waitFor(() => {
         expect(mockNavigate).toHaveBeenCalledWith('/home');
@@ -492,8 +500,9 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const customLink = screen.getAllByTestId('navigationLink-custom')[0];
-      fireEvent.click(customLink);
+      await user.click(customLink);
 
       await waitFor(() => {
         expect(customOnClick).toHaveBeenCalled();
@@ -515,8 +524,9 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const homeLink = screen.getAllByTestId('navigationLink-home')[0];
-      fireEvent.click(homeLink);
+      await user.click(homeLink);
 
       await waitFor(() => {
         expect(customOnNavigation).toHaveBeenCalledWith(
@@ -684,7 +694,7 @@ describe('UserPortalNavigationBar', () => {
       expect(logo).toHaveAttribute('alt', customAltText);
     });
 
-    it('does not navigate when brand click handler is provided', () => {
+    it('does not navigate when brand click handler is provided', async () => {
       const mockBrandClick = vi.fn();
 
       render(
@@ -698,7 +708,8 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
-      fireEvent.click(screen.getByTestId('brandLogo'));
+      const user = userEvent.setup();
+      await user.click(screen.getByTestId('brandLogo'));
 
       // Custom brand click handler should be called
       expect(mockBrandClick).toHaveBeenCalled();
@@ -849,11 +860,12 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const languageDropdown = screen.getByTestId('languageDropdownToggle');
-      fireEvent.click(languageDropdown);
+      await user.click(languageDropdown);
 
       const spanishOption = screen.getByTestId('changeLanguageBtn1');
-      fireEvent.click(spanishOption);
+      await user.click(spanishOption);
 
       await waitFor(() => {
         expect(i18next.changeLanguage).toHaveBeenCalledWith(languages[1].code);
@@ -875,11 +887,12 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const languageDropdown = screen.getByTestId('languageDropdownToggle');
-      fireEvent.click(languageDropdown);
+      await user.click(languageDropdown);
 
       const spanishOption = screen.getByTestId('changeLanguageBtn1');
-      fireEvent.click(spanishOption);
+      await user.click(spanishOption);
 
       await waitFor(() => {
         expect(i18next.changeLanguage).toHaveBeenCalledWith(languages[1].code);
@@ -887,7 +900,7 @@ describe('UserPortalNavigationBar', () => {
       });
     });
 
-    it('uses current language from cookies', () => {
+    it('uses current language from cookies', async () => {
       (cookies.get as Mock).mockImplementation((key: string) => {
         if (key === 'i18next') return 'es';
         return undefined;
@@ -901,8 +914,9 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const languageDropdown = screen.getByTestId('languageDropdownToggle');
-      fireEvent.click(languageDropdown);
+      await user.click(languageDropdown);
 
       // Spanish option should be disabled as it's the current language
       const spanishOption = screen.getByTestId('changeLanguageBtn3');
@@ -911,7 +925,7 @@ describe('UserPortalNavigationBar', () => {
   });
 
   describe('UserPortalNavigationBar - User Profile Dropdown', () => {
-    it('navigates to settings when settings is clicked', () => {
+    it('navigates to settings when settings is clicked', async () => {
       render(
         <MockedProvider mocks={[]}>
           <MemoryRouter>
@@ -920,16 +934,17 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const dropdown = screen.getByTestId('logoutDropdown');
-      fireEvent.click(dropdown);
+      await user.click(dropdown);
 
       const settingsOption = screen.getByText('settings');
-      fireEvent.click(settingsOption);
+      await user.click(settingsOption);
 
       expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
     });
 
-    it('displays user name in dropdown', () => {
+    it('displays user name in dropdown', async () => {
       render(
         <MockedProvider mocks={[]}>
           <MemoryRouter>
@@ -938,8 +953,9 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const dropdown = screen.getByTestId('logoutDropdown');
-      fireEvent.click(dropdown);
+      await user.click(dropdown);
 
       expect(screen.getByText(mockUserName)).toBeInTheDocument();
     });
@@ -1031,11 +1047,12 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const dropdown = screen.getByTestId('logoutDropdown');
-      fireEvent.click(dropdown);
+      await user.click(dropdown);
 
       const logoutBtn = screen.getByTestId('logoutBtn');
-      fireEvent.click(logoutBtn);
+      await user.click(logoutBtn);
 
       await waitFor(() => {
         // Toast error should be called with logout failed message
@@ -1108,11 +1125,12 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const dropdown = screen.getByTestId('logoutDropdown');
-      fireEvent.click(dropdown);
+      await user.click(dropdown);
 
       const logoutBtn = screen.getByTestId('logoutBtn');
-      fireEvent.click(logoutBtn);
+      await user.click(logoutBtn);
 
       await waitFor(() => {
         // Component catches the error, so side effects still run.
@@ -1143,11 +1161,12 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const dropdown = screen.getByTestId('logoutDropdown');
-      fireEvent.click(dropdown);
+      await user.click(dropdown);
 
       const logoutBtn = screen.getByTestId('logoutBtn');
-      fireEvent.click(logoutBtn);
+      await user.click(logoutBtn);
 
       await waitFor(() => {
         // Network errors also don't prevent cleanup as they are caught
@@ -1167,11 +1186,12 @@ describe('UserPortalNavigationBar', () => {
         </MockedProvider>,
       );
 
+      const user = userEvent.setup();
       const dropdown = screen.getByTestId('logoutDropdown');
-      fireEvent.click(dropdown);
+      await user.click(dropdown);
 
       const logoutBtn = screen.getByTestId('logoutBtn');
-      fireEvent.click(logoutBtn);
+      await user.click(logoutBtn);
 
       await waitFor(() => {
         // Custom logout handler is called, mutation is bypassed entirely
@@ -1260,7 +1280,7 @@ describe('LanguageSelector Component', () => {
     vi.clearAllMocks();
   });
 
-  it('renders language selector with all languages', () => {
+  it('renders language selector with all languages', async () => {
     render(
       <MemoryRouter>
         <LanguageSelector
@@ -1273,8 +1293,9 @@ describe('LanguageSelector Component', () => {
       </MemoryRouter>,
     );
 
+    const user = userEvent.setup();
     const dropdown = screen.getByTestId('testlanguageDropdownToggle');
-    fireEvent.click(dropdown);
+    await user.click(dropdown);
 
     languages.forEach((language, index) => {
       expect(
@@ -1284,7 +1305,7 @@ describe('LanguageSelector Component', () => {
     });
   });
 
-  it('disables current language option', () => {
+  it('disables current language option', async () => {
     render(
       <MemoryRouter>
         <LanguageSelector
@@ -1297,8 +1318,9 @@ describe('LanguageSelector Component', () => {
       </MemoryRouter>,
     );
 
+    const user = userEvent.setup();
     const dropdown = screen.getByTestId('testlanguageDropdownToggle');
-    fireEvent.click(dropdown);
+    await user.click(dropdown);
 
     const englishOption = screen.getByTestId('testchangeLanguageBtn0');
     expect(englishOption).toHaveClass('disabled');
@@ -1317,11 +1339,12 @@ describe('LanguageSelector Component', () => {
       </MemoryRouter>,
     );
 
+    const user = userEvent.setup();
     const dropdown = screen.getByTestId('testlanguageDropdownToggle');
-    fireEvent.click(dropdown);
+    await user.click(dropdown);
 
     const spanishOption = screen.getByTestId('testchangeLanguageBtn1');
-    fireEvent.click(spanishOption);
+    await user.click(spanishOption);
 
     await waitFor(() => {
       expect(mockHandleLanguageChange).toHaveBeenCalledWith(languages[1].code);
@@ -1411,18 +1434,19 @@ describe('LanguageSelector Component', () => {
       </MemoryRouter>,
     );
 
+    const user = userEvent.setup();
     const dropdown = screen.getByTestId('testlanguageDropdownToggle');
-    fireEvent.click(dropdown);
+    await user.click(dropdown);
 
     const frenchOption = screen.getByTestId('testchangeLanguageBtn2');
-    fireEvent.click(frenchOption);
+    await user.click(frenchOption);
 
     await waitFor(() => {
       expect(asyncHandleLanguageChange).toHaveBeenCalledWith(languages[2].code);
     });
   });
 
-  it('renders country flags for each language', () => {
+  it('renders country flags for each language', async () => {
     render(
       <MemoryRouter>
         <LanguageSelector
@@ -1435,8 +1459,9 @@ describe('LanguageSelector Component', () => {
       </MemoryRouter>,
     );
 
+    const user = userEvent.setup();
     const dropdown = screen.getByTestId('testlanguageDropdownToggle');
-    fireEvent.click(dropdown);
+    await user.click(dropdown);
 
     languages.forEach((language) => {
       const flagElement = document.querySelector(
@@ -1463,7 +1488,7 @@ describe('UserProfileDropdown Component', () => {
     vi.clearAllMocks();
   });
 
-  it('renders user profile dropdown with user name', () => {
+  it('renders user profile dropdown with user name', async () => {
     render(
       <MemoryRouter>
         <UserProfileDropdown
@@ -1484,8 +1509,9 @@ describe('UserProfileDropdown Component', () => {
       </MemoryRouter>,
     );
 
+    const user = userEvent.setup();
     const dropdown = screen.getByTestId('testlogoutDropdown');
-    fireEvent.click(dropdown);
+    await user.click(dropdown);
 
     expect(screen.getByText('Test User')).toBeInTheDocument();
   });
@@ -1514,7 +1540,7 @@ describe('UserProfileDropdown Component', () => {
     expect(container.firstChild).toBeNull();
   });
 
-  it('navigates to settings when settings is clicked', () => {
+  it('navigates to settings when settings is clicked', async () => {
     render(
       <MemoryRouter>
         <UserProfileDropdown
@@ -1535,16 +1561,17 @@ describe('UserProfileDropdown Component', () => {
       </MemoryRouter>,
     );
 
+    const user = userEvent.setup();
     const dropdown = screen.getByTestId('testlogoutDropdown');
-    fireEvent.click(dropdown);
+    await user.click(dropdown);
 
     const settingsLink = screen.getByText('settings');
-    fireEvent.click(settingsLink);
+    await user.click(settingsLink);
 
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
   });
 
-  it('calls handleLogout when logout is clicked', () => {
+  it('calls handleLogout when logout is clicked', async () => {
     render(
       <MemoryRouter>
         <UserProfileDropdown
@@ -1565,11 +1592,12 @@ describe('UserProfileDropdown Component', () => {
       </MemoryRouter>,
     );
 
+    const user = userEvent.setup();
     const dropdown = screen.getByTestId('testlogoutDropdown');
-    fireEvent.click(dropdown);
+    await user.click(dropdown);
 
     const logoutBtn = screen.getByTestId('testlogoutBtn');
-    fireEvent.click(logoutBtn);
+    await user.click(logoutBtn);
 
     expect(mockHandleLogout).toHaveBeenCalled();
   });
@@ -1648,7 +1676,7 @@ describe('UserProfileDropdown Component', () => {
     expect(screen.getByTestId('personIcon')).toBeInTheDocument();
   });
 
-  it('renders with empty user name', () => {
+  it('renders with empty user name', async () => {
     render(
       <MemoryRouter>
         <UserProfileDropdown
@@ -1669,15 +1697,16 @@ describe('UserProfileDropdown Component', () => {
       </MemoryRouter>,
     );
 
+    const user = userEvent.setup();
     const dropdown = screen.getByTestId('testlogoutDropdown');
-    fireEvent.click(dropdown);
+    await user.click(dropdown);
 
     // Should render empty string or fallback
     const userNameElement = screen.getByText('', { selector: 'b' });
     expect(userNameElement).toBeInTheDocument();
   });
 
-  it('applies correct CSS classes from styles prop', () => {
+  it('applies correct CSS classes from styles prop', async () => {
     render(
       <MemoryRouter>
         <UserProfileDropdown
@@ -1698,10 +1727,11 @@ describe('UserProfileDropdown Component', () => {
       </MemoryRouter>,
     );
 
+    const user = userEvent.setup();
     const dropdown = screen.getByTestId('testlogoutDropdown');
     expect(dropdown).toHaveClass('colorWhite');
 
-    fireEvent.click(dropdown);
+    await user.click(dropdown);
 
     const settingsLink = screen.getByText('settings');
     expect(settingsLink.closest('.dropdown-item')).toHaveClass('link');
