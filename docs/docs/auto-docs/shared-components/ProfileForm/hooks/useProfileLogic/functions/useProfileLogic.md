@@ -18,7 +18,7 @@ Defined in: [src/shared-components/ProfileForm/hooks/useProfileLogic.ts:19](http
 
 ### formState
 
-> **formState**: `IProfileFormState`
+> **formState**: [`IProfileFormState`](../../../../../types/shared-components/ProfileForm/interface/interfaces/IProfileFormState.md)
 
 ### handlers
 

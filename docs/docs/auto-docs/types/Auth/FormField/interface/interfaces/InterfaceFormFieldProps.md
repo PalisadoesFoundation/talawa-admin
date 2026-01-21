@@ -153,7 +153,7 @@ Test ID for testing purposes
 
 ### type?
 
-> `optional` **type**: `"text"` \| `"email"` \| `"password"` \| `"tel"`
+> `optional` **type**: `"text"` \| `"password"` \| `"email"` \| `"tel"`
 
 Defined in: [src/types/Auth/FormField/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L17)
 
