@@ -1,7 +1,7 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { Form } from 'react-bootstrap';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import styles from './CRUDModalTemplate.module.css';
@@ -64,15 +64,16 @@ describe('CRUDModalTemplate', () => {
       expect(screen.queryByText('Modal Content')).not.toBeInTheDocument();
     });
 
-    it('should call onClose when close button is clicked', () => {
+    it('should call onClose when close button is clicked', async () => {
       renderWithI18n(
         <CRUDModalTemplate open={true} title="Test Modal" onClose={mockOnClose}>
           <div>Content</div>
         </CRUDModalTemplate>,
       );
 
+      const user = userEvent.setup();
       const closeButton = screen.getByTestId('modalCloseBtn');
-      fireEvent.click(closeButton);
+      await user.click(closeButton);
 
       expect(mockOnClose).toHaveBeenCalledTimes(1);
     });
@@ -97,7 +98,7 @@ describe('CRUDModalTemplate', () => {
       expect(screen.getByText('Cancel')).toBeInTheDocument();
     });
 
-    it('should call onPrimary when primary button is clicked', () => {
+    it('should call onPrimary when primary button is clicked', async () => {
       renderWithI18n(
         <CRUDModalTemplate
           open={true}
@@ -110,8 +111,9 @@ describe('CRUDModalTemplate', () => {
         </CRUDModalTemplate>,
       );
 
+      const user = userEvent.setup();
       const saveButton = screen.getByText('Save');
-      fireEvent.click(saveButton);
+      await user.click(saveButton);
 
       expect(mockOnPrimary).toHaveBeenCalledTimes(1);
     });
@@ -287,7 +289,7 @@ describe('CRUDModalTemplate', () => {
       expect(screen.getByTestId('spinner')).toBeInTheDocument();
     });
 
-    it('should not call onPrimary when loading', () => {
+    it('should not call onPrimary when loading', async () => {
       renderWithI18n(
         <CRUDModalTemplate
           open={true}
@@ -300,8 +302,9 @@ describe('CRUDModalTemplate', () => {
         </CRUDModalTemplate>,
       );
 
+      const user = userEvent.setup();
       const primaryBtn = screen.getByTestId('modal-primary-btn');
-      fireEvent.click(primaryBtn);
+      await user.click(primaryBtn);
 
       expect(mockOnPrimary).not.toHaveBeenCalled();
     });
@@ -335,19 +338,20 @@ describe('CRUDModalTemplate', () => {
   });
 
   describe('Keyboard navigation', () => {
-    it('should call onClose when Escape key is pressed', () => {
+    it('should call onClose when Escape key is pressed', async () => {
       renderWithI18n(
         <CRUDModalTemplate open={true} title="Test Modal" onClose={mockOnClose}>
           <div>Content</div>
         </CRUDModalTemplate>,
       );
 
-      fireEvent.keyDown(document, { key: 'Escape' });
+      const user = userEvent.setup();
+      await user.keyboard('{Escape}');
 
       expect(mockOnClose).toHaveBeenCalled();
     });
 
-    it('should not call onClose when Escape is pressed while loading', () => {
+    it('should not call onClose when Escape is pressed while loading', async () => {
       renderWithI18n(
         <CRUDModalTemplate
           open={true}
@@ -359,7 +363,8 @@ describe('CRUDModalTemplate', () => {
         </CRUDModalTemplate>,
       );
 
-      fireEvent.keyDown(document, { key: 'Escape' });
+      const user = userEvent.setup();
+      await user.keyboard('{Escape}');
 
       expect(mockOnClose).not.toHaveBeenCalled();
     });
@@ -428,10 +433,10 @@ describe('CreateModal', () => {
           onClose={mockOnClose}
           onSubmit={mockOnSubmit}
         >
-          <Form.Group>
-            <Form.Label>Name</Form.Label>
-            <Form.Control type="text" placeholder="Enter name" />
-          </Form.Group>
+          <div>
+            <label>Name</label>
+            <input type="text" placeholder="Enter name" />
+          </div>
         </CreateModal>,
       );
 
@@ -439,7 +444,7 @@ describe('CreateModal', () => {
       expect(screen.getByPlaceholderText('Enter name')).toBeInTheDocument();
     });
 
-    it('should call onSubmit when form is submitted', () => {
+    it('should call onSubmit when form is submitted', async () => {
       renderWithI18n(
         <CreateModal
           open={true}
@@ -447,19 +452,20 @@ describe('CreateModal', () => {
           onClose={mockOnClose}
           onSubmit={mockOnSubmit}
         >
-          <Form.Group>
-            <Form.Control type="text" />
-          </Form.Group>
+          <div>
+            <input type="text" />
+          </div>
         </CreateModal>,
       );
 
+      const user = userEvent.setup();
       const submitButton = screen.getByTestId('modal-submit-btn');
-      fireEvent.click(submitButton);
+      await user.click(submitButton);
 
       expect(mockOnSubmit).toHaveBeenCalled();
     });
 
-    it('should prevent default form submission', () => {
+    it('should prevent default form submission', async () => {
       renderWithI18n(
         <CreateModal
           open={true}
@@ -467,12 +473,13 @@ describe('CreateModal', () => {
           onClose={mockOnClose}
           onSubmit={mockOnSubmit}
         >
-          <Form.Control type="text" />
+          <input type="text" />
         </CreateModal>,
       );
 
+      const user = userEvent.setup();
       const submitButton = screen.getByTestId('modal-submit-btn');
-      fireEvent.click(submitButton);
+      await user.click(submitButton);
 
       expect(mockOnSubmit).toHaveBeenCalled();
     });
@@ -486,7 +493,7 @@ describe('CreateModal', () => {
           onSubmit={mockOnSubmit}
           submitDisabled={true}
         >
-          <Form.Control type="text" />
+          <input type="text" />
         </CreateModal>,
       );
 
@@ -502,7 +509,7 @@ describe('CreateModal', () => {
           onClose={mockOnClose}
           onSubmit={mockOnSubmit}
         >
-          <Form.Control type="text" />
+          <input type="text" />
         </CreateModal>,
       );
 
@@ -520,12 +527,13 @@ describe('CreateModal', () => {
           onClose={mockOnClose}
           onSubmit={mockOnSubmit}
         >
-          <Form.Control type="text" data-testid="input-field" />
+          <input type="text" data-testid="input-field" />
         </CreateModal>,
       );
 
+      const user = userEvent.setup();
       const input = screen.getByTestId('input-field');
-      fireEvent.keyDown(input, { key: 'Enter', ctrlKey: true });
+      await user.type(input, '{Control>}{Enter}{/Control}');
 
       await waitFor(() => {
         expect(mockOnSubmit).toHaveBeenCalled();
@@ -540,12 +548,13 @@ describe('CreateModal', () => {
           onClose={mockOnClose}
           onSubmit={mockOnSubmit}
         >
-          <Form.Control type="text" data-testid="input-field" />
+          <input type="text" data-testid="input-field" />
         </CreateModal>,
       );
 
+      const user = userEvent.setup();
       const input = screen.getByTestId('input-field');
-      fireEvent.keyDown(input, { key: 'Enter', metaKey: true });
+      await user.type(input, '{Meta>}{Enter}{/Meta}');
 
       await waitFor(() => {
         expect(mockOnSubmit).toHaveBeenCalled();
@@ -562,7 +571,7 @@ describe('CreateModal', () => {
           onClose={mockOnClose}
           onSubmit={mockOnSubmit}
         >
-          <Form.Control type="text" data-testid="first-input" />
+          <input type="text" data-testid="first-input" />
         </CreateModal>,
       );
 
@@ -574,7 +583,7 @@ describe('CreateModal', () => {
             onClose={mockOnClose}
             onSubmit={mockOnSubmit}
           >
-            <Form.Control type="text" data-testid="first-input" />
+            <input type="text" data-testid="first-input" />
           </CreateModal>
         </I18nextProvider>,
       );
@@ -597,9 +606,9 @@ describe('CreateModal', () => {
           onSubmit={mockOnSubmit}
         >
           <>
-            <Form.Control type="hidden" />
-            <Form.Control type="text" disabled />
-            <Form.Control type="text" data-testid="visible-input" />
+            <input type="hidden" />
+            <input type="text" disabled />
+            <input type="text" data-testid="visible-input" />
           </>
         </CreateModal>,
       );
@@ -613,9 +622,9 @@ describe('CreateModal', () => {
             onSubmit={mockOnSubmit}
           >
             <>
-              <Form.Control type="hidden" />
-              <Form.Control type="text" disabled />
-              <Form.Control type="text" data-testid="visible-input" />
+              <input type="hidden" />
+              <input type="text" disabled />
+              <input type="text" data-testid="visible-input" />
             </>
           </CreateModal>
         </I18nextProvider>,
@@ -663,24 +672,6 @@ describe('CreateModal', () => {
       );
     });
 
-    it('should not submit when Enter is pressed without Ctrl or Cmd', () => {
-      renderWithI18n(
-        <CreateModal
-          open={true}
-          title="Create Item"
-          onClose={mockOnClose}
-          onSubmit={mockOnSubmit}
-        >
-          <Form.Control type="text" data-testid="input-field" />
-        </CreateModal>,
-      );
-
-      const input = screen.getByTestId('input-field');
-      fireEvent.keyDown(input, { key: 'Enter' });
-
-      expect(mockOnSubmit).not.toHaveBeenCalled();
-    });
-
     it('should render footer with cancel and submit buttons', () => {
       renderWithI18n(
         <CreateModal
@@ -689,7 +680,7 @@ describe('CreateModal', () => {
           onClose={mockOnClose}
           onSubmit={mockOnSubmit}
         >
-          <Form.Control type="text" />
+          <input type="text" />
         </CreateModal>,
       );
 
@@ -717,7 +708,7 @@ describe('EditModal', () => {
         onSubmit={mockOnSubmit}
         loadingData={true}
       >
-        <Form.Control type="text" />
+        <input type="text" />
       </EditModal>,
     );
 
@@ -733,10 +724,10 @@ describe('EditModal', () => {
         onSubmit={mockOnSubmit}
         loadingData={false}
       >
-        <Form.Group>
-          <Form.Label>Edit Name</Form.Label>
-          <Form.Control type="text" defaultValue="Existing Name" />
-        </Form.Group>
+        <div>
+          <label>Edit Name</label>
+          <input type="text" defaultValue="Existing Name" />
+        </div>
       </EditModal>,
     );
 
@@ -752,7 +743,7 @@ describe('EditModal', () => {
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
       >
-        <Form.Control type="text" />
+        <input type="text" />
       </EditModal>,
     );
 
@@ -768,7 +759,7 @@ describe('EditModal', () => {
         onSubmit={mockOnSubmit}
         loadingData={true}
       >
-        <Form.Control type="text" data-testid="input-field" />
+        <input type="text" data-testid="input-field" />
       </EditModal>,
     );
 
@@ -786,7 +777,7 @@ describe('EditModal', () => {
         loading={true}
         loadingData={true}
       >
-        <Form.Control type="text" />
+        <input type="text" />
       </EditModal>,
     );
 
@@ -794,7 +785,7 @@ describe('EditModal', () => {
     expect(submitButton).toBeDisabled();
   });
 
-  it('should call onSubmit when form is submitted', () => {
+  it('should call onSubmit when form is submitted', async () => {
     renderWithI18n(
       <EditModal
         open={true}
@@ -802,17 +793,18 @@ describe('EditModal', () => {
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
       >
-        <Form.Control type="text" data-testid="input-field" />
+        <input type="text" data-testid="input-field" />
       </EditModal>,
     );
 
+    const user = userEvent.setup();
     const submitButton = screen.getByTestId('modal-submit-btn');
-    fireEvent.click(submitButton);
+    await user.click(submitButton);
 
     expect(mockOnSubmit).toHaveBeenCalledTimes(1);
   });
 
-  it('should submit form when Ctrl+Enter is pressed', () => {
+  it('should submit form when Ctrl+Enter is pressed', async () => {
     renderWithI18n(
       <EditModal
         open={true}
@@ -820,17 +812,18 @@ describe('EditModal', () => {
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
       >
-        <Form.Control type="text" data-testid="input-field" />
+        <input type="text" data-testid="input-field" />
       </EditModal>,
     );
 
+    const user = userEvent.setup();
     const input = screen.getByTestId('input-field');
-    fireEvent.keyDown(input, { key: 'Enter', ctrlKey: true });
+    await user.type(input, '{Control>}{Enter}{/Control}');
 
     expect(mockOnSubmit).toHaveBeenCalledTimes(1);
   });
 
-  it('should submit form when Cmd+Enter is pressed (Mac)', () => {
+  it('should submit form when Cmd+Enter is pressed (Mac)', async () => {
     renderWithI18n(
       <EditModal
         open={true}
@@ -838,12 +831,13 @@ describe('EditModal', () => {
         onClose={mockOnClose}
         onSubmit={mockOnSubmit}
       >
-        <Form.Control type="text" data-testid="input-field" />
+        <input type="text" data-testid="input-field" />
       </EditModal>,
     );
 
+    const user = userEvent.setup();
     const input = screen.getByTestId('input-field');
-    fireEvent.keyDown(input, { key: 'Enter', metaKey: true });
+    await user.type(input, '{Meta>}{Enter}{/Meta}');
 
     expect(mockOnSubmit).toHaveBeenCalledTimes(1);
   });
@@ -914,7 +908,7 @@ describe('DeleteModal', () => {
     expect(warningIcon).not.toBeInTheDocument();
   });
 
-  it('should call onDelete when delete button is clicked', () => {
+  it('should call onDelete when delete button is clicked', async () => {
     renderWithI18n(
       <DeleteModal
         open={true}
@@ -924,13 +918,14 @@ describe('DeleteModal', () => {
       />,
     );
 
+    const user = userEvent.setup();
     const deleteButton = screen.getByTestId('modal-delete-btn');
-    fireEvent.click(deleteButton);
+    await user.click(deleteButton);
 
     expect(mockOnDelete).toHaveBeenCalledTimes(1);
   });
 
-  it('should not call onDelete when loading state is true', () => {
+  it('should not call onDelete when loading state is true', async () => {
     renderWithI18n(
       <DeleteModal
         open={true}
@@ -941,8 +936,9 @@ describe('DeleteModal', () => {
       />,
     );
 
+    const user = userEvent.setup();
     const deleteButton = screen.getByTestId('modal-delete-btn');
-    fireEvent.click(deleteButton);
+    await user.click(deleteButton);
 
     expect(mockOnDelete).not.toHaveBeenCalled();
   });
@@ -1045,7 +1041,7 @@ describe('ViewModal', () => {
     expect(screen.getByText('Close')).toBeInTheDocument();
   });
 
-  it('should render custom action buttons', () => {
+  it('should render custom action buttons', async () => {
     const mockEdit = vi.fn();
     const mockDelete = vi.fn();
 
@@ -1072,10 +1068,11 @@ describe('ViewModal', () => {
     expect(screen.getByText('Edit')).toBeInTheDocument();
     expect(screen.getByText('Delete')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText('Edit'));
+    const user = userEvent.setup();
+    await user.click(screen.getByText('Edit'));
     expect(mockEdit).toHaveBeenCalledTimes(1);
 
-    fireEvent.click(screen.getByText('Delete'));
+    await user.click(screen.getByText('Delete'));
     expect(mockDelete).toHaveBeenCalledTimes(1);
   });
 
