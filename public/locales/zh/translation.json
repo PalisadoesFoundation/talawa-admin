@@ -719,6 +719,7 @@
     "description": "描述",
     "enterDescription": "输入描述",
     "category": "议程类别",
+    "selectCategory": "Select Category",
     "attachments": "附件",
     "attachmentLimit": "添加任何图像文件或视频文件，最大 10MB",
     "fileSizeExceedsLimit": "文件大小超过 10MB 的限制",

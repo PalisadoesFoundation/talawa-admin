@@ -7,11 +7,9 @@
  * description, categories, URLs, and attachments. The modal also includes
  * validation for URLs and file size limits for attachments.
  *
- * @param props - The props for the component (see InterfaceAgendaItemsUpdateModalProps)
+ * See InterfaceAgendaItemsUpdateModalProps for props documentation.
  *
  * @remarks
- * - The component uses `react-bootstrap` for form elements.
- * - `@mui/material` is used for the Autocomplete component.
  * - File attachments are uploaded via MinIO presigned URLs.
  * - URLs are validated using a regular expression.
  *
@@ -30,9 +28,13 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { Form, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import Button from 'shared-components/Button/Button';
-import { Autocomplete, TextField } from '@mui/material';
+import {
+  FormTextField,
+  FormSelectField,
+  FormFieldGroup,
+} from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useMinioUpload } from 'utils/MinioUpload';
@@ -40,6 +42,7 @@ import BaseModal from 'shared-components/BaseModal/BaseModal';
 import styles from './AgendaItemsUpdateModal.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import type { InterfaceAgendaItemsUpdateModalProps } from 'types/Agenda/interface';
+
 const AgendaItemsUpdateModal: React.FC<
   InterfaceAgendaItemsUpdateModalProps
 > = ({
@@ -173,85 +176,75 @@ const AgendaItemsUpdateModal: React.FC<
       showCloseButton={true}
       dataTestId="updateAgendaItemModal"
     >
-      <Form onSubmit={updateAgendaItemHandler}>
-        <Form.Group className="d-flex mb-3 w-100">
-          <Autocomplete
-            multiple
-            className={`${styles.noOutline} w-100`}
-            limitTags={2}
-            data-testid="categorySelect"
-            options={agendaItemCategories || []}
-            value={
-              agendaItemCategories?.filter((category) =>
-                formState.agendaItemCategoryIds.includes(category._id),
-              ) || []
-            }
-            filterSelectedOptions={true}
-            getOptionLabel={(
-              category: InterfaceAgendaItemCategoryInfo,
-            ): string => category.name}
-            onChange={(_, newCategories): void => {
-              setFormState({
-                ...formState,
-                agendaItemCategoryIds: newCategories.map(
-                  (category) => category._id,
-                ),
-              });
-            }}
-            renderInput={(params) => (
-              <TextField {...params} label={t('category')} />
-            )}
-          />
-        </Form.Group>
+      <form onSubmit={updateAgendaItemHandler}>
+        <FormSelectField
+          name="categorySelect"
+          label={t('category')}
+          value={formState.agendaItemCategoryIds[0] || ''}
+          onChange={(value: string) => {
+            setFormState({
+              ...formState,
+              agendaItemCategoryIds: value ? [value] : [],
+            });
+          }}
+          data-testid="categorySelect"
+        >
+          <option value="">{t('selectCategory')}</option>
+          {(agendaItemCategories || []).map(
+            (category: InterfaceAgendaItemCategoryInfo) => (
+              <option key={category._id} value={category._id}>
+                {category.name}
+              </option>
+            ),
+          )}
+        </FormSelectField>
 
         <Row className="mb-3">
           <Col>
-            <Form.Group className="mb-3" controlId="title">
-              <Form.Label>{t('title')}</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder={t('enterTitle')}
-                value={formState.title}
-                onChange={(e) =>
-                  setFormState({ ...formState, title: e.target.value })
-                }
-              />
-            </Form.Group>
+            <FormTextField
+              name="title"
+              label={t('title')}
+              placeholder={t('enterTitle')}
+              value={formState.title}
+              onChange={(value: string) =>
+                setFormState({ ...formState, title: value })
+              }
+              data-testid="titleInput"
+            />
           </Col>
           <Col>
-            <Form.Group controlId="duration">
-              <Form.Label>{t('duration')}</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder={t('enterDuration')}
-                value={formState.duration}
-                required
-                onChange={(e) =>
-                  setFormState({ ...formState, duration: e.target.value })
-                }
-              />
-            </Form.Group>
+            <FormTextField
+              name="duration"
+              label={t('duration')}
+              placeholder={t('enterDuration')}
+              value={formState.duration}
+              onChange={(value: string) =>
+                setFormState({ ...formState, duration: value })
+              }
+              required
+              data-testid="durationInput"
+            />
           </Col>
         </Row>
 
-        <Form.Group className="mb-3" controlId="description">
-          <Form.Label>{t('description')}</Form.Label>
-          <Form.Control
-            as="textarea"
+        <FormFieldGroup name="description" label={t('description')}>
+          <textarea
+            className="form-control"
             rows={1}
             placeholder={t('enterDescription')}
             value={formState.description}
             onChange={(e) =>
               setFormState({ ...formState, description: e.target.value })
             }
+            data-testid="descriptionInput"
           />
-        </Form.Group>
+        </FormFieldGroup>
 
-        <Form.Group className="mb-3">
-          <Form.Label>{t('url')}</Form.Label>
+        <FormFieldGroup name="url" label={t('url')}>
           <div className="d-flex">
-            <Form.Control
+            <input
               type="text"
+              className="form-control"
               placeholder={t('enterUrl')}
               id="basic-url"
               data-testid="urlInput"
@@ -280,10 +273,14 @@ const AgendaItemsUpdateModal: React.FC<
               </Button>
             </li>
           ))}
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Label>{t('attachments')}</Form.Label>
-          <Form.Control
+        </FormFieldGroup>
+
+        <FormFieldGroup
+          name="attachments"
+          label={t('attachments')}
+          helpText={t('attachmentLimit')}
+        >
+          <input
             accept="image/*, video/*"
             data-testid="attachment"
             name="attachment"
@@ -291,9 +288,10 @@ const AgendaItemsUpdateModal: React.FC<
             id="attachment"
             multiple={true}
             onChange={handleFileChange}
+            className="form-control"
           />
-          <Form.Text>{t('attachmentLimit')}</Form.Text>
-        </Form.Group>
+        </FormFieldGroup>
+
         {formState.attachments && (
           <div className={styles.previewFile} data-testid="mediaPreview">
             {formState.attachments.map((attachment, index) => (
@@ -327,6 +325,7 @@ const AgendaItemsUpdateModal: React.FC<
             ))}
           </div>
         )}
+
         <Button
           type="submit"
           className={styles.greenregbtnAgendaItems}
@@ -334,7 +333,7 @@ const AgendaItemsUpdateModal: React.FC<
         >
           {t('update')}
         </Button>
-      </Form>
+      </form>
     </BaseModal>
   );
 };

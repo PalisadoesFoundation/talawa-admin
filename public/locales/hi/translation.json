@@ -736,6 +736,7 @@
     "description": "विवरण",
     "enterDescription": "विवरण दर्ज करें",
     "category": "एजेंडा श्रेणी",
+    "selectCategory": "Select Category",
     "attachments": "संलग्नक",
     "attachmentLimit": "10MB तक कोई भी छवि फ़ाइल या वीडियो फ़ाइल जोड़ें",
     "fileSizeExceedsLimit": "फ़ाइल का आकार सीमा 10MB से अधिक है",

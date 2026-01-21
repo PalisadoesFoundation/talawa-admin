@@ -719,6 +719,7 @@
     "description": "Descripción",
     "enterDescription": "Ingresar descripción",
     "category": "Categoría del orden del día",
+    "selectCategory": "Select Category",
     "attachments": "Archivos adjuntos",
     "attachmentLimit": "Agregar cualquier archivo de imagen o video hasta 10MB",
     "fileSizeExceedsLimit": "El tamaño del archivo excede el límite de 10MB",

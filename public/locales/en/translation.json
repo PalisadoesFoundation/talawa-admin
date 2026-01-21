@@ -719,6 +719,7 @@
     "description": "Description",
     "enterDescription": "Enter Description",
     "category": "Agenda Category",
+    "selectCategory": "Select Category",
     "attachments": "Attachments",
     "attachmentLimit": "Add any image file or video file upto 10MB",
     "fileSizeExceedsLimit": "File size exceeds the limit which is 10MB",

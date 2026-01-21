@@ -720,6 +720,7 @@
     "description": "Description",
     "enterDescription": "Entrer la description",
     "category": "Catégorie de l'ordre du jour",
+    "selectCategory": "Select Category",
     "attachments": "Pièces jointes",
     "attachmentLimit": "Ajouter un fichier image ou vidéo jusqu'à 10 Mo",
     "fileSizeExceedsLimit": "La taille du fichier dépasse la limite de 10 Mo",

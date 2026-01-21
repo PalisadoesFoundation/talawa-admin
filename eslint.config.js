@@ -105,14 +105,12 @@ const restrictedImports = [
       'Do not import Chip from @mui/material. Use the shared StatusBadge component from src/shared-components/StatusBadge/ instead.',
   },
   {
-    id: 'mui-textfield',
     name: '@mui/material',
     importNames: ['TextField'],
     message:
       'Do not import TextField from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
   },
   {
-    id: 'mui-formcontrol',
     name: '@mui/material',
     importNames: ['FormControl'],
     message:
@@ -381,19 +379,6 @@ export default [
       'src/types/shared-components/BaseModal/**/*.{ts,tsx}',
     ],
     rules: restrictImportsExcept(['rb-modal']),
-  },
-  /**
-   * Exemption: AgendaItems component files (temporary)
-   *
-   * AgendaItems components use Form from react-bootstrap and TextField with Autocomplete.
-   * TextField is required for MUI Autocomplete's renderInput prop (standard MUI pattern).
-   * These files predate the FormFieldGroup restriction and require migration.
-   * TODO: Migrate to FormFieldGroup component in a future ticket.
-   * Allowed IDs: rb-form, mui-textfield.
-   */
-  {
-    files: ['src/components/AgendaItems/**/*.{ts,tsx}'],
-    rules: restrictImportsExcept(['rb-form', 'mui-textfield']),
   },
 
   /**
