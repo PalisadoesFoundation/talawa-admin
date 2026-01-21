@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useQuery } from '@apollo/client';
-import type {
-  InterfaceCursorPaginationManagerProps,
-  InterfaceConnectionData,
-  PaginationVariables,
+import {
+  type InterfaceConnectionData,
+  type InterfaceCursorPaginationManagerProps,
+  type PaginationVariables,
 } from 'types/CursorPagination/interface';
 import type { DefaultConnectionPageInfo } from 'types/AdminPortal/pagination';
 import styles from './CursorPaginationManager.module.css';
@@ -174,6 +174,7 @@ export function CursorPaginationManager<
       after: null,
     } as PaginationVariables<TVariables>,
     notifyOnNetworkStatusChange: true,
+    skip: !queryVariables?.input,
   });
 
   // Data synchronization effect
