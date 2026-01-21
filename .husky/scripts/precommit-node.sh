@@ -13,7 +13,9 @@ STAGED_SRC_FILE="$1"
 echo "Running Node.js pre-commit checks..."
 
 pnpm run generate-docs
-git add docs/docs/auto-docs
+if [ -d docs/docs/auto-docs ]; then
+  git add docs/docs/auto-docs
+fi
 pnpm run format:fix
 pnpm run lint-staged
 pnpm run typecheck

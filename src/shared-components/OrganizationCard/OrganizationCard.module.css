@@ -66,42 +66,9 @@
   margin-top: var(--space-4);
 }
 
-@media (max-width: 550px) {
-  .orgCard {
-    width: 100%;
-    height: unset;
-    margin: var(--space-3) var(--space-0);
-    padding: var(--space-6) var(--space-7);
-  }
-
-  .orgCard .innerContainer .orgImgContainer {
-    margin-bottom: var(--space-4);
-  }
-
-  .orgCard .innerContainer {
-    flex-direction: column;
-  }
-
-  .orgCard .innerContainer .orgImgContainer img {
-    height: auto;
-    width: 100%;
-  }
-
-  .orgCard .innerContainer .content {
-    margin-left: var(--space-0);
-  }
-
-  .orgCard button {
-    bottom: var(--space-0);
-    right: var(--space-0);
-    position: relative;
-    margin-left: auto;
-    display: block;
-  }
-}
-
 @media (max-width: 580px) {
   .orgCard {
+    width: 100%;
     height: unset;
     margin: var(--space-3) var(--space-0);
     padding: var(--space-6) var(--space-7);
