@@ -44,7 +44,7 @@ The modal includes:
 - A textarea for entering the group description.
 - An input field for entering the number of volunteers required.
 - A submit button to update the group.
-On form submission, the component calls `updateVolunteerGroup` to update the existing group.
-- Calls `updateVolunteerGroup` mutation to update an existing group, or
+On form submission, the component calls `updateVolunteerGroup` to update/edit the existing group.
+- Calls `updateVolunteerGroup` mutation to update an existing group.
 
 Success or error messages are displayed using toast notifications based on the result of the mutation.
