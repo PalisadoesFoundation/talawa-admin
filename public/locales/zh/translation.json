@@ -745,13 +745,9 @@
     "agendaItemDeleted": "议程项目已成功删除",
     "deleteAgendaItem": "删除议程项目",
     "deleteAgendaItemMsg": "您要删除此议程项目吗？",
-<<<<<<< HEAD
-=======
-    "event": "活动",
     "search": "搜索",
->>>>>>> f997b14356e (fix the conflicting file and linting typos)
-    "attachmentPreview": "附件預覽",
     "event": "活动",
+    "attachmentPreview": "附件預覽",
     "errorLoadingAgendaCategories": "加载议程类别数据时发生错误",
     "errorLoadingAgendaItems": "加载议程项目数据时发生错误"
   },
