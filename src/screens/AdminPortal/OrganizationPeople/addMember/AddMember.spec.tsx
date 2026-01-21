@@ -824,7 +824,7 @@ describe('AddMember Screen', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('addNewUserModal')).toBeInTheDocument();
-      expect(screen.getByTestId('nameInput')).toBeInTheDocument();
+      expect(screen.getByTestId('firstNameInput')).toBeInTheDocument();
       expect(screen.getByTestId('emailInput')).toBeInTheDocument();
       expect(screen.getByTestId('passwordInput')).toBeInTheDocument();
       expect(screen.getByTestId('confirmPasswordInput')).toBeInTheDocument();
@@ -887,7 +887,7 @@ describe('AddMember Screen', () => {
     const newUserOption = screen.getByText('New User');
     fireEvent.click(newUserOption);
 
-    const nameInput = screen.getByTestId('nameInput');
+    const nameInput = screen.getByTestId('firstNameInput');
     const emailInput = screen.getByTestId('emailInput');
     const passwordInput = screen.getByTestId('passwordInput');
     const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
@@ -941,7 +941,7 @@ describe('AddMember Screen', () => {
     const newUserOption = screen.getByText('New User');
     fireEvent.click(newUserOption);
 
-    const nameInput = screen.getByTestId('nameInput');
+    const nameInput = screen.getByTestId('firstNameInput');
     const emailInput = screen.getByTestId('emailInput');
     const passwordInput = screen.getByTestId('passwordInput');
     const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
@@ -986,7 +986,7 @@ describe('AddMember Screen', () => {
     const newUserOption = screen.getByText('New User');
     fireEvent.click(newUserOption);
 
-    const nameInput = screen.getByTestId('nameInput');
+    const nameInput = screen.getByTestId('firstNameInput');
     const emailInput = screen.getByTestId('emailInput');
     const passwordInput = screen.getByTestId('passwordInput');
     const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
@@ -1031,7 +1031,7 @@ describe('AddMember Screen', () => {
     const newUserOption = screen.getByText('New User');
     fireEvent.click(newUserOption);
 
-    const nameInput = screen.getByTestId('nameInput');
+    const nameInput = screen.getByTestId('firstNameInput');
     const emailInput = screen.getByTestId('emailInput');
     const passwordInput = screen.getByTestId('passwordInput');
     const confirmPasswordInput = screen.getByTestId('confirmPasswordInput');
