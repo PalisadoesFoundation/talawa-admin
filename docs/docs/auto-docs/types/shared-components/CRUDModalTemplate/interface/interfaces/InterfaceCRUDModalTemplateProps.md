@@ -167,6 +167,16 @@ Controls whether the modal is visible (defaults to false)
 
 ***
 
+### primaryBtnTestId?
+
+> `optional` **primaryBtnTestId**: `string`
+
+Defined in: [src/types/shared-components/CRUDModalTemplate/interface.ts:138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/CRUDModalTemplate/interface.ts#L138)
+
+Optional test ID for the primary button
+
+***
+
 ### primaryDisabled?
 
 > `optional` **primaryDisabled**: `boolean`
