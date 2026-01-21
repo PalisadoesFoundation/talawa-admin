@@ -12,7 +12,7 @@ Defined in: [src/shared-components/TableLoader/TableLoader.tsx:36](https://githu
 
 ### props
 
-[`InterfaceTableLoader`](../../../../types/shared-components/TableLoader/interface/interfaces/InterfaceTableLoader.md)
+[`InterfaceTableLoaderProps`](../../../../types/shared-components/TableLoader/interface/interfaces/InterfaceTableLoaderProps.md)
 
 ## Returns
 
