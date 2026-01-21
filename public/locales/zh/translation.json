@@ -1506,14 +1506,10 @@
     "options": "选项",
     "addRegistrant": "添加注册者",
     "noRegistrantsFound": "未找到注册者",
-<<<<<<< HEAD
-=======
     "cannotUnregisterCheckedIn": "无法取消已签到的用户的注册",
->>>>>>> f997b14356e (fix the conflicting file and linting typos)
     "removingAttendee": "正在移除参与者...",
     "attendeeRemovedSuccessfully": "参与者移除成功！",
     "errorRemovingAttendee": "移除参与者时出错。请重试。",
-    "cannotUnregisterCheckedIn": "无法取消已签到的用户的注册",
     "checkedIn": "已签到",
     "unregister": "取消注册",
     "cannotUnregisterCheckedInTooltip": "无法取消已签到用户的注册"
@@ -1928,11 +1924,6 @@
     "pdfGeneratedSuccessfully": "PDF 生成成功！",
     "errorGeneratingPdf": "生成 PDF 时出错",
     "unknownError": "未知错误",
-<<<<<<< HEAD
-=======
-    "checkInButton": "签到",
-    "searchAttendees": "搜尋參與者",
->>>>>>> f997b14356e (fix the conflicting file and linting typos)
     "checkedIn": "已簽到",
     "downloadTag": "下載標籤",
     "checkInButton": "签到",
