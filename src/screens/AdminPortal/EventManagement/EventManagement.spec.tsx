@@ -1,3 +1,10 @@
+vi.mock(
+  'shared-components/EventListCard/Modal/EventListCardModals/EventListCardModals',
+  () => ({
+    __esModule: true,
+    default: () => <div data-testid="event-list-card-modals" />,
+  }),
+);
 import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, waitFor } from '@testing-library/react';
@@ -106,13 +113,6 @@ describe('Event Management', () => {
         useParams: vi.fn(),
       };
     });
-    vi.mock(
-      'shared-components/EventListCard/Modal/EventListCardModals/EventListCardModals',
-      () => ({
-        __esModule: true,
-        default: () => <div data-testid="event-list-card-modals" />,
-      }),
-    );
   });
 
   afterEach(() => {
@@ -300,9 +300,7 @@ describe('Event Management', () => {
       ];
 
       for (const option of tabOptions) {
-        act(async () => {
-          await user.click(screen.getByTestId(`${option}DropdownItem`));
-        });
+        await user.click(screen.getByTestId(`${option}DropdownItem`));
 
         expect(screen.getByTestId(`${option}DropdownItem`)).toHaveClass(
           'd-flex gap-2 dropdown-item',
