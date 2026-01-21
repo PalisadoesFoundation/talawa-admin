@@ -126,7 +126,7 @@ export const NotificationToast: InterfaceNotificationToastHelpers = {
   warning: (message, options) => showToast('warning', message, options),
   info: (message, options) => showToast('info', message, options),
   dismiss: () => toast.dismiss(),
-  promise: <T = void>(
+  promise: <T = void,>(
     promisifiedFunction: PromiseFunction<T>,
     messages: InterfacePromiseMessages,
     options?: ToastOptions,
