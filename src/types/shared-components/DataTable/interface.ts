@@ -664,3 +664,34 @@ export interface InterfaceActionsCellProps<T> {
   /** Array of action definitions */
   actions: ReadonlyArray<IRowAction<T>>;
 }
+
+/**
+ * Options for the useDataTableFiltering hook.
+ *
+ * Configures filtering and search behavior for DataTable.
+ * @typeParam T - The type of the row data
+ */
+export interface IUseDataTableFilteringOptions<T> {
+  /** Array of row data */
+  data: T[];
+  /** Column definitions */
+  columns: Array<IColumnDef<T>>;
+  /** Initial value for uncontrolled global search */
+  initialGlobalSearch?: string;
+  /** Controlled global search value */
+  globalSearch?: string;
+  /** Callback when global search changes (for controlled mode) */
+  onGlobalSearchChange?: (q: string) => void;
+  /** Column filter values by column ID */
+  columnFilters?: Record<string, unknown>;
+  /** Callback when column filters change */
+  onColumnFiltersChange?: (filters: Record<string, unknown>) => void;
+  /** If true, global search is handled server-side */
+  serverSearch?: boolean;
+  /** If true, column filtering is handled server-side */
+  serverFilter?: boolean;
+  /** Pagination mode affects page reset behavior */
+  paginationMode?: 'client' | 'server';
+  /** Callback to reset page when filters change */
+  onPageReset?: () => void;
+}

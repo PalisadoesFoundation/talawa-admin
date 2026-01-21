@@ -1,23 +1,46 @@
 import React from 'react';
-import { IColumnDef } from '../../../types/shared-components/DataTable/interface';
+import {
+  IColumnDef,
+  IUseDataTableFilteringOptions,
+} from '../../../types/shared-components/DataTable/interface';
 import { getCellValue, toSearchableString } from '../utils';
-
-interface IUseDataTableFilteringOptions<T> {
-  data: T[];
-  columns: Array<IColumnDef<T>>;
-  initialGlobalSearch?: string;
-  globalSearch?: string;
-  onGlobalSearchChange?: (q: string) => void;
-  columnFilters?: Record<string, unknown>;
-  onColumnFiltersChange?: (filters: Record<string, unknown>) => void;
-  serverSearch?: boolean;
-  serverFilter?: boolean;
-  paginationMode?: 'client' | 'server';
-  onPageReset?: () => void;
-}
 
 /**
  * Hook to manage DataTable filtering and search logic.
+ *
+ * Provides controlled and uncontrolled modes for both global search and
+ * per-column filtering. Handles client-side filtering when server flags
+ * are not set.
+ *
+ * @typeParam T - The row data type used in the DataTable
+ *
+ * @param options - Configuration options for filtering behavior
+ * @param options.data - Array of row data to filter
+ * @param options.columns - Column definitions with filter/search metadata
+ * @param options.initialGlobalSearch - Initial search value for uncontrolled mode
+ * @param options.globalSearch - Controlled global search value
+ * @param options.onGlobalSearchChange - Callback for controlled search updates
+ * @param options.columnFilters - Column filter values by column ID
+ * @param options.onColumnFiltersChange - Callback when column filters change
+ * @param options.serverSearch - If true, skip client-side global search filtering
+ * @param options.serverFilter - If true, skip client-side column filtering
+ * @param options.paginationMode - Pagination mode affecting page reset behavior
+ * @param options.onPageReset - Callback to reset page when filters change
+ *
+ * @returns Object containing:
+ *   - `query` - Current global search string
+ *   - `updateGlobalSearch` - Function to update the search query
+ *   - `filteredRows` - Array of rows after applying filters
+ *   - `filters` - Current column filter values
+ *
+ * @example
+ * ```tsx
+ * const { query, updateGlobalSearch, filteredRows } = useDataTableFiltering({
+ *   data: users,
+ *   columns: userColumns,
+ *   initialGlobalSearch: '',
+ * });
+ * ```
  */
 export function useDataTableFiltering<T>(
   options: IUseDataTableFilteringOptions<T>,
