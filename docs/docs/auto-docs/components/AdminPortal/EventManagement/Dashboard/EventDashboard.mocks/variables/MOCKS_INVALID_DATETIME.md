@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_INVALID\_DATETIME**: `object`[]
 
-Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts:156](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts#L156)
+Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts:159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/EventManagement/Dashboard/EventDashboard.mocks.ts#L159)
 
 ## Type Declaration
 
@@ -81,6 +81,10 @@ Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard
 #### result.data.event.id
 
 > **id**: `string` = `'event123'`
+
+#### result.data.event.isInviteOnly
+
+> **isInviteOnly**: `boolean` = `false`
 
 #### result.data.event.isPublic
 

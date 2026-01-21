@@ -14,6 +14,7 @@ export const CREATE_EVENT_MUTATION = gql`
       location
       isPublic
       isRegisterable
+      isInviteOnly
       createdAt
       updatedAt
       # Recurring event fields (available for recurring events)
@@ -58,13 +59,8 @@ export const UPDATE_EVENT_MUTATION = gql`
       location
       isPublic
       isRegisterable
-      createdAt
-      updatedAt
+      isInviteOnly
       creator {
-        id
-        name
-      }
-      updater {
         id
         name
       }
@@ -130,11 +126,11 @@ export const UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION = gql`
       location
       isPublic
       isRegisterable
+      isInviteOnly
       allDay
       progressLabel
       sequenceNumber
       totalCount
-      updatedAt
     }
   }
 `;
@@ -152,11 +148,11 @@ export const UPDATE_THIS_AND_FOLLOWING_EVENTS_MUTATION = gql`
       location
       isPublic
       isRegisterable
+      isInviteOnly
       allDay
       progressLabel
       sequenceNumber
       totalCount
-      updatedAt
     }
   }
 `;
@@ -169,7 +165,6 @@ export const UPDATE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION = gql`
       id
       name
       description
-      updatedAt
     }
   }
 `;

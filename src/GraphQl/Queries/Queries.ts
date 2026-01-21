@@ -303,6 +303,7 @@ export const EVENT_DETAILS = gql`
       allDay
       isPublic
       isRegisterable
+      isInviteOnly
       startAt
       endAt
       createdAt
@@ -539,6 +540,7 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             location
             isPublic
             isRegisterable
+            isInviteOnly
             # Recurring event fields
             isRecurringEventTemplate
             baseEvent {
@@ -620,6 +622,15 @@ export const GET_ORGANIZATION_EVENTS_USER_PORTAL_PG = gql`
             location
             isPublic
             isRegisterable
+            isInviteOnly
+            creator {
+              id
+              name
+            }
+            attendees {
+              id
+              name
+            }
             # Recurring event fields
             isRecurringEventTemplate
             baseEvent {
