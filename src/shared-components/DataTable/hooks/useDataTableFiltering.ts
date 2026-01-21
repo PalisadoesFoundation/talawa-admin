@@ -89,6 +89,13 @@ export function useDataTableFiltering<T>(
     [controlledSearch, onGlobalSearchChange, paginationMode, onPageReset],
   );
 
+  // Precompute column lookup map for O(1) access in filtering
+  const columnById = React.useMemo(() => {
+    const m = new Map<string, (typeof columns)[number]>();
+    columns.forEach((c) => m.set(c.id, c));
+    return m;
+  }, [columns]);
+
   // Client-side filtering pipeline (skip when server flags are set)
   const filteredRows: T[] = React.useMemo(() => {
     let rows = data ?? [];
@@ -98,7 +105,7 @@ export function useDataTableFiltering<T>(
     if (!serverFilter && filters && Object.keys(filters).length > 0) {
       rows = rows.filter((row) => {
         for (const [colId, filterValueRaw] of Object.entries(filters)) {
-          const col = columns.find((c) => c.id === colId);
+          const col = columnById.get(colId);
           if (!col) continue;
           if (col.meta?.filterable === false) continue; // opt-out
 
@@ -146,7 +153,7 @@ export function useDataTableFiltering<T>(
     }
 
     return rows;
-  }, [data, columns, filters, serverFilter, query, serverSearch]);
+  }, [data, columnById, columns, filters, serverFilter, query, serverSearch]);
 
   return {
     query,
