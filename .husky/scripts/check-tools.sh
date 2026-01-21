@@ -1,5 +1,6 @@
-#!/usr/bin/env sh
-set -euo pipefail
+#!/bin/sh
+
+set -eu
 
 echo "Checking required tools..."
 

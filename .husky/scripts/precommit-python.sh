@@ -1,13 +1,28 @@
-#!/usr/bin/env sh
+#!/bin/sh
 #
 # Pre-commit script for Python checks.
 # Initializes the Python virtual environment, runs formatters, linters,
 # and various CI parity checks on staged files.
 # Used by pre-commit hooks to enforce code quality before commits.
 #
-set -euo pipefail
+
+set -eu
 
 STAGED_SRC_FILE="$1"
+
+# Check if Python CI checks are needed
+REPO_ROOT=$(git rev-parse --show-toplevel)
+REQUIREMENTS_FILE="$REPO_ROOT/.github/workflows/requirements.txt"
+
+if [ ! -f "$REQUIREMENTS_FILE" ]; then
+  echo "Python requirements file not found. Skipping Python checks."
+  exit 0
+fi
+
+if [ ! -d "$REPO_ROOT/.github" ]; then
+  echo "No .github directory found. Skipping Python checks."
+  exit 0
+fi
 
 echo "Initializing Python virtual environment..."
 VENV_BIN=$(./.husky/scripts/venv.sh) || exit 1
@@ -20,17 +35,17 @@ fi
 
 echo "Running Python formatting and lint checks..."
 
-"$@" -m black --check .github
-"$@" -m pydocstyle .github
-"$@" -m flake8 .github
+"$@" -m black --check .github || exit 1
+"$@" -m pydocstyle .github || exit 1
+"$@" -m flake8 .github || exit 1
 
 echo "Running Python CI parity checks..."
 
-"$@" .github/workflows/scripts/check_docstrings.py --directories .github
-"$@" .github/workflows/scripts/compare_translations.py --directory public/locales
+"$@" .github/workflows/scripts/check_docstrings.py --directories .github || exit 1
+"$@" .github/workflows/scripts/compare_translations.py --directory public/locales || exit 1
 "$@" .github/workflows/scripts/countline.py \
   --lines 600 \
-  --files ./.github/workflows/config/countline_excluded_file_list.txt
+  --files ./.github/workflows/config/countline_excluded_file_list.txt || exit 1
 
 if [ ! -s "$STAGED_SRC_FILE" ]; then
   echo "No staged source files detected. Skipping file-based Python checks."
@@ -39,7 +54,7 @@ fi
 
 
 echo "Running translation checks on staged files..."
-xargs -0 -a "$STAGED_SRC_FILE" "$@" .github/workflows/scripts/translation_check.py --files
+xargs -0 -a "$STAGED_SRC_FILE" "$@" .github/workflows/scripts/translation_check.py --files || exit 1
 
 echo "Running disable statements check..."
 
@@ -48,14 +63,6 @@ SCRIPT_DIR=".github-central/.github/workflows/scripts"
 SCRIPT_PATH="$SCRIPT_DIR/disable_statements_check.py"
 CACHE_MAX_AGE_HOURS=24
 
-# NOTE:
-# The SHA256 checksum below is intentional and acts as a security guard.
-# This script is downloaded from an external repository and must be verified
-# before execution to prevent running unreviewed or tampered code.
-#
-# If the upstream script changes, this checksum WILL change and the hook will fail.
-# This is expected behavior and forces a conscious review of upstream changes.
-# After verifying the update is safe, regenerate and update the checksum here.
 EXPECTED_SHA="0b4184cffc6dba3607798cd54e57e99944c36cc01775cfcad68b95b713196e08"
 
 mkdir -p "$SCRIPT_DIR"
@@ -71,7 +78,6 @@ if [ -f "$SCRIPT_PATH" ]; then
     FILE_MOD_TIME=$(stat -c %Y "$SCRIPT_PATH" 2>/dev/null || true)
   fi
 
-  # Windows (Git Bash) fallback using PowerShell
   if [ -z "$FILE_MOD_TIME" ] && command -v powershell.exe >/dev/null 2>&1; then
     FILE_MOD_TIME=$(powershell.exe -NoProfile -Command \
       "(Get-Item '$SCRIPT_PATH').LastWriteTime.ToUnixTimeSeconds()" \
@@ -98,9 +104,9 @@ if [ "$NEEDS_DOWNLOAD" = true ]; then
   TEMP_FILE=$(mktemp)
 
   if command -v curl >/dev/null 2>&1; then
-    curl -sSfL "$SCRIPT_URL" -o "$TEMP_FILE"
+    curl -sSfL "$SCRIPT_URL" -o "$TEMP_FILE" || exit 1
   elif command -v wget >/dev/null 2>&1; then
-    wget -q -O "$TEMP_FILE" "$SCRIPT_URL"
+    wget -q -O "$TEMP_FILE" "$SCRIPT_URL" || exit 1
   else
     echo "Error: Neither curl nor wget is installed."
     exit 1
@@ -127,14 +133,11 @@ if [ "$NEEDS_DOWNLOAD" = true ]; then
   chmod +x "$SCRIPT_PATH"
 fi
 
-xargs -0 -a "$STAGED_SRC_FILE" "$@" "$SCRIPT_PATH" --files
+xargs -0 -a "$STAGED_SRC_FILE" "$@" "$SCRIPT_PATH" --files || exit 1
 
 
 echo "Running CSS policy checks..."
 
-# CSS Policy Check
-# Exclude src/utils/ (utility/helper functions) and src/types/ (type definitions)
-# as they cannot contain UI styling code
 CSS_TMP=$(mktemp)
 trap 'rm -f "$CSS_TMP"' EXIT
 
@@ -145,7 +148,7 @@ git diff --cached -z --name-only --diff-filter=ACMRT \
 
 if [ -s "$CSS_TMP" ]; then
   xargs -0 -a "$CSS_TMP" "$@" \
-    .github/workflows/scripts/css_check.py --files
+    .github/workflows/scripts/css_check.py --files || exit 1
 fi
 
 echo "Python checks completed."
