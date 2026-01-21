@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router';
 
-import type { InterfaceTableLoader } from './TableLoader';
+import type { InterfaceTableLoaderProps } from 'types/shared-components/TableLoader/interface';
 import TableLoader from './TableLoader';
 import { vi } from 'vitest';
 
@@ -15,7 +15,7 @@ describe('Testing Loader component', () => {
     vi.restoreAllMocks();
   });
   test('Component should be rendered properly only headerTitles is provided', () => {
-    const props: InterfaceTableLoader = {
+    const props: InterfaceTableLoaderProps = {
       noOfRows: 10,
       headerTitles: ['header1', 'header2', 'header3'],
     };
