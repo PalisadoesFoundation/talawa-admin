@@ -31,7 +31,7 @@
  */
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import {
   FormTextField,
   FormSelectField,
@@ -40,14 +40,14 @@ import { BaseModal } from 'shared-components/BaseModal';
 import styles from './AddOnSpotAttendee.module.css';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type {
   InterfaceAddOnSpotAttendeeProps,
   InterfaceFormData,
-} from 'utils/interfaces';
+} from 'types/AdminPortal/EventRegistrantsModal/AddOnSpot';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
@@ -63,8 +63,8 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
     gender: '',
   });
   const { t } = useTranslation('translation', { keyPrefix: 'onSpotAttendee' });
-  const { t: tErrors } = useTranslation('errors');
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
   const { orgId } = useParams<{ orgId: string }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [addSignUp] = useMutation(SIGNUP_MUTATION);
@@ -95,7 +95,8 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   ): Promise<void> => {
     e.preventDefault();
 
-    if (!validateForm()) {
+    const isValid = validateForm();
+    if (!isValid) {
       return;
     }
 

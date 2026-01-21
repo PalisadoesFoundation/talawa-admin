@@ -6,7 +6,7 @@
 
 > **usePluginActions**(`__namedParameters`): `object`
 
-Defined in: [src/screens/AdminPortal/PluginStore/hooks/usePluginActions.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/PluginStore/hooks/usePluginActions.ts#L21)
+Defined in: [src/screens/AdminPortal/PluginStore/hooks/usePluginActions.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/PluginStore/hooks/usePluginActions.ts#L17)
 
 ## Parameters
 
