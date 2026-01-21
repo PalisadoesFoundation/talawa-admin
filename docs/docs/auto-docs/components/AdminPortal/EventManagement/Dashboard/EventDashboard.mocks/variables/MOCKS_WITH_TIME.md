@@ -82,6 +82,10 @@ Defined in: [src/components/AdminPortal/EventManagement/Dashboard/EventDashboard
 
 > **id**: `string` = `'event123'`
 
+#### result.data.event.isInviteOnly
+
+> **isInviteOnly**: `boolean` = `false`
+
 #### result.data.event.isPublic
 
 > **isPublic**: `boolean` = `true`
