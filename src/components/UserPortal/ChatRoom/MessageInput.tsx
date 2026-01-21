@@ -73,6 +73,7 @@ export default function MessageInput({
       <input
         type="file"
         accept="image/*"
+        minLength={1}
         ref={fileInputRef}
         style={{ display: 'none' }}
         onChange={onFileChange}

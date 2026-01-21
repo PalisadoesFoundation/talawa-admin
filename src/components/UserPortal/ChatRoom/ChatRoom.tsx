@@ -89,7 +89,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const [groupChatDetailsModalisOpen, setGroupChatDetailsModalisOpen] =
     useState(false);
 
-  const shouldAutoScrollRef = useRef<boolean>(false);
   const paginationRef =
     useRef<
       InterfaceCursorPaginationManagerRef<
@@ -205,9 +204,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           const derivedIsGroup =
             (chatData?.members?.edges?.length ?? 0) > 2 ? true : false;
 
-          let title = chatTitle;
-          let subtitle = chatSubtitle;
-          let image = chatImage;
+          let title = chatData.name || '';
+          let subtitle = '';
+          let image = chatData.avatarURL || '';
 
           if (chatData.members?.edges?.length === 2) {
             const otherUser = chatData.members.edges.find(
@@ -232,7 +231,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
         });
       }
     },
-    [userId, chatTitle, chatSubtitle, chatImage],
+    [userId],
   );
 
   const { refetch: unreadChatListRefetch } = useQuery(UNREAD_CHATS);
@@ -241,6 +240,10 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     let messageBody = newMessage;
     if (attachmentObjectName) {
       messageBody = attachmentObjectName;
+    }
+
+    if (!messageBody && !messageBody.length && !attachmentObjectName) {
+      return;
     }
 
     try {
@@ -267,7 +270,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           updatedAt: now,
           creator: {
             id: userId as string,
-            name: 'You',
+            name: t('you'),
             avatarMimeType: undefined,
             avatarURL: undefined,
           },
@@ -296,7 +299,10 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           },
         });
       }
-      shouldAutoScrollRef.current = true;
+      const el = document.querySelector(`.${styles.chatMessages}`);
+      if (el) {
+        el.scrollTop = el.scrollHeight;
+      }
       setReplyToDirectMessage(null);
       setEditMessage(null);
       setNewMessage('');
@@ -323,7 +329,10 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       ) {
         const newMessage = messageSubscriptionData.data.data.chatMessageCreate;
         if (newMessage?.creator?.id === userId) {
-          shouldAutoScrollRef.current = true;
+          const el = document.querySelector(`.${styles.chatMessages}`);
+          if (el) {
+            el.scrollTop = el.scrollHeight;
+          }
         }
         await markReadIfSupported(props.selectedContact, newMessage.id).catch(
           () => {},
@@ -365,17 +374,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       unreadChatListRefetch();
     },
   });
-
-  // Scroll to bottom when sending message
-  useEffect(() => {
-    if (shouldAutoScrollRef.current) {
-      const el = document.querySelector(`.${styles.chatMessages}`);
-      if (el) {
-        el.scrollTop = el.scrollHeight;
-        shouldAutoScrollRef.current = false;
-      }
-    }
-  }, [shouldAutoScrollRef.current, chat]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 

@@ -149,6 +149,7 @@ export function CursorPaginationManager<
     actionRef,
     infiniteScroll = false,
     scrollThreshold = 50,
+    className,
   } = props;
 
   const { t } = useTranslation('common');
@@ -167,6 +168,7 @@ export function CursorPaginationManager<
   const previousRefetchTrigger = useRef(refetchTrigger);
   const generationRef = useRef(0);
   const isMounted = useRef(true);
+  const itemsRef = useRef<TNode[]>([]);
 
   // Handle component unmount
   useEffect(() => {
@@ -174,6 +176,11 @@ export function CursorPaginationManager<
       isMounted.current = false;
     };
   }, []);
+
+  // Sync itemsRef with items state
+  useEffect(() => {
+    itemsRef.current = items;
+  }, [items]);
 
   // Imperative Handle
   React.useImperativeHandle(
@@ -206,9 +213,9 @@ export function CursorPaginationManager<
           return newItems;
         });
       },
-      getItems: () => items,
+      getItems: () => itemsRef.current,
     }),
-    [items, onDataChange],
+    [onDataChange],
   );
 
   // Apollo Client hook
@@ -232,7 +239,6 @@ export function CursorPaginationManager<
       return vars as PaginationVariables<TVariables>;
     })(),
     notifyOnNetworkStatusChange: true,
-    skip: !queryVariables?.input,
   });
 
   // Data synchronization effect
@@ -383,49 +389,6 @@ export function CursorPaginationManager<
     return () => el.removeEventListener('scroll', handleScroll);
   }, [infiniteScroll, paginationType, scrollThreshold, handleLoadMore]);
 
-  // Scroll Restoration Layout Effect
-  React.useLayoutEffect(() => {
-    if (
-      paginationType === 'backward' &&
-      scrollStateRef.current &&
-      containerRef.current
-    ) {
-      const { scrollHeight, scrollTop } = scrollStateRef.current;
-      const newScrollHeight = containerRef.current.scrollHeight;
-      const heightDiff = newScrollHeight - scrollHeight;
-
-      containerRef.current.scrollTop = scrollTop + heightDiff;
-
-      scrollStateRef.current = null;
-    }
-  }, [items, paginationType]);
-
-  // Infinite Scroll Handler
-  useEffect(() => {
-    if (!infiniteScroll || !containerRef.current) return;
-
-    const handleScroll = (e: Event) => {
-      const target = e.target as HTMLDivElement;
-
-      if (paginationType === 'backward') {
-        if (target.scrollTop <= scrollThreshold) {
-          handleLoadMore();
-        }
-      } else {
-        if (
-          target.scrollHeight - target.scrollTop - target.clientHeight <=
-          scrollThreshold
-        ) {
-          handleLoadMore();
-        }
-      }
-    };
-
-    const el = containerRef.current;
-    el.addEventListener('scroll', handleScroll);
-    return () => el.removeEventListener('scroll', handleScroll);
-  }, [infiniteScroll, paginationType, scrollThreshold, handleLoadMore]);
-
   // Refetch handler
   const handleRefetch = useCallback(async () => {
     // Increment generation to invalidate any pending fetchMore requests
@@ -520,8 +483,7 @@ export function CursorPaginationManager<
   return (
     <div
       data-testid="cursor-pagination-manager"
-      // eslint-disable-next-line react/destructuring-assignment
-      className={props.className}
+      className={className}
       ref={containerRef}
       onScroll={onContentScroll}
     >
