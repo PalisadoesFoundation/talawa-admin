@@ -4,7 +4,7 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import { Form } from 'react-bootstrap';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import globalStyles from 'style/app-fixed.module.css';
+import styles from './CRUDModalTemplate.module.css';
 import {
   CRUDModalTemplate,
   CreateModal,
@@ -232,7 +232,7 @@ describe('CRUDModalTemplate', () => {
       );
 
       const primaryBtn = screen.getByTestId('modal-primary-btn');
-      expect(primaryBtn).toHaveClass(globalStyles.addButton);
+      expect(primaryBtn).toHaveClass(styles.addButton);
     });
 
     it('should apply danger className when primaryVariant is danger', () => {
@@ -249,7 +249,7 @@ describe('CRUDModalTemplate', () => {
       );
 
       const primaryBtn = screen.getByTestId('modal-primary-btn');
-      expect(primaryBtn).toHaveClass(globalStyles.removeButton);
+      expect(primaryBtn).toHaveClass(styles.removeButton);
     });
 
     it('should not apply special className when primaryVariant is success', () => {
@@ -266,8 +266,8 @@ describe('CRUDModalTemplate', () => {
       );
 
       const primaryBtn = screen.getByTestId('modal-primary-btn');
-      expect(primaryBtn).not.toHaveClass(globalStyles.addButton);
-      expect(primaryBtn).not.toHaveClass(globalStyles.removeButton);
+      expect(primaryBtn).not.toHaveClass(styles.addButton);
+      expect(primaryBtn).not.toHaveClass(styles.removeButton);
     });
   });
 

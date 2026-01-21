@@ -5,7 +5,7 @@ import BaseModal from 'shared-components/BaseModal/BaseModal';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type { InterfaceCRUDModalTemplateProps } from 'types/shared-components/CRUDModalTemplate/interface';
 import styles from './CRUDModalTemplate.module.css';
-import globalStyles from 'style/app-fixed.module.css';
+
 import { useTranslation } from 'react-i18next';
 
 /**
@@ -112,9 +112,9 @@ export const CRUDModalTemplate: React.FC<InterfaceCRUDModalTemplateProps> = ({
             disabled={loading || primaryDisabled}
             className={
               primaryVariant === 'primary'
-                ? globalStyles.addButton
+                ? styles.addButton
                 : primaryVariant === 'danger'
-                  ? globalStyles.removeButton
+                  ? styles.removeButton
                   : ''
             }
             data-testid={primaryBtnTestId || 'modal-primary-btn'}

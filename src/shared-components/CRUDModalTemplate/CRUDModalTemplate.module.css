@@ -97,3 +97,27 @@
   outline: 2px solid #1778f2;
   outline-offset: 2px;
 }
+
+.addButton {
+  background-color: var(--addButton-bg);
+  color: var(--addButton-font);
+  border: 1px solid var(--addButton-border);
+}
+
+.addButton:hover {
+  background-color: var(--addButton-bg-hover);
+  border-color: var(--addButton-border-hover);
+  color: #fff;
+}
+
+.removeButton {
+  background-color: var(--removeButton-bg);
+  color: var(--removeButton-color);
+  border: 1px solid var(--removeButton-border);
+}
+
+.removeButton:hover {
+  background-color: var(--removeButton-bg-hover);
+  border-color: var(--removeButton-border-hover);
+  color: var(--removeButton-color-hover);
+}
