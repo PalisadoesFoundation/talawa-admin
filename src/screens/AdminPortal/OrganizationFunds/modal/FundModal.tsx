@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button } from 'shared-components/Button';
 import { BaseModal } from 'shared-components/BaseModal';
 import type { InterfaceCreateFund, InterfaceFundInfo } from 'utils/interfaces';
 import styles from './FundModal.module.css';
@@ -11,8 +11,7 @@ import {
   UPDATE_FUND_MUTATION,
 } from 'GraphQl/Mutations/FundMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { TextField } from '@mui/material';
-import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 export interface InterfaceFundModal {
   isOpen: boolean;
@@ -178,14 +177,6 @@ const FundModal: React.FC<InterfaceFundModal> = ({
           <p className={styles.titlemodal} data-testid="modalTitle">
             {t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}
           </p>
-          <Button
-            variant="danger"
-            onClick={hide}
-            className={styles.closeButton}
-            data-testid="fundModalCloseBtn"
-          >
-            <i className="fa fa-times"></i>
-          </Button>
         </div>
       }
     >
@@ -196,45 +187,33 @@ const FundModal: React.FC<InterfaceFundModal> = ({
         className="p-3"
       >
         <div className="d-flex mb-3 w-100">
-          <FormFieldGroup
-            label={t('fundName')}
+          <FormTextField
             name="fundName"
+            label={t('fundName')}
             required
+            value={formState.fundName}
             touched={touched.fundName}
             error={fundNameError}
-          >
-            <TextField
-              variant="outlined"
-              className={`${styles.noOutline} w-100`}
-              value={formState.fundName}
-              inputProps={{ id: 'fundName', 'aria-label': t('fundName') }}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setFormState({ ...formState, fundName: e.target.value });
-              }}
-              onBlur={() => setTouched((prev) => ({ ...prev, fundName: true }))}
-            />
-          </FormFieldGroup>
+            onChange={(value) =>
+              setFormState((prev) => ({ ...prev, fundName: value }))
+            }
+            onBlur={() => setTouched((prev) => ({ ...prev, fundName: true }))}
+          />
         </div>
 
         <div className="d-flex mb-3 w-100">
-          <FormFieldGroup
-            label={t('fundId')}
+          <FormTextField
             name="fundId"
+            label={t('fundId')}
             required
+            value={formState.fundRef}
             touched={touched.fundRef}
             error={fundRefError}
-          >
-            <TextField
-              variant="outlined"
-              className={`${styles.noOutline} w-100`}
-              value={formState.fundRef}
-              inputProps={{ id: 'fundId', 'aria-label': t('fundId') }}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setFormState({ ...formState, fundRef: e.target.value });
-              }}
-              onBlur={() => setTouched((prev) => ({ ...prev, fundRef: true }))}
-            />
-          </FormFieldGroup>
+            onChange={(value) =>
+              setFormState((prev) => ({ ...prev, fundRef: value }))
+            }
+            onBlur={() => setTouched((prev) => ({ ...prev, fundRef: true }))}
+          />
         </div>
 
         <div
@@ -254,10 +233,10 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                 checked={formState.isTaxDeductible}
                 data-testid="setisTaxDeductibleSwitch"
                 onChange={() =>
-                  setFormState({
-                    ...formState,
-                    isTaxDeductible: !formState.isTaxDeductible,
-                  })
+                  setFormState((prev) => ({
+                    ...prev,
+                    isTaxDeductible: !prev.isTaxDeductible,
+                  }))
                 }
               />
             </div>
@@ -273,10 +252,10 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                 checked={formState.isDefault}
                 data-testid="setDefaultSwitch"
                 onChange={() =>
-                  setFormState({
-                    ...formState,
-                    isDefault: !formState.isDefault,
-                  })
+                  setFormState((prev) => ({
+                    ...prev,
+                    isDefault: !prev.isDefault,
+                  }))
                 }
               />
             </div>
@@ -293,10 +272,10 @@ const FundModal: React.FC<InterfaceFundModal> = ({
                   checked={formState.isArchived}
                   data-testid="archivedSwitch"
                   onChange={() =>
-                    setFormState({
-                      ...formState,
-                      isArchived: !formState.isArchived,
-                    })
+                    setFormState((prev) => ({
+                      ...prev,
+                      isArchived: !prev.isArchived,
+                    }))
                   }
                 />
               </div>
