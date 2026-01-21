@@ -39,7 +39,7 @@
  */
 import React from 'react';
 import TruncatedText from 'shared-components/TruncatedText/TruncatedText';
-import Button from 'react-bootstrap/Button';
+import Button from 'shared-components/Button/Button';
 import { useTranslation } from 'react-i18next';
 import styles from './OrganizationCard.module.css';
 import { Tooltip } from '@mui/material';

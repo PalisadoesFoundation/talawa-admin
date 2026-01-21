@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import OrganizationCard from './OrganizationCard';
 import { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
@@ -188,7 +189,7 @@ describe('OrganizationCard', () => {
     expect(screen.queryByText('admins:')).not.toBeInTheDocument();
   });
 
-  it('renders "Manage" button and navigates correctly for admin role', () => {
+  it('renders "Manage" button and navigates correctly for admin role', async () => {
     const adminData = { ...mockData, role: 'admin' };
     render(
       <MockedProvider>
@@ -199,11 +200,11 @@ describe('OrganizationCard', () => {
     const button = screen.getByTestId('manageBtn');
     expect(button).toHaveTextContent('Manage');
 
-    fireEvent.click(button);
+    await userEvent.click(button);
     expect(mockNavigate).toHaveBeenCalledWith('/orgdash/123');
   });
 
-  it('renders "Visit" button and navigates correctly for joined user', () => {
+  it('renders "Visit" button and navigates correctly for joined user', async () => {
     const joinedData = { ...mockData, isJoined: true };
     render(
       <MockedProvider>
@@ -214,7 +215,7 @@ describe('OrganizationCard', () => {
     const button = screen.getByTestId('manageBtn');
     expect(button).toHaveTextContent('Visit');
 
-    fireEvent.click(button);
+    await userEvent.click(button);
     expect(mockNavigate).toHaveBeenCalledWith('/user/organization/123');
   });
 
@@ -336,7 +337,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('joinBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith('orgJoined');
@@ -379,7 +380,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('joinBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -413,7 +414,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('joinBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith('AlreadyJoined');
@@ -445,7 +446,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('joinBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith('errorOccurred');
@@ -470,7 +471,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('joinBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith('errorOccurred');
@@ -518,7 +519,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('joinBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith('orgJoined');
@@ -555,7 +556,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('withdrawBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith('UserIdNotFound');
@@ -600,7 +601,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('withdrawBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -623,7 +624,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('withdrawBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -656,7 +657,7 @@ describe('OrganizationCard', () => {
     );
 
     const button = screen.getByTestId('withdrawBtn');
-    fireEvent.click(button);
+    await userEvent.click(button);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();
@@ -693,7 +694,7 @@ describe('OrganizationCard', () => {
       );
 
       const button = screen.getByTestId('withdrawBtn');
-      fireEvent.click(button);
+      await userEvent.click(button);
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalled();

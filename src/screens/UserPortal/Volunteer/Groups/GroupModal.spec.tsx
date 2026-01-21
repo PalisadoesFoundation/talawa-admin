@@ -6,7 +6,7 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -297,7 +297,8 @@ describe('Testing GroupModal', () => {
     const vrInput = screen.getByRole('spinbutton', {
       name: /volunteers required/i,
     });
-    fireEvent.change(vrInput, { target: { value: '10' } });
+    await userEvent.clear(vrInput);
+    await userEvent.type(vrInput, '10');
     expect(vrInput).toHaveValue(10);
   });
 
@@ -307,7 +308,7 @@ describe('Testing GroupModal', () => {
       name: /volunteers required/i,
     });
     expect(vrInput).toHaveValue(5);
-    fireEvent.change(vrInput, { target: { value: '' } });
+    await userEvent.clear(vrInput);
     await waitFor(() => {
       expect(vrInput).toHaveValue(null);
     });
@@ -318,7 +319,8 @@ describe('Testing GroupModal', () => {
     const vrInput = screen.getByRole('spinbutton', {
       name: /volunteers required/i,
     });
-    fireEvent.change(vrInput, { target: { value: '-1' } });
+    await userEvent.clear(vrInput);
+    await userEvent.type(vrInput, '-1');
     await waitFor(() => {
       expect(vrInput).toHaveValue(null);
     });
@@ -329,7 +331,8 @@ describe('Testing GroupModal', () => {
     const vrInput = screen.getByRole('spinbutton', {
       name: /volunteers required/i,
     });
-    fireEvent.change(vrInput, { target: { value: '0' } });
+    await userEvent.clear(vrInput);
+    await userEvent.type(vrInput, '0');
     await waitFor(() => {
       expect(vrInput).toHaveValue(null);
     });
@@ -343,7 +346,8 @@ describe('Testing GroupModal', () => {
       name: /volunteers required/i,
     });
     expect(vrInput).toBeInTheDocument();
-    fireEvent.change(vrInput, { target: { value: '-1' } });
+    await userEvent.clear(vrInput);
+    await userEvent.type(vrInput, '-1');
 
     await waitFor(() => {
       expect(vrInput).toHaveValue(null);
@@ -356,12 +360,14 @@ describe('Testing GroupModal', () => {
       expect(vrInput).toHaveValue(null);
     });
 
-    fireEvent.change(vrInput, { target: { value: '0' } });
+    await userEvent.clear(vrInput);
+    await userEvent.type(vrInput, '0');
     await waitFor(() => {
       expect(vrInput).toHaveValue(null);
     });
 
-    fireEvent.change(vrInput, { target: { value: '19' } });
+    await userEvent.clear(vrInput);
+    await userEvent.type(vrInput, '19');
     await waitFor(() => {
       expect(vrInput).toHaveValue(19);
     });
@@ -373,19 +379,22 @@ describe('Testing GroupModal', () => {
 
     const nameInput = screen.getByRole('textbox', { name: /name/i });
     expect(nameInput).toBeInTheDocument();
-    fireEvent.change(nameInput, { target: { value: 'Group 2' } });
+    await userEvent.clear(nameInput);
+    await userEvent.type(nameInput, 'Group 2');
     expect(nameInput).toHaveValue('Group 2');
 
     const descInput = screen.getByRole('textbox', { name: /description/i });
     expect(descInput).toBeInTheDocument();
-    fireEvent.change(descInput, { target: { value: 'desc new' } });
+    await userEvent.clear(descInput);
+    await userEvent.type(descInput, 'desc new');
     expect(descInput).toHaveValue('desc new');
 
     const vrInput = screen.getByRole('spinbutton', {
       name: /volunteers required/i,
     });
     expect(vrInput).toBeInTheDocument();
-    fireEvent.change(vrInput, { target: { value: '10' } });
+    await userEvent.clear(vrInput);
+    await userEvent.type(vrInput, '10');
     expect(vrInput).toHaveValue(10);
 
     const submitBtn = screen.getByTestId('submitBtn');
@@ -420,19 +429,22 @@ describe('Testing GroupModal', () => {
 
     const nameInput = screen.getByRole('textbox', { name: /name/i });
     expect(nameInput).toBeInTheDocument();
-    fireEvent.change(nameInput, { target: { value: 'Group 2' } });
+    await userEvent.clear(nameInput);
+    await userEvent.type(nameInput, 'Group 2');
     expect(nameInput).toHaveValue('Group 2');
 
     const descInput = screen.getByRole('textbox', { name: /description/i });
     expect(descInput).toBeInTheDocument();
-    fireEvent.change(descInput, { target: { value: 'desc new' } });
+    await userEvent.clear(descInput);
+    await userEvent.type(descInput, 'desc new');
     expect(descInput).toHaveValue('desc new');
 
     const vrInput = screen.getByRole('spinbutton', {
       name: /volunteers required/i,
     });
     expect(vrInput).toBeInTheDocument();
-    fireEvent.change(vrInput, { target: { value: '10' } });
+    await userEvent.clear(vrInput);
+    await userEvent.type(vrInput, '10');
     expect(vrInput).toHaveValue(10);
 
     const submitBtn = screen.getByTestId('submitBtn');
@@ -787,7 +799,7 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link1, itemProps[0]);
     const nameInput = screen.getByRole('textbox', { name: /name/i });
     await userEvent.clear(nameInput);
-    fireEvent.blur(nameInput);
+    await userEvent.tab();
 
     await waitFor(() => {
       const submitBtn = screen.getByTestId('submitBtn');
@@ -803,7 +815,7 @@ describe('Testing GroupModal', () => {
 
     // Input invalid value
     await userEvent.type(vrInput, '-5');
-    fireEvent.blur(vrInput);
+    await userEvent.tab();
 
     await waitFor(() => {
       const errorMessages = screen.queryAllByText(t.invalidNumber);
@@ -820,7 +832,7 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link1, itemProps[0]);
     const nameInput = screen.getByRole('textbox', { name: /name/i });
     await userEvent.clear(nameInput);
-    fireEvent.blur(nameInput); // Trigger error
+    await userEvent.tab(); // Trigger error
 
     await waitFor(() => {
       const submitBtn = screen.getByTestId('submitBtn');
