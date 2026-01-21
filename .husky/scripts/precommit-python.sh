@@ -39,7 +39,7 @@ fi
 
 
 echo "Running translation checks on staged files..."
-xargs -0 -a "$STAGED_SRC_FILE" "$@" .github/workflows/scripts/translation_check.py --files
+xargs -0 < "$STAGED_SRC_FILE" "$@" .github/workflows/scripts/translation_check.py --files
 
 echo "Running disable statements check..."
 
@@ -127,7 +127,7 @@ if [ "$NEEDS_DOWNLOAD" = true ]; then
   chmod +x "$SCRIPT_PATH"
 fi
 
-xargs -0 -a "$STAGED_SRC_FILE" "$@" "$SCRIPT_PATH" --files
+xargs -0 < "$STAGED_SRC_FILE" "$@" "$SCRIPT_PATH" --files
 
 
 echo "Running CSS policy checks..."
@@ -144,7 +144,7 @@ git diff --cached -z --name-only --diff-filter=ACMRT \
   > "$CSS_TMP" || true
 
 if [ -s "$CSS_TMP" ]; then
-  xargs -0 -a "$CSS_TMP" "$@" \
+  xargs -0 < "$CSS_TMP" "$@" \
     .github/workflows/scripts/css_check.py --files
 fi
 

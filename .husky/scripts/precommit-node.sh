@@ -13,10 +13,11 @@ STAGED_SRC_FILE="$1"
 echo "Running Node.js pre-commit checks..."
 
 pnpm run generate-docs
+git add docs/docs/auto-docs
 pnpm run format:fix
 pnpm run lint-staged
 pnpm run typecheck
-xargs -0 -a "$STAGED_SRC_FILE" pnpm run check-i18n -- --staged
+xargs -0 < "$STAGED_SRC_FILE" pnpm run check-i18n -- --staged
 
 # MinIO compliance check (prevent unsupported upload patterns)
 echo "Running MinIO compliance check (policy enforcement)..."

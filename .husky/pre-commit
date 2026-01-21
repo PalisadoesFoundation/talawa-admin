@@ -25,4 +25,4 @@ fi
 
 .husky/scripts/precommit-python.sh "$STAGED_SRC_FILE"
 
-xargs -0 -a "$STAGED_ALL_FILE" git add --
+xargs -0 < "$STAGED_ALL_FILE" git add --
