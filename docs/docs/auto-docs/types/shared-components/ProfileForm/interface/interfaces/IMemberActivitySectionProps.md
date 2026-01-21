@@ -27,11 +27,3 @@ Defined in: [src/types/shared-components/ProfileForm/interface.ts:61](https://gi
 #### Returns
 
 `void`
-
-***
-
-### t
-
-> **t**: `TFunction`
-
-Defined in: [src/types/shared-components/ProfileForm/interface.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileForm/interface.ts#L62)
