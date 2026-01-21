@@ -6,7 +6,7 @@
 
 > `const` **NotificationToast**: [`InterfaceNotificationToastHelpers`](../../../../types/shared-components/NotificationToast/interface/interfaces/InterfaceNotificationToastHelpers.md)
 
-Defined in: [src/shared-components/NotificationToast/NotificationToast.tsx:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/NotificationToast/NotificationToast.tsx#L124)
+Defined in: [src/shared-components/NotificationToast/NotificationToast.tsx:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/NotificationToast/NotificationToast.tsx#L123)
 
 NotificationToast
 
