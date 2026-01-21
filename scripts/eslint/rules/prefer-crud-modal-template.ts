@@ -3,7 +3,7 @@ import { TSESTree, AST_NODE_TYPES, TSESLint } from '@typescript-eslint/utils';
 /**
  * ESLint rule to prefer CRUDModalTemplate over BaseModal in CRUD contexts.
  * Detects BaseModal imports (default/named/aliased) and JSX usage.
- * Flags violations when handler props (onSubmit, onConfirm, onPrimary, onSave) or form tags are present.
+ * Flags violations when handler props (onSubmit, onConfirm, onPrimary, onSave) are present.
  */
 
 type MessageIds = 'preferCrud';
@@ -33,9 +33,9 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
         // Check if importing from BaseModal component
         if (
           typeof node.source.value === 'string' &&
-          (node.source.value.includes('BaseModal') ||
-            node.source.value.endsWith('/BaseModal') ||
-            node.source.value === 'BaseModal')
+          ((node.source.value as string) === 'BaseModal' ||
+            (node.source.value as string).endsWith('/BaseModal') ||
+            (node.source.value as string).includes('/BaseModal/'))
         ) {
           // Handle default imports: import BaseModal from './BaseModal'
           node.specifiers.forEach((specifier) => {
@@ -45,7 +45,13 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
             // Handle named imports: import { BaseModal } from './components'
             // Also handles aliased imports: import { BaseModal as MyModal } from './components'
             else if (specifier.type === AST_NODE_TYPES.ImportSpecifier) {
-              baseModalNames.add(specifier.local.name);
+              const importedName =
+                specifier.imported.type === AST_NODE_TYPES.Identifier
+                  ? specifier.imported.name
+                  : null;
+              if (importedName === 'BaseModal') {
+                baseModalNames.add(specifier.local.name);
+              }
             }
           });
         }
@@ -83,8 +89,31 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
           return false;
         });
 
-        // Check for form elements in children (requires checking parent context)
-        if (hasCrudHandler) {
+        const hasFormElement = (children: TSESTree.JSXChild[]): boolean =>
+          children.some((child) => {
+            if (child.type === AST_NODE_TYPES.JSXElement) {
+              const childName =
+                child.openingElement.name.type === AST_NODE_TYPES.JSXIdentifier
+                  ? child.openingElement.name.name
+                  : null;
+              if (childName === 'form' || childName === 'Form') return true;
+              return hasFormElement(child.children);
+            }
+            if (child.type === AST_NODE_TYPES.JSXFragment) {
+              return hasFormElement(child.children);
+            }
+            return false;
+          });
+
+        const parent = node.parent;
+        const hasFormInChildren =
+          parent?.type === AST_NODE_TYPES.JSXElement
+            ? hasFormElement(parent.children)
+            : parent?.type === AST_NODE_TYPES.JSXFragment
+              ? hasFormElement(parent.children)
+              : false;
+
+        if (hasCrudHandler || hasFormInChildren) {
           context.report({
             node: node as TSESTree.JSXOpeningElement,
             messageId: 'preferCrud',
