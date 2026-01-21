@@ -16,7 +16,9 @@ vi.mock('shared-components/LoadingState/LoadingState', () => ({
   }: {
     isLoading: boolean;
     children: React.ReactNode;
-  }) => <div data-testid="loading-state">{isLoading ? 'Loading...' : children}</div>,
+  }) => (
+    <div data-testid="loading-state">{isLoading ? 'Loading...' : children}</div>
+  ),
 }));
 
 vi.mock('components/MemberActivity/Modal/EventsAttendedMemberModal', () => ({
@@ -30,7 +32,9 @@ vi.mock('./ProfileFormWrapper', () => ({
 }));
 
 vi.mock('./PersonalDetailsCard', () => ({
-  default: () => <div data-testid="personal-details-card">Personal Details</div>,
+  default: () => (
+    <div data-testid="personal-details-card">Personal Details</div>
+  ),
 }));
 
 vi.mock('./ContactInfoCard', () => ({
@@ -38,7 +42,9 @@ vi.mock('./ContactInfoCard', () => ({
 }));
 
 vi.mock('./MemberActivitySection', () => ({
-  default: () => <div data-testid="member-activity-section">Member Activity</div>,
+  default: () => (
+    <div data-testid="member-activity-section">Member Activity</div>
+  ),
 }));
 
 // Mock the Button to capture clicks easily
@@ -62,7 +68,9 @@ describe('MemberDetail Component', () => {
 
   const defaultHookValues = {
     formState: {},
-    userData: { user: { eventsAttended: [], emailAddress: 'test@example.com' } },
+    userData: {
+      user: { eventsAttended: [], emailAddress: 'test@example.com' },
+    },
     loading: false,
     isUpdated: false,
     selectedAvatar: null,
@@ -93,10 +101,12 @@ describe('MemberDetail Component', () => {
     });
 
     render(<MemberDetail />);
-    
+
     expect(screen.getByText('Loading...')).toBeInTheDocument();
     // Child components should not render while loading
-    expect(screen.queryByTestId('personal-details-card')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('personal-details-card'),
+    ).not.toBeInTheDocument();
   });
 
   test('renders all child components when loading is false', () => {
@@ -148,7 +158,7 @@ describe('MemberDetail Component', () => {
 
     render(<MemberDetail />);
     const user = userEvent.setup();
-    
+
     await user.click(screen.getByTestId('resetChangesBtn'));
 
     expect(mockHandlers.resetChanges).toHaveBeenCalledTimes(1);
