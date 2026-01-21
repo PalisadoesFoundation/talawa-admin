@@ -1,0 +1,53 @@
+/* Migrated from app-fixed.module.css and profileForm.module.css */
+
+.allRound {
+  border-radius: 1rem;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.topRadius {
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.personalDetailsHeader {
+  background-color: #fff;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.profileImage {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border: 4px solid #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.editProfileIcon {
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  right: 10px;
+  bottom: 10px;
+}
+
+.editProfileIcon:hover {
+  background-color: #f8f9fa !important;
+  transform: scale(1.1);
+}
+
+.hiddenFileInput {
+  display: none !important;
+}
+
+.inputColor {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+}
+
+.inputColor:focus {
+  background-color: #fff;
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}

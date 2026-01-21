@@ -1,0 +1,45 @@
+/* Migrated from app-fixed.module.css and profileForm.module.css */
+
+.allRound {
+  border-radius: 1rem;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.topRadius {
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.contact {
+  margin-bottom: 1.5rem;
+}
+
+.member_details_style {
+  background-color: #fff;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.cardBody {
+  padding: 1.5rem;
+}
+
+.scrollableCardBody {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.emptyContainer {
+  min-height: 100px;
+  color: #6c757d;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.contact_btn {
+  font-weight: 600;
+}

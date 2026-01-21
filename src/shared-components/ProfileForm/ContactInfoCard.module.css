@@ -1,0 +1,27 @@
+/* Migrated from app-fixed.module.css and profileForm.module.css */
+
+.allRound {
+  border-radius: 1rem;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.topRadius {
+  border-top-left-radius: 1rem;
+  border-top-right-radius: 1rem;
+}
+
+.member_details_style {
+  background-color: #fff;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.inputColor {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+}
+
+/* Ensure input placeholder color is consistent if needed */
+.inputColor::placeholder {
+  color: #6c757d;
+}

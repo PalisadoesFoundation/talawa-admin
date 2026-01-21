@@ -16,7 +16,7 @@ import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import MemberDetail, { getLanguageName } from './ProfileForm';
+import MemberDetail from './ProfileForm';
 import {
   MOCKS1,
   MOCKS2,
@@ -29,6 +29,7 @@ import { vi } from 'vitest';
 import dayjs from 'dayjs';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { urlToFile } from 'utils/urlToFile';
+import { getLanguageName } from 'types/shared-components/ProfileForm/interface';
 
 const link1 = new StaticMockLink(MOCKS1, true);
 const link2 = new StaticMockLink(MOCKS2, true);
