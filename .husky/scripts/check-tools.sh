@@ -37,6 +37,7 @@ check_tool git
 check_tool node
 check_tool pnpm
 check_tool npx
+check_tool "perl"
 
 # Download tools (at least one required)
 if ! command -v curl >/dev/null 2>&1 && ! command -v wget >/dev/null 2>&1; then
