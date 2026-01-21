@@ -129,7 +129,7 @@ export function CursorPaginationManager<
   TNode,
   TVariables extends Record<string, unknown> = Record<string, unknown>, //i18n-ignore-line
 >(
-  props: InterfaceCursorPaginationManagerProps<TNode, TVariables>,
+  props: InterfaceCursorPaginationManagerProps<TData, TNode, TVariables>,
 ): React.ReactElement {
   const {
     query,
@@ -142,6 +142,13 @@ export function CursorPaginationManager<
     emptyStateComponent,
     onDataChange,
     refetchTrigger,
+    paginationType = 'forward',
+    variableKeyMap,
+    onQueryResult,
+    onContentScroll,
+    actionRef,
+    infiniteScroll = false,
+    scrollThreshold = 50,
   } = props;
 
   const { t } = useTranslation('common');
@@ -152,6 +159,11 @@ export function CursorPaginationManager<
     null,
   );
   const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollStateRef = useRef<{
+    scrollHeight: number;
+    scrollTop: number;
+  } | null>(null);
   const previousRefetchTrigger = useRef(refetchTrigger);
   const generationRef = useRef(0);
   const isMounted = useRef(true);
@@ -163,16 +175,62 @@ export function CursorPaginationManager<
     };
   }, []);
 
+  // Imperative Handle
+  React.useImperativeHandle(
+    actionRef,
+    () => ({
+      addItem: (item: TNode, position: 'start' | 'end' = 'end') => {
+        setItems((prev) => {
+          const newItems =
+            position === 'start' ? [item, ...prev] : [...prev, item];
+          if (onDataChange) onDataChange(newItems);
+          return newItems;
+        });
+      },
+      removeItem: (predicate: (item: TNode) => boolean) => {
+        setItems((prev) => {
+          const newItems = prev.filter((item) => !predicate(item));
+          if (onDataChange) onDataChange(newItems);
+          return newItems;
+        });
+      },
+      updateItem: (
+        predicate: (item: TNode) => boolean,
+        updater: (item: TNode) => TNode,
+      ) => {
+        setItems((prev) => {
+          const newItems = prev.map((item) =>
+            predicate(item) ? updater(item) : item,
+          );
+          if (onDataChange) onDataChange(newItems);
+          return newItems;
+        });
+      },
+      getItems: () => items,
+    }),
+    [items, onDataChange],
+  );
+
   // Apollo Client hook
   const { data, loading, error, fetchMore, refetch } = useQuery<
     TData,
     TVariables
   >(query, {
-    variables: {
-      ...queryVariables,
-      first: itemsPerPage,
-      after: null,
-    } as PaginationVariables<TVariables>,
+    variables: (() => {
+      const vars: Record<string, unknown> = { ...queryVariables };
+      if (paginationType === 'backward') {
+        const lastKey = variableKeyMap?.last || 'last';
+        const beforeKey = variableKeyMap?.before || 'before';
+        vars[lastKey] = itemsPerPage;
+        vars[beforeKey] = null;
+      } else {
+        const firstKey = variableKeyMap?.first || 'first';
+        const afterKey = variableKeyMap?.after || 'after';
+        vars[firstKey] = itemsPerPage;
+        vars[afterKey] = null;
+      }
+      return vars as PaginationVariables<TVariables>;
+    })(),
     notifyOnNetworkStatusChange: true,
     skip: !queryVariables?.input,
   });
@@ -180,6 +238,10 @@ export function CursorPaginationManager<
   // Data synchronization effect
   useEffect(() => {
     if (!data) return;
+
+    if (onQueryResult) {
+      onQueryResult(data);
+    }
 
     const connectionData = extractDataFromPath<TNode>(data, dataPath);
 
@@ -196,20 +258,41 @@ export function CursorPaginationManager<
 
   // Load more handler
   const handleLoadMore = useCallback(async () => {
-    if (!pageInfo?.hasNextPage || isLoadingMore || loading) {
+    const hasMore =
+      paginationType === 'backward'
+        ? pageInfo?.hasPreviousPage
+        : pageInfo?.hasNextPage;
+
+    if (!hasMore || isLoadingMore || loading) {
       return;
     }
 
     setIsLoadingMore(true);
     const currentGeneration = generationRef.current;
 
+    if (paginationType === 'backward' && containerRef.current) {
+      scrollStateRef.current = {
+        scrollHeight: containerRef.current.scrollHeight,
+        scrollTop: containerRef.current.scrollTop,
+      };
+    }
+
     try {
+      const variables: Record<string, unknown> = { ...queryVariables };
+      if (paginationType === 'backward') {
+        const lastKey = variableKeyMap?.last || 'last';
+        const beforeKey = variableKeyMap?.before || 'before';
+        variables[lastKey] = itemsPerPage;
+        variables[beforeKey] = pageInfo?.startCursor;
+      } else {
+        const firstKey = variableKeyMap?.first || 'first';
+        const afterKey = variableKeyMap?.after || 'after';
+        variables[firstKey] = itemsPerPage;
+        variables[afterKey] = pageInfo?.endCursor;
+      }
+
       const result = await fetchMore({
-        variables: {
-          ...queryVariables,
-          first: itemsPerPage,
-          after: pageInfo.endCursor,
-        } as PaginationVariables<TVariables>,
+        variables: variables as PaginationVariables<TVariables>,
       });
 
       // Check if this request is stale or component unmounted
@@ -222,7 +305,11 @@ export function CursorPaginationManager<
       if (connectionData) {
         const newNodes = extractNodes(connectionData.edges);
         setItems((prevItems) => {
-          const updatedItems = [...prevItems, ...newNodes];
+          const updatedItems =
+            paginationType === 'backward'
+              ? [...newNodes, ...prevItems]
+              : [...prevItems, ...newNodes];
+
           if (onDataChange) {
             onDataChange(updatedItems);
           }
@@ -248,7 +335,96 @@ export function CursorPaginationManager<
     itemsPerPage,
     dataPath,
     onDataChange,
+    paginationType,
+    variableKeyMap,
+    onContentScroll,
   ]);
+
+  // Scroll Restoration Layout Effect
+  React.useLayoutEffect(() => {
+    if (
+      paginationType === 'backward' &&
+      scrollStateRef.current &&
+      containerRef.current
+    ) {
+      const { scrollHeight, scrollTop } = scrollStateRef.current;
+      const newScrollHeight = containerRef.current.scrollHeight;
+      const heightDiff = newScrollHeight - scrollHeight;
+
+      containerRef.current.scrollTop = scrollTop + heightDiff;
+
+      scrollStateRef.current = null;
+    }
+  }, [items, paginationType]);
+
+  // Infinite Scroll Handler
+  useEffect(() => {
+    if (!infiniteScroll || !containerRef.current) return;
+
+    const handleScroll = (e: Event) => {
+      const target = e.target as HTMLDivElement;
+
+      if (paginationType === 'backward') {
+        if (target.scrollTop <= scrollThreshold) {
+          handleLoadMore();
+        }
+      } else {
+        if (
+          target.scrollHeight - target.scrollTop - target.clientHeight <=
+          scrollThreshold
+        ) {
+          handleLoadMore();
+        }
+      }
+    };
+
+    const el = containerRef.current;
+    el.addEventListener('scroll', handleScroll);
+    return () => el.removeEventListener('scroll', handleScroll);
+  }, [infiniteScroll, paginationType, scrollThreshold, handleLoadMore]);
+
+  // Scroll Restoration Layout Effect
+  React.useLayoutEffect(() => {
+    if (
+      paginationType === 'backward' &&
+      scrollStateRef.current &&
+      containerRef.current
+    ) {
+      const { scrollHeight, scrollTop } = scrollStateRef.current;
+      const newScrollHeight = containerRef.current.scrollHeight;
+      const heightDiff = newScrollHeight - scrollHeight;
+
+      containerRef.current.scrollTop = scrollTop + heightDiff;
+
+      scrollStateRef.current = null;
+    }
+  }, [items, paginationType]);
+
+  // Infinite Scroll Handler
+  useEffect(() => {
+    if (!infiniteScroll || !containerRef.current) return;
+
+    const handleScroll = (e: Event) => {
+      const target = e.target as HTMLDivElement;
+
+      if (paginationType === 'backward') {
+        if (target.scrollTop <= scrollThreshold) {
+          handleLoadMore();
+        }
+      } else {
+        if (
+          target.scrollHeight - target.scrollTop - target.clientHeight <=
+          scrollThreshold
+        ) {
+          handleLoadMore();
+        }
+      }
+    };
+
+    const el = containerRef.current;
+    el.addEventListener('scroll', handleScroll);
+    return () => el.removeEventListener('scroll', handleScroll);
+  }, [infiniteScroll, paginationType, scrollThreshold, handleLoadMore]);
 
   // Refetch handler
   const handleRefetch = useCallback(async () => {
@@ -259,15 +435,24 @@ export function CursorPaginationManager<
     setIsLoadingMore(false);
 
     try {
-      await refetch({
-        ...queryVariables,
-        first: itemsPerPage,
-        after: null,
-      } as PaginationVariables<TVariables>);
+      const vars: Record<string, unknown> = { ...queryVariables };
+      if (paginationType === 'backward') {
+        const lastKey = variableKeyMap?.last || 'last';
+        const beforeKey = variableKeyMap?.before || 'before';
+        vars[lastKey] = itemsPerPage;
+        vars[beforeKey] = null;
+      } else {
+        const firstKey = variableKeyMap?.first || 'first';
+        const afterKey = variableKeyMap?.after || 'after';
+        vars[firstKey] = itemsPerPage;
+        vars[afterKey] = null;
+      }
+
+      await refetch(vars as PaginationVariables<TVariables>);
     } catch (err) {
       console.error('Error refetching data:', err);
     }
-  }, [refetch, queryVariables, itemsPerPage]);
+  }, [refetch, queryVariables, itemsPerPage, paginationType, variableKeyMap]);
 
   // Watch for refetchTrigger changes
   useEffect(() => {
@@ -333,25 +518,63 @@ export function CursorPaginationManager<
 
   // Success state: render items and load more button
   return (
-    <div data-testid="cursor-pagination-manager">
+    <div
+      data-testid="cursor-pagination-manager"
+      // eslint-disable-next-line react/destructuring-assignment
+      className={props.className}
+      ref={containerRef}
+      onScroll={onContentScroll}
+    >
+      {!infiniteScroll &&
+        paginationType === 'backward' &&
+        pageInfo?.hasPreviousPage && (
+          <div className={styles.loadMoreSection}>
+            <button
+              type="button"
+              onClick={handleLoadMore}
+              disabled={isLoadingMore}
+              className={styles.loadMoreButton}
+              aria-label={t('loadOlderMessages')}
+              data-testid="load-more-button-top"
+            >
+              {isLoadingMore ? t('loading') : t('loadOlderMessages')}
+            </button>
+          </div>
+        )}
+
+      {infiniteScroll && paginationType === 'backward' && isLoadingMore && (
+        <div className={styles.loadMoreSection}>
+          <span className={styles.loadingText}>{t('loading')}...</span>
+        </div>
+      )}
+
       <div className={styles.itemsContainer}>
         {items.map((item, index) => {
           const key = keyExtractor ? keyExtractor(item, index) : index;
           return <div key={key}>{renderItem(item, index)}</div>;
         })}
       </div>
-      {pageInfo?.hasNextPage && (
+
+      {!infiniteScroll &&
+        paginationType === 'forward' &&
+        pageInfo?.hasNextPage && (
+          <div className={styles.loadMoreSection}>
+            <button
+              type="button"
+              onClick={handleLoadMore}
+              disabled={isLoadingMore}
+              className={styles.loadMoreButton}
+              aria-label={t('loadMoreItems')}
+              data-testid="load-more-button"
+            >
+              {isLoadingMore ? t('loading') : t('loadMore')}
+            </button>
+          </div>
+        )}
+
+      {infiniteScroll && paginationType === 'forward' && isLoadingMore && (
         <div className={styles.loadMoreSection}>
-          <button
-            type="button"
-            onClick={handleLoadMore}
-            disabled={isLoadingMore}
-            className={styles.loadMoreButton}
-            aria-label={t('loadMoreItems')}
-            data-testid="load-more-button"
-          >
-            {isLoadingMore ? t('loading') : t('loadMore')}
-          </button>
+          <span className={styles.loadingText}>{t('loading')}...</span>
         </div>
       )}
     </div>

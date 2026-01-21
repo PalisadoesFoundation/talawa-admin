@@ -8,29 +8,14 @@
  * - Uses Apollo Client for GraphQL queries, mutations, and subscriptions.
  * - Supports message editing, replying, and attachments.
  * - Displays group chat details when applicable.
+ * - Uses CursorPaginationManager for message pagination.
  *
  * @param props - The props for the ChatRoom component.
- * @returns The rendered ChatRoom comp                            {message.parentMessage && (
-                              <a href={`#${message.parentMessage.id}`}>
-                                <div className={styles.replyToMessage}>
-                                  <p className={styles.replyToMessageSender}>
-                                    {message.parentMessage.creator.name}
-                                  </p>
-                                  <span>{message.parentMessage.body}</span>
-                                </div>
-                              </a>
-                            )} @example
- * ```tsx
- * <ChatRoom
- *   selectedContact="12345"
- *   chatListRefetch={refetchChatList}
- * />
- * ```
+ * @returns The rendered ChatRoom component
  */
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import type { ChangeEvent } from 'react';
-import { Button } from 'react-bootstrap';
 import styles from './ChatRoom.module.css';
 import { useTranslation } from 'react-i18next';
 import { CHAT_BY_ID, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
@@ -50,9 +35,11 @@ import { useMinioDownload } from 'utils/MinioDownload';
 import type { INewChat } from './types';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import ChatHeader from './ChatHeader';
-import ChatMessages from './ChatMessages';
 import EmptyChatState from './EmptyChatState';
 import MessageInput from './MessageInput';
+import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
+import type { InterfaceCursorPaginationManagerRef } from 'types/CursorPagination/interface';
+import MessageItem from './MessageItem';
 
 interface IChatRoomProps {
   selectedContact: string;
@@ -86,7 +73,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   useEffect(() => {
     if (props.selectedContact) {
       setItem('selectedChatId', props.selectedContact);
-      setLoadingMoreMessages(false);
     }
   }, [props.selectedContact, setItem]);
   const [chatTitle, setChatTitle] = useState('');
@@ -103,11 +89,13 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const [groupChatDetailsModalisOpen, setGroupChatDetailsModalisOpen] =
     useState(false);
 
-  const [loadingMoreMessages, setLoadingMoreMessages] = useState(false);
-  const [hasMoreMessages, setHasMoreMessages] = useState(false);
-  const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const backfillAttemptsRef = useRef<number>(0);
   const shouldAutoScrollRef = useRef<boolean>(false);
+  const paginationRef =
+    useRef<
+      InterfaceCursorPaginationManagerRef<
+        INewChat['messages']['edges'][number]['node']
+      >
+    >(null);
 
   const [attachment, setAttachment] = useState<string | null>(null);
   const [attachmentObjectName, setAttachmentObjectName] = useState<
@@ -202,160 +190,52 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           },
         },
       });
-      await chatRefetch();
+      paginationRef.current?.removeItem((item) => item.id === messageId);
     } catch (error) {
       console.error('Error deleting message:', error);
     }
   };
 
-  const { data: chatData, refetch: chatRefetch } = useQuery(CHAT_BY_ID, {
-    variables: {
-      input: { id: props.selectedContact },
-      first: 10,
-      after: null,
-      lastMessages: 10,
-      beforeMessages: null,
-    },
-    skip: !props.selectedContact,
-  });
+  // Callback to handle full query result from CursorPaginationManager
+  const handleQueryResult = useCallback(
+    (data: { chat: INewChat }) => {
+      if (data?.chat) {
+        const chatData = data.chat;
+        setChat(() => {
+          const derivedIsGroup =
+            (chatData?.members?.edges?.length ?? 0) > 2 ? true : false;
 
-  const loadMoreMessages = async (): Promise<void> => {
-    if (loadingMoreMessages || !hasMoreMessages || !chat) return;
+          let title = chatTitle;
+          let subtitle = chatSubtitle;
+          let image = chatImage;
 
-    const pageInfo = chat.messages.pageInfo;
-    if (!pageInfo.hasPreviousPage) {
-      setHasMoreMessages(false);
-      return;
-    }
-
-    setLoadingMoreMessages(true);
-    const currentScrollHeight = messagesContainerRef.current?.scrollHeight || 0;
-
-    try {
-      const firstMessageCursor = chat.messages.edges[0]?.cursor;
-      if (!firstMessageCursor) {
-        setHasMoreMessages(false);
-        return;
-      }
-
-      const result = await chatRefetch({
-        input: { id: props.selectedContact },
-        first: 10,
-        after: null,
-        lastMessages: 10,
-        beforeMessages: firstMessageCursor,
-      });
-
-      if (result.data?.chat?.messages) {
-        const newMessages = result.data.chat.messages.edges;
-
-        if (newMessages.length > 0) {
-          const existingMessageIds = new Set(
-            chat.messages.edges.map((edge) => edge.node.id),
-          );
-          const uniqueNewMessages = newMessages.filter(
-            (edge: INewChat['messages']['edges'][0]) =>
-              !existingMessageIds.has(edge.node.id),
-          );
-
-          if (uniqueNewMessages.length > 0) {
-            const updatedChat = {
-              ...chat,
-              messages: {
-                ...result.data.chat.messages,
-                edges: [...uniqueNewMessages, ...chat.messages.edges],
-                pageInfo: result.data.chat.messages.pageInfo,
-              },
-            };
-
-            setChat(updatedChat);
-
-            setTimeout(() => {
-              if (messagesContainerRef.current) {
-                const newScrollHeight =
-                  messagesContainerRef.current.scrollHeight;
-                messagesContainerRef.current.scrollTop =
-                  newScrollHeight - currentScrollHeight;
-              }
-            }, 0);
-
-            setHasMoreMessages(
-              result.data.chat.messages.pageInfo.hasPreviousPage,
-            );
-          } else {
-            setHasMoreMessages(false);
+          if (chatData.members?.edges?.length === 2) {
+            const otherUser = chatData.members.edges.find(
+              (edge) => edge.node.user.id !== userId,
+            )?.node.user;
+            if (otherUser) {
+              title = `${otherUser.name}`;
+              subtitle = '';
+              image = otherUser.avatarURL || '';
+            }
+          } else if (derivedIsGroup) {
+            title = chatData.name;
+            subtitle = `${chatData.members?.edges?.length || 0} members`;
+            image = chatData.avatarURL || '';
           }
-        } else {
-          setHasMoreMessages(false);
-        }
+
+          setChatTitle(title);
+          setChatSubtitle(subtitle);
+          setChatImage(image);
+
+          return { ...chatData, isGroup: derivedIsGroup };
+        });
       }
-    } catch (error) {
-      console.error('Error loading more messages:', error);
-    } finally {
-      setLoadingMoreMessages(false);
-    }
-  };
-
-  const handleScroll = (): void => {
-    if (!messagesContainerRef.current) return;
-
-    const el = messagesContainerRef.current;
-    const { scrollTop } = el;
-
-    if (scrollTop < 100 && hasMoreMessages && !loadingMoreMessages) {
-      loadMoreMessages();
-    }
-  };
-  // const { refetch: chatListRefetch } = useQuery(CHATS_LIST, {
-  //   variables: {
-  //     id: userId,
-  //   },
-  // });
+    },
+    [userId, chatTitle, chatSubtitle, chatImage],
+  );
 
   const { refetch: unreadChatListRefetch } = useQuery(UNREAD_CHATS);
-  // NOTE(caching): With cache policies, unread chats list can be updated via
-  // cache.modify on Query.unreadChats instead of refetching.
-
-  useEffect(() => {
-    if (chatData?.chat?.messages?.edges?.length) {
-      const lastMessage =
-        chatData.chat.messages.edges[chatData.chat.messages.edges.length - 1];
-      markReadIfSupported(props.selectedContact, lastMessage.node.id)
-        .catch(() => {})
-        .finally(() => {
-          props.chatListRefetch();
-          unreadChatListRefetch();
-        });
-    }
-  }, [props.selectedContact, chatData]);
-
-  useEffect(() => {
-    if (chatData) {
-      const chat = chatData.chat;
-      const derivedIsGroup =
-        (chat?.members?.edges?.length ?? 0) > 2 ? true : false;
-      setChat({ ...chat, isGroup: derivedIsGroup });
-
-      setHasMoreMessages(chat.messages?.pageInfo?.hasPreviousPage ?? false);
-      shouldAutoScrollRef.current = true;
-
-      if (chat.members?.edges?.length === 2) {
-        const otherUser = chat.members.edges.find(
-          (edge: INewChat['members']['edges'][0]) =>
-            edge.node.user.id !== userId,
-        )?.node.user;
-        if (otherUser) {
-          setChatTitle(`${otherUser.name}`);
-          setChatSubtitle('');
-          setChatImage(otherUser.avatarURL);
-        }
-      } else if (chat.members?.edges?.length > 2) {
-        setChatTitle(chat.name);
-        setChatSubtitle(`${chat.members?.edges?.length || 0} members`);
-        setChatImage(chat.avatarURL);
-      }
-    }
-  }, [chatData, userId]);
 
   const sendMessage = async (): Promise<void> => {
     let messageBody = newMessage;
@@ -373,46 +253,38 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             },
           },
         });
-        await chatRefetch();
+        paginationRef.current?.updateItem(
+          (item) => item.id === editMessage.id,
+          (item) => ({ ...item, body: messageBody }),
+        );
       } else {
         const tempId = `temp-${Date.now()}`;
-        setChat((prev: INewChat | undefined) => {
-          if (!prev) return prev;
-          const now = new Date().toISOString();
-          const newEdge = {
-            cursor: tempId,
-            node: {
-              id: tempId,
-              body: messageBody,
-              createdAt: now,
-              updatedAt: now,
-              creator: {
-                id: userId,
-                name: 'You',
-                avatarMimeType: undefined,
-                avatarURL: undefined,
-              },
-              parentMessage: replyToDirectMessage
-                ? {
-                    id: replyToDirectMessage.id,
-                    body: replyToDirectMessage.body,
-                    createdAt: replyToDirectMessage.createdAt,
-                    creator: {
-                      id: replyToDirectMessage.creator.id,
-                      name: replyToDirectMessage.creator.name,
-                    },
-                  }
-                : undefined,
-            },
-          } as INewChat['messages']['edges'][0];
-          return {
-            ...prev,
-            messages: {
-              ...prev.messages,
-              edges: [...prev.messages.edges, newEdge],
-            },
-          } as INewChat;
-        });
+        const now = new Date().toISOString();
+        const newMessageNode: INewChat['messages']['edges'][number]['node'] = {
+          id: tempId,
+          body: messageBody,
+          createdAt: now,
+          updatedAt: now,
+          creator: {
+            id: userId as string,
+            name: 'You',
+            avatarMimeType: undefined,
+            avatarURL: undefined,
+          },
+          parentMessage: replyToDirectMessage
+            ? {
+                id: replyToDirectMessage.id,
+                body: replyToDirectMessage.body,
+                createdAt: replyToDirectMessage.createdAt,
+                creator: {
+                  id: replyToDirectMessage.creator.id,
+                  name: replyToDirectMessage.creator.name,
+                },
+              }
+            : undefined,
+        };
+
+        paginationRef.current?.addItem(newMessageNode, 'end');
 
         await sendMessageToChat({
           variables: {
@@ -457,86 +329,53 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           () => {},
         );
 
-        // Soft-append the new message to local state to avoid pagination issues.
-        // TODO(caching): With cache policies, prefer cache.modify on Chat.messages
-        //               to append if the message is not present (dedupe by node.id).
-        setChat((prev: INewChat | undefined) => {
-          if (!prev) return prev;
-          try {
-            const newEdge = {
-              cursor: newMessage.id,
-              node: {
-                id: newMessage.id,
-                body: newMessage.body,
-                createdAt: newMessage.createdAt,
-                updatedAt: newMessage.updatedAt,
+        // Soft-append the new message to local state
+        const newItem: INewChat['messages']['edges'][number]['node'] = {
+          id: newMessage.id,
+          body: newMessage.body,
+          createdAt: newMessage.createdAt,
+          updatedAt: newMessage.updatedAt,
+          creator: {
+            id: newMessage.creator?.id || '',
+            name: newMessage.creator?.name || '',
+            avatarMimeType: newMessage.creator?.avatarMimeType || undefined,
+            avatarURL: newMessage.creator?.avatarURL || undefined,
+          },
+          parentMessage: newMessage.parentMessage
+            ? {
+                id: newMessage.parentMessage.id,
+                body: newMessage.parentMessage.body,
+                createdAt: newMessage.parentMessage.createdAt,
                 creator: {
-                  id: newMessage.creator?.id,
-                  name: newMessage.creator?.name,
-                  avatarMimeType: newMessage.creator?.avatarMimeType,
-                  avatarURL: newMessage.creator?.avatarURL,
+                  id: newMessage.parentMessage.creator.id,
+                  name: newMessage.parentMessage.creator.name,
                 },
-                parentMessage: newMessage.parentMessage
-                  ? {
-                      id: newMessage.parentMessage.id,
-                      body: newMessage.parentMessage.body,
-                      createdAt: newMessage.parentMessage.createdAt,
-                      creator: {
-                        id: newMessage.parentMessage.creator.id,
-                        name: newMessage.parentMessage.creator.name,
-                      },
-                    }
-                  : undefined,
-              },
-            } as INewChat['messages']['edges'][0];
+              }
+            : undefined,
+        };
 
-            const exists = prev.messages.edges.some(
-              (e) => e.node.id === newEdge.node.id,
-            );
-            if (exists) return prev;
-
-            return {
-              ...prev,
-              messages: {
-                ...prev.messages,
-                edges: [...prev.messages.edges, newEdge],
-              },
-            } as INewChat;
-          } catch {
-            return prev;
-          }
-        });
+        const exists = paginationRef.current
+          ?.getItems()
+          .some((item) => item.id === newItem.id);
+        if (!exists) {
+          paginationRef.current?.addItem(newItem, 'end');
+        }
       }
       props.chatListRefetch();
       unreadChatListRefetch();
-      // TODO(caching): Replace refetches above with targeted cache updates once
-      // cache policies are enabled (e.g., bump lastMessage and unread count).
     },
   });
 
+  // Scroll to bottom when sending message
   useEffect(() => {
-    const el = messagesContainerRef.current;
-    if (!el) return;
-    const nearBottom = el.scrollHeight - (el.scrollTop + el.clientHeight) < 100;
-    if (shouldAutoScrollRef.current || nearBottom) {
-      el.scrollTop = el.scrollHeight;
-      shouldAutoScrollRef.current = false;
+    if (shouldAutoScrollRef.current) {
+      const el = document.querySelector(`.${styles.chatMessages}`);
+      if (el) {
+        el.scrollTop = el.scrollHeight;
+        shouldAutoScrollRef.current = false;
+      }
     }
-  }, [chat?.messages?.edges?.length]);
-
-  useEffect(() => {
-    const el = messagesContainerRef.current;
-    if (!el) return;
-    if (loadingMoreMessages) return;
-    if (!hasMoreMessages) return;
-
-    const { scrollHeight, clientHeight } = el;
-    const notScrollable = scrollHeight <= clientHeight + 24;
-    if (notScrollable && backfillAttemptsRef.current < 3) {
-      backfillAttemptsRef.current += 1;
-      loadMoreMessages();
-    }
-  }, [chat?.messages?.edges?.length, hasMoreMessages, loadingMoreMessages]);
+  }, [shouldAutoScrollRef.current, chat]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -589,38 +428,44 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             <div
               className={`d-flex flex-grow-1 flex-column ${styles.flexContainerMinHeight}`}
             >
-              {hasMoreMessages && (chat?.messages?.edges?.length ?? 0) > 0 && (
-                <div className={styles.loadMoreBar}>
-                  <Button
-                    variant="light"
-                    size="sm"
-                    onClick={loadMoreMessages}
-                    disabled={loadingMoreMessages}
-                  >
-                    {loadingMoreMessages
-                      ? t('loading')
-                      : t('loadOlderMessages')}
-                  </Button>
-                </div>
-              )}
-              <ChatMessages
-                messages={chat?.messages?.edges || []}
-                isGroup={chat?.isGroup || false}
-                currentUserId={userId as string}
-                chatOrganizationId={chat?.organization?.id}
-                getFileFromMinio={getFileFromMinio}
-                onScroll={handleScroll}
-                loadingMoreMessages={loadingMoreMessages}
-                onReply={setReplyToDirectMessage}
-                onEdit={(message) => {
-                  setEditMessage(message);
-                  setNewMessage(message.body);
+              <CursorPaginationManager
+                query={CHAT_BY_ID}
+                queryVariables={{
+                  input: { id: props.selectedContact },
+                  first: 15,
                 }}
-                onDelete={deleteMessage}
-                t={t}
-                setMessagesContainerRef={(ref) => {
-                  messagesContainerRef.current = ref;
+                dataPath="chat.messages"
+                itemsPerPage={15}
+                paginationType="backward"
+                variableKeyMap={{
+                  last: 'lastMessages',
+                  before: 'beforeMessages',
                 }}
+                actionRef={paginationRef}
+                className={styles.chatMessages}
+                infiniteScroll={true}
+                onQueryResult={handleQueryResult}
+                keyExtractor={(item) => item.id}
+                renderItem={(item) => (
+                  <MessageItem
+                    key={item.id}
+                    message={item}
+                    isGroup={chat?.isGroup || false}
+                    currentUserId={userId as string}
+                    chatOrganizationId={chat?.organization?.id}
+                    getFileFromMinio={getFileFromMinio}
+                    onReply={setReplyToDirectMessage}
+                    onEdit={(msg) => {
+                      setEditMessage(msg);
+                      setNewMessage(msg.body);
+                    }}
+                    onDelete={deleteMessage}
+                    t={t}
+                  />
+                )}
+                emptyStateComponent={
+                  <EmptyChatState message={t('noMessages')} />
+                }
               />
             </div>
             <MessageInput
@@ -647,7 +492,14 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             toggleGroupChatDetailsModal={toggleGroupChatDetailsModal}
             groupChatDetailsModalisOpen={groupChatDetailsModalisOpen}
             chat={chat}
-            chatRefetch={chatRefetch}
+            chatRefetch={() =>
+              Promise.resolve({
+                data: { chat: chat },
+                loading: false,
+                networkStatus: 7,
+                error: undefined,
+              } as ApolloQueryResult<{ chat: INewChat }>)
+            }
           />
         )}
       </div>
