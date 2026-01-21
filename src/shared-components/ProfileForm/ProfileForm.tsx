@@ -1,11 +1,3 @@
-/**
- * ProfileForm Component - Unified Profile Management
- *
- * Refactored to separate concerns:
- * - Logic: hooks/useProfileLogic
- * - Types: types.ts
- * - UI Components: components/PersonalDetailsCard, components/ContactInfoCard, components/MemberActivitySection
- */
 import React from 'react';
 import { Row, Col, Card } from 'react-bootstrap';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -65,10 +57,10 @@ const MemberDetail: React.FC = (): JSX.Element => {
               handleFieldChange={handlers.handleFieldChange}
             />
 
+            {/* UPDATED: Removed t={t} prop as it is now handled internally */}
             <MemberActivitySection
               events={userData?.user?.eventsAttended}
               onViewAll={handlers.handleEventsAttendedModal}
-              t={t}
             />
           </Col>
 

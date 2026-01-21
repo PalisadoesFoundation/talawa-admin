@@ -1,16 +1,21 @@
 import React from 'react';
 import { Card, Col } from 'react-bootstrap';
+// Add this import:
+import { useTranslation } from 'react-i18next';
 import EventsAttendedByMember from 'components/MemberActivity/EventsAttendedByMember';
 import Button from 'shared-components/Button/Button';
 import type { IEvent } from 'types/Event/interface';
 import { IMemberActivitySectionProps } from '../../types/shared-components/ProfileForm/interface';
 import styles from './MemberActivitySection.module.css';
 
+// Remove 't' from the destructured props
 const MemberActivitySection: React.FC<IMemberActivitySectionProps> = ({
   events,
   onViewAll,
-  t,
 }) => {
+  // Initialize translation hook here so the scanner detects the prefix
+  const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
+
   return (
     <>
       <Col>

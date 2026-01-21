@@ -59,7 +59,7 @@ export interface IContactInfoCardProps {
 export interface IMemberActivitySectionProps {
   events?: IEvent[];
   onViewAll: () => void;
-  t: TFunction;
+  // REMOVED: t: TFunction; (This is now handled internally by the component)
 }
 
 /**
