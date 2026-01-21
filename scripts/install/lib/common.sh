@@ -260,12 +260,70 @@ prompt_input() {
 # SECURITY HELPERS
 # ==============================================================================
 
-# Whitelist-based sanitization for security-critical inputs
-# Usage: safe_value=$(sanitize_input_strict "$user_input")
+# Whitelist-based validation for security-critical inputs
+# Validates input against context-specific patterns and REJECTS invalid input
+# instead of silently transforming it.
+#
+# Usage: 
+#   sanitize_input "$user_input" "filename"
+#   sanitize_input "$user_input" "identifier"
+#   sanitize_input "$user_input" "path"
+#   sanitize_input "$user_input"  # defaults to "general"
+#
+# Returns:
+#   0 - Input is valid and printed to stdout
+#   $E_INVALID_ARG - Input does not match expected pattern
+#
+# Context types:
+#   filename   - Safe filename characters only, no path separators (a-zA-Z0-9._-)
+#   identifier - Valid shell variable/function names (starts with letter/underscore)
+#   path       - Absolute paths only, no path traversal (..)
+#   general    - Most restrictive: alphanumeric, underscore, hyphen only
 sanitize_input() {
     local input="${1:-}"
-    # Allow only alphanumeric, underscore, hyphen, dot, and forward slash
-    printf '%s' "$input" | tr -cd 'a-zA-Z0-9_./-'
+    local purpose="${2:-general}"  # Context: filename, path, identifier, etc.
+    
+    # Empty input is invalid
+    if [[ -z "$input" ]]; then
+        log_error "Invalid input: empty string is not allowed for $purpose"
+        return "$E_INVALID_ARG"
+    fi
+    
+    case "$purpose" in
+        filename)
+            # Only allow safe filename characters, no path separators
+            if [[ "$input" =~ ^[a-zA-Z0-9._-]+$ ]]; then
+                printf '%s' "$input"
+                return 0
+            fi
+            ;;
+        identifier)
+            # Variable names, function names (must start with letter or underscore)
+            if [[ "$input" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
+                printf '%s' "$input"
+                return 0
+            fi
+            ;;
+        path)
+            # Absolute paths only, no traversal
+            # Must start with /, no .. sequences allowed
+            if [[ "$input" =~ ^/[a-zA-Z0-9._/-]+$ ]] && [[ ! "$input" =~ \.\. ]]; then
+                printf '%s' "$input"
+                return 0
+            fi
+            ;;
+        *)
+            # General: most restrictive - alphanumeric, underscore, hyphen only
+            if [[ "$input" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+                printf '%s' "$input"
+                return 0
+            fi
+            ;;
+    esac
+    
+    # Reject invalid input
+    log_error "Invalid input: '$input' does not match expected pattern for $purpose"
+    return "$E_INVALID_ARG"
 }
 
 # Create a temporary file securely
@@ -419,11 +477,18 @@ resolve_path() {
 # Check if running as root
 # Usage: if is_root; then echo "Running as root"; fi
 is_root() {
+    # Primary method: use id command if available
     if command -v id >/dev/null 2>&1; then
-        [[ "$(id -u)" -eq 0 ]]
+        [[ "$(id -u 2>/dev/null)" -eq 0 ]]
     else
-        # Fallback: check UID environment variable
-        [[ "${UID:-$(whoami 2>/dev/null)}" == "0" ]] || [[ "$(whoami 2>/dev/null)" == "root" ]]
+        # Fallback: check UID if set and numeric, otherwise check username
+        if [[ -n "${UID:-}" ]] && [[ "$UID" =~ ^[0-9]+$ ]]; then
+            # UID is set and numeric, compare to 0
+            [[ "$UID" -eq 0 ]]
+        else
+            # UID not set or not numeric, check username
+            [[ "$(whoami 2>/dev/null)" == "root" ]]
+        fi
     fi
 }
 
@@ -500,8 +565,13 @@ get_os() {
 # validate_url "https://example.com" && echo "URL valid"
 # validate_url "not-a-url" || echo "Invalid URL rejected (expected)"
 #
-# # Test sanitize_input
-# echo "Sanitized: $(sanitize_input 'hello; rm -rf /')"
+# # Test sanitize_input (now validates instead of transforms)
+# sanitize_input "hello123" "general" && echo "Valid general input"
+# sanitize_input "file.txt" "filename" && echo "Valid filename"
+# sanitize_input "/usr/local/bin" "path" && echo "Valid path"
+# sanitize_input "../../etc/passwd" "path" || echo "Path traversal rejected (expected)"
+# sanitize_input "hello; rm -rf /" "general" || echo "Command injection rejected (expected)"
+#
 #
 # # Test temp file creation
 # tmpfile=$(create_temp_file "test")
