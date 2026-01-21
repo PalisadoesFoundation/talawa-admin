@@ -26,12 +26,12 @@
   "users": "用户",
   "checkInRegistrantsAriaLabel": "签到登记者",
   "recurrence": {
-    "daily": "Daily",
-    "weeklyOn": "Weekly on {{day}}",
-    "monthlyOn": "Monthly on day {{day}}",
-    "annuallyOn": "Annually on {{month}} {{day}}",
-    "everyWeekday": "Every weekday (Monday to Friday)",
-    "custom": "Custom..."
+    "daily": "每天",
+    "weeklyOn": "每周{{day}}",
+    "monthlyOn": "每月第{{day}}天",
+    "annuallyOn": "每年{{month}}{{day}}",
+    "everyWeekday": "每个工作日（周一至周五）",
+    "custom": "自定义..."
   },
   "requests": "请求",
   "OR": "或",

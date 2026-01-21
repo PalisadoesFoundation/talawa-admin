@@ -290,11 +290,11 @@
   "share": "शेयर करें",
   "checkInRegistrantsAriaLabel": "पंजीकृतों को चेक इन करें",
   "recurrence": {
-    "daily": "Daily",
-    "weeklyOn": "Weekly on {{day}}",
-    "monthlyOn": "Monthly on day {{day}}",
-    "annuallyOn": "Annually on {{month}} {{day}}",
-    "everyWeekday": "Every weekday (Monday to Friday)",
-    "custom": "Custom..."
+    "daily": "दैनिक",
+    "weeklyOn": "साप्ताहिक {{day}} को",
+    "monthlyOn": "मासिक {{day}} तारीख को",
+    "annuallyOn": "वार्षिक {{month}} {{day}} को",
+    "everyWeekday": "प्रत्येक कार्यदिवस (सोमवार से शुक्रवार)",
+    "custom": "कस्टम..."
   }
 }

@@ -44,12 +44,12 @@
   "enterEmail": "Entrez l'e-mail",
   "checkInRegistrantsAriaLabel": "Enregistrer les participants",
   "recurrence": {
-    "daily": "Daily",
-    "weeklyOn": "Weekly on {{day}}",
-    "monthlyOn": "Monthly on day {{day}}",
-    "annuallyOn": "Annually on {{month}} {{day}}",
-    "everyWeekday": "Every weekday (Monday to Friday)",
-    "custom": "Custom..."
+    "daily": "Quotidien",
+    "weeklyOn": "Chaque semaine le {{day}}",
+    "monthlyOn": "Chaque mois le {{day}}",
+    "annuallyOn": "Chaque année le {{day}} {{month}}",
+    "everyWeekday": "Chaque jour ouvrable (lundi au vendredi)",
+    "custom": "Personnalisé..."
   },
   "emailAddress": "Adresse e-mail",
   "email": "E-mail",

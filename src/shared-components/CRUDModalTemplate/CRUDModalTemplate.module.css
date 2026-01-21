@@ -109,7 +109,6 @@
   border-color: var(--addButton-border-hover);
   color: #fff;
 }
-
 .removeButton {
   background-color: var(--removeButton-bg);
   color: var(--removeButton-color);

@@ -26,6 +26,10 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 const { setItem, clearAllItems } = useLocalStorage();
 
+afterEach(() => {
+  vi.clearAllMocks();
+});
+
 vi.mock('@mui/icons-material', async () => {
   const actual = (await vi.importActual('@mui/icons-material')) as Record<
     string,
@@ -261,9 +265,7 @@ describe('Event Management', () => {
       const dropdownContainer = screen.getByTestId('tabsDropdownContainer');
       expect(dropdownContainer).toBeInTheDocument();
 
-      await act(async () => {
-        await user.click(screen.getByTestId('tabsDropdownToggle'));
-      });
+      await user.click(screen.getByTestId('tabsDropdownToggle'));
 
       const tabOptions = [
         'dashboard',
@@ -285,9 +287,8 @@ describe('Event Management', () => {
       await act(async () => {
         renderEventManagement();
       });
-      await act(async () => {
-        await user.click(screen.getByTestId('tabsDropdownToggle'));
-      });
+
+      await user.click(screen.getByTestId('tabsDropdownToggle'));
 
       const tabOptions = [
         'dashboard',
