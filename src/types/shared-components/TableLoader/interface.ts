@@ -1,4 +1,4 @@
-export interface InterfaceTableLoader {
+export interface InterfaceTableLoaderProps {
   noOfRows: number;
   headerTitles?: string[];
   noOfCols?: number;

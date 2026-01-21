@@ -31,9 +31,9 @@
 import React, { useEffect } from 'react';
 import styles from './TableLoader.module.css';
 import DataTable from '../../shared-components/DataTable/DataTable';
-import { InterfaceTableLoader } from 'types/shared-components/TableLoader/interface';
+import { InterfaceTableLoaderProps } from 'types/shared-components/TableLoader/interface';
 
-const tableLoader = (props: InterfaceTableLoader): JSX.Element => {
+const tableLoader = (props: InterfaceTableLoaderProps): JSX.Element => {
   const { noOfRows, headerTitles, noOfCols, 'data-testid': dataTestId } = props;
 
   useEffect(() => {
