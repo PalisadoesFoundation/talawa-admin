@@ -1,0 +1,128 @@
+.message {
+  margin-top: 25%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.icon {
+  margin-right: 8px;
+}
+
+.iconLarge {
+  font-size: 48px;
+}
+
+.TableImage {
+  object-fit: cover;
+  margin-right: 5px;
+  width: var(--table-image-size) !important;
+  height: var(--table-image-size) !important;
+  border-radius: 100% !important;
+}
+
+.assigneeCellContainer {
+  display: flex;
+  align-items: center;
+}
+
+.groupIconSecondary {
+  background-color: var(--color-gray-300);
+}
+
+.tableHeader {
+  background-color: var(--color-red-500);
+  font-weight: bold;
+}
+
+.infoButton {
+  background-color: var(--infoButton-bg) !important;
+  border-color: var(--infoButton-border);
+  color: var(--infoButton-color);
+  margin-right: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.infoButton:hover {
+  background-color: var(--infoButton-bg-hover);
+  border-color: var(--infoButton-border-hover);
+  color: var(--infoButton-color) !important;
+  box-shadow: var(--drop-shadow);
+}
+
+.actionItemDeleteButton {
+  background-color: var(--actionItemDeleteButton-bg) !important;
+  color: var(--actionItemDeleteButton-color) !important;
+}
+
+.actionItemDeleteButton:hover {
+  box-shadow: var(--drop-shadow);
+}
+
+.checkboxButton input:checked {
+  background-color: var(--checkboxButton-checked-bg);
+  border-color: var(--checkboxButton-checked-color);
+}
+
+.checkboxButton input:hover {
+  box-shadow: var(--drop-shadow);
+}
+
+.checkboxButton input:focus {
+  border-color: var(--checkbox-focus-border);
+  outline: 2px solid var(--checkbox-focus-border);
+  outline-offset: 2px;
+}
+
+.dropdown {
+  background-color: var(--dropdown-bg) !important;
+  min-width: 150px;
+  border: 1px solid var(--dropdown-border);
+  color: var(--dropdown-font-color) !important;
+  position: relative;
+  display: inline-block;
+}
+
+.createButton {
+  background-color: var(--createButton-bg) !important;
+  color: var(--createButton-color) !important;
+  border: 1px solid var(--createButton-border) !important;
+  margin: 5px 10px;
+  width: 10rem;
+  height: 3rem;
+}
+
+.rowBackground {
+  background-color: var(--rowBackground-bg);
+  color: var(--rowBackground-color);
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.btnsContainer {
+  display: flex;
+  margin: 2.5rem 0;
+  align-items: center;
+}
+
+@media (max-width: 520px) {
+  .btnsContainer {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 1020px) {
+  .btnsContainer {
+    flex-direction: column;
+    margin: 1.5rem 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .btnsContainer {
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+  }
+}

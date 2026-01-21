@@ -33,6 +33,7 @@ const EventManagement = lazy(
 const ForgotPassword = lazy(
   () => import('screens/ForgotPassword/ForgotPassword'),
 );
+const VerifyEmail = lazy(() => import('screens/Auth/VerifyEmail/VerifyEmail'));
 const MemberDetail = lazy(
   () => import('shared-components/ProfileForm/ProfileForm'),
 );
@@ -300,6 +301,8 @@ function App(): React.ReactElement {
             </Route>
           </Route>
           <Route path="/forgotPassword" element={<ForgotPassword />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/auth/verify-email" element={<VerifyEmail />} />
           {/* Public invitation accept route */}
           <Route
             path="/event/invitation/:token"
