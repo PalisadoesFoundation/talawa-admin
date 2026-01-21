@@ -57,9 +57,8 @@ export function useDataTableFiltering<T>(
   } = options;
 
   // Controlled / uncontrolled global search
-  const controlledSearch =
-    typeof globalSearch === 'string' &&
-    typeof onGlobalSearchChange === 'function';
+  // Controlled mode: globalSearch is provided (even if no handler)
+  const controlledSearch = globalSearch !== undefined;
   const [uQuery, setUQuery] = React.useState(initialGlobalSearch);
   const query = controlledSearch ? (globalSearch as string) : uQuery;
 
@@ -72,9 +71,13 @@ export function useDataTableFiltering<T>(
 
   const updateGlobalSearch = React.useCallback(
     (next: string) => {
-      if (controlledSearch && onGlobalSearchChange) {
-        onGlobalSearchChange(next);
+      if (controlledSearch) {
+        // In controlled mode, call handler if it exists (no-op otherwise)
+        if (onGlobalSearchChange) {
+          onGlobalSearchChange(next);
+        }
       } else {
+        // In uncontrolled mode, update internal state
         setUQuery(next);
       }
       // Reset to first page on search change if using client pagination
