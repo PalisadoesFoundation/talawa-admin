@@ -1315,10 +1315,15 @@ describe('EventActionItems', () => {
     it('should call debounced search when input changes', async () => {
       renderEventActionItems();
 
-      await waitFor(async () => {
-        const searchInput = screen.getByTestId('searchBy');
-        await userEvent.clear(searchInput);
-        await userEvent.type(searchInput, 'test search');
+      await waitFor(() => {
+        expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      });
+
+      const searchInput = screen.getByTestId('searchBy');
+      await userEvent.clear(searchInput);
+      await userEvent.type(searchInput, 'test search');
+
+      await waitFor(() => {
         expect(searchInput).toHaveValue('test search');
       });
     });

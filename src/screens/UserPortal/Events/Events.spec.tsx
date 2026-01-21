@@ -818,7 +818,7 @@ async function wait(ms = 500): Promise<void> {
 
 describe('Testing Events Screen [User Portal]', () => {
   beforeEach(() => {
-    vi.useFakeTimers({ toFake: ['Date'] });
+    // Set system time without faking timers to keep Apollo promises working
     vi.setSystemTime(new Date(TEST_DATE));
 
     Object.defineProperty(window, 'matchMedia', {
