@@ -1,7 +1,7 @@
 import React from 'react';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import type { RenderResult } from '@testing-library/react';
-import { render, act, fireEvent, waitFor } from '@testing-library/react';
+import { render, act, waitFor } from '@testing-library/react';
 import EventDashboard from './EventDashboard';
 import { BrowserRouter } from 'react-router';
 import { MockedProvider } from '@apollo/react-testing';
@@ -35,6 +35,7 @@ import {
   beforeEach,
   afterEach,
 } from 'vitest';
+import userEvent from '@testing-library/user-event';
 
 // Mock localStorage
 const localStorageMock = (() => {
@@ -87,6 +88,7 @@ async function wait(ms = 500): Promise<void> {
 }
 
 const mockID = 'event123';
+const user = userEvent.setup();
 vi.mock('react-router', async () => ({
   ...(await vi.importActual('react-router')),
 }));
@@ -221,7 +223,7 @@ describe('Testing Event Dashboard Screen', () => {
 
     // Click to open modal
     await act(async () => {
-      fireEvent.click(editButton);
+      await user.click(editButton);
     });
 
     await waitFor(() => {

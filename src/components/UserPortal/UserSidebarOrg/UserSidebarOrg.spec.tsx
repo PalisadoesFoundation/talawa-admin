@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router-dom';
@@ -29,7 +29,7 @@ import { usePluginDrawerItems } from 'plugin';
  * 9. **Translation Display**: Ensures proper translation of UI text.
  * 10. **Toast Notifications Mocking**: Mocks toast notifications during tests.
  *
- * `fireEvent` simulates user actions, and `vi.fn()` mocks callback functions.
+ * `userEvent` simulates user actions, and `vi.fn()` mocks callback functions.
  */
 const { setItem, clearAllItems } = useLocalStorage();
 
@@ -266,7 +266,7 @@ async function wait(ms = 100): Promise<void> {
 
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
-  fireEvent(window, new window.Event('resize'));
+  window.dispatchEvent(new window.Event('resize'));
 };
 
 beforeEach(() => {

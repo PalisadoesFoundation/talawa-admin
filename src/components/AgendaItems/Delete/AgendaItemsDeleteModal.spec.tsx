@@ -1,6 +1,6 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
@@ -14,6 +14,7 @@ let mockToggleDeleteModal: ReturnType<typeof vi.fn>;
 let mockDeleteAgendaItemHandler: ReturnType<typeof vi.fn>;
 const mockT = (key: string): string => key;
 const mockTCommon = (key: string): string => key;
+const user = userEvent.setup();
 
 describe('AgendaItemsDeleteModal', () => {
   beforeEach(() => {
@@ -108,17 +109,14 @@ describe('AgendaItemsDeleteModal', () => {
     renderComponent();
 
     // Test Escape key
-    fireEvent.keyDown(screen.getByRole('dialog'), {
-      key: 'Escape',
-      code: 'Escape',
-    });
+    await user.keyboard('{Escape}');
     expect(mockToggleDeleteModal).not.toHaveBeenCalled(); // Should not close as backdrop is static
 
     // Test Enter key on confirm button
     const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
     confirmButton.focus();
 
-    fireEvent.click(confirmButton);
+    await user.click(confirmButton);
     expect(mockDeleteAgendaItemHandler).toHaveBeenCalled();
   });
 
