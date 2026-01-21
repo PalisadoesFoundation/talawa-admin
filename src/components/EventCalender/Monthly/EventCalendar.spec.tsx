@@ -1,6 +1,7 @@
 import React from 'react';
 import Calendar from './EventCalender';
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
@@ -129,7 +130,7 @@ describe('Calendar', () => {
     expect(currentDateElement.textContent).toContain(expectedText);
   });
 
-  it('Should show prev and next month on clicking < & > buttons', () => {
+  it('Should show prev and next month on clicking < & > buttons', async () => {
     //testing previous month button
     render(
       <Router>
@@ -146,16 +147,16 @@ describe('Calendar', () => {
       </Router>,
     );
     const prevButton = screen.getByTestId('prevmonthordate');
-    fireEvent.click(prevButton);
+    await userEvent.click(prevButton);
     //testing next month button
     const nextButton = screen.getByTestId('nextmonthordate');
-    fireEvent.click(nextButton);
+    await userEvent.click(nextButton);
     //Testing year change
     for (let index = 0; index < 13; index++) {
-      fireEvent.click(nextButton);
+      await userEvent.click(nextButton);
     }
     for (let index = 0; index < 13; index++) {
-      fireEvent.click(prevButton);
+      await userEvent.click(prevButton);
     }
   });
 
@@ -176,15 +177,17 @@ describe('Calendar', () => {
     );
     await wait();
     const prevButtons = screen.getAllByTestId('prevYear');
-    prevButtons.forEach((button) => {
-      fireEvent.click(button);
-    });
+    // Use for...of to handle awaits sequentially
+    for (const button of prevButtons) {
+      await userEvent.click(button);
+    }
     await wait();
     //testing next year button
     const nextButton = screen.getAllByTestId('prevYear');
-    nextButton.forEach((button) => {
-      fireEvent.click(button);
-    });
+    // Use for...of to handle awaits sequentially
+    for (const button of nextButton) {
+      await userEvent.click(button);
+    }
   });
 
   it('Should show prev and next date on clicking < & > buttons in the day view', async () => {
@@ -204,16 +207,16 @@ describe('Calendar', () => {
     );
     //testing previous date button
     const prevButton = screen.getByTestId('prevmonthordate');
-    fireEvent.click(prevButton);
+    await userEvent.click(prevButton);
     //testing next date button
     const nextButton = screen.getByTestId('nextmonthordate');
-    fireEvent.click(nextButton);
+    await userEvent.click(nextButton);
     //Testing year change and month change
     for (let index = 0; index < 366; index++) {
-      fireEvent.click(prevButton);
+      await userEvent.click(prevButton);
     }
     for (let index = 0; index < 732; index++) {
-      fireEvent.click(nextButton);
+      await userEvent.click(nextButton);
     }
   });
 
@@ -295,7 +298,7 @@ describe('Calendar', () => {
     // expect(todayElement).toHaveClass(styles.day__today);
   });
 
-  it('Today button should show today cell', () => {
+  it('Today button should show today cell', async () => {
     render(
       <Router>
         <MockedProvider link={link}>
@@ -314,11 +317,11 @@ describe('Calendar', () => {
     );
     //Changing the month
     const prevButton = screen.getByTestId('prevmonthordate');
-    fireEvent.click(prevButton);
+    await userEvent.click(prevButton);
 
     // Clicking today button
     const todayButton = screen.getByTestId('today');
-    fireEvent.click(todayButton);
+    await userEvent.click(todayButton);
     // const todayCell = screen.getByText(new Date().getDate().toString());
     // expect(todayCell).toHaveClass(styles.day__today);
   });
@@ -438,7 +441,7 @@ describe('Calendar', () => {
     expect(viewAllButton.length).toBeGreaterThan(0);
 
     // Simulate clicking the "View all" button to expand the list
-    fireEvent.click(viewAllButton[0]);
+    await userEvent.click(viewAllButton[0]);
 
     const event5 = screen.queryByText('Event 5');
     expect(event5).toBeNull();
@@ -447,7 +450,7 @@ describe('Calendar', () => {
     expect(viewLessButtons.length).toBeGreaterThan(0);
 
     // Simulate clicking "View less" to collapse the list
-    fireEvent.click(viewLessButtons[0]);
+    await userEvent.click(viewLessButtons[0]);
     const viewAllButtons = screen.getAllByText('View all');
     expect(viewAllButtons.length).toBeGreaterThan(0);
 
@@ -520,7 +523,7 @@ describe('Calendar', () => {
     expect(renderHourComponent).toBeInTheDocument();
   });
 
-  it('should handle date navigation boundary conditions in day view', () => {
+  it('should handle date navigation boundary conditions in day view', async () => {
     const mockOnMonthChange = vi.fn();
 
     // Test navigation at month boundaries
@@ -544,17 +547,17 @@ describe('Calendar', () => {
     const nextButton = screen.getByTestId('nextmonthordate');
 
     // Test previous date navigation - should trigger month change when needed
-    fireEvent.click(prevButton);
+    await userEvent.click(prevButton);
 
     // Test next date navigation - should trigger month change when needed
-    fireEvent.click(nextButton);
+    await userEvent.click(nextButton);
 
     // Verify the navigation functions are working
     expect(prevButton).toBeInTheDocument();
     expect(nextButton).toBeInTheDocument();
   });
 
-  it('should test specific date navigation logic for code coverage', () => {
+  it('should test specific date navigation logic for code coverage', async () => {
     const mockOnMonthChange = vi.fn();
 
     // This test ensures we cover the specific lines mentioned:
@@ -584,8 +587,8 @@ describe('Calendar', () => {
 
     // Execute the navigation functions to ensure code coverage
     // These clicks will exercise the handlePrevDate and handleNextDate functions
-    fireEvent.click(prevButton);
-    fireEvent.click(nextButton);
+    await userEvent.click(prevButton);
+    await userEvent.click(nextButton);
 
     // The specific logic being tested is internal state management,
     // so we verify the buttons exist and are functional
@@ -593,7 +596,7 @@ describe('Calendar', () => {
     expect(nextButton).toBeInTheDocument();
   });
 
-  it('should handle previous date navigation from January 1st (year boundary)', () => {
+  it('should handle previous date navigation from January 1st (year boundary)', async () => {
     const mockOnMonthChange = vi.fn();
 
     // Test the specific lines:
@@ -634,7 +637,7 @@ describe('Calendar', () => {
     const prevButton = screen.getByTestId('prevmonthordate');
 
     // Click previous when we're on January 1st to trigger year boundary logic
-    fireEvent.click(prevButton);
+    await userEvent.click(prevButton);
 
     // Verify onMonthChange was called with December of previous year
     expect(mockOnMonthChange).toHaveBeenCalledWith(11, dayjs().year() - 1);
@@ -643,7 +646,7 @@ describe('Calendar', () => {
     globalThis.Date = originalDate;
   });
 
-  it('should handle previous date navigation from any other month when currentDate is 1', () => {
+  it('should handle previous date navigation from any other month when currentDate is 1', async () => {
     const mockOnMonthChange = vi.fn();
 
     // Test the specific lines for non-January case:
@@ -688,7 +691,7 @@ describe('Calendar', () => {
     const prevButton = screen.getByTestId('prevmonthordate');
 
     // Click previous when we're on June 1st to trigger previous month logic
-    fireEvent.click(prevButton);
+    await userEvent.click(prevButton);
 
     // Verify onMonthChange was called with May of same year
     expect(mockOnMonthChange).toHaveBeenCalledWith(4, dayjs().year());
@@ -697,7 +700,7 @@ describe('Calendar', () => {
     globalThis.Date = originalDate;
   });
 
-  it('should handle next date navigation from December 31st (year boundary)', () => {
+  it('should handle next date navigation from December 31st (year boundary)', async () => {
     const mockOnMonthChange = vi.fn();
 
     // Test the specific lines:
@@ -741,7 +744,7 @@ describe('Calendar', () => {
     const nextButton = screen.getByTestId('nextmonthordate');
 
     // Click next when we're on December 31st to trigger year boundary logic
-    fireEvent.click(nextButton);
+    await userEvent.click(nextButton);
 
     // Verify onMonthChange was called with January of next year
     expect(mockOnMonthChange).toHaveBeenCalledWith(0, dayjs().year() + 1);
@@ -750,7 +753,7 @@ describe('Calendar', () => {
     globalThis.Date = originalDate;
   });
 
-  it('should handle next date navigation from end of any other month', () => {
+  it('should handle next date navigation from end of any other month', async () => {
     const mockOnMonthChange = vi.fn();
 
     // Test the specific lines for non-December case:
@@ -794,7 +797,7 @@ describe('Calendar', () => {
     const nextButton = screen.getByTestId('nextmonthordate');
 
     // Click next when we're on June 30th to trigger next month logic
-    fireEvent.click(nextButton);
+    await userEvent.click(nextButton);
 
     // Verify onMonthChange was called with July of same year
     expect(mockOnMonthChange).toHaveBeenCalledWith(6, dayjs().year());
@@ -1738,7 +1741,7 @@ describe('Calendar', () => {
       // If "View all" button exists, click it to expand all events
       const viewAllButton = screen.queryByTestId('more');
       if (viewAllButton) {
-        fireEvent.click(viewAllButton);
+        await userEvent.click(viewAllButton);
         // Wait for the expanded view to stabilize
         await screen.findByText('Public Event');
       }
@@ -1849,7 +1852,7 @@ describe('Calendar', () => {
       // If "View all" button exists, click it to expand all events
       const viewAllButton = screen.queryByTestId('more');
       if (viewAllButton) {
-        fireEvent.click(viewAllButton);
+        await userEvent.click(viewAllButton);
         // Wait for the expanded view to stabilize
         await screen.findByText('Public Event');
       }
@@ -1904,11 +1907,11 @@ describe('Calendar', () => {
       const viewAllBtn = await screen.findByText('View all');
       expect(viewAllBtn).toBeInTheDocument();
 
-      fireEvent.click(viewAllBtn);
+      await userEvent.click(viewAllBtn);
       const viewLessBtn = await screen.findByText('View less');
       expect(viewLessBtn).toBeInTheDocument();
 
-      fireEvent.click(viewLessBtn);
+      await userEvent.click(viewLessBtn);
       const viewAllBtnAgain = await screen.findByText('View all');
       expect(viewAllBtnAgain).toBeInTheDocument();
     });

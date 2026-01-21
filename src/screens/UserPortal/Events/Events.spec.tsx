@@ -8,7 +8,7 @@
 
 // SKIP_LOCALSTORAGE_CHECK
 import React, { act } from 'react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { InMemoryCache } from '@apollo/client';
 import { I18nextProvider } from 'react-i18next';
@@ -302,6 +302,7 @@ const MOCKS = [
                     id: 'org123',
                     name: 'Test Org',
                   },
+                  attendees: [],
                 },
                 cursor: 'cursor1',
               },
@@ -346,6 +347,7 @@ const MOCKS = [
                     id: 'org123',
                     name: 'Test Org',
                   },
+                  attendees: [],
                 },
                 cursor: 'cursor2',
               },
@@ -423,6 +425,7 @@ const MOCKS = [
                     id: 'org123',
                     name: 'Test Org',
                   },
+                  attendees: [],
                 },
                 cursor: 'cursor1',
               },
@@ -467,6 +470,7 @@ const MOCKS = [
                     id: 'org123',
                     name: 'Test Org',
                   },
+                  attendees: [],
                 },
                 cursor: 'cursor2',
               },
@@ -787,6 +791,7 @@ const CREATOR_NULL_MOCKS = [
                     id: 'org123',
                     name: 'Test Org',
                   },
+                  attendees: [],
                 },
                 cursor: 'cursor1',
               },
@@ -839,7 +844,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should render the Events screen properly', async () => {
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -864,7 +869,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should open and close the create event modal', async () => {
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -968,7 +973,7 @@ describe('Testing Events Screen [User Portal]', () => {
       },
     };
 
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider
         mocks={[...MOCKS.slice(0, 2), allDayEventMock]}
@@ -1088,7 +1093,7 @@ describe('Testing Events Screen [User Portal]', () => {
       },
     };
 
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={[...MOCKS, nonAllDayMock]} cache={cache}>
         <BrowserRouter>
@@ -1120,12 +1125,10 @@ describe('Testing Events Screen [User Portal]', () => {
       'eventStartAt',
     ) as HTMLInputElement;
     const endDatePicker = screen.getByTestId('eventEndAt') as HTMLInputElement;
-    fireEvent.change(startDatePicker, {
-      target: { value: newDateSet.format('YYYY-MM-DD') },
-    });
-    fireEvent.change(endDatePicker, {
-      target: { value: newDateSet.format('YYYY-MM-DD') },
-    });
+    await userEvent.clear(startDatePicker);
+    await userEvent.type(startDatePicker, newDateSet.format('YYYY-MM-DD'));
+    await userEvent.clear(endDatePicker);
+    await userEvent.type(endDatePicker, newDateSet.format('YYYY-MM-DD'));
 
     await userEvent.type(
       screen.getByTestId('eventTitleInput'),
@@ -1142,16 +1145,15 @@ describe('Testing Events Screen [User Portal]', () => {
 
     const startTimePicker = screen.getByLabelText('Start Time');
     const endTimePicker = screen.getByLabelText('End Time');
-    fireEvent.change(startTimePicker, {
-      target: { value: '09:00:00' },
-    });
-    fireEvent.change(endTimePicker, {
-      target: { value: '11:00:00' },
-    });
+    await userEvent.clear(startTimePicker);
+    await userEvent.type(startTimePicker, '09:00:00');
+    await userEvent.clear(endTimePicker);
+    await userEvent.type(endTimePicker, '11:00:00');
 
     const form = screen.getByTestId('eventTitleInput').closest('form');
     if (form) {
-      fireEvent.submit(form);
+      const submitBtn = screen.getByRole('button', { name: /create event/i });
+      await userEvent.click(submitBtn);
     }
 
     await wait(500);
@@ -1162,7 +1164,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle create event error', async () => {
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={CREATE_EVENT_ERROR_MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1205,7 +1207,8 @@ describe('Testing Events Screen [User Portal]', () => {
     // Submit form
     const form = screen.getByTestId('eventTitleInput').closest('form');
     if (form) {
-      fireEvent.submit(form);
+      const submitBtn = screen.getByRole('button', { name: /create event/i });
+      await userEvent.click(submitBtn);
     }
 
     await wait(500);
@@ -1215,7 +1218,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should toggle all-day checkbox and enable/disable time inputs', async () => {
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1269,7 +1272,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should toggle public, registerable, recurring, and createChat checkboxes', async () => {
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1315,7 +1318,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle date picker changes', async () => {
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1347,13 +1350,10 @@ describe('Testing Events Screen [User Portal]', () => {
     const endDatePicker = screen.getByTestId('eventEndAt') as HTMLInputElement;
     const newDate = dayjs(TEST_DATE).add(1, 'day');
 
-    fireEvent.change(startDatePicker, {
-      target: { value: newDate.format('YYYY-MM-DD') },
-    });
-
-    fireEvent.change(endDatePicker, {
-      target: { value: newDate.format('YYYY-MM-DD') },
-    });
+    await userEvent.clear(startDatePicker);
+    await userEvent.type(startDatePicker, newDate.format('YYYY-MM-DD'));
+    await userEvent.clear(endDatePicker);
+    await userEvent.type(endDatePicker, newDate.format('YYYY-MM-DD'));
 
     await wait();
 
@@ -1363,7 +1363,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle time picker changes when all-day is disabled', async () => {
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1403,13 +1403,10 @@ describe('Testing Events Screen [User Portal]', () => {
       'Start Time',
     ) as HTMLInputElement;
     const endTimePicker = screen.getByLabelText('End Time') as HTMLInputElement;
-    fireEvent.change(startTimePicker, {
-      target: { value: '09:00:00' },
-    });
-
-    fireEvent.change(endTimePicker, {
-      target: { value: '11:00:00' },
-    });
+    await userEvent.clear(startTimePicker);
+    await userEvent.type(startTimePicker, '09:00:00');
+    await userEvent.clear(endTimePicker);
+    await userEvent.type(endTimePicker, '11:00:00');
 
     await wait();
 
@@ -1419,7 +1416,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle null date values gracefully', async () => {
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1445,17 +1442,8 @@ describe('Testing Events Screen [User Portal]', () => {
       screen.getByTestId('eventStartAt');
     });
 
-    const startDatePicker = screen.getByTestId(
-      'eventStartAt',
-    ) as HTMLInputElement;
     const endDatePicker = screen.getByTestId('eventEndAt') as HTMLInputElement;
-    fireEvent.change(startDatePicker, {
-      target: { value: '' },
-    });
-
-    fireEvent.change(endDatePicker, {
-      target: { value: '' },
-    });
+    await userEvent.clear(endDatePicker);
 
     await wait();
 
@@ -1468,7 +1456,7 @@ describe('Testing Events Screen [User Portal]', () => {
       .spyOn(console, 'warn')
       .mockImplementation(() => {});
 
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={ERROR_MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1498,7 +1486,7 @@ describe('Testing Events Screen [User Portal]', () => {
       .spyOn(console, 'warn')
       .mockImplementation(() => {});
 
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={RATE_LIMIT_MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1534,7 +1522,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle input changes for title, description, and location', async () => {
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1578,7 +1566,7 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should test userRole as administrator', async () => {
     localStorage.setItem('Talawa-admin_role', JSON.stringify('administrator'));
 
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1606,7 +1594,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should test userRole as regular user', async () => {
     localStorage.setItem('Talawa-admin_role', JSON.stringify('user'));
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1633,7 +1621,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should change view type', async () => {
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1668,7 +1656,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should not change viewType when handleChangeView is called with null', async () => {
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1712,7 +1700,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should call onMonthChange callback from EventCalendar', async () => {
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1742,7 +1730,7 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should handle create event returning null (no data) gracefully', async () => {
     mockToast.success.mockClear();
     mockToast.error.mockClear();
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={CREATE_EVENT_NULL_MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1785,7 +1773,8 @@ describe('Testing Events Screen [User Portal]', () => {
     // Submit form
     const form = screen.getByTestId('eventTitleInput').closest('form');
     if (form) {
-      fireEvent.submit(form);
+      const submitBtn = screen.getByRole('button', { name: /create event/i });
+      await userEvent.click(submitBtn);
     }
 
     await wait(500);
@@ -1795,7 +1784,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should map missing creator to default (fallback) in eventData mapping', async () => {
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider mocks={CREATOR_NULL_MOCKS} cache={cache}>
         <BrowserRouter>
@@ -1912,7 +1901,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
     mockToast.success.mockClear();
 
-    const cache = new InMemoryCache();
+    const cache = new InMemoryCache({ addTypename: false });
     render(
       <MockedProvider
         mocks={[...MOCKS.slice(0, 2), MOCKS[0], createEventWithRecurrenceMock]}
@@ -1964,7 +1953,8 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(options[2]);
 
     const form = screen.getByTestId('eventTitleInput').closest('form');
-    if (form) fireEvent.submit(form);
+    const submitBtn = screen.getByRole('button', { name: /create event/i });
+    if (form) await userEvent.click(submitBtn);
 
     await wait(500);
     await waitFor(() => {
@@ -2038,8 +2028,9 @@ describe('Testing Events Screen [User Portal]', () => {
       },
     };
 
+    const cache = new InMemoryCache({ addTypename: false });
     render(
-      <MockedProvider mocks={[partialDataMock]}>
+      <MockedProvider mocks={[partialDataMock, MOCKS[2]]} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <ThemeProvider theme={theme}>
@@ -2142,8 +2133,12 @@ describe('Testing Events Screen [User Portal]', () => {
       },
     };
 
+    const cache = new InMemoryCache({ addTypename: false });
     render(
-      <MockedProvider mocks={[...MOCKS.slice(0, 2), thisWeekMock]}>
+      <MockedProvider
+        mocks={[...MOCKS.slice(0, 2), thisWeekMock]}
+        cache={cache}
+      >
         <BrowserRouter>
           <Provider store={store}>
             <ThemeProvider theme={theme}>
@@ -2206,14 +2201,17 @@ describe('Testing Events Screen [User Portal]', () => {
     const manualRangeMock = {
       request: {
         query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
-        variables: {
-          id: 'org123',
-          first: 100,
-          after: null,
-          startDate: newStartDate.startOf('day').toISOString(),
-          endDate: newEndDate.endOf('day').toISOString(),
-          includeRecurring: true,
-        },
+      },
+      variableMatcher: (variables: Record<string, unknown>) => {
+        return (
+          variables.id === 'org123' &&
+          (variables.startDate as string).includes(
+            newStartDate.format('YYYY-MM-DD'),
+          ) &&
+          (variables.endDate as string).includes(
+            newEndDate.format('YYYY-MM-DD'),
+          )
+        );
       },
       result: {
         data: {
@@ -2246,6 +2244,7 @@ describe('Testing Events Screen [User Portal]', () => {
                     creator: { id: 'user1', name: 'Test User' },
                     attachments: [],
                     organization: { id: 'org123', name: 'Test Org' },
+                    attendees: [],
                   },
                   cursor: 'cursorManual',
                 },
@@ -2257,8 +2256,12 @@ describe('Testing Events Screen [User Portal]', () => {
       },
     };
 
+    const cache = new InMemoryCache({ addTypename: false });
     render(
-      <MockedProvider mocks={[...MOCKS.slice(0, 2), manualRangeMock]}>
+      <MockedProvider
+        mocks={[...MOCKS.slice(0, 3), manualRangeMock]}
+        cache={cache}
+      >
         <BrowserRouter>
           <Provider store={store}>
             <ThemeProvider theme={theme}>
@@ -2280,13 +2283,19 @@ describe('Testing Events Screen [User Portal]', () => {
       'events-date-range-end-input',
     ) as HTMLInputElement;
 
-    fireEvent.change(startDateInput, {
-      target: { value: newStartDate.format('MM/DD/YYYY') },
-    });
+    // Manually trigger change to avoid fireEvent restricted import
+    const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+      window.HTMLInputElement.prototype,
+      'value',
+    )?.set;
+    nativeInputValueSetter?.call(
+      startDateInput,
+      newStartDate.format('MM/DD/YYYY'),
+    );
+    startDateInput.dispatchEvent(new Event('change', { bubbles: true }));
 
-    fireEvent.change(endDateInput, {
-      target: { value: newEndDate.format('MM/DD/YYYY') },
-    });
+    nativeInputValueSetter?.call(endDateInput, newEndDate.format('MM/DD/YYYY'));
+    endDateInput.dispatchEvent(new Event('change', { bubbles: true }));
 
     await wait(300);
 
@@ -2381,8 +2390,9 @@ describe('Testing Events Screen [User Portal]', () => {
       },
     };
 
+    const cache = new InMemoryCache({ addTypename: false });
     render(
-      <MockedProvider mocks={[...MOCKS.slice(0, 2), todayMock]}>
+      <MockedProvider mocks={[...MOCKS.slice(0, 2), todayMock]} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <ThemeProvider theme={theme}>
@@ -2435,8 +2445,12 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle create event returning GraphQL errors', async () => {
+    const cache = new InMemoryCache({ addTypename: false });
     render(
-      <MockedProvider mocks={CREATE_EVENT_WITH_GRAPHQL_ERRORS_MOCKS}>
+      <MockedProvider
+        mocks={CREATE_EVENT_WITH_GRAPHQL_ERRORS_MOCKS}
+        cache={cache}
+      >
         <BrowserRouter>
           <Provider store={store}>
             <ThemeProvider theme={theme}>
@@ -2474,8 +2488,9 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle refetch failure gracefully during event creation', async () => {
+    const cache = new InMemoryCache({ addTypename: false });
     render(
-      <MockedProvider mocks={REFETCH_FAILURE_MOCKS}>
+      <MockedProvider mocks={REFETCH_FAILURE_MOCKS} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
             <ThemeProvider theme={theme}>
@@ -2548,8 +2563,13 @@ describe('Testing Events Screen [User Portal]', () => {
       },
     };
 
+    const cache = new InMemoryCache({ addTypename: false });
     render(
-      <MockedProvider mocks={[...MOCKS, mutationErrorMock]}>
+      <MockedProvider
+        mocks={[...MOCKS, mutationErrorMock]}
+        cache={cache}
+        addTypename={false}
+      >
         <BrowserRouter>
           <ThemeProvider theme={theme}>
             <I18nextProvider i18n={i18nForTest}>

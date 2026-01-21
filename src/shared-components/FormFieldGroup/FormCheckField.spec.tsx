@@ -1,4 +1,7 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
 import { FormCheckField } from './FormCheckField';
 import '@testing-library/jest-dom';
 
@@ -9,19 +12,23 @@ describe('FormCheckField', () => {
     onChange: vi.fn(),
   };
 
+  const renderWithProviders = (ui: React.ReactElement) => {
+    return render(<I18nextProvider i18n={i18nForTest}>{ui}</I18nextProvider>);
+  };
+
   afterEach(() => {
     vi.clearAllMocks();
   });
 
   it('renders a checkbox by default', () => {
-    render(<FormCheckField {...defaultProps} />);
+    renderWithProviders(<FormCheckField {...defaultProps} />);
     const checkbox = screen.getByLabelText('Test Label');
     expect(checkbox).toBeInTheDocument();
     expect(checkbox).toHaveAttribute('type', 'checkbox');
   });
 
   it('renders a radio button when type is radio', () => {
-    render(<FormCheckField {...defaultProps} type="radio" />);
+    renderWithProviders(<FormCheckField {...defaultProps} type="radio" />);
     const radio = screen.getByLabelText('Test Label');
     expect(radio).toBeInTheDocument();
     expect(radio).toHaveAttribute('type', 'radio');
@@ -29,7 +36,7 @@ describe('FormCheckField', () => {
 
   it('renders a switch when type is switch', () => {
     // Note: Form.Check type="switch" renders a checkbox input with a specific class
-    render(<FormCheckField {...defaultProps} type="switch" />);
+    renderWithProviders(<FormCheckField {...defaultProps} type="switch" />);
     const switchInput = screen.getByLabelText('Test Label');
     expect(switchInput).toBeInTheDocument();
     expect(switchInput).toHaveAttribute('type', 'checkbox');
@@ -38,27 +45,29 @@ describe('FormCheckField', () => {
   });
 
   it('handles checked state', () => {
-    render(<FormCheckField {...defaultProps} checked={true} />);
+    renderWithProviders(<FormCheckField {...defaultProps} checked={true} />);
     const checkbox = screen.getByLabelText('Test Label');
     expect(checkbox).toBeChecked();
   });
 
-  it('calls onChange handler when clicked', () => {
+  it('calls onChange handler when clicked', async () => {
     const handleChange = vi.fn();
-    render(<FormCheckField {...defaultProps} onChange={handleChange} />);
+    renderWithProviders(
+      <FormCheckField {...defaultProps} onChange={handleChange} />,
+    );
     const checkbox = screen.getByLabelText('Test Label');
-    fireEvent.click(checkbox);
+    await userEvent.click(checkbox);
     expect(handleChange).toHaveBeenCalledTimes(1);
   });
 
   it('forwards disabled prop', () => {
-    render(<FormCheckField {...defaultProps} disabled={true} />);
+    renderWithProviders(<FormCheckField {...defaultProps} disabled={true} />);
     const checkbox = screen.getByLabelText('Test Label');
     expect(checkbox).toBeDisabled();
   });
 
   it('renders inline when inline prop is true', () => {
-    const { container } = render(
+    const { container } = renderWithProviders(
       <FormCheckField {...defaultProps} inline={true} />,
     );
     // When inline is true, it renders Form.Check directly, not wrapped in FormFieldGroup
@@ -67,7 +76,9 @@ describe('FormCheckField', () => {
   });
 
   it('applies custom className', () => {
-    render(<FormCheckField {...defaultProps} className="custom-class" />);
+    renderWithProviders(
+      <FormCheckField {...defaultProps} className="custom-class" />,
+    );
     // The class should be on the outer wrapper or the check component depending on implementation
     // Since FormCheckField wraps in FormFieldGroup by default, let's check if the class is applied
     // The Form.Check itself or the group might receive it.
@@ -81,7 +92,7 @@ describe('FormCheckField', () => {
   });
 
   it('renders with validation error', () => {
-    render(
+    renderWithProviders(
       <FormCheckField
         {...defaultProps}
         touched={true}
@@ -95,7 +106,9 @@ describe('FormCheckField', () => {
   });
 
   it('forwards data-testid', () => {
-    render(<FormCheckField {...defaultProps} data-testid="test-checkbox" />);
+    renderWithProviders(
+      <FormCheckField {...defaultProps} data-testid="test-checkbox" />,
+    );
     expect(screen.getByTestId('test-checkbox')).toBeInTheDocument();
   });
 });

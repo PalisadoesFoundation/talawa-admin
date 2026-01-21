@@ -6,7 +6,8 @@ import {
   AdapterDayjs,
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -558,7 +559,7 @@ describe('Testing ItemViewModal', () => {
       expect(screen.queryByText(t.actionItemDetails)).not.toBeInTheDocument();
     });
 
-    it('should call hide function when close button is clicked', () => {
+    it('should call hide function when close button is clicked', async () => {
       const item = createActionItem();
       renderItemViewModal(link1, {
         isOpen: true,
@@ -567,7 +568,7 @@ describe('Testing ItemViewModal', () => {
       });
 
       const closeButton = screen.getByTestId('modalCloseBtn');
-      fireEvent.click(closeButton);
+      await userEvent.click(closeButton);
 
       expect(mockHide).toHaveBeenCalledTimes(1);
     });

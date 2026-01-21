@@ -1,10 +1,4 @@
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  within,
-} from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -1372,13 +1366,13 @@ describe('EventListCardPreviewModal', () => {
       const calendarButton = within(
         startDatePicker as HTMLElement,
       ).getByLabelText(/choose date/i);
-      fireEvent.click(calendarButton);
+      await userEvent.click(calendarButton);
 
       const calendarGrid = await screen.findByRole('grid');
       const dateToSelect = within(calendarGrid).getByRole('gridcell', {
         name: '20',
       });
-      fireEvent.click(dateToSelect);
+      await userEvent.click(dateToSelect);
 
       await waitFor(() => {
         expect(mockSetEventStartDate).toHaveBeenCalled();
