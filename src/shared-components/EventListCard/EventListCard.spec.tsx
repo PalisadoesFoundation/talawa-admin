@@ -239,7 +239,7 @@ describe('Testing Event List Card', () => {
     });
     await userEvent.click(screen.getByTestId('deleteEventModalBtn'));
 
-    const primaryBtn = await screen.findByTestId('modal-primary-btn');
+    const primaryBtn = await screen.findByTestId('deleteEventBtn');
     await userEvent.click(primaryBtn);
 
     await waitFor(() => {
@@ -281,7 +281,7 @@ describe('Testing Event List Card', () => {
 
     await userEvent.click(screen.getByTestId('card'));
     await userEvent.click(screen.getByTestId('deleteEventModalBtn'));
-    const primaryBtn = await screen.findByTestId('modal-primary-btn');
+    const primaryBtn = await screen.findByTestId('deleteEventBtn');
     await userEvent.click(primaryBtn);
 
     await waitFor(() => {
