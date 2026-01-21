@@ -16,7 +16,7 @@ import type {
   InterfaceCurrentUserTypePG,
 } from 'utils/interfaces';
 
-const superAdminCurrentUser: InterfaceCurrentUserTypePG = {
+const _superAdminCurrentUser: InterfaceCurrentUserTypePG = {
   currentUser: {
     id: '123',
     name: 'John Doe',
@@ -27,10 +27,49 @@ const superAdminCurrentUser: InterfaceCurrentUserTypePG = {
 
 const superAdminUser: InterfaceUserType = {
   user: {
+    // @ts-expect-error - Mock data structure differs from type
+    id: '123',
     firstName: 'John',
     lastName: 'Doe',
+    name: 'John Doe',
     email: 'john.doe@akatsuki.com',
+    emailAddress: 'john.doe@akatsuki.com',
     image: null,
+    avatarURL: '',
+    avatarMimeType: '',
+    isEmailAddressVerified: true,
+    addressLine1: '',
+    addressLine2: '',
+    birthDate: dayjs().toISOString(),
+    city: '',
+    countryCode: 'us',
+    createdAt: dayjs().toISOString(),
+    updatedAt: dayjs().toISOString(),
+    description: '',
+    educationGrade: 'no_grade',
+    employmentStatus: 'unemployed',
+    homePhoneNumber: '',
+    maritalStatus: 'single',
+    mobilePhoneNumber: '',
+    workPhoneNumber: '',
+    natalSex: 'male',
+    naturalLanguageCode: 'en',
+    postalCode: '',
+    role: 'administrator',
+    state: '',
+    jobTitle: '',
+    eventsAttended: {
+      id: 'events_conn',
+      edges: [],
+    },
+    creator: {
+      id: '123',
+      name: 'John Doe',
+    },
+    updater: {
+      id: '123',
+      name: 'John Doe',
+    },
   },
 };
 
@@ -48,10 +87,12 @@ const organizations: InterfaceOrgInfoTypePG[] = [
     description: 'Dog care center',
     createdAt: dayjs().subtract(1, 'year').toISOString(),
     members: {
+      id: 'members_conn',
       edges: [],
     },
     addressLine1: 'Texas, USA',
     role: 'admin',
+    isMember: false,
   },
 ];
 
@@ -60,12 +101,10 @@ const MOCKS = [
   {
     request: {
       query: CURRENT_USER,
-      variables: { userId: '123' },
     },
     result: {
       data: {
-        user: superAdminUser,
-        currentUser: superAdminCurrentUser.currentUser,
+        user: superAdminUser.user,
       },
     },
   },
@@ -77,6 +116,8 @@ const MOCKS = [
     result: {
       data: {
         user: {
+          id: '123',
+          name: 'John Doe',
           __typename: 'User',
           notifications: [],
         },
@@ -151,6 +192,7 @@ const MOCKS = [
             description: 'Description 1',
             createdAt: dayjs().subtract(1, 'year').toISOString(),
             members: {
+              id: 'members_conn',
               edges: [
                 {
                   node: {
@@ -168,6 +210,7 @@ const MOCKS = [
             description: 'Description 2',
             createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
             members: {
+              id: 'members_conn',
               edges: [
                 {
                   node: {
@@ -201,6 +244,7 @@ const MOCKS = [
             description: 'Description 3',
             createdAt: dayjs().subtract(1, 'year').add(2, 'days').toISOString(),
             members: {
+              id: 'members_conn',
               edges: [
                 {
                   node: {
@@ -261,6 +305,8 @@ const MOCKS_EMPTY = [
     result: {
       data: {
         user: {
+          id: '123',
+          name: 'John Doe',
           __typename: 'User',
           notifications: [],
         },
@@ -353,6 +399,8 @@ const MOCKS_ADMIN = [
     result: {
       data: {
         user: {
+          id: '123',
+          name: 'John Doe',
           __typename: 'User',
           notifications: [],
         },

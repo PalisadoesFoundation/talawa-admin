@@ -36,7 +36,6 @@
  * ```
  */
 import { useMemo, useState } from 'react';
-import { Button } from 'react-bootstrap';
 import styles from './Invitations.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
@@ -54,6 +53,9 @@ import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
+import Button from 'shared-components/Button/Button';
+import { mapVolunteerStatusToVariant } from 'utils/volunteerStatusMapper';
 
 enum ItemFilter {
   Group = 'group',
@@ -259,7 +261,12 @@ const Invitations = (): JSX.Element => {
                 </div>
               </div>
             </div>
-            <div className="d-flex gap-2">
+            <div className="d-flex gap-2 align-items-center">
+              <StatusBadge
+                {...mapVolunteerStatusToVariant(invite.status)}
+                size="sm"
+                dataTestId={`invitation-status-${invite.id}`} // i18n-ignore-line
+              />
               <Button
                 variant="outline-success"
                 size="sm"

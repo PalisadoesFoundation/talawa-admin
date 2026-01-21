@@ -4,11 +4,7 @@
 
 # Interface: InterfacePaginationArgs
 
-Defined in: [src/utils/interfaces.ts:1279](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1279)
-
-InterfacePaginationArgs
-
-## Description
+Defined in: [src/utils/interfaces.ts:944](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L944)
 
 Defines the arguments for pagination.
 
@@ -18,9 +14,7 @@ Defines the arguments for pagination.
 
 > **after**: `string`
 
-Defined in: [src/utils/interfaces.ts:1280](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1280)
-
-The cursor to paginate after.
+Defined in: [src/utils/interfaces.ts:945](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L945)
 
 ***
 
@@ -28,9 +22,7 @@ The cursor to paginate after.
 
 > **before**: `string`
 
-Defined in: [src/utils/interfaces.ts:1281](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1281)
-
-The cursor to paginate before.
+Defined in: [src/utils/interfaces.ts:946](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L946)
 
 ***
 
@@ -38,9 +30,7 @@ The cursor to paginate before.
 
 > **first**: `number`
 
-Defined in: [src/utils/interfaces.ts:1282](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1282)
-
-The maximum number of items to return from the beginning.
+Defined in: [src/utils/interfaces.ts:947](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L947)
 
 ***
 
@@ -48,6 +38,4 @@ The maximum number of items to return from the beginning.
 
 > **last**: `number`
 
-Defined in: [src/utils/interfaces.ts:1283](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1283)
-
-The maximum number of items to return from the end.
+Defined in: [src/utils/interfaces.ts:948](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L948)

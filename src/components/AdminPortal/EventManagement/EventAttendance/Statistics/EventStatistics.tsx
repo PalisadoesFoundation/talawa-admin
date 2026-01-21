@@ -39,14 +39,14 @@
 // translation-check-keyPrefix: eventAttendance
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import {
-  Button,
   ButtonGroup,
   Tooltip,
   OverlayTrigger,
   Dropdown,
 } from 'react-bootstrap';
-import { BaseModal } from 'shared-components/BaseModal';
-import 'react-datepicker/dist/react-datepicker.css';
+import Button from 'shared-components/Button';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
+
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -69,8 +69,7 @@ import type {
   InterfaceAttendanceStatisticsModalProps,
   InterfaceEvent,
 } from 'types/Event/interface';
-import styles from 'style/app-fixed.module.css';
-import componentStyles from './EventStatistics.module.css';
+import styles from './EventStatistics.module.css';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
 
@@ -460,7 +459,7 @@ export const AttendanceStatisticsModal: React.FC<
         <div className="w-100 border border-success d-flex flex-row rounded">
           {showTrends ? (
             <div
-              className={`${styles.borderRightGreen} ${componentStyles.chartContainer} text-success position-relative pt-4 align-items-center justify-content-center w-50 border-right-1 border-success`}
+              className={`${styles.borderRightGreen} ${styles.chartContainer} text-success position-relative pt-4 align-items-center justify-content-center w-50 border-right-1 border-success`}
             >
               <Line
                 data={chartData}
