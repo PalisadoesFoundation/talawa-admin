@@ -247,6 +247,7 @@
   "pageNumber": "Page {{page}}",
   "loadMoreItems": "Load more items",
   "loadMore": "Load More",
+  "loadOlderMessages": "Load older messages",
   "retry": "Retry",
   "publicEvent": "Public (Community Visible)",
   "publicEventDescription": "Visible to everyone in the community",

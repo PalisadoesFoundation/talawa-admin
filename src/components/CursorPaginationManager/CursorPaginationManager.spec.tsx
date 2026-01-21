@@ -1610,7 +1610,9 @@ describe('CursorPaginationManager', () => {
       );
 
       await waitFor(() => {
-        expect(screen.getByLabelText('loadOlderMessages')).toBeInTheDocument();
+        expect(
+          screen.getByLabelText('Load older messages'),
+        ).toBeInTheDocument();
       });
     });
 
@@ -1689,7 +1691,7 @@ describe('CursorPaginationManager', () => {
         expect(screen.getByText('User 2')).toBeInTheDocument();
       });
 
-      const loadOlderBtn = screen.getByLabelText('loadOlderMessages');
+      const loadOlderBtn = screen.getByLabelText('Load older messages');
       await user.click(loadOlderBtn);
 
       await waitFor(() => {

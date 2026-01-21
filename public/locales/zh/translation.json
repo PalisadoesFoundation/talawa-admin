@@ -1789,6 +1789,8 @@
     "reply": "回复",
     "edit": "编辑",
     "delete": "删除",
+    "noMessages": "暂时没有消息",
+    "you": "你",
     "errorBoundary": {
       "title": "出现问题",
       "message": "聊天室中发生了意外错误",

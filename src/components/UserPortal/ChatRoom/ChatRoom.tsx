@@ -242,7 +242,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       messageBody = attachmentObjectName;
     }
 
-    if (!messageBody && !messageBody.length && !attachmentObjectName) {
+    if (!messageBody && !attachmentObjectName) {
       return;
     }
 

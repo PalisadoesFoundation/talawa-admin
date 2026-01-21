@@ -69,7 +69,8 @@ vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
 
 // Note: no direct imports from Minio modules are necessary; they are mocked above
 
-import ChatRoom, { MessageImage } from './ChatRoom';
+import ChatRoom from './ChatRoom';
+import MessageImage from './MessageImage';
 import { CHAT_BY_ID, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
 import {
   MARK_CHAT_MESSAGES_AS_READ,
