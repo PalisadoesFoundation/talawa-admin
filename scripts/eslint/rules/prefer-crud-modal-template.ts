@@ -1,13 +1,14 @@
 import { TSESTree, AST_NODE_TYPES, TSESLint } from '@typescript-eslint/utils';
+type MessageIds = 'preferCrud';
+type Options = [];
 
 /**
  * ESLint rule to prefer CRUDModalTemplate over BaseModal in CRUD contexts.
+ *
  * Detects BaseModal imports (default/named/aliased) and JSX usage.
- * Flags violations when handler props (onSubmit, onConfirm, onPrimary, onSave) are present.
+ * Flags violations when handler props (onSubmit, onConfirm, onPrimary, onSave)
+ * are present, or when form elements exist within the modal children.
  */
-
-type MessageIds = 'preferCrud';
-type Options = [];
 
 const rule: TSESLint.RuleModule<MessageIds, Options> = {
   meta: {
@@ -30,31 +31,33 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
     return {
       // Collect BaseModal imports
       ImportDeclaration(node: TSESTree.ImportDeclaration) {
-        // Check if importing from BaseModal component
-        if (
-          typeof node.source.value === 'string' &&
-          ((node.source.value as string) === 'BaseModal' ||
-            (node.source.value as string).endsWith('/BaseModal') ||
-            (node.source.value as string).includes('/BaseModal/'))
-        ) {
+        if (typeof node.source.value !== 'string') return;
+
+        const importPath = node.source.value;
+        const isBaseModalPath =
+          importPath === 'BaseModal' ||
+          importPath.endsWith('/BaseModal') ||
+          importPath.includes('/BaseModal/');
+
+        node.specifiers.forEach((specifier) => {
           // Handle default imports: import BaseModal from './BaseModal'
-          node.specifiers.forEach((specifier) => {
-            if (specifier.type === AST_NODE_TYPES.ImportDefaultSpecifier) {
+          if (specifier.type === AST_NODE_TYPES.ImportDefaultSpecifier) {
+            if (isBaseModalPath) {
               baseModalNames.add(specifier.local.name);
             }
-            // Handle named imports: import { BaseModal } from './components'
-            // Also handles aliased imports: import { BaseModal as MyModal } from './components'
-            else if (specifier.type === AST_NODE_TYPES.ImportSpecifier) {
-              const importedName =
-                specifier.imported.type === AST_NODE_TYPES.Identifier
-                  ? specifier.imported.name
-                  : null;
-              if (importedName === 'BaseModal') {
-                baseModalNames.add(specifier.local.name);
-              }
+          }
+          // Handle named imports: import { BaseModal } from './components'
+          // Also handles aliased imports: import { BaseModal as MyModal } from './components'
+          else if (specifier.type === AST_NODE_TYPES.ImportSpecifier) {
+            const importedName =
+              specifier.imported.type === AST_NODE_TYPES.Identifier
+                ? specifier.imported.name
+                : null;
+            if (importedName === 'BaseModal') {
+              baseModalNames.add(specifier.local.name);
             }
-          });
-        }
+          }
+        });
       },
 
       // Check JSX usage
