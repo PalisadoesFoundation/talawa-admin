@@ -96,6 +96,12 @@ export function useDataTableFiltering<T>(
     return m;
   }, [columns]);
 
+  // Precompute searchable columns for global search
+  const searchableColumns = React.useMemo(
+    () => columns.filter((c) => c.meta?.searchable !== false),
+    [columns],
+  );
+
   // Client-side filtering pipeline (skip when server flags are set)
   const filteredRows: T[] = React.useMemo(() => {
     let rows = data ?? [];
@@ -140,9 +146,8 @@ export function useDataTableFiltering<T>(
     // 2) Global search across searchable columns
     const q = (query ?? '').trim().toLowerCase();
     if (!serverSearch && q) {
-      const searchable = columns.filter((c) => c.meta?.searchable !== false);
       rows = rows.filter((row) => {
-        return searchable.some((col) => {
+        return searchableColumns.some((col) => {
           if (typeof col.meta?.getSearchValue === 'function') {
             return col.meta.getSearchValue(row).toLowerCase().includes(q);
           }
@@ -153,7 +158,15 @@ export function useDataTableFiltering<T>(
     }
 
     return rows;
-  }, [data, columnById, columns, filters, serverFilter, query, serverSearch]);
+  }, [
+    data,
+    columnById,
+    searchableColumns,
+    filters,
+    serverFilter,
+    query,
+    serverSearch,
+  ]);
 
   return {
     query,
