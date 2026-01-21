@@ -8,7 +8,7 @@ import {
   ORGANIZATION_DONATION_CONNECTION_LIST,
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -28,6 +28,11 @@ const { mockErrorHandler, mockUseParams, mockToast } = vi.hoisted(() => ({
 
 vi.mock('utils/errorHandler', () => ({
   errorHandler: mockErrorHandler,
+}));
+
+vi.mock('react-router-dom', async () => ({
+  ...(await vi.importActual('react-router-dom')),
+  useParams: mockUseParams,
 }));
 
 vi.mock('react-router', async () => ({
@@ -59,7 +64,7 @@ vi.mock(
 );
 
 vi.mock('components/UserPortal/DonationCard/DonationCard', () => ({
-  default: () => <div data-testid="donation-card-content" />,
+  default: () => <div data-testid="donation-card-mock" />,
 }));
 
 interface InterfaceSearchFilterBarMockProps {
@@ -357,8 +362,6 @@ const DONATION_ERROR_MOCK = [
 
 const emptyLink = new StaticMockLink(EMPTY_DONATIONS_MOCK, true);
 const errorLink = new StaticMockLink(DONATION_ERROR_MOCK, true);
-const multipleLink = new StaticMockLink(MULTIPLE_DONATIONS_MOCKS, true);
-
 const renderDonate = (mocks = MOCKS) => {
   return render(
     <MockedProvider mocks={mocks} addTypename={false}>
@@ -558,17 +561,7 @@ describe('Donate Component', () => {
   });
 
   test('handles pagination with multiple donations', async () => {
-    render(
-      <MockedProvider link={multipleLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderDonate(MULTIPLE_DONATIONS_MOCKS);
 
     // Wait for donations to load
     await waitFor(() => {
@@ -579,17 +572,7 @@ describe('Donate Component', () => {
   });
 
   test('pagination displays correct donations based on page and rowsPerPage', async () => {
-    render(
-      <MockedProvider link={multipleLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderDonate(MULTIPLE_DONATIONS_MOCKS);
 
     // Wait for donations to load - page 0, showing first 5 donations
     await waitFor(() => {
@@ -625,19 +608,7 @@ describe('Donate Component', () => {
       ...MOCKS.slice(1),
     ];
 
-    const exactMatchLink = new StaticMockLink(exactMatchMocks, true);
-
-    render(
-      <MockedProvider link={exactMatchLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderDonate(exactMatchMocks);
 
     // With exactly 5 donations and rowsPerPage=5, should show all 5
     await waitFor(() => {
@@ -753,17 +724,7 @@ describe('Donate Component', () => {
   });
 
   test('changes page using pagination next button', async () => {
-    render(
-      <MockedProvider link={multipleLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderDonate(MULTIPLE_DONATIONS_MOCKS);
 
     // Wait for donations to load
     await waitFor(() => {
@@ -774,8 +735,10 @@ describe('Donate Component', () => {
     expect(screen.getByTestId('current-page')).toHaveTextContent('0');
 
     // Initially should show first 5 donations (User 0 to User 4)
-    let cards = screen.getAllByTestId('donationCard');
-    expect(cards.length).toBe(5);
+    await waitFor(() => {
+      const cards = screen.getAllByTestId('donationCard');
+      expect(cards.length).toBe(5);
+    });
 
     // Click next page
     const nextButton = screen.getByTestId('next-page-btn');
@@ -787,22 +750,15 @@ describe('Donate Component', () => {
     });
 
     // Should now show next 5 donations (User 5 to User 9)
-    cards = screen.getAllByTestId('donationCard');
-    expect(cards.length).toBe(5);
+    // Should now show next 5 donations (User 5 to User 9)
+    await waitFor(() => {
+      const cards = screen.getAllByTestId('donationCard');
+      expect(cards.length).toBe(5);
+    });
   });
 
   test('changes page using pagination previous button', async () => {
-    render(
-      <MockedProvider link={multipleLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderDonate(MULTIPLE_DONATIONS_MOCKS);
 
     // Wait for donations to load
     await waitFor(() => {
@@ -826,22 +782,15 @@ describe('Donate Component', () => {
     });
 
     // Should show first 5 donations again
-    const cards = screen.getAllByTestId('donationCard');
-    expect(cards.length).toBe(5);
+    // Should show first 5 donations again
+    await waitFor(() => {
+      const cards = screen.getAllByTestId('donationCard');
+      expect(cards.length).toBe(5);
+    });
   });
 
   test('changes rows per page and resets to page 0', async () => {
-    render(
-      <MockedProvider link={multipleLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderDonate(MULTIPLE_DONATIONS_MOCKS);
 
     // Wait for donations to load
     await waitFor(() => {
@@ -853,8 +802,10 @@ describe('Donate Component', () => {
     expect(screen.getByTestId('current-page')).toHaveTextContent('0');
 
     // Initially should show 5 donation cards
-    let cards = screen.getAllByTestId('donationCard');
-    expect(cards.length).toBe(5);
+    await waitFor(() => {
+      const cards = screen.getAllByTestId('donationCard');
+      expect(cards.length).toBe(5);
+    });
 
     // Go to page 1
     const nextButton = screen.getByTestId('next-page-btn');
@@ -875,22 +826,14 @@ describe('Donate Component', () => {
     });
 
     // Should now show all 10 donation cards
-    cards = screen.getAllByTestId('donationCard');
-    expect(cards.length).toBe(10);
+    await waitFor(() => {
+      const cards = screen.getAllByTestId('donationCard');
+      expect(cards.length).toBe(10);
+    });
   });
 
   test('parses rows per page value correctly', async () => {
-    render(
-      <MockedProvider link={multipleLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Donate />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderDonate(MULTIPLE_DONATIONS_MOCKS);
 
     // Wait for donations to load
     await waitFor(() => {
@@ -898,8 +841,10 @@ describe('Donate Component', () => {
     });
 
     // Initially 5 rows
-    let cards = screen.getAllByTestId('donationCard');
-    expect(cards.length).toBe(5);
+    await waitFor(() => {
+      const cards = screen.getAllByTestId('donationCard');
+      expect(cards.length).toBe(5);
+    });
 
     // Change to 25 rows per page
     const rowsSelect = screen.getByTestId('rows-per-page-select');
@@ -911,7 +856,9 @@ describe('Donate Component', () => {
     });
 
     // Should now show all 10 donation cards (we only have 10 total)
-    cards = screen.getAllByTestId('donationCard');
-    expect(cards.length).toBe(10);
+    await waitFor(() => {
+      const cards = screen.getAllByTestId('donationCard');
+      expect(cards.length).toBe(10);
+    });
   });
 });

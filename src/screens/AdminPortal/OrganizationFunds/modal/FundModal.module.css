@@ -10,12 +10,6 @@
   margin-bottom: 0;
 }
 
-.closeButton {
-  color: var(--color-red-500);
-  border: none;
-  background-color: var(--color-white);
-}
-
 .noOutline input {
   outline: none;
 }
