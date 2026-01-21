@@ -29,7 +29,7 @@ export const EventStatsWrapper = ({
       <Button
         variant="light"
         className="text-secondary"
-        aria-label={t('checkInRegistrantsAriaLabel')}
+        aria-label={t('viewEventStatistics')}
         onClick={(): void => {
           setShowModal(true); // Show the EventStats component when button is clicked
         }}

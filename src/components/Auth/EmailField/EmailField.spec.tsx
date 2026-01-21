@@ -1,6 +1,7 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
+import userEvent from '@testing-library/user-event';
 import { EmailField } from './EmailField';
 
 vi.mock('react-i18next', async () => {
@@ -31,7 +32,6 @@ describe('EmailField', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
 
   describe('Basic Rendering', () => {
@@ -109,7 +109,8 @@ describe('EmailField', () => {
       expect(input).toHaveValue('user@example.com');
     });
 
-    test('calls onChange when input value changes', () => {
+    test('calls onChange when input value changes', async () => {
+      const user = userEvent.setup();
       const onChange = vi.fn();
       render(
         <EmailField
@@ -120,12 +121,13 @@ describe('EmailField', () => {
       );
 
       const input = screen.getByTestId('email-input');
-      fireEvent.change(input, { target: { value: 'new@example.com' } });
+      await user.type(input, 'new@example.com');
 
-      expect(onChange).toHaveBeenCalledTimes(1);
+      expect(onChange).toHaveBeenCalled();
     });
 
-    test('onChange receives correct event data', () => {
+    test('onChange receives correct event data', async () => {
+      const user = userEvent.setup();
       const onChange = vi.fn();
       render(
         <EmailField
@@ -136,7 +138,7 @@ describe('EmailField', () => {
       );
 
       const input = screen.getByTestId('email-input');
-      fireEvent.change(input, { target: { value: 'test@example.com' } });
+      await user.type(input, 'test@example.com');
 
       expect(onChange).toHaveBeenCalled();
     });

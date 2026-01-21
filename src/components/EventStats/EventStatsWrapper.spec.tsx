@@ -1,5 +1,6 @@
 import React from 'react';
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import { render, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { EventStatsWrapper } from './EventStatsWrapper';
 import { BrowserRouter } from 'react-router';
@@ -34,6 +35,7 @@ describe('Testing Event Stats Wrapper', () => {
   };
 
   it('The button to open and close the modal should work properly', async () => {
+    const user = userEvent.setup();
     const { getAllByText, queryByText, queryByRole } = render(
       <MockedProvider mocks={mockData}>
         <BrowserRouter>
@@ -48,7 +50,7 @@ describe('Testing Event Stats Wrapper', () => {
     // Open the modal
     const button = queryByText('viewEventStatistics') as Element;
     expect(button).toBeInTheDocument();
-    fireEvent.click(button);
+    await user.click(button);
 
     // After opening, multiple elements with "title" exist (modal title and review section)
     await waitFor(() => {
@@ -59,7 +61,7 @@ describe('Testing Event Stats Wrapper', () => {
     // Close the modal using close button
     const closeButton = queryByRole('button', { name: /close/i }) as Element;
     expect(closeButton).toBeInTheDocument();
-    fireEvent.click(closeButton);
+    await user.click(closeButton);
 
     // After closing, modal title should not be in the document
     await waitFor(() =>
@@ -80,7 +82,7 @@ describe('Testing Event Stats Wrapper', () => {
     const buttonText = getByText('viewEventStatistics');
     expect(buttonText).toBeInTheDocument();
 
-    const button = getByLabelText('checkInRegistrantsAriaLabel');
+    const button = getByLabelText('viewEventStatistics');
     expect(button).toBeInTheDocument();
     expect(button).toHaveClass('btn-light', 'text-secondary');
     expect(button.tagName).toBe('BUTTON');
@@ -90,6 +92,7 @@ describe('Testing Event Stats Wrapper', () => {
   });
 
   it('Should pass correct props to EventStats and handle empty _id', async () => {
+    const user = userEvent.setup();
     const { getByText, getAllByText, rerender, queryByRole } = render(
       <MockedProvider mocks={mockData}>
         <BrowserRouter>
@@ -103,7 +106,7 @@ describe('Testing Event Stats Wrapper', () => {
 
     // Open modal to verify eventId prop is passed
     const openButton = getByText('viewEventStatistics');
-    fireEvent.click(openButton);
+    await user.click(openButton);
 
     await waitFor(() => {
       const titleElements = getAllByText('title');
@@ -116,7 +119,7 @@ describe('Testing Event Stats Wrapper', () => {
     // Close the modal before rerendering
     const closeButton = queryByRole('button', { name: /close/i });
     if (closeButton) {
-      fireEvent.click(closeButton as Element);
+      await user.click(closeButton as Element);
       await waitFor(() => {
         expect(document.querySelector('.modal-title')).toBeNull();
       });
@@ -138,6 +141,7 @@ describe('Testing Event Stats Wrapper', () => {
   });
 
   it('Should maintain state consistency through multiple open/close cycles', async () => {
+    const user = userEvent.setup();
     const { getAllByText, queryByRole, getByText } = render(
       <MockedProvider mocks={mockData}>
         <BrowserRouter>
@@ -148,7 +152,7 @@ describe('Testing Event Stats Wrapper', () => {
 
     // Cycle 1: Open and close
     const button = getByText('viewEventStatistics');
-    fireEvent.click(button);
+    await user.click(button);
 
     await waitFor(() => {
       const titleElements = getAllByText('title');
@@ -157,14 +161,14 @@ describe('Testing Event Stats Wrapper', () => {
 
     let closeButton = queryByRole('button', { name: /close/i }) as Element;
     expect(closeButton).toBeInTheDocument();
-    fireEvent.click(closeButton);
+    await user.click(closeButton);
 
     await waitFor(() =>
       expect(document.querySelector('.modal-title')).not.toBeInTheDocument(),
     );
 
     // Cycle 2: Open and close again
-    fireEvent.click(button);
+    await user.click(button);
 
     await waitFor(() => {
       const titleElements = getAllByText('title');
@@ -172,14 +176,14 @@ describe('Testing Event Stats Wrapper', () => {
     });
 
     closeButton = queryByRole('button', { name: /close/i }) as Element;
-    fireEvent.click(closeButton);
+    await user.click(closeButton);
 
     await waitFor(() =>
       expect(document.querySelector('.modal-title')).not.toBeInTheDocument(),
     );
 
     // Cycle 3: One more cycle to ensure consistency
-    fireEvent.click(button);
+    await user.click(button);
 
     await waitFor(() => {
       const titleElements = getAllByText('title');
@@ -192,6 +196,7 @@ describe('Testing Event Stats Wrapper', () => {
   });
 
   it('Should handle modal state changes correctly', async () => {
+    const user = userEvent.setup();
     const { getByText, queryByRole } = render(
       <MockedProvider mocks={mockData}>
         <BrowserRouter>
@@ -202,7 +207,7 @@ describe('Testing Event Stats Wrapper', () => {
 
     // Open modal
     const button = getByText('viewEventStatistics');
-    fireEvent.click(button);
+    await user.click(button);
 
     // Verify modal opened with correct content
     await waitFor(() => {
@@ -217,7 +222,7 @@ describe('Testing Event Stats Wrapper', () => {
     expect(closeButton).toBeInTheDocument();
 
     // Close and verify state change
-    fireEvent.click(closeButton as Element);
+    await user.click(closeButton as Element);
 
     await waitFor(() => {
       // After closing, the modal title should not be in the document
@@ -236,7 +241,7 @@ describe('Testing Event Stats Wrapper', () => {
     );
 
     // Verify button exists
-    const button = getByLabelText('checkInRegistrantsAriaLabel');
+    const button = getByLabelText('viewEventStatistics');
     expect(button).toBeInTheDocument();
 
     // Verify button parent structure
