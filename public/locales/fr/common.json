@@ -44,6 +44,7 @@
   "enterEmail": "Entrez l'e-mail",
   "emailAddress": "Adresse e-mail",
   "email": "E-mail",
+  "emailPlaceholder": "name@example.com",
   "name": "Nom",
   "gender": "Genre",
   "desc": "Description",
@@ -113,6 +114,8 @@
   "createdLatest": "Créé le plus récemment",
   "createdEarliest": "Créé le plus tôt",
   "searchBy": "Rechercher par {{item}}",
+  "viewDetails": "Voir les détails",
+  "markComplete": "Marquer comme complété",
   "plugins": "Extensions",
   "save": "Enregistrer",
   "saving": "Enregistrement...",
@@ -285,5 +288,7 @@
   "attendedEventsList": "Liste des événements suivis",
   "linkCopied": "Lien copié dans le presse-papiers",
   "copyToClipboardError": "Erreur lors de la copie du lien dans le presse-papiers",
-  "share": "Partager"
+  "share": "Partager",
+  "viewEventStatistics": "Voir les statistiques de l'événement",
+  "checkInRegistrantsAriaLabel": "Enregistrer les participants"
 }

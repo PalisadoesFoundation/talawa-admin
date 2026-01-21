@@ -7,7 +7,21 @@ import LeftDrawer from './LeftDrawer';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
-import styles from 'style/app-fixed.module.css';
+// Mock CSS modules
+vi.mock('style/app-fixed.module.css', () => ({
+  default: {
+    sidebarBtnActive: 'sidebarBtnActive',
+    collapsedDrawer: 'collapsedDrawer',
+    expandedDrawer: 'expandedDrawer',
+  },
+}));
+
+vi.mock('shared-components/SidebarBase/SidebarBase.module.css', () => ({
+  default: {
+    expandedDrawer: 'expandedDrawer',
+    collapsedDrawer: 'collapsedDrawer',
+  },
+}));
 import { usePluginDrawerItems } from 'plugin';
 
 // Mock the local storage hook
@@ -32,10 +46,7 @@ vi.mock('utils/useSession', () => ({
 // Mock the SignOut component to avoid Apollo Client dependencies
 vi.mock('components/SignOut/SignOut', () => ({
   default: ({ hideDrawer }: { hideDrawer?: boolean }) => (
-    <div
-      data-testid="sign-out-component"
-      style={{ display: hideDrawer ? 'none' : 'block' }}
-    >
+    <div data-testid="sign-out-component" hidden={hideDrawer}>
       Sign Out Mock
     </div>
   ),
@@ -277,7 +288,7 @@ describe('LeftDrawer Component', () => {
       // Simulate active route
       window.history.pushState({}, '', '/orglist');
 
-      expect(organizationsButton).toHaveClass(`${styles.sidebarBtnActive}`);
+      expect(organizationsButton).toHaveClass('sidebarBtnActive');
     });
 
     it('does not hide drawer on desktop view navigation button clicks', () => {
@@ -304,7 +315,7 @@ describe('LeftDrawer Component', () => {
       fireEvent.click(organizationsButton);
       const leftDrawerContainer = screen.getByTestId('leftDrawerContainer');
 
-      expect(leftDrawerContainer).toHaveClass(styles.expandedDrawer);
+      expect(leftDrawerContainer).toHaveClass('expandedDrawer');
     });
 
     it('hides drawer on mobile view for all navigation buttons', () => {

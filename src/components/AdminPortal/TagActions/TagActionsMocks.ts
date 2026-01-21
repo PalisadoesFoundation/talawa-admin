@@ -22,6 +22,12 @@ function createEdge(
     usersAssignedTo: { totalCount: number };
     childTags: { totalCount: number };
     ancestorTags: { _id: string; name: string }[];
+    folder: null;
+    createdAt: string;
+    updatedAt: string;
+    creator: { id: string; name: string };
+    updater: { id: string; name: string };
+    id: string;
   };
   cursor: string;
 } {
@@ -33,6 +39,12 @@ function createEdge(
       usersAssignedTo: { totalCount: usersCount },
       childTags: { totalCount: childCount },
       ancestorTags,
+      folder: null,
+      createdAt: '2023-01-01T00:00:00.000Z',
+      updatedAt: '2023-01-01T00:00:00.000Z',
+      creator: { id: '1', name: 'Creator' },
+      updater: { id: '1', name: 'Updater' },
+      id: _id,
     },
     cursor: cursorVal || _id,
   };
@@ -116,6 +128,8 @@ export const MOCKS = [
       data: {
         organizations: [
           {
+            id: 'org1',
+            name: 'Org 1',
             userTags: {
               edges: userTagEdgesFirst,
               pageInfo: {
@@ -144,6 +158,8 @@ export const MOCKS = [
       data: {
         organizations: [
           {
+            id: 'org1',
+            name: 'Org 1',
             userTags: {
               edges: userTagEdgesFirst,
               pageInfo: {
@@ -173,6 +189,8 @@ export const MOCKS = [
       data: {
         organizations: [
           {
+            id: 'org1',
+            name: 'Org 1',
             userTags: {
               edges: userTagEdgesNext,
               pageInfo: {
@@ -202,6 +220,8 @@ export const MOCKS = [
       data: {
         organizations: [
           {
+            id: 'org1',
+            name: 'Org 1',
             userTags: {
               edges: userTagEdgesSearch,
               pageInfo: {
@@ -230,6 +250,8 @@ export const MOCKS = [
       data: {
         organizations: [
           {
+            id: 'org1',
+            name: 'Org 1',
             userTags: {
               edges: userTagEdgesSearch,
               pageInfo: {
@@ -349,6 +371,8 @@ export const MOCKS_ERROR_SUBTAGS_QUERY = [
       data: {
         organizations: [
           {
+            id: 'org1',
+            name: 'Org 1',
             userTags: {
               edges: [
                 createEdge('1', 'userTag 1', null, 5, 11, []),
@@ -394,6 +418,8 @@ export const MOCKS_ERROR_ASSIGN_OR_REMOVAL_TAGS = [
       data: {
         organizations: [
           {
+            id: 'org1',
+            name: 'Org 1',
             userTags: {
               edges: userTagEdgesFirst,
               pageInfo: {

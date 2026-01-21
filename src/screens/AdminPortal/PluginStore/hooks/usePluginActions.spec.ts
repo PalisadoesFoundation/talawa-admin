@@ -22,25 +22,18 @@ vi.mock('plugin/manager', () => ({
 }));
 
 // Mock the GraphQL hooks
-const {
-  mockCreatePlugin,
-  mockUpdatePlugin,
-  mockDeletePlugin,
-  mockInstallPlugin,
-  mockReload,
-} = vi.hoisted(() => ({
-  mockCreatePlugin: vi.fn(),
-  mockUpdatePlugin: vi.fn(),
-  mockDeletePlugin: vi.fn(),
-  mockInstallPlugin: vi.fn(),
-  mockReload: vi.fn(),
-}));
+const { mockCreatePlugin, mockUpdatePlugin, mockDeletePlugin, mockReload } =
+  vi.hoisted(() => ({
+    mockCreatePlugin: vi.fn(),
+    mockUpdatePlugin: vi.fn(),
+    mockDeletePlugin: vi.fn(),
+    mockReload: vi.fn(),
+  }));
 
 vi.mock('plugin/graphql-service', () => ({
   useCreatePlugin: () => [mockCreatePlugin],
   useUpdatePlugin: () => [mockUpdatePlugin],
   useDeletePlugin: () => [mockDeletePlugin],
-  useInstallPlugin: () => [mockInstallPlugin],
 }));
 
 // Mock window.location.reload
@@ -102,7 +95,6 @@ describe('usePluginActions', () => {
     mockCreatePlugin.mockResolvedValue({});
     mockUpdatePlugin.mockResolvedValue({});
     mockDeletePlugin.mockResolvedValue({});
-    mockInstallPlugin.mockResolvedValue({});
   });
 
   afterEach(() => {
@@ -128,7 +120,7 @@ describe('usePluginActions', () => {
   });
 
   it('should successfully install a plugin', async () => {
-    mockInstallPlugin.mockResolvedValue({});
+    mockUpdatePlugin.mockResolvedValue({});
     mockPluginManager.installPlugin.mockResolvedValue(true);
 
     const { result } = renderHook(() =>
@@ -142,10 +134,11 @@ describe('usePluginActions', () => {
       await result.current.handleInstallPlugin(mockPlugin);
     });
 
-    expect(mockInstallPlugin).toHaveBeenCalledWith({
+    expect(mockUpdatePlugin).toHaveBeenCalledWith({
       variables: {
         input: {
-          pluginId: 'test-plugin',
+          id: 'db-plugin-id',
+          isInstalled: true,
         },
       },
     });
@@ -245,7 +238,7 @@ describe('usePluginActions', () => {
   });
 
   it('should handle installation failure in GraphQL', async () => {
-    mockInstallPlugin.mockRejectedValue(new Error('GraphQL error'));
+    mockUpdatePlugin.mockRejectedValue(new Error('GraphQL error'));
 
     const { result } = renderHook(() =>
       usePluginActions({
@@ -261,8 +254,35 @@ describe('usePluginActions', () => {
     expect(result.current.loading).toBe(false);
   });
 
+  it('should throw error when plugin is not found in database during installation', async () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const { result } = renderHook(() =>
+      usePluginActions({
+        pluginData: { getPlugins: [] }, // No plugins in database
+        refetch: mockRefetch,
+      }),
+    );
+
+    await act(async () => {
+      await result.current.handleInstallPlugin(mockPlugin);
+    });
+
+    // Verify error was logged
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Failed to install plugin:',
+      expect.any(Error),
+    );
+
+    // updatePlugin should not be called since plugin was not found
+    expect(mockUpdatePlugin).not.toHaveBeenCalled();
+    expect(result.current.loading).toBe(false);
+
+    consoleSpy.mockRestore();
+  });
+
   it('should handle installation failure in plugin manager', async () => {
-    mockInstallPlugin.mockResolvedValue({});
+    mockUpdatePlugin.mockResolvedValue({});
     mockPluginManager.installPlugin.mockResolvedValue(false);
 
     const { result } = renderHook(() =>
@@ -441,7 +461,7 @@ describe('usePluginActions', () => {
   });
 
   it('should set loading state correctly during installation', async () => {
-    mockInstallPlugin.mockImplementation(
+    mockUpdatePlugin.mockImplementation(
       () => new Promise((resolve) => setTimeout(resolve, 100)),
     );
     mockPluginManager.installPlugin.mockResolvedValue(true);
