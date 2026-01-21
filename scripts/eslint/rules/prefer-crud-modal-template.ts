@@ -4,7 +4,6 @@ type Options = [];
 
 /**
  * ESLint rule to prefer CRUDModalTemplate over BaseModal in CRUD contexts.
- *
  * Detects BaseModal imports (default/named/aliased) and JSX usage.
  * Flags violations when handler props (onSubmit, onConfirm, onPrimary, onSave)
  * are present, or when form elements exist within the modal children.
@@ -15,7 +14,8 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
     type: 'suggestion',
     docs: {
       description: 'Prefer CRUDModalTemplate over BaseModal in CRUD contexts',
-      url: 'docs/docs/docs/developer-resources/linting.md',
+      //docs does not exists yet
+      url: 'docs/developer-resources/linting.md',
     },
     messages: {
       preferCrud:
@@ -34,26 +34,28 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
         if (typeof node.source.value !== 'string') return;
 
         const importPath = node.source.value;
-        const isBaseModalPath =
-          importPath === 'BaseModal' ||
-          importPath.endsWith('/BaseModal') ||
-          importPath.includes('/BaseModal/');
 
         node.specifiers.forEach((specifier) => {
-          // Handle default imports: import BaseModal from './BaseModal'
-          if (specifier.type === AST_NODE_TYPES.ImportDefaultSpecifier) {
-            if (isBaseModalPath) {
-              baseModalNames.add(specifier.local.name);
-            }
-          }
           // Handle named imports: import { BaseModal } from './components'
           // Also handles aliased imports: import { BaseModal as MyModal } from './components'
-          else if (specifier.type === AST_NODE_TYPES.ImportSpecifier) {
+          if (specifier.type === AST_NODE_TYPES.ImportSpecifier) {
             const importedName =
               specifier.imported.type === AST_NODE_TYPES.Identifier
                 ? specifier.imported.name
                 : null;
             if (importedName === 'BaseModal') {
+              baseModalNames.add(specifier.local.name);
+            }
+          }
+          // Handle default imports: import BaseModal from './BaseModal'
+          // Only track if the import path explicitly targets BaseModal module
+          else if (specifier.type === AST_NODE_TYPES.ImportDefaultSpecifier) {
+            const isBaseModalPath =
+              importPath === 'BaseModal' ||
+              importPath.endsWith('/BaseModal') ||
+              importPath === 'shared-components/BaseModal' ||
+              importPath.endsWith('/BaseModal/index');
+            if (isBaseModalPath) {
               baseModalNames.add(specifier.local.name);
             }
           }
@@ -148,9 +150,10 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
               ? hasFormElement(parent.children)
               : false;
 
-        if (hasCrudHandler || hasFormInChildren) {
+        // Require both CRUD handler props AND form elements to trigger
+        if (hasCrudHandler && hasFormInChildren) {
           context.report({
-            node: node as TSESTree.JSXOpeningElement,
+            node: node,
             messageId: 'preferCrud',
           });
         }
