@@ -23,6 +23,14 @@
 # =============================================================================
 set -euo pipefail
 
+PIDS=()
+cleanup_bg() {
+  for pid in "${PIDS[@]:-}"; do
+    kill "$pid" 2>/dev/null || true
+  done
+}
+trap cleanup_bg EXIT
+
 STAGED_SRC_FILE="$1"
 
 [ ! -s "$STAGED_SRC_FILE" ] && exit 0
@@ -30,16 +38,20 @@ STAGED_SRC_FILE="$1"
 echo "Running Node.js pre-commit checks..."
 
 pnpm run generate-docs &
-PID_DOCS=$!
+PIDS+=("$PID_DOCS")
 
 pnpm run format:fix || exit 1
 pnpm run lint-staged || exit 1
 
 pnpm run typecheck &
-PID_TYPECHECK=$!
+PIDS+=("$PID_TYPECHECK")
 
-wait "$PID_DOCS" || { echo "Documentation generation failed"; exit 1; }
-wait "$PID_TYPECHECK" || { echo "Type checking failed"; exit 1; }
+wait "$PID_DOCS"; STATUS_DOCS=$?
+wait "$PID_TYPECHECK"; STATUS_TYPECHECK=$?
+if [ "$STATUS_DOCS" -ne 0 ] || [ "$STATUS_TYPECHECK" -ne 0 ]; then
+  echo "Background task failure"
+  exit 1
+fi
 
 xargs -0 pnpm run check-i18n -- --staged < "$STAGED_SRC_FILE"
 
@@ -52,9 +64,11 @@ pnpm run check:pom || exit 1
 
 npx knip --include files,exports,nsExports,nsTypes &
 PID_KNIP1=$!
+PIDS+=("$PID_KNIP1")
 
 npx knip --config knip.deps.json --include dependencies &
 PID_KNIP2=$!
+PIDS+=("$PID_KNIP2")
 
 wait "$PID_KNIP1" || exit 1
 wait "$PID_KNIP2" || exit 1

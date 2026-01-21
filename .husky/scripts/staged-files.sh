@@ -27,14 +27,15 @@ get_staged_files() {
   fi
 
   if [ -n "$include" ] && [ -n "$exclude" ]; then
-    grep -zE "$include" "$_STAGED_CACHE_FILE" | grep -zvE "$exclude" || true
+    # Use perl for cross-platform null-delimited filtering
+    perl -0 -ne "print if m{$include} && !m{$exclude}" "$_STAGED_CACHE_FILE" || true
     return
   fi
 
   if [ -n "$include" ]; then
-    grep -zE "$include" "$_STAGED_CACHE_FILE" || true
+    perl -0 -ne "print if m{$include}" "$_STAGED_CACHE_FILE" || true
     return
   fi
 
-  grep -zvE "$exclude" "$_STAGED_CACHE_FILE" || true
+  perl -0 -ne "print if !m{$exclude}" "$_STAGED_CACHE_FILE" || true
 }

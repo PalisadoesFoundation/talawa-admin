@@ -48,7 +48,11 @@ MAX_FILE_LINES=600
 # Reduces network dependency while ensuring periodic updates.
 SCRIPT_CACHE_HOURS=24
 
-STAGED_SRC_FILE="$1"
+STAGED_SRC_FILE="${1:-}"
+if [ -z "$STAGED_SRC_FILE" ]; then
+  echo "Error: staged file list path is required." >&2
+  exit 1
+fi
 
 echo "Initializing Python virtual environment..."
 VENV_BIN=$(./.husky/scripts/venv.sh) || exit 1
@@ -132,7 +136,7 @@ if [ -f "$SCRIPT_PATH" ]; then
   esac
 
   if [ -n "$FILE_MOD_TIME" ]; then
-    CURRENT_TIME=$(date +%s 2>/dev/null || python3 -c "import time; print(int(time.time()))")
+    CURRENT_TIME=$(date +%s 2>/dev/null || python3 -c "import time; print(int(time.time()))" 2>/dev/null || python -c "import time; print(int(time.time()))")
     AGE_HOURS=$(( (CURRENT_TIME - FILE_MOD_TIME) / 3600 ))
 
     if [ "$AGE_HOURS" -lt "$CACHE_MAX_AGE_HOURS" ]; then
