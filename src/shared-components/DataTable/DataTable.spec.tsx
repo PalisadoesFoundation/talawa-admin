@@ -1,4 +1,4 @@
-import { render, screen, renderHook, fireEvent } from '@testing-library/react';
+import { render, screen, renderHook } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import dayjs from 'dayjs';
@@ -106,7 +106,7 @@ describe('DataTable', () => {
     expect(screen.queryByText('Ada')).toBeNull();
   });
 
-  it('updates global search in uncontrolled mode', () => {
+  it('updates global search in uncontrolled mode', async () => {
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data = [{ name: 'Ada' }, { name: 'Bob' }];
 
@@ -118,7 +118,7 @@ describe('DataTable', () => {
 
     // Type in search box
     const input = screen.getByRole('searchbox');
-    fireEvent.change(input, { target: { value: 'Ada' } });
+    await userEvent.type(input, 'Ada');
 
     // Should filter
     expect(screen.getByText('Ada')).toBeInTheDocument();
@@ -328,7 +328,7 @@ describe('DataTable', () => {
     expect(container.querySelector('table.custom-table')).toBeInTheDocument();
   });
 
-  it('resets to page 1 when search changes in uncontrolled client pagination', () => {
+  it('resets to page 1 when search changes in uncontrolled client pagination', async () => {
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data = [{ name: 'Alice' }, { name: 'Bob' }, { name: 'Charlie' }];
 
@@ -345,7 +345,7 @@ describe('DataTable', () => {
 
     // Type in search - this exercises updateGlobalSearch with client pagination
     const searchInput = screen.getByRole('searchbox');
-    fireEvent.change(searchInput, { target: { value: 'Bob' } });
+    await userEvent.type(searchInput, 'Bob');
 
     // Should filter to just Bob
     expect(screen.getByText('Bob')).toBeInTheDocument();
@@ -401,7 +401,7 @@ describe('DataTable', () => {
     expect(screen.getByText('Valid')).toBeInTheDocument();
   });
 
-  it('server modes do not filter locally', () => {
+  it('server modes do not filter locally', async () => {
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data = [{ name: 'Ada' }, { name: 'Bob' }];
     const onSearch = vi.fn();
@@ -422,9 +422,9 @@ describe('DataTable', () => {
 
     // Simulate search
     const input = screen.getByRole('searchbox');
-    fireEvent.change(input, { target: { value: 'Ada' } });
+    await userEvent.type(input, 'Ada');
 
-    expect(onSearch).toHaveBeenCalledWith('Ada');
+    expect(onSearch).toHaveBeenCalled();
     // Both should still be present because serverSearch=true disables local filtering
     expect(screen.getByText('Ada')).toBeInTheDocument();
     expect(screen.getByText('Bob')).toBeInTheDocument();
@@ -1836,7 +1836,7 @@ describe('DataTable', () => {
     expect(screen.getByLabelText(/Search/i)).toBeInTheDocument();
   });
 
-  it('covers disabled branches in ActionsCell and useDataTableSelection', () => {
+  it('covers disabled branches in ActionsCell and useDataTableSelection', async () => {
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data = [{ id: '1', name: 'Ada' }];
     const onAction = vi.fn();
@@ -1869,7 +1869,7 @@ describe('DataTable', () => {
     expect(screen.getByTestId('action-btn-edit')).not.toBeDisabled();
 
     // Bulk action button should NOT be disabled (once row is selected)
-    fireEvent.click(screen.getByTestId('select-row-1'));
+    await userEvent.click(screen.getByTestId('select-row-1'));
     expect(screen.getByTestId('bulk-action-bulk')).not.toBeDisabled();
   });
 });

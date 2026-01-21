@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  IColumnDef,
-  IUseDataTableFilteringOptions,
-} from '../../../types/shared-components/DataTable/interface';
+import { IUseDataTableFilteringOptions } from '../../../types/shared-components/DataTable/interface';
 import { getCellValue, toSearchableString } from '../utils';
 
 /**
@@ -14,18 +11,18 @@ import { getCellValue, toSearchableString } from '../utils';
  *
  * @typeParam T - The row data type used in the DataTable
  *
- * @param options - Configuration options for filtering behavior
- * @param options.data - Array of row data to filter
- * @param options.columns - Column definitions with filter/search metadata
- * @param options.initialGlobalSearch - Initial search value for uncontrolled mode
- * @param options.globalSearch - Controlled global search value
- * @param options.onGlobalSearchChange - Callback for controlled search updates
- * @param options.columnFilters - Column filter values by column ID
- * @param options.onColumnFiltersChange - Callback when column filters change
- * @param options.serverSearch - If true, skip client-side global search filtering
- * @param options.serverFilter - If true, skip client-side column filtering
- * @param options.paginationMode - Pagination mode affecting page reset behavior
- * @param options.onPageReset - Callback to reset page when filters change
+ * @param options - Configuration options for filtering behavior including:
+ *   - `data` - Array of row data to filter
+ *   - `columns` - Column definitions with filter/search metadata
+ *   - `initialGlobalSearch` - Initial search value for uncontrolled mode
+ *   - `globalSearch` - Controlled global search value
+ *   - `onGlobalSearchChange` - Callback for controlled search updates
+ *   - `columnFilters` - Column filter values by column ID
+ *   - `onColumnFiltersChange` - Callback when column filters change
+ *   - `serverSearch` - If true, skip client-side global search filtering
+ *   - `serverFilter` - If true, skip client-side column filtering
+ *   - `paginationMode` - Pagination mode affecting page reset behavior
+ *   - `onPageReset` - Callback to reset page when filters change
  *
  * @returns Object containing:
  *   - `query` - Current global search string

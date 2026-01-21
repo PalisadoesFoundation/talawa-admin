@@ -6,7 +6,7 @@
 
 > **useDataTableFiltering**\<`T`\>(`options`): `object`
 
-Defined in: [src/shared-components/DataTable/hooks/useDataTableFiltering.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/hooks/useDataTableFiltering.ts#L45)
+Defined in: [src/shared-components/DataTable/hooks/useDataTableFiltering.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/hooks/useDataTableFiltering.ts#L42)
 
 Hook to manage DataTable filtering and search logic.
 
@@ -28,7 +28,18 @@ The row data type used in the DataTable
 
 [`IUseDataTableFilteringOptions`](../../../../../types/shared-components/DataTable/interface/interfaces/IUseDataTableFilteringOptions.md)\<`T`\>
 
-Configuration options for filtering behavior
+Configuration options for filtering behavior including:
+  - `data` - Array of row data to filter
+  - `columns` - Column definitions with filter/search metadata
+  - `initialGlobalSearch` - Initial search value for uncontrolled mode
+  - `globalSearch` - Controlled global search value
+  - `onGlobalSearchChange` - Callback for controlled search updates
+  - `columnFilters` - Column filter values by column ID
+  - `onColumnFiltersChange` - Callback when column filters change
+  - `serverSearch` - If true, skip client-side global search filtering
+  - `serverFilter` - If true, skip client-side column filtering
+  - `paginationMode` - Pagination mode affecting page reset behavior
+  - `onPageReset` - Callback to reset page when filters change
 
 ## Returns
 
