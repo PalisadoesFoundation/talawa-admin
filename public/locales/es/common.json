@@ -43,12 +43,6 @@
   "resetChanges": "Reset Changes",
   "displayImage": "Display Image",
   "checkInRegistrantsAriaLabel": "Registrar asistentes",
-  "auth": {
-    "emailField": {
-      "label": "Email",
-      "placeholder": "name@example.com"
-    }
-  },
   "recurrence": {
     "daily": "Diario",
     "weeklyOn": "Semanalmente el {{day}}",

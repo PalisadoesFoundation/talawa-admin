@@ -43,12 +43,6 @@
   "displayImage": "Afficher l'image",
   "enterEmail": "Entrez l'e-mail",
   "checkInRegistrantsAriaLabel": "Enregistrer les participants",
-  "auth": {
-    "emailField": {
-      "label": "Email",
-      "placeholder": "name@example.com"
-    }
-  },
   "recurrence": {
     "daily": "Daily",
     "weeklyOn": "Weekly on {{day}}",

@@ -25,12 +25,6 @@
   "settings": "设置",
   "users": "用户",
   "checkInRegistrantsAriaLabel": "签到登记者",
-  "auth": {
-    "emailField": {
-      "label": "Email",
-      "placeholder": "name@example.com"
-    }
-  },
   "recurrence": {
     "daily": "Daily",
     "weeklyOn": "Weekly on {{day}}",
