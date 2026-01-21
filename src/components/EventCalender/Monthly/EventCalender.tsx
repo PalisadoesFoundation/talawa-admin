@@ -37,8 +37,8 @@ import EventListCard from 'components/EventListCard/EventListCard';
 import dayjs from 'dayjs';
 import React, { useState, useEffect, useMemo } from 'react';
 import type { JSX } from 'react';
-import Button from 'react-bootstrap/Button';
-import styles from '../../../style/app-fixed.module.css';
+import Button from 'shared-components/Button';
+import styles from './EventCalender.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import HolidayCard from '../../HolidayCards/HolidayCard';
@@ -92,31 +92,50 @@ const Calendar: React.FC<
     userRole?: string,
     userId?: string,
   ): InterfaceEvent[] => {
-    const filteredEvents: InterfaceEvent[] = [];
-
+    // If no user info, only show public events
     if (!userRole || !userId) {
       return eventData.filter((event) => event.isPublic);
     }
 
+    // Admins see everything
     if (userRole === UserRole.ADMINISTRATOR) {
       return eventData;
     }
 
-    eventData.forEach((event) => {
+    // For regular users:
+    // - Backend already filters Organization Members events based on membership
+    // - We need to check Invite Only events for creator OR attendee status
+    // - All other events returned by backend should be shown
+    return eventData.filter((event) => {
+      // Creator always sees their own events
+      if (event.creator && event.creator.id === userId) {
+        return true;
+      }
+
+      // Public events - always visible (backend returns them)
       if (event.isPublic) {
-        filteredEvents.push(event);
-        return;
+        return true;
       }
 
-      const isMember = orgData?.members?.edges.some(
-        (edge) => edge.node.id === userId,
-      );
-      if (!event.isPublic && isMember) {
-        filteredEvents.push(event);
+      // Invite Only events - visible to creator OR attendees
+      if (event.isInviteOnly) {
+        const isCreator = event.creator && event.creator.id === userId;
+        const isAttendee = event.attendees?.some(
+          (attendee) => attendee.id === userId,
+        );
+        return isCreator || isAttendee;
       }
+
+      // Organization Members events - check membership
+      // If not public and not invite-only, it must be an organization event
+      // Check if user is a member of the organization
+      const isMember =
+        orgData?.members?.edges?.some((edge) => edge.node.id === userId) ||
+        !orgData?.members ||
+        false;
+
+      return isMember || false;
     });
-
-    return filteredEvents;
   };
 
   useEffect(() => {
@@ -142,13 +161,7 @@ const Calendar: React.FC<
     return Array.isArray(holidays)
       ? holidays.filter((holiday) => {
           if (!holiday.date) {
-            if (
-              typeof globalThis !== 'undefined' &&
-              typeof globalThis.process !== 'undefined' &&
-              globalThis.process.env?.NODE_ENV !== 'test'
-            ) {
-              console.warn(`Holiday "${holiday.name}" has no date specified.`);
-            }
+            console.warn(`Holiday "${holiday.name}" has no date specified.`);
             return false;
           }
           const holidayMonth = dayjs(holiday.date, 'MM-DD', true).month();
@@ -238,6 +251,7 @@ const Calendar: React.FC<
           allDay={datas.allDay}
           isPublic={datas.isPublic}
           isRegisterable={datas.isRegisterable}
+          isInviteOnly={Boolean(datas.isInviteOnly)}
           isRecurringEventTemplate={datas.isRecurringEventTemplate}
           baseEvent={datas.baseEvent}
           sequenceNumber={datas.sequenceNumber}
@@ -421,6 +435,7 @@ const Calendar: React.FC<
               allDay={datas.allDay}
               isPublic={datas.isPublic}
               isRegisterable={datas.isRegisterable}
+              isInviteOnly={Boolean(datas.isInviteOnly)}
               attendees={datas.attendees || []}
               creator={datas.creator}
               userId={userId}
@@ -451,6 +466,7 @@ const Calendar: React.FC<
           key={index}
           className={`${className} ${allEventsList?.length > 0 ? styles.day__events : ''}`}
           data-testid="day"
+          data-has-events={allEventsList?.length > 0}
         >
           {date.getDate()}
           {date.getMonth() !== currentMonth ? null : (

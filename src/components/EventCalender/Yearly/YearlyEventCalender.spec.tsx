@@ -1,11 +1,6 @@
 import React, { Suspense } from 'react';
-import {
-  render,
-  fireEvent,
-  act,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { vi, it, describe, beforeEach, expect } from 'vitest';
 import Calendar from './YearlyEventCalender';
 // Removed dependency on Monthly EventCalendar for tests that target yearly view directly
@@ -60,9 +55,7 @@ async function clickExpandForDate(
 
     return found as HTMLButtonElement;
   });
-  await act(async () => {
-    fireEvent.click(btn);
-  });
+  await userEvent.click(btn);
   return btn;
 }
 
@@ -203,6 +196,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: true,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [
         { id: 'user1', name: 'User 1', emailAddress: 'user1@example.com' },
       ],
@@ -224,6 +218,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: false,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [
         { id: 'user2', name: 'User 2', emailAddress: 'user2@example.com' },
       ],
@@ -319,16 +314,12 @@ describe('Calendar Component', () => {
 
     const currentYear = new Date().getFullYear();
 
-    await act(async () => {
-      fireEvent.click(getByTestId('prevYear'));
-    });
+    await userEvent.click(getByTestId('prevYear'));
     await waitFor(() => {
       expect(getByText(String(currentYear - 1))).toBeInTheDocument();
     });
 
-    await act(async () => {
-      fireEvent.click(getByTestId('nextYear'));
-    });
+    await userEvent.click(getByTestId('nextYear'));
     await waitFor(() => {
       expect(getByText(String(currentYear))).toBeInTheDocument();
     });
@@ -443,9 +434,7 @@ describe('Calendar Component', () => {
 
     const expandButton = container.querySelector('.btn__more');
     if (expandButton) {
-      await act(async () => {
-        fireEvent.click(expandButton);
-      });
+      await userEvent.click(expandButton);
       await waitFor(() => {
         expect(screen.getByText('No Event Available!')).toBeInTheDocument();
       });
@@ -492,7 +481,7 @@ describe('Calendar Component', () => {
 
     let foundMatch = false;
     for (const button of Array.from(expandButtons)) {
-      fireEvent.click(button);
+      await userEvent.click(button);
       // Expect one of the event names to appear when expanded
       const matches = screen.queryAllByText(/New Test Event|Test Event/);
       if (matches.length > 0) {
@@ -577,15 +566,11 @@ describe('Calendar Component', () => {
       <Calendar eventData={mockEventData} refetchEvents={mockRefetchEvents} />,
     );
 
-    await act(async () => {
-      fireEvent.click(getByTestId('prevYear'));
-      fireEvent.click(getByTestId('prevYear'));
-    });
+    await userEvent.click(getByTestId('prevYear'));
+    await userEvent.click(getByTestId('prevYear'));
 
-    await act(async () => {
-      fireEvent.click(getByTestId('nextYear'));
-      fireEvent.click(getByTestId('nextYear'));
-    });
+    await userEvent.click(getByTestId('nextYear'));
+    await userEvent.click(getByTestId('nextYear'));
 
     const currentYear = new Date().getFullYear();
     expect(getByText(String(currentYear))).toBeInTheDocument();
@@ -653,6 +638,7 @@ describe('Calendar Component', () => {
       ...mockEventData[1],
       name: 'Member Private Event',
       isPublic: false,
+      isInviteOnly: false,
       startDate: janFirst.toISOString(),
       endDate: janFirst.toISOString(),
       startTime: '12:00:00',
@@ -705,6 +691,7 @@ describe('Calendar Component', () => {
       ...mockEventData[1],
       name: 'NonMember Private Event',
       isPublic: false,
+      isInviteOnly: false,
       startDate: todayDate.toISOString(),
       endDate: todayDate.toISOString(),
       startTime: '12:00:00',
@@ -753,9 +740,7 @@ describe('Calendar Component', () => {
     );
     expect(noEventsButton).toBeInTheDocument();
     if (noEventsButton) {
-      await act(async () => {
-        fireEvent.click(noEventsButton);
-      });
+      await userEvent.click(noEventsButton);
     }
 
     await waitFor(() => {
@@ -781,9 +766,7 @@ describe('Calendar Component', () => {
     expect(noEventsButton).toBeInTheDocument();
 
     if (noEventsButton) {
-      await act(async () => {
-        fireEvent.click(noEventsButton);
-      });
+      await userEvent.click(noEventsButton);
     }
 
     await waitFor(() => {
@@ -806,6 +789,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: true,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: undefined as unknown as CalendarEventItem['attendees'],
       creator: { id: 'creator-x', name: 'A B', emailAddress: 'a@example.com' },
     };
@@ -856,6 +840,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: true,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [],
       creator: {
         id: 'creator1',
@@ -876,6 +861,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: false,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [],
       creator: {
         id: 'creator2',
@@ -908,9 +894,7 @@ describe('Calendar Component', () => {
 
     // Check if there are events by clicking expand buttons and checking content
     for (const button of Array.from(expandButtons)) {
-      await act(async () => {
-        fireEvent.click(button);
-      });
+      await userEvent.click(button);
 
       // Wait for potential event list to appear
       await waitFor(
@@ -942,6 +926,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: true,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [],
       creator: {
         id: 'creator1',
@@ -962,6 +947,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: false,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [],
       creator: {
         id: 'creator2',
@@ -996,9 +982,7 @@ describe('Calendar Component', () => {
 
     // Check if there are events by clicking expand buttons and checking content
     for (const button of Array.from(expandButtons)) {
-      await act(async () => {
-        fireEvent.click(button);
-      });
+      await userEvent.click(button);
 
       // Wait for potential event list to appear
       await waitFor(
@@ -1030,6 +1014,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: false,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [],
       creator: {
         id: 'creator2',
@@ -1081,6 +1066,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: false,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [],
       creator: {
         id: 'creator2',
@@ -1141,6 +1127,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: true,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [],
       creator: {
         id: 'creator1',
@@ -1161,6 +1148,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: false,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [],
       creator: {
         id: 'creator2',
@@ -1181,6 +1169,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: false,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [],
       creator: {
         id: 'creator3',
@@ -1247,27 +1236,21 @@ describe('Calendar Component', () => {
     const nextButton = getByTestId('nextYear');
 
     // Test navigation to previous year
-    await act(async () => {
-      fireEvent.click(prevButton);
-    });
+    await userEvent.click(prevButton);
 
     await waitFor(() => {
       expect(screen.getByText(String(currentYear - 1))).toBeInTheDocument();
     });
 
     // Test navigation to next year (back to current)
-    await act(async () => {
-      fireEvent.click(nextButton);
-    });
+    await userEvent.click(nextButton);
 
     await waitFor(() => {
       expect(screen.getByText(String(currentYear))).toBeInTheDocument();
     });
 
     // Test navigation to future year
-    await act(async () => {
-      fireEvent.click(nextButton);
-    });
+    await userEvent.click(nextButton);
 
     await waitFor(() => {
       expect(screen.getByText(String(currentYear + 1))).toBeInTheDocument();
@@ -1345,9 +1328,7 @@ describe('Calendar Component', () => {
     );
     expect(noEventsButton).toBeInTheDocument();
     if (noEventsButton) {
-      await act(async () => {
-        fireEvent.click(noEventsButton);
-      });
+      await userEvent.click(noEventsButton);
     }
 
     await waitFor(() => {
@@ -1373,7 +1354,7 @@ describe('Calendar Component', () => {
     expect(noEventsBtn).toBeInTheDocument();
 
     if (noEventsBtn) {
-      await act(async () => fireEvent.click(noEventsBtn));
+      await userEvent.click(noEventsBtn);
       await waitFor(() =>
         expect(screen.getByText('No Event Available!')).toBeInTheDocument(),
       );
@@ -1509,7 +1490,7 @@ describe('Calendar Component', () => {
     expect(noEventsBtn).toBeInTheDocument();
 
     if (noEventsBtn) {
-      await act(async () => fireEvent.click(noEventsBtn));
+      await userEvent.click(noEventsBtn);
       await waitFor(() =>
         expect(screen.getByText('No Event Available!')).toBeInTheDocument(),
       );

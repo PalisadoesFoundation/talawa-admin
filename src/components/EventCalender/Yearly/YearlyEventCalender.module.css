@@ -1,0 +1,172 @@
+.day__today {
+  background-color: var(--dayToday-bg);
+  font-weight: var(--font-weight-bold);
+  text-decoration: underline;
+  color: var(--dayToday-color);
+}
+
+.day__outside {
+  background-color: var(--dayOutside-bg);
+  color: var(--dayOutside-color);
+}
+
+.day__yearly {
+  border-radius: var(--space-2);
+  font-size: small;
+  padding: var(--space-2);
+  text-align: center;
+  height: 2rem;
+  margin: 1px;
+}
+
+.day__events {
+  background-color: var(--dayEvents-bg);
+}
+
+.expand_list_container {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-2);
+  width: fit-content;
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: var(--expandListContainer-bg);
+  border: 1px solid var(--expandListContainer-border);
+  border-radius: var(--space-2);
+  margin: var(--space-2);
+}
+
+.expand_event_list {
+  display: flex;
+  flex-direction: column;
+}
+
+.event_list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  border-radius: var(--space-2);
+  margin: var(--space-2);
+}
+
+.btn__more {
+  border: 0;
+  font-size: var(--font-size-sm);
+  background-color: initial;
+  color: var(--btnMore-color);
+  font-weight: var(--font-weight-semibold);
+  position: relative;
+  display: block;
+  margin: var(--space-1);
+}
+
+.btn__more:hover {
+  color: var(--btnMore-color-hover);
+}
+
+@media only screen and (max-width: 576px) {
+  .btn__more {
+    font-size: var(--font-size-xs);
+  }
+}
+
+.closebtnYearlyEventCalender {
+  padding: var(--space-3);
+}
+
+.circularButton {
+  width: var(--space-2);
+  height: var(--space-2);
+  background-color: var(--color-red-500);
+  border-radius: 50%;
+  display: inline-block;
+  margin-left: var(--space-2);
+}
+
+.columnYearlyEventCalender {
+  float: left;
+  width: 25%;
+  padding: var(--space-3);
+}
+
+@media only screen and (max-width: 576px) {
+  .columnYearlyEventCalender {
+    float: left;
+    width: 100%;
+    padding: var(--space-3);
+  }
+}
+
+.cardYearlyEventCalender {
+  padding: var(--space-5);
+  text-align: center;
+  height: 21rem;
+}
+
+.cardHeaderYearlyEventCalender {
+  text-align: left;
+}
+
+.weekday__yearly {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--weekdayYearly-bg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.calendar__days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: repeat(5, 1fr);
+  margin-bottom: var(--space-8);
+}
+
+.yearlyCalendar {
+  max-width: var(--space-29);
+  margin: 0 auto;
+}
+
+.yearlyCalendarHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--space-6);
+}
+
+.buttonEventCalendar {
+  border-radius: 100rem;
+  color: var(--buttonEventCalendar-color);
+  border: 0;
+}
+
+.year {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+  margin: 0 var(--space-6);
+}
+
+.rowYearlyEventCalender {
+  margin: 1px -5px;
+}
+
+.rowYearlyEventCalender:after {
+  content: '';
+  display: table;
+  clear: both;
+  margin: 0 -5px;
+}
+
+.yearlyCalender {
+  background-color: var(--yearlyCalender-bg);
+  box-sizing: border-box;
+}
+
+.calendar {
+  font-family: var(--font-family-sans, 'Outfit', sans-serif);
+  padding: var(--space-6);
+  background-color: var(--calendar-bg);
+  min-height: 80vh;
+}
