@@ -1,4 +1,25 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+#
+# =============================================================================
+# Pre-Commit Tool Availability Check
+# =============================================================================
+#
+# This script ensures all required tools are available before running
+# any pre-commit checks. Failing early avoids confusing errors later
+# in the commit process.
+#
+# Checked Tools:
+# - Core: git, node, pnpm, npx
+# - Download tools: curl or wget (at least one required)
+# - Checksum tools: shasum or sha256sum
+# - Python: python3 or python (used via virtual environment)
+#
+# Design Notes:
+# - Fails fast with actionable error messages
+# - Supports multiple equivalent tools for portability
+# - Improves cross-platform developer experience
+#
+# =============================================================================
 set -euo pipefail
 
 echo "Checking required tools..."

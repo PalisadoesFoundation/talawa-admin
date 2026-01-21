@@ -1,11 +1,52 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 #
-# Pre-commit script for Python checks.
-# Initializes the Python virtual environment, runs formatters, linters,
-# and various CI parity checks on staged files.
-# Used by pre-commit hooks to enforce code quality before commits.
+# =============================================================================
+# Pre-Commit Python Checks
+# =============================================================================
 #
+# Initializes a Python virtual environment and runs all Python-based
+# validation and policy checks used by CI.
+#
+# Checks include:
+# - Formatting and linting (black, flake8, pydocstyle)
+# - Documentation and translation validation
+# - File complexity limits
+# - Security checks via external, checksum-verified scripts
+# - CSS policy checks on staged files
+#
+# External Script Caching:
+# - Centralized scripts are downloaded from PalisadoesFoundation/.github
+# - Cached locally to reduce network dependency
+# - SHA256 verification ensures script integrity
+#
+# Design Notes:
+# - Supports Windows via cmd.exe execution
+# - Uses null-delimited file lists for safety
+# - Falls back gracefully when no staged files are present
+#
+# =============================================================================
 set -euo pipefail
+
+. "$(git rev-parse --show-toplevel)/.husky/scripts/staged-files.sh"
+
+cleanup() {
+  [ -n "${CSS_TMP:-}" ] && rm -f "$CSS_TMP"
+  cleanup_staged_cache 2>/dev/null || true
+}
+
+trap cleanup EXIT
+
+# =============================================================================
+# Configuration constants
+# =============================================================================
+
+# Maximum allowed lines per file before triggering complexity warnings.
+# This helps prevent large, hard-to-maintain files from being committed.
+MAX_FILE_LINES=600
+
+# Cache duration (in hours) for externally downloaded scripts.
+# Reduces network dependency while ensuring periodic updates.
+SCRIPT_CACHE_HOURS=24
 
 STAGED_SRC_FILE="$1"
 
@@ -29,7 +70,7 @@ echo "Running Python CI parity checks..."
 "$@" .github/workflows/scripts/check_docstrings.py --directories .github
 "$@" .github/workflows/scripts/compare_translations.py --directory public/locales
 "$@" .github/workflows/scripts/countline.py \
-  --lines 600 \
+  --lines "$MAX_FILE_LINES" \
   --files ./.github/workflows/config/countline_excluded_file_list.txt
 
 if [ ! -s "$STAGED_SRC_FILE" ]; then
@@ -39,14 +80,14 @@ fi
 
 
 echo "Running translation checks on staged files..."
-xargs -0 -a "$STAGED_SRC_FILE" "$@" .github/workflows/scripts/translation_check.py --files
+xargs -0 "$@" .github/workflows/scripts/translation_check.py --files < "$STAGED_SRC_FILE"
 
 echo "Running disable statements check..."
 
 SCRIPT_URL="https://raw.githubusercontent.com/PalisadoesFoundation/.github/main/.github/workflows/scripts/disable_statements_check.py"
 SCRIPT_DIR=".github-central/.github/workflows/scripts"
 SCRIPT_PATH="$SCRIPT_DIR/disable_statements_check.py"
-CACHE_MAX_AGE_HOURS=24
+CACHE_MAX_AGE_HOURS="$SCRIPT_CACHE_HOURS"
 
 # NOTE:
 # The SHA256 checksum below is intentional and acts as a security guard.
@@ -65,21 +106,33 @@ NEEDS_DOWNLOAD=true
 FILE_MOD_TIME=""
 
 if [ -f "$SCRIPT_PATH" ]; then
-  if [ "$(uname)" = "Darwin" ]; then
-    FILE_MOD_TIME=$(stat -f %m "$SCRIPT_PATH" 2>/dev/null || true)
-  else
-    FILE_MOD_TIME=$(stat -c %Y "$SCRIPT_PATH" 2>/dev/null || true)
-  fi
+ OS_TYPE=$(uname -s)
 
-  # Windows (Git Bash) fallback using PowerShell
-  if [ -z "$FILE_MOD_TIME" ] && command -v powershell.exe >/dev/null 2>&1; then
-    FILE_MOD_TIME=$(powershell.exe -NoProfile -Command \
-      "(Get-Item '$SCRIPT_PATH').LastWriteTime.ToUnixTimeSeconds()" \
-      2>/dev/null || true)
-  fi
+  case "$OS_TYPE" in
+    Darwin*)
+      # macOS
+      FILE_MOD_TIME=$(stat -f %m "$SCRIPT_PATH" 2>/dev/null || true)
+      ;;
+    Linux*)
+      # Linux
+      FILE_MOD_TIME=$(stat -c %Y "$SCRIPT_PATH" 2>/dev/null || true)
+      ;;
+    MINGW*|MSYS*|CYGWIN*)
+      # Windows (Git Bash)
+      if command -v powershell.exe >/dev/null 2>&1; then
+        FILE_MOD_TIME=$(powershell.exe -NoProfile -Command \
+          "(Get-Item \"${SCRIPT_PATH}\").LastWriteTime.ToUnixTimeSeconds()" \
+          2>/dev/null || true)
+      fi
+      ;;
+    *)
+      echo "Unsupported OS detected: $OS_TYPE : disabling script cache"
+      FILE_MOD_TIME=""
+      ;;
+  esac
 
   if [ -n "$FILE_MOD_TIME" ]; then
-    CURRENT_TIME=$(date +%s)
+    CURRENT_TIME=$(date +%s 2>/dev/null || python3 -c "import time; print(int(time.time()))")
     AGE_HOURS=$(( (CURRENT_TIME - FILE_MOD_TIME) / 3600 ))
 
     if [ "$AGE_HOURS" -lt "$CACHE_MAX_AGE_HOURS" ]; then
@@ -127,7 +180,7 @@ if [ "$NEEDS_DOWNLOAD" = true ]; then
   chmod +x "$SCRIPT_PATH"
 fi
 
-xargs -0 -a "$STAGED_SRC_FILE" "$@" "$SCRIPT_PATH" --files
+xargs -0 "$@" "$SCRIPT_PATH" --files < "$STAGED_SRC_FILE"
 
 
 echo "Running CSS policy checks..."
@@ -136,16 +189,12 @@ echo "Running CSS policy checks..."
 # Exclude src/utils/ (utility/helper functions) and src/types/ (type definitions)
 # as they cannot contain UI styling code
 CSS_TMP=$(mktemp)
-trap 'rm -f "$CSS_TMP"' EXIT
 
-git diff --cached -z --name-only --diff-filter=ACMRT \
-  | grep -zv '^src/utils/' \
-  | grep -zv '^src/types/' \
-  > "$CSS_TMP" || true
+get_staged_files '' '^src/utils/|^src/types/' > "$CSS_TMP"
 
 if [ -s "$CSS_TMP" ]; then
-  xargs -0 -a "$CSS_TMP" "$@" \
-    .github/workflows/scripts/css_check.py --files
+  xargs -0 "$@" \
+    .github/workflows/scripts/css_check.py --files < "$CSS_TMP"
 fi
 
 echo "Python checks completed."
