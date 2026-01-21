@@ -139,6 +139,7 @@ describe('Testing Event List Card', () => {
               allDay={true}
               isPublic={true}
               isRegisterable={false}
+              isInviteOnly={false}
               attendees={[]}
               creator={{}}
             />

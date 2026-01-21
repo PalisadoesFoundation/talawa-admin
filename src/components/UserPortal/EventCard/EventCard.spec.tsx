@@ -55,6 +55,7 @@ describe('Testing Event Card In User portal', () => {
     startAt: dayjs.utc().add(10, 'days').toISOString(),
     endAt: dayjs.utc().add(12, 'days').toISOString(),
     isRegisterable: true,
+    isInviteOnly: false,
     isPublic: true,
     endTime: '19:49:12',
     startTime: '17:49:12',
@@ -150,6 +151,47 @@ describe('Testing Event Card In User portal', () => {
       );
     });
   });
+
+  it('should display "Invite Only" badge and disable registration when isInviteOnly is true', () => {
+    const inviteOnlyProps = { ...props, isInviteOnly: true };
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventCard {...inviteOnlyProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const inviteOnlyButton = screen.getByText('Invite Only');
+    expect(inviteOnlyButton).toBeInTheDocument();
+    expect(inviteOnlyButton.closest('button')).toBeDisabled();
+    expect(screen.queryByText('Register')).not.toBeInTheDocument();
+  });
+
+  it('should handle combined scenario with isPublic: false and isInviteOnly: true', () => {
+    const combinedProps = { ...props, isPublic: false, isInviteOnly: true };
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <EventCard {...combinedProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const inviteOnlyButton = screen.getByText('Invite Only');
+    expect(inviteOnlyButton).toBeInTheDocument();
+    expect(inviteOnlyButton.closest('button')).toBeDisabled();
+  });
 });
 
 describe('Event card when start and end time are not given', () => {
@@ -162,6 +204,7 @@ describe('Event card when start and end time are not given', () => {
     startAt: dayjs.utc().add(10, 'days').startOf('day').toISOString(),
     endAt: dayjs.utc().add(12, 'days').endOf('day').toISOString(),
     isRegisterable: true,
+    isInviteOnly: false,
     isPublic: true,
     endTime: '',
     startTime: '',
