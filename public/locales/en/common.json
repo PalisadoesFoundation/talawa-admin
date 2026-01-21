@@ -290,7 +290,7 @@
   "copyToClipboardError": "Error copying link to clipboard",
   "share": "Share",
   "userNotFound": "User not found",
-  "avatarProcessingError": "Error processing avatar, please check your image."
+  "avatarProcessingError": "Error processing avatar, please check your image.",
   "viewEventStatistics": "View Event Statistics",
   "checkInRegistrantsAriaLabel": "Check in registrants"
 }

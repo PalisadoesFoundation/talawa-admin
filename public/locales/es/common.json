@@ -290,7 +290,7 @@
   "copyToClipboardError": "Error al copiar el enlace al portapapeles",
   "share": "Compartir",
   "userNotFound": "Usuario no encontrado",
-  "avatarProcessingError": "Error al procesar el avatar, por favor verifique su imagen."
+  "avatarProcessingError": "Error al procesar el avatar, por favor verifique su imagen.",
   "viewEventStatistics": "Ver Estadísticas del Evento",
   "checkInRegistrantsAriaLabel": "Registrar asistentes"
 }

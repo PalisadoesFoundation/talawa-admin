@@ -290,7 +290,7 @@
   "copyToClipboardError": "Erreur lors de la copie du lien dans le presse-papiers",
   "share": "Partager",
   "userNotFound": "Utilisateur non trouvé",
-  "avatarProcessingError": "Erreur lors du traitement de l'avatar, veuillez vérifier votre image."
+  "avatarProcessingError": "Erreur lors du traitement de l'avatar, veuillez vérifier votre image.",
   "viewEventStatistics": "Voir les statistiques de l'événement",
   "checkInRegistrantsAriaLabel": "Enregistrer les participants"
 }

@@ -290,7 +290,7 @@
   "copyToClipboardError": "复制链接到剪贴板时出错",
   "share": "分享",
   "userNotFound": "未找到用户",
-  "avatarProcessingError": "处理头像时出错，请检查您的图片。"
+  "avatarProcessingError": "处理头像时出错，请检查您的图片。",
   "viewEventStatistics": "查看活动统计",
   "checkInRegistrantsAriaLabel": "签到登记者"
 }
