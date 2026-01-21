@@ -110,7 +110,7 @@ NEEDS_DOWNLOAD=true
 FILE_MOD_TIME=""
 
 if [ -f "$SCRIPT_PATH" ]; then
- OS_TYPE=$(uname -s)
+  OS_TYPE=$(uname -s)
 
   case "$OS_TYPE" in
     Darwin*)

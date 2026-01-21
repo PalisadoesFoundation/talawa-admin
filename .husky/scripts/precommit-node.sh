@@ -33,7 +33,10 @@ trap cleanup_bg EXIT
 
 STAGED_SRC_FILE="$1"
 
-[ ! -s "$STAGED_SRC_FILE" ] && exit 0
+[ ! -s "$STAGED_SRC_FILE" ] && {
+  echo "Skipping Node.js checks (no staged source files)..."
+  exit 0
+}
 
 echo "Running Node.js pre-commit checks..."
 
@@ -72,8 +75,12 @@ npx knip --config knip.deps.json --include dependencies &
 PID_KNIP2=$!
 PIDS+=("$PID_KNIP2")
 
-wait "$PID_KNIP1" || exit 1
-wait "$PID_KNIP2" || exit 1
+wait "$PID_KNIP1"; STATUS_KNIP1=$?
+wait "$PID_KNIP2"; STATUS_KNIP2=$?
+if [ "$STATUS_KNIP1" -ne 0 ] || [ "$STATUS_KNIP2" -ne 0 ]; then
+  echo "Background task failure"
+  exit 1
+fi
 
 pnpm run check-mock-cleanup || exit 1
 pnpm run check-localstorage || exit 1
