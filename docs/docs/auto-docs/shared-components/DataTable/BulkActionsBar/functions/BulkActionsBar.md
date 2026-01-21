@@ -15,7 +15,7 @@ Shows the selected count, action buttons, and a clear button.
 
 ### count
 
-[`InterfaceBulkActionsBarProps`](../../../../types/shared-components/DataTable/interface/interfaces/InterfaceBulkActionsBarProps.md)
+[`InterfaceBulkActionsBarProps`](../../../../types/shared-components/BulkActionsBar/interface/interfaces/InterfaceBulkActionsBarProps.md)
 
 The number of selected rows.
 

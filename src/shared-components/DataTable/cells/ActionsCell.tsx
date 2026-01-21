@@ -1,5 +1,5 @@
 import React from 'react';
-import type { InterfaceActionsCellProps } from '../../../types/shared-components/DataTable/interface';
+import type { InterfaceActionsCellProps } from '../../../types/shared-components/ActionsCell/interface';
 import styles from './ActionsCell.module.css';
 
 /**

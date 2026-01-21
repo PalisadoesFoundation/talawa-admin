@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './BulkActionsBar.module.css';
-import type { InterfaceBulkActionsBarProps } from '../../types/shared-components/DataTable/interface';
+import type { InterfaceBulkActionsBarProps } from '../../types/shared-components/BulkActionsBar/interface';
 import { useTranslation } from 'react-i18next';
 
 // translation-check-keyPrefix: common

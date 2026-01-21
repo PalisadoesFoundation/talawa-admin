@@ -22,7 +22,7 @@ The type of the row data
 
 ### props
 
-[`InterfaceActionsCellProps`](../../../../../types/shared-components/DataTable/interface/interfaces/InterfaceActionsCellProps.md)\<`T`\>
+[`InterfaceActionsCellProps`](../../../../../types/shared-components/ActionsCell/interface/interfaces/InterfaceActionsCellProps.md)\<`T`\>
 
 Props containing row data and action definitions
 

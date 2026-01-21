@@ -233,6 +233,17 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   const hasRowActions = effectiveRowActions && effectiveRowActions.length > 0;
   const hasBulkActions = bulkActions && bulkActions.length > 0;
 
+  // Memoize selected keys/rows for bulk actions to avoid recomputing in map
+  const selectedKeysOnPage = React.useMemo(
+    () => keysOnPage.filter((k) => currentSelection.has(k)),
+    [keysOnPage, currentSelection],
+  );
+
+  const selectedRowsOnPage = React.useMemo(
+    () => paginatedData.filter((_, i) => currentSelection.has(keysOnPage[i])),
+    [paginatedData, keysOnPage, currentSelection],
+  );
+
   // 1) Error state
   if (error) {
     return (
@@ -270,11 +281,21 @@ export function DataTable<T>(props: IDataTableProps<T>) {
           )}
           <thead>
             <tr>
+              {effectiveSelectable && (
+                <th scope="col" className={styles.selectCol}>
+                  <div className={styles.dataSkeletonCell} aria-hidden="true" />
+                </th>
+              )}
               {columns.map((col) => (
                 <th key={col.id} scope="col">
                   {renderHeader(col.header)}
                 </th>
               ))}
+              {hasRowActions && (
+                <th scope="col" className={styles.actionsCol}>
+                  <div className={styles.dataSkeletonCell} aria-hidden="true" />
+                </th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -283,6 +304,15 @@ export function DataTable<T>(props: IDataTableProps<T>) {
                 key={`skeleton-row-${rowIdx}`}
                 data-testid={`skeleton-row-${rowIdx}`}
               >
+                {effectiveSelectable && (
+                  <td>
+                    <div
+                      className={styles.dataSkeletonCell}
+                      data-testid="data-skeleton-cell"
+                      aria-hidden="true"
+                    />
+                  </td>
+                )}
                 {columns.map((col) => (
                   <td key={col.id}>
                     <div
@@ -292,6 +322,15 @@ export function DataTable<T>(props: IDataTableProps<T>) {
                     />
                   </td>
                 ))}
+                {hasRowActions && (
+                  <td>
+                    <div
+                      className={styles.dataSkeletonCell}
+                      data-testid="data-skeleton-cell"
+                      aria-hidden="true"
+                    />
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
@@ -353,15 +392,9 @@ export function DataTable<T>(props: IDataTableProps<T>) {
       {effectiveSelectable && hasBulkActions && (
         <BulkActionsBar count={selectedCountOnPage} onClear={clearSelection}>
           {bulkActions.map((action) => {
-            const selectedKeysOnPage = keysOnPage.filter((k) =>
-              currentSelection.has(k),
-            );
-            const selectedRows = paginatedData.filter((_, i) =>
-              currentSelection.has(keysOnPage[i]),
-            );
             const isDisabled =
               typeof action.disabled === 'function'
-                ? action.disabled(selectedRows, selectedKeysOnPage)
+                ? action.disabled(selectedRowsOnPage, selectedKeysOnPage)
                 : !!action.disabled;
             return (
               <button
