@@ -46,6 +46,7 @@
   "enterEmail": "Enter Email",
   "emailAddress": "Email Address",
   "email": "Email",
+  "emailPlaceholder": "name@example.com",
   "name": "Name",
   "desc": "Description",
   "enterDescription": "Enter Description",
@@ -290,4 +291,6 @@
   "share": "Share",
   "userNotFound": "User not found",
   "avatarProcessingError": "Error processing avatar, please check your image."
+  "viewEventStatistics": "View Event Statistics",
+  "checkInRegistrantsAriaLabel": "Check in registrants"
 }

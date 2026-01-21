@@ -44,6 +44,7 @@
   "enterEmail": "Entrez l'e-mail",
   "emailAddress": "Adresse e-mail",
   "email": "E-mail",
+  "emailPlaceholder": "name@example.com",
   "name": "Nom",
   "gender": "Genre",
   "desc": "Description",
@@ -290,4 +291,6 @@
   "share": "Partager",
   "userNotFound": "Utilisateur non trouvé",
   "avatarProcessingError": "Erreur lors du traitement de l'avatar, veuillez vérifier votre image."
+  "viewEventStatistics": "Voir les statistiques de l'événement",
+  "checkInRegistrantsAriaLabel": "Enregistrer les participants"
 }
