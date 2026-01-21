@@ -26,8 +26,10 @@ export type ButtonVariant =
  * Props for the shared Button wrapper.
  * Extends react-bootstrap Button props and adds loading, icon, and layout helpers.
  */
-export interface InterfaceButtonProps
-  extends Omit<BootstrapButtonProps, 'size' | 'variant'> {
+export interface InterfaceButtonProps extends Omit<
+  BootstrapButtonProps,
+  'size' | 'variant'
+> {
   /** Visual variant (e.g., primary, outline-primary, danger). */
   variant?: ButtonVariant;
   /** Size token. `md` is the default; `xl` uses custom styling. */
