@@ -33,7 +33,7 @@ import styles from './TableLoader.module.css';
 import { Table } from 'react-bootstrap';
 import { InterfaceTableLoaderProps } from 'types/shared-components/TableLoader/interface';
 
-const tableLoader = (props: InterfaceTableLoaderProps): JSX.Element => {
+const TableLoader = (props: InterfaceTableLoaderProps): JSX.Element => {
   const { noOfRows, headerTitles, noOfCols, 'data-testid': dataTestId } = props;
 
   useEffect(() => {
@@ -89,4 +89,4 @@ const tableLoader = (props: InterfaceTableLoaderProps): JSX.Element => {
   );
 };
 
-export default tableLoader;
+export default TableLoader;
