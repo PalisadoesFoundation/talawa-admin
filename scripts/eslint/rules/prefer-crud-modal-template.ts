@@ -92,6 +92,32 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
           return false;
         });
 
+        const hasFormInExpression = (expr: TSESTree.Expression): boolean => {
+          if (expr.type === AST_NODE_TYPES.JSXElement) {
+            const childName =
+              expr.openingElement.name.type === AST_NODE_TYPES.JSXIdentifier
+                ? expr.openingElement.name.name
+                : null;
+            if (childName === 'form' || childName === 'Form') return true;
+            return hasFormElement(expr.children);
+          }
+          if (expr.type === AST_NODE_TYPES.JSXFragment) {
+            return hasFormElement(expr.children);
+          }
+          if (expr.type === AST_NODE_TYPES.LogicalExpression) {
+            return (
+              hasFormInExpression(expr.left) || hasFormInExpression(expr.right)
+            );
+          }
+          if (expr.type === AST_NODE_TYPES.ConditionalExpression) {
+            return (
+              hasFormInExpression(expr.consequent) ||
+              hasFormInExpression(expr.alternate)
+            );
+          }
+          return false;
+        };
+
         const hasFormElement = (children: TSESTree.JSXChild[]): boolean =>
           children.some((child) => {
             if (child.type === AST_NODE_TYPES.JSXElement) {
@@ -104,6 +130,12 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
             }
             if (child.type === AST_NODE_TYPES.JSXFragment) {
               return hasFormElement(child.children);
+            }
+            if (child.type === AST_NODE_TYPES.JSXExpressionContainer) {
+              return (
+                child.expression.type !== AST_NODE_TYPES.JSXEmptyExpression &&
+                hasFormInExpression(child.expression)
+              );
             }
             return false;
           });
