@@ -98,8 +98,16 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
     const importPathPatterns = options.importPathPatterns || [];
 
     // Check if current file should be ignored
-    const filename = context.filename ?? context.getFilename();
-    if (ignorePaths.some((pattern) => matchesGlob(filename, pattern))) {
+    const filename = (context.filename ?? context.getFilename()).replace(
+      /\\/g,
+      '/',
+    );
+    const normalizedIgnorePaths = ignorePaths.map((pattern) =>
+      pattern.replace(/\\/g, '/'),
+    );
+    if (
+      normalizedIgnorePaths.some((pattern) => matchesGlob(filename, pattern))
+    ) {
       return {};
     }
 
@@ -144,7 +152,10 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
           ? spec.imported.name
           : '';
       const local = spec.local.name;
-      return imported === local ? local : `${imported} as ${local}`;
+      const typePrefix = spec.importKind === 'type' ? 'type ' : '';
+      return imported === local
+        ? `${typePrefix}${local}`
+        : `${typePrefix}${imported} as ${local}`;
     };
     return {
       // Collect BaseModal imports
