@@ -1,6 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -625,7 +626,7 @@ describe('UserTableRow', () => {
     expect(gridCell).toBeInTheDocument();
   });
 
-  it('prevents default on keyboard events', async () => {
+  it('prevents default on keyboard events', () => {
     const onRowClick = vi.fn();
 
     render(
@@ -642,16 +643,15 @@ describe('UserTableRow', () => {
     const gridCell = screen.getByTestId('spec-gridcell-u1');
 
     // Test Enter key
-    gridCell.focus();
-    await userEvent.keyboard('{Enter}');
+    fireEvent.keyDown(gridCell, { key: 'Enter' });
     expect(onRowClick).toHaveBeenCalledWith(user);
 
     // Test Space key
-    await userEvent.keyboard(' ');
+    fireEvent.keyDown(gridCell, { key: ' ' });
     expect(onRowClick).toHaveBeenCalledTimes(2);
   });
 
-  it('handles keyboard events without onRowClick handler', async () => {
+  it('handles keyboard events without onRowClick handler', () => {
     render(
       <RouterWrapper>
         <UserTableRow user={user} isDataGrid testIdPrefix="spec" />
@@ -661,14 +661,13 @@ describe('UserTableRow', () => {
     const gridCell = screen.getByTestId('spec-gridcell-u1');
 
     // Should not throw error when onRowClick is undefined
-    gridCell.focus();
-    await userEvent.keyboard('{Enter}');
-    await userEvent.keyboard(' ');
+    fireEvent.keyDown(gridCell, { key: 'Enter' });
+    fireEvent.keyDown(gridCell, { key: ' ' });
 
     expect(gridCell).toBeInTheDocument();
   });
 
-  it('handles keyboard events on table row without onRowClick', async () => {
+  it('handles keyboard events on table row without onRowClick', () => {
     render(
       <RouterWrapper>
         <table>
@@ -682,9 +681,8 @@ describe('UserTableRow', () => {
     const tableRow = screen.getByTestId('spec-tr-u1');
 
     // Should not throw error when onRowClick is undefined
-    tableRow.focus();
-    await userEvent.keyboard('{Enter}');
-    await userEvent.keyboard(' ');
+    fireEvent.keyDown(tableRow, { key: 'Enter' });
+    fireEvent.keyDown(tableRow, { key: ' ' });
 
     expect(tableRow).toBeInTheDocument();
   });

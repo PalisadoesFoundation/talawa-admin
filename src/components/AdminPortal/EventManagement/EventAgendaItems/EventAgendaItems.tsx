@@ -57,19 +57,17 @@ import AgendaItemsCreateModal from 'components/AgendaItems/Create/AgendaItemsCre
 import styles from './EventAgendaItems.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { useParams } from 'react-router';
 
 function EventAgendaItems(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
-  const { orgId } = useParams();
 
   const { t } = useTranslation('translation', { keyPrefix: 'agendaItems' });
 
-  if (!orgId) {
-    // Avoid malformed orgId usage when the route is unexpected.
-    console.error('EventAgendaItems: missing orgId in route params.');
-    return <p>{t('errorLoadingAgendaCategories')}</p>;
-  }
+  // Extract organization ID from URL
+  const url: string = window.location.href;
+  const eventPath = '/admin/event/';
+  const startIdx: number = url.indexOf(eventPath) + eventPath.length;
+  const orgId: string = url.slice(startIdx, url.indexOf('/', startIdx));
 
   // State to manage the create agenda item modal visibility
   const [agendaItemCreateModalIsOpen, setAgendaItemCreateModalIsOpen] =
