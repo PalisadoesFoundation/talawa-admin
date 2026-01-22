@@ -1,4 +1,5 @@
 import { TSESTree, AST_NODE_TYPES, TSESLint } from '@typescript-eslint/utils';
+import path from 'node:path';
 
 type MessageIds = 'preferCrud';
 
@@ -98,10 +99,12 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
     const importPathPatterns = options.importPathPatterns || [];
 
     // Check if current file should be ignored
-    const filename = (context.filename ?? context.getFilename()).replace(
-      /\\/g,
-      '/',
-    );
+    const rawFilename = context.filename ?? context.getFilename();
+    const relativeFilename =
+      rawFilename === '<input>'
+        ? rawFilename
+        : path.relative(context.getCwd(), rawFilename);
+    const filename = relativeFilename.replace(/\\/g, '/');
     const normalizedIgnorePaths = ignorePaths.map((pattern) =>
       pattern.replace(/\\/g, '/'),
     );
