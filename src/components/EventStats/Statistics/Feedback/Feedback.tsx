@@ -51,7 +51,7 @@ export const FeedbackStats = ({
   });
 
   // Get colors from CSS custom properties only
-  const ratingColors = React.useMemo(() => {
+  const ratingColors = useMemo(() => {
     if (typeof document === 'undefined') {
       // Return empty array for SSR - component won't render chart anyway
       return [];
