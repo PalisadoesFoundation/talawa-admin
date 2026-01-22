@@ -176,7 +176,11 @@ const LeftDrawerOrg = ({
       }
       footerContent={
         <>
-          <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
+          <div
+            className={
+              hideDrawer ? styles.profileContainerHidden : styles.profileContainer
+            }
+          >
             <ProfileCard />
           </div>
           <SignOut hideDrawer={hideDrawer} />
