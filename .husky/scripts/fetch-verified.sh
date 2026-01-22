@@ -57,14 +57,18 @@ fetch_and_verify() {
         FILE_MOD_TIME=$(stat -c %Y "$dest" 2>/dev/null || true)
         ;;
       MINGW*|MSYS*|CYGWIN*)
-        if command -v powershell.exe >/dev/null 2>&1; then
-          FILE_MOD_TIME=$(powershell.exe -NoProfile -Command \
-            "([DateTimeOffset](Get-Item -LiteralPath \"${dest}\").LastWriteTimeUtc).ToUnixTimeSeconds()" \
-            2>/dev/null | tr -d '\r' || true)
-        fi
-        ;;
+            if command -v powershell.exe >/dev/null 2>&1; then
+                local win_path
+                win_path=$(cygpath -w "$dest" 2>/dev/null \
+                || echo "$dest" | sed 's|^/\([a-z]\)/|\U\1:/|')
+
+                FILE_MOD_TIME=$(powershell.exe -NoProfile -Command \
+                "([DateTimeOffset](Get-Item -LiteralPath \"${win_path}\").LastWriteTimeUtc).ToUnixTimeSeconds()" \
+                2>/dev/null | tr -d '\r' || true)
+            fi
+            ;;
       *)
-        echo "Warning: Unsupported OS ($OS_TYPE); disabling cache" >&2
+        echo "Warning: Unsupported OS ($OS_TYPE); caching disabled. Script will be downloaded on every run." >&2
         FILE_MOD_TIME=""
         ;;
     esac
@@ -79,13 +83,30 @@ fetch_and_verify() {
     fi
   fi
 
+  if [ "$NEEDS_DOWNLOAD" = false ]; then
+    local cached_sha
+    if command -v sha256sum >/dev/null 2>&1; then
+      cached_sha=$(sha256sum "$dest" | awk '{print $1}')
+    elif command -v shasum >/dev/null 2>&1; then
+      cached_sha=$(shasum -a 256 "$dest" | awk '{print $1}')
+    else
+      echo "Error: sha256sum or shasum is required" >&2
+      exit 1
+    fi
+
+    if [ "$cached_sha" != "$expected_sha" ]; then
+      echo "Warning: cached checksum mismatch; re-downloading" >&2
+      NEEDS_DOWNLOAD=true
+    fi
+  fi
+
   if [ "$NEEDS_DOWNLOAD" = true ]; then
     echo "Fetching $(basename "$dest")..."
 
     local tmp
-    tmp="$(mktemp)"
+    tmp="$(mktemp -t fetch.XXXXXX)"
     trap "rm -f '$tmp'" RETURN
-    
+
     if command -v curl >/dev/null 2>&1; then
       curl -sSfL "$url" -o "$tmp"
     elif command -v wget >/dev/null 2>&1; then
