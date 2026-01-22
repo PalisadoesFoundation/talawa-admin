@@ -23,7 +23,8 @@ import UserScreen from './UserScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import '@testing-library/dom';
-import './UserScreen.module.css';
+import styles from './UserScreen.module.css';
+import type { InterfaceUserPortalNavbarProps } from 'types/UserPortalNavigationBar/interface';
 let mockID: string | undefined = '123';
 let mockLocation: string | undefined = '/user/organization/123';
 
@@ -94,7 +95,7 @@ vi.mock('components/ProfileCard/ProfileCard', () => ({
 vi.mock(
   'components/UserPortal/UserPortalNavigationBar/UserPortalNavigationBar',
   () => ({
-    UserPortalNavigationBar: vi.fn((props) => (
+    UserPortalNavigationBar: vi.fn((props: InterfaceUserPortalNavbarProps) => (
       <nav
         data-testid="user-portal-navbar"
         data-mode={props.mode}
@@ -273,8 +274,8 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     );
 
     const titleElement = screen.getByRole('heading', { level: 1 });
-    expect(titleElement.parentElement?.className).toMatch(
-      /_titleContainer_\w+/,
+    expect(titleElement.parentElement?.className).toContain(
+      styles.titleContainer,
     );
   });
 

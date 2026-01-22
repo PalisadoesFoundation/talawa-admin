@@ -265,6 +265,10 @@ export const UserPortalNavigationBar = (
         variant={variant}
         className={navbarClassName}
         style={customStyles}
+        data-testid="user-portal-navbar"
+        data-mode={mode}
+        data-orgid={organizationId || ''}
+        data-currentpage={currentPage || ''}
       >
         <Container fluid>
           <Navbar.Brand
@@ -309,6 +313,10 @@ export const UserPortalNavigationBar = (
       variant={variant}
       className={navbarClassName}
       style={customStyles}
+      data-testid="user-portal-navbar"
+      data-mode={mode}
+      data-orgid={organizationId || ''}
+      data-currentpage={currentPage || ''}
     >
       <Container fluid>
         <Navbar.Brand
