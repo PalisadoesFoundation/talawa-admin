@@ -6,6 +6,7 @@ import {
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -142,12 +143,12 @@ describe('Testing Volunteers Screen', () => {
     expect(sortBtn).toBeInTheDocument();
 
     // Sort by hoursVolunteered_DESC
-    await userEvent.click(sortBtn);
+    fireEvent.click(sortBtn);
     const hoursVolunteeredDESC = await screen.findByTestId(
       'hoursVolunteered_DESC',
     );
     expect(hoursVolunteeredDESC).toBeInTheDocument();
-    await userEvent.click(hoursVolunteeredDESC);
+    fireEvent.click(hoursVolunteeredDESC);
 
     let volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');
@@ -155,12 +156,12 @@ describe('Testing Volunteers Screen', () => {
     // Sort by hoursVolunteered_ASC
     sortBtn = await screen.findByTestId('sort');
     expect(sortBtn).toBeInTheDocument();
-    await userEvent.click(sortBtn);
+    fireEvent.click(sortBtn);
     const hoursVolunteeredASC = await screen.findByTestId(
       'hoursVolunteered_ASC',
     );
     expect(hoursVolunteeredASC).toBeInTheDocument();
-    await userEvent.click(hoursVolunteeredASC);
+    fireEvent.click(hoursVolunteeredASC);
 
     volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName[0]).toHaveTextContent('Bruce Graza');
@@ -209,12 +210,12 @@ describe('Testing Volunteers Screen', () => {
     expect(filterBtn).toBeInTheDocument();
 
     // Filter by All
-    await userEvent.click(filterBtn);
+    fireEvent.click(filterBtn);
 
     await waitFor(() => {
       expect(screen.getByTestId('all')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('all'));
+    fireEvent.click(screen.getByTestId('all'));
 
     const volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName).toHaveLength(3); // volunteer1, volunteer2, volunteer3
@@ -229,12 +230,12 @@ describe('Testing Volunteers Screen', () => {
     expect(filterBtn).toBeInTheDocument();
 
     // Filter by Pending
-    await userEvent.click(filterBtn);
+    fireEvent.click(filterBtn);
 
     await waitFor(() => {
       expect(screen.getByTestId('pending')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('pending'));
+    fireEvent.click(screen.getByTestId('pending'));
 
     const volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName[0]).toHaveTextContent('Bruce Graza');
@@ -249,12 +250,12 @@ describe('Testing Volunteers Screen', () => {
     expect(filterBtn).toBeInTheDocument();
 
     // Filter by Accepted
-    await userEvent.click(filterBtn);
+    fireEvent.click(filterBtn);
 
     await waitFor(() => {
       expect(screen.getByTestId('accepted')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('accepted'));
+    fireEvent.click(screen.getByTestId('accepted'));
 
     const volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');

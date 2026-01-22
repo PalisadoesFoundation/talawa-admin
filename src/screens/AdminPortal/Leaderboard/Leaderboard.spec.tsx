@@ -6,6 +6,7 @@ import {
 } from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -158,20 +159,20 @@ describe('Testing Leaderboard Screen', () => {
     expect(sortBtn).toBeInTheDocument();
 
     // Sort by hours_DESC
-    await userEvent.click(sortBtn);
+    fireEvent.click(sortBtn);
     const hoursDesc = await screen.findByTestId('hours_DESC');
     expect(hoursDesc).toBeInTheDocument();
-    await userEvent.click(hoursDesc);
+    fireEvent.click(hoursDesc);
 
     let userName = await screen.findAllByTestId('userName');
     expect(userName[0]).toHaveTextContent('Teresa Bradley');
 
     // Sort by hours_ASC
     expect(sortBtn).toBeInTheDocument();
-    await userEvent.click(sortBtn);
+    fireEvent.click(sortBtn);
     const hoursAsc = await screen.findByTestId('hours_ASC');
     expect(hoursAsc).toBeInTheDocument();
-    await userEvent.click(hoursAsc);
+    fireEvent.click(hoursAsc);
 
     userName = await screen.findAllByTestId('userName');
     expect(userName[0]).toHaveTextContent('Jane Doe');
@@ -189,11 +190,11 @@ describe('Testing Leaderboard Screen', () => {
     const filter = await screen.findByTestId('timeFrame');
     expect(filter).toBeInTheDocument();
 
-    await userEvent.click(filter);
+    fireEvent.click(filter);
     const timeFrameAll = await screen.findByTestId('allTime');
     expect(timeFrameAll).toBeInTheDocument();
 
-    await userEvent.click(timeFrameAll);
+    fireEvent.click(timeFrameAll);
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(4);
   });
@@ -211,11 +212,11 @@ describe('Testing Leaderboard Screen', () => {
 
     // Filter by weekly
     expect(filter).toBeInTheDocument();
-    await userEvent.click(filter);
+    fireEvent.click(filter);
 
     const timeFrameWeekly = await screen.findByTestId('weekly');
     expect(timeFrameWeekly).toBeInTheDocument();
-    await userEvent.click(timeFrameWeekly);
+    fireEvent.click(timeFrameWeekly);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(1);
@@ -232,11 +233,11 @@ describe('Testing Leaderboard Screen', () => {
     // Filter by monthly
     const filter = await screen.findByTestId('timeFrame');
     expect(filter).toBeInTheDocument();
-    await userEvent.click(filter);
+    fireEvent.click(filter);
 
     const timeFrameMonthly = await screen.findByTestId('monthly');
     expect(timeFrameMonthly).toBeInTheDocument();
-    await userEvent.click(timeFrameMonthly);
+    fireEvent.click(timeFrameMonthly);
 
     await waitFor(() => {
       const userName = screen.getAllByTestId('userName');
@@ -255,11 +256,11 @@ describe('Testing Leaderboard Screen', () => {
     // Filter by yearly
     const filter = await screen.findByTestId('timeFrame');
     expect(filter).toBeInTheDocument();
-    await userEvent.click(filter);
+    fireEvent.click(filter);
 
     const timeFrameYearly = await screen.findByTestId('yearly');
     expect(timeFrameYearly).toBeInTheDocument();
-    await userEvent.click(timeFrameYearly);
+    fireEvent.click(timeFrameYearly);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(3);
@@ -314,8 +315,7 @@ describe('Testing Leaderboard Screen', () => {
     expect(searchInput).toBeInTheDocument();
     const userName = screen.getAllByTestId('userName');
     userName[0].focus();
-    userName[0].focus();
-    await userEvent.keyboard('{Enter}');
+    fireEvent.keyDown(userName[0], { key: 'Enter' });
     expect(screen.getByTestId('memberScreen')).toBeInTheDocument();
   });
 
@@ -329,14 +329,7 @@ describe('Testing Leaderboard Screen', () => {
 
     const userName = screen.getAllByTestId('userName');
     userName[0].focus();
-    userName[0].dispatchEvent(
-      new KeyboardEvent('keydown', {
-        key: ' ',
-        code: 'Space',
-        bubbles: true,
-        cancelable: true,
-      }),
-    );
+    fireEvent.keyDown(userName[0], { key: ' ' });
 
     await waitFor(() => {
       expect(screen.getByTestId('memberScreen')).toBeInTheDocument();

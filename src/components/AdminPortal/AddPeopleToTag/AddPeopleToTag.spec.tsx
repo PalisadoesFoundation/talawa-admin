@@ -2,8 +2,8 @@ import React from 'react';
 import { vi, expect, describe, it } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, cleanup, waitFor, act } from '@testing-library/react';
 import { fireEvent } from '@testing-library/dom';
+import { render, screen, cleanup, waitFor, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
@@ -300,9 +300,8 @@ describe('Organisation Tags Page', () => {
     // SearchBar renders a clear button when value is not empty
     const clearBtn = screen.getByTestId('clearFirstNameSearch');
     fireEvent.click(clearBtn);
-    await waitFor(() => {
-      expect(input).toHaveValue('');
-    });
+
+    expect(input).toHaveValue('');
   });
 
   it('clears last name search input', async () => {
@@ -316,9 +315,8 @@ describe('Organisation Tags Page', () => {
     // SearchBar renders a clear button when value is not empty
     const clearBtn = screen.getByTestId('clearLastNameSearch');
     fireEvent.click(clearBtn);
-    await waitFor(() => {
-      expect(input).toHaveValue('');
-    });
+
+    expect(input).toHaveValue('');
   });
 
   it('Renders more members with infinite scroll', async () => {
@@ -338,9 +336,9 @@ describe('Organisation Tags Page', () => {
     const initialMemberDataLength = screen.getAllByTestId('memberName').length;
 
     // Set scroll position to the bottom
-    addPeopleToTagScrollableDiv.scrollTop =
-      addPeopleToTagScrollableDiv.scrollHeight;
-    addPeopleToTagScrollableDiv.dispatchEvent(new Event('scroll'));
+    fireEvent.scroll(addPeopleToTagScrollableDiv, {
+      target: { scrollY: addPeopleToTagScrollableDiv.scrollHeight },
+    });
 
     await waitFor(() => {
       const finalMemberDataLength = screen.getAllByTestId('memberName').length;

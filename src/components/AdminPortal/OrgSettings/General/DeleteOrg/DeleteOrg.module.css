@@ -18,8 +18,8 @@
   composes: icon from '../../../../../style/app-fixed.module.css';
 }
 
-.modalHeaderDelete {
-  composes: modalHeaderDelete from '../../../../../style/app-fixed.module.css';
+.modelHeaderDelete {
+  composes: modelHeaderDelete from '../../../../../style/app-fixed.module.css';
 }
 
 .btnDelete {
