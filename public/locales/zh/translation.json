@@ -2351,6 +2351,10 @@
     "noEventsAttended": "未参加任何活动"
   },
   "eventStats": {
+    "averageRating": {
+      "title": "平均评论分数",
+      "rated": "评分 {{score}} / 5"
+    },
     "title": "活動統計",
     "reviews": {
       "title": "評論",

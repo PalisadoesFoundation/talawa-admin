@@ -70,7 +70,7 @@ vi.mock('shared-components/Avatar/Avatar', () => ({
   ),
 }));
 
-vi.mock('subComponents/SortingButton', () => ({
+vi.mock('shared-components/SortingButton/SortingButton', () => ({
   default: ({
     onSortChange,
     dataTestIdPrefix,
@@ -121,7 +121,6 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
       <input
         data-testid={inputTestId}
         onChange={(e) => {
-          // Call onSearch immediately without debounce for testing
           onSearch(e.target.value);
         }}
       />

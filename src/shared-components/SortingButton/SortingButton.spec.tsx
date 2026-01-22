@@ -1,7 +1,46 @@
+/* eslint-disable react/no-multi-comp */
+import type { ReactNode, ButtonHTMLAttributes } from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import SortingButton from './SortingButton';
 import type { InterfaceSortingOption } from 'types/shared-components/SearchFilterBar/interface';
+let user: ReturnType<typeof userEvent.setup>;
+
+beforeEach(() => {
+  user = userEvent.setup({
+    delay: null, // IMPORTANT: disables timers
+  });
+});
+
+vi.mock('react-bootstrap/Dropdown', async () => {
+  const React = await import('react');
+
+  type Props = { children?: ReactNode };
+  type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+    children?: ReactNode;
+  };
+
+  const Dropdown = ({ children }: Props) => <div>{children}</div>;
+
+  Dropdown.Toggle = ({ children, ...props }: ButtonProps) => (
+    <button {...props}>{children}</button>
+  );
+
+  Dropdown.Menu = ({ children }: Props) => <div>{children}</div>;
+
+  Dropdown.Item = ({
+    children,
+    onClick,
+    ...props
+  }: ButtonProps & { onClick?: () => void }) => (
+    <button onClick={onClick} {...props}>
+      {children}
+    </button>
+  );
+
+  return { default: Dropdown };
+});
 
 describe('SortingButton', () => {
   const mockSortingOptions: InterfaceSortingOption[] = [
@@ -110,11 +149,11 @@ describe('SortingButton', () => {
   });
 
   describe('Dropdown Functionality', () => {
-    it('should render all sorting options in the dropdown menu', () => {
+    it('should render all sorting options in the dropdown menu', async () => {
       render(<SortingButton {...defaultProps} />);
 
-      const button = screen.getByRole('button', { expanded: false });
-      fireEvent.click(button);
+      const button = screen.getByTestId('sort');
+      await user.click(button);
 
       expect(screen.getByText('Latest')).toBeInTheDocument();
       expect(screen.getByText('Oldest')).toBeInTheDocument();
@@ -122,39 +161,39 @@ describe('SortingButton', () => {
       expect(screen.getByText('Least Popular')).toBeInTheDocument();
     });
 
-    it('should call onSortChange with string value when option is clicked', () => {
+    it('should call onSortChange with string value when option is clicked', async () => {
       const onSortChange = vi.fn();
       render(<SortingButton {...defaultProps} onSortChange={onSortChange} />);
 
-      const button = screen.getByRole('button', { expanded: false });
-      fireEvent.click(button);
+      const button = screen.getByTestId('sort');
+      await user.click(button);
 
       const latestOption = screen.getByText('Latest');
-      fireEvent.click(latestOption);
+      await user.click(latestOption);
 
       expect(onSortChange).toHaveBeenCalledWith('latest');
       expect(onSortChange).toHaveBeenCalledTimes(1);
     });
 
-    it('should call onSortChange with number value when option is clicked', () => {
+    it('should call onSortChange with number value when option is clicked', async () => {
       const onSortChange = vi.fn();
       render(<SortingButton {...defaultProps} onSortChange={onSortChange} />);
 
-      const button = screen.getByRole('button', { expanded: false });
-      fireEvent.click(button);
+      const button = screen.getByTestId('sort');
+      await user.click(button);
 
       const popularOption = screen.getByText('Most Popular');
-      fireEvent.click(popularOption);
+      await user.click(popularOption);
 
       expect(onSortChange).toHaveBeenCalledWith(1);
       expect(onSortChange).toHaveBeenCalledTimes(1);
     });
 
-    it('should render options with correct data-testid attributes', () => {
+    it('should render options with correct data-testid attributes', async () => {
       render(<SortingButton {...defaultProps} />);
 
-      const button = screen.getByRole('button', { expanded: false });
-      fireEvent.click(button);
+      const button = screen.getByTestId('sort');
+      await user.click(button);
 
       expect(screen.getByTestId('latest')).toBeInTheDocument();
       expect(screen.getByTestId('oldest')).toBeInTheDocument();
@@ -241,11 +280,11 @@ describe('SortingButton', () => {
   });
 
   describe('Edge Cases', () => {
-    it('should handle empty sortingOptions array', () => {
+    it('should handle empty sortingOptions array', async () => {
       render(<SortingButton {...defaultProps} sortingOptions={[]} />);
 
-      const button = screen.getByRole('button', { expanded: false });
-      fireEvent.click(button);
+      const button = screen.getByTestId('sort');
+      await user.click(button);
 
       // Should not crash and dropdown should still render
       expect(button).toBeInTheDocument();
@@ -265,7 +304,7 @@ describe('SortingButton', () => {
       expect(button).toHaveClass('btn-success');
     });
 
-    it('should handle invalid numeric selectedOption and display it without preselecting an option', () => {
+    it('should handle invalid numeric selectedOption and display it without preselecting an option', async () => {
       render(
         <SortingButton
           {...defaultProps}
@@ -283,7 +322,7 @@ describe('SortingButton', () => {
       expect(button).toHaveClass('btn-success');
 
       // Open dropdown and verify no option matches 999
-      fireEvent.click(button);
+      await user.click(button);
 
       // All options should be visible but none should be "active" or preselected
       expect(screen.getByText('Latest')).toBeInTheDocument();
