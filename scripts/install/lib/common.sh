@@ -402,25 +402,6 @@ validate_url() {
     [[ "$url" =~ ^https?://[^[:space:]]+$ ]]
 }
 
-# Get the directory of the currently executing script
-# Uses $0 for better portability across shells
-# Usage: script_dir=$(get_script_dir)
-get_script_dir() {
-    local source="${BASH_SOURCE[0]:-$0}"
-    local dir
-
-    # Resolve symlinks
-    while [[ -L "$source" ]]; do
-        dir="$(cd -P "$(dirname "$source")" && pwd)"
-        source="$(readlink "$source")"
-        # If source is relative, resolve it relative to the symlink directory
-        [[ "$source" != /* ]] && source="$dir/$source"
-    done
-
-    dir="$(cd -P "$(dirname "$source")" && pwd)"
-    printf '%s' "$dir"
-}
-
 # Safely source another script file
 # Usage: safe_source "/path/to/script.sh"
 safe_source() {
