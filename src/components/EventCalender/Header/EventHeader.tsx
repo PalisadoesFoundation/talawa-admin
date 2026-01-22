@@ -40,7 +40,7 @@ import AddIcon from '@mui/icons-material/Add';
 import styles from 'style/app-fixed.module.css';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { useTranslation } from 'react-i18next';
-import SortingButton from 'subComponents/SortingButton';
+import SortingButton from 'shared-components/SortingButton/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import type { InterfaceEventHeaderProps } from 'types/Event/interface';
 
