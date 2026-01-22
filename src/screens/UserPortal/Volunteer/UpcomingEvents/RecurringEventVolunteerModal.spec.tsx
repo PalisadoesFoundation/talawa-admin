@@ -1,5 +1,6 @@
 import { describe, test, expect, vi, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import dayjs from 'dayjs';
 import i18n from 'utils/i18nForTest';
@@ -108,7 +109,8 @@ describe('RecurringEventVolunteerModal', () => {
     ).toBeInTheDocument();
   });
 
-  test('allows switching between instance and series options (covers both onChange handlers)', () => {
+  test('allows switching between instance and series options (covers both onChange handlers)', async () => {
+    const user = userEvent.setup();
     render(
       <I18nextProvider i18n={i18n}>
         <RecurringEventVolunteerModal {...defaultProps} />
@@ -123,17 +125,18 @@ describe('RecurringEventVolunteerModal', () => {
     expect(instanceRadio).not.toBeChecked();
 
     // Switch to instance
-    fireEvent.click(instanceRadio);
+    await user.click(instanceRadio);
     expect(instanceRadio).toBeChecked();
     expect(seriesRadio).not.toBeChecked();
 
     // Switch back to series (exercises the series onChange handler branch)
-    fireEvent.click(seriesRadio);
+    await user.click(seriesRadio);
     expect(seriesRadio).toBeChecked();
     expect(instanceRadio).not.toBeChecked();
   });
 
-  test('submit triggers onSelectSeries when "series" option is selected', () => {
+  test('submit triggers onSelectSeries when "series" option is selected', async () => {
+    const user = userEvent.setup();
     render(
       <I18nextProvider i18n={i18n}>
         <RecurringEventVolunteerModal {...defaultProps} />
@@ -142,13 +145,14 @@ describe('RecurringEventVolunteerModal', () => {
 
     // Series is selected by default
     const submitBtn = screen.getByTestId('modal-primary-btn');
-    fireEvent.click(submitBtn);
+    await user.click(submitBtn);
 
     expect(defaultProps.onSelectSeries).toHaveBeenCalledTimes(1);
     expect(defaultProps.onSelectInstance).not.toHaveBeenCalled();
   });
 
-  test('submit triggers onSelectInstance when "instance" option is selected', () => {
+  test('submit triggers onSelectInstance when "instance" option is selected', async () => {
+    const user = userEvent.setup();
     render(
       <I18nextProvider i18n={i18n}>
         <RecurringEventVolunteerModal {...defaultProps} />
@@ -159,33 +163,35 @@ describe('RecurringEventVolunteerModal', () => {
     const submitBtn = screen.getByTestId('modal-primary-btn');
 
     // Change selection to instance
-    fireEvent.click(instanceRadio);
-    fireEvent.click(submitBtn);
+    await user.click(instanceRadio);
+    await user.click(submitBtn);
 
     expect(defaultProps.onSelectInstance).toHaveBeenCalledTimes(1);
     expect(defaultProps.onSelectSeries).not.toHaveBeenCalled();
   });
 
-  test('cancel button calls onHide', () => {
+  test('cancel button calls onHide', async () => {
+    const user = userEvent.setup();
     render(
       <I18nextProvider i18n={i18n}>
         <RecurringEventVolunteerModal {...defaultProps} />
       </I18nextProvider>,
     );
 
-    fireEvent.click(screen.getByTestId('modal-secondary-btn'));
+    await user.click(screen.getByTestId('modal-secondary-btn'));
 
     expect(defaultProps.onHide).toHaveBeenCalledTimes(1);
   });
 
-  test('close button calls onHide', () => {
+  test('close button calls onHide', async () => {
+    const user = userEvent.setup();
     render(
       <I18nextProvider i18n={i18n}>
         <RecurringEventVolunteerModal {...defaultProps} />
       </I18nextProvider>,
     );
 
-    fireEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
 
     expect(defaultProps.onHide).toHaveBeenCalledTimes(1);
   });

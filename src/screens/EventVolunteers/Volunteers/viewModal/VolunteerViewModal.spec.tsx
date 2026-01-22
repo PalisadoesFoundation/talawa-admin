@@ -4,7 +4,8 @@ import {
   AdapterDayjs,
 } from 'shared-components/DatePicker';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -157,24 +158,26 @@ describe('Testing VolunteerViewModal', () => {
   });
 
   describe('Modal Functionality', () => {
-    it('should call hide function when close button is clicked', () => {
+    it('should call hide function when close button is clicked', async () => {
+      const user = userEvent.setup();
       const hideMock = vi.fn();
       const props = { ...itemProps[0], hide: hideMock };
       renderVolunteerViewModal(props);
 
       const closeButton = screen.getByTestId('modalCloseBtn');
-      fireEvent.click(closeButton);
+      await user.click(closeButton);
 
       expect(hideMock).toHaveBeenCalledTimes(1);
     });
 
-    it('should call hide function when footer close button is clicked', () => {
+    it('should call hide function when footer close button is clicked', async () => {
+      const user = userEvent.setup();
       const hideMock = vi.fn();
       const props = { ...itemProps[0], hide: hideMock };
       renderVolunteerViewModal(props);
 
       const closeButton = screen.getByTestId('modal-close-btn');
-      fireEvent.click(closeButton);
+      await user.click(closeButton);
 
       expect(hideMock).toHaveBeenCalledTimes(1);
     });
@@ -325,38 +328,44 @@ describe('Testing VolunteerViewModal', () => {
   });
 
   describe('Field onChange handlers', () => {
-    it('should handle volunteer name field onChange', () => {
+    it('should handle volunteer name field onChange', async () => {
+      const user = userEvent.setup();
       renderVolunteerViewModal(itemProps[0]);
 
       const volunteerNameField = screen.getByTestId('volunteerName');
       const input = volunteerNameField.querySelector('input');
 
       if (input) {
-        fireEvent.change(input, { target: { value: 'New Name' } });
+        await user.clear(input);
+        await user.type(input, 'New Name');
         expect(input).toHaveValue('Teresa Bradley');
       }
     });
 
-    it('should handle status field onChange', () => {
+    it('should handle status field onChange', async () => {
+      const user = userEvent.setup();
       renderVolunteerViewModal(itemProps[0]);
 
       const statusField = screen.getByTestId('volunteerStatus');
       const input = statusField.querySelector('input');
 
       if (input) {
-        fireEvent.change(input, { target: { value: 'New Status' } });
+        await user.clear(input);
+        await user.type(input, 'New Status');
         expect(input).toHaveValue('Accepted');
       }
     });
 
-    it('should handle hours volunteered field onChange', () => {
+    it('should handle hours volunteered field onChange', async () => {
+      const user = userEvent.setup();
       renderVolunteerViewModal(itemProps[0]);
 
       const hoursField = screen.getByTestId('hoursVolunteered');
       const input = hoursField.querySelector('input');
 
       if (input) {
-        fireEvent.change(input, { target: { value: '20' } });
+        await user.clear(input);
+        await user.type(input, '20');
         expect(input).toHaveValue('10');
       }
     });

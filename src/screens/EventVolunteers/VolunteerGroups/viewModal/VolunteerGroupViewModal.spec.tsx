@@ -5,7 +5,7 @@ import {
   AdapterDayjs,
 } from 'shared-components/DatePicker';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -138,63 +138,45 @@ describe('Testing VolunteerGroupViewModal', () => {
     it('should keep group name field read-only', () => {
       renderGroupViewModal(itemProps[0]);
 
-      const groupNameField = screen.getByTestId('groupName');
-      const input = groupNameField.querySelector('input');
-      expect(input).not.toBeNull();
-
-      fireEvent.change(input as HTMLInputElement, {
-        target: { value: 'New Name' },
-      });
+      const input = screen.getByTestId('groupName');
+      expect(input).toBeInTheDocument();
+      expect(input).toBeDisabled();
       expect(input).toHaveValue('Group 1');
     });
 
     it('should keep volunteersRequired field read-only', () => {
       renderGroupViewModal(itemProps[1]);
 
-      const volunteersRequiredField = screen.getByTestId('volunteersRequired');
-      const input = volunteersRequiredField.querySelector('input');
-      expect(input).not.toBeNull();
-
-      fireEvent.change(input as HTMLInputElement, { target: { value: '20' } });
+      const input = screen.getByTestId('volunteersRequired');
+      expect(input).toBeInTheDocument();
+      expect(input).toBeDisabled();
       expect(input).toHaveValue('10');
     });
 
     it('should keep description field read-only', () => {
       renderGroupViewModal(itemProps[0]);
 
-      const descriptionField = screen.getByTestId('groupDescription');
-      const input = descriptionField.querySelector('input');
-      expect(input).not.toBeNull();
-
-      fireEvent.change(input as HTMLInputElement, {
-        target: { value: 'New Description' },
-      });
+      const input = screen.getByTestId('groupDescription');
+      expect(input).toBeInTheDocument();
+      expect(input).toBeDisabled();
       expect(input).toHaveValue('desc');
     });
 
     it('should keep leader field read-only', () => {
       renderGroupViewModal(itemProps[0]);
 
-      const leaderField = screen.getByTestId('groupLeader');
-      const input = leaderField.querySelector('input');
-      expect(input).not.toBeNull();
-
-      fireEvent.change(input as HTMLInputElement, {
-        target: { value: 'New Leader' },
-      });
+      const input = screen.getByTestId('groupLeader');
+      expect(input).toBeInTheDocument();
+      expect(input).toBeDisabled();
       expect(input).toHaveValue('Teresa Bradley');
     });
 
     it('should keep creator field read-only', () => {
       renderGroupViewModal(itemProps[0]);
 
-      const creatorField = screen.getByTestId('groupCreator');
-      const input = creatorField.querySelector('input');
-      expect(input).not.toBeNull();
-
-      fireEvent.change(input as HTMLInputElement, {
-        target: { value: 'New Creator' },
-      });
+      const input = screen.getByTestId('groupCreator');
+      expect(input).toBeInTheDocument();
+      expect(input).toBeDisabled();
       expect(input).toHaveValue('Wilt Shepherd');
     });
   });

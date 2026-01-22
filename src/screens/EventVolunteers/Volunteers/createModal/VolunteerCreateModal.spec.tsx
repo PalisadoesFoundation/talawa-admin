@@ -6,13 +6,8 @@ import {
   AdapterDayjs,
 } from 'shared-components/DatePicker';
 import type { RenderResult } from '@testing-library/react';
-import {
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-  within,
-} from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -23,7 +18,6 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceVolunteerCreateModal } from './VolunteerCreateModal';
 import VolunteerCreateModal from './VolunteerCreateModal';
-import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 
 /**
@@ -90,6 +84,7 @@ describe('Testing VolunteerCreateModal', () => {
   });
 
   it('VolunteerCreateModal -> Create', async () => {
+    const user = userEvent.setup();
     renderCreateModal(link1, itemProps[0]);
     expect(screen.getByText(t.addVolunteer)).toBeInTheDocument();
 
@@ -97,15 +92,15 @@ describe('Testing VolunteerCreateModal', () => {
     const membersSelect = await screen.findByTestId('membersSelect');
     expect(membersSelect).toBeInTheDocument();
     const volunteerInputField = within(membersSelect).getByRole('combobox');
-    fireEvent.mouseDown(volunteerInputField);
+    await user.click(volunteerInputField);
 
     const volunteerOption = await screen.findByText('John Doe');
     expect(volunteerOption).toBeInTheDocument();
-    fireEvent.click(volunteerOption);
+    await user.click(volunteerOption);
 
     const submitBtn = screen.getByTestId('modal-submit-btn');
     expect(submitBtn).toBeInTheDocument();
-    await userEvent.click(submitBtn);
+    await user.click(submitBtn);
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(t.volunteerAdded);
@@ -115,6 +110,7 @@ describe('Testing VolunteerCreateModal', () => {
   });
 
   it('VolunteerCreateModal -> Create -> Error', async () => {
+    const user = userEvent.setup();
     renderCreateModal(link2, itemProps[0]);
     expect(screen.getByText(t.addVolunteer)).toBeInTheDocument();
 
@@ -122,15 +118,15 @@ describe('Testing VolunteerCreateModal', () => {
     const membersSelect = await screen.findByTestId('membersSelect');
     expect(membersSelect).toBeInTheDocument();
     const volunteerInputField = within(membersSelect).getByRole('combobox');
-    fireEvent.mouseDown(volunteerInputField);
+    await user.click(volunteerInputField);
 
     const volunteerOption = await screen.findByText('John Doe');
     expect(volunteerOption).toBeInTheDocument();
-    fireEvent.click(volunteerOption);
+    await user.click(volunteerOption);
 
     const submitBtn = screen.getByTestId('modal-submit-btn');
     expect(submitBtn).toBeInTheDocument();
-    await userEvent.click(submitBtn);
+    await user.click(submitBtn);
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();
@@ -138,22 +134,23 @@ describe('Testing VolunteerCreateModal', () => {
   });
 
   it('should handle isOptionEqualToValue for members Autocomplete', async () => {
+    const user = userEvent.setup();
     renderCreateModal(link1, itemProps[0]);
     expect(screen.getByText(t.addVolunteer)).toBeInTheDocument();
 
     // Select a member
     const membersSelect = await screen.findByTestId('membersSelect');
     const memberInputField = within(membersSelect).getByRole('combobox');
-    fireEvent.mouseDown(memberInputField);
+    await user.click(memberInputField);
     const memberOption = await screen.findByText('John Doe');
-    fireEvent.click(memberOption);
+    await user.click(memberOption);
 
     await waitFor(() => {
       expect(memberInputField).toHaveValue('John Doe');
     });
 
     // Open again: since filterSelectedOptions is true, the selected option should be filtered out
-    fireEvent.mouseDown(memberInputField);
+    await user.click(memberInputField);
 
     // 'John Doe' should NOT be in the list now, but other options like 'Jane Smith' should be
     expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
@@ -174,6 +171,7 @@ describe('Testing VolunteerCreateModal', () => {
     };
 
     it('should create volunteer for entire series when applyTo is "series"', async () => {
+      const user = userEvent.setup();
       renderCreateModal(link1, recurringEventProps);
       expect(screen.getByText(t.addVolunteer)).toBeInTheDocument();
 
@@ -190,12 +188,12 @@ describe('Testing VolunteerCreateModal', () => {
       // Select a volunteer
       const membersSelect = await screen.findByTestId('membersSelect');
       const volunteerInputField = within(membersSelect).getByRole('combobox');
-      fireEvent.mouseDown(volunteerInputField);
+      await user.click(volunteerInputField);
       const volunteerOption = await screen.findByText('John Doe');
-      fireEvent.click(volunteerOption);
+      await user.click(volunteerOption);
 
       const submitBtn = screen.getByTestId('modal-submit-btn');
-      await userEvent.click(submitBtn);
+      await user.click(submitBtn);
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -207,6 +205,7 @@ describe('Testing VolunteerCreateModal', () => {
     });
 
     it('should create volunteer for this instance only when applyTo is "instance"', async () => {
+      const user = userEvent.setup();
       renderCreateModal(link1, recurringEventProps);
       expect(screen.getByText(t.addVolunteer)).toBeInTheDocument();
 
@@ -214,18 +213,18 @@ describe('Testing VolunteerCreateModal', () => {
       const instanceRadio = screen.getByRole('radio', {
         name: /this event only/i,
       });
-      await userEvent.click(instanceRadio);
+      await user.click(instanceRadio);
       expect(instanceRadio).toBeChecked();
 
       // Select a volunteer
       const membersSelect = await screen.findByTestId('membersSelect');
       const volunteerInputField = within(membersSelect).getByRole('combobox');
-      fireEvent.mouseDown(volunteerInputField);
+      await user.click(volunteerInputField);
       const volunteerOption = await screen.findByText('John Doe');
-      fireEvent.click(volunteerOption);
+      await user.click(volunteerOption);
 
       const submitBtn = screen.getByTestId('modal-submit-btn');
-      await userEvent.click(submitBtn);
+      await user.click(submitBtn);
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -237,17 +236,18 @@ describe('Testing VolunteerCreateModal', () => {
     });
 
     it('should use baseEvent.id for recurring events when available', async () => {
+      const user = userEvent.setup();
       renderCreateModal(link1, recurringEventProps);
 
       // Select a volunteer to test the mutation data creation
       const membersSelect = await screen.findByTestId('membersSelect');
       const volunteerInputField = within(membersSelect).getByRole('combobox');
-      fireEvent.mouseDown(volunteerInputField);
+      await user.click(volunteerInputField);
       const volunteerOption = await screen.findByText('John Doe');
-      fireEvent.click(volunteerOption);
+      await user.click(volunteerOption);
 
       const submitBtn = screen.getByTestId('modal-submit-btn');
-      await userEvent.click(submitBtn);
+      await user.click(submitBtn);
 
       // This test verifies the eventId logic: baseEvent?.id || eventId
       await waitFor(() => {
@@ -296,24 +296,25 @@ describe('Testing VolunteerCreateModal', () => {
     });
 
     it('should reset applyTo to "series" after successful submission', async () => {
+      const user = userEvent.setup();
       renderCreateModal(link1, recurringEventProps);
 
       // Change to instance
       const instanceRadio = screen.getByRole('radio', {
         name: /this event only/i,
       });
-      await userEvent.click(instanceRadio);
+      await user.click(instanceRadio);
       expect(instanceRadio).toBeChecked();
 
       // Submit form
       const membersSelect = await screen.findByTestId('membersSelect');
       const volunteerInputField = within(membersSelect).getByRole('combobox');
-      fireEvent.mouseDown(volunteerInputField);
+      await user.click(volunteerInputField);
       const volunteerOption = await screen.findByText('John Doe');
-      fireEvent.click(volunteerOption);
+      await user.click(volunteerOption);
 
       const submitBtn = screen.getByTestId('modal-submit-btn');
-      await userEvent.click(submitBtn);
+      await user.click(submitBtn);
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalled();
@@ -333,15 +334,16 @@ describe('Testing VolunteerCreateModal', () => {
     });
 
     it('should handle volunteer deselection and disable submit button', async () => {
+      const user = userEvent.setup();
       renderCreateModal(link1, itemProps[0]);
 
       // Select a volunteer first
       const membersSelect = await screen.findByTestId('membersSelect');
       const volunteerInputField = within(membersSelect).getByRole('combobox');
-      fireEvent.mouseDown(volunteerInputField);
+      await user.click(volunteerInputField);
 
       const volunteerOption = await screen.findByText('John Doe');
-      fireEvent.click(volunteerOption);
+      await user.click(volunteerOption);
 
       await waitFor(() => {
         const submitBtn = screen.getByTestId('modal-submit-btn');
@@ -349,8 +351,7 @@ describe('Testing VolunteerCreateModal', () => {
       });
 
       // Clear the selection
-      fireEvent.change(volunteerInputField, { target: { value: '' } });
-      fireEvent.blur(volunteerInputField);
+      await user.clear(volunteerInputField);
 
       await waitFor(() => {
         const submitBtn = screen.getByTestId('modal-submit-btn');

@@ -2,11 +2,11 @@ import React from 'react';
 import {
   render,
   screen,
-  fireEvent,
   waitFor,
   renderHook,
   act,
 } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -73,7 +73,8 @@ describe('CRUDModalTemplate', () => {
       expect(screen.queryByText('Modal Content')).not.toBeInTheDocument();
     });
 
-    it('should call onClose when close button is clicked', () => {
+    it('should call onClose when close button is clicked', async () => {
+      const user = userEvent.setup();
       renderWithI18n(
         <CRUDModalTemplate open={true} title="Test Modal" onClose={mockOnClose}>
           <div>Content</div>
@@ -81,7 +82,7 @@ describe('CRUDModalTemplate', () => {
       );
 
       const closeButton = screen.getByTestId('modalCloseBtn');
-      fireEvent.click(closeButton);
+      await user.click(closeButton);
 
       expect(mockOnClose).toHaveBeenCalledTimes(1);
     });
@@ -106,7 +107,8 @@ describe('CRUDModalTemplate', () => {
       expect(screen.getByText('Cancel')).toBeInTheDocument();
     });
 
-    it('should call onPrimary when primary button is clicked', () => {
+    it('should call onPrimary when primary button is clicked', async () => {
+      const user = userEvent.setup();
       renderWithI18n(
         <CRUDModalTemplate
           open={true}
@@ -120,7 +122,7 @@ describe('CRUDModalTemplate', () => {
       );
 
       const saveButton = screen.getByText('Save');
-      fireEvent.click(saveButton);
+      await user.click(saveButton);
 
       expect(mockOnPrimary).toHaveBeenCalledTimes(1);
     });
@@ -296,7 +298,8 @@ describe('CRUDModalTemplate', () => {
       expect(screen.getByTestId('spinner')).toBeInTheDocument();
     });
 
-    it('should not call onPrimary when loading', () => {
+    it('should not call onPrimary when loading', async () => {
+      const user = userEvent.setup();
       renderWithI18n(
         <CRUDModalTemplate
           open={true}
@@ -310,7 +313,7 @@ describe('CRUDModalTemplate', () => {
       );
 
       const primaryBtn = screen.getByTestId('modal-primary-btn');
-      fireEvent.click(primaryBtn);
+      await user.click(primaryBtn);
 
       expect(mockOnPrimary).not.toHaveBeenCalled();
     });
@@ -344,19 +347,21 @@ describe('CRUDModalTemplate', () => {
   });
 
   describe('Keyboard navigation', () => {
-    it('should call onClose when Escape key is pressed', () => {
+    it('should call onClose when Escape key is pressed', async () => {
+      const user = userEvent.setup();
       renderWithI18n(
         <CRUDModalTemplate open={true} title="Test Modal" onClose={mockOnClose}>
           <div>Content</div>
         </CRUDModalTemplate>,
       );
 
-      fireEvent.keyDown(document, { key: 'Escape' });
+      await user.keyboard('{Escape}');
 
       expect(mockOnClose).toHaveBeenCalled();
     });
 
-    it('should not call onClose when Escape is pressed while loading', () => {
+    it('should not call onClose when Escape is pressed while loading', async () => {
+      const user = userEvent.setup();
       renderWithI18n(
         <CRUDModalTemplate
           open={true}
@@ -368,7 +373,7 @@ describe('CRUDModalTemplate', () => {
         </CRUDModalTemplate>,
       );
 
-      fireEvent.keyDown(document, { key: 'Escape' });
+      await user.keyboard('{Escape}');
 
       expect(mockOnClose).not.toHaveBeenCalled();
     });
@@ -451,7 +456,8 @@ describe('CreateModal', () => {
       expect(screen.getByPlaceholderText('Enter name')).toBeInTheDocument();
     });
 
-    it('should call onSubmit when form is submitted', () => {
+    it('should call onSubmit when form is submitted', async () => {
+      const user = userEvent.setup();
       renderWithI18n(
         <CreateModal
           open={true}
@@ -464,12 +470,13 @@ describe('CreateModal', () => {
       );
 
       const submitButton = screen.getByTestId('modal-submit-btn');
-      fireEvent.click(submitButton);
+      await user.click(submitButton);
 
       expect(mockOnSubmit).toHaveBeenCalled();
     });
 
-    it('should prevent default form submission', () => {
+    it('should prevent default form submission', async () => {
+      const user = userEvent.setup();
       renderWithI18n(
         <CreateModal
           open={true}
@@ -482,7 +489,7 @@ describe('CreateModal', () => {
       );
 
       const submitButton = screen.getByTestId('modal-submit-btn');
-      fireEvent.click(submitButton);
+      await user.click(submitButton);
 
       expect(mockOnSubmit).toHaveBeenCalled();
     });
@@ -523,6 +530,7 @@ describe('CreateModal', () => {
 
   describe('Keyboard shortcuts', () => {
     it('should submit form when Ctrl+Enter is pressed', async () => {
+      const user = userEvent.setup();
       renderWithI18n(
         <CreateModal
           open={true}
@@ -541,7 +549,8 @@ describe('CreateModal', () => {
       );
 
       const input = screen.getByTestId('input-field');
-      fireEvent.keyDown(input, { key: 'Enter', ctrlKey: true });
+      await user.click(input);
+      await user.keyboard('{Control>}{Enter}{/Control}');
 
       await waitFor(() => {
         expect(mockOnSubmit).toHaveBeenCalled();
@@ -549,6 +558,7 @@ describe('CreateModal', () => {
     });
 
     it('should submit form when Cmd+Enter is pressed (Mac)', async () => {
+      const user = userEvent.setup();
       renderWithI18n(
         <CreateModal
           open={true}
@@ -567,7 +577,8 @@ describe('CreateModal', () => {
       );
 
       const input = screen.getByTestId('input-field');
-      fireEvent.keyDown(input, { key: 'Enter', metaKey: true });
+      await user.click(input);
+      await user.keyboard('{Meta>}{Enter}{/Meta}');
 
       await waitFor(() => {
         expect(mockOnSubmit).toHaveBeenCalled();
@@ -721,7 +732,8 @@ describe('CreateModal', () => {
       );
     });
 
-    it('should not submit when Enter is pressed without Ctrl or Cmd', () => {
+    it('should not submit when Enter is pressed without Ctrl or Cmd', async () => {
+      const user = userEvent.setup();
       renderWithI18n(
         <CreateModal
           open={true}
@@ -729,18 +741,13 @@ describe('CreateModal', () => {
           onClose={mockOnClose}
           onSubmit={mockOnSubmit}
         >
-          <FormTextField
-            name="test"
-            label="Test"
-            value=""
-            onChange={vi.fn()}
-            data-testid="input-field"
-          />
+          <input type="text" data-testid="input-field" />
         </CreateModal>,
       );
 
       const input = screen.getByTestId('input-field');
-      fireEvent.keyDown(input, { key: 'Enter' });
+      await user.click(input);
+      await user.keyboard('{Enter}');
 
       expect(mockOnSubmit).not.toHaveBeenCalled();
     });
@@ -866,7 +873,8 @@ describe('EditModal', () => {
     expect(submitButton).toBeDisabled();
   });
 
-  it('should call onSubmit when form is submitted', () => {
+  it('should call onSubmit when form is submitted', async () => {
+    const user = userEvent.setup();
     renderWithI18n(
       <EditModal
         open={true}
@@ -885,12 +893,13 @@ describe('EditModal', () => {
     );
 
     const submitButton = screen.getByTestId('modal-submit-btn');
-    fireEvent.click(submitButton);
+    await user.click(submitButton);
 
     expect(mockOnSubmit).toHaveBeenCalledTimes(1);
   });
 
-  it('should submit form when Ctrl+Enter is pressed', () => {
+  it('should submit form when Ctrl+Enter is pressed', async () => {
+    const user = userEvent.setup();
     renderWithI18n(
       <EditModal
         open={true}
@@ -909,12 +918,14 @@ describe('EditModal', () => {
     );
 
     const input = screen.getByTestId('input-field');
-    fireEvent.keyDown(input, { key: 'Enter', ctrlKey: true });
+    await user.click(input);
+    await user.keyboard('{Control>}{Enter}{/Control}');
 
     expect(mockOnSubmit).toHaveBeenCalledTimes(1);
   });
 
-  it('should submit form when Cmd+Enter is pressed (Mac)', () => {
+  it('should submit form when Cmd+Enter is pressed (Mac)', async () => {
+    const user = userEvent.setup();
     renderWithI18n(
       <EditModal
         open={true}
@@ -933,7 +944,8 @@ describe('EditModal', () => {
     );
 
     const input = screen.getByTestId('input-field');
-    fireEvent.keyDown(input, { key: 'Enter', metaKey: true });
+    await user.click(input);
+    await user.keyboard('{Meta>}{Enter}{/Meta}');
 
     expect(mockOnSubmit).toHaveBeenCalledTimes(1);
   });
@@ -1004,7 +1016,8 @@ describe('DeleteModal', () => {
     expect(warningIcon).not.toBeInTheDocument();
   });
 
-  it('should call onDelete when delete button is clicked', () => {
+  it('should call onDelete when delete button is clicked', async () => {
+    const user = userEvent.setup();
     renderWithI18n(
       <DeleteModal
         open={true}
@@ -1015,12 +1028,13 @@ describe('DeleteModal', () => {
     );
 
     const deleteButton = screen.getByTestId('modal-delete-btn');
-    fireEvent.click(deleteButton);
+    await user.click(deleteButton);
 
     expect(mockOnDelete).toHaveBeenCalledTimes(1);
   });
 
-  it('should not call onDelete when loading state is true', () => {
+  it('should not call onDelete when loading state is true', async () => {
+    const user = userEvent.setup();
     renderWithI18n(
       <DeleteModal
         open={true}
@@ -1032,7 +1046,7 @@ describe('DeleteModal', () => {
     );
 
     const deleteButton = screen.getByTestId('modal-delete-btn');
-    fireEvent.click(deleteButton);
+    await user.click(deleteButton);
 
     expect(mockOnDelete).not.toHaveBeenCalled();
   });
@@ -1135,7 +1149,8 @@ describe('ViewModal', () => {
     expect(screen.getByText('Close')).toBeInTheDocument();
   });
 
-  it('should render custom action buttons', () => {
+  it('should render custom action buttons', async () => {
+    const user = userEvent.setup();
     const mockEdit = vi.fn();
     const mockDelete = vi.fn();
 
@@ -1162,10 +1177,10 @@ describe('ViewModal', () => {
     expect(screen.getByText('Edit')).toBeInTheDocument();
     expect(screen.getByText('Delete')).toBeInTheDocument();
 
-    fireEvent.click(screen.getByText('Edit'));
+    await user.click(screen.getByText('Edit'));
     expect(mockEdit).toHaveBeenCalledTimes(1);
 
-    fireEvent.click(screen.getByText('Delete'));
+    await user.click(screen.getByText('Delete'));
     expect(mockDelete).toHaveBeenCalledTimes(1);
   });
 
