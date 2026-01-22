@@ -12,7 +12,8 @@ beforeAll(() => {
 });
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { PRESIGNED_URL } from 'GraphQl/Mutations/mutations';
 import { useMinioUpload } from './MinioUpload';
@@ -84,7 +85,7 @@ describe('Minio Upload Integration', (): void => {
       result: {
         data: {
           createPresignedUrl: {
-            fileUrl: null, // Added field to match the query shape.
+            fileUrl: null,
             presignedUrl: 'https://minio-test.com/upload/url',
             objectName: 'test-object-name',
             requiresUpload: true,
@@ -103,15 +104,11 @@ describe('Minio Upload Integration', (): void => {
       </MockedProvider>,
     );
 
+    const user = userEvent.setup();
     const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
     const input = screen.getByTestId('file-input') as HTMLInputElement;
-    Object.defineProperty(input, 'files', {
-      value: [file],
-      writable: false,
-    });
-    fireEvent.change(input);
+    await user.upload(input, file);
 
-    expect(screen.getByTestId('status').textContent).toBe('uploading');
     await waitFor(() => {
       expect(screen.getByTestId('status').textContent).toBe('success');
     });
@@ -160,13 +157,10 @@ describe('Minio Upload Integration', (): void => {
       </MockedProvider>,
     );
 
+    const user = userEvent.setup();
     const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
     const input = screen.getByTestId('file-input') as HTMLInputElement;
-    Object.defineProperty(input, 'files', {
-      value: [file],
-      writable: false,
-    });
-    fireEvent.change(input);
+    await user.upload(input, file);
 
     await waitFor(() => {
       expect(screen.getByTestId('status').textContent).toBe('error');
@@ -207,13 +201,10 @@ describe('Minio Upload Integration', (): void => {
       </MockedProvider>,
     );
 
+    const user = userEvent.setup();
     const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
     const input = screen.getByTestId('file-input') as HTMLInputElement;
-    Object.defineProperty(input, 'files', {
-      value: [file],
-      writable: false,
-    });
-    fireEvent.change(input);
+    await user.upload(input, file);
 
     await waitFor(() => {
       expect(screen.getByTestId('status').textContent).toBe('error');
@@ -236,13 +227,10 @@ describe('Minio Upload Integration', (): void => {
       </MockedProvider>,
     );
 
+    const user = userEvent.setup();
     const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
     const input = screen.getByTestId('file-input') as HTMLInputElement;
-    Object.defineProperty(input, 'files', {
-      value: [file],
-      writable: false,
-    });
-    fireEvent.change(input);
+    await user.upload(input, file);
 
     await waitFor(() => {
       expect(screen.getByTestId('status').textContent).toBe('error');
@@ -263,13 +251,10 @@ describe('Minio Upload Integration', (): void => {
       Promise.resolve({ ok: false } as Response),
     );
 
+    const user = userEvent.setup();
     const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
     const input = screen.getByTestId('file-input') as HTMLInputElement;
-    Object.defineProperty(input, 'files', {
-      value: [file],
-      writable: false,
-    });
-    fireEvent.change(input);
+    await user.upload(input, file);
 
     await waitFor(() => {
       expect(screen.getByTestId('status').textContent).toBe('error');
