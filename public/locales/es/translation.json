@@ -1493,6 +1493,7 @@
     "removingAttendee": "Eliminando el asistente...",
     "attendeeRemovedSuccessfully": "Asistente eliminado con éxito",
     "errorRemovingAttendee": "Error al eliminar asistente",
+    "cannotUnregisterCheckedIn": "No se puede dar de baja a un usuario que ya se registró",
     "checkedIn": "Registrado",
     "unregister": "Dar de baja",
     "cannotUnregisterCheckedInTooltip": "No se puede dar de baja a un usuario que ya se registró"
@@ -1902,6 +1903,8 @@
     "pdfGeneratedSuccessfully": "¡PDF generado con éxito!",
     "errorGeneratingPdf": "Error al generar PDF",
     "unknownError": "Error desconocido",
+    "checkedIn": "Registrado",
+    "downloadTag": "Descargar etiqueta",
     "checkInButton": "Registrarse",
     "searchAttendees": "Buscar asistentes",
     "checkIn": "Registrar",

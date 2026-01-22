@@ -1920,6 +1920,8 @@
     "pdfGeneratedSuccessfully": "PDF généré avec succès !",
     "errorGeneratingPdf": "Erreur lors de la génération du PDF",
     "unknownError": "Erreur inconnue",
+    "checkedIn": "Enregistré",
+    "downloadTag": "Télécharger l'étiquette",
     "checkInButton": "S'enregistrer",
     "searchAttendees": "Rechercher des participants",
     "checkIn": "Enregistrer",
