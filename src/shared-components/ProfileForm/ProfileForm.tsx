@@ -3,9 +3,9 @@
  *
  * This component provides a comprehensive profile management interface that handles
  * three distinct use cases:
- * - **User Profile**: When users view/edit their own profile (/user/settings)
- * - **Member Profile**: When admins view/edit organization member profiles (/member/:orgId/:userId)
- * - **Admin Profile**: When super admins view/edit admin profiles (/adminprofile/settings)
+ * - ** User Profile**: When users view/edit their own profile (/user/settings)
+ * - ** Member Profile**: When admins view/edit organization member profiles (/member/:orgId/:userId)
+ * - ** Admin Profile**: When super admins view/edit admin profiles (/adminprofile/settings)
  *
  * The component intelligently adapts its behavior and UI based on the context:
  * - Uses different GraphQL mutations (UPDATE_CURRENT_USER vs UPDATE_USER_MUTATION)
