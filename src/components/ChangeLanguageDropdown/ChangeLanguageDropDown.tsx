@@ -5,6 +5,8 @@
  * It integrates with i18next for internationalization and updates the user's language preference
  * on the server using a GraphQL mutation.
  *
+ * @param props - Props for the dropdown, see {@link InterfaceDropDownProps}
+ * @returns JSX.Element
  * @remarks
  * - The component uses `react-bootstrap` for the dropdown UI.
  * - The current language is determined using a cookie (`i18next`).
