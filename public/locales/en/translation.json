@@ -2347,6 +2347,10 @@
     "noEventsAttended": "No events attended"
   },
   "eventStats": {
+    "averageRating": {
+      "title": "Average Review Score",
+      "rated": "Rated {{score}} / 5"
+    },
     "title": "Event Statistics",
     "reviews": {
       "title": "Reviews",
