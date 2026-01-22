@@ -25,7 +25,6 @@ import SignOut from 'components/SignOut/SignOut';
 import SidebarBase from 'shared-components/SidebarBase/SidebarBase';
 import SidebarNavItem from 'shared-components/SidebarNavItem/SidebarNavItem';
 import SidebarPluginSection from 'shared-components/SidebarPluginSection/SidebarPluginSection';
-import styles from './LeftDrawer.module.css';
 
 export interface ILeftDrawerProps {
   hideDrawer: boolean;
@@ -119,15 +118,11 @@ const LeftDrawer = ({
       portalType="admin"
       footerContent={
         <>
-          <div
-            className={
-              hideDrawer
-                ? styles.profileContainerHidden
-                : styles.profileContainer
-            }
-          >
-            <ProfileCard />
-          </div>
+          {!hideDrawer && (
+            <div>
+              <ProfileCard />
+            </div>
+          )}
           <SignOut hideDrawer={hideDrawer} />
         </>
       }
