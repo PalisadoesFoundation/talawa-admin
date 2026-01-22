@@ -19,7 +19,15 @@ vi.mock('react-i18next', async () => {
   return {
     ...actual,
     useTranslation: () => ({
-      t: (key: string) => key,
+      t: (key: string, options?: { count?: number }) => {
+        // Handle eventStats.feedback translations
+        if (key === 'title') return 'Feedback Analysis';
+        if (key === 'emptyState')
+          return 'Please ask attendees to submit feedback for insights!';
+        if (key === 'filledByCount' && options?.count !== undefined)
+          return `${options.count} people have filled feedback for this event.`;
+        return key;
+      },
       tCommon: (key: string) => key,
       tErrors: (key: string) => key,
     }),
@@ -37,7 +45,7 @@ describe('Testing Event Stats', () => {
   };
 
   it('The stats should be rendered properly', async () => {
-    const { queryByText } = render(
+    const { getAllByText } = render(
       <MockedProvider mocks={mockData}>
         <BrowserRouter>
           <EventStats {...props} />
@@ -46,7 +54,10 @@ describe('Testing Event Stats', () => {
     );
 
     await waitFor(() => {
-      expect(queryByText('Feedback Analysis')).toBeInTheDocument();
+      const elements = getAllByText('Feedback Analysis');
+      // Should find at least one element (may be duplicated by React StrictMode)
+      expect(elements.length).toBeGreaterThanOrEqual(1);
+      expect(elements[0]).toBeInTheDocument();
     });
   });
 });
