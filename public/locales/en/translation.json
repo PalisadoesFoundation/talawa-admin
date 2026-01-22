@@ -140,9 +140,6 @@
     "OR": "OR",
     "loading": "loading"
   },
-  "userGlobalScreen": {
-    "title": "Global Settings"
-  },
   "latestEvents": {
     "eventCardTitle": "Upcoming Events",
     "eventCardSeeAll": "See All",
@@ -1395,9 +1392,6 @@
     "logout": "logout",
     "close": "close",
     "talawaBranding": "Talawa Branding"
-  },
-  "userGlobalScreen": {
-    "title": "Global Features"
   },
   "userOrganizations": {
     "allOrganizations": "All Organizations",
