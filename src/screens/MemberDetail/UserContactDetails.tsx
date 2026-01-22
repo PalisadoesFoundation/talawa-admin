@@ -1,3 +1,31 @@
+/**
+ * UserContactDetails component
+ *
+ * Renders the personal and contact information section of a member’s profile.
+ * Allows users or administrators to view and update details such as avatar,
+ * personal information, contact numbers, address, and other profile attributes.
+ *
+ * Features include avatar upload with validation, form state management,
+ * conditional update actions, and localized labels.
+ *
+ * @param props - Component props.
+ * Optional {@link MemberDetailProps.id | id} may be provided to fetch
+ * and update the corresponding member’s contact details.
+ *
+ * @returns The rendered UserContactDetails component.
+ *
+ * @remarks
+ * - Uses Apollo Client hooks for fetching and updating user data.
+ * - Handles avatar uploads with file type and size validation.
+ * - Provides form validation for sensitive fields such as passwords.
+ * - Uses react-bootstrap components and MUI-based date pickers for UI.
+ * - Supports localization via react-i18next.
+ *
+ * @example
+ * ```tsx
+ * <UserContactDetails id="12345" />
+ * ```
+ */
 import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { Button } from 'shared-components/Button';
