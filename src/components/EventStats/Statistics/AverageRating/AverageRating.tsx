@@ -29,17 +29,19 @@ import styles from './AverageRating.module.css';
 import type { InterfaceStatsModal } from 'types/Event/interface';
 
 export const AverageRating = ({ data }: InterfaceStatsModal): JSX.Element => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventStats.averageRating',
+  });
 
   return (
     <>
       <Card className={styles.cardContainer}>
         <Card.Body>
           <Card.Title>
-            <h4>{t('eventStats.averageRating.title')}</h4>
+            <h4>{t('title')}</h4>
           </Card.Title>
           <Typography component="legend">
-            {t('eventStats.averageRating.rated', {
+            {t('rated', {
               score: data.event.averageFeedbackScore?.toFixed(2),
             })}
           </Typography>
@@ -49,9 +51,11 @@ export const AverageRating = ({ data }: InterfaceStatsModal): JSX.Element => {
             max={5}
             readOnly
             value={data.event.averageFeedbackScore}
-            icon={<FavoriteIcon fontSize="inherit" />}
+            icon={<FavoriteIcon className={styles.ratingIcon} />}
             size="medium"
-            emptyIcon={<FavoriteBorderIcon fontSize="inherit" />}
+            emptyIcon={
+              <FavoriteBorderIcon className={styles.ratingEmptyIcon} />
+            }
             classes={{
               iconFilled: styles.ratingFilled,
               iconHover: styles.ratingHover,
