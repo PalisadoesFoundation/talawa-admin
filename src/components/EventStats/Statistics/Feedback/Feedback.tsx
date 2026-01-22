@@ -31,7 +31,7 @@
  * ```
  *
  */
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   PieChart,
   pieArcClasses,
@@ -43,6 +43,16 @@ import type { InterfaceStatsModal } from 'types/Event/interface';
 import { useTranslation } from 'react-i18next';
 import './Feedback.module.css';
 
+// Fallback colors in case CSS variables are not available (SSR, tests)
+const FALLBACK_COLORS = [
+  '#57bb8a',
+  '#94bd77',
+  '#d4c86a',
+  '#e9b861',
+  '#e79a69',
+  '#dd776e',
+];
+
 export const FeedbackStats = ({
   data,
 }: InterfaceStatsModal): React.JSX.Element => {
@@ -50,22 +60,26 @@ export const FeedbackStats = ({
     keyPrefix: 'eventStats.feedback',
   });
 
-  // Get colors from CSS custom properties to avoid hardcoded hex values
-  const getCSSVariable = (varName: string): string => {
-    return getComputedStyle(document.documentElement)
-      .getPropertyValue(varName)
-      .trim();
-  };
-
-  // Colors for the pie chart slices, from green (high ratings) to red (low ratings)
-  const ratingColors = [
-    getCSSVariable('--rating-color-5'), // Green
-    getCSSVariable('--rating-color-4'),
-    getCSSVariable('--rating-color-3'),
-    getCSSVariable('--rating-color-2'),
-    getCSSVariable('--rating-color-1'),
-    getCSSVariable('--rating-color-0'), // Red
-  ];
+  // Memoize colors to avoid getComputedStyle on every render
+  const ratingColors = useMemo(() => {
+    if (typeof document === 'undefined') return FALLBACK_COLORS;
+    const getCSSVariable = (varName: string): string => {
+      const value = getComputedStyle(document.documentElement)
+        .getPropertyValue(varName)
+        .trim();
+      return value || '';
+    };
+    const colors = [
+      getCSSVariable('--rating-color-5'),
+      getCSSVariable('--rating-color-4'),
+      getCSSVariable('--rating-color-3'),
+      getCSSVariable('--rating-color-2'),
+      getCSSVariable('--rating-color-1'),
+      getCSSVariable('--rating-color-0'),
+    ];
+    // Return fallback if any color is empty
+    return colors.some((c) => !c) ? FALLBACK_COLORS : colors;
+  }, []);
 
   // Count the number of feedbacks for each rating
   const count: Record<number, number> = {};
