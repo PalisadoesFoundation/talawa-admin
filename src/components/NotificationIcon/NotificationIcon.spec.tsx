@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter, Routes, Route } from 'react-router';
 import NotificationIcon from './NotificationIcon';
@@ -31,7 +31,11 @@ interface InterfaceNotification {
   navigation?: string;
 }
 
-const mocks = (notifications: InterfaceNotification[], error = false) => [
+const mocks = (
+  notifications: InterfaceNotification[],
+  error = false,
+  delay = 0,
+) => [
   {
     request: {
       query: GET_USER_NOTIFICATIONS,
@@ -43,6 +47,7 @@ const mocks = (notifications: InterfaceNotification[], error = false) => [
         },
       },
     },
+    delay,
     result: error
       ? { errors: [new Error('An error occurred')] }
       : {
@@ -71,8 +76,11 @@ const generateNotifications = (
   }));
 
 describe('NotificationIcon Component', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+
   beforeEach(() => {
     mockNavigate = vi.fn();
+    user = userEvent.setup();
   });
 
   afterEach(() => {
@@ -81,16 +89,14 @@ describe('NotificationIcon Component', () => {
 
   it('should render loading state', async () => {
     render(
-      <MockedProvider mocks={mocks([])}>
+      <MockedProvider mocks={mocks([], false, 1000)}>
         <MemoryRouter>
           <NotificationIcon />
         </MemoryRouter>
       </MockedProvider>,
     );
-    fireEvent.click(screen.getByRole('button'));
-    await waitFor(() => {
-      expect(screen.getByText('Loading...')).toBeInTheDocument();
-    });
+    await user.click(screen.getByRole('button'));
+    expect(await screen.findByText('Loading...')).toBeInTheDocument();
   });
 
   it('should render error state', async () => {
@@ -101,7 +107,7 @@ describe('NotificationIcon Component', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-    fireEvent.click(screen.getByRole('button'));
+    await user.click(screen.getByRole('button'));
     await waitFor(() => {
       expect(
         screen.getByText('Error fetching notifications'),
@@ -117,7 +123,7 @@ describe('NotificationIcon Component', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-    fireEvent.click(screen.getByRole('button'));
+    await user.click(screen.getByRole('button'));
     await waitFor(() => {
       expect(screen.getByText('No new notifications')).toBeInTheDocument();
     });
@@ -160,10 +166,9 @@ describe('NotificationIcon Component', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-    fireEvent.click(screen.getByRole('button'));
-    await waitFor(() => {
-      fireEvent.click(screen.getByText(/This is notification 1/));
-    });
+    await user.click(screen.getByRole('button'));
+    const notificationItem = await screen.findByText(/This is notification 1/);
+    await user.click(notificationItem);
     expect(mockNavigate).toHaveBeenCalledWith('/admin/notification/1');
   });
 
@@ -177,10 +182,9 @@ describe('NotificationIcon Component', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-    fireEvent.click(screen.getByRole('button'));
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('View all notifications'));
-    });
+    await user.click(screen.getByRole('button'));
+    const viewAllLink = await screen.findByText('View all notifications');
+    await user.click(viewAllLink);
     expect(mockNavigate).toHaveBeenCalledWith('/admin/notification');
   });
 
@@ -194,10 +198,9 @@ describe('NotificationIcon Component', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-    fireEvent.click(screen.getByRole('button'));
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('View all notifications'));
-    });
+    await user.click(screen.getByRole('button'));
+    const viewAllLink = await screen.findByText('View all notifications');
+    await user.click(viewAllLink);
     expect(mockNavigate).toHaveBeenCalledWith('/user/notification');
   });
 
@@ -214,10 +217,9 @@ describe('NotificationIcon Component', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-    fireEvent.click(screen.getByRole('button'));
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('Test body'));
-    });
+    await user.click(screen.getByRole('button'));
+    const notificationBody = await screen.findByText('Test body');
+    await user.click(notificationBody);
     expect(mockNavigate).toHaveBeenCalledWith('/admin/notification');
   });
 
@@ -234,7 +236,7 @@ describe('NotificationIcon Component', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-    fireEvent.click(screen.getByRole('button'));
+    await user.click(screen.getByRole('button'));
     await waitFor(() => {
       expect(screen.getByTitle('Unread')).toBeInTheDocument();
     });
@@ -249,7 +251,7 @@ describe('NotificationIcon Component', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-    fireEvent.click(screen.getByRole('button'));
+    await user.click(screen.getByRole('button'));
     await waitFor(() => {
       expect(
         screen.getByText(/This is a very long notification body that shoul.../),
@@ -265,7 +267,7 @@ describe('NotificationIcon Component', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-    fireEvent.click(screen.getByRole('button'));
+    await user.click(screen.getByRole('button'));
     await waitFor(() => {
       expect(screen.getByText('This is notification 1')).toBeInTheDocument();
     });
@@ -281,10 +283,9 @@ describe('NotificationIcon Component', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-    fireEvent.click(screen.getByRole('button'));
-    await waitFor(() => {
-      fireEvent.click(screen.getByText('View all notifications'));
-    });
+    await user.click(screen.getByRole('button'));
+    const viewAllLink = await screen.findByText('View all notifications');
+    await user.click(viewAllLink);
     expect(mockNavigate).toHaveBeenCalledWith('/user/notification');
   });
 });

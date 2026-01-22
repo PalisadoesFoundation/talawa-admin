@@ -4,7 +4,13 @@
  * This component renders a card displaying details of an event attended by a user.
  * It includes the event's title, start date, location, and a link to the event's details.
  *
- * @param props - The properties passed to the component.
+ * @param title - Event title displayed on the card.
+ * @param time - Optional time metadata for the event.
+ * @param startdate - Optional start date ISO string for the event.
+ * @param creator - Optional creator name or identifier.
+ * @param location - Optional location string for the event.
+ * @param eventId - Optional event identifier used for navigation.
+ * @param orgId - Optional organization identifier used for navigation.
  * @returns A styled card displaying event details.
  *
  * @remarks
@@ -42,8 +48,13 @@ export interface InterfaceCardItem {
   orgId?: string;
 }
 
-const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
-  const { title, startdate, location, orgId, eventId } = props;
+const EventAttendedCard = ({
+  title,
+  startdate,
+  location,
+  orgId,
+  eventId,
+}: InterfaceCardItem): JSX.Element => {
   const { getItem } = useLocalStorage();
 
   // Check if user is administrator - only administrators can navigate to event details
