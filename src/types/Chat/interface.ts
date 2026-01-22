@@ -1,4 +1,5 @@
 import type { ApolloQueryResult } from '@apollo/client';
+import { GroupChat } from './type';
 
 export type NewChatType = {
   id: string;
@@ -68,6 +69,7 @@ export type NewChatType = {
   messages: {
     edges: Array<{
       __typename?: string;
+      cursor?: string;
       node: {
         __typename?: string;
         id: string;
@@ -94,6 +96,12 @@ export type NewChatType = {
         } | null;
       };
     }>;
+    pageInfo: {
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor: string;
+      endCursor: string;
+    };
   };
 };
 
@@ -124,3 +132,28 @@ export interface InterfaceContactCardProps {
   unseenMessages: number;
   lastMessage: string;
 }
+
+export interface InterfaceChatRoomProps {
+  selectedContact: string;
+  chatListRefetch: (
+    variables?:
+      | Partial<{
+          id: string;
+        }>
+      | undefined,
+  ) => Promise<ApolloQueryResult<{ chatList: GroupChat[] }>>;
+}
+
+export interface InterfaceMessageImageProps {
+  media: string;
+  organizationId?: string;
+  getFileFromMinio: (
+    objectName: string,
+    organizationId: string,
+  ) => Promise<string>;
+}
+
+//add type aliases to maintain backward compatibility
+export type INewChat = NewChatType;
+export type IChatRoomProps = InterfaceChatRoomProps;
+export type IMessageImageProps = InterfaceMessageImageProps;

@@ -183,7 +183,15 @@ describe('GroupChatDetails', () => {
       creator: chat.creator,
       updater: chat.updater,
       members: chat.members ?? { edges: [] },
-      messages: chat.messages ?? { edges: [] },
+      messages: chat.messages ?? {
+        edges: [],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: '',
+          endCursor: '',
+        },
+      },
     };
   };
 
