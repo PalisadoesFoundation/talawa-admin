@@ -44,7 +44,8 @@
  */
 import { Paper, TableBody } from '@mui/material';
 import React, { useRef, useState, useEffect } from 'react';
-import { Button, ListGroup, Dropdown } from 'react-bootstrap';
+import { Button } from 'shared-components/Button';
+import { ListGroup, Dropdown } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import styles from './GroupChatDetails.module.css';
 import { useMutation, useQuery } from '@apollo/client';
