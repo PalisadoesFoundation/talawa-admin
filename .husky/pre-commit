@@ -1,24 +1,6 @@
 #!/usr/bin/env bash
-#
 # =============================================================================
 # Talawa Admin – Git Pre-Commit Hook
-# =============================================================================
-#
-# This is the main entry point for all pre-commit checks.
-# It determines which files are staged, prepares temporary file lists,
-# and delegates language-specific checks to dedicated scripts.
-#
-# Responsibilities:
-# - Verify required tools are installed
-# - Identify staged source files safely (null-delimited)
-# - Run Node.js and Python pre-commit checks conditionally
-# - Re-stage modified files after formatting
-#
-# Design Notes:
-# - Uses temporary files instead of variables to safely handle filenames
-# - Exits early if no files are staged to improve performance
-# - Delegates logic to smaller scripts for maintainability
-#
 # =============================================================================
 set -euo pipefail
 
