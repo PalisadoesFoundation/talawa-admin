@@ -9,7 +9,7 @@
  *
  * @remarks
  * - Primarily used for pages that require filtering, sorting, or search.
- * - Uses `SearchBar` and `SortingButton` subcomponents for search and sorting functionality.
+ * - Uses `SearchBar` and `SortingButton` shared-components for search and sorting functionality.
  * - Layout is responsive and adjusts based on provided props.
  *
  * @example
