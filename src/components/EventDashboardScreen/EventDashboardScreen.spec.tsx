@@ -10,7 +10,6 @@ import i18nForTest from 'utils/i18nForTest';
 import EventDashboardScreen from './EventDashboardScreen';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
-import './EventDashboardScreen.module.css';
 import { MOCKS } from './EventDashboardScreenMocks';
 import userEvent from '@testing-library/user-event';
 

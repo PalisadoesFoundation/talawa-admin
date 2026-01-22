@@ -2,8 +2,14 @@ import React from 'react';
 import { vi, expect, describe, it } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { render, screen, cleanup, waitFor, act } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
+import {
+  render,
+  screen,
+  cleanup,
+  waitFor,
+  act,
+  fireEvent,
+} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
