@@ -21,7 +21,7 @@
  */
 import { useQuery, useMutation } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button/Button';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
@@ -33,7 +33,7 @@ import {
   MEMBERSHIP_REQUEST_PG,
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import TableLoader from 'components/TableLoader/TableLoader';
+import TableLoader from 'shared-components/TableLoader/TableLoader';
 import {
   GridCellParams,
   GridColDef,

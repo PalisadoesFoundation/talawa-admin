@@ -13,7 +13,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import LoadingState from './LoadingState';
-import { InterfaceTableLoader } from 'components/TableLoader/TableLoader';
+import { InterfaceTableLoaderProps } from 'types/shared-components/TableLoader/interface';
 
 // Mock TableLoader component
 vi.mock('components/TableLoader/TableLoader', () => ({
@@ -21,7 +21,7 @@ vi.mock('components/TableLoader/TableLoader', () => ({
     noOfRows,
     headerTitles,
     'data-testid': dataTestId,
-  }: InterfaceTableLoader) => (
+  }: InterfaceTableLoaderProps) => (
     <div data-testid={dataTestId || 'mock-table-loader'}>
       <div data-testid="table-headers">{JSON.stringify(headerTitles)}</div>
       <div data-testid="table-rows-count">{noOfRows}</div>
