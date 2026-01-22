@@ -1,0 +1,5 @@
+/* LeftDrawerOrg component styles */
+.optionList {
+  display: flex;
+  flex-direction: column;
+}

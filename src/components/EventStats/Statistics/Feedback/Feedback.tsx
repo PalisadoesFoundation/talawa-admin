@@ -41,6 +41,7 @@ import Card from 'react-bootstrap/Card';
 import type { Feedback } from 'types/Event/type';
 import type { InterfaceStatsModal } from 'types/Event/interface';
 import { useTranslation } from 'react-i18next';
+import './Feedback.module.css';
 
 export const FeedbackStats = ({
   data,
@@ -49,14 +50,21 @@ export const FeedbackStats = ({
     keyPrefix: 'eventStats.feedback',
   });
 
+  // Get colors from CSS custom properties to avoid hardcoded hex values
+  const getCSSVariable = (varName: string): string => {
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue(varName)
+      .trim();
+  };
+
   // Colors for the pie chart slices, from green (high ratings) to red (low ratings)
   const ratingColors = [
-    '#57bb8a', // Green
-    '#94bd77',
-    '#d4c86a',
-    '#e9b861',
-    '#e79a69',
-    '#dd776e', // Red
+    getCSSVariable('--rating-color-5'), // Green
+    getCSSVariable('--rating-color-4'),
+    getCSSVariable('--rating-color-3'),
+    getCSSVariable('--rating-color-2'),
+    getCSSVariable('--rating-color-1'),
+    getCSSVariable('--rating-color-0'), // Red
   ];
 
   // Count the number of feedbacks for each rating
