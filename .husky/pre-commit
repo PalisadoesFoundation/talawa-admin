@@ -1,17 +1,37 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
+#
+# =============================================================================
+# Talawa Admin – Git Pre-Commit Hook
+# =============================================================================
+#
+# This is the main entry point for all pre-commit checks.
+# It determines which files are staged, prepares temporary file lists,
+# and delegates language-specific checks to dedicated scripts.
+#
+# Responsibilities:
+# - Verify required tools are installed
+# - Identify staged source files safely (null-delimited)
+# - Run Node.js and Python pre-commit checks conditionally
+# - Re-stage modified files after formatting
+#
+# Design Notes:
+# - Uses temporary files instead of variables to safely handle filenames
+# - Exits early if no files are staged to improve performance
+# - Delegates logic to smaller scripts for maintainability
+#
+# =============================================================================
 set -euo pipefail
+
+. .husky/scripts/staged-files.sh
 
 .husky/scripts/check-tools.sh
 
 STAGED_SRC_FILE=$(mktemp)
 STAGED_ALL_FILE=$(mktemp)
-trap 'rm -f "$STAGED_SRC_FILE" "$STAGED_ALL_FILE"' EXIT
+trap 'rm -f "$STAGED_SRC_FILE" "$STAGED_ALL_FILE"; cleanup_staged_cache 2>/dev/null || true' EXIT
 
-git diff --cached -z --name-only --diff-filter=ACMRT \
-  | grep -zE '^(src|scripts)/.*\.(ts|tsx|js|jsx)$' \
-  > "$STAGED_SRC_FILE" || true
-
-git diff --cached -z --name-only --diff-filter=ACMRT > "$STAGED_ALL_FILE"
+get_staged_files '^(src|scripts)/.*\.(ts|tsx|js|jsx)$' > "$STAGED_SRC_FILE"
+get_staged_files > "$STAGED_ALL_FILE"
 
 # Early exit if nothing staged
 [ ! -s "$STAGED_ALL_FILE" ] && {
@@ -25,4 +45,4 @@ fi
 
 .husky/scripts/precommit-python.sh "$STAGED_SRC_FILE"
 
-xargs -0 -a "$STAGED_ALL_FILE" git add --
+xargs -0 git add -- < "$STAGED_ALL_FILE"
