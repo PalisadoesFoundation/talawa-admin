@@ -84,7 +84,8 @@ fetch_and_verify() {
 
     local tmp
     tmp="$(mktemp)"
-
+    trap "rm -f '$tmp'" RETURN
+    
     if command -v curl >/dev/null 2>&1; then
       curl -sSfL "$url" -o "$tmp"
     elif command -v wget >/dev/null 2>&1; then
