@@ -16,11 +16,17 @@ const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(() => ({ orgId: 'orgId' })),
 }));
 
-vi.mock('@mui/x-date-pickers', () => ({
-  LocalizationProvider: ({ children }: { children: React.ReactNode }) => (
-    <>{children}</>
-  ),
-}));
+vi.mock('@mui/x-date-pickers', async () => {
+  const actual = await vi.importActual<typeof import('@mui/x-date-pickers')>(
+    '@mui/x-date-pickers',
+  );
+  return {
+    ...actual,
+    LocalizationProvider: ({ children }: { children: React.ReactNode }) => (
+      <>{children}</>
+    ),
+  };
+});
 
 vi.mock('react-router', async () => {
   const actual =
