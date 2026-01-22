@@ -1,10 +1,3 @@
-/**
- * UserContactDetails
- *
- * Renders a comprehensive profile view for a user.
- *
- * @param props - Props for UserContactDetails.
- */
 import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { Button } from 'shared-components/Button';
@@ -33,10 +26,11 @@ import {
 } from 'utils/formEnumFields';
 import dayjs from 'dayjs';
 import DynamicDropDown from 'components/DynamicDropDown/DynamicDropDown';
-import { urlToFile } from 'utils/urlToFile';
 import { validatePassword } from 'utils/passwordValidator';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
 import { MemberDetailProps } from 'types/AdminPortal/MemberDetail/type';
+import { resolveAvatarFile } from './resolveAvatarFile';
+import { phoneFieldConfigs, addressFieldConfigs } from './fieldConfigs';
 const UserContactDetails: React.FC<MemberDetailProps> = ({
   id,
 }): JSX.Element => {
@@ -48,6 +42,8 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
   const [isUpdated, setisUpdated] = useState(false);
   const currentId = location.state?.id || getItem('id') || id;
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
+  const [newAvatarUploaded, setNewAvatarUploaded] = useState(false);
+
   document.title = t('title');
   const [formState, setFormState] = useState({
     addressLine1: '',
@@ -123,6 +119,10 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     setisUpdated(true);
     setFormState((prev) => ({ ...prev, [fieldName]: sanitizeInput(value) }));
   };
+  const onAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleFileUpload(e);
+    setNewAvatarUploaded(true);
+  };
   const handleUserUpdate = async (): Promise<void> => {
     const removeEmptyFields = <T extends Record<string, string | File | null>>(
       obj: T,
@@ -139,15 +139,13 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
       NotificationToast.error(passwordError);
       return;
     }
-    const avatarFile =
-      !selectedAvatar && formState.avatarURL
-        ? await urlToFile(formState.avatarURL).catch(() => {
-            NotificationToast.error(
-              'Failed to process profile picture. Please try uploading again.',
-            );
-            return null;
-          })
-        : null;
+
+    let avatarFile = await resolveAvatarFile({
+      newAvatarUploaded,
+      selectedAvatar,
+      avatarURL: formState.avatarURL,
+    });
+
     const data: Omit<typeof formState, 'avatarURL' | 'emailAddress'> & {
       id?: string;
     } = {
@@ -266,7 +264,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                     data-testid="fileInput"
                     multiple={false}
                     ref={fileInputRef}
-                    onChange={handleFileUpload}
+                    onChange={onAvatarChange}
                   />
                 </FormFieldGroup>
               </Col>
@@ -432,138 +430,58 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                     placeholder={tCommon('email')}
                   />
                 </Col>
-                <Col md={12}>
-                  <label htmlFor="phoneNumber" className="form-label">
-                    {t('mobilePhoneNumber')}
-                  </label>
-                  <input
-                    id="mobilePhoneNumber"
-                    value={formState.mobilePhoneNumber}
-                    className={`form-control ${styles.inputColor}`}
-                    type="tel"
-                    name="mobilePhoneNumber"
-                    data-testid="inputMobilePhoneNumber"
-                    onChange={(e) =>
-                      handleFieldChange('mobilePhoneNumber', e.target.value)
-                    }
-                    placeholder={tCommon('memberDetailNumberExample')}
-                  />
-                </Col>
-                <Col md={12}>
-                  <label htmlFor="phoneNumber" className="form-label">
-                    {t('workPhoneNumber')}
-                  </label>
-                  <input
-                    id="workPhoneNumber"
-                    value={formState.workPhoneNumber}
-                    className={`form-control ${styles.inputColor}`}
-                    type="tel"
-                    data-testid="inputWorkPhoneNumber"
-                    name="workPhoneNumber"
-                    onChange={(e) =>
-                      handleFieldChange('workPhoneNumber', e.target.value)
-                    }
-                    placeholder={tCommon('memberDetailNumberExample')}
-                  />
-                </Col>
-                <Col md={12}>
-                  <label htmlFor="phoneNumber" className="form-label">
-                    {t('homePhoneNumber')}
-                  </label>
-                  <input
-                    id="homePhoneNumber"
-                    value={formState.homePhoneNumber}
-                    className={`form-control ${styles.inputColor}`}
-                    type="tel"
-                    data-testid="inputHomePhoneNumber"
-                    name="homePhoneNumber"
-                    onChange={(e) =>
-                      handleFieldChange('homePhoneNumber', e.target.value)
-                    }
-                    placeholder={tCommon('memberDetailNumberExample')}
-                  />
-                </Col>
-                <Col md={12}>
-                  <label htmlFor="addressLine1" className="form-label">
-                    {t('addressLine1')}
-                  </label>
-                  <input
-                    id="addressLine1"
-                    value={formState.addressLine1}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="addressLine1"
-                    data-testid="inputAddressLine1"
-                    onChange={(e) =>
-                      handleFieldChange('addressLine1', e.target.value)
-                    }
-                    placeholder={tCommon('memberDetailExampleLane')}
-                  />
-                </Col>
-                <Col md={12}>
-                  <label htmlFor="addressLine2" className="form-label">
-                    {t('addressLine2')}
-                  </label>
-                  <input
-                    id="addressLine2"
-                    value={formState.addressLine2}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="addressLine2"
-                    data-testid="inputAddressLine2"
-                    onChange={(e) =>
-                      handleFieldChange('addressLine2', e.target.value)
-                    }
-                    placeholder={tCommon('memberDetailExampleLane')}
-                  />
-                </Col>
-                <Col md={12}>
-                  <label htmlFor="postalCode" className="form-label">
-                    {t('postalCode')}
-                  </label>
-                  <input
-                    id="postalCode"
-                    value={formState.postalCode}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="postalCode"
-                    data-testid="inputPostalCode"
-                    onChange={(e) =>
-                      handleFieldChange('postalCode', e.target.value)
-                    }
-                    placeholder={tCommon('postalCode')}
-                  />
-                </Col>
-                <Col md={6}>
-                  <label htmlFor="city" className="form-label">
-                    {t('city')}
-                  </label>
-                  <input
-                    id="city"
-                    value={formState.city}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="city"
-                    data-testid="inputCity"
-                    onChange={(e) => handleFieldChange('city', e.target.value)}
-                    placeholder={tCommon('enterCity')}
-                  />
-                </Col>
-                <Col md={6}>
-                  <label htmlFor="state" className="form-label">
-                    {t('state')}
-                  </label>
-                  <input
-                    id="state"
-                    value={formState.state}
-                    className={`form-control ${styles.inputColor}`}
-                    type="text"
-                    name="state"
-                    data-testid="inputState"
-                    onChange={(e) => handleFieldChange('state', e.target.value)}
-                    placeholder={tCommon('enterCity')}
-                  />
-                </Col>
+                {phoneFieldConfigs.map((field) => (
+                  <Col md={12} key={field.id}>
+                    <label htmlFor={field.id} className="form-label">
+                      {t(field.key)}
+                    </label>
+                    <input
+                      id={field.id}
+                      value={
+                        (formState[
+                          field.key as keyof typeof formState
+                        ] as string) || ''
+                      }
+                      className={`form-control ${styles.inputColor}`}
+                      type="tel"
+                      data-testid={field.testId}
+                      name={field.id}
+                      onChange={(e) =>
+                        handleFieldChange(field.key, e.target.value)
+                      }
+                      placeholder={tCommon('memberDetailNumberExample')}
+                    />
+                  </Col>
+                ))}
+                {addressFieldConfigs.map((field) => (
+                  <Col md={field.colSize} key={field.id}>
+                    <label htmlFor={field.id} className="form-label">
+                      {t(field.key)}
+                    </label>
+                    <input
+                      id={field.id}
+                      value={
+                        (formState[
+                          field.key as keyof typeof formState
+                        ] as string) || ''
+                      }
+                      className={`form-control ${styles.inputColor}`}
+                      type="text"
+                      name={field.id}
+                      data-testid={field.testId}
+                      onChange={(e) =>
+                        handleFieldChange(field.key, e.target.value)
+                      }
+                      placeholder={
+                        field.key === 'postalCode'
+                          ? tCommon('postalCode')
+                          : field.key.includes('city')
+                            ? tCommon('enterCity')
+                            : tCommon('memberDetailExampleLane')
+                      }
+                    />
+                  </Col>
+                ))}
                 <Col md={12}>
                   <FormFieldGroup name="country" label={tCommon('country')}>
                     <select
