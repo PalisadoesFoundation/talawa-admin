@@ -105,7 +105,7 @@ log_step() {
 # Log a section header (for major sections without step numbers)
 # Usage: log_section "Configuration"
 log_section() {
-    local title="$1"
+    local title="${1:-}"
     printf "\n"
     printf "=== %s ===\n" "$title"
 }
