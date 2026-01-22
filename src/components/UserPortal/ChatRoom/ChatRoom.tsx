@@ -261,7 +261,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           (item) => ({ ...item, body: messageBody }),
         );
       } else {
-        const tempId = `temp-${Date.now()}`;
+        const tempId = `${Date.now()}`;
         const now = new Date().toISOString();
         const newMessageNode: INewChat['messages']['edges'][number]['node'] = {
           id: tempId,
