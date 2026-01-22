@@ -98,7 +98,7 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
     const importPathPatterns = options.importPathPatterns || [];
 
     // Check if current file should be ignored
-    const filename = context.getFilename();
+    const filename = context.filename ?? context.getFilename();
     if (ignorePaths.some((pattern) => matchesGlob(filename, pattern))) {
       return {};
     }
@@ -307,6 +307,11 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
                         }
                         if (spec.type === AST_NODE_TYPES.ImportSpecifier) {
                           return specifierToString(spec);
+                        }
+                        if (
+                          spec.type === AST_NODE_TYPES.ImportNamespaceSpecifier
+                        ) {
+                          return `* as ${spec.local.name}`;
                         }
                         return '';
                       })
