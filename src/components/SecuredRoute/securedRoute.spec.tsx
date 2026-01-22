@@ -1,6 +1,7 @@
 import React from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { render, screen } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import SecuredRoute from './SecuredRoute';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -108,7 +109,7 @@ describe('SecuredRoute', () => {
       );
 
       // Simulate mouse movement - this should update the lastActive timestamp
-      document.dispatchEvent(new Event('mousemove'));
+      fireEvent(document, new Event('mousemove'));
 
       // We can't directly test the lastActive variable since it's module-scoped,
       // but we can verify the event listener is attached by checking if the event fires
@@ -134,7 +135,7 @@ describe('SecuredRoute', () => {
       vi.advanceTimersByTime(14 * 60 * 1000);
 
       // Simulate user activity
-      document.dispatchEvent(new Event('mousemove'));
+      fireEvent(document, new Event('mousemove'));
 
       // Advance past original timeout point
       vi.advanceTimersByTime(2 * 60 * 1000);

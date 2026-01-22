@@ -24,7 +24,7 @@
  *
  * Dependencies:
  * - React
- * - shared-components (Button, BaseModal)
+ * - react-bootstrap (Button, Modal)
  * - `@apollo/client` (useMutation)
  * - react-toastify (toast)
  * - react-i18next (useTranslation)
@@ -33,7 +33,7 @@
  *
  */
 import React from 'react';
-import { BaseModal } from 'shared-components/BaseModal';
+import Modal from 'react-bootstrap/Modal';
 import Button from 'shared-components/Button';
 import { useMutation } from '@apollo/client';
 import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -81,12 +81,16 @@ function orgAdminListCard({
     }
   };
   return (
-    <BaseModal
-      show={true}
-      onHide={toggleRemoveModal}
-      title={t('removeAdmin')}
-      footer={
-        <>
+    <>
+      <Modal show={true} onHide={toggleRemoveModal}>
+        <Modal.Header>
+          <h5 id={`removeAdminModalLabel${id}`}>{t('removeAdmin')}</h5>
+          <Button variant="danger" onClick={toggleRemoveModal}>
+            <i className="fas fa-times"></i>
+          </Button>
+        </Modal.Header>
+        <Modal.Body>{t('removeAdminMsg')}</Modal.Body>
+        <Modal.Footer>
           <Button variant="danger" onClick={toggleRemoveModal}>
             {tCommon('no')}
           </Button>
@@ -97,11 +101,9 @@ function orgAdminListCard({
           >
             {tCommon('yes')}
           </Button>
-        </>
-      }
-    >
-      {t('removeAdminMsg')}
-    </BaseModal>
+        </Modal.Footer>
+      </Modal>
+    </>
   );
 }
 export default orgAdminListCard;

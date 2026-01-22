@@ -2,7 +2,7 @@ import type { ReactElement } from 'react';
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { fireEvent } from '@testing-library/dom';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
@@ -151,7 +151,7 @@ describe('Organisation Settings Page', () => {
     const actionItemButton = screen.getByTestId('actionItemCategoriesSettings');
     expect(actionItemButton).toBeInTheDocument();
 
-    await userEvent.click(actionItemButton);
+    fireEvent.click(actionItemButton);
 
     // Check if action item categories tab is now displayed
     await waitFor(() => {
@@ -174,7 +174,7 @@ describe('Organisation Settings Page', () => {
     const agendaItemButton = screen.getByTestId('agendaItemCategoriesSettings');
     expect(agendaItemButton).toBeInTheDocument();
 
-    await userEvent.click(agendaItemButton);
+    fireEvent.click(agendaItemButton);
 
     // Check if agenda item categories tab is now displayed
     await waitFor(() => {
@@ -194,14 +194,14 @@ describe('Organisation Settings Page', () => {
     await waitFor(() => screen.getByTestId('generalTab'));
 
     // Switch to action item categories
-    await userEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
+    fireEvent.click(screen.getByTestId('actionItemCategoriesSettings'));
     await waitFor(() => {
       expect(screen.getByTestId('actionItemCategoriesTab')).toBeInTheDocument();
       expect(screen.queryByTestId('generalTab')).not.toBeInTheDocument();
     });
 
     // Switch to agenda item categories
-    await userEvent.click(screen.getByTestId('agendaItemCategoriesSettings'));
+    fireEvent.click(screen.getByTestId('agendaItemCategoriesSettings'));
     await waitFor(() => {
       expect(screen.getByTestId('agendaItemCategoriesTab')).toBeInTheDocument();
       expect(
@@ -210,7 +210,7 @@ describe('Organisation Settings Page', () => {
     });
 
     // Switch back to general
-    await userEvent.click(screen.getByTestId('generalSettings'));
+    fireEvent.click(screen.getByTestId('generalSettings'));
     await waitFor(() => {
       expect(screen.getByTestId('generalTab')).toBeInTheDocument();
       expect(
@@ -261,7 +261,7 @@ describe('Organisation Settings Page', () => {
     expect(agendaButton.className).not.toMatch(/_activeTabBtn_/);
 
     // Click action item categories tab
-    await userEvent.click(actionButton);
+    fireEvent.click(actionButton);
     await waitFor(() => screen.getByTestId('actionItemCategoriesTab'));
 
     // Now action item categories should be active
@@ -270,7 +270,7 @@ describe('Organisation Settings Page', () => {
     expect(agendaButton.className).not.toMatch(/_activeTabBtn_/);
 
     // Click agenda item categories tab
-    await userEvent.click(agendaButton);
+    fireEvent.click(agendaButton);
     await waitFor(() => screen.getByTestId('agendaItemCategoriesTab'));
 
     // Now agenda item categories should be active

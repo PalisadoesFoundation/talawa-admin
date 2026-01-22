@@ -1,6 +1,7 @@
 import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -130,7 +131,7 @@ describe('Event Management', () => {
       renderEventManagement();
 
       const backButton = screen.getByTestId('backBtn');
-      await userEvent.click(backButton);
+      await act(() => fireEvent.click(backButton));
 
       const eventsScreen = screen.getByTestId('eventsScreen');
       expect(eventsScreen).toBeInTheDocument();
@@ -143,7 +144,7 @@ describe('Event Management', () => {
       renderEventManagement();
 
       const backButton = screen.getByTestId('backBtn');
-      await userEvent.click(backButton);
+      await act(() => fireEvent.click(backButton));
 
       await waitFor(() => {
         const userEventsScreen = screen.getByTestId('userEventsScreen');
@@ -158,7 +159,7 @@ describe('Event Management', () => {
       renderEventManagement();
 
       const backButton = screen.getByTestId('backBtn');
-      await userEvent.click(backButton);
+      await act(() => fireEvent.click(backButton));
 
       await waitFor(() => {
         const eventsScreen = screen.getByTestId('eventsScreen');
