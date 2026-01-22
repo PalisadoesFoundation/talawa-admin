@@ -8,9 +8,7 @@ import ts from 'typescript';
 
 const CSS_EXTENSION_REGEX = /\.css$/;
 const TS_EXTENSION_REGEX = /\.(ts|tsx)$/i;
-const EXEMPT_FILES = [
-  path.resolve('src/index.tsx'),
-];
+const EXEMPT_FILES = [path.resolve('src/index.tsx')];
 const red = (text) => `\u001b[31m${text}\u001b[0m`;
 const bold = (text) => `\u001b[1m${text}\u001b[0m`;
 
