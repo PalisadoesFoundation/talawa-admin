@@ -311,7 +311,6 @@ describe('Testing User Table Item', () => {
     );
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Joined Organization 1/i));
-    expect(window.location.replace).toHaveBeenCalledWith('/admin/orgdash/abc');
     expect(mockNavigatePush).toHaveBeenCalledWith('/admin/orgdash/abc');
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
   });
@@ -835,7 +834,6 @@ describe('Testing User Table Item', () => {
     );
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Blocked Organization 1/i));
-    expect(window.location.replace).toHaveBeenCalledWith('/admin/orgdash/ghi');
     expect(mockNavigatePush).toHaveBeenCalledWith('/admin/orgdash/ghi');
     fireEvent.click(screen.getByTestId(`closeUnblockOrgsBtn${123}`));
   });

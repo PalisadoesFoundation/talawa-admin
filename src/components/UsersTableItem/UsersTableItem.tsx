@@ -123,7 +123,6 @@ const UsersTableItem = (props: Props): JSX.Element => {
 
   function goToOrg(_id: string): void {
     const url = '/admin/orgdash/' + _id;
-    window.location.replace(url);
     navigate(url);
   }
 
