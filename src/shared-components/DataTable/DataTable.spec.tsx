@@ -1,4 +1,4 @@
-import { render, screen, renderHook } from '@testing-library/react';
+import { render, screen, renderHook, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, afterEach, vi } from 'vitest';
 import dayjs from 'dayjs';
@@ -1378,69 +1378,77 @@ describe('DataTable', () => {
    * ------------------------------------------------------------------ */
 
   it('warns when renderRow is used with selectable prop', () => {
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const originalEnv = process.env.NODE_ENV;
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
       'development';
 
-    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
-    const data = [{ name: 'Ada' }];
+    try {
+      const columns = [
+        { id: 'name', header: 'Name', accessor: 'name' as const },
+      ];
+      const data = [{ name: 'Ada' }];
 
-    render(
-      <DataTable
-        data={data}
-        columns={columns}
-        selectable
-        renderRow={(row) => (
-          <tr key={row.name}>
-            <td>{row.name}</td>
-          </tr>
-        )}
-      />,
-    );
+      render(
+        <DataTable
+          data={data}
+          columns={columns}
+          selectable
+          renderRow={(row) => (
+            <tr key={row.name}>
+              <td>{row.name}</td>
+            </tr>
+          )}
+        />,
+      );
 
-    expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining(
-        '`selectable` is ignored when `renderRow` is provided',
-      ),
-    );
-
-    warnSpy.mockRestore();
-    (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
-      originalEnv;
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining(
+          '`selectable` is ignored when `renderRow` is provided',
+        ),
+      );
+    } finally {
+      warnSpy.mockRestore();
+      (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
+        originalEnv;
+    }
   });
 
   it('warns when renderRow is used with rowActions prop', () => {
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const originalEnv = process.env.NODE_ENV;
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
       'development';
 
-    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
-    const data = [{ name: 'Ada' }];
+    try {
+      const columns = [
+        { id: 'name', header: 'Name', accessor: 'name' as const },
+      ];
+      const data = [{ name: 'Ada' }];
 
-    render(
-      <DataTable
-        data={data}
-        columns={columns}
-        rowActions={[{ id: 'edit', label: 'Edit', onClick: () => {} }]}
-        renderRow={(row) => (
-          <tr key={row.name}>
-            <td>{row.name}</td>
-          </tr>
-        )}
-      />,
-    );
+      render(
+        <DataTable
+          data={data}
+          columns={columns}
+          rowActions={[{ id: 'edit', label: 'Edit', onClick: () => {} }]}
+          renderRow={(row) => (
+            <tr key={row.name}>
+              <td>{row.name}</td>
+            </tr>
+          )}
+        />,
+      );
 
-    expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining(
-        '`rowActions` is ignored when `renderRow` is provided',
-      ),
-    );
-
-    warnSpy.mockRestore();
-    (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
-      originalEnv;
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining(
+          '`rowActions` is ignored when `renderRow` is provided',
+        ),
+      );
+    } finally {
+      warnSpy.mockRestore();
+      (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
+        originalEnv;
+    }
   });
 
   /* ------------------------------------------------------------------
@@ -1448,64 +1456,72 @@ describe('DataTable', () => {
    * ------------------------------------------------------------------ */
 
   it('warns when currentPage is provided without onPageChange', () => {
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const originalEnv = process.env.NODE_ENV;
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
       'development';
 
-    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
-    const data = [{ name: 'Ada' }];
+    try {
+      const columns = [
+        { id: 'name', header: 'Name', accessor: 'name' as const },
+      ];
+      const data = [{ name: 'Ada' }];
 
-    render(
-      <DataTable
-        data={data}
-        columns={columns}
-        paginationMode="client"
-        currentPage={1}
-        // Note: onPageChange is intentionally NOT provided
-      />,
-    );
+      render(
+        <DataTable
+          data={data}
+          columns={columns}
+          paginationMode="client"
+          currentPage={1}
+          // Note: onPageChange is intentionally NOT provided
+        />,
+      );
 
-    expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining(
-        '`currentPage` was provided without `onPageChange`',
-      ),
-    );
-
-    warnSpy.mockRestore();
-    (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
-      originalEnv;
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining(
+          '`currentPage` was provided without `onPageChange`',
+        ),
+      );
+    } finally {
+      warnSpy.mockRestore();
+      (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
+        originalEnv;
+    }
   });
 
   it('warns when paginationMode is server but totalItems is not provided', () => {
-    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const originalEnv = process.env.NODE_ENV;
+    const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
     (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
       'development';
 
-    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
-    const data = [{ name: 'Ada' }];
+    try {
+      const columns = [
+        { id: 'name', header: 'Name', accessor: 'name' as const },
+      ];
+      const data = [{ name: 'Ada' }];
 
-    render(
-      <DataTable
-        data={data}
-        columns={columns}
-        paginationMode="server"
-        pageInfo={{ hasNextPage: true, hasPreviousPage: false }}
-        onLoadMore={() => {}}
-        // Note: totalItems is intentionally NOT provided
-      />,
-    );
+      render(
+        <DataTable
+          data={data}
+          columns={columns}
+          paginationMode="server"
+          pageInfo={{ hasNextPage: true, hasPreviousPage: false }}
+          onLoadMore={() => {}}
+          // Note: totalItems is intentionally NOT provided
+        />,
+      );
 
-    expect(warnSpy).toHaveBeenCalledWith(
-      expect.stringContaining(
-        '`paginationMode="server"` requires `totalItems`',
-      ),
-    );
-
-    warnSpy.mockRestore();
-    (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
-      originalEnv;
+      expect(warnSpy).toHaveBeenCalledWith(
+        expect.stringContaining(
+          '`paginationMode="server"` requires `totalItems`',
+        ),
+      );
+    } finally {
+      warnSpy.mockRestore();
+      (process.env as unknown as Record<string, string | undefined>).NODE_ENV =
+        originalEnv;
+    }
   });
 
   it('calls onPageChange callback when page is changed in controlled mode', async () => {
@@ -1716,35 +1732,43 @@ describe('DataTable', () => {
         }),
       );
 
-      // Select row
-      result.current.toggleRowSelection('1');
+      // Select row (wrap in act to flush state updates)
+      act(() => {
+        result.current.toggleRowSelection('1');
+      });
 
       // 1) Test boolean disabled: true
-      result.current.runBulkAction({
-        id: 'b1',
-        label: 'B1',
-        onClick: onBulk,
-        disabled: true,
+      act(() => {
+        result.current.runBulkAction({
+          id: 'b1',
+          label: 'B1',
+          onClick: onBulk,
+          disabled: true,
+        });
       });
       expect(onBulk).not.toHaveBeenCalled();
 
       // 2) Test boolean disabled: false
-      result.current.runBulkAction({
-        id: 'b2',
-        label: 'B2',
-        onClick: onBulk,
-        disabled: false,
+      act(() => {
+        result.current.runBulkAction({
+          id: 'b2',
+          label: 'B2',
+          onClick: onBulk,
+          disabled: false,
+        });
       });
       expect(onBulk).toHaveBeenCalled();
 
       // 3) Test confirm cancel
       onBulk.mockClear();
       confirmSpy.mockReturnValue(false);
-      result.current.runBulkAction({
-        id: 'b3',
-        label: 'B3',
-        onClick: onBulk,
-        confirm: 'Really?',
+      act(() => {
+        result.current.runBulkAction({
+          id: 'b3',
+          label: 'B3',
+          onClick: onBulk,
+          confirm: 'Really?',
+        });
       });
       expect(confirmSpy).toHaveBeenCalledWith('Really?');
       expect(onBulk).not.toHaveBeenCalled();
