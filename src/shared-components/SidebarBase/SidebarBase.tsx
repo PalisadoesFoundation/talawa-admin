@@ -96,7 +96,7 @@ const SidebarBase = ({
 
       {/* Main Content Area (Navigation Items) */}
       <div className={`d-flex flex-column ${styles.sidebarcompheight}`}>
-        {children}
+        <div className={styles.optionList}>{children}</div>
       </div>
 
       {/* Footer Section (Profile Card, Sign Out, etc.) */}

@@ -72,7 +72,7 @@ const UserSidebar = ({
 
   const drawerContent = useMemo(
     () => (
-      <div className={styles.optionList}>
+      <>
         <SidebarNavItem
           to="/user/organizations"
           icon={<IconComponent name="My Organizations" />}
@@ -109,7 +109,7 @@ const UserSidebar = ({
           hideDrawer={hideDrawer}
           onItemClick={handleLinkClick}
         />
-      </div>
+      </>
     ),
     [pluginDrawerItems, t, tCommon, hideDrawer, handleLinkClick],
   );

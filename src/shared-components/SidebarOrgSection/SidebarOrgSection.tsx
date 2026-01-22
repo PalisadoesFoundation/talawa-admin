@@ -28,7 +28,7 @@ import { useTranslation } from 'react-i18next';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import Avatar from 'shared-components/Avatar/Avatar';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
-import styles from '../../style/app-fixed.module.css';
+import styles from './SidebarOrgSection.module.css';
 import type { ISidebarOrgSectionProps } from '../../types/SidebarOrgSection/interface';
 
 interface IOrganizationData {

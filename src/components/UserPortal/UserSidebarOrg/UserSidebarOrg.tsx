@@ -85,7 +85,7 @@ const UserSidebarOrg = ({
 
   const drawerContent = useMemo(
     () => (
-      <div className={styles.optionList}>
+      <>
         {targets.map((target) => {
           const { name, url, subTargets } = target;
 
@@ -129,7 +129,7 @@ const UserSidebarOrg = ({
           onItemClick={handleLinkClick}
           useSimpleButton={true}
         />
-      </div>
+      </>
     ),
     [
       targets,
