@@ -40,10 +40,15 @@ import {
 import Card from 'react-bootstrap/Card';
 import type { Feedback } from 'types/Event/type';
 import type { InterfaceStatsModal } from 'types/Event/interface';
+import { useTranslation } from 'react-i18next';
 
 export const FeedbackStats = ({
   data,
 }: InterfaceStatsModal): React.JSX.Element => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'eventStats.feedback',
+  });
+
   // Colors for the pie chart slices, from green (high ratings) to red (low ratings)
   const ratingColors = [
     '#57bb8a', // Green
@@ -79,12 +84,9 @@ export const FeedbackStats = ({
       <Card>
         <Card.Body>
           <Card.Title>
-            <h3>Feedback Analysis</h3>
+            <h3>{t('title')}</h3>
           </Card.Title>
-          <h5>
-            {data.event.feedback.length} people have filled feedback for this
-            event.
-          </h5>
+          <h5>{t('filledByCount', { count: data.event.feedback.length })}</h5>
           {data.event.feedback.length ? (
             <PieChart
               colors={ratingColors}
@@ -117,7 +119,7 @@ export const FeedbackStats = ({
               height={380}
             />
           ) : (
-            <>Please ask attendees to submit feedback for insights!</>
+            <>{t('emptyState')}</>
           )}
         </Card.Body>
       </Card>
