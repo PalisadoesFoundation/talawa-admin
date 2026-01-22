@@ -107,6 +107,7 @@ describe('DataTable', () => {
   });
 
   it('updates global search in uncontrolled mode', async () => {
+    const user = userEvent.setup();
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data = [{ name: 'Ada' }, { name: 'Bob' }];
 
@@ -118,7 +119,7 @@ describe('DataTable', () => {
 
     // Type in search box
     const input = screen.getByRole('searchbox');
-    await userEvent.type(input, 'Ada');
+    await user.type(input, 'Ada');
 
     // Should filter
     expect(screen.getByText('Ada')).toBeInTheDocument();
@@ -329,6 +330,7 @@ describe('DataTable', () => {
   });
 
   it('resets to page 1 when search changes in uncontrolled client pagination', async () => {
+    const user = userEvent.setup();
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data = [{ name: 'Alice' }, { name: 'Bob' }, { name: 'Charlie' }];
 
@@ -345,7 +347,7 @@ describe('DataTable', () => {
 
     // Type in search - this exercises updateGlobalSearch with client pagination
     const searchInput = screen.getByRole('searchbox');
-    await userEvent.type(searchInput, 'Bob');
+    await user.type(searchInput, 'Bob');
 
     // Should filter to just Bob
     expect(screen.getByText('Bob')).toBeInTheDocument();
@@ -402,6 +404,7 @@ describe('DataTable', () => {
   });
 
   it('server modes do not filter locally', async () => {
+    const user = userEvent.setup();
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data = [{ name: 'Ada' }, { name: 'Bob' }];
     const onSearch = vi.fn();
@@ -422,7 +425,7 @@ describe('DataTable', () => {
 
     // Simulate search
     const input = screen.getByRole('searchbox');
-    await userEvent.type(input, 'Ada');
+    await user.type(input, 'Ada');
 
     expect(onSearch).toHaveBeenCalled();
     // Both should still be present because serverSearch=true disables local filtering
