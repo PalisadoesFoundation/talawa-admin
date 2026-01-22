@@ -663,7 +663,7 @@ describe('PostsPage Component', () => {
 
       // Close modal
       const closeButton = screen.getByTestId('close-post-view-button');
-      user.click(closeButton);
+      await user.click(closeButton);
 
       await waitFor(() => {
         expect(screen.queryByTestId('post-view-modal')).not.toBeInTheDocument();

@@ -370,6 +370,7 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing registration functionality', async () => {
+    const user = userEvent.setup();
     // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -405,28 +406,29 @@ describe('Testing Login Page Screen', () => {
     // Check if goToRegisterPortion exists before clicking
     const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
-      await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
-      await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-      await userEvent.type(
+      await user.type(screen.getByPlaceholderText(/Name/i), formData.name);
+      await user.type(screen.getByTestId(/signInEmail/i), formData.email);
+      await user.type(
         screen.getByPlaceholderText('Password'),
         formData.password,
       );
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Confirm Password'),
         formData.confirmPassword,
       );
 
       const registrationBtn = screen.queryByTestId('registrationBtn');
       if (registrationBtn) {
-        await userEvent.click(registrationBtn);
+        await user.click(registrationBtn);
       }
     }
   });
 
   it('Testing registration functionality when all inputs are invalid', async () => {
+    const user = userEvent.setup();
     // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -461,28 +463,29 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
-      await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
-      await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-      await userEvent.type(
+      await user.type(screen.getByPlaceholderText(/Name/i), formData.name);
+      await user.type(screen.getByTestId(/signInEmail/i), formData.email);
+      await user.type(
         screen.getByPlaceholderText('Password'),
         formData.password,
       );
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Confirm Password'),
         formData.confirmPassword,
       );
 
       const registrationBtn = screen.queryByTestId('registrationBtn');
       if (registrationBtn) {
-        await userEvent.click(registrationBtn);
+        await user.click(registrationBtn);
       }
     }
   });
 
   it('Testing registration functionality, when password and confirm password is not same', async () => {
+    const user = userEvent.setup();
     // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -517,28 +520,29 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
-      await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
-      await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-      await userEvent.type(
+      await user.type(screen.getByPlaceholderText(/Name/i), formData.name);
+      await user.type(screen.getByTestId(/signInEmail/i), formData.email);
+      await user.type(
         screen.getByPlaceholderText('Password'),
         formData.password,
       );
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Confirm Password'),
         formData.confirmPassword,
       );
 
       const registrationBtn = screen.queryByTestId('registrationBtn');
       if (registrationBtn) {
-        await userEvent.click(registrationBtn);
+        await user.click(registrationBtn);
       }
     }
   });
 
   it('Testing registration functionality, when input is not filled correctly', async () => {
+    const user = userEvent.setup();
     // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -573,28 +577,29 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
-      await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
-      await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-      await userEvent.type(
+      await user.type(screen.getByPlaceholderText(/Name/i), formData.name);
+      await user.type(screen.getByTestId(/signInEmail/i), formData.email);
+      await user.type(
         screen.getByPlaceholderText('Password'),
         formData.password,
       );
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Confirm Password'),
         formData.confirmPassword,
       );
 
       const registrationBtn = screen.queryByTestId('registrationBtn');
       if (registrationBtn) {
-        await userEvent.click(registrationBtn);
+        await user.click(registrationBtn);
       }
     }
   });
 
   it('switches to login tab on successful registration', async () => {
+    const user = userEvent.setup();
     // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -629,23 +634,23 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
-      await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
-      await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-      await userEvent.type(
+      await user.type(screen.getByPlaceholderText(/Name/i), formData.name);
+      await user.type(screen.getByTestId(/signInEmail/i), formData.email);
+      await user.type(
         screen.getByPlaceholderText('Password'),
         formData.password,
       );
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Confirm Password'),
         formData.confirmPassword,
       );
 
       const registrationBtn = screen.queryByTestId('registrationBtn');
       if (registrationBtn) {
-        await userEvent.click(registrationBtn);
+        await user.click(registrationBtn);
         await wait();
 
         // Check if the login tab is now active by checking for elements that only appear in the login tab
@@ -655,6 +660,7 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('switches to login tab on successful registration correct data', async () => {
+    const user = userEvent.setup();
     // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -690,23 +696,23 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId(/goToRegisterPortion/i);
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
-      await userEvent.type(screen.getByPlaceholderText(/Name/i), formData.name);
-      await userEvent.type(screen.getByTestId(/signInEmail/i), formData.email);
-      await userEvent.type(
+      await user.type(screen.getByPlaceholderText(/Name/i), formData.name);
+      await user.type(screen.getByTestId(/signInEmail/i), formData.email);
+      await user.type(
         screen.getByPlaceholderText('Password'),
         formData.password,
       );
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Confirm Password'),
         formData.confirmPassword,
       );
 
       const registrationBtn = screen.queryByTestId('registrationBtn');
       if (registrationBtn) {
-        await userEvent.click(registrationBtn);
+        await user.click(registrationBtn);
         await wait();
 
         // Check if the login tab is now active by checking for elements that only appear in the login tab
@@ -716,6 +722,7 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing toggle login register portion', async () => {
+    const user = userEvent.setup();
     // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -745,7 +752,7 @@ describe('Testing Login Page Screen', () => {
 
     // Only test this if we're not on the admin path and the register button exists
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
 
       // The goToLoginPortion button has been removed, so this test is no longer valid
       // Skip this part or check for a different condition
@@ -755,6 +762,7 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing login functionality', async () => {
+    const user = userEvent.setup();
     const formData = { email: 'johndoe@gmail.com', password: 'johndoe' };
 
     render(
@@ -771,18 +779,19 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    await userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
-    await userEvent.type(
+    await user.type(screen.getByTestId(/loginEmail/i), formData.email);
+    await user.type(
       screen.getByPlaceholderText(/Enter Password/i),
       formData.password,
     );
 
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
 
     await wait();
   });
 
   it('Testing wrong login functionality', async () => {
+    const user = userEvent.setup();
     const formData = { email: 'johndoe@gmail.com', password: 'johndoe1' };
 
     render(
@@ -799,18 +808,19 @@ describe('Testing Login Page Screen', () => {
 
     await wait();
 
-    await userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
-    await userEvent.type(
+    await user.type(screen.getByTestId(/loginEmail/i), formData.email);
+    await user.type(
       screen.getByPlaceholderText(/Enter Password/i),
       formData.password,
     );
 
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
 
     await wait();
   });
 
   it('Testing password preview feature for login', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -828,15 +838,16 @@ describe('Testing Login Page Screen', () => {
     const input = screen.getByTestId('password') as HTMLInputElement;
     const toggleText = screen.getByTestId('showLoginPassword');
     expect(input.type).toBe('password');
-    await userEvent.click(toggleText);
+    await user.click(toggleText);
     expect(input.type).toBe('text');
-    await userEvent.click(toggleText);
+    await user.click(toggleText);
     expect(input.type).toBe('password');
 
     await wait();
   });
 
   it('Testing password preview feature for register', async () => {
+    const user = userEvent.setup();
     // Skip this test for admin path since register button is removed
     Object.defineProperty(window, 'location', {
       configurable: true,
@@ -864,15 +875,15 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId('goToRegisterPortion');
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
       const input = screen.getByTestId('passwordField') as HTMLInputElement;
       const toggleText = screen.getByTestId('showPassword');
       expect(input.type).toBe('password');
-      await userEvent.click(toggleText);
+      await user.click(toggleText);
       expect(input.type).toBe('text');
-      await userEvent.click(toggleText);
+      await user.click(toggleText);
       expect(input.type).toBe('password');
     }
 
@@ -880,6 +891,7 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing confirm password preview feature', async () => {
+    const user = userEvent.setup();
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: {
@@ -906,15 +918,15 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId('goToRegisterPortion');
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
       const input = screen.getByTestId('cpassword') as HTMLInputElement;
       const toggleText = screen.getByTestId('showPasswordCon');
       expect(input.type).toBe('password');
-      await userEvent.click(toggleText);
+      await user.click(toggleText);
       expect(input.type).toBe('text');
-      await userEvent.click(toggleText);
+      await user.click(toggleText);
       expect(input.type).toBe('password');
     }
 
@@ -939,6 +951,7 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing for the password error warning when user clicks on password field and password is less than 8 character', async () => {
+    const user = userEvent.setup();
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: {
@@ -966,10 +979,10 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId('goToRegisterPortion');
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Password'),
         password.password,
       );
@@ -983,6 +996,7 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing for the password error warning when user clicks on password field and password is greater than or equal to 8 character', async () => {
+    const user = userEvent.setup();
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: {
@@ -1010,10 +1024,10 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId('goToRegisterPortion');
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Password'),
         password.password,
       );
@@ -1027,6 +1041,7 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing for the password error warning when user clicks on fields except password field and password is less than 8 character', async () => {
+    const user = userEvent.setup();
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: {
@@ -1054,12 +1069,12 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId('goToRegisterPortion');
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
       expect(screen.getByPlaceholderText('Password')).not.toHaveFocus();
 
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Password'),
         password.password,
       );
@@ -1069,6 +1084,7 @@ describe('Testing Login Page Screen', () => {
   });
 
   it('Testing for the password error warning when user clicks on fields except password field and password is greater than or equal to 8 character', async () => {
+    const user = userEvent.setup();
     Object.defineProperty(window, 'location', {
       configurable: true,
       value: {
@@ -1096,12 +1112,12 @@ describe('Testing Login Page Screen', () => {
 
     const registerButton = screen.queryByTestId('goToRegisterPortion');
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
       expect(screen.getByPlaceholderText('Password')).not.toHaveFocus();
 
-      await userEvent.type(
+      await user.type(
         screen.getByPlaceholderText('Password'),
         password.password,
       );
@@ -1226,6 +1242,7 @@ describe('Testing invitation functionality', () => {
   });
 
   it('should handle pending invitation token on successful login', async () => {
+    const user = userEvent.setup();
     const mockToken = 'test-invitation-token';
 
     // Mock getItem to return pending invitation token
@@ -1252,12 +1269,9 @@ describe('Testing invitation functionality', () => {
 
     await wait();
 
-    await userEvent.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
-    await userEvent.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'johndoe',
-    );
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
+    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'johndoe');
+    await user.click(screen.getByTestId('loginBtn'));
 
     await wait();
 
@@ -1267,6 +1281,7 @@ describe('Testing invitation functionality', () => {
   });
 
   it('should handle pending invitation token on successful registration', async () => {
+    const user = userEvent.setup();
     const mockToken = 'test-invitation-token';
 
     mockUseLocalStorage.getItem.mockImplementation((key: string) => {
@@ -1304,27 +1319,21 @@ describe('Testing invitation functionality', () => {
     // Click register button
     const registerButton = screen.queryByTestId('goToRegisterPortion');
     if (registerButton) {
-      await userEvent.click(registerButton);
+      await user.click(registerButton);
       await wait();
 
       // Fill registration form
-      await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
-      await userEvent.type(
-        screen.getByTestId('signInEmail'),
-        'johndoe@gmail.com',
-      );
-      await userEvent.type(
-        screen.getByPlaceholderText('Password'),
-        'Johndoe@123',
-      );
-      await userEvent.type(
+      await user.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
+      await user.type(screen.getByTestId('signInEmail'), 'johndoe@gmail.com');
+      await user.type(screen.getByPlaceholderText('Password'), 'Johndoe@123');
+      await user.type(
         screen.getByPlaceholderText('Confirm Password'),
         'Johndoe@123',
       );
 
       const registrationBtn = screen.queryByTestId('registrationBtn');
       if (registrationBtn) {
-        await userEvent.click(registrationBtn);
+        await user.click(registrationBtn);
         await wait();
 
         // Verify that removeItem was called with the pending invitation token
@@ -1337,6 +1346,7 @@ describe('Testing invitation functionality', () => {
   });
 
   it('should not redirect when no pending invitation token exists', async () => {
+    const user = userEvent.setup();
     // Mock getItem to return null for pending invitation token
     mockUseLocalStorage.getItem.mockImplementation((key: string) => {
       if (key === 'pendingInvitationToken') return null;
@@ -1358,12 +1368,9 @@ describe('Testing invitation functionality', () => {
     await wait();
 
     // Fill login form
-    await userEvent.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
-    await userEvent.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'johndoe',
-    );
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
+    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'johndoe');
+    await user.click(screen.getByTestId('loginBtn'));
 
     await wait();
 
@@ -1374,6 +1381,7 @@ describe('Testing invitation functionality', () => {
 });
 
 it('Render the Select Organization list and change the option', async () => {
+  const user = userEvent.setup();
   // Skip this test for admin path since register button is removed
   Object.defineProperty(window, 'location', {
     configurable: true,
@@ -1521,6 +1529,7 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('bypasses recaptcha when feature is off', async () => {
+    const user = userEvent.setup();
     vi.resetModules();
     vi.doMock('Constant/constant.ts', async () => ({
       ...(await vi.importActual('Constant/constant.ts')),
@@ -1542,31 +1551,29 @@ describe('Extra coverage for 100 %', () => {
     );
     await wait();
     // Verify recaptcha is bypassed by submitting login without token
-    await userEvent.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
-    await userEvent.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'johndoe',
-    );
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
+    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'johndoe');
+    await user.click(screen.getByTestId('loginBtn'));
     await wait();
     // Should succeed without recaptcha interaction
     expect(routerMocks.navigate).toHaveBeenCalledWith('/user/organizations');
   });
 
   it('shows toast for invalid name during registration', async () => {
+    const user = userEvent.setup();
     setLocationPath('/');
     renderLoginPage();
     await wait();
-    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
-    await userEvent.type(screen.getByPlaceholderText(/Name/i), '123'); // invalid - contains numbers
-    await userEvent.type(screen.getByTestId('signInEmail'), 'a@b.co'); // invalid email (too short)
-    await userEvent.type(screen.getByPlaceholderText('Password'), 'Valid@123');
-    await userEvent.type(
+    await user.click(screen.getByTestId('goToRegisterPortion'));
+    await user.type(screen.getByPlaceholderText(/Name/i), '123'); // invalid - contains numbers
+    await user.type(screen.getByTestId('signInEmail'), 'a@b.co'); // invalid email (too short)
+    await user.type(screen.getByPlaceholderText('Password'), 'Valid@123');
+    await user.type(
       screen.getByPlaceholderText('Confirm Password'),
       'Valid@123',
     );
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('registrationBtn'));
+    await user.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
@@ -1575,19 +1582,17 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('shows toast for weak password', async () => {
+    const user = userEvent.setup();
     setLocationPath('/');
     renderLoginPage();
     await wait();
-    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
-    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
-    await userEvent.type(screen.getByTestId('signInEmail'), 'john@doe.com'); // valid email to isolate password validation
-    await userEvent.type(screen.getByPlaceholderText('Password'), 'weak');
-    await userEvent.type(
-      screen.getByPlaceholderText('Confirm Password'),
-      'weak',
-    );
+    await user.click(screen.getByTestId('goToRegisterPortion'));
+    await user.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
+    await user.type(screen.getByTestId('signInEmail'), 'john@doe.com'); // valid email to isolate password validation
+    await user.type(screen.getByPlaceholderText('Password'), 'weak');
+    await user.type(screen.getByPlaceholderText('Confirm Password'), 'weak');
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('registrationBtn'));
+    await user.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
@@ -1596,6 +1601,7 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('warns when non-admin logs in from admin portal', async () => {
+    const user = userEvent.setup();
     setLocationPath('/admin');
     const NON_ADMIN_MOCK = [
       ...MOCKS.filter((m) => m.request.query !== SIGNIN_QUERY),
@@ -1622,13 +1628,10 @@ describe('Extra coverage for 100 %', () => {
     ];
     renderLoginPage(NON_ADMIN_MOCK);
     await wait();
-    await userEvent.type(screen.getByTestId('loginEmail'), 'user@example.com');
-    await userEvent.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'pass',
-    );
+    await user.type(screen.getByTestId('loginEmail'), 'user@example.com');
+    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith(
       'Sorry! you are not Authorised!',
@@ -1675,6 +1678,7 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('resets signup recaptcha when signup fails', async () => {
+    const user = userEvent.setup();
     const FAIL_MOCK = [
       {
         request: {
@@ -1727,28 +1731,23 @@ describe('Extra coverage for 100 %', () => {
     setLocationPath('/');
     renderLoginPage(FAIL_MOCK);
     await wait();
-    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
-    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
-    await userEvent.type(
-      screen.getByTestId('signInEmail'),
-      'johndoe@gmail.com',
-    );
-    await userEvent.type(
-      screen.getByPlaceholderText('Password'),
-      'Johndoe@123',
-    );
-    await userEvent.type(
+    await user.click(screen.getByTestId('goToRegisterPortion'));
+    await user.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
+    await user.type(screen.getByTestId('signInEmail'), 'johndoe@gmail.com');
+    await user.type(screen.getByPlaceholderText('Password'), 'Johndoe@123');
+    await user.type(
       screen.getByPlaceholderText('Confirm Password'),
       'Johndoe@123',
     );
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('registrationBtn'));
+    await user.click(screen.getByTestId('registrationBtn'));
     await wait();
 
     expect(resetReCAPTCHA).toHaveBeenCalled();
   });
 
   it('shows error toast when recaptcha verification fails during signup', async () => {
+    const user = userEvent.setup();
     const RECAPTCHA_ERROR_MOCK = [
       {
         request: {
@@ -1776,16 +1775,16 @@ describe('Extra coverage for 100 %', () => {
     setLocationPath('/');
     renderLoginPage(RECAPTCHA_ERROR_MOCK);
     await wait();
-    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
-    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John');
-    await userEvent.type(screen.getByTestId('signInEmail'), 'john@doe.com');
-    await userEvent.type(screen.getByPlaceholderText('Password'), 'John@123');
-    await userEvent.type(
+    await user.click(screen.getByTestId('goToRegisterPortion'));
+    await user.type(screen.getByPlaceholderText(/Name/i), 'John');
+    await user.type(screen.getByTestId('signInEmail'), 'john@doe.com');
+    await user.type(screen.getByPlaceholderText('Password'), 'John@123');
+    await user.type(
       screen.getByPlaceholderText('Confirm Password'),
       'John@123',
     );
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('registrationBtn'));
+    await user.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.error).toHaveBeenCalledWith(
       expect.stringMatching(/captcha|Invalid reCAPTCHA/i),
@@ -1793,19 +1792,20 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('shows email invalid toast when email is too short', async () => {
+    const user = userEvent.setup();
     setLocationPath('/');
     renderLoginPage();
     await wait();
-    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
-    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John');
-    await userEvent.type(screen.getByTestId('signInEmail'), 'a@b.co'); // length 6
-    await userEvent.type(screen.getByPlaceholderText('Password'), 'Test@123');
-    await userEvent.type(
+    await user.click(screen.getByTestId('goToRegisterPortion'));
+    await user.type(screen.getByPlaceholderText(/Name/i), 'John');
+    await user.type(screen.getByTestId('signInEmail'), 'a@b.co'); // length 6
+    await user.type(screen.getByPlaceholderText('Password'), 'Test@123');
+    await user.type(
       screen.getByPlaceholderText('Confirm Password'),
       'Test@123',
     );
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('registrationBtn'));
+    await user.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
@@ -1814,6 +1814,7 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('shows not found warning when signIn returns null', async () => {
+    const user = userEvent.setup();
     const NULL_SIGNIN_MOCK = [
       {
         request: {
@@ -1834,18 +1835,16 @@ describe('Extra coverage for 100 %', () => {
     setLocationPath('/');
     renderLoginPage(NULL_SIGNIN_MOCK);
     await wait();
-    await userEvent.type(screen.getByTestId('loginEmail'), 'test@test.com');
-    await userEvent.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'pass',
-    );
+    await user.type(screen.getByTestId('loginEmail'), 'test@test.com');
+    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'pass');
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith('Not found');
   });
 
   it('shows account locked message with countdown when retryAfter is provided', async () => {
+    const user = userEvent.setup();
     // Set retryAfter to 15 minutes from now
     const retryAfterDate = new Date(Date.now() + 15 * 60 * 1000).toISOString();
 
@@ -1880,13 +1879,13 @@ describe('Extra coverage for 100 %', () => {
     renderLoginPage(ACCOUNT_LOCKED_MOCK);
     await wait();
 
-    await userEvent.type(screen.getByTestId('loginEmail'), 'locked@test.com');
-    await userEvent.type(
+    await user.type(screen.getByTestId('loginEmail'), 'locked@test.com');
+    await user.type(
       screen.getByPlaceholderText(/Enter Password/i),
       'wrongpass',
     );
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
     await wait();
 
     // Should show the account locked message with countdown (15 minutes)
@@ -1900,6 +1899,7 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('shows generic account locked message when retryAfter is missing', async () => {
+    const user = userEvent.setup();
     const ACCOUNT_LOCKED_NO_TIMER_MOCK = [
       {
         request: {
@@ -1931,13 +1931,13 @@ describe('Extra coverage for 100 %', () => {
     renderLoginPage(ACCOUNT_LOCKED_NO_TIMER_MOCK);
     await wait();
 
-    await userEvent.type(screen.getByTestId('loginEmail'), 'locked@test.com');
-    await userEvent.type(
+    await user.type(screen.getByTestId('loginEmail'), 'locked@test.com');
+    await user.type(
       screen.getByPlaceholderText(/Enter Password/i),
       'wrongpass',
     );
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
     await wait();
 
     // Should show generic account locked message (without countdown)
@@ -1951,6 +1951,7 @@ describe('Extra coverage for 100 %', () => {
   });
 
   it('handles non-account_locked GraphQL errors via errorHandler', async () => {
+    const user = userEvent.setup();
     const OTHER_GRAPHQL_ERROR_MOCK = [
       {
         request: {
@@ -1981,13 +1982,13 @@ describe('Extra coverage for 100 %', () => {
     renderLoginPage(OTHER_GRAPHQL_ERROR_MOCK);
     await wait();
 
-    await userEvent.type(screen.getByTestId('loginEmail'), 'test@test.com');
-    await userEvent.type(
+    await user.type(screen.getByTestId('loginEmail'), 'test@test.com');
+    await user.type(
       screen.getByPlaceholderText(/Enter Password/i),
       'wrongpass',
     );
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
     await wait();
 
     // Should call errorHandler which shows the error message
@@ -2001,6 +2002,7 @@ describe('Extra coverage for 100 %', () => {
 
 describe('Cookie-based authentication verification', () => {
   it('should NOT store tokens in localStorage (tokens handled by HTTP-Only cookies)', async () => {
+    const user = userEvent.setup();
     const SIGNIN_WITH_REFRESH_TOKEN_MOCK = [
       {
         request: {
@@ -2056,13 +2058,13 @@ describe('Cookie-based authentication verification', () => {
 
     await wait();
 
-    await userEvent.type(screen.getByTestId('loginEmail'), 'test@gmail.com');
-    await userEvent.type(
+    await user.type(screen.getByTestId('loginEmail'), 'test@gmail.com');
+    await user.type(
       screen.getByPlaceholderText(/Enter Password/i),
       'testPassword',
     );
     // reCAPTCHA is now integrated directly in the mutation
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
 
     await wait();
 
@@ -2098,6 +2100,7 @@ describe('Cookie-based authentication verification', () => {
 
   // Test case for registration/signup flow
   it('registers user without storing tokens in localStorage (cookie-based auth)', async () => {
+    const user = userEvent.setup();
     const SIGNUP_SUCCESS_MOCK = [
       {
         request: {
@@ -2156,26 +2159,20 @@ describe('Cookie-based authentication verification', () => {
     await wait();
 
     // Switch to Register tab
-    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
+    await user.click(screen.getByTestId('goToRegisterPortion'));
 
     // Fill registration form
-    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'New User');
-    await userEvent.type(
-      screen.getByTestId('signInEmail'),
-      'newuser@example.com',
-    );
-    await userEvent.type(
-      screen.getByPlaceholderText('Password'),
-      'Password@123',
-    );
-    await userEvent.type(
+    await user.type(screen.getByPlaceholderText(/Name/i), 'New User');
+    await user.type(screen.getByTestId('signInEmail'), 'newuser@example.com');
+    await user.type(screen.getByPlaceholderText('Password'), 'Password@123');
+    await user.type(
       screen.getByPlaceholderText('Confirm Password'),
       'Password@123',
     );
     // reCAPTCHA is now integrated directly in the mutation
 
     // Submit registration
-    await userEvent.click(screen.getByTestId('registrationBtn'));
+    await user.click(screen.getByTestId('registrationBtn'));
 
     await wait();
 
@@ -2213,6 +2210,7 @@ describe('Cookie-based authentication verification', () => {
   });
 
   it('Testing login error handling (catch block)', async () => {
+    const user = userEvent.setup();
     const ERROR_MOCKS = [
       {
         request: {
@@ -2310,17 +2308,14 @@ describe('Cookie-based authentication verification', () => {
 
     await wait();
 
-    await userEvent.type(screen.getByTestId(/loginEmail/i), 'error@gmail.com');
-    await userEvent.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'password',
-    );
+    await user.type(screen.getByTestId(/loginEmail/i), 'error@gmail.com');
+    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'password');
 
     // reCAPTCHA is now integrated directly in the mutation
 
     await wait();
 
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
 
     await wait();
 
@@ -2352,10 +2347,11 @@ describe('Cookie-based authentication verification', () => {
     });
 
     it('redirects to login on back to login button click', async () => {
+      const user = userEvent.setup();
       setLocationPath('/register');
       renderLoginPage();
       await wait();
-      await userEvent.click(screen.getByTestId('goToLoginPortion'));
+      await user.click(screen.getByTestId('goToLoginPortion'));
       await wait();
       expect(screen.getByTestId('goToRegisterPortion')).toBeInTheDocument();
     });
@@ -2420,6 +2416,7 @@ describe('Cookie-based authentication verification', () => {
   });
 
   it('sets recaptcha token when recaptcha is completed', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -2436,18 +2433,12 @@ describe('Cookie-based authentication verification', () => {
 
     const [loginRecaptcha] = screen.getAllByTestId('mock-recaptcha');
 
-    await userEvent.type(loginRecaptcha, 'fake-recaptcha-token');
+    await user.type(loginRecaptcha, 'fake-recaptcha-token');
 
-    await userEvent.type(
-      screen.getByTestId('loginEmail'),
-      'testadmin2@example.com',
-    );
-    await userEvent.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'Pass@123',
-    );
+    await user.type(screen.getByTestId('loginEmail'), 'testadmin2@example.com');
+    await user.type(screen.getByPlaceholderText(/Enter Password/i), 'Pass@123');
 
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
 
     await wait();
 
@@ -2457,6 +2448,7 @@ describe('Cookie-based authentication verification', () => {
   });
 
   it('Testing login functionality with verified email clears storage flags', async () => {
+    const user = userEvent.setup();
     const formData = { email: 'verified@gmail.com', password: 'password123' };
 
     render(
@@ -2473,13 +2465,13 @@ describe('Cookie-based authentication verification', () => {
 
     await wait();
 
-    await userEvent.type(screen.getByTestId(/loginEmail/i), formData.email);
-    await userEvent.type(
+    await user.type(screen.getByTestId(/loginEmail/i), formData.email);
+    await user.type(
       screen.getByPlaceholderText(/Enter Password/i),
       formData.password,
     );
 
-    await userEvent.click(screen.getByTestId('loginBtn'));
+    await user.click(screen.getByTestId('loginBtn'));
 
     await wait();
 

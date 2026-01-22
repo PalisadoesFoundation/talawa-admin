@@ -197,6 +197,7 @@ describe('Event Management', () => {
     });
 
     it('switches between all available tabs', async () => {
+      const user = userEvent.setup();
       renderEventManagement();
 
       const tabsToTest = [
@@ -209,7 +210,7 @@ describe('Event Management', () => {
       ];
 
       for (const { button, tab } of tabsToTest) {
-        await userEvent.click(screen.getByTestId(button));
+        await user.click(screen.getByTestId(button));
         expect(screen.getByTestId(tab)).toBeInTheDocument();
       }
     });
@@ -252,6 +253,7 @@ describe('Event Management', () => {
     });
 
     it('renders dropdown with all options', async () => {
+      const user = userEvent.setup();
       await act(async () => {
         renderEventManagement();
       });
@@ -259,9 +261,7 @@ describe('Event Management', () => {
       const dropdownContainer = screen.getByTestId('tabsDropdownContainer');
       expect(dropdownContainer).toBeInTheDocument();
 
-      await act(async () => {
-        await userEvent.click(screen.getByTestId('tabsDropdownToggle'));
-      });
+      await user.click(screen.getByTestId('tabsDropdownToggle'));
 
       const tabOptions = [
         'dashboard',
@@ -279,12 +279,11 @@ describe('Event Management', () => {
     });
 
     it('switches tabs through dropdown selection', async () => {
+      const user = userEvent.setup();
       await act(async () => {
         renderEventManagement();
       });
-      await act(async () => {
-        await userEvent.click(screen.getByTestId('tabsDropdownToggle'));
-      });
+      await user.click(screen.getByTestId('tabsDropdownToggle'));
 
       const tabOptions = [
         'dashboard',
@@ -297,9 +296,7 @@ describe('Event Management', () => {
       ];
 
       for (const option of tabOptions) {
-        act(async () => {
-          await userEvent.click(screen.getByTestId(`${option}DropdownItem`));
-        });
+        await user.click(screen.getByTestId(`${option}DropdownItem`));
 
         expect(screen.getByTestId(`${option}DropdownItem`)).toHaveClass(
           'd-flex gap-2 dropdown-item',

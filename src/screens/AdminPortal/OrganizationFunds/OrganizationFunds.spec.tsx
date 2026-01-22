@@ -192,6 +192,7 @@ describe('OrganizationFunds Screen =>', () => {
   it('open and close Create Fund modal', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
+    const user = userEvent.setup();
 
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
@@ -199,14 +200,14 @@ describe('OrganizationFunds Screen =>', () => {
 
     const createFundBtn = await screen.findByTestId('createFundBtn');
     expect(createFundBtn).toBeInTheDocument();
-    await userEvent.click(createFundBtn);
+    await user.click(createFundBtn);
 
     await waitFor(() => {
       const modalTitle = screen.getByTestId('modalTitle');
       expect(modalTitle).toHaveTextContent(translations.fundCreate);
     });
 
-    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() => {
       expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
@@ -215,6 +216,7 @@ describe('OrganizationFunds Screen =>', () => {
   it('open and close update fund modal', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
+    const user = userEvent.setup();
 
     await waitFor(() => {
       expect(screen.getByTestId('searchByName')).toBeInTheDocument();
@@ -222,14 +224,14 @@ describe('OrganizationFunds Screen =>', () => {
 
     const editFundBtn = await screen.findAllByTestId('editFundBtn');
     await waitFor(() => expect(editFundBtn[0]).toBeInTheDocument());
-    await userEvent.click(editFundBtn[0]);
+    await user.click(editFundBtn[0]);
 
     await waitFor(() =>
       expect(
         screen.getAllByText(translations.fundUpdate)[0],
       ).toBeInTheDocument(),
     );
-    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
@@ -238,6 +240,7 @@ describe('OrganizationFunds Screen =>', () => {
   it('Search the Funds list by name', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
+    const user = userEvent.setup();
 
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
@@ -245,8 +248,8 @@ describe('OrganizationFunds Screen =>', () => {
 
     // Get the search field and type into it (SearchBar now uses onChange, not searchBtn)
     const searchField = await screen.findByTestId('searchByName');
-    await userEvent.clear(searchField);
-    await userEvent.type(searchField, '2');
+    await user.clear(searchField);
+    await user.type(searchField, '2');
 
     // Wait and verify search results - search now triggers on type
     await waitFor(
@@ -424,6 +427,7 @@ describe('OrganizationFunds Screen =>', () => {
   it('should clear the search input when clear button is clicked', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
+    const user = userEvent.setup();
 
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
@@ -431,14 +435,14 @@ describe('OrganizationFunds Screen =>', () => {
 
     // Get the search field and type into it
     const searchField = await screen.findByTestId('searchByName');
-    await userEvent.type(searchField, 'testsearch');
+    await user.type(searchField, 'testsearch');
 
     // Verify search text is entered (onChange trims spaces)
     expect(searchField).toHaveValue('testsearch');
 
     // Click the clear button
     const clearButton = screen.getByRole('button', { name: /clear/i });
-    await userEvent.click(clearButton);
+    await user.click(clearButton);
 
     // Verify search input is cleared
     await waitFor(() => {
@@ -449,6 +453,7 @@ describe('OrganizationFunds Screen =>', () => {
   it('should display "noResultsFoundFor" message when search yields no results', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);
+    const user = userEvent.setup();
 
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
@@ -461,7 +466,7 @@ describe('OrganizationFunds Screen =>', () => {
 
     // Type a search term that won't match any funds
     const searchField = await screen.findByTestId('searchByName');
-    await userEvent.type(searchField, 'nonexistentfundxyz');
+    await user.type(searchField, 'nonexistentfundxyz');
 
     // Verify "No results found for" message is displayed
     await waitFor(() => {
