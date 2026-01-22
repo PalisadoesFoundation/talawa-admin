@@ -18,7 +18,7 @@
  */
 
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
-import styles from './ChatRoom.module.css';
+import styles from './EmptyChatState.module.css';
 
 interface IEmptyChatStateProps {
   message: string;

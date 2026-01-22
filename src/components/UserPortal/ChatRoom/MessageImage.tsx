@@ -23,7 +23,7 @@
  */
 
 import React from 'react';
-import styles from './ChatRoom.module.css';
+import styles from './MessageImage.module.css';
 
 interface InterfaceMessageImageProps {
   media: string;

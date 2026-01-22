@@ -24,7 +24,7 @@
  */
 
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
-import styles from './ChatRoom.module.css';
+import styles from './ChatHeader.module.css';
 
 interface IChatHeaderProps {
   chatImage: string;

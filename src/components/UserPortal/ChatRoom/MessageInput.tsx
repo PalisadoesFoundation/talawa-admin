@@ -38,7 +38,7 @@ import { GrAttachment } from 'react-icons/gr';
 import SendIcon from '@mui/icons-material/Send';
 import { Close } from '@mui/icons-material';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
-import styles from './ChatRoom.module.css';
+import styles from './MessageInput.module.css';
 import type { ChangeEvent } from 'react';
 import type { INewChat } from './types';
 

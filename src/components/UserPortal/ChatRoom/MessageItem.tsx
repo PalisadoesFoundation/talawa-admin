@@ -33,7 +33,7 @@
 import { Dropdown } from 'react-bootstrap';
 import { MoreVert } from '@mui/icons-material';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
-import styles from './ChatRoom.module.css';
+import styles from './MessageItem.module.css';
 import type { INewChat } from './types';
 import MessageImage from './MessageImage';
 
