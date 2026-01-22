@@ -719,9 +719,12 @@
     "description": "Description",
     "enterDescription": "Enter Description",
     "category": "Agenda Category",
+    "selectCategory": "Select Category",
     "attachments": "Attachments",
     "attachmentLimit": "Add any image file or video file upto 10MB",
     "fileSizeExceedsLimit": "File size exceeds the limit which is 10MB",
+    "fileUploadError": "Failed to upload file. Please try again.",
+    "deleteAttachment": "Delete attachment",
     "urls": "URLs",
     "url": "add link to URL",
     "enterUrl": "https://example.com",
@@ -2347,10 +2350,6 @@
     "noEventsAttended": "No events attended"
   },
   "eventStats": {
-    "averageRating": {
-      "title": "Average Review Score",
-      "rated": "Rated {{score}} / 5"
-    },
     "title": "Event Statistics",
     "reviews": {
       "title": "Reviews",

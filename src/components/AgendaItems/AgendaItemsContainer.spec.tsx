@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
@@ -9,7 +9,7 @@ import i18nForTest from 'utils/i18nForTest';
 import {
   LocalizationProvider,
   AdapterDayjs,
-} from 'shared-components/DateRangePicker';
+} from 'shared-components/DatePicker';
 import type { DropResult } from '@hello-pangea/dnd';
 
 import { store } from 'state/store';
@@ -35,7 +35,6 @@ const callOnDragEnd = (result: DropResult): void => {
     capturedOnDragEnd(result);
   }
 };
-
 // Mock @hello-pangea/dnd to capture onDragEnd callback
 vi.mock('@hello-pangea/dnd', () => ({
   DragDropContext: ({
@@ -98,16 +97,14 @@ const link2 = new StaticMockLink(MOCKS_ERROR, true);
 const linkDragDrop = new StaticMockLink(MOCKS_DRAG_DROP, true);
 const linkDragDropError = new StaticMockLink(MOCKS_DRAG_DROP_ERROR, true);
 
-const mockNotificationToast = vi.hoisted(() => ({
+// Use vi.hoisted() to create mock that survives vi.mock hoisting
+const mockToast = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
-  warning: vi.fn(),
-  info: vi.fn(),
-  dismiss: vi.fn(),
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
-  NotificationToast: mockNotificationToast,
+vi.mock('react-toastify', () => ({
+  toast: mockToast,
 }));
 
 //temporarily fixes react-beautiful-dnd droppable method's depreciation error
@@ -211,15 +208,13 @@ describe('Testing Agenda Items components', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('updateAgendaItemModalCloseBtn'),
+        screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('updateAgendaItemModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() =>
-      expect(
-        screen.queryByTestId('updateAgendaItemModalCloseBtn'),
-      ).not.toBeInTheDocument(),
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument(),
     );
   });
 
@@ -324,15 +319,13 @@ describe('Testing Agenda Items components', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('updateAgendaItemModalCloseBtn'),
+        screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('updateAgendaItemModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() =>
-      expect(
-        screen.queryByTestId('updateAgendaItemModalCloseBtn'),
-      ).not.toBeInTheDocument(),
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument(),
     );
   });
 
@@ -365,10 +358,10 @@ describe('Testing Agenda Items components', () => {
       translations.enterDescription,
     );
 
-    fireEvent.change(title, { target: { value: '' } });
+    await userEvent.clear(title);
     await userEvent.type(title, formData.title);
 
-    fireEvent.change(description, { target: { value: '' } });
+    await userEvent.clear(description);
     await userEvent.type(description, formData.description);
 
     await waitFor(() => {
@@ -405,12 +398,10 @@ describe('Testing Agenda Items components', () => {
     });
     await userEvent.click(screen.getAllByTestId('editAgendaItemModalBtn')[0]);
 
-    const titleInput = screen.getByLabelText(translations.title);
-    const descriptionInput = screen.getByLabelText(translations.description);
-    fireEvent.change(titleInput, { target: { value: '' } });
-    fireEvent.change(descriptionInput, {
-      target: { value: '' },
-    });
+    const titleInput = screen.getByTestId('titleInput');
+    const descriptionInput = screen.getByTestId('descriptionInput');
+    await userEvent.clear(titleInput);
+    await userEvent.clear(descriptionInput);
     await userEvent.type(titleInput, formData.title);
     await userEvent.type(descriptionInput, formData.description);
 
@@ -420,7 +411,7 @@ describe('Testing Agenda Items components', () => {
     await userEvent.click(screen.getByTestId('updateAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(mockNotificationToast.error).toHaveBeenCalled();
+      expect(mockToast.error).toHaveBeenCalled();
     });
   });
 
@@ -474,8 +465,9 @@ describe('Testing Agenda Items components', () => {
     await userEvent.click(screen.getByTestId('deleteAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(mockNotificationToast.success).toHaveBeenCalledWith(
+      expect(mockToast.success).toHaveBeenCalledWith(
         translations.agendaItemDeleted,
+        expect.any(Object),
       );
     });
   });
@@ -527,7 +519,7 @@ describe('Testing Agenda Items components', () => {
     await userEvent.click(screen.getByTestId('deleteAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(mockNotificationToast.error).toHaveBeenCalled();
+      expect(mockToast.error).toHaveBeenCalled();
     });
   });
 
@@ -795,7 +787,7 @@ describe('Testing Agenda Items components', () => {
 
     // Should toast an error
     await waitFor(() => {
-      expect(mockNotificationToast.error).toHaveBeenCalled();
+      expect(mockToast.error).toHaveBeenCalled();
     });
   });
 

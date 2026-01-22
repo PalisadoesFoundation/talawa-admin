@@ -15,7 +15,7 @@
  *
  * @remarks
  * Uses `@hello-pangea/dnd` for drag-and-drop functionality.
- * Integrates with `react-toastify` for user notifications.
+ * Integrates with `NotificationToast` for user notifications.
  * Includes modals for previewing, updating, and deleting agenda items.
  *
  * @example
@@ -30,8 +30,8 @@
  */
 import React, { useState } from 'react';
 import type { FormEvent, JSX } from 'react';
-import { Button } from 'shared-components/Button';
 import { Col, Row } from 'react-bootstrap';
+import Button from 'shared-components/Button/Button';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useMutation } from '@apollo/client';
@@ -145,6 +145,18 @@ function AgendaItemsContainer({
   ): Promise<void> => {
     e.preventDefault();
     try {
+      // Parse JSON attachment metadata strings to FileMetadataInput objects
+      const parsedAttachments = formState.attachments
+        .filter((att) => att.trim() !== '')
+        .map((att) => {
+          try {
+            return JSON.parse(att);
+          } catch {
+            return null;
+          }
+        })
+        .filter(Boolean);
+
       await updateAgendaItem({
         variables: {
           updateAgendaItemId: agendaItemId,
@@ -153,14 +165,14 @@ function AgendaItemsContainer({
             description: formState.description,
             duration: formState.duration,
             categories: formState.agendaItemCategoryIds,
-            attachments: formState.attachments,
+            attachments: parsedAttachments,
             urls: formState.urls,
           },
         },
       });
       agendaItemRefetch();
       hideUpdateModal();
-      NotificationToast.success(t('agendaItemUpdated') as string);
+      NotificationToast.success(t('agendaItemUpdated'));
     } catch (error) {
       if (error instanceof Error) {
         NotificationToast.error(`${error.message}`);
@@ -180,7 +192,7 @@ function AgendaItemsContainer({
       });
       agendaItemRefetch();
       toggleDeleteModal();
-      NotificationToast.success(t('agendaItemDeleted') as string);
+      NotificationToast.success(t('agendaItemDeleted'));
     } catch (error) {
       if (error instanceof Error) {
         NotificationToast.error(`${error.message}`);
