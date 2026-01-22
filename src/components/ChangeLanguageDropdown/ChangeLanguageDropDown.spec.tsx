@@ -7,8 +7,10 @@ import {
   afterEach,
   type Mock,
 } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
+import { I18nextProvider } from 'react-i18next';
 import React from 'react';
 import cookies from 'js-cookie';
 import i18next from 'i18next';
@@ -17,6 +19,7 @@ import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
 import useLocalStorage from 'utils/useLocalstorage';
 import { urlToFile } from 'utils/urlToFile';
+import i18nForTest from 'utils/i18nForTest';
 
 // Mock dependencies
 const sharedMocks = vi.hoisted(() => ({
@@ -31,14 +34,44 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 
 vi.mock('js-cookie', () => ({ default: { get: vi.fn(), set: vi.fn() } }));
 
-vi.mock('i18next', () => ({ default: { changeLanguage: vi.fn() } }));
+vi.mock('i18next', () => {
+  const mockT = vi.fn((key: string) => key);
+  const mockI18next = {
+    use: vi.fn().mockReturnThis(),
+    init: vi.fn().mockReturnThis(),
+    changeLanguage: vi.fn(),
+    t: mockT,
+    getFixedT: vi.fn(() => mockT),
+    language: 'en',
+    languages: ['en', 'es', 'fr', 'hi', 'zh'],
+    isInitialized: true,
+    hasLoadedNamespace: vi.fn(() => true),
+    loadNamespaces: vi.fn().mockResolvedValue(undefined),
+    on: vi.fn(),
+    off: vi.fn(),
+    getResourceBundle: vi.fn(() => ({})),
+    options: {
+      react: { useSuspense: false },
+    },
+    services: {
+      resourceStore: {
+        data: {},
+      },
+    },
+    store: {
+      on: vi.fn(),
+      off: vi.fn(),
+    },
+  };
+  return { default: mockI18next };
+});
 
 vi.mock('utils/useLocalstorage', () => ({ default: vi.fn() }));
 
 vi.mock('utils/urlToFile', () => ({ urlToFile: vi.fn() }));
 
 // Mock the CSS module
-vi.mock('style/app-fixed.module.css', () => ({
+vi.mock('./ChangeLanguageDropDown.module.css', () => ({
   default: { changeLanguageBtn: '_changeLanguageBtn_d00707' },
 }));
 
@@ -82,7 +115,9 @@ describe('ChangeLanguageDropDown', () => {
   it('renders with default language (English)', () => {
     render(
       <MockedProvider mocks={mocks}>
-        <ChangeLanguageDropDown />
+        <I18nextProvider i18n={i18nForTest}>
+          <ChangeLanguageDropDown />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -100,19 +135,21 @@ describe('ChangeLanguageDropDown', () => {
 
     render(
       <MockedProvider mocks={mocks}>
-        <ChangeLanguageDropDown />
+        <I18nextProvider i18n={i18nForTest}>
+          <ChangeLanguageDropDown />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
     const dropdown = screen.getByTestId('language-dropdown-btn');
-    fireEvent.click(dropdown);
+    await userEvent.click(dropdown);
 
     const spanishOption = await screen.findByTestId('change-language-btn-es');
-    fireEvent.click(spanishOption);
+    await userEvent.click(spanishOption);
 
     await waitFor(() => {
       expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
-        'noUsersFound',
+        'userNotFound',
       );
     });
   });
@@ -120,15 +157,17 @@ describe('ChangeLanguageDropDown', () => {
   it('successfully changes language', async () => {
     render(
       <MockedProvider mocks={mocks}>
-        <ChangeLanguageDropDown />
+        <I18nextProvider i18n={i18nForTest}>
+          <ChangeLanguageDropDown />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
     const dropdown = screen.getByTestId('language-dropdown-btn');
-    fireEvent.click(dropdown);
+    await userEvent.click(dropdown);
 
     const spanishOption = await screen.findByTestId('change-language-btn-es');
-    fireEvent.click(spanishOption);
+    await userEvent.click(spanishOption);
 
     await waitFor(() => {
       expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
@@ -139,12 +178,14 @@ describe('ChangeLanguageDropDown', () => {
   it('renders all available languages in the dropdown', async () => {
     render(
       <MockedProvider mocks={mocks}>
-        <ChangeLanguageDropDown />
+        <I18nextProvider i18n={i18nForTest}>
+          <ChangeLanguageDropDown />
+        </I18nextProvider>
       </MockedProvider>,
     );
 
     const dropdown = screen.getByTestId('language-dropdown-btn');
-    fireEvent.click(dropdown);
+    await userEvent.click(dropdown);
 
     await waitFor(() => {
       languages.forEach((language) => {
@@ -182,12 +223,15 @@ describe('ChangeLanguageDropDown', () => {
     );
 
     const dropdown = screen.getByTestId('language-dropdown-btn');
-    fireEvent.click(dropdown);
+    await userEvent.click(dropdown);
 
     const spanishOption = await screen.findByTestId('change-language-btn-es');
-    fireEvent.click(spanishOption);
+    await userEvent.click(spanishOption);
 
     await waitFor(() => {
+      expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
+        'avatarProcessingError',
+      );
       expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
       expect(cookies.set).toHaveBeenCalledWith('i18next', 'es');
     });
@@ -212,10 +256,10 @@ describe('ChangeLanguageDropDown', () => {
     );
 
     const dropdown = screen.getByTestId('language-dropdown-btn');
-    fireEvent.click(dropdown);
+    await userEvent.click(dropdown);
 
     const spanishOption = await screen.findByTestId('change-language-btn-es');
-    fireEvent.click(spanishOption);
+    await userEvent.click(spanishOption);
 
     await waitFor(() => {
       expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
@@ -260,10 +304,10 @@ describe('ChangeLanguageDropDown', () => {
       );
 
       const dropdown = screen.getByTestId('language-dropdown-btn');
-      fireEvent.click(dropdown);
+      await userEvent.click(dropdown);
 
       const spanishOption = await screen.findByTestId('change-language-btn-es');
-      fireEvent.click(spanishOption);
+      await userEvent.click(spanishOption);
 
       await waitFor(() => {
         expect(i18next.changeLanguage).toHaveBeenCalledWith('es');
@@ -334,10 +378,10 @@ describe('ChangeLanguageDropDown', () => {
     );
 
     const dropdown = screen.getByTestId('language-dropdown-btn');
-    fireEvent.click(dropdown);
+    await userEvent.click(dropdown);
 
     const spanishOption = await screen.findByTestId('change-language-btn-es');
-    fireEvent.click(spanishOption);
+    await userEvent.click(spanishOption);
 
     await waitFor(() => {
       // Verify language changed locally
@@ -388,10 +432,10 @@ describe('ChangeLanguageDropDown', () => {
     );
 
     const dropdown = screen.getByTestId('language-dropdown-btn');
-    fireEvent.click(dropdown);
+    await userEvent.click(dropdown);
 
     const spanishOption = await screen.findByTestId('change-language-btn-es');
-    fireEvent.click(spanishOption);
+    await userEvent.click(spanishOption);
 
     await waitFor(() => {
       // Verify mutation WAS called (critical assertion)
@@ -437,10 +481,10 @@ describe('ChangeLanguageDropDown', () => {
     );
 
     const dropdown = screen.getByTestId('language-dropdown-btn');
-    fireEvent.click(dropdown);
+    await userEvent.click(dropdown);
 
     const frenchOption = await screen.findByTestId('change-language-btn-fr');
-    fireEvent.click(frenchOption);
+    await userEvent.click(frenchOption);
 
     await waitFor(() => {
       expect(i18next.changeLanguage).toHaveBeenCalledWith('fr');

@@ -1,0 +1,128 @@
+.AgendaItemsModal {
+  /* Modal container styles */
+}
+
+.titlemodalAgendaItems {
+  color: var(--titlemodalAgendaItems-color);
+  font-weight: 600;
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
+  border-bottom: 3px solid var(--titlemodalAgendaItems-border);
+  width: 65%;
+}
+
+.noOutline input {
+  outline: none;
+}
+
+.noOutline input:disabled {
+  -webkit-text-fill-color: var(--noOutline-input-disables) !important;
+}
+
+.noOutline textarea:disabled {
+  color: var(--noOutline-textarea-disables) !important;
+  opacity: 1;
+}
+
+.noOutline:is(:hover, :focus, :active, :focus-visible, .show) {
+  outline: none !important;
+}
+
+.urlListItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+
+.urlListItem a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.urlListItem a:hover {
+  text-decoration: underline;
+}
+
+.urlIcon {
+  margin-right: 10px;
+}
+
+.deleteButtonAgendaItems {
+  margin-left: auto;
+  padding: 2px 5px;
+}
+
+.previewFile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.previewFile img,
+.previewFile video {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.attachmentPreview {
+  position: relative;
+  width: 100%;
+}
+
+.closeButtonFile {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  transform: scale(1.2);
+  cursor: pointer;
+  border: none;
+  color: var(--closeButtonFile-color);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.greenregbtnAgendaItems {
+  margin: 1rem 0 0;
+  margin-top: 15px;
+  border: 1px solid var(--regBtnAgendaItems-border);
+  box-shadow: 0 2px 2px var(--regBtnAgendaItems-box-shadow);
+  padding: 10px 10px;
+  border-radius: 5px;
+  background-color: var(--regBtnAgendaItems-bg);
+  width: 100%;
+  font-size: 16px;
+  color: var(--regBtnAgendaItems-color);
+  outline: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+@media (max-width: 768px) {
+  .titlemodalAgendaItems {
+    width: 90%;
+  }
+
+  .greenregbtnAgendaItems {
+    width: 90%;
+  }
+}
+
+@media (max-width: 576px) {
+  .titlemodalAgendaItems {
+    width: 100%;
+  }
+
+  .greenregbtnAgendaItems {
+    width: 100%;
+  }
+}

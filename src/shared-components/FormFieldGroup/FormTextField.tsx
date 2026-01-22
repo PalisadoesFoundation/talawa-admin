@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form } from 'react-bootstrap';
+import { Form, InputGroup } from 'react-bootstrap';
 import { FormFieldGroup } from './FormFieldGroup';
 import type { IFormTextFieldProps } from '../../types/FormFieldGroup/interface';
 
@@ -16,11 +16,34 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
   helpText,
   error,
   touched,
+  startAdornment,
+  endAdornment,
   type = 'text',
   placeholder,
   value,
   onChange,
+  disabled,
+  'data-testid': dataTestId,
+  ...props
 }) => {
+  const isInvalid = touched && !!error;
+
+  const renderControl = () => (
+    <Form.Control
+      id={name}
+      type={type}
+      placeholder={placeholder}
+      value={value}
+      onChange={(e) => {
+        onChange(e.target.value);
+      }}
+      isInvalid={isInvalid}
+      disabled={disabled}
+      data-testid={dataTestId}
+      {...props}
+    />
+  );
+
   return (
     <FormFieldGroup
       name={name}
@@ -30,15 +53,22 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
       error={error}
       touched={touched}
     >
-      <Form.Control
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={(e) => {
-          onChange(e.target.value);
-        }}
-        isInvalid={touched && !!error}
-      />
+      {startAdornment || endAdornment ? (
+        <React.Fragment>
+          <InputGroup>
+            {startAdornment}
+            {renderControl()}
+            {endAdornment}
+          </InputGroup>
+          {/*
+              Bootstraps Form.Control inside InputGroup doesn't show standard validation feedback automatically
+              in the same way or position, but FormFieldGroup handles error text display below the child.
+              However, Form.Control.isInvalid handles the red border.
+           */}
+        </React.Fragment>
+      ) : (
+        renderControl()
+      )}
     </FormFieldGroup>
   );
 };

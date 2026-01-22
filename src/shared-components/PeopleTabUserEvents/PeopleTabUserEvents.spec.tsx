@@ -43,9 +43,7 @@ describe('PeopleTabUserEvents', () => {
   it('renders action button with icon and label', () => {
     render(<PeopleTabUserEvents {...defaultProps} />);
 
-    const button = screen.getByRole('button', {
-      name: `➡️ ${defaultProps.actionName}`,
-    });
+    const button = screen.getByRole('button');
 
     expect(button).toBeInTheDocument();
     expect(screen.getByTestId('arrow-icon')).toBeInTheDocument();

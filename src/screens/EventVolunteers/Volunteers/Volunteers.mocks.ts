@@ -126,7 +126,7 @@ export const MOCKS = [
           name_contains: '',
           hasAccepted: undefined,
         },
-        orderBy: null,
+        orderBy: undefined,
       },
     },
     result: {
@@ -183,7 +183,7 @@ export const MOCKS = [
           name_contains: 'T',
           hasAccepted: undefined,
         },
-        orderBy: null,
+        orderBy: undefined,
       },
     },
     result: {
@@ -202,7 +202,7 @@ export const MOCKS = [
           name_contains: 'Teresa',
           hasAccepted: undefined,
         },
-        orderBy: null,
+        orderBy: undefined,
       },
     },
     result: {
@@ -217,7 +217,7 @@ export const MOCKS = [
       variables: {
         input: { id: 'eventId' },
         where: { eventId: 'eventId', name_contains: '', hasAccepted: false },
-        orderBy: null,
+        orderBy: undefined,
       },
     },
     result: {
@@ -232,7 +232,7 @@ export const MOCKS = [
       variables: {
         input: { id: 'eventId' },
         where: { eventId: 'eventId', name_contains: '', hasAccepted: true },
-        orderBy: null,
+        orderBy: undefined,
       },
     },
     result: {
@@ -360,7 +360,7 @@ export const MOCKS_ERROR = [
           name_contains: '',
           hasAccepted: undefined,
         },
-        orderBy: null,
+        orderBy: undefined,
       },
     },
     error: new Error('An error occurred'),
@@ -422,7 +422,7 @@ export const MOCKS_EMPTY = [
           name_contains: '',
           hasAccepted: undefined,
         },
-        orderBy: null,
+        orderBy: undefined,
       },
     },
     result: {

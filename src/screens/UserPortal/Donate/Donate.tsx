@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
+import { useParams } from 'react-router-dom';
+import { Dropdown, FormControl, InputGroup } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useQuery, useMutation } from '@apollo/client';
 import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
@@ -154,24 +155,30 @@ export default function Donate(): JSX.Element {
               </Dropdown.Menu>
             </Dropdown>
 
-            <Form.Control
+            <label htmlFor="donationAmountInput" className="visually-hidden">
+              {t('amount')}
+            </label>
+            <FormControl
+              id="donationAmountInput"
               type="text"
               data-testid="donationAmount"
               placeholder={t('amount')}
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
+              aria-describedby="donationAmountHelp"
             />
           </InputGroup>
 
-          <Form.Text className="text-muted">
+          <div id="donationAmountHelp" className="text-muted form-text">
             {t('donationAmountDescription')}
-          </Form.Text>
+          </div>
 
           <Button
             size="sm"
             data-testid="donateBtn"
             onClick={donateToOrg}
             className={`${styles.addButton} ${styles.donateBtn}`}
+            variant="primary"
           >
             {t('donate')} <SendIcon />
           </Button>

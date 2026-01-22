@@ -1,0 +1,51 @@
+.createButton {
+  composes: createButton from '../../style/app-fixed.module.css';
+}
+
+.list_box {
+  composes: list_box from '../../style/app-fixed.module.css';
+}
+
+.closeButton {
+  composes: closeButton from '../../style/app-fixed.module.css';
+}
+
+.head {
+  min-width: 0;
+}
+
+.postContainer {
+  min-width: 0;
+}
+
+.mainpagerightOrgPost {
+  min-width: 0;
+}
+
+.addPost {
+  min-width: 0;
+}
+
+.noPostsFound {
+  min-width: 0;
+}
+
+.postInfiniteScroll {
+  min-width: 0;
+}
+
+.createPostModalContainer {
+  min-width: 0;
+}
+
+.pinnedPostModal {
+  min-width: 0;
+}
+
+.pinnedPostModalBody {
+  min-width: 0;
+}
+
+.closeButtonIcon {
+  min-width: 0;
+}

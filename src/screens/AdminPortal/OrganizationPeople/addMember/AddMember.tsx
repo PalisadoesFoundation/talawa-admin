@@ -1,44 +1,18 @@
 /**
- * Component: AddMember
+ * AddMember component allows users to add members to an organization.
  *
- * This component allows users to add members to an organization. It provides two options:
+ * @remarks
+ * This component provides two options:
  * 1. Adding an existing user from the user list.
  * 2. Creating a new user and adding them to the organization.
  *
- * Features
- * - Fetches and displays a paginated list of users with search functionality.
- * - Allows adding existing users to the organization.
- * - Provides a modal for creating new users with validation for required fields.
- * - Supports cursor-based pagination for user listing.
+ * Key features include:
+ * - Paginated list of users with search functionality.
+ * - Modal for creating new users with validation.
+ * - Integration with Apollo Client for GraphQL logic.
+ * - Responsive layout using React Bootstrap and Material-UI.
  *
- * Hooks
- * - `useLazyQuery`: Fetches users with pagination.
- * - `useMutation`: Handles adding members and creating new users.
- * - `useQuery`: Fetches organization details.
- * - `useTranslation`: Provides translations for UI text.
- *
- * StateManagement
- * - `addUserModalisOpen`: Controls the visibility of the "Add Existing User" modal.
- * - `createNewUserModalisOpen`: Controls the visibility of the "Create New User" modal.
- * - `page`: Tracks the current page for pagination.
- * - `paginationMeta`: Stores pagination metadata (e.g., hasNextPage, hasPreviousPage).
- * - `createUserVariables`: Stores input values for creating a new user.
- *
- * Props
- * - None
- *
- * Dependencies
- * - Apollo Client for GraphQL queries and mutations.
- * - React Bootstrap for modals and forms.
- * - Material-UI for table and icons.
- * - React Router for navigation.
- * - React Toastify for notifications.
- *
- * Usage
- * - This component is used in the "Organization People" section of the application.
- * - It allows administrators to manage members of an organization.
- *
- * @returns JSX.Element - The rendered AddMember component.
+ * @returns \{JSX.Element\} The rendered `AddMember` component.
  */
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
 import { Check, Close } from '@mui/icons-material';
@@ -60,8 +34,8 @@ import {
 } from 'GraphQl/Queries/Queries';
 import type { ChangeEvent } from 'react';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Button, Form, InputGroup } from 'react-bootstrap';
-import BaseModal from 'shared-components/BaseModal/BaseModal';
+import { InputGroup, FormControl } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -72,6 +46,7 @@ import Avatar from 'shared-components/Avatar/Avatar';
 import { TablePagination } from '@mui/material';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { IEdge, IUserDetails, IQueryVariable } from './types';
 
 // Removed StyledTableCell and StyledTableRow in favor of CSS modules
@@ -305,11 +280,10 @@ function AddMember(): JSX.Element {
       />
       <BaseModal
         dataTestId="addExistingUserModal"
+        title={translateOrgPeople('addMembers')}
         show={addUserModalisOpen}
         onHide={toggleDialogModal}
         className={styles.modalContent}
-        title={translateOrgPeople('addMembers')}
-        headerTestId="pluginNotificationHeader"
       >
         <div className={styles.input}>
           <SearchBar
@@ -457,12 +431,10 @@ function AddMember(): JSX.Element {
       </BaseModal>
       <BaseModal
         dataTestId="addNewUserModal"
-        show={createNewUserModalisOpen}
-        onHide={closeCreateNewUserModal}
         title={translateOrgPeople('createUser')}
         headerClassName={styles.headers}
-        headerTestId="createUser"
-        showCloseButton={false}
+        show={createNewUserModalisOpen}
+        onHide={closeCreateNewUserModal}
         footer={
           <div>
             <Button
@@ -491,7 +463,7 @@ function AddMember(): JSX.Element {
             <div className="col-sm-12">
               <h6>{translateAddMember('addMember.enterName')}</h6>
               <InputGroup className="mt-2 mb-4">
-                <Form.Control
+                <FormControl
                   placeholder={translateAddMember('addMember.name')}
                   className={styles.borderNone}
                   value={createUserVariables.name}
@@ -503,7 +475,7 @@ function AddMember(): JSX.Element {
           </div>
           <h6>{translateOrgPeople('enterEmail')}</h6>
           <InputGroup className="mt-2 mb-4">
-            <Form.Control
+            <FormControl
               placeholder={translateOrgPeople('emailAddress')}
               type="email"
               className={styles.borderNone}
@@ -519,7 +491,7 @@ function AddMember(): JSX.Element {
           </InputGroup>
           <h6>{translateOrgPeople('enterPassword')}</h6>
           <InputGroup className="mt-2 mb-4">
-            <Form.Control
+            <FormControl
               placeholder={translateOrgPeople('password')}
               type={showPassword ? 'text' : 'password'}
               className={styles.borderNone}
@@ -541,7 +513,7 @@ function AddMember(): JSX.Element {
           </InputGroup>
           <h6>{translateOrgPeople('enterConfirmPassword')}</h6>
           <InputGroup className="mt-2 mb-4">
-            <Form.Control
+            <FormControl
               placeholder={translateOrgPeople('confirmPassword')}
               type={showConfirmPassword ? 'text' : 'password'}
               className={styles.borderNone}
@@ -563,7 +535,7 @@ function AddMember(): JSX.Element {
           </InputGroup>
           <h6>{translateOrgPeople('organization')}</h6>
           <InputGroup className="mt-2 mb-4">
-            <Form.Control
+            <FormControl
               className={styles.borderNone}
               value={organizationData?.organization?.name}
               data-testid="organizationName"

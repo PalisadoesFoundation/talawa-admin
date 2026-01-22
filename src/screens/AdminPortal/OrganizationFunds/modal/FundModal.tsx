@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import type { ChangeEvent } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button } from 'shared-components/Button';
 import { BaseModal } from 'shared-components/BaseModal';
 import type { InterfaceCreateFund, InterfaceFundInfo } from 'utils/interfaces';
-import styles from 'style/app-fixed.module.css';
+import styles from './FundModal.module.css';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import {
@@ -11,8 +11,7 @@ import {
   UPDATE_FUND_MUTATION,
 } from 'GraphQl/Mutations/FundMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { TextField } from '@mui/material';
-import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 export interface InterfaceFundModal {
   isOpen: boolean;
@@ -178,64 +177,44 @@ const FundModal: React.FC<InterfaceFundModal> = ({
           <p className={styles.titlemodal} data-testid="modalTitle">
             {t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}
           </p>
-          <Button
-            variant="danger"
-            onClick={hide}
-            className={styles.closeButton}
-            data-testid="fundModalCloseBtn"
-          >
-            <i className="fa fa-times"></i>
-          </Button>
         </div>
       }
     >
-      <Form
+      <form
         onSubmitCapture={
           mode === 'create' ? createFundHandler : updateFundHandler
         }
         className="p-3"
       >
-        <Form.Group className="d-flex mb-3 w-100">
-          <FormFieldGroup
-            label={t('fundName')}
+        <div className="d-flex mb-3 w-100">
+          <FormTextField
             name="fundName"
+            label={t('fundName')}
             required
+            value={formState.fundName}
             touched={touched.fundName}
             error={fundNameError}
-          >
-            <TextField
-              variant="outlined"
-              className={`${styles.noOutline} w-100`}
-              value={formState.fundName}
-              inputProps={{ id: 'fundName', 'aria-label': t('fundName') }}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setFormState({ ...formState, fundName: e.target.value });
-              }}
-              onBlur={() => setTouched((prev) => ({ ...prev, fundName: true }))}
-            />
-          </FormFieldGroup>
-        </Form.Group>
+            onChange={(value) =>
+              setFormState((prev) => ({ ...prev, fundName: value }))
+            }
+            onBlur={() => setTouched((prev) => ({ ...prev, fundName: true }))}
+          />
+        </div>
 
-        <Form.Group className="d-flex mb-3 w-100">
-          <FormFieldGroup
-            label={t('fundId')}
+        <div className="d-flex mb-3 w-100">
+          <FormTextField
             name="fundId"
+            label={t('fundId')}
             required
+            value={formState.fundRef}
             touched={touched.fundRef}
             error={fundRefError}
-          >
-            <TextField
-              variant="outlined"
-              className={`${styles.noOutline} w-100`}
-              value={formState.fundRef}
-              inputProps={{ id: 'fundId', 'aria-label': t('fundId') }}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setFormState({ ...formState, fundRef: e.target.value });
-              }}
-              onBlur={() => setTouched((prev) => ({ ...prev, fundRef: true }))}
-            />
-          </FormFieldGroup>
-        </Form.Group>
+            onChange={(value) =>
+              setFormState((prev) => ({ ...prev, fundRef: value }))
+            }
+            onBlur={() => setTouched((prev) => ({ ...prev, fundRef: true }))}
+          />
+        </div>
 
         <div
           className={`d-flex mt-2 mb-3 flex-wrap ${
@@ -244,57 +223,63 @@ const FundModal: React.FC<InterfaceFundModal> = ({
               : 'justify-content-start gap-3'
           }`}
         >
-          <Form.Group className="d-flex">
+          <div className="d-flex align-items-center">
             <label htmlFor="isTaxDeductibleSwitch">{t('taxDeductible')}</label>
-            <Form.Switch
-              type="checkbox"
-              id="isTaxDeductibleSwitch"
-              checked={formState.isTaxDeductible}
-              data-testid="setisTaxDeductibleSwitch"
-              className={`ms-2 ${styles.switch}`}
-              onChange={() =>
-                setFormState({
-                  ...formState,
-                  isTaxDeductible: !formState.isTaxDeductible,
-                })
-              }
-            />
-          </Form.Group>
-
-          <Form.Group className="d-flex">
-            <label htmlFor="isDefaultSwitch">{t('default')}</label>
-            <Form.Switch
-              type="checkbox"
-              id="isDefaultSwitch"
-              className={`ms-2 ${styles.switch}`}
-              data-testid="setDefaultSwitch"
-              checked={formState.isDefault}
-              onChange={() =>
-                setFormState({
-                  ...formState,
-                  isDefault: !formState.isDefault,
-                })
-              }
-            />
-          </Form.Group>
-
-          {mode === 'edit' && (
-            <Form.Group className="d-flex">
-              <label htmlFor="archivedSwitch">{t('archived')}</label>
-              <Form.Switch
+            <div className={`form-check form-switch ms-2 ${styles.switch}`}>
+              <input
                 type="checkbox"
-                id="archivedSwitch"
-                checked={formState.isArchived}
-                data-testid="archivedSwitch"
-                className={`ms-2 ${styles.switch}`}
+                id="isTaxDeductibleSwitch"
+                className="form-check-input"
+                checked={formState.isTaxDeductible}
+                data-testid="setisTaxDeductibleSwitch"
                 onChange={() =>
-                  setFormState({
-                    ...formState,
-                    isArchived: !formState.isArchived,
-                  })
+                  setFormState((prev) => ({
+                    ...prev,
+                    isTaxDeductible: !prev.isTaxDeductible,
+                  }))
                 }
               />
-            </Form.Group>
+            </div>
+          </div>
+
+          <div className="d-flex align-items-center">
+            <label htmlFor="isDefaultSwitch">{t('default')}</label>
+            <div className={`form-check form-switch ms-2 ${styles.switch}`}>
+              <input
+                type="checkbox"
+                id="isDefaultSwitch"
+                className="form-check-input"
+                checked={formState.isDefault}
+                data-testid="setDefaultSwitch"
+                onChange={() =>
+                  setFormState((prev) => ({
+                    ...prev,
+                    isDefault: !prev.isDefault,
+                  }))
+                }
+              />
+            </div>
+          </div>
+
+          {mode === 'edit' && (
+            <div className="d-flex align-items-center">
+              <label htmlFor="archivedSwitch">{t('archived')}</label>
+              <div className={`form-check form-switch ms-2 ${styles.switch}`}>
+                <input
+                  type="checkbox"
+                  id="archivedSwitch"
+                  className="form-check-input"
+                  checked={formState.isArchived}
+                  data-testid="archivedSwitch"
+                  onChange={() =>
+                    setFormState((prev) => ({
+                      ...prev,
+                      isArchived: !prev.isArchived,
+                    }))
+                  }
+                />
+              </div>
+            </div>
           )}
         </div>
 
@@ -305,7 +290,7 @@ const FundModal: React.FC<InterfaceFundModal> = ({
         >
           {t(mode === 'create' ? 'fundCreate' : 'fundUpdate')}
         </Button>
-      </Form>
+      </form>
     </BaseModal>
   );
 };

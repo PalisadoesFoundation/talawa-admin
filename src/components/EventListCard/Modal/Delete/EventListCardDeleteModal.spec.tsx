@@ -22,6 +22,7 @@ const mockStandaloneEventProps: InterfaceDeleteEventModalProps = {
     location: 'Test Location',
     isPublic: true,
     isRegisterable: true,
+    isInviteOnly: false,
     attendees: [],
     creator: {
       id: 'user1',
@@ -57,6 +58,7 @@ const mockRecurringEventProps: InterfaceDeleteEventModalProps = {
     location: 'Conference Room',
     isPublic: true,
     isRegisterable: true,
+    isInviteOnly: false,
     attendees: [],
     creator: {
       id: 'user1',

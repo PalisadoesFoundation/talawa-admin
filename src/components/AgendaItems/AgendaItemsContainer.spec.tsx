@@ -6,9 +6,10 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import i18nForTest from 'utils/i18nForTest';
-import { toast } from 'react-toastify';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { DropResult } from '@hello-pangea/dnd';
 
 import { store } from 'state/store';
@@ -97,11 +98,16 @@ const link2 = new StaticMockLink(MOCKS_ERROR, true);
 const linkDragDrop = new StaticMockLink(MOCKS_DRAG_DROP, true);
 const linkDragDropError = new StaticMockLink(MOCKS_DRAG_DROP_ERROR, true);
 
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+const mockNotificationToast = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
+  dismiss: vi.fn(),
+}));
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockNotificationToast,
 }));
 
 //temporarily fixes react-beautiful-dnd droppable method's depreciation error
@@ -414,7 +420,7 @@ describe('Testing Agenda Items components', () => {
     await userEvent.click(screen.getByTestId('updateAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(mockNotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -468,7 +474,7 @@ describe('Testing Agenda Items components', () => {
     await userEvent.click(screen.getByTestId('deleteAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(mockNotificationToast.success).toHaveBeenCalledWith(
         translations.agendaItemDeleted,
       );
     });
@@ -521,7 +527,7 @@ describe('Testing Agenda Items components', () => {
     await userEvent.click(screen.getByTestId('deleteAgendaItemBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(mockNotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -789,7 +795,7 @@ describe('Testing Agenda Items components', () => {
 
     // Should toast an error
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(mockNotificationToast.error).toHaveBeenCalled();
     });
   });
 

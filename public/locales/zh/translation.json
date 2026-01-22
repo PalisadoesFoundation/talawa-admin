@@ -84,7 +84,12 @@
     "communityLogo": "社区标志",
     "organizations": "组织",
     "accountLocked": "由于登录失败次数过多，您的账户已被暂时锁定。请稍后重试。",
-    "accountLockedWithTimer": "您的账户已被暂时锁定。请在 {{minutes}} 分钟后重试。"
+    "accountLockedWithTimer": "您的账户已被暂时锁定。请在 {{minutes}} 分钟后重试。",
+    "signupSuccessVerifyEmail": "Successfully registered! Please check your email to verify your account.",
+    "emailResent": "Verification email has been resent successfully.",
+    "emailNotVerified": "您的电子邮件未验证。请检查收件箱中的验证链接。",
+    "resendVerification": "重新发送验证邮件",
+    "resendFailed": "重新发送验证邮件失败，请重试。"
   },
   "adminProfile": {
     "title": "管理员资料",
@@ -409,7 +414,9 @@
     "profile": "配置文件",
     "joined": "加入",
     "createUser": "创建用户",
-    "notFound": "未找到成员"
+    "notFound": "未找到成员",
+    "showPassword": "显示密码",
+    "hidePassword": "隐藏密码"
   },
   "organizationCard": {
     "join": "加入",
@@ -544,6 +551,10 @@
     "recurring": "重复",
     "isPublic": "是公开的",
     "isRegistrable": "可注册",
+    "visibility": "可见性",
+    "public": "公开",
+    "organizationMembers": "组织成员",
+    "inviteOnly": "仅限受邀者",
     "registerable": "可注册",
     "createEvent": "创建事件",
     "enterFilter": "输入过滤器",
@@ -668,7 +679,19 @@
     "completeForInstance": "此实例完成",
     "completeForSeries": "系列完成",
     "postCompletionNotesRequired": "需要完成后的备注",
-    "updateThisInstance": "更新此实例"
+    "updateThisInstance": "更新此实例",
+    "itemCategory": "项目类别",
+    "assignedDate": "分配日期",
+    "actions": "操作",
+    "noCategory": "无类别",
+    "viewActionItem": "查看操作项",
+    "updateStatus": "更新状态",
+    "pending": "待定",
+    "completed": "已完成",
+    "late": "逾期",
+    "searchByAssignee": "按受托人搜索",
+    "searchByCategory": "按类别搜索",
+    "sortByAssignedDate": "按分配日期排序"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "议程类别详情",
@@ -712,6 +735,7 @@
     "options": "选项",
     "createAgendaItem": "创建议程项目",
     "noAgendaItems": "没有议程项目",
+    "search": "搜索",
     "selectAgendaItemCategory": "选择议程项目类别",
     "update": "更新",
     "delete": "删除",
@@ -720,9 +744,10 @@
     "agendaItemDeleted": "议程项目已成功删除",
     "deleteAgendaItem": "删除议程项目",
     "deleteAgendaItemMsg": "您要删除此议程项目吗？",
+    "attachmentPreview": "附件預覽",
     "event": "活动",
-    "search": "搜索",
-    "attachmentPreview": "附件預覽"
+    "errorLoadingAgendaCategories": "加载议程类别数据时发生错误",
+    "errorLoadingAgendaItems": "加载议程项目数据时发生错误"
   },
   "eventListCard": {
     "deleteEvent": "删除事件",
@@ -745,6 +770,10 @@
     "allDay": "一整天",
     "recurringEvent": "重复事件",
     "isPublic": "是公开的",
+    "visibility": "可见性",
+    "public": "公开",
+    "organizationMembers": "组织成员",
+    "inviteOnly": "仅限受邀者",
     "isRegistrable": "可注册",
     "updatePost": "更新帖子",
     "eventDetails": "活动详情",
@@ -774,7 +803,19 @@
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "done": "完成",
     "invalidDate": "Invalid Date",
-    "createChat": "创建聊天"
+    "createChat": "创建聊天",
+    "isRegisterable": "可注册",
+    "creator": "创建者",
+    "edit": "编辑",
+    "delete": "删除",
+    "viewDetails": "查看详情",
+    "noEventsFound": "未找到事件",
+    "noEvent": "无事件",
+    "averageFeedback": "平均反馈",
+    "noOfAttendees": "参与者数量",
+    "noRegistrations": "无注册",
+    "registrants": "注册者",
+    "to": "至"
   },
   "funds": {
     "title": "基金",
@@ -855,6 +896,7 @@
     "updatePledge": "更新承诺",
     "deletePledge": "删除承诺",
     "amount": "数量",
+    "amountMustBeAtLeastOne": "金额必须至少为 1",
     "editPledge": "编辑承诺",
     "deletePledgeMsg": "您确定要删除此承诺吗？",
     "noPledges": "未找到承诺",
@@ -1373,12 +1415,13 @@
   },
   "posts": {
     "pinnedPosts": "置顶帖子",
+    "errorLoadingPreviewPost": "加载预览帖子时出错。请重试。",
     "title": "帖子",
     "latest": "最新",
     "oldest": "最旧的",
     "none": "无",
     "unknownUser": "未知用户",
-    "closePinnedPost": "关闭置顶帖子",
+    "closePostView": "关闭帖子视图",
     "searchPosts": "搜索帖子",
     "nothingToShow": "这里没有可显示的内容。",
     "noMorePosts": "没有更多帖子了",
@@ -1434,7 +1477,24 @@
     "pageNumber": "第 {{page}} 页",
     "goToToday": "转到今天",
     "genderDistribution": "性别分布",
-    "ageDistribution": "年龄分布"
+    "ageDistribution": "年龄分布",
+    "trends": "趋势",
+    "demography": "人口统计",
+    "male": "男性",
+    "female": "女性",
+    "other": "其他",
+    "under18": "18岁以下",
+    "age18to40": "18至40岁",
+    "over40": "40岁以上",
+    "exportData": "导出数据",
+    "demographics": "人口统计数据",
+    "today": "今天",
+    "attendanceCount": "出席人数",
+    "totalMembers": "总成员数",
+    "membersAttended": "到场成员",
+    "age": "年龄",
+    "close": "关闭",
+    "gender": "性别"
   },
   "eventRegistrant": {
     "sort": "排序",
@@ -1450,26 +1510,10 @@
     "removingAttendee": "正在移除参与者...",
     "attendeeRemovedSuccessfully": "参与者移除成功！",
     "errorRemovingAttendee": "移除参与者时出错。请重试。",
+    "cannotUnregisterCheckedIn": "无法取消已签到的用户的注册",
     "checkedIn": "已签到",
     "unregister": "取消注册",
     "cannotUnregisterCheckedInTooltip": "无法取消已签到用户的注册"
-  },
-  "onSpotAttendee": {
-    "title": "现场参与者",
-    "enterFirstName": "输入名字",
-    "enterLastName": "输入姓氏",
-    "enterEmail": "输入电子邮件",
-    "enterPhoneNo": "输入电话号码",
-    "selectGender": "选择性别",
-    "invalidDetailsMessage": "请填写所有必填字段",
-    "orgIdMissing": "组织ID缺失。请重试。",
-    "attendeeAddedSuccess": "参与者添加成功！",
-    "addAttendee": "添加",
-    "phoneNumber": "电话号码",
-    "addingAttendee": "添加中...",
-    "male": "男性",
-    "female": "女性",
-    "other": "其他"
   },
   "settings": {
     "noeventsAttended": "未参加任何活动",
@@ -1872,17 +1916,31 @@
   "checkIn": {
     "errorCheckingIn": "签到错误",
     "checkedInSuccessfully": "成功签到",
-    "searchAttendees": "搜尋參與者",
+    "generatingPdf": "正在生成 PDF...",
+    "pdfGeneratedSuccessfully": "PDF 生成成功！",
+    "errorGeneratingPdf": "生成 PDF 时出错",
+    "unknownError": "未知错误",
     "checkedIn": "已簽到",
     "downloadTag": "下載標籤",
+    "checkInButton": "签到",
+    "searchAttendees": "搜尋參與者",
     "checkIn": "簽到",
-    "eventCheckInManagement": "活動簽到管理"
+    "eventCheckInManagement": "活動簽到管理",
+    "checkInMembers": "签到成员",
+    "unknownUser": "未知用户",
+    "user": "用户",
+    "checkInStatus": "签到状态"
   },
   "eventRegistrantsModal": {
     "title": "活动注册者",
     "errorAddingAttendee": "添加与会者时出错",
     "errorRemovingAttendee": "删除与会者时出错",
     "eventRegistrantsTitle": "活动注册者",
+    "registerMember": "注册会员",
+    "showAttendees": "显示参加者",
+    "addingAttendee": "正在添加参与者...",
+    "selectUserFirst": "请先选择要添加的用户！",
+    "unknownUser": "未知用户",
     "inviteByEmailButton": "通过电子邮件邀请",
     "noRegistrationsFound": "未找到注册",
     "inviteByEmail": {
@@ -1898,7 +1956,10 @@
       "expiresInDaysLabel": "有效期（天）",
       "errorSendingInvites": "发送邀请时出错",
       "emailsLabel": "收件人邮箱和姓名",
-      "emailsHelp": "为每个收件人提供邮箱和可选姓名。根据需要添加多个收件人。"
+      "emailsHelp": "为每个收件人提供邮箱和可选姓名。根据需要添加多个收件人。",
+      "noRecipientsError": "请提供至少一个收件人电子邮件",
+      "invalidEmailsError": "无效的电子邮件：{{emails}}",
+      "invitesSentSuccessfully": "邀请已成功发送"
     },
     "addRegistrant": "添加注册者",
     "addOnspotRegistration": "添加现场注册",
@@ -1906,6 +1967,29 @@
     "registrantPlaceholder": "选择您要添加的用户",
     "chooseUser": "请先选择要添加的用户！",
     "addingAttendee": "正在添加参与者..."
+  },
+  "onSpotAttendee": {
+    "invalidEmailFormat": "无效的电子邮件格式",
+    "organizationIdMissing": "缺少组织 ID。",
+    "title": "现场参与者",
+    "enterFirstName": "输入名字",
+    "enterLastName": "输入姓氏",
+    "enterEmail": "输入电子邮件",
+    "enterPhoneNo": "输入电话号码",
+    "selectGender": "选择性别",
+    "invalidDetailsMessage": "请填写所有必填字段",
+    "orgIdMissing": "组织ID缺失。请重试。",
+    "attendeeAddedSuccess": "参与者添加成功！",
+    "addAttendee": "添加",
+    "phoneNumber": "电话号码",
+    "phoneNumberPlaceholder": "1234567890",
+    "addingAttendee": "添加中...",
+    "male": "男性",
+    "female": "女性",
+    "other": "其他",
+    "placeholderFirstName": "小明",
+    "placeholderLastName": "张",
+    "placeholderEmail": "abc@gmail.com"
   },
   "userCampaigns": {
     "title": "筹款活动",
@@ -1933,6 +2017,7 @@
     "noCampaigns": "未找到活动",
     "raised": "已筹集",
     "campaignIndex": "#",
+    "campaignStatus": "状态",
     "fundGoal": "筹款目标",
     "percentRaised": "% 已筹集",
     "createFirstCampaign": "创建您的第一个筹款活动以在此处查看。",
@@ -1949,7 +2034,20 @@
     "searchPledges": "搜索承诺"
   },
   "leaveOrganization": {
-    "title": "离开组织"
+    "title": "离开组织",
+    "leaveOrganization": "离开组织",
+    "confirmLeaveOrganization": "确认离开组织",
+    "leaveOrganizationConfirmation": "您确定要离开 {{orgName}} 吗？您将失去对仅限会员内容的访问权限。",
+    "enterEmailToConfirm": "输入您的电子邮件以确认：",
+    "enterYourEmail": "输入您的电子邮件",
+    "confirmEmailInput": "确认电子邮件输入",
+    "leftOrganizationSuccess": "您已成功离开该组织！",
+    "leftOrganizationError": "离开组织失败。请重试。",
+    "networkError": "无法处理您的请求。请检查您的连接。",
+    "emailMismatchError": "您输入的电子邮件与您的帐户电子邮件不匹配。",
+    "continue": "继续",
+    "missingRequiredInfo": "无法处理请求：缺少必需信息。",
+    "organizationNotFound": "未找到组织"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "志愿者视图选择器",
@@ -2081,7 +2179,11 @@
     "groupName": "小组名称",
     "noOfMembers": "成员数量",
     "options": "选项",
-    "notSpecified": "未指定"
+    "notSpecified": "未指定",
+    "invited": "已邀请",
+    "groupsAvailable": "{{count}} 个小组可用",
+    "volunteersRequired": "必需",
+    "signedUp": "已报名"
   },
   "pluginStore": {
     "title": "插件商店",
@@ -2186,7 +2288,9 @@
     "title": "用户门户",
     "talawa": "塔拉瓦",
     "talawaBranding": "Talawa 品牌形象",
-    "view": "查看"
+    "view": "查看",
+    "changeLanguage": "更改语言",
+    "userNotFoundError": "未找到用户"
   },
   "donation": {
     "amount_label": "金额",
@@ -2214,5 +2318,53 @@
   },
   "userGlobalScreen": {
     "globalFeatures": "全球功能"
+  },
+  "recurringEventVolunteerModal": {
+    "joinGroupTitle": "加入 {{groupName}} - {{eventName}}",
+    "volunteerTitle": "为 {{eventName}} 做志愿者",
+    "joinGroupQuestion": "您想为整个系列加入\"{{groupName}}\"还是仅为此实例加入?",
+    "volunteerQuestion": "您想为整个系列做志愿者还是仅为此实例做志愿者?",
+    "volunteerForSeries": "为整个系列做志愿者",
+    "joinGroupForSeries": "您将加入此小组参加重复系列中的所有活动",
+    "volunteerForSeriesDesc": "您将为此重复系列中的所有活动做志愿者",
+    "volunteerForInstance": "仅为此实例做志愿者",
+    "joinGroupForInstance": "您将仅在 {{date}} 的活动中加入此小组",
+    "volunteerForInstanceDesc": "您将仅为 {{date}} 的活动做志愿者",
+    "cancel": "取消",
+    "submitRequest": "提交请求"
+  },
+  "eventsAttendedMemberModal": {
+    "title": "参加的活动列表",
+    "showing": "显示 {{start}} - {{end}} 共 {{total}} 个活动",
+    "eventName": "活动名称",
+    "dateOfEvent": "活动日期",
+    "recurringEvent": "重复活动",
+    "attendees": "参与者",
+    "tableAriaLabel": "参加的活动表",
+    "paginationAriaLabel": "活动分页导航",
+    "paginationGoToPage": "转到第 {{page}} 页",
+    "paginationGoToType": "转到{{type}}页",
+    "noEventsAttended": "未参加任何活动"
+  },
+  "eventStats": {
+    "title": "活動統計",
+    "reviews": {
+      "title": "評論",
+      "emptyState": "等待人們談論活動...",
+      "filledByCount": "已由 {{count}} 人填寫。"
+    }
+  },
+  "verifyEmail": {
+    "title": "验证您的邮箱",
+    "verifying": "正在验证您的邮箱...",
+    "success": "验证成功!",
+    "successMessage": "您的邮箱已成功验证。您现在可以登录了。",
+    "error": "验证失败",
+    "invalidToken": "无效或过期的验证链接。",
+    "loginRequired": "请登录以继续。",
+    "resendButton": "重新发送验证邮件",
+    "resendSuccess": "验证邮件发送成功!",
+    "resendFailed": "发送验证邮件失败。请稍后再试。",
+    "goToLogin": "前往登录"
   }
 }

@@ -1,5 +1,5 @@
-import type { ChangeEvent } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import React, { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { Button } from 'react-bootstrap';
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
   InterfacePledgeInfo,
@@ -7,22 +7,15 @@ import type {
   InterfaceCreatePledge,
 } from 'utils/interfaces';
 import styles from './PledgeModal.module.css';
-import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import {
-  Autocomplete,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-} from '@mui/material';
+import { Autocomplete, InputLabel, MenuItem, Select } from '@mui/material';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 
 /**
  * Props for the `PledgeModal` component.
@@ -55,8 +48,8 @@ export interface InterfacePledgeModal {
  * @example
  * ```ts
  * areOptionsEqual(
- *   { id: '1' } as InterfaceUserInfoPG,
- *   { id: '1' } as InterfaceUserInfoPG,
+ * { id: '1' } as InterfaceUserInfoPG,
+ * { id: '1' } as InterfaceUserInfoPG,
  * );
  * // returns true
  * ```
@@ -76,8 +69,8 @@ export const areOptionsEqual = (
  * @example
  * ```ts
  * getMemberLabel({
- *   firstName: 'John',
- *   lastName: 'Doe',
+ * firstName: 'John',
+ * lastName: 'Doe',
  * } as InterfaceUserInfoPG);
  * // returns "John Doe"
  * ```
@@ -96,13 +89,13 @@ export const getMemberLabel = (member: InterfaceUserInfoPG): string =>
  * @example
  * ```tsx
  * <PledgeModal
- *   isOpen={true}
- *   hide={() => {}}
- *   campaignId="123"
- *   userId="456"
- *   pledge={null}
- *   refetchPledge={() => {}}
- *   mode="create"
+ * isOpen={true}
+ * hide={() => {}}
+ * campaignId="123"
+ * userId="456"
+ * pledge={null}
+ * refetchPledge={() => {}}
+ * mode="create"
  * />
  * ```
  */
@@ -189,7 +182,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
    */
 
   const updatePledgeHandler = useCallback(
-    async (e: ChangeEvent<HTMLFormElement>) => {
+    async (e: FormEvent<HTMLFormElement>) => {
       e.preventDefault();
       const updatedFields: { amount?: number } = {};
       if (pledgeAmount !== pledge?.amount) {
@@ -217,7 +210,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
    * @returns A promise that resolves when the pledge is successfully created.
    */
   const createPledgeHandler = useCallback(
-    async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+    async (e: FormEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
       if (pledgeUsers.length === 0 || !pledgeUsers[0]) {
         NotificationToast.error(t('selectPledger'));
@@ -281,13 +274,20 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       }
       showCloseButton={false}
     >
-      <Form
+      <form
         data-testid="pledgeForm"
-        onSubmit={mode === 'edit' ? updatePledgeHandler : createPledgeHandler}
+        onSubmit={(e: FormEvent<HTMLFormElement>) => {
+          e.preventDefault();
+          if (mode === 'edit') {
+            updatePledgeHandler(e);
+          } else {
+            createPledgeHandler(e);
+          }
+        }}
         className="p-3"
       >
         {userData?.user?.role !== 'regular' && (
-          <Form.Group className="d-flex mb-3 w-100">
+          <div className="d-flex mb-3 w-100">
             <Autocomplete
               className={`${styles.noOutline} w-100`}
               data-testid="pledgerSelect"
@@ -308,21 +308,29 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 });
               }}
               renderInput={(params) => (
-                <TextField {...params} label={t('pledgers')} />
+                <div ref={params.InputProps.ref} className="position-relative">
+                  <input
+                    {...params.inputProps}
+                    type="text"
+                    placeholder={t('pledgers')}
+                    aria-label={t('pledgers')}
+                    className={`form-control ${styles.noOutline}`}
+                  />
+                  {params.InputProps.endAdornment}
+                </div>
               )}
             />
-          </Form.Group>
+          </div>
         )}
-        <Form.Group className="d-flex gap-3 mb-4">
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">
-              {t('currency')}
-            </InputLabel>
+        <div className="d-flex gap-3 mb-4">
+          <div className="flex-grow-1">
+            <InputLabel id="currency-select-label">{t('currency')}</InputLabel>
             <Select
-              labelId="demo-simple-select-label"
+              labelId="currency-select-label"
               value={pledgeCurrency}
               label={t('currency')}
               data-testid="currencySelect"
+              fullWidth
               onChange={(e) => {
                 setFormState({
                   ...formState,
@@ -336,24 +344,33 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 </MenuItem>
               ))}
             </Select>
-          </FormControl>
-          <FormControl fullWidth>
-            <TextField
+          </div>
+          <div className="flex-grow-1">
+            <FormTextField
+              name="amount"
               label={t('amount')}
-              variant="outlined"
-              className={styles.noOutline}
-              value={pledgeAmount}
-              onChange={(e) => {
-                if (parseInt(e.target.value) > 0) {
+              type="number"
+              value={String(pledgeAmount)}
+              onChange={(value) => {
+                if (value === '' || value.trim() === '') {
                   setFormState({
                     ...formState,
-                    pledgeAmount: parseInt(e.target.value),
+                    pledgeAmount: 0,
+                  });
+                  return;
+                }
+                const numValue = parseInt(value);
+                if (!isNaN(numValue) && numValue > 0) {
+                  setFormState({
+                    ...formState,
+                    pledgeAmount: numValue,
                   });
                 }
               }}
+              className={styles.noOutline}
             />
-          </FormControl>
-        </Form.Group>
+          </div>
+        </div>
         <Button
           type="submit"
           className={styles.addButton}
@@ -361,7 +378,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         >
           {t(mode === 'edit' ? 'updatePledge' : 'createPledge')}
         </Button>
-      </Form>
+      </form>
     </BaseModal>
   );
 };

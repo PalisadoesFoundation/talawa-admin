@@ -9,7 +9,7 @@ import i18nForTest from 'utils/i18nForTest';
 import OrganizationScreen from './OrganizationScreen';
 import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import styles from 'style/app-fixed.module.css';
+import styles from './OrganizationScreen.module.css';
 import { vi } from 'vitest';
 import { setItem, clearAllItems } from 'utils/useLocalstorage';
 import dayjs from 'dayjs';

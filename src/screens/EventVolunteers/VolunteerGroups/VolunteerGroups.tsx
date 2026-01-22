@@ -16,23 +16,22 @@
  *
  * @returns The rendered volunteer groups management component.
  */
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button/Button';
 import { Navigate, useParams } from 'react-router';
 
 import { Groups, WarningAmberRounded } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
-import { debounce } from '@mui/material';
 
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import {
-  DataGrid,
-  type GridCellParams,
-  type GridColDef,
+import type {
+  GridCellParams,
+  GridColDef,
 } from 'shared-components/DataGridWrapper';
+import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
 import Avatar from 'shared-components/Avatar/Avatar';
 import styles from './VolunteerGroups.module.css';
 import { GET_EVENT_VOLUNTEER_GROUPS } from 'GraphQl/Queries/EventVolunteerQueries';
@@ -40,7 +39,6 @@ import VolunteerGroupModal from './modal/VolunteerGroupModal';
 import VolunteerGroupDeleteModal from './deleteModal/VolunteerGroupDeleteModal';
 import VolunteerGroupViewModal from './viewModal/VolunteerGroupViewModal';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
-import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 enum ModalState {
   SAME = 'same',
@@ -63,7 +61,7 @@ enum ModalState {
  *
  * @returns JSX.Element
  */
-function volunteerGroups(): JSX.Element {
+function VolunteerGroups(): JSX.Element {
   const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
@@ -71,16 +69,10 @@ function volunteerGroups(): JSX.Element {
   // Get the organization ID from URL parameters
   const { orgId, eventId } = useParams();
 
-  if (!orgId || !eventId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const [group, setGroup] = useState<InterfaceVolunteerGroupInfo | null>(null);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, setSortBy] = useState<
-    'volunteers_ASC' | 'volunteers_DESC' | null
-  >(null);
+  const [sortBy, setSortBy] = useState<string>('');
   const [searchBy, setSearchBy] = useState<'leader' | 'group'>('group');
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
   const [baseEvent, setBaseEvent] = useState<{ id: string } | null>(null);
@@ -91,20 +83,6 @@ function volunteerGroups(): JSX.Element {
     [ModalState.DELETE]: false,
     [ModalState.VIEW]: false,
   });
-
-  const debouncedSearch = useCallback(
-    debounce((value: string) => {
-      setSearchTerm(value);
-    }, 300),
-    [],
-  );
-
-  // Debounce cleanup effect
-  useEffect(() => {
-    return () => {
-      debouncedSearch.clear();
-    };
-  }, [debouncedSearch]);
 
   /**
    * Query to fetch event and volunteer groups for the event.
@@ -140,16 +118,16 @@ function volunteerGroups(): JSX.Element {
   const closeModal = (modal: ModalState): void =>
     setModalState((prevState) => ({ ...prevState, [modal]: false }));
 
-  const handleModalClick = useCallback(
-    (group: InterfaceVolunteerGroupInfo | null, modal: ModalState): void => {
-      if (modal === ModalState.SAME) {
-        setModalMode(group ? 'edit' : 'create');
-      }
-      setGroup(group);
-      openModal(modal);
-    },
-    [openModal],
-  );
+  const handleModalClick = (
+    group: InterfaceVolunteerGroupInfo | null,
+    modal: ModalState,
+  ): void => {
+    if (modal === ModalState.SAME) {
+      setModalMode(group ? 'edit' : 'create');
+    }
+    setGroup(group);
+    openModal(modal);
+  };
 
   // Effect to set recurring event info similar to Volunteers component
   useEffect(() => {
@@ -194,6 +172,9 @@ function volunteerGroups(): JSX.Element {
     return finalGroups;
   }, [eventData, searchTerm, searchBy, sortBy]);
 
+  if (!orgId || !eventId) {
+    return <Navigate to={'/'} replace />;
+  }
   if (groupsError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
@@ -347,10 +328,8 @@ function volunteerGroups(): JSX.Element {
             item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
           })}
           searchValue={searchTerm}
-          onSearchChange={debouncedSearch}
-          onSearchSubmit={(value) => {
-            setSearchTerm(value);
-          }}
+          onSearchChange={(value: string) => setSearchTerm(value)}
+          onSearchSubmit={(value: string) => setSearchTerm(value)}
           searchInputTestId="searchBy"
           searchButtonTestId="searchBtn"
           hasDropdowns
@@ -387,7 +366,7 @@ function volunteerGroups(): JSX.Element {
                 },
               ],
               onOptionChange: (value) => {
-                setSortBy(value as 'volunteers_DESC' | 'volunteers_ASC');
+                setSortBy(String(value));
               },
               type: 'sort',
             },
@@ -407,27 +386,18 @@ function volunteerGroups(): JSX.Element {
         />
 
         {/* Table with Volunteer Groups */}
-        <DataGrid
-          disableColumnMenu
-          columnBufferPx={7}
-          hideFooter={true}
-          getRowId={(row) => row.id}
-          slots={{
-            noRowsOverlay: () => (
-              <EmptyState
-                icon={<Groups />}
-                message={t('eventVolunteers.noVolunteerGroups')}
-                dataTestId="volunteerGroups-empty-state"
-              />
-            ),
-          }}
-          className={styles.dataGridContainer}
-          getRowClassName={() => `${styles.rowBackgrounds}`}
-          autoHeight
-          rowHeight={65}
+        <DataGridWrapper
           rows={groups}
           columns={columns}
-          isRowSelectable={() => false}
+          loading={groupsLoading}
+          emptyStateProps={{
+            icon: <Groups />,
+            message: t('eventVolunteers.noVolunteerGroups'),
+            dataTestId: 'volunteerGroups-empty-state',
+          }}
+          paginationConfig={{
+            enabled: false,
+          }}
         />
 
         <VolunteerGroupModal
@@ -466,4 +436,4 @@ function volunteerGroups(): JSX.Element {
   );
 }
 
-export default volunteerGroups;
+export default VolunteerGroups;

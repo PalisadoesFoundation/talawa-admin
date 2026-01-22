@@ -36,6 +36,16 @@ vi.mock('utils/MinioUpload', () => ({
   useMinioUpload: () => ({ uploadFileToMinio: mockUploadFileToMinio }),
 }));
 
+// Mock formEnumFields to inject a very long country code for validation testing
+vi.mock('utils/formEnumFields', () => ({
+  countryOptions: [
+    { value: 'us', label: 'United States' },
+    { value: 'ca', label: 'Canada' },
+    // A value > 50 chars to test the validation logic in the onChange handler
+    { value: 'x'.repeat(51), label: 'Long Country Name' },
+  ],
+}));
+
 describe('OrganizationModal Component', () => {
   const mockToggleModal = vi.fn();
 
@@ -88,7 +98,6 @@ describe('OrganizationModal Component', () => {
               createOrg={mockCreateOrg}
               t={(key) => key}
               tCommon={(key) => key}
-              userData={undefined}
             />
           </I18nextProvider>
         </BrowserRouter>
@@ -137,7 +146,6 @@ describe('OrganizationModal Component', () => {
               createOrg={mockCreateOrg}
               t={(key) => key}
               tCommon={(key) => key}
-              userData={undefined}
             />
           </I18nextProvider>
         </BrowserRouter>
@@ -218,7 +226,6 @@ describe('OrganizationModal Component', () => {
               createOrg={mockCreateOrg}
               t={(key) => key}
               tCommon={(key) => key}
-              userData={undefined}
             />
           </I18nextProvider>
         </BrowserRouter>
@@ -293,6 +300,25 @@ describe('OrganizationModal Component', () => {
     );
   });
 
+  test('country code should not update if value length exceeds 50 characters', async () => {
+    setup();
+    const countrySelect = screen.getByTestId(
+      'modalOrganizationCountryCode',
+    ) as HTMLSelectElement;
+
+    // Select the mocked option that is intentionally longer than 50 characters
+    // 'x'.repeat(51) is in our mock above
+    const longCode = 'x'.repeat(51);
+
+    mockSetFormState.mockClear();
+
+    // Simulate user selecting this long option
+    fireEvent.change(countrySelect, { target: { value: longCode } });
+
+    // Expect setFormState NOT to be called because 51 > 50
+    expect(mockSetFormState).not.toHaveBeenCalled();
+  });
+
   test('country select should have default disabled option', () => {
     setup();
     const countrySelect = screen.getByTestId(
@@ -338,7 +364,6 @@ describe('OrganizationModal Component', () => {
                 createOrg={mockCreateOrg}
                 t={(key) => key}
                 tCommon={(key) => key}
-                userData={undefined}
               />
             </I18nextProvider>
           </BrowserRouter>
@@ -466,7 +491,6 @@ describe('OrganizationModal Component', () => {
               createOrg={mockCreateOrg}
               t={(key) => key}
               tCommon={(key) => key}
-              userData={undefined}
             />
           </I18nextProvider>
         </BrowserRouter>
@@ -489,7 +513,6 @@ describe('OrganizationModal Component', () => {
               createOrg={mockCreateOrg}
               t={(key) => key}
               tCommon={(key) => key}
-              userData={undefined}
             />
           </I18nextProvider>
         </BrowserRouter>
@@ -542,7 +565,6 @@ describe('OrganizationModal Component', () => {
               createOrg={mockCreateOrg}
               t={(key) => key}
               tCommon={(key) => key}
-              userData={undefined}
             />
           </I18nextProvider>
         </BrowserRouter>
@@ -602,7 +624,4 @@ describe('OrganizationModal Component', () => {
     });
     expect(mockSetFormState).not.toHaveBeenCalled();
   });
-
-  // Note: Most field validation tests are covered by the loop test above.
-  // The description field retains its individual test due to its unique 200-character limit.
 });
