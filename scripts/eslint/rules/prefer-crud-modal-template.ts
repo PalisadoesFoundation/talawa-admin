@@ -1,12 +1,51 @@
 import { TSESTree, AST_NODE_TYPES, TSESLint } from '@typescript-eslint/utils';
+
 type MessageIds = 'preferCrud';
-type Options = [];
+
+interface InterfaceRuleOptions {
+  keywords?: string[];
+  variants?: string[];
+  ignorePaths?: string[];
+  importPathPatterns?: string[];
+}
+
+type Options = [InterfaceRuleOptions?];
+
+const DEFAULT_KEYWORDS = ['onSubmit', 'onConfirm', 'onPrimary', 'onSave'];
+const DEFAULT_VARIANTS = ['BaseModal'];
+const CRUD_IMPORT_PATH =
+  'src/shared-components/CRUDModalTemplate/CRUDModalTemplate';
+
+/**
+ * Simple glob matcher for file paths and patterns
+ */
+const escapeRegExp = (input: string): string =>
+  input.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&');
+
+const matchesGlob = (str: string, pattern: string): boolean => {
+  const escapedPattern = escapeRegExp(pattern);
+
+  const regexPattern = escapedPattern
+    .replace(/\\\*\\\*/g, '__DOUBLE_STAR__')
+    .replace(/\\\*/g, '[^/]*')
+    .replace(/__DOUBLE_STAR__/g, '.*')
+    .replace(/\\\?/g, '.');
+
+  const regex = new RegExp(`^${regexPattern}$`);
+  return regex.test(str);
+};
 
 /**
  * ESLint rule to prefer CRUDModalTemplate over BaseModal in CRUD contexts.
  * Detects BaseModal imports (default/named/aliased) and JSX usage.
  * Flags violations when handler props (onSubmit, onConfirm, onPrimary, onSave)
  * are present, or when form elements exist within the modal children.
+ *
+ * Options:
+ * - keywords: Array of prop names that indicate CRUD context (default: ['onSubmit', 'onConfirm', 'onPrimary', 'onSave'])
+ * - variants: Array of component names to check (default: ['BaseModal'])
+ * - ignorePaths: Array of glob patterns for files to ignore
+ * - importPathPatterns: Array of import path patterns to match
  */
 const rule: TSESLint.RuleModule<MessageIds, Options> = {
   meta: {
@@ -20,12 +59,82 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
       preferCrud:
         'Prefer CRUDModalTemplate over BaseModal when using CRUD-related props or form elements.',
     },
-    schema: [],
+    fixable: 'code',
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          keywords: {
+            type: 'array',
+            items: { type: 'string' },
+            description: 'Prop names that indicate CRUD context',
+          },
+          variants: {
+            type: 'array',
+            items: { type: 'string' },
+            description: 'Component names to check',
+          },
+          ignorePaths: {
+            type: 'array',
+            items: { type: 'string' },
+            description: 'Glob patterns for files to ignore',
+          },
+          importPathPatterns: {
+            type: 'array',
+            items: { type: 'string' },
+            description: 'Import path patterns to match',
+          },
+        },
+        additionalProperties: false,
+      },
+    ],
   },
 
   create(context: TSESLint.RuleContext<MessageIds, Options>) {
-    // Track BaseModal local names (handles default, named, and aliased imports)
+    const options = context.options[0] || {};
+    const keywords = options.keywords || DEFAULT_KEYWORDS;
+    const variants = options.variants || DEFAULT_VARIANTS;
+    const ignorePaths = options.ignorePaths || [];
+    const importPathPatterns = options.importPathPatterns || [];
+
+    // Check if current file should be ignored
+    const filename = context.getFilename();
+    if (ignorePaths.some((pattern) => matchesGlob(filename, pattern))) {
+      return {};
+    }
+
+    // Track BaseModal local names and their import declarations
     const baseModalNames = new Set<string>();
+    const importDeclarations = new Map<string, TSESTree.ImportDeclaration>();
+
+    /**
+     * Checks if an import path matches BaseModal patterns
+     */
+    const isTargetModalPath = (importPath: string): boolean => {
+      // Check against custom import path patterns if provided
+      if (importPathPatterns.length > 0) {
+        return importPathPatterns.some((pattern) => {
+          if (pattern.includes('*')) {
+            return matchesGlob(importPath, pattern);
+          }
+          return (
+            importPath === pattern ||
+            importPath.endsWith(`/${pattern}`) ||
+            importPath.includes(`/${pattern}/`)
+          );
+        });
+      }
+
+      // Default behavior: check against variants
+      return variants.some((variant) => {
+        return (
+          importPath === variant ||
+          importPath.endsWith(`/${variant}`) ||
+          importPath === `shared-components/${variant}` ||
+          importPath.endsWith(`/${variant}/index`)
+        );
+      });
+    };
 
     return {
       // Collect BaseModal imports
@@ -33,6 +142,7 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
         if (typeof node.source.value !== 'string') return;
 
         const importPath = node.source.value;
+        if (!isTargetModalPath(importPath)) return;
 
         node.specifiers.forEach((specifier) => {
           // Handle named imports: import { BaseModal } from './components'
@@ -42,21 +152,18 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
               specifier.imported.type === AST_NODE_TYPES.Identifier
                 ? specifier.imported.name
                 : null;
-            if (importedName === 'BaseModal') {
-              baseModalNames.add(specifier.local.name);
+            if (importedName && variants.includes(importedName)) {
+              const localName = specifier.local.name;
+              baseModalNames.add(localName);
+              importDeclarations.set(localName, node);
             }
           }
           // Handle default imports: import BaseModal from './BaseModal'
           // Only track if the import path explicitly targets BaseModal module
           else if (specifier.type === AST_NODE_TYPES.ImportDefaultSpecifier) {
-            const isBaseModalPath =
-              importPath === 'BaseModal' ||
-              importPath.endsWith('/BaseModal') ||
-              importPath === 'shared-components/BaseModal' ||
-              importPath.endsWith('/BaseModal/index');
-            if (isBaseModalPath) {
-              baseModalNames.add(specifier.local.name);
-            }
+            const localName = specifier.local.name;
+            baseModalNames.add(localName);
+            importDeclarations.set(localName, node);
           }
         });
       },
@@ -77,21 +184,14 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
           return;
         }
 
-        // Check for CRUD-related handler props
-        const crudHandlerProps = [
-          'onSubmit',
-          'onConfirm',
-          'onPrimary',
-          'onSave',
-        ];
-
+        // Check for CRUD-related handler props using configured keywords
         const hasCrudHandler = node.attributes.some((attr) => {
           if (attr.type === AST_NODE_TYPES.JSXAttribute) {
             const attrName =
               attr.name.type === AST_NODE_TYPES.JSXIdentifier
                 ? attr.name.name
                 : null;
-            return attrName && crudHandlerProps.includes(attrName);
+            return attrName && keywords.includes(attrName);
           }
           return false;
         });
@@ -152,9 +252,105 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
 
         // Flag when CRUD handler props OR form elements are present
         if (hasCrudHandler || hasFormInChildren) {
+          const importDecl = importDeclarations.get(elementName);
+
           context.report({
             node: node,
             messageId: 'preferCrud',
+            fix: importDecl
+              ? (fixer) => {
+                  const localName = elementName;
+
+                  // Check if import has multiple specifiers
+                  const hasMultipleSpecifiers =
+                    importDecl.specifiers.length > 1;
+
+                  if (hasMultipleSpecifiers) {
+                    // Preserve other imports, only remove/replace the matched variant component
+                    const otherSpecifiers = importDecl.specifiers.filter(
+                      (spec) => {
+                        if (spec.type === AST_NODE_TYPES.ImportSpecifier) {
+                          return spec.local.name !== elementName;
+                        }
+                        if (
+                          spec.type === AST_NODE_TYPES.ImportDefaultSpecifier
+                        ) {
+                          return spec.local.name !== elementName;
+                        }
+                        return true;
+                      },
+                    );
+
+                    // Build new import preserving other specifiers
+                    const originalImportPath = importDecl.source.value;
+                    const preservedImports = otherSpecifiers
+                      .map((spec) => {
+                        if (
+                          spec.type === AST_NODE_TYPES.ImportDefaultSpecifier
+                        ) {
+                          return spec.local.name;
+                        }
+                        if (spec.type === AST_NODE_TYPES.ImportSpecifier) {
+                          const imported =
+                            spec.imported.type === AST_NODE_TYPES.Identifier
+                              ? spec.imported.name
+                              : '';
+                          const local = spec.local.name;
+                          return imported === local
+                            ? local
+                            : `${imported} as ${local}`;
+                        }
+                        return '';
+                      })
+                      .filter(Boolean)
+                      .join(', ');
+
+                    const hasDefault = otherSpecifiers.some(
+                      (s) => s.type === AST_NODE_TYPES.ImportDefaultSpecifier,
+                    );
+                    const hasNamed = otherSpecifiers.some(
+                      (s) => s.type === AST_NODE_TYPES.ImportSpecifier,
+                    );
+
+                    let preservedImportStmt = '';
+                    if (hasDefault && hasNamed) {
+                      const defaultSpec = otherSpecifiers.find(
+                        (s) => s.type === AST_NODE_TYPES.ImportDefaultSpecifier,
+                      );
+                      const namedSpecs = otherSpecifiers
+                        .filter(
+                          (s) => s.type === AST_NODE_TYPES.ImportSpecifier,
+                        )
+                        .map((spec) => {
+                          if (spec.type === AST_NODE_TYPES.ImportSpecifier) {
+                            const imported =
+                              spec.imported.type === AST_NODE_TYPES.Identifier
+                                ? spec.imported.name
+                                : '';
+                            const local = spec.local.name;
+                            return imported === local
+                              ? local
+                              : `${imported} as ${local}`;
+                          }
+                          return '';
+                        })
+                        .join(', ');
+                      preservedImportStmt = `import ${defaultSpec?.local.name}, { ${namedSpecs} } from '${originalImportPath}';`;
+                    } else if (hasDefault) {
+                      preservedImportStmt = `import ${preservedImports} from '${originalImportPath}';`;
+                    } else {
+                      preservedImportStmt = `import { ${preservedImports} } from '${originalImportPath}';`;
+                    }
+
+                    const newImport = `import { CRUDModalTemplate as ${localName} } from "${CRUD_IMPORT_PATH}";\n${preservedImportStmt}`;
+                    return fixer.replaceText(importDecl, newImport);
+                  } else {
+                    // Single specifier: replace entire import
+                    const newImport = `import { CRUDModalTemplate as ${localName} } from "${CRUD_IMPORT_PATH}";`;
+                    return fixer.replaceText(importDecl, newImport);
+                  }
+                }
+              : undefined,
           });
         }
       },
