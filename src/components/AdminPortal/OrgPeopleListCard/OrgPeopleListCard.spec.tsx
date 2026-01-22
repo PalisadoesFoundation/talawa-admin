@@ -231,7 +231,7 @@ describe('Testing Organization People List Card', () => {
     );
 
     await waitFor(() => {
-      expect(window.location.pathname).toBe('/orglist');
+      expect(window.location.pathname).toBe('/admin/orglist');
     });
   });
 });

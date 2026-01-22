@@ -1,11 +1,6 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
@@ -531,14 +526,14 @@ const previewPostErrorMock: MockedResponse = {
 // Helper render function
 const renderComponent = (
   mocks: MockedResponse[],
-  path = '/orgpost/123',
+  path = '/admin/orgpost/123',
 ): RenderResult =>
   render(
     <I18nextProvider i18n={i18nForTest}>
       <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={[path]}>
           <Routes>
-            <Route path="/orgpost/:orgId" element={<PostsPage />} />
+            <Route path="/admin/orgpost/:orgId" element={<PostsPage />} />
           </Routes>
         </MemoryRouter>
       </MockedProvider>
@@ -584,7 +579,7 @@ describe('PostsPage Component', () => {
 
       renderComponent(
         [orgPostListMock, emptyPinnedPostsMock, previewPostErrorMock],
-        `/orgpost/123?${searchParams.toString()}`,
+        `/admin/orgpost/123?${searchParams.toString()}`,
       );
 
       await waitFor(() => {
@@ -631,7 +626,7 @@ describe('PostsPage Component', () => {
 
       renderComponent(
         [orgPostListMock, emptyPinnedPostsMock, previewPostLoadingMock],
-        `/orgpost/123?${searchParams.toString()}`,
+        `/admin/orgpost/123?${searchParams.toString()}`,
       );
 
       // Should show loading state initially

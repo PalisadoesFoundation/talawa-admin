@@ -1,6 +1,7 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -173,7 +174,9 @@ describe('Testing OrganizationScreen', () => {
     mockUseParams = vi.fn();
     mockUseMatch = vi.fn();
     mockNavigate = vi.fn();
-    mockUseLocation = vi.fn().mockReturnValue({ pathname: '/orgdash/123' });
+    mockUseLocation = vi.fn().mockReturnValue({
+      pathname: '/admin/orgdash/123',
+    });
     mockUseParams.mockReset();
     mockUseMatch.mockReset();
     mockNavigate.mockReset();

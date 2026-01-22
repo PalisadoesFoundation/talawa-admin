@@ -1,0 +1,23 @@
+.opendrawer {
+  composes: opendrawer from '../../../style/app-fixed.module.css';
+}
+
+.collapseSidebarButton {
+  composes: collapseSidebarButton from '../../../style/app-fixed.module.css';
+}
+
+.pageContainer {
+  composes: pageContainer from '../../../style/app-fixed.module.css';
+}
+
+.expand {
+  composes: expand from '../../../style/app-fixed.module.css';
+}
+
+.contract {
+  composes: contract from '../../../style/app-fixed.module.css';
+}
+
+.navContainer {
+  composes: navContainer from '../../../style/app-fixed.module.css';
+}

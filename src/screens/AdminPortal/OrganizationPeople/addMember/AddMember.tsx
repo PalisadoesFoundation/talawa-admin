@@ -384,7 +384,9 @@ function AddMember(): JSX.Element {
                     <TableCell align="center" className={styles.tableBodyCell}>
                       <Link
                         className={`${styles.membername} ${styles.subtleBlueGrey}`}
-                        to={{ pathname: `/member/${currentUrl}` }}
+                        to={{
+                          pathname: `/admin/member/${currentUrl}/${userDetails.id}`,
+                        }}
                       >
                         {userDetails.name}
                         <br />

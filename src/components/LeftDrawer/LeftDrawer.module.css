@@ -1,0 +1,11 @@
+.optionList {
+  composes: optionList from '../../style/app-fixed.module.css';
+}
+
+.profileCardWrapper {
+  display: flex;
+}
+
+.profileCardHidden {
+  display: none;
+}

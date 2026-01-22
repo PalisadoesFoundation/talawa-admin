@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter, Routes, Route } from 'react-router';
 import NotificationIcon from './NotificationIcon';
@@ -66,7 +67,7 @@ const generateNotifications = (
       ? `This is a very long notification body that should be truncated ${i + 1}`
       : `This is notification ${i + 1}`,
     isRead,
-    navigation: `/notification/${i + 1}`,
+    navigation: `/admin/notification/${i + 1}`,
   }));
 
 describe('NotificationIcon Component', () => {
@@ -163,7 +164,7 @@ describe('NotificationIcon Component', () => {
     await waitFor(() => {
       fireEvent.click(screen.getByText(/This is notification 1/));
     });
-    expect(mockNavigate).toHaveBeenCalledWith('/notification/1');
+    expect(mockNavigate).toHaveBeenCalledWith('/admin/notification/1');
   });
 
   it('should navigate to all notifications page', async () => {
@@ -180,7 +181,7 @@ describe('NotificationIcon Component', () => {
     await waitFor(() => {
       fireEvent.click(screen.getByText('View all notifications'));
     });
-    expect(mockNavigate).toHaveBeenCalledWith('/notification');
+    expect(mockNavigate).toHaveBeenCalledWith('/admin/notification');
   });
 
   it('should navigate to user notification page from user portal', async () => {
@@ -217,7 +218,7 @@ describe('NotificationIcon Component', () => {
     await waitFor(() => {
       fireEvent.click(screen.getByText('Test body'));
     });
-    expect(mockNavigate).toHaveBeenCalledWith('/notification');
+    expect(mockNavigate).toHaveBeenCalledWith('/admin/notification');
   });
 
   it('should show unread dot for unread notifications', async () => {

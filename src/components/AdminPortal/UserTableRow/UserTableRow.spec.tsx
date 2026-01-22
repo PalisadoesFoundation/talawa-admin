@@ -1,6 +1,7 @@
 import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -36,7 +37,7 @@ describe('UserTableRow', () => {
           user={user}
           isDataGrid
           showJoinedDate
-          linkPath={`/member/${user.id}`}
+          linkPath={`/admin/member/${user.id}`}
           actions={[]}
           testIdPrefix="spec"
         />
@@ -235,7 +236,7 @@ describe('UserTableRow', () => {
       <RouterWrapper>
         <UserTableRow
           user={user}
-          linkPath="/member/u1"
+          linkPath="/admin/member/u1"
           isDataGrid
           testIdPrefix="spec"
         />
@@ -243,7 +244,7 @@ describe('UserTableRow', () => {
     );
     const nameLink = screen.getByRole('link', { name: 'Admin User' });
     expect(nameLink).toBeInTheDocument();
-    expect(nameLink).toHaveAttribute('href', '/member/u1');
+    expect(nameLink).toHaveAttribute('href', '/admin/member/u1');
   });
 
   it('renders disabled action button', () => {
@@ -344,7 +345,7 @@ describe('UserTableRow', () => {
       <RouterWrapper>
         <UserTableRow
           user={user}
-          linkPath="/member/u1"
+          linkPath="/admin/member/u1"
           onRowClick={onRowClick}
           isDataGrid
           testIdPrefix="spec"
@@ -563,7 +564,7 @@ describe('UserTableRow', () => {
       <RouterWrapper>
         <UserTableRow
           user={user}
-          linkPath="/member/u1"
+          linkPath="/admin/member/u1"
           isDataGrid
           testIdPrefix="spec"
         />
@@ -722,7 +723,7 @@ describe('UserTableRow', () => {
       <RouterWrapper>
         <UserTableRow
           user={user}
-          linkPath="/member/u1"
+          linkPath="/admin/member/u1"
           compact={true}
           isDataGrid
           testIdPrefix="spec"
@@ -731,6 +732,6 @@ describe('UserTableRow', () => {
     );
     const nameLink = screen.getByRole('link', { name: 'Admin User' });
     expect(nameLink).toBeInTheDocument();
-    expect(nameLink).toHaveAttribute('href', '/member/u1');
+    expect(nameLink).toHaveAttribute('href', '/admin/member/u1');
   });
 });

@@ -28,7 +28,7 @@ import { useQuery } from '@apollo/client';
 import { CircularProgress, TableCell, TableRow } from '@mui/material';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import React from 'react';
-import styles from 'style/app-fixed.module.css';
+import styles from './customTableCell.module.css';
 import { Link } from 'react-router';
 
 export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
@@ -72,7 +72,7 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
     <TableRow className="my-6" data-testid="custom-row">
       <TableCell align="left">
         <Link
-          to={`/event/${event.organization.id}/${event.id}`}
+          to={`/admin/event/${event.organization.id}/${event.id}`}
           className={styles.membername}
         >
           {event.name}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import SecuredRoute from './SecuredRoute';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -58,10 +59,10 @@ describe('SecuredRoute', () => {
       setItem('role', 'administrator');
 
       render(
-        <MemoryRouter initialEntries={['/orglist']}>
+        <MemoryRouter initialEntries={['/admin/orglist']}>
           <Routes>
             <Route element={<SecuredRoute />}>
-              <Route path="/orglist" element={testComponent} />
+              <Route path="/admin/orglist" element={testComponent} />
             </Route>
           </Routes>
         </MemoryRouter>,
@@ -76,10 +77,10 @@ describe('SecuredRoute', () => {
       setItem('role', 'regular');
 
       render(
-        <MemoryRouter initialEntries={['/orglist']}>
+        <MemoryRouter initialEntries={['/admin/orglist']}>
           <Routes>
             <Route element={<SecuredRoute />}>
-              <Route path="/orglist" element={testComponent} />
+              <Route path="/admin/orglist" element={testComponent} />
             </Route>
           </Routes>
         </MemoryRouter>,
@@ -98,10 +99,10 @@ describe('SecuredRoute', () => {
       setItem('role', 'administrator');
 
       render(
-        <MemoryRouter initialEntries={['/orglist']}>
+        <MemoryRouter initialEntries={['/admin/orglist']}>
           <Routes>
             <Route element={<SecuredRoute />}>
-              <Route path="/orglist" element={testComponent} />
+              <Route path="/admin/orglist" element={testComponent} />
             </Route>
           </Routes>
         </MemoryRouter>,
@@ -121,10 +122,10 @@ describe('SecuredRoute', () => {
       setItem('token', 'test-token');
 
       render(
-        <MemoryRouter initialEntries={['/orglist']}>
+        <MemoryRouter initialEntries={['/admin/orglist']}>
           <Routes>
             <Route element={<SecuredRoute />}>
-              <Route path="/orglist" element={testComponent} />
+              <Route path="/admin/orglist" element={testComponent} />
             </Route>
           </Routes>
         </MemoryRouter>,
@@ -159,10 +160,10 @@ describe('SecuredRoute', () => {
       setItem('id', 'admin-123');
 
       render(
-        <MemoryRouter initialEntries={['/orglist']}>
+        <MemoryRouter initialEntries={['/admin/orglist']}>
           <Routes>
             <Route element={<SecuredRoute />}>
-              <Route path="/orglist" element={testComponent} />
+              <Route path="/admin/orglist" element={testComponent} />
             </Route>
           </Routes>
         </MemoryRouter>,

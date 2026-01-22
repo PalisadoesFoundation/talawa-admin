@@ -182,7 +182,7 @@ const LoginPage = (): JSX.Element => {
       const storedRole = getItem('role');
       const target =
         storedRole === 'administrator' || storedRole === 'superuser'
-          ? '/orglist'
+          ? '/admin/orglist'
           : '/user/organizations';
       navigate(target);
       extendSession();
@@ -425,7 +425,7 @@ const LoginPage = (): JSX.Element => {
           return;
         }
         startSession();
-        navigate(role === 'admin' ? '/orglist' : '/user/organizations');
+        navigate(role === 'admin' ? '/admin/orglist' : '/user/organizations');
       } else {
         NotificationToast.warning(tErrors('notFound') as string);
       }

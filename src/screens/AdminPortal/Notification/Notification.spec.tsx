@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter } from 'react-router-dom';
 import Notification from './Notification';
@@ -140,7 +141,7 @@ const generateNotifications = (
     title: `Notification ${i + 1}`,
     body: `This is notification ${i + 1}`,
     isRead,
-    navigation: `/notification/${i + 1}`,
+    navigation: `/admin/notification/${i + 1}`,
   }));
 
 afterEach(() => {

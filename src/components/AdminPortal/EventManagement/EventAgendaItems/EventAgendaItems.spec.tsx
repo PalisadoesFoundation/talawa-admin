@@ -390,7 +390,7 @@ describe('Testing Agenda Items Components', () => {
       configurable: true,
       value: {
         reload: vi.fn(),
-        href: 'https://localhost:4321/event/111/123',
+        href: 'https://localhost:4321/admin/event/111/123',
       },
     });
   });

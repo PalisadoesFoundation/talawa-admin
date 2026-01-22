@@ -2,7 +2,8 @@ import React, { act } from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { I18nextProvider } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -311,8 +312,8 @@ describe('Testing User Table Item', () => {
     );
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Joined Organization 1/i));
-    expect(window.location.replace).toHaveBeenCalledWith('/orgdash/abc');
-    expect(mockNavigatePush).toHaveBeenCalledWith('/orgdash/abc');
+    expect(window.location.replace).toHaveBeenCalledWith('/admin/orgdash/abc');
+    expect(mockNavigatePush).toHaveBeenCalledWith('/admin/orgdash/abc');
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
   });
   test('Remove user from Organization should function properly in Organizations Joined Modal', async () => {
@@ -835,8 +836,8 @@ describe('Testing User Table Item', () => {
     );
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Blocked Organization 1/i));
-    expect(window.location.replace).toHaveBeenCalledWith('/orgdash/ghi');
-    expect(mockNavigatePush).toHaveBeenCalledWith('/orgdash/ghi');
+    expect(window.location.replace).toHaveBeenCalledWith('/admin/orgdash/ghi');
+    expect(mockNavigatePush).toHaveBeenCalledWith('/admin/orgdash/ghi');
     fireEvent.click(screen.getByTestId(`closeUnblockOrgsBtn${123}`));
   });
   test('handles errors in unblockUser mutation', async () => {

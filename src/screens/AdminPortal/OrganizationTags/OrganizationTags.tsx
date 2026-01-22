@@ -170,11 +170,11 @@ function OrganizationTags(): JSX.Element {
     ) || [];
 
   const redirectToManageTag = (tagId: string): void => {
-    navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
+    navigate(`/admin/orgtags/${orgId}/manageTag/${tagId}`);
   };
 
   const redirectToSubTags = (tagId: string): void => {
-    navigate(`/orgtags/${orgId}/subTags/${tagId}`);
+    navigate(`/admin/orgtags/${orgId}/subTags/${tagId}`);
   };
 
   const renderCountLink = (
@@ -252,7 +252,7 @@ function OrganizationTags(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return renderCountLink(
           params,
-          (id) => `/orgtags/${orgId}/subTags/${id}`,
+          (id) => `/admin/orgtags/${orgId}/subTags/${id}`,
           params.row.childTags?.totalCount,
         );
       },
@@ -269,7 +269,7 @@ function OrganizationTags(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return renderCountLink(
           params,
-          (id) => `/orgtags/${orgId}/manageTag/${id}`,
+          (id) => `/admin/orgtags/${orgId}/manageTag/${id}`,
           params.row.usersAssignedTo?.totalCount,
         );
       },

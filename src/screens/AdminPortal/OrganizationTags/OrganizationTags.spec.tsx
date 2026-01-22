@@ -1,14 +1,8 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import {
-  act,
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
@@ -130,17 +124,20 @@ vi.mock('shared-components/ReportingTable/ReportingTable', async () => {
 const renderOrganizationTags = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/orgtags/orgId']}>
+      <MemoryRouter initialEntries={['/admin/orgtags/orgId']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
-              <Route path="/orgtags/:orgId" element={<OrganizationTags />} />
               <Route
-                path="/orgtags/:orgId/manageTag/:tagId"
+                path="/admin/orgtags/:orgId"
+                element={<OrganizationTags />}
+              />
+              <Route
+                path="/admin/orgtags/:orgId/manageTag/:tagId"
                 element={<div data-testid="manageTagScreen"></div>}
               />
               <Route
-                path="/orgtags/:orgId/subTags/:tagId"
+                path="/admin/orgtags/:orgId/subTags/:tagId"
                 element={<div data-testid="subTagsScreen"></div>}
               />
             </Routes>

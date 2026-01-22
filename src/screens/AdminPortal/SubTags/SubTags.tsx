@@ -17,7 +17,7 @@ import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
-import Button from 'react-bootstrap/Button';
+import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
@@ -167,11 +167,11 @@ function SubTags(): JSX.Element {
   ];
 
   const redirectToManageTag = (tagId: string): void => {
-    navigate(`/orgtags/${orgId}/manageTag/${tagId}`);
+    navigate(`/admin/orgtags/${orgId}/manageTag/${tagId}`);
   };
 
   const redirectToSubTags = (tagId: string): void => {
-    navigate(`/orgtags/${orgId}/subTags/${tagId}`);
+    navigate(`/admin/orgtags/${orgId}/subTags/${tagId}`);
   };
 
   const sortDropdownConfig = {
@@ -257,7 +257,7 @@ function SubTags(): JSX.Element {
         return (
           <Link
             className="text-secondary"
-            to={`/orgtags/${orgId}/subTags/${params.row._id}`}
+            to={`/admin/orgtags/${orgId}/subTags/${params.row._id}`}
             aria-label={t('viewSubTags', {
               count: params.row.childTags.totalCount,
             })}
@@ -280,7 +280,7 @@ function SubTags(): JSX.Element {
         return (
           <Link
             className="text-secondary"
-            to={`/orgtags/${orgId}/manageTag/${params.row._id}`}
+            to={`/admin/orgtags/${orgId}/manageTag/${params.row._id}`}
           >
             {params.row.usersAssignedTo.totalCount}
           </Link>
@@ -340,13 +340,13 @@ function SubTags(): JSX.Element {
 
                 <button
                   type="button"
-                  onClick={() => navigate(`/orgtags/${orgId}`)}
+                  onClick={() => navigate(`/admin/orgtags/${orgId}`)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
-                      navigate(`/orgtags/${orgId}`);
+                      navigate(`/admin/orgtags/${orgId}`);
                     } else if (e.key === ' ') {
                       e.preventDefault();
-                      navigate(`/orgtags/${orgId}`);
+                      navigate(`/admin/orgtags/${orgId}`);
                     }
                   }}
                   className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}

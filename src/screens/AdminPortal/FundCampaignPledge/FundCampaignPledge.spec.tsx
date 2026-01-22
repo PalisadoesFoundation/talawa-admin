@@ -1,18 +1,15 @@
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
-import {
-  act,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -89,9 +86,9 @@ vi.mock('shared-components/BreadcrumbsComponent/BreadcrumbsComponent', () => ({
             );
           }
 
-          const testId = item.to?.includes('/orgfunds/')
+          const testId = item.to?.includes('/admin/orgfunds/')
             ? 'fundsLink'
-            : item.to?.includes('/orgfundcampaign/')
+            : item.to?.includes('/admin/orgfundcampaign/')
               ? 'campaignsLink'
               : 'breadcrumbLink';
 
@@ -449,14 +446,14 @@ const renderFundCampaignPledge = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
       <MemoryRouter
-        initialEntries={['/fundCampaignPledge/orgId/fundCampaignId']}
+        initialEntries={['/admin/fundCampaignPledge/orgId/fundCampaignId']}
       >
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route
-                  path="/fundCampaignPledge/:orgId/:fundCampaignId"
+                  path="/admin/fundCampaignPledge/:orgId/:fundCampaignId"
                   element={<FundCampaignPledge />}
                 />
                 <Route
@@ -492,12 +489,12 @@ describe('Testing Campaign Pledge Screen', () => {
 
     render(
       <MockedProvider link={link1}>
-        <MemoryRouter initialEntries={['/fundCampaignPledge/']}>
+        <MemoryRouter initialEntries={['/admin/fundCampaignPledge/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route
-                  path="/fundCampaignPledge/"
+                  path="/admin/fundCampaignPledge/"
                   element={<FundCampaignPledge />}
                 />
                 <Route
@@ -664,7 +661,7 @@ describe('Testing Campaign Pledge Screen', () => {
     // Verify fund link is present with correct href
     const fundsLink = screen.getByTestId('fundsLink');
     expect(fundsLink).toBeInTheDocument();
-    expect(fundsLink).toHaveAttribute('href', '/orgfunds/orgId');
+    expect(fundsLink).toHaveAttribute('href', '/admin/orgfunds/orgId');
     expect(fundsLink).toHaveTextContent('Test Fund');
 
     // Verify campaign link is present with correct href
@@ -672,7 +669,7 @@ describe('Testing Campaign Pledge Screen', () => {
     expect(campaignsLink).toBeInTheDocument();
     expect(campaignsLink).toHaveAttribute(
       'href',
-      '/orgfundcampaign/orgId/fundId123',
+      '/admin/orgfundcampaign/orgId/fundId123',
     );
     expect(campaignsLink).toHaveTextContent('Test Campaign');
 

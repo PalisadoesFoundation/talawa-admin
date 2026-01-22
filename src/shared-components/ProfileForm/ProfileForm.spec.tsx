@@ -1,13 +1,7 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import {
-  act,
-  cleanup,
-  fireEvent,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
@@ -144,16 +138,16 @@ vi.mock('screens/UserPortal/Settings/ProfileHeader/ProfileHeader', () => ({
 const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/orgtags/123/member/456']}>
+      <MemoryRouter initialEntries={['/admin/member/123/456']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
               <Route
-                path="/orgtags/:orgId/member/:userId"
+                path="/admin/member/:orgId/:userId"
                 element={<MemberDetail />}
               />
               <Route
-                path="/orgtags/:orgId/manageTag/:tagId"
+                path="/admin/orgtags/:orgId/manageTag/:tagId"
                 element={<div data-testid="manageTagScreen"></div>}
               />
             </Routes>
@@ -458,12 +452,12 @@ describe('MemberDetail', () => {
       // the component should handle gracefully
       render(
         <MockedProvider link={link2}>
-          <MemoryRouter initialEntries={['/orgtags/123/member/']}>
+          <MemoryRouter initialEntries={['/admin/member/123/']}>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
                 <Routes>
                   <Route
-                    path="/orgtags/:orgId/member/:userId?"
+                    path="/admin/member/:orgId/:userId?"
                     element={<MemberDetail />}
                   />
                 </Routes>

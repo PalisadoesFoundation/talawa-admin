@@ -44,11 +44,11 @@ const renderOrgAdminListCard = (props: {
 }): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/orgpeople/987']}>
+      <MemoryRouter initialEntries={['/admin/orgpeople/987']}>
         <I18nextProvider i18n={i18nForTest}>
           <Routes>
             <Route
-              path="/orgpeople/:orgId"
+              path="/admin/orgpeople/:orgId"
               element={<OrgAdminListCard {...props} />}
             />
             <Route
@@ -156,10 +156,10 @@ describe('Testing Organization Admin List Card', () => {
 
     render(
       <MockedProvider link={noDataLink}>
-        <MemoryRouter initialEntries={['/orgpeople/987']}>
+        <MemoryRouter initialEntries={['/admin/orgpeople/987']}>
           <Routes>
             <Route
-              path="/orgpeople/:orgId"
+              path="/admin/orgpeople/:orgId"
               element={<OrgAdminListCard {...props} />}
             />
           </Routes>
@@ -198,10 +198,10 @@ describe('Testing Organization Admin List Card', () => {
 
     render(
       <MockedProvider link={failingLink}>
-        <MemoryRouter initialEntries={['/orgpeople/987']}>
+        <MemoryRouter initialEntries={['/admin/orgpeople/987']}>
           <Routes>
             <Route
-              path="/orgpeople/:orgId"
+              path="/admin/orgpeople/:orgId"
               element={<OrgAdminListCard {...props} />}
             />
           </Routes>

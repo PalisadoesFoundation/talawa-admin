@@ -1,12 +1,15 @@
 import type { ReactElement } from 'react';
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import { MockedProvider } from '@apollo/react-testing';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -35,12 +38,15 @@ const renderOrganisationSettings = (
   routerMocks.useParams.mockReturnValue({ orgId });
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={[`/orgsetting/${orgId}`]}>
+      <MemoryRouter initialEntries={[`/admin/orgsetting/${orgId}`]}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
-                <Route path="/orgsetting/:orgId" element={<OrgSettings />} />
+                <Route
+                  path="/admin/orgsetting/:orgId"
+                  element={<OrgSettings />}
+                />
                 <Route
                   path="/"
                   element={
@@ -78,11 +84,11 @@ describe('Organisation Settings Page', () => {
     const OrgSettings = await SetupRedirectTest();
     render(
       <MockedProvider>
-        <MemoryRouter initialEntries={['/orgsetting/']}>
+        <MemoryRouter initialEntries={['/admin/orgsetting/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
-                <Route path="/orgsetting/" element={OrgSettings} />
+                <Route path="/admin/orgsetting/" element={OrgSettings} />
                 <Route
                   path="/"
                   element={

@@ -2,14 +2,8 @@ import React from 'react';
 import { vi, expect, describe, it } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import {
-  render,
-  screen,
-  fireEvent,
-  cleanup,
-  waitFor,
-  act,
-} from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
+import { render, screen, cleanup, waitFor, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
@@ -118,12 +112,12 @@ const renderAddPeopleToTagModal = (
 ): RenderResult => {
   return render(
     <MockedProvider cache={cache} link={link}>
-      <MemoryRouter initialEntries={['/orgtags/123/manageTag/1']}>
+      <MemoryRouter initialEntries={['/admin/orgtags/123/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
               <Route
-                path="/orgtags/:orgId/manageTag/:tagId"
+                path="/admin/orgtags/:orgId/manageTag/:tagId"
                 element={<AddPeopleToTag {...props} />}
               />
             </Routes>
@@ -139,12 +133,12 @@ const renderComponent = (
 ): RenderResult =>
   render(
     <MockedProvider cache={cache} link={new StaticMockLink(MOCKS, true)}>
-      <MemoryRouter initialEntries={['/orgtags/1/manageTag/1']}>
+      <MemoryRouter initialEntries={['/admin/orgtags/1/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
               <Route
-                path="/orgtags/:orgId/manageTag/:tagId"
+                path="/admin/orgtags/:orgId/manageTag/:tagId"
                 element={
                   <AddPeopleToTag {...defaultProps} {...(customProps ?? {})} />
                 }
@@ -422,12 +416,12 @@ describe('Organisation Tags Page', () => {
     act(() => {
       rerender(
         <MockedProvider cache={cache} link={new StaticMockLink(MOCKS, true)}>
-          <MemoryRouter initialEntries={['/orgtags/1/manageTag/1']}>
+          <MemoryRouter initialEntries={['/admin/orgtags/1/manageTag/1']}>
             <Provider store={store}>
               <I18nextProvider i18n={i18n}>
                 <Routes>
                   <Route
-                    path="/orgtags/:orgId/manageTag/:tagId"
+                    path="/admin/orgtags/:orgId/manageTag/:tagId"
                     element={
                       <AddPeopleToTag
                         {...defaultProps}

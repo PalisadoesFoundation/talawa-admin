@@ -1,7 +1,8 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
@@ -10,7 +11,6 @@ import i18nForTest from 'utils/i18nForTest';
 import EventDashboardScreen from './EventDashboardScreen';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
-import '../../style/app-fixed.module.css';
 import { MOCKS } from './EventDashboardScreenMocks';
 
 const { setItem } = useLocalStorage();
@@ -37,7 +37,9 @@ vi.mock('react-router', async () => {
     ...actual,
     useParams: () => ({ orgId: mockID }),
     useLocation: () => ({
-      pathname: mockID ? `/orgdash/${mockID}` : '/orgdash/undefined',
+      pathname: mockID
+        ? `/admin/orgdash/${mockID}`
+        : '/admin/orgdash/undefined',
     }),
   };
 });
@@ -109,7 +111,7 @@ describe('EventDashboardScreen Component', () => {
 
     render(
       <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgdash/undefined']}>
+        <MemoryRouter initialEntries={['/admin/orgdash/undefined']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />
@@ -129,7 +131,7 @@ describe('EventDashboardScreen Component', () => {
 
     render(
       <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgdash/123']}>
+        <MemoryRouter initialEntries={['/admin/orgdash/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />
@@ -148,7 +150,7 @@ describe('EventDashboardScreen Component', () => {
 
     render(
       <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgdash/123']}>
+        <MemoryRouter initialEntries={['/admin/orgdash/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />
@@ -168,7 +170,7 @@ describe('EventDashboardScreen Component', () => {
 
     render(
       <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgdash/123']}>
+        <MemoryRouter initialEntries={['/admin/orgdash/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />

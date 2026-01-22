@@ -94,7 +94,7 @@ const ForgotPassword = (): JSX.Element => {
   const isLoggedIn = getItem('IsLoggedIn');
   useEffect(() => {
     if (isLoggedIn == 'TRUE') {
-      window.location.replace('/orglist');
+      window.location.replace('/admin/orglist');
     }
     return () => {
       removeItem('otpToken');

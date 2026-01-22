@@ -33,8 +33,8 @@
  *
  */
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Button from 'shared-components/Button';
 import { useMutation } from '@apollo/client';
 import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
@@ -48,7 +48,7 @@ function orgAdminListCard({
   toggleRemoveModal,
 }: InterfaceOrgPeopleListCardProps): JSX.Element {
   if (!id) {
-    return <Navigate to={'/orglist'} />;
+    return <Navigate to={'/admin/orglist'} />;
   }
   const { orgId: currentUrl } = useParams();
   const [remove] = useMutation(REMOVE_ADMIN_MUTATION);
