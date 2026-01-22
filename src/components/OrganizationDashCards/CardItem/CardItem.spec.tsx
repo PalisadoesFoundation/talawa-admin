@@ -83,7 +83,7 @@ describe('CardItem Component', () => {
     expect(screen.getByText('#1 Post Title')).toBeInTheDocument();
   });
 
-  it('handles image error by falling back to default image for Post', () => {
+  it('handles image error by falling back to default image for Post', async () => {
     const props: InterfaceCardItem = {
       type: 'Post',
       title: 'Post with Image Error',
@@ -102,9 +102,12 @@ describe('CardItem Component', () => {
     });
 
     // After error, the default image should be displayed
-    const defaultImg = screen.getByAltText('Post with Image Error');
-    expect(defaultImg).toBeInTheDocument();
-    expect(defaultImg.getAttribute('src')).toContain('defaultImg.png');
+    await waitFor(() => {
+      expect(img).toHaveAttribute(
+        'src',
+        expect.stringContaining('defaultImg.png'),
+      );
+    });
   });
 
   it('renders MembershipRequest with Avatar when no image provided', () => {
@@ -125,7 +128,7 @@ describe('CardItem Component', () => {
     );
   });
 
-  it('renders MembershipRequest with Avatar when image fails to load', () => {
+  it('renders MembershipRequest with Avatar when image fails to load', async () => {
     const props: InterfaceCardItem = {
       type: 'MembershipRequest',
       title: 'Jane Smith',
@@ -143,9 +146,11 @@ describe('CardItem Component', () => {
     });
 
     // After error, the Avatar should be displayed (has empty alt text)
-    const avatar = screen.getByAltText('');
-    expect(avatar).toBeInTheDocument();
-    expect(avatar).toHaveAttribute('src', expect.stringContaining('svg'));
+    await waitFor(() => {
+      const avatar = screen.getByAltText('');
+      expect(avatar).toBeInTheDocument();
+      expect(avatar).toHaveAttribute('src', expect.stringContaining('svg'));
+    });
   });
 
   it('renders Post with valid image', () => {
