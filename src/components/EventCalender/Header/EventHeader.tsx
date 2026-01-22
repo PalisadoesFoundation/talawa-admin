@@ -5,19 +5,18 @@
  * functionality for searching, sorting, and creating events. It is designed
  * to be used within the organization events page.
  *
- * @param {InterfaceEventHeaderProps} props - The props for the EventHeader component.
- * @param {ViewType} props.viewType - The current view type of the calendar (e.g., Month, Day, Year).
- * @param {(viewType: ViewType) => void} props.handleChangeView - Callback function to handle changes in the calendar view type.
- * @param {() => void} props.showInviteModal - Callback function to display the modal for creating a new event.
+ * @param props - The props for the EventHeader component.
+ * @param viewType - The current view type of the calendar (e.g., Month, Day, Year).
+ * @param handleChangeView - Callback function to handle changes in the calendar view type.
+ * @param showInviteModal - Callback function to display the modal for creating a new event.
  *
- * @returns {JSX.Element} The rendered EventHeader component.
+ * @returns - The rendered EventHeader component.
  *
  * @remarks
  * - This component uses `SearchBar` for searching events by name.
  * - It includes two `SortingButton` components for selecting the calendar view type and event type.
  * - A `Button` is provided to trigger the creation of a new event, styled with an `AddIcon`.
  *
- * @dependencies
  * - `react-bootstrap` for the `Button` component.
  * - `@mui/icons-material` for the `AddIcon`.
  * - `react-i18next` for translations.
@@ -35,7 +34,7 @@
  */
 
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import AddIcon from '@mui/icons-material/Add';
 import styles from 'style/app-fixed.module.css';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';

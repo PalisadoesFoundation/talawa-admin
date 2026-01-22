@@ -1,4 +1,4 @@
-// // SearchingButton.spec.tsx
+// SearchingButton.spec.tsx
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import SearchingButton from './SearchingButton';

@@ -1,3 +1,6 @@
+/**
+ * Represents a single sorting option for the SortingButton dropdown.
+ */
 export interface InterfaceSortingOption {
   /** The label to display for the sorting option */
   label: string;
@@ -5,6 +8,9 @@ export interface InterfaceSortingOption {
   value: string | number;
 }
 
+/**
+ * Props for the SortingButton component.
+ */
 export interface InterfaceSortingButtonProps {
   /** The title attribute for the Dropdown */
   title?: string;
@@ -26,5 +32,6 @@ export interface InterfaceSortingButtonProps {
   type?: 'sort' | 'filter';
   /** Accessible label for the dropdown button (screen readers) */
   ariaLabel?: string;
+  /** Optional custom icon to display in the button */
   icon?: string | null;
 }

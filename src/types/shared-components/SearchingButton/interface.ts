@@ -1,3 +1,6 @@
+/**
+ * Props for SearchingButton component.
+ */
 export interface InterfaceSearchingButtonProps {
   /** The title attribute for the Dropdown */
   title?: string;

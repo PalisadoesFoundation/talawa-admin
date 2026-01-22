@@ -5,8 +5,6 @@
  * It supports page title, search bar, sorting dropdowns, optional event type filter,
  * and action buttons.
  *
- * @component
- *
  * @remarks
  * - Primarily used for pages that require filtering, sorting, or search.
  * - Uses `SearchBar` and `SortingButton` shared-components for search and sorting functionality.
@@ -36,27 +34,16 @@
  * />
  * ```
  *
- * @param {string} [title] — Optional title displayed at the top of the page.
- * @param {{
- *   placeholder: string;
- *   onSearch: (value: string) => void;
- *   inputTestId?: string;
- *   buttonTestId?: string;
- * }} [search] — Search bar configuration.
+ * @param title - Optional title displayed at the top of the page.
+ * @param search - Search bar configuration.
  *
- * @param {Array<{
- *   title: string;
- *   options: { label: string; value: string | number }[];
- *   selected: string | number;
- *   onChange: (value: string | number) => void;
- *   testIdPrefix: string;
- * }>} [sorting] — List of sorting dropdown selectors.
+ * @param sorting - List of sorting dropdown selectors.
  *
- * @param {boolean} [showEventTypeFilter=false] — Whether to show the event type dropdown.
+ * @param showEventTypeFilter - Whether to show the event type dropdown.
  *
- * @param {React.ReactNode} [actions] — Action buttons/elements rendered on the right side.
+ * @param actions - Action buttons/elements rendered on the right side.
  *
- * @returns {JSX.Element} The rendered PageHeader component.
+ * @returns - The rendered PageHeader component.
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';

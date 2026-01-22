@@ -1,3 +1,5 @@
+/* eslint-disable react/no-multi-comp */
+import type { ReactNode, ButtonHTMLAttributes } from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -14,12 +16,24 @@ beforeEach(() => {
 vi.mock('react-bootstrap/Dropdown', async () => {
   const React = await import('react');
 
-  const Dropdown = ({ children }: any) => <div>{children}</div>;
-  Dropdown.Toggle = ({ children, ...props }: any) => (
+  type Props = { children?: ReactNode };
+  type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+    children?: ReactNode;
+  };
+
+  const Dropdown = ({ children }: Props) => <div>{children}</div>;
+
+  Dropdown.Toggle = ({ children, ...props }: ButtonProps) => (
     <button {...props}>{children}</button>
   );
-  Dropdown.Menu = ({ children }: any) => <div>{children}</div>;
-  Dropdown.Item = ({ children, onClick, ...props }: any) => (
+
+  Dropdown.Menu = ({ children }: Props) => <div>{children}</div>;
+
+  Dropdown.Item = ({
+    children,
+    onClick,
+    ...props
+  }: ButtonProps & { onClick?: () => void }) => (
     <button onClick={onClick} {...props}>
       {children}
     </button>
