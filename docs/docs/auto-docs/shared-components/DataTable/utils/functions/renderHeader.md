@@ -6,7 +6,7 @@
 
 > **renderHeader**(`header`): `ReactNode`
 
-Defined in: [src/shared-components/DataTable/utils.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/utils.ts#L9)
+Defined in: [src/shared-components/DataTable/utils.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/utils.ts#L12)
 
 Renders the header of a column.
 
@@ -16,6 +16,10 @@ Renders the header of a column.
 
 [`HeaderRender`](../../../../types/shared-components/DataTable/interface/type-aliases/HeaderRender.md)
 
+Header value or render function.
+
 ## Returns
 
 `ReactNode`
+
+The rendered header content.

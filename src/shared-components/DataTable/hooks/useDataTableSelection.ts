@@ -143,7 +143,12 @@ export function useDataTableSelection<T>(
 
       if (action.confirm && !window.confirm(action.confirm)) return;
 
-      void action.onClick(selectedRows, selectedKeysOnPage);
+      // Handle async bulk actions with error catching
+      Promise.resolve(action.onClick(selectedRows, selectedKeysOnPage)).catch(
+        (error: unknown) => {
+          console.error('Bulk action failed:', error);
+        },
+      );
     },
     [paginatedData, currentSelection, keysOnPage],
   );

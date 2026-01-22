@@ -6,7 +6,7 @@
 
 > **renderCellValue**(`value`): `string` \| `number`
 
-Defined in: [src/shared-components/DataTable/utils.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/utils.ts#L16)
+Defined in: [src/shared-components/DataTable/utils.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/utils.ts#L22)
 
 Renders a cell value for display.
 
@@ -16,6 +16,10 @@ Renders a cell value for display.
 
 `unknown`
 
+Raw cell value.
+
 ## Returns
 
 `string` \| `number`
+
+Display-safe string or primitive.

@@ -5,6 +5,9 @@ import {
 
 /**
  * Renders the header of a column.
+ *
+ * @param header - Header value or render function.
+ * @returns The rendered header content.
  */
 export function renderHeader(header: HeaderRender) {
   return typeof header === 'function' ? header() : header;
@@ -12,6 +15,9 @@ export function renderHeader(header: HeaderRender) {
 
 /**
  * Renders a cell value for display.
+ *
+ * @param value - Raw cell value.
+ * @returns Display-safe string or primitive.
  */
 export function renderCellValue(value: unknown) {
   if (value == null) return '';
@@ -43,9 +49,14 @@ export function getCellValue<T, TValue = unknown>(
 
 /**
  * Helper for text search interactions.
+ *
+ * @param v - Value to stringify for search.
+ * @returns Searchable string.
  */
 export function toSearchableString(v: unknown): string {
   if (v === null || v === undefined) return '';
-  if (v instanceof Date) return v.toISOString();
+  if (v instanceof Date) {
+    return Number.isNaN(v.getTime()) ? '' : v.toISOString();
+  }
   return String(v);
 }

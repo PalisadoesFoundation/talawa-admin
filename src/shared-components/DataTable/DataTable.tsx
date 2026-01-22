@@ -77,7 +77,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     } else {
       setInternalPage(1);
     }
-  }, [onPageChange]);
+  }, [isControlled, onPageChange]);
 
   // Filtering & Search Logic (Extracted to hook)
   const { query, updateGlobalSearch, filteredRows } = useDataTableFiltering({

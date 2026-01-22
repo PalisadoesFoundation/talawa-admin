@@ -6,7 +6,7 @@
 
 > **getCellValue**\<`T`, `TValue`\>(`row`, `accessor`): `TValue`
 
-Defined in: [src/shared-components/DataTable/utils.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/utils.ts#L35)
+Defined in: [src/shared-components/DataTable/utils.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/utils.ts#L41)
 
 Helper to get raw cell value from a row using the accessor.
 
