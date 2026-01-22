@@ -1,7 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -90,8 +89,11 @@ const renderOrganizationFunds = (link: ApolloLink): RenderResult => {
 };
 
 describe('OrganizationFunds Screen =>', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+  
   beforeEach(() => {
     mockedUseParams.mockReset();
+    user = userEvent.setup();
   });
 
   afterEach(() => {
@@ -331,7 +333,7 @@ describe('OrganizationFunds Screen =>', () => {
 
     expect(createdOnHeader).toBeInTheDocument();
     if (createdOnHeader) {
-      fireEvent.click(createdOnHeader);
+      await user.click(createdOnHeader);
       await wait(300);
     }
 
@@ -361,7 +363,7 @@ describe('OrganizationFunds Screen =>', () => {
 
     const fundName = await screen.findAllByTestId('fundName');
     expect(fundName[0]).toBeInTheDocument();
-    fireEvent.click(fundName[0]);
+    await user.click(fundName[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('campaignScreen')).toBeInTheDocument();
@@ -374,7 +376,7 @@ describe('OrganizationFunds Screen =>', () => {
 
     const viewBtn = await screen.findAllByTestId('viewBtn');
     expect(viewBtn[0]).toBeInTheDocument();
-    fireEvent.click(viewBtn[0]);
+    await user.click(viewBtn[0]);
 
     await waitFor(() => {
       expect(screen.getByTestId('campaignScreen')).toBeInTheDocument();
@@ -408,7 +410,7 @@ describe('OrganizationFunds Screen =>', () => {
       ) as HTMLButtonElement | null;
 
       if (nextButton && !nextButton.disabled) {
-        fireEvent.click(nextButton);
+        await user.click(nextButton);
         await wait(300);
       }
     }
@@ -506,11 +508,11 @@ describe('OrganizationFunds Screen =>', () => {
     );
 
     if (createdOnHeader) {
-      fireEvent.click(createdOnHeader);
+      await user.click(createdOnHeader);
       await wait(300);
 
       // Click again to toggle sort direction
-      fireEvent.click(createdOnHeader);
+      await user.click(createdOnHeader);
       await wait(300);
     }
 

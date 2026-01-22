@@ -98,6 +98,12 @@ const renderEventManagement = (): RenderResult => {
 };
 
 describe('Event Management', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+
+  beforeEach(() => {
+    user = userEvent.setup();
+  })
+
   beforeAll(() => {
     vi.mock('react-router', async () => {
       const actual = await vi.importActual('react-router');
@@ -130,7 +136,7 @@ describe('Event Management', () => {
       renderEventManagement();
 
       const backButton = screen.getByTestId('backBtn');
-      await userEvent.click(backButton);
+      await user.click(backButton);
 
       const eventsScreen = screen.getByTestId('eventsScreen');
       expect(eventsScreen).toBeInTheDocument();
@@ -143,7 +149,7 @@ describe('Event Management', () => {
       renderEventManagement();
 
       const backButton = screen.getByTestId('backBtn');
-      await userEvent.click(backButton);
+      await user.click(backButton);
 
       await waitFor(() => {
         const userEventsScreen = screen.getByTestId('userEventsScreen');
@@ -158,7 +164,7 @@ describe('Event Management', () => {
       renderEventManagement();
 
       const backButton = screen.getByTestId('backBtn');
-      await userEvent.click(backButton);
+      await user.click(backButton);
 
       await waitFor(() => {
         const eventsScreen = screen.getByTestId('eventsScreen');

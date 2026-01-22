@@ -1,7 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { render, screen, within, waitFor } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import userEvent from '@testing-library/user-event';
@@ -311,6 +310,12 @@ vi.mock('react-google-recaptcha', async () => {
   );
   return { __esModule: true, default: recaptcha };
 });
+
+let user: ReturnType<typeof userEvent.setup>;
+
+beforeEach(() => {
+  user = userEvent.setup();
+})
 
 describe('Testing Login Page Screen', () => {
   it('Component Should be rendered properly', async () => {
@@ -1396,16 +1401,17 @@ it('Render the Select Organization list and change the option', async () => {
 
   const registerButton = screen.queryByTestId('goToRegisterPortion');
   if (registerButton) {
-    await userEvent.click(registerButton);
+    await user.click(registerButton);
     await wait();
 
     const autocomplete = screen.getByTestId('selectOrg');
     const input = within(autocomplete).getByRole('combobox');
     autocomplete.focus();
 
-    fireEvent.change(input, { target: { value: 'a' } });
-    fireEvent.keyDown(autocomplete, { key: 'ArrowDown' });
-    fireEvent.keyDown(autocomplete, { key: 'Enter' });
+    await user.clear(input);
+    await user.type(input, 'a');
+    await user.keyboard('{ArrowDown}');
+    await user.keyboard('{Enter}');
   }
 });
 

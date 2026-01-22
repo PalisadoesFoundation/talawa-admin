@@ -7,7 +7,6 @@ import {
 
 import type { RenderResult } from '@testing-library/react';
 import { render, screen, waitFor } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -88,12 +87,15 @@ const renderVolunteerGroups = (link: ApolloLink): RenderResult => {
 /** Mock useParams to provide consistent test data */
 
 describe('Testing VolunteerGroups Screen', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+
   beforeEach(() => {
     vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({
       orgId: 'orgId',
       eventId: 'eventId',
     });
+    user = userEvent.setup();
   });
 
   afterEach(() => {
@@ -159,10 +161,10 @@ describe('Testing VolunteerGroups Screen', () => {
     expect(sortBtn).toBeInTheDocument();
 
     // Sort by members_DESC
-    fireEvent.click(sortBtn);
+    await user.click(sortBtn);
     const volunteersDESC = await screen.findByTestId('volunteers_DESC');
     expect(volunteersDESC).toBeInTheDocument();
-    fireEvent.click(volunteersDESC);
+    await user.click(volunteersDESC);
 
     let groupName = await screen.findAllByTestId('groupName');
     expect(groupName[0]).toHaveTextContent('Group 1');
@@ -170,10 +172,10 @@ describe('Testing VolunteerGroups Screen', () => {
     // Sort by members_ASC
     sortBtn = await screen.findByTestId('sort');
     expect(sortBtn).toBeInTheDocument();
-    fireEvent.click(sortBtn);
+    await user.click(sortBtn);
     const volunteersASC = await screen.findByTestId('volunteers_ASC');
     expect(volunteersASC).toBeInTheDocument();
-    fireEvent.click(volunteersASC);
+    await user.click(volunteersASC);
 
     groupName = await screen.findAllByTestId('groupName');
     expect(groupName[0]).toHaveTextContent('Group 2');

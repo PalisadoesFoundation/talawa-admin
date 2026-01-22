@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter } from 'react-router-dom';
 import Notification from './Notification';
@@ -11,6 +10,7 @@ import {
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import i18nForTest from 'utils/i18nForTest';
+import userEvent from '@testing-library/user-event';
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
@@ -144,6 +144,12 @@ const generateNotifications = (
     navigation: `/admin/notification/${i + 1}`,
   }));
 
+let user: ReturnType<typeof userEvent.setup>;
+
+beforeEach(() => {
+  user = userEvent.setup();
+})
+
 afterEach(() => {
   vi.clearAllMocks();
 });
@@ -245,7 +251,7 @@ describe('Notification Component', () => {
       expect(screen.getByText(/mark as read/i)).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByText(/mark as read/i));
+    await user.click(screen.getByText(/mark as read/i));
 
     await waitFor(() => {
       expect(screen.queryByText(/mark as read/i)).not.toBeInTheDocument();
@@ -264,12 +270,12 @@ describe('Notification Component', () => {
     // wait for first page to load
     await screen.findByText('Notification 1');
 
-    await userEvent.click(await screen.findByText(/next/i));
+    await user.click(await screen.findByText(/next/i));
 
     // second page should contain Notification 8 (index 6)
     await screen.findByText('Notification 8');
 
-    await userEvent.click(await screen.findByText(/prev/i));
+    await user.click(await screen.findByText(/prev/i));
 
     await screen.findByText('Notification 1');
   });
@@ -325,7 +331,7 @@ describe('Notification Component', () => {
       expect(screen.getByText(/mark as read/i)).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByText(/mark as read/i));
+    await user.click(screen.getByText(/mark as read/i));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -404,7 +410,7 @@ describe('Pagination Visibility', () => {
 
     // Navigate to page 2
     await screen.findByText('Notification 1');
-    await userEvent.click(await screen.findByText(/next/i));
+    await user.click(await screen.findByText(/next/i));
     await screen.findByText('Notification 7');
 
     // Pagination should still be visible

@@ -1,24 +1,25 @@
-import type { ReactElement } from 'react';
 import React from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
-import {
-  LocalizationProvider,
-  AdapterDayjs,
-} from 'shared-components/DateRangePicker';
 import { MockedProvider } from '@apollo/react-testing';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import OrgSettings from './OrgSettings';
 import { MOCKS } from './OrgSettings.mocks';
+import userEvent from '@testing-library/user-event';
 
 const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(() => ({ orgId: 'orgId' })),
+}));
+
+vi.mock('@mui/x-date-pickers', () => ({
+  LocalizationProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
 }));
 
 vi.mock('react-router', async () => {
@@ -40,22 +41,17 @@ const renderOrganisationSettings = (
     <MockedProvider link={link}>
       <MemoryRouter initialEntries={[`/admin/orgsetting/${orgId}`]}>
         <Provider store={store}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/admin/orgsetting/:orgId"
-                  element={<OrgSettings />}
-                />
-                <Route
-                  path="/"
-                  element={
-                    <div data-testid="paramsError">Redirected to Home</div>
-                  }
-                />
-              </Routes>
-            </I18nextProvider>
-          </LocalizationProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <Routes>
+              <Route path="/admin/orgsetting/:orgId" element={<OrgSettings />} />
+              <Route
+                path="/"
+                element={
+                  <div data-testid="paramsError">Redirected to Home</div>
+                }
+              />
+            </Routes>
+          </I18nextProvider>
         </Provider>
       </MemoryRouter>
     </MockedProvider>,
@@ -63,32 +59,29 @@ const renderOrganisationSettings = (
 };
 
 describe('Organisation Settings Page', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+
   beforeEach(() => {
     vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
+    user = userEvent.setup();
   });
 
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  const SetupRedirectTest = async (): Promise<ReactElement> => {
+  it('should redirect to fallback URL if URL params are undefined', async () => {
     routerMocks.useParams.mockReturnValue({
       orgId: undefined as unknown as string,
     });
-    const orgSettingsModule = await import('./OrgSettings');
-    return <orgSettingsModule.default />;
-  };
-
-  it('should redirect to fallback URL if URL params are undefined', async () => {
-    const OrgSettings = await SetupRedirectTest();
     render(
       <MockedProvider>
         <MemoryRouter initialEntries={['/admin/orgsetting/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
-                <Route path="/admin/orgsetting/" element={OrgSettings} />
+                <Route path="/admin/orgsetting/" element={<OrgSettings />} />
                 <Route
                   path="/"
                   element={
@@ -143,7 +136,6 @@ describe('Organisation Settings Page', () => {
 
   it('should switch to action item categories tab when clicked', async () => {
     renderOrganisationSettings();
-    const user = userEvent.setup();
 
     // Wait for component to load
     await waitFor(() => screen.getByTestId('generalTab'));
@@ -167,7 +159,6 @@ describe('Organisation Settings Page', () => {
 
   it('should switch to agenda item categories tab when clicked', async () => {
     renderOrganisationSettings();
-    const user = userEvent.setup();
 
     // Wait for component to load
     await waitFor(() => screen.getByTestId('generalTab'));
@@ -191,7 +182,6 @@ describe('Organisation Settings Page', () => {
 
   it('should switch between tabs correctly', async () => {
     renderOrganisationSettings();
-    const user = userEvent.setup();
 
     // Wait for component to load with general tab active
     await waitFor(() => screen.getByTestId('generalTab'));
@@ -249,7 +239,6 @@ describe('Organisation Settings Page', () => {
 
   it('should apply correct CSS classes to active and inactive tabs', async () => {
     renderOrganisationSettings();
-    const user = userEvent.setup();
 
     // Wait for component to load
     await waitFor(() => screen.getByTestId('generalTab'));
