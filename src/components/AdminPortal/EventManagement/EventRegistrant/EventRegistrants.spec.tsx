@@ -268,17 +268,15 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     const user = userEvent.setup();
     renderEventRegistrants();
 
-    await waitFor(async () => {
-      const checkedInButton = screen.getByRole('button', {
-        name: 'Checked In',
-      });
-
-      // Button should be disabled for checked-in users
-      expect(checkedInButton).toBeDisabled();
-
-      // Even if clicked programmatically, no side effects should occur
-      await user.click(checkedInButton);
+    const checkedInButton = await screen.findByRole('button', {
+      name: 'Checked In',
     });
+
+    // Button should be disabled for checked-in users
+    expect(checkedInButton).toBeDisabled();
+
+    // Even if clicked programmatically, no side effects should occur
+    await user.click(checkedInButton);
 
     // No warning or error toast should be shown
     expect(NotificationToast.warning).not.toHaveBeenCalled();
@@ -355,12 +353,10 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     const user = userEvent.setup();
     renderEventRegistrants();
 
-    await waitFor(async () => {
-      const unregisterButton = screen.getByRole('button', {
-        name: 'Unregister',
-      });
-      await user.click(unregisterButton);
+    const unregisterButton = await screen.findByRole('button', {
+      name: 'Unregister',
     });
+    await user.click(unregisterButton);
 
     await waitFor(
       () => {
@@ -379,12 +375,10 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     const user = userEvent.setup();
     renderEventRegistrants(ERROR_DELETION_MOCKS);
 
-    await waitFor(async () => {
-      const unregisterButton = screen.getByRole('button', {
-        name: 'Unregister',
-      });
-      await user.click(unregisterButton);
+    const unregisterButton = await screen.findByRole('button', {
+      name: 'Unregister',
     });
+    await user.click(unregisterButton);
 
     await waitFor(
       () => {
