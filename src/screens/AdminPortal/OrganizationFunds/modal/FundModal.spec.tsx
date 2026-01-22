@@ -144,8 +144,12 @@ describe('PledgeModal', () => {
         screen.getAllByText(translations.fundUpdate)[0],
       ).toBeInTheDocument(),
     );
-    expect(screen.getByLabelText(translations.fundName)).toHaveValue('Fund 1');
-    expect(screen.getByLabelText(translations.fundId)).toHaveValue('1111');
+    expect(
+      screen.getByLabelText(translations.fundName, { exact: false }),
+    ).toHaveValue('Fund 1');
+    expect(
+      screen.getByLabelText(translations.fundId, { exact: false }),
+    ).toHaveValue('1111');
     expect(screen.getByTestId('setisTaxDeductibleSwitch')).toBeChecked();
     expect(screen.getByTestId('setDefaultSwitch')).not.toBeChecked();
     expect(screen.getByTestId('archivedSwitch')).not.toBeChecked();
@@ -153,7 +157,9 @@ describe('PledgeModal', () => {
 
   it('should update Fund Name when input value changes', async () => {
     renderFundModal(link1, fundProps[1]);
-    const fundNameInput = screen.getByLabelText(translations.fundName);
+    const fundNameInput = screen.getByLabelText(translations.fundName, {
+      exact: false,
+    });
     expect(fundNameInput).toHaveValue('Fund 1');
     fireEvent.change(fundNameInput, { target: { value: 'Fund 2' } });
     expect(fundNameInput).toHaveValue('Fund 2');
@@ -161,7 +167,9 @@ describe('PledgeModal', () => {
 
   it('should update Fund Reference ID when input value changes', async () => {
     renderFundModal(link1, fundProps[1]);
-    const fundIdInput = screen.getByLabelText(translations.fundId);
+    const fundIdInput = screen.getByLabelText(translations.fundId, {
+      exact: false,
+    });
     expect(fundIdInput).toHaveValue('1111');
     fireEvent.change(fundIdInput, { target: { value: '2222' } });
     expect(fundIdInput).toHaveValue('2222');
@@ -170,7 +178,9 @@ describe('PledgeModal', () => {
   it('should show required error when Fund Name is empty and touched', async () => {
     // Start with a fund that has a name (edit mode)
     renderFundModal(link1, fundProps[1]);
-    const fundNameInput = screen.getByLabelText(translations.fundName);
+    const fundNameInput = screen.getByLabelText(translations.fundName, {
+      exact: false,
+    });
 
     // Clear the input
     fireEvent.change(fundNameInput, { target: { value: '' } });
@@ -191,7 +201,9 @@ describe('PledgeModal', () => {
 
   it('should show required error when Fund Reference ID is empty and touched', async () => {
     renderFundModal(link1, fundProps[1]);
-    const fundIdInput = screen.getByLabelText(translations.fundId);
+    const fundIdInput = screen.getByLabelText(translations.fundId, {
+      exact: false,
+    });
 
     fireEvent.change(fundIdInput, { target: { value: '' } });
     fireEvent.blur(fundIdInput);
@@ -226,10 +238,14 @@ describe('PledgeModal', () => {
   it('should create fund', async () => {
     renderFundModal(link1, fundProps[0]);
 
-    const fundNameInput = screen.getByLabelText(translations.fundName);
+    const fundNameInput = screen.getByLabelText(translations.fundName, {
+      exact: false,
+    });
     fireEvent.change(fundNameInput, { target: { value: 'Fund 2' } });
 
-    const fundIdInput = screen.getByLabelText(translations.fundId);
+    const fundIdInput = screen.getByLabelText(translations.fundId, {
+      exact: false,
+    });
     fireEvent.change(fundIdInput, { target: { value: '2222' } });
 
     const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
@@ -253,10 +269,14 @@ describe('PledgeModal', () => {
     renderFundModal(link1, fundProps[1]);
 
     // Simulate no change to the fields
-    const fundNameInput = screen.getByLabelText(translations.fundName);
+    const fundNameInput = screen.getByLabelText(translations.fundName, {
+      exact: false,
+    });
     fireEvent.change(fundNameInput, { target: { value: 'Fund 1' } });
 
-    const fundIdInput = screen.getByLabelText(translations.fundId);
+    const fundIdInput = screen.getByLabelText(translations.fundId, {
+      exact: false,
+    });
     fireEvent.change(fundIdInput, { target: { value: '1111' } });
 
     const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
@@ -283,7 +303,9 @@ describe('PledgeModal', () => {
   it('should update fund', async () => {
     renderFundModal(link1, fundProps[1]);
 
-    const fundNameInput = screen.getByLabelText(translations.fundName);
+    const fundNameInput = screen.getByLabelText(translations.fundName, {
+      exact: false,
+    });
     fireEvent.change(fundNameInput, { target: { value: 'Fund 2' } });
 
     const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
@@ -303,10 +325,14 @@ describe('PledgeModal', () => {
   it('Error: should create fund', async () => {
     renderFundModal(link2, fundProps[0]);
 
-    const fundNameInput = screen.getByLabelText(translations.fundName);
+    const fundNameInput = screen.getByLabelText(translations.fundName, {
+      exact: false,
+    });
     fireEvent.change(fundNameInput, { target: { value: 'Fund 2' } });
 
-    const fundIdInput = screen.getByLabelText(translations.fundId);
+    const fundIdInput = screen.getByLabelText(translations.fundId, {
+      exact: false,
+    });
     fireEvent.change(fundIdInput, { target: { value: '2222' } });
 
     const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
@@ -327,10 +353,14 @@ describe('PledgeModal', () => {
   it('Error: should update fund', async () => {
     renderFundModal(link2, fundProps[1]);
 
-    const fundNameInput = screen.getByLabelText(translations.fundName);
+    const fundNameInput = screen.getByLabelText(translations.fundName, {
+      exact: false,
+    });
     fireEvent.change(fundNameInput, { target: { value: 'Fund 2' } });
 
-    const fundIdInput = screen.getByLabelText(translations.fundId);
+    const fundIdInput = screen.getByLabelText(translations.fundId, {
+      exact: false,
+    });
     fireEvent.change(fundIdInput, { target: { value: '2222' } });
 
     const taxDeductibleSwitch = screen.getByTestId('setisTaxDeductibleSwitch');
@@ -355,7 +385,9 @@ describe('PledgeModal', () => {
     const { rerender } = renderFundModal(link1, fundProps[1]);
 
     // Initial values
-    expect(screen.getByLabelText(translations.fundName)).toHaveValue('Fund 1');
+    expect(
+      screen.getByLabelText(translations.fundName, { exact: false }),
+    ).toHaveValue('Fund 1');
 
     // Create new props with different fund data
     const updatedProps: InterfaceFundModal = {
@@ -407,10 +439,12 @@ describe('PledgeModal', () => {
 
     // Verify form state updated
     await waitFor(() => {
-      expect(screen.getByLabelText(translations.fundName)).toHaveValue(
-        'Updated Fund',
-      );
-      expect(screen.getByLabelText(translations.fundId)).toHaveValue('9999');
+      expect(
+        screen.getByLabelText(translations.fundName, { exact: false }),
+      ).toHaveValue('Updated Fund');
+      expect(
+        screen.getByLabelText(translations.fundId, { exact: false }),
+      ).toHaveValue('9999');
       expect(screen.getByTestId('setisTaxDeductibleSwitch')).not.toBeChecked();
       expect(screen.getByTestId('setDefaultSwitch')).toBeChecked();
       expect(screen.getByTestId('archivedSwitch')).toBeChecked();
@@ -421,7 +455,9 @@ describe('PledgeModal', () => {
     const { rerender } = renderFundModal(link1, fundProps[1]);
 
     // Initial values
-    expect(screen.getByLabelText(translations.fundName)).toHaveValue('Fund 1');
+    expect(
+      screen.getByLabelText(translations.fundName, { exact: false }),
+    ).toHaveValue('Fund 1');
 
     // Create props with null fund
     const updatedProps: InterfaceFundModal = {
@@ -444,8 +480,12 @@ describe('PledgeModal', () => {
 
     // Verify form state is reset
     await waitFor(() => {
-      expect(screen.getByLabelText(translations.fundName)).toHaveValue('');
-      expect(screen.getByLabelText(translations.fundId)).toHaveValue('');
+      expect(
+        screen.getByLabelText(translations.fundName, { exact: false }),
+      ).toHaveValue('');
+      expect(
+        screen.getByLabelText(translations.fundId, { exact: false }),
+      ).toHaveValue('');
     });
   });
 

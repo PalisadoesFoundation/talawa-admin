@@ -458,6 +458,7 @@ export interface InterfaceOrgInfoTypePG {
   createdAt: string;
   membersCount?: number;
   members?: {
+    id?: string;
     edges: {
       node: {
         id: string;
@@ -465,6 +466,7 @@ export interface InterfaceOrgInfoTypePG {
     }[];
   };
   role: string;
+  isMember?: boolean;
 }
 
 /**
@@ -552,6 +554,7 @@ export interface InterfaceUserPg {
   updatedAt: string;
   updater: InterfaceUserPg;
   workPhoneNumber: string;
+  naturalLanguageCode: string;
 }
 
 /**
@@ -1672,26 +1675,6 @@ export interface InterfaceAgendaItemCategoryInfo {
  */
 export interface InterfaceAgendaItemCategoryList {
   agendaItemCategoriesByOrganization: InterfaceAgendaItemCategoryInfo[];
-}
-
-/**
- * Defines the props for the AddOnSpotAttendee component.
- */
-export interface InterfaceAddOnSpotAttendeeProps {
-  show: boolean;
-  handleClose: () => void;
-  reloadMembers: () => void;
-}
-
-/**
- * Defines the structure for form data.
- */
-export interface InterfaceFormData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phoneNo: string;
-  gender: string;
 }
 
 /**

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationAdvertisementListItem
 
-Defined in: [src/utils/interfaces.ts:1176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1176)
+Defined in: [src/utils/interfaces.ts:1179](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1179)
 
 Defines the structure for an organization advertisement list item returned from a query.
 
@@ -14,7 +14,7 @@ Defines the structure for an organization advertisement list item returned from 
 
 > **advertisements**: `object`
 
-Defined in: [src/utils/interfaces.ts:1177](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1177)
+Defined in: [src/utils/interfaces.ts:1180](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1180)
 
 #### edges
 

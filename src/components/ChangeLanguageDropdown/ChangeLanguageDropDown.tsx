@@ -5,6 +5,8 @@
  * It integrates with i18next for internationalization and updates the user's language preference
  * on the server using a GraphQL mutation.
  *
+ * @param props - Props for the dropdown, see {@link InterfaceDropDownProps}
+ * @returns JSX.Element
  * @remarks
  * - The component uses `react-bootstrap` for the dropdown UI.
  * - The current language is determined using a cookie (`i18next`).
@@ -16,7 +18,7 @@ import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import i18next from 'i18next';
 import { languages } from 'utils/languages';
-import styles from 'style/app-fixed.module.css';
+import styles from './ChangeLanguageDropDown.module.css';
 import cookies from 'js-cookie';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
@@ -46,7 +48,7 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
     }
 
     if (!userId) {
-      NotificationToast.error(tCommon('noUsersFound'));
+      NotificationToast.error(tCommon('userNotFound'));
       return;
     }
 
@@ -59,6 +61,7 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
           avatarFile = await urlToFile(userImage);
         }
       } catch (error) {
+        NotificationToast.error(tCommon('avatarProcessingError'));
         console.error('Error processing avatar:', error);
       }
     }

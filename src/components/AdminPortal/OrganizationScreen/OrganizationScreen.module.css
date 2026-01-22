@@ -9,9 +9,11 @@
   padding-left: 4rem;
   animation: moveLeft 0.5s ease-in-out;
 }
+
 .avatarStyle {
   border-radius: 100%;
 }
+
 .profileContainer {
   border: none;
   padding: 2.1rem 0.5rem;
@@ -24,32 +26,39 @@
     0 4px 4px 0 rgba(177, 177, 177, 0.2),
     0 6px 20px 0 rgba(151, 151, 151, 0.19);
 }
+
 .profileContainer:focus {
   outline: none;
   background-color: var(--bs-gray-100);
 }
+
 .imageContainer {
   width: 56px;
 }
+
 .profileContainer .profileText {
   flex: 1;
   text-align: start;
   overflow: hidden;
   margin-right: 4px;
 }
+
 .angleDown {
   margin-left: 4px;
 }
+
 .profileContainer .profileText .primaryText {
   font-size: 1rem;
   font-weight: 600;
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-line-clamp: 2;
+  /* number of lines to show */
   -webkit-box-orient: vertical;
   word-wrap: break-word;
   white-space: normal;
 }
+
 .profileContainer .profileText .secondaryText {
   font-size: 0.8rem;
   font-weight: 400;
@@ -80,6 +89,7 @@
   opacity: 1;
   color: black !important;
 }
+
 .opendrawer {
   position: fixed;
   display: flex;
@@ -96,13 +106,16 @@
   margin-right: 20px;
   color: black;
 }
+
 .profileDropdown {
   background-color: transparent !important;
 }
+
 .profileDropdown .dropdown-toggle .btn .btn-normal {
   display: none !important;
   background-color: transparent !important;
 }
+
 .dropdownToggle {
   background-image: url(/public/images/svg/angleDown.svg);
   background-repeat: no-repeat;
@@ -119,6 +132,7 @@
   transition: background-color 0.5s ease;
   background-color: var(--bs-primary);
 }
+
 .collapseSidebarButton:hover {
   transition: background-color 0.5s ease;
   background-color: var(--bs-primary);
@@ -128,6 +142,7 @@
   .contract {
     padding-left: calc(276px + 2rem + 1.5rem);
   }
+
   .collapseSidebarButton {
     width: calc(250px + 2rem);
   }
@@ -137,19 +152,23 @@
   .pageContainer {
     padding: 1rem 1.5rem 0 calc(300px + 2rem);
   }
+
   .collapseSidebarButton {
     height: 30px;
     width: calc(300px + 1rem);
   }
 }
+
 @media (max-height: 650px) {
   .pageContainer {
     padding: 1rem 1.5rem 0 calc(270px);
   }
+
   .collapseSidebarButton {
     width: 250px;
     height: 20px;
   }
+
   .opendrawer {
     width: 30px;
   }
@@ -175,4 +194,14 @@
     left: 0;
     right: 0;
   }
+}
+
+/* -- OrganizationScreen specific styles -- */
+
+.flexContainerColumn {
+  flex: 1;
+}
+
+.titleMargin {
+  margin-top: 0.75rem;
 }
