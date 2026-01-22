@@ -959,10 +959,9 @@ describe('Testing GroupModal', () => {
         name: /volunteers required/i,
       });
 
-      // Type non-numeric input - browser will prevent 'abc' from being entered in number input
-      // So we need to use fireEvent.change to simulate this edge case
       await user.clear(vrInput);
-      await user.type(vrInput, '{a}');
+      // Lone '-' triggers parseInt NaN for number input
+      await user.type(vrInput, '-');
       await waitFor(() => {
         expect(vrInput).toHaveValue(null);
       });

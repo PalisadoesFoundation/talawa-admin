@@ -12,7 +12,7 @@
  *   - `members` (edges array) and optional `membersCount`
  *   - `adminsCount`, `membershipRequestStatus`, `userRegistrationRequired`, `membershipRequests`, `isJoined`, `role`
  * - Membership state can be `'member'`, `'pending'`, or `'notMember'`.
- * - Uses `react-bootstrap` for buttons, `@mui/material` for tooltips, and `react-router-dom` for navigation.
+ * - Uses the shared Button component, `@mui/material` for tooltips, and `react-router-dom` for navigation.
  * - Uses `useTranslation` from `react-i18next` for localization.
  * - Uses GraphQL mutations to handle membership requests and joining organizations.
  *
@@ -39,9 +39,8 @@
  */
 import React from 'react';
 import TruncatedText from 'shared-components/TruncatedText/TruncatedText';
-import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from './OrganizationCard.module.css';
 import { Tooltip } from '@mui/material';
 import Avatar from 'shared-components/Avatar/Avatar';
 import { useNavigate } from 'react-router-dom';
@@ -56,6 +55,7 @@ import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import useLocalStorage from 'utils/useLocalstorage';
+import Button from 'shared-components/Button';
 
 export interface InterfaceOrganizationCardPropsPG {
   data: InterfaceOrganizationCardProps;
