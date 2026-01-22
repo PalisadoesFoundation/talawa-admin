@@ -70,7 +70,7 @@ const SidebarPluginSection = ({
                   src={item.icon}
                   alt={hideDrawer ? '' : item.label}
                   aria-hidden={hideDrawer ? 'true' : undefined}
-                  style={{ width: 25, height: 25 }}
+                  className={styles.pluginIcon}
                 />
               ) : (
                 <PluginLogo
@@ -99,25 +99,14 @@ const SidebarPluginSection = ({
       {!hideDrawer &&
         (useSimpleButton ? (
           <h5
-            className={`${styles.titleHeader} text-secondary`}
-            style={{
-              fontSize: '1.1rem',
-              marginTop: '1.5rem',
-              marginBottom: '0.75rem',
-            }}
+            className={`${styles.titleHeader} ${styles.simpleHeader} text-secondary`}
             data-testid="pluginSettingsHeader"
           >
             {tCommon('plugins')}
           </h5>
         ) : (
           <h4
-            className={styles.titleHeader}
-            style={{
-              fontSize: '1.1rem',
-              marginTop: '1.5rem',
-              marginBottom: '0.75rem',
-              color: 'var(--bs-secondary)',
-            }}
+            className={`${styles.titleHeader} ${styles.regularHeader}`}
             data-testid="pluginSettingsHeader"
           >
             {tCommon('pluginSettings')}

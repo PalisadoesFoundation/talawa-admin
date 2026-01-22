@@ -1,34 +1,15 @@
 /**
  * UserSidebar Component
  *
- * This component renders the sidebar for the user portal, providing navigation
- * options such as "My Organizations" and "Settings". It also includes a profile
- * dropdown for user-specific actions. The sidebar's visibility can be toggled
- * based on the viewport width or user interaction.
+ * This component renders the sidebar for the user portal.
  *
- * @remarks
- * - The component uses reusable shared sidebar components.
- * - Internationalization is handled using the `react-i18next` library.
- * - The sidebar adapts its visibility based on the `hideDrawer` prop and viewport width.
- * - **REFACTORED**: Now uses shared SidebarBase, SidebarNavItem, and SidebarPluginSection components
- *
- * @param {InterfaceUserSidebarProps} props - The props for the UserSidebar component.
- * @param {boolean} props.hideDrawer - Determines the visibility of the sidebar.
- * @param {React.Dispatch<React.SetStateAction<boolean>>} props.setHideDrawer -
- * Function to update the `hideDrawer` state.
- *
- * @returns {JSX.Element} The rendered UserSidebar component.
- *
- * @example
- * ```tsx
- * <UserSidebar hideDrawer={false} setHideDrawer={setHideDrawer} />
- * ```
+ * @param props - The props for the UserSidebar component.
+ * @returns The rendered UserSidebar component.
  */
 
 import React, { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { FaBell } from 'react-icons/fa';
-import styles from '../../../style/app-fixed.module.css';
 import { usePluginDrawerItems } from 'plugin';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
 import SignOut from 'components/SignOut/SignOut';
@@ -119,7 +100,7 @@ const UserSidebar = ({
       hideDrawer={hideDrawer}
       setHideDrawer={setHideDrawer}
       portalType="user"
-      backgroundColor="#f0f7fb"
+      backgroundColor="var(--sidebar-bg-user)"
       persistToggleState={true}
       headerContent={headerContent}
       footerContent={
