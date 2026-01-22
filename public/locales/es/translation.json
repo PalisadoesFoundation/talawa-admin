@@ -362,7 +362,7 @@
     "avatar": "avatar de {{title}}",
     "eventLocation": "Ubicación del Evento",
     "eventDate": "Fecha del Evento",
-    "loadingPlaceholder": "&nbsp;"
+    "loadingPlaceholder": "\u00A0"
   },
   "dashboard": {
     "title": "Panel de",

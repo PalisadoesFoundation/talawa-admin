@@ -362,7 +362,7 @@
     "avatar": "{{title}} 头像",
     "eventLocation": "活动地点",
     "eventDate": "活动日期",
-    "loadingPlaceholder": "&nbsp;"
+    "loadingPlaceholder": "\u00A0"
   },
   "dashboard": {
     "title": "仪表板",

@@ -15,7 +15,7 @@
   box-shadow: var(--hover-shadow);
 }
 
-.CardItemImage {
+.cardItemImage {
   width: 60px;
   /* Assumed standard avatar size */
   height: 60px;
@@ -24,11 +24,11 @@
   flex-shrink: 0;
 }
 
-.CardItemMainDiv {
+.cardItemMainDiv {
   width: 100%;
 }
 
-.CardItemMainDivEvent {
+.cardItemMainDivEvent {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -43,7 +43,7 @@
   color: var(--primaryText-color, #000);
 }
 
-.CardItemDate {
+.cardItemDate {
   display: block;
   font-size: 0.85rem;
   color: var(--cardItem-time-color, #495057);

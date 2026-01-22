@@ -362,7 +362,7 @@
     "avatar": "{{title}} avatar",
     "eventLocation": "Event Location",
     "eventDate": "Event Date",
-    "loadingPlaceholder": "&nbsp;"
+    "loadingPlaceholder": "\u00A0"
   },
   "dashboard": {
     "title": "Dashboard",

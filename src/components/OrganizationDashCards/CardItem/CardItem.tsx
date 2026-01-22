@@ -58,13 +58,13 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
     <>
       <div className={`${styles.cardItem}`} data-testid="cardItem">
         {type !== 'Event' && (
-          <div className={styles.CardItemImage}>
+          <div className={styles.cardItemImage}>
             {image && imgOk ? (
               <img
                 src={image}
                 alt={t('avatar', { title })}
                 crossOrigin="anonymous"
-                className={styles.CardItemImage}
+                className={styles.cardItemImage}
                 loading="lazy"
                 decoding="async"
                 onError={() => setImgOk(false)}
@@ -72,7 +72,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
             ) : type === 'MembershipRequest' ? (
               <Avatar
                 data-testid="display-img"
-                avatarStyle={styles.CardItemImage}
+                avatarStyle={styles.cardItemImage}
                 name={`${title}`}
                 alt=""
               />
@@ -81,7 +81,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
                 src={DefaultImg}
                 alt={`${title}`}
                 crossOrigin="anonymous"
-                className={styles.CardItemImage}
+                className={styles.cardItemImage}
                 loading="lazy"
                 decoding="async"
               />
@@ -90,7 +90,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
         )}
 
         <div
-          className={`${styles.CardItemMainDiv} ${type === 'Event' ? styles.CardItemMainDivEvent : ''}`}
+          className={`${styles.cardItemMainDiv} ${type === 'Event' ? styles.cardItemMainDivEvent : ''}`}
         >
           {title && (
             <div className={`${styles.upcomingEventsTitle} `} title={title}>
@@ -99,7 +99,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
           )}
 
           {type == 'Post' && time && (
-            <span className={`${styles.CardItemDate}`}>
+            <span className={`${styles.cardItemDate}`}>
               Posted on:
               {dayjs(time).format('MMM D, YYYY')}
             </span>

@@ -2,8 +2,6 @@
   border: 1px solid var(--cardItem-border, #e9ecef);
   background: var(--orgCard-bg, #fff);
   border-radius: 8px;
-  /* Assumed standard */
-  /* padding: 16px; - Checked usage, loading might need same padding? CardItemLoading uses styles.cardItem explicitly. */
   padding: 16px;
   display: flex;
   gap: 16px;

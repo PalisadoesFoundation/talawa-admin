@@ -362,7 +362,7 @@
     "avatar": "{{title}} अवतार",
     "eventLocation": "इवेंट स्थान",
     "eventDate": "इवेंट तिथि",
-    "loadingPlaceholder": "&nbsp;"
+    "loadingPlaceholder": "\u00A0"
   },
   "dashboard": {
     "title": "डैशबोर्ड",
