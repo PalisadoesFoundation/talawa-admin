@@ -1,0 +1,17 @@
+@import 'style/tokens/index.css';
+
+.cardContainer {
+  margin: var(--space-4) var(--space-6);
+  padding: var(--space-4);
+  background-color: var(--box-bg);
+  box-shadow: var(--drop-shadow);
+  border-radius: var(--space-2);
+}
+
+.ratingFilled {
+  color: var(--rating-star-filled);
+}
+
+.ratingHover {
+  color: var(--rating-star-hover);
+}
