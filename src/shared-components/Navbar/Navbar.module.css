@@ -13,10 +13,20 @@
   margin-right: 0;
 }
 
-.calendar__search {
-  flex: 1 1 360px;
-  min-width: 260px;
-  max-width: 100%;
+.space {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 1rem;
+}
+
+.dropdown {
+  background-color: var(--dropdown-bg) !important;
+  min-width: 150px;
+  border: 1px solid var(--dropdown-border);
+  color: var(--dropdown-font-color) !important;
+  position: relative;
+  display: inline-block;
 }
 
 .btnsBlock {
@@ -31,11 +41,7 @@
   margin: 0;
 }
 
-.dropdown {
-  background-color: var(--dropdown-bg) !important;
-  min-width: 150px;
-  border: 1px solid var(--dropdown-border);
-  color: var(--dropdown-font-color) !important;
-  position: relative;
-  display: inline-block;
+.selectTypeEventHeader {
+  border-radius: 10px;
+  margin: 8px;
 }
