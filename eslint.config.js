@@ -118,6 +118,11 @@ const restrictedImports = [
       'Do not import Chip from @mui/material. Use the shared StatusBadge component from src/shared-components/StatusBadge/ instead.',
   },
   {
+    name: '@mui/material/Chip',
+    message:
+      'Do not import Chip from @mui/material. Use the shared StatusBadge component from src/shared-components/StatusBadge/ instead.',
+  },
+  {
     name: '@mui/material',
     importNames: ['TextField'],
     message:
@@ -147,7 +152,6 @@ const restrictedImports = [
   },
   {
     name: '@mui/material/Button',
-    importNames: ['Button'],
     message:
       'Direct imports of Button from @mui/material are not allowed. Use the shared Button component from src/shared-components/Button/ instead.',
   },
