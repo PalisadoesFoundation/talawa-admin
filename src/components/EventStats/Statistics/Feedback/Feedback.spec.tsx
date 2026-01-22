@@ -1,9 +1,9 @@
 import { PieChart } from '@mui/x-charts/PieChart';
 import { render, waitFor } from '@testing-library/react';
+import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
-import { ToastContainer } from 'react-toastify';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { describe, expect, it, vi } from 'vitest';
@@ -60,7 +60,7 @@ describe('Testing Feedback Statistics Card', () => {
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
-            <ToastContainer />
+            <NotificationToastContainer />
             <FeedbackStats {...nonEmptyProps} />
           </I18nextProvider>
         </Provider>
@@ -87,7 +87,7 @@ describe('Testing Feedback Statistics Card', () => {
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
-            <ToastContainer />
+            <NotificationToastContainer />
             <FeedbackStats {...emptyProps} />
           </I18nextProvider>
         </Provider>
@@ -110,7 +110,7 @@ describe('Testing Feedback Statistics Card', () => {
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
-            <ToastContainer />
+            <NotificationToastContainer />
             <FeedbackStats {...diverseRatingsProps} />
           </I18nextProvider>
         </Provider>
@@ -144,7 +144,7 @@ describe('Testing Feedback Statistics Card', () => {
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
-            <ToastContainer />
+            <NotificationToastContainer />
             <FeedbackStats {...diverseRatingsProps} />
           </I18nextProvider>
         </Provider>
@@ -186,7 +186,7 @@ describe('Testing Feedback Statistics Card', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
+              <NotificationToastContainer />
               <FeedbackStats {...nonEmptyProps} />
             </I18nextProvider>
           </Provider>
