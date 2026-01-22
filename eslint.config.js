@@ -125,7 +125,6 @@ const restrictedImports = [
   },
   {
     name: '@mui/material/TextField',
-    importNames: ['TextField'],
     message:
       'Do not import TextField from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
   },
@@ -137,7 +136,6 @@ const restrictedImports = [
   },
   {
     name: '@mui/material/FormControl',
-    importNames: ['FormControl'],
     message:
       'Do not import FormControl from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
   },
