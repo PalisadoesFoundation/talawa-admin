@@ -23,7 +23,7 @@ import UserScreen from './UserScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import '@testing-library/dom';
-import './UserScreen.spec.module.css';
+import './UserScreen.module.css';
 let mockID: string | undefined = '123';
 let mockLocation: string | undefined = '/user/organization/123';
 
