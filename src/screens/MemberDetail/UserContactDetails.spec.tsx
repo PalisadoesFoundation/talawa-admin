@@ -1,12 +1,6 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import {
-  act,
-  cleanup,
-  render,
-  screen,
-  waitFor,
-} from '@testing-library/react';
+import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
@@ -429,7 +423,9 @@ describe('MemberDetail', () => {
       await wait();
 
       const futureDate = dayjs().add(1, 'year');
-      const birthDateInput = screen.getByTestId('birthDate') as HTMLInputElement;
+      const birthDateInput = screen.getByTestId(
+        'birthDate',
+      ) as HTMLInputElement;
 
       await userEvent.clear(birthDateInput);
       await userEvent.type(birthDateInput, futureDate.format('YYYY-MM-DD'));
@@ -450,7 +446,7 @@ describe('MemberDetail', () => {
         type: 'image/png',
       });
       await userEvent.upload(fileInput, largeFile);
-      
+
       // The component should show some error for large files
       await waitFor(() => {
         expect(mockToast.error).toHaveBeenCalled();
@@ -461,9 +457,15 @@ describe('MemberDetail', () => {
       renderMemberDetailScreen(link1);
       await wait();
 
-      const mobilePhoneInput = screen.getByTestId('inputMobilePhoneNumber') as HTMLInputElement;
-      const workPhoneInput = screen.getByTestId('inputWorkPhoneNumber') as HTMLInputElement;
-      const homePhoneInput = screen.getByTestId('inputHomePhoneNumber') as HTMLInputElement;
+      const mobilePhoneInput = screen.getByTestId(
+        'inputMobilePhoneNumber',
+      ) as HTMLInputElement;
+      const workPhoneInput = screen.getByTestId(
+        'inputWorkPhoneNumber',
+      ) as HTMLInputElement;
+      const homePhoneInput = screen.getByTestId(
+        'inputHomePhoneNumber',
+      ) as HTMLInputElement;
 
       // Test mobile phone
       await userEvent.clear(mobilePhoneInput);
@@ -503,7 +505,9 @@ describe('MemberDetail', () => {
       renderMemberDetailScreen(link1);
       await wait();
 
-      const birthDateInput = screen.getByTestId('birthDate') as HTMLInputElement;
+      const birthDateInput = screen.getByTestId(
+        'birthDate',
+      ) as HTMLInputElement;
       expect(birthDateInput).toBeInTheDocument();
 
       // Simulate birth date change
@@ -576,7 +580,9 @@ describe('MemberDetail', () => {
     });
 
     // Enter invalid password (e.g., too short)
-    const passwordInput = screen.getByTestId('inputPassword') as HTMLInputElement;
+    const passwordInput = screen.getByTestId(
+      'inputPassword',
+    ) as HTMLInputElement;
     await userEvent.clear(passwordInput);
     await userEvent.type(passwordInput, 'weak');
 
@@ -790,13 +796,17 @@ describe('MemberDetail', () => {
     });
 
     // Test addressLine2 specifically (often less covered)
-    const addressLine2 = screen.getByTestId('inputAddressLine2') as HTMLInputElement;
+    const addressLine2 = screen.getByTestId(
+      'inputAddressLine2',
+    ) as HTMLInputElement;
     await userEvent.clear(addressLine2);
     await userEvent.type(addressLine2, 'Apt 123');
     expect(addressLine2).toHaveValue('Apt 123');
 
     // Test postal code
-    const postalCode = screen.getByTestId('inputPostalCode') as HTMLInputElement;
+    const postalCode = screen.getByTestId(
+      'inputPostalCode',
+    ) as HTMLInputElement;
     await userEvent.clear(postalCode);
     await userEvent.type(postalCode, '12345');
     expect(postalCode).toHaveValue('12345');

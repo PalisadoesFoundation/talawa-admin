@@ -4,9 +4,9 @@
 
 # Variable: phoneFieldConfigs
 
-> `const` **phoneFieldConfigs**: [`PhoneFieldConfig`](../interfaces/PhoneFieldConfig.md)[]
+> `const` **phoneFieldConfigs**: [`InterfacePhoneFieldConfig`](../../../../types/AdminPortal/MemberDetail/interface/interfaces/InterfacePhoneFieldConfig.md)[]
 
-Defined in: [src/screens/MemberDetail/fieldConfigs.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/fieldConfigs.ts#L17)
+Defined in: [src/screens/MemberDetail/fieldConfigs.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/fieldConfigs.ts#L10)
 
 Configuration array for phone input fields.
 Each object specifies the id, testId, and key of a phone number field.

@@ -16,7 +16,10 @@ Resolves the avatar file to use for a member.
 
 [`InterfaceResolveAvatarFileParams`](../../../../types/AdminPortal/MemberDetail/interface/interfaces/InterfaceResolveAvatarFileParams.md)
 
-Object containing avatar information
+Object containing avatar information:
+  - `newAvatarUploaded`: Whether a new avatar file was uploaded
+  - `selectedAvatar`: The uploaded avatar file, if any
+  - `avatarURL`: The URL of the existing avatar
 
 ## Returns
 
