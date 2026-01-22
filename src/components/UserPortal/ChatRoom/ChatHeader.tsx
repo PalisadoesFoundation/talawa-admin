@@ -25,14 +25,7 @@
 
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import styles from './ChatHeader.module.css';
-
-interface IChatHeaderProps {
-  chatImage: string;
-  chatTitle: string;
-  chatSubtitle: string;
-  isGroup?: boolean;
-  onGroupClick?: () => void;
-}
+import { InterfaceChatHeaderProps } from './types';
 
 export default function ChatHeader({
   chatImage,
@@ -40,7 +33,7 @@ export default function ChatHeader({
   chatSubtitle,
   isGroup = false,
   onGroupClick,
-}: IChatHeaderProps): JSX.Element {
+}: InterfaceChatHeaderProps): JSX.Element {
   return (
     <div className={styles.header}>
       <div className={styles.userInfo}>

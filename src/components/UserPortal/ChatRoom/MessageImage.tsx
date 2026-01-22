@@ -23,6 +23,7 @@
  */
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './MessageImage.module.css';
 
 interface InterfaceMessageImageProps {
@@ -36,6 +37,9 @@ interface InterfaceMessageImageProps {
 
 const MessageImage = React.memo(
   ({ media, organizationId, getFileFromMinio }: InterfaceMessageImageProps) => {
+    const { t } = useTranslation('translation', {
+      keyPrefix: 'userChatRoom',
+    });
     const [imageState, setImageState] = React.useState<{
       url: string | null;
       loading: boolean;
@@ -74,12 +78,14 @@ const MessageImage = React.memo(
     }, [media, organizationId, getFileFromMinio]);
 
     if (imageState.loading) {
-      return <div className={styles.messageAttachment}>Loading image...</div>;
+      return (
+        <div className={styles.messageAttachment}>{t('loadingImage')}</div>
+      );
     }
 
     if (imageState.error || !imageState.url) {
       return (
-        <div className={styles.messageAttachment}>Image not available</div>
+        <div className={styles.messageAttachment}>{t('imageNotAvailable')}</div>
       );
     }
 
@@ -87,7 +93,7 @@ const MessageImage = React.memo(
       <img
         className={styles.messageAttachment}
         src={imageState.url}
-        alt="Attachment"
+        alt={t('attachment')}
         onError={() => setImageState((prev) => ({ ...prev, error: true }))}
       />
     );

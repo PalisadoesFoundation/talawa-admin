@@ -1002,11 +1002,13 @@ describe('ChatRoom Component', () => {
         .fn()
         .mockResolvedValue('https://example.com/presigned.jpg');
       const { findByAltText, getByText } = render(
-        <MessageImage
-          media="uploads/img1"
-          organizationId="org123"
-          getFileFromMinio={getFile}
-        />,
+        <I18nextProvider i18n={i18nForTest}>
+          <MessageImage
+            media="uploads/img1"
+            organizationId="org123"
+            getFileFromMinio={getFile}
+          />
+        </I18nextProvider>,
       );
 
       expect(getByText('Loading image...')).toBeInTheDocument();
@@ -1019,11 +1021,13 @@ describe('ChatRoom Component', () => {
     it('shows error message when getFileFromMinio rejects', async () => {
       const getFile = vi.fn().mockRejectedValue(new Error('not found'));
       const { findByText } = render(
-        <MessageImage
-          media="uploads/img2"
-          organizationId="org123"
-          getFileFromMinio={getFile}
-        />,
+        <I18nextProvider i18n={i18nForTest}>
+          <MessageImage
+            media="uploads/img2"
+            organizationId="org123"
+            getFileFromMinio={getFile}
+          />
+        </I18nextProvider>,
       );
 
       const err = await findByText('Image not available');
@@ -1034,11 +1038,13 @@ describe('ChatRoom Component', () => {
       const getFile = vi.fn().mockResolvedValue('https://example.com/bad.jpg');
       const user = userEvent.setup();
       const { findByAltText, findByText } = render(
-        <MessageImage
-          media="uploads/img3"
-          organizationId="org123"
-          getFileFromMinio={getFile}
-        />,
+        <I18nextProvider i18n={i18nForTest}>
+          <MessageImage
+            media="uploads/img3"
+            organizationId="org123"
+            getFileFromMinio={getFile}
+          />
+        </I18nextProvider>,
       );
 
       const img = await findByAltText('Attachment');
@@ -1054,11 +1060,13 @@ describe('ChatRoom Component', () => {
     it('shows error when media is falsy (no media provided)', async () => {
       const getFile = vi.fn();
       const { getByText } = render(
-        <MessageImage
-          media={''}
-          organizationId="org123"
-          getFileFromMinio={getFile}
-        />,
+        <I18nextProvider i18n={i18nForTest}>
+          <MessageImage
+            media={''}
+            organizationId="org123"
+            getFileFromMinio={getFile}
+          />
+        </I18nextProvider>,
       );
 
       expect(getByText('Image not available')).toBeInTheDocument();

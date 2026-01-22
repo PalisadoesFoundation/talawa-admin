@@ -96,3 +96,11 @@ export interface INewChat {
     };
   };
 }
+
+export interface InterfaceChatHeaderProps {
+  chatImage: string;
+  chatTitle: string;
+  chatSubtitle: string;
+  isGroup?: boolean;
+  onGroupClick?: () => void;
+}

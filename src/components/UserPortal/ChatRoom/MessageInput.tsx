@@ -32,6 +32,7 @@
  */
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import Button from '../../../shared-components/Button';
 import { FormTextField } from '../../../shared-components/FormFieldGroup/FormFieldGroup';
 import { GrAttachment } from 'react-icons/gr';
@@ -69,6 +70,9 @@ export default function MessageInput({
   sendMessagePlaceholder,
   fileInputRef,
 }: IMessageInputProps): JSX.Element {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userChatRoom',
+  });
   return (
     <div id="messageInput">
       <input
@@ -105,7 +109,7 @@ export default function MessageInput({
       )}
       {attachment && (
         <div className={styles.attachment}>
-          <img src={attachment} alt="Attachment" />
+          <img src={attachment} alt={t('attachment')} />
 
           <Button
             data-testid="removeAttachment"

@@ -219,7 +219,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             }
           } else if (derivedIsGroup) {
             title = chatData.name;
-            subtitle = `${chatData.members?.edges?.length || 0} members`;
+            subtitle = `${chatData.members?.edges?.length || 0} ${t('members')}`;
             image = chatData.avatarURL || '';
           }
 
