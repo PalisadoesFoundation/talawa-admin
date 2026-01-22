@@ -14,7 +14,7 @@ let mockToggleDeleteModal: ReturnType<typeof vi.fn>;
 let mockDeleteAgendaItemHandler: ReturnType<typeof vi.fn>;
 const mockT = (key: string): string => key;
 const mockTCommon = (key: string): string => key;
-const user = userEvent.setup();
+let user: ReturnType<typeof userEvent.setup>;
 
 describe('AgendaItemsDeleteModal', () => {
   beforeEach(() => {
@@ -23,6 +23,7 @@ describe('AgendaItemsDeleteModal', () => {
     vi.clearAllMocks();
     // Reset any manual timers
     vi.useRealTimers();
+    user = userEvent.setup();
   });
 
   afterEach(() => {

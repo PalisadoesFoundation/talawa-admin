@@ -265,8 +265,10 @@ async function wait(ms = 100): Promise<void> {
 }
 
 const resizeWindow = (width: number): void => {
-  window.innerWidth = width;
-  window.dispatchEvent(new window.Event('resize'));
+  act(() => {
+    window.innerWidth = width;
+    window.dispatchEvent(new window.Event('resize'));
+  });
 };
 
 beforeEach(() => {

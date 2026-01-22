@@ -93,7 +93,7 @@ describe('SecuredRoute', () => {
   });
 
   describe('User Activity Tracking', () => {
-    it('should update lastActive on mouse movement', () => {
+    it('should update lastActive on mouse movement', async () => {
       setItem('IsLoggedIn', 'TRUE');
       setItem('role', 'administrator');
 
@@ -115,7 +115,7 @@ describe('SecuredRoute', () => {
       expect(screen.getByText('Test Protected Content')).toBeInTheDocument();
     });
 
-    it('should prevent timeout when user activity occurs within timeout window', () => {
+    it('should prevent timeout when user activity occurs within timeout window', async () => {
       setItem('IsLoggedIn', 'TRUE');
       setItem('role', 'administrator');
       setItem('token', 'test-token');
