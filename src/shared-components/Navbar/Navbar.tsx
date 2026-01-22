@@ -47,7 +47,7 @@
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from 'style/app-fixed.module.css';
+import styles from './Navbar.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'shared-components/SortingButton/SortingButton';
 

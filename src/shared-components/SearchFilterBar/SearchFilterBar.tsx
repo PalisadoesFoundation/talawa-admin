@@ -7,7 +7,7 @@ import type {
   InterfaceSearchFilterBarProps,
   InterfaceSearchFilterBarAdvanced,
 } from 'types/shared-components/SearchFilterBar/interface';
-import styles from 'style/app-fixed.module.css';
+import styles from './SearchFilterBar.module.css';
 
 /**
  * SearchFilterBar component provides a unified search and filter interface.

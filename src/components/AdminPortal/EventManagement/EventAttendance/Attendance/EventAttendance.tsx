@@ -34,7 +34,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Tooltip } from '@mui/material';
 import Button from 'shared-components/Button';
-import styles from 'style/app-fixed.module.css';
+import styles from './EventAttendance.module.css';
 import { useLazyQuery } from '@apollo/client';
 import { EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
 import { useParams, Link } from 'react-router';

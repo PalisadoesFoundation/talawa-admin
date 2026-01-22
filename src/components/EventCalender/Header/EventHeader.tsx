@@ -36,7 +36,7 @@
 import React from 'react';
 import Button from 'shared-components/Button';
 import AddIcon from '@mui/icons-material/Add';
-import styles from 'style/app-fixed.module.css';
+import styles from './EventHeader.module.css';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { useTranslation } from 'react-i18next';
 import SortingButton from 'shared-components/SortingButton/SortingButton';
