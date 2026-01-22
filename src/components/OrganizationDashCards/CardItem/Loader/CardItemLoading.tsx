@@ -3,8 +3,7 @@
  * for a card item. This component is used to indicate that the
  * content of a card item is being loaded.
  *
- * @component
- * @returns {JSX.Element} A JSX element representing the loading state
+ * @returns A JSX element representing the loading state
  * of a card item.
  *
  * @remarks
@@ -14,27 +13,13 @@
  *   visual effect for the loading state.
  * - The `themeOverlay` class is used to style the icon wrapper
  *   during the loading state.
- *
- * @example
- * ```tsx
- * import CardItemLoading from './CardItemLoading';
- *
- * const App = () => (
- *   <div>
- *     <CardItemLoading />
- *   </div>
- * );
- * ```
- *
- * @remarks
- * This component is primarily used in the `OrganizationDashCards`
- * section of the application to provide a consistent loading
- * experience for users.
  */
 import React from 'react';
 import styles from 'style/app-fixed.module.css';
+import { useTranslation } from 'react-i18next';
 
 const CardItemLoading = (): JSX.Element => {
+  const { t } = useTranslation('translation', { keyPrefix: 'cardItem' });
   return (
     <>
       <div
@@ -48,7 +33,7 @@ const CardItemLoading = (): JSX.Element => {
           className={`${styles.title} shimmer rounded`}
           style={{ height: '1.5rem' }}
         >
-          &nbsp;
+          {t('loadingPlaceholder')}
         </span>
       </div>
     </>

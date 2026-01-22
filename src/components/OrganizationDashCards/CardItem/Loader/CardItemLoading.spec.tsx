@@ -2,7 +2,21 @@ import CardItemLoading from './CardItemLoading';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import styles from 'style/app-fixed.module.css';
+
+vi.mock('react-i18next', () => ({
+  useTranslation: (_ns: unknown, options: { keyPrefix: string }) => ({
+    t: (key: string) =>
+      options?.keyPrefix ? `${options.keyPrefix}.${key}` : key,
+    i18n: {
+      changeLanguage: () => new Promise(() => {}),
+    },
+  }),
+}));
 describe('Test the CardItemLoading component', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('Should render the component', () => {
     render(<CardItemLoading />);
     expect(screen.getByTestId('cardItemLoading')).toBeInTheDocument();

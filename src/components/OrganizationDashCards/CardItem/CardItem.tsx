@@ -28,6 +28,7 @@ import dayjs from 'dayjs';
 import styles from 'style/app-fixed.module.css';
 import Avatar from 'shared-components/Avatar/Avatar';
 import DefaultImg from 'assets/images/defaultImg.png';
+import { useTranslation } from 'react-i18next';
 
 export interface InterfaceCardItem {
   type: 'Event' | 'Post' | 'MembershipRequest';
@@ -41,6 +42,7 @@ export interface InterfaceCardItem {
 }
 
 const CardItem = (props: InterfaceCardItem): JSX.Element => {
+  const { t } = useTranslation('translation', { keyPrefix: 'cardItem' });
   const { creator, type, title, startdate, enddate, time, location, image } =
     props;
   const [imgOk, setImgOk] = useState(true);
@@ -60,7 +62,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
             {image && imgOk ? (
               <img
                 src={image}
-                alt={`${title} avatar`}
+                alt={t('avatar', { title })}
                 crossOrigin="anonymous"
                 className={styles.CardItemImage}
                 loading="lazy"
@@ -114,7 +116,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
             {location && (
               <span className={`${styles.location} fst-normal fw-semibold`}>
                 <MarkerIcon
-                  title="Event Location"
+                  title={t('eventLocation')}
                   stroke="var(--bs-primary)"
                   width={22}
                   height={22}

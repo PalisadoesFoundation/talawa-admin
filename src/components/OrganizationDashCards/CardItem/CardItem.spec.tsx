@@ -1,6 +1,16 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, act, fireEvent } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import CardItem from './CardItem';
+
+vi.mock('react-i18next', () => ({
+  useTranslation: (_ns: unknown, options: { keyPrefix: string }) => ({
+    t: (key: string) =>
+      options?.keyPrefix ? `${options.keyPrefix}.${key}` : key,
+    i18n: {
+      changeLanguage: () => new Promise(() => {}),
+    },
+  }),
+}));
 import type { InterfaceCardItem } from './CardItem';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -92,13 +102,13 @@ describe('CardItem Component', () => {
 
     render(<CardItem {...props} />);
 
-    const img = screen.getByAltText('Post with Image Error avatar');
+    const img = screen.getByAltText('cardItem.avatar');
     expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute('src', 'invalid-image-url.jpg');
 
     // Simulate image load error
     act(() => {
-      fireEvent.error(img);
+      img.dispatchEvent(new Event('error'));
     });
 
     // After error, the default image should be displayed
@@ -134,12 +144,12 @@ describe('CardItem Component', () => {
 
     render(<CardItem {...props} />);
 
-    const img = screen.getByAltText('Jane Smith avatar');
+    const img = screen.getByAltText('cardItem.avatar');
     expect(img).toBeInTheDocument();
 
     // Simulate image load error
     act(() => {
-      fireEvent.error(img);
+      img.dispatchEvent(new Event('error'));
     });
 
     // After error, the Avatar should be displayed (has empty alt text)
@@ -157,7 +167,7 @@ describe('CardItem Component', () => {
 
     render(<CardItem {...props} />);
 
-    const img = screen.getByAltText('Post with Image avatar');
+    const img = screen.getByAltText('cardItem.avatar');
     expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute('src', 'https://example.com/image.jpg');
   });
@@ -189,7 +199,7 @@ describe('CardItem Component', () => {
 
     render(<CardItem {...props} />);
 
-    const img = screen.getByAltText('Member Request avatar');
+    const img = screen.getByAltText('cardItem.avatar');
     expect(img).toBeInTheDocument();
     expect(img).toHaveAttribute('src', 'https://example.com/member.jpg');
   });

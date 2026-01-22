@@ -13,6 +13,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useNavigate, useLocation } from 'react-router';
 import styles from './NotificationIcon.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceNotification {
   id: string;
@@ -23,6 +24,7 @@ interface InterfaceNotification {
 }
 
 const NotificationIcon = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'notification' });
   const [notifications, setNotifications] = useState<InterfaceNotification[]>(
     [],
   );
@@ -60,7 +62,7 @@ const NotificationIcon = () => {
           {unreadCount > 0 && (
             <span
               className={styles.unreadBadge}
-              title={`${unreadCount} unread`}
+              title={t('unreadCount', { count: unreadCount })}
             >
               {unreadCount > 9 ? '9+' : unreadCount}
             </span>
@@ -69,8 +71,8 @@ const NotificationIcon = () => {
       </Dropdown.Toggle>
 
       <Dropdown.Menu className={styles.glassMenu}>
-        {loading && <Dropdown.Item>Loading...</Dropdown.Item>}
-        {error && <Dropdown.Item>Error fetching notifications</Dropdown.Item>}
+        {loading && <Dropdown.Item>{t('loading')}</Dropdown.Item>}
+        {error && <Dropdown.Item>{t('errorFetching')}</Dropdown.Item>}
         {notifications.length > 0 ? (
           notifications.map((notification) => (
             <Dropdown.Item
@@ -91,7 +93,7 @@ const NotificationIcon = () => {
               }}
             >
               {!notification.isRead && (
-                <span className={styles.notificationDot} title="Unread" />
+                <span className={styles.notificationDot} title={t('unread')} />
               )}
               <span className={styles.notificationText}>
                 {notification.body.length > 48
@@ -101,7 +103,7 @@ const NotificationIcon = () => {
             </Dropdown.Item>
           ))
         ) : (
-          <Dropdown.Item>No new notifications</Dropdown.Item>
+          <Dropdown.Item>{t('noNewNotifications')}</Dropdown.Item>
         )}
         <Dropdown.Divider />
         <Dropdown.Item
@@ -112,7 +114,7 @@ const NotificationIcon = () => {
             navigate(isUserPortal ? '/user/notification' : '/notification');
           }}
         >
-          View all notifications
+          {t('viewAllNotifications')}
         </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
