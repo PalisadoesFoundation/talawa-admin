@@ -1,12 +1,6 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
@@ -349,8 +343,10 @@ const setMatchMediaStub = (): void => {
   });
 };
 
+let user: ReturnType<typeof userEvent.setup>;
 beforeEach(() => {
   vi.clearAllMocks();
+  user = userEvent.setup();
   sharedMocks.useParams.mockReturnValue({ orgId: '' });
   setMatchMediaStub();
 });
@@ -393,7 +389,7 @@ describe('Testing People Screen [User Portal]', () => {
 
     await wait();
 
-    await userEvent.type(screen.getByTestId('searchInput'), 'Ad{enter}');
+    await user.type(screen.getByTestId('searchInput'), 'Ad{enter}');
     await wait(SEARCH_DEBOUNCE_MS);
 
     await waitFor(() => {
@@ -417,11 +413,11 @@ describe('Testing People Screen [User Portal]', () => {
 
     await wait();
     const searchBtn = screen.getByTestId('searchBtn');
-    await userEvent.clear(screen.getByTestId('searchInput'));
-    await userEvent.click(searchBtn);
-    await userEvent.type(screen.getByTestId('searchInput'), 'Admin');
+    await user.clear(screen.getByTestId('searchInput'));
+    await user.click(searchBtn);
+    await user.type(screen.getByTestId('searchInput'), 'Admin');
     await wait(SEARCH_DEBOUNCE_MS);
-    await userEvent.click(searchBtn);
+    await user.click(searchBtn);
     await wait();
 
     await waitFor(() => {
@@ -445,8 +441,8 @@ describe('Testing People Screen [User Portal]', () => {
 
     await wait();
 
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('1'));
+    await user.click(screen.getByTestId('modeChangeBtn'));
+    await user.click(screen.getByTestId('1'));
     await wait();
 
     expect(screen.queryByText('Admin User')).toBeInTheDocument();
@@ -512,13 +508,13 @@ describe('Testing People Screen Pagination [User Portal]', () => {
 
     // Change rows per page to 10 (should show 6 now)
     const select = screen.getByRole('combobox');
-    await userEvent.selectOptions(select, '10');
+    await user.selectOptions(select, '10');
     await wait();
 
     expect(screen.getByText('user6')).toBeInTheDocument();
 
     // Reset to smaller page size to test navigation
-    await userEvent.selectOptions(select, '5');
+    await user.selectOptions(select, '5');
     await wait();
   });
 
@@ -539,13 +535,13 @@ describe('Testing People Screen Pagination [User Portal]', () => {
 
     // Navigate to page 2
     const nextButton = screen.getByTestId('nextPage');
-    await userEvent.click(nextButton);
+    await user.click(nextButton);
     await wait();
 
     // Now navigate back to page 1 (this covers lines 158-161)
     // This uses cached cursor, no new query needed
     const prevButton = screen.getByTestId('previousPage');
-    await userEvent.click(prevButton);
+    await user.click(prevButton);
     await wait();
 
     // Should be back on first page
@@ -567,9 +563,9 @@ describe('People Component Mode Switch and Search Coverage', () => {
       </MockedProvider>,
     );
 
-    await userEvent.type(screen.getByTestId('searchInput'), 'Admin');
+    await user.type(screen.getByTestId('searchInput'), 'Admin');
     await wait(SEARCH_DEBOUNCE_MS);
-    await userEvent.click(screen.getByTestId('searchBtn'));
+    await user.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.getByText('Admin User')).toBeInTheDocument();
@@ -594,7 +590,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
     const select = screen.getByLabelText('rows per page');
     expect(select).toBeInTheDocument();
     const nextButton = screen.getByTestId('nextPage');
-    await userEvent.click(nextButton);
+    await user.click(nextButton);
   });
 
   it('should not trigger search for non-Enter key press', async () => {
@@ -611,7 +607,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
     );
 
     const searchInput = screen.getByTestId('searchInput');
-    fireEvent.keyUp(searchInput, { key: 'A', code: 'KeyA' });
+    await user.type(searchInput, 'A'); // Type 'A' without Enter
 
     await new Promise((resolve) => setTimeout(resolve, 100));
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
@@ -635,7 +631,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
     const searchInput = screen.getByTestId('searchInput');
     searchInput.remove();
 
-    await userEvent.click(searchBtn);
+    await user.click(searchBtn);
     await new Promise((resolve) => setTimeout(resolve, 100));
   });
 });
@@ -678,8 +674,8 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     expect(screen.getByText('Test User')).toBeInTheDocument();
     expect(screen.getByText('Admin User')).toBeInTheDocument();
 
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('1'));
+    await user.click(screen.getByTestId('modeChangeBtn'));
+    await user.click(screen.getByTestId('1'));
     await wait();
 
     expect(screen.getByText('Admin User')).toBeInTheDocument();
@@ -693,15 +689,15 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     expect(screen.getByText('Admin User')).toBeInTheDocument();
     expect(screen.getByText('Test User')).toBeInTheDocument();
 
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('1'));
+    await user.click(screen.getByTestId('modeChangeBtn'));
+    await user.click(screen.getByTestId('1'));
     await wait();
 
     expect(screen.queryByText('Admin User')).toBeInTheDocument();
     expect(screen.queryByText('Test User')).not.toBeInTheDocument();
 
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('0'));
+    await user.click(screen.getByTestId('modeChangeBtn'));
+    await user.click(screen.getByTestId('0'));
     await wait();
 
     expect(screen.getByText('Test User')).toBeInTheDocument();
@@ -716,8 +712,8 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     expect(screen.getByText('Test User')).toBeInTheDocument();
     expect(screen.getByText('test@example.com')).toBeInTheDocument();
 
-    await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('1'));
+    await user.click(screen.getByTestId('modeChangeBtn'));
+    await user.click(screen.getByTestId('1'));
     await wait();
 
     expect(screen.getByText('Admin User')).toBeInTheDocument();
@@ -739,12 +735,12 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     );
 
     const searchInput = screen.getByTestId('searchInput');
-    await userEvent.type(searchInput, 'Test');
+    await user.type(searchInput, 'Test');
     expect(searchInput).toHaveValue('Test');
 
     // SearchBar renders a clear button when value is not empty
     const clearBtn = screen.getByLabelText('Clear');
-    await userEvent.click(clearBtn);
+    await user.click(clearBtn);
 
     expect(searchInput).toHaveValue('');
   });

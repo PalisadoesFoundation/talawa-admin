@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { ViewModal } from './ViewModal';
-import { Button } from 'react-bootstrap';
+import { Button } from 'shared-components/Button';
 
 // Demo content for stories - not user-facing, only for Storybook documentation
 // i18n-ignore-next-line

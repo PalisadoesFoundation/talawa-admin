@@ -1,5 +1,6 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, it, expect, vi, afterEach } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import SearchFilterBar from './SearchFilterBar';
 import type {
   InterfaceSearchFilterBarProps,
@@ -38,7 +39,7 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
   ),
 }));
 
-vi.mock('subComponents/SortingButton', () => ({
+vi.mock('shared-components/SortingButton/SortingButton', () => ({
   default: vi.fn(
     ({
       buttonLabel,
@@ -78,13 +79,8 @@ vi.mock('lodash', async () => {
 });
 
 describe('SearchFilterBar', () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
-
   afterEach(() => {
     vi.clearAllMocks();
-    vi.useRealTimers();
   });
 
   describe('Simple Variant - Search Only', () => {
@@ -124,29 +120,33 @@ describe('SearchFilterBar', () => {
       expect(containerDiv).toBeInTheDocument();
     });
 
-    it('should update search input value when user types', () => {
+    it('should update search input value when user types', async () => {
+      const user = userEvent.setup();
       render(<SearchFilterBar {...simpleProps} />);
 
       const searchInput = screen.getByTestId('searchInput');
-      fireEvent.change(searchInput, { target: { value: 'test query' } });
+      await user.type(searchInput, 'test query');
 
       expect(searchInput).toHaveValue('test query');
     });
 
-    it('should call onSearchChange when user types', () => {
+    it('should call onSearchChange when user types', async () => {
+      const user = userEvent.setup();
       const onSearchChange = vi.fn();
       render(
         <SearchFilterBar {...simpleProps} onSearchChange={onSearchChange} />,
       );
 
       const searchInput = screen.getByTestId('searchInput');
-      fireEvent.change(searchInput, { target: { value: 'test' } });
+      await user.type(searchInput, 'test');
 
       expect(onSearchChange).toHaveBeenCalledWith('test');
     });
 
-    it('should call onSearchSubmit when search button is clicked', () => {
+    it('should call onSearchSubmit when search button is clicked', async () => {
+      const user = userEvent.setup();
       const onSearchSubmit = vi.fn();
+
       render(
         <SearchFilterBar
           {...simpleProps}
@@ -156,7 +156,7 @@ describe('SearchFilterBar', () => {
       );
 
       const searchButton = screen.getByTestId('searchButton');
-      fireEvent.click(searchButton);
+      await user.click(searchButton);
 
       expect(onSearchSubmit).toHaveBeenCalledWith('test query');
     });
@@ -252,7 +252,8 @@ describe('SearchFilterBar', () => {
       expect(screen.getByText('Time Frame')).toBeInTheDocument();
     });
 
-    it('should call dropdown onOptionChange when selection changes', () => {
+    it('should call dropdown onOptionChange when selection changes', async () => {
+      const user = userEvent.setup();
       const onOptionChange = vi.fn();
       const propsWithCallback: InterfaceSearchFilterBarProps = {
         ...advancedProps,
@@ -267,7 +268,7 @@ describe('SearchFilterBar', () => {
       render(<SearchFilterBar {...propsWithCallback} />);
 
       const dropdown = screen.getByTestId('sort-select');
-      fireEvent.change(dropdown, { target: { value: 'ASCENDING' } });
+      await user.selectOptions(dropdown, 'ASCENDING');
 
       expect(onOptionChange).toHaveBeenCalledWith('ASCENDING');
     });
@@ -406,7 +407,8 @@ describe('SearchFilterBar', () => {
       expect(mockDebounce).toHaveBeenCalledWith(onSearchChange, 500);
     });
 
-    it('should update internal state immediately on typing', () => {
+    it('should update internal state immediately on typing', async () => {
+      const user = userEvent.setup();
       render(
         <SearchFilterBar
           hasDropdowns={false}
@@ -417,7 +419,7 @@ describe('SearchFilterBar', () => {
       );
 
       const searchInput = screen.getByTestId('searchInput');
-      fireEvent.change(searchInput, { target: { value: 'instant' } });
+      await user.type(searchInput, 'instant');
 
       expect(searchInput).toHaveValue('instant');
     });
@@ -591,7 +593,8 @@ describe('SearchFilterBar', () => {
       expect(screen.getByPlaceholderText('Search')).toBeInTheDocument();
     });
 
-    it('should handle undefined onSearchSubmit', () => {
+    it('should handle undefined onSearchSubmit', async () => {
+      const user = userEvent.setup();
       render(
         <SearchFilterBar
           hasDropdowns={false}
@@ -602,7 +605,7 @@ describe('SearchFilterBar', () => {
       );
 
       const searchButton = screen.getByTestId('searchButton');
-      expect(() => fireEvent.click(searchButton)).not.toThrow();
+      expect(async () => await user.click(searchButton)).not.toThrow();
     });
   });
 
@@ -655,7 +658,8 @@ describe('SearchFilterBar', () => {
   });
 
   describe('Integration Tests', () => {
-    it('should work as complete search and filter system (Leaderboard scenario)', () => {
+    it('should work as complete search and filter system (Leaderboard scenario)', async () => {
+      const user = userEvent.setup();
       const onSearchChange = vi.fn();
       const onSortChange = vi.fn();
       const onFilterChange = vi.fn();
@@ -695,20 +699,24 @@ describe('SearchFilterBar', () => {
         />,
       );
 
+      // SEARCH
       const searchInput = screen.getByTestId('searchInput');
-      fireEvent.change(searchInput, { target: { value: 'John' } });
+      await user.type(searchInput, 'John');
       expect(onSearchChange).toHaveBeenCalledWith('John');
 
-      const sortDropdown = screen.getByTestId('sort-select');
-      fireEvent.change(sortDropdown, { target: { value: 'hours_ASC' } });
+      // SORT (mocked)
+      const sortSelect = screen.getByTestId('sort-select');
+      await user.selectOptions(sortSelect, 'hours_ASC');
       expect(onSortChange).toHaveBeenCalledWith('hours_ASC');
 
-      const filterDropdown = screen.getByTestId('timeFrame-select');
-      fireEvent.change(filterDropdown, { target: { value: 'weekly' } });
+      // FILTER (mocked)
+      const timeFrameSelect = screen.getByTestId('timeFrame-select');
+      await user.selectOptions(timeFrameSelect, 'weekly');
       expect(onFilterChange).toHaveBeenCalledWith('weekly');
     });
 
-    it('should work as PluginStore scenario with button', () => {
+    it('should work as PluginStore scenario with button', async () => {
+      const user = userEvent.setup();
       const onSearchChange = vi.fn();
       const onFilterChange = vi.fn();
       const onUploadClick = vi.fn();
@@ -746,19 +754,20 @@ describe('SearchFilterBar', () => {
       );
 
       const searchInput = screen.getByTestId('searchInput');
-      fireEvent.change(searchInput, { target: { value: 'auth' } });
+      await user.type(searchInput, 'auth');
       expect(onSearchChange).toHaveBeenCalledWith('auth');
 
       const filterDropdown = screen.getByTestId('filterPlugins-select');
-      fireEvent.change(filterDropdown, { target: { value: 'installed' } });
+      await user.selectOptions(filterDropdown, 'installed');
       expect(onFilterChange).toHaveBeenCalledWith('installed');
 
       const uploadButton = screen.getByTestId('upload-btn');
-      fireEvent.click(uploadButton);
+      await user.click(uploadButton);
       expect(onUploadClick).toHaveBeenCalled();
     });
 
-    it('should work as simple Requests scenario', () => {
+    it('should work as simple Requests scenario', async () => {
+      const user = userEvent.setup();
       const onSearchChange = vi.fn();
       const onSearchSubmit = vi.fn();
 
@@ -773,11 +782,11 @@ describe('SearchFilterBar', () => {
       );
 
       const searchInput = screen.getByTestId('searchInput');
-      fireEvent.change(searchInput, { target: { value: 'pending' } });
+      await user.type(searchInput, 'pending');
       expect(onSearchChange).toHaveBeenCalledWith('pending');
 
       const searchButton = screen.getByTestId('searchButton');
-      fireEvent.click(searchButton);
+      await user.click(searchButton);
       expect(onSearchSubmit).toHaveBeenCalledWith('pending');
     });
   });
