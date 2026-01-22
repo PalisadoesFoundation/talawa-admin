@@ -1,7 +1,7 @@
 import CardItemLoading from './CardItemLoading';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import styles from 'style/app-fixed.module.css';
+import styles from './CardItemLoading.module.css';
 
 vi.mock('react-i18next', () => ({
   useTranslation: (_ns: unknown, options: { keyPrefix: string }) => ({

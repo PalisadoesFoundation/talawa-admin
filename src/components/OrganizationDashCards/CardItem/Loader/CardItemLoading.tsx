@@ -15,7 +15,7 @@
  *   during the loading state.
  */
 import React from 'react';
-import styles from 'style/app-fixed.module.css';
+import styles from './CardItemLoading.module.css';
 import { useTranslation } from 'react-i18next';
 
 const CardItemLoading = (): JSX.Element => {

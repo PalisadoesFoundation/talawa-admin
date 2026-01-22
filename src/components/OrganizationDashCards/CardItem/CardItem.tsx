@@ -25,7 +25,7 @@ import React, { useState, useEffect } from 'react';
 import MarkerIcon from 'assets/svgs/cardItemLocation.svg?react';
 import DateIcon from 'assets/svgs/cardItemDate.svg?react';
 import dayjs from 'dayjs';
-import styles from 'style/app-fixed.module.css';
+import styles from './CardItem.module.css';
 import Avatar from 'shared-components/Avatar/Avatar';
 import DefaultImg from 'assets/images/defaultImg.png';
 import { useTranslation } from 'react-i18next';
@@ -93,10 +93,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
           className={`${styles.CardItemMainDiv} ${type === 'Event' ? styles.CardItemMainDivEvent : ''}`}
         >
           {title && (
-            <div
-              className={`${styles.cardItemtitle} ${styles.upcomingEventsTitle} `}
-              title={title}
-            >
+            <div className={`${styles.upcomingEventsTitle} `} title={title}>
               {title}
             </div>
           )}
