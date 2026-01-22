@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter } from 'react-router-dom';
 import Notification from './Notification';
@@ -245,7 +245,7 @@ describe('Notification Component', () => {
       expect(screen.getByText(/mark as read/i)).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText(/mark as read/i));
+    await userEvent.click(screen.getByText(/mark as read/i));
 
     await waitFor(() => {
       expect(screen.queryByText(/mark as read/i)).not.toBeInTheDocument();
@@ -264,12 +264,12 @@ describe('Notification Component', () => {
     // wait for first page to load
     await screen.findByText('Notification 1');
 
-    fireEvent.click(await screen.findByText(/next/i));
+    await userEvent.click(await screen.findByText(/next/i));
 
     // second page should contain Notification 8 (index 6)
     await screen.findByText('Notification 8');
 
-    fireEvent.click(await screen.findByText(/prev/i));
+    await userEvent.click(await screen.findByText(/prev/i));
 
     await screen.findByText('Notification 1');
   });
@@ -325,7 +325,7 @@ describe('Notification Component', () => {
       expect(screen.getByText(/mark as read/i)).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText(/mark as read/i));
+    await userEvent.click(screen.getByText(/mark as read/i));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -404,7 +404,7 @@ describe('Pagination Visibility', () => {
 
     // Navigate to page 2
     await screen.findByText('Notification 1');
-    fireEvent.click(await screen.findByText(/next/i));
+    await userEvent.click(await screen.findByText(/next/i));
     await screen.findByText('Notification 7');
 
     // Pagination should still be visible

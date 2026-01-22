@@ -31,7 +31,8 @@ import useLocalStorage from 'utils/useLocalstorage';
 const superAdminScreen = (): React.ReactElement => {
   const location = useLocation();
   const { getItem, setItem } = useLocalStorage();
-  const titleKey = map[location.pathname.split('/')[2]];
+  const segment = location.pathname.split('/')[2] || 'default';
+  const titleKey = map[segment] ?? map.default;
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
   const [hideDrawer, setHideDrawer] = useState<boolean>(() => {
     const stored = getItem('sidebar');
@@ -124,4 +125,5 @@ const map: Record<
   communityProfile: 'communityProfile',
   pluginstore: 'pluginStore',
   notification: 'notification',
+  default: 'orgList',
 };

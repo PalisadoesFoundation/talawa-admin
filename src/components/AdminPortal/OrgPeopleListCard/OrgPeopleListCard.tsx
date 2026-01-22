@@ -30,7 +30,7 @@
  * ```
  */
 import React from 'react';
-import Modal from 'react-bootstrap/Modal';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import Button from 'shared-components/Button';
 import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -39,7 +39,6 @@ import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { useParams, Navigate } from 'react-router';
 import { errorHandler } from 'utils/errorHandler';
 import styles from './OrgPeopleListCard.module.css';
-import { Close } from '@mui/icons-material';
 import type { InterfaceOrgPeopleListCardProps } from 'types/AdminPortal/Organization/interface';
 
 function orgPeopleListCard(
@@ -79,38 +78,34 @@ function orgPeopleListCard(
   return (
     <div>
       {/* Modal to confirm member removal */}
-      <Modal show={true} onHide={props.toggleRemoveModal}>
-        <Modal.Header>
-          <h5 data-testid="removeMemberModal">{t('removeMember')}</h5>
-          {/* Button to close the modal */}
-          <Button
-            variant="danger"
-            onClick={props.toggleRemoveModal}
-            className={styles.closeButton}
-          >
-            <Close className={styles.closeButton} />
-          </Button>
-        </Modal.Header>
-        <Modal.Body>{t('removeMemberMsg')}</Modal.Body>
-        <Modal.Footer>
-          <Button
-            type="button"
-            className={styles.addButton}
-            onClick={removeMember}
-            data-testid="removeMemberBtn"
-          >
-            {tCommon('yes')}
-          </Button>
-          <Button
-            type="button"
-            onClick={props.toggleRemoveModal}
-            className={styles.removeButton}
-            data-testid="closeRemoveId"
-          >
-            {tCommon('no')}
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <BaseModal
+        show={true}
+        onHide={props.toggleRemoveModal}
+        title={t('removeMember')}
+        headerTestId="removeMemberModal"
+        footer={
+          <>
+            <Button
+              type="button"
+              className={styles.addButton}
+              onClick={removeMember}
+              data-testid="removeMemberBtn"
+            >
+              {tCommon('yes')}
+            </Button>
+            <Button
+              type="button"
+              onClick={props.toggleRemoveModal}
+              className={styles.removeButton}
+              data-testid="closeRemoveId"
+            >
+              {tCommon('no')}
+            </Button>
+          </>
+        }
+      >
+        {t('removeMemberMsg')}
+      </BaseModal>
     </div>
   );
 }
