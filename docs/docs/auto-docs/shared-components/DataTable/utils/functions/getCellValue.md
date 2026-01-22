@@ -4,9 +4,9 @@
 
 # Function: getCellValue()
 
-> **getCellValue**\<`T`\>(`row`, `accessor`): `unknown`
+> **getCellValue**\<`T`, `TValue`\>(`row`, `accessor`): `TValue`
 
-Defined in: [src/shared-components/DataTable/utils.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/utils.ts#L29)
+Defined in: [src/shared-components/DataTable/utils.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/utils.ts#L35)
 
 Helper to get raw cell value from a row using the accessor.
 
@@ -16,16 +16,30 @@ Helper to get raw cell value from a row using the accessor.
 
 `T`
 
+The row data type
+
+### TValue
+
+`TValue` = `unknown`
+
+The expected return value type
+
 ## Parameters
 
 ### row
 
 `T`
 
+The row data object
+
 ### accessor
 
-[`Accessor`](../../../../types/shared-components/DataTable/interface/type-aliases/Accessor.md)\<`T`, `unknown`\>
+[`Accessor`](../../../../types/shared-components/DataTable/interface/type-aliases/Accessor.md)\<`T`, `TValue`\>
+
+Column accessor (property key or function)
 
 ## Returns
 
-`unknown`
+`TValue`
+
+The cell value

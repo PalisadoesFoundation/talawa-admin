@@ -25,11 +25,20 @@ export function renderCellValue(value: unknown) {
 
 /**
  * Helper to get raw cell value from a row using the accessor.
+ *
+ * @typeParam T - The row data type
+ * @typeParam TValue - The expected return value type
+ * @param row - The row data object
+ * @param accessor - Column accessor (property key or function)
+ * @returns The cell value
  */
-export function getCellValue<T>(row: T, accessor: IColumnDef<T>['accessor']) {
+export function getCellValue<T, TValue = unknown>(
+  row: T,
+  accessor: IColumnDef<T, TValue>['accessor'],
+): TValue {
   return typeof accessor === 'function'
     ? accessor(row)
-    : row[accessor as keyof T];
+    : (row[accessor as keyof T] as TValue);
 }
 
 /**

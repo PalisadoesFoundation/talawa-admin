@@ -1,21 +1,18 @@
 import React from 'react';
-import {
+import type {
   Key,
   IBulkAction,
+  IUseDataTableSelectionOptions,
 } from '../../../types/shared-components/DataTable/interface';
-
-interface IUseDataTableSelectionOptions<T> {
-  paginatedData: T[];
-  keysOnPage: Key[];
-  selectable?: boolean;
-  selectedKeys?: ReadonlySet<Key>;
-  onSelectionChange?: (next: ReadonlySet<Key>) => void;
-  initialSelectedKeys?: ReadonlySet<Key>;
-  bulkActions?: ReadonlyArray<IBulkAction<T>>;
-}
 
 /**
  * Hook to manage DataTable selection and bulk action logic.
+ * Supports controlled and uncontrolled modes for row selection.
+ * Normalizes selection to current page keys on page changes.
+ *
+ * @typeParam T - The row data type
+ * @param options - Configuration options for selection behavior
+ * @returns Object containing selection state and mutation helpers
  */
 export function useDataTableSelection<T>(
   options: IUseDataTableSelectionOptions<T>,
@@ -30,8 +27,8 @@ export function useDataTableSelection<T>(
   } = options;
 
   // Selection state (controlled or uncontrolled)
-  const isSelectionControlled =
-    selectedKeys !== undefined && onSelectionChange !== undefined;
+  // Controlled mode: selectedKeys is provided (even if no handler for read-only mode)
+  const isSelectionControlled = selectedKeys !== undefined;
   const [internalSelectedKeys, setInternalSelectedKeys] = React.useState<
     Set<Key>
   >(new Set(initialSelectedKeys ?? []));
@@ -44,18 +41,32 @@ export function useDataTableSelection<T>(
 
   const updateSelection = React.useCallback(
     (next: Set<Key>) => {
-      if (isSelectionControlled && onSelectionChange) {
-        onSelectionChange(next);
+      if (isSelectionControlled) {
+        // In controlled mode, call handler if it exists (no-op otherwise)
+        onSelectionChange?.(next);
       } else {
+        // In uncontrolled mode, update internal state
         setInternalSelectedKeys(new Set(next));
       }
     },
     [isSelectionControlled, onSelectionChange],
   );
 
+  // Track previous keysOnPage to detect actual page changes
+  const prevKeysOnPageRef = React.useRef<Key[]>([]);
+
   // Normalize selection on page change: only keep selections that exist on the current page
   const keysOnPageSet = React.useMemo(() => new Set(keysOnPage), [keysOnPage]);
+
   React.useEffect(() => {
+    // Only run normalization when keysOnPage actually changes
+    const keysChanged =
+      prevKeysOnPageRef.current.length !== keysOnPage.length ||
+      !keysOnPage.every((k, i) => prevKeysOnPageRef.current[i] === k);
+
+    if (!keysChanged) return;
+    prevKeysOnPageRef.current = keysOnPage;
+
     // Compute intersection of currentSelection with keysOnPage
     const normalizedSelection = new Set<Key>();
     for (const key of currentSelection) {
@@ -67,7 +78,7 @@ export function useDataTableSelection<T>(
     if (normalizedSelection.size !== currentSelection.size) {
       updateSelection(normalizedSelection);
     }
-  }, [keysOnPageSet, currentSelection, updateSelection]);
+  }, [keysOnPage, keysOnPageSet, currentSelection, updateSelection]);
 
   const selectedCountOnPage = React.useMemo(
     () => keysOnPage.filter((k) => currentSelection.has(k)).length,

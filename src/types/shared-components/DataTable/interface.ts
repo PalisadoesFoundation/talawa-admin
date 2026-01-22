@@ -637,20 +637,6 @@ export interface InterfaceSearchBarProps {
    */
   'clear-aria-label'?: string;
 }
-
-/**
- * Props for the BulkActionsBar component.
- *
- * Used to display a toolbar when rows are selected in a DataTable.
- */
-export interface InterfaceBulkActionsBarProps {
-  /** Number of selected rows */
-  count: number;
-  /** Bulk action buttons to render */
-  children: React.ReactNode;
-  /** Callback to clear selection */
-  onClear: () => void;
-}
 /**
  * Options for the useDataTableFiltering hook.
  *
@@ -680,4 +666,27 @@ export interface IUseDataTableFilteringOptions<T> {
   paginationMode?: 'client' | 'server';
   /** Callback to reset page when filters change */
   onPageReset?: () => void;
+}
+
+/**
+ * Options for the useDataTableSelection hook.
+ *
+ * Configures selection behavior for DataTable.
+ * @typeParam T - The row data type
+ */
+export interface IUseDataTableSelectionOptions<T> {
+  /** Current page data */
+  paginatedData: T[];
+  /** Keys of rows on the current page */
+  keysOnPage: Key[];
+  /** Whether selection is enabled */
+  selectable?: boolean;
+  /** Controlled selected keys */
+  selectedKeys?: ReadonlySet<Key>;
+  /** Callback when selection changes */
+  onSelectionChange?: (next: ReadonlySet<Key>) => void;
+  /** Initial selected keys for uncontrolled mode */
+  initialSelectedKeys?: ReadonlySet<Key>;
+  /** Bulk action definitions */
+  bulkActions?: ReadonlyArray<IBulkAction<T>>;
 }

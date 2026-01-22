@@ -6,7 +6,7 @@
 
 > **toSearchableString**(`v`): `string`
 
-Defined in: [src/shared-components/DataTable/utils.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/utils.ts#L38)
+Defined in: [src/shared-components/DataTable/utils.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/utils.ts#L47)
 
 Helper for text search interactions.
 

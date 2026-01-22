@@ -6,9 +6,11 @@
 
 > **useDataTableSelection**\<`T`\>(`options`): `object`
 
-Defined in: [src/shared-components/DataTable/hooks/useDataTableSelection.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/hooks/useDataTableSelection.ts#L20)
+Defined in: [src/shared-components/DataTable/hooks/useDataTableSelection.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/hooks/useDataTableSelection.ts#L17)
 
 Hook to manage DataTable selection and bulk action logic.
+Supports controlled and uncontrolled modes for row selection.
+Normalizes selection to current page keys on page changes.
 
 ## Type Parameters
 
@@ -16,15 +18,21 @@ Hook to manage DataTable selection and bulk action logic.
 
 `T`
 
+The row data type
+
 ## Parameters
 
 ### options
 
-`IUseDataTableSelectionOptions`\<`T`\>
+[`IUseDataTableSelectionOptions`](../../../../../types/shared-components/DataTable/interface/interfaces/IUseDataTableSelectionOptions.md)\<`T`\>
+
+Configuration options for selection behavior
 
 ## Returns
 
 `object`
+
+Object containing selection state and mutation helpers
 
 ### allSelectedOnPage
 
