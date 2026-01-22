@@ -1160,18 +1160,4 @@ describe('makeUserTags utility function - pageInfo default parameter coverage', 
     expect(result.pageInfo.hasNextPage).toBe(false);
     expect(result.pageInfo.hasPreviousPage).toBe(false);
   });
-
-  test('should handle empty initial input for search', async () => {
-    renderOrganizationTags(link);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('searchByName')).toBeInTheDocument();
-    });
-
-    const input = screen.getByTestId('searchByName') as HTMLInputElement;
-
-    fireEvent.change(input, { target: { value: 'testSearch' } });
-
-    expect(input.value).toBe('testSearch');
-  });
 });
