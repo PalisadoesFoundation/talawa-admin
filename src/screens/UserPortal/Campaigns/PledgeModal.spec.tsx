@@ -464,7 +464,7 @@ describe('PledgeModal', () => {
       expect(amountInput).toHaveValue(10);
     });
 
-    it('should not update pledgeAmount when input value is zero', async () => {
+    it('should accept zero as valid amount input', async () => {
       renderPledgeModal(link1, pledgeProps[1]);
       const amountInput = screen.getByLabelText('Amount');
       expect(amountInput).toHaveValue(100);
