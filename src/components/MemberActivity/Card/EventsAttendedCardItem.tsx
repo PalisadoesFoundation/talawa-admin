@@ -4,17 +4,8 @@
  * This component renders a card displaying details of an event attended by a user.
  * It includes the event's title, start date, location, and a link to the event's details.
  *
- * @component
- * @param {InterfaceCardItem} props - The properties passed to the component.
- * @param {string} props.title - The title of the event.
- * @param {string} [props.time] - The time of the event (optional, not currently used).
- * @param {string} [props.startdate] - The start date of the event in ISO format (optional).
- * @param {string} [props.creator] - The creator of the event (optional, not currently used).
- * @param {string} [props.location] - The location of the event (optional).
- * @param {string} [props.eventId] - The unique identifier for the event (optional).
- * @param {string} [props.orgId] - The unique identifier for the organization hosting the event (optional).
- *
- * @returns {JSX.Element} A styled card displaying event details.
+ * @param props - The properties passed to the component.
+ * @returns A styled card displaying event details.
  *
  * @remarks
  * - If the `startdate` is provided and valid, it displays the month and day.
@@ -39,7 +30,7 @@ import { Card, Row, Col } from 'react-bootstrap';
 import { MdChevronRight, MdLocationOn } from 'react-icons/md';
 import { Link } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from 'style/app-fixed.module.css';
+import styles from './EventsAttendedCardItem.module.css';
 
 export interface InterfaceCardItem {
   title: string;
@@ -113,7 +104,7 @@ const EventAttendedCard = (props: InterfaceCardItem): JSX.Element => {
           {isAdministrator && (
             <Col xs={2} md={1} className="text-end">
               <Link
-                to={`/event/${orgId}/${eventId}`}
+                to={`/admin/event/${orgId}/${eventId}`}
                 state={{ id: eventId }}
                 className="text-decoration-none"
               >

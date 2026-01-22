@@ -38,7 +38,9 @@ vi.mock('react-router', async () => {
     ...actual,
     useParams: () => ({ orgId: mockID }),
     useLocation: () => ({
-      pathname: mockID ? `/orgdash/${mockID}` : '/orgdash/undefined',
+      pathname: mockID
+        ? `/admin/orgdash/${mockID}`
+        : '/admin/orgdash/undefined',
     }),
   };
 });
@@ -112,7 +114,7 @@ describe('EventDashboardScreen Component', () => {
 
     render(
       <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgdash/undefined']}>
+        <MemoryRouter initialEntries={['/admin/orgdash/undefined']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />
@@ -132,7 +134,7 @@ describe('EventDashboardScreen Component', () => {
 
     render(
       <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgdash/123']}>
+        <MemoryRouter initialEntries={['/admin/orgdash/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />
@@ -151,7 +153,7 @@ describe('EventDashboardScreen Component', () => {
 
     render(
       <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgdash/123']}>
+        <MemoryRouter initialEntries={['/admin/orgdash/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />
@@ -171,7 +173,7 @@ describe('EventDashboardScreen Component', () => {
 
     render(
       <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgdash/123']}>
+        <MemoryRouter initialEntries={['/admin/orgdash/123']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <EventDashboardScreen />

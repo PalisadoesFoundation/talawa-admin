@@ -1,6 +1,7 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -377,7 +378,7 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
 
-    expect(window.location.assign).toHaveBeenCalledWith('/orglist');
+    expect(window.location.assign).toHaveBeenCalledWith('/admin/orglist');
   });
 
   test('Component should be rendered properly when user is Admin', async () => {

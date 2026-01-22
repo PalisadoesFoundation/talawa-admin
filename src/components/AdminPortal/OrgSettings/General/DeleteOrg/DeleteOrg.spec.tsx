@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { useParams, useNavigate } from 'react-router';
 import type { DocumentNode } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
@@ -100,7 +101,7 @@ describe('DeleteOrg Component', () => {
       expect(deleteOrgMutationMock).toHaveBeenCalledWith({
         variables: { input: { id: '1' } },
       });
-      expect(navigateMock).toHaveBeenCalledWith('/orglist');
+      expect(navigateMock).toHaveBeenCalledWith('/admin/orglist');
     });
   });
 
@@ -154,7 +155,7 @@ describe('DeleteOrg Component', () => {
 
     await waitFor(
       () => {
-        expect(navigateMock).toHaveBeenCalledWith('/orglist');
+        expect(navigateMock).toHaveBeenCalledWith('/admin/orglist');
       },
       { timeout: 1500 },
     );

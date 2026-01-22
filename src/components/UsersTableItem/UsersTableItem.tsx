@@ -12,7 +12,8 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Row } from 'react-bootstrap';
+import { Row } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { useTranslation } from 'react-i18next';
@@ -20,8 +21,7 @@ import { useNavigate } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItemForAdmin } from 'utils/interfaces';
-import styles from '../../style/app-fixed.module.css';
-import usertableStyles from './UsersTableItem.module.css';
+import styles from './UsersTableItem.module.css';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 type Props = {
@@ -122,7 +122,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   };
 
   function goToOrg(_id: string): void {
-    const url = '/orgdash/' + _id;
+    const url = '/admin/orgdash/' + _id;
     window.location.replace(url);
     navigate(url);
   }
@@ -298,8 +298,8 @@ const UsersTableItem = (props: Props): JSX.Element => {
                           {isAdmin ? tCommon('admin') : tCommon('user')}{' '}
                         </td>
                         <td>
-                          <Form.Select
-                            size="sm"
+                          <select
+                            className="form-select form-select-sm"
                             onChange={changeRoleInOrg}
                             data-testid={`changeRoleInOrg${org.id}`}
                             disabled={isAdmin}
@@ -335,7 +335,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
                                 </option>
                               </>
                             )}
-                          </Form.Select>
+                          </select>
                         </td>
                         <td>
                           <Button
@@ -394,7 +394,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
           </>
         }
       >
-        <hr className={usertableStyles.divider} />
+        <hr className={styles.divider} />
         <p>
           {t('removeConfirmation', {
             name: user.name,
@@ -558,7 +558,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
           </>
         }
       >
-        <hr className={usertableStyles.divider} />
+        <hr className={styles.divider} />
         <p>
           {t('unblockConfirmation', {
             name: user.name,

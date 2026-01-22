@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Card } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
@@ -11,7 +12,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { IS_SAMPLE_ORGANIZATION_QUERY } from 'GraphQl/Queries/Queries';
-import styles from 'style/app-fixed.module.css';
+import styles from './DeleteOrg.module.css';
 import { useNavigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -72,7 +73,7 @@ function deleteOrg(): JSX.Element {
             t('successfullyDeletedSampleOrganization') as string,
           );
           setTimeout(() => {
-            navigate('/orglist');
+            navigate('/admin/orglist');
           }, 1000);
         })
         .catch((error) => {
@@ -82,7 +83,7 @@ function deleteOrg(): JSX.Element {
       // For regular organizations, use a different mutation
       try {
         await del({ variables: { input: { id: currentUrl || '' } } });
-        navigate('/orglist');
+        navigate('/admin/orglist');
       } catch (error) {
         errorHandler(t, error);
       }

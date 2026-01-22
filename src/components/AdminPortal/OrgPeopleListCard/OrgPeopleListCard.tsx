@@ -30,15 +30,15 @@
  * ```
  */
 import React from 'react';
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Button from 'shared-components/Button';
 import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { useParams, Navigate } from 'react-router';
 import { errorHandler } from 'utils/errorHandler';
-import styles from 'style/app-fixed.module.css';
+import styles from './OrgPeopleListCard.module.css';
 import { Close } from '@mui/icons-material';
 import type { InterfaceOrgPeopleListCardProps } from 'types/AdminPortal/Organization/interface';
 
@@ -50,7 +50,7 @@ function orgPeopleListCard(
 
   // If the member ID is not provided, navigate to the organization list
   if (!props.id) {
-    return <Navigate to={'/orglist'} />;
+    return <Navigate to={'/admin/orglist'} />;
   }
 
   // Mutation to remove a member from the organization

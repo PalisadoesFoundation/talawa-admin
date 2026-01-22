@@ -58,10 +58,10 @@ describe('SecuredRoute', () => {
       setItem('role', 'administrator');
 
       render(
-        <MemoryRouter initialEntries={['/orglist']}>
+        <MemoryRouter initialEntries={['/admin/orglist']}>
           <Routes>
             <Route element={<SecuredRoute />}>
-              <Route path="/orglist" element={testComponent} />
+              <Route path="/admin/orglist" element={testComponent} />
             </Route>
           </Routes>
         </MemoryRouter>,
@@ -76,10 +76,10 @@ describe('SecuredRoute', () => {
       setItem('role', 'regular');
 
       render(
-        <MemoryRouter initialEntries={['/orglist']}>
+        <MemoryRouter initialEntries={['/admin/orglist']}>
           <Routes>
             <Route element={<SecuredRoute />}>
-              <Route path="/orglist" element={testComponent} />
+              <Route path="/admin/orglist" element={testComponent} />
             </Route>
           </Routes>
         </MemoryRouter>,
@@ -98,10 +98,10 @@ describe('SecuredRoute', () => {
       setItem('role', 'administrator');
 
       render(
-        <MemoryRouter initialEntries={['/orglist']}>
+        <MemoryRouter initialEntries={['/admin/orglist']}>
           <Routes>
             <Route element={<SecuredRoute />}>
-              <Route path="/orglist" element={testComponent} />
+              <Route path="/admin/orglist" element={testComponent} />
             </Route>
           </Routes>
         </MemoryRouter>,
@@ -121,10 +121,10 @@ describe('SecuredRoute', () => {
       setItem('token', 'test-token');
 
       render(
-        <MemoryRouter initialEntries={['/orglist']}>
+        <MemoryRouter initialEntries={['/admin/orglist']}>
           <Routes>
             <Route element={<SecuredRoute />}>
-              <Route path="/orglist" element={testComponent} />
+              <Route path="/admin/orglist" element={testComponent} />
             </Route>
           </Routes>
         </MemoryRouter>,
@@ -159,10 +159,10 @@ describe('SecuredRoute', () => {
       setItem('id', 'admin-123');
 
       render(
-        <MemoryRouter initialEntries={['/orglist']}>
+        <MemoryRouter initialEntries={['/admin/orglist']}>
           <Routes>
             <Route element={<SecuredRoute />}>
-              <Route path="/orglist" element={testComponent} />
+              <Route path="/admin/orglist" element={testComponent} />
             </Route>
           </Routes>
         </MemoryRouter>,

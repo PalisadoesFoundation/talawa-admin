@@ -173,7 +173,9 @@ describe('Testing OrganizationScreen', () => {
     mockUseParams = vi.fn();
     mockUseMatch = vi.fn();
     mockNavigate = vi.fn();
-    mockUseLocation = vi.fn().mockReturnValue({ pathname: '/orgdash/123' });
+    mockUseLocation = vi.fn().mockReturnValue({
+      pathname: '/admin/orgdash/123',
+    });
     mockUseParams.mockReset();
     mockUseMatch.mockReset();
     mockNavigate.mockReset();

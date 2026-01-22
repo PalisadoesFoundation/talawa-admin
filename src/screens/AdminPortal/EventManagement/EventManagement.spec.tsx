@@ -1,6 +1,7 @@
 import React, { act } from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent } from '@testing-library/dom';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -67,20 +68,20 @@ const mockWithTime = new StaticMockLink(MOCKS_WITH_FIXED_TIME, true);
 const renderEventManagement = (): RenderResult => {
   return render(
     <MockedProvider link={mockWithTime} mocks={MOCKS_WITH_FIXED_TIME}>
-      <MemoryRouter initialEntries={['/event/orgId/eventId']}>
+      <MemoryRouter initialEntries={['/admin/event/orgId/eventId']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
               <Route
-                path="/event/:orgId/:eventId"
+                path="/admin/event/:orgId/:eventId"
                 element={<EventManagement />}
               />
               <Route
-                path="/orglist"
+                path="/admin/orglist"
                 element={<div data-testid="paramsError">paramsError</div>}
               />
               <Route
-                path="/orgevents/:orgId"
+                path="/admin/orgevents/:orgId"
                 element={<div data-testid="eventsScreen">eventsScreen</div>}
               />
               <Route

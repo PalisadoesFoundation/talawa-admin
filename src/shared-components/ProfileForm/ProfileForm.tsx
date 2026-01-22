@@ -4,7 +4,7 @@
  * This component provides a comprehensive profile management interface that handles
  * three distinct use cases:
  * - **User Profile**: When users view/edit their own profile (/user/settings)
- * - **Member Profile**: When admins view/edit organization member profiles (/member/:orgId/:userId)
+ * - **Member Profile**: When admins view/edit organization member profiles (/admin/member/:orgId/:userId)
  * - **Admin Profile**: When super admins view/edit admin profiles (/adminprofile/settings)
  *
  * The component intelligently adapts its behavior and UI based on the context:
@@ -38,7 +38,7 @@
  * - Wrapped with UserSidebar via ProfileFormWrapper
  * - Triggers window.location.reload after save
  *
- * **Admin/Member Context** (`/member/:orgId/:userId`, `/adminprofile/settings`):
+ * **Admin/Member Context** (`/admin/member/:orgId/:userId`, `/adminprofile/settings`):
  * - Uses UPDATE_USER_MUTATION mutation
  * - No localStorage updates
  * - Direct rendering without sidebar wrapper
