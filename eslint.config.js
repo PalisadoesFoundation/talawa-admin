@@ -56,6 +56,12 @@ const restrictedImports = [
       'Do not import Form directly. Use the shared FormFieldGroup component instead.',
   },
   {
+    id: 'rb-form-path',
+    name: 'react-bootstrap/Form',
+    message:
+      'Do not import Form directly. Use the shared FormFieldGroup component instead.',
+  },
+  {
     id: 'mui-date-pickers',
     name: '@mui/x-date-pickers',
     message:
@@ -118,7 +124,19 @@ const restrictedImports = [
       'Do not import TextField from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
   },
   {
+    name: '@mui/material/TextField',
+    importNames: ['TextField'],
+    message:
+      'Do not import TextField from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
+  },
+  {
     name: '@mui/material',
+    importNames: ['FormControl'],
+    message:
+      'Do not import FormControl from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
+  },
+  {
+    name: '@mui/material/FormControl',
     importNames: ['FormControl'],
     message:
       'Do not import FormControl from @mui/material. Use the shared FormFieldGroup component from src/shared-components/FormFieldGroup/ instead.',
@@ -364,14 +382,14 @@ export default [
    *
    * FormFieldGroup files need direct react-bootstrap Form access for wrapper implementation.
    * These files are the only ones allowed to import Form directly from react-bootstrap.
-   * Allowed ID: rb-form.
+   * Allowed ID: rb-form, rb-form-path.
    */
   {
     files: [
       'src/shared-components/FormFieldGroup/**/*.{ts,tsx}',
       'src/types/shared-components/FormFieldGroup/**/*.{ts,tsx}',
     ],
-    rules: restrictImportsExcept(['rb-form']),
+    rules: restrictImportsExcept(['rb-form', 'rb-form-path']),
   },
   /**
    * Exemption: BaseModal component files
