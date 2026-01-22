@@ -4,13 +4,13 @@
 
 # Function: default()
 
-> **default**(`props`): `Element`
+> **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/MemberActivity/Card/EventsAttendedCardItem.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Card/EventsAttendedCardItem.tsx#L45)
+Defined in: [src/components/MemberActivity/Card/EventsAttendedCardItem.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Card/EventsAttendedCardItem.tsx#L51)
 
 ## Parameters
 
-### props
+### \_\_namedParameters
 
 [`InterfaceCardItem`](../interfaces/InterfaceCardItem.md)
 

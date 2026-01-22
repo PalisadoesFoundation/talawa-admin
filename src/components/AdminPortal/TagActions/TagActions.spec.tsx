@@ -1,7 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
 import { render, screen, cleanup, waitFor, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
@@ -11,7 +10,7 @@ import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import type { ApolloLink } from '@apollo/client';
-import type { InterfaceTagActionsProps } from './TagActions';
+import type { InterfaceTagActionsProps } from 'types/AdminPortal/TagActions/interface';
 import TagActions from './TagActions';
 import i18n from 'utils/i18nForTest';
 import { vi } from 'vitest';
@@ -198,7 +197,8 @@ describe('Organisation Tags Page', () => {
       ).toBeInTheDocument();
     });
     const input = screen.getByPlaceholderText(translations.searchByName);
-    fireEvent.change(input, { target: { value: 'searchUserTag' } });
+    await userEvent.clear(input);
+    await userEvent.type(input, 'searchUserTag');
 
     // should render the two searched tags from the mock data
     // where name starts with "searchUserTag"
@@ -255,9 +255,8 @@ describe('Organisation Tags Page', () => {
       screen.getAllByTestId('orgUserSubTags').length;
 
     // Set scroll position to the bottom
-    fireEvent.scroll(subTagsScrollableDiv1, {
-      target: { scrollY: subTagsScrollableDiv1.scrollHeight },
-    });
+    subTagsScrollableDiv1.scrollTop = subTagsScrollableDiv1.scrollHeight;
+    subTagsScrollableDiv1.dispatchEvent(new Event('scroll'));
 
     await waitFor(() => {
       const finalTagsDataLength =
