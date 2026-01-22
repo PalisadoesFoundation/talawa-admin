@@ -36,10 +36,18 @@ const restrictedImports = [
   },
   {
     id: 'rb-modal',
+    name: 'react-bootstrap',
+    importNames: ['Modal'],
+    message:
+      'Do not import Modal directly. Use the shared BaseModal or the CRUDModalTemplate/* components instead.',
+  },
+  {
+    id: 'rb-modal-path',
     name: 'react-bootstrap/Modal',
     message:
       'Do not import Modal directly. Use the shared BaseModal or the CRUDModalTemplate/* components instead.',
   },
+
   {
     id: 'rb-form',
     name: 'react-bootstrap',
@@ -370,14 +378,14 @@ export default [
    *
    * BaseModal files need direct react-bootstrap Modal access for wrapper implementation.
    * These files are the only ones allowed to import Modal directly from react-bootstrap.
-   * Allowed ID: rb-modal.
+   * Allowed ID: rb-modal, rb-modal-path.
    */
   {
     files: [
       'src/shared-components/BaseModal/**/*.{ts,tsx}',
       'src/types/shared-components/BaseModal/**/*.{ts,tsx}',
     ],
-    rules: restrictImportsExcept(['rb-modal']),
+    rules: restrictImportsExcept(['rb-modal', 'rb-modal-path']),
   },
 
   /**
