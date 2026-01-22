@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/MemberActivity/Card/EventsAttendedCardItem.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Card/EventsAttendedCardItem.tsx#L51)
+Defined in: [src/components/MemberActivity/Card/EventsAttendedCardItem.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Card/EventsAttendedCardItem.tsx#L55)
 
 ## Parameters
 
