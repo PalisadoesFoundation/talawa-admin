@@ -1,11 +1,24 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 #
-# Bootstrap script for Python virtual environment.
-# Validates venv exists, locates the venv Python executable (cross-platform),
-# installs dependencies from requirements.txt, and outputs the Python path.
-# Used by pre-commit hooks to run Python-based CI checks locally.
+# =============================================================================
+# Python Virtual Environment Bootstrap
+# =============================================================================
 #
-
+# Locates and prepares the project's Python virtual environment for use
+# by pre-commit hooks and local CI parity checks.
+#
+# Responsibilities:
+# - Detect the correct Python executable across platforms
+# - Ensure dependencies are installed from requirements.txt
+# - Normalize paths for Windows environments (Git Bash / Cygwin)
+# - Prevent concurrent dependency installation via file locking
+#
+# Design Notes:
+# - Supports both Unix and Windows virtualenv layouts
+# - Uses locking to avoid race conditions during installs
+# - Outputs the resolved Python executable path for callers
+#
+# =============================================================================
 set -euo pipefail
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
