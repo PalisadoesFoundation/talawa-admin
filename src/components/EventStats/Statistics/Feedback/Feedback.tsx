@@ -43,16 +43,6 @@ import type { InterfaceStatsModal } from 'types/Event/interface';
 import { useTranslation } from 'react-i18next';
 import './Feedback.module.css';
 
-// Fallback colors in case CSS variables are not available (SSR, tests)
-const FALLBACK_COLORS = [
-  '#57bb8a',
-  '#94bd77',
-  '#d4c86a',
-  '#e9b861',
-  '#e79a69',
-  '#dd776e',
-];
-
 export const FeedbackStats = ({
   data,
 }: InterfaceStatsModal): React.JSX.Element => {
@@ -60,25 +50,27 @@ export const FeedbackStats = ({
     keyPrefix: 'eventStats.feedback',
   });
 
-  // Memoize colors to avoid getComputedStyle on every render
-  const ratingColors = useMemo(() => {
-    if (typeof document === 'undefined') return FALLBACK_COLORS;
+  // Get colors from CSS custom properties only
+  const ratingColors = React.useMemo(() => {
+    if (typeof document === 'undefined') {
+      // Return empty array for SSR - component won't render chart anyway
+      return [];
+    }
     const getCSSVariable = (varName: string): string => {
-      const value = getComputedStyle(document.documentElement)
-        .getPropertyValue(varName)
-        .trim();
-      return value || '';
+      return (
+        getComputedStyle(document.documentElement)
+          .getPropertyValue(varName)
+          .trim() || 'transparent'
+      );
     };
-    const colors = [
-      getCSSVariable('--rating-color-5'),
+    return [
+      getCSSVariable('--rating-color-5'), // Green
       getCSSVariable('--rating-color-4'),
       getCSSVariable('--rating-color-3'),
       getCSSVariable('--rating-color-2'),
       getCSSVariable('--rating-color-1'),
-      getCSSVariable('--rating-color-0'),
+      getCSSVariable('--rating-color-0'), // Red
     ];
-    // Return fallback if any color is empty
-    return colors.some((c) => !c) ? FALLBACK_COLORS : colors;
   }, []);
 
   // Count the number of feedbacks for each rating
