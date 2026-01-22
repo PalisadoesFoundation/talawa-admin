@@ -19,7 +19,7 @@
  */
 // translation-check-keyPrefix: manageTag
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button } from 'shared-components/Button';
 import styles from './RemoveUserTagModal.module.css';
 import { BaseModal } from 'shared-components/BaseModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
