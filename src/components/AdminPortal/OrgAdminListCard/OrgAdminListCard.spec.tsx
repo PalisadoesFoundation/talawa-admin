@@ -52,7 +52,7 @@ const renderOrgAdminListCard = (props: {
               element={<OrgAdminListCard {...props} />}
             />
             <Route
-              path="/orgList"
+              path="/admin/orglist"
               element={<div data-testid="orgListScreen">orgListScreen</div>}
             />
           </Routes>

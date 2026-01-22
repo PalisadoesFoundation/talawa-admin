@@ -1,16 +1,16 @@
 /* global HTMLElement */
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter, MemoryRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import SuperAdminScreen from './SuperAdminScreen';
 import { describe, test, expect, vi } from 'vitest';
 import useLocalStorage from 'utils/useLocalstorage';
-import styles from 'style/app-fixed.module.css';
+import styles from './SuperAdminScreen.module.css';
 const { clearAllItems } = useLocalStorage();
 
 // Mock LeftDrawer to prevent router-related errors from NavLink, useLocation, etc.
@@ -55,7 +55,7 @@ vi.mock('components/ProfileCard/ProfileCard', () => ({
 
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
-  fireEvent(window, new window.Event('resize'));
+  window.dispatchEvent(new Event('resize'));
 };
 
 describe('Testing LeftDrawer in SuperAdminScreen', () => {
@@ -90,10 +90,50 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
 
     // Resize window to a smaller width
     resizeWindow(800);
-    // clickToggleMenuBtn(toggleButton);
-    expect(leftDrawerContainer).toHaveClass(styles.collapsedDrawer);
+    await waitFor(() => {
+      expect(leftDrawerContainer).toHaveClass(styles.collapsedDrawer);
+    });
 
     // clickToggleMenuBtn(toggleButton);
     // expect(icon).toHaveClass('fa fa-angle-double-left');
+  });
+});
+
+describe('SuperAdminScreen title mapping', () => {
+  const titleCases = [
+    { path: '/admin/orglist', keyPrefix: 'orgList' },
+    { path: '/admin/requests', keyPrefix: 'requests' },
+    { path: '/admin/users', keyPrefix: 'users' },
+    { path: '/admin/member/123', keyPrefix: 'memberDetail' },
+    { path: '/admin/profile', keyPrefix: 'adminProfile' },
+    { path: '/admin/communityProfile', keyPrefix: 'communityProfile' },
+    { path: '/admin/pluginstore', keyPrefix: 'pluginStore' },
+    { path: '/admin/notification', keyPrefix: 'notification' },
+  ];
+
+  const renderWithPath = (path: string): void => {
+    render(
+      <MockedProvider>
+        <MemoryRouter initialEntries={[path]}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <SuperAdminScreen />
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+  };
+
+  test.each(titleCases)('renders title for $path', ({ path, keyPrefix }) => {
+    renderWithPath(path);
+    const translations = i18nForTest.getDataByLanguage('en')?.translation as
+      | Record<string, { title?: string }>
+      | undefined;
+    const expectedTitle = translations?.[keyPrefix]?.title ?? 'title';
+
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      expectedTitle,
+    );
   });
 });

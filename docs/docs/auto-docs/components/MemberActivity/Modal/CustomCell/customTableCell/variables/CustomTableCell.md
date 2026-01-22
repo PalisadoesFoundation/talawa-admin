@@ -4,6 +4,6 @@
 
 # Variable: CustomTableCell
 
-> `const` **CustomTableCell**: `React.FC`\<\{ `eventId`: `string`; \}\>
+> `const` **CustomTableCell**: `React.FC`\<[`InterfaceCustomTableCellProps`](../../../../../../types/MemberActivity/interface/interfaces/InterfaceCustomTableCellProps.md)\>
 
-Defined in: [src/components/MemberActivity/Modal/CustomCell/customTableCell.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Modal/CustomCell/customTableCell.tsx#L34)
+Defined in: [src/components/MemberActivity/Modal/CustomCell/customTableCell.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/Modal/CustomCell/customTableCell.tsx#L35)

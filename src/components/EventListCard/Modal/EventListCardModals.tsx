@@ -391,9 +391,9 @@ function EventListCardModals({
   };
 
   const openEventDashboard = (): void => {
-    const userPath =
-      eventListCardProps.userRole === UserRole.REGULAR ? 'user/' : '';
-    navigate(`/${userPath}event/${orgId}/${eventListCardProps.id}`);
+    const isUserPortal = eventListCardProps.userRole === UserRole.REGULAR;
+    const basePath = isUserPortal ? '/user' : '/admin';
+    navigate(`${basePath}/event/${orgId}/${eventListCardProps.id}`);
   };
 
   return (

@@ -1,7 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { render, screen, waitFor } from '@testing-library/react';
-import { fireEvent } from '@testing-library/dom';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -227,7 +226,7 @@ describe('Testing OrganizationScreen', () => {
     );
   });
 
-  test('handles window resize', () => {
+  test('handles window resize', async () => {
     // Set up mocks for valid orgId case
     mockUseParams.mockReturnValue({ orgId: '123' });
     mockUseMatch.mockReturnValue({
@@ -237,8 +236,11 @@ describe('Testing OrganizationScreen', () => {
     renderComponent();
 
     window.innerWidth = 800;
-    fireEvent(window, new window.Event('resize'));
-    expect(screen.getByTestId('mainpageright')).toHaveClass(styles.expand);
+    window.dispatchEvent(new window.Event('resize'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('mainpageright')).toHaveClass(styles.expand);
+    });
   });
 
   test('handles event not found scenario', async () => {

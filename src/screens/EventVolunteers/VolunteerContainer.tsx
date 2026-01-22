@@ -6,7 +6,7 @@
  *
  * @example
  * ```tsx
- * <Route path="/organization/:orgId/event/:eventId/volunteers" element={<VolunteerContainer />} />
+ * <Route path="/admin/event/:orgId/:eventId/volunteers" element={<VolunteerContainer />} />
  * ```
  */
 import React, { useState } from 'react';
@@ -39,14 +39,15 @@ function VolunteerContainer(): JSX.Element {
         items={[
           {
             translationKey: 'organization',
-            to: `/user/organization/${orgId}`,
+            to: `/admin/orgdash/${orgId}`,
           },
           {
             translationKey: 'events',
-            to: `/user/events/${orgId}`,
+            to: `/admin/orgevents/${orgId}`,
           },
           {
             translationKey: 'event',
+            to: `/admin/event/${orgId}/${eventId}`,
           },
           {
             translationKey: 'Volunteers',
