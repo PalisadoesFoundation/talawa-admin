@@ -57,3 +57,11 @@
 .navContainer {
   composes: navContainer from '../../../style/app-fixed.module.css';
 }
+
+.collapsedDrawer {
+  composes: collapsedDrawer from '../../../style/app-fixed.module.css';
+}
+
+.expandedDrawer {
+  composes: expandedDrawer from '../../../style/app-fixed.module.css';
+}
