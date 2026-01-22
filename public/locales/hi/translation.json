@@ -2344,6 +2344,10 @@
     "noEventsAttended": "कोई घटना में उपस्थित नहीं हुए"
   },
   "eventStats": {
+    "averageRating": {
+      "title": "औसत समीक्षा स्कोर",
+      "rated": "रेटेड {{score}} / 5"
+    },
     "title": "इवेंट आंकड़े",
     "reviews": {
       "title": "समीक्षाएं",
