@@ -72,8 +72,12 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   const page = isControlled ? currentPage : internalPage;
 
   const handlePageReset = React.useCallback(() => {
-    if (!isControlled) setInternalPage(1);
-  }, [isControlled]);
+    if (isControlled) {
+      onPageChange?.(1);
+    } else {
+      setInternalPage(1);
+    }
+  }, [onPageChange]);
 
   // Filtering & Search Logic (Extracted to hook)
   const { query, updateGlobalSearch, filteredRows } = useDataTableFiltering({
@@ -180,6 +184,17 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     [paginatedData, getKey, startIndex],
   );
 
+  // When renderRow is provided, disable selection/actions to prevent column count mismatch
+  const effectiveSelectable = renderRow ? false : selectable;
+  const effectiveRowActions = renderRow ? [] : rowActions;
+
+  // Conditional selection props when renderRow is present
+  const effectiveSelectedKeys = renderRow ? undefined : selectedKeys;
+  const effectiveOnSelectionChange = renderRow ? undefined : onSelectionChange;
+  const effectiveInitialSelectedKeys = renderRow
+    ? undefined
+    : initialSelectedKeys;
+
   // Selection & Selection-based Actions Logic (Extracted to hook)
   const {
     currentSelection,
@@ -193,10 +208,10 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   } = useDataTableSelection({
     paginatedData,
     keysOnPage,
-    selectable,
-    selectedKeys,
-    onSelectionChange,
-    initialSelectedKeys,
+    selectable: effectiveSelectable,
+    selectedKeys: effectiveSelectedKeys,
+    onSelectionChange: effectiveOnSelectionChange,
+    initialSelectedKeys: effectiveInitialSelectedKeys,
     bulkActions,
   });
 
@@ -207,10 +222,6 @@ export function DataTable<T>(props: IDataTableProps<T>) {
       headerCheckboxRef.current.indeterminate = someSelectedOnPage;
     }
   }, [someSelectedOnPage]);
-
-  // When renderRow is provided, disable selection/actions to prevent column count mismatch
-  const effectiveSelectable = renderRow ? false : selectable;
-  const effectiveRowActions = renderRow ? [] : rowActions;
 
   // Warn in development if renderRow is used with selection/actions
   React.useEffect(() => {

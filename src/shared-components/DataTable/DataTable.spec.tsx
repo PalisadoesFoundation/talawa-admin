@@ -1529,6 +1529,31 @@ describe('DataTable', () => {
     expect(onPageChange).toHaveBeenCalledWith(2);
   });
 
+  it('calls onPageChange(1) in controlled mode when search changes (handlePageReset)', async () => {
+    const onPageChange = vi.fn();
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+    const data = [{ name: 'Ada' }, { name: 'Bob' }, { name: 'Charlie' }];
+
+    render(
+      <DataTable
+        data={data}
+        columns={columns}
+        showSearch
+        paginationMode="client"
+        pageSize={1}
+        currentPage={2}
+        onPageChange={onPageChange}
+      />,
+    );
+
+    // Type in search to trigger handlePageReset
+    const searchInput = screen.getByRole('searchbox');
+    await userEvent.type(searchInput, 'a');
+
+    // In controlled mode, handlePageReset should call onPageChange(1)
+    expect(onPageChange).toHaveBeenCalledWith(1);
+  });
+
   /* ------------------------------------------------------------------
    * loadingMore skeleton rows with selection and row actions columns
    * ------------------------------------------------------------------ */
