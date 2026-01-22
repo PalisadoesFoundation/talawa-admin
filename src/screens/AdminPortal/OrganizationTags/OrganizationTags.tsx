@@ -301,7 +301,6 @@ function OrganizationTags(): JSX.Element {
   ];
 
   const handleSortChange = (value: string): void => {
-    setTagSearchName('');
     setTagSortOrder(value === 'latest' ? 'DESCENDING' : 'ASCENDING');
   };
 
