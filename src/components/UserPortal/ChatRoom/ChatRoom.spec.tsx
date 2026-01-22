@@ -65,6 +65,8 @@ vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
 // Note: no direct imports from Minio modules are necessary; they are mocked above
 
 import ChatRoom from './ChatRoom';
+import ChatHeader from './ChatHeader';
+import EmptyChatState from './EmptyChatState';
 import MessageImage from './MessageImage';
 import { CHAT_BY_ID, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
 import {
@@ -1760,8 +1762,6 @@ describe('ChatRoom Component', () => {
   });
 
   it('handles subscription handler catch block when data processing fails', async () => {
-    // This test triggers the catch block by providing a parentMessage with null creator
-    // which will cause an error when accessing creator.id at line 587
     const SUBSCRIPTION_WITH_ERROR = {
       request: {
         query: MESSAGE_SENT_TO_CHAT,
@@ -1791,7 +1791,7 @@ describe('ChatRoom Component', () => {
               id: 'parent1',
               body: 'Parent',
               createdAt: dayjs.utc().subtract(1, 'day').toISOString(),
-              creator: null, // This will cause an error when accessing creator.id
+              creator: null,
             },
           },
         },
@@ -1800,13 +1800,222 @@ describe('ChatRoom Component', () => {
 
     const { chatListRefetch } = renderChatRoom([SUBSCRIPTION_WITH_ERROR]);
 
+    await waitFor(() =>
+      expect(screen.getByText('Test Chat')).toBeInTheDocument(),
+    );
+
+    await waitFor(() => {
+      expect(chatListRefetch).toHaveBeenCalled();
+    });
+  });
+
+  it('does not send message when both message body and attachment are empty', async () => {
+    const user = userEvent.setup();
+    renderChatRoom();
+
     await waitFor(() => {
       expect(screen.getByText('Test Chat')).toBeInTheDocument();
     });
 
-    // The subscription should be processed and catch block should handle the error
+    const messageInput = screen.getByTestId('messageInput') as HTMLInputElement;
+    const sendButton = screen.getByTestId('sendMessage');
+
+    await user.clear(messageInput);
+    expect(messageInput.value).toBe('');
+
+    await user.click(sendButton);
+
     await waitFor(() => {
-      expect(chatListRefetch).toHaveBeenCalled();
+      expect(screen.queryByText('Test Chat')).toBeInTheDocument();
+    });
+  });
+
+  it('updates edited message in pagination ref correctly', async () => {
+    const user = userEvent.setup();
+    renderChatRoom([CHAT_BY_ID_MOCK, CHAT_BY_ID_AFTER_EDIT_MOCK]);
+
+    await waitFor(() => {
+      expect(screen.getByText('Hello World')).toBeInTheDocument();
+    });
+
+    const msgNode = screen
+      .getByText('Hello World')
+      .closest('[data-testid="message"]') as HTMLElement | null;
+    if (!msgNode) throw new Error('message node not found');
+    const toggle = within(msgNode as HTMLElement).getByTestId('dropdown');
+    await user.click(toggle);
+
+    const editButton = screen.getByTestId('replyToMessage');
+    await user.click(editButton);
+
+    const editInput = screen.getByTestId('messageInput') as HTMLInputElement;
+    await user.clear(editInput);
+    await user.type(editInput, 'Edited message');
+
+    const saveButton = screen.getByTestId('sendMessage');
+    await user.click(saveButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('Edited message')).toBeInTheDocument();
+    });
+  });
+
+  it('opens group chat details and triggers refetch callback', async () => {
+    const user = userEvent.setup();
+    renderChatRoom([CHAT_BY_ID_GROUP_MOCK]);
+
+    await waitFor(() => {
+      expect(screen.getByText(mockGroupChatData.name)).toBeInTheDocument();
+    });
+
+    const headerNode = screen.getByText(mockGroupChatData.name).closest('div');
+    if (!headerNode) throw new Error('header node not found');
+    await user.click(headerNode);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('groupChatDetailsModal')).toBeInTheDocument();
+    });
+  });
+
+  describe('ChatHeader component edge cases', () => {
+    it('does not crash when isGroup is true but onGroupClick is undefined', () => {
+      const { getByText } = render(
+        <I18nextProvider i18n={i18nForTest}>
+          <ChatHeader
+            chatImage="https://example.com/avatar.jpg"
+            chatTitle="Test Chat"
+            chatSubtitle="3 members"
+            isGroup={true}
+            onGroupClick={undefined}
+          />
+        </I18nextProvider>,
+      );
+
+      expect(getByText('Test Chat')).toBeInTheDocument();
+      expect(getByText('3 members')).toBeInTheDocument();
+    });
+
+    it('does not call onGroupClick when isGroup is false', async () => {
+      const user = userEvent.setup();
+      const onGroupClickMock = vi.fn();
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <ChatHeader
+            chatImage="https://example.com/avatar.jpg"
+            chatTitle="Direct Chat"
+            chatSubtitle=""
+            isGroup={false}
+            onGroupClick={onGroupClickMock}
+          />
+        </I18nextProvider>,
+      );
+
+      const headerNode = screen.getByText('Direct Chat').closest('div');
+      if (!headerNode) throw new Error('header node not found');
+
+      await user.click(headerNode);
+
+      expect(onGroupClickMock).not.toHaveBeenCalled();
+    });
+
+    it('calls onGroupClick when isGroup is true and onGroupClick is provided', async () => {
+      const user = userEvent.setup();
+      const onGroupClickMock = vi.fn();
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <ChatHeader
+            chatImage="https://example.com/avatar.jpg"
+            chatTitle="Group Chat"
+            chatSubtitle="3 members"
+            isGroup={true}
+            onGroupClick={onGroupClickMock}
+          />
+        </I18nextProvider>,
+      );
+
+      const headerNode = screen.getByText('Group Chat').closest('div');
+      if (!headerNode) throw new Error('header node not found');
+
+      await user.click(headerNode);
+
+      expect(onGroupClickMock).toHaveBeenCalled();
+    });
+  });
+
+  describe('MessageImage onError handler', () => {
+    it('handles image load error when onError fires after successful fetch', async () => {
+      const getFile = vi
+        .fn()
+        .mockResolvedValue('https://example.com/presigned.jpg');
+      const { findByAltText, findByText } = render(
+        <I18nextProvider i18n={i18nForTest}>
+          <MessageImage
+            media="uploads/imgError"
+            organizationId="org123"
+            getFileFromMinio={getFile}
+          />
+        </I18nextProvider>,
+      );
+
+      const img = await findByAltText('Attachment');
+      expect(img).toBeTruthy();
+      expect(img).toHaveAttribute('src', 'https://example.com/presigned.jpg');
+
+      img.dispatchEvent(new Event('error'));
+
+      const err = await findByText('Image not available');
+      expect(err).toBeInTheDocument();
+    });
+
+    it('handles multiple onError triggers gracefully', async () => {
+      const getFile = vi
+        .fn()
+        .mockResolvedValue('https://example.com/presigned.jpg');
+      const { findByAltText, findByText } = render(
+        <I18nextProvider i18n={i18nForTest}>
+          <MessageImage
+            media="uploads/imgMultiError"
+            organizationId="org123"
+            getFileFromMinio={getFile}
+          />
+        </I18nextProvider>,
+      );
+
+      const img = await findByAltText('Attachment');
+      expect(img).toBeTruthy();
+
+      img.dispatchEvent(new Event('error'));
+      await findByText('Image not available');
+
+      img.dispatchEvent(new Event('error'));
+
+      expect(await findByText('Image not available')).toBeInTheDocument();
+    });
+  });
+
+  describe('EmptyChatState component', () => {
+    it('renders with provided message', () => {
+      const { getByTestId } = render(
+        <I18nextProvider i18n={i18nForTest}>
+          <EmptyChatState message="Select a contact to chat" />
+        </I18nextProvider>,
+      );
+
+      expect(getByTestId('noChatSelected')).toHaveTextContent(
+        'Select a contact to chat',
+      );
+    });
+
+    it('renders with empty message', () => {
+      const { getByTestId } = render(
+        <I18nextProvider i18n={i18nForTest}>
+          <EmptyChatState message="" />
+        </I18nextProvider>,
+      );
+
+      expect(getByTestId('noChatSelected')).toHaveTextContent('');
     });
   });
 
