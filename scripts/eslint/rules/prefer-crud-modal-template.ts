@@ -135,7 +135,17 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
         );
       });
     };
-
+    /**
+     * Converts an ImportSpecifier to its string representation
+     */
+    const specifierToString = (spec: TSESTree.ImportSpecifier): string => {
+      const imported =
+        spec.imported.type === AST_NODE_TYPES.Identifier
+          ? spec.imported.name
+          : '';
+      const local = spec.local.name;
+      return imported === local ? local : `${imported} as ${local}`;
+    };
     return {
       // Collect BaseModal imports
       ImportDeclaration(node: TSESTree.ImportDeclaration) {
@@ -159,7 +169,8 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
             }
           }
           // Handle default imports: import BaseModal from './BaseModal'
-          // Only track if the import path explicitly targets BaseModal module
+          // Note: ImportDefaultSpecifier from target paths are added to baseModalNames/importDeclarations
+          // without variants validation, treating any default import as an intentional BaseModal alias
           else if (specifier.type === AST_NODE_TYPES.ImportDefaultSpecifier) {
             const localName = specifier.local.name;
             baseModalNames.add(localName);
@@ -282,7 +293,11 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
                     );
 
                     // Build new import preserving other specifiers
-                    const originalImportPath = importDecl.source.value;
+                    const rawImportSource = importDecl.source.value;
+                    const originalImportPath =
+                      typeof rawImportSource === 'string'
+                        ? rawImportSource
+                        : String(rawImportSource);
                     const preservedImports = otherSpecifiers
                       .map((spec) => {
                         if (
@@ -291,14 +306,7 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
                           return spec.local.name;
                         }
                         if (spec.type === AST_NODE_TYPES.ImportSpecifier) {
-                          const imported =
-                            spec.imported.type === AST_NODE_TYPES.Identifier
-                              ? spec.imported.name
-                              : '';
-                          const local = spec.local.name;
-                          return imported === local
-                            ? local
-                            : `${imported} as ${local}`;
+                          return specifierToString(spec);
                         }
                         return '';
                       })
@@ -323,14 +331,7 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
                         )
                         .map((spec) => {
                           if (spec.type === AST_NODE_TYPES.ImportSpecifier) {
-                            const imported =
-                              spec.imported.type === AST_NODE_TYPES.Identifier
-                                ? spec.imported.name
-                                : '';
-                            const local = spec.local.name;
-                            return imported === local
-                              ? local
-                              : `${imported} as ${local}`;
+                            return specifierToString(spec);
                           }
                           return '';
                         })
@@ -342,11 +343,11 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
                       preservedImportStmt = `import { ${preservedImports} } from '${originalImportPath}';`;
                     }
 
-                    const newImport = `import { CRUDModalTemplate as ${localName} } from "${CRUD_IMPORT_PATH}";\n${preservedImportStmt}`;
+                    const newImport = `import { CRUDModalTemplate as ${localName} } from '${CRUD_IMPORT_PATH}';\n${preservedImportStmt}`;
                     return fixer.replaceText(importDecl, newImport);
                   } else {
                     // Single specifier: replace entire import
-                    const newImport = `import { CRUDModalTemplate as ${localName} } from "${CRUD_IMPORT_PATH}";`;
+                    const newImport = `import { CRUDModalTemplate as ${localName} } from '${CRUD_IMPORT_PATH}';`;
                     return fixer.replaceText(importDecl, newImport);
                   }
                 }
