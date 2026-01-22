@@ -1,5 +1,5 @@
 .colorWhite {
-  color: white;
+  color: var(--color-white);
 }
 
 .glassMenu {
@@ -35,7 +35,7 @@
 .notificationDot {
   width: 10px;
   height: 10px;
-  background: #0a0a0a;
+  background: var(--color-gray-900);
   border-radius: 50%;
   margin-right: 8px;
   flex-shrink: 0;
@@ -46,7 +46,15 @@
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 0.97em;
-  color: #222;
+  color: var(--color-gray-900);
+}
+
+.notificationClickable {
+  cursor: pointer;
+}
+
+.notificationStatic {
+  cursor: default;
 }
 
 .iconButton {
@@ -71,6 +79,15 @@
   outline: none !important;
 }
 
+.iconWrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.bellIcon {
+  color: var(--color-gray-800);
+}
+
 .unreadBadge {
   position: absolute;
   top: -6px;
@@ -78,8 +95,8 @@
   min-width: 18px;
   height: 18px;
   padding: 0 4px;
-  background: #d63031; /* red badge */
-  color: #fff;
+  background: var(--color-red-500);
+  color: var(--color-white);
   border-radius: 12px;
   font-size: 11px;
   display: inline-flex;
