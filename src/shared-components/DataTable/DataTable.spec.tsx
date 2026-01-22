@@ -711,6 +711,42 @@ describe('DataTable', () => {
     expect(screen.getAllByRole('row')).toHaveLength(4); // 1 header + 3 skeleton rows
   });
 
+  it('renders skeleton table with selection and actions columns when loading', () => {
+    type Row = { id: string; name: string };
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
+
+    render(
+      <DataTable<Row>
+        data={[]}
+        columns={columns}
+        loading
+        skeletonRows={2}
+        selectable
+        rowKey="id"
+        rowActions={[{ id: 'edit', label: 'Edit', onClick: () => {} }]}
+      />,
+    );
+
+    const table = screen.getByRole('table');
+    expect(table).toHaveAttribute('aria-busy', 'true');
+
+    // Header row should have 3 columns: select + name + actions
+    const headerCells = screen.getAllByRole('columnheader');
+    expect(headerCells).toHaveLength(3);
+
+    // Each skeleton row should have 3 cells: select + name + actions
+    const skeletonRows = screen.getAllByTestId(/^skeleton-row-/);
+    expect(skeletonRows).toHaveLength(2);
+    skeletonRows.forEach((row) => {
+      const cells = row.querySelectorAll('td');
+      expect(cells).toHaveLength(3);
+    });
+
+    // Total skeleton cells: 2 rows * 3 columns = 6 cells with data-testid
+    const skeletonCells = screen.getAllByTestId('data-skeleton-cell');
+    expect(skeletonCells).toHaveLength(6);
+  });
+
   it('renders <caption> with ariaLabel in both loading and table content states', () => {
     const columns = [
       {
@@ -1180,34 +1216,35 @@ describe('DataTable', () => {
     type Row = { id: string; name: string };
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data: Row[] = [{ id: '1', name: 'Ada' }];
+    try {
+      render(
+        <DataTable<Row>
+          data={data}
+          columns={columns}
+          selectable
+          rowKey="id"
+          bulkActions={[
+            {
+              id: 'delete',
+              label: 'Delete',
+              onClick: onBulk,
+              confirm: 'Are you sure?',
+            },
+          ]}
+        />,
+      );
 
-    render(
-      <DataTable<Row>
-        data={data}
-        columns={columns}
-        selectable
-        rowKey="id"
-        bulkActions={[
-          {
-            id: 'delete',
-            label: 'Delete',
-            onClick: onBulk,
-            confirm: 'Are you sure?',
-          },
-        ]}
-      />,
-    );
+      // Select row
+      await user.click(screen.getByTestId('select-row-1'));
 
-    // Select row
-    await user.click(screen.getByTestId('select-row-1'));
+      // Click bulk action
+      await user.click(screen.getByTestId('bulk-action-delete'));
 
-    // Click bulk action
-    await user.click(screen.getByTestId('bulk-action-delete'));
-
-    expect(confirmSpy).toHaveBeenCalledWith('Are you sure?');
-    expect(onBulk).toHaveBeenCalled();
-
-    confirmSpy.mockRestore();
+      expect(confirmSpy).toHaveBeenCalledWith('Are you sure?');
+      expect(onBulk).toHaveBeenCalled();
+    } finally {
+      confirmSpy.mockRestore();
+    }
   });
 
   it('bulk action with confirm does not call onClick when cancelled', async () => {
