@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { BrowserRouter } from 'react-router';
 import EventsAttendedMemberModal from './EventsAttendedMemberModal';
@@ -118,7 +119,8 @@ describe('EventsAttendedMemberModal', () => {
     expect(screen.getByText('Event 5')).toBeInTheDocument();
   });
 
-  test('handles pagination correctly', () => {
+  test('handles pagination correctly', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider>
         <BrowserRouter>
@@ -127,11 +129,12 @@ describe('EventsAttendedMemberModal', () => {
       </MockedProvider>,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: 'Go to next page' }));
+    await user.click(screen.getByRole('button', { name: 'Go to next page' }));
     expect(screen.getByText('Event 6')).toBeInTheDocument();
   });
 
-  test('closes modal when close button is clicked', () => {
+  test('closes modal when close button is clicked', async () => {
+    const user = userEvent.setup();
     const mockSetShow = vi.fn();
     render(
       <MockedProvider>
@@ -141,12 +144,13 @@ describe('EventsAttendedMemberModal', () => {
       </MockedProvider>,
     );
 
-    fireEvent.click(screen.getByTestId('modalCloseBtn'));
+    await user.click(screen.getByTestId('modalCloseBtn'));
     expect(mockSetShow).toHaveBeenCalledWith(false);
     expect(mockSetShow).toHaveBeenCalledTimes(1);
   });
 
-  test('displays correct pagination info', () => {
+  test('displays correct pagination info', async () => {
+    const user = userEvent.setup();
     render(
       <MockedProvider>
         <BrowserRouter>
@@ -156,7 +160,7 @@ describe('EventsAttendedMemberModal', () => {
     );
 
     expect(screen.getByText('Showing 1 - 5 of 6 Events')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Go to next page' }));
+    await user.click(screen.getByRole('button', { name: 'Go to next page' }));
     expect(screen.getByText('Showing 6 - 6 of 6 Events')).toBeInTheDocument();
   });
 });

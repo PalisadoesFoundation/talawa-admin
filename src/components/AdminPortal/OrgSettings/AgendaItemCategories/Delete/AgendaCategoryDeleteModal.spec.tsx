@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -76,15 +77,17 @@ describe('AgendaCategoryDeleteModal', () => {
     expect(screen.queryByText('deleteAgendaCategory')).not.toBeInTheDocument();
   });
 
-  test("calls toggleDeleteModal when 'No' button is clicked", () => {
+  test("calls toggleDeleteModal when 'No' button is clicked", async () => {
+    const user = userEvent.setup();
     renderComponent(true);
-    fireEvent.click(screen.getByTestId('deleteAgendaCategoryCloseBtn'));
+    await user.click(screen.getByTestId('deleteAgendaCategoryCloseBtn'));
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
   });
 
-  test("calls deleteAgendaCategoryHandler when 'Yes' button is clicked", () => {
+  test("calls deleteAgendaCategoryHandler when 'Yes' button is clicked", async () => {
+    const user = userEvent.setup();
     renderComponent(true);
-    fireEvent.click(screen.getByTestId('deleteAgendaCategoryBtn'));
+    await user.click(screen.getByTestId('deleteAgendaCategoryBtn'));
     expect(mockDeleteAgendaCategoryHandler).toHaveBeenCalledTimes(1);
   });
 });

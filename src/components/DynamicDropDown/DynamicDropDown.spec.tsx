@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, act, fireEvent } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import DynamicDropDown from './DynamicDropDown';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
@@ -99,6 +99,8 @@ describe('DynamicDropDown component', () => {
   });
 
   it('handles keyboard navigation with Enter key correctly', async () => {
+    const user = userEvent.setup();
+
     const formData = { fieldName: 'value1' };
     const setFormData = vi.fn();
 
@@ -112,22 +114,22 @@ describe('DynamicDropDown component', () => {
     });
 
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
 
-    const dropdownMenu = screen.getByTestId('fieldname-dropdown-menu');
+    await user.click(dropdownButton);
+
     const option = screen.getByTestId('change-fieldname-btn-value2');
+
     option.focus();
-
-    await act(async () => {
-      fireEvent.keyDown(dropdownMenu, { key: 'Enter' });
-    });
-
-    expect(option).toBeInTheDocument();
+    await user.keyboard('{Enter}');
+    expect(setFormData).toHaveBeenCalledWith(
+      expect.objectContaining({
+        fieldName: 'value2',
+      }),
+    );
   });
 
   it('handles keyboard navigation with Space key correctly', async () => {
+    const user = userEvent.setup();
     const formData = { fieldName: 'value1' };
     const setFormData = vi.fn();
 
@@ -141,22 +143,17 @@ describe('DynamicDropDown component', () => {
     });
 
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
+    await userEvent.click(dropdownButton);
 
-    const dropdownMenu = screen.getByTestId('fieldname-dropdown-menu');
     const option = screen.getByTestId('change-fieldname-btn-value2');
+
     option.focus();
-
-    await act(async () => {
-      fireEvent.keyDown(dropdownMenu, { key: ' ' });
-    });
-
+    await user.keyboard('{space}');
     expect(option).toBeInTheDocument();
   });
 
   it('ignores non-Enter/Space key presses', async () => {
+    const user = userEvent.setup();
     const formData = { fieldName: 'value1' };
     const setFormData = vi.fn();
 
@@ -166,17 +163,11 @@ describe('DynamicDropDown component', () => {
     });
 
     const dropdownButton = screen.getByTestId('fieldname-dropdown-btn');
-    await act(async () => {
-      await userEvent.click(dropdownButton);
-    });
+    await userEvent.click(dropdownButton);
 
-    const dropdownMenu = screen.getByTestId('fieldname-dropdown-menu');
-
-    await act(async () => {
-      fireEvent.keyDown(dropdownMenu, { key: 'Escape' });
-      fireEvent.keyDown(dropdownMenu, { key: 'Tab' });
-      fireEvent.keyDown(dropdownMenu, { key: 'a' });
-    });
+    await user.keyboard('{Escape}');
+    await user.keyboard('{Tab}');
+    await user.keyboard('a');
 
     expect(setFormData).not.toHaveBeenCalled();
   });
@@ -387,6 +378,7 @@ describe('DynamicDropDown component', () => {
   });
 
   it('handles keyboard event when no element is focused', async () => {
+    const user = userEvent.setup();
     const formData = { fieldName: 'value1' };
     const setFormData = vi.fn();
 
@@ -399,22 +391,18 @@ describe('DynamicDropDown component', () => {
     await act(async () => {
       await userEvent.click(dropdownButton);
     });
-
-    const dropdownMenu = screen.getByTestId('fieldname-dropdown-menu');
 
     // Blur any focused element
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
 
-    await act(async () => {
-      fireEvent.keyDown(dropdownMenu, { key: 'Enter' });
-    });
-
+    await user.keyboard('{Enter}');
     expect(setFormData).not.toHaveBeenCalled();
   });
 
   it('handles keyboard event when focused element is not an HTMLElement', async () => {
+    const user = userEvent.setup();
     const formData = { fieldName: 'value1' };
     const setFormData = vi.fn();
 
@@ -428,17 +416,12 @@ describe('DynamicDropDown component', () => {
       await userEvent.click(dropdownButton);
     });
 
-    const dropdownMenu = screen.getByTestId('fieldname-dropdown-menu');
-
     // Simply blur the active element instead of mocking
     if (document.activeElement instanceof HTMLElement) {
       document.activeElement.blur();
     }
 
-    await act(async () => {
-      fireEvent.keyDown(dropdownMenu, { key: 'Enter' });
-    });
-
+    await user.keyboard('{Enter}');
     expect(setFormData).not.toHaveBeenCalled();
   });
 

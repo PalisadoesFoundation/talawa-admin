@@ -1,5 +1,6 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import PaginationList from './PaginationList';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
@@ -107,26 +108,39 @@ describe('PaginationList', () => {
     expect(screen.getByTestId('pagination-navigator')).toBeInTheDocument();
   });
 
-  it('calls onPageChange when page navigation occurs', () => {
+  it('calls onPageChange when page navigation occurs', async () => {
+    const user = userEvent.setup();
     mockMatchMedia(false); // false = large screen
 
     renderWithProviders();
 
     const nextButton = screen.getByTestId('next-button');
-    fireEvent.click(nextButton);
+    await user.click(nextButton);
 
     expect(defaultProps.onPageChange).toHaveBeenCalledWith(null, 1);
   });
 
-  it('calls onRowsPerPageChange when rows per page changes', () => {
+  it('calls onRowsPerPageChange when rows per page changes', async () => {
+    const user = userEvent.setup();
     mockMatchMedia(false); // false = large screen
 
-    renderWithProviders();
+    const onRowsPerPageChange = vi.fn();
 
-    const selectElement = screen.getByLabelText('rows per page');
-    fireEvent.change(selectElement, { target: { value: '20' } });
+    renderWithProviders({
+      count: 100,
+      rowsPerPage: 10,
+      page: 0,
+      onPageChange: vi.fn(),
+      onRowsPerPageChange,
+    });
 
-    expect(defaultProps.onRowsPerPageChange).toHaveBeenCalled();
+    const select = screen.getByRole('combobox', {
+      name: /rows per page/i,
+    });
+
+    await user.selectOptions(select, '30');
+
+    expect(onRowsPerPageChange).toHaveBeenCalled();
   });
 
   it('displays correct page information', () => {
