@@ -35,7 +35,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 import type { TargetsType } from 'state/reducers/routesReducer';
-import styles from './../../style/app-fixed.module.css';
+import styles from './LeftDrawerOrg.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { usePluginDrawerItems } from 'plugin';
 import ProfileCard from 'components/ProfileCard/ProfileCard';
@@ -125,7 +125,7 @@ const LeftDrawerOrg = ({
               }
               label={tCommon(name)}
               testId={name}
-              dataCy={`leftDrawerButton-${name}`}
+              dataCy={'leftDrawerButton-' + name}
               hideDrawer={hideDrawer}
               onClick={handleLinkClick}
               useSimpleButton={true}
@@ -176,7 +176,13 @@ const LeftDrawerOrg = ({
       }
       footerContent={
         <>
-          <div style={{ display: hideDrawer ? 'none' : 'flex' }}>
+          <div
+            className={
+              hideDrawer
+                ? styles.profileContainerHidden
+                : styles.profileContainer
+            }
+          >
             <ProfileCard />
           </div>
           <SignOut hideDrawer={hideDrawer} />

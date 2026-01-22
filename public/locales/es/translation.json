@@ -2353,6 +2353,11 @@
       "title": "Reseñas",
       "emptyState": "Esperando a que la gente hable sobre el evento...",
       "filledByCount": "Completado por {{count}} personas."
+    },
+    "feedback": {
+      "title": "Análisis de comentarios",
+      "emptyState": "¡Pida a los asistentes que envíen comentarios para obtener información!",
+      "filledByCount": "{{count}} personas han completado comentarios para este evento."
     }
   },
   "verifyEmail": {
