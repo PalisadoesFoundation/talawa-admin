@@ -8,6 +8,7 @@ import updateEnvFile from './updateEnvFile/updateEnvFile';
 import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
 import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
 import { backupEnvFile } from './backupEnvFile/backupEnvFile';
+import { pathToFileURL } from 'url';
 
 /**
  * Environment variable value constants
@@ -213,4 +214,6 @@ export async function main(): Promise<void> {
   }
 }
 
-main();
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
+  main();
+}
