@@ -4,7 +4,7 @@ import Modal from 'react-bootstrap/Modal';
 import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
-import styles from './OrganizationEvents.module.css';
+import styles from './CreateEventModal.module.css';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import { errorHandler } from 'utils/errorHandler';
 import EventForm, {

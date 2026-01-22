@@ -89,7 +89,9 @@
     "emailResent": "Verification email has been resent successfully.",
     "emailNotVerified": "Your email is not verified. Please check your inbox for the verification link.",
     "resendVerification": "Resend Verification",
-    "resendFailed": "Failed to resend verification email. Please try again."
+    "resendFailed": "Failed to resend verification email. Please try again.",
+    "showPassword": "पासवर्ड दिखाएं",
+    "hidePassword": "पासवर्ड छिपाएं"
   },
   "adminProfile": {
     "title": "एडमिन प्रोफ़ाइल",
