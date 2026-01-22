@@ -466,7 +466,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
         <tbody>
           {renderRow
             ? paginatedData.map((row, idx) => (
-                <React.Fragment key={getKey(row, idx)}>
+                <React.Fragment key={getKey(row, startIndex + idx)}>
                   {renderRow(row, idx)}
                 </React.Fragment>
               ))
