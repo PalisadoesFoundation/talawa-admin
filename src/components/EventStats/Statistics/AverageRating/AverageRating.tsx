@@ -4,7 +4,7 @@
  * This component displays the average review score for an event using a styled card layout.
  * It utilizes Material-UI's `Rating` component to visually represent the score with custom icons.
  *
- * @param props - The props object containing event statistics data.
+ * @param data - Event statistics data for the AverageRating component.
  *
  * @returns A React component that renders the average review score with a styled card.
  *
@@ -33,6 +33,8 @@ export const AverageRating = ({ data }: InterfaceStatsModal): JSX.Element => {
     keyPrefix: 'eventStats.averageRating',
   });
 
+  const safeScore = data.event.averageFeedbackScore ?? 0;
+
   return (
     <>
       <Card className={styles.cardContainer}>
@@ -42,7 +44,7 @@ export const AverageRating = ({ data }: InterfaceStatsModal): JSX.Element => {
           </Card.Title>
           <Typography component="legend">
             {t('rated', {
-              score: data.event.averageFeedbackScore?.toFixed(2),
+              score: safeScore.toFixed(2),
             })}
           </Typography>
           <Rating
@@ -50,7 +52,7 @@ export const AverageRating = ({ data }: InterfaceStatsModal): JSX.Element => {
             precision={0.5}
             max={5}
             readOnly
-            value={data.event.averageFeedbackScore}
+            value={safeScore}
             icon={<FavoriteIcon className={styles.ratingIcon} />}
             size="medium"
             emptyIcon={
