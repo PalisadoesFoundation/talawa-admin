@@ -227,15 +227,13 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     const user = userEvent.setup();
     renderEventRegistrants();
 
-    await waitFor(async () => {
-      const checkedInButton = screen.getByRole('button', {
-        name: 'Checked In',
-      });
-
-      expect(checkedInButton).toBeDisabled();
-
-      await user.click(checkedInButton);
+    const checkedInButton = await screen.findByRole('button', {
+      name: 'Checked In',
     });
+
+    expect(checkedInButton).toBeDisabled();
+
+    await user.click(checkedInButton);
 
     expect(NotificationToast.warning).not.toHaveBeenCalled();
   });
@@ -244,13 +242,11 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     const user = userEvent.setup();
     renderEventRegistrants();
 
-    await waitFor(async () => {
-      const unregisterButton = screen.getByRole('button', {
-        name: 'Unregister',
-      });
-
-      await user.click(unregisterButton);
+    const unregisterButton = await screen.findByRole('button', {
+      name: 'Unregister',
     });
+
+    await user.click(unregisterButton);
 
     await waitFor(() => {
       expect(NotificationToast.warning).toHaveBeenCalledWith(
