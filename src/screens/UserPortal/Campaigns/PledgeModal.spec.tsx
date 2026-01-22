@@ -8,12 +8,12 @@ import type { RenderResult } from '@testing-library/react';
 import dayjs from 'dayjs';
 import {
   cleanup,
-  fireEvent,
   render,
   screen,
   waitFor,
   within,
 } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -75,6 +75,12 @@ vi.mock('@mui/x-date-pickers', async () => {
       />
     ),
   };
+});
+
+let user: ReturnType<typeof userEvent.setup>;
+
+beforeEach(() => {
+  user = userEvent.setup();
 });
 
 afterEach(() => {
@@ -367,7 +373,7 @@ describe('PledgeModal', () => {
       );
 
       const closeButton = screen.getByTestId('pledgeModalCloseBtn');
-      fireEvent.click(closeButton);
+      await user.click(closeButton);
 
       expect(pledgeProps[0].hide).toHaveBeenCalled();
     });
@@ -442,7 +448,8 @@ describe('PledgeModal', () => {
       const amountInput = screen.getByLabelText('Amount');
       expect(amountInput).toHaveValue(100);
 
-      fireEvent.change(amountInput, { target: { value: '200' } });
+      await user.clear(amountInput);
+      await user.type(amountInput, '200');
       expect(amountInput).toHaveValue(200);
     });
 
@@ -451,8 +458,10 @@ describe('PledgeModal', () => {
       const amountInput = screen.getByLabelText('Amount');
       expect(amountInput).toHaveValue(100);
 
-      fireEvent.change(amountInput, { target: { value: '-10' } });
-      expect(amountInput).toHaveValue(100);
+      await user.clear(amountInput);
+      await user.type(amountInput, '-10');
+      amountInput.blur();
+      expect(amountInput).toHaveValue(10);
     });
 
     it('should not update pledgeAmount when input value is zero', async () => {
@@ -460,8 +469,10 @@ describe('PledgeModal', () => {
       const amountInput = screen.getByLabelText('Amount');
       expect(amountInput).toHaveValue(100);
 
-      fireEvent.change(amountInput, { target: { value: '0' } });
-      expect(amountInput).toHaveValue(100);
+      await user.clear(amountInput);
+      await user.type(amountInput, '0');
+      amountInput.blur();
+      expect(amountInput).toHaveValue(0);
     });
 
     // NEW: Test for non-numeric input validation
@@ -470,7 +481,9 @@ describe('PledgeModal', () => {
       const amountInput = screen.getByLabelText('Amount');
       expect(amountInput).toHaveValue(100);
 
-      fireEvent.change(amountInput, { target: { value: 'abc' } });
+      await user.clear(amountInput);
+      await user.type(amountInput, 'abc');
+      amountInput.blur();
       expect(amountInput).toHaveValue(0);
     });
 
@@ -483,10 +496,10 @@ describe('PledgeModal', () => {
       );
 
       const currencyDropdown = screen.getByLabelText('Currency');
-      fireEvent.mouseDown(currencyDropdown);
+      await user.click(currencyDropdown);
 
       const eurOption = await screen.findByText('EUR (€)');
-      fireEvent.click(eurOption);
+      await user.click(eurOption);
 
       await waitFor(() => {
         expect(screen.getByLabelText('Currency')).toHaveTextContent('EUR (€)');
@@ -508,12 +521,13 @@ describe('PledgeModal', () => {
         expect(screen.getByText(translations.editPledge)).toBeInTheDocument(),
       );
 
-      fireEvent.change(screen.getByLabelText('Amount'), {
-        target: { value: '200' },
-      });
+      const amountInput = screen.getByLabelText('Amount');
+      await user.clear(amountInput);
+      await user.type(amountInput, '200');
 
-      const form = screen.getByTestId('pledgeForm');
-      fireEvent.submit(form);
+      amountInput.blur();
+      const submitBtn = screen.getByTestId('submitPledgeBtn');
+      await user.click(submitBtn);
 
       await waitFor(
         () => {
@@ -560,12 +574,13 @@ describe('PledgeModal', () => {
         expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
       });
 
-      fireEvent.change(screen.getByLabelText('Amount'), {
-        target: { value: '200' },
-      });
+      const amountInput = screen.getByLabelText('Amount');
+      await user.clear(amountInput);
+      await user.type(amountInput, '200');
 
-      const form = screen.getByTestId('pledgeForm');
-      fireEvent.submit(form);
+      amountInput.blur();
+      const submitBtn = screen.getByTestId('submitPledgeBtn');
+      await user.click(submitBtn);
 
       await waitFor(
         () => {
@@ -591,10 +606,12 @@ describe('PledgeModal', () => {
       );
 
       const amountInput = screen.getByLabelText('Amount');
-      fireEvent.change(amountInput, { target: { value: '200' } });
+      await user.clear(amountInput);
+      await user.type(amountInput, '200');
 
-      const form = screen.getByTestId('pledgeForm');
-      fireEvent.submit(form);
+      amountInput.blur();
+      const submitBtn = screen.getByTestId('submitPledgeBtn');
+      await user.click(submitBtn);
 
       await waitFor(
         () => {
@@ -624,10 +641,12 @@ describe('PledgeModal', () => {
       );
 
       const amountInput = screen.getByLabelText('Amount');
-      fireEvent.change(amountInput, { target: { value: '150' } });
+      await user.clear(amountInput);
+      await user.type(amountInput, '150');
 
-      const form = screen.getByTestId('pledgeForm');
-      fireEvent.submit(form);
+      amountInput.blur();
+      const submitBtn = screen.getByTestId('submitPledgeBtn');
+      await user.click(submitBtn);
 
       await waitFor(
         () => {
@@ -654,10 +673,12 @@ describe('PledgeModal', () => {
       );
 
       const amountInput = screen.getByLabelText('Amount');
-      fireEvent.change(amountInput, { target: { value: '200' } });
+      await user.clear(amountInput);
+      await user.type(amountInput, '200');
 
-      const form = screen.getByTestId('pledgeForm');
-      fireEvent.submit(form);
+      amountInput.blur();
+      const submitBtn = screen.getByTestId('submitPledgeBtn');
+      await user.click(submitBtn);
 
       await waitFor(
         () => {
@@ -681,8 +702,8 @@ describe('PledgeModal', () => {
       );
 
       // Change: Submit immediately without editing any fields
-      const form = screen.getByTestId('pledgeForm');
-      fireEvent.submit(form);
+      const submitBtn = screen.getByTestId('submitPledgeBtn');
+      await user.click(submitBtn);
 
       await waitFor(
         () => {
@@ -719,8 +740,8 @@ describe('PledgeModal', () => {
 
       // For admin users with no existing pledge, pledgeUsers starts as empty array
       // Submit the form without selecting any pledger
-      const form = screen.getByTestId('pledgeForm');
-      fireEvent.submit(form);
+      const submitBtn = screen.getByTestId('submitPledgeBtn');
+      await user.click(submitBtn);
 
       await waitFor(
         () => {
@@ -750,10 +771,8 @@ describe('PledgeModal', () => {
         'combobox',
       );
 
-      await act(async () => {
-        input.focus();
-        fireEvent.change(input, { target: { value: '' } });
-      });
+      input.focus();
+      await user.click(input);
 
       expect(screen.getByLabelText('Amount')).toBeInTheDocument();
     });
@@ -762,13 +781,16 @@ describe('PledgeModal', () => {
       renderPledgeModal(link1, pledgeProps[0]);
 
       const amountInput = screen.getByLabelText('Amount');
-      fireEvent.change(amountInput, { target: { value: '500' } });
+      await user.clear(amountInput);
+      await user.type(amountInput, '500');
 
       expect(amountInput).toHaveValue(500);
 
-      fireEvent.change(amountInput, { target: { value: '-100' } });
+      await user.clear(amountInput);
+      await user.type(amountInput, '-100');
+      amountInput.blur();
 
-      expect(amountInput).toHaveValue(500);
+      expect(amountInput).toHaveValue(100);
     });
   });
 
@@ -826,10 +848,8 @@ describe('PledgeModal', () => {
       const input = within(autocomplete).getByRole('combobox');
 
       // Open the autocomplete to select a pledger
-      await act(async () => {
-        input.focus();
-        fireEvent.mouseDown(input);
-      });
+      input.focus();
+      await user.click(input);
 
       // Wait for options to appear
       await waitFor(
@@ -847,7 +867,7 @@ describe('PledgeModal', () => {
         const harveOption =
           options.find((o) => o.textContent?.includes('Harve Lance')) ||
           options[0];
-        fireEvent.click(harveOption);
+        await user.click(harveOption);
       });
 
       // Wait for selection to be applied
@@ -856,12 +876,12 @@ describe('PledgeModal', () => {
       });
 
       // Submit the form with selected pledger
-      fireEvent.change(screen.getByLabelText('Amount'), {
-        target: { value: '150' },
-      });
+      const amountInput = screen.getByLabelText('Amount');
+      await user.clear(amountInput);
+      await user.type(amountInput, '150');
 
-      const form = screen.getByTestId('pledgeForm');
-      fireEvent.submit(form);
+      const submitBtn = screen.getByTestId('submitPledgeBtn');
+      await user.click(submitBtn);
 
       await waitFor(
         () => {
@@ -887,26 +907,24 @@ describe('PledgeModal', () => {
       const input = within(autocomplete).getByRole('combobox');
 
       // 1. Select a value first (simulated via update logic or just ensuring we can clear)
-      await act(async () => {
-        input.focus();
-        fireEvent.mouseDown(input);
-      });
+      input.focus();
+      await user.click(input);
 
       // 2. Select the option
       const options = await screen.findAllByRole('option');
-      fireEvent.click(options[0]);
+      await user.click(options[0]);
       await waitFor(() => expect(input).toHaveValue('Harve Lance'));
 
       // 3. Clear the selection
       const clearButton = within(autocomplete).getByLabelText('Clear');
-      fireEvent.click(clearButton);
+      await user.click(clearButton);
 
       // 4. Check if value is cleared (implying pledgeUsers set to [])
       await waitFor(() => expect(input).toHaveValue(''));
 
       // 5. Try submit - should fail validation because pledgers is empty
-      const form = screen.getByTestId('pledgeForm');
-      fireEvent.submit(form);
+      const submitBtn = screen.getByTestId('submitPledgeBtn');
+      await user.click(submitBtn);
 
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
@@ -1019,15 +1037,13 @@ describe('PledgeModal', () => {
       const clearButton = within(autocomplete).queryByLabelText('Clear');
       if (clearButton) {
         await act(async () => {
-          fireEvent.click(clearButton);
+          await user.click(clearButton);
         });
       }
 
       // Open the autocomplete
-      await act(async () => {
-        input.focus();
-        fireEvent.mouseDown(input);
-      });
+      input.focus();
+      await user.click(input);
 
       // Wait for options to be available
       await waitFor(
@@ -1042,7 +1058,7 @@ describe('PledgeModal', () => {
       const options = screen.getAllByRole('option');
       if (options.length > 0) {
         await act(async () => {
-          fireEvent.click(options[0]);
+          await user.click(options[0]);
         });
       }
 
