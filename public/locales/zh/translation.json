@@ -1965,8 +1965,7 @@
     "addOnspotRegistration": "添加现场注册",
     "registrantLabel": "添加一名注册者",
     "registrantPlaceholder": "选择您要添加的用户",
-    "chooseUser": "请先选择要添加的用户！",
-    "addingAttendee": "正在添加参与者..."
+    "chooseUser": "请先选择要添加的用户！"
   },
   "onSpotAttendee": {
     "invalidEmailFormat": "无效的电子邮件格式",

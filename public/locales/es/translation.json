@@ -1948,8 +1948,7 @@
     "addOnspotRegistration": "Agregar Registro en el Lugar",
     "registrantLabel": "Agregar un Registrante",
     "registrantPlaceholder": "Elija el usuario que desea agregar",
-    "chooseUser": "¡Por favor, elija un usuario para agregar primero!",
-    "addingAttendee": "Agregando asistente..."
+    "chooseUser": "¡Por favor, elija un usuario para agregar primero!"
   },
   "onSpotAttendee": {
     "invalidEmailFormat": "Formato de correo electrónico no válido",

@@ -556,7 +556,6 @@
     "inviteOnly": "Sur invitation uniquement",
     "registerable": "Est enregistrable",
     "searchMemberName": "Rechercher le nom du membre",
-    "isRegistrable": "Est enregistrable",
     "createEvent": "Créer un évènement",
     "enterFilter": "Entrer le filtre",
     "enterName": "Entrez le nom",
@@ -1966,8 +1965,7 @@
     "addOnspotRegistration": "Ajouter une Inscription sur Place",
     "registrantLabel": "Ajouter un Inscrit",
     "registrantPlaceholder": "Choisissez l'utilisateur que vous souhaitez ajouter",
-    "chooseUser": "Veuillez d'abord choisir un utilisateur à ajouter!",
-    "addingAttendee": "Ajout du participant..."
+    "chooseUser": "Veuillez d'abord choisir un utilisateur à ajouter!"
   },
   "onSpotAttendee": {
     "invalidEmailFormat": "Format d'email invalide",

@@ -1965,8 +1965,7 @@
     "addOnspotRegistration": "ऑनस्पॉट पंजीकरण जोड़ें",
     "registrantLabel": "एक पंजीकृत जोड़ें",
     "registrantPlaceholder": "वह उपयोगकर्ता चुनें जिसे आप जोड़ना चाहते हैं",
-    "chooseUser": "कृपया पहले जोड़ने के लिए एक उपयोगकर्ता चुनें!",
-    "addingAttendee": "उपस्थित व्यक्ति को जोड़ा जा रहा है..."
+    "chooseUser": "कृपया पहले जोड़ने के लिए एक उपयोगकर्ता चुनें!"
   },
   "onSpotAttendee": {
     "invalidEmailFormat": "अमान्य ईमेल प्रारूप",
