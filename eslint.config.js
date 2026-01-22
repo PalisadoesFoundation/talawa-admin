@@ -36,8 +36,7 @@ const restrictedImports = [
   },
   {
     id: 'rb-modal',
-    name: 'react-bootstrap',
-    importNames: ['Modal'],
+    name: 'react-bootstrap/Modal',
     message:
       'Do not import Modal directly. Use the shared BaseModal or the CRUDModalTemplate/* components instead.',
   },
