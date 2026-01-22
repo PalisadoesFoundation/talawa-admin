@@ -42,6 +42,12 @@ const restrictedImports = [
       'Do not import Modal directly. Use the shared BaseModal or the CRUDModalTemplate/* components instead.',
   },
   {
+    name: 'react-bootstrap/Modal',
+    importNames: ['Modal'],
+    message:
+      'Do not import Modal directly. Use the shared BaseModal or the CRUDModalTemplate/* components instead.',
+  },
+  {
     id: 'rb-form',
     name: 'react-bootstrap',
     importNames: ['Form'],
