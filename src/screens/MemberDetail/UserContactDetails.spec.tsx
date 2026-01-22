@@ -43,14 +43,14 @@ async function wait(ms = 500): Promise<void> {
   await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
 }
 
-// Fix the NotificationToast mock - it should return an object with methods
-const mockToast = {
-  success: vi.fn(),
-  error: vi.fn(),
-  warning: vi.fn(),
-  info: vi.fn(),
-};
-
+const { mockToast } = vi.hoisted(() => ({
+  mockToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
+}));
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: mockToast,
 }));
