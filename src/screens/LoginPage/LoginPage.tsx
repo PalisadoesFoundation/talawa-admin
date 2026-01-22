@@ -545,7 +545,11 @@ const LoginPage = (): JSX.Element => {
                         data-testid="loginEmail"
                         data-cy="loginEmail"
                       />
-                      <Button tabIndex={-1} className={styles.email_button}>
+                      <Button
+                        type="button"
+                        tabIndex={-1}
+                        className={styles.email_button}
+                      >
                         <EmailOutlinedIcon />
                       </Button>
                     </div>
@@ -580,6 +584,7 @@ const LoginPage = (): JSX.Element => {
                           data-cy="loginPassword"
                         />
                         <Button
+                          type="button"
                           onClick={togglePassword}
                           data-testid="showLoginPassword"
                           className={styles.email_button}
@@ -634,6 +639,7 @@ const LoginPage = (): JSX.Element => {
                         <span className={styles.orText}>{tCommon('OR')}</span>
                       </div>
                       <Button
+                        type="button"
                         variant="outline-secondary"
                         value="Register"
                         className={styles.reg_btn}
@@ -743,6 +749,7 @@ const LoginPage = (): JSX.Element => {
                         }
                       />
                       <Button
+                        type="button"
                         tabIndex={-1}
                         className={`${styles.email_button}`}
                       >
@@ -786,6 +793,7 @@ const LoginPage = (): JSX.Element => {
                           }}
                         />
                         <Button
+                          type="button"
                           onClick={togglePassword}
                           data-testid="showPassword"
                           className={`${styles.email_button}`}
@@ -948,6 +956,7 @@ const LoginPage = (): JSX.Element => {
                         autoComplete="new-password"
                       />
                       <Button
+                        type="button"
                         data-testid="showPasswordCon"
                         onClick={toggleConfirmPassword}
                         className={`${styles.email_button}`}
@@ -1023,6 +1032,7 @@ const LoginPage = (): JSX.Element => {
                     <span className={styles.orText}>{tCommon('OR')}</span>
                   </div>
                   <Button
+                    type="button"
                     variant="outline-secondary"
                     className={styles.reg_btn}
                     data-testid="goToLoginPortion"
