@@ -30,8 +30,11 @@ import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import React from 'react';
 import styles from './customTableCell.module.css';
 import { Link } from 'react-router';
+import type { InterfaceCustomTableCellProps } from 'types/MemberActivity/interface';
 
-export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
+export const CustomTableCell: React.FC<InterfaceCustomTableCellProps> = ({
+  eventId,
+}) => {
   const { data, loading, error } = useQuery(EVENT_DETAILS, {
     variables: { eventId: eventId },
     errorPolicy: 'all',

@@ -22,6 +22,12 @@ interface InterfaceNotification {
   navigation?: string;
 }
 
+const getNotificationPath = (pathname: string): string => {
+  const path = pathname || '';
+  const isUserPortal = path.startsWith('/user');
+  return isUserPortal ? '/user/notification' : '/admin/notification';
+};
+
 const NotificationIcon = () => {
   const [notifications, setNotifications] = useState<InterfaceNotification[]>(
     [],
@@ -85,12 +91,7 @@ const NotificationIcon = () => {
                   navigate(notification.navigation);
                   return;
                 }
-                const path = location.pathname || '';
-                const isUserPortal =
-                  path.startsWith('/user/') || path.startsWith('/user');
-                navigate(
-                  isUserPortal ? '/user/notification' : '/admin/notification',
-                );
+                navigate(getNotificationPath(location.pathname));
               }}
             >
               {!notification.isRead && (
@@ -109,12 +110,7 @@ const NotificationIcon = () => {
         <Dropdown.Divider />
         <Dropdown.Item
           onClick={() => {
-            const path = location.pathname || '';
-            const isUserPortal =
-              path.startsWith('/user/') || path.startsWith('/user');
-            navigate(
-              isUserPortal ? '/user/notification' : '/admin/notification',
-            );
+            navigate(getNotificationPath(location.pathname));
           }}
         >
           View all notifications

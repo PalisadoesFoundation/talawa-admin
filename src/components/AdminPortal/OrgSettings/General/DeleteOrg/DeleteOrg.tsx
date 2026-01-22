@@ -120,7 +120,7 @@ function deleteOrg(): JSX.Element {
           onHide={toggleDeleteModal}
           title={t('deleteOrganization')}
           dataTestId="orgDeleteModal"
-          headerClassName={styles.modelHeaderDelete}
+          headerClassName={styles.modalHeaderDelete}
           footer={
             <>
               <Button

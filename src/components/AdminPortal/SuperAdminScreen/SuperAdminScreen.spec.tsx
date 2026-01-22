@@ -4,7 +4,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter, MemoryRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import SuperAdminScreen from './SuperAdminScreen';
@@ -103,5 +103,44 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
       // The class should toggle from its initial state
       expect(hasCollapsed).toBe(!initialHasCollapsed);
     });
+  });
+});
+
+describe('SuperAdminScreen title mapping', () => {
+  const titleCases = [
+    { path: '/admin/orglist', keyPrefix: 'orgList' },
+    { path: '/admin/requests', keyPrefix: 'requests' },
+    { path: '/admin/users', keyPrefix: 'users' },
+    { path: '/admin/member/123', keyPrefix: 'memberDetail' },
+    { path: '/admin/profile', keyPrefix: 'adminProfile' },
+    { path: '/admin/communityProfile', keyPrefix: 'communityProfile' },
+    { path: '/admin/pluginstore', keyPrefix: 'pluginStore' },
+    { path: '/admin/notification', keyPrefix: 'notification' },
+  ];
+
+  const renderWithPath = (path: string): void => {
+    render(
+      <MockedProvider>
+        <MemoryRouter initialEntries={[path]}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <SuperAdminScreen />
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+  };
+
+  test.each(titleCases)('renders title for $path', ({ path, keyPrefix }) => {
+    renderWithPath(path);
+    const translations = i18nForTest.getDataByLanguage('en')?.translation as
+      | Record<string, { title?: string }>
+      | undefined;
+    const expectedTitle = translations?.[keyPrefix]?.title ?? 'title';
+
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+      expectedTitle,
+    );
   });
 });
