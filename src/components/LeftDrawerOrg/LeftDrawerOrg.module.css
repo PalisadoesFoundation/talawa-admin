@@ -1,13 +1,13 @@
 /* LeftDrawerOrg component styles */
 .optionList {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .profileContainer {
-    display: flex;
+  display: flex;
 }
 
 .profileContainerHidden {
-    display: none;
+  display: none;
 }

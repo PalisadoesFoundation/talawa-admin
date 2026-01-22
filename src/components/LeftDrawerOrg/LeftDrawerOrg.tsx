@@ -178,7 +178,9 @@ const LeftDrawerOrg = ({
         <>
           <div
             className={
-              hideDrawer ? styles.profileContainerHidden : styles.profileContainer
+              hideDrawer
+                ? styles.profileContainerHidden
+                : styles.profileContainer
             }
           >
             <ProfileCard />
