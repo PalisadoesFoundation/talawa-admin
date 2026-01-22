@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import React from 'react';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { describe, it, expect, vi, afterEach } from 'vitest';
@@ -1743,8 +1743,7 @@ describe('CursorPaginationManager', () => {
         configurable: true,
       });
 
-      // 1000 - 500 - 500 = 0 <= 50 (default threshold), so it should load
-      fireEvent.scroll(container);
+      container.dispatchEvent(new Event('scroll', { bubbles: true }));
 
       await waitFor(() => {
         expect(screen.getByText('User 3')).toBeInTheDocument();

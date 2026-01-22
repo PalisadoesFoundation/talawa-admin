@@ -1,3 +1,4 @@
+// translation-check-keyPrefix: userChatRoom
 /**
  * MessageItem Component
  *

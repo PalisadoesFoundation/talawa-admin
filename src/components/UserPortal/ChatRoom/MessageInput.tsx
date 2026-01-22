@@ -32,7 +32,8 @@
  */
 
 import React from 'react';
-import { Button, InputGroup, Form } from 'react-bootstrap';
+import Button from '../../../shared-components/Button';
+import { FormTextField } from '../../../shared-components/FormFieldGroup/FormFieldGroup';
 import { GrAttachment } from 'react-icons/gr';
 import SendIcon from '@mui/icons-material/Send';
 import { Close } from '@mui/icons-material';
@@ -104,7 +105,7 @@ export default function MessageInput({
       )}
       {attachment && (
         <div className={styles.attachment}>
-          <img src={attachment} alt="attachment" />
+          <img src={attachment} alt="Attachment" />
 
           <Button
             data-testid="removeAttachment"
@@ -116,37 +117,44 @@ export default function MessageInput({
         </div>
       )}
 
-      <InputGroup>
-        <button
-          type="button"
-          onClick={onAddAttachment}
-          className={styles.addAttachmentBtn}
-        >
-          <GrAttachment />
-        </button>
-        <Form.Control
-          placeholder={sendMessagePlaceholder}
-          aria-label={sendMessagePlaceholder}
-          value={newMessage}
-          data-testid="messageInput"
-          onChange={onNewMessageChange}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault();
-              onSendMessage();
-            }
-          }}
-          className={styles.sendMessageInput}
-        />
-        <Button
-          onClick={onSendMessage}
-          variant="primary"
-          id="button-send"
-          data-testid="sendMessage"
-        >
-          <SendIcon fontSize="small" />
-        </Button>
-      </InputGroup>
+      <FormTextField
+        name="messageInput"
+        label={sendMessagePlaceholder}
+        placeholder={sendMessagePlaceholder}
+        value={newMessage}
+        onChange={(value) => {
+          const syntheticEvent = {
+            target: { value },
+          } as ChangeEvent<HTMLInputElement>;
+          onNewMessageChange(syntheticEvent);
+        }}
+        data-testid="messageInput"
+        startAdornment={
+          <button
+            type="button"
+            onClick={onAddAttachment}
+            className={styles.addAttachmentBtn}
+          >
+            <GrAttachment />
+          </button>
+        }
+        endAdornment={
+          <Button
+            onClick={onSendMessage}
+            variant="primary"
+            id="button-send"
+            data-testid="sendMessage"
+          >
+            <SendIcon fontSize="small" />
+          </Button>
+        }
+        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            onSendMessage();
+          }
+        }}
+      />
     </div>
   );
 }

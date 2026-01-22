@@ -311,6 +311,11 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       await props.chatListRefetch({ id: userId as string });
     } catch (error) {
       console.error('Error sending message:', error);
+      if (!editMessage) {
+        paginationRef.current?.removeItem((item) =>
+          item.id.startsWith('temp-'),
+        );
+      }
     }
   };
 
@@ -355,10 +360,12 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 id: newMessage.parentMessage.id,
                 body: newMessage.parentMessage.body,
                 createdAt: newMessage.parentMessage.createdAt,
-                creator: {
-                  id: newMessage.parentMessage.creator.id,
-                  name: newMessage.parentMessage.creator.name,
-                },
+                creator: newMessage.parentMessage.creator
+                  ? {
+                      id: newMessage.parentMessage.creator.id,
+                      name: newMessage.parentMessage.creator.name,
+                    }
+                  : { id: '', name: '' },
               }
             : undefined,
         };

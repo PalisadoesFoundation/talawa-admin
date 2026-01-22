@@ -87,7 +87,7 @@ const MessageImage = React.memo(
       <img
         className={styles.messageAttachment}
         src={imageState.url}
-        alt="attachment"
+        alt="Attachment"
         onError={() => setImageState((prev) => ({ ...prev, error: true }))}
       />
     );
