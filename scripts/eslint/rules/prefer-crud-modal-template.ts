@@ -324,6 +324,9 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
                     const hasNamed = otherSpecifiers.some(
                       (s) => s.type === AST_NODE_TYPES.ImportSpecifier,
                     );
+                    const hasNamespace = otherSpecifiers.some(
+                      (s) => s.type === AST_NODE_TYPES.ImportNamespaceSpecifier,
+                    );
 
                     let preservedImportStmt = '';
                     if (hasDefault && hasNamed) {
@@ -334,16 +337,19 @@ const rule: TSESLint.RuleModule<MessageIds, Options> = {
                         .filter(
                           (s) => s.type === AST_NODE_TYPES.ImportSpecifier,
                         )
-                        .map((spec) => {
-                          if (spec.type === AST_NODE_TYPES.ImportSpecifier) {
-                            return specifierToString(spec);
-                          }
-                          return '';
-                        })
+                        .map((spec) =>
+                          specifierToString(spec as TSESTree.ImportSpecifier),
+                        )
                         .join(', ');
                       preservedImportStmt = `import ${defaultSpec?.local.name}, { ${namedSpecs} } from '${originalImportPath}';`;
                     } else if (hasDefault) {
                       preservedImportStmt = `import ${preservedImports} from '${originalImportPath}';`;
+                    } else if (hasNamespace && !hasNamed) {
+                      const namespaceSpec = otherSpecifiers.find(
+                        (s) =>
+                          s.type === AST_NODE_TYPES.ImportNamespaceSpecifier,
+                      ) as TSESTree.ImportNamespaceSpecifier;
+                      preservedImportStmt = `import * as ${namespaceSpec.local.name} from '${originalImportPath}';`;
                     } else {
                       preservedImportStmt = `import { ${preservedImports} } from '${originalImportPath}';`;
                     }
