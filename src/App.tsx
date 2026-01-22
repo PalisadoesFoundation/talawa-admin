@@ -34,6 +34,7 @@ const ForgotPassword = lazy(
   () => import('screens/ForgotPassword/ForgotPassword'),
 );
 const MemberDetail = lazy(() => import('screens/MemberDetail/MemberDetail'));
+const VerifyEmail = lazy(() => import('screens/Auth/VerifyEmail/VerifyEmail'));
 const OrgContribution = lazy(
   () => import('screens/AdminPortal/OrgContribution/OrgContribution'),
 );
@@ -296,6 +297,8 @@ function App(): React.ReactElement {
             </Route>
           </Route>
           <Route path="/forgotPassword" element={<ForgotPassword />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/auth/verify-email" element={<VerifyEmail />} />
           {/* Public invitation accept route */}
           <Route
             path="/event/invitation/:token"

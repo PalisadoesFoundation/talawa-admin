@@ -262,6 +262,43 @@ export const CREATE_MEMBER_PG = gql`
   }
 `;
 
+/**
+ * Verifies a user's email address using a token sent via email.
+ *
+ * @param token - The verification token received via email
+ * @returns An object containing:
+ *   - success: boolean indicating if the verification succeeded
+ *   - message: A descriptive message about the result
+ */
+export const VERIFY_EMAIL_MUTATION = gql`
+  mutation VerifyEmail($token: String!) {
+    verifyEmail(input: { token: $token }) {
+      success
+      message
+    }
+  }
+`;
+
+/**
+ * Resends the email verification link to the currently authenticated user.
+ *
+ * @remarks
+ * The user must be logged in for this mutation to work.
+ * No parameters are required as it uses the authenticated user's session.
+ *
+ * @returns An object containing:
+ *   - success: boolean indicating if the email was sent successfully
+ *   - message: A descriptive message about the result
+ */
+export const RESEND_VERIFICATION_EMAIL_MUTATION = gql`
+  mutation SendVerificationEmail {
+    sendVerificationEmail {
+      success
+      message
+    }
+  }
+`;
+
 // to login in the talawa admin
 
 // to get the refresh token

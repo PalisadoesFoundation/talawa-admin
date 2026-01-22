@@ -4,7 +4,8 @@
  * in a DataGrid with search, sorting, pagination, and modal dialogs.
  */
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, ProgressBar } from 'react-bootstrap';
+import { Button } from 'shared-components/Button';
+import { ProgressBar } from 'react-bootstrap';
 import styles from './Pledges.module.css';
 import { useTranslation } from 'react-i18next';
 import WarningAmberRounded from '@mui/icons-material/WarningAmberRounded';

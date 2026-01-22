@@ -47,11 +47,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import { InterfaceJoinedOrganizationsData } from 'types/AdminPortal/UserDetails/UserOrganization/interface';
 import {
-  UserOrganizationProps,
-  OrgRelationType,
-  UserOrg,
+  InterfaceUserOrganizationsProps,
+  InterfaceOrgRelationType,
+  InterfaceUserOrg,
 } from 'types/AdminPortal/UserDetails/UserOrganization/type';
-const UserOrganizations: React.FC<UserOrganizationProps> = ({
+const UserOrganizations: React.FC<InterfaceUserOrganizationsProps> = ({
   id,
 }): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
@@ -59,7 +59,9 @@ const UserOrganizations: React.FC<UserOrganizationProps> = ({
   const location = useLocation();
   const { getItem } = useLocalStorage();
   const [rowsPerPage] = React.useState(5);
-  const [orgFilter, setOrgFilter] = useState<'ALL' | OrgRelationType>('ALL');
+  const [orgFilter, setOrgFilter] = useState<'ALL' | InterfaceOrgRelationType>(
+    'ALL',
+  );
 
   const currentId = location.state?.id || getItem('id') || id;
 
@@ -75,8 +77,8 @@ const UserOrganizations: React.FC<UserOrganizationProps> = ({
     variables: { input: { id: currentId } },
   });
 
-  const allUserOrgs: UserOrg[] = useMemo(() => {
-    const created: UserOrg[] =
+  const allUserOrgs: InterfaceUserOrg[] = useMemo(() => {
+    const created: InterfaceUserOrg[] =
       userData?.user?.createdOrganizations?.map(
         (org: {
           id: string;
@@ -96,7 +98,7 @@ const UserOrganizations: React.FC<UserOrganizationProps> = ({
         }),
       ) || [];
 
-    const belongTo: UserOrg[] =
+    const belongTo: InterfaceUserOrg[] =
       userData?.user?.organizationsWhereMember?.edges?.map(
         (edge: {
           node: {
@@ -118,7 +120,7 @@ const UserOrganizations: React.FC<UserOrganizationProps> = ({
         }),
       ) || [];
 
-    const joined: UserOrg[] =
+    const joined: InterfaceUserOrg[] =
       joinedOrganizationsData?.user?.organizationsWhereMember?.edges?.map(
         (edge: {
           node: {
@@ -208,7 +210,7 @@ const UserOrganizations: React.FC<UserOrganizationProps> = ({
             icon: '/images/svg/ri_arrow-up-down-line.svg',
             selected: orgFilter,
             onChange: (value: string | number) =>
-              setOrgFilter(value as 'ALL' | OrgRelationType),
+              setOrgFilter(value as 'ALL' | InterfaceOrgRelationType),
             testIdPrefix: 'orgFilter',
           },
         ]}

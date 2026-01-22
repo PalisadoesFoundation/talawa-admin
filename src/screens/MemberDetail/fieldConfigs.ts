@@ -1,5 +1,13 @@
-// Field configurations to reduce code repetition
-export const phoneFieldConfigs = [
+import {
+  InterfacePhoneFieldConfig,
+  InterfaceAddressFieldConfig,
+} from 'types/AdminPortal/MemberDetail/interface';
+
+/**
+ * Configuration array for phone input fields.
+ * Each object specifies the id, testId, and key of a phone number field.
+ */
+export const phoneFieldConfigs: InterfacePhoneFieldConfig[] = [
   {
     id: 'mobilePhoneNumber',
     testId: 'inputMobilePhoneNumber',
@@ -17,7 +25,11 @@ export const phoneFieldConfigs = [
   },
 ];
 
-export const addressFieldConfigs = [
+/**
+ * Configuration array for address input fields.
+ * Each object specifies the id, testId, key, and optionally colSize of an address field.
+ */
+export const addressFieldConfigs: InterfaceAddressFieldConfig[] = [
   {
     id: 'addressLine1',
     testId: 'inputAddressLine1',
@@ -36,6 +48,16 @@ export const addressFieldConfigs = [
     colSize: 12,
     key: 'postalCode',
   },
-  { id: 'city', testId: 'inputCity', colSize: 6, key: 'city' },
-  { id: 'state', testId: 'inputState', colSize: 6, key: 'state' },
+  {
+    id: 'city',
+    testId: 'inputCity',
+    colSize: 6,
+    key: 'city',
+  },
+  {
+    id: 'state',
+    testId: 'inputState',
+    colSize: 6,
+    key: 'state',
+  },
 ];

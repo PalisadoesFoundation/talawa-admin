@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { resolveAvatarFile } from './resolveAvatarFile';
 import { urlToFile } from 'utils/urlToFile';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -11,6 +11,11 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 }));
 
 describe('resolveAvatarFile', () => {
+  // --- Clear mocks after each test to ensure isolation ---
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('returns selectedAvatar when new avatar is uploaded', async () => {
     const file = new File(['img'], 'avatar.png', { type: 'image/png' });
 
@@ -48,5 +53,18 @@ describe('resolveAvatarFile', () => {
 
     expect(NotificationToast.error).toHaveBeenCalled();
     expect(result).toBeNull();
+  });
+
+  // --- New test for the missing null-return path ---
+  it('returns null when no avatar uploaded and no avatarURL provided', async () => {
+    const result = await resolveAvatarFile({
+      newAvatarUploaded: false,
+      selectedAvatar: null,
+      avatarURL: '',
+    });
+
+    expect(result).toBeNull();
+    expect(urlToFile).not.toHaveBeenCalled();
+    expect(NotificationToast.error).not.toHaveBeenCalled();
   });
 });

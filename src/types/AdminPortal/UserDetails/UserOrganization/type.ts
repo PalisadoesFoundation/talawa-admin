@@ -1,10 +1,10 @@
-export type UserOrganizationProps = { id?: string };
-export type OrgRelationType = 'CREATED' | 'BELONG_TO' | 'JOINED';
+export type InterfaceUserOrganizationsProps = { id?: string };
+export type InterfaceOrgRelationType = 'CREATED' | 'BELONG_TO' | 'JOINED';
 
-export type UserOrg = {
+export type InterfaceUserOrg = {
   id: string;
   name: string;
-  relation: OrgRelationType;
+  relation: InterfaceOrgRelationType;
   adminsCount: number;
   membersCount: number;
   description?: string;

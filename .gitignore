@@ -88,6 +88,7 @@ downloads/
 eggs/
 .eggs/
 lib/
+!scripts/install/lib/
 lib64/
 parts/
 sdist/
@@ -287,3 +288,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ESLint plugin build output
+scripts/eslint/dist/

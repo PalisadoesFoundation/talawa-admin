@@ -45,6 +45,7 @@
   "enterEmail": "ईमेल दर्ज करें",
   "emailAddress": "ईमेल पता",
   "email": "ईमेल",
+  "emailPlaceholder": "name@example.com",
   "name": "नाम",
   "desc": "विवरण",
   "enterPassword": "पासवर्ड दर्ज करें",
@@ -113,6 +114,8 @@
   "createdLatest": "नवीनतम",
   "createdEarliest": "सबसे पुराना",
   "searchBy": "{{item}} से खोजें",
+  "viewDetails": "विवरण देखें",
+  "markComplete": "पूर्ण के रूप में चिह्नित करें",
   "plugins": "प्लगइन्स",
   "save": "सहेजें",
   "saving": "सहेजा जा रहा है...",
@@ -286,5 +289,9 @@
   "linkCopied": "लिंक क्लिपबोर्ड पर कॉपी किया गया",
   "copyToClipboardError": "लिंक क्लिपबोर्ड पर कॉपी करने में त्रुटि",
   "share": "शेयर करें",
-  "failedToLoadUserData": "उपयोगकर्ता डेटा लोड करने में विफल"
+  "failedToLoadUserData": "उपयोगकर्ता डेटा लोड करने में विफल",
+  "userNotFound": "उपयोगकर्ता नहीं मिला",
+  "avatarProcessingError": "अवतार प्रोसेसिंग में त्रुटि, कृपया अपनी छवि जांचें।",
+  "viewEventStatistics": "इवेंट सांख्यिकी देखें",
+  "checkInRegistrantsAriaLabel": "पंजीकृतों को चेक इन करें"
 }

@@ -17,7 +17,7 @@
  * - \@mui/material
  * - shared-components/LoadingState/LoadingState
  * - components/Avatar/Avatar
- * - subComponents/SortingButton
+ * - shared-components/SortingButton/SortingButton
  * - shared-components/SearchBar/SearchBar
  * - GraphQl/Queries/EventVolunteerQueries
  * - utils/interfaces
@@ -48,9 +48,8 @@
  */
 import React, { useMemo, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button/Button';
 import { Navigate, useParams } from 'react-router';
-
 import { VolunteerActivism, WarningAmberRounded } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';

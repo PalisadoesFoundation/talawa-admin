@@ -4,24 +4,9 @@
 
 # Variable: addressFieldConfigs
 
-> `const` **addressFieldConfigs**: `object`[]
+> `const` **addressFieldConfigs**: [`AddressFieldConfig`](../interfaces/AddressFieldConfig.md)[]
 
-Defined in: [src/screens/MemberDetail/fieldConfigs.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/fieldConfigs.ts#L20)
+Defined in: [src/screens/MemberDetail/fieldConfigs.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/fieldConfigs.ts#L53)
 
-## Type Declaration
-
-### colSize
-
-> **colSize**: `number` = `12`
-
-### id
-
-> **id**: `string` = `'addressLine1'`
-
-### key
-
-> **key**: `string` = `'addressLine1'`
-
-### testId
-
-> **testId**: `string` = `'inputAddressLine1'`
+Configuration array for address input fields.
+Each object specifies the id, testId, key, and optionally colSize of an address field.
