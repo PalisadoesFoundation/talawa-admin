@@ -37,7 +37,8 @@
  * ```
  */
 import React, { useState, useEffect } from 'react';
-import { Button, Row, Col } from 'react-bootstrap';
+import { Button } from 'shared-components/Button';
+import { Row, Col } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { Autocomplete } from '@mui/material';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
