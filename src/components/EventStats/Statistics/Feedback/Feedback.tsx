@@ -52,16 +52,18 @@ export const FeedbackStats = ({
 
   // Get colors from CSS custom properties only
   const ratingColors = useMemo(() => {
-    if (typeof document === 'undefined') {
-      // Return empty array for SSR - component won't render chart anyway
-      return [];
-    }
     const getCSSVariable = (varName: string): string => {
-      return (
-        getComputedStyle(document.documentElement)
-          .getPropertyValue(varName)
-          .trim() || 'transparent'
-      );
+      // Safely get CSS variable, fallback to 'transparent' if not available
+      try {
+        return (
+          getComputedStyle(document.documentElement)
+            .getPropertyValue(varName)
+            .trim() || 'transparent'
+        );
+      } catch {
+        // SSR or other edge cases
+        return 'transparent';
+      }
     };
     return [
       getCSSVariable('--rating-color-5'), // Green
