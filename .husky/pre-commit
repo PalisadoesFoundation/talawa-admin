@@ -22,46 +22,34 @@
 #
 # =============================================================================
 
-# Enable strict error handling (compatible with bash on all platforms)
 set -eu
 
-# Enable pipefail only if supported (bash 3.0+)
 if [ -n "${BASH_VERSION:-}" ] && [ "${BASH_VERSINFO[0]}" -ge 3 ]; then
   set -o pipefail
 fi
 
-# Load staged file detection helpers
 . .husky/scripts/staged-files.sh
 
-# Verify all required tools are installed before proceeding
 .husky/scripts/check-tools.sh
 
-# Create temporary files to store staged file lists
 STAGED_SRC_FILE=$(mktemp)
 STAGED_ALL_FILE=$(mktemp)
 
-# Clean up temporary files on exit
 trap 'rm -f "$STAGED_SRC_FILE" "$STAGED_ALL_FILE"; cleanup_staged_cache 2>/dev/null || true' EXIT
 
-# Get TypeScript/JavaScript source files from src/ and scripts/
 get_staged_files '^(src|scripts)/.*\.(ts|tsx|js|jsx)$' > "$STAGED_SRC_FILE"
 
-# Get all staged files for final re-staging after formatting
 get_staged_files > "$STAGED_ALL_FILE"
 
-# Early exit if nothing staged
 [ ! -s "$STAGED_ALL_FILE" ] && {
   echo "No staged files to check..."
   exit 0
 }
 
-# Run Node.js checks only if source files are staged
 if [ -s "$STAGED_SRC_FILE" ]; then
   .husky/scripts/precommit-node.sh "$STAGED_SRC_FILE"
 fi
 
-# Run Python checks (always runs to validate .github workflows)
 .husky/scripts/precommit-python.sh "$STAGED_SRC_FILE"
 
-# Re-stage any files modified by formatters
 xargs -0 git add -- < "$STAGED_ALL_FILE"
