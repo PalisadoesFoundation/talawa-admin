@@ -55,7 +55,7 @@ vi.mock('components/ProfileCard/ProfileCard', () => ({
 
 const resizeWindow = (width: number): void => {
   window.innerWidth = width;
-  window.dispatchEvent(new window.Event('resize'));
+  window.dispatchEvent(new Event('resize'));
 };
 
 describe('Testing LeftDrawer in SuperAdminScreen', () => {
