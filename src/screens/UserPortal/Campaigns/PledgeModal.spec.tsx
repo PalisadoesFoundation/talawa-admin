@@ -460,7 +460,7 @@ describe('PledgeModal', () => {
 
       await user.clear(amountInput);
       await user.type(amountInput, '-10');
-      amountInput.blur();
+      await user.tab();
       expect(amountInput).toHaveValue(10);
     });
 
@@ -471,7 +471,7 @@ describe('PledgeModal', () => {
 
       await user.clear(amountInput);
       await user.type(amountInput, '0');
-      amountInput.blur();
+      await user.tab();
       expect(amountInput).toHaveValue(0);
     });
 
@@ -483,7 +483,7 @@ describe('PledgeModal', () => {
 
       await user.clear(amountInput);
       await user.type(amountInput, 'abc');
-      amountInput.blur();
+      await user.tab();
       expect(amountInput).toHaveValue(0);
     });
 
@@ -525,7 +525,7 @@ describe('PledgeModal', () => {
       await user.clear(amountInput);
       await user.type(amountInput, '200');
 
-      amountInput.blur();
+      await user.tab();
       const submitBtn = screen.getByTestId('submitPledgeBtn');
       await user.click(submitBtn);
 
@@ -578,7 +578,7 @@ describe('PledgeModal', () => {
       await user.clear(amountInput);
       await user.type(amountInput, '200');
 
-      amountInput.blur();
+      await user.tab();
       const submitBtn = screen.getByTestId('submitPledgeBtn');
       await user.click(submitBtn);
 
@@ -609,7 +609,7 @@ describe('PledgeModal', () => {
       await user.clear(amountInput);
       await user.type(amountInput, '200');
 
-      amountInput.blur();
+      await user.tab();
       const submitBtn = screen.getByTestId('submitPledgeBtn');
       await user.click(submitBtn);
 
@@ -644,7 +644,7 @@ describe('PledgeModal', () => {
       await user.clear(amountInput);
       await user.type(amountInput, '150');
 
-      amountInput.blur();
+      await user.tab();
       const submitBtn = screen.getByTestId('submitPledgeBtn');
       await user.click(submitBtn);
 
@@ -676,7 +676,7 @@ describe('PledgeModal', () => {
       await user.clear(amountInput);
       await user.type(amountInput, '200');
 
-      amountInput.blur();
+      await user.tab();
       const submitBtn = screen.getByTestId('submitPledgeBtn');
       await user.click(submitBtn);
 
@@ -771,7 +771,6 @@ describe('PledgeModal', () => {
         'combobox',
       );
 
-      input.focus();
       await user.click(input);
 
       expect(screen.getByLabelText('Amount')).toBeInTheDocument();
@@ -788,7 +787,7 @@ describe('PledgeModal', () => {
 
       await user.clear(amountInput);
       await user.type(amountInput, '-100');
-      amountInput.blur();
+      await user.tab();
 
       expect(amountInput).toHaveValue(100);
     });
@@ -848,7 +847,6 @@ describe('PledgeModal', () => {
       const input = within(autocomplete).getByRole('combobox');
 
       // Open the autocomplete to select a pledger
-      input.focus();
       await user.click(input);
 
       // Wait for options to appear
@@ -907,7 +905,6 @@ describe('PledgeModal', () => {
       const input = within(autocomplete).getByRole('combobox');
 
       // 1. Select a value first (simulated via update logic or just ensuring we can clear)
-      input.focus();
       await user.click(input);
 
       // 2. Select the option
@@ -1042,7 +1039,6 @@ describe('PledgeModal', () => {
       }
 
       // Open the autocomplete
-      input.focus();
       await user.click(input);
 
       // Wait for options to be available
