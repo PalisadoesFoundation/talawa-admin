@@ -2355,6 +2355,10 @@
     "noEventsAttended": "No hay eventos asistidos"
   },
   "eventStats": {
+    "averageRating": {
+      "title": "Puntuación Media de Reseñas",
+      "rated": "Valoración {{score}} / 5"
+    },
     "title": "Estadísticas del evento",
     "reviews": {
       "title": "Reseñas",

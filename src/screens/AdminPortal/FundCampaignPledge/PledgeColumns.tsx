@@ -5,7 +5,7 @@ import type {
 } from 'shared-components/DataGridWrapper';
 import type { TFunction } from 'i18next';
 import dayjs from 'dayjs';
-import { Button } from 'react-bootstrap';
+import { Button } from 'shared-components/Button';
 import Avatar from 'shared-components/Avatar/Avatar';
 import { currencySymbols } from 'utils/currency';
 import type {

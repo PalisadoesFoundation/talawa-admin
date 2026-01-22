@@ -549,7 +549,6 @@
     "recurringEvent": "Événement récurrent",
     "recurring": "Récurrent",
     "isPublic": "est public",
-    "isRegistrable": "Est enregistrable",
     "visibility": "Visibilité",
     "public": "Public",
     "organizationMembers": "Membres de l'organisation",
@@ -2357,6 +2356,10 @@
     "noEventsAttended": "Aucun événement assisté"
   },
   "eventStats": {
+    "averageRating": {
+      "title": "Score Moyen des Avis",
+      "rated": "Noté {{score}} / 5"
+    },
     "title": "Statistiques de l'événement",
     "reviews": {
       "title": "Avis",
