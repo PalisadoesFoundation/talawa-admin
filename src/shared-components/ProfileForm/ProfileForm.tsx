@@ -3,7 +3,7 @@
  *
  * This component provides a comprehensive profile management interface that handles
  * three distinct use cases:
- * - ** User Profile**: When users view/edit their own profile (/user/settings)
+ * - **User Profile**: When users view/edit their own profile (/user/settings)
  * - ** Member Profile**: When admins view/edit organization member profiles (/member/:orgId/:userId)
  * - ** Admin Profile**: When super admins view/edit admin profiles (/adminprofile/settings)
  *
