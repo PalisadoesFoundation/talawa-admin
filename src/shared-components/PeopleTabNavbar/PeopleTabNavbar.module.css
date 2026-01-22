@@ -13,22 +13,23 @@
   margin-right: 0;
 }
 
-.calendar__search {
-  flex: 1 1 360px;
-  min-width: 260px;
-  max-width: 100%;
+.peopleTabNavbarAlignment {
+  display: flex;
+  gap: 4rem;
+  align-items: center;
 }
 
-.btnsBlock {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  width: auto;
-  flex-shrink: 0;
-  height: 48px;
-  margin: 0;
+.selectTypeEventHeader {
+  border-radius: 10px;
+  margin: 8px;
+}
+
+.dropdownItemButton {
+  background-color: var(--dropdownItem-bg) !important;
+  color: var(--dropdownItem-color) !important;
+  border: none !important;
+  box-shadow: var(--dropdownItem-box-shadow);
+  border-radius: 9px;
 }
 
 .dropdown {
@@ -38,4 +39,12 @@
   color: var(--dropdown-font-color) !important;
   position: relative;
   display: inline-block;
+}
+
+.btnsBlock > * {
+  margin: 0 !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  min-height: auto !important;
 }

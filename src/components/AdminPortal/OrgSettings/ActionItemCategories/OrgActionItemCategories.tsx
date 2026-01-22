@@ -28,8 +28,8 @@
 
 import type { FC } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button } from 'react-bootstrap';
-import styles from 'style/app-fixed.module.css';
+import Button from 'shared-components/Button';
+import styles from './OrgActionItemCategories.module.css';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
@@ -46,7 +46,7 @@ import { Stack } from '@mui/material';
 import CategoryModal from './Modal/ActionItemCategoryModal';
 import CategoryViewModal from './Modal/ActionItemCategoryViewModal';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import SortingButton from 'subComponents/SortingButton';
+import SortingButton from 'shared-components/SortingButton/SortingButton';
 import StatusBadge from 'shared-components/StatusBadge/StatusBadge';
 
 /** Modal state management */
