@@ -1,5 +1,6 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import UserEvents from './UserEvents';
 import {
   InterfacePeopleTabNavbarProps,
@@ -96,64 +97,55 @@ describe('UserEvents Component', () => {
 
   it('renders events correctly', () => {
     render(<UserEvents />);
-
     expect(screen.getByText('React Workshop')).toBeInTheDocument();
     expect(screen.getAllByText('Node.js Seminar').length).toBeGreaterThan(0);
   });
 
-  it('filters events by search input', () => {
+  it('filters events by search input', async () => {
     render(<UserEvents />);
-
     const searchInput = screen.getByTestId('events-search');
 
-    fireEvent.change(searchInput, { target: { value: 'react' } });
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'react');
 
     expect(screen.getByText('React Workshop')).toBeInTheDocument();
     expect(screen.queryByText('Node.js Seminar')).not.toBeInTheDocument();
   });
 
-  it('shows empty state when no events match search', () => {
+  it('shows empty state when no events match search', async () => {
     render(<UserEvents />);
-
     const searchInput = screen.getByTestId('events-search');
 
-    fireEvent.change(searchInput, { target: { value: 'python' } });
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'python');
 
     expect(screen.getByText('noeventsAttended')).toBeInTheDocument();
   });
 
-  it('changes sorting order when sort option changes', () => {
+  it('changes sorting order when sort option changes', async () => {
     render(<UserEvents />);
-
     const sortSelect = screen.getByTestId('eventsSort-select');
 
-    fireEvent.change(sortSelect, { target: { value: 'DESC' } });
+    await userEvent.selectOptions(sortSelect, 'DESC');
 
     const events = screen.getAllByTestId('event-card');
     expect(events.length).toBeGreaterThan(0);
   });
 
-  it('sorts events by name using localeCompare', () => {
+  it('sorts events by name using localeCompare', async () => {
     render(<UserEvents />);
-
     const sortSelect = screen.getByTestId('eventsSort-select');
 
     // ---- ASC (A → Z) ----
-    fireEvent.change(sortSelect, { target: { value: 'ASC' } });
-
+    await userEvent.selectOptions(sortSelect, 'ASC');
     let eventCards = screen.getAllByTestId('event-card');
     let firstEventName = eventCards[0].querySelector('p')?.textContent;
-
-    // "Node.js Seminar" should come before "React Workshop" in ASC
     expect(firstEventName).toBe('Node.js Seminar');
 
     // ---- DESC (Z → A) ----
-    fireEvent.change(sortSelect, { target: { value: 'DESC' } });
-
+    await userEvent.selectOptions(sortSelect, 'DESC');
     eventCards = screen.getAllByTestId('event-card');
     firstEventName = eventCards[0].querySelector('p')?.textContent;
-
-    // "React Workshop" should come first in DESC
     expect(firstEventName).toBe('React Workshop');
   });
 });

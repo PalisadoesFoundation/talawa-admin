@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import MemberDetail from './MemberDetail';
 import { ReactNode } from 'react';
 
@@ -91,10 +92,10 @@ describe('MemberDetail', () => {
     );
   });
 
-  it('switches to organizations tab', () => {
+  it('switches to organizations tab', async () => {
     render(<MemberDetail />);
 
-    fireEvent.click(screen.getByTestId('tab-organizations'));
+    await userEvent.click(screen.getByTestId('tab-organizations'));
 
     expect(screen.getByTestId('user-organizations')).toBeInTheDocument();
     expect(screen.getByTestId('tab-organizations')).toHaveAttribute(
@@ -103,18 +104,18 @@ describe('MemberDetail', () => {
     );
   });
 
-  it('switches to tags tab', () => {
+  it('switches to tags tab', async () => {
     render(<MemberDetail />);
 
-    fireEvent.click(screen.getByTestId('tab-tags'));
+    await userEvent.click(screen.getByTestId('tab-tags'));
 
     expect(screen.getByTestId('user-tags')).toBeInTheDocument();
   });
 
-  it('switches to events tab', () => {
+  it('switches to events tab', async () => {
     render(<MemberDetail />);
 
-    fireEvent.click(screen.getByTestId('tab-events'));
+    await userEvent.click(screen.getByTestId('tab-events'));
 
     expect(screen.getByTestId('user-events')).toBeInTheDocument();
     expect(screen.getByTestId('tab-events')).toHaveAttribute(
@@ -123,15 +124,15 @@ describe('MemberDetail', () => {
     );
   });
 
-  it('switches back to overview tab when overview button is clicked', () => {
+  it('switches back to overview tab when overview button is clicked', async () => {
     render(<MemberDetail id="123" />);
 
     // Step 1: switch away from overview
-    fireEvent.click(screen.getByTestId('tab-events'));
+    await userEvent.click(screen.getByTestId('tab-events'));
     expect(screen.getByTestId('user-events')).toBeInTheDocument();
 
     // Step 2: click overview tab
-    fireEvent.click(screen.getByTestId('tab-overview'));
+    await userEvent.click(screen.getByTestId('tab-overview'));
 
     // Step 3: overview content is rendered again
     expect(screen.getByTestId('user-contact-details')).toHaveTextContent('123');

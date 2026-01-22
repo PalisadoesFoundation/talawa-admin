@@ -22,7 +22,7 @@
 # =============================================================================
 set -euo pipefail
 
-. .husky/scripts/staged-files.sh
+.husky/scripts/staged-files.sh
 
 .husky/scripts/check-tools.sh
 

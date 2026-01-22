@@ -5,10 +5,10 @@ import type { InterfaceResolveAvatarFileParams } from 'types/AdminPortal/MemberD
 /**
  * Resolves the avatar file to use for a member.
  *
- * @param params - Object containing avatar information
- * @param params.newAvatarUploaded - Whether a new avatar file was uploaded
- * @param params.selectedAvatar - The uploaded avatar file, if any
- * @param params.avatarURL - The URL of the existing avatar
+ * @param params Object containing avatar information:
+ *   - `newAvatarUploaded`: Whether a new avatar file was uploaded
+ *   - `selectedAvatar`: The uploaded avatar file, if any
+ *   - `avatarURL`: The URL of the existing avatar
  * @returns A Promise that resolves to the selected File or null if unable to resolve
  */
 export const resolveAvatarFile = async ({

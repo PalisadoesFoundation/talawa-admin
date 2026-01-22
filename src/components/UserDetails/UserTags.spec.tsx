@@ -1,4 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi } from 'vitest';
 import UserTags from './UserTags';
 import { InterfacePeopleTabNavbarProps } from 'types/PeopleTab/interface';
@@ -63,42 +64,38 @@ describe('UserTags Component', () => {
     expect(screen.getByText('Security Audit')).toBeInTheDocument();
   });
 
-  it('filters tags by search term (tag name)', () => {
+  it('filters tags by search term (tag name)', async () => {
     render(<UserTags />);
 
     const searchInput = screen.getByTestId('tagsSearchInput');
 
-    fireEvent.change(searchInput, {
-      target: { value: 'Marketing' },
-    });
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'Marketing');
 
     expect(screen.getByText('Marketing Campaign')).toBeInTheDocument();
     expect(screen.queryByText('Product Launch')).not.toBeInTheDocument();
   });
 
-  it('filters tags by createdBy field', () => {
+  it('filters tags by createdBy field', async () => {
     render(<UserTags />);
 
     const searchInput = screen.getByTestId('tagsSearchInput');
 
-    fireEvent.change(searchInput, {
-      target: { value: 'John Doe' },
-    });
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'John Doe');
 
     expect(screen.getByText('Marketing Campaign')).toBeInTheDocument();
     expect(screen.getByText('Sales Q2')).toBeInTheDocument();
     expect(screen.queryByText('Design Review')).not.toBeInTheDocument();
   });
 
-  it('changes sorting order when sort option changes', () => {
+  it('changes sorting order when sort option changes', async () => {
     render(<UserTags />);
 
     const sortSelect = screen.getByTestId('tagsSort-select');
 
     // Change to oldest
-    fireEvent.change(sortSelect, {
-      target: { value: 'oldest' },
-    });
+    await userEvent.selectOptions(sortSelect, 'oldest');
 
     // First row should now be the first dummy tag
     const rows = screen.getAllByRole('row');
@@ -114,15 +111,13 @@ describe('UserTags Component', () => {
     expect(createdByLinks.length).toBeGreaterThan(0);
   });
 
-  it('reverses tag order when sorting by latest', () => {
+  it('reverses tag order when sorting by latest', async () => {
     render(<UserTags />);
 
     const sortSelect = screen.getByTestId('tagsSort-select');
 
     // Trigger reverse()
-    fireEvent.change(sortSelect, {
-      target: { value: 'latest' },
-    });
+    await userEvent.selectOptions(sortSelect, 'latest');
 
     const rows = screen.getAllByRole('row');
 

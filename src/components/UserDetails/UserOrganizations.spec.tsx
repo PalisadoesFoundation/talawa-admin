@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import UserOrganizations from './UserOrganizations';
 import { MemoryRouter } from 'react-router';
 import React from 'react';
@@ -264,9 +265,9 @@ describe('UserOrganizations', () => {
       expect(screen.getByText('Created Org')).toBeInTheDocument();
     });
 
-    fireEvent.change(screen.getByTestId('search-input'), {
-      target: { value: 'created' },
-    });
+    const searchInput = screen.getByTestId('search-input');
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'created');
 
     await waitFor(() => {
       expect(screen.getByText('Created Org')).toBeInTheDocument();
@@ -283,9 +284,8 @@ describe('UserOrganizations', () => {
       expect(screen.getByText('Joined Org')).toBeInTheDocument();
     });
 
-    fireEvent.change(screen.getByTestId('orgFilter'), {
-      target: { value: 'JOINED' },
-    });
+    const orgFilter = screen.getByTestId('orgFilter');
+    await userEvent.selectOptions(orgFilter, 'JOINED');
 
     await waitFor(() => {
       expect(screen.getByText('Joined Org')).toBeInTheDocument();
@@ -302,9 +302,9 @@ describe('UserOrganizations', () => {
       expect(screen.getByText('Created Org')).toBeInTheDocument();
     });
 
-    fireEvent.change(screen.getByTestId('search-input'), {
-      target: { value: 'xyz' },
-    });
+    const searchInput = screen.getByTestId('search-input');
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'xyz');
 
     await waitFor(() => {
       expect(screen.getByText('noOrganizationsFound')).toBeInTheDocument();
@@ -368,9 +368,8 @@ describe('UserOrganizations', () => {
       expect(orgsAsc[2]).toHaveTextContent('Joined Org');
     });
 
-    fireEvent.change(screen.getByTestId('orgSort'), {
-      target: { value: 'DESC' },
-    });
+    const orgSort = screen.getByTestId('orgSort');
+    await userEvent.selectOptions(orgSort, 'DESC');
 
     await waitFor(() => {
       const orgsDesc = screen.getAllByRole('heading', { level: 3 });
