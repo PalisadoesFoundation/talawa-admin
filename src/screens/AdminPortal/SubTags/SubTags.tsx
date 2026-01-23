@@ -13,9 +13,8 @@ import { WarningAmberRounded } from '@mui/icons-material';
 import IconComponent from 'components/IconComponent/IconComponent';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useNavigate, useParams, Link } from 'react-router';
-import type { ChangeEvent } from 'react';
+import type { FormEvent } from 'react';
 import React, { useState } from 'react';
-import Form from 'react-bootstrap/Form';
 import { FormTextField } from 'shared-components/FormFieldGroup/FormTextField';
 import Button from 'shared-components/Button';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
@@ -116,7 +115,7 @@ function SubTags(): JSX.Element {
   const [create, { loading: createUserTagLoading }] =
     useMutation(CREATE_USER_TAG);
 
-  const addSubTag = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+  const addSubTag = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     try {
@@ -434,7 +433,7 @@ function SubTags(): JSX.Element {
         centered
         title={t('tagDetails')}
       >
-        <Form onSubmitCapture={addSubTag}>
+        <form onSubmit={addSubTag}>
           <FormTextField
             name="tagName"
             label={t('tagName')}
@@ -471,7 +470,7 @@ function SubTags(): JSX.Element {
               {createUserTagLoading ? tCommon('creating') : tCommon('create')}
             </Button>
           </div>
-        </Form>
+        </form>
       </BaseModal>
     </>
   );
