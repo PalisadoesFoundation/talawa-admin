@@ -1,6 +1,6 @@
 import React from 'react';
 import type { RenderResult } from '@testing-library/react';
-import { act, cleanup, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider, MockedResponse } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
@@ -10,13 +10,8 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import MemberDetail from './UserContactDetails';
-import {
-  MOCKS1,
-  MOCKS2,
-  MOCK_FILE,
-  UPDATE_MOCK,
-  UPDATE_USER_ERROR_MOCKS,
-} from './mock';
+import { MOCKS1, MOCKS2, MOCK_FILE } from './mock';
+import { UPDATE_MOCK, UPDATE_USER_ERROR_MOCKS } from './updateMock';
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
@@ -1083,5 +1078,21 @@ describe('MemberDetail', () => {
       timeout: 5000,
     });
     unmount();
+  });
+  test('reloads the page after successful save', async () => {
+    renderMemberDetailScreen(createLink(UPDATE_MOCK));
+    await waitForLoadingComplete();
+
+    const nameInput = screen.getByTestId('inputName');
+    await user.clear(nameInput);
+    await user.type(nameInput, 'ReloadTestName');
+
+    const saveButton = screen.getByTestId('saveChangesBtn');
+    await user.click(saveButton);
+
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalled();
+      expect(mockReload).toHaveBeenCalledTimes(1);
+    });
   });
 });
