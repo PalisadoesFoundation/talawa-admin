@@ -34,7 +34,7 @@
  */
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card, Button, Form } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { useMutation, useQuery } from '@apollo/client';
@@ -44,6 +44,7 @@ import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
 import styles from 'style/app-fixed.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import Button from 'shared-components/Button/Button';
 
 interface TestInterfaceUpdateTimeoutProps {
   onValueChange?: (value: number) => void;
@@ -147,27 +148,27 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
       <Card className={`${styles.updateTimeoutCard} rounded-4 shadow-sm`}>
         <Card.Header className={styles.updateTimeoutCardHeader}>
           <div className={styles.updateTimeoutCardTitle}>
-            Login Session Timeout
+            {t('sessionTimeout.title')}
           </div>
         </Card.Header>
         <Card.Body className={styles.updateTimeoutCardBody}>
-          <Form onSubmit={handleOnSubmit}>
+          <form onSubmit={handleOnSubmit}>
             <div className={styles.updateTimeoutLabelsContainer}>
-              <Form.Label className={styles.updateTimeoutCurrent}>
-                Current Timeout:
+              <label className={`form-label ${styles.updateTimeoutCurrent}`}>
+                {t('sessionTimeout.currentTimeout')}
                 <span
                   className={styles.updateTimeoutValue}
                   data-testid="timeout-value"
                 >
                   {communityTimeout !== undefined
-                    ? ` ${communityTimeout} minutes`
-                    : ' No timeout set'}
+                    ? t('sessionTimeout.minutes', { count: communityTimeout })
+                    : t('sessionTimeout.noTimeoutSet')}
                 </span>
-              </Form.Label>
+              </label>
 
-              <Form.Label className={styles.updateTimeoutLabel}>
-                Update Timeout
-              </Form.Label>
+              <label className={`form-label ${styles.updateTimeoutLabel}`}>
+                {t('sessionTimeout.updateTimeout')}
+              </label>
             </div>
 
             <Box>
@@ -187,10 +188,10 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
               className={styles.updateTimeoutSliderLabels}
               data-testid="slider-labels"
             >
-              <span>15 min</span>
-              <span>30 min</span>
-              <span>45 min</span>
-              <span>60 min</span>
+              <span>{t('sessionTimeout.min15')}</span>
+              <span>{t('sessionTimeout.min30')}</span>
+              <span>{t('sessionTimeout.min45')}</span>
+              <span>{t('sessionTimeout.min60')}</span>
             </div>
             <div className={styles.updateTimeoutButtonContainer}>
               <Button
@@ -198,10 +199,10 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
                 className={styles.addButton}
                 data-testid="update-button"
               >
-                Update
+                {t('sessionTimeout.update')}
               </Button>
             </div>
-          </Form>
+          </form>
         </Card.Body>
       </Card>
     </LoadingState>
