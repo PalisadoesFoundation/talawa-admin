@@ -1,5 +1,4 @@
-﻿/* eslint-disable no-restricted-imports */
-import React from 'react';
+﻿import React from 'react';
 import {
   render,
   screen,
@@ -36,7 +35,7 @@ vi.mock('react-i18next', async (importOriginal) => {
   };
 });
 
-// Mock @mui/x-date-pickers to simple inputs
+// eslint-disable-next-line no-restricted-imports -- mocking MUI date pickers for tests
 vi.mock('@mui/x-date-pickers', () => ({
   LocalizationProvider: ({ children }: { children: React.ReactNode }) => (
     <>{children}</>

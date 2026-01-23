@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-imports */
 import React, { act } from 'react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import {
@@ -260,6 +261,31 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.clearAllMocks();
+});
+
+vi.mock('@mui/material/Autocomplete', () => {
+  return {
+    __esModule: true,
+    default: ({
+      renderInput,
+      ...props
+    }: {
+      renderInput: (params: {
+        inputProps: { role?: string };
+        InputProps: { ref: { current: HTMLInputElement | null } };
+      }) => React.ReactNode;
+      'data-testid'?: string;
+    }) => {
+      return (
+        <div data-testid={props['data-testid'] ?? 'selectOrg'}>
+          {renderInput({
+            inputProps: { role: 'combobox' },
+            InputProps: { ref: { current: document.createElement('input') } },
+          })}
+        </div>
+      );
+    },
+  };
 });
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
