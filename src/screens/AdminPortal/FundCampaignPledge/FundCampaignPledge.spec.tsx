@@ -1424,8 +1424,12 @@ describe('Testing Campaign Pledge Screen', () => {
     // Find the search input
     const searchInput = screen.getByTestId('searchPledger');
     expect(searchInput).toBeInTheDocument();
+    await waitFor(() => {
+      expect(searchInput).toBeEnabled();
+    });
 
     // Type in the search input with leading/trailing spaces
+    await userEvent.click(searchInput);
     await userEvent.clear(searchInput);
     await userEvent.type(searchInput, '  John Doe  ');
 
@@ -1446,6 +1450,7 @@ describe('Testing Campaign Pledge Screen', () => {
     );
 
     // Clear and type again to ensure the callback is covered
+    await userEvent.click(searchInput);
     await userEvent.clear(searchInput);
     await userEvent.type(searchInput, 'Jane');
 

@@ -198,7 +198,14 @@
     "prev": "上一页",
     "next": "下一页",
     "markAsRead": "标记为已读",
-    "markAsReadAriaLabel": "将通知'{{title}}'标记为已读"
+    "markAsReadAriaLabel": "将通知'{{title}}'标记为已读",
+    "loading": "Loading...",
+    "errorFetching": "Error fetching notifications.",
+    "noNewNotifications": "No new notifications.",
+    "openNotificationsMenu": "Open notifications menu",
+    "unread": "Unread",
+    "unreadCount": "{{count}} unread notifications",
+    "viewAllNotifications": "View all notifications"
   },
   "orgList": {
     "title": "塔拉瓦组织",

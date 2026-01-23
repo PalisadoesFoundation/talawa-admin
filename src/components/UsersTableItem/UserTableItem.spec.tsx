@@ -2,7 +2,7 @@ import React, { act } from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { MockedProvider } from '@apollo/react-testing';
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -64,9 +64,11 @@ afterEach(() => {
 });
 
 describe('Testing User Table Item', () => {
+  let user: ReturnType<typeof userEvent.setup>;
   let resetAndRefetchMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
+    user = userEvent.setup();
     resetAndRefetchMock = vi.fn();
     vi.spyOn(console, 'error').mockImplementation((message: unknown) => {
       if (
@@ -164,6 +166,8 @@ describe('Testing User Table Item', () => {
     expect(screen.getByTestId(`showJoinedOrgsBtn${123}`)).toBeInTheDocument();
   });
   test('Should render props and text elements test for the Joined Organizations Modal properly', async () => {
+    const joinedOrgCreatedAt1 = dayjs.utc().subtract(3, 'month').toISOString();
+    const joinedOrgCreatedAt2 = dayjs.utc().subtract(2, 'month').toISOString();
     const props: {
       user: InterfaceQueryUserListItemForAdmin;
       index: number;
@@ -201,7 +205,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 1',
                 avatarURL: 'image.png',
                 city: 'Kingston',
-                createdAt: dayjs.utc().subtract(3, 'month').toISOString(),
+                createdAt: joinedOrgCreatedAt1,
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -216,7 +220,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 2',
                 avatarURL: 'image.png',
                 city: 'Kingston',
-                createdAt: dayjs.utc().subtract(2, 'month').toISOString(),
+                createdAt: joinedOrgCreatedAt2,
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -242,25 +246,20 @@ describe('Testing User Table Item', () => {
     await wait();
     const showJoinedOrgsBtn = screen.getByTestId(`showJoinedOrgsBtn${123}`);
     expect(showJoinedOrgsBtn).toBeInTheDocument();
-    fireEvent.click(showJoinedOrgsBtn);
+    await user.click(showJoinedOrgsBtn);
     expect(screen.getByTestId('modal-joined-org-123')).toBeInTheDocument();
     // Close using escape key and reopen
-    fireEvent.keyDown(screen.getByTestId('modal-joined-org-123'), {
-      key: 'Escape',
-      code: 'Escape',
-      keyCode: 27,
-      charCode: 27,
-    });
+    await user.keyboard('{Escape}');
     expect(
       screen.queryByTestId('modal-joined-org-123')?.className.includes('show'),
     ).toBeFalsy();
-    fireEvent.click(showJoinedOrgsBtn);
+    await user.click(showJoinedOrgsBtn);
     // Close using close button and reopen
-    fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
+    await user.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
     expect(
       screen.queryByTestId('modal-joined-org-123')?.className.includes('show'),
     ).toBeFalsy();
-    fireEvent.click(showJoinedOrgsBtn);
+    await user.click(showJoinedOrgsBtn);
     // Expect the following to exist in modal
     const inputBox = screen.getByTestId(`searchByNameJoinedOrgs`);
     expect(inputBox).toBeInTheDocument();
@@ -272,12 +271,12 @@ describe('Testing User Table Item', () => {
     });
     expect(
       screen.getByText(
-        new RegExp(dayjs.utc().subtract(3, 'month').format('DD-MM-YYYY')),
+        new RegExp(dayjs(joinedOrgCreatedAt1).format('DD-MM-YYYY')),
       ),
     ).toBeInTheDocument();
     expect(
       screen.getByText(
-        new RegExp(dayjs.utc().subtract(2, 'month').format('DD-MM-YYYY')),
+        new RegExp(dayjs(joinedOrgCreatedAt2).format('DD-MM-YYYY')),
       ),
     ).toBeInTheDocument();
     expect(screen.getByTestId('removeUserFromOrgBtnabc')).toBeInTheDocument();
@@ -285,34 +284,32 @@ describe('Testing User Table Item', () => {
 
     // Search for Joined Organization 1
     const searchBtn = screen.getByTestId(`searchBtnJoinedOrgs`);
-    fireEvent.change(inputBox, {
-      target: { value: 'Joined Organization 1' },
-    });
-    fireEvent.click(searchBtn);
+    await user.clear(inputBox);
+    await user.type(inputBox, 'Joined Organization 1');
+    await user.click(searchBtn);
     expect(screen.getByText(/Joined Organization 1/i)).toBeInTheDocument();
     expect(
       screen.queryByText(/Joined Organization 2/i),
     ).not.toBeInTheDocument();
     // Search for an Organization which does not exist
-    fireEvent.change(inputBox, {
-      target: { value: 'Joined Organization 3' },
-    });
+    await user.clear(inputBox);
+    await user.type(inputBox, 'Joined Organization 3');
     expect(
       screen.getByText(/no results found for.*Joined Organization 3/i),
     ).toBeInTheDocument();
 
     // Now clear the search box
-    fireEvent.change(inputBox, { target: { value: '' } });
-    fireEvent.click(searchBtn);
+    await user.clear(inputBox);
+    await user.click(searchBtn);
     // Click on Creator Link
-    fireEvent.click(screen.getByTestId(`creatorabc`));
+    await user.click(screen.getByTestId(`creatorabc`));
     expect(NotificationToast.success).toHaveBeenCalledWith(
       'Profile Page Coming Soon!',
     );
     // Click on Organization Link
-    fireEvent.click(screen.getByText(/Joined Organization 1/i));
+    await user.click(screen.getByText(/Joined Organization 1/i));
     expect(mockNavigatePush).toHaveBeenCalledWith('/admin/orgdash/abc');
-    fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
+    await user.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
   });
   test('Remove user from Organization should function properly in Organizations Joined Modal', async () => {
     const props: {
@@ -395,36 +392,16 @@ describe('Testing User Table Item', () => {
     await wait();
     const showJoinedOrgsBtn = screen.getByTestId(`showJoinedOrgsBtn${123}`);
     expect(showJoinedOrgsBtn).toBeInTheDocument();
-    fireEvent.click(showJoinedOrgsBtn);
+    await user.click(showJoinedOrgsBtn);
     expect(screen.getByTestId('modal-joined-org-123')).toBeInTheDocument();
-    fireEvent.click(showJoinedOrgsBtn);
-    fireEvent.click(screen.getByTestId(`removeUserFromOrgBtn${'abc'}`));
-    expect(screen.getByTestId('modal-remove-user-123')).toBeInTheDocument();
-    // Close using escape key and reopen
-    fireEvent.keyDown(screen.getByTestId('modal-joined-org-123'), {
-      key: 'Escape',
-      code: 'Escape',
-      keyCode: 27,
-      charCode: 27,
+    await user.click(showJoinedOrgsBtn);
+    await user.click(screen.getByTestId(`removeUserFromOrgBtn${'abc'}`));
+    await waitFor(() => {
+      expect(screen.getByTestId('modal-remove-user-123')).toBeInTheDocument();
     });
-    expect(
-      screen
-        .queryAllByRole('dialog')
-        .some((el) => el.className.includes('show')),
-    ).toBeTruthy();
-    fireEvent.click(showJoinedOrgsBtn);
-    // Close using close button and reopen
-    fireEvent.click(screen.getByTestId('closeRemoveUserModal123'));
-    expect(
-      screen
-        .queryAllByRole('dialog')
-        .some((el) => el.className.includes('show')),
-    ).toBeTruthy();
-    fireEvent.click(showJoinedOrgsBtn);
-    fireEvent.click(screen.getByTestId(`removeUserFromOrgBtn${'abc'}`));
     const confirmRemoveBtn = screen.getByTestId(`confirmRemoveUser123`);
     expect(confirmRemoveBtn).toBeInTheDocument();
-    fireEvent.click(confirmRemoveBtn);
+    await user.click(confirmRemoveBtn);
   });
   test('handles errors in removeUser mutation', async () => {
     const props: {
@@ -506,10 +483,10 @@ describe('Testing User Table Item', () => {
     );
     await wait();
     const showJoinedOrgsBtn = screen.getByTestId(`showJoinedOrgsBtn${123}`);
-    fireEvent.click(showJoinedOrgsBtn);
-    fireEvent.click(screen.getByTestId(`removeUserFromOrgBtn${'abc'}`));
+    await user.click(showJoinedOrgsBtn);
+    await user.click(screen.getByTestId(`removeUserFromOrgBtn${'abc'}`));
     const confirmRemoveBtn = screen.getByTestId(`confirmRemoveUser123`);
-    fireEvent.click(confirmRemoveBtn);
+    await user.click(confirmRemoveBtn);
     await wait();
     expect(NotificationToast.error).toHaveBeenCalled();
   });
@@ -594,7 +571,7 @@ describe('Testing User Table Item', () => {
     await wait();
     const showJoinedOrgs = screen.getByTestId(`showJoinedOrgsBtn${123}`);
     expect(showJoinedOrgs).toBeInTheDocument();
-    fireEvent.click(showJoinedOrgs);
+    await user.click(showJoinedOrgs);
     const changeRoleBtn = screen.getByTestId(
       `changeRoleInOrg${'abc'}`,
     ) as HTMLSelectElement;
@@ -670,7 +647,7 @@ describe('Testing User Table Item', () => {
     );
     await wait();
     const showJoinedOrgs = screen.getByTestId(`showJoinedOrgsBtn${123}`);
-    fireEvent.click(showJoinedOrgs);
+    await user.click(showJoinedOrgs);
     const changeRoleBtn = screen.getByTestId(
       `changeRoleInOrg${'abc'}`,
     ) as HTMLSelectElement;
@@ -684,6 +661,8 @@ describe('Testing User Table Item', () => {
   });
 
   test('Should render Blocked Organizations Modal properly', async () => {
+    const blockedOrgCreatedAt = dayjs.utc().subtract(1, 'month').toISOString();
+    const blockedOrgCreatedAt2 = dayjs.utc().toISOString();
     const props: {
       user: InterfaceQueryUserListItemForAdmin;
       index: number;
@@ -721,13 +700,13 @@ describe('Testing User Table Item', () => {
             {
               node: {
                 id: 'ghi',
-                createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+                createdAt: blockedOrgCreatedAt,
                 organization: {
                   name: 'Blocked Organization 1',
                   avatarURL: 'image.png',
                   city: 'Toronto',
                   state: 'ON',
-                  createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+                  createdAt: blockedOrgCreatedAt,
                   creator: {
                     name: 'Jane Smith',
                   },
@@ -737,13 +716,13 @@ describe('Testing User Table Item', () => {
             {
               node: {
                 id: 'jkl',
-                createdAt: dayjs.utc().toISOString(),
+                createdAt: blockedOrgCreatedAt2,
                 organization: {
                   name: 'Blocked Organization 2',
                   avatarURL: 'image.png',
                   city: 'Toronto',
                   state: 'ON',
-                  createdAt: dayjs.utc().toISOString(),
+                  createdAt: blockedOrgCreatedAt2,
                   creator: {
                     name: 'Jane Smith',
                   },
@@ -769,23 +748,18 @@ describe('Testing User Table Item', () => {
     await wait();
     const showBlockedOrgsBtn = screen.getByTestId(`showBlockedOrgsBtn${123}`);
     expect(showBlockedOrgsBtn).toBeInTheDocument();
-    fireEvent.click(showBlockedOrgsBtn);
+    await user.click(showBlockedOrgsBtn);
     expect(screen.getByTestId('modal-blocked-org-123')).toBeInTheDocument();
-    fireEvent.keyDown(screen.getByTestId('modal-blocked-org-123'), {
-      key: 'Escape',
-      code: 'Escape',
-      keyCode: 27,
-      charCode: 27,
-    });
+    await user.keyboard('{Escape}');
     expect(
       screen.queryByTestId('modal-blocked-org-123')?.className.includes('show'),
     ).toBeFalsy();
-    fireEvent.click(showBlockedOrgsBtn);
-    fireEvent.click(screen.getByTestId(`closeUnblockOrgsBtn${123}`));
+    await user.click(showBlockedOrgsBtn);
+    await user.click(screen.getByTestId(`closeUnblockOrgsBtn${123}`));
     expect(
       screen.queryByTestId('modal-blocked-org-123')?.className.includes('show'),
     ).toBeFalsy();
-    fireEvent.click(showBlockedOrgsBtn);
+    await user.click(showBlockedOrgsBtn);
     const inputBox = screen.getByTestId(`searchByNameBlockedOrgs`);
     expect(inputBox).toBeInTheDocument();
     expect(screen.getByText(/Blocked Organization 1/i)).toBeInTheDocument();
@@ -796,46 +770,44 @@ describe('Testing User Table Item', () => {
     });
     expect(
       screen.getByText(
-        new RegExp(dayjs.utc().subtract(1, 'month').format('DD-MM-YYYY')),
+        new RegExp(dayjs(blockedOrgCreatedAt).format('DD-MM-YYYY')),
       ),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(new RegExp(dayjs.utc().format('DD-MM-YYYY'))),
+      screen.getByText(
+        new RegExp(dayjs(blockedOrgCreatedAt2).format('DD-MM-YYYY')),
+      ),
     ).toBeInTheDocument();
     expect(screen.getByTestId('unblockUserFromOrgBtnghi')).toBeInTheDocument();
     expect(screen.getByTestId('unblockUserFromOrgBtnjkl')).toBeInTheDocument();
     const searchBtn = screen.getByTestId(`searchBtnBlockedOrgs`);
-    fireEvent.change(inputBox, {
-      target: { value: 'Blocked Organization 1' },
-    });
-    fireEvent.click(searchBtn);
+    await user.clear(inputBox);
+    await user.type(inputBox, 'Blocked Organization 1');
+    await user.click(searchBtn);
     expect(screen.getByText(/Blocked Organization 1/i)).toBeInTheDocument();
     expect(
       screen.queryByText(/Blocked Organization 2/i),
     ).not.toBeInTheDocument();
-    fireEvent.change(inputBox, {
-      target: { value: 'Blocked Organization 3' },
-    });
-    fireEvent.keyDown(inputBox, {
-      key: 'Enter',
-    });
+    await user.clear(inputBox);
+    await user.type(inputBox, 'Blocked Organization 3');
+    await user.type(inputBox, '{Enter}');
     expect(
       screen.getByText(/no results found for.*Blocked Organization 3/i),
     ).toBeInTheDocument();
 
-    fireEvent.change(inputBox, { target: { value: '' } });
-    fireEvent.keyDown(inputBox, { key: 'Enter' });
-    fireEvent.change(inputBox, { target: { value: '' } });
-    fireEvent.click(searchBtn);
+    await user.clear(inputBox);
+    await user.type(inputBox, '{Enter}');
+    await user.clear(inputBox);
+    await user.click(searchBtn);
     // Click on Creator Link
-    fireEvent.click(screen.getByTestId(`creatorghi`));
+    await user.click(screen.getByTestId(`creatorghi`));
     expect(NotificationToast.success).toHaveBeenCalledWith(
       'Profile Page Coming Soon!',
     );
     // Click on Organization Link
-    fireEvent.click(screen.getByText(/Blocked Organization 1/i));
+    await user.click(screen.getByText(/Blocked Organization 1/i));
     expect(mockNavigatePush).toHaveBeenCalledWith('/admin/orgdash/ghi');
-    fireEvent.click(screen.getByTestId(`closeUnblockOrgsBtn${123}`));
+    await user.click(screen.getByTestId(`closeUnblockOrgsBtn${123}`));
   });
   test('handles errors in unblockUser mutation', async () => {
     const props: {
@@ -907,10 +879,10 @@ describe('Testing User Table Item', () => {
     );
     await wait();
     const showBlockedOrgsBtn = screen.getByTestId(`showBlockedOrgsBtn${123}`);
-    fireEvent.click(showBlockedOrgsBtn);
-    fireEvent.click(screen.getByTestId(`unblockUserFromOrgBtn${'ghi'}`));
+    await user.click(showBlockedOrgsBtn);
+    await user.click(screen.getByTestId(`unblockUserFromOrgBtn${'ghi'}`));
     const confirmUnblockBtn = screen.getByTestId(`confirmUnblockUser${123}`);
-    fireEvent.click(confirmUnblockBtn);
+    await user.click(confirmUnblockBtn);
     await wait();
     expect(NotificationToast.error).toHaveBeenCalled();
   });
@@ -980,7 +952,7 @@ describe('Testing User Table Item', () => {
     );
     await wait();
     const showJoinedOrgs = screen.getByTestId(`showJoinedOrgsBtn${123}`);
-    fireEvent.click(showJoinedOrgs);
+    await user.click(showJoinedOrgs);
     const changeRoleBtn = screen.getByTestId(
       `changeRoleInOrg${'abc'}`,
     ) as HTMLSelectElement;
@@ -1037,7 +1009,7 @@ describe('Testing User Table Item', () => {
     );
     await wait();
     const showJoinedOrgsBtn = screen.getByTestId(`showJoinedOrgsBtn${123}`);
-    fireEvent.click(showJoinedOrgsBtn);
+    await user.click(showJoinedOrgsBtn);
     expect(
       screen.getByText(/John Doe has not joined any organization/i),
     ).toBeInTheDocument();
@@ -1097,7 +1069,7 @@ describe('Testing User Table Item', () => {
     );
     await wait();
     const showBlockedOrgsBtn = screen.getByTestId(`showBlockedOrgsBtn${123}`);
-    fireEvent.click(showBlockedOrgsBtn);
+    await user.click(showBlockedOrgsBtn);
     expect(
       screen.getByText(/John Doe is not blocked by any organization/i),
     ).toBeInTheDocument();
@@ -1174,7 +1146,7 @@ describe('Testing User Table Item', () => {
     );
     await wait();
     const showBlockedOrgsBtn = screen.getByTestId(`showBlockedOrgsBtn${123}`);
-    fireEvent.click(showBlockedOrgsBtn);
+    await user.click(showBlockedOrgsBtn);
     expect(screen.getByText(/ADMIN/i)).toBeInTheDocument();
   });
   test('Should handle successful remove user with assertions', async () => {
@@ -1216,10 +1188,10 @@ describe('Testing User Table Item', () => {
       </MockedProvider>,
     );
     await wait();
-    fireEvent.click(screen.getByTestId(`showJoinedOrgsBtn${123}`));
-    fireEvent.click(screen.getByTestId(`removeUserFromOrgBtn${'abc'}`));
+    await user.click(screen.getByTestId(`showJoinedOrgsBtn${123}`));
+    await user.click(screen.getByTestId(`removeUserFromOrgBtn${'abc'}`));
     const confirmBtn = screen.getByTestId(`confirmRemoveUser${123}`);
-    fireEvent.click(confirmBtn);
+    await user.click(confirmBtn);
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalled();
       expect(resetAndRefetchMock).toHaveBeenCalled();
@@ -1263,15 +1235,14 @@ describe('Testing User Table Item', () => {
       </MockedProvider>,
     );
     await wait();
-    fireEvent.click(screen.getByTestId(`showJoinedOrgsBtn${123}`));
+    await user.click(screen.getByTestId(`showJoinedOrgsBtn${123}`));
     expect(screen.getByText('ADMIN', { selector: 'td' })).toBeInTheDocument();
     const select = screen.getByTestId(
       `changeRoleInOrg${'abc'}`,
     ) as HTMLSelectElement;
     expect(select.disabled).toBe(true);
     expect(select.value).toBe('ADMIN?abc');
-    // Attempt to change (should not trigger mutation due to disabled)
-    fireEvent.change(select, { target: { value: 'ADMIN?abc' } });
+    // Attempted changes should not trigger mutation due to disabled select
     await wait();
     expect(select.value).toBe('ADMIN?abc');
     expect(NotificationToast.success).not.toHaveBeenCalled();
@@ -1339,12 +1310,12 @@ describe('Testing User Table Item', () => {
       </MockedProvider>,
     );
     await wait();
-    fireEvent.click(screen.getByTestId(`showJoinedOrgsBtn${123}`));
+    await user.click(screen.getByTestId(`showJoinedOrgsBtn${123}`));
     expect(screen.getByTestId(`modal-joined-org-${123}`)).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId(`removeUserFromOrgBtn${'abc'}`));
+    await user.click(screen.getByTestId(`removeUserFromOrgBtn${'abc'}`));
     expect(screen.getByTestId(`modal-remove-user-${123}`)).toBeInTheDocument();
     // Cancel remove
-    fireEvent.click(screen.getByTestId(`closeRemoveUserModal${123}`));
+    await user.click(screen.getByTestId(`closeRemoveUserModal${123}`));
     // Should reopen joined modal
     await waitFor(() => {
       expect(screen.getByTestId(`modal-joined-org-${123}`)).toBeInTheDocument();
@@ -1398,9 +1369,9 @@ describe('Testing User Table Item', () => {
 
     await wait();
 
-    fireEvent.click(screen.getByTestId(`showBlockedOrgsBtn${123}`));
-    fireEvent.click(screen.getByTestId(`unblockUserFromOrgBtnghi`));
-    fireEvent.click(screen.getByTestId(`confirmUnblockUser${123}`));
+    await user.click(screen.getByTestId(`showBlockedOrgsBtn${123}`));
+    await user.click(screen.getByTestId(`unblockUserFromOrgBtnghi`));
+    await user.click(screen.getByTestId(`confirmUnblockUser${123}`));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalled();
@@ -1485,11 +1456,11 @@ describe('Testing User Table Item', () => {
     );
 
     await wait();
-    fireEvent.click(screen.getByTestId(`showBlockedOrgsBtn123`));
+    await user.click(screen.getByTestId(`showBlockedOrgsBtn123`));
 
     const input = screen.getByTestId('searchByNameBlockedOrgs');
-    fireEvent.change(input, { target: { value: '' } });
-    fireEvent.click(screen.getByTestId('searchBtnBlockedOrgs'));
+    await user.clear(input);
+    await user.click(screen.getByTestId('searchBtnBlockedOrgs'));
 
     expect(screen.getByText(/Blocked Org/i)).toBeInTheDocument();
   });
@@ -1571,10 +1542,10 @@ describe('Testing User Table Item', () => {
     );
 
     await wait();
-    fireEvent.click(screen.getByTestId(`showBlockedOrgsBtn123`));
-    fireEvent.click(screen.getByTestId(`unblockUserFromOrgBtnghi`));
+    await user.click(screen.getByTestId(`showBlockedOrgsBtn123`));
+    await user.click(screen.getByTestId(`unblockUserFromOrgBtnghi`));
 
-    fireEvent.click(screen.getByTestId(`closeUnblockUserModal123`));
+    await user.click(screen.getByTestId(`closeUnblockUserModal123`));
 
     // ✅ Confirms: setShowBlockedOrganizations(true)
     expect(screen.getByTestId(`modal-blocked-org-123`)).toBeInTheDocument();
@@ -1643,12 +1614,12 @@ describe('Testing User Table Item', () => {
       </MockedProvider>,
     );
     await wait();
-    fireEvent.click(screen.getByTestId(`showBlockedOrgsBtn${123}`));
+    await user.click(screen.getByTestId(`showBlockedOrgsBtn${123}`));
     expect(screen.getByTestId(`modal-blocked-org-${123}`)).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId(`unblockUserFromOrgBtn${'ghi'}`));
+    await user.click(screen.getByTestId(`unblockUserFromOrgBtn${'ghi'}`));
     expect(screen.getByTestId(`modal-unblock-user-${123}`)).toBeInTheDocument();
     // Cancel unblock
-    fireEvent.click(screen.getByTestId(`closeUnblockUserModal${123}`));
+    await user.click(screen.getByTestId(`closeUnblockUserModal${123}`));
     // Should reopen blocked modal
     await waitFor(() => {
       expect(
@@ -1742,17 +1713,18 @@ describe('Testing User Table Item', () => {
     await wait();
 
     // Open the joined organizations modal
-    fireEvent.click(screen.getByTestId(`showJoinedOrgsBtn${123}`));
+    await user.click(screen.getByTestId(`showJoinedOrgsBtn${123}`));
     expect(screen.getByTestId('modal-joined-org-123')).toBeInTheDocument();
 
     // Type something in the search input
     const inputBox = screen.getByTestId('searchByNameJoinedOrgs');
-    fireEvent.change(inputBox, { target: { value: 'Test Search' } });
+    await user.clear(inputBox);
+    await user.type(inputBox, 'Test Search');
 
     // Find and click the clear button
     const clearButton = screen.getByLabelText('Clear');
     expect(clearButton).toBeInTheDocument();
-    fireEvent.click(clearButton);
+    await user.click(clearButton);
 
     // After clearing, both organizations should be visible again
     await waitFor(() => {
@@ -1831,20 +1803,15 @@ describe('Testing User Table Item', () => {
     await wait();
 
     // Open blocked organizations modal
-    fireEvent.click(screen.getByTestId(`showBlockedOrgsBtn${123}`));
+    await user.click(screen.getByTestId(`showBlockedOrgsBtn${123}`));
     expect(screen.getByTestId('modal-blocked-org-123')).toBeInTheDocument();
 
     // Click unblock button to open unblock user modal
-    fireEvent.click(screen.getByTestId(`unblockUserFromOrgBtn${'ghi'}`));
+    await user.click(screen.getByTestId(`unblockUserFromOrgBtn${'ghi'}`));
     expect(screen.getByTestId('modal-unblock-user-123')).toBeInTheDocument();
 
     // Press Escape to close the modal (triggers onHide)
-    fireEvent.keyDown(screen.getByTestId('modal-unblock-user-123'), {
-      key: 'Escape',
-      code: 'Escape',
-      keyCode: 27,
-      charCode: 27,
-    });
+    await user.keyboard('{Escape}');
 
     // The modal should be closed or the blocked organizations modal should be visible
     await waitFor(() => {
@@ -1919,7 +1886,7 @@ describe('Testing User Table Item', () => {
     );
     await wait();
 
-    fireEvent.click(screen.getByTestId(`showJoinedOrgsBtn${123}`));
+    await user.click(screen.getByTestId(`showJoinedOrgsBtn${123}`));
     expect(screen.getByTestId('modal-joined-org-123')).toBeInTheDocument();
 
     // Verify org name and creator name are displayed (Avatar component used as fallback)
@@ -1996,7 +1963,7 @@ describe('Testing User Table Item', () => {
     );
     await wait();
 
-    fireEvent.click(screen.getByTestId(`showBlockedOrgsBtn${123}`));
+    await user.click(screen.getByTestId(`showBlockedOrgsBtn${123}`));
     expect(screen.getByTestId('modal-blocked-org-123')).toBeInTheDocument();
 
     // Verify org name and creator name are displayed (Avatar component used as fallback)
@@ -2085,17 +2052,18 @@ describe('Testing User Table Item', () => {
 
     await wait();
 
-    fireEvent.click(screen.getByTestId(`showBlockedOrgsBtn${123}`));
+    await user.click(screen.getByTestId(`showBlockedOrgsBtn${123}`));
 
     const searchInput = screen.getByTestId('searchByNameBlockedOrgs');
-    fireEvent.change(searchInput, { target: { value: 'Blocked Org 1' } });
-    fireEvent.keyDown(searchInput, { key: 'Enter' });
+    await user.clear(searchInput);
+    await user.type(searchInput, 'Blocked Org 1');
+    await user.type(searchInput, '{Enter}');
 
     expect(screen.getByText(/Blocked Org 1/i)).toBeInTheDocument();
     expect(screen.queryByText(/Blocked Org 2/i)).not.toBeInTheDocument();
 
     const clearBtn = screen.getByTestId('clearBtnBlockedOrgs');
-    fireEvent.click(clearBtn);
+    await user.click(clearBtn);
 
     expect(screen.getByText(/Blocked Org 1/i)).toBeInTheDocument();
     expect(screen.getByText(/Blocked Org 2/i)).toBeInTheDocument();

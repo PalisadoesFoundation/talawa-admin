@@ -198,7 +198,14 @@
     "prev": "Précédent",
     "next": "Suivant",
     "markAsRead": "Marquer comme lues",
-    "markAsReadAriaLabel": "Marquer la notification '{{title}}' comme lue"
+    "markAsReadAriaLabel": "Marquer la notification '{{title}}' comme lue",
+    "loading": "Loading...",
+    "errorFetching": "Error fetching notifications.",
+    "noNewNotifications": "No new notifications.",
+    "openNotificationsMenu": "Open notifications menu",
+    "unread": "Unread",
+    "unreadCount": "{{count}} unread notifications",
+    "viewAllNotifications": "View all notifications"
   },
   "orgList": {
     "title": "Organisations Talawa",

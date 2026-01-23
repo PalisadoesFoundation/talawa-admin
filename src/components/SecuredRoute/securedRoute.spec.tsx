@@ -93,7 +93,7 @@ describe('SecuredRoute', () => {
   });
 
   describe('User Activity Tracking', () => {
-    it('should update lastActive on mouse movement', async () => {
+    it('should update lastActive on mouse movement', () => {
       setItem('IsLoggedIn', 'TRUE');
       setItem('role', 'administrator');
 

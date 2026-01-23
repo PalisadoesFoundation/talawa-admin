@@ -198,7 +198,14 @@
     "prev": "Prev",
     "next": "Next",
     "markAsRead": "Mark as Read",
-    "markAsReadAriaLabel": "Mark notification '{{title}}' as read"
+    "markAsReadAriaLabel": "Mark notification '{{title}}' as read",
+    "loading": "Loading...",
+    "errorFetching": "Error fetching notifications.",
+    "noNewNotifications": "No new notifications.",
+    "openNotificationsMenu": "Open notifications menu",
+    "unread": "Unread",
+    "unreadCount": "{{count}} unread notifications",
+    "viewAllNotifications": "View all notifications"
   },
   "orgList": {
     "title": "Organizations",

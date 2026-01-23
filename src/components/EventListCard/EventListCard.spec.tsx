@@ -268,7 +268,7 @@ describe('Testing Event List Card', () => {
                     element={<EventListCard key={key} {...otherProps} />}
                   />
                   <Route
-                    path="/admin/event/:orgId/"
+                    path="/admin/event/:orgId/:eventId"
                     element={<EventListCard key={key} {...otherProps} />}
                   />
                 </Routes>

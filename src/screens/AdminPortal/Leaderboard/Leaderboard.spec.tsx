@@ -320,6 +320,7 @@ describe('Testing Leaderboard Screen', () => {
   });
 
   it('OnKeyDown Space key on Member navigate to Member Screen', async () => {
+    const user = userEvent.setup();
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
@@ -329,7 +330,8 @@ describe('Testing Leaderboard Screen', () => {
 
     const userName = screen.getAllByTestId('userName');
     userName[0].focus();
-    await userEvent.type(userName[0], '{space}');
+    expect(userName[0]).toHaveFocus();
+    await user.keyboard(' ');
 
     await waitFor(() => {
       expect(screen.getByTestId('memberScreen')).toBeInTheDocument();

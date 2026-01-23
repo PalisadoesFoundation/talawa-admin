@@ -712,9 +712,6 @@ describe('OrganizationPeople', () => {
   });
 
   test('handles pagination correctly for ADMIN no next', async () => {
-    const user = userEvent.setup({
-      pointerEventsCheck: PointerEventsCheckLevel.Never,
-    });
     const initialMemberMock = createMemberConnectionMock({
       orgId: 'orgid',
       first: 10,
@@ -795,13 +792,13 @@ describe('OrganizationPeople', () => {
 
     // Navigate to next page
     const nextPageButton = screen.getByRole('button', { name: /next page/i });
-    await user.click(nextPageButton);
+    expect(nextPageButton).toBeDisabled();
 
     // Navigate back to previous page
     const prevPageButton = screen.getByRole('button', {
       name: /previous page/i,
     });
-    await user.click(prevPageButton);
+    expect(prevPageButton).toBeDisabled();
   });
 
   test('handles errors from GraphQL queries', async () => {
@@ -1021,9 +1018,6 @@ describe('OrganizationPeople', () => {
   });
 
   test('prevents navigation when there are no pages available', async () => {
-    const user = userEvent.setup({
-      pointerEventsCheck: PointerEventsCheckLevel.Never,
-    });
     const singlePageMock = createMemberConnectionMock(
       {
         orgId: 'orgid',
@@ -1080,7 +1074,7 @@ describe('OrganizationPeople', () => {
 
     // Try to navigate to next page (should not work)
     const nextPageButton = screen.getByRole('button', { name: /next page/i });
-    await user.click(nextPageButton);
+    expect(nextPageButton).toBeDisabled();
 
     // Should still show the same data
     await waitFor(() => {
@@ -1267,9 +1261,6 @@ describe('OrganizationPeople', () => {
   });
 
   test('prevents backward navigation attempt when hasPreviousPage is false', async () => {
-    const user = userEvent.setup({
-      pointerEventsCheck: PointerEventsCheckLevel.Never,
-    });
     // This test targets line 353 - the second return statement
     const firstPageMock = createMemberConnectionMock(
       {
@@ -1330,8 +1321,7 @@ describe('OrganizationPeople', () => {
       name: /previous page/i,
     });
 
-    // This click should trigger the line 353 return statement
-    await user.click(prevPageButton);
+    expect(prevPageButton).toBeDisabled();
 
     // Verify we're still showing the same data
     await waitFor(() => {
