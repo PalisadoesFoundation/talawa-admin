@@ -14,6 +14,7 @@ let mockToggleDeleteModal: ReturnType<typeof vi.fn>;
 let mockDeleteAgendaItemHandler: ReturnType<typeof vi.fn>;
 const mockT = (key: string): string => key;
 const mockTCommon = (key: string): string => key;
+let user: ReturnType<typeof userEvent.setup>;
 
 describe('AgendaItemsDeleteModal', () => {
   beforeEach(() => {
@@ -22,10 +23,10 @@ describe('AgendaItemsDeleteModal', () => {
     vi.clearAllMocks();
     // Reset any manual timers
     vi.useRealTimers();
+    user = userEvent.setup();
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -70,47 +71,42 @@ describe('AgendaItemsDeleteModal', () => {
 
   // Interaction Tests
   test('calls toggleDeleteModal when close button is clicked', async () => {
-    const user = userEvent.setup();
     renderComponent();
     const closeButton = screen.getByTestId('deleteAgendaItemCloseBtn');
-    await user.click(closeButton);
+    await userEvent.click(closeButton);
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
   });
 
   test('calls deleteAgendaItemHandler when confirm button is clicked', async () => {
-    const user = userEvent.setup();
     renderComponent();
     const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
-    await user.click(confirmButton);
+    await userEvent.click(confirmButton);
     expect(mockDeleteAgendaItemHandler).toHaveBeenCalledTimes(1);
   });
 
   test('calls toggleDeleteModal when modal header close button is clicked', async () => {
-    const user = userEvent.setup();
     renderComponent();
     const closeButton = screen.getByRole('button', { name: /close/i });
-    await user.click(closeButton);
+    await userEvent.click(closeButton);
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
   });
 
   // Edge Cases
   test('handles rapid button clicks correctly', async () => {
-    const user = userEvent.setup();
     renderComponent();
     const confirmButton = screen.getByTestId('deleteAgendaItemBtn');
     const closeButton = screen.getByTestId('deleteAgendaItemCloseBtn');
 
     // Simulate rapid clicks
-    await user.click(confirmButton);
-    await user.click(closeButton);
-    await user.click(confirmButton);
+    await userEvent.click(confirmButton);
+    await userEvent.click(closeButton);
+    await userEvent.click(confirmButton);
 
     expect(mockDeleteAgendaItemHandler).toHaveBeenCalledTimes(2);
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
   });
 
   test('handles keyboard events correctly', async () => {
-    const user = userEvent.setup();
     renderComponent();
 
     // Test Escape key
