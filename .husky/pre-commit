@@ -20,6 +20,12 @@
 # - Delegates logic to smaller scripts for maintainability
 #
 # =============================================================================
+
+# If running under sh/dash (from Husky sourcing), re-execute with bash
+if [ -z "$BASH_VERSION" ]; then
+  exec bash "$0" "$@"
+fi
+
 set -euo pipefail
 
 . .husky/scripts/staged-files.sh
