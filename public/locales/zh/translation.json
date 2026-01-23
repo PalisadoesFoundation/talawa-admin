@@ -201,6 +201,7 @@
     "markAsReadAriaLabel": "将通知'{{title}}'标记为已读",
     "unreadCount_one": "{{count}} 未读",
     "unreadCount_other": "{{count}} 未读",
+    "unreadCount": "{{count}} 未读",
     "loading": "加载中...",
     "errorFetching": "获取通知时出错",
     "unread": "未读",

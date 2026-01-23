@@ -201,6 +201,7 @@
     "markAsReadAriaLabel": "सूचना '{{title}}' को पढ़ा हुआ चिह्नित करें",
     "unreadCount_one": "{{count}} अपठित",
     "unreadCount_other": "{{count}} अपठित",
+    "unreadCount": "{{count}} अपठित",
     "loading": "लोड हो रहा है...",
     "errorFetching": "सूचनाएं प्राप्त करते समय त्रुटि",
     "unread": "अपठित",

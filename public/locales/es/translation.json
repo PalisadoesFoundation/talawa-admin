@@ -201,6 +201,7 @@
     "markAsReadAriaLabel": "Marcar notificación '{{title}}' como leída",
     "unreadCount_one": "{{count}} sin leer",
     "unreadCount_other": "{{count}} sin leer",
+    "unreadCount": "{{count}} sin leer",
     "loading": "Cargando...",
     "errorFetching": "Error al obtener notificaciones",
     "unread": "Sin leer",
