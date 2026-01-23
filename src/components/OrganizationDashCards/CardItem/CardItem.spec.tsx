@@ -230,4 +230,44 @@ describe('CardItem Component', () => {
     const newImg = screen.getByAltText('cardItem.avatar');
     expect(newImg).toHaveAttribute('src', 'second-image.jpg');
   });
+
+  it('renders Post with creator information', () => {
+    const props: InterfaceCardItem = {
+      type: 'Post',
+      title: 'Post with Creator',
+      creator: { id: 123, name: 'John Creator' },
+    };
+
+    render(<CardItem {...props} />);
+
+    expect(
+      screen.getByText('cardItem.author John Creator'),
+    ).toBeInTheDocument();
+  });
+
+  it('renders Post with location information', () => {
+    const props: InterfaceCardItem = {
+      type: 'Post',
+      title: 'Post with Location',
+      location: 'Test Location',
+    };
+
+    render(<CardItem {...props} />);
+
+    expect(screen.getByText('Test Location')).toBeInTheDocument();
+    expect(screen.getByTestId('marker-icon')).toBeInTheDocument();
+  });
+
+  it('renders MembershipRequest with location information', () => {
+    const props: InterfaceCardItem = {
+      type: 'MembershipRequest',
+      title: 'Request with Location',
+      location: 'Request Location',
+    };
+
+    render(<CardItem {...props} />);
+
+    expect(screen.getByText('Request Location')).toBeInTheDocument();
+    expect(screen.getByTestId('marker-icon')).toBeInTheDocument();
+  });
 });
