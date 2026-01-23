@@ -10,15 +10,16 @@ Defined in: [src/components/OrganizationDashCards/CardItem/CardItem.tsx:51](http
 
 Displays information about an event, post, or membership request as a styled card.
 
-`@param` props - Component props from InterfaceCardItemProps
-`@returns` JSX.Element
-
 ## Parameters
 
 ### props
 
 [`InterfaceCardItem`](../interfaces/InterfaceCardItem.md)
 
+Component props from InterfaceCardItem.
+
 ## Returns
 
 `Element`
+
+JSX.Element
