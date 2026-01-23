@@ -5,8 +5,7 @@
   text-decoration: none;
 }
 
-.eventsAttended,
-.membername {
+.eventsAttended {
   color: var(--eventsAttended-membername-color);
 }
 
