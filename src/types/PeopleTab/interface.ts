@@ -74,9 +74,9 @@ export interface InterfacePeopletabUserEventsProps {
 export interface InterfacePeopleTabUserOrganizationProps {
   img?: string;
   title: string;
-  description?: string;
-  adminCount?: number;
-  membersCount?: number;
+  description: string;
+  adminCount: number;
+  membersCount: number;
   actionIcon?: React.ReactNode;
   actionName?: string;
 }

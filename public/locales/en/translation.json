@@ -198,16 +198,7 @@
     "prev": "Prev",
     "next": "Next",
     "markAsRead": "Mark as Read",
-    "markAsReadAriaLabel": "Mark notification '{{title}}' as read",
-    "unreadCount_one": "{{count}} unread",
-    "unreadCount_other": "{{count}} unread",
-    "unreadCount": "{{count}} unread",
-    "loading": "Loading...",
-    "errorFetching": "Error fetching notifications",
-    "unread": "Unread",
-    "noNewNotifications": "No new notifications",
-    "viewAllNotifications": "View all notifications",
-    "openNotificationsMenu": "Open notifications menu"
+    "markAsReadAriaLabel": "Mark notification '{{title}}' as read"
   },
   "orgList": {
     "title": "Organizations",
@@ -360,14 +351,6 @@
     "url": "Enter url",
     "profileChangedMsg": "Successfully updated the Profile Details.",
     "resetData": "Successfully reset the Profile Details."
-  },
-  "cardItem": {
-    "avatar": "{{title}} avatar",
-    "eventLocation": "Event Location",
-    "eventDate": "Event Date",
-    "loadingPlaceholder": "\u00A0",
-    "postedOn": "Posted on:",
-    "author": "Author:"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -752,16 +735,16 @@
     "options": "Options",
     "createAgendaItem": "Create Agenda Item",
     "noAgendaItems": "No Agenda Items",
+    "deleteAgendaItem": "Delete Agenda Item",
+    "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
+    "search": "Search",
     "selectAgendaItemCategory": "Select an agenda item category",
     "update": "Update",
     "delete": "Delete",
     "agendaItemCreated": "Agenda Item created successfully",
     "agendaItemUpdated": "Agenda Item updated successfully",
     "agendaItemDeleted": "Agenda Item deleted successfully",
-    "deleteAgendaItem": "Delete Agenda Item",
-    "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
     "event": "Event",
-    "search": "Search",
     "attachmentPreview": "Attachment preview",
     "errorLoadingAgendaCategories": "Error occurred while loading Agenda Categories Data",
     "errorLoadingAgendaItems": "Error occurred while loading Agenda Items Data"
@@ -2307,15 +2290,7 @@
     "talawaBranding": "Talawa Branding",
     "view": "View",
     "changeLanguage": "Change Language",
-    "userNotFoundError": "User not found",
-    "selectAllOnPage": "Select all rows on this page",
-    "actions": "Actions",
-    "bulkActions": "Bulk actions",
-    "selected": "selected",
-    "clear": "Clear",
-    "clearSelection": "Clear selection",
-    "loading": "Loading...",
-    "selectRow": "Select row {{rowKey}}"
+    "userNotFoundError": "User not found"
   },
   "donation": {
     "amount_label": "Amount",

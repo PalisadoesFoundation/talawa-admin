@@ -1,17 +1,43 @@
+/*
+ * Copyright 2025 Palisadoes Foundation
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /**
- * A marketplace interface for browsing, installing, and managing Talawa plugins.
- * Provides functionality to search, filter, and paginate through available plugins,
- * with options to install, uninstall, and toggle plugin status.
+ * Toggles the visibility of the uninstall confirmation modal.
+ * Sets the selected plugin for uninstallation.
+ *
+ * @param plugin - The plugin to be uninstalled (optional).
+ */
+/**
+ * PluginStore Screen
+ *
+ * This screen displays the marketplace of available plugins.
+ * It allows administrators to browse, install, and uninstall plugins
+ * for the organization.
+ *
+ * @returns The rendered PluginStore screen.
  */
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@mui/material';
+import Button from 'shared-components/Button/Button';
 import styles from './PluginStore.module.css';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import PluginModal from './PluginModal';
 import UploadPluginModal from './UploadPluginModal';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
-import { PluginList, UninstallConfirmationModal } from './components';
+import PluginList from './components/PluginList';
+import UninstallConfirmationModal from 'components/AdminPortal/PluginStore/components/UninstallConfirmationModal/UninstallConfirmationModal';
 import { usePluginActions, usePluginFilters } from './hooks';
 import { useGetAllPlugins } from 'plugin/graphql-service';
 import type { IPluginMeta } from 'plugin';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -12,7 +12,6 @@ import {
 } from 'shared-components/DateRangePicker';
 import AgendaCategoryCreateModal from './AgendaCategoryCreateModal';
 import { vi } from 'vitest';
-import userEvent from '@testing-library/user-event';
 /**
  * This file contains unit tests for the `AgendaCategoryCreateModal` component.
  *
@@ -43,7 +42,6 @@ describe('AgendaCategoryCreateModal', () => {
     mockCreateAgendaCategoryHandler = vi.fn();
   });
   afterEach(() => {
-    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -77,8 +75,7 @@ describe('AgendaCategoryCreateModal', () => {
       screen.getByTestId('modalCloseBtn'), // BaseModal's close button ID
     ).toBeInTheDocument();
   });
-  it('updates formState.name and formState.description on user input', async () => {
-    const user = userEvent.setup();
+  it('tests the condition for formState.name and formState.description', () => {
     const mockFormState = {
       name: 'Test Name',
       description: 'Test Description',
@@ -105,28 +102,23 @@ describe('AgendaCategoryCreateModal', () => {
       </MockedProvider>,
     );
     const nameInput = screen.getByLabelText('name');
-    await user.clear(nameInput);
-    await user.type(nameInput, 'New name');
-
-    expect(
-      mockSetFormState.mock.calls.some(
-        ([arg]) => arg.name !== mockFormState.name,
-      ),
-    ).toBe(true);
-
+    fireEvent.change(nameInput, {
+      target: { value: 'New name' },
+    });
     const descriptionInput = screen.getByLabelText('description');
-    await user.clear(descriptionInput);
-    await user.type(descriptionInput, 'New description');
-
-    expect(
-      mockSetFormState.mock.calls.some(
-        ([arg]) => arg.description !== mockFormState.description,
-      ),
-    ).toBe(true);
+    fireEvent.change(descriptionInput, {
+      target: { value: 'New description' },
+    });
+    expect(mockSetFormState).toHaveBeenCalledWith({
+      ...mockFormState,
+      name: 'New name',
+    });
+    expect(mockSetFormState).toHaveBeenCalledWith({
+      ...mockFormState,
+      description: 'New description',
+    });
   });
-
-  it('calls createAgendaCategoryHandler when form is submitted', async () => {
-    const user = userEvent.setup();
+  it('calls createAgendaCategoryHandler when form is submitted', () => {
     render(
       <MockedProvider>
         <Provider store={store}>
@@ -148,7 +140,7 @@ describe('AgendaCategoryCreateModal', () => {
       </MockedProvider>,
     );
 
-    await user.click(screen.getByTestId('createAgendaCategoryFormSubmitBtn'));
+    fireEvent.submit(screen.getByTestId('createAgendaCategoryFormSubmitBtn'));
     expect(mockCreateAgendaCategoryHandler).toHaveBeenCalledTimes(1);
   });
 });

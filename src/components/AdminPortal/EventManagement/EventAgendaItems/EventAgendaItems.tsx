@@ -36,7 +36,7 @@
 import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from 'react-bootstrap';
+import Button from 'shared-components/Button';
 
 import { WarningAmberRounded } from '@mui/icons-material';
 
@@ -51,8 +51,8 @@ import type {
   InterfaceAgendaItemCategoryList,
   InterfaceAgendaItemList,
 } from 'utils/interfaces';
-import AgendaItemsContainer from 'components/AgendaItems/AgendaItemsContainer';
-import AgendaItemsCreateModal from 'components/AgendaItems/Create/AgendaItemsCreateModal';
+import AgendaItemsContainer from 'components/AdminPortal/EventManagement/AgendaItems/AgendaItemsContainer';
+import AgendaItemsCreateModal from 'components/AdminPortal/EventManagement/AgendaItems/Create/AgendaItemsCreateModal';
 
 import styles from 'style/app-fixed.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';

@@ -24,17 +24,17 @@ Defined in: [src/types/PeopleTab/interface.ts:81](https://github.com/PalisadoesF
 
 ***
 
-### adminCount?
+### adminCount
 
-> `optional` **adminCount**: `number`
+> **adminCount**: `number`
 
 Defined in: [src/types/PeopleTab/interface.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L78)
 
 ***
 
-### description?
+### description
 
-> `optional` **description**: `string`
+> **description**: `string`
 
 Defined in: [src/types/PeopleTab/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L77)
 
@@ -48,9 +48,9 @@ Defined in: [src/types/PeopleTab/interface.ts:75](https://github.com/PalisadoesF
 
 ***
 
-### membersCount?
+### membersCount
 
-> `optional` **membersCount**: `number`
+> **membersCount**: `number`
 
 Defined in: [src/types/PeopleTab/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L79)
 

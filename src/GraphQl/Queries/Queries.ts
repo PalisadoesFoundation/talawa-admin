@@ -1,4 +1,6 @@
 import gql from 'graphql-tag';
+//Query List
+// Check Auth
 
 // Query to get info about current user
 export const CURRENT_USER = gql`
@@ -443,33 +445,6 @@ export const GET_ORGANIZATION_POSTS_COUNT_PG = gql`
     organization(input: { id: $id }) {
       id
       postsCount
-    }
-  }
-`;
-
-export const GET_USER_BY_ID = gql`
-  query GetUserById($input: QueryUserInput!) {
-    user(input: $input) {
-      id
-      name
-      emailAddress
-      addressLine1
-      addressLine2
-      birthDate
-      city
-      avatarURL
-      countryCode
-      description
-      educationGrade
-      employmentStatus
-      homePhoneNumber
-      maritalStatus
-      mobilePhoneNumber
-      natalSex
-      naturalLanguageCode
-      postalCode
-      state
-      workPhoneNumber
     }
   }
 `;

@@ -290,7 +290,6 @@
   "linkCopied": "Link copied to clipboard",
   "copyToClipboardError": "Error copying link to clipboard",
   "share": "Share",
-  "failedToLoadUserData": "Failed to load user data",
   "userNotFound": "User not found",
   "avatarProcessingError": "Error processing avatar, please check your image.",
   "viewEventStatistics": "View Event Statistics",

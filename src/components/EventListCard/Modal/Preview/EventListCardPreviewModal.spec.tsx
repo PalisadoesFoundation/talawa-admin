@@ -181,12 +181,11 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('closes modal when close button is clicked', async () => {
-    const user = userEvent.setup();
     const mockHideViewModal = vi.fn();
     renderComponent({ hideViewModal: mockHideViewModal });
 
     const closeButton = screen.getByTestId('modalCloseBtn');
-    await user.click(closeButton);
+    await userEvent.click(closeButton);
 
     expect(mockHideViewModal).toHaveBeenCalledOnce();
   });
@@ -248,12 +247,11 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('updates form state when name field changes', async () => {
-    const user = userEvent.setup();
     const mockSetFormState = vi.fn();
     renderComponent({ setFormState: mockSetFormState });
 
     const nameField = screen.getByTestId('updateName');
-    await user.type(nameField, 'X');
+    await userEvent.type(nameField, 'X');
 
     // Check that setFormState was called, indicating the onChange handler works
     expect(mockSetFormState).toHaveBeenCalled();
@@ -263,12 +261,11 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('updates form state when description field changes', async () => {
-    const user = userEvent.setup();
     const mockSetFormState = vi.fn();
     renderComponent({ setFormState: mockSetFormState });
 
     const descriptionField = screen.getByTestId('updateDescription');
-    await user.type(descriptionField, 'Y');
+    await userEvent.type(descriptionField, 'Y');
 
     // Check that setFormState was called, indicating the onChange handler works
     expect(mockSetFormState).toHaveBeenCalled();
@@ -278,12 +275,11 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('updates form state when location field changes', async () => {
-    const user = userEvent.setup();
     const mockSetFormState = vi.fn();
     renderComponent({ setFormState: mockSetFormState });
 
     const locationField = screen.getByTestId('updateLocation');
-    await user.type(locationField, 'Z');
+    await userEvent.type(locationField, 'Z');
 
     // Check that setFormState was called, indicating the onChange handler works
     expect(mockSetFormState).toHaveBeenCalled();
@@ -317,18 +313,16 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('toggles all-day checkbox', async () => {
-    const user = userEvent.setup();
     const mockSetAllDayChecked = vi.fn();
     renderComponent({ setAllDayChecked: mockSetAllDayChecked });
 
     const allDayCheckbox = screen.getByTestId('updateAllDay');
-    await user.click(allDayCheckbox);
+    await userEvent.click(allDayCheckbox);
 
     expect(mockSetAllDayChecked).toHaveBeenCalledWith(true);
   });
 
   test('adjusts end time when unchecking all-day if times are equal', async () => {
-    const user = userEvent.setup();
     const mockSetAllDayChecked = vi.fn();
     const mockSetFormState = vi.fn();
     const sameTime = '10:00:00';
@@ -341,7 +335,7 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const allDayCheckbox = screen.getByTestId('updateAllDay');
-    await user.click(allDayCheckbox);
+    await userEvent.click(allDayCheckbox);
 
     // Should toggle checked state
     expect(mockSetAllDayChecked).toHaveBeenCalledWith(false);
@@ -355,7 +349,6 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('does not adjust end time when unchecking all-day if times are different', async () => {
-    const user = userEvent.setup();
     const mockSetAllDayChecked = vi.fn();
     const mockSetFormState = vi.fn();
     const startTime = '10:00:00';
@@ -369,7 +362,7 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const allDayCheckbox = screen.getByTestId('updateAllDay');
-    await user.click(allDayCheckbox);
+    await userEvent.click(allDayCheckbox);
 
     // Should toggle checked state
     expect(mockSetAllDayChecked).toHaveBeenCalledWith(false);
@@ -426,7 +419,6 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('clicking public radio sets publicchecked to true and inviteonlychecked to false', async () => {
-    const user = userEvent.setup();
     const mockSetPublicChecked = vi.fn();
     const mockSetInviteOnlyChecked = vi.fn();
     renderComponent({
@@ -437,14 +429,13 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const publicRadio = screen.getByLabelText('public');
-    await user.click(publicRadio);
+    await userEvent.click(publicRadio);
 
     expect(mockSetPublicChecked).toHaveBeenCalledWith(true);
     expect(mockSetInviteOnlyChecked).toHaveBeenCalledWith(false);
   });
 
   test('clicking organization members radio sets both flags to false', async () => {
-    const user = userEvent.setup();
     const mockSetPublicChecked = vi.fn();
     const mockSetInviteOnlyChecked = vi.fn();
     renderComponent({
@@ -455,14 +446,13 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const orgMembersRadio = screen.getByLabelText('organizationMembers');
-    await user.click(orgMembersRadio);
+    await userEvent.click(orgMembersRadio);
 
     expect(mockSetPublicChecked).toHaveBeenCalledWith(false);
     expect(mockSetInviteOnlyChecked).toHaveBeenCalledWith(false);
   });
 
   test('clicking invite only radio sets publicchecked to false and inviteonlychecked to true', async () => {
-    const user = userEvent.setup();
     const mockSetPublicChecked = vi.fn();
     const mockSetInviteOnlyChecked = vi.fn();
     renderComponent({
@@ -473,7 +463,7 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const inviteOnlyRadio = screen.getByLabelText('inviteOnly');
-    await user.click(inviteOnlyRadio);
+    await userEvent.click(inviteOnlyRadio);
 
     expect(mockSetPublicChecked).toHaveBeenCalledWith(false);
     expect(mockSetInviteOnlyChecked).toHaveBeenCalledWith(true);
@@ -515,12 +505,11 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('toggles registrable checkbox', async () => {
-    const user = userEvent.setup();
     const mockSetRegistrableChecked = vi.fn();
     renderComponent({ setRegistrableChecked: mockSetRegistrableChecked });
 
     const registrableCheckbox = screen.getByTestId('updateRegistrable');
-    await user.click(registrableCheckbox);
+    await userEvent.click(registrableCheckbox);
 
     expect(mockSetRegistrableChecked).toHaveBeenCalledWith(false);
   });
@@ -677,7 +666,6 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('calls registerEventHandler when register button is clicked', async () => {
-    const user = userEvent.setup();
     const mockRegisterEventHandler = vi.fn();
     renderComponent({
       eventListCardProps: {
@@ -691,40 +679,37 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const registerBtn = screen.getByTestId('registerEventBtn');
-    await user.click(registerBtn);
+    await userEvent.click(registerBtn);
 
     expect(mockRegisterEventHandler).toHaveBeenCalledOnce();
   });
 
   test('calls handleEventUpdate when edit button is clicked', async () => {
-    const user = userEvent.setup();
     const mockHandleEventUpdate = vi.fn();
     renderComponent({ handleEventUpdate: mockHandleEventUpdate });
 
     const editBtn = screen.getByTestId('previewUpdateEventBtn');
-    await user.click(editBtn);
+    await userEvent.click(editBtn);
 
     expect(mockHandleEventUpdate).toHaveBeenCalledOnce();
   });
 
   test('calls toggleDeleteModal when delete button is clicked', async () => {
-    const user = userEvent.setup();
     const mockToggleDeleteModal = vi.fn();
     renderComponent({ toggleDeleteModal: mockToggleDeleteModal });
 
     const deleteBtn = screen.getByTestId('deleteEventModalBtn');
-    await user.click(deleteBtn);
+    await userEvent.click(deleteBtn);
 
     expect(mockToggleDeleteModal).toHaveBeenCalledOnce();
   });
 
   test('calls openEventDashboard when dashboard button is clicked', async () => {
-    const user = userEvent.setup();
     const mockOpenEventDashboard = vi.fn();
     renderComponent({ openEventDashboard: mockOpenEventDashboard });
 
     const dashboardBtn = screen.getByTestId('showEventDashboardBtn');
-    await user.click(dashboardBtn);
+    await userEvent.click(dashboardBtn);
 
     expect(mockOpenEventDashboard).toHaveBeenCalledOnce();
   });
@@ -781,7 +766,6 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('opens recurrence dropdown and shows options', async () => {
-    const user = userEvent.setup();
     renderComponent({
       eventListCardProps: {
         ...mockEventListCardProps,
@@ -794,7 +778,7 @@ describe('EventListCardPreviewModal', () => {
 
     // Verify dropdown exists and is clickable
     expect(dropdownToggle).toBeInTheDocument();
-    await user.click(dropdownToggle);
+    await userEvent.click(dropdownToggle);
 
     // Verify at least one option appears (using testid which is more reliable)
     await waitFor(() => {
@@ -811,7 +795,6 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('sets recurrence when option is selected', async () => {
-    const user = userEvent.setup();
     const mockSetRecurrence = vi.fn();
     renderComponent({
       eventListCardProps: {
@@ -823,16 +806,15 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const dropdownToggle = screen.getByTestId('recurrenceDropdown');
-    await user.click(dropdownToggle);
+    await userEvent.click(dropdownToggle);
 
     const dailyOption = screen.getByTestId('recurrenceOption-0');
-    await user.click(dailyOption);
+    await userEvent.click(dailyOption);
 
     expect(mockSetRecurrence).toHaveBeenCalled();
   });
 
   test('opens custom recurrence modal when custom option is selected', async () => {
-    const user = userEvent.setup();
     const mockSetCustomRecurrenceModalIsOpen = vi.fn();
     renderComponent({
       eventListCardProps: {
@@ -844,16 +826,15 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const dropdownToggle = screen.getByTestId('recurrenceDropdown');
-    await user.click(dropdownToggle);
+    await userEvent.click(dropdownToggle);
 
     const customOption = screen.getByTestId('recurrenceOption-5');
-    await user.click(customOption);
+    await userEvent.click(customOption);
 
     expect(mockSetCustomRecurrenceModalIsOpen).toHaveBeenCalledWith(true);
   });
 
   test('sets default recurrence when custom is selected and no recurrence is set', async () => {
-    const user = userEvent.setup();
     const mockSetRecurrence = vi.fn();
     const mockSetCustomRecurrenceModalIsOpen = vi.fn();
     renderComponent({
@@ -868,17 +849,16 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const dropdownToggle = screen.getByTestId('recurrenceDropdown');
-    await user.click(dropdownToggle);
+    await userEvent.click(dropdownToggle);
 
     const customOption = screen.getByTestId('recurrenceOption-5');
-    await user.click(customOption);
+    await userEvent.click(customOption);
 
     expect(mockSetRecurrence).toHaveBeenCalled();
     expect(mockSetCustomRecurrenceModalIsOpen).toHaveBeenCalledWith(true);
   });
 
   test('does not set recurrence when custom is selected and recurrence is already set', async () => {
-    const user = userEvent.setup();
     const mockSetRecurrence = vi.fn();
     const mockSetCustomRecurrenceModalIsOpen = vi.fn();
     const existingRecurrence = {
@@ -898,17 +878,16 @@ describe('EventListCardPreviewModal', () => {
     });
 
     const dropdownToggle = screen.getByTestId('recurrenceDropdown');
-    await user.click(dropdownToggle);
+    await userEvent.click(dropdownToggle);
 
     const customOption = screen.getByTestId('recurrenceOption-5');
-    await user.click(customOption);
+    await userEvent.click(customOption);
 
     expect(mockSetRecurrence).not.toHaveBeenCalled();
     expect(mockSetCustomRecurrenceModalIsOpen).toHaveBeenCalledWith(true);
   });
 
   test('updates start date and adjusts end date when start date changes', async () => {
-    const user = userEvent.setup();
     const baseDate = new Date(Date.UTC(2025, 0, 15, 12, 0, 0));
     const mockSetEventStartDate = vi.fn();
     const mockSetEventEndDate = vi.fn();
@@ -926,13 +905,13 @@ describe('EventListCardPreviewModal', () => {
     const calendarButton = within(
       startDatePicker as HTMLElement,
     ).getByLabelText(/choose date/i);
-    await user.click(calendarButton);
+    await userEvent.click(calendarButton);
 
     const calendarGrid = await screen.findByRole('grid');
     const dateToSelect = within(calendarGrid).getByRole('gridcell', {
       name: '20',
     });
-    await user.click(dateToSelect);
+    await userEvent.click(dateToSelect);
 
     await waitFor(() => {
       expect(mockSetEventStartDate).toHaveBeenCalled();
@@ -940,7 +919,6 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('updates end date when end date changes', async () => {
-    const user = userEvent.setup();
     const baseDate = new Date(Date.UTC(2025, 0, 15, 12, 0, 0));
     const mockSetEventEndDate = vi.fn();
     renderComponent({
@@ -955,13 +933,13 @@ describe('EventListCardPreviewModal', () => {
     const calendarButton = within(endDatePicker as HTMLElement).getByLabelText(
       /choose date/i,
     );
-    await user.click(calendarButton);
+    await userEvent.click(calendarButton);
 
     const calendarGrid = await screen.findByRole('grid');
     const dateToSelect = within(calendarGrid).getByRole('gridcell', {
       name: '20',
     });
-    await user.click(dateToSelect);
+    await userEvent.click(dateToSelect);
 
     await waitFor(() => {
       expect(mockSetEventEndDate).toHaveBeenCalled();
@@ -969,7 +947,6 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('updates start time when start time changes', async () => {
-    const user = userEvent.setup();
     const mockSetFormState = vi.fn();
     renderComponent({
       setFormState: mockSetFormState,
@@ -981,7 +958,7 @@ describe('EventListCardPreviewModal', () => {
     const clockButton = within(startTimePicker as HTMLElement).getByLabelText(
       /choose time/i,
     );
-    await user.click(clockButton);
+    await userEvent.click(clockButton);
 
     await waitFor(() => {
       expect(
@@ -991,7 +968,7 @@ describe('EventListCardPreviewModal', () => {
 
     const hoursListbox = screen.getByRole('listbox', { name: /select hours/i });
     const timeToSelect = within(hoursListbox).getByText('11');
-    await user.click(timeToSelect);
+    await userEvent.click(timeToSelect);
 
     await waitFor(() => {
       expect(mockSetFormState).toHaveBeenCalled();
@@ -999,7 +976,6 @@ describe('EventListCardPreviewModal', () => {
   });
 
   test('updates end time when end time changes', async () => {
-    const user = userEvent.setup();
     const mockSetFormState = vi.fn();
     renderComponent({
       setFormState: mockSetFormState,
@@ -1011,7 +987,7 @@ describe('EventListCardPreviewModal', () => {
     const clockButton = within(endTimePicker as HTMLElement).getByLabelText(
       /choose time/i,
     );
-    await user.click(clockButton);
+    await userEvent.click(clockButton);
 
     await waitFor(() => {
       expect(
@@ -1021,7 +997,7 @@ describe('EventListCardPreviewModal', () => {
 
     const hoursListbox = screen.getByRole('listbox', { name: /select hours/i });
     const timeToSelect = within(hoursListbox).getByText('11');
-    await user.click(timeToSelect);
+    await userEvent.click(timeToSelect);
 
     await waitFor(() => {
       expect(mockSetFormState).toHaveBeenCalled();
@@ -1373,7 +1349,6 @@ describe('EventListCardPreviewModal', () => {
 
   describe('Date and Time Picker onChange handlers', () => {
     test('updates end date if new start date is later', async () => {
-      const user = userEvent.setup();
       const mockSetEventStartDate = vi.fn();
       const mockSetEventEndDate = vi.fn();
       // Set the end date to an early date (5th of current month) so selecting 20th will be later
@@ -1391,13 +1366,13 @@ describe('EventListCardPreviewModal', () => {
       const calendarButton = within(
         startDatePicker as HTMLElement,
       ).getByLabelText(/choose date/i);
-      await user.click(calendarButton);
+      await userEvent.click(calendarButton);
 
       const calendarGrid = await screen.findByRole('grid');
       const dateToSelect = within(calendarGrid).getByRole('gridcell', {
         name: '20',
       });
-      await user.click(dateToSelect);
+      await userEvent.click(dateToSelect);
 
       await waitFor(() => {
         expect(mockSetEventStartDate).toHaveBeenCalled();

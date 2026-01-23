@@ -1,36 +1,78 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { validatePassword } from './passwordValidator';
 
 describe('validatePassword', () => {
-  it('returns error if password is shorter than 8 characters', () => {
-    const result = validatePassword('Ab1!');
-    expect(result).toBe('Password must be at least 8 characters long.');
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
-  it('returns error if password has no uppercase letter', () => {
-    const result = validatePassword('abcd123!');
-    expect(result).toBe('Password must contain at least one uppercase letter.');
+  it('should return true for valid passwords', () => {
+    const validPasswords = [
+      'Password1!',
+      'Complex123#',
+      'SuperSecure2023!',
+      'Test@1234',
+      '!Abcd1234',
+    ];
+
+    validPasswords.forEach((password) => {
+      expect(validatePassword(password)).toBe(true);
+    });
   });
 
-  it('returns error if password has no lowercase letter', () => {
-    const result = validatePassword('ABCD123!');
-    expect(result).toBe('Password must contain at least one lowercase letter.');
+  it('should return false for passwords shorter than 8 characters', () => {
+    const shortPasswords = ['Pass1!', 'Ab1!def', 'A1!b'];
+
+    shortPasswords.forEach((password) => {
+      expect(validatePassword(password)).toBe(false);
+    });
   });
 
-  it('returns error if password has no number', () => {
-    const result = validatePassword('Abcdefg!');
-    expect(result).toBe('Password must contain at least one number.');
+  it('should return false for passwords without special characters', () => {
+    const noSpecialCharPasswords = [
+      'Password123',
+      'AbcdEfgh1',
+      'ComplexPass123',
+    ];
+
+    noSpecialCharPasswords.forEach((password) => {
+      expect(validatePassword(password)).toBe(false);
+    });
   });
 
-  it('returns error if password has no special character', () => {
-    const result = validatePassword('Abcd1234');
-    expect(result).toBe(
-      'Password must contain at least one special character.',
-    );
+  it('should return false for passwords without numbers', () => {
+    const noNumberPasswords = ['Password!@', 'AbcdEfgh!', 'ComplexPass!'];
+
+    noNumberPasswords.forEach((password) => {
+      expect(validatePassword(password)).toBe(false);
+    });
   });
 
-  it('returns null for a valid password', () => {
-    const result = validatePassword('Abcd123!');
-    expect(result).toBeNull();
+  it('should return false for passwords without uppercase letters', () => {
+    const noUppercasePasswords = ['password1!', 'complex123!', 'test@1234'];
+
+    noUppercasePasswords.forEach((password) => {
+      expect(validatePassword(password)).toBe(false);
+    });
+  });
+
+  it('should return false for passwords without lowercase letters', () => {
+    const noLowercasePasswords = ['PASSWORD1!', 'COMPLEX123!', 'TEST@1234'];
+
+    noLowercasePasswords.forEach((password) => {
+      expect(validatePassword(password)).toBe(false);
+    });
+  });
+
+  it('should return false for empty strings', () => {
+    expect(validatePassword('')).toBe(false);
+  });
+
+  it('should return true for passwords with spaces', () => {
+    const passwordsWithSpaces = ['Password 1!', 'Complex 123#', 'Test @ 1234'];
+
+    passwordsWithSpaces.forEach((password) => {
+      expect(validatePassword(password)).toBe(true);
+    });
   });
 });

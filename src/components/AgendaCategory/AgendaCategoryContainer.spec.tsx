@@ -1,5 +1,11 @@
 import React from 'react';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  act,
+  fireEvent,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
@@ -52,7 +58,6 @@ const translations = JSON.parse(
 
 describe('Testing Agenda Category Component', () => {
   afterEach(() => {
-    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   const formData = {
@@ -104,7 +109,6 @@ describe('Testing Agenda Category Component', () => {
   });
 
   test('opens and closes the update modal correctly', async () => {
-    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <Provider store={store}>
@@ -124,14 +128,16 @@ describe('Testing Agenda Category Component', () => {
         screen.getAllByTestId('editAgendCategoryModalBtn')[0],
       ).toBeInTheDocument();
     });
-    await user.click(screen.getAllByTestId('editAgendCategoryModalBtn')[0]);
+    await userEvent.click(
+      screen.getAllByTestId('editAgendCategoryModalBtn')[0],
+    );
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await user.click(screen.getByTestId('modalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument(),
@@ -139,7 +145,6 @@ describe('Testing Agenda Category Component', () => {
   });
 
   test('opens and closes the preview modal correctly', async () => {
-    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <Provider store={store}>
@@ -159,14 +164,16 @@ describe('Testing Agenda Category Component', () => {
         screen.getAllByTestId('previewAgendaCategoryModalBtn')[0],
       ).toBeInTheDocument();
     });
-    await user.click(screen.getAllByTestId('previewAgendaCategoryModalBtn')[0]);
+    await userEvent.click(
+      screen.getAllByTestId('previewAgendaCategoryModalBtn')[0],
+    );
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await user.click(screen.getByTestId('modalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument(),
@@ -174,7 +181,6 @@ describe('Testing Agenda Category Component', () => {
   });
 
   test('opens and closes the update and delete modals through the preview modal', async () => {
-    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <Provider store={store}>
@@ -194,7 +200,9 @@ describe('Testing Agenda Category Component', () => {
         screen.getAllByTestId('previewAgendaCategoryModalBtn')[0],
       ).toBeInTheDocument();
     });
-    await user.click(screen.getAllByTestId('previewAgendaCategoryModalBtn')[0]);
+    await userEvent.click(
+      screen.getAllByTestId('previewAgendaCategoryModalBtn')[0],
+    );
 
     await waitFor(() => {
       return expect(
@@ -207,14 +215,14 @@ describe('Testing Agenda Category Component', () => {
         screen.getByTestId('deleteAgendaCategoryModalBtn'),
       ).toBeInTheDocument();
     });
-    await user.click(screen.getByTestId('deleteAgendaCategoryModalBtn'));
+    await userEvent.click(screen.getByTestId('deleteAgendaCategoryModalBtn'));
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('deleteAgendaCategoryCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await user.click(screen.getByTestId('deleteAgendaCategoryCloseBtn'));
+    await userEvent.click(screen.getByTestId('deleteAgendaCategoryCloseBtn'));
 
     await waitFor(() =>
       expect(
@@ -227,14 +235,16 @@ describe('Testing Agenda Category Component', () => {
         screen.getByTestId('editAgendaCategoryPreviewModalBtn'),
       ).toBeInTheDocument();
     });
-    await user.click(screen.getByTestId('editAgendaCategoryPreviewModalBtn'));
+    await userEvent.click(
+      screen.getByTestId('editAgendaCategoryPreviewModalBtn'),
+    );
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await user.click(screen.getByTestId('modalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() =>
       expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument(),
@@ -242,7 +252,6 @@ describe('Testing Agenda Category Component', () => {
   });
 
   test('updates an agenda category and toasts success', async () => {
-    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <Provider store={store}>
@@ -264,21 +273,23 @@ describe('Testing Agenda Category Component', () => {
         screen.getAllByTestId('editAgendCategoryModalBtn')[0],
       ).toBeInTheDocument();
     });
-    await user.click(screen.getAllByTestId('editAgendCategoryModalBtn')[0]);
+    await userEvent.click(
+      screen.getAllByTestId('editAgendCategoryModalBtn')[0],
+    );
 
     const name = screen.getByPlaceholderText(translations.name);
     const description = screen.getByPlaceholderText(translations.description);
 
-    await user.clear(name);
-    await user.type(name, formData.name);
+    fireEvent.change(name, { target: { value: '' } });
+    await userEvent.type(name, formData.name);
 
-    await user.clear(description);
-    await user.type(description, formData.description);
+    fireEvent.change(description, { target: { value: '' } });
+    await userEvent.type(description, formData.description);
 
     await waitFor(() => {
       expect(screen.getByTestId('editAgendaCategoryBtn')).toBeInTheDocument();
     });
-    await user.click(screen.getByTestId('editAgendaCategoryBtn'));
+    await userEvent.click(screen.getByTestId('editAgendaCategoryBtn'));
 
     await waitFor(() => {
       expect(mockNotificationToast.success).toHaveBeenCalledWith(
@@ -288,7 +299,6 @@ describe('Testing Agenda Category Component', () => {
   });
 
   test('toasts error on unsuccessful updation', async () => {
-    const user = userEvent.setup();
     render(
       <MockedProvider link={link2}>
         <Provider store={store}>
@@ -310,20 +320,23 @@ describe('Testing Agenda Category Component', () => {
         screen.getAllByTestId('editAgendCategoryModalBtn')[0],
       ).toBeInTheDocument();
     });
-    await user.click(screen.getAllByTestId('editAgendCategoryModalBtn')[0]);
+    await userEvent.click(
+      screen.getAllByTestId('editAgendCategoryModalBtn')[0],
+    );
 
     const nameInput = screen.getByLabelText(translations.name);
     const descriptionInput = screen.getByLabelText(translations.description);
-    await user.clear(nameInput);
-    await user.clear(descriptionInput);
-
-    await user.type(nameInput, formData.name);
-    await user.type(descriptionInput, formData.description);
+    fireEvent.change(nameInput, { target: { value: '' } });
+    fireEvent.change(descriptionInput, {
+      target: { value: '' },
+    });
+    await userEvent.type(nameInput, formData.name);
+    await userEvent.type(descriptionInput, formData.description);
 
     await waitFor(() => {
       expect(screen.getByTestId('editAgendaCategoryBtn')).toBeInTheDocument();
     });
-    await user.click(screen.getByTestId('editAgendaCategoryBtn'));
+    await userEvent.click(screen.getByTestId('editAgendaCategoryBtn'));
 
     await waitFor(() => {
       expect(mockNotificationToast.error).toHaveBeenCalled();
@@ -331,7 +344,6 @@ describe('Testing Agenda Category Component', () => {
   });
 
   test('deletes the agenda category and toasts success', async () => {
-    const user = userEvent.setup();
     render(
       <MockedProvider link={link}>
         <Provider store={store}>
@@ -353,7 +365,9 @@ describe('Testing Agenda Category Component', () => {
         screen.getAllByTestId('previewAgendaCategoryModalBtn')[0],
       ).toBeInTheDocument();
     });
-    await user.click(screen.getAllByTestId('previewAgendaCategoryModalBtn')[0]);
+    await userEvent.click(
+      screen.getAllByTestId('previewAgendaCategoryModalBtn')[0],
+    );
 
     await waitFor(() => {
       return expect(
@@ -366,7 +380,7 @@ describe('Testing Agenda Category Component', () => {
         screen.getByTestId('deleteAgendaCategoryModalBtn'),
       ).toBeInTheDocument();
     });
-    await user.click(screen.getByTestId('deleteAgendaCategoryModalBtn'));
+    await userEvent.click(screen.getByTestId('deleteAgendaCategoryModalBtn'));
 
     await waitFor(() => {
       return expect(
@@ -374,7 +388,7 @@ describe('Testing Agenda Category Component', () => {
       ).resolves.toBeInTheDocument();
     });
 
-    await user.click(screen.getByTestId('deleteAgendaCategoryBtn'));
+    await userEvent.click(screen.getByTestId('deleteAgendaCategoryBtn'));
 
     await waitFor(() => {
       expect(mockNotificationToast.success).toHaveBeenCalledWith(
@@ -384,7 +398,6 @@ describe('Testing Agenda Category Component', () => {
   });
 
   test('toasts error on unsuccessful deletion', async () => {
-    const user = userEvent.setup();
     render(
       <MockedProvider link={link2}>
         <Provider store={store}>
@@ -404,7 +417,9 @@ describe('Testing Agenda Category Component', () => {
         screen.getAllByTestId('previewAgendaCategoryModalBtn')[0],
       ).toBeInTheDocument();
     });
-    await user.click(screen.getAllByTestId('previewAgendaCategoryModalBtn')[0]);
+    await userEvent.click(
+      screen.getAllByTestId('previewAgendaCategoryModalBtn')[0],
+    );
 
     await waitFor(() => {
       return expect(
@@ -417,14 +432,14 @@ describe('Testing Agenda Category Component', () => {
         screen.getByTestId('deleteAgendaCategoryModalBtn'),
       ).toBeInTheDocument();
     });
-    await user.click(screen.getByTestId('deleteAgendaCategoryModalBtn'));
+    await userEvent.click(screen.getByTestId('deleteAgendaCategoryModalBtn'));
 
     await waitFor(() => {
       return expect(
         screen.findByTestId('deleteAgendaCategoryCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await user.click(screen.getByTestId('deleteAgendaCategoryBtn'));
+    await userEvent.click(screen.getByTestId('deleteAgendaCategoryBtn'));
 
     await waitFor(() => {
       expect(mockNotificationToast.error).toHaveBeenCalled();

@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -44,7 +44,6 @@ describe('AgendaCategoryUpdateModal', () => {
     mockUpdateAgendaCategoryHandler = vi.fn();
   });
   afterEach(() => {
-    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -76,7 +75,6 @@ describe('AgendaCategoryUpdateModal', () => {
   });
 
   it('calls hideUpdateModal when close button is clicked', async () => {
-    const user = userEvent.setup();
     render(
       <MockedProvider>
         <Provider store={store}>
@@ -98,12 +96,11 @@ describe('AgendaCategoryUpdateModal', () => {
       </MockedProvider>,
     );
 
-    await user.click(screen.getByTestId('modalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     expect(mockHideUpdateModal).toHaveBeenCalledTimes(1);
   });
 
-  it('tests the condition for formState.name and formState.description', async () => {
-    const user = userEvent.setup();
+  it('tests the condition for formState.name and formState.description', () => {
     const mockFormState = {
       name: 'Test Name',
       description: 'Test Description',
@@ -130,28 +127,24 @@ describe('AgendaCategoryUpdateModal', () => {
       </MockedProvider>,
     );
     const nameInput = screen.getByLabelText('name');
-    await user.clear(nameInput);
-    await user.type(nameInput, 'New name');
-
-    expect(
-      mockSetFormState.mock.calls.some(
-        ([arg]) => arg.name !== mockFormState.name,
-      ),
-    ).toBe(true);
-
+    fireEvent.change(nameInput, {
+      target: { value: 'New name' },
+    });
     const descriptionInput = screen.getByLabelText('description');
-    await user.clear(descriptionInput);
-    await user.type(descriptionInput, 'New description');
-
-    expect(
-      mockSetFormState.mock.calls.some(
-        ([arg]) => arg.description !== mockFormState.description,
-      ),
-    ).toBe(true);
+    fireEvent.change(descriptionInput, {
+      target: { value: 'New description' },
+    });
+    expect(mockSetFormState).toHaveBeenCalledWith({
+      ...mockFormState,
+      name: 'New name',
+    });
+    expect(mockSetFormState).toHaveBeenCalledWith({
+      ...mockFormState,
+      description: 'New description',
+    });
   });
 
-  it('calls updateAgendaCategoryHandler when form is submitted', async () => {
-    const user = userEvent.setup();
+  it('calls updateAgendaCategoryHandler when form is submitted', () => {
     render(
       <MockedProvider>
         <Provider store={store}>
@@ -173,7 +166,7 @@ describe('AgendaCategoryUpdateModal', () => {
       </MockedProvider>,
     );
 
-    await user.click(screen.getByTestId('editAgendaCategoryBtn'));
+    fireEvent.submit(screen.getByTestId('editAgendaCategoryBtn'));
     expect(mockUpdateAgendaCategoryHandler).toHaveBeenCalledTimes(1);
   });
 });

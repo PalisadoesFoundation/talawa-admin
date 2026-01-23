@@ -198,16 +198,7 @@
     "prev": "上一页",
     "next": "下一页",
     "markAsRead": "标记为已读",
-    "markAsReadAriaLabel": "将通知'{{title}}'标记为已读",
-    "unreadCount_one": "{{count}} 未读",
-    "unreadCount_other": "{{count}} 未读",
-    "unreadCount": "{{count}} 未读",
-    "loading": "加载中...",
-    "errorFetching": "获取通知时出错",
-    "unread": "未读",
-    "noNewNotifications": "没有新通知",
-    "viewAllNotifications": "查看所有通知",
-    "openNotificationsMenu": "打开通知菜单"
+    "markAsReadAriaLabel": "将通知'{{title}}'标记为已读"
   },
   "orgList": {
     "title": "塔拉瓦组织",
@@ -360,14 +351,6 @@
     "url": "输入网址",
     "profileChangedMsg": "已成功更新个人资料详细信息。",
     "resetData": "成功重置个人资料详细信息。"
-  },
-  "cardItem": {
-    "avatar": "{{title}} 头像",
-    "eventLocation": "活动地点",
-    "eventDate": "活动日期",
-    "loadingPlaceholder": "\u00A0",
-    "postedOn": "发布于：",
-    "author": "作者："
   },
   "dashboard": {
     "title": "仪表板",
@@ -752,7 +735,6 @@
     "options": "选项",
     "createAgendaItem": "创建议程项目",
     "noAgendaItems": "没有议程项目",
-    "search": "搜索",
     "selectAgendaItemCategory": "选择议程项目类别",
     "update": "更新",
     "delete": "删除",
@@ -761,6 +743,7 @@
     "agendaItemDeleted": "议程项目已成功删除",
     "deleteAgendaItem": "删除议程项目",
     "deleteAgendaItemMsg": "您要删除此议程项目吗？",
+    "search": "搜索",
     "attachmentPreview": "附件預覽",
     "event": "活动",
     "errorLoadingAgendaCategories": "加载议程类别数据时发生错误",
@@ -2308,6 +2291,8 @@
     "view": "查看",
     "changeLanguage": "更改语言",
     "userNotFoundError": "未找到用户",
+    "yes": "是",
+    "no": "否",
     "selectAllOnPage": "选择此页所有行",
     "actions": "操作",
     "bulkActions": "批量操作",

@@ -198,16 +198,7 @@
     "prev": "Anterior",
     "next": "Siguiente",
     "markAsRead": "Marcar como leído",
-    "markAsReadAriaLabel": "Marcar notificación '{{title}}' como leída",
-    "unreadCount_one": "{{count}} sin leer",
-    "unreadCount_other": "{{count}} sin leer",
-    "unreadCount": "{{count}} sin leer",
-    "loading": "Cargando...",
-    "errorFetching": "Error al obtener notificaciones",
-    "unread": "Sin leer",
-    "noNewNotifications": "No hay nuevas notificaciones",
-    "viewAllNotifications": "Ver todas las notificaciones",
-    "openNotificationsMenu": "Abrir menú de notificaciones"
+    "markAsReadAriaLabel": "Marcar notificación '{{title}}' como leída"
   },
   "orgList": {
     "title": "Organizaciones Talawa",
@@ -360,14 +351,6 @@
     "url": "Introducir URL",
     "profileChangedMsg": "Se actualizaron correctamente los detalles del perfil.",
     "resetData": "Restablezca correctamente los detalles del perfil."
-  },
-  "cardItem": {
-    "avatar": "avatar de {{title}}",
-    "eventLocation": "Ubicación del Evento",
-    "eventDate": "Fecha del Evento",
-    "loadingPlaceholder": "\u00A0",
-    "postedOn": "Publicado el:",
-    "author": "Autor:"
   },
   "dashboard": {
     "title": "Panel de",
@@ -1923,8 +1906,6 @@
     "pdfGeneratedSuccessfully": "¡PDF generado con éxito!",
     "errorGeneratingPdf": "Error al generar PDF",
     "unknownError": "Error desconocido",
-    "checkedIn": "Registrado",
-    "downloadTag": "Descargar etiqueta",
     "checkInButton": "Registrarse",
     "searchAttendees": "Buscar asistentes",
     "checkIn": "Registrar",
@@ -1932,7 +1913,9 @@
     "checkInMembers": "Registrar miembros",
     "unknownUser": "Usuario Desconocido",
     "user": "Usuario",
-    "checkInStatus": "Estado de Registro"
+    "checkInStatus": "Estado de Registro",
+    "checkedIn": "Registrado",
+    "downloadTag": "Descargar etiqueta"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",
@@ -2308,6 +2291,8 @@
     "view": "Ver",
     "changeLanguage": "Cambiar idioma",
     "userNotFoundError": "Usuario no encontrado",
+    "yes": "Sí",
+    "no": "No",
     "selectAllOnPage": "Seleccionar todas las filas de esta página",
     "actions": "Acciones",
     "bulkActions": "Acciones masivas",
