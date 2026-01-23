@@ -1,0 +1,9 @@
+/* Feedback rating colors - gradient from green (high) to red (low) */
+:root {
+  --rating-color-5: #57bb8a;
+  --rating-color-4: #94bd77;
+  --rating-color-3: #d4c86a;
+  --rating-color-2: #e9b861;
+  --rating-color-1: #e79a69;
+  --rating-color-0: #dd776e;
+}
