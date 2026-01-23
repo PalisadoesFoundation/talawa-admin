@@ -1,4 +1,5 @@
-﻿import React from 'react';
+﻿/* eslint-disable no-restricted-imports */
+import React from 'react';
 import {
   render,
   screen,
@@ -295,7 +296,7 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    const closeBtn = screen.getByTestId('createEventModalCloseBtn');
+    const closeBtn = screen.getByTestId('modalCloseBtn');
     fireEvent.click(closeBtn);
 
     expect(onClose).toHaveBeenCalled();
@@ -685,7 +686,7 @@ describe('CreateEventModal', () => {
     });
 
     // Close modal
-    fireEvent.click(screen.getByTestId('createEventModalCloseBtn'));
+    fireEvent.click(screen.getByTestId('modalCloseBtn'));
 
     // Reopen modal
     rerender(
@@ -714,7 +715,7 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    const createBtn = screen.getByTestId('createEventBtn');
+    const createBtn = screen.getByTestId('modal-submit-btn');
     expect(createBtn).toBeDisabled();
   });
 
@@ -1237,7 +1238,7 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    const createBtn = screen.getByTestId('createEventBtn');
+    const createBtn = screen.getByTestId('modal-submit-btn');
 
     // Button should be disabled during loading
     expect(createBtn).toBeDisabled();
