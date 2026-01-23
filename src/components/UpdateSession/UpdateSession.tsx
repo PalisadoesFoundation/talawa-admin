@@ -53,9 +53,7 @@ interface TestInterfaceUpdateTimeoutProps {
 const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
   onValueChange,
 }): JSX.Element => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'communityProfile',
-  });
+  const { t } = useTranslation('translation');
 
   const [timeout, setTimeout] = useState<number>(30);
   const [communityTimeout, setCommunityTimeout] = useState<number | undefined>(
@@ -136,7 +134,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
         variables: { inactivityTimeoutDuration: timeout * 60 },
       });
 
-      NotificationToast.success(t('profileChangedMsg'));
+      NotificationToast.success(t('communityProfile.profileChangedMsg'));
       setCommunityTimeout(timeout);
     } catch (error: unknown) {
       errorHandler(t, error as Error);
@@ -148,26 +146,28 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
       <Card className={`${styles.updateTimeoutCard} rounded-4 shadow-sm`}>
         <Card.Header className={styles.updateTimeoutCardHeader}>
           <div className={styles.updateTimeoutCardTitle}>
-            {t('sessionTimeout.title')}
+            {t('communityProfile.sessionTimeout.title')}
           </div>
         </Card.Header>
         <Card.Body className={styles.updateTimeoutCardBody}>
           <form onSubmit={handleOnSubmit}>
             <div className={styles.updateTimeoutLabelsContainer}>
               <label className={`form-label ${styles.updateTimeoutCurrent}`}>
-                {t('sessionTimeout.currentTimeout')}
+                {t('communityProfile.sessionTimeout.currentTimeout')}
                 <span
                   className={styles.updateTimeoutValue}
                   data-testid="timeout-value"
                 >
                   {communityTimeout !== undefined
-                    ? t('sessionTimeout.minutes', { count: communityTimeout })
-                    : t('sessionTimeout.noTimeoutSet')}
+                    ? t('communityProfile.sessionTimeout.minutes', {
+                        count: communityTimeout,
+                      })
+                    : t('communityProfile.sessionTimeout.noTimeoutSet')}
                 </span>
               </label>
 
               <label className={`form-label ${styles.updateTimeoutLabel}`}>
-                {t('sessionTimeout.updateTimeout')}
+                {t('communityProfile.sessionTimeout.updateTimeout')}
               </label>
             </div>
 
@@ -188,10 +188,10 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
               className={styles.updateTimeoutSliderLabels}
               data-testid="slider-labels"
             >
-              <span>{t('sessionTimeout.min15')}</span>
-              <span>{t('sessionTimeout.min30')}</span>
-              <span>{t('sessionTimeout.min45')}</span>
-              <span>{t('sessionTimeout.min60')}</span>
+              <span>{t('communityProfile.sessionTimeout.min15')}</span>
+              <span>{t('communityProfile.sessionTimeout.min30')}</span>
+              <span>{t('communityProfile.sessionTimeout.min45')}</span>
+              <span>{t('communityProfile.sessionTimeout.min60')}</span>
             </div>
             <div className={styles.updateTimeoutButtonContainer}>
               <Button
@@ -199,7 +199,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
                 className={styles.addButton}
                 data-testid="update-button"
               >
-                {t('sessionTimeout.update')}
+                {t('communityProfile.sessionTimeout.update')}
               </Button>
             </div>
           </form>
