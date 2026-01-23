@@ -1,11 +1,6 @@
 import React from 'react';
 import { describe, it, vi, expect, beforeEach } from 'vitest';
-import {
-  render,
-  screen,
-  waitFor,
-  fireEvent,
-} from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { MockedProvider } from '@apollo/react-testing';
@@ -237,14 +232,14 @@ describe('LeftDrawer Component', () => {
 
       // Enter key to show
       element.focus();
-      fireEvent.keyDown(element, { key: 'Enter', code: 'Enter' });
+      await user.keyboard('{Enter}');
       await waitFor(() => {
         expect(container.className).toContain('expandedDrawer');
       });
 
       // Space key to hide
       element.focus();
-      fireEvent.keyDown(element, { key: ' ', code: 'Space' });
+      await user.keyboard('{Space}');
       await waitFor(() => {
         expect(container.className).toContain('collapsedDrawer');
       });
