@@ -19,12 +19,12 @@ interface InterfaceNotification {
 /**
  * NotificationIcon component.
  *
- * `@remarks`
+ * @remarks
  * A small, friendly notification bell used in the app header. It shows the
  * unread count and a compact dropdown of the most recent notifications so
  * users can quickly preview or navigate to them.
  *
- * `@returns` JSX.Element
+ * @returns JSX.Element's
  */
 const NotificationIcon = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'notification' });
