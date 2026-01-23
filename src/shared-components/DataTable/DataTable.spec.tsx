@@ -1255,33 +1255,35 @@ describe('DataTable', () => {
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' as const }];
     const data: Row[] = [{ id: '1', name: 'Ada' }];
 
-    render(
-      <DataTable<Row>
-        data={data}
-        columns={columns}
-        selectable
-        rowKey="id"
-        bulkActions={[
-          {
-            id: 'delete',
-            label: 'Delete',
-            onClick: onBulk,
-            confirm: 'Are you sure?',
-          },
-        ]}
-      />,
-    );
+    try {
+      render(
+        <DataTable<Row>
+          data={data}
+          columns={columns}
+          selectable
+          rowKey="id"
+          bulkActions={[
+            {
+              id: 'delete',
+              label: 'Delete',
+              onClick: onBulk,
+              confirm: 'Are you sure?',
+            },
+          ]}
+        />,
+      );
 
-    // Select row
-    await user.click(screen.getByTestId('select-row-1'));
+      // Select row
+      await user.click(screen.getByTestId('select-row-1'));
 
-    // Click bulk action
-    await user.click(screen.getByTestId('bulk-action-delete'));
+      // Click bulk action
+      await user.click(screen.getByTestId('bulk-action-delete'));
 
-    expect(confirmSpy).toHaveBeenCalledWith('Are you sure?');
-    expect(onBulk).not.toHaveBeenCalled();
-
-    confirmSpy.mockRestore();
+      expect(confirmSpy).toHaveBeenCalledWith('Are you sure?');
+      expect(onBulk).not.toHaveBeenCalled();
+    } finally {
+      confirmSpy.mockRestore();
+    }
   });
 
   it('bulk action disabled function is called with selected rows and keys', async () => {
@@ -1761,56 +1763,58 @@ describe('DataTable', () => {
       const onBulk = vi.fn();
       const confirmSpy = vi.spyOn(window, 'confirm');
 
-      const { result } = renderHook(() =>
-        useDataTableSelection({
-          paginatedData: data,
-          keysOnPage,
-          selectable: true,
-        }),
-      );
+      try {
+        const { result } = renderHook(() =>
+          useDataTableSelection({
+            paginatedData: data,
+            keysOnPage,
+            selectable: true,
+          }),
+        );
 
-      // Select row (wrap in act to flush state updates)
-      act(() => {
-        result.current.toggleRowSelection('1');
-      });
-
-      // 1) Test boolean disabled: true
-      act(() => {
-        result.current.runBulkAction({
-          id: 'b1',
-          label: 'B1',
-          onClick: onBulk,
-          disabled: true,
+        // Select row (wrap in act to flush state updates)
+        act(() => {
+          result.current.toggleRowSelection('1');
         });
-      });
-      expect(onBulk).not.toHaveBeenCalled();
 
-      // 2) Test boolean disabled: false
-      act(() => {
-        result.current.runBulkAction({
-          id: 'b2',
-          label: 'B2',
-          onClick: onBulk,
-          disabled: false,
+        // 1) Test boolean disabled: true
+        act(() => {
+          result.current.runBulkAction({
+            id: 'b1',
+            label: 'B1',
+            onClick: onBulk,
+            disabled: true,
+          });
         });
-      });
-      expect(onBulk).toHaveBeenCalled();
+        expect(onBulk).not.toHaveBeenCalled();
 
-      // 3) Test confirm cancel
-      onBulk.mockClear();
-      confirmSpy.mockReturnValue(false);
-      act(() => {
-        result.current.runBulkAction({
-          id: 'b3',
-          label: 'B3',
-          onClick: onBulk,
-          confirm: 'Really?',
+        // 2) Test boolean disabled: false
+        act(() => {
+          result.current.runBulkAction({
+            id: 'b2',
+            label: 'B2',
+            onClick: onBulk,
+            disabled: false,
+          });
         });
-      });
-      expect(confirmSpy).toHaveBeenCalledWith('Really?');
-      expect(onBulk).not.toHaveBeenCalled();
+        expect(onBulk).toHaveBeenCalled();
 
-      confirmSpy.mockRestore();
+        // 3) Test confirm cancel
+        onBulk.mockClear();
+        confirmSpy.mockReturnValue(false);
+        act(() => {
+          result.current.runBulkAction({
+            id: 'b3',
+            label: 'B3',
+            onClick: onBulk,
+            confirm: 'Really?',
+          });
+        });
+        expect(confirmSpy).toHaveBeenCalledWith('Really?');
+        expect(onBulk).not.toHaveBeenCalled();
+      } finally {
+        confirmSpy.mockRestore();
+      }
     });
   });
 
