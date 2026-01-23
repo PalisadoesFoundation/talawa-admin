@@ -9,7 +9,7 @@
 }
 
 .cardItem:hover {
-  box-shadow: var(--hover-shadow);
+  box-shadow: var(--hover-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
 }
 
 .cardItemImage {

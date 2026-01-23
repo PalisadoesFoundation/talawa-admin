@@ -44,8 +44,8 @@ export interface InterfaceCardItem {
 /**
  * Displays information about an event, post, or membership request as a styled card.
  *
- * `@param` props - Component props from InterfaceCardItemProps
- * `@returns` JSX.Element
+ * @param props - Component props from InterfaceCardItem.
+ * @returns JSX.Element
  */
 
 const CardItem = (props: InterfaceCardItem): JSX.Element => {
