@@ -23,6 +23,11 @@
   outline: none;
 }
 
+.profileContainer:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
 .imageContainer {
   width: 68px;
   margin-right: 8px;

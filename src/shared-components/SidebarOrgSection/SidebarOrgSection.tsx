@@ -29,7 +29,7 @@ import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import Avatar from 'shared-components/Avatar/Avatar';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import styles from './SidebarOrgSection.module.css';
-import type { ISidebarOrgSectionProps } from '../../types/SidebarOrgSection/interface';
+import type { ISidebarOrgSectionProps } from '../../types/shared-components/SidebarOrgSection/interface';
 
 interface IOrganizationData {
   id: string;
