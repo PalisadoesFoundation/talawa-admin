@@ -44,6 +44,7 @@ describe('AgendaCategoryUpdateModal', () => {
     mockUpdateAgendaCategoryHandler = vi.fn();
   });
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

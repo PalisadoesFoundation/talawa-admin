@@ -188,7 +188,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('searchs for tags where the name matches the provided search input', async () => {
+  test('searches for tags where the name matches the provided search input', async () => {
     const user = userEvent.setup();
     renderTagActionsModal(props[0], link1);
 

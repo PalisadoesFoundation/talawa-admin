@@ -230,11 +230,8 @@ describe('Organisation Tags Page', () => {
 
     const input = screen.getByPlaceholderText(translations.firstName);
 
-    // clear safely
-    await user.click(input);
+    // clear and type value
     await user.clear(input);
-
-    // paste triggers a single change event
     await user.paste('usersToAssignTo');
 
     // should render the two users from the mock data
@@ -261,11 +258,8 @@ describe('Organisation Tags Page', () => {
 
     const input = screen.getByPlaceholderText(translations.lastName);
 
-    // clear safely
-    await user.click(input);
+    // clear and type value
     await user.clear(input);
-
-    // paste triggers a single change event
     await user.paste('userToAssignTo');
 
     // should render the two users from the mock data
@@ -345,7 +339,7 @@ describe('Organisation Tags Page', () => {
     const initialMemberDataLength = screen.getAllByTestId('memberName').length;
 
     // Set scroll position to the bottom
-    act(() => {
+    await act(async () => {
       addPeopleToTagScrollableDiv.scrollTop =
         addPeopleToTagScrollableDiv.scrollHeight;
       addPeopleToTagScrollableDiv.dispatchEvent(
@@ -428,7 +422,7 @@ describe('Organisation Tags Page', () => {
   it('Resets the search state and refetches when the modal transitions from closed to open', async () => {
     const { rerender } = renderComponent({ addPeopleToTagModalIsOpen: false });
 
-    act(() => {
+    await act(async () => {
       rerender(
         <MockedProvider cache={cache} link={new StaticMockLink(MOCKS, true)}>
           <MemoryRouter initialEntries={['/orgtags/1/manageTag/1']}>

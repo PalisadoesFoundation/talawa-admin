@@ -43,6 +43,7 @@ describe('AgendaCategoryCreateModal', () => {
     mockCreateAgendaCategoryHandler = vi.fn();
   });
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

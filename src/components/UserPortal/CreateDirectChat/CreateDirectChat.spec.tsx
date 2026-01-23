@@ -252,8 +252,8 @@ describe('CreateDirectChatModal', () => {
     await user.type(searchInput, 'Test User 2');
     await user.click(searchButton);
 
-    await waitFor(async () => {
-      const userRows = await screen.findAllByTestId('user');
+    await waitFor(() => {
+      const userRows = screen.getAllByTestId('user');
       expect(userRows.length).toBe(1);
       expect(userRows[0]).toHaveTextContent('Test User 2');
     });

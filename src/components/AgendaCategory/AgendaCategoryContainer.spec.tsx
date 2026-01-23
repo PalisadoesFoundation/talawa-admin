@@ -52,6 +52,7 @@ const translations = JSON.parse(
 
 describe('Testing Agenda Category Component', () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   const formData = {

@@ -112,11 +112,12 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 
 //temporarily fixes react-beautiful-dnd droppable method's depreciation error
 //needs to be fixed in React 19
+const originalConsoleError = console.error;
 vi.spyOn(console, 'error').mockImplementation((message) => {
   if (message.includes('Support for defaultProps will be removed')) {
     return;
   }
-  console.error(message);
+  originalConsoleError(message);
 });
 
 async function wait(ms = 100): Promise<void> {
@@ -373,7 +374,9 @@ describe('Testing Agenda Items components', () => {
     await user.click(screen.getByTestId('updateAgendaItemBtn'));
 
     await waitFor(() => {
-      // expect(toast.success).toBeCalledWith(translations.agendaItemUpdated);
+      expect(mockNotificationToast.success).toHaveBeenCalledWith(
+        translations.agendaItemUpdated,
+      );
     });
   });
 

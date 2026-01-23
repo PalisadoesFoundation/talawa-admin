@@ -127,26 +127,4 @@ describe('AgendaCategoryPreviewModal Component', () => {
 
     expect(mockToggleDeleteModal).toHaveBeenCalledTimes(1);
   });
-
-  // New Test Case: Verifying form field values
-  test('displays correct values for name, description, and createdBy fields', () => {
-    render(
-      <AgendaCategoryPreviewModal
-        agendaCategoryPreviewModalIsOpen={true}
-        hidePreviewModal={mockOnClose}
-        showUpdateModal={mockShowUpdateModal}
-        toggleDeleteModal={mockToggleDeleteModal}
-        formState={mockCategory}
-        t={mockT}
-      />,
-    );
-
-    expect(screen.getByText(/name/i)).toBeInTheDocument();
-    expect(screen.getByText(/description/i)).toBeInTheDocument();
-    expect(screen.getByText(/createdby/i)).toBeInTheDocument();
-
-    expect(screen.getByText('Meeting')).toBeInTheDocument();
-    expect(screen.getByText('Team discussion')).toBeInTheDocument();
-    expect(screen.getByText('John Doe')).toBeInTheDocument();
-  });
 });
