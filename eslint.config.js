@@ -548,9 +548,8 @@ export default [
    */
   {
     files: [
-      'src/shared-components/SearchBar/**/*.{ts,tsx}',
-      'src/shared-components/SearchFilterBar/**/*.{ts,tsx}',
-      'src/shared-components/DataTable/**/*.{ts,tsx}',
+      'src/shared-components/SearchFilterBar/SearchFilterBar.tsx',
+      'src/shared-components/DataTable/SearchBar.tsx',
     ],
     rules: {
       'no-restricted-syntax': ['error', ...securityRestrictions],
