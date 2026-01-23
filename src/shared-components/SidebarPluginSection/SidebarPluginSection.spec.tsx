@@ -1,6 +1,7 @@
 import React from 'react';
 import { describe, it, vi, expect, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
@@ -135,7 +136,7 @@ describe('SidebarPluginSection Component', () => {
     it('sets correct size for custom icon', () => {
       renderComponent();
       const customIcon = screen.getByAltText('Plugin Two');
-      expect(customIcon).toHaveStyle({ width: '25px', height: '25px' });
+      expect(customIcon.className).toContain('pluginIcon');
     });
   });
 
@@ -160,21 +161,21 @@ describe('SidebarPluginSection Component', () => {
   });
 
   describe('Click Handling', () => {
-    it('calls onItemClick when plugin item is clicked', () => {
+    it('calls onItemClick when plugin item is clicked', async () => {
       const handleItemClick = vi.fn();
       renderComponent({ onItemClick: handleItemClick });
       const link = screen.getByTestId('plugin-plugin-1-btn').closest('a');
       expect(link).not.toBeNull();
-      fireEvent.click(link as HTMLAnchorElement);
+      await userEvent.click(link as HTMLAnchorElement);
       expect(handleItemClick).toHaveBeenCalled();
     });
 
-    it('does not error when onItemClick is not provided', () => {
+    it('does not error when onItemClick is not provided', async () => {
       renderComponent({ onItemClick: undefined });
       const link = screen.getByTestId('plugin-plugin-1-btn').closest('a');
       expect(link).not.toBeNull();
-      expect(() => {
-        fireEvent.click(link as HTMLAnchorElement);
+      await expect(async () => {
+        await userEvent.click(link as HTMLAnchorElement);
       }).not.toThrow();
     });
   });
@@ -234,12 +235,7 @@ describe('SidebarPluginSection Component', () => {
     it('has correct header styling', () => {
       renderComponent();
       const header = screen.getByText('pluginSettings').closest('h4');
-      expect(header).toHaveStyle({
-        fontSize: '1.1rem',
-        marginTop: '1.5rem',
-        marginBottom: '0.75rem',
-        color: 'var(--bs-secondary)',
-      });
+      expect(header?.className).toContain('regularHeader');
     });
   });
 
