@@ -108,9 +108,6 @@ const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
 };
 
 describe('Testing Event Dashboard Screen', () => {
-  beforeEach(() => {
-    user = userEvent.setup();
-  });
   beforeAll(() => {
     vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
       __esModule: true,
@@ -119,6 +116,7 @@ describe('Testing Event Dashboard Screen', () => {
   });
 
   beforeEach(() => {
+    user = userEvent.setup();
     // Clear localStorage before each test
     localStorageMock.clear();
   });
@@ -126,6 +124,7 @@ describe('Testing Event Dashboard Screen', () => {
   afterEach(() => {
     // Clean up after each test
     localStorageMock.clear();
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

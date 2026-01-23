@@ -179,6 +179,7 @@ describe('Testing OrganizationScreen', () => {
     mockNavigate.mockReset();
   });
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

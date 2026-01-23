@@ -62,6 +62,7 @@ const translations = {
 
 describe('Testing Agenda Categories Component', () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
