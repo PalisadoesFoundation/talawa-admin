@@ -58,6 +58,30 @@ Defined in: [src/types/FormFieldGroup/interface.ts:8](https://github.com/Palisad
 
 ***
 
+### hideLabel?
+
+> `optional` **hideLabel**: `boolean`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L14)
+
+#### Inherited from
+
+[`InterfaceFormFieldGroupProps`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md).[`hideLabel`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md#hidelabel)
+
+***
+
+### inline?
+
+> `optional` **inline**: `boolean`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L13)
+
+#### Inherited from
+
+[`InterfaceFormFieldGroupProps`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md).[`inline`](../../../../FormFieldGroup/interface/interfaces/InterfaceFormFieldGroupProps.md#inline)
+
+***
+
 ### label
 
 > **label**: `string`

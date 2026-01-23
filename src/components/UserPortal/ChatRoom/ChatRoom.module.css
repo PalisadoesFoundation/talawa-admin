@@ -24,6 +24,10 @@
   background: white;
 }
 
+.loadingMore {
+  text-align: center;
+}
+
 .userInfo {
   display: flex;
   border-bottom: var(--space-1) solid var(--color-black);
@@ -189,7 +193,38 @@
 }
 
 .customToggle {
-  display: none;
+  opacity: 0;
+  visibility: hidden;
+  padding: 0;
+  background: none;
+  border: none;
+  --bs-btn-active-bg: none;
+  min-width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  transition:
+    opacity 0.15s ease,
+    visibility 0.15s ease;
+}
+
+.messageReceived:hover .customToggle,
+.messageSent:hover .customToggle {
+  opacity: 1;
+  visibility: visible;
+}
+
+.customToggle:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.customToggle svg {
+  color: var(--color-black);
+  font-size: var(--font-size-lg);
+}
+
+.customToggle::after,
+.closeBtn::after {
+  content: none;
 }
 
 .customToggle,
@@ -198,16 +233,6 @@
   background: none;
   border: none;
   --bs-btn-active-bg: none;
-}
-
-.customToggle svg {
-  color: var(--color-black);
-  font-size: var(--font-size-xs);
-}
-
-.customToggle::after,
-.closeBtn::after {
-  content: none;
 }
 
 .closeBtn svg {
@@ -229,19 +254,6 @@
 .customToggle:active {
   background: none;
   border: none;
-}
-
-.messageReceived:hover .customToggle {
-  display: block;
-}
-
-.messageSent:hover .customToggle {
-  display: block;
-}
-
-.messageSent:hover,
-.messageReceived:hover {
-  padding: var(--space-0) var(--space-3);
 }
 
 .messageSent:target {

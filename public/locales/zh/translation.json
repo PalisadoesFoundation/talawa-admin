@@ -1795,9 +1795,12 @@
     "loadingImage": "正在加载图片…",
     "imageNotAvailable": "图片不可用",
     "attachment": "附件",
+    "members": "成员",
     "reply": "回复",
     "edit": "编辑",
     "delete": "删除",
+    "noMessages": "暂时没有消息",
+    "you": "你",
     "errorBoundary": {
       "title": "出现问题",
       "message": "聊天室中发生了意外错误",
@@ -2288,7 +2291,15 @@
     "talawaBranding": "Talawa 品牌形象",
     "view": "查看",
     "changeLanguage": "更改语言",
-    "userNotFoundError": "未找到用户"
+    "userNotFoundError": "未找到用户",
+    "selectAllOnPage": "选择此页所有行",
+    "actions": "操作",
+    "bulkActions": "批量操作",
+    "selected": "已选择",
+    "clear": "清除",
+    "clearSelection": "清除选择",
+    "loading": "加载中...",
+    "selectRow": "选择第 {{rowKey}} 行"
   },
   "donation": {
     "amount_label": "金额",

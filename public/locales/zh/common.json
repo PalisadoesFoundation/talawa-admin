@@ -246,6 +246,7 @@
   "tags": "标签",
   "loadMoreItems": "加载更多项目",
   "loadMore": "加载更多",
+  "loadOlderMessages": "加载旧消息",
   "retry": "重试",
   "publicEvent": "公开（社区可见）",
   "publicEventDescription": "社区中的每个人可见",
@@ -291,5 +292,11 @@
   "share": "分享",
   "userNotFound": "未找到用户",
   "avatarProcessingError": "处理头像时出错，请检查您的图片。",
-  "viewEventStatistics": "查看事件统计"
+  "viewEventStatistics": "查看活动统计",
+  "checkInRegistrantsAriaLabel": "签到登记者",
+  "selectAllOnPage": "选择此页面上的所有行",
+  "selectRow": "选择行 {{rowKey}}",
+  "bulkActions": "批量操作",
+  "selected": "已选择",
+  "clearSelection": "清除选择"
 }

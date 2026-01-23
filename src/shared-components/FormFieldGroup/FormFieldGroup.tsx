@@ -20,13 +20,39 @@ export const FormFieldGroup: React.FC<
   touched,
   children,
   labelClassName,
+  inline,
+  hideLabel,
 }) => {
   const { t: tCommon } = useTranslation('common');
   const showError = touched && !!error;
 
+  if (inline) {
+    return (
+      <>
+        {label && !hideLabel && (
+          <Form.Label htmlFor={name} className="visually-hidden">
+            {label}
+            {required && <span aria-label={tCommon('required')}>*</span>}
+          </Form.Label>
+        )}
+        {children}
+        {showError && (
+          <Form.Control.Feedback type="invalid" className="d-block">
+            {error}
+          </Form.Control.Feedback>
+        )}
+      </>
+    );
+  }
+
   return (
     <Form.Group controlId={name}>
-      <Form.Label htmlFor={name} className={labelClassName}>
+      <Form.Label
+        htmlFor={name}
+        className={`${hideLabel ? 'visually-hidden' : ''} ${
+          labelClassName || ''
+        }`}
+      >
         {label}
         {required && <span aria-label={tCommon('required')}>*</span>}
       </Form.Label>

@@ -1779,9 +1779,12 @@
     "loadingImage": "Loading image...",
     "imageNotAvailable": "Image not available",
     "attachment": "Attachment",
+    "members": "members",
     "reply": "Reply",
     "edit": "Edit",
     "delete": "Delete",
+    "noMessages": "No messages yet",
+    "you": "You",
     "errorBoundary": {
       "title": "Something went wrong",
       "message": "An unexpected error occurred in the chat room",
@@ -2291,7 +2294,15 @@
     "talawaBranding": "Talawa Branding",
     "view": "View",
     "changeLanguage": "Change Language",
-    "userNotFoundError": "User not found"
+    "userNotFoundError": "User not found",
+    "selectAllOnPage": "Select all rows on this page",
+    "actions": "Actions",
+    "bulkActions": "Bulk actions",
+    "selected": "selected",
+    "clear": "Clear",
+    "clearSelection": "Clear selection",
+    "loading": "Loading...",
+    "selectRow": "Select row {{rowKey}}"
   },
   "donation": {
     "amount_label": "Amount",

@@ -10,10 +10,20 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { GraphQLError } from 'graphql';
 
+interface InterfaceCursorPaginationManagerHandle<T> {
+  addItem: (item: T) => void;
+  updateItem: (
+    predicate: (item: T) => boolean,
+    updater: (item: T) => T,
+  ) => void;
+  removeItem: (predicate: (item: T) => boolean) => void;
+  getItems: () => T[];
+}
+
 // Mock query for testing
 const MOCK_QUERY = gql`
-  query GetUsers($first: Int!, $after: String) {
-    users(first: $first, after: $after) {
+  query GetUsers($first: Int, $after: String, $last: Int, $before: String) {
+    users(first: $first, after: $after, last: $last, before: $before) {
       edges {
         cursor
         node {
@@ -1507,6 +1517,338 @@ describe('CursorPaginationManager', () => {
       // Should only have refetched data
       expect(screen.getByText('Refetched User 1')).toBeInTheDocument();
       expect(screen.queryByText('User 2')).not.toBeInTheDocument();
+    });
+  });
+  describe('Backward Pagination', () => {
+    it('uses "last" and "before" variables instead of "first" and "after"', async () => {
+      const backwardMock = {
+        request: {
+          query: MOCK_QUERY,
+          variables: { last: 10, before: null },
+        },
+        result: {
+          data: {
+            users: {
+              edges: [
+                {
+                  cursor: 'cursor2',
+                  node: { id: '2', name: 'User 2', email: 'user2@test.com' },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: true,
+                startCursor: 'cursor2',
+                endCursor: 'cursor2',
+              },
+            },
+          },
+        },
+      };
+
+      const mocks = [backwardMock];
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              paginationType="backward"
+              renderItem={(user: User) => <div>{user.name}</div>}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('User 2')).toBeInTheDocument();
+      });
+    });
+
+    it('shows "Load Older Messages" button instead of "Load More"', async () => {
+      const backwardMock = {
+        request: {
+          query: MOCK_QUERY,
+          variables: { last: 10, before: null },
+        },
+        result: {
+          data: {
+            users: {
+              edges: [
+                {
+                  cursor: 'cursor2',
+                  node: { id: '2', name: 'User 2', email: 'user2@test.com' },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: true,
+                startCursor: 'cursor2',
+                endCursor: 'cursor2',
+              },
+            },
+          },
+        },
+      };
+
+      const mocks = [backwardMock];
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              paginationType="backward"
+              renderItem={(user: User) => <div>{user.name}</div>}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(
+          screen.getByLabelText('Load older messages'),
+        ).toBeInTheDocument();
+      });
+    });
+
+    it('prepends new items when loading more', async () => {
+      const user = userEvent.setup();
+      const initialMock = {
+        request: {
+          query: MOCK_QUERY,
+          variables: { last: 10, before: null },
+        },
+        result: {
+          data: {
+            users: {
+              edges: [
+                {
+                  cursor: 'cursor2',
+                  node: { id: '2', name: 'User 2', email: 'user2@test.com' },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: true,
+                startCursor: 'cursor2',
+                endCursor: 'cursor2',
+              },
+            },
+          },
+        },
+      };
+
+      const loadOlderMock = {
+        request: {
+          query: MOCK_QUERY,
+          variables: { last: 10, before: 'cursor2' },
+        },
+        result: {
+          data: {
+            users: {
+              edges: [
+                {
+                  cursor: 'cursor1',
+                  node: { id: '1', name: 'User 1', email: 'user1@test.com' },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: false,
+                startCursor: 'cursor1',
+                endCursor: 'cursor1',
+              },
+            },
+          },
+        },
+      };
+
+      const mocks = [initialMock, loadOlderMock];
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              paginationType="backward"
+              keyExtractor={(u: User) => u.id}
+              renderItem={(user: User) => (
+                <div data-testid="user-item">{user.name}</div>
+              )}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('User 2')).toBeInTheDocument();
+      });
+
+      const loadOlderBtn = screen.getByLabelText('Load older messages');
+      await user.click(loadOlderBtn);
+
+      await waitFor(() => {
+        expect(screen.getByText('User 1')).toBeInTheDocument();
+      });
+
+      const items = screen.getAllByTestId('user-item');
+      expect(items).toHaveLength(2);
+      expect(items[0]).toHaveTextContent('User 1');
+      expect(items[1]).toHaveTextContent('User 2');
+    });
+  });
+
+  describe('Infinite Scroll', () => {
+    it('triggers load more when scrolling to bottom (forward pagination)', async () => {
+      const mocks = [createSuccessMock(true), createLoadMoreMock()];
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              infiniteScroll={true}
+              renderItem={(user: User) => <div>{user.name}</div>}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('User 1')).toBeInTheDocument();
+      });
+
+      const container = screen.getByTestId('cursor-pagination-manager');
+
+      // Mock scroll properties to simulate being at the bottom
+      Object.defineProperty(container, 'scrollHeight', {
+        value: 1000,
+        configurable: true,
+      });
+      Object.defineProperty(container, 'scrollTop', {
+        value: 500,
+        configurable: true,
+      });
+      Object.defineProperty(container, 'clientHeight', {
+        value: 500,
+        configurable: true,
+      });
+
+      container.dispatchEvent(new Event('scroll', { bubbles: true }));
+
+      await waitFor(() => {
+        expect(screen.getByText('User 3')).toBeInTheDocument();
+      });
+    });
+  });
+  describe('Imperative Handle', () => {
+    it('allows mutating items via actionRef', async () => {
+      const mocks = [createSuccessMock()];
+      const actionRef =
+        React.createRef<InterfaceCursorPaginationManagerHandle<User>>();
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              actionRef={actionRef}
+              renderItem={(user: User) => <div>{user.name}</div>}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('User 1')).toBeInTheDocument();
+      });
+
+      // Test addItem
+      const newUser = { id: '99', name: 'New User', email: 'new@test.com' };
+      React.act(() => {
+        actionRef.current?.addItem(newUser);
+      });
+      expect(screen.getByText('New User')).toBeInTheDocument();
+
+      // Test updateItem
+      React.act(() => {
+        actionRef.current?.updateItem(
+          (u: User) => u.id === '99',
+          (u: User) => ({ ...u, name: 'Updated User' }),
+        );
+      });
+      expect(screen.getByText('Updated User')).toBeInTheDocument();
+
+      // Test removeItem
+      React.act(() => {
+        actionRef.current?.removeItem((u: User) => u.id === '99');
+      });
+      expect(screen.queryByText('Updated User')).not.toBeInTheDocument();
+
+      // Test getItems
+      const items = actionRef.current?.getItems();
+      expect(items).toHaveLength(2); // User 1 and User 2
+      expect(items?.[0]?.name).toBe('User 1');
+    });
+  });
+
+  describe('Variable Key Map', () => {
+    it('uses custom variable keys', async () => {
+      const customVarsMock = {
+        request: {
+          query: MOCK_QUERY,
+          variables: { limit: 10, offset: null }, // Using 'limit' and 'offset' instead of 'first' and 'after'
+        },
+        result: {
+          data: {
+            users: {
+              edges: [
+                {
+                  cursor: 'cursor1',
+                  node: { id: '1', name: 'User 1', email: 'user1@test.com' },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: false,
+                startCursor: 'cursor1',
+                endCursor: 'cursor1',
+              },
+            },
+          },
+        },
+      };
+
+      const mocks = [customVarsMock];
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              variableKeyMap={{ first: 'limit', after: 'offset' }}
+              renderItem={(user: User) => <div>{user.name}</div>}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('User 1')).toBeInTheDocument();
+      });
     });
   });
 });
