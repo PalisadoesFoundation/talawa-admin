@@ -7,9 +7,16 @@
   display: inline-block;
 }
 
-.dropdownContainer {
-  position: relative;
-  display: inline-block;
+.dropdownToggle {
+  margin-bottom: 0;
+  display: flex;
+  background-color: var(--tablerow-bg-color);
+  border: none;
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  color: var(--eventManagement-button-text);
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .dropdownMenu {
@@ -21,29 +28,6 @@
   padding: 5px 0;
   margin: 0;
   list-style: none;
-}
-
-.dropdownButton {
-  background-color: transparent;
-  color: var(--dropdownButton-color);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  width: 100%;
-  justify-content: flex-end;
-  padding: 8px 10px;
-}
-
-.dropdownToggle {
-  margin-bottom: 0;
-  display: flex;
-  background-color: var(--tablerow-bg-color);
-  border: none;
-  border-top-right-radius: 16px;
-  border-bottom-right-radius: 16px;
-  color: var(--eventManagement-button-text);
-  background-repeat: no-repeat;
-  background-position: center;
 }
 
 .dropdownItem {

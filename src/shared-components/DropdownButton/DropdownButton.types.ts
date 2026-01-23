@@ -1,6 +1,3 @@
-import type { ReactNode } from 'react';
-import { ButtonSize } from 'shared-components/Button';
-
 export type DropdownItem = {
   key: string;
   label: string;
@@ -23,16 +20,3 @@ export type DropdownButtonVariant =
   | 'outline-danger';
 
 export type DropdownButtonSize = 'sm' | 'md' | 'lg' | 'xl';
-
-export type DropdownButtonProps = {
-  label: ReactNode;
-  items: DropdownItem[];
-
-  disabled?: boolean;
-  variant?: DropdownButtonVariant;
-  size?: ButtonSize;
-
-  align?: 'start' | 'end';
-  dataTestId?: string;
-  className?: string;
-};

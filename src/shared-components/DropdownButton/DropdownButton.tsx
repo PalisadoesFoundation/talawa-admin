@@ -1,16 +1,21 @@
 import { Dropdown } from 'react-bootstrap';
 import Button from '../Button';
-import styles from 'shared-components/common/css/dropdown.module.css';
-import type { DropdownButtonProps } from 'shared-components/DropdownButton/DropdownButton.types';
+import styles from './DropdownButton.module.css';
+import { InterfaceDropdownButtonProps } from 'types/shared-components/DropdownButton/interface';
 
 const mapSizeToBootstrap = (
-  size?: DropdownButtonProps['size'],
+  size?: InterfaceDropdownButtonProps['size'],
 ): 'sm' | 'lg' | undefined => {
   if (size === 'sm' || size === 'lg') return size;
   if (size === 'xl') return 'lg';
   return undefined; // md
 };
 
+/**
+ * Shared dropdown button with consistent styling and menu rendering.
+ * @param props - Component props.
+ * @returns - JSX.Element
+ */
 const DropdownButton = ({
   label,
   items,
@@ -20,26 +25,27 @@ const DropdownButton = ({
   dataTestId,
   align = 'start',
   className,
-}: DropdownButtonProps) => {
+}: InterfaceDropdownButtonProps) => {
   return (
-    <Dropdown>
+    <Dropdown className={styles.dropdown}>
       <Dropdown.Toggle
         as={Button}
         variant={variant}
         size={mapSizeToBootstrap(size)}
         disabled={disabled}
         data-testid={dataTestId}
-        className={`${styles.toggle} ${className ?? ''}`}
+        className={`${styles.dropdownToggle} ${className ?? ''}`}
       >
         {label}
       </Dropdown.Toggle>
 
-      <Dropdown.Menu align={align}>
+      <Dropdown.Menu align={align} className={styles.dropdownMenu}>
         {items.map((item) => (
           <Dropdown.Item
             key={item.key}
             onClick={item.onClick}
             disabled={item.disabled}
+            className={styles.dropdownItem}
           >
             {item.label}
           </Dropdown.Item>

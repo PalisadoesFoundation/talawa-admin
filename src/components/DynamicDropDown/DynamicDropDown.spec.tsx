@@ -34,6 +34,9 @@ describe('DynamicDropDown component', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
   it('renders and handles selection correctly', async () => {
     const user = userEvent.setup();
     const formData = { fieldName: 'value2' };
