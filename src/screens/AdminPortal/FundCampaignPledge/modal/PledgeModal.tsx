@@ -86,6 +86,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   mode,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
+  const { t: tCommon } = useTranslation('common');
 
   const [formState, setFormState] = useState<InterfaceCreatePledge>({
     pledgeUsers: pledge?.pledger ? [pledge.pledger] : [],
@@ -96,12 +97,14 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   const [pledgers, setPledgers] = useState<InterfaceUserInfoPG[]>([]);
   const [amountTouched, setAmountTouched] = useState(false);
 
-  const [updatePledge] = useMutation(UPDATE_PLEDGE);
-  const [createPledge] = useMutation(CREATE_PLEDGE);
+  const [updatePledge, { loading: updateLoading }] = useMutation(UPDATE_PLEDGE);
+  const [createPledge, { loading: createLoading }] = useMutation(CREATE_PLEDGE);
 
   const { data: memberData } = useQuery(MEMBERS_LIST_PG, {
     variables: { input: { id: orgId } },
   });
+
+  const loading = updateLoading || createLoading;
 
   useEffect(() => {
     if (pledge) {
@@ -122,7 +125,20 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     }
   }, [memberData]);
 
+  const [inputValue, setInputValue] = useState('');
+
+  useEffect(() => {
+    if (formState.pledgeUsers.length > 0) {
+      setInputValue(getMemberLabel(formState.pledgeUsers[0]));
+    } else if (inputValue && formState.pledgeUsers.length === 0) {
+      // Clear input value when pledge users are cleared
+      setInputValue('');
+    }
+  }, [formState.pledgeUsers]);
+
   const isAmountValid = formState.pledgeAmount > 0;
+
+  const showAmountError = amountTouched || formState.pledgeAmount < 1;
 
   // Update error handling to show exact error message
   const updatePledgeHandler = useCallback(
@@ -154,7 +170,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       try {
         e.preventDefault();
         if (!formState.pledgeUsers[0]?.id) {
-          throw new Error('Failed to create pledge');
+          throw new Error(t('createFailed') as string);
         }
 
         await createPledge({
@@ -174,7 +190,9 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         });
         hide();
       } catch (error: unknown) {
-        NotificationToast.error((error as Error).message);
+        NotificationToast.error(
+          (error as Error).message || (t('createFailed') as string),
+        );
       }
     },
     [formState, campaignId, createPledge, refetchPledge, hide, t],
@@ -217,24 +235,28 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
             data-testid="pledgerSelect"
             options={pledgers}
             value={formState.pledgeUsers[0] || null}
+            onChange={(_, newPledger: InterfaceUserInfoPG | null): void => {
+              setFormState((prev) => ({
+                ...prev,
+                pledgeUsers: newPledger ? [newPledger] : [],
+              }));
+            }}
+            inputValue={inputValue}
+            onInputChange={(_, newInputValue) => {
+              setInputValue(newInputValue);
+            }}
             filterSelectedOptions={true}
             clearOnEscape
             disableClearable={false}
             componentsProps={{
               clearIndicator: {
-                'aria-label': 'Clear',
+                'aria-label': tCommon('clear'),
               },
             }}
-            isOptionEqualToValue={areOptionsEqual}
-            getOptionLabel={getMemberLabel}
-            onChange={(_, newPledger): void => {
-              setFormState({
-                ...formState,
-                pledgeUsers: newPledger
-                  ? [{ ...newPledger, id: newPledger.id }]
-                  : [],
-              });
-            }}
+            isOptionEqualToValue={(option, value) =>
+              areOptionsEqual(option, value)
+            }
+            getOptionLabel={(option) => getMemberLabel(option)}
             renderInput={(params) => (
               <FormFieldGroup name="pledgers" label={t('pledgers')}>
                 <div ref={params.InputProps.ref}>
@@ -277,18 +299,16 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               type="number"
               value={formState.pledgeAmount.toString()}
               onChange={(value) => {
-                const numValue = parseInt(value, 10);
-                if (!isNaN(numValue)) {
-                  setFormState({
-                    ...formState,
-                    pledgeAmount: Math.max(0, numValue),
-                  });
+                const val = value === '' ? 0 : parseInt(value, 10);
+                if (!isNaN(val)) {
+                  setFormState((prev) => ({
+                    ...prev,
+                    pledgeAmount: Math.max(0, val),
+                  }));
                 }
               }}
-              error={
-                formState.pledgeAmount < 1 ? t('amountMustBeAtLeastOne') : ''
-              }
-              touched={amountTouched}
+              error={showAmountError ? t('amountMustBeAtLeastOne') : ''}
+              touched={showAmountError}
               onBlur={() => setAmountTouched(true)}
               data-testid="pledgeAmount"
             />
@@ -300,7 +320,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           type="submit"
           className={styles.addButton}
           data-testid="submitPledgeBtn"
-          disabled={!isAmountValid}
+          disabled={!isAmountValid || loading}
         >
           {t(mode === 'edit' ? 'updatePledge' : 'createPledge')}
         </Button>

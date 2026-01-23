@@ -48,6 +48,14 @@ Defined in: [src/types/FormFieldGroup/interface.ts:6](https://github.com/Palisad
 
 ***
 
+### labelClassName?
+
+> `optional` **labelClassName**: `string`
+
+Defined in: [src/types/FormFieldGroup/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/FormFieldGroup/interface.ts#L12)
+
+***
+
 ### name
 
 > **name**: `string`
