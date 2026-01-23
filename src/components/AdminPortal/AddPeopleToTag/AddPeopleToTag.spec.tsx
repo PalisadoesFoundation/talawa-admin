@@ -2,14 +2,7 @@ import React from 'react';
 import { vi, expect, describe, it } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
-import {
-  render,
-  screen,
-  fireEvent,
-  cleanup,
-  waitFor,
-  act,
-} from '@testing-library/react';
+import { render, screen, cleanup, waitFor, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
@@ -197,6 +190,7 @@ describe('Organisation Tags Page', () => {
   });
 
   it('Selects and deselects members to assign to', async () => {
+    const user = userEvent.setup();
     renderAddPeopleToTagModal(props, link);
 
     await wait();
@@ -204,125 +198,128 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
     });
-    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await user.click(screen.getAllByTestId('selectMemberBtn')[0]);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[1]).toBeInTheDocument();
     });
-    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[1]);
+    await user.click(screen.getAllByTestId('selectMemberBtn')[1]);
 
     await waitFor(() => {
       expect(
         screen.getAllByTestId('clearSelectedMember')[0],
       ).toBeInTheDocument();
     });
-    await userEvent.click(screen.getAllByTestId('clearSelectedMember')[0]);
+    await user.click(screen.getAllByTestId('clearSelectedMember')[0]);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('deselectMemberBtn')[0]).toBeInTheDocument();
     });
-    await userEvent.click(screen.getAllByTestId('deselectMemberBtn')[0]);
+    await user.click(screen.getAllByTestId('deselectMemberBtn')[0]);
   });
 
   it('searchs for tags where the firstName matches the provided firstName search input', async () => {
+    const user = userEvent.setup();
     renderAddPeopleToTagModal(props, link);
-
-    await wait();
 
     await waitFor(() => {
       expect(
         screen.getByPlaceholderText(translations.firstName),
       ).toBeInTheDocument();
     });
+
     const input = screen.getByPlaceholderText(translations.firstName);
-    fireEvent.change(input, { target: { value: 'usersToAssignTo' } });
+
+    // clear and type value
+    await user.clear(input);
+    await user.paste('usersToAssignTo');
 
     // should render the two users from the mock data
-    // where firstName starts with "usersToAssignTo"
     await waitFor(() => {
       const members = screen.getAllByTestId('memberName');
-      expect(members.length).toEqual(2);
+      expect(members).toHaveLength(2);
     });
 
-    await waitFor(() => {
-      expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
-        'usersToAssignTo user1',
-      );
-    });
+    const members = screen.getAllByTestId('memberName');
 
-    await waitFor(() => {
-      expect(screen.getAllByTestId('memberName')[1]).toHaveTextContent(
-        'usersToAssignTo user2',
-      );
-    });
+    expect(members[0]).toHaveTextContent('usersToAssignTo user1');
+    expect(members[1]).toHaveTextContent('usersToAssignTo user2');
   });
 
   it('searchs for tags where the lastName matches the provided lastName search input', async () => {
+    const user = userEvent.setup();
     renderAddPeopleToTagModal(props, link);
-
-    await wait();
 
     await waitFor(() => {
       expect(
         screen.getByPlaceholderText(translations.lastName),
       ).toBeInTheDocument();
     });
+
     const input = screen.getByPlaceholderText(translations.lastName);
-    fireEvent.change(input, { target: { value: 'userToAssignTo' } });
+
+    // clear and type value
+    await user.clear(input);
+    await user.paste('userToAssignTo');
 
     // should render the two users from the mock data
-    // where lastName starts with "usersToAssignTo"
     await waitFor(() => {
       const members = screen.getAllByTestId('memberName');
-      expect(members.length).toEqual(2);
+      expect(members).toHaveLength(2);
     });
 
-    await waitFor(() => {
-      expect(screen.getAllByTestId('memberName')[0]).toHaveTextContent(
-        'first userToAssignTo',
-      );
-    });
+    const members = screen.getAllByTestId('memberName');
 
-    await waitFor(() => {
-      expect(screen.getAllByTestId('memberName')[1]).toHaveTextContent(
-        'second userToAssignTo',
-      );
-    });
-    await waitFor(() => {
-      expect(screen.getAllByTestId('memberName')[1]).toHaveTextContent(
-        'second userToAssignTo',
-      );
-    });
+    expect(members[0]).toHaveTextContent('first userToAssignTo');
+    expect(members[1]).toHaveTextContent('second userToAssignTo');
   });
 
   it('clears first name search input', async () => {
+    const user = userEvent.setup();
     renderAddPeopleToTagModal(props, link);
     await wait();
 
     const input = screen.getByPlaceholderText(translations.firstName);
-    fireEvent.change(input, { target: { value: 'test' } });
-    expect(input).toHaveValue('test');
 
-    // SearchBar renders a clear button when value is not empty
-    const clearBtn = screen.getByTestId('clearFirstNameSearch');
-    fireEvent.click(clearBtn);
+    // use a value that exists in mocks
+    await user.click(input);
+    await user.paste('usersToAssignTo');
 
-    expect(input).toHaveValue('');
+    await waitFor(() => {
+      expect(input).toHaveValue('usersToAssignTo');
+    });
+
+    // clear button exists because query succeeded
+    const clearBtn = await screen.findByTestId('clearFirstNameSearch');
+    await user.click(clearBtn);
+
+    await waitFor(() => {
+      expect(input).toHaveValue('');
+    });
   });
 
   it('clears last name search input', async () => {
+    const user = userEvent.setup();
     renderAddPeopleToTagModal(props, link);
     await wait();
 
     const input = screen.getByPlaceholderText(translations.lastName);
-    fireEvent.change(input, { target: { value: 'test' } });
-    expect(input).toHaveValue('test');
+
+    // use a value that exists in mocks
+    await user.click(input);
+    await user.paste('userToAssignTo');
+
+    await waitFor(() => {
+      expect(input).toHaveValue('userToAssignTo');
+    });
 
     // SearchBar renders a clear button when value is not empty
-    const clearBtn = screen.getByTestId('clearLastNameSearch');
-    fireEvent.click(clearBtn);
+    const clearBtn = await screen.findByTestId('clearLastNameSearch');
+    await user.click(clearBtn);
 
-    expect(input).toHaveValue('');
+    await waitFor(() => {
+      expect(input).toHaveValue('');
+    });
   });
 
   it('Renders more members with infinite scroll', async () => {
@@ -342,8 +339,12 @@ describe('Organisation Tags Page', () => {
     const initialMemberDataLength = screen.getAllByTestId('memberName').length;
 
     // Set scroll position to the bottom
-    fireEvent.scroll(addPeopleToTagScrollableDiv, {
-      target: { scrollY: addPeopleToTagScrollableDiv.scrollHeight },
+    await act(async () => {
+      addPeopleToTagScrollableDiv.scrollTop =
+        addPeopleToTagScrollableDiv.scrollHeight;
+      addPeopleToTagScrollableDiv.dispatchEvent(
+        new Event('scroll', { bubbles: true }),
+      );
     });
 
     await waitFor(() => {
@@ -355,6 +356,7 @@ describe('Organisation Tags Page', () => {
   });
 
   it('Toasts error when no one is selected while assigning', async () => {
+    const user = userEvent.setup();
     renderAddPeopleToTagModal(props, link);
 
     await wait();
@@ -362,7 +364,7 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getByTestId('assignPeopleBtn')).toBeInTheDocument();
     });
-    await userEvent.click(screen.getByTestId('assignPeopleBtn'));
+    await user.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -372,6 +374,7 @@ describe('Organisation Tags Page', () => {
   });
 
   it('Assigns tag to multiple people', async () => {
+    const user = userEvent.setup();
     renderAddPeopleToTagModal(props, link);
 
     await wait();
@@ -380,19 +383,19 @@ describe('Organisation Tags Page', () => {
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[0]).toBeInTheDocument();
     });
-    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await user.click(screen.getAllByTestId('selectMemberBtn')[0]);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[1]).toBeInTheDocument();
     });
-    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[1]);
+    await user.click(screen.getAllByTestId('selectMemberBtn')[1]);
 
     await waitFor(() => {
       expect(screen.getAllByTestId('selectMemberBtn')[2]).toBeInTheDocument();
     });
-    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[2]);
+    await user.click(screen.getAllByTestId('selectMemberBtn')[2]);
 
-    await userEvent.click(screen.getByTestId('assignPeopleBtn'));
+    await user.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -419,7 +422,7 @@ describe('Organisation Tags Page', () => {
   it('Resets the search state and refetches when the modal transitions from closed to open', async () => {
     const { rerender } = renderComponent({ addPeopleToTagModalIsOpen: false });
 
-    act(() => {
+    await act(async () => {
       rerender(
         <MockedProvider cache={cache} link={new StaticMockLink(MOCKS, true)}>
           <MemoryRouter initialEntries={['/orgtags/1/manageTag/1']}>
@@ -450,6 +453,7 @@ describe('Organisation Tags Page', () => {
   });
 
   it('displays the unknownError toast if a non-Error is thrown', async () => {
+    const user = userEvent.setup();
     const linkWithNonError = new StaticMockLink(MOCK_NON_ERROR, true);
 
     const customProps = {
@@ -463,8 +467,8 @@ describe('Organisation Tags Page', () => {
       expect(screen.getAllByTestId('selectMemberBtn')).toHaveLength(1);
     });
 
-    await userEvent.click(screen.getAllByTestId('selectMemberBtn')[0]);
-    await userEvent.click(screen.getByTestId('assignPeopleBtn'));
+    await user.click(screen.getAllByTestId('selectMemberBtn')[0]);
+    await user.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalled();
