@@ -1,0 +1,10 @@
+.peopleTabUserEventsContainer {
+  width: 100%;
+}
+
+.peoplePageUserEventCardBody {
+  display: grid;
+  gap: 1rem;
+  justify-content: center;
+  grid-template-columns: repeat(2, minmax(650px, 1fr));
+}

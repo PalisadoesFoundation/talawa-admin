@@ -290,6 +290,7 @@
   "linkCopied": "Enlace copiado al portapapeles",
   "copyToClipboardError": "Error al copiar el enlace al portapapeles",
   "share": "Compartir",
+  "failedToLoadUserData": "No se pudo cargar la información del usuario",
   "userNotFound": "Usuario no encontrado",
   "avatarProcessingError": "Error al procesar el avatar, por favor verifique su imagen.",
   "viewEventStatistics": "Ver Estadísticas del Evento",
