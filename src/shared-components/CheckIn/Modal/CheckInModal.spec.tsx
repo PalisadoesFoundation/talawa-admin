@@ -1,6 +1,6 @@
 import React from 'react';
 import { EVENT_DETAILS, EVENT_CHECKINS } from 'GraphQl/Queries/Queries';
-import { fireEvent, render, waitFor, screen } from '@testing-library/react';
+import { render, waitFor, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { CheckInModal } from './CheckInModal';
 import { BrowserRouter } from 'react-router';
@@ -15,6 +15,7 @@ import {
 import { checkInQueryMock } from '../CheckInMocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi } from 'vitest';
+import userEvent from '@testing-library/user-event';
 
 const link = new StaticMockLink(checkInQueryMock, true);
 
@@ -27,6 +28,7 @@ describe('Testing Check In Attendees Modal', () => {
     eventId: 'event123',
     handleClose: vi.fn(),
   };
+  const user = userEvent.setup();
 
   /**
    * Test case for rendering the CheckInModal component and verifying functionality.
@@ -55,12 +57,10 @@ describe('Testing Check In Attendees Modal', () => {
     await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());
     await waitFor(() => expect(queryByText('John2 Doe2')).toBeInTheDocument());
 
-    // Tetst filtering of users
-    fireEvent.change(
+    // Test filtering of users
+    await user.type(
       getByPlaceholderText('Search Attendees') as HTMLInputElement,
-      {
-        target: { value: 'John Doe' },
-      },
+      'John Doe',
     );
 
     await waitFor(() => expect(queryByText('John Doe')).toBeInTheDocument());
@@ -70,7 +70,7 @@ describe('Testing Check In Attendees Modal', () => {
 
     // Test clearing search
     const clearButton = screen.getByTestId('clearSearchAttendees');
-    fireEvent.click(clearButton);
+    await user.click(clearButton);
 
     await waitFor(() => expect(queryByText('John2 Doe2')).toBeInTheDocument());
   });
