@@ -49,9 +49,9 @@ describe('UnassignUserTagModal Component', () => {
     expect(screen.getByText('unassignUserTag')).toBeInTheDocument();
     expect(screen.getByText('unassignUserTagMessage')).toBeInTheDocument();
 
-    expect(screen.getByTestId('unassignTagModalCloseBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('modal-cancel-btn')).toBeInTheDocument();
 
-    expect(screen.getByTestId('unassignTagModalSubmitBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('modal-delete-btn')).toBeInTheDocument();
   });
 
   it('does not render the modal when closed', () => {
@@ -70,7 +70,7 @@ describe('UnassignUserTagModal Component', () => {
   it('calls toggleUnassignUserTagModal when No button is clicked', () => {
     render(<UnassignUserTagModal {...defaultProps} />);
 
-    const cancelButton = screen.getByTestId('unassignTagModalCloseBtn');
+    const cancelButton = screen.getByTestId('modal-cancel-btn');
     fireEvent.click(cancelButton);
 
     expect(defaultProps.toggleUnassignUserTagModal).toHaveBeenCalledTimes(1);
@@ -79,7 +79,7 @@ describe('UnassignUserTagModal Component', () => {
   it('calls handleUnassignUserTag when Yes button is clicked', async () => {
     render(<UnassignUserTagModal {...defaultProps} />);
 
-    const confirmButton = screen.getByTestId('unassignTagModalSubmitBtn');
+    const confirmButton = screen.getByTestId('modal-delete-btn');
     fireEvent.click(confirmButton);
 
     await waitFor(() => {
@@ -101,7 +101,7 @@ describe('UnassignUserTagModal Component', () => {
 
     render(<UnassignUserTagModal {...propsWithPendingSubmit} />);
 
-    const confirmButton = screen.getByTestId('unassignTagModalSubmitBtn');
+    const confirmButton = screen.getByTestId('modal-delete-btn');
 
     fireEvent.click(confirmButton);
 
@@ -132,7 +132,7 @@ describe('UnassignUserTagModal Component', () => {
       />,
     );
 
-    const confirmButton = screen.getByTestId('unassignTagModalSubmitBtn');
+    const confirmButton = screen.getByTestId('modal-delete-btn');
 
     fireEvent.click(confirmButton);
     fireEvent.click(confirmButton);
@@ -147,14 +147,13 @@ describe('UnassignUserTagModal Component', () => {
   it('applies correct CSS classes to buttons', () => {
     render(<UnassignUserTagModal {...defaultProps} />);
 
-    expect(screen.getByTestId('unassignTagModalCloseBtn')).toHaveClass(
-      'removeButton-class',
-    );
+    const cancelButton = screen.getByTestId('modal-cancel-btn');
+    const deleteButton = screen.getByTestId('modal-delete-btn');
 
-    expect(screen.getByTestId('unassignTagModalSubmitBtn')).toHaveClass(
-      'addButton-class',
-    );
+    expect(cancelButton).toHaveClass('btn-secondary');
+    expect(deleteButton).toHaveClass('btn-danger');
   });
+
   it('handles error when handleUnassignUserTag rejects', async () => {
     const error = new Error('Unassign failed');
 
@@ -179,7 +178,7 @@ describe('UnassignUserTagModal Component', () => {
       />,
     );
 
-    const confirmButton = screen.getByTestId('unassignTagModalSubmitBtn');
+    const confirmButton = screen.getByTestId('modal-delete-btn');
     fireEvent.click(confirmButton);
 
     await waitFor(() => {

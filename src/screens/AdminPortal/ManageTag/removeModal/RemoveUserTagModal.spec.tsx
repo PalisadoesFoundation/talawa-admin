@@ -46,10 +46,8 @@ describe('RemoveUserTagModal Component', () => {
     expect(screen.getByTestId('remove-user-tag-modal')).toBeInTheDocument();
     expect(screen.getByText('removeUserTag')).toBeInTheDocument();
     expect(screen.getByText('removeUserTagMessage')).toBeInTheDocument();
-    expect(
-      screen.getByTestId('removeUserTagModalCloseBtn'),
-    ).toBeInTheDocument();
-    expect(screen.getByTestId('removeUserTagSubmitBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('modal-cancel-btn')).toBeInTheDocument();
+    expect(screen.getByTestId('modal-delete-btn')).toBeInTheDocument();
   });
 
   it('does not render the modal when closed', () => {
@@ -65,7 +63,7 @@ describe('RemoveUserTagModal Component', () => {
   it('calls toggleRemoveUserTagModal when No button is clicked', () => {
     render(<RemoveUserTagModal {...defaultProps} />);
 
-    const cancelButton = screen.getByTestId('removeUserTagModalCloseBtn');
+    const cancelButton = screen.getByTestId('modal-cancel-btn');
     fireEvent.click(cancelButton);
 
     expect(defaultProps.toggleRemoveUserTagModal).toHaveBeenCalledTimes(1);
@@ -74,7 +72,7 @@ describe('RemoveUserTagModal Component', () => {
   it('calls handleRemoveUserTag when Yes button is clicked', async () => {
     render(<RemoveUserTagModal {...defaultProps} />);
 
-    const confirmButton = screen.getByTestId('removeUserTagSubmitBtn');
+    const confirmButton = screen.getByTestId('modal-delete-btn');
     fireEvent.click(confirmButton);
 
     await waitFor(() => {
@@ -95,7 +93,7 @@ describe('RemoveUserTagModal Component', () => {
 
     render(<RemoveUserTagModal {...propsWithPendingSubmit} />);
 
-    const confirmButton = screen.getByTestId('removeUserTagSubmitBtn');
+    const confirmButton = screen.getByTestId('modal-delete-btn');
 
     fireEvent.click(confirmButton);
 
@@ -125,7 +123,7 @@ describe('RemoveUserTagModal Component', () => {
       />,
     );
 
-    const confirmButton = screen.getByTestId('removeUserTagSubmitBtn');
+    const confirmButton = screen.getByTestId('modal-delete-btn');
 
     fireEvent.click(confirmButton);
     fireEvent.click(confirmButton);
@@ -140,14 +138,15 @@ describe('RemoveUserTagModal Component', () => {
   it('applies correct CSS classes to buttons', () => {
     render(<RemoveUserTagModal {...defaultProps} />);
 
-    expect(screen.getByTestId('removeUserTagModalCloseBtn')).toHaveClass(
-      'removeButton-class',
+    expect(screen.getByTestId('modal-cancel-btn')).toHaveClass(
+      'btn btn-secondary',
     );
 
-    expect(screen.getByTestId('removeUserTagSubmitBtn')).toHaveClass(
-      'addButton-class',
+    expect(screen.getByTestId('modal-delete-btn')).toHaveClass(
+      '_removeButton_d8535b btn btn-danger',
     );
   });
+
   it('handles error when handleRemoveUserTag rejects', async () => {
     const error = new Error('Remove failed');
 
@@ -164,7 +163,7 @@ describe('RemoveUserTagModal Component', () => {
       />,
     );
 
-    const confirmButton = screen.getByTestId('removeUserTagSubmitBtn');
+    const confirmButton = screen.getByTestId('modal-delete-btn');
     fireEvent.click(confirmButton);
 
     await waitFor(() => {

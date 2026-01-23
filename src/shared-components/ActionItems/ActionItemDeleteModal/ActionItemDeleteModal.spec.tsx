@@ -129,10 +129,10 @@ describe('Testing ItemDeleteModal', () => {
 
   it('should successfully Delete Action Item', async () => {
     renderItemDeleteModal(successLink, testItemProps);
-    expect(screen.getByTestId('deleteyesbtn')).toBeInTheDocument();
+    expect(screen.getByTestId('modal-delete-btn')).toBeInTheDocument();
 
     await act(() => {
-      fireEvent.click(screen.getByTestId('deleteyesbtn'));
+      fireEvent.click(screen.getByTestId('modal-delete-btn'));
     });
 
     await waitFor(() => {
@@ -146,8 +146,8 @@ describe('Testing ItemDeleteModal', () => {
 
   it('should fail to Delete Action Item', async () => {
     renderItemDeleteModal(errorLink, testItemProps);
-    expect(screen.getByTestId('deleteyesbtn')).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId('deleteyesbtn'));
+    expect(screen.getByTestId('modal-delete-btn')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('modal-delete-btn'));
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -257,7 +257,7 @@ describe('Testing ItemDeleteModal', () => {
 
       // Click delete button
       await act(() => {
-        fireEvent.click(screen.getByTestId('deleteyesbtn'));
+        fireEvent.click(screen.getByTestId('modal-delete-btn'));
       });
 
       await waitFor(() => {
@@ -289,7 +289,7 @@ describe('Testing ItemDeleteModal', () => {
 
       // Click delete button
       await act(() => {
-        fireEvent.click(screen.getByTestId('deleteyesbtn'));
+        fireEvent.click(screen.getByTestId('modal-delete-btn'));
       });
 
       await waitFor(() => {
@@ -315,7 +315,7 @@ describe('Testing ItemDeleteModal', () => {
 
       // Click delete button
       await act(() => {
-        fireEvent.click(screen.getByTestId('deleteyesbtn'));
+        fireEvent.click(screen.getByTestId('modal-delete-btn'));
       });
 
       await waitFor(() => {
@@ -341,7 +341,7 @@ describe('Testing ItemDeleteModal', () => {
 
       // Click delete button
       await act(() => {
-        fireEvent.click(screen.getByTestId('deleteyesbtn'));
+        fireEvent.click(screen.getByTestId('modal-delete-btn'));
       });
 
       await waitFor(() => {
@@ -371,7 +371,7 @@ describe('Testing ItemDeleteModal', () => {
       fireEvent.click(instanceRadio);
 
       // Click delete button
-      fireEvent.click(screen.getByTestId('deleteyesbtn'));
+      fireEvent.click(screen.getByTestId('modal-delete-btn'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(

@@ -25,8 +25,6 @@
  *
  * Success or error messages are displayed using toast notifications based on the result of the mutation.
  */
-import type { ChangeEvent } from 'react';
-import { Button, Form } from 'react-bootstrap';
 import type {
   InterfaceCreateVolunteerGroup,
   InterfaceVolunteerGroupInfo,
@@ -37,9 +35,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { BaseModal } from 'shared-components/BaseModal';
+import { CRUDModalTemplate } from 'shared-components/CRUDModalTemplate/CRUDModalTemplate';
 import {
-  FormControl,
   Paper,
   Stack,
   Table,
@@ -48,8 +45,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
-  FormHelperText,
 } from '@mui/material';
 import {
   UPDATE_VOLUNTEER_GROUP,
@@ -61,6 +56,7 @@ import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries
 import Avatar from 'shared-components/Avatar/Avatar';
 import { FaXmark } from 'react-icons/fa6';
 import { FormFieldGroup } from 'shared-components/FormFieldGroup/FormFieldGroup';
+import Button from 'shared-components/Button/Button';
 
 export interface InterfaceGroupModal {
   isOpen: boolean;
@@ -92,6 +88,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
   });
   const [volunteersRequiredError, setVolunteersRequiredError] =
     useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [touched, setTouched] = useState<{
     name: boolean;
@@ -165,13 +162,15 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
   }, [group]);
 
   const updateGroupHandler = useCallback(
-    async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+    async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
+      if (isSubmitting) return;
 
       if (volunteersRequiredError || nameError) {
         return;
       }
 
+      setIsSubmitting(true);
       const updatedFields: {
         [key: string]: number | string | undefined | null;
       } = {};
@@ -198,30 +197,21 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
       } catch (error: unknown) {
         console.log(error);
         NotificationToast.error((error as Error).message);
+      } finally {
+        setIsSubmitting(false);
       }
     },
-    [formState, group, volunteersRequiredError, nameError],
+    [formState, group, volunteersRequiredError, nameError, isSubmitting],
   );
 
   return (
-    <BaseModal
-      show={isOpen}
-      onHide={hide}
+    <CRUDModalTemplate
+      open={isOpen}
+      onClose={hide}
+      title={t('manageGroup')}
       className={styles.groupModal}
-      showCloseButton={false}
-      headerContent={
-        <div className="d-flex justify-content-between align-items-center w-100">
-          <p className={styles.titlemodal}>{t('manageGroup')}</p>
-          <Button
-            variant="danger"
-            onClick={hide}
-            className={styles.modalCloseBtn}
-            data-testid="modalCloseBtn"
-          >
-            <i className="fa fa-times"></i>
-          </Button>
-        </div>
-      }
+      loading={isSubmitting}
+      showFooter={false}
     >
       <fieldset
         className={`btn-group ${styles.toggleGroup} mt-0 px-3 mb-4 w-100`}
@@ -262,9 +252,9 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
       </fieldset>
 
       {modalType === 'details' ? (
-        <Form
+        <form
           data-testid="pledgeForm"
-          onSubmitCapture={updateGroupHandler}
+          onSubmit={updateGroupHandler}
           className="p-3"
         >
           {/* Input field to enter the group name */}
@@ -275,42 +265,36 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             touched={touched.name}
             error={nameError}
           >
-            <FormControl fullWidth>
-              <TextField
-                id="name"
-                aria-label={tCommon('name')}
-                required
-                variant="outlined"
-                className={styles.noOutline}
-                value={name}
-                data-testid="nameInput"
-                onChange={(e) =>
-                  setFormState({ ...formState, name: e.target.value })
-                }
-                onBlur={() => setTouched({ ...touched, name: true })}
-              />
-            </FormControl>
+            <input
+              id="name"
+              type="text"
+              aria-label={tCommon('name')}
+              required
+              className={`form-control ${styles.noOutline}`}
+              value={name}
+              data-testid="nameInput"
+              onChange={(e) =>
+                setFormState({ ...formState, name: e.target.value })
+              }
+              onBlur={() => setTouched({ ...touched, name: true })}
+            />
           </FormFieldGroup>
 
           {/* Input field to enter the group description */}
           <FormFieldGroup name="description" label={tCommon('description')}>
-            <FormControl fullWidth>
-              <TextField
-                id="description"
-                aria-label={tCommon('description')}
-                multiline
-                rows={3}
-                variant="outlined"
-                className={styles.noOutline}
-                value={description}
-                onChange={(e) =>
-                  setFormState({
-                    ...formState,
-                    description: e.target.value,
-                  })
-                }
-              />
-            </FormControl>
+            <textarea
+              id="description"
+              aria-label={tCommon('description')}
+              rows={3}
+              className={`form-control ${styles.noOutline}`}
+              value={description ?? ''}
+              onChange={(e) =>
+                setFormState({
+                  ...formState,
+                  description: e.target.value,
+                })
+              }
+            />
           </FormFieldGroup>
 
           <FormFieldGroup
@@ -319,51 +303,42 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             touched={touched.volunteersRequired}
             error={volunteersRequiredError ? t('invalidNumber') : undefined}
           >
-            <FormControl fullWidth error={volunteersRequiredError}>
-              <TextField
-                id="volunteersRequired"
-                aria-label={t('volunteersRequired')}
-                variant="outlined"
-                className={styles.noOutline}
-                type="number"
-                slotProps={{
-                  htmlInput: { min: 1 },
-                }}
-                value={volunteersRequired ?? ''}
-                error={volunteersRequiredError}
-                onChange={(e) => {
-                  const val = e.target.value;
-                  if (val === '') {
+            <input
+              id="volunteersRequired"
+              type="number"
+              min="1"
+              aria-label={t('volunteersRequired')}
+              className={`form-control ${styles.noOutline}`}
+              value={volunteersRequired !== null ? volunteersRequired : ''}
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === '') {
+                  setFormState({
+                    ...formState,
+                    volunteersRequired: null,
+                  });
+                  setVolunteersRequiredError(false);
+                } else {
+                  const parsed = parseInt(val, 10);
+                  if (Number.isNaN(parsed) || parsed < 1) {
+                    setVolunteersRequiredError(true);
                     setFormState({
                       ...formState,
                       volunteersRequired: null,
                     });
-                    setVolunteersRequiredError(false);
                   } else {
-                    const parsed = parseInt(val, 10);
-                    if (Number.isNaN(parsed) || parsed < 1) {
-                      setVolunteersRequiredError(true);
-                      setFormState({
-                        ...formState,
-                        volunteersRequired: null,
-                      });
-                    } else {
-                      setVolunteersRequiredError(false);
-                      setFormState({
-                        ...formState,
-                        volunteersRequired: parsed,
-                      });
-                    }
+                    setVolunteersRequiredError(false);
+                    setFormState({
+                      ...formState,
+                      volunteersRequired: parsed,
+                    });
                   }
-                }}
-                onBlur={() =>
-                  setTouched({ ...touched, volunteersRequired: true })
                 }
-              />
-              {volunteersRequiredError && (
-                <FormHelperText>{t('invalidNumber')}</FormHelperText>
-              )}
-            </FormControl>
+              }}
+              onBlur={() =>
+                setTouched({ ...touched, volunteersRequired: true })
+              }
+            />
           </FormFieldGroup>
 
           <Button
@@ -374,7 +349,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
           >
             {t('updateGroup')}
           </Button>
-        </Form>
+        </form>
       ) : (
         <div className="px-3">
           {requests.length === 0 ? (
@@ -471,7 +446,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
           )}
         </div>
       )}
-    </BaseModal>
+    </CRUDModalTemplate>
   );
 };
 
