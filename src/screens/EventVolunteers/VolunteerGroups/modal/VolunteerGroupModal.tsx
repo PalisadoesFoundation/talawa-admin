@@ -255,7 +255,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         <div className="d-flex mb-3 w-100">
           <FormFieldGroup
             name="leaderSelect"
-            label={`${t('leader')} *`}
+            label={t('leader')}
             required
             touched={false}
           >
@@ -311,7 +311,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         <div className="d-flex mb-3 w-100">
           <FormFieldGroup
             name="volunteerSelect"
-            label={`${t('volunteers')} *`}
+            label={t('volunteers')}
             required
             touched={false}
           >
@@ -356,21 +356,33 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           <FormTextField
             name="volunteersRequired"
             label={t('volunteersRequired')}
-            type="text"
+            type="number"
             className={styles.noOutline}
             value={volunteersRequired?.toString() ?? ''}
             onChange={(value) => {
-              if (parseInt(value) > 0) {
-                setFormState({
-                  ...formState,
-                  volunteersRequired: parseInt(value),
-                });
-              } else if (value === '') {
+              const trimmedValue = value.trim();
+              if (trimmedValue === '') {
                 setFormState({
                   ...formState,
                   volunteersRequired: null,
                 });
+                return;
               }
+
+              const parsed = parseInt(trimmedValue, 10);
+
+              if (Number.isNaN(parsed) || parsed <= 0) {
+                setFormState({
+                  ...formState,
+                  volunteersRequired: null,
+                });
+                return;
+              }
+
+              setFormState({
+                ...formState,
+                volunteersRequired: parsed,
+              });
             }}
           />
         </div>

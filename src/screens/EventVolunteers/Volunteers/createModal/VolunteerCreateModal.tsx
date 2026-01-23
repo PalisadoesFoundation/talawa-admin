@@ -170,7 +170,6 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
         >
           <Autocomplete
             className="w-100"
-            limitTags={2}
             data-testid="membersSelect"
             options={members}
             isOptionEqualToValue={(option, value) => option.id === value.id}
