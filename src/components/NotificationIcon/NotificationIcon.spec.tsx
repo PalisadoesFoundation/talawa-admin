@@ -196,12 +196,12 @@ describe('NotificationIcon Component', () => {
       </MockedProvider>,
     );
     await userEvent.click(screen.getByRole('button'));
-    await waitFor(async () => {
-      await userEvent.click(
-        screen.getByText('notification.viewAllNotifications'),
-      );
+    await userEvent.click(
+      screen.getByText('notification.viewAllNotifications'),
+    );
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith('/notification');
     });
-    expect(mockNavigate).toHaveBeenCalledWith('/notification');
   });
 
   it('should navigate to user notification page from user portal', async () => {
@@ -215,12 +215,12 @@ describe('NotificationIcon Component', () => {
       </MockedProvider>,
     );
     await userEvent.click(screen.getByRole('button'));
-    await waitFor(async () => {
-      await userEvent.click(
-        screen.getByText('notification.viewAllNotifications'),
-      );
+    await userEvent.click(
+      screen.getByText('notification.viewAllNotifications'),
+    );
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith('/user/notification');
     });
-    expect(mockNavigate).toHaveBeenCalledWith('/user/notification');
   });
 
   it('should navigate to default notification page when navigation is not provided', async () => {
@@ -237,10 +237,10 @@ describe('NotificationIcon Component', () => {
       </MockedProvider>,
     );
     await userEvent.click(screen.getByRole('button'));
-    await waitFor(async () => {
-      await userEvent.click(screen.getByText('Test body'));
+    await userEvent.click(screen.getByText('Test body'));
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith('/notification');
     });
-    expect(mockNavigate).toHaveBeenCalledWith('/notification');
   });
 
   it('should show unread dot for unread notifications', async () => {
@@ -304,11 +304,11 @@ describe('NotificationIcon Component', () => {
       </MockedProvider>,
     );
     await userEvent.click(screen.getByRole('button'));
-    await waitFor(async () => {
-      await userEvent.click(
-        screen.getByText('notification.viewAllNotifications'),
-      );
+    await userEvent.click(
+      screen.getByText('notification.viewAllNotifications'),
+    );
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith('/user/notification');
     });
-    expect(mockNavigate).toHaveBeenCalledWith('/user/notification');
   });
 });

@@ -41,6 +41,13 @@ export interface InterfaceCardItem {
   image?: string;
 }
 
+/**
+ * Displays information about an event, post, or membership request as a styled card.
+ *
+ * `@param` props - Component props from InterfaceCardItemProps
+ * `@returns` JSX.Element
+ */
+
 const CardItem = (props: InterfaceCardItem): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'cardItem' });
   const { creator, type, title, startdate, enddate, time, location, image } =

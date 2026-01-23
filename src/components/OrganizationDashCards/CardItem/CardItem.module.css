@@ -1,10 +1,7 @@
 .cardItem {
   border: 1px solid var(--cardItem-border, #e9ecef);
   background: var(--orgCard-bg, #fff);
-  border-radius: 8px;
-  /* Assumed standard */
   padding: 16px;
-  /* Assumed */
   display: flex;
   gap: 16px;
   align-items: center;
@@ -17,7 +14,6 @@
 
 .cardItemImage {
   width: 60px;
-  /* Assumed standard avatar size */
   height: 60px;
   border-radius: 50%;
   object-fit: cover;

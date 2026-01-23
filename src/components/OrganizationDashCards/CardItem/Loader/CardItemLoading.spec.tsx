@@ -8,7 +8,7 @@ vi.mock('react-i18next', () => ({
     t: (key: string) =>
       options?.keyPrefix ? `${options.keyPrefix}.${key}` : key,
     i18n: {
-      changeLanguage: () => new Promise(() => {}),
+      changeLanguage: () => Promise.resolve(),
     },
   }),
 }));
