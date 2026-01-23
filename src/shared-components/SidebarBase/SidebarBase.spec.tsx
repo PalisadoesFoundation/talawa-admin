@@ -1,6 +1,7 @@
 import React from 'react';
 import { describe, it, vi, expect, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { BrowserRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
@@ -131,23 +132,23 @@ describe('SidebarBase Component', () => {
   });
 
   describe('Toggle Functionality', () => {
-    it('calls setHideDrawer when toggle button is clicked', () => {
+    it('calls setHideDrawer when toggle button is clicked', async () => {
       renderComponent({ hideDrawer: false });
       const toggleBtn = screen.getByTestId('toggleBtn');
-      fireEvent.click(toggleBtn);
+      await userEvent.click(toggleBtn);
       expect(mockSetHideDrawer).toHaveBeenCalledWith(true);
     });
 
-    it('toggles from hidden to visible when clicked', () => {
+    it('toggles from hidden to visible when clicked', async () => {
       renderComponent({ hideDrawer: true });
       const toggleBtn = screen.getByTestId('toggleBtn');
-      fireEvent.click(toggleBtn);
+      await userEvent.click(toggleBtn);
       expect(mockSetHideDrawer).toHaveBeenCalledWith(false);
     });
   });
 
   describe('Persist Toggle State', () => {
-    it('does not persist state to localStorage when persistToggleState is false', () => {
+    it('does not persist state to localStorage when persistToggleState is false', async () => {
       const mockSetItem = vi.fn();
       vi.mocked(useLocalStorage).mockReturnValue({
         setItem: mockSetItem,
@@ -159,11 +160,11 @@ describe('SidebarBase Component', () => {
 
       renderComponent({ persistToggleState: false });
       const toggleBtn = screen.getByTestId('toggleBtn');
-      fireEvent.click(toggleBtn);
+      await userEvent.click(toggleBtn);
       expect(mockSetItem).not.toHaveBeenCalled();
     });
 
-    it('persists state to localStorage when persistToggleState is true', () => {
+    it('persists state to localStorage when persistToggleState is true', async () => {
       const mockSetItem = vi.fn();
       vi.mocked(useLocalStorage).mockReturnValue({
         setItem: mockSetItem,
@@ -175,11 +176,11 @@ describe('SidebarBase Component', () => {
 
       renderComponent({ persistToggleState: true, hideDrawer: false });
       const toggleBtn = screen.getByTestId('toggleBtn');
-      fireEvent.click(toggleBtn);
+      await userEvent.click(toggleBtn);
       expect(mockSetItem).toHaveBeenCalledWith('sidebar', true);
     });
 
-    it('persists correct state when toggling from hidden to visible', () => {
+    it('persists correct state when toggling from hidden to visible', async () => {
       const mockSetItem = vi.fn();
       vi.mocked(useLocalStorage).mockReturnValue({
         setItem: mockSetItem,
@@ -191,7 +192,7 @@ describe('SidebarBase Component', () => {
 
       renderComponent({ persistToggleState: true, hideDrawer: true });
       const toggleBtn = screen.getByTestId('toggleBtn');
-      fireEvent.click(toggleBtn);
+      await userEvent.click(toggleBtn);
       expect(mockSetItem).toHaveBeenCalledWith('sidebar', false);
     });
   });
@@ -273,9 +274,12 @@ describe('SidebarBase Component', () => {
       renderComponent();
       const childrenContainer =
         screen.getByTestId('children-content').parentElement;
-      expect(childrenContainer?.className).toContain('d-flex');
-      expect(childrenContainer?.className).toContain('flex-column');
-      expect(childrenContainer?.className).toContain('sidebarcompheight');
+      expect(childrenContainer?.className).toContain('optionList');
+
+      const mainContainer = childrenContainer?.parentElement;
+      expect(mainContainer?.className).toContain('d-flex');
+      expect(mainContainer?.className).toContain('flex-column');
+      expect(mainContainer?.className).toContain('sidebarcompheight');
     });
 
     it('has correct footer class when footer content provided', () => {

@@ -77,15 +77,30 @@ vi.mock('utils/errorHandler', () => ({
 
 describe('Testing Organization Admin List Card', () => {
   global.alert = vi.fn();
+  const originalLocation = window.location;
 
   beforeEach(() => {
     Object.defineProperty(window, 'location', {
+      configurable: true,
       writable: true,
-      value: { reload: vi.fn() },
+      value: {
+        href: originalLocation.href,
+        pathname: originalLocation.pathname || '/',
+        search: originalLocation.search,
+        hash: originalLocation.hash,
+        assign: vi.fn(),
+        replace: vi.fn(),
+        reload: vi.fn(),
+      },
     });
   });
 
   afterEach(() => {
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      writable: true,
+      value: originalLocation,
+    });
     vi.restoreAllMocks();
   });
 
