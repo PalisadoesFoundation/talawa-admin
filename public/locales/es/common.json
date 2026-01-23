@@ -294,7 +294,7 @@
   "viewEventStatistics": "Ver Estadísticas del Evento",
   "checkInRegistrantsAriaLabel": "Registrar asistentes",
   "selectAllOnPage": "Seleccionar todas las filas en esta página",
-  "selectRow": "Seleccionar fila {{id}}",
+  "selectRow": "Seleccionar fila {{rowKey}}",
   "bulkActions": "Acciones masivas",
   "selected": "seleccionados",
   "clearSelection": "Limpiar selección"

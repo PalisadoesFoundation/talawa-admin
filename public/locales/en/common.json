@@ -294,7 +294,7 @@
   "viewEventStatistics": "View Event Statistics",
   "checkInRegistrantsAriaLabel": "Check in registrants",
   "selectAllOnPage": "Select all rows on this page",
-  "selectRow": "Select row {{id}}",
+  "selectRow": "Select row {{rowKey}}",
   "bulkActions": "Bulk actions",
   "selected": "selected",
   "clearSelection": "Clear selection"

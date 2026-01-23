@@ -294,7 +294,7 @@
   "viewEventStatistics": "查看活动统计",
   "checkInRegistrantsAriaLabel": "签到登记者",
   "selectAllOnPage": "选择此页面上的所有行",
-  "selectRow": "选择行 {{id}}",
+  "selectRow": "选择行 {{rowKey}}",
   "bulkActions": "批量操作",
   "selected": "已选择",
   "clearSelection": "清除选择"

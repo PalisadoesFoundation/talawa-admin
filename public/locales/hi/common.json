@@ -294,7 +294,7 @@
   "viewEventStatistics": "इवेंट सांख्यिकी देखें",
   "checkInRegistrantsAriaLabel": "पंजीकृतों को चेक इन करें",
   "selectAllOnPage": "इस पृष्ठ पर सभी पंक्तियों का चयन करें",
-  "selectRow": "पंक्ति {{id}} का चयन करें",
+  "selectRow": "पंक्ति {{rowKey}} का चयन करें",
   "bulkActions": "सामूहिक क्रियाएं",
   "selected": "चयनित",
   "clearSelection": "चयन साफ़ करें"
