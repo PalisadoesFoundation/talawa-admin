@@ -88,7 +88,7 @@ async function wait(ms = 500): Promise<void> {
 }
 
 const mockID = 'event123';
-const user = userEvent.setup();
+let user: ReturnType<typeof userEvent.setup>;
 vi.mock('react-router', async () => ({
   ...(await vi.importActual('react-router')),
 }));
@@ -108,6 +108,9 @@ const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
 };
 
 describe('Testing Event Dashboard Screen', () => {
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
   beforeAll(() => {
     vi.mock('components/EventListCard/Modal/EventListCardModals', () => ({
       __esModule: true,

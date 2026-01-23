@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { act } from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { MockedProvider } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
@@ -92,8 +92,10 @@ vi.mock('components/ProfileDropdown/ProfileDropdown', () => ({
 const link = new StaticMockLink(MOCKS, true);
 const user = userEvent.setup();
 const resizeWindow = (width: number): void => {
-  window.innerWidth = width;
-  window.dispatchEvent(new Event('resize'));
+  act(() => {
+    window.innerWidth = width;
+    window.dispatchEvent(new Event('resize'));
+  });
 };
 
 const clickToggleMenuBtn = async (toggleButton: HTMLElement): Promise<void> => {
