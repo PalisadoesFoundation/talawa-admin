@@ -23,15 +23,14 @@
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { useNavigate, useParams, Link } from 'react-router';
-import type { ChangeEvent } from 'react';
+import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import Form from 'react-bootstrap/Form';
-import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import IconComponent from 'components/IconComponent/IconComponent';
 import Button from 'shared-components/Button';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type { InterfaceTagDataPG } from 'utils/interfaces';
 import styles from './OrganizationTags.module.css';
@@ -124,7 +123,7 @@ function OrganizationTags(): JSX.Element {
 
   const [create, { loading: createTagLoading }] = useMutation(CREATE_USER_TAG);
 
-  const createTag = async (e: ChangeEvent<HTMLFormElement>) => {
+  const createTag = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!tagName.trim()) {
@@ -406,36 +405,16 @@ function OrganizationTags(): JSX.Element {
       </Row>
 
       {/* Create Tag Modal */}
-      <Modal
+      <BaseModal
         show={createTagModalIsOpen}
         onHide={hideCreateTagModal}
         backdrop="static"
-        aria-labelledby="contained-modal-title-vcenter"
         centered
-      >
-        <Modal.Header
-          className={styles.tableHeader}
-          data-testid="modalOrganizationHeader"
-          closeButton
-        >
-          <Modal.Title>{t('tagDetails')}</Modal.Title>
-        </Modal.Header>
-        <Form onSubmitCapture={createTag}>
-          <Modal.Body>
-            <FormTextField
-              name="tagName"
-              label={t('tagName')}
-              placeholder={t('tagNamePlaceholder')}
-              value={tagName}
-              onChange={setTagName}
-              required
-              autoComplete="off"
-              data-testid="tagNameInput"
-              className={styles.inputField}
-            />
-          </Modal.Body>
-
-          <Modal.Footer>
+        title={t('tagDetails')}
+        headerClassName={styles.tableHeader}
+        headerTestId="modalOrganizationHeader"
+        footer={
+          <>
             <Button
               variant="secondary"
               onClick={(): void => hideCreateTagModal()}
@@ -447,6 +426,7 @@ function OrganizationTags(): JSX.Element {
             </Button>
             <Button
               type="submit"
+              form="create-tag-form"
               value="invite"
               data-testid="createTagSubmitBtn"
               className={styles.addButton}
@@ -455,9 +435,23 @@ function OrganizationTags(): JSX.Element {
             >
               {tCommon('create')}
             </Button>
-          </Modal.Footer>
-        </Form>
-      </Modal>
+          </>
+        }
+      >
+        <form id="create-tag-form" onSubmit={createTag}>
+          <FormTextField
+            name="tagName"
+            label={t('tagName')}
+            placeholder={t('tagNamePlaceholder')}
+            value={tagName}
+            onChange={setTagName}
+            required
+            autoComplete="off"
+            data-testid="tagNameInput"
+            className={styles.inputField}
+          />
+        </form>
+      </BaseModal>
     </>
   );
 }
