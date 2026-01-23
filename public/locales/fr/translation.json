@@ -2356,6 +2356,11 @@
       "title": "Avis",
       "emptyState": "En attente que les gens parlent de l'événement...",
       "filledByCount": "Rempli par {{count}} personnes."
+    },
+    "feedback": {
+      "title": "Analyse des commentaires",
+      "emptyState": "Veuillez demander aux participants de soumettre leurs commentaires pour obtenir des informations !",
+      "filledByCount": "{{count}} personnes ont rempli des commentaires pour cet événement."
     }
   },
   "verifyEmail": {
