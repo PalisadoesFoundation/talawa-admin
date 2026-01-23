@@ -10,16 +10,8 @@
  * - Displays group chat details when applicable.
  *
  * @param props - The props for the ChatRoom component.
- * @returns The rendered ChatRoom comp                            {message.parentMessage && (
-                              <a href={`#${message.parentMessage.id}`}>
-                                <div className={styles.replyToMessage}>
-                                  <p className={styles.replyToMessageSender}>
-                                    {message.parentMessage.creator.name}
-                                  </p>
-                                  <span>{message.parentMessage.body}</span>
-                                </div>
-                              </a>
-                            )} @example
+ * @returns The rendered ChatRoom component.
+ * @example
  * ```tsx
  * <ChatRoom
  *   selectedContact="12345"
@@ -36,7 +28,6 @@ import styles from './ChatRoom.module.css';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import { useTranslation } from 'react-i18next';
 import { CHAT_BY_ID, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
-import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery, useSubscription } from '@apollo/client';
 import {
   EDIT_CHAT_MESSAGE,
@@ -51,174 +42,16 @@ import GroupChatDetails from 'components/GroupChatDetails/GroupChatDetails';
 import { GrAttachment } from 'react-icons/gr';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
-import type { GroupChat } from 'types/Chat/type';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { useChatRoomState } from './hooks/useChatRoomState';
+import type { InterfaceChatRoomProps, NewChatType } from 'types/Chat/interface';
+import { MessageImage } from 'subComponents/MessageImage';
 // import { toast } from 'react-toastify';
 // import { validateFile } from 'utils/fileValidation';
 
-interface IChatRoomProps {
-  selectedContact: string;
-  chatListRefetch: (
-    variables?:
-      | Partial<{
-          id: string;
-        }>
-      | undefined,
-  ) => Promise<ApolloQueryResult<{ chatList: GroupChat[] }>>;
-}
-
-interface INewChat {
-  id: string;
-  name: string;
-  description?: string;
-  avatarMimeType?: string;
-  avatarURL?: string;
-  isGroup: boolean;
-  createdAt: string;
-  updatedAt: string;
-  organization?: {
-    id: string;
-    name: string;
-    countryCode?: string;
-  };
-  creator?: {
-    id: string;
-    name: string;
-    avatarMimeType?: string;
-    avatarURL?: string;
-  };
-  updater?: {
-    id: string;
-    name: string;
-    avatarMimeType?: string;
-    avatarURL?: string;
-  };
-  members: {
-    edges: Array<{
-      cursor: string;
-      node: {
-        user: {
-          id: string;
-          name: string;
-          avatarMimeType?: string;
-          avatarURL?: string;
-        };
-        role: string;
-      };
-    }>;
-  };
-  messages: {
-    edges: Array<{
-      cursor: string;
-      node: {
-        id: string;
-        body: string;
-        createdAt: string;
-        updatedAt: string;
-        creator: {
-          id: string;
-          name: string;
-          avatarMimeType?: string;
-          avatarURL?: string;
-        };
-        parentMessage?: {
-          id: string;
-          body: string;
-          createdAt: string;
-          creator: {
-            id: string;
-            name: string;
-          };
-        };
-      };
-    }>;
-    pageInfo: {
-      hasNextPage: boolean;
-      hasPreviousPage: boolean;
-      startCursor: string;
-      endCursor: string;
-    };
-  };
-}
-
-interface IMessageImageProps {
-  media: string;
-  organizationId?: string;
-  getFileFromMinio: (
-    objectName: string,
-    organizationId: string,
-  ) => Promise<string>;
-}
-
-const MessageImageBase: React.FC<IMessageImageProps> = ({
-  media,
-  organizationId,
-  getFileFromMinio,
-}) => {
-  const [imageState, setImageState] = useState<{
-    url: string | null;
-    loading: boolean;
-    error: boolean;
-  }>({
-    url: null,
-    loading: !!media,
-    error: false,
-  });
-
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userChatRoom',
-  });
-
-  useEffect(() => {
-    if (!media) {
-      setImageState((prev) => ({ ...prev, error: true, loading: false }));
-      return;
-    }
-
-    const orgId = organizationId || 'organization';
-
-    let stillMounted = true;
-    const loadImage = async (): Promise<void> => {
-      try {
-        const url = await getFileFromMinio(media, orgId);
-        if (stillMounted) setImageState({ url, loading: false, error: false });
-      } catch (error) {
-        console.error('Error fetching image from MinIO:', error);
-        if (stillMounted)
-          setImageState({ url: null, loading: false, error: true });
-      }
-    };
-
-    loadImage();
-    return () => {
-      stillMounted = false;
-    };
-  }, [media, organizationId, getFileFromMinio]);
-
-  if (imageState.loading) {
-    return <div className={styles.messageAttachment}>{t('loadingImage')}</div>;
-  }
-
-  if (imageState.error || !imageState.url) {
-    return (
-      <div className={styles.messageAttachment}>{t('imageNotAvailable')}</div>
-    );
-  }
-
-  return (
-    <img
-      className={styles.messageAttachment}
-      src={imageState.url}
-      alt={t('attachment')}
-      onError={() => setImageState((prev) => ({ ...prev, error: true }))}
-    />
-  );
-};
-
-export const MessageImage = React.memo(MessageImageBase);
-
-export default function chatRoom(props: IChatRoomProps): JSX.Element {
+export default function ChatRoom(props: InterfaceChatRoomProps): JSX.Element {
+  const { selectedContact, chatListRefetch } = props;
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
   });
@@ -237,39 +70,50 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const userId = getItem('userId') || getItem('id');
 
   useEffect(() => {
-    if (props.selectedContact) {
-      setItem('selectedChatId', props.selectedContact);
+    if (selectedContact) {
+      setItem('selectedChatId', selectedContact);
       setHasMoreMessages(true);
       setLoadingMoreMessages(false);
     }
-  }, [props.selectedContact, setItem]);
-  const [chatTitle, setChatTitle] = useState('');
-  const [chatSubtitle, setChatSubtitle] = useState('');
-  const [chatImage, setChatImage] = useState('');
-  const [newMessage, setNewMessage] = useState('');
-  const [chat, setChat] = useState<INewChat>();
-  const [replyToDirectMessage, setReplyToDirectMessage] = useState<
-    INewChat['messages']['edges'][0]['node'] | null
-  >(null);
-  const [editMessage, setEditMessage] = useState<
-    INewChat['messages']['edges'][0]['node'] | null
-  >(null);
-  const [groupChatDetailsModalisOpen, setGroupChatDetailsModalisOpen] =
-    useState(false);
+  }, [selectedContact, setItem]);
 
-  const [loadingMoreMessages, setLoadingMoreMessages] = useState(false);
-  const [hasMoreMessages, setHasMoreMessages] = useState(true);
+  const {
+    chatTitle,
+    chatSubtitle,
+    chatImage,
+    newMessage,
+    chat,
+    replyToDirectMessage,
+    editMessage,
+    groupChatDetailsModalisOpen,
+    loadingMoreMessages,
+    hasMoreMessages,
+    attachment,
+    attachmentObjectName,
+    setChatTitle,
+    setChatSubtitle,
+    setChatImage,
+    setNewMessage,
+    setChat,
+    setReplyToDirectMessage,
+    setEditMessage,
+    setLoadingMoreMessages,
+    setHasMoreMessages,
+    setAttachment,
+    setAttachmentObjectName,
+    openGroupChatDetails,
+    clearAttachment,
+    clearMessageInput,
+    toggleGroupChatDetailsModal,
+  } = useChatRoomState();
+
+  const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio: unstableGetFile } = useMinioDownload();
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const backfillAttemptsRef = useRef<number>(0);
   const shouldAutoScrollRef = useRef<boolean>(false);
-
-  const [attachment, setAttachment] = useState<string | null>(null);
-  const [attachmentObjectName, setAttachmentObjectName] = useState<
-    string | null
-  >(null);
-  const { uploadFileToMinio } = useMinioUpload();
-  const { getFileFromMinio: unstableGetFile } = useMinioDownload();
   const getFileFromMinioRef = useRef(unstableGetFile);
+
   useEffect(() => {
     getFileFromMinioRef.current = unstableGetFile;
   }, [unstableGetFile]);
@@ -278,13 +122,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       getFileFromMinioRef.current(objectName, organizationId),
     [],
   );
-
-  const openGroupChatDetails = (): void => {
-    setGroupChatDetailsModalisOpen(true);
-  };
-
-  const toggleGroupChatDetailsModal = (): void =>
-    setGroupChatDetailsModalisOpen(!groupChatDetailsModalisOpen);
 
   /**
    * Handles changes to the new message input field.
@@ -301,7 +138,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const [sendMessageToChat] = useMutation(SEND_MESSAGE_TO_CHAT, {
     variables: {
       input: {
-        chatId: props.selectedContact,
+        chatId: selectedContact,
         parentMessageId: replyToDirectMessage?.id,
         body: newMessage,
       },
@@ -364,13 +201,13 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
 
   const { data: chatData, refetch: chatRefetch } = useQuery(CHAT_BY_ID, {
     variables: {
-      input: { id: props.selectedContact },
+      input: { id: selectedContact },
       first: 10,
       after: null,
       lastMessages: 10,
       beforeMessages: null,
     },
-    skip: !props.selectedContact,
+    skip: !selectedContact,
   });
 
   const loadMoreMessages = async (): Promise<void> => {
@@ -393,7 +230,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       }
 
       const result = await chatRefetch({
-        input: { id: props.selectedContact },
+        input: { id: selectedContact },
         first: 10,
         after: null,
         lastMessages: 10,
@@ -408,7 +245,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             chat.messages.edges.map((edge) => edge.node.id),
           );
           const uniqueNewMessages = newMessages.filter(
-            (edge: INewChat['messages']['edges'][0]) =>
+            (edge: NewChatType['messages']['edges'][0]) =>
               !existingMessageIds.has(edge.node.id),
           );
 
@@ -474,14 +311,14 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     if (chatData?.chat?.messages?.edges?.length) {
       const lastMessage =
         chatData.chat.messages.edges[chatData.chat.messages.edges.length - 1];
-      markReadIfSupported(props.selectedContact, lastMessage.node.id)
+      markReadIfSupported(selectedContact, lastMessage.node.id)
         .catch(() => {})
         .finally(() => {
-          props.chatListRefetch();
+          chatListRefetch();
           unreadChatListRefetch();
         });
     }
-  }, [props.selectedContact, chatData]);
+  }, [selectedContact, chatData, chatListRefetch, unreadChatListRefetch]);
 
   useEffect(() => {
     if (chatData) {
@@ -494,7 +331,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
 
       if (chat.members?.edges?.length === 2) {
         const otherUser = chat.members.edges.find(
-          (edge: INewChat['members']['edges'][0]) =>
+          (edge: NewChatType['members']['edges'][0]) =>
             edge.node.user.id !== userId,
         )?.node.user;
         if (otherUser) {
@@ -530,7 +367,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
         await sendMessageToChat({
           variables: {
             input: {
-              chatId: props.selectedContact,
+              chatId: selectedContact,
               parentMessageId: replyToDirectMessage?.id,
               body: messageBody,
             },
@@ -539,12 +376,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       }
       shouldAutoScrollRef.current = true;
       await chatRefetch();
-      setReplyToDirectMessage(null);
-      setEditMessage(null);
-      setNewMessage('');
-      setAttachment(null);
-      setAttachmentObjectName(null);
-      await props.chatListRefetch({ id: userId as string });
+      clearMessageInput();
+      clearAttachment();
+      await chatListRefetch({ id: userId as string });
     } catch (error) {
       console.error('Error sending message:', error);
     }
@@ -553,28 +387,28 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   useSubscription(MESSAGE_SENT_TO_CHAT, {
     variables: {
       input: {
-        id: props.selectedContact,
+        id: selectedContact,
       },
     },
-    skip: !props.selectedContact,
+    skip: !selectedContact,
     onData: async (messageSubscriptionData) => {
       if (
         messageSubscriptionData?.data.data.chatMessageCreate &&
         messageSubscriptionData?.data.data.chatMessageCreate.chat?.id ===
-          props.selectedContact
+          selectedContact
       ) {
         const newMessage = messageSubscriptionData.data.data.chatMessageCreate;
         if (newMessage?.creator?.id === userId) {
           shouldAutoScrollRef.current = true;
         }
-        await markReadIfSupported(props.selectedContact, newMessage.id).catch(
+        await markReadIfSupported(selectedContact, newMessage.id).catch(
           () => {},
         );
 
         // Soft-append the new message to local state to avoid pagination issues.
         // TODO(caching): With cache policies, prefer cache.modify on Chat.messages
         //               to append if the message is not present (dedupe by node.id).
-        setChat((prev: INewChat | undefined) => {
+        setChat((prev: NewChatType | undefined) => {
           if (!prev) return prev;
           try {
             const newEdge = {
@@ -602,7 +436,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                     }
                   : undefined,
               },
-            } as INewChat['messages']['edges'][0];
+            } as NewChatType['messages']['edges'][0];
 
             const exists = prev.messages.edges.some(
               (e) => e.node.id === newEdge.node.id,
@@ -615,13 +449,13 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 ...prev.messages,
                 edges: [...prev.messages.edges, newEdge],
               },
-            } as INewChat;
+            } as NewChatType;
           } catch {
             return prev;
           }
         });
       }
-      props.chatListRefetch();
+      chatListRefetch();
       unreadChatListRefetch();
       // TODO(caching): Replace refetches above with targeted cache updates once
       // cache policies are enabled (e.g., bump lastMessage and unread count).
@@ -672,8 +506,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       if (fileInputRef.current) fileInputRef.current.value = '';
     } catch (error) {
       console.error('Error uploading file:', error);
-      setAttachment(null);
-      setAttachmentObjectName(null);
+      clearAttachment();
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
@@ -689,7 +522,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
         className={`d-flex flex-column ${styles.chatAreaContainer}`}
         id="chat-area"
       >
-        {!props.selectedContact ? (
+        {!selectedContact ? (
           <div
             className={`d-flex flex-column justify-content-center align-items-center w-100 h-75 gap-2 ${styles.grey}`}
           >
@@ -751,7 +584,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                   <div id="messages">
                     {chat?.messages.edges.map(
                       (edge: {
-                        node: INewChat['messages']['edges'][0]['node'];
+                        node: NewChatType['messages']['edges'][0]['node'];
                       }) => {
                         const message = edge.node;
                         const isFile = message.body.startsWith('uploads/');
@@ -917,8 +750,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                   <Button
                     data-testid="removeAttachment"
                     onClick={() => {
-                      setAttachment(null);
-                      setAttachmentObjectName(null);
+                      clearAttachment();
                       if (fileInputRef.current) fileInputRef.current.value = '';
                     }}
                     className={styles.closeBtn}
