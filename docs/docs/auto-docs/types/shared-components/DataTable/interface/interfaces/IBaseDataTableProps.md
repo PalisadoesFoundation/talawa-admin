@@ -31,6 +31,16 @@ This improves accessibility for screen readers and navigation.
 
 ***
 
+### bulkActions?
+
+> `optional` **bulkActions**: readonly [`IBulkAction`](IBulkAction.md)\<`T`\>[]
+
+Defined in: [src/types/shared-components/DataTable/interface.ts:409](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L409)
+
+Bulk actions shown in a toolbar when rows are selected.
+
+***
+
 ### columnFilters?
 
 > `optional` **columnFilters**: `Record`\<`string`, `unknown`\>
@@ -84,6 +94,16 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:371](https://git
 > `optional` **initialGlobalSearch**: `string`
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:375](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L375)
+
+***
+
+### initialSelectedKeys?
+
+> `optional` **initialSelectedKeys**: `ReadonlySet`\<[`Key`](../type-aliases/Key.md)\>
+
+Defined in: [src/types/shared-components/DataTable/interface.ts:401](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L401)
+
+Initial selected keys for uncontrolled selection.
 
 ***
 
@@ -142,6 +162,26 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:372](https://git
 
 ***
 
+### onSelectionChange()?
+
+> `optional` **onSelectionChange**: (`next`) => `void`
+
+Defined in: [src/types/shared-components/DataTable/interface.ts:397](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L397)
+
+Callback when selection changes. Required for controlled selection.
+
+#### Parameters
+
+##### next
+
+`ReadonlySet`\<[`Key`](../type-aliases/Key.md)\>
+
+#### Returns
+
+`void`
+
+***
+
 ### renderError()?
 
 > `optional` **renderError**: (`error`) => `ReactNode`
@@ -184,6 +224,16 @@ Optional custom row renderer. When provided, rows are rendered using this functi
 
 ***
 
+### rowActions?
+
+> `optional` **rowActions**: readonly [`IRowAction`](IRowAction.md)\<`T`\>[]
+
+Defined in: [src/types/shared-components/DataTable/interface.ts:405](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L405)
+
+Per-row action buttons rendered in an actions column.
+
+***
+
 ### rowKey?
 
 > `optional` **rowKey**: keyof `T` \| (`row`) => `string` \| `number`
@@ -200,6 +250,26 @@ If a property name is provided, its value will be coerced to string or number.
 > `optional` **searchPlaceholder**: `string`
 
 Defined in: [src/types/shared-components/DataTable/interface.ts:368](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L368)
+
+***
+
+### selectable?
+
+> `optional` **selectable**: `boolean`
+
+Defined in: [src/types/shared-components/DataTable/interface.ts:389](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L389)
+
+When true, render a checkbox column for row selection.
+
+***
+
+### selectedKeys?
+
+> `optional` **selectedKeys**: `ReadonlySet`\<[`Key`](../type-aliases/Key.md)\>
+
+Defined in: [src/types/shared-components/DataTable/interface.ts:393](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L393)
+
+Controlled selection state. When provided with onSelectionChange, selection is controlled.
 
 ***
 

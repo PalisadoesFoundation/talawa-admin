@@ -4,7 +4,7 @@
 
 # Interface: IFilterState
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:489](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L489)
+Defined in: [src/types/shared-components/DataTable/interface.ts:515](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L515)
 
 Filter state
 
@@ -14,7 +14,7 @@ Filter state
 
 > **columnId**: `string`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:490](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L490)
+Defined in: [src/types/shared-components/DataTable/interface.ts:516](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L516)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/types/shared-components/DataTable/interface.ts:490](https://git
 
 > **value**: `unknown`
 
-Defined in: [src/types/shared-components/DataTable/interface.ts:491](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L491)
+Defined in: [src/types/shared-components/DataTable/interface.ts:517](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DataTable/interface.ts#L517)
