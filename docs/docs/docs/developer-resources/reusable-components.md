@@ -861,18 +861,35 @@ Use TSDoc comments to document functions, classes, and interfaces within reusabl
 
 ## Shared CSS
 
-- We have a new folder for shared CSS files:
-  src/shared-components/common/css/
-- Currently it includes:
+In limited cases, CSS may be shared between shared-components to avoid duplication
+and visual drift for common UI primitives (e.g. dropdowns, pickers).
 
-* `dropdown.module.css` — universal dropdown styles
-* `SharedPicker.module.css` — shared picker styles
+### Rules
+
+- Shared CSS must live in:
+  `src/shared-components/common/css/`
+- Only CSS Modules (`*.module.css`) are allowed
+- Shared CSS must contain **only structural and visual styles**
+- No component-specific logic or screen-specific styles are allowed
+- Shared CSS should be consumed by shared wrapper components where possible
+
+### Current shared styles
+
+- `dropdown.module.css` — universal dropdown styles
+- `SharedPicker.module.css` — shared picker styles
 
 
 ## DropdownButton Component
 
 The `DropdownButton` component wraps `Dropdown.Toggle` and uses the existing shared `Button` component.
 It centralizes dropdown button styling and ensures consistent behavior across the app.
+
+The `DropdownButton` component wraps `Dropdown.Toggle` and uses the existing shared
+`Button` component. It centralizes dropdown button styling and ensures consistent
+behavior across the app.
+
+This component is the primary consumer of `dropdown.module.css`, ensuring that
+shared CSS is not imported ad-hoc across the codebase.
 
 ### Props
 
