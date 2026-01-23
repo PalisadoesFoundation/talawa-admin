@@ -1,4 +1,4 @@
-import React from 'react';
+import type { ReactNode } from 'react';
 
 /**
  * Props for PeopleTabNavbar component.
@@ -20,5 +20,5 @@ export interface InterfacePeopleTabNavbarProps {
     icon?: string | null;
   }>;
   showEventTypeFilter?: boolean;
-  actions?: React.ReactNode;
+  actions?: ReactNode;
 }

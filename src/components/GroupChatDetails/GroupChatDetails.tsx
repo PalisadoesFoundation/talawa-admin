@@ -77,7 +77,7 @@ import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
-export default function groupChatDetails({
+export default function GroupChatDetails({
   toggleGroupChatDetailsModal,
   groupChatDetailsModalisOpen,
   chat,
