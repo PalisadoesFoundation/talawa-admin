@@ -213,7 +213,7 @@ export async function main(): Promise<void> {
     process.removeListener('SIGINT', sigintHandler);
   }
 }
-
+/* v8 ignore next 3 */
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   main();
 }
