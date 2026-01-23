@@ -45,7 +45,6 @@ import { socialMediaLinks } from '../../constants';
 import styles from './LoginPage.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import Autocomplete from '@mui/material/Autocomplete';
-import TextField from '@mui/material/TextField';
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
 import { FormFieldGroup } from '../../shared-components/FormFieldGroup/FormFieldGroup';
@@ -1010,10 +1009,10 @@ const LoginPage = (): JSX.Element => {
                         }}
                         options={organizations}
                         renderInput={(params) => (
-                          <TextField
-                            {...params}
-                            label={t('organizations')}
-                            className={styles.selectOrgText}
+                          <input
+                            {...params.inputProps}
+                            ref={params.InputProps.ref}
+                            className={`form-control ${styles.selectOrgText}`}
                           />
                         )}
                       />
